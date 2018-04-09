@@ -38,7 +38,7 @@ jobs:
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
           git config push.default upstream
-          git branch $CIRCLE_BRANCH --set-upstream-to origin/master
+          git branch $CIRCLE_BRANCH --set-upstream-to origin/gh-pages
       - run: npm run build
       - run: |
           git add --force dist/
