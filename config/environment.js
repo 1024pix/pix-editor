@@ -2,7 +2,7 @@
 
 module.exports = function(environment) {
   let ENV = {
-    modulePrefix: 'pixeditor-ember',
+    modulePrefix: 'pixeditor',
     environment,
     rootURL: '/',
     locationType: 'auto',

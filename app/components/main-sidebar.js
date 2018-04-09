@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import ENV from "pixeditor-ember/config/environment";
+import ENV from "pixeditor/config/environment";
 import {inject as service} from "@ember/service";
 import {computed} from "@ember/object";
 
