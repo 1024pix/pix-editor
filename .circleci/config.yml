@@ -1,0 +1,62 @@
+---
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - checkout
+      - run: npm install
+      - run: echo $CIRCLE_SHA1 > .circle-sha
+      - save_cache:
+          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+          paths:
+            - ~
+
+  test:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - run: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+      #- run: npm test # FIXME uncomment this
+      - run: echo "You need tests"
+
+  deploy_to_ghpages:
+    docker:
+      - image: circleci/node:latest
+    steps:
+      - run: echo $CIRCLE_SHA1 > .circle-sha
+      - restore_cache:
+          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+      - run: |
+          mkdir ~/.ssh
+          ssh-keyscan github.com > ~/.ssh/known_hosts
+      - run: |
+          git config user.email "$GITHUB_EMAIL"
+          git config user.name "$GITHUB_NAME"
+          git config push.default upstream
+          git branch $CIRCLE_BRANCH --set-upstream-to origin/gh-pages
+      - run: npm run build
+      - run: |
+          git add --force dist/
+          git commit -m "deploying on gh-pages"
+          git push --force
+
+workflows:
+  version: 2
+  build_test_and_deploy:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      - deploy_to_ghpages:
+          requires:
+            - build
+            - test
+          filters:
+            branches:
+              only: master
