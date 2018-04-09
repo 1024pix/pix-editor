@@ -1,0 +1,68 @@
+<div class="skill-name {{challenge.statusCSS}}">
+  <div class="ui menu">
+    <div class="item header">{{challenge.skillNames}}</div>
+    <div class="ui right menu">
+      {{#if maximized}}
+        <a class="ui icon item" onclick={{action "minimize"}}><i class="icon window minimize"></i></a>
+      {{else}}
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="icon window maximize"></i></a>
+      {{/if}}
+      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+    </div>
+  </div>
+</div>
+{{#if challenge.illustration}}
+    {{#ui-modal class="template small" context=".main" closable=true}}
+      <i class="close icon"></i>
+      <div class="image content">
+        <img class="image" src="{{challenge.illustration.[0].url}}">
+      </div>
+    {{/ui-modal}}
+{{/if}}
+<div class="challenge">
+  <div class="challenge-data">
+    {{challenge-form challenge=challenge showIllustration=(action 'showIllustration') edition=edition}}
+    {{#if copyOperation}}
+      {{textarea value=challenge.preview id="copyZone"}}
+    {{/if}}
+  </div>
+  <div class="ui vertical compact labeled icon menu challenge-menu">
+    {{#if edition}}
+      <a class="item" onclick={{action "save"}} class="important-action">
+        <i class="save icon"></i>
+        Enregistrer
+      </a>
+      {{#if mayUpdateCache}}
+        <div class="item">
+          {{ui-checkbox label="mise à jour cache" checked=updateCache onChange=(action (mut updateCache))}}
+        </div>
+      {{/if}}
+      <a class="item" onclick={{action "cancelEdit"}}>
+        <i class="ban icon"></i>
+        Annuler
+      </a>
+    {{else}}
+      <a class="item" onclick={{action "preview"}}>
+        <i class="eye icon"></i>
+        Prévisualiser
+      </a>
+      <a class="item" onclick={{action "edit"}}>
+        <i class="edit icon"></i>
+        Modifier
+      </a>
+      <a class="item" onclick={{action "duplicate"}}>
+        <i class="copy icon"></i>
+        Dupliquer
+      </a>
+      <a class="item" onclick={{action "openAirtable"}}>
+        <i class="table icon"></i>
+        Airtable
+      </a>
+      <a class="item"  onclick={{action "copyLink"}}>
+        <i class="linkify icon"></i>
+        Copier lien
+      </a>
+    {{/if}}
+  </div>
+</div>
+{{outlet}}

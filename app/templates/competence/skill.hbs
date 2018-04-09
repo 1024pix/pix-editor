@@ -1,0 +1,47 @@
+<div class="skill-name {{skill.descriptionCSS}}">
+  <div class="ui menu">
+    <div class="item header">{{skill.name}}</div>
+    <div class="ui right menu">
+      {{#if maximized}}
+        <a class="ui icon item" onclick={{action "minimize"}}><i class="icon window minimize"></i></a>
+      {{else}}
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="icon window maximize"></i></a>
+      {{/if}}
+      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+    </div>
+  </div>
+</div>
+<div class="skill-details">
+  <div class="skill-data">
+    {{skill-form skill=skill edition=edition}}
+  </div>
+  <div class="ui vertical compact labeled icon menu skill-menu">
+    {{#if edition}}
+      <a class="item" onclick={{action "save"}} class="important-action">
+        <i class="save icon"></i>
+        Enregistrer
+      </a>
+      <a class="item" onclick={{action "cancelEdit"}}>
+        <i class="ban icon"></i>
+        Annuler
+      </a>
+    {{else}}
+      {{#if skill.template}}
+        <a class="item" onclick={{action "preview"}}>
+          <i class="eye icon"></i>
+          Prévisualiser
+        </a>
+      {{/if}}
+      <a class="item" onclick={{action "edit"}}>
+        <i class="edit icon"></i>
+        Modifier
+      </a>
+      <a class="item" onclick={{action "openAirtable"}}>
+        <i class="table icon"></i>
+        Airtable
+      </a>
+    {{/if}}
+  </div>
+</div>
+
+{{outlet}}

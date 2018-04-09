@@ -1,0 +1,29 @@
+<form action="" class="ui form">
+  {{form-mde title="Consigne" value=challenge.instructions edition=edition}}
+  {{form-select title="Type" value=challenge.type options=options.types edition=edition}}
+  {{form-textarea title="Propositions" value=challenge.suggestion edition=edition}}
+  {{form-textarea title="Réponses" value=challenge.answers edition=edition}}
+  <div class={{concat "field" (if edition "" " disabled")}}>
+    <label>Tolérance</label>
+    <div class="three fields">
+      <div class="field">
+        {{ui-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 readonly=(not edition) onChange=(action (mut challenge.t1))}}
+      </div>
+      <div class="field">
+        {{ui-checkbox label="T2 (ponctuation)" checked=challenge.t2 readonly=(not edition) onChange=(action (mut challenge.t2))}}
+      </div>
+      <div class="field">
+        {{ui-checkbox label="T3 (distance d'édition)" checked=challenge.t3 readonly=(not edition) onChange=(action (mut challenge.t3))}}
+      </div>
+    </div>
+  </div>
+  {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
+  {{form-files title="Pièces jointes" value=challenge.attachments edition=edition display=(action showIllustration)}}
+  {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
+  {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
+  {{form-select title="Statut" value=challenge.status options=options.status edition=edition}}
+  {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
+  {{#if (not edition)}}
+  {{form-input value=challenge.id title="Record id" edition=edition}}
+  {{/if}}
+</form>

@@ -1,0 +1,10 @@
+<div class="field">
+    <label>{{title}}</label>
+    {{#if edition}}
+        {{simple-mde value=value change=(action (mut value)) options=simpleMDEOptions}}
+    {{else}}
+        <div class="mde-preview">
+            {{simple-mde-preview value}}
+        </div>
+    {{/if}}
+</div>

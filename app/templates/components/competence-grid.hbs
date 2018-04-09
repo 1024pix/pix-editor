@@ -1,0 +1,41 @@
+<table class="ui celled table definition tubes">
+  <tbody>
+  {{#each tubes as |tube|}}
+  <tr>
+    <td>{{tube.name}}</td>
+    {{#each tube.skills as |skill|}}
+      {{#if skillMode}}
+        {{#link-to "competence.skill" competenceId skill.id tagName="td" class=(concat "skill link " skill.descriptionCSS)}}
+        {{skill.name}}
+        <div class="help">
+          {{#if skill.clue}}
+          <i class={{concat "idea icon " skill.clueCSS}}></i>
+          {{else}}
+          <i class="icon"></i>
+          {{/if}}
+        </div>
+        {{/link-to}}
+      {{else}}
+        {{#if skill.template}}
+        {{#link-to "competence.challenge" competenceId skill.template.id tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
+        <div class="alternative">
+          <span class="production">{{skill.alternativeCount}}</span> - <span class="workbench">{{skill.workbenchCount}}</span>
+          {{#if skill.template.notDeclinable}}
+            <span class="not-declinable">NR</span>
+          {{/if}}
+        </div>
+        {{/link-to}}
+        {{else if skill}}
+        <td class='skill'>
+          {{skill.name}}
+          <div class="alternative">&nbsp;</div>
+        </td>
+        {{else}}
+        <td></td>
+        {{/if}}
+      {{/if}}
+    {{/each}}
+  </tr>
+  {{/each}}
+  </tbody>
+</table>

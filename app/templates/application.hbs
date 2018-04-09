@@ -1,0 +1,33 @@
+<div class="ui container fluid application pushable">
+  <div class={{concat "ui page dimmer inverted" (if loading " active" "")}}>
+      <div class="ui text loader">{{loadingMessage}}</div>
+  </div>
+  {{main-sidebar areas=model loadCompetence=(action "loadCompetence") class=(concat "inverted menu left vertical main-sidebar wide " (if (eq currentRouteName 'index') "visible" "")) openConfiguration=(action "openConfiguration")}}
+  <div class="pusher">
+    <div class="ui vertical inverted icon menu main-menu">
+      <a class="item" onclick={{action "toggleSidebar"}}>
+        <i class="bars icon"></i>
+      </a>
+    </div>
+    <div class="main">
+      {{outlet}}
+      {{#if messages.length}}
+        <div class="messages">
+          {{#each messages as |message|}}
+            <div class={{concat "ui floating message " (if message.positive "positive" "warning")}} id="{{message.id}}">
+              <p>
+                {{#if message.positive}}
+                <i class="check icon"></i>
+                {{else}}
+                <i class="exclamation icon"></i>
+                {{/if}}
+                {{message.text}}
+              </p>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  {{config-form update=(action "configUpdated") display=displayConfig}}
+</div>

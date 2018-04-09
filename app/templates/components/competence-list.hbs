@@ -1,0 +1,21 @@
+<div class="competence-list-header">
+  <div class="list-row">
+    <div class="list-item skillNames" onclick={{action "sortBy" "skillNames"}}>Acquis</div>
+    <div class="list-item instructions" onclick={{action "sortBy" "instructions"}}>Consigne</div>
+    <div class="list-item type" onclick={{action "sortBy" "type"}}>Type</div>
+    <div class="list-item status" onclick={{action "sortBy" "status"}}>Statut</div>
+  </div>
+</div>
+<div class="competence-list-body">
+  {{#ember-collection
+    items=list
+    cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
+  }}
+  {{#link-to "competence.challenge" competenceId item.id tagName="div" class="list-row"}}
+    <div class="list-item">{{item.skillNames}}</div>
+    <div class="list-item">{{item.instructions}}</div>
+    <div class="list-item">{{item.type}}</div>
+    <div class="list-item">{{item.status}}</div>
+  {{/link-to}}
+  {{/ember-collection}}
+</div>

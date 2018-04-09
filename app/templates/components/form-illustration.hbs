@@ -1,0 +1,22 @@
+<div class="field">
+  {{#if (or value.length edition)}}
+    <label>{{title}}</label>
+  {{/if}}
+  {{#if value.length}}
+    {{#if value.[0].url}}
+      <img src="{{value.[0].url}}" alt="" class="clickable" onclick={{action display 'template'}}>
+    {{else}}
+      {{value.[0].file.name}} ({{value.[0].file.size}} octets)
+    {{/if}}
+    {{#if edition}}
+      <a onclick={{action "remove"}} class="file-remove"><i class="remove icon"></i></a>
+    {{/if}}
+  {{/if}}
+  {{#if edition}}
+    {{#file-upload name="illustration" accept="image/*" onfileadd=(action "add")}}
+      <a class="ui button">
+        Choisir une image...
+      </a>
+    {{/file-upload}}
+  {{/if}}
+</div>

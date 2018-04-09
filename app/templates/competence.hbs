@@ -1,0 +1,32 @@
+<div class="competence-name">
+  <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action (mut skillMode))}}</div>
+</h1>
+</div>
+<div class="ui top attached borderless labelled icon menu {{competenceHidden}}">
+  {{#if skillMode}}
+    <a class="left item" onclick={{action "soon"}}>
+      <i class="plus square outline icon"></i> Nouvel acquis
+    </a>
+  {{else}}
+    <a class="left item" onclick={{action "soon"}}>
+      <i class="plus square outline icon"></i> Nouveau prototype
+    </a>
+  {{/if}}
+  <a class="right item" onclick={{action "refresh"}}>
+    <i class="refresh icon"></i> Actualiser
+  </a>
+</div>
+<div class="ui attached segment competence {{size}} {{competenceHidden}}">
+  {{competence-list list=challenges competenceId=competence.id hidden=(not listView)}}
+  {{competence-grid tubes=competence.tubes competenceId=competence.id hidden=listView skillMode=skillMode}}
+</div>
+<div class="ui borderless bottom attached labelled icon menu {{competenceHidden}}">
+  <a class={{concat "item" (if (not listView) " active" "")}} onclick={{action "setGridView"}}>
+    <i class="grid layout icon"></i>
+  </a>
+  <a class={{concat "item" (if listView " active" "")}} onclick={{action "setListView"}}>
+    <i class="align justify icon"></i>
+  </a>
+</div>
+
+{{outlet}}

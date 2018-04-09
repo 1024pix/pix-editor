@@ -1,0 +1,9 @@
+<div class={{concat "field" (if edition "" " disabled")}}>
+    <label>
+        {{#if edition}}
+            <a onClick={{action "toggleMaximized"}} class={{concat "ui compact icon right floated button" (if maximized " primary" " basic")}}><i class="maximize icon"></i></a>
+        {{/if}}
+        {{title}}
+    </label>
+    {{textarea value=value rows="4" readonly=(not edition) class="attached"}}
+</div>
