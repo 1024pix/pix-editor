@@ -84,6 +84,9 @@ export default Controller.extend({
     setGridView() {
       this.set("listView", false);
     },
+    newTemplate() {
+      this.transitionToRoute("competence.new-template", this.get("model.competence").get("id"));
+    },
     soon() {
       this.get("application").send("showMessage", "Disponible bientôt...", true);
     }
