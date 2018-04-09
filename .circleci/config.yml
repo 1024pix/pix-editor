@@ -10,7 +10,7 @@ jobs:
       - run: npm install
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - save_cache:
-          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+          key: v2-pix-editor-{{ checksum ".circle-sha" }}
           paths:
             - ~
 
@@ -20,7 +20,7 @@ jobs:
     steps:
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - restore_cache:
-          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+          key: v2-pix-editor-{{ checksum ".circle-sha" }}
       #- run: npm test # FIXME uncomment this
       - run: echo "You need tests"
 
@@ -30,7 +30,7 @@ jobs:
     steps:
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - restore_cache:
-          key: v1-pix-editor-{{ checksum ".circle-sha" }}
+          key: v2-pix-editor-{{ checksum ".circle-sha" }}
       - run: |
           mkdir ~/.ssh
           ssh-keyscan github.com > ~/.ssh/known_hosts
@@ -38,7 +38,7 @@ jobs:
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
           git config push.default upstream
-          git branch $CIRCLE_BRANCH --set-upstream-to origin/gh-pages
+          git branch $CIRCLE_BRANCH --set-upstream-to origin/master
       - run: npm run build
       - run: |
           git add --force dist/
