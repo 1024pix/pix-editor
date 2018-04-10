@@ -5,6 +5,7 @@ import { inject as controller } from '@ember/controller';
 import { alias } from "@ember/object/computed";
 
 export default Controller.extend({
+  challengeCount:0,
   childComponentMaximized:false,
   skillMode:false,
   listView:false,
@@ -92,6 +93,7 @@ export default Controller.extend({
     },
     addChallenge(challenge) {
       this.get("challenges").addObject(challenge);
+      this.set("challengeCount", this.get("challengeCount")+1);
     }
   },
   size:computed("router.currentRouteName", function() {

@@ -106,7 +106,7 @@ export default Route.extend({
         current.push(value);
         return current;
       }, Object.values(orderedChallenges));
-      // Todo link challenges to competence
+      // Todo filter prototypes
       return {
         competence:competence,
         challenges:challenges,
@@ -117,6 +117,7 @@ export default Route.extend({
   setupController(controller, model) {
     this._super(controller, model);
     controller.set("challengeMaximized", false);
+    controller.set("challengeCount", model.challenges.length);
   },
   actions: {
     refreshModel() {

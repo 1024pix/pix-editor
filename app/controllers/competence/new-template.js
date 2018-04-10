@@ -2,7 +2,7 @@ import Challenge from './challenge';
 
 export default Challenge.extend({
   creation:true,
-  updateCache:false,
+  mayUpdateCache:false,
   actions:{
     cancelEdit() {
       this.set("edition", false);

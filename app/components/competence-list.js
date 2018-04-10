@@ -1,5 +1,5 @@
 import Component from '@ember/component';
-import {computed, observer} from "@ember/object";
+import {observer} from "@ember/object";
 import $ from "jquery";
 
 export default Component.extend({
@@ -9,9 +9,6 @@ export default Component.extend({
     this._super(...arguments);
     this.columns = [100];
   },
-  itemCount:computed("list", function(){
-    return this.get("list").length;
-  }),
   sortManager:observer("list", function() {
     $(".competence-list-header .list-item").removeClass("sorting");
   }),
