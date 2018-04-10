@@ -35,6 +35,7 @@ export default Controller.extend({
     },
     finishedLoading() {
       this.set("loading", false);
+      this.set("loadingMessage", "");
     },
     openConfiguration() {
       this.set("displayConfig", true);

@@ -89,6 +89,9 @@ export default Controller.extend({
     },
     soon() {
       this.get("application").send("showMessage", "Disponible bientôt...", true);
+    },
+    addChallenge(challenge) {
+      this.get("challenges").addObject(challenge);
     }
   },
   size:computed("router.currentRouteName", function() {

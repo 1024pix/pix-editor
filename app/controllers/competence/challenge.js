@@ -81,69 +81,8 @@ export default Controller.extend({
     },
     save() {
       this.get("application").send("isLoading");
-      let challenge = this.get("challenge");
-
-      // check for illustration upload
-      let illustration = challenge.get("illustration");
-      let uploadIllustration;
-      if (illustration && illustration.length>0 && illustration.get('firstObject').file) {
-        let file = illustration.get('firstObject').file;
-        this.get("application").send("isLoading", "Envoi de l'illustration...");
-        uploadIllustration = this.get("storage").uploadFile(file);
-      } else {
-        uploadIllustration = Promise.resolve(false);
-      }
-
-      // check for attachments upload
-      let attachments = challenge.get("attachments");
-      let uploadAttachments;
-      let uploadAttachmentRequired = false;
-      if (attachments) {
-        let storage = this.get("storage");
-        uploadAttachments = attachments.reduce((current, value) => {
-          if (value.file) {
-            current.push(storage.uploadFile(value.file));
-            uploadAttachmentRequired = true;
-          } else {
-            current.push(Promise.resolve(value));
-          }
-          return current;
-        }, []);
-      }
-
-      uploadIllustration.then((newIllustration) => {
-        if (newIllustration) {
-          challenge.set("illustration", [{url:newIllustration.url, filename:newIllustration.filename}]);
-        }
-        if (uploadAttachmentRequired) {
-          this.get("application").send("isLoading", "Envoi des pièces jointes...");
-          return Promise.all(uploadAttachments);
-        } else {
-          return Promise.resolve(false);
-        }
-      }).then((newAttachments) => {
-        this.get("application").send("isLoading", "Enregistrement...");
-        if (newAttachments) {
-          challenge.set("attachments", newAttachments);
-        }
-        return challenge.save();
-      }).then(() => {
-        this.set("edition", false);
-        let previousState = this.get("wasMaximized");
-        if (!previousState) {
-          this.send("minimize");
-        }
-        if (this.get("mayUpdateCache") && this.get("updateCache")) {
-          this.get("application").send("isLoading", "Mise à jour du cache...");
-          return this.get("pixConnector").updateCache(challenge)
-          .catch(() => {
-            this.get("application").send("showMessage", "Impossible de mettre à jour le cache", false);
-            return Promise.resolve(true);
-          });
-        } else {
-          return Promise.resolve(true);
-        }
-      }).then(() => {
+      return this._saveChallenge()
+      .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Épreuve mise à jour", true);
       }).catch(() => {
@@ -154,5 +93,69 @@ export default Controller.extend({
     duplicate() {
       this.get("application").send("showMessage", "Disponible bientôt...", true);
     }
+  },
+  _saveChallenge() {
+    let challenge = this.get("challenge");
+    // check for illustration upload
+    let illustration = challenge.get("illustration");
+    let uploadIllustration;
+    if (illustration && illustration.length>0 && illustration.get('firstObject').file) {
+      let file = illustration.get('firstObject').file;
+      this.get("application").send("isLoading", "Envoi de l'illustration...");
+      uploadIllustration = this.get("storage").uploadFile(file);
+    } else {
+      uploadIllustration = Promise.resolve(false);
+    }
+
+    // check for attachments upload
+    let attachments = challenge.get("attachments");
+    let uploadAttachments;
+    let uploadAttachmentRequired = false;
+    if (attachments) {
+      let storage = this.get("storage");
+      uploadAttachments = attachments.reduce((current, value) => {
+        if (value.file) {
+          current.push(storage.uploadFile(value.file));
+          uploadAttachmentRequired = true;
+        } else {
+          current.push(Promise.resolve(value));
+        }
+        return current;
+      }, []);
+    }
+
+    return uploadIllustration.then((newIllustration) => {
+      if (newIllustration) {
+        challenge.set("illustration", [{url:newIllustration.url, filename:newIllustration.filename}]);
+      }
+      if (uploadAttachmentRequired) {
+        this.get("application").send("isLoading", "Envoi des pièces jointes...");
+        return Promise.all(uploadAttachments);
+      } else {
+        return Promise.resolve(false);
+      }
+    }).then((newAttachments) => {
+      this.get("application").send("isLoading", "Enregistrement...");
+      if (newAttachments) {
+        challenge.set("attachments", newAttachments);
+      }
+      return challenge.save();
+    }).then(() => {
+      this.set("edition", false);
+      let previousState = this.get("wasMaximized");
+      if (!previousState) {
+        this.send("minimize");
+      }
+      if (this.get("mayUpdateCache") && this.get("updateCache")) {
+        this.get("application").send("isLoading", "Mise à jour du cache...");
+        return this.get("pixConnector").updateCache(challenge)
+        .catch(() => {
+          this.get("application").send("showMessage", "Impossible de mettre à jour le cache", false);
+          return Promise.resolve(true);
+        });
+      } else {
+        return Promise.resolve(true);
+      }
+    });
   }
 });
