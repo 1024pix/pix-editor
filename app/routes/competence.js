@@ -117,7 +117,7 @@ export default Route.extend({
   },
   setupController(controller, model) {
     this._super(controller, model);
-    controller.set("challengeMaximized", false);
+    controller.set("childComponentMaximized", false);
     controller.set("challengeCount", model.challenges.length);
   },
   actions: {
