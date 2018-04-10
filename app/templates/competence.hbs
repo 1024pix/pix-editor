@@ -21,12 +21,14 @@
   {{competence-grid tubes=competence.tubes competenceId=competence.id hidden=listView skillMode=skillMode}}
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}}">
+{{#if (not skillMode)}}
   <a class={{concat "item" (if (not listView) " active" "")}} onclick={{action "setGridView"}}>
     <i class="grid layout icon"></i>
   </a>
   <a class={{concat "item" (if listView " active" "")}} onclick={{action "setListView"}}>
     <i class="align justify icon"></i>
   </a>
+{{/if}}
 </div>
 
 {{outlet}}

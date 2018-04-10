@@ -38,6 +38,9 @@ export default Controller.extend({
   childComponentAdapter:observer("skillMode", function() {
     let skillMode = this.get("skillMode");
     let currentRoute = this.get("router.currentRouteName");
+    if (skillMode) {
+      this.set("listView", false);
+    }
     if (skillMode && currentRoute === "competence.challenge") {
       /*let challenge = this.get("currentChallenge");
       let skillNames = challenge.get("skillNames")
