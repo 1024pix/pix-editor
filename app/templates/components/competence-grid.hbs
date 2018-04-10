@@ -5,7 +5,7 @@
     <td>{{tube.name}}</td>
     {{#each tube.skills as |skill|}}
       {{#if skillMode}}
-        {{#link-to "competence.skill" competenceId skill.id tagName="td" class=(concat "skill link " skill.descriptionCSS)}}
+        {{#link-to "competence.skill" competenceModel skill tagName="td" class=(concat "skill link " skill.descriptionCSS)}}
         {{skill.name}}
         <div class="help">
           {{#if skill.clue}}
@@ -17,7 +17,7 @@
         {{/link-to}}
       {{else}}
         {{#if skill.template}}
-        {{#link-to "competence.challenge" competenceId skill.template.id tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
+        {{#link-to "competence.challenge" competenceModel skill.template tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
         <div class="alternative">
           <span class="production">{{skill.alternativeCount}}</span> - <span class="workbench">{{skill.workbenchCount}}</span>
           {{#if skill.template.notDeclinable}}
