@@ -39,7 +39,7 @@ jobs:
           git config user.name "$GITHUB_NAME"
           git config push.default upstream
           git branch $CIRCLE_BRANCH --set-upstream-to origin/gh-pages
-      - run: npm run build
+      - run: npm run build:production
       - run: |
           git add --force dist/
           git commit -m "deploying on gh-pages"
