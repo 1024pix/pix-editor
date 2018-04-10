@@ -43,7 +43,7 @@ jobs:
       - run: |
           git add --force dist/
           git commit -m "deploying on gh-pages"
-          git subtree push --prefix=dist origin master
+          git subtree push --prefix=dist subtree_origin master
 
 workflows:
   version: 2
