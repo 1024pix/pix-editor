@@ -11,7 +11,8 @@ export default Component.extend({
       this.set("value", list);
     },
     add(file) {
-      let list = this.get("value").slice();
+      let value = this.get("value");
+      let list = value?value.slice():[];
       list.push({file:file, url:"", filename:file.get("name")});
       this.set("value", list);
     }
