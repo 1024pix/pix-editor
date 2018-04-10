@@ -180,6 +180,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 .skill-name {
   border-top:1px solid rgba(34, 36, 38, 0.15);
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
+  .creation {
+    font-style:italic;
+  }
   .ui.menu {
     border-radius:0;
     border:none;

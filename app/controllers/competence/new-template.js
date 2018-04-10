@@ -1,10 +1,12 @@
 import Challenge from './challenge';
 
 export default Challenge.extend({
-  edition:true,
-  init() {
-    this._super(...arguments);
-    this.get("competence").send("maximizeChildComponent");
-    this.edition = true;
+  creation:true,
+  actions:{
+    cancelEdit() {
+      this.set("edition", false);
+      this.get("application").send("showMessage", "Création annulée", true);
+      this.get("competence").send("closeChildComponent");
+    }
   }
 });

@@ -10,6 +10,7 @@ export default Controller.extend({
   maximized:false,
   copyOperation:false,
   edition:false,
+  creation:false,
   wasMaximized:false,
   updateCache:true,
   challenge:alias("model"),

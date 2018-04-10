@@ -1,6 +1,12 @@
 <div class="skill-name {{challenge.statusCSS}}">
   <div class="ui menu">
-    <div class="item header">{{challenge.skillNames}}</div>
+    <div class="item header">
+    {{#if creation}}
+      <span class="creation">Nouveau prototype</span>
+    {{else}}
+      {{challenge.skillNames}}
+    {{/if}}
+    </div>
     <div class="ui right menu">
       {{#if maximized}}
         <a class="ui icon item" onclick={{action "minimize"}}><i class="icon window minimize"></i></a>
