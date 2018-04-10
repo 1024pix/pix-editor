@@ -5,5 +5,6 @@ export default Challenge.extend({
   init() {
     this._super(...arguments);
     this.get("competence").send("maximizeChildComponent");
+    this.edition = true;
   }
 });
