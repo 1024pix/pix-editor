@@ -5,7 +5,7 @@ import {inject as service} from "@ember/service";
 export default Route.extend({
   paginatedQuery:service(),
   model(params) {
-    let competence, skills, workbenchChallengeIdsBySkill, challenges;
+    let competence, skills, workbenchChallengeIdsBySkill;
     let store = this.get("store");
     return store.findRecord("competence", params.competence_id)
     .then(data => {
@@ -50,7 +50,7 @@ export default Route.extend({
       let byWorkbenchSkillFilter = "AND("+workbenchRecordsText+", Statut != 'archive', {Généalogie} = 'Décliné 1')";
 
       // get challenges linked to competence
-      let byCompetenceFilter = "AND(FIND('"+competence.get("code")+"', competences) , Statut != 'archive', Acquix = BLANK())";
+      let byCompetenceFilter = "AND(FIND('"+competence.get("code")+"', competences) , Statut != 'archive', Acquix = BLANK(), {Généalogie} = 'Prototype 1')";
 
       let pq = this.get("paginatedQuery");
       return RSVP.hash({
@@ -102,11 +102,12 @@ export default Route.extend({
           }
         }
       })
-      challenges = data.byCompetenceProd.reduce((current, value) => {
+      let challenges = data.byCompetenceProd.reduce((current, value) => {
         current.push(value);
         return current;
-      }, Object.values(orderedChallenges));
-      // Todo filter prototypes
+      }, Object.values(orderedChallenges).filter((value) => {
+        return value.get("template");
+      }));
       return {
         competence:competence,
         challenges:challenges,
