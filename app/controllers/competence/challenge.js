@@ -92,6 +92,9 @@ export default Controller.extend({
     },
     duplicate() {
       this.get("competence").send("copyChallenge", this.get("challenge").get("id"));
+    },
+    showAlternatives() {
+      this.get("competence").send("showAlternatives", this.get("challenge"));
     }
   },
   _saveChallenge() {

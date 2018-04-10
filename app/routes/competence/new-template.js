@@ -27,5 +27,6 @@ export default Challenge.extend({
     controller.send("edit");
     // required because 'alias' does not seem to work with extended controller
     controller.set("challenge", model);
+    this.controllerFor("competence").set("twoColumns", false);
   }
 });

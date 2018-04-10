@@ -13,6 +13,7 @@ export default Controller.extend({
   application:controller(),
   currentChallenge:null,
   currentSkill:null,
+  twoColumns:false,
   competence:alias("model.competence"),
   challenges:alias("model.challenges"),
   init() {
@@ -89,10 +90,10 @@ export default Controller.extend({
       this.set("listView", false);
     },
     newChallenge() {
-      this.transitionToRoute("competence.new-template", this.get("model.competence").get("id"));
+      this.transitionToRoute("competence.new-template", this.get("model"));
     },
     copyChallenge(challengeId) {
-      this.transitionToRoute("competence.new-template", this.get("model.competence").get("id"), { queryParams: { from: challengeId}});
+      this.transitionToRoute("competence.new-template", this.get("model"), { queryParams: { from: challengeId}});
     },
     soon() {
       this.get("application").send("showMessage", "Disponible bientôt...", true);
@@ -100,6 +101,9 @@ export default Controller.extend({
     addChallenge(challenge) {
       this.get("challenges").addObject(challenge);
       this.set("challengeCount", this.get("challengeCount")+1);
+    },
+    showAlternatives(challenge) {
+      this.transitionToRoute("competence.challenge.alternatives", this.get("model"), challenge);
     }
   },
   size:computed("router.currentRouteName", function() {

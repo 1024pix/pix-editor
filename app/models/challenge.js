@@ -4,7 +4,7 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.alternatives = [];
+    this.alternatives = {};
   },
   competence:DS.attr(),
   instructions:DS.attr(),

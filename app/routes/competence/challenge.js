@@ -11,7 +11,8 @@ export default Route.extend({
     if (!model.get("skillNames")) {
       this.controllerFor("competence").set("listView", true);
     }
-    this.controllerFor("competence").set("currentChallenge", model);
+    //this.controllerFor("competence").set("currentChallenge", model);
+    this.controllerFor("competence").set("twoColumns", false);
   },
   actions: {
     willTransition(transition) {

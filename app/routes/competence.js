@@ -73,14 +73,19 @@ export default Route.extend({
       skills.forEach((skill) => {
         let template = null;
         let alternativeCount = 0;
+        let alternatives = [];
         let ids = skill.get("challengeIds");
         if (ids) {
           let set = ids.reduce((current, id) => {
-            if (orderedChallenges[id]) {
-              current.push(orderedChallenges[id]);
-              if (orderedChallenges[id].get("template") && (!template || orderedChallenges[id].get("validated"))) {
-                template = orderedChallenges[id];
+            let challenge = orderedChallenges[id];
+            if (challenge) {
+              current.push(challenge);
+              if (challenge.get("template")) {
+                if (!template || challenge.get("validated")) {
+                  template = challenge;
+                }
               } else {
+                alternatives.push(challenge);
                 alternativeCount++;
               }
             }
@@ -100,6 +105,9 @@ export default Route.extend({
             }, []);
             skill.set("workbenchChallenges", set);
           }
+          if (template) {
+            template.set("alternatives", {production:alternatives, workbench:set});
+          }
         }
       })
       let challenges = data.byCompetenceProd.reduce((current, value) => {
@@ -118,6 +126,7 @@ export default Route.extend({
   setupController(controller, model) {
     this._super(controller, model);
     controller.set("childComponentMaximized", false);
+    controller.set("twoColumns", false);
     controller.set("challengeCount", model.challenges.length);
   },
   actions: {

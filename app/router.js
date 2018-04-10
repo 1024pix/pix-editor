@@ -9,7 +9,9 @@ const Router = EmberRouter.extend({
 Router.map(function() {
   this.route('competence', {path:'/competence/:competence_id'}, function() {
     this.route('new-template', {path:'/challenge'});
-    this.route('challenge', {path:'/challenge/:challenge_id'});
+    this.route('challenge', {path:'/challenge/:challenge_id'}, function() {
+      this.route('alternatives');
+    });
     this.route('skill', {path:'/skill/:skill_id'});
   });
 });
