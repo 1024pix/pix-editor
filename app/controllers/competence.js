@@ -88,8 +88,11 @@ export default Controller.extend({
     setGridView() {
       this.set("listView", false);
     },
-    newTemplate() {
+    newChallenge() {
       this.transitionToRoute("competence.new-template", this.get("model.competence").get("id"));
+    },
+    copyChallenge(challengeId) {
+      this.transitionToRoute("competence.new-template", this.get("model.competence").get("id"), { queryParams: { from: challengeId}});
     },
     soon() {
       this.get("application").send("showMessage", "Disponible bientôt...", true);

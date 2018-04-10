@@ -2,19 +2,22 @@ import DS from 'ember-data';
 import {computed} from '@ember/object';
 
 export default DS.Model.extend({
+  init() {
+    this._super(...arguments);
+    this.challenges = [];
+    this.workbenchChallenges = [];
+    this.tutoMore = [];
+    this.tutoSolutions = [];
+  },
   name: DS.attr(),
-  competence: DS.belongsTo('competence',{ readOnly: true }),
+  competence: null,
   challengeIds: DS.attr(),
   clue:DS.attr(),
   status:DS.attr(),
   description:DS.attr(),
-  challenges: DS.hasMany('challenge', { readOnly: true}),
-  workbenchChallenges: DS.hasMany('workbenchChallenge', { readOnly: true}),
   tutoSolutionIds:DS.attr(),
-  tutoSolutions: DS.hasMany('tutorial', {readOnly:true}),
   tutoMoreIds:DS.attr(),
-  tutoMore: DS.hasMany('tutorial', {readOnly:true}),
-  template: DS.belongsTo('challenge', {inverse:null, readOnly:true}),
+  template: null,
   workbenchCount:computed('workbenchChallenges', function() {
     return this.get("workbenchChallenges").get('length');
   }),

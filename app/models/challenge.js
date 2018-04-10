@@ -2,6 +2,10 @@ import DS from 'ember-data';
 import {computed} from '@ember/object';
 
 export default DS.Model.extend({
+  init() {
+    this._super(...arguments);
+    this.alternatives = [];
+  },
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
@@ -16,9 +20,9 @@ export default DS.Model.extend({
   author:DS.attr(),
   declinable:DS.attr(),
   version:DS.attr(),
-  alternatives: DS.hasMany('challenge',{ readOnly: true }),
   genealogy:DS.attr(),
   skillNames:DS.attr({readOnly:true}),
+  skills:DS.attr(),
   workbench:false,
   status:DS.attr(),
   preview:DS.attr(),

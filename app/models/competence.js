@@ -5,10 +5,13 @@ const findTubeName = /^@([^\d]+)(\d)$/;
 
 
 export default DS.Model.extend({
+  init() {
+    this._super(...arguments);
+    this.skills = [];
+  },
   area: DS.belongsTo('area'),
   name: DS.attr('string', { readOnly: true }),
   code: DS.attr(),
-  skills:DS.hasMany('skill'),
   tubes:computed('skills', function() {
     const skills = this.get('skills');
     let set = skills.reduce((current, skill) => {

@@ -91,7 +91,7 @@ export default Controller.extend({
       });
     },
     duplicate() {
-      this.get("application").send("showMessage", "Disponible bientôt...", true);
+      this.get("competence").send("copyChallenge", this.get("challenge").get("id"));
     }
   },
   _saveChallenge() {

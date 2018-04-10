@@ -3,6 +3,7 @@ import Challenge from './challenge';
 export default Challenge.extend({
   creation:true,
   mayUpdateCache:false,
+  queryParams: ['from'],
   actions:{
     cancelEdit() {
       this.set("edition", false);
