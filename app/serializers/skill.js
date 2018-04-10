@@ -4,7 +4,7 @@ export default ApplicationSerializer.extend({
   attrs:{
     name:"Nom",
     clue:"Indice",
-    status:"Statut",
+    status:"Statut de l'indice",
     challengeIds:"Epreuves",
     description:"Description",
     tutoSolutionIds: "Comprendre",
