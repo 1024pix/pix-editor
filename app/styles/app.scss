@@ -61,6 +61,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   display:flex;
   flex-direction:row;
   flex:1;
+  position:relative;
 
   .main-left {
     flex:1;
