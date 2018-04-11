@@ -25,7 +25,7 @@ export default DS.Model.extend({
   skills:DS.attr(),
   workbench:false,
   status:DS.attr(),
-  preview:DS.attr(),
+  preview:DS.attr({readOnly:true}),
   template:computed('genealogy', function(){
     return (this.get('genealogy') == 'Prototype 1');
   }),
