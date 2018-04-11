@@ -5,6 +5,8 @@ export default Route.extend({
     this.controllerFor("competence").set("twoColumns", true);
     let challenge = this.modelFor("competence.challenge");
     controller.set("challenge", challenge);
+    let competence = this.modelFor("competence");
+    controller.set("competence", competence);
     let count = 0;
     if (challenge.alternatives) {
       if (challenge.alternatives.production) {

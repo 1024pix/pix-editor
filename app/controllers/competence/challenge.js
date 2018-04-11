@@ -4,6 +4,7 @@ import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { alias } from '@ember/object/computed';
+import { computed } from '@ember/object';
 
 export default Controller.extend({
   config:service(),
@@ -13,12 +14,21 @@ export default Controller.extend({
   creation:false,
   wasMaximized:false,
   updateCache:true,
+  workbench:false,
   challenge:alias("model"),
   competence:controller(),
   application:controller(),
   storage:service(),
   pixConnector:service(),
+  copyZoneId:"copyZone",
   mayUpdateCache:alias("pixConnector.connected"),
+  challengeTitle:computed("creation","challenge", function() {
+    if (this.get("creation")) {
+      return "<span class='creation'>Nouveau prototype</span>";
+    } else {
+      return this.get("challenge.skillNames");
+    }
+  }),
   actions:{
     showIllustration: function(className){
       $(".ui." + className + ".small.modal").modal({dimmerSettings: {closable:true}}).modal('show');
@@ -47,7 +57,7 @@ export default Controller.extend({
     copyLink() {
       this.set("copyOperation", true);
       scheduleOnce('afterRender', this, function() {
-        let element = document.getElementById("copyZone");
+        let element = document.getElementById(this.get("copyZoneId"));
         element.select();
         try {
           var successful = document.execCommand("copy");

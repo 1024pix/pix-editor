@@ -9,7 +9,7 @@ export default Controller.extend({
   application:controller(),
   listHidden:false,
   size:computed("router.currentRouteName", function() {
-    if (this.get("router.currentRouteName") == 'competence.challenge.alternatives') {
+    if (this.get("router.currentRouteName") == 'competence.challenge.alternatives.index') {
       return "full";
     } else {
       return "half";
