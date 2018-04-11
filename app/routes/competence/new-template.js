@@ -8,6 +8,7 @@ export default Challenge.extend({
       .then((template) => {
         let data = template.toJSON({includeId:false});
         data.status = "proposé";
+        delete data.pixId;
         if (data.illustration) {
           let illustration = data.illustration[0];
           data.illustration = [{url:illustration.url, filename:illustration.filename}];

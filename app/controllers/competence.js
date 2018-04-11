@@ -42,7 +42,7 @@ export default Controller.extend({
     if (skillMode) {
       this.set("listView", false);
     }
-    if (skillMode && currentRoute === "competence.challenge") {
+    if (skillMode && currentRoute.startsWith("competence.challenge")) {
       /*let challenge = this.get("currentChallenge");
       let skillNames = challenge.get("skillNames")
       if (skills.length>0) {
@@ -52,7 +52,7 @@ export default Controller.extend({
       }*/
       //TODO: link to correct skill
       this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-    } else if (!skillMode && currentRoute === "competence.skill") {
+    } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
       /*let skill = this.get("currentSkill");
       let template = skill.get("template");
       if (template) {
@@ -64,6 +64,13 @@ export default Controller.extend({
       }*/
       //TODO: link to correct challenge
       this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+    }
+  }),
+  size:computed("router.currentRouteName", function() {
+    if (this.get("router.currentRouteName") == 'competence.index') {
+      return "full";
+    } else {
+      return "half";
     }
   }),
   actions: {
@@ -96,7 +103,7 @@ export default Controller.extend({
       this.transitionToRoute("competence.new-template", this.get("model"), { queryParams: { from: challengeId}});
     },
     soon() {
-      this.get("application").send("showMessage", "Disponible bientôt...", true);
+      this.get("application").send("showMessage", "Bientôt disponible...", true);
     },
     addChallenge(challenge) {
       this.get("challenges").addObject(challenge);
@@ -105,12 +112,5 @@ export default Controller.extend({
     showAlternatives(challenge) {
       this.transitionToRoute("competence.challenge.alternatives", this.get("model"), challenge);
     }
-  },
-  size:computed("router.currentRouteName", function() {
-    if (this.get("router.currentRouteName") == 'competence.index') {
-      return "full";
-    } else {
-      return "half";
-    }
-  })
+  }
 });

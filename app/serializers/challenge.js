@@ -22,7 +22,9 @@ export default ApplicationSerializer.extend({
     status:"Statut",
     preview:"Preview",
     competence:"competences",
-    skills:"Acquix"
+    skills:"Acquix",
+    pixId:"Identifiant",
+    alternativeIndex:"Indice_aval"
   },
 
   payloadKeyFromModelName: function() {

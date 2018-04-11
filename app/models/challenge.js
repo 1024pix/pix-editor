@@ -26,6 +26,8 @@ export default DS.Model.extend({
   workbench:false,
   status:DS.attr(),
   preview:DS.attr({readOnly:true}),
+  pixId:DS.attr(),
+  alternativeIndex:DS.attr(),
   template:computed('genealogy', function(){
     return (this.get('genealogy') == 'Prototype 1');
   }),
@@ -36,6 +38,15 @@ export default DS.Model.extend({
   notDeclinable:computed('declinable', function() {
     let declinable = this.get("declinable");
     return (declinable && declinable === "non");
+  }),
+  computedIndex:computed("pixId", function() {
+    let pixId = this.get("pixId");
+    if (pixId) {
+      let parts = pixId.split("_");
+      return parts[parts.length - 1];
+    } else {
+      return -1;
+    }
   }),
   alternativeCount:0,
   statusCSS:computed('status', function() {

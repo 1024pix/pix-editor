@@ -1,14 +1,24 @@
-<div class="competence-name">
-<h1>
-<!--   <div class="ui menu">
-    <div class="item header">
+<div class="main-title">
+  <h1>
+  <!--   <div class="ui menu">
+      <div class="item header">
+        Déclinaisons de {{challenge.skillNames}}
+      </div>
+      <div class="ui right menu">
+        <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+      </div>
+    </div>-->
       Déclinaisons de {{challenge.skillNames}}
-    </div>
-    <div class="ui right menu">
-      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
-    </div>
-  </div>-->
-      Déclinaisons de {{challenge.skillNames}}
-</h1>
+  </h1>
+</div>
+<div class="ui top attached borderless labelled icon menu {{listHidden}}">
+  <a class="left item" onclick={{action "newAlternative"}}>
+    <i class="plus square outline icon"></i> Nouvelle déclinaison
+  </a>
+</div>
+<div class="ui attached segment competence {{size}} {{listHidden}}">
+  {{alternatives-list list=alternatives itemCount=challengeCount competenceModel=competence hidden=false}}
+</div>
+<div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
 </div>
 {{outlet}}

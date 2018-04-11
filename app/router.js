@@ -11,6 +11,7 @@ Router.map(function() {
     this.route('new-template', {path:'/challenge'});
     this.route('challenge', {path:'/challenge/:challenge_id'}, function() {
       this.route('alternatives');
+      this.route('alternative', {path:'/alternative/:alternative_id'});
     });
     this.route('skill', {path:'/skill/:skill_id'});
   });

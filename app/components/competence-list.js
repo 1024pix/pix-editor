@@ -10,12 +10,12 @@ export default Component.extend({
     this.columns = [100];
   },
   sortManager:observer("list", function() {
-    $(".competence-list-header .list-item").removeClass("sorting");
+    $(".list-header .list-item").removeClass("sorting");
   }),
   actions:{
     sortBy(field) {
       let sort1, sort2;
-      let sortElement = $(".competence-list-header .list-item."+field);
+      let sortElement = $(".list-header .list-item."+field);
       if (sortElement.hasClass("ascending")) {
         sortElement.removeClass("ascending");
         sortElement.addClass("descending");
@@ -62,7 +62,7 @@ export default Component.extend({
       list.clear();
       list.pushObjects(elements);
       this.set("list", list);
-      $(".competence-list-header .list-item").removeClass("sorting");
+      $(".list-header .list-item").removeClass("sorting");
       sortElement.addClass("sorting");
     }
   }

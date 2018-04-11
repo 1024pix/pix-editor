@@ -63,47 +63,51 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   flex:1;
   position:relative;
 
-  .main-left {
+
+  .ui[class*="top attached"].menu {
+    margin:0;
+    border-radius:0;
+  }
+
+  .ui[class*="bottom attached"].menu {
+    margin:0;
+    border-radius:0;
+  }
+
+  .ui.attached {
+
+    &.menu:not(.tabular) {
+    border:none;
+    border-bottom:1px solid rgba(34, 36, 38, 0.15);
+    background-color:#F9FAFB;
+    }
+
+    + .ui.attached.menu:not(.top) {
+      border-top:1px solid rgba(34, 36, 38, 0.15);
+    }
+
+    &.segment {
+      margin:0;
+      border:none;
+      padding:0;
+    }
+  }
+
+
+  .main-left,
+  .main-right {
     flex:1;
     display:flex;
     flex-direction:column;
     justify-content:flex-start;
     box-sizing:border-box;
     overflow:hidden;
-
-    > .ui[class*="top attached"].menu {
-      margin:0;
-      border-radius:0;
-    }
-
-    > .ui[class*="bottom attached"].menu {
-      margin:0;
-      border-radius:0;
-    }
-
-    > .ui.attached {
-
-      &.menu:not(.tabular) {
-      border:none;
-      border-bottom:1px solid rgba(34, 36, 38, 0.15);
-      background-color:#F9FAFB;
-      }
-
-      + .ui.attached.menu:not(.top) {
-        border-top:1px solid rgba(34, 36, 38, 0.15);
-      }
-
-      &.segment {
-        margin:0;
-        border:none;
-        padding:0;
-      }
-    }
   }
 
   .main-right {
-    flex:1;
+    border-left:1px solid rgba(34, 36, 38, 0.15);
   }
+
 
   .messages {
     position:absolute;
@@ -111,7 +115,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     top:5px;
   }
 }
-.competence-name {
+.main-title {
   box-sizing:border-box;
   padding:0 10px;
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
@@ -119,7 +123,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   h1 {
     font-size:20px;
     font-weight:normal;
-    padding:4px 0;
+    padding:6px 0;
     color:#FFFFFF;
   }
   .skill-mode {
@@ -136,7 +140,6 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
   .skill-mode .checkbox {
     margin-left:10px;
-    margin-top:6px;
   }
 }
 
@@ -439,18 +442,19 @@ img.clickable {
   margin-top:5px;
 }
 
-.competence-list {
+.competence-list,
+.alternatives-list {
   height:100%;
   display:flex;
   flex-direction:column;
 
-  .competence-list-header {
+  .list-header {
     height:40px;
     background-color:#F9FAFB;
     font-weight:bold;
   }
 
-  .competence-list-body {
+  .list-body {
     flex:1;
     position:relative;
   }
@@ -502,6 +506,16 @@ img.clickable {
 
     &.active {
       color:red;
+    }
+  }
+}
+
+.alternatives-list {
+  .list-body .list-row {
+    color:#0000ff;
+
+    &.workbench {
+      color:#ff0000;
     }
   }
 }

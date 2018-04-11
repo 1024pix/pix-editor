@@ -96,17 +96,18 @@ export default Route.extend({
             skill.set("template", template);
           }
           skill.set('alternativeCount', alternativeCount);
+          let workbenchAlternatives = [];
           if (workbenchChallengeIdsBySkill[skill.get("id")]) {
-            let set = workbenchChallengeIdsBySkill[skill.get("id")].reduce((current, id) => {
+            workbenchAlternatives = workbenchChallengeIdsBySkill[skill.get("id")].reduce((current, id) => {
               if (orderedWorkbenchChallenges[id]) {
                 current.push(orderedWorkbenchChallenges[id]);
               }
               return current;
             }, []);
-            skill.set("workbenchChallenges", set);
+            skill.set("workbenchChallenges", workbenchAlternatives);
           }
           if (template) {
-            template.set("alternatives", {production:alternatives, workbench:set});
+            template.set("alternatives", {production:alternatives, workbench:workbenchAlternatives});
           }
         }
       })

@@ -1,9 +1,9 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item skillNames" onclick={{action "sortBy" "skillNames"}}>Acquis</div>
+    <div class="list-item skillNames" onclick={{action "sortBy" "skillNames"}}>Indice</div>
     <div class="list-item instructions" onclick={{action "sortBy" "instructions"}}>Consigne</div>
-    <div class="list-item type" onclick={{action "sortBy" "type"}}>Type</div>
     <div class="list-item status" onclick={{action "sortBy" "status"}}>Statut</div>
+    <div class="list-item type" onclick={{action "sortBy" "type"}}>Production</div>
   </div>
 </div>
 <div class="list-body">
@@ -11,11 +11,11 @@
     items=list
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
   }}
-  {{#link-to "competence.challenge" competenceModel item tagName="div" class="list-row"}}
-    <div class="list-item">{{item.skillNames}}</div>
+  {{#link-to "competence.challenge" competenceModel item tagName="div" class=(concat "list-row" (if item.workbench " workbench" ""))}}
+    <div class="list-item">{{item.computedIndex}}</div>
     <div class="list-item">{{item.instructions}}</div>
-    <div class="list-item">{{item.type}}</div>
     <div class="list-item">{{item.status}}</div>
+    <div class="list-item">{{#if item.workbench}}Non{{else}}Oui{{/if}}</div>
   {{/link-to}}
   {{/ember-collection}}
 </div>
