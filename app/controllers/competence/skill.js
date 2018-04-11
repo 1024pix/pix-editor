@@ -56,6 +56,7 @@ export default Controller.extend({
       let skill = this.get("skill");
       skill.save()
       .then(()=> {
+        this.set("edition", false);
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Acquis mis à jour", true);
       })
