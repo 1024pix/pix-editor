@@ -335,10 +335,9 @@ img.clickable {
     }
 
     .field.disabled {
-      textarea {
-        background-color:#f9f9f9;
-      }
-      input[type="text"] {
+      textarea,
+      input[type="text"],
+      .selection {
         background-color:#f9f9f9;
       }
     }
