@@ -14,7 +14,7 @@
 </div>
 </div>
 {{#if challenge.illustration}}
-    {{#ui-modal class="template small" context=".main" closable=true}}
+    {{#ui-modal class=(concat "small " elementClass) context=".main" closable=true detachable=false}}
       <i class="close icon"></i>
       <div class="image content">
         <img class="image" src="{{challenge.illustration.[0].url}}">
@@ -22,8 +22,8 @@
     {{/ui-modal}}
 {{/if}}
 <div class="challenge">
-  <div class="challenge-data">
-    {{challenge-form challenge=challenge showIllustration=(action 'showIllustration') edition=edition}}
+  <div class="challenge-data {{elementClass}}">
+    {{challenge-form challenge=challenge showIllustration=(action 'showIllustration') edition=edition alternative=alternative}}
     {{#if copyOperation}}
       {{textarea value=challenge.preview id=copyZoneId}}
     {{/if}}
@@ -64,7 +64,7 @@
       <i class="linkify icon"></i>
       Copier lien
     </a>
-    {{#if (not workbench)}}
+    {{#if (not alternative)}}
       <a class="item alternatives"  onclick={{action "showAlternatives"}}>
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;

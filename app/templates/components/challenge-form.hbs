@@ -19,10 +19,14 @@
   </div>
   {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
   {{form-files title="Pièces jointes" value=challenge.attachments edition=edition display=(action showIllustration)}}
+{{#if (not alternative)}}
   {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
+{{/if}}
   {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
   {{form-select title="Statut" value=challenge.status options=options.status edition=edition}}
+{{#if (not alternative)}}
   {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
+{{/if}}
   {{#if (not edition)}}
   {{form-input value=challenge.id title="Record id" edition=edition}}
   {{/if}}

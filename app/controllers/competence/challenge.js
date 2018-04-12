@@ -7,6 +7,7 @@ import { alias } from '@ember/object/computed';
 import { computed } from '@ember/object';
 
 export default Controller.extend({
+  elementClass:"template-challenge",
   config:service(),
   maximized:false,
   copyOperation:false,
@@ -14,7 +15,7 @@ export default Controller.extend({
   creation:false,
   wasMaximized:false,
   updateCache:true,
-  workbench:false,
+  alternative:false,
   challenge:alias("model"),
   competence:controller(),
   application:controller(),
@@ -30,8 +31,8 @@ export default Controller.extend({
     }
   }),
   actions:{
-    showIllustration: function(className){
-      $(".ui." + className + ".small.modal").modal({dimmerSettings: {closable:true}}).modal('show');
+    showIllustration: function(){
+      $("."+this.get("elementClass")+".small.modal").modal({dimmerSettings: {closable:true}}).modal('show');
     },
     maximize() {
       this.set("maximized", true);
@@ -77,7 +78,7 @@ export default Controller.extend({
       this.set("wasMaximized", state);
       this.send("maximize");
       this.set("edition", true);
-      $(".challenge-data").scrollTop(0);
+      $("."+this.get("elementClass")+".challenge-data" ).scrollTop(0);
     },
     cancelEdit() {
       this.set("edition", false);

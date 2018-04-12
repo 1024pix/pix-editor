@@ -7,13 +7,16 @@ import { inject as controller } from "@ember/controller";
 export default Controller.extend({
   router:service(),
   application:controller(),
-  listHidden:false,
+  childComponentMaximized:false,
   size:computed("router.currentRouteName", function() {
     if (this.get("router.currentRouteName") == 'competence.challenge.alternatives.index') {
       return "full";
     } else {
       return "half";
     }
+  }),
+  listHidden:computed("childComponentMaximized", function() {
+    return this.get("childComponentMaximized")?"hidden":"";
   }),
   alternatives:computed("challenge", function() {
     let challenge = this.get("challenge");
@@ -28,6 +31,16 @@ export default Controller.extend({
   actions: {
     newAlternative() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
+    },
+    maximizeChildComponent() {
+      this.set("childComponentMaximized", true);
+    },
+    minimizeChildComponent() {
+      this.set("childComponentMaximized", false);
+    },
+    closeChildComponent() {
+      this.set("childComponentMaximized", false);
+      this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), this.get("challenge"));
     }
   }
 });

@@ -4,7 +4,7 @@
   {{/if}}
   {{#if value.length}}
     {{#if value.[0].url}}
-      <img src="{{value.[0].url}}" alt="" class="clickable" onclick={{action display 'template'}}>
+      <img src="{{value.[0].url}}" alt="" class="clickable" onclick={{action display}}>
     {{else}}
       {{value.[0].file.name}} ({{value.[0].file.size}} octets)
     {{/if}}

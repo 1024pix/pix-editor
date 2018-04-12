@@ -17,6 +17,7 @@ export default Route.extend({
       }
     }
     controller.set("challengeCount",count);
+    controller.set("childComponentMaximized", false);
   },
   renderTemplate() {
     this.render('competence/challenge/alternatives', {
