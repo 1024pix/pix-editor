@@ -3,19 +3,20 @@ import {observer} from "@ember/object";
 import $ from "jquery";
 
 export default Component.extend({
-  classNames:["competence-list"],
-  classNameBindings: ["hidden"],
+  classNameBindings: ["hidden", "listType"],
+  listType: "template-list",
   init() {
     this._super(...arguments);
     this.columns = [100];
   },
   sortManager:observer("list", function() {
-    $(".list-header .list-item").removeClass("sorting");
+    $("."+this.get("listType")+" .list-header .list-item").removeClass("sorting");
   }),
   actions:{
-    sortBy(field) {
+    sortBy(field, type) {
+      let className = this.get("listType");
       let sort1, sort2;
-      let sortElement = $(".list-header .list-item."+field);
+      let sortElement = $("."+className+" .list-header .list-item."+field);
       if (sortElement.hasClass("ascending")) {
         sortElement.removeClass("ascending");
         sortElement.addClass("descending");
@@ -29,7 +30,7 @@ export default Component.extend({
       }
       let list = this.get("list");
       let elements = list.toArray();
-      if (field === "skillNames") {
+      if (type === "array") {
         elements.sort((a,b) => {
           let val1 = a.get(field);
           let val2 = b.get(field);
@@ -49,6 +50,25 @@ export default Component.extend({
             return sort2;
           return 0;
         })
+      } else if (type === "string") {
+        elements.sort((a,b) => {
+          let val1 = a.get(field), val2 = b.get(field);
+          if (val1) {
+            val1 = val1.toLowerCase();
+          } else {
+            val1 = "";
+          }
+          if (val2) {
+            val2 = val2.toLowerCase();
+          } else {
+            val2 = "";
+          }
+          if (val1>val2)
+            return sort1;
+          if (val1<val2)
+            return sort2;
+          return 0;
+        })
       } else {
         elements.sort((a,b) => {
           let val1 = a.get(field), val2 = b.get(field);
@@ -57,12 +77,12 @@ export default Component.extend({
           if (val1<val2)
             return sort2;
           return 0;
-        })
+        });
       }
       list.clear();
       list.pushObjects(elements);
       this.set("list", list);
-      $(".list-header .list-item").removeClass("sorting");
+      $("."+className+" .list-header .list-item").removeClass("sorting");
       sortElement.addClass("sorting");
     }
   }

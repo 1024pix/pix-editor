@@ -442,8 +442,8 @@ img.clickable {
   margin-top:5px;
 }
 
-.competence-list,
-.alternatives-list {
+.template-list,
+.alternative-list {
   height:100%;
   display:flex;
   flex-direction:column;
@@ -510,7 +510,7 @@ img.clickable {
   }
 }
 
-.alternatives-list {
+.alternative-list {
   .list-body .list-row {
     color:#0000ff;
 
