@@ -125,6 +125,24 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     font-weight:normal;
     padding:6px 0;
     color:#FFFFFF;
+
+    .ui.right.floated.menu {
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      min-height:0;
+      a {
+        padding-top:7px;
+        padding-bottom:0;
+        background-color:transparent;
+        box-shadow:none;
+        border:none;
+        i {
+          color:#ffffff;
+        }
+      }
+    }
+
   }
   .skill-mode {
     float:right;

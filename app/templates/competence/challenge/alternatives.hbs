@@ -8,7 +8,11 @@
         <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
       </div>
     </div>-->
+  <div class="ui right floated menu">
+    {{#link-to "competence.challenge" competence challenge class="ui icon item"}}<i class="icon window close"></i>{{/link-to}}
+  </div>
       Déclinaisons de {{challenge.skillNames}}
+
   </h1>
 </div>
 <div class="ui top attached borderless labelled icon menu {{listHidden}}">
