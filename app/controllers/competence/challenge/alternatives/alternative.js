@@ -11,7 +11,12 @@ export default Challenge.extend({
       if (pixId) {
         return pixId
       } else {
-        return "Déclinaison n°"+challenge.get("alternativeIndex");
+        let alternativeIndex = challenge.get("alternativeIndex");
+        if (alternativeIndex) {
+          return "Déclinaison n°"+alternativeIndex;
+        } else {
+          return "Déclinaison (pas d'indice)";
+        }
       }
     }
   }),
