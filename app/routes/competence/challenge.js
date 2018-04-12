@@ -12,7 +12,6 @@ export default Route.extend({
       this.controllerFor("competence").set("listView", true);
     }
     //this.controllerFor("competence").set("currentChallenge", model);
-    this.controllerFor("competence").set("twoColumns", false);
   },
   actions: {
     willTransition(transition) {

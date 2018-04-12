@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   setupController(controller) {
-    this.controllerFor("competence").set("twoColumns", true);
+    this._super(controller);
     let challenge = this.modelFor("competence.challenge");
     controller.set("challenge", challenge);
     let competence = this.modelFor("competence");
@@ -23,11 +23,5 @@ export default Route.extend({
       into: 'competence',
       outlet: 'mainRight'
     })
-  },
-  actions: {
-    willTransition() {
-      this.controllerFor("competence").set("twoColumns", false);
-    }
   }
-
 });

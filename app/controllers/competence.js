@@ -13,7 +13,6 @@ export default Controller.extend({
   application:controller(),
   currentChallenge:null,
   currentSkill:null,
-  twoColumns:false,
   competence:alias("model.competence"),
   challenges:alias("model.challenges"),
   init() {
@@ -71,6 +70,17 @@ export default Controller.extend({
       return "full";
     } else {
       return "half";
+    }
+  }),
+  twoColumns:computed("router.currentRouteName", function() {
+    let routeName = this.get("router.currentRouteName");
+    switch (routeName) {
+      case "competence.challenge.alternatives":
+      case "competence.challenge.alternatives.index":
+      case "competence.challenge.alternatives.alternative":
+        return true;
+      default:
+        return false;
     }
   }),
   actions: {
