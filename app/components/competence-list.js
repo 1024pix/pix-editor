@@ -72,6 +72,16 @@ export default Component.extend({
       } else {
         elements.sort((a,b) => {
           let val1 = a.get(field), val2 = b.get(field);
+          if (val1) {
+            val1 = parseInt(val1);
+          } else {
+            val1 = 0;
+          }
+          if (val2) {
+            val2 = parseInt(val2);
+          } else {
+            val2 = 0;
+          }
           if (val1>val2)
             return sort1;
           if (val1<val2)
