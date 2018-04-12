@@ -24,7 +24,7 @@ export default Controller.extend({
   mayUpdateCache:alias("pixConnector.connected"),
   challengeTitle:computed("creation","challenge", function() {
     if (this.get("creation")) {
-      return "<span class='creation'>Nouveau prototype</span>";
+      return "Nouveau prototype";
     } else {
       return this.get("challenge.skillNames");
     }
