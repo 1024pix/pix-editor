@@ -107,7 +107,7 @@ export default Route.extend({
             skill.set("workbenchChallenges", workbenchAlternatives);
           }
           if (template) {
-            template.set("alternatives", {production:alternatives, workbench:workbenchAlternatives});
+            template.set("orderedAlternatives", {production:alternatives, workbench:workbenchAlternatives});
           }
         }
       })

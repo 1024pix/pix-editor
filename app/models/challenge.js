@@ -1,11 +1,12 @@
 import DS from "ember-data";
 import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
+import { A } from "@ember/array";
 
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.alternatives = {};
+    this.orderedAlternatives = {production:[], workbench:[]};
   },
   competence:DS.attr(),
   instructions:DS.attr(),
@@ -84,5 +85,17 @@ export default DS.Model.extend({
       })
     }
     return this.get("myStore").createRecord("challenge", data);
-  }
+  },
+  alternatives:computed("orderedAlternatives", function() {
+    let set = this.get("orderedAlternatives");
+    let productionAlternatives = set.production.toArray();
+    let workbenchAlternatives = set.workbench.toArray();
+    let result = new A();
+    result.pushObjects(productionAlternatives);
+    result.pushObjects(workbenchAlternatives);
+    return result;
+  }),
+  alternativesCount:computed("alternatives", function() {
+    return this.get("alternatives").length;
+  })
 });

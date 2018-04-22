@@ -7,16 +7,7 @@ export default Route.extend({
     controller.set("challenge", challenge);
     let competence = this.modelFor("competence");
     controller.set("competence", competence);
-    let count = 0;
-    if (challenge.alternatives) {
-      if (challenge.alternatives.production) {
-        count+=challenge.alternatives.production.length;
-      }
-      if (challenge.alternatives.workbench) {
-        count+=challenge.alternatives.workbench.length;
-      }
-    }
-    controller.set("challengeCount",count);
+    controller.set("challengeCount",challenge.get("alternativesCount"));
     controller.set("childComponentMaximized", false);
   },
   renderTemplate() {
