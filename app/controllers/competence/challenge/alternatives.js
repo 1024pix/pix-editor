@@ -39,6 +39,13 @@ export default Controller.extend({
     addChallenge(challenge) {
       this.get("alternatives").addObject(challenge);
       this.set("challengeCount", this.get("challengeCount")+1);
+    },
+    removeChallenge(challenge) {
+      let alternatives = this.get("alternatives");
+      if (alternatives.includes(challenge)) {
+        alternatives.removeObject(challenge);
+        this.set("challengeCount", this.get("challengeCount")-1);
+      }
     }
   }
 });

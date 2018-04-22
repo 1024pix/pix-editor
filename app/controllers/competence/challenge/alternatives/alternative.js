@@ -51,17 +51,6 @@ export default Challenge.extend({
         }
         this.set("copyOperation", false);
       });
-    },
-    save() {
-      this.get("application").send("isLoading");
-      return this._saveChallenge()
-      .then(() => {
-        this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Épreuve mise à jour", true);
-      }).catch(() => {
-        this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);
-      });
     }
   }
 });
