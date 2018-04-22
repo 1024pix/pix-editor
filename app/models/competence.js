@@ -108,7 +108,7 @@ export default DS.Model.extend({
           skill.set("workbenchChallenges", workbenchAlternatives);
         }
         if (template) {
-          template.set("orderedAlternatives", {production:alternatives, workbench:workbenchAlternatives});
+          template.set("sortedAlternatives", {production:alternatives, workbench:workbenchAlternatives});
         }
       }
     })

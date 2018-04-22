@@ -6,7 +6,7 @@ import { A } from "@ember/array";
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.orderedAlternatives = {production:[], workbench:[]};
+    this.sortedAlternatives = {production:[], workbench:[]};
   },
   competence:DS.attr(),
   instructions:DS.attr(),
@@ -34,8 +34,8 @@ export default DS.Model.extend({
   template:computed("genealogy", function(){
     return (this.get("genealogy") == "Prototype 1");
   }),
-  validated:computed('status', function(){
-    let status = this.get('status');
+  validated:computed("status", function(){
+    let status = this.get("status");
     return ["validated", "validé sans test", "pré-validé"].includes(status);
   }),
   notDeclinable:computed('declinable', function() {
@@ -86,8 +86,8 @@ export default DS.Model.extend({
     }
     return this.get("myStore").createRecord("challenge", data);
   },
-  alternatives:computed("orderedAlternatives", function() {
-    let set = this.get("orderedAlternatives");
+  alternatives:computed("sortedAlternatives", function() {
+    let set = this.get("sortedAlternatives");
     let productionAlternatives = set.production.toArray();
     let workbenchAlternatives = set.workbench.toArray();
     let result = new A();
