@@ -1,6 +1,6 @@
-import Challenge from './challenge';
+import Alternative from './alternative';
 
-export default Challenge.extend({
+export default Alternative.extend({
   creation:true,
   mayUpdateCache:false,
   queryParams: ['from'],
@@ -15,11 +15,10 @@ export default Challenge.extend({
       return this._saveChallenge()
       .then(() => {
         this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Prototype enregistré", true);
+        this.get("application").send("showMessage", "Déclinaison enregistrée", true);
         let challenge = this.get("challenge");
         this.get("parentController").send("addChallenge", challenge);
-        // use id in order to reload models
-        this.transitionToRoute("competence.challenge", this.get("competence").get("id"), challenge.get("id"));
+        this.transitionToRoute("competence.challenge.alternatives.alternative", this.get("competence.id"), this.get("template.id"), challenge.get("id"));
       }).catch(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la création", false);

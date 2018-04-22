@@ -78,6 +78,7 @@ export default Controller.extend({
       case "competence.challenge.alternatives":
       case "competence.challenge.alternatives.index":
       case "competence.challenge.alternatives.alternative":
+      case "competence.challenge.alternatives.new-alternative":
         return true;
       default:
         return false;

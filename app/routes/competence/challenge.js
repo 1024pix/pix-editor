@@ -8,10 +8,10 @@ export default Route.extend({
     this._super(controller, model);
     controller.set("maximized", false);
     controller.set("edition", false);
+    controller.set("competence", this.modelFor("competence"));
     if (model.template && !model.get("skillNames")) {
       this.controllerFor("competence").set("listView", true);
     }
-    //this.controllerFor("competence").set("currentChallenge", model);
   },
   actions: {
     willTransition(transition) {

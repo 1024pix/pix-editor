@@ -46,9 +46,9 @@ export default DS.Model.extend({
     let pixId = this.get("pixId");
     if (pixId) {
       let parts = pixId.split("_");
-      return parts[parts.length - 1];
+      return parseInt(parts[parts.length - 1]);
     } else {
-      return -1;
+      return null;
     }
   }),
   alternativeCount:0,
@@ -71,7 +71,7 @@ export default DS.Model.extend({
     let status = this.get("status");
     return (status === "archive");
   }),
-  clone:function() {
+  clone:function(fieldsToRemove) {
     let data = this.toJSON({includeId:false});
     data.status = "proposé";
     delete data.pixId;
@@ -84,7 +84,14 @@ export default DS.Model.extend({
         return {url:value.url, filename:value.filename};
       })
     }
-    return this.get("myStore").createRecord("challenge", data);
+    if (fieldsToRemove) {
+      fieldsToRemove.forEach((current) => {
+        if (data[current]) {
+          delete data[current];
+        }
+      });
+    }
+    return this.get("myStore").createRecord(this.constructor.modelName, data);
   },
   alternatives:computed("sortedAlternatives", function() {
     let set = this.get("sortedAlternatives");
@@ -97,5 +104,15 @@ export default DS.Model.extend({
   }),
   alternativesCount:computed("alternatives", function() {
     return this.get("alternatives").length;
+  }),
+  nextComputedIndex:computed("alternatives", function() {
+    return this.get("alternatives").reduce((current, alternative) => {
+      let index = alternative.get("computedIndex");
+      if (index && index >= current) {
+        return index+1;
+      } else {
+        return current;
+      }
+    }, 1);
   })
 });

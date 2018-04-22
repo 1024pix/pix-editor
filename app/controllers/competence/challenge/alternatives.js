@@ -32,6 +32,13 @@ export default Controller.extend({
     closeChildComponent() {
       this.set("childComponentMaximized", false);
       this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), this.get("challenge"));
+    },
+    copyChallenge(challengeId) {
+      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"), { queryParams: { from: challengeId}});
+    },
+    addChallenge(challenge) {
+      this.get("alternatives").addObject(challenge);
+      this.set("challengeCount", this.get("challengeCount")+1);
     }
   }
 });

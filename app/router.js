@@ -10,8 +10,9 @@ Router.map(function() {
   this.route('competence', {path:'/competence/:competence_id'}, function() {
     this.route('new-template', {path:'/challenge'});
     this.route('challenge', {path:'/challenge/:challenge_id'}, function() {
-      this.route('alternatives', {path:'/alternative'}, function() {
+      this.route('alternatives', {path:'/alternatives'}, function() {
         this.route('alternative', {path:'/:alternative_id'});
+        this.route('new-alternative', {path:'/new'});
       });
     });
     this.route('skill', {path:'/skill/:skill_id'});

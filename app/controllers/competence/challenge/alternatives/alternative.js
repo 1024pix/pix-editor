@@ -7,7 +7,7 @@ export default Challenge.extend({
   alternative:true,
   copyZoneId:"copyZoneWorkbench",
   elementClass:"alternative-challenge",
-  alternatives:controller("competence.challenge.alternatives"),
+  parentController:controller("competence.challenge.alternatives"),
   challengeTitle:computed("challenge", function() {
     let challenge = this.get("challenge");
     if (challenge) {
@@ -25,18 +25,6 @@ export default Challenge.extend({
     }
   }),
   actions:{
-    maximize() {
-      this.set("maximized", true);
-      this.get("alternatives").send("maximizeChildComponent");
-    },
-    minimize() {
-      this.set("maximized", false);
-      this.get("alternatives").send("minimizeChildComponent");
-    },
-    close() {
-      this.set("maximized", false);
-      this.get("alternatives").send("closeChildComponent");
-    },
     preview() {
       let challenge = this.get("challenge");
       window.open(challenge.get("preview"), challenge.get("id"));
@@ -74,10 +62,6 @@ export default Challenge.extend({
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);
       });
-    },
-    duplicate() {
-      this.get("application").send("showMessage", "Bientôt disponible...", true);
-      //this.get("competence").send("copyChallenge", this.get("challenge").get("id"));
     }
-}
+  }
 });

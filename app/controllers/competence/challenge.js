@@ -8,6 +8,7 @@ import { computed } from '@ember/object';
 
 export default Controller.extend({
   elementClass:"template-challenge",
+  parentController:controller("competence"),
   config:service(),
   maximized:false,
   copyOperation:false,
@@ -17,7 +18,6 @@ export default Controller.extend({
   updateCache:true,
   alternative:false,
   challenge:alias("model"),
-  competence:controller(),
   application:controller(),
   storage:service(),
   pixConnector:service(),
@@ -36,15 +36,15 @@ export default Controller.extend({
     },
     maximize() {
       this.set("maximized", true);
-      this.get("competence").send("maximizeChildComponent");
+      this.get("parentController").send("maximizeChildComponent");
     },
     minimize() {
       this.set("maximized", false);
-      this.get("competence").send("minimizeChildComponent");
+      this.get("parentController").send("minimizeChildComponent");
     },
     close() {
       this.set("maximized", false);
-      this.get("competence").send("closeChildComponent");
+      this.get("parentController").send("closeChildComponent");
     },
     preview() {
       let challenge = this.get("challenge");
@@ -98,7 +98,7 @@ export default Controller.extend({
         this.get("application").send("showMessage", "Épreuve mise à jour", true);
         let challenge = this.get("challenge");
         if (challenge.get("isArchived")) {
-          this.get("competence").send("removeChallenge", challenge);
+          this.get("parentController").send("removeChallenge", challenge);
           this.send("close");
         }
       }).catch(() => {
@@ -107,10 +107,10 @@ export default Controller.extend({
       });
     },
     duplicate() {
-      this.get("competence").send("copyChallenge", this.get("challenge").get("id"));
+      this.get("parentController").send("copyChallenge", this.get("challenge").get("id"));
     },
     showAlternatives() {
-      this.get("competence").send("showAlternatives", this.get("challenge"));
+      this.get("parentController").send("showAlternatives", this.get("challenge"));
     }
   },
   _saveChallenge() {
