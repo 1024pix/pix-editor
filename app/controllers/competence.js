@@ -13,7 +13,7 @@ export default Controller.extend({
   application:controller(),
   currentChallenge:null,
   currentSkill:null,
-  competence:alias("model.competence"),
+  competence:alias("model"),
   challenges:alias("model.challenges"),
   init() {
     this._super(...arguments);
@@ -92,7 +92,7 @@ export default Controller.extend({
     },
     closeChildComponent(refresh) {
       this.set("childComponentMaximized", false);
-      this.transitionToRoute("competence", this.get("model.competence").get("id"));
+      this.transitionToRoute("competence", this.get("competence").get("id"));
       if (refresh) {
         this.send("refreshModel");
       }
@@ -107,10 +107,10 @@ export default Controller.extend({
       this.set("listView", false);
     },
     newChallenge() {
-      this.transitionToRoute("competence.new-template", this.get("model"));
+      this.transitionToRoute("competence.new-template", this.get("competence"));
     },
     copyChallenge(challengeId) {
-      this.transitionToRoute("competence.new-template", this.get("model"), { queryParams: { from: challengeId}});
+      this.transitionToRoute("competence.new-template", this.get("competence"), { queryParams: { from: challengeId}});
     },
     soon() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
@@ -127,7 +127,7 @@ export default Controller.extend({
       }
     },
     showAlternatives(challenge) {
-      this.transitionToRoute("competence.challenge.alternatives", this.get("model"), challenge);
+      this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), challenge);
     }
   }
 });

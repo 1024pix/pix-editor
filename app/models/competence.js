@@ -49,7 +49,6 @@ export default DS.Model.extend({
       return current.concat(skill.get("challengeIds"));
     }, []);
   }),
-
   challenges:computed("skills", "workbenchSkills", "sortedChallenges", function() {
     const productionChallenges = this.get("sortedChallenges.production");
     const workbenchChallenges = this.get("sortedChallenges.workbench");
@@ -118,5 +117,8 @@ export default DS.Model.extend({
     }, Object.values(orderedChallenges).filter((value) => {
       return value.get("template");
     }));
+  }),
+  challengeCount:computed("challenges", function() {
+    return this.get("challenges").length;
   })
 });

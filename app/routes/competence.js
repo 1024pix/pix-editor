@@ -42,17 +42,13 @@ export default Route.extend({
     })
     .then(data => {
       competence.set("sortedChallenges", {production:data.bySkillProd, workbench:data.bySkillWorkbench, noSkill: data.byCompetenceProd});
-
-      return {
-        competence:competence,
-        challenges:competence.get("challenges")
-      }
+      return competence;
     });
   },
   setupController(controller, model) {
     this._super(controller, model);
     controller.set("childComponentMaximized", false);
-    controller.set("challengeCount", model.challenges.length);
+    controller.set("challengeCount", model.get("challengeCount"));
   },
   actions: {
     refreshModel() {
