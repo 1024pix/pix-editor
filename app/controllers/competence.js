@@ -91,15 +91,15 @@ export default Controller.extend({
     minimizeChildComponent() {
       this.set("childComponentMaximized", false);
     },
-    closeChildComponent(refresh) {
+    closeChildComponent() {
       this.set("childComponentMaximized", false);
       this.transitionToRoute("competence", this.get("competence").get("id"));
-      if (refresh) {
-        this.send("refreshModel");
-      }
     },
-    refresh() {
-      this.send("closeChildComponent", true);
+    refresh(closeChild) {
+      if (closeChild) {
+        this.send("closeChildComponent");
+      }
+      this.send("refreshModel");
     },
     setListView() {
       this.set("listView", true);

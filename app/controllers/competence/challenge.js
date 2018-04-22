@@ -100,6 +100,7 @@ export default Controller.extend({
         if (challenge.get("isArchived")) {
           this.get("parentController").send("removeChallenge", challenge);
           this.send("close");
+          this.get("parentController").send("refresh");
         }
       }).catch(() => {
         this.get("application").send("finishedLoading");

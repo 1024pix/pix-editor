@@ -7,6 +7,7 @@ import { alias } from "@ember/object/computed";
 export default Controller.extend({
   router:service(),
   application:controller(),
+  competenceController:controller("competence"),
   childComponentMaximized:false,
   alternatives:alias("challenge.alternatives"),
   size:computed("router.currentRouteName", function() {
@@ -46,6 +47,9 @@ export default Controller.extend({
         alternatives.removeObject(challenge);
         this.set("challengeCount", this.get("challengeCount")-1);
       }
+    },
+    refresh() {
+      this.get("competenceController").send("refresh");
     }
   }
 });
