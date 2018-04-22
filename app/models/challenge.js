@@ -1,5 +1,5 @@
-import DS from 'ember-data';
-import {computed} from '@ember/object';
+import DS from "ember-data";
+import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
 
 export default DS.Model.extend({
@@ -30,8 +30,8 @@ export default DS.Model.extend({
   pixId:DS.attr(),
   alternativeIndex:DS.attr(),
   myStore:service("store"),
-  template:computed('genealogy', function(){
-    return (this.get('genealogy') == 'Prototype 1');
+  template:computed("genealogy", function(){
+    return (this.get("genealogy") == "Prototype 1");
   }),
   validated:computed('status', function(){
     let status = this.get('status');
@@ -51,8 +51,8 @@ export default DS.Model.extend({
     }
   }),
   alternativeCount:0,
-  statusCSS:computed('status', function() {
-    let status = this.get('status');
+  statusCSS:computed("status", function() {
+    let status = this.get("status");
     switch (status) {
       case "validé":
         return "validated";
@@ -62,9 +62,13 @@ export default DS.Model.extend({
         return "suggested";
       case "pré-validé":
         return "prevalidated";
-      case "archivé":
+      case "archive":
         return "archived";
     }
+  }),
+  isArchived: computed("status", function() {
+    let status = this.get("status");
+    return (status === "archive");
   }),
   clone:function() {
     let data = this.toJSON({includeId:false});

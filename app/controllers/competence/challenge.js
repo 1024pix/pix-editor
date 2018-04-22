@@ -96,6 +96,11 @@ export default Controller.extend({
       .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Épreuve mise à jour", true);
+        let challenge = this.get("challenge");
+        if (challenge.get("isArchived")) {
+          this.get("competence").send("removeChallenge", challenge);
+          this.send("close");
+        }
       }).catch(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);

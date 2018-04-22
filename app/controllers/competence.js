@@ -119,6 +119,13 @@ export default Controller.extend({
       this.get("challenges").addObject(challenge);
       this.set("challengeCount", this.get("challengeCount")+1);
     },
+    removeChallenge(challenge) {
+      let challenges = this.get("challenges");
+      if (challenges.includes(challenge)) {
+        challenges.removeObject(challenge);
+        this.set("challengeCount", this.get("challengeCount")-1);
+      }
+    },
     showAlternatives(challenge) {
       this.transitionToRoute("competence.challenge.alternatives", this.get("model"), challenge);
     }
