@@ -1,5 +1,6 @@
 import DS from 'ember-data';
 import {computed} from '@ember/object';
+import {inject as service} from "@ember/service";
 
 export default DS.Model.extend({
   init() {
@@ -28,6 +29,7 @@ export default DS.Model.extend({
   preview:DS.attr({readOnly:true}),
   pixId:DS.attr(),
   alternativeIndex:DS.attr(),
+  myStore:service("store"),
   template:computed('genealogy', function(){
     return (this.get('genealogy') == 'Prototype 1');
   }),
@@ -63,5 +65,20 @@ export default DS.Model.extend({
       case "archivé":
         return "archived";
     }
-  })
+  }),
+  clone:function() {
+    let data = this.toJSON({includeId:false});
+    data.status = "proposé";
+    delete data.pixId;
+    if (data.illustration) {
+      let illustration = data.illustration[0];
+      data.illustration = [{url:illustration.url, filename:illustration.filename}];
+    }
+    if (data.attachments) {
+      data.attachments = data.attachments.map(value => {
+        return {url:value.url, filename:value.filename};
+      })
+    }
+    return this.get("myStore").createRecord("challenge", data);
+  }
 });
