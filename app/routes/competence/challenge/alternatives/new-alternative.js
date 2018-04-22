@@ -12,7 +12,11 @@ export default Route.extend({
         return model;
       });
     } else {
-      return this.get("store").createRecord("workbenchChallenge", {competence:[this.modelFor("competence").competence.id], status:"proposé", t1:true, t2:true, t3:true, genealogy:"Dérivé 1", alternativeIndex:alternativeIndex.toString()});
+      let template = this.modelFor("competence/challenge");
+      let newDerived = template.derive();
+      newDerived.set("alternativeIndex", alternativeIndex.toString())
+      //TODO: handle skills creation in workbench if required
+      return newDerived;
     }
   },
   setupController(controller, model) {

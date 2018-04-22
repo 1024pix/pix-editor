@@ -22,7 +22,7 @@ export default Controller.extend({
   }),
   actions: {
     newAlternative() {
-      this.get("application").send("showMessage", "Bientôt disponible...", true);
+      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"));
     },
     maximizeChildComponent() {
       this.set("childComponentMaximized", true);

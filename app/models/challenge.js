@@ -31,6 +31,7 @@ export default DS.Model.extend({
   pixId:DS.attr(),
   alternativeIndex:DS.attr(),
   myStore:service("store"),
+  config:service(),
   template:computed("genealogy", function(){
     return (this.get("genealogy") == "Prototype 1");
   }),
@@ -71,7 +72,7 @@ export default DS.Model.extend({
     let status = this.get("status");
     return (status === "archive");
   }),
-  clone:function(fieldsToRemove) {
+  _getJSON(fieldsToRemove) {
     let data = this.toJSON({includeId:false});
     data.status = "proposé";
     delete data.pixId;
@@ -91,7 +92,16 @@ export default DS.Model.extend({
         }
       });
     }
-    return this.get("myStore").createRecord(this.constructor.modelName, data);
+    return data;
+  },
+  clone(fieldsToRemove) {
+    return this.get("myStore").createRecord(this.constructor.modelName, this._getJSON(fieldsToRemove));
+  },
+  derive() {
+    let data = this._getJSON(["competence", "skills", "skillNames"]);
+    data.genealogy = "Décliné 1";
+    data.author = this.get("config").get("author");
+    return this.get("myStore").createRecord("workbenchChallenge", data);
   },
   alternatives:computed("sortedAlternatives", function() {
     let set = this.get("sortedAlternatives");
