@@ -6,7 +6,7 @@ export default ChallengeModel.extend({
   computedIndex:computed("alternativeIndex", function() {
     let index = this.get("alternativeIndex");
     if (index) {
-      return parseInt(index[0]);
+      return parseInt(index);
     } else {
       return null;
     }
