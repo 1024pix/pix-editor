@@ -1,6 +1,8 @@
 <form action="" class="ui form">
   {{form-mde title="Consigne" value=challenge.instructions edition=edition}}
+{{#if (not alternative)}}
   {{form-select title="Type" value=challenge.type options=options.types edition=edition}}
+{{/if}}
   {{form-textarea title="Propositions" value=challenge.suggestion edition=edition}}
   {{form-textarea title="Réponses" value=challenge.answers edition=edition}}
   <div class={{concat "field" (if edition "" " disabled")}}>
