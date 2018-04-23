@@ -5,6 +5,8 @@ export default Controller.extend({
   loading:false,
   loadingMessage:"",
   displayConfig:false,
+  popinImageSrc:"",
+  popinImageDisplay:false,
   init() {
     this._super(...arguments);
     this.messages = [];
@@ -42,6 +44,10 @@ export default Controller.extend({
     },
     configUpdated() {
       this.send("refresh");
+    },
+    showPopinImage(src) {
+      this.set("popinImageSrc", src);
+      this.set("popinImageDisplay", true);
     }
   }
 });

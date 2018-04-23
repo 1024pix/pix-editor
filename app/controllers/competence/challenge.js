@@ -32,7 +32,8 @@ export default Controller.extend({
   }),
   actions:{
     showIllustration: function(){
-      $("."+this.get("elementClass")+".small.modal").modal({dimmerSettings: {closable:true}}).modal('show');
+      let illustration = this.get("challenge.illustration")[0];
+      this.get("application").send("showPopinImage", illustration.url);
     },
     maximize() {
       this.set("maximized", true);
