@@ -61,6 +61,7 @@ export default Service.extend({
       }
       return this.get("ajax").post(url, data)
       .then(() => {
+        data.dataType="text";
         return this.get("ajax").post(url+"/solution", data);
       })
       .catch((error) => {
