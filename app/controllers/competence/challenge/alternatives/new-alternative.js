@@ -12,11 +12,41 @@ export default Alternative.extend({
     },
     save() {
       this.get("application").send("isLoading");
-      return this._saveChallenge()
+      let challenge = this.get("challenge");
+      let skillChecks;
+      if (challenge.get("skills")) {
+        skillChecks = Promise.resolve(true);
+      } else {
+        let store = this.get("store");
+        // skills need to be set
+        let skillRequests = this.get("template").get("skills").reduce((current, skill) => {
+          let request = store.query("workbenchSkill", {filterByFormula:"FIND('"+skill+"', {Acquis prod})"})
+          .then((result) => {
+            if (result.get("length")>0) {
+              return result.get("firstObject").get("id");
+            } else {
+              let newSkill = store.createRecord("workbenchSkill", {skillId:skill, name:skill});
+              return newSkill.save()
+              .then(() => {
+                return newSkill.get("id");
+              });
+            }
+          });
+          current.push(request);
+          return current;
+        }, []);
+        skillChecks = Promise.all(skillRequests)
+        .then(ids => {
+          challenge.set("skills", ids);
+        });
+      }
+      return skillChecks
+      .then(() => {
+        return this._saveChallenge();
+      })
       .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Déclinaison enregistrée", true);
-        let challenge = this.get("challenge");
         this.get("parentController").send("addChallenge", challenge);
         this.transitionToRoute("competence.challenge.alternatives.alternative", this.get("competence.id"), this.get("template.id"), challenge.get("id"));
         this.get("parentController").send("refresh");

@@ -15,7 +15,6 @@ export default Route.extend({
       let template = this.modelFor("competence/challenge");
       let newDerived = template.derive();
       newDerived.set("alternativeIndex", alternativeIndex.toString())
-      //TODO: handle skills creation in workbench if required
       return newDerived;
     }
   },

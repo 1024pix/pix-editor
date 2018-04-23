@@ -100,7 +100,7 @@ export default DS.Model.extend({
   derive() {
     let data = this._getJSON(["competence", "skills", "skillNames"]);
     data.genealogy = "Décliné 1";
-    data.author = this.get("config").get("author");
+    data.author = [this.get("config").get("author")];
     return this.get("myStore").createRecord("workbenchChallenge", data);
   },
   alternatives:computed("sortedAlternatives", function() {
