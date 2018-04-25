@@ -72,6 +72,9 @@ export default DS.Model.extend({
     let status = this.get("status");
     return (status === "archive");
   }),
+  archive() {
+    this.set("status", "archive");
+  },
   _getJSON(fieldsToRemove) {
     let data = this.toJSON({includeId:false});
     data.status = "proposé";
@@ -102,6 +105,11 @@ export default DS.Model.extend({
     data.genealogy = "Décliné 1";
     data.author = [this.get("config").get("author")];
     return this.get("myStore").createRecord("workbenchChallenge", data);
+  },
+  publish() {
+    let data = this._getJSON(["skills", "alternativeIndex"]);
+    data.workbench = false;
+    return this.get("myStore").createRecord("challenge", data);
   },
   alternatives:computed("sortedAlternatives", function() {
     let set = this.get("sortedAlternatives");

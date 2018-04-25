@@ -113,6 +113,27 @@ export default Controller.extend({
     },
     showAlternatives() {
       this.get("parentController").send("showAlternatives", this.get("challenge"));
+    },
+    publish() {
+      let that = this;
+      this.get("application").send("confirm", "Mise en production", "Êtes-vous sûr de vouloir mettre l'épreuve en production ?", function(result) {
+        if (result) {
+          that.get("application").send("isLoading");
+          return that._publishChallenge()
+          .then(() => {
+            that.get("application").send("finishedLoading");
+            that.get("application").send("showMessage", "Mise en production réussie", true);
+            that.send("close");
+            that.get("parentController").send("refresh");
+          })
+          .catch(() =>{
+            that.get("application").send("finishedLoading");
+            that.get("application").send("showMessage", "Erreur lors de la mise en production", false);
+          });
+        } else {
+          that.get("application").send("showMessage", "Mise en production abandonnée", true);
+        }
+      });
     }
   },
   _saveChallenge() {
@@ -177,6 +198,65 @@ export default Controller.extend({
       } else {
         return Promise.resolve(true);
       }
+    });
+  },
+  _publishChallenge() {
+    // CHECKS
+    this.get("application").send("isLoading", "Vérifications");
+    let challenge = this.get("challenge");
+    if (!challenge.get("workbench")){
+      this.get("application").send("showMessage", "L'épreuve est DÉJÀ en production", false);
+      return Promise.reject();
+    }
+    let alternativeIndex = challenge.get("alternativeIndex");
+    if (!alternativeIndex) {
+      this.get("application").send("showMessage", "L'épreuve n'a pas d'indice", false);
+      return Promise.reject();
+    }
+    let store = this.get("store");
+    let productionChallenge;
+    let skillIds;
+    let skillNames;
+    try {
+      skillIds = challenge.get("skills").reduce((current, skillId) => {
+        let workbenchSkill = store.peekRecord("workbenchSkill", skillId);
+        if (!workbenchSkill) {
+          throw skillId;
+        }
+        current.push(workbenchSkill.get("skillId"));
+        return current;
+      }, []);
+      skillNames = skillIds.reduce((current, skillId) => {
+        let productionSkill = store.peekRecord("skill", skillId);
+        if (!productionSkill) {
+          throw skillId;
+        }
+        current.push(productionSkill.get("name"));
+        return current;
+      }, []);
+    } catch (e) {
+      this.get("application").send("showMessage", "Acquis "+e+" introuvable", false);
+      return Promise.reject();
+    }
+    let index = skillNames.join("")+"_"+1+"_"+alternativeIndex;
+    return store.query("challenge", {filterByFormula:"FIND('"+index+"', {Identifiant})"})
+    .then((result) => {
+      if (result.get("length")>0) {
+        this.get("application").send("showMessage", "Une épreuve avec le même indice est déjà en production", false);
+        return Promise.reject();
+      }
+      // CREATE PRODUCTION CHALLENGE
+      this.get("application").send("isLoading", "Enregistrement en PRODUCTION");
+      productionChallenge = challenge.publish();
+      productionChallenge.set("skills", skillIds);
+      productionChallenge.set("pixId", index);
+      return productionChallenge.save();
+    })
+    .then(() => {
+      // ARCHIVE WORKBENCH CHALLENGE
+      this.get("application").send("isLoading", "Mise à jour de la base AVAL");
+      challenge.archive();
+      return challenge.save();
     });
   }
 });

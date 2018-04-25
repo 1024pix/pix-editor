@@ -61,6 +61,13 @@
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
       </a>
+    {{else}}
+      {{#if challenge.workbench}}
+        <a class="item publish"  onclick={{action "publish"}}>
+          <i class="checkmark icon"></i>
+          Production
+        </a>
+      {{/if}}
     {{/if}}
   {{/if}}
 </div>

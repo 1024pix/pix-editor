@@ -405,8 +405,15 @@ img.clickable {
     display:none;
   }
 
-  .item.alternatives {
-    color:#2185d0;
+  .item {
+    &.publish{
+      color:#d02185;
+    }
+
+    &.alternatives {
+      color:#2185d0;
+    }
+
   }
 }
 
