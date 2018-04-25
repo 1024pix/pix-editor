@@ -17,7 +17,7 @@
         {{/link-to}}
       {{else}}
         {{#if skill.template}}
-        {{#link-to "competence.challenge" competenceModel skill.template tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
+        {{#link-to link competenceModel skill.template tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
         <div class="alternative">
           <span class="production">{{skill.alternativeCount}}</span> - <span class="workbench">{{skill.workbenchCount}}</span>
           {{#if skill.template.notDeclinable}}

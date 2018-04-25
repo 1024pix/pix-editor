@@ -84,6 +84,13 @@ export default Controller.extend({
         return false;
     }
   }),
+  challengeLink:computed("twoColumns", function() {
+    if (this.get("twoColumns")) {
+      return "competence.challenge.alternatives";
+    } else {
+      return "competence.challenge";
+    }
+  }),
   actions: {
     maximizeChildComponent() {
       this.set("childComponentMaximized", true);

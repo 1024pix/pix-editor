@@ -11,7 +11,7 @@
     items=list
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
   }}
-  {{#link-to "competence.challenge" competenceModel item tagName="div" class="list-row"}}
+  {{#link-to link competenceModel item tagName="div" class="list-row"}}
     <div class="list-item">{{item.skillNames}}</div>
     <div class="list-item">{{item.instructions}}</div>
     <div class="list-item">{{item.type}}</div>

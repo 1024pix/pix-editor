@@ -1,13 +1,5 @@
 <div class="main-title">
   <h1>
-  <!--   <div class="ui menu">
-      <div class="item header">
-        Déclinaisons de {{challenge.skillNames}}
-      </div>
-      <div class="ui right menu">
-        <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
-      </div>
-    </div>-->
   <div class="ui right floated menu">
     {{#link-to "competence.challenge" competence challenge class="ui icon item"}}<i class="icon window close"></i>{{/link-to}}
   </div>
@@ -16,9 +8,11 @@
   </h1>
 </div>
 <div class="ui top attached borderless labelled icon menu {{listHidden}}">
+{{#if challenge.skills}}
   <a class="left item" onclick={{action "newAlternative"}}>
     <i class="plus square outline icon"></i> Nouvelle déclinaison
   </a>
+{{/if}}
 </div>
 <div class="ui attached segment competence {{size}} {{listHidden}}">
   {{alternatives-list list=alternatives itemCount=challengeCount competenceModel=competence challengeModel=challenge hidden=false}}
