@@ -32,7 +32,11 @@ export default Challenge.extend({
     openAirtable() {
       let challenge = this.get("challenge");
       let config = this.get("config");
-      window.open(config.get("airtableUrl")+config.get("tableWorkbench")+"/"+challenge.get("id"), "airtable");
+      if (challenge.get("workbench")) {
+        window.open(config.get("airtableUrl")+config.get("tableWorkbench")+"/"+challenge.get("id"), "airtable");
+      } else {
+        window.open(config.get("airtableUrl")+config.get("tableChallenges")+"/"+challenge.get("id"), "airtable");
+      }
     },
     copyLink() {
       this.set("copyOperation", true);
