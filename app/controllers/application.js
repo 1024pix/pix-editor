@@ -6,7 +6,11 @@ export default Controller.extend({
   loadingMessage:"",
   displayConfig:false,
   popinImageSrc:"",
-  popinImageDisplay:false,
+  displayPopinImage:false,
+  displayConfirm:false,
+  confirmTitle:"",
+  confirmContent:"",
+  confirmCallback:null,
   init() {
     this._super(...arguments);
     this.messages = [];
@@ -45,9 +49,34 @@ export default Controller.extend({
     configUpdated() {
       this.send("refresh");
     },
+    configHidden() {
+      this.set("displayConfig", false);
+    },
     showPopinImage(src) {
       this.set("popinImageSrc", src);
-      this.set("popinImageDisplay", true);
+      this.set("displayPopinImage", true);
+    },
+    popinImageHidden() {
+      this.set("displayPopinImage", false);
+    },
+    confirm(title, message, callback) {
+      this.confirmCallback = callback;
+      this.set("confirmTitle", title);
+      this.set("confirmContent", message);
+      this.set("displayConfirm", true);
+    },
+    confirmApprove() {
+      if (this.confirmCallback) {
+        this.confirmCallback(true);
+      }
+    },
+    confirmDeny() {
+      if (this.confirmCallback) {
+        this.confirmCallback(false);
+      }
+    },
+    confirmHidden() {
+      this.set("displayConfirm", false);
     }
   }
 });

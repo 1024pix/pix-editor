@@ -48,11 +48,10 @@ export default Component.extend({
       this.set("saved", true);
     },
     closed() {
-      //TODO: replace this by an action to parent controller?
-      this.set("display", false);
       if (this.get("saved")) {
         this.get("update")();
       }
+      this.get("closed")();
     }
   }
 });

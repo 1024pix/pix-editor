@@ -9,10 +9,5 @@ export default Component.extend({
         $(".popin-image").modal('show');
       }).attr("src", this.get("src"));
     }
-  }),
-  actions:{
-    closed() {
-      this.set("display", false);
-    }
-  }
+  })
 });
