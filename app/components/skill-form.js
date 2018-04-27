@@ -4,7 +4,7 @@ export default Component.extend({
   init() {
     this._super(...arguments);
     this.options = {
-      'status': ["Proposé", "Validé"]
+      'status': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"]
     }
 
   }
