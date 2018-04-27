@@ -343,6 +343,7 @@ img.clickable {
   .ui.form {
     margin-bottom:20px;
     .disabled.field {
+      pointer-events:auto;
       opacity:1;
       > label {
         opacity:1;
