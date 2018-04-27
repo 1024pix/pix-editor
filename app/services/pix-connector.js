@@ -48,25 +48,43 @@ export default Service.extend({
       let workbench = challenge.get("workbench");
       let url, token;
       if (workbench) {
-        url = this.get("config").get("pixWorkbench")+"/api/challenges/"+challenge.get("id");
+        url = this.get("config").get("pixWorkbench")+"/api/cache";
         token = this.get("tokens").workbench;
       } else {
-        url = this.get("config").get("pixStaging")+"/api/challenges/"+challenge.get("id");
+        url = this.get("config").get("pixStaging")+"/api/cache";
         token = this.get("tokens").staging;
       }
-      let data = {
+      let payload = {
+        dataType:"text",
         headers:{
           Authorization: "Bearer "+token
+        },
+        data:{
+          "cache-key":"challenge-repository_get_"+challenge.get("id")
         }
       }
-      return this.get("ajax").post(url, data)
-      .then(() => {
-        data.dataType="text";
-        return this.get("ajax").post(url+"/solution", data);
+      let problem = false;
+      return this.get("ajax").del(url, payload)
+      .catch((error) => {
+        if (error.status !== 404) {
+          problem = true;
+        }
+      })
+      .finally(() => {
+        payload.data["cache-key"]="Epreuves_"+challenge.get("id");
+        return this.get("ajax").del(url, payload);
       })
       .catch((error) => {
-        return Promise.reject(error);
+        if (error.status !== 404) {
+          problem = true;
+        }
       })
+      .finally(() => {
+        if (problem) {
+          return Promise.reject();
+        }
+        return true;
+      });
     } else {
       return Promise.reject();
     }
