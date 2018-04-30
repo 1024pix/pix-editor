@@ -17,6 +17,7 @@ export default Controller.extend({
   wasMaximized:false,
   updateCache:true,
   alternative:false,
+  defaultSaveChangelog:"Mise à jour du prototype",
   challenge:alias("model"),
   application:controller(),
   storage:service(),
@@ -92,20 +93,29 @@ export default Controller.extend({
       this.get("application").send("showMessage", "Modification annulée", true);
     },
     save() {
-      this.get("application").send("isLoading");
-      return this._saveChallenge()
-      .then(() => {
-        this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Épreuve mise à jour", true);
-        let challenge = this.get("challenge");
-        if (challenge.get("isArchived")) {
-          this.get("parentController").send("removeChallenge", challenge);
-          this.send("close");
-          this.get("parentController").send("refresh");
-        }
-      }).catch(() => {
-        this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);
+      this.get("application").send("getChangelog", this.get("defaultSaveChangelog"), (changelog) => {
+        this.get("application").send("isLoading");
+        return this._saveChallenge()
+        .then(() => {
+          if (changelog) {
+            return this._saveChangelog(changelog);
+          } else {
+            return Promise.resolve();
+          }
+        })
+        .then(() => {
+          this.get("application").send("finishedLoading");
+          this.get("application").send("showMessage", "Épreuve mise à jour", true);
+          let challenge = this.get("challenge");
+          if (challenge.get("isArchived")) {
+            this.get("parentController").send("removeChallenge", challenge);
+            this.send("close");
+            this.get("parentController").send("refresh");
+          }
+        }).catch(() => {
+          this.get("application").send("finishedLoading");
+          this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);
+        });
       });
     },
     duplicate() {
@@ -115,23 +125,31 @@ export default Controller.extend({
       this.get("parentController").send("showAlternatives", this.get("challenge"));
     },
     publish() {
-      let that = this;
-      this.get("application").send("confirm", "Mise en production", "Êtes-vous sûr de vouloir mettre l'épreuve en production ?", function(result) {
+      this.get("application").send("confirm", "Mise en production", "Êtes-vous sûr de vouloir mettre l'épreuve en production ?", (result) => {
         if (result) {
-          that.get("application").send("isLoading");
-          return that._publishChallenge()
-          .then(() => {
-            that.get("application").send("finishedLoading");
-            that.get("application").send("showMessage", "Mise en production réussie", true);
-            that.send("close");
-            that.get("parentController").send("refresh");
-          })
-          .catch(() =>{
-            that.get("application").send("finishedLoading");
-            that.get("application").send("showMessage", "Erreur lors de la mise en production", false);
+          this.get("application").send("getChangelog", "Mise en production de la déclinaison", (changelog) => {
+            this.get("application").send("isLoading");
+            return this._publishChallenge()
+            .then(() => {
+              if (changelog) {
+                return this._saveChangelog(changelog);
+              } else {
+                return Promise.resolve();
+              }
+            })
+            .then(() => {
+              this.get("application").send("finishedLoading");
+              this.get("application").send("showMessage", "Mise en production réussie", true);
+              this.send("close");
+              this.get("parentController").send("refresh");
+            })
+            .catch(() =>{
+              this.get("application").send("finishedLoading");
+              this.get("application").send("showMessage", "Erreur lors de la mise en production", false);
+            });
           });
         } else {
-          that.get("application").send("showMessage", "Mise en production abandonnée", true);
+          this.get("application").send("showMessage", "Mise en production abandonnée", true);
         }
       });
     }
@@ -258,5 +276,15 @@ export default Controller.extend({
       challenge.archive();
       return challenge.save();
     });
+  },
+  _saveChangelog(text) {
+    let challenge = this.get("challenge");
+    let skills = "";
+    let skillIds = challenge.get("skills");
+    if (skillIds) {
+      skills = skillIds.join(",");
+    }
+    let entry = this.get("store").createRecord("changelogEntry",{text:text, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:skills, createdAt:(new Date()).toISOString(), production:!challenge.get("workbench")});
+    return entry.save();
   }
 });

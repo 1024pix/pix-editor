@@ -4,6 +4,7 @@ export default Alternative.extend({
   creation:true,
   mayUpdateCache:false,
   queryParams: ['from'],
+  defaultSaveChangelog:"Création de la déclinaison",
   actions:{
     cancelEdit() {
       this.set("edition", false);

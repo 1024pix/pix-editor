@@ -4,6 +4,7 @@ export default Challenge.extend({
   creation:true,
   mayUpdateCache:false,
   queryParams: ['from'],
+  defaultSaveChangelog:"Création du prototype",
   actions:{
     cancelEdit() {
       this.set("edition", false);
