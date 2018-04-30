@@ -19,6 +19,7 @@ export default Route.extend({
           !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         transition.abort();
       } else {
+        this.controller.set("edition", false);
         return true;
       }
     }
