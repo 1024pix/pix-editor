@@ -1,4 +1,4 @@
-{{#ui-modal class="popin-changelog" context=".application" onApprove=(action "confirm") onHidden=(action deny)}}
+{{#ui-modal class="popin-changelog" context=".application" onApprove=(action "confirm") onDeny=(action deny) onHidden=(action closed)}}
   <div class="header">
     Message pour le changelog
   </div>
