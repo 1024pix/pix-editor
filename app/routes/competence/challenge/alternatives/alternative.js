@@ -12,6 +12,7 @@ export default Route.extend({
     this._super(controller, model);
     controller.set("maximized", false);
     controller.set("edition", false);
+    controller.set("competence", this.modelFor("competence"));
   },
   actions: {
     willTransition(transition) {
