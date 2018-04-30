@@ -1,0 +1,25 @@
+{{#ui-modal class="popin-changelog" context=".application" onApprove=(action "confirm") onHidden=(action deny)}}
+  <div class="header">
+    Message pour le changelog
+  </div>
+  <div class="content">
+    <div class="description">
+      <form class="ui form">
+        <div class="field">
+          <label>Texte</label>
+          <div class="ui input">
+            {{textarea value=value rows="4"}}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="actions">
+    <div class="ui deny button">
+      Ignorer
+    </div>
+    <div class="ui positive right button">
+      Enregistrer
+    </div>
+  </div>
+{{/ui-modal}}

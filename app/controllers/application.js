@@ -8,9 +8,12 @@ export default Controller.extend({
   popinImageSrc:"",
   displayPopinImage:false,
   displayConfirm:false,
+  displayChangelog:false,
   confirmTitle:"",
   confirmContent:"",
   confirmCallback:null,
+  changelogDefault:"",
+  changelogCallback:null,
   init() {
     this._super(...arguments);
     this.messages = [];
@@ -77,6 +80,24 @@ export default Controller.extend({
     },
     confirmHidden() {
       this.set("displayConfirm", false);
+    },
+    getChangelog(defaultMessage, callback) {
+      this.changelogCallback = callback;
+      this.set("changelogDefault", defaultMessage);
+      this.set("displayChangelog", true);
+    },
+    changelogApprove(value) {
+      if (this.changelogCallback) {
+        this.changelogCallback(value);
+      }
+    },
+    changelogDeny() {
+      if (this.changelogCallback) {
+        this.changelogCallback(false);
+      }
+    },
+    changelogHidden() {
+      this.set("displayChangelog", false);
     }
   }
 });
