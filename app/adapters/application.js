@@ -17,10 +17,6 @@ export default AirtableAdapter.extend({
   }),
   pathForType(type) {
     switch (type) {
-      case "area":
-        return "Domaines";
-      case "competence":
-        return "Competences";
       case "skill":
         return "Acquis";
       case "tutorial":
