@@ -107,7 +107,7 @@ export default DS.Model.extend({
     return this.get("myStore").createRecord("workbenchChallenge", data);
   },
   publish() {
-    let data = this._getJSON(["skills", "alternativeIndex"]);
+    let data = this._getJSON(["competence", "skills", "alternativeIndex"]);
     data.workbench = false;
     return this.get("myStore").createRecord("challenge", data);
   },
@@ -132,5 +132,13 @@ export default DS.Model.extend({
         return current;
       }
     }, 1);
+  }),
+  joinedSkills:computed("skills", function() {
+    let skills = this.get("skills");
+    if (skills) {
+      return skills.join(",");
+    } else {
+      return "";
+    }
   })
 });
