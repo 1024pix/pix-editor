@@ -1,5 +1,8 @@
 <div class={{concat "challenge-header " challenge.statusCSS}}>
   <div class="ui menu">
+    <div class="ui left menu">
+      <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
+    </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
     </div>

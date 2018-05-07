@@ -1,0 +1,31 @@
+<div class="list-header">
+  <div class="list-row">
+    <div class="list-item computedIndex" onclick={{action "sortBy" "date" "int"}}>Date</div>
+    {{#if displayAuthor}}
+      <div class="list-item instructions" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
+    {{/if}}
+    <div class="list-item status" onclick={{action "sortBy" "text" "string"}}>Texte</div>
+    {{#if displayStatus}}
+      <div class="list-item workbench" onclick={{action "sortBy" "status" "string"}}>Statut</div>
+    {{/if}}
+  </div>
+</div>
+<div class="list-body">
+  {{#if itemCount}}
+    {{#ember-collection
+      items=list
+      cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
+    }}
+    <div class=list-row onclick={{action show item}}>
+      <div class="list-item">{{item.date}}</div>
+      {{#if displayAuthor}}
+        <div class="list-item">{{item.author}}</div>
+      {{/if}}
+      <div class="list-item">{{item.text}}</div>
+      {{#if displayStatus}}
+        <div class="list-item">{{item.status}}</div>
+      {{/if}}
+    </div>
+    {{/ember-collection}}
+  {{/if}}
+</div>

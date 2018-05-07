@@ -1,4 +1,5 @@
 import DS from 'ember-data';
+import {computed} from "@ember/object";
 
 export default DS.Model.extend({
   text:DS.attr(),
@@ -8,5 +9,10 @@ export default DS.Model.extend({
   skills:DS.attr(),
   production:DS.attr(),
   createdAt:DS.attr(),
-  changelog:DS.attr("boolean", {defaultValue: false })
+  status:DS.attr(),
+  changelog:DS.attr("boolean", {defaultValue: false }),
+  date:computed("createdAt", function() {
+    let createdDate = this.get("createdAt");
+    return (new Date(createdDate)).toLocaleDateString("fr");
+  })
 });

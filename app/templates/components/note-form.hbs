@@ -1,0 +1,29 @@
+<div class="ui content">
+  <form class="ui form">
+    <div class="field">
+      {{form-select title="Statut" value=entry.status options=options.status edition=edition}}
+    </div>
+    <div class="field {{if edition "" "disabled"}}">
+      <label>Texte</label>
+      <div class="ui input">
+        {{textarea value=entry.text rows="4" readonly=(not edition)}}
+      </div>
+    </div>
+  </form>
+</div>
+<div class="actions">
+  <a class="ui right button" onclick={{action close}}>
+    Retour
+  </a>
+  {{#if edition}}
+  <a class="ui green right button" onclick={{action "save"}}>
+    Enregistrer
+  </a>
+  {{else}}
+    {{#if mayEdit}}
+    <a class="ui green right button" onclick={{action edit}}>
+      Modifier
+    </a>
+    {{/if}}
+  {{/if}}
+</div>

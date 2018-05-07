@@ -152,6 +152,9 @@ export default Controller.extend({
           this.get("application").send("showMessage", "Mise en production abandonnée", true);
         }
       });
+    },
+    challengeLog() {
+      this.get("application").send("showChallengeLog", this.get("challenge"), this.get("competence"));
     }
   },
   _saveChallenge() {
@@ -279,12 +282,7 @@ export default Controller.extend({
   },
   _saveChangelog(text) {
     let challenge = this.get("challenge");
-    let skills = "";
-    let skillIds = challenge.get("skills");
-    if (skillIds) {
-      skills = skillIds.join(",");
-    }
-    let entry = this.get("store").createRecord("changelogEntry",{text:text, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:skills, createdAt:(new Date()).toISOString(), production:!challenge.get("workbench")});
+    let entry = this.get("store").createRecord("changelogEntry",{text:text, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:challenge.get("joinedSkills"), createdAt:(new Date()).toISOString(), production:!challenge.get("workbench")});
     return entry.save();
   }
 });

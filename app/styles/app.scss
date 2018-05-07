@@ -555,11 +555,19 @@ img.clickable {
       &.ui.bottom.attached:last-child {
         margin-bottom:1rem;
       }
+
+    &.active {
+      display:flex;
+      flex-direction:column;
+    }
   }
+
 
   .own-note-list,
   .changelog-entry-list,
   .note-list {
+    flex:1;
+
     .list-row .list-item {
       &:first-child {
         border-left:none;
@@ -619,4 +627,16 @@ img.clickable {
     }
 
   }
+
+  .ui.form {
+    .field.disabled, .field.disabled label {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .field.disabled textarea, .field.disabled .selection {
+      background-color:#f9f9f9;
+    }
+  }
+
 }

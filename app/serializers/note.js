@@ -9,7 +9,8 @@ export default ApplicationSerializer.extend({
     skills:"Acquis",
     production:"Production",
     changelog:"Changelog",
-    createdAt:"Date"
+    createdAt:"Date",
+    status:"Statut"
   },
   payloadKeyFromModelName: function() {
     return 'Notes';
