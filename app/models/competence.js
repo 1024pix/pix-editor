@@ -120,5 +120,11 @@ export default DS.Model.extend({
   }),
   challengeCount:computed("challenges", function() {
     return this.get("challenges").length;
+  }),
+  tubeCount:computed("tubes", function() {
+    return this.get("tubes").length;
+  }),
+  skillCount:computed("skills", function() {
+    return this.get("skills.length");
   })
 });

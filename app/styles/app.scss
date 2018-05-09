@@ -125,6 +125,13 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
     + .ui.attached.menu:not(.top) {
       border-top:1px solid rgba(34, 36, 38, 0.15);
+      display:flex;
+
+      .item.competence-info {
+        flex:1;
+        flex-direction:row;
+        justify-content:space-evenly;
+      }
     }
 
     &.segment {
