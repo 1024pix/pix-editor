@@ -1,3 +1,22 @@
+$validated-background-color:#08cf08;
+$validated-color:#000000;
+$validated-no-test-background-color:#00ff00;
+$validated-no-test-color:#000000;
+$prevalidated-background-color:#aaFFaa;
+$prevalidated-color:#000000;
+$suggested-background-color:#4283ed;
+$suggested-color:#ffffff;
+$archived-background-color:#aa1efc;
+$archived-color:#ffffff;
+$to-be-submitted-background-color:#ffc851;
+$to-be-submitted-color:#000000;
+$need-work-background-color:#ff51e8;
+$need-work-color:#000000;
+
+$production-color:#0000ff;
+$workbench-color:#ff0000;
+
+
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
   height:100%;
 }
@@ -133,11 +152,11 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         justify-content:space-evenly;
 
         .production {
-          color:#0000ff;
+          color:$production-color;
         }
 
         .workbench {
-          color:#ff0000;
+          color:$workbench-color;
         }
       }
     }
@@ -253,7 +272,68 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       }
       &.link {
         cursor:pointer;
+
+        .skill-name {
+          margin:-5px -5px 0 -5px;
+          padding: 5px 5px 0 5px;
+        }
+
+        .help {
+          margin: 0 -5px -5px -5px;
+          padding: 0 5px 5px 5px;
+        }
+
+        &.suggested,
+        &.suggested.active,
+        .skill-name.suggested,
+        .help.suggested {
+          background-color:$suggested-background-color !important;
+          color:$suggested-color;
+        }
+
+        &.prevalidated,
+        &.prevalidated.active,
+        .skill-name.prevalidated,
+        .help.validated {
+          background-color:$prevalidated-background-color !important;
+          color:$prevalidated-color;
+        }
+
+        &.validated_no_test,
+        &.validated_no_test.active {
+          background-color:$validated-no-test-background-color !important;
+          color:$validated-no-test-color;
+        }
+
+        &.validated,
+        &.validated.active,
+        .skill-name.validated,
+        .help.validated {
+          background-color:$validated-background-color !important;
+          color:$validated-color;
+        }
+
+        &.link.archived,
+        &.link.archived.active,
+        .skill-name.archived,
+        .help.archived {
+          background-color:$archived-background-color !important;
+          color:$archived-color;
+        }
+
+        .skill-name.to-be-submitted,
+        .help.to-be-submitted {
+          background-color:$to-be-submitted-background-color !important;
+          color:$to-be-submitted-color;
+        }
+
+        .skill-name.need-work,
+        .help.need-work {
+          background-color:$need-work-background-color !important;
+          color:$need-work-color;
+        }
       }
+
       idea.icon.validated {
         color:#08cf08;
       }
@@ -261,7 +341,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 }
 
-.challenge-header {
+.challenge-header,
+.skill-header {
   border-top:1px solid rgba(34, 36, 38, 0.15);
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
   .creation {
@@ -294,57 +375,45 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       display:none;
     }
   }
-}
 
-td.skill.link.validated,
-td.skill.link.validated.active,
-td.skill.link.described,
-td.skill.link.described.active,
-.challenge-header.validated,
-.challenge-header.described {
-  background-color:#08cf08 !important;
-}
-td.skill.link.validated_no_test,
-td.skill.link.validated_no_test.active,
-.challenge-header.validated_no_test {
-  background-color:#00ff00 !important;
-}
-td.skill.link.suggested,
-td.skill.link.suggested.active,
-td.skill.link.undescribed,
-td.skill.link.undescribed.active,
-.challenge-header.suggested,
-.challenge-header.undescribed {
-  background-color:#4283ed !important;
-  color:#ffffff;
-}
-
-td.skill.link.prevalidated,
-td.skill.link.prevalidated.active,
-.challenge-header.prevalidated {
-  background-color:#aaFFaa !important;
-}
-td.skill.link.archived,
-td.skill.link.archived.active,
-.challenge-header.archived {
-  background-color:#aa1efc !important;
-  color:#ffffff;
-}
-td.skill.link.suggested,
-td.skill.link.suggested.active,
-.challenge-header.suggested {
-  background-color:#4283ed !important;
-  color:#ffffff;
+  &.suggested {
+    background-color:$suggested-background-color !important;
+    color:$suggested-color;
+  }
+  &.prevalidated {
+    background-color:$prevalidated-background-color !important;
+    color:$prevalidated-color;
+  }
+  &.validated_no_test {
+    background-color:$validated-no-test-background-color !important;
+    color:$validated-no-test-color;
+  }
+  &.validated {
+    background-color:$validated-background-color !important;
+    color:$validated-color;
+  }
+  &.archived {
+    background-color:$archived-background-color !important;
+    color:$archived-color;
+  }
+  &.to-be-submitted {
+    background-color:$to-be-submitted-background-color !important;
+    color:$to-be-submitted-color;
+  }
+  &.need-work {
+    background-color:$need-work-background-color !important;
+    color:$need-work-color;
+  }
 }
 
 .alternative {
   color:rgba(0, 0, 0, 0.87);
   font-size:12px;
   .production {
-    color:#0000FF;
+    color:$production-color;
   }
   .workbench {
-    color:#FF0000;
+    color:$workbench-color;
   }
   .not-declinable {
     font-weight:bold;
@@ -594,10 +663,10 @@ img.clickable {
 
 .alternative-list {
   .list-body .list-row {
-    color:#0000ff;
+    color:$production-color;
 
     &.workbench {
-      color:#ff0000;
+      color:$workbench-color;
     }
   }
 }

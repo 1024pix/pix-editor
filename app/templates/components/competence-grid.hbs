@@ -5,9 +5,11 @@
     <td>{{tube.name}}</td>
     {{#each tube.skills as |skill|}}
       {{#if skillMode}}
-        {{#link-to "competence.skill" competenceModel skill tagName="td" class=(concat "skill link " skill.descriptionCSS)}}
-        {{skill.name}}
-        <div class="help">
+        {{#link-to "competence.skill" competenceModel skill tagName="td" class="skill link"}}
+        <div class="skill-name {{skill.descriptionCSS}}">
+          {{skill.name}}
+        </div>
+        <div class="help {{skill.clueCSS}}">
           {{#if skill.clue}}
           <i class={{concat "idea icon " skill.clueCSS}}></i>
           {{else}}

@@ -19,23 +19,40 @@ export default DS.Model.extend({
   tutoSolutionIds:DS.attr(),
   tutoMoreIds:DS.attr(),
   template: null,
-  workbenchCount:computed('workbenchChallenges', function() {
+  workbenchCount:computed("workbenchChallenges", function() {
     return this.get("workbenchChallenges").get('length');
   }),
-  descriptionCSS:computed("description" , function() {
-    let clue = this.get("description");
-    if (clue && clue.length>0) {
-      return "described";
+  descriptionCSS:computed("descriptionStatus" , function() {
+    let status = this.get("descriptionStatus");
+    if (!status) {
+      return "suggested";
     } else {
-      return "undescribed";
+      return this._getCSSFromStatus(status);
     }
   }),
-  clueCSS:computed("status" , function() {
-    let status = this.get("status");
-    if (status === "Validé") {
-      return "validated";
-    } else {
+  clueCSS:computed("clueStatus" , function() {
+    let status = this.get("clueStatus");
+    if (!status) {
       return "suggested";
+    } else {
+      return this._getCSSFromStatus(status);
     }
-  })
+  }),
+  _getCSSFromStatus(status) {
+    switch(status) {
+      case "pré-validé":
+        return "prevalidated";
+      case "Validé":
+        return "validated";
+      case "à soumettre":
+        return "to-be-submitted";
+      case "à retravailler":
+        return "need-work";
+      case "Proposé":
+        return "suggested";
+      case "archivé":
+        return "archived";
+    }
+    return "suggested";
+  }
 });
