@@ -271,6 +271,7 @@ export default Controller.extend({
       productionChallenge = challenge.publish();
       productionChallenge.set("skills", skillIds);
       productionChallenge.set("pixId", index);
+      productionChallenge.set("competence", [this.get("competence.id")]);
       return productionChallenge.save();
     })
     .then(() => {
