@@ -10,7 +10,7 @@ export default DS.Model.extend({
     this.tutoSolutions = [];
   },
   name: DS.attr(),
-  competence: null,
+  competence: DS.attr(),
   challengeIds: DS.attr(),
   clue:DS.attr(),
   clueStatus:DS.attr(),

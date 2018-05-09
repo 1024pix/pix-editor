@@ -9,7 +9,8 @@ export default ApplicationSerializer.extend({
     description:"Description",
     descriptionStatus:"Statut de la description",
     tutoSolutionIds: "Comprendre",
-    tutoMoreIds: "En savoir plus"
+    tutoMoreIds: "En savoir plus",
+    competence:"Compétence"
   },
   payloadKeyFromModelName: function() {
     return "Acquis";
