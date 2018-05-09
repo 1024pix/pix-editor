@@ -11,6 +11,8 @@ export default Controller.extend({
   listView:false,
   router:service(),
   application:controller(),
+  challengeController:controller("competence.challenge"),
+  skillController:controller("competence.skill"),
   currentChallenge:null,
   currentSkill:null,
   competence:alias("model"),
@@ -42,27 +44,21 @@ export default Controller.extend({
       this.set("listView", false);
     }
     if (skillMode && currentRoute.startsWith("competence.challenge")) {
-      /*let challenge = this.get("currentChallenge");
-      let skillNames = challenge.get("skillNames")
+      let challenge = this.get("challengeController").get("challenge");
+      let skills = challenge.get("skills");
       if (skills.length>0) {
-        let skill = skills.get("firstObject");
-        console.debug(skill);
-        this.transitionToRoute("competence.skill", this.get("competence").get("id"), skill.get("id"));
-      }*/
-      //TODO: link to correct skill
-      this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-    } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
-      /*let skill = this.get("currentSkill");
-      let template = skill.get("template");
-      if (template) {
-        console.log("id");
-        console.debug(template.get("id"));
-        this.transitionToRoute("competence.challenge", this.get("competence").get("id"), template.get("id"));
+        this.transitionToRoute("competence.skill", this.get("competence"), skills[0]);
       } else {
         this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-      }*/
-      //TODO: link to correct challenge
-      this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+      }
+    } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
+      let skill = this.get("skillController").get("skill");
+      let template = skill.get("template");
+      if (template) {
+        this.transitionToRoute("competence.challenge", this.get("competence"), template);
+      } else {
+        this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+      }
     }
   }),
   size:computed("router.currentRouteName", function() {
