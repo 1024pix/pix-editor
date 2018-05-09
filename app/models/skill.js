@@ -52,6 +52,8 @@ export default DS.Model.extend({
         return "suggested";
       case "archivé":
         return "archived";
+      case "inapplicable":
+        return "na";
     }
     return "suggested";
   }

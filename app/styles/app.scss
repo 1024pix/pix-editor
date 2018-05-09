@@ -12,6 +12,8 @@ $to-be-submitted-background-color:#ffc851;
 $to-be-submitted-color:#000000;
 $need-work-background-color:#ff51e8;
 $need-work-color:#000000;
+$na-background-color:#eceaea;
+$na-color:#000000;
 
 $production-color:#0000ff;
 $workbench-color:#ff0000;
@@ -333,6 +335,11 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         .help.need-work {
           background-color:$need-work-background-color !important;
           color:$need-work-color;
+        }
+
+        .help.na {
+          background-color:$na-background-color !important;
+          color:$na-color;
         }
       }
 
