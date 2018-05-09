@@ -13,8 +13,6 @@ export default Controller.extend({
   application:controller(),
   challengeController:controller("competence.challenge"),
   skillController:controller("competence.skill"),
-  currentChallenge:null,
-  currentSkill:null,
   competence:alias("model"),
   challenges:alias("model.challenges"),
   init() {

@@ -9,7 +9,6 @@ export default Route.extend({
     controller.set("maximized", false);
     controller.set("edition", false);
     this.controllerFor("competence").set("skillMode", true);
-    this.controllerFor("competence").set("currentSkill", model);
   },
   actions: {
     willTransition(transition) {
