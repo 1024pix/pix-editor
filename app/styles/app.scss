@@ -9,9 +9,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 .main-sidebar {
 
   .header {
-    height:40px;
-    padding:10px 5px;
-    font-size:20px;
+    height:50px;
+    padding:15px 5px;
+    font-size:25px;
     color:#ffffff;
   }
 
@@ -40,6 +40,46 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       font-size:12px;
       float:none;
       margin-right:5px;
+    }
+  }
+
+  .ui.search {
+    width:100%;
+    box-sizing:border-box;
+    padding:0 5px;
+    margin-bottom:5px;
+
+    .prompt {
+      border-radius:0;
+    }
+
+    .ui.input {
+      width:100%;
+
+      input {
+        padding:4px;
+        background-color:transparent;
+        border-color:rgba(255,255,255,0.7);
+        color:rgba(255,255,255,0.8);
+
+        &::placeholder {
+          color:rgba(255,255,255,0.7);
+        }
+      }
+
+      i.icon {
+        color:#ffffff;
+      }
+    }
+
+    &.loading {
+      .input > i.icon::after {
+        border-color: #ffffff transparent transparent;
+      }
+    }
+
+    .results .message .header {
+      display:none;
     }
   }
 }
