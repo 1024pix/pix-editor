@@ -267,7 +267,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     padding:5px;
     &.skill {
       text-align:center;
-      &.active {
+      &.active,
+      &.active .skill-name,
+      &.active .help {
         color:red !important;
       }
       &.link {
