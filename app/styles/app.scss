@@ -131,6 +131,14 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         flex:1;
         flex-direction:row;
         justify-content:space-evenly;
+
+        .production {
+          color:#0000ff;
+        }
+
+        .workbench {
+          color:#ff0000;
+        }
       }
     }
 

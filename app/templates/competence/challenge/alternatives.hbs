@@ -18,5 +18,6 @@
   {{alternatives-list list=alternatives itemCount=challengeCount competenceModel=competence challengeModel=challenge hidden=false}}
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
+  <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternativeCount}}</span></div><div>En aval : <span class="workbench">{{challenge.workbenchAlternativeCount}}</span></div></div>
 </div>
 {{outlet}}

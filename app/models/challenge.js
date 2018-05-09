@@ -142,5 +142,11 @@ export default DS.Model.extend({
     } else {
       return "";
     }
+  }),
+  productionAlternativeCount:computed("sortedAlternatives", function() {
+    return this.get("sortedAlternatives").production.length;
+  }),
+  workbenchAlternativeCount:computed("sortedAlternatives", function() {
+    return this.get("sortedAlternatives").workbench.length;
   })
 });
