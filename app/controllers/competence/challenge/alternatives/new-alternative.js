@@ -3,7 +3,7 @@ import Alternative from './alternative';
 export default Alternative.extend({
   creation:true,
   mayUpdateCache:false,
-  queryParams: ['from'],
+  queryParams: ["from", "workbench"],
   defaultSaveChangelog:"Création de la déclinaison",
   actions:{
     cancelEdit() {

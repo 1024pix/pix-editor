@@ -31,6 +31,15 @@ export default Controller.extend({
       return this.get("challenge.skillNames");
     }
   }),
+  mayEdit:computed("config.lite", "challenge.workbench", function() {
+    return (!this.get("config.lite") || this.get("challenge.workbench"));
+  }),
+  mayDuplicate:computed("config.lite", "challenge.template", function() {
+    return (!this.get("config.lite") || !this.get("challenge.template"));
+  }),
+  mayAccessLog:computed("config.lite", function() {
+    return !this.get("config.lite");
+  }),
   actions:{
     showIllustration: function(){
       let illustration = this.get("challenge.illustration")[0];
@@ -119,7 +128,7 @@ export default Controller.extend({
       });
     },
     duplicate() {
-      this.get("parentController").send("copyChallenge", this.get("challenge").get("id"));
+      this.get("parentController").send("copyChallenge", this.get("challenge"));
     },
     showAlternatives() {
       this.get("parentController").send("showAlternatives", this.get("challenge"));

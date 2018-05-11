@@ -10,6 +10,7 @@ export default Controller.extend({
   skillMode:false,
   listView:false,
   router:service(),
+  config:service(),
   application:controller(),
   challengeController:controller("competence.challenge"),
   skillController:controller("competence.skill"),
@@ -111,8 +112,8 @@ export default Controller.extend({
     newChallenge() {
       this.transitionToRoute("competence.new-template", this.get("competence"));
     },
-    copyChallenge(challengeId) {
-      this.transitionToRoute("competence.new-template", this.get("competence"), { queryParams: { from: challengeId}});
+    copyChallenge(challenge) {
+      this.transitionToRoute("competence.new-template", this.get("competence"), { queryParams: { from: challenge.get("id")}});
     },
     soon() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);

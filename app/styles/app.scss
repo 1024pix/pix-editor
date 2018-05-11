@@ -194,6 +194,11 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   padding:0 10px;
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
   background-color:#3498db;
+
+  &.lite {
+    background-color:#7C0E6A;
+  }
+
   h1 {
     font-size:20px;
     font-weight:normal;
@@ -458,6 +463,11 @@ img.clickable {
 
 .ui.inverted.menu {
   background-color:#3498db;
+
+  &.lite {
+    background-color:#7C0E6A;
+  }
+
 }
 .ui.inverted.menu .item {
   color:#ffffff;

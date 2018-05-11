@@ -1,5 +1,6 @@
 import Controller from '@ember/controller';
 import $ from 'jquery';
+import {inject as service} from '@ember/service';
 
 export default Controller.extend({
   loading:false,
@@ -16,6 +17,7 @@ export default Controller.extend({
   changelogCallback:null,
   challengeLogged:null,
   competenceLogged:null,
+  config:service(),
   init() {
     this._super(...arguments);
     this.messages = [];

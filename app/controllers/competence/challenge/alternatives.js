@@ -6,6 +6,7 @@ import { alias } from "@ember/object/computed";
 
 export default Controller.extend({
   router:service(),
+  config:service(),
   application:controller(),
   competenceController:controller("competence"),
   childComponentMaximized:false,
@@ -34,8 +35,12 @@ export default Controller.extend({
       this.set("childComponentMaximized", false);
       this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), this.get("challenge"));
     },
-    copyChallenge(challengeId) {
-      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"), { queryParams: { from: challengeId}});
+    copyChallenge(challenge) {
+      let params = {from: challenge.get("id")};
+      if (challenge.get("workbench")) {
+        params.workbench=1;
+      }
+      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"), { queryParams: params});
     },
     addChallenge(challenge) {
       this.get("alternatives").addObject(challenge);

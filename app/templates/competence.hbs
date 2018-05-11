@@ -1,18 +1,20 @@
 <div class="main-left">
-  <div class="main-title">
+  <div class="main-title {{if config.lite "lite" ""}}">
     <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action (mut skillMode))}}</div>
   </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}}">
-    {{#if skillMode}}
-      <a class="left item" onclick={{action "soon"}}>
-        <i class="plus square outline icon"></i> Nouvel acquis
-      </a>
-    {{else}}
-      <a class="left item" onclick={{action "newChallenge"}}>
-        <i class="plus square outline icon"></i> Nouveau prototype
-      </a>
-    {{/if}}
+    {{#unless config.lite}}
+      {{#if skillMode}}
+        <a class="left item" onclick={{action "soon"}}>
+          <i class="plus square outline icon"></i> Nouvel acquis
+        </a>
+      {{else}}
+        <a class="left item" onclick={{action "newChallenge"}}>
+          <i class="plus square outline icon"></i> Nouveau prototype
+        </a>
+      {{/if}}
+    {{/unless}}
     <a class="right item" onclick={{action "refresh" true}}>
       <i class="refresh icon"></i> Actualiser
     </a>

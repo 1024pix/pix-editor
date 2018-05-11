@@ -1,8 +1,10 @@
 <div class={{concat "challenge-header " challenge.statusCSS}}>
   <div class="ui menu">
-    <div class="ui left menu">
-      <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
-    </div>
+    {{#if mayAccessLog}}
+      <div class="ui left menu">
+        <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
+      </div>
+    {{/if}}
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
     </div>
@@ -43,18 +45,24 @@
       <i class="eye icon"></i>
       Prévisualiser
     </a>
-    <a class="item" onclick={{action "edit"}}>
-      <i class="edit icon"></i>
-      Modifier
-    </a>
-    <a class="item" onclick={{action "duplicate"}}>
-      <i class="copy icon"></i>
-      Dupliquer
-    </a>
-    <a class="item" onclick={{action "openAirtable"}}>
-      <i class="table icon"></i>
-      Airtable
-    </a>
+    {{#if mayEdit}}
+      <a class="item" onclick={{action "edit"}}>
+        <i class="edit icon"></i>
+        Modifier
+      </a>
+    {{/if}}
+    {{#if mayDuplicate}}
+      <a class="item" onclick={{action "duplicate"}}>
+        <i class="copy icon"></i>
+        Dupliquer
+      </a>
+    {{/if}}
+    {{#unless config.lite}}
+      <a class="item" onclick={{action "openAirtable"}}>
+        <i class="table icon"></i>
+        Airtable
+      </a>
+    {{/unless}}
     <a class="item"  onclick={{action "copyLink"}}>
       <i class="linkify icon"></i>
       Copier lien
@@ -65,12 +73,14 @@
         Déclinaisons &gt;&gt;
       </a>
     {{else}}
-      {{#if challenge.workbench}}
-        <a class="item publish"  onclick={{action "publish"}}>
-          <i class="checkmark icon"></i>
-          Production
-        </a>
-      {{/if}}
+      {{#unless config.lite}}
+        {{#if challenge.workbench}}
+          <a class="item publish"  onclick={{action "publish"}}>
+            <i class="checkmark icon"></i>
+            Production
+          </a>
+        {{/if}}
+      {{/unless}}
     {{/if}}
   {{/if}}
 </div>

@@ -5,7 +5,13 @@ export default Route.extend({
   model(params) {
     let alternativeIndex = this.modelFor("competence/challenge").get("nextComputedIndex");
     if (params.from) {
-      return this.get("store").findRecord("workbenchChallenge",params.from)
+      let templateQuery;
+      if (params.workbench) {
+        templateQuery = this.get("store").findRecord("workbenchChallenge",params.from);
+      } else {
+        templateQuery = this.get("store").findRecord("challenge",params.from);
+      }
+      return templateQuery
       .then((template) => {
         let model = template.clone();
         model.set("alternativeIndex", alternativeIndex.toString());
