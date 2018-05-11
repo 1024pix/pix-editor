@@ -62,7 +62,7 @@ export default DS.Model.extend({
     if (ids) {
       return ids.length;
     } else {
-      return "-"
+      return 0;
     }
   }),
   tutoMoreCount:computed("tutoMoreIds", function() {
@@ -70,7 +70,7 @@ export default DS.Model.extend({
     if (ids) {
       return ids.length;
     } else {
-      return "-"
+      return 0;
     }
   })
 });
