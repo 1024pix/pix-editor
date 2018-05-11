@@ -142,6 +142,17 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     border:none;
     border-bottom:1px solid rgba(34, 36, 38, 0.15);
     background-color:#F9FAFB;
+      &.skill-mode {
+        background-color:#424344;
+
+        a.item {
+          color:#F9FAFB;
+        }
+
+        .item.competence-info {
+          color:#F9FAFB;
+        }
+      }
     }
 
     + .ui.attached.menu:not(.top) {

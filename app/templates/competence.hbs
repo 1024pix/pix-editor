@@ -3,7 +3,7 @@
     <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action (mut skillMode))}}</div>
   </h1>
   </div>
-  <div class="ui top attached borderless labelled icon menu {{competenceHidden}}">
+  <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}
       {{#if skillMode}}
         <a class="left item" onclick={{action "soon"}}>
@@ -23,7 +23,7 @@
     {{competence-list list=challenges itemCount=challengeCount competenceModel=model hidden=(not listView) link=challengeLink}}
     {{competence-grid tubes=competence.tubes competenceModel=model hidden=listView skillMode=skillMode link=challengeLink}}
   </div>
-  <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}}">
+  <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
   {{#if (not skillMode)}}
     <a class={{concat "item" (if (not listView) " active" "")}} onclick={{action "setGridView"}}>
       <i class="grid layout icon"></i>
