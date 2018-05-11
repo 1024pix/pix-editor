@@ -448,6 +448,11 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       margin-right:10px !important;
     }
   }
+
+  label .ui.icon.right {
+    border:none;
+    box-shadow:none;
+  }
 }
 
 img.clickable {
@@ -521,10 +526,16 @@ img.clickable {
         display:flex;
         flex-direction:column;
         align-items:strech;
+        margin:10px;
+
+        label {
+          margin-top:5px;
+        }
 
         textarea {
           display:block;
           flex-grow:1;
+          margin-bottom:20px;
         }
       }
 
