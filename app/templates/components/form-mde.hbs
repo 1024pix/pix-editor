@@ -1,5 +1,14 @@
 <div class="field">
-    <label>{{title}}</label>
+    <label>
+        {{#if edition}}
+            {{#if helpContent}}
+            <div class="ui compact icon right floated button basic">
+                {{ui-popup tagName="i" class="help icon" html=helpContent}}
+            </div>
+            {{/if}}
+        {{/if}}
+        {{title}}
+    </label>
     {{#if edition}}
         {{simple-mde value=value change=(action (mut value)) options=simpleMDEOptions}}
     {{else}}
