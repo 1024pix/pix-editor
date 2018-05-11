@@ -56,5 +56,21 @@ export default DS.Model.extend({
         return "na";
     }
     return "suggested";
-  }
+  },
+  tutoSolutionCount:computed("tutoSolutionIds", function() {
+    let ids = this.get("tutoSolutionIds");
+    if (ids) {
+      return ids.length;
+    } else {
+      return "-"
+    }
+  }),
+  tutoMoreCount:computed("tutoMoreIds", function() {
+    let ids = this.get("tutoMoreIds");
+    if (ids) {
+      return ids.length;
+    } else {
+      return "-"
+    }
+  })
 });

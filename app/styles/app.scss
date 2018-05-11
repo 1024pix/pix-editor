@@ -292,6 +292,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
           padding: 0 5px 5px 5px;
         }
 
+        .tuto-count {
+          font-size:12px;
+        }
+
         &.suggested,
         &.suggested.active,
         .skill-name.suggested,
