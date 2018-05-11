@@ -1,7 +1,8 @@
 import Component from '@ember/component';
 import $ from "jquery";
-import { observer, computed } from '@ember/object';
+import { observer } from '@ember/object';
 import {inject as service} from '@ember/service';
+import { alias } from "@ember/object/computed";
 
 export default Component.extend({
   config:service(),
@@ -11,6 +12,7 @@ export default Component.extend({
   pixUser:"",
   pixPassword:"",
   saved:false,
+  authors:alias("config.authors"),
   displayManager:observer("display", function() {
     if (this.get("display")) {
       $(".config-form").modal('show');
@@ -24,8 +26,13 @@ export default Component.extend({
       this.set("saved", false);
     }
   }),
-  authors:computed("config.authors", function() {
-    return this.get("config.authors");
+  authorsUpdate:observer("airtableKey", "configKey", function() {
+    if (this.get("airtableKey") && this.get("configKey")) {
+      let config = this.get("config");
+      config.set("airtableKey", this.get("airtableKey"));
+      config.set("configKey", this.get("configKey"));
+      config.check();
+    }
   }),
   actions:{
     saveConfig() {
