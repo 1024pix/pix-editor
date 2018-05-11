@@ -15,6 +15,7 @@
   <div class="skill-data">
     {{skill-form skill=skill edition=edition}}
   </div>
+{{#unless config.lite}}
   <div class="ui vertical compact labeled icon menu skill-menu">
     {{#if edition}}
       <a class="item" onclick={{action "save"}} class="important-action">
@@ -42,6 +43,7 @@
       </a>
     {{/if}}
   </div>
+{{/unless}}
 </div>
 
 {{outlet}}
