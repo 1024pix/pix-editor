@@ -5,6 +5,7 @@
 {{/if}}
   {{form-textarea title="Propositions" value=challenge.suggestion edition=edition}}
   {{form-textarea title="Réponses" value=challenge.answers edition=edition}}
+{{#if challenge.isTextBased}}
   <div class={{concat "field" (if edition "" " disabled")}}>
     <label>Tolérance</label>
     <div class="three fields">
@@ -19,6 +20,7 @@
       </div>
     </div>
   </div>
+{{/if}}
   {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
   {{form-files title="Pièces jointes" value=challenge.attachments edition=edition display=(action showIllustration)}}
 {{#if (not alternative)}}

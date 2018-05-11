@@ -148,5 +148,9 @@ export default DS.Model.extend({
   }),
   workbenchAlternativeCount:computed("sortedAlternatives", function() {
     return this.get("sortedAlternatives").workbench.length;
+  }),
+  isTextBased:computed("type", function() {
+    let type = this.get("type");
+    return ["QROC","QROCM","QROCM-ind","QROCM-dep"].includes(type);
   })
 });
