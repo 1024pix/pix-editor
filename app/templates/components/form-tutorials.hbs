@@ -1,0 +1,35 @@
+<div class="field {{if edition "" " disabled"}}">
+  <label>
+    {{title}}
+  </label>
+  {{#if loading}}
+    <div class="ui active centered inline loader"></div>
+  {{else}}
+    <div class="ui cards">
+      {{#each tutorials as |tutorial|}}
+        <div class="card">
+          <div class="content">
+            <div class="header">
+              <a class="ui right floated button basic" href="{{tutorial.link}}" target="_blank">
+                <i class="external icon"></i>
+              </a>
+              {{tutorial.title}}
+            </div>
+            <div class="description">
+              <div>Format : {{tutorial.format}}</div>
+              <div>Durée : {{tutorial.duration}}</div>
+              <div>Source : {{tutorial.source}}</div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+      {{#if empty}}
+        <div class="card">
+          <div class="content">
+            aucun élément
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  {{/if}}
+</div>

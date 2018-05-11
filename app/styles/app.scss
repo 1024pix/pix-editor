@@ -468,6 +468,18 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     border:none;
     box-shadow:none;
   }
+
+  .ui.cards > .card {
+
+    .header .ui.button > .icon {
+      margin-right:0;
+    }
+
+    > .content,
+    > .content > .header {
+      font-size:14px;
+    }
+  }
 }
 
 img.clickable {
