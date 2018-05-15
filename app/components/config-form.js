@@ -42,17 +42,19 @@ export default Component.extend({
       let author = this.get("author");
       let lite = true;
       config.set("author", author);
-      let authorRecord = this.get("authors").find((value) => {
-        return value.get("name") === author;
+      this.get("authors").then(authors => {
+        let authorRecord = authors.find((value) => {
+          return value.get("name") === author;
+        });
+        if (authorRecord) {
+          lite = authorRecord.get("lite");
+        }
+        config.set("lite", lite);
+        config.set("pixUser", this.get("pixUser"));
+        config.set("pixPassword", this.get("pixPassword"));
+        config.save();
+        this.set("saved", true);
       });
-      if (authorRecord) {
-        lite = authorRecord.get("lite");
-      }
-      config.set("lite", lite);
-      config.set("pixUser", this.get("pixUser"));
-      config.set("pixPassword", this.get("pixPassword"));
-      config.save();
-      this.set("saved", true);
     },
     closed() {
       if (this.get("saved")) {
