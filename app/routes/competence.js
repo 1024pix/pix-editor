@@ -53,6 +53,35 @@ export default Route.extend({
   actions: {
     refreshModel() {
       this.refresh();
+    },
+    willTransition(transition) {
+      try {
+        if (transition.targetName === "challenge") {
+          let challengeId = transition.params.challenge.challenge_id;
+          let competence = this.modelFor("competence");
+          let productionIds = competence.get("productionChallengeIds");
+          if (productionIds.includes(challengeId)) {
+            let challenge = this.get("store").peekRecord("challenge", challengeId);
+            if (challenge) {
+              if (challenge.template) {
+                this.transitionTo("competence.challenge", competence, challenge);
+              } else {
+                let skills = competence.get("skills");
+                let skill = skills.filter((skill) => {
+                  return skill.get("challenges").includes(challenge);
+                });
+                if (skill.length > 0  && skill[0].template) {
+                  this.transitionTo("competence.challenge.alternatives.alternative", competence, skill[0].template, challenge);
+                }
+              }
+            }
+          }
+        }
+      }
+      catch(error) {
+        // do nothing
+      }
+      return true;
     }
   }
 });
