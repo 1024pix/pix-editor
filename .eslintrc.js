@@ -15,6 +15,7 @@ module.exports = {
     browser: true
   },
   rules: {
+    "no-console":"off"
   },
   overrides: [
     // node files
@@ -33,9 +34,6 @@ module.exports = {
       env: {
         browser: false,
         node: true,
-      },
-      rules: {
-        "no-console":"off"
       }
     }
   ]
