@@ -61,7 +61,3 @@ workflows:
           filters:
             branches:
               only: master
-
-test:
-  override:
-    - "true"
