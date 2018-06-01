@@ -34,7 +34,13 @@
 {{#if (not alternative)}}
   {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
 {{/if}}
-  {{#if (not edition)}}
-  {{form-input value=challenge.id title="Record id" edition=edition}}
+<div class={{concat "field" (if edition "" " disabled")}}>
+  <label for="">{{ui-checkbox label="Timer" checked=challenge.timerOn readonly=(not edition) onChange=(action (mut challenge.timerOn))}}</label>
+  {{#if challenge.timer}}
+    {{form-input value=challenge.timer edition=edition}}
   {{/if}}
+</div>
+{{#if (not edition)}}
+  {{form-input value=challenge.id title="Record id" edition=edition}}
+{{/if}}
 </form>

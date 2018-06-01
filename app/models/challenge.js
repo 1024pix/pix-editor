@@ -31,6 +31,7 @@ export default DS.Model.extend({
   pixId:DS.attr(),
   alternativeIndex:DS.attr(),
   scoring:DS.attr(),
+  timer:DS.attr('number'),
 
   myStore:service("store"),
   config:service(),
@@ -157,5 +158,24 @@ export default DS.Model.extend({
   }),
   supportsScoring:computed("type", function() {
     return this.get("type") == "QROCM-dep";
+  }),
+  timerOn:computed("timer", {
+    get() {
+      let timer = this.get("timer");
+      return (timer && timer>0)?true:false;
+    },
+    set(key, value) {
+      let timer = this.get("timer");
+      if (value) {
+        if (!timer || timer === 0) {
+          this.set("timer", 1);
+        }
+      } else {
+        if (timer && timer > 0) {
+          this.set("timer", 0);
+        }
+      }
+      return value;
+    }
   })
 });

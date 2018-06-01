@@ -25,7 +25,8 @@ export default ApplicationSerializer.extend({
     skills:"Acquix",
     pixId:"Identifiant",
     alternativeIndex:"Indice_aval",
-    scoring:"Scoring"
+    scoring:"Scoring",
+    timer:"Timer"
   },
 
   payloadKeyFromModelName: function() {
