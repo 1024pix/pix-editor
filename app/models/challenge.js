@@ -30,6 +30,8 @@ export default DS.Model.extend({
   preview:DS.attr({readOnly:true}),
   pixId:DS.attr(),
   alternativeIndex:DS.attr(),
+  scoring:DS.attr(),
+
   myStore:service("store"),
   config:service(),
   template:computed("genealogy", function(){
@@ -152,5 +154,8 @@ export default DS.Model.extend({
   isTextBased:computed("type", function() {
     let type = this.get("type");
     return ["QROC","QROCM","QROCM-ind","QROCM-dep"].includes(type);
+  }),
+  supportsScoring:computed("type", function() {
+    return this.get("type") == "QROCM-dep";
   })
 });

@@ -21,6 +21,9 @@
     </div>
   </div>
 {{/if}}
+{{#if challenge.supportsScoring}}
+  {{form-textarea value=challenge.scoring title="Scoring" edition=edition helpContent=helpScoring}}
+{{/if}}
   {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
   {{form-files title="Pièces jointes" value=challenge.attachments edition=edition display=(action showIllustration)}}
 {{#if (not alternative)}}
