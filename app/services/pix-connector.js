@@ -10,13 +10,28 @@ export default Service.extend({
     let config = this.get("config");
     let user = config.get("pixUser");
     let password = config.get("pixPassword");
+    let workbenchUser = config.get("pixWorkbenchUser");
+    let workbenchPassword = config.get("pixWorkbenchPassword");
     if (user && user.length>0 && password && password.length>0) {
-      let data = {
+      let dataStaging = {
         data: {
           data: {
             attributes: {
-              email:config.get("pixUser"),
-              password:config.get("pixPassword")
+              email:user,
+              password:password
+            }
+          }
+        },
+        headers: {
+          "Content-type": "application/json"
+        }
+      };
+      let dataWorkbench = {
+        data: {
+          data: {
+            attributes: {
+              email:workbenchUser,
+              password:workbenchPassword
             }
           }
         },
@@ -25,9 +40,9 @@ export default Service.extend({
         }
       }
       let requests = [
-        this.get("ajax").post(config.get("pixStaging")+"/api/authentications", data),
-        this.get("ajax").post(config.get("pixWorkbench")+"/api/authentications", data)
-      ]
+        this.get("ajax").post(config.get("pixStaging")+"/api/authentications", dataStaging),
+        this.get("ajax").post(config.get("pixWorkbench")+"/api/authentications", dataWorkbench)
+      ];
       Promise.all(requests)
       .then((responses) => {
         this.set("tokens", {

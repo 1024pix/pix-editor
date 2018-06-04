@@ -13,5 +13,7 @@ module.exports = {
   storageKey:"KEY",
   storageAuth:"URL",
   pixStaging:"URL",
-  pixWorkbench:"URL"
+  pixWorkbench:"URL",
+  pixWorkbenchUser:"user",
+  pixWorkbenchPassword:"password"
 };
