@@ -47,7 +47,7 @@ export default Service.extend({
       .then((responses) => {
         this.set("tokens", {
           staging:responses[0].data.attributes.token,
-          preview:responses[1].data.attributes.token
+          workbench:responses[1].data.attributes.token
         });
         this.set("connected", true);
       })
