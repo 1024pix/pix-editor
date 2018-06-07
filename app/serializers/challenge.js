@@ -26,7 +26,10 @@ export default ApplicationSerializer.extend({
     pixId:"Identifiant",
     alternativeIndex:"Indice_aval",
     scoring:"Scoring",
-    timer:"Timer"
+    timer:"Timer",
+    embedURL:"Embed URL",
+    embedTitle:"Embed title",
+    embedHeight:"Embed height"
   },
 
   payloadKeyFromModelName: function() {

@@ -32,6 +32,9 @@ export default DS.Model.extend({
   alternativeIndex:DS.attr(),
   scoring:DS.attr(),
   timer:DS.attr('number'),
+  embedURL:DS.attr(),
+  embedTitle:DS.attr(),
+  embedHeight:DS.attr('number'),
 
   myStore:service("store"),
   config:service(),

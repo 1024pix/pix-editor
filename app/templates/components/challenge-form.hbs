@@ -26,6 +26,9 @@
 {{/if}}
   {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
   {{form-files title="Pièces jointes" value=challenge.attachments edition=edition display=(action showIllustration)}}
+  {{form-input title="Embed" value=challenge.embedURL edition=edition label="URL"}}
+  {{form-input value=challenge.embedHeight edition=edition label="Hauteur"}}
+  {{form-input value=challenge.embedTitle edition=edition label="Titre"}}
 {{#if (not alternative)}}
   {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
 {{/if}}

@@ -513,6 +513,13 @@ img.clickable {
   overflow:scroll;
   .ui.form {
     margin-bottom:20px;
+
+    .label-input {
+      width:70px;
+      padding:9px 5px;
+      text-align:left;
+    }
+
     .disabled.field {
       pointer-events:auto;
       opacity:1;
@@ -564,12 +571,11 @@ img.clickable {
           flex-grow:1;
           margin-bottom:20px;
         }
+
       }
 
     }
-
   }
-
 }
 
 .ui.menu.challenge-menu,
