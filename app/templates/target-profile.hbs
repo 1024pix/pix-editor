@@ -1,0 +1,52 @@
+<div class="main">
+  <div class="main-left">
+  <div class="main-title">
+    <h1>Générateur de profil cible</h1>
+  </div>
+  <div class="ui top attached borderless labelled icon menu">
+    <a class="first left item" onclick={{action "load"}}>
+      <i class="folder open icon"></i> Ouvrir
+    </a>
+    <a class="left item" onclick={{action "save"}}>
+      <i class="save icon"></i> Enregistrer
+    </a>
+    <a class="right item" onclick={{action "generate"}}>
+      <i class="download icon"></i> Identifiants
+    </a>
+  </div>
+  <div class="ui attached target-profile">
+    {{#each model as |area|}}
+    <div>
+      <div class="ui horizontal divider">
+    {{area.name}}
+      </div>
+    {{#each area.competences as |competence|}}
+    <div class="ui vertical segment">
+        <h4>
+      {{competence.name}}
+      </h4>
+      <div class="target-profile-competence">
+        {{#each competence.tubes2 as |tube|}}
+        <div class="target-profile-tube" onclick={{action "displayTube" tube}} title={{tube.name}}>
+          <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink" style="stroke:black; fill:{{if tube.selectedLevel "#88ff22" "#dddddd"}}; stroke-width:1">
+            <polygon class="hex" points="31,15 23.5,28 8.5,28 1,15 8.5,2 23.5,2" style="pointer-events: visible"></polygon>
+            {{#if tube.selectedLevel}}
+              <text x="12" y="20">{{tube.selectedLevel}}</text>
+            {{/if}}
+          </svg>
+          <div class="tube-name">
+            {{tube.name}}
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{/each}}
+
+    </div>
+    {{/each}}
+    {{input type='file' id='target-profile__open-file' change=(action "openFile")}}
+  </div>
+  </div>
+  {{popin-tube-level set=(action "setProfileTube") unset=(action "unsetProfileTube") closed=(action "tubeLevelHidden") display=displayTubeLevel level=selectedTubeLevel selectedSkills=selectedTubeSkills tube=selectedTube}}
+</div>
