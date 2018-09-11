@@ -131,6 +131,9 @@ export default Controller.extend({
     },
     showAlternatives(challenge) {
       this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), challenge);
+    },
+    shareSkills() {
+      this.get("application").send("showMessage", "Bientôt disponible...", true);
     }
   }
 });
