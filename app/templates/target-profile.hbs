@@ -1,7 +1,7 @@
 <div class="main">
   <div class="main-left">
   <div class="main-title">
-    <h1>Générateur de profil cible</h1>
+    <h1>Générateur de profil cible <div class="target-profile-mode {{if extended "active"}}">Vue étendue{{ui-checkbox checked=extended class="toggle target-profile-mode" onChange=(action (mut extended))}}</div></h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
     <a class="first left item" onclick={{action "load"}}>
@@ -14,24 +14,24 @@
       <i class="download icon"></i> Identifiants
     </a>
   </div>
-  <div class="ui attached target-profile">
+  <div class="ui attached target-profile {{if extended "extended"}}">
     {{#each model as |area|}}
     <div>
       <div class="ui horizontal divider">
     {{area.name}}
       </div>
     {{#each area.competences as |competence|}}
-    <div class="ui vertical segment">
-        <h4>
-      {{competence.name}}
+    <div class="ui vertical segment target-profile-segment">
+      <h4>
+        {{competence.name}}
       </h4>
       <div class="target-profile-competence">
         {{#each competence.tubes2 as |tube|}}
-        <div class="target-profile-tube" onclick={{action "displayTube" tube}} title={{tube.name}}>
+        <div class="target-profile-tube" onclick={{action "displayTube" tube}} title={{tube.name}} onmouseover={{action "showTubeName" tube.name competence}} onmouseout={{action "hideTubeName" competence}}>
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink" style="stroke:black; fill:{{if tube.selectedLevel "#88ff22" "#dddddd"}}; stroke-width:1">
             <polygon class="hex" points="14.05,1 27.1,8.5 27.1,23.5 14.05,31 1,23.5 1,8.5 14.05,1" style="pointer-events: visible"></polygon>
             {{#if tube.selectedLevel}}
-              <text x="10" y="21">{{tube.selectedLevel}}</text>
+              <text x="10" y="21" style="fill:black">{{tube.selectedLevel}}</text>
             {{/if}}
           </svg>
           <div class="tube-name">
@@ -39,6 +39,9 @@
           </div>
         </div>
         {{/each}}
+      </div>
+      <div class="tube-name">
+        {{if competence._tubeName competence._tubeName}}
       </div>
     </div>
     {{/each}}

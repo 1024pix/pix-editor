@@ -256,20 +256,21 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     }
 
   }
-  .skill-mode {
+  .skill-mode,
+  .target-profile-mode {
     float:right;
     margin-top:2px;
     font-weight:normal;
     font-size:14px;
     color:rgba(255,255,255,0.5);
-  }
 
-  .skill-mode.active {
-    color:#ffffff;
-  }
+    &.active {
+      color:#ffffff;
+    }
 
-  .skill-mode .checkbox {
-    margin-left:10px;
+    .checkbox {
+      margin-left:10px;
+    }
   }
 }
 
@@ -852,26 +853,63 @@ img.clickable {
 
 .target-profile {
   width:100%;
-  padding:0 20px;
+  padding:20px;
   overflow-x:hidden;
   overflow-y:scroll;
 
-  .target-profile-competence {
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
+  .ui.vertical.segment {
+    border-color:rgba(34, 36, 38, 0.05);
+    padding-bottom:0;
+  }
 
-    .target-profile-tube {
-      text-align: center;
-      margin:5px 7px;
-      cursor:pointer;
-      width:100px;
+  .target-profile-segment {
 
-      .tube-name {
-        overflow:hidden;
-        text-overflow:ellipsis;
+    .target-profile-competence {
+      display:flex;
+      flex-direction:row;
+      flex-wrap:wrap;
+      padding-top:5px;
+
+      .target-profile-tube {
+        text-align: center;
+        margin:0;
+        cursor:pointer;
+        width:32px;
+
+        .tube-name {
+          display:none;
+        }
       }
+    }
 
+    > .tube-name {
+      padding:0;
+      min-height:20px;
+      font-size:12px;
+    }
+
+  }
+
+  &.extended{
+    .target-profile-segment.ui.vertical.segment {
+      padding-bottom:14px;
+
+      > .tube-name {
+        display:none;
+      }
+      .target-profile-competence {
+
+        .target-profile-tube {
+          margin:5px 7px;
+          width:100px;
+
+          .tube-name {
+            display:block;
+            overflow:hidden;
+            text-overflow:ellipsis;
+          }
+        }
+      }
     }
   }
 

@@ -8,6 +8,7 @@ export default Controller.extend({
   selectedTubeLevel:false,
   fileSaver: service('file-saver'),
   application:controller(),
+  extended:false,
 
   init() {
     this._super();
@@ -108,6 +109,12 @@ export default Controller.extend({
       } catch(error) {
         this.get("application").send("showMessage", "Erreur lors de l'ouverture du fichier", false);
       }
+    },
+    showTubeName(name, competence) {
+      competence.set("_tubeName", name);
+    },
+    hideTubeName(competence) {
+      competence.set("_tubeName", null);
     }
 
   }
