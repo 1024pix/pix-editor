@@ -19,6 +19,7 @@ Router.map(function() {
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});
+  this.route('target-profile');
 });
 
 export default Router;
