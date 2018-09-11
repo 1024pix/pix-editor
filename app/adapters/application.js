@@ -21,6 +21,8 @@ export default AirtableAdapter.extend({
         return "Acquis";
       case "tutorial":
         return "Tutoriels";
+      case "tube":
+        return "Tubes";
       default:
         return this._super(type);
     }
