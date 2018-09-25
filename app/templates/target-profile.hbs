@@ -26,7 +26,7 @@
         {{competence.name}}
       </h4>
       <div class="target-profile-competence">
-        {{#each competence.tubes2 as |tube|}}
+        {{#each competence.sortedTubes as |tube|}}
         <div class="target-profile-tube" onclick={{action "displayTube" tube}} title={{tube.name}} onmouseover={{action "showTubeName" tube.name competence}} onmouseout={{action "hideTubeName" competence}}>
           <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink" style="stroke:black; fill:{{if tube.selectedLevel "#88ff22" "#dddddd"}}; stroke-width:1">
             <polygon class="hex" points="14.05,1 27.1,8.5 27.1,23.5 14.05,31 1,23.5 1,8.5 14.05,1" style="pointer-events: visible"></polygon>

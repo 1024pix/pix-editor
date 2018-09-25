@@ -37,7 +37,7 @@ export default Controller.extend({
       let ids = areas.reduce((areaValues, area) => {
         let competences = area.get('competences');
         return competences.reduce((competenceValues, competence) => {
-          let tubes = competence.get('tubes2');
+          let tubes = competence.get('ntubes');
           return tubes.reduce((tubeValues, tube) => {
             if (tube.get("selectedLevel")) {
               tubeValues = tubeValues.concat(tube.get("selectedSkills"));
@@ -54,7 +54,7 @@ export default Controller.extend({
       let data = areas.reduce((areaValues, area) => {
         let competences = area.get('competences');
         return competences.reduce((competenceValues, competence) => {
-          let tubes = competence.get('tubes2');
+          let tubes = competence.get('ntubes');
           return tubes.reduce((tubeValues, tube) => {
             if (tube.get("selectedLevel")) {
               tubeValues.push({
@@ -91,7 +91,7 @@ export default Controller.extend({
           areas.forEach(area => {
             let competences = area.get('competences');
             competences.forEach(competence => {
-              let tubes = competence.get('tubes2');
+              let tubes = competence.get('ntubes');
               tubes.forEach(tube => {
                 if (indexedTubes[tube.id]) {
                   tube.set("selectedLevel", indexedTubes[tube.id].level);

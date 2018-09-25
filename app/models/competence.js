@@ -1,8 +1,8 @@
 import DS from 'ember-data';
 import {computed} from '@ember/object';
+import {sort} from '@ember/object/computed';
 
 const findTubeName = /^@([^\d]+)(\d)$/;
-
 
 export default DS.Model.extend({
   init() {
@@ -33,6 +33,9 @@ export default DS.Model.extend({
       return current;
     }, []);
   }),
+  ntubes: DS.hasMany("tube"),
+  tubesSorting: Object.freeze(['name']),
+  sortedTubes:sort('ntubes', 'tubesSorting'),
   skillIds:computed("skills", function() {
     return this.get("skills").reduce((current, skill) => {
       current.push(skill.get("id"));
