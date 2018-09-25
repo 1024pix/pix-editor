@@ -39,5 +39,19 @@ export default AirtableAdapter.extend({
     let url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
 
     return this.ajax(url, "PATCH", { data: data });
+  },
+  coalesceFindRequests:true,
+  groupRecordsForFindMany (store, snapshots) {
+    let groups = [];
+    for (let i=0; i<snapshots.length; i+=100) {
+      groups.push(snapshots.slice(i,i+100));
+    }
+    return groups;
+  },
+  findMany (store, type, ids, snapshots) {
+    let recordsText = "OR(RECORD_ID() = '"+ids.join("',RECORD_ID() ='")+"')";
+    let url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
+    return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
   }
+
 });
