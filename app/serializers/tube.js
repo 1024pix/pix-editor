@@ -5,11 +5,9 @@ export default ApplicationSerializer.extend({
     name:"Nom",
     description:"Description",
     competenceIds:"Competences",
-    skillIds:"Acquis"
+    skills:"Acquis"
   },
-
   payloadKeyFromModelName: function() {
     return 'Tubes';
   }
-
 });

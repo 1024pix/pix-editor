@@ -13,21 +13,20 @@ export default Component.extend({
     }
   }),
   skills:computed("tube", "selectedSkills", function() {
-    let tube = this.get("tube");
+    let tube = this.get('tube');
     if (tube) {
-      let pq = this.get("paginatedQuery");
-      let recordsText = "OR(RECORD_ID() = '"+tube.get("skillIds").join("',RECORD_ID() ='")+"')";
       return DS.PromiseArray.create({
-        promise: pq.query("skill", {filterByFormula:recordsText, sort: [{field: "Level", direction: "asc"}]}).then(skills => {
-          let selected = this.get("selectedSkills");
-          return skills.reduce((orderedSkills, skill) => {
-            let level = skill.get('level');
-            skill.set("_selected", selected.includes(skill.id));
-            orderedSkills[level-1] = skill;
-            return orderedSkills;
-          }, [null, null, null, null, null, null, null, null]);
-        })
-      });
+        promise:tube.get('skills')
+          .then(skills => {
+            let selected = this.get("selectedSkills");
+            return skills.reduce((orderedSkills, skill) => {
+              let level = skill.get('level');
+              skill.set("_selected", selected.includes(skill.id));
+              orderedSkills[level-1] = skill;
+              return orderedSkills;
+            }, [null, null, null, null, null, null, null, null]);
+          })
+        });
     } else {
       return [];
     }
