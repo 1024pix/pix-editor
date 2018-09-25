@@ -18,22 +18,8 @@ export default Route.extend({
   },
   model() {
     if (this.get("configured")) {
-      let areas;
       let store = this.get('store');
-      return store.findAll('area')
-      .then(data => {
-        areas = data;
-        return store.findAll('competence');
-      })
-      .then(competences => {
-        areas.forEach(area => {
-          let ids = area.get('competenceIds');
-          area.set('competences', competences.filter(competence => {
-            return ids.includes(competence.id);
-          }));
-        })
-        return areas;
-      });
+      return store.findAll('area');
     }
   },
   afterModel() {

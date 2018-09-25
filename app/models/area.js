@@ -1,10 +1,9 @@
 import DS from 'ember-data';
+import {sort} from '@ember/object/computed';
 
 export default DS.Model.extend({
-  init() {
-    this._super(...arguments);
-    this.competences = [];
-  },
   name: DS.attr(),
-  competenceIds: DS.attr()
+  competences: DS.hasMany('competence'),
+  competencesSorting: Object.freeze(['code']),
+  sortedCompetences: sort('competences','competencesSorting')
 });

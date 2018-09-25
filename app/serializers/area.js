@@ -4,11 +4,10 @@ export default ApplicationSerializer.extend({
 
   attrs:{
     name:"Nom",
-    competenceIds:"Competences (identifiants)"
+    competences:"Competences (identifiants)"
   },
 
   payloadKeyFromModelName: function() {
     return 'Domaines';
   }
-
-});
+  });
