@@ -1,8 +1,6 @@
 import DS from 'ember-data';
 import {computed} from '@ember/object';
-import {sort} from '@ember/object/computed';
 
-const findTubeName = /^@([^\d]+)(\d)$/;
 
 export default DS.Model.extend({
   init() {
@@ -14,7 +12,7 @@ export default DS.Model.extend({
   area: DS.belongsTo("area"),
   name: DS.attr("string", { readOnly: true }),
   code: DS.attr(),
-  tubes:computed("skills", function() {
+  /*tubes:computed("skills", function() {
     const skills = this.get("skills");
     let set = skills.reduce((current, skill) => {
       let result = findTubeName.exec(skill.get("name"));
@@ -32,10 +30,16 @@ export default DS.Model.extend({
       current.push({name:key, skills:set[key]});
       return current;
     }, []);
+  }),*/
+  tubes: DS.hasMany("tube"),
+  sortedTubes:computed('tubes.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('tubes')
+        .then(tubes => {
+          return tubes.filterBy('name');
+        })
+    });
   }),
-  ntubes: DS.hasMany("tube"),
-  tubesSorting: Object.freeze(['name']),
-  sortedTubes:sort('ntubes', 'tubesSorting'),
   skillIds:computed("skills", function() {
     return this.get("skills").reduce((current, skill) => {
       current.push(skill.get("id"));
@@ -127,7 +131,21 @@ export default DS.Model.extend({
   tubeCount:computed("tubes", function() {
     return this.get("tubes").length;
   }),
-  skillCount:computed("skills", function() {
-    return this.get("skills.length");
+  skillCount:computed("tubes.[]", function() {
+    return DS.PromiseObject.create({
+      promise:this.get('tubes')
+        .then(tubes => {
+          let getCounts = tubes.reduce((promises, tube) => {
+            promises.push(tube.get('skillCount'));
+            return promises;
+          }, []);
+          return Promise.all(getCounts);
+        })
+        .then(counts => {
+          return counts.reduce((count, value)=> {
+            return count+value;
+          },0);
+        })
+    });
   })
 });

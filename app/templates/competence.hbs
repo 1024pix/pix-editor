@@ -21,7 +21,7 @@
   </div>
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
     {{competence-list list=challenges itemCount=challengeCount competenceModel=model hidden=(not listView) link=challengeLink}}
-    {{competence-grid tubes=competence.tubes competenceModel=model hidden=listView skillMode=skillMode link=challengeLink}}
+    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView skillMode=skillMode link=challengeLink}}
   </div>
   <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
   {{#if (not skillMode)}}

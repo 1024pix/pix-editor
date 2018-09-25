@@ -3,7 +3,7 @@
   {{#each tubes as |tube|}}
   <tr>
     <td>{{tube.name}}</td>
-    {{#each tube.skills as |skill|}}
+    {{#each tube.filledSkills as |skill|}}
       {{#if skillMode}}
         {{#if skill.name}}
           {{#link-to "competence.skill" competenceModel skill tagName="td" class="skill link"}}

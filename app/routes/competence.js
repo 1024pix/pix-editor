@@ -5,10 +5,10 @@ import {inject as service} from "@ember/service";
 export default Route.extend({
   paginatedQuery:service(),
   model(params) {
-    let competence;
+    //let competence;
     let store = this.get("store");
-    return store.findRecord("competence", params.competence_id)
-    .then(data => {
+    return store.findRecord("competence", params.competence_id);
+    /*.then(data => {
       competence = data;
       // get skills
       return store.query("skill", {filterByFormula:"FIND('"+competence.get("code")+"', {Compétence})", sort: [{field: "Nom", direction: "asc"}]});
@@ -43,7 +43,7 @@ export default Route.extend({
     .then(data => {
       competence.set("sortedChallenges", {production:data.bySkillProd, workbench:data.bySkillWorkbench, noSkill: data.byCompetenceProd});
       return competence;
-    });
+    });*/
   },
   setupController(controller, model) {
     this._super(controller, model);

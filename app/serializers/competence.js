@@ -4,7 +4,7 @@ export default ApplicationSerializer.extend({
   attrs: {
     name:"Référence",
     code:"Sous-domaine",
-    ntubes:"Tubes"
+    tubes:"Tubes"
   },
   payloadKeyFromModelName: function() {
     return 'Competences';

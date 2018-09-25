@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-import {sort} from '@ember/object/computed';
+import {computed} from '@ember/object';
 
 export default DS.Model.extend({
   name: DS.attr(),
@@ -7,8 +7,29 @@ export default DS.Model.extend({
   competenceIds: DS.attr(),
   selectedLevel:false,
   skills:DS.hasMany('skill'),
-  skillsSorting:Object.freeze(['level']),
-  sortedSkills:sort('skills', 'skillsSorting'),
+  skillCount:computed('skills', function() {
+    return this.get('skills').length;
+  }),
+  sortedSkills:computed('skills.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('skills')
+      .then(skills => {
+        return skills.sortBy('level');
+      })
+    });
+  }),
+  filledSkills:computed('sortedSkills', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('sortedSkills')
+        .then(skills => {
+          let value = skills.reduce((grid, skill) => {
+            grid[skill.get('level')-1] = skill;
+            return grid;
+          },[false, false, false, false, false, false, false]);
+          return value;
+        })
+    });
+  }),
   init() {
     this.set('selectedSkills', []);
     return this._super(...arguments);
