@@ -63,31 +63,27 @@ export default Service.extend({
       let workbench = challenge.get("workbench");
       let url, token;
       if (workbench) {
-        url = this.get("config").get("pixWorkbench")+"/api/cache";
+        url = this.get("config").get("pixWorkbench")+"/api/cache/";
         token = this.get("tokens").workbench;
       } else {
-        url = this.get("config").get("pixStaging")+"/api/cache";
+        url = this.get("config").get("pixStaging")+"/api/cache/";
         token = this.get("tokens").staging;
       }
       let payload = {
         dataType:"text",
         headers:{
           Authorization: "Bearer "+token
-        },
-        data:{
-          "cache-key":"challenge-repository_get_"+challenge.get("id")
         }
       }
       let problem = false;
-      return this.get("ajax").del(url, payload)
+      return this.get("ajax").del(url+"challenge-repository_get_"+challenge.get("id"), payload)
       .catch((error) => {
         if (error.status !== 404) {
           problem = true;
         }
       })
       .finally(() => {
-        payload.data["cache-key"]="Epreuves_"+challenge.get("id");
-        return this.get("ajax").del(url, payload);
+        return this.get("ajax").del(url+"Epreuves_"+challenge.get("id"), payload);
       })
       .catch((error) => {
         if (error.status !== 404) {
