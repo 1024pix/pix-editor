@@ -4,8 +4,8 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.challenges = [];
-    this.workbenchChallenges = [];
+    /*this.challenges = [];
+    this.workbenchChallenges = [];*/
     this.tutoMore = [];
     this.tutoSolutions = [];
   },
@@ -19,10 +19,26 @@ export default DS.Model.extend({
   tutoSolutionIds:DS.attr(),
   tutoMoreIds:DS.attr(),
   tubeId:DS.attr(),
-  template: null,
   level:DS.attr(),
-  workbenchCount:computed("workbenchChallenges", function() {
-    return this.get("workbenchChallenges").get('length');
+  workbenchSkill:DS.belongsTo('workbenchSkill'),
+  workbenchChallenges:computed('workbenchSkill', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('workbenchSkill')
+        .then((skill) => {
+          if (skill)
+            return skill.get('challenges');
+          else
+            return [];
+        })
+    });
+  }),
+  workbenchCount:computed("workbenchChallenges.[]", function() {
+    return DS.PromiseObject.create({
+      promise:this.get('workbenchChallenges')
+        .then((challenges) => {
+          return challenges.length;
+        })
+    });
   }),
   descriptionCSS:computed("descriptionStatus" , function() {
     let status = this.get("descriptionStatus");
@@ -74,5 +90,29 @@ export default DS.Model.extend({
     } else {
       return 0;
     }
+  }),
+  challenges:DS.hasMany('challenge'),
+  template:computed('challenges.[]', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('challenges')
+      .then((challenges) => {
+        return challenges.find((challenge) => {
+          return challenge.get('validated')&&challenge.get('template');
+        });
+      })
+    });
+  }),
+  alternativeCount:computed('challenges.[]', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('challenges')
+      .then((challenges) => {
+        return challenges.reduce((count, challenge) => {
+          if (challenge.get('validated') && !challenge.get('template')) {
+            count++;
+          }
+          return count;
+        }, 0);
+      })
+    });
   })
 });
