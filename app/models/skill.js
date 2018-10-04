@@ -9,7 +9,7 @@ export default DS.Model.extend({
     this.tutoMore = [];
     this.tutoSolutions = [];
   },
-  name: DS.attr(),
+  name: DS.attr("string", { readOnly: true }),
   competence: DS.attr(),
   challengeIds: DS.attr(),
   clue:DS.attr(),
