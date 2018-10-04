@@ -43,7 +43,7 @@ export default DS.Model.extend({
   }),
   validated:computed("status", function(){
     let status = this.get("status");
-    return ["validated", "validé sans test", "pré-validé"].includes(status);
+    return ["validé", "validé sans test", "pré-validé"].includes(status);
   }),
   notDeclinable:computed('declinable', function() {
     let declinable = this.get("declinable");
