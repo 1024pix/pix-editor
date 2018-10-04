@@ -23,11 +23,11 @@
           <td></td>
         {{/if}}
       {{else}}
-        {{#if skill.template}}
-        {{#link-to link competenceModel skill.template tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
+        {{#if skill.template.content}}
+        {{#link-to link competenceModel skill.template.content tagName="td" class=(concat "skill link " skill.template.content.statusCSS)}}{{skill.name}}
         <div class="alternative">
-          <span class="production">{{skill.alternativeCount}}</span> - <span class="workbench">{{skill.workbenchCount}}</span>
-          {{#if skill.template.notDeclinable}}
+          <span class="production">{{skill.alternativeCount.content}}</span> - <span class="workbench">{{skill.workbenchCount.content}}</span>
+          {{#if skill.template.content.notDeclinable}}
             <span class="not-declinable">NR</span>
           {{/if}}
         </div>
