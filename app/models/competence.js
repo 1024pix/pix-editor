@@ -5,9 +5,9 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.skills = [];
+    /*this.skills = [];
     this.workbenchSkills = [];
-    this.sortedChallenges = {production:[], workbench:[], noSkill:[]};
+    this.sortedChallenges = {production:[], workbench:[], noSkill:[]};*/
   },
   area: DS.belongsTo("area"),
   name: DS.attr("string", { readOnly: true }),
@@ -40,7 +40,7 @@ export default DS.Model.extend({
         })
     });
   }),
-  skillIds:computed("skills", function() {
+  /*skillIds:computed("skills", function() {
     return this.get("skills").reduce((current, skill) => {
       current.push(skill.get("id"));
       return current;
@@ -127,7 +127,7 @@ export default DS.Model.extend({
   }),
   challengeCount:computed("challenges", function() {
     return this.get("challenges").length;
-  }),
+  }),*/
   tubeCount:computed("tubes", function() {
     return this.get("tubes").length;
   }),
