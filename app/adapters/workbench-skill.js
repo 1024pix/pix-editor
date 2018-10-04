@@ -10,6 +10,12 @@ export default ApplicationAdapter.extend({
   }),
   pathForType() {
     return "Acquis";
-  }
+  }/*,
+  findMany (store, type, ids, snapshots) {
+    let recordsText = 'OR(' + ids.map(id => `{Acquis prod} = '${id}'`).join(",") + ')';
+    let url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
+    return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
+  }*/
+
 
 });
