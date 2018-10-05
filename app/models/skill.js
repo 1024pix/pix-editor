@@ -114,5 +114,11 @@ export default DS.Model.extend({
         }, 0);
       })
     });
+  }),
+  loaded:computed('challenges.[]', function() {
+    return this.get('challenges')
+    .then(() => {
+      return true;
+    });
   })
 });

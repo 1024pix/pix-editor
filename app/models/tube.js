@@ -30,6 +30,19 @@ export default DS.Model.extend({
         })
     });
   }),
+  loaded:computed('skills.[]', function() {
+    return this.get('skills')
+    .then(skills => {
+      let waitForSkills = skills.reduce((promises, skill) => {
+        promises.push(skill.get('loaded'));
+        return promises;
+      }, []);
+      return Promise.all(waitForSkills);
+    })
+    .then(() => {
+      return true;
+    });
+  }),
   init() {
     this.set('selectedSkills', []);
     return this._super(...arguments);
