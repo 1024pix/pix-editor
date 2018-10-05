@@ -40,13 +40,28 @@ export default DS.Model.extend({
         })
     });
   }),
-  /*skillIds:computed("skills", function() {
-    return this.get("skills").reduce((current, skill) => {
-      current.push(skill.get("id"));
-      return current;
-    }, []);
+  skillIds:computed("tubes.[]", function() {
+    return this.get('tubes')
+    .then(tubes => {
+      return tubes.reduce((ids, tube) => {
+        return ids.concat(tube.hasMany('skills').ids());
+      }, []);
+    });
   }),
-  productionChallengeIds:computed("skills", function() {
+  loaded:computed("tubes.[]", function() {
+    return this.get("tubes")
+    .then(tubes => {
+      let waitForTubes = tubes.reduce((promises, tube) => {
+        promises.push(tube.get('loaded'));
+        return promises;
+      }, []);
+      return Promise.all(waitForTubes);
+    })
+    .then(() => {
+      return true;
+    })
+  }),
+  /*productionChallengeIds:computed("skills", function() {
     return this.get("skills").reduce((current, skill) => {
       return current.concat(skill.get("challengeIds"));
     }, []);
