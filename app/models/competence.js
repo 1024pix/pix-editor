@@ -162,5 +162,15 @@ export default DS.Model.extend({
           },0);
         })
     });
-  })
+  }),
+  refresh() {
+    return this.hasMany('tubes').reload()
+    .then(tubes => {
+      let refreshTubes = tubes.reduce((promises, tube) => {
+        promises.push(tube.refresh());
+        return promises;
+      }, []);
+      return Promise.all(refreshTubes);
+    });
+  }
 });

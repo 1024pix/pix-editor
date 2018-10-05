@@ -43,6 +43,16 @@ export default DS.Model.extend({
       return true;
     });
   }),
+  refresh() {
+    return this.hasMany('skills').reload()
+    .then(skills => {
+      let refreshSkills = skills.reduce((promises, skill) => {
+        promises.push(skill.refresh());
+        return promises;
+      }, []);
+      return Promise.all(refreshSkills);
+    });
+  },
   init() {
     this.set('selectedSkills', []);
     return this._super(...arguments);

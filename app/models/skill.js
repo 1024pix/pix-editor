@@ -120,5 +120,8 @@ export default DS.Model.extend({
     .then(() => {
       return true;
     });
-  })
+  }),
+  refresh() {
+    return this.hasMany('challenges').reload();
+  }
 });
