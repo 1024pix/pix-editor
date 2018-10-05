@@ -5,12 +5,30 @@ export default Route.extend({
   paginatedQuery:service(),
   model(params) {
     let model = null;
-    return this.get("store").findRecord("competence", params.competence_id)
+    let store = this.get('store');
+    return store.findRecord("competence", params.competence_id)
     .then(competence => {
       model = competence;
-      return competence.get('skillIds');
+      if (!model.get('workbenchLoaded')) {
+        return competence.get('skillIds')
+        .then((ids) => {
+          let recordsText = 'OR(' + ids.map(id => `{Acquis prod} = '${id}'`).join(",") + ')';
+          return store.query("workbenchSkill", {filterByFormula:recordsText});
+        })
+        .then(() => {
+          model.set('workbenchLoaded', true);
+        });
+      } else {
+        return Promise.resolve();
+      }
     }).then(() => {
-      // TODO: load workbench skills
+      if (model.get('needsRefresh')) {
+        return model.refresh();
+      } else {
+        return Promise.resolve();
+      }
+    }).then(() => {
+      model.set('needsRefresh', false);
       return model.get('loaded');
     }).then(() => {
       return model;
@@ -60,6 +78,9 @@ export default Route.extend({
   },
   actions: {
     refreshModel() {
+      let model = this.modelFor(this.routeName);
+      model.set('workbenchLoaded', false);
+      model.set('needsRefresh', true);
       this.refresh();
     },
     willTransition(transition) {

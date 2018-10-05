@@ -4,8 +4,6 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    /*this.challenges = [];
-    this.workbenchChallenges = [];*/
     this.tutoMore = [];
     this.tutoSolutions = [];
   },
@@ -25,10 +23,11 @@ export default DS.Model.extend({
     return DS.PromiseArray.create({
       promise:this.get('workbenchSkill')
         .then((skill) => {
-          if (skill)
-            return skill.get('challenges');
-          else
+          if (skill) {
+            return skill.get('challenges')
+          } else {
             return [];
+          }
         })
     });
   }),
@@ -36,7 +35,12 @@ export default DS.Model.extend({
     return DS.PromiseObject.create({
       promise:this.get('workbenchChallenges')
         .then((challenges) => {
-          return challenges.length;
+          return challenges.reduce((count, challenge) => {
+            if (!challenge.get('isArchived') && !challenge.get('template')) {
+              count++;
+            }
+            return count;
+          }, 0);
         })
     });
   }),

@@ -9,28 +9,11 @@ export default DS.Model.extend({
     this.workbenchSkills = [];
     this.sortedChallenges = {production:[], workbench:[], noSkill:[]};*/
   },
+  workbenchLoaded:false,
+  needsRefresh:false,
   area: DS.belongsTo("area"),
   name: DS.attr("string", { readOnly: true }),
   code: DS.attr(),
-  /*tubes:computed("skills", function() {
-    const skills = this.get("skills");
-    let set = skills.reduce((current, skill) => {
-      let result = findTubeName.exec(skill.get("name"));
-      if (result && result[1] && result[2]) {
-        let tubeName = result[1];
-        let index = parseInt(result[2]);
-        if (!current[tubeName]) {
-          current[tubeName] = [false, false, false, false, false, false, false];
-        }
-        current[tubeName][index-1] = skill;
-      }
-      return current;
-    }, {});
-    return Object.keys(set).reduce((current, key) => {
-      current.push({name:key, skills:set[key]});
-      return current;
-    }, []);
-  }),*/
   tubes: DS.hasMany("tube"),
   sortedTubes:computed('tubes.[]', function() {
     return DS.PromiseArray.create({
@@ -61,6 +44,36 @@ export default DS.Model.extend({
       return true;
     })
   }),
+  tubeCount:computed("tubes", function() {
+    return this.get("tubes").length;
+  }),
+  skillCount:computed("tubes.[]", function() {
+    return DS.PromiseObject.create({
+      promise:this.get('tubes')
+        .then(tubes => {
+          let getCounts = tubes.reduce((promises, tube) => {
+            promises.push(tube.get('skillCount'));
+            return promises;
+          }, []);
+          return Promise.all(getCounts);
+        })
+        .then(counts => {
+          return counts.reduce((count, value)=> {
+            return count+value;
+          },0);
+        })
+    });
+  }),
+  refresh() {
+    return this.hasMany('tubes').reload()
+    .then(tubes => {
+      let refreshTubes = tubes.reduce((promises, tube) => {
+        promises.push(tube.refresh());
+        return promises;
+      }, []);
+      return Promise.all(refreshTubes);
+    });
+  }
   /*productionChallengeIds:computed("skills", function() {
     return this.get("skills").reduce((current, skill) => {
       return current.concat(skill.get("challengeIds"));
@@ -142,35 +155,26 @@ export default DS.Model.extend({
   }),
   challengeCount:computed("challenges", function() {
     return this.get("challenges").length;
+  }),
+  tubes:computed("skills", function() {
+    const skills = this.get("skills");
+    let set = skills.reduce((current, skill) => {
+      let result = findTubeName.exec(skill.get("name"));
+      if (result && result[1] && result[2]) {
+        let tubeName = result[1];
+        let index = parseInt(result[2]);
+        if (!current[tubeName]) {
+          current[tubeName] = [false, false, false, false, false, false, false];
+        }
+        current[tubeName][index-1] = skill;
+      }
+      return current;
+    }, {});
+    return Object.keys(set).reduce((current, key) => {
+      current.push({name:key, skills:set[key]});
+      return current;
+    }, []);
   }),*/
-  tubeCount:computed("tubes", function() {
-    return this.get("tubes").length;
-  }),
-  skillCount:computed("tubes.[]", function() {
-    return DS.PromiseObject.create({
-      promise:this.get('tubes')
-        .then(tubes => {
-          let getCounts = tubes.reduce((promises, tube) => {
-            promises.push(tube.get('skillCount'));
-            return promises;
-          }, []);
-          return Promise.all(getCounts);
-        })
-        .then(counts => {
-          return counts.reduce((count, value)=> {
-            return count+value;
-          },0);
-        })
-    });
-  }),
-  refresh() {
-    return this.hasMany('tubes').reload()
-    .then(tubes => {
-      let refreshTubes = tubes.reduce((promises, tube) => {
-        promises.push(tube.refresh());
-        return promises;
-      }, []);
-      return Promise.all(refreshTubes);
-    });
-  }
+
+
 });
