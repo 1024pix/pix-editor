@@ -1,13 +1,21 @@
 import Route from '@ember/routing/route';
-import RSVP from 'rsvp';
 import {inject as service} from "@ember/service";
 
 export default Route.extend({
   paginatedQuery:service(),
   model(params) {
-    //let competence;
-    let store = this.get("store");
-    return store.findRecord("competence", params.competence_id);
+    let model = null;
+    return this.get("store").findRecord("competence", params.competence_id)
+    .then(competence => {
+      model = competence;
+      return competence.get('skillIds');
+    }).then(() => {
+      // TODO: load workbench skills
+      return model.get('loaded');
+    }).then(() => {
+      return model;
+    })
+
     /*.then(data => {
       competence = data;
       // get skills
