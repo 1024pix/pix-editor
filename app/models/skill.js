@@ -8,6 +8,7 @@ export default DS.Model.extend({
     this.tutoSolutions = [];
   },
   name: DS.attr(),
+  challenges:DS.hasMany('challenge'),
   competence: DS.attr(),
   challengeIds: DS.attr(),
   clue:DS.attr(),
@@ -28,19 +29,6 @@ export default DS.Model.extend({
           } else {
             return [];
           }
-        })
-    });
-  }),
-  workbenchCount:computed("workbenchChallenges.[]", function() {
-    return DS.PromiseObject.create({
-      promise:this.get('workbenchChallenges')
-        .then((challenges) => {
-          return challenges.reduce((count, challenge) => {
-            if (!challenge.get('isArchived') && !challenge.get('template')) {
-              count++;
-            }
-            return count;
-          }, 0);
         })
     });
   }),
@@ -95,7 +83,6 @@ export default DS.Model.extend({
       return 0;
     }
   }),
-  challenges:DS.hasMany('challenge'),
   template:computed('challenges.[]', function() {
     return DS.PromiseObject.create({
       promise:this.get('challenges')
@@ -106,17 +93,40 @@ export default DS.Model.extend({
       })
     });
   }),
-  alternativeCount:computed('challenges.[]', function() {
-    return DS.PromiseObject.create({
+  alternatives:computed('challenges.[]', function() {
+    return DS.PromiseArray.create({
       promise:this.get('challenges')
       .then((challenges) => {
-        return challenges.reduce((count, challenge) => {
-          if (challenge.get('validated') && !challenge.get('template')) {
-            count++;
-          }
-          return count;
-        }, 0);
+        return challenges.filter((challenge) => {
+          return (!challenge.get('isArchived') && !challenge.get('template'));
+        });
       })
+    });
+  }),
+  alternativesCount:computed('alternatives.[]', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('alternatives')
+        .then(alternatives => {
+          return alternatives.length;
+        })
+    });
+  }),
+  workbenchAlternatives:computed('workbenchChallenges.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('workbenchChallenges')
+        .then((challenges) => {
+          return challenges.filter((challenge) => {
+            return (!challenge.get('isArchived') && !challenge.get('template'));
+          });
+        })
+    });
+  }),
+  workbenchAlternativesCount:computed('workbenchAlternatives.[]', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('workbenchAlternatives')
+        .then(alternatives => {
+          return alternatives.length;
+        })
     });
   }),
   loaded:computed('challenges.[]', function() {

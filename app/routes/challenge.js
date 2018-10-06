@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
+    //TODO: à améliorer
     let set = {templateId:false, alternativeId:false, competenceId:false};
     return this.get("store").query("challenge", {filterByFormula:"AND(FIND('"+params.challenge_id+"', RECORD_ID()) , Statut != 'archive')", maxRecords:1})
     .then(result => {

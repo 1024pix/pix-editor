@@ -4,10 +4,7 @@ import {inject as service} from "@ember/service";
 import { A } from "@ember/array";
 
 export default DS.Model.extend({
-  init() {
-    this._super(...arguments);
-    this.sortedAlternatives = {production:[], workbench:[]};
-  },
+  skills:DS.hasMany('skill'),
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
@@ -24,7 +21,6 @@ export default DS.Model.extend({
   version:DS.attr(),
   genealogy:DS.attr(),
   skillNames:DS.attr({readOnly:true}),
-  skills:DS.attr(),
   workbench:false,
   status:DS.attr(),
   preview:DS.attr({readOnly:true}),
@@ -119,17 +115,61 @@ export default DS.Model.extend({
     data.workbench = false;
     return this.get("myStore").createRecord("challenge", data);
   },
-  alternatives:computed("sortedAlternatives", function() {
-    let set = this.get("sortedAlternatives");
-    let productionAlternatives = set.production.toArray();
-    let workbenchAlternatives = set.workbench.toArray();
-    let result = new A();
-    result.pushObjects(productionAlternatives);
-    result.pushObjects(workbenchAlternatives);
-    return result;
+  alternatives:computed("skills.[]", function() {
+    return DS.PromiseArray.create({
+      promise:this.get('skills')
+        .then((skills) => {
+          let firstSkill = skills.firstObject;
+          if (firstSkill) {
+            let result = new A();
+            return firstSkill.get('alternatives')
+            .then(alternatives => {
+              result.pushObjects(alternatives);
+              return firstSkill.get('workbenchAlternatives');
+            })
+            .then(workbenchAlternatives => {
+              result.pushObjects(workbenchAlternatives);
+              return result;
+            })
+          } else {
+            return [];
+          }
+        })
+    })
   }),
   alternativesCount:computed("alternatives", function() {
-    return this.get("alternatives").length;
+    return DS.PromiseObject.create({
+      promise:this.get("alternatives")
+        .then(alternatives => {
+          return alternatives.length;
+        })
+    });
+  }),
+  productionAlternativesCount:computed("alternatives", function() {
+    return DS.PromiseObject.create({
+      promise:this.get("alternatives")
+        .then(alternatives =>{
+          return alternatives.reduce((count, alternative) => {
+            if (!alternative.get("workbench")) {
+              count++;
+            }
+            return count;
+          }, 0)
+        })
+    });
+  }),
+  workbenchAlternativesCount:computed("sortedAlternatives", function() {
+    return DS.PromiseObject.create({
+      promise:this.get("alternatives")
+        .then(alternatives =>{
+          return alternatives.reduce((count, alternative) => {
+            if (alternative.get("workbench")) {
+              count++;
+            }
+            return count;
+          }, 0)
+        })
+    });
   }),
   nextComputedIndex:computed("alternatives", function() {
     return this.get("alternatives").reduce((current, alternative) => {
@@ -148,12 +188,6 @@ export default DS.Model.extend({
     } else {
       return "";
     }
-  }),
-  productionAlternativeCount:computed("sortedAlternatives", function() {
-    return this.get("sortedAlternatives").production.length;
-  }),
-  workbenchAlternativeCount:computed("sortedAlternatives", function() {
-    return this.get("sortedAlternatives").workbench.length;
   }),
   isTextBased:computed("type", function() {
     let type = this.get("type");

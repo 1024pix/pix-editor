@@ -26,7 +26,7 @@
         {{#if skill.template.content}}
         {{#link-to link competenceModel skill.template.content tagName="td" class=(concat "skill link " skill.template.content.statusCSS)}}{{skill.name}}
         <div class="alternative">
-          <span class="production">{{skill.alternativeCount.content}}</span> - <span class="workbench">{{skill.workbenchCount.content}}</span>
+          <span class="production">{{skill.alternativesCount.content}}</span> - <span class="workbench">{{skill.workbenchAlternativesCount.content}}</span>
           {{#if skill.template.content.notDeclinable}}
             <span class="not-declinable">NR</span>
           {{/if}}
