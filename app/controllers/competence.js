@@ -139,12 +139,18 @@ export default Controller.extend({
     shareSkills() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
     },
-    switchProduction() {
+    switchProduction(skipClose) {
       this.set("production", true);
       this.set("listView", false);
+      if (!skipClose) {
+        this.send("closeChildComponent");
+      }
     },
-    switchWorkbench() {
+    switchWorkbench(skipClose) {
       this.set("production", false);
+      if (!skipClose) {
+        this.send("closeChildComponent");
+      }
     }
   }
 });

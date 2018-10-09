@@ -17,7 +17,8 @@ Router.map(function() {
           this.route('single', {path:'/:alternative_id'});
         });
       })
-      });
+      this.route('list', {path:'/list/:skill_id'});
+    });
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});

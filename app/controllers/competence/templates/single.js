@@ -167,7 +167,7 @@ export default Controller.extend({
     },
     init() {
       if (this.get("challenge.workbench")) {
-        this.get("parentController").send("switchWorkbench");
+        this.get("parentController").send("switchWorkbench", true);
         //TODO : if no skill, set listView
       }
     }
