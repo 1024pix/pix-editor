@@ -14,11 +14,6 @@
         <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction"}}>Production</div>
         <div class="item workbench {{if production "" "active"}}"  onclick={{action "switchWorkbench"}}>Brouillons</div>
       </div>
-      <!--
-        <a class="left item" onclick={{action "newChallenge"}}>
-          <i class="plus square outline icon"></i> Nouveau prototype
-        </a>
-      -->
       {{/if}}
     {{/unless}}
     <a class="right item" onclick={{action "refresh" true}}>
@@ -44,6 +39,10 @@
   {{#if skillMode}}
     <a class="right item" onclick={{action "shareSkills"}}>
       <i class="share square icon"></i>
+    </a>
+  {{else if (not production)}}
+    <a class="right item" onclick={{action "newTemplate"}}>
+      <i class="plus square outline icon"></i> Nouveau prototype
     </a>
   {{/if}}
   </div>

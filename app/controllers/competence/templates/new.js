@@ -1,4 +1,4 @@
-import Template from '../template';
+import Template from './single';
 
 export default Template.extend({
   creation:true,

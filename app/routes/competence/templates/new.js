@@ -1,7 +1,7 @@
-import Template from '../template';
+import Template from './single';
 
 export default Template.extend({
-  templateName: "competence/template",
+  templateName: "competence/templates/single",
   model(params) {
     if (params.from) {
       return this.get("store").findRecord("challenge",params.from)

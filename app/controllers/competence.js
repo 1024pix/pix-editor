@@ -115,7 +115,7 @@ export default Controller.extend({
     setGridView() {
       this.set("listView", false);
     },
-    newChallenge() {
+    newTemplate() {
       this.transitionToRoute("competence.templates.new", this.get("competence"));
     },
     copyChallenge(challenge) {
@@ -143,6 +143,7 @@ export default Controller.extend({
     },
     switchProduction() {
       this.set("production", true);
+      this.set("listView", false);
     },
     switchWorkbench() {
       this.set("production", false);
