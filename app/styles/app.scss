@@ -1,3 +1,7 @@
+$production-background-color:#00ff00;
+$production-color:#000000;
+$workbench-background-color:#fcfd9f;
+$workbench-color:#000000;
 $validated-background-color:#00ff00/*#08cf08*/;
 $validated-color:#000000;
 $validated-no-test-background-color:#00ff00;
@@ -15,8 +19,8 @@ $need-work-color:#000000;
 $na-background-color:#eceaea;
 $na-color:#000000;
 
-$production-color:#085508;/*#0000ff;*/
-$workbench-color:#ff0000;
+$production-alternative-color:#085508;/*#0000ff;*/
+$workbench-alternative-color:#c48807;
 
 
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
@@ -165,7 +169,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
           }
           &.workbench {
-            color:#0000ff;
+            color:#e9ca19;
           }
         }
       }
@@ -209,13 +213,13 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         flex-direction:row;
         justify-content:space-evenly;
 
-        .production {
+        /*.production {
           color:$production-color;
         }
 
         .workbench {
           color:$workbench-color;
-        }
+        }*/
       }
     }
 
@@ -332,7 +336,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     /*background-color:#F9FAFB;*/
 
     &:first-child:not(.ignored) {
-      /*background-color:transparent;*/
+      background-color:#F9FAFB;
       padding-left:10px;
     }
 
@@ -358,6 +362,22 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
         .tuto-count {
           font-size:12px;
+        }
+
+        &.production,
+        &.production.active,
+        .skill-name.production,
+        .help.production {
+          background-color:$production-background-color !important;
+          color:$production-color;
+        }
+
+        &.workbench,
+        &.workbench.active,
+        .skill-name.workbench,
+        .help.workbench {
+          background-color:$workbench-background-color !important;
+          color:$workbench-color;
         }
 
         &.suggested,
@@ -492,10 +512,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   color:rgba(0, 0, 0, 0.87);
   font-size:12px;
   .production {
-    color:$production-color;
+    color:$production-alternative-color;
   }
   .workbench {
-    color:$workbench-color;
+    color:$workbench-alternative-color;
   }
   .not-declinable {
     font-weight:bold;
@@ -782,7 +802,7 @@ img.clickable {
     color:$production-color;
 
     &.workbench {
-      color:$workbench-color;
+      color:$workbench-alternative-color;
     }
   }
 }

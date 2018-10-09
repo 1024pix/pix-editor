@@ -14,7 +14,7 @@
   {{/link-to}}
 {{else}}
   {{#if (and production skill.template.content)}}
-    {{#link-to link competenceModel skill.template.content tagName="td" class=(concat "skill link " skill.template.content.statusCSS)}}
+    {{#link-to link competenceModel skill.template.content tagName="td" class="skill link production"}}
       {{skill.name}}
       <div class="alternative">
         <span class="production">{{skill.alternativesCount.content}}</span>
@@ -24,7 +24,8 @@
       </div>
     {{/link-to}}
   {{else}}
-    {{#link-to link competenceModel tagName="td" class=(concat "skill link " skill.template.content.statusCSS)}}
+    {{#link-to link competenceModel tagName="td" class=(concat "skill link " (if production "production" "workbench"))}}
+      {{skill.name}}
       <div class="alternative">
         {{#if production}}
            <span class="production">{{skill.alternativesCount.content}}</span>
