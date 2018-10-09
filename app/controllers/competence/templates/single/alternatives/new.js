@@ -1,4 +1,4 @@
-import Alternative from './alternative';
+import Alternative from '../alternative';
 
 export default Alternative.extend({
   creation:true,
@@ -49,7 +49,7 @@ export default Alternative.extend({
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Déclinaison enregistrée", true);
         this.get("parentController").send("addChallenge", challenge);
-        this.transitionToRoute("competence.challenge.alternatives.alternative", this.get("competence.id"), this.get("template.id"), challenge.get("id"));
+        this.transitionToRoute("competence.templates.single.alternative", this.get("competence.id"), this.get("template.id"), challenge.get("id"));
         this.get("parentController").send("refresh");
       }).catch(() => {
         this.get("application").send("finishedLoading");

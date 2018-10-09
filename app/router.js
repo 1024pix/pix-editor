@@ -8,14 +8,16 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('competence', {path:'/competence/:competence_id'}, function() {
-    this.route('new-template', {path:'/challenge'});
-    this.route('challenge', {path:'/challenge/:challenge_id'}, function() {
-      this.route('alternatives', {path:'/alternatives'}, function() {
-        this.route('alternative', {path:'/:alternative_id'});
-        this.route('new-alternative', {path:'/new'});
-      });
-    });
     this.route('skill', {path:'/skill/:skill_id'});
+    this.route('templates', {path:'/templates'}, function() {
+      this.route('new', {path:'/new'});
+      this.route('single', {path:'/:template_id'}, function() {
+        this.route('alternatives', {path:'/alternatives'}, function() {
+          this.route('new', {path:'/new'});
+          this.route('single', {path:'/:alternative_id'});
+        });
+      })
+      });
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});

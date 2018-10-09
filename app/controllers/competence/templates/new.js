@@ -1,6 +1,6 @@
-import Challenge from './challenge';
+import Template from '../template';
 
-export default Challenge.extend({
+export default Template.extend({
   creation:true,
   mayUpdateCache:false,
   queryParams: ['from'],
@@ -20,7 +20,7 @@ export default Challenge.extend({
         let challenge = this.get("challenge");
         this.get("parentController").send("addChallenge", challenge);
         // use id in order to reload models
-        this.transitionToRoute("competence.challenge", this.get("competence").get("id"), challenge.get("id"));
+        this.transitionToRoute("competence.templates.single", this.get("competence").get("id"), challenge.get("id"));
       }).catch(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la création", false);

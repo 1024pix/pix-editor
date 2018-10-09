@@ -93,14 +93,14 @@ export default Route.extend({
             let challenge = this.get("store").peekRecord("challenge", challengeId);
             if (challenge) {
               if (challenge.template) {
-                this.transitionTo("competence.challenge", competence, challenge);
+                this.transitionTo("competence.templates.single", competence, challenge);
               } else {
                 let skills = competence.get("skills");
                 let skill = skills.filter((skill) => {
                   return skill.get("challenges").includes(challenge);
                 });
                 if (skill.length > 0  && skill[0].template) {
-                  this.transitionTo("competence.challenge.alternatives.alternative", competence, skill[0].template, challenge);
+                  this.transitionTo("competence.templates.single.alternatives.single", competence, skill[0].template, challenge);
                 }
               }
             }

@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  templateName: "competence/challenge",
+  templateName: "competence/template",
   model(params) {
-    let alternativeIndex = this.modelFor("competence/challenge").get("nextComputedIndex");
+    let alternativeIndex = this.modelFor("competence/template").get("nextComputedIndex");
     if (params.from) {
       let templateQuery;
       if (params.workbench) {
@@ -18,7 +18,7 @@ export default Route.extend({
         return model;
       });
     } else {
-      let template = this.modelFor("competence/challenge");
+      let template = this.modelFor("competence/template");
       let newDerived = template.derive();
       newDerived.set("alternativeIndex", alternativeIndex.toString())
       return newDerived;
@@ -27,7 +27,7 @@ export default Route.extend({
   setupController(controller, model) {
     this._super(controller, model);
     controller.set("competence", this.modelFor("competence"));
-    controller.set("template", this.modelFor("competence/challenge"));
+    controller.set("template", this.modelFor("competence/template"));
     controller.send("edit");
   },
   resetController(controller, isExiting) {

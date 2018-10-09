@@ -12,7 +12,7 @@ export default Controller.extend({
   childComponentMaximized:false,
   alternatives:alias("challenge.alternatives"),
   size:computed("router.currentRouteName", function() {
-    if (this.get("router.currentRouteName") == 'competence.challenge.alternatives.index') {
+    if (this.get("router.currentRouteName") == 'competence.templates.single.alternatives.index') {
       return "full";
     } else {
       return "half";
@@ -23,7 +23,7 @@ export default Controller.extend({
   }),
   actions: {
     newAlternative() {
-      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"));
+      this.transitionToRoute("competence.templates.single.alternatives.new", this.get("competence"),  this.get("challenge"));
     },
     maximizeChildComponent() {
       this.set("childComponentMaximized", true);
@@ -33,14 +33,14 @@ export default Controller.extend({
     },
     closeChildComponent() {
       this.set("childComponentMaximized", false);
-      this.transitionToRoute("competence.challenge.alternatives", this.get("competence"), this.get("challenge"));
+      this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), this.get("challenge"));
     },
     copyChallenge(challenge) {
       let params = {from: challenge.get("id")};
       if (challenge.get("workbench")) {
         params.workbench=1;
       }
-      this.transitionToRoute("competence.challenge.alternatives.new-alternative", this.get("competence"),  this.get("challenge"), { queryParams: params});
+      this.transitionToRoute("competence.templates.single.alternatives.new", this.get("competence"),  this.get("challenge"), { queryParams: params});
     },
     addChallenge(challenge) {
       this.get("alternatives").addObject(challenge);

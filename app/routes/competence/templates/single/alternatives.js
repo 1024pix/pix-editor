@@ -1,9 +1,9 @@
 import Route from '@ember/routing/route';
 
 export default Route.extend({
-  setupController(controller) {
+ setupController(controller) {
     this._super(controller);
-    let challenge = this.modelFor("competence.challenge");
+    let challenge = this.modelFor("competence.templates.single");
     controller.set("challenge", challenge);
     let competence = this.modelFor("competence");
     controller.set("competence", competence);
@@ -11,7 +11,7 @@ export default Route.extend({
     controller.set("childComponentMaximized", false);
   },
   renderTemplate() {
-    this.render('competence/challenge/alternatives', {
+    this.render('competence/templates/single/alternatives', {
       into: 'competence',
       outlet: 'mainRight'
     })

@@ -40,9 +40,9 @@ export default Route.extend({
   afterModel(model) {
     if (model.templateId && model.competenceId) {
       if (model.alternativeId) {
-        this.transitionTo("competence.challenge.alternatives.alternative", model.competenceId, model.templateId, model.alternativeId);
+        this.transitionTo("competence.templates.single.alternatives.single", model.competenceId, model.templateId, model.alternativeId);
       } else {
-        this.transitionTo("competence.challenge", model.competenceId, model.templateId);
+        this.transitionTo("competence.templates.single", model.competenceId, model.templateId);
       }
     } else {
       this.transitionTo("index");

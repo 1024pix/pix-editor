@@ -1,7 +1,7 @@
-import Challenge from './challenge';
+import Template from '../template';
 
-export default Challenge.extend({
-  templateName: "competence/challenge",
+export default Template.extend({
+  templateName: "competence/template",
   model(params) {
     if (params.from) {
       return this.get("store").findRecord("challenge",params.from)

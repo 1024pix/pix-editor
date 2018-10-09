@@ -11,7 +11,7 @@
     items=list
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
   }}
-  {{#link-to "competence.challenge.alternatives.alternative" competenceModel challengeModel item tagName="div" class=(concat "list-row" (if item.workbench " workbench" ""))}}
+  {{#link-to "competence.templates.single.alternatives.single" competenceModel challengeModel item tagName="div" class=(concat "list-row" (if item.workbench " workbench" ""))}}
     <div class="list-item">{{item.computedIndex}}</div>
     <div class="list-item">{{item.instructions}}</div>
     <div class="list-item">{{item.status}}</div>

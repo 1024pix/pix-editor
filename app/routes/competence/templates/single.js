@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
-    return this.get("store").findRecord("challenge", params.challenge_id);
+    return this.get("store").findRecord("challenge", params.template_id);
   },
   setupController(controller, model) {
     this._super(controller, model);

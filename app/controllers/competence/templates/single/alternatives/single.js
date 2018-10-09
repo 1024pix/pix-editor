@@ -1,13 +1,13 @@
-import Challenge from '../../challenge';
+import Template from '../../single';
 import {computed} from '@ember/object';
 import {scheduleOnce} from '@ember/runloop';
 import {inject as controller} from '@ember/controller';
 
-export default Challenge.extend({
+export default Template.extend({
   alternative:true,
   copyZoneId:"copyZoneWorkbench",
   elementClass:"alternative-challenge",
-  parentController:controller("competence.challenge.alternatives"),
+  parentController:controller("competence.templates.single.alternatives"),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
   mayAccessLog:true,
   challengeTitle:computed("challenge", function() {
