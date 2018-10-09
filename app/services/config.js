@@ -7,6 +7,7 @@ import {inject as service} from '@ember/service';
 export default Service.extend({
   store:service(),
   init() {
+    this._super(...arguments);
     this.localConfigKeys = ["airtableKey", "configKey", "author", "lite"];
     this.localConfigKeysOptional = ["pixUser", "pixPassword"];
   },
