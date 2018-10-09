@@ -164,6 +164,12 @@ export default Controller.extend({
     },
     challengeLog() {
       this.get("application").send("showChallengeLog", this.get("challenge"), this.get("competence"));
+    },
+    init() {
+      if (this.get("challenge.workbench")) {
+        this.get("parentController").send("switchWorkbench");
+        //TODO : if no skill, set listView
+      }
     }
   },
   _saveChallenge() {

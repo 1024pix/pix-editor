@@ -25,9 +25,6 @@ export default Template.extend({
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la création", false);
       });
-    },
-    init() {
-      this.get("parentController").send("switchWorkbench");
     }
   }
 });

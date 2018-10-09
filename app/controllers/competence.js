@@ -5,7 +5,6 @@ import { inject as controller } from '@ember/controller';
 import { alias } from "@ember/object/computed";
 
 export default Controller.extend({
-  challengeCount:0,
   childComponentMaximized:false,
   skillMode:false,
   listView:false,
@@ -16,7 +15,6 @@ export default Controller.extend({
   challengeController:controller("competence.templates.single"),
   skillController:controller("competence.skill"),
   competence:alias("model"),
-  challenges:alias("model.challenges"),
   init() {
     this._super(...arguments);
     this.listColumns = [{
@@ -89,7 +87,7 @@ export default Controller.extend({
         return "competence.templates.single";
       }
     } else {
-      return "competence.templates";
+      return "competence.templates.single";
     }
   }),
   actions: {

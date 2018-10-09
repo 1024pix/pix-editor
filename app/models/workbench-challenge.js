@@ -1,6 +1,5 @@
-import DS from "ember-data";
 import ChallengeModel from './challenge';
-import { computed, observer } from '@ember/object';
+import { computed } from '@ember/object';
 
 export default ChallengeModel.extend({
   workbench:true,

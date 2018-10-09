@@ -64,6 +64,7 @@ export default DS.Model.extend({
         })
     });
   }),
+  workbenchTemplates:DS.hasMany("workbench-challenge"),
   refresh() {
     return this.hasMany('tubes').reload()
     .then(tubes => {

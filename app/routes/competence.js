@@ -16,6 +16,11 @@ export default Route.extend({
           return store.query("workbenchSkill", {filterByFormula:recordsText});
         })
         .then(() => {
+          let recordsText = `AND( {Competence Production} = '${params.competence_id}', {Généalogie} = 'Prototype 1')`;
+          return store.query("workbenchChallenge", {filterByFormula:recordsText});
+        })
+        .then((templates) => {
+          model.set('workbenchTemplates', templates);
           model.set('workbenchLoaded', true);
         });
       } else {
