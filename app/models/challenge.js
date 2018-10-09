@@ -31,7 +31,6 @@ export default DS.Model.extend({
   embedURL:DS.attr(),
   embedTitle:DS.attr(),
   embedHeight:DS.attr('number'),
-
   myStore:service("store"),
   config:service(),
   template:computed("genealogy", function(){
