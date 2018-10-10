@@ -70,26 +70,26 @@ export default Service.extend({
         token = this.get("tokens").staging;
       }
       let payload = {
-        dataType:"text",
         headers:{
           Authorization: "Bearer "+token
         }
       }
       let problem = false;
-      return this.get("ajax").del(url+"challenge-repository_get_"+challenge.get("id"), payload)
+      return this.get("ajax").del(url+"Epreuves_"+challenge.get("id"), payload)
+      //return this.get("ajax").del(url+"challenge-repository_get_"+challenge.get("id"), payload)
       .catch((error) => {
         if (error.status !== 404) {
           problem = true;
         }
       })
-      .finally(() => {
+      /*.finally(() => {
         return this.get("ajax").del(url+"Epreuves_"+challenge.get("id"), payload);
       })
       .catch((error) => {
         if (error.status !== 404) {
           problem = true;
         }
-      })
+      })*/
       .finally(() => {
         if (problem) {
           return Promise.reject();

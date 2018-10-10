@@ -7,7 +7,7 @@ export default DS.Model.extend({
     this.tutoMore = [];
     this.tutoSolutions = [];
   },
-  name: DS.attr(),
+  name: DS.attr('string', {readonly:true}),
   challenges:DS.hasMany('challenge'),
   competence: DS.attr(),
   challengeIds: DS.attr(),
