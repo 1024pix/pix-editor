@@ -8,7 +8,7 @@ export default Route.extend({
     .then(result => {
       if (result.get("length")>0) {
         let challenge = result.get("firstObject");
-        if (challenge.get("template")) {
+        if (challenge.get("isTemplate")) {
           set.templateId = challenge.get("id");
         } else {
           set.alternativeId = challenge.get("id");

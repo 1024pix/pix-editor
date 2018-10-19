@@ -1,7 +1,7 @@
 $production-background-color:#00ff00;
 $production-color:#000000;
-$workbench-background-color:#fcfd9f;
-$workbench-color:#000000;
+$draft-background-color:#fcfd9f;
+$draft-color:#000000;
 $validated-background-color:#00ff00/*#08cf08*/;
 $validated-color:#000000;
 $validated-no-test-background-color:#00ff00;
@@ -20,7 +20,7 @@ $na-background-color:#eceaea;
 $na-color:#000000;
 
 $production-alternative-color:#085508;/*#0000ff;*/
-$workbench-alternative-color:#c48807;
+$draft-alternative-color:#c48807;
 
 
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
@@ -168,7 +168,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
             color:#08cf08;
 
           }
-          &.workbench {
+          &.draft {
             color:#f8d71b;
           }
         }
@@ -372,12 +372,12 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
           color:$production-color;
         }
 
-        &.workbench,
-        &.workbench.active,
-        .skill-name.workbench,
-        .help.workbench {
-          background-color:$workbench-background-color !important;
-          color:$workbench-color;
+        &.draft,
+        &.draft.active,
+        .skill-name.draft,
+        .help.draft {
+          background-color:$draft-background-color !important;
+          color:$draft-color;
         }
 
         &.suggested,
@@ -514,8 +514,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .production {
     color:$production-alternative-color;
   }
-  .workbench {
-    color:$workbench-alternative-color;
+  .draft {
+    color:$draft-alternative-color;
   }
   .not-declinable {
     font-weight:bold;
@@ -801,8 +801,8 @@ img.clickable {
   .list-body .list-row {
     color:$production-color;
 
-    &.workbench {
-      color:$workbench-alternative-color;
+    &.draft {
+      color:$draft-alternative-color;
     }
   }
 }

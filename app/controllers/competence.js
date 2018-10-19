@@ -146,7 +146,7 @@ export default Controller.extend({
         this.send("closeChildComponent");
       }
     },
-    switchWorkbench(skipClose) {
+    switchDraft(skipClose) {
       this.set("production", false);
       if (!skipClose) {
         this.send("closeChildComponent");

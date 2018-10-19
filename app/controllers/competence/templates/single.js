@@ -31,11 +31,11 @@ export default Controller.extend({
       return this.get("challenge.skillNames");
     }
   }),
-  mayEdit:computed("config.lite", "challenge.workbench", function() {
-    return (!this.get("config.lite") || this.get("challenge.workbench"));
+  mayEdit:computed("config.lite", "challenge.isDraft", function() {
+    return (!this.get("config.lite") || !this.get("challenge.isValidated"));
   }),
-  mayDuplicate:computed("config.lite", "challenge.template", function() {
-    return (!this.get("config.lite") || !this.get("challenge.template"));
+  mayDuplicate:computed("config.lite", "challenge.isTemplate", function() {
+    return (!this.get("config.lite") || !this.get("challenge.isTemplate"));
   }),
   mayAccessLog:computed("config.lite", function() {
     return !this.get("config.lite");
@@ -166,8 +166,9 @@ export default Controller.extend({
       this.get("application").send("showChallengeLog", this.get("challenge"), this.get("competence"));
     },
     init() {
-      if (this.get("challenge.workbench")) {
-        this.get("parentController").send("switchWorkbench", true);
+      if (!this.get("challenge.isValidated")) {
+        console.log("pas validated");
+        this.get("parentController").send("switchDraft", true);
         //TODO : if no skill, set listView
       }
     }
@@ -237,6 +238,7 @@ export default Controller.extend({
     });
   },
   _publishChallenge() {
+    // TODO: à revoir
     // CHECKS
     this.get("application").send("isLoading", "Vérifications");
     let challenge = this.get("challenge");
@@ -297,6 +299,7 @@ export default Controller.extend({
     });
   },
   _saveChangelog(text) {
+    //TODO: à revoir
     let challenge = this.get("challenge");
     let entry = this.get("store").createRecord("changelogEntry",{text:text, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:challenge.get("joinedSkills"), createdAt:(new Date()).toISOString(), production:!challenge.get("workbench")});
     return entry.save();

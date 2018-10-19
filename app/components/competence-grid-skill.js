@@ -3,11 +3,11 @@ import { computed } from '@ember/object';
 
 export default Component.extend({
   tagName:"",
-  skillLink:computed("link", "skillMode", "production", "skill.template.content", function() {
+  skillLink:computed("link", "skillMode", "production", "skill.productionTemplate.content", function() {
     let skillMode = this.get("skillMode");
     let production = this.get("production");
     let link = this.get("link");
-    let template = this.get("skill.template.content");
+    let template = this.get("skill.productionTemplate.content");
     if (skillMode) {
       return "competence.skill";
     }
@@ -16,10 +16,10 @@ export default Component.extend({
     }
     return "competence.templates.list";
   }),
-  skillLinkElement:computed("skillMode", "production", "skill.template.content", function() {
+  skillLinkElement:computed("skillMode", "production", "skill.productionTemplate.content", function() {
     let skillMode = this.get("skillMode");
     let production = this.get("production");
-    let template = this.get("skill.template.content");
+    let template = this.get("skill.productionTemplate.content");
     if (skillMode) {
       return this.get("skill");
     }

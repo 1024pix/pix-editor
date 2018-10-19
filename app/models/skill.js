@@ -19,19 +19,6 @@ export default DS.Model.extend({
   tutoMoreIds:DS.attr(),
   tubeId:DS.attr(),
   level:DS.attr(),
-  workbenchSkill:DS.belongsTo('workbenchSkill'),
-  workbenchChallenges:computed('workbenchSkill', function() {
-    return DS.PromiseArray.create({
-      promise:this.get('workbenchSkill')
-        .then((skill) => {
-          if (skill) {
-            return skill.get('challenges')
-          } else {
-            return [];
-          }
-        })
-    });
-  }),
   descriptionCSS:computed("descriptionStatus" , function() {
     let status = this.get("descriptionStatus");
     if (!status) {
@@ -83,12 +70,32 @@ export default DS.Model.extend({
       return 0;
     }
   }),
-  template:computed('challenges.[]', function() {
-    return DS.PromiseObject.create({
+  templates:computed('challenges.[]', function() {
+    return DS.PromiseArray.create({
       promise:this.get('challenges')
-      .then((challenges) => {
-        return challenges.find((challenge) => {
-          return challenge.get('validated')&&challenge.get('template');
+        .then(challenges => {
+          return challenges.filter((challenge) => {
+            return challenge.get('isTemplate');
+          })
+        })
+    })
+  }),
+  productionTemplate:computed('templates.[]', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('templates')
+      .then((templates) => {
+        return templates.find((template) => {
+          return template.get('isValidated');
+        });
+      })
+    });
+  }),
+  draftTemplates:computed('templates.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('templates')
+      .then((templates) => {
+        return templates.filter((template) => {
+          return !template.get('isValidated');
         });
       })
     });
@@ -98,35 +105,9 @@ export default DS.Model.extend({
       promise:this.get('challenges')
       .then((challenges) => {
         return challenges.filter((challenge) => {
-          return (!challenge.get('isArchived') && !challenge.get('template'));
+          return !challenge.get('isTemplate');
         });
       })
-    });
-  }),
-  alternativesCount:computed('alternatives.[]', function() {
-    return DS.PromiseObject.create({
-      promise:this.get('alternatives')
-        .then(alternatives => {
-          return alternatives.length;
-        })
-    });
-  }),
-  workbenchAlternatives:computed('workbenchChallenges.[]', function() {
-    return DS.PromiseArray.create({
-      promise:this.get('workbenchChallenges')
-        .then((challenges) => {
-          return challenges.filter((challenge) => {
-            return (!challenge.get('isArchived') && !challenge.get('template'));
-          });
-        })
-    });
-  }),
-  workbenchAlternativesCount:computed('workbenchAlternatives.[]', function() {
-    return DS.PromiseObject.create({
-      promise:this.get('workbenchAlternatives')
-        .then(alternatives => {
-          return alternatives.length;
-        })
     });
   }),
   loaded:computed('challenges.[]', function() {

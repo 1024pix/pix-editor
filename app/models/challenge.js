@@ -1,7 +1,6 @@
 import DS from "ember-data";
 import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
-import { A } from "@ember/array";
 
 export default DS.Model.extend({
   skills:DS.hasMany('skill'),
@@ -18,25 +17,24 @@ export default DS.Model.extend({
   pedagogy:DS.attr(),
   author:DS.attr(),
   declinable:DS.attr(),
-  version:DS.attr(),
+  version:DS.attr('number'),
   genealogy:DS.attr(),
   skillNames:DS.attr({readOnly:true}),
-  workbench:false,
   status:DS.attr(),
   preview:DS.attr({readOnly:true}),
   pixId:DS.attr(),
-  alternativeIndex:DS.attr(),
   scoring:DS.attr(),
   timer:DS.attr('number'),
   embedURL:DS.attr(),
   embedTitle:DS.attr(),
   embedHeight:DS.attr('number'),
+  alternativeVersion:DS.attr('number'),
   myStore:service("store"),
   config:service(),
-  template:computed("genealogy", function(){
-    return (this.get("genealogy") == "Prototype 1");
+  isTemplate:computed("genealogy", function(){
+    return (this.get("genealogy") === "Prototype 1");
   }),
-  validated:computed("status", function(){
+  isValidated:computed("status", function(){
     let status = this.get("status");
     return ["validé", "validé sans test", "pré-validé"].includes(status);
   }),
@@ -53,7 +51,6 @@ export default DS.Model.extend({
       return null;
     }
   }),
-  alternativeCount:0,
   statusCSS:computed("status", function() {
     let status = this.get("status");
     switch (status) {
@@ -103,6 +100,7 @@ export default DS.Model.extend({
     return this.get("myStore").createRecord(this.constructor.modelName, data);
   },
   derive() {
+    // TODO: à modifier
     let data = this._getJSON(["competence", "skills", "skillNames"]);
     data.status = "proposé";
     data.genealogy = "Décliné 1";
@@ -110,26 +108,27 @@ export default DS.Model.extend({
     return this.get("myStore").createRecord("workbenchChallenge", data);
   },
   publish() {
+    // TODO: à modifier
     let data = this._getJSON(["competence", "skills", "alternativeIndex"]);
     data.workbench = false;
     return this.get("myStore").createRecord("challenge", data);
   },
-  alternatives:computed("skills.[]", function() {
+  alternatives:computed('isTemplate','version', 'skills.[]', function() {
+    if (!this.get('isTemplate')) {
+      return [];
+    }
+    let currentVersion = this.get('version');
     return DS.PromiseArray.create({
       promise:this.get('skills')
         .then((skills) => {
           let firstSkill = skills.firstObject;
           if (firstSkill) {
-            let result = new A();
             return firstSkill.get('alternatives')
             .then(alternatives => {
-              result.pushObjects(alternatives);
-              return firstSkill.get('workbenchAlternatives');
-            })
-            .then(workbenchAlternatives => {
-              result.pushObjects(workbenchAlternatives);
-              return result;
-            })
+              return alternatives.filter(alternative => {
+                return (alternative.get('version') === currentVersion);
+              });
+            });
           } else {
             return [];
           }
@@ -144,20 +143,7 @@ export default DS.Model.extend({
         })
     });
   }),
-  productionAlternativesCount:computed("alternatives", function() {
-    return DS.PromiseObject.create({
-      promise:this.get("alternatives")
-        .then(alternatives =>{
-          return alternatives.reduce((count, alternative) => {
-            if (!alternative.get("workbench")) {
-              count++;
-            }
-            return count;
-          }, 0)
-        })
-    });
-  }),
-  workbenchAlternativesCount:computed("sortedAlternatives", function() {
+  /*workbenchAlternativesCount:computed("sortedAlternatives", function() {
     return DS.PromiseObject.create({
       promise:this.get("alternatives")
         .then(alternatives =>{
@@ -169,31 +155,32 @@ export default DS.Model.extend({
           }, 0)
         })
     });
-  }),
+  }),*/
   nextComputedIndex:computed("alternatives", function() {
-    return this.get("alternatives").reduce((current, alternative) => {
+    return 0;/*this.get("alternatives").reduce((current, alternative) => {
       let index = alternative.get("computedIndex");
       if (index && index >= current) {
         return index+1;
       } else {
         return current;
       }
-    }, 1);
+    }, 1);*/
   }),
-  joinedSkills:computed("skills", function() {
+  /*joinedSkills:computed("skills", function() {
+    // TODO: à arranger (record, pas texte)
     let skills = this.get("skills");
     if (skills) {
       return skills.join(",");
     } else {
       return "";
     }
-  }),
+  }),*/
   isTextBased:computed("type", function() {
     let type = this.get("type");
     return ["QROC","QROCM","QROCM-ind","QROCM-dep"].includes(type);
   }),
   supportsScoring:computed("type", function() {
-    return this.get("type") == "QROCM-dep";
+    return this.get("type") === "QROCM-dep";
   }),
   timerOn:computed("timer", {
     get() {

@@ -74,7 +74,7 @@
       </a>
     {{else}}
       {{#unless config.lite}}
-        {{#if challenge.workbench}}
+        {{#if (not challenge.isValidated)}}
           <a class="item publish"  onclick={{action "publish"}}>
             <i class="checkmark icon"></i>
             Production

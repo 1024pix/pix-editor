@@ -36,6 +36,7 @@ export default Controller.extend({
       this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), this.get("challenge"));
     },
     copyChallenge(challenge) {
+      // TODO: à revoir
       let params = {from: challenge.get("id")};
       if (challenge.get("workbench")) {
         params.workbench=1;

@@ -5,7 +5,7 @@ import {inject as controller} from '@ember/controller';
 
 export default Template.extend({
   alternative:true,
-  copyZoneId:"copyZoneWorkbench",
+  copyZoneId:"copyZoneDraft",
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
@@ -34,11 +34,7 @@ export default Template.extend({
     openAirtable() {
       let challenge = this.get("challenge");
       let config = this.get("config");
-      if (challenge.get("workbench")) {
-        window.open(config.get("airtableUrl")+config.get("tableWorkbench")+"/"+challenge.get("id"), "airtable");
-      } else {
-        window.open(config.get("airtableUrl")+config.get("tableChallenges")+"/"+challenge.get("id"), "airtable");
-      }
+      window.open(config.get("airtableUrl")+config.get("tableChallenges")+"/"+challenge.get("id"), "airtable");
     },
     copyLink() {
       this.set("copyOperation", true);
