@@ -24,8 +24,8 @@ export default Route.extend({
       return newDerived;
     }
   },
-  setupController(controller, model) {
-    this._super(controller, model);
+  setupController(controller) {
+    this._super(...arguments);
     controller.set("competence", this.modelFor("competence"));
     controller.set("template", this.modelFor("competence/template"));
     controller.send("edit");

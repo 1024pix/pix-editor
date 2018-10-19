@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
  setupController(controller) {
-    this._super(controller);
+    this._super(...arguments);
     let challenge = this.modelFor("competence.templates.single");
     controller.set("challenge", challenge);
     let competence = this.modelFor("competence");

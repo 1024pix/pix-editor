@@ -12,8 +12,8 @@ export default Template.extend({
       return this.get("store").createRecord("workbenchChallenge", {competence:[this.modelFor("competence").id], status:"proposé", t1:true, t2:true, t3:true, genealogy:"Prototype 1"});
     }
   },
-  setupController(controller, model) {
-    this._super(controller, model);
+  setupController(controller) {
+    this._super(...arguments);
     controller.send("edit");
     controller.send("init");
   },

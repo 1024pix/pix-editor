@@ -4,8 +4,8 @@ export default Route.extend({
   model(params) {
     return this.get("store").findRecord("skill", params.skill_id);
   },
-  setupController(controller, model) {
-    this._super(controller, model);
+  setupController(controller) {
+    this._super(...arguments);
     controller.set("maximized", false);
     controller.set("edition", false);
     this.controllerFor("competence").set("skillMode", true);

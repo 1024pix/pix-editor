@@ -4,8 +4,8 @@ export default Route.extend({
   model(params) {
     return this.get("store").findRecord("challenge", params.template_id);
   },
-  setupController(controller, model) {
-    this._super(controller, model);
+  setupController(controller) {
+    this._super(...arguments);
     controller.set("maximized", false);
     controller.set("edition", false);
     controller.set("competence", this.modelFor("competence"));

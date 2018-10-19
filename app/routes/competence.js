@@ -21,7 +21,7 @@ export default Route.extend({
     })
   },
   setupController(controller, model) {
-    this._super(controller, model);
+    this._super(...arguments);
     controller.set("childComponentMaximized", false);
     controller.set("challengeCount", model.get("challengeCount"));
   },
