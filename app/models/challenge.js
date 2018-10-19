@@ -155,22 +155,6 @@ export default DS.Model.extend({
         })
     });
   }),
-  productionAlternativesCount:computed("productionAlternatives.[]", function() {
-    return DS.PromiseObject.create({
-      promise:this.get("productionAlternatives")
-        .then(alternatives => {
-          return alternatives.get('length');
-        })
-    });
-  }),
-  draftAlternativesCount:computed("draftAlternatives.[]", function() {
-    return DS.PromiseObject.create({
-      promise:this.get("draftAlternatives")
-        .then(alternatives => {
-          return alternatives.get('length');
-        })
-    });
-  }),
   nextComputedIndex:computed("alternatives", function() {
     return 0;/*this.get("alternatives").reduce((current, alternative) => {
       let index = alternative.get("computedIndex");

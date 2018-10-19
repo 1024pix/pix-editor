@@ -14,10 +14,10 @@
   </div>
 </div>
 <div class="ui attached segment competence {{size}} {{listHidden}}">
-  {{alternatives-list list=(if production challenge.productionAlternatives challenge.draftAlternatives) itemCount=(if production challenge.productionAlternativesCount.content challenge.draftAlternativesCount.content) competenceModel=competence challengeModel=challenge hidden=false}}
+  {{alternatives-list list=(if production challenge.productionAlternatives challenge.draftAlternatives) itemCount=(if production challenge.productionAlternatives.length challenge.draftAlternatives.length) competenceModel=competence challengeModel=challenge hidden=false}}
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
-  <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternativesCount.content}}</span></div><div>Brouillons : <span class="workbench">{{challenge.draftAlternativesCount.content}}</span></div></div>
+  <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{challenge.draftAlternatives.length}}</span></div></div>
   {{#if (not production)}}
     <a class="right item" onclick={{action "newAlternative"}}>
       <i class="plus square outline icon"></i> Nouvelle déclinaison
