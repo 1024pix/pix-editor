@@ -55,13 +55,11 @@ export default DS.Model.extend({
     let status = this.get("status");
     switch (status) {
       case "validé":
-        return "validated";
       case "validé sans test":
-        return "validated_no_test";
+      case "pré-validé":
+        return "validated";
       case "proposé":
         return "suggested";
-      case "pré-validé":
-        return "prevalidated";
       case "archive":
         return "archived";
     }
