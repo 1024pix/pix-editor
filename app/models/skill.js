@@ -75,7 +75,7 @@ export default DS.Model.extend({
       promise:this.get('challenges')
         .then(challenges => {
           return challenges.filter((challenge) => {
-            return challenge.get('isTemplate');
+            return challenge.get('isTemplate') && !challenge.get('isArchived');
           })
         })
     })
