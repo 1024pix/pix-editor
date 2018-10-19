@@ -4,8 +4,8 @@
   <tr>
     <td>{{tube.name}}</td>
     {{#each tube.filledSkills as |skill|}}
-      {{#if skill.name}}
-        {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
+      {{#if (and skill.name (or skillMode (not production)  skill.productionTemplate))}}
+          {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
       {{else}}
         <td></td>
       {{/if}}
