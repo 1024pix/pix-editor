@@ -443,6 +443,23 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 }
 
+.template-list {
+  .list-row {
+    .suggested {
+      background-color:$suggested-background-color !important;
+      color:$suggested-color;
+    }
+    .validated {
+      background-color:$validated-background-color !important;
+      color:$validated-color;
+    }
+    .archived {
+      background-color:$archived-background-color !important;
+      color:$archived-color;
+    }
+  }
+}
+
 .challenge-header,
 .skill-header {
   border-top:1px solid rgba(34, 36, 38, 0.15);
