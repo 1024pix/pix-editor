@@ -9,6 +9,7 @@ export default Controller.extend({
   application:controller(),
   competenceController:controller("competence"),
   childComponentMaximized:false,
+  production:true,
   size:computed("router.currentRouteName", function() {
     if (this.get("router.currentRouteName") == 'competence.templates.single.alternatives.index') {
       return "full";
@@ -43,17 +44,27 @@ export default Controller.extend({
     },
     addChallenge(challenge) {
       this.get("challenge.alternatives").addObject(challenge);
-      this.set("challengeCount", this.get("challengeCount")+1);
+      // TODO: check that this is useless
+      //this.set("challengeCount", this.get("challengeCount")+1);
     },
     removeChallenge(challenge) {
       let alternatives = this.get("challenge.alternatives");
       if (alternatives.includes(challenge)) {
         alternatives.removeObject(challenge);
-        this.set("challengeCount", this.get("challengeCount")-1);
+        // TODO: check that this is useless
+        //this.set("challengeCount", this.get("challengeCount")-1);
       }
     },
     refresh() {
       this.get("competenceController").send("refresh");
+    },
+    switchProduction() {
+      this.set("production", true);
+      this.send("closeChildComponent");
+    },
+    switchDraft() {
+      this.set("production", false);
+      this.send("closeChildComponent");
     }
   }
 });

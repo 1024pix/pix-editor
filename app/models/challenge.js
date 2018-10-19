@@ -135,29 +135,39 @@ export default DS.Model.extend({
         })
     })
   }),
-  productionAlternativesCount:computed("alternatives", function() {
-    return DS.PromiseObject.create({
+  productionAlternatives:computed("alternatives.[]", function() {
+    return DS.PromiseArray.create({
       promise:this.get("alternatives")
         .then(alternatives => {
-          return alternatives.reduce((count, alternative) => {
-            if (alternative.get("isValidated")) {
-              count++;
-            }
-            return count;
-          },0);
+          return alternatives.filter(alternative => {
+            return alternative.get("isValidated");
+          });
         })
     });
   }),
-  draftAlternativesCount:computed("alternatives", function() {
-    return DS.PromiseObject.create({
+  draftAlternatives:computed("alternatives.[]", function() {
+    return DS.PromiseArray.create({
       promise:this.get("alternatives")
         .then(alternatives => {
-          return alternatives.reduce((count, alternative) => {
-            if (!alternative.get("isValidated")) {
-              count++;
-            }
-            return count;
-          },0);
+          return alternatives.filter(alternative => {
+            return !alternative.get("isValidated");
+          });
+        })
+    });
+  }),
+  productionAlternativesCount:computed("productionAlternatives.[]", function() {
+    return DS.PromiseObject.create({
+      promise:this.get("productionAlternatives")
+        .then(alternatives => {
+          return alternatives.get('length');
+        })
+    });
+  }),
+  draftAlternativesCount:computed("draftAlternatives.[]", function() {
+    return DS.PromiseObject.create({
+      promise:this.get("draftAlternatives")
+        .then(alternatives => {
+          return alternatives.get('length');
         })
     });
   }),

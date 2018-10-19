@@ -18,8 +18,10 @@
     <div class="alternative">
       {{#if production}}
         <span class="production">{{skill.productionTemplate.productionAlternativesCount.content}}</span>
+        {{#if skill.productionTemplate.draftAlternativesCount.content}}
+        <span class="draft">({{skill.productionTemplate.draftAlternativesCount.content}})</span>
+        {{/if}}
       {{else}}
-        <span class="draft">{{skill.productionTemplate.draftAlternativesCount.content}}</span>
       {{/if}}
       {{#if skill.template.content.notDeclinable}}
         <span class="not-declinable">NR</span>
