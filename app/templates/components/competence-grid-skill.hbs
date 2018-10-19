@@ -13,13 +13,13 @@
     </div>
   {{/link-to}}
 {{else}}
-  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "workbench"))}}
+  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
     {{skill.name}}
     <div class="alternative">
       {{#if production}}
-        <span class="production">{{skill.productionTemplate.alternativesCount.content}}</span>
+        <span class="production">{{skill.productionTemplate.productionAlternativesCount.content}}</span>
       {{else}}
-        <span class="workbench">{{skill.workbenchAlternativesCount.content}}</span>
+        <span class="draft">{{skill.productionTemplate.draftAlternativesCount.content}}</span>
       {{/if}}
       {{#if skill.template.content.notDeclinable}}
         <span class="not-declinable">NR</span>
