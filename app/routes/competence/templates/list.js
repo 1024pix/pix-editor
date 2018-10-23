@@ -6,7 +6,7 @@ export default Route.extend({
   },
   setupController(controller) {
     this._super(...arguments);
-    let competence = this.modelFor("competence");
-    controller.set("competence", competence);
+    controller.set("competence", this.modelFor("competence"));
+    controller.send("init");
   }
 });

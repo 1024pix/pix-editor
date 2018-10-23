@@ -9,6 +9,9 @@ export default Controller.extend({
     },
     newTemplate() {
       console.log("todo");
+    },
+    init() {
+      this.get("parentController").send("switchDraft", true);
     }
   }
 });
