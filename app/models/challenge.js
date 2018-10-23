@@ -93,7 +93,7 @@ export default DS.Model.extend({
     return data;
   },
   clone() {
-    let ignoredFields = ["skills"];
+    let ignoredFields = ["skills", "author"];
     if (this.get("isTemplate")) {
       ignoredFields.push("version");
     } else {
@@ -101,6 +101,7 @@ export default DS.Model.extend({
     }
     let data = this._getJSON(ignoredFields);
     data.status = "proposé";
+    data.author = [this.get("config").get("author")];
     return this.get("skills")
     .then(skills => {
       data.skills = skills;
@@ -108,12 +109,12 @@ export default DS.Model.extend({
     });
   },
   derive() {
-    // TODO: à modifier
-    let data = this._getJSON(["competence", "skills", "skillNames"]);
-    data.status = "proposé";
-    data.genealogy = "Décliné 1";
-    data.author = [this.get("config").get("author")];
-    return this.get("myStore").createRecord("workbenchChallenge", data);
+    return this.clone()
+    .then(alternative => {
+      alternative.set("version", this.get("version"));
+      alternative.set("genealogy", "Décliné 1");
+      return alternative;
+    });
   },
   publish() {
     // TODO: à modifier
