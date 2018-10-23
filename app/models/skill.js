@@ -10,7 +10,6 @@ export default DS.Model.extend({
   name: DS.attr('string', {readonly:true}),
   challenges:DS.hasMany('challenge'),
   competence: DS.attr(),
-  challengeIds: DS.attr(),
   clue:DS.attr(),
   clueStatus:DS.attr(),
   description:DS.attr(),
@@ -118,5 +117,17 @@ export default DS.Model.extend({
   }),
   refresh() {
     return this.hasMany('challenges').reload();
+  },
+  getNextVersion() {
+    return this.get("templates")
+    .then(templates => {
+      return templates.reduce((current, template) => {
+        let version = template.get("version");
+        if (version > current) {
+          return version;
+        }
+        return current;
+      }, 0)+1;
+    });
   }
 });
