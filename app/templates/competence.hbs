@@ -7,7 +7,7 @@
     {{#unless config.lite}}
       {{#if skillMode}}
         <a class="left item" onclick={{action "soon"}}>
-          <i class="plus square icon"></i> Nouvel acquis
+          <i class="plus square outline icon"></i> Nouvel acquis
         </a>
       {{else}}
       <div class="ui top attached tabular menu">
@@ -42,7 +42,7 @@
     </a>
   {{else if (not production)}}
     <a class="right item" onclick={{action "newTemplate"}}>
-      <i class="plus square icon"></i> Nouveau prototype
+      <i class="plus square outline icon"></i> Nouveau prototype
     </a>
   {{/if}}
   </div>
