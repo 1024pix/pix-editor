@@ -3,7 +3,7 @@ import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
 
 export default DS.Model.extend({
-  skills:DS.hasMany('skill', {readOnly:true}),
+  skills:DS.hasMany('skill'),
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
@@ -92,10 +92,14 @@ export default DS.Model.extend({
     }
     return data;
   },
-  clone(fieldsToRemove) {
-    let data = this._getJSON(fieldsToRemove);
+  clone() {
+    let data = this._getJSON(["skills"]);
     data.status = "proposé";
-    return this.get("myStore").createRecord(this.constructor.modelName, data);
+    return this.get("skills")
+    .then(skills => {
+      data.skills = skills;
+      return this.get("myStore").createRecord(this.constructor.modelName, data);
+    });
   },
   derive() {
     // TODO: à modifier
