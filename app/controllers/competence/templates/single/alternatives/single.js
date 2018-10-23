@@ -10,20 +10,8 @@ export default Template.extend({
   parentController:controller("competence.templates.single.alternatives"),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
   challengeTitle:computed("challenge", function() {
-    let challenge = this.get("challenge");
-    if (challenge) {
-      let pixId = challenge.get("pixId");
-      if (pixId) {
-        return pixId
-      } else {
-        let alternativeIndex = challenge.get("alternativeIndex");
-        if (alternativeIndex) {
-          return "Déclinaison n°"+alternativeIndex;
-        } else {
-          return "Déclinaison (pas d'indice)";
-        }
-      }
-    }
+    let index = this.get("challenge.alternativeVersion");
+    return "Déclinaison n°"+index;
   }),
   actions:{
     preview() {

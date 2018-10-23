@@ -4,8 +4,8 @@
     {{#if mayAccessLog}}
         <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
     {{/if}}
-    {{#if challenge.isTemplate}}
-        <a class="ui icon item" onclick={{action "showVersions"}}><i class="calendar alternate outline icon"></i></a>
+    {{#if (and challenge.isTemplate (not creation))}}
+        <a class="ui icon item" onclick={{action "showVersions"}}><i class="clone icon"></i>&nbsp;v{{challenge.version}}</a>
     {{/if}}
       </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
