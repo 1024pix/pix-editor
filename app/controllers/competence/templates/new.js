@@ -18,9 +18,7 @@ export default Template.extend({
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Prototype enregistré", true);
         let challenge = this.get("challenge");
-        this.get("parentController").send("addChallenge", challenge);
-        // use id in order to reload models
-        this.transitionToRoute("competence.templates.single", this.get("competence").get("id"), challenge.get("id"));
+        this.transitionToRoute("competence.templates.single", this.get("competence"), challenge);
       }).catch(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la création", false);
