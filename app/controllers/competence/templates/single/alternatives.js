@@ -39,25 +39,7 @@ export default Controller.extend({
       this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), this.get("challenge"));
     },
     copyChallenge(challenge) {
-      // TODO: à revoir
-      let params = {from: challenge.get("id")};
-      if (challenge.get("workbench")) {
-        params.workbench=1;
-      }
-      this.transitionToRoute("competence.templates.single.alternatives.new", this.get("competence"),  this.get("challenge"), { queryParams: params});
-    },
-    addChallenge(challenge) {
-      this.get("challenge.alternatives").addObject(challenge);
-      // TODO: check that this is useless
-      //this.set("challengeCount", this.get("challengeCount")+1);
-    },
-    removeChallenge(challenge) {
-      let alternatives = this.get("challenge.alternatives");
-      if (alternatives.includes(challenge)) {
-        alternatives.removeObject(challenge);
-        // TODO: check that this is useless
-        //this.set("challengeCount", this.get("challengeCount")-1);
-      }
+      this.transitionToRoute("competence.templates.single.alternatives.new", this.get("competence"),  this.get("challenge"), { queryParams: {from: challenge.get("id")}});
     },
     refresh() {
       this.get("competenceController").send("refresh");
