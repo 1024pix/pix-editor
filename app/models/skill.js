@@ -89,7 +89,7 @@ export default DS.Model.extend({
         })
     })
   }),
-  productionTemplate:computed('templates.[]', function() {
+  productionTemplate:computed('templates.@each.isValidated', function() {
     return DS.PromiseObject.create({
       promise:this.get('templates')
       .then((templates) => {
@@ -99,7 +99,7 @@ export default DS.Model.extend({
       })
     });
   }),
-  draftTemplates:computed('templates.[]', function() {
+  draftTemplates:computed('templates.@each.isValidated', function() {
     return DS.PromiseArray.create({
       promise:this.get('templates')
       .then((templates) => {

@@ -123,12 +123,6 @@ export default Controller.extend({
         .then(() => {
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Épreuve mise à jour", true);
-          let challenge = this.get("challenge");
-          if (challenge.get("isArchived")) {
-            this.get("parentController").send("removeChallenge", challenge);
-            this.send("close");
-            this.get("parentController").send("refresh");
-          }
         }).catch(() => {
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Erreur lors de la mise à jour", false);
@@ -144,7 +138,13 @@ export default Controller.extend({
     validate() {
       this.get("application").send("confirm", "Mise en production", "Êtes-vous sûr de vouloir mettre l'épreuve en production ?", (result) => {
         if (result) {
-          this.get("application").send("getChangelog", "Mise en production de la déclinaison", (changelog) => {
+          let defaultLogMessage;
+          if (this.get("challenge.isTemplate")) {
+            defaultLogMessage = "Mise en production de la déclinaison";
+          } else {
+            defaultLogMessage = "Mise en production du prototype";
+          }
+          this.get("application").send("getChangelog", defaultLogMessage, (changelog) => {
             this.get("application").send("isLoading");
             return this._publishChallenge()
             .then(() => {
@@ -157,8 +157,7 @@ export default Controller.extend({
             .then(() => {
               this.get("application").send("finishedLoading");
               this.get("application").send("showMessage", "Mise en production réussie", true);
-              this.send("close");
-              this.get("parentController").send("refresh");
+              this.get("parentController").send("switchProduction", true);
             })
             .catch(() =>{
               this.get("application").send("finishedLoading");
@@ -183,9 +182,9 @@ export default Controller.extend({
       this.set("maximized", parentController.get("childComponentMaximized"));
     },
     showVersions() {
-      this.get("challenge.skills")
-      .then(skills => {
-        this.transitionToRoute("competence.templates.list", skills.get("firstObject"));
+      this.get("challenge.firstSkill")
+      .then(firstSkill => {
+        this.transitionToRoute("competence.templates.list", firstSkill);
       })
     }
   },
@@ -254,65 +253,64 @@ export default Controller.extend({
     });
   },
   _publishChallenge() {
-    // TODO: à revoir
     // CHECKS
     this.get("application").send("isLoading", "Vérifications");
     let challenge = this.get("challenge");
-    if (!challenge.get("workbench")){
-      this.get("application").send("showMessage", "L'épreuve est DÉJÀ en production", false);
+    if (challenge.get("isValidated")){
+      this.get("application").send("showMessage", "L'épreuve est déjà en production", false);
       return Promise.reject();
     }
-    let alternativeIndex = challenge.get("alternativeIndex");
-    if (!alternativeIndex) {
-      this.get("application").send("showMessage", "L'épreuve n'a pas d'indice", false);
-      return Promise.reject();
-    }
-    let store = this.get("store");
-    let productionChallenge;
-    let skillIds;
-    let skillNames;
-    try {
-      skillIds = challenge.get("skills").reduce((current, skillId) => {
-        let workbenchSkill = store.peekRecord("workbenchSkill", skillId);
-        if (!workbenchSkill) {
-          throw skillId;
+    if (challenge.get("isTemplate")) {
+      return challenge.get("firstSkill")
+      .then(firstSkill => {
+        if (firstSkill == null) {
+          this.get("application").send("showMessage", "L'épreuve n'est pas rattachée à un acquis", false);
+          return Promise.reject();
         }
-        current.push(workbenchSkill.get("skillId"));
-        return current;
-      }, []);
-      skillNames = skillIds.reduce((current, skillId) => {
-        let productionSkill = store.peekRecord("skill", skillId);
-        if (!productionSkill) {
-          throw skillId;
+        return firstSkill.get("productionTemplate");
+      })
+      .then(previousTemplate => {
+        if (previousTemplate != null) {
+          return new Promise((resolve, reject) => {
+            this.get("application").send("confirm", "Archivage du prototype précédent", "Êtes-vous sûr de vouloir archiver le prototype précédent ?", (result) => {
+              if (result) {
+                resolve(previousTemplate);
+              } else {
+                reject();
+              }
+            })
+          });
+        } else {
+          return Promise.resolve(null);
         }
-        current.push(productionSkill.get("name"));
-        return current;
-      }, []);
-    } catch (e) {
-      this.get("application").send("showMessage", "Acquis "+e+" introuvable", false);
-      return Promise.reject();
-    }
-    let index = skillNames.join("")+"_"+1+"_"+alternativeIndex;
-    return store.query("challenge", {filterByFormula:"FIND('"+index+"', {Identifiant})"})
-    .then((result) => {
-      if (result.get("length")>0) {
-        this.get("application").send("showMessage", "Une épreuve avec le même indice est déjà en production", false);
+      })
+      .then(previousTemplate => {
+        if (previousTemplate != null) {
+          return previousTemplate.archive();
+        } else {
+          return Promise.resolve();
+        }
+      })
+      .then(() => {
+        return challenge.validate();
+      }) // Required ?
+      .catch(() => {
         return Promise.reject();
-      }
-      // CREATE PRODUCTION CHALLENGE
-      this.get("application").send("isLoading", "Enregistrement en PRODUCTION");
-      productionChallenge = challenge.publish();
-      productionChallenge.set("skills", skillIds);
-      productionChallenge.set("pixId", index);
-      productionChallenge.set("competence", [this.get("competence.id")]);
-      return productionChallenge.save();
-    })
-    .then(() => {
-      // ARCHIVE WORKBENCH CHALLENGE
-      this.get("application").send("isLoading", "Mise à jour de la base AVAL");
-      challenge.archive();
-      return challenge.save();
-    });
+      })
+    } else {
+      return challenge.get("template")
+      .then(template => {
+        if (!template.get("isValidated")) {
+          this.get("application").send("showMessage", "Le prototype correspondant n'est pas validé", false);
+          return Promise.reject();
+        } else {
+          return challenge.validate();
+        }
+      })
+      .catch(() => {
+        return Promise.reject();
+      })
+    }
   },
   _saveChangelog(text) {
     //TODO: à revoir

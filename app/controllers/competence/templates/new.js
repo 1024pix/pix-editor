@@ -18,14 +18,13 @@ export default Template.extend({
       return this._saveChallenge()
       .then(() => {
         this.get("application").send("showMessage", "Prototype enregistré", true);
-        return challenge.get("skills")
+        return challenge.get("firstSkill")
       })
-      .then(skills => {
-        if (skills.length > 0) {
-          let skill = skills.get("firstObject");
-          return skill.reload()
+      .then(firstSkill => {
+        if (firstSkill) {
+          return firstSkill.reload()
           .then(() => {
-            return skill.getNextVersion();
+            return firstSkill.getNextVersion();
           })
         } else {
           return Promise.resolve(0);

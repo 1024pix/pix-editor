@@ -70,6 +70,11 @@ export default DS.Model.extend({
   }),
   archive() {
     this.set("status", "archive");
+    return this.save();
+  },
+  validate() {
+    this.set("status", "validé");
+    return this.save();
   },
   _getJSON(fieldsToRemove) {
     let data = this.toJSON({includeId:false});
@@ -122,7 +127,7 @@ export default DS.Model.extend({
     data.workbench = false;
     return this.get("myStore").createRecord("challenge", data);
   },
-  alternatives:computed('isTemplate','version', 'skills.@each.challenges', function() {
+  alternatives:computed('isTemplate','version', 'skills.@each.alternatives', function() {
     if (!this.get('isTemplate')) {
       return [];
     }
@@ -144,6 +149,35 @@ export default DS.Model.extend({
         })
     })
   }),
+  firstSkill:computed('skills', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+        .then((skills) => {
+          return skills.firstObject;
+        })
+    });
+  }),
+  template:computed('isTemplate','version', 'firstSkill.templates', function() {
+    if (this.get('isTemplate')) {
+      return null;
+    }
+    let currentVersion = this.get('version');
+    return DS.PromiseObject.create({
+      promise:this.get('firstSkill')
+        .then(firstSkill => {
+          if (firstSkill) {
+            return firstSkill.get('templates')
+            .then(templates => {
+              return templates.find(template => {
+                return (template.get('version') === currentVersion);
+              });
+            });
+          } else {
+            return null;
+          }
+        })
+    })
+  }),
   sortedAlternatives:computed("alternatives.[]", function() {
     return DS.PromiseArray.create({
       promise:this.get("alternatives")
@@ -154,7 +188,7 @@ export default DS.Model.extend({
         })
     })
   }),
-  productionAlternatives:computed("sortedAlternatives.[]", function() {
+  productionAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
     return DS.PromiseArray.create({
       promise:this.get("sortedAlternatives")
         .then(alternatives => {
@@ -164,7 +198,7 @@ export default DS.Model.extend({
         })
     });
   }),
-  draftAlternatives:computed("sortedAlternatives.[]", function() {
+  draftAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
     return DS.PromiseArray.create({
       promise:this.get("sortedAlternatives")
         .then(alternatives => {
