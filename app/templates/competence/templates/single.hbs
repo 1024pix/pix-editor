@@ -1,10 +1,11 @@
 <div class={{concat "challenge-header " challenge.statusCSS}}>
   <div class="ui menu">
-    {{#if mayAccessLog}}
       <div class="ui left menu">
+    {{#if mayAccessLog}}
         <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
-      </div>
     {{/if}}
+        <a class="ui icon item" onclick={{action "showVersions"}}><i class="calendar alternate outline icon"></i></a>
+      </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
     </div>
@@ -12,7 +13,7 @@
       {{#if maximized}}
         <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
       {{else}}
-        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize icon"></i></a>
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
       {{/if}}
       <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
     </div>

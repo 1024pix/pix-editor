@@ -171,6 +171,12 @@ export default Controller.extend({
       } else {
         this.get("parentController").send("switchProduction", true);
       }
+    },
+    showVersions() {
+      this.get("challenge.skills")
+      .then(skills => {
+        this.transitionToRoute("competence.templates.list", skills.get("firstObject"));
+      })
     }
   },
   _saveChallenge() {
