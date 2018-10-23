@@ -1,8 +1,9 @@
-import AirtableAdapter from "ember-airtable/adapter";
+import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import {computed} from "@ember/object";
 
-export default AirtableAdapter.extend({
+export default DS.RESTAdapter.extend({
+  host: 'https://api.airtable.com',
   config:service(),
   headers:computed("config.airtableKey", function() {
     return {

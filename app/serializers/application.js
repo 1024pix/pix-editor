@@ -1,12 +1,64 @@
-import AirtableSerializer from "ember-airtable/serializer";
+import DS from 'ember-data';
+import { merge } from '@ember/polyfills';
+import { pluralize } from 'ember-inflector';
 
-export default AirtableSerializer.extend({
+export default DS.RESTSerializer.extend({
   payloadKeyFromModelName: function(modelName) {
     if (modelName === 'area') {
       return 'Domaines';
     }
     return this._super(modelName);
   },
+
+  normalizeResponse(store, type, payload) {
+    const modelNamePlural = pluralize(type.modelName);
+
+    if(payload.records) {
+      payload[modelNamePlural] = payload.records;
+      delete payload.records;
+
+      payload.meta = {
+        offset: payload.offset
+      };
+      delete payload.offset;
+
+      payload[modelNamePlural].forEach((record) => {
+        merge(record, record.fields);
+        delete record.fields;
+        record.created = record.createdTime;
+        delete record.createdTime;
+      });
+    } else {
+      payload[type.modelName] = payload.fields;
+      payload[type.modelName].id = payload.id;
+      payload[type.modelName].created = payload.createdTime;
+      delete payload.id;
+      delete payload.fields;
+      delete payload.createdTime;
+    }
+
+    return this._super(...arguments);
+  },
+
+  serializeIntoHash(data, type, record, options) {
+    data['fields'] = this.serialize(record, options);
+  },
+
+  serialize(snapshot, options) {
+    let json = this._super(snapshot, options);
+
+    delete json.created;
+
+    return json;
+  },
+
+  serializeAttribute(snapshot, json, key, attribute) {
+    if (attribute.options && attribute.options.readOnly) {
+      return;
+    }
+    this._super(...arguments);
+  },
+
   serializeHasMany(snapshot, json, relationship) {
     if (relationship.options && relationship.options.readOnly) {
       return;

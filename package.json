@@ -19,7 +19,6 @@
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.7.0",
-    "ember-airtable": "0.0.5",
     "ember-ajax": "^3.1.2",
     "ember-auto-import": "^1.2.13",
     "ember-cli": "~3.1.4",
