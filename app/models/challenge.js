@@ -121,7 +121,7 @@ export default DS.Model.extend({
     data.workbench = false;
     return this.get("myStore").createRecord("challenge", data);
   },
-  alternatives:computed('isTemplate','version', 'skills.[]', function() {
+  alternatives:computed('isTemplate','version', 'skills.@each.challenges', function() {
     if (!this.get('isTemplate')) {
       return [];
     }
