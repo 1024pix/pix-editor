@@ -11,7 +11,7 @@ export default Controller.extend({
       console.log("todo");
     },
     init() {
-      this.get("parentController").send("switchDraft", true);
+      this.get("parentController").send("switchDraft", false);
     }
   }
 });

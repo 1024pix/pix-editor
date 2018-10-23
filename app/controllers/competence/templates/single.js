@@ -166,11 +166,13 @@ export default Controller.extend({
       this.get("application").send("showChallengeLog", this.get("challenge"), this.get("competence"));
     },
     init() {
+      let parentController = this.get("parentController");
       if (!this.get("challenge.isValidated")) {
-        this.get("parentController").send("switchDraft", true);
+        parentController.send("switchDraft", false);
       } else {
-        this.get("parentController").send("switchProduction", true);
+        parentController.send("switchProduction", false);
       }
+      this.set("maximized", parentController.get("childComponentMaximized"));
     },
     showVersions() {
       this.get("challenge.skills")

@@ -139,16 +139,16 @@ export default Controller.extend({
     shareSkills() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
     },
-    switchProduction(skipClose) {
+    switchProduction(closeChild) {
       this.set("production", true);
       this.set("listView", false);
-      if (!skipClose) {
+      if (closeChild) {
         this.send("closeChildComponent");
       }
     },
-    switchDraft(skipClose) {
+    switchDraft(closeChild) {
       this.set("production", false);
-      if (!skipClose) {
+      if (closeChild) {
         this.send("closeChildComponent");
       }
     }

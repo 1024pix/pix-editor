@@ -11,8 +11,8 @@
         </a>
       {{else}}
       <div class="ui top attached tabular menu">
-        <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction"}}>Production</div>
-        <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft"}}>Versions</div>
+        <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>Production</div>
+        <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft" true}}>Versions</div>
       </div>
       {{/if}}
     {{/unless}}
