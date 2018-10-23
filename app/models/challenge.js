@@ -121,12 +121,6 @@ export default DS.Model.extend({
       return alternative;
     });
   },
-  publish() {
-    // TODO: à modifier
-    let data = this._getJSON(["competence", "skills", "alternativeIndex"]);
-    data.workbench = false;
-    return this.get("myStore").createRecord("challenge", data);
-  },
   alternatives:computed('isTemplate','version', 'skills.@each.alternatives', function() {
     if (!this.get('isTemplate')) {
       return [];
