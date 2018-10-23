@@ -3,7 +3,7 @@ import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
 
 export default DS.Model.extend({
-  skills:DS.hasMany('skill'),
+  skills:DS.hasMany('skill', {readOnly:true}),
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
