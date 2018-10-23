@@ -7,7 +7,7 @@
     {{#unless config.lite}}
       {{#if skillMode}}
         <a class="left item" onclick={{action "soon"}}>
-          <i class="plus square outline icon"></i> Nouvel acquis
+          <i class="plus square icon"></i> Nouvel acquis
         </a>
       {{else}}
       <div class="ui top attached tabular menu">
@@ -17,7 +17,7 @@
       {{/if}}
     {{/unless}}
     <a class="right item" onclick={{action "refresh" true}}>
-      <i class="refresh icon"></i> Actualiser
+      <i class="sync alternate icon"></i> Actualiser
     </a>
   </div>
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
@@ -42,7 +42,7 @@
     </a>
   {{else if (not production)}}
     <a class="right item" onclick={{action "newTemplate"}}>
-      <i class="plus square outline icon"></i> Nouveau prototype
+      <i class="plus square icon"></i> Nouveau prototype
     </a>
   {{/if}}
   </div>
