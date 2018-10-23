@@ -9,7 +9,6 @@ export default Component.extend({
     this.options = {
       'types': ["QCU", "QCM", "QROC", "QROCM-ind", "QROCM-dep", "QRU"],
       'pedagogy': ["e-preuve", "q-savoir", "q-situation"],
-      'status':["proposé", "pré-validé", "validé sans test", "validé", "archive"],
       'declinable':["", "facilement", "difficilement", "permutation", "non"]
     }
   },
