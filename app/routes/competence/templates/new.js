@@ -3,6 +3,7 @@ import Template from './single';
 export default Template.extend({
   templateName: "competence/templates/single",
   model(params) {
+    //TODO: handle "fromSkill" param
     if (params.from) {
       return this.get("store").findRecord("challenge",params.from)
       .then((template) => {
