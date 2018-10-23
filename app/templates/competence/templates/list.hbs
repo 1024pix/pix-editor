@@ -10,8 +10,10 @@
   {{templates-list list=model.templates itemCount=model.templates.length competenceModel=competence hidden=false}}
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
+  {{#if mayCreateTemplate}}
     <a class="right item" onclick={{action "newTemplate"}}>
       <i class="plus square outline icon"></i> Nouvelle version
     </a>
+  {{/if}}
 </div>
 {{outlet}}

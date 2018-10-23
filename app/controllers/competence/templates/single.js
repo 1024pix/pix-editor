@@ -10,6 +10,7 @@ export default Controller.extend({
   elementClass:"template-challenge",
   parentController:controller("competence"),
   config:service(),
+  access:service(),
   maximized:false,
   copyOperation:false,
   edition:false,
@@ -31,14 +32,20 @@ export default Controller.extend({
       return this.get("challenge.skillNames");
     }
   }),
-  mayEdit:computed("config.lite", "challenge.isDraft", function() {
-    return (!this.get("config.lite") || !this.get("challenge.isValidated"));
+  mayEdit:computed("config.access", "challenge", function() {
+    return this.get("access").mayEdit(this.get("challenge"));
   }),
-  mayDuplicate:computed("config.lite", "challenge.isTemplate", function() {
-    return (!this.get("config.lite") || !this.get("challenge.isTemplate"));
+  mayDuplicate:computed("config.access", "challenge", function() {
+    return this.get("access").mayDuplicate(this.get("challenge"));
   }),
-  mayAccessLog:computed("config.lite", function() {
-    return !this.get("config.lite");
+  mayAccessLog:computed("config.access", "challenge", function() {
+    return this.get("access").mayAccessLog(this.get("challenge"));
+  }),
+  mayAccessAirtable:computed("config.access", function() {
+    return this.get("access").mayAccessAirtable();
+  }),
+  mayValidate:computed("config.access", function() {
+    return this.get("access").mayValidate();
   }),
   actions:{
     showIllustration: function(){
@@ -133,7 +140,7 @@ export default Controller.extend({
     showAlternatives() {
       this.get("parentController").send("showAlternatives", this.get("challenge"));
     },
-    publish() {
+    validate() {
       this.get("application").send("confirm", "Mise en production", "Êtes-vous sûr de vouloir mettre l'épreuve en production ?", (result) => {
         if (result) {
           this.get("application").send("getChangelog", "Mise en production de la déclinaison", (changelog) => {

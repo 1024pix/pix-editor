@@ -6,6 +6,7 @@ import { alias } from "@ember/object/computed";
 
 export default Component.extend({
   config:service(),
+  access:service(),
   airtableKey:"",
   configKey:"",
   author:"",
@@ -40,16 +41,19 @@ export default Component.extend({
       config.set("airtableKey", this.get("airtableKey"));
       config.set("configKey", this.get("configKey"));
       let author = this.get("author");
-      let lite = true;
+      let access = this.get("access");
+      let accessLevel = access.get("readOnly");
       config.set("author", author);
       this.get("authors").then(authors => {
         let authorRecord = authors.find((value) => {
           return value.get("name") === author;
         });
         if (authorRecord) {
-          lite = authorRecord.get("lite");
+          console.log(authorRecord.get("access"));
+          accessLevel = access.getLevel(authorRecord.get("access"));
         }
-        config.set("lite", lite);
+        console.log(accessLevel);
+        config.set("access", accessLevel);
         config.set("pixUser", this.get("pixUser"));
         config.set("pixPassword", this.get("pixPassword"));
         config.save();

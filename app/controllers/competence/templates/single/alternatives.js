@@ -6,10 +6,14 @@ import { inject as controller } from "@ember/controller";
 export default Controller.extend({
   router:service(),
   config:service(),
+  access:service(),
   application:controller(),
   competenceController:controller("competence"),
   childComponentMaximized:false,
   production:true,
+  mayCreateAlternative:computed("config.access", function() {
+    return this.get("access").mayCreateAlternative();
+  }),
   size:computed("router.currentRouteName", function() {
     if (this.get("router.currentRouteName") == 'competence.templates.single.alternatives.index') {
       return "full";
@@ -58,13 +62,17 @@ export default Controller.extend({
     refresh() {
       this.get("competenceController").send("refresh");
     },
-    switchProduction() {
+    switchProduction(closeChild) {
       this.set("production", true);
-      this.send("closeChildComponent");
+      if (closeChild) {
+        this.send("closeChildComponent");
+      }
     },
-    switchDraft() {
+    switchDraft(closeChild) {
       this.set("production", false);
-      this.send("closeChildComponent");
+      if (closeChild) {
+        this.send("closeChildComponent");
+      }
     }
   }
 });

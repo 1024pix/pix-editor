@@ -9,8 +9,8 @@
 </div>
 <div class="ui top attached borderless labelled icon menu {{listHidden}}">
   <div class="ui top attached tabular menu">
-    <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction"}}>Production</div>
-    <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft"}}>Brouillons</div>
+    <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>Production</div>
+    <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft" true}}>Brouillons</div>
   </div>
 </div>
 <div class="ui attached segment competence {{size}} {{listHidden}}">
@@ -18,7 +18,7 @@
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
   <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{challenge.draftAlternatives.length}}</span></div></div>
-  {{#if (not production)}}
+  {{#if (and (not production) mayCreateAlternative)}}
     <a class="right item" onclick={{action "newAlternative"}}>
       <i class="plus square outline icon"></i> Nouvelle déclinaison
     </a>

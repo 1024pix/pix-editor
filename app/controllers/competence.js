@@ -11,6 +11,7 @@ export default Controller.extend({
   production:true,
   router:service(),
   config:service(),
+  access:service(),
   application:controller(),
   challengeController:controller("competence.templates.single"),
   skillController:controller("competence.skill"),
@@ -32,6 +33,9 @@ export default Controller.extend({
     }
   ];
   },
+  mayCreateTemplate:computed("config.access", function() {
+    return this.get("access").mayCreateTemplate();
+  }),
   competenceHidden:computed("childComponentMaximized", function() {
     return this.get("childComponentMaximized")?"hidden":"";
   }),

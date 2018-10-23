@@ -9,7 +9,6 @@ export default Template.extend({
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
-  mayAccessLog:true,
   challengeTitle:computed("challenge", function() {
     let challenge = this.get("challenge");
     if (challenge) {

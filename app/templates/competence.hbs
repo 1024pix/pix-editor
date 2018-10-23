@@ -40,7 +40,7 @@
     <a class="right item" onclick={{action "shareSkills"}}>
       <i class="share square icon"></i>
     </a>
-  {{else if (not production)}}
+  {{else if (and (not production) mayCreateTemplate)}}
     <a class="right item" onclick={{action "newTemplate"}}>
       <i class="plus square outline icon"></i> Nouveau prototype
     </a>

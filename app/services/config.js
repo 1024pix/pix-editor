@@ -8,7 +8,7 @@ export default Service.extend({
   store:service(),
   init() {
     this._super(...arguments);
-    this.localConfigKeys = ["airtableKey", "configKey", "author", "lite"];
+    this.localConfigKeys = ["airtableKey", "configKey", "author", "access"];
     this.localConfigKeysOptional = ["pixUser", "pixPassword"];
   },
   check() {
@@ -87,6 +87,7 @@ export default Service.extend({
       }
       return current;
     }, localConfig);
+    console.debug(localConfig);
     localStorage.setItem("pix-config", JSON.stringify(localConfig));
   }
 

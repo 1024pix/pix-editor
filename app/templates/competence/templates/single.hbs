@@ -4,7 +4,9 @@
     {{#if mayAccessLog}}
         <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
     {{/if}}
+    {{#if challenge.isTemplate}}
         <a class="ui icon item" onclick={{action "showVersions"}}><i class="calendar alternate outline icon"></i></a>
+    {{/if}}
       </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
@@ -58,12 +60,12 @@
         Dupliquer
       </a>
     {{/if}}
-    {{#unless config.lite}}
+    {{#if mayAccessAirtable}}
       <a class="item" onclick={{action "openAirtable"}}>
         <i class="table icon"></i>
         Airtable
       </a>
-    {{/unless}}
+    {{/if}}
     <a class="item"  onclick={{action "copyLink"}}>
       <i class="linkify icon"></i>
       Copier lien
@@ -74,14 +76,12 @@
         Déclinaisons &gt;&gt;
       </a>
     {{else}}
-      {{#unless config.lite}}
-        {{#if (not challenge.isValidated)}}
-          <a class="item publish"  onclick={{action "publish"}}>
-            <i class="checkmark icon"></i>
-            Production
-          </a>
-        {{/if}}
-      {{/unless}}
+      {{#if (and (not challenge.isValidated) mayValidate)}}
+        <a class="item publish"  onclick={{action "validate"}}>
+          <i class="checkmark icon"></i>
+          Production
+        </a>
+      {{/if}}
     {{/if}}
   {{/if}}
 </div>
