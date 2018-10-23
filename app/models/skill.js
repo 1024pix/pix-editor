@@ -75,7 +75,9 @@ export default DS.Model.extend({
         .then(challenges => {
           return challenges.filter((challenge) => {
             return challenge.get('isTemplate');
-          })
+          }).sort((a, b) => {
+            return a.get("version")<b.get("version");
+          });
         })
     })
   }),
