@@ -126,17 +126,6 @@ export default Controller.extend({
     soon() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
     },
-    addChallenge(challenge) {
-      this.get("challenges").addObject(challenge);
-      this.set("challengeCount", this.get("challengeCount")+1);
-    },
-    removeChallenge(challenge) {
-      let challenges = this.get("challenges");
-      if (challenges.includes(challenge)) {
-        challenges.removeObject(challenge);
-        this.set("challengeCount", this.get("challengeCount")-1);
-      }
-    },
     showAlternatives(challenge) {
       this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), challenge);
     },
