@@ -45,7 +45,8 @@ export default Controller.extend({
     return this.get("access").mayAccessAirtable();
   }),
   mayValidate:computed("config.access", function() {
-    return this.get("access").mayValidate();
+    let challenge = this.get("challenge");
+    return (this.get("access").mayValidate() && !challenge.get("isValidated"));
   }),
   actions:{
     showIllustration: function(){

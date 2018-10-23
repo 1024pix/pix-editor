@@ -680,8 +680,9 @@ img.clickable {
   }
 
   .item {
-    &.publish{
-      color:#d02185;
+    &.validate{
+      color:$production-color;
+      background-color:$production-background-color;
     }
 
     &.alternatives {
