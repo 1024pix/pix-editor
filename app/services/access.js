@@ -40,8 +40,13 @@ export default Service.extend({
   mayAccessAirtable() {
     return this.isAdmin();
   },
-  mayValidate() {
-    return this.isAdmin();
+  mayValidate(challenge) {
+    let production = challenge.get("isValidated");
+    let archived = challenge.get("isArchived");
+    return this.isAdmin() && !production && !archived;
+  },
+  mayArchive(challenge) {
+    return this.mayEdit(challenge);
   },
   isReplicator() {
     let level = this.get("config.access");

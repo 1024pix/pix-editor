@@ -45,8 +45,10 @@ export default Controller.extend({
     return this.get("access").mayAccessAirtable();
   }),
   mayValidate:computed("config.access", "challenge", function() {
-    let challenge = this.get("challenge");
-    return (this.get("access").mayValidate() && !challenge.get("isValidated"));
+    return this.get("access").mayValidate(this.get("challenge"));
+  }),
+  mayArchive:computed("config.access", "challenge", function() {
+    return this.get("access").mayArchive(this.get("challenge"));
   }),
   actions:{
     showIllustration: function(){
@@ -166,6 +168,34 @@ export default Controller.extend({
           });
         } else {
           this.get("application").send("showMessage", "Mise en production abandonnée", true);
+        }
+      });
+    },
+    archive() {
+      this.get("application").send("confirm", "Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?", (result) => {
+        if (result) {
+          this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
+            this.get("application").send("isLoading");
+            return this.get("challenge").archive()
+            .then(() => {
+              if (changelog) {
+                return this._saveChangelog(changelog);
+              } else {
+                return Promise.resolve();
+              }
+            })
+            .then(() => {
+              this.get("application").send("finishedLoading");
+              this.get("application").send("showMessage", "Archivage réussi", true);
+              this.send("close");
+            })
+            .catch(() =>{
+              this.get("application").send("finishedLoading");
+              this.get("application").send("showMessage", "Erreur lors de la mise en production", false);
+            });
+          });
+        } else {
+          this.get("application").send("showMessage", "Archivage abandonné", true);
         }
       });
     },

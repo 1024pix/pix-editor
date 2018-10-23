@@ -10,6 +10,25 @@
       </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
+      {{#if (or mayValidate mayArchive)}}
+        {{#ui-dropdown class="icon"}}
+          <i class="sort down icon"></i>
+          <div class="menu">
+            {{#if mayValidate}}
+              <a class="item validate"  onclick={{action "validate"}}>
+                <i class="checkmark icon"></i>
+                Valider
+              </a>
+            {{/if}}
+            {{#if mayArchive}}
+              <a class="item archive"  onclick={{action "archive"}}>
+                <i class="trash alternate icon"></i>
+                Archiver
+              </a>
+            {{/if}}
+          </div>
+        {{/ui-dropdown}}
+      {{/if}}
     </div>
     <div class="ui right menu">
       {{#if maximized}}
@@ -74,12 +93,6 @@
       <a class="item alternatives"  onclick={{action "showAlternatives"}}>
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
-      </a>
-    {{/if}}
-    {{#if mayValidate}}
-      <a class="item validate"  onclick={{action "validate"}}>
-        <i class="checkmark icon"></i>
-        Valider
       </a>
     {{/if}}
   {{/if}}
