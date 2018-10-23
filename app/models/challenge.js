@@ -137,9 +137,19 @@ export default DS.Model.extend({
         })
     })
   }),
-  productionAlternatives:computed("alternatives.[]", function() {
+  sortedAlternatives:computed("alternatives.[]", function() {
     return DS.PromiseArray.create({
       promise:this.get("alternatives")
+        .then(alternatives => {
+          return alternatives.sort((a, b) => {
+            return a.get("alternativeVersion")>b.get("alternativeVersion");
+          });
+        })
+    })
+  }),
+  productionAlternatives:computed("sortedAlternatives.[]", function() {
+    return DS.PromiseArray.create({
+      promise:this.get("sortedAlternatives")
         .then(alternatives => {
           return alternatives.filter(alternative => {
             return alternative.get("isValidated");
@@ -147,9 +157,9 @@ export default DS.Model.extend({
         })
     });
   }),
-  draftAlternatives:computed("alternatives.[]", function() {
+  draftAlternatives:computed("sortedAlternatives.[]", function() {
     return DS.PromiseArray.create({
-      promise:this.get("alternatives")
+      promise:this.get("sortedAlternatives")
         .then(alternatives => {
           return alternatives.filter(alternative => {
             return !alternative.get("isValidated");
