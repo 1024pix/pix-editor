@@ -87,7 +87,6 @@ export default Controller.extend({
             values[tube.id] = tube;
             return values;
           }, {});
-          console.debug(indexedTubes);
           areas.forEach(area => {
             let competences = area.get('competences');
             competences.forEach(competence => {

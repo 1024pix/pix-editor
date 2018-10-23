@@ -87,7 +87,6 @@ export default Service.extend({
       }
       return current;
     }, localConfig);
-    console.debug(localConfig);
     localStorage.setItem("pix-config", JSON.stringify(localConfig));
   }
 
