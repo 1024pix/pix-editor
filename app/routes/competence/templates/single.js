@@ -16,9 +16,13 @@ export default Route.extend({
   },
   actions: {
     willTransition(transition) {
-      if (this.controller.get("edition") &&
-          !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
-        transition.abort();
+      if (this.controller.get("edition")) {
+        if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+          this.controller.send("cancelEdit");
+          return true;
+        } else {
+          transition.abort();
+        }
       } else {
         this.controller.set("edition", false);
         return true;
