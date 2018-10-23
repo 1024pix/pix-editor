@@ -176,6 +176,7 @@ export default Controller.extend({
         if (result) {
           this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
             this.get("application").send("isLoading");
+            // TODO: archive alternative challenges as well
             return this.get("challenge").archive()
             .then(() => {
               if (changelog) {
@@ -316,6 +317,7 @@ export default Controller.extend({
       })
       .then(previousTemplate => {
         if (previousTemplate != null) {
+          // TODO: archive alternative challenges as well
           return previousTemplate.archive();
         } else {
           return Promise.resolve();
