@@ -75,7 +75,15 @@ export default DS.Model.extend({
         .then(challenges => {
           return challenges.filter((challenge) => {
             return challenge.get('isTemplate');
-          }).sort((a, b) => {
+          })
+        })
+    })
+  }),
+  sortedTemplates:computed('templates.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('templates')
+        .then(templates => {
+          return templates.sort((a, b) => {
             return a.get("version")<b.get("version");
           });
         })
