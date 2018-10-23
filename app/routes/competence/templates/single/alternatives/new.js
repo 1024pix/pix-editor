@@ -9,7 +9,7 @@ export default Route.extend({
         return challenge.clone();
       })
     } else {
-      let template = this.modelFor("competence/template");
+      let template = this.modelFor("competence/templates/single");
       return template.derive();
     }
   },
