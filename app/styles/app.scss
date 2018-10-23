@@ -8,8 +8,8 @@ $validated-no-test-background-color:#00ff00;
 $validated-no-test-color:#000000;
 $prevalidated-background-color:#00ff00/*#aaFFaa*/;
 $prevalidated-color:#000000;
-$suggested-background-color:#aa1efc;
-$suggested-color:#ffffff;
+$suggested-background-color:#9cc0f7;
+$suggested-color:#0a1b53;
 $archived-background-color:#6b686d;
 $archived-color:#ffffff;
 $to-be-submitted-background-color:#ffc851;
@@ -443,7 +443,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 }
 
-.template-list {
+.template-list,
+.alternative-list {
   .list-row {
     .suggested {
       background-color:$suggested-background-color !important;
@@ -467,6 +468,27 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .creation {
     font-style:italic;
   }
+
+  .ui.menu .ui.dropdown {
+    i {
+      font-size:14px;
+    }
+
+    .menu > .item {
+
+      font-size:16px !important;
+
+      &.validate{
+        color:$production-color !important;
+        background-color:$production-background-color !important;
+      }
+      &.archive{
+        color:$archived-color !important;
+        background-color:$archived-background-color !important;
+      }
+    }
+  }
+
   .ui.menu {
     border-radius:0;
     border:none;
@@ -680,10 +702,6 @@ img.clickable {
   }
 
   .item {
-    &.validate{
-      color:$production-color;
-      background-color:$production-background-color;
-    }
 
     &.alternatives {
       color:#2185d0;
@@ -811,16 +829,6 @@ img.clickable {
 
     &.active {
       background-color:#ffffcc;
-    }
-  }
-}
-
-.alternative-list {
-  .list-body .list-row {
-    color:$production-color;
-
-    &.draft {
-      color:$draft-alternative-color;
     }
   }
 }
