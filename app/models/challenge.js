@@ -93,7 +93,13 @@ export default DS.Model.extend({
     return data;
   },
   clone() {
-    let data = this._getJSON(["skills"]);
+    let ignoredFields = ["skills"];
+    if (this.get("isTemplate")) {
+      ignoredFields.push("version");
+    } else {
+      ignoredFields.push("alternativeVersion");
+    }
+    let data = this._getJSON(ignoredFields);
     data.status = "proposé";
     return this.get("skills")
     .then(skills => {
@@ -167,16 +173,18 @@ export default DS.Model.extend({
         })
     });
   }),
-  nextComputedIndex:computed("alternatives", function() {
-    return 0;/*this.get("alternatives").reduce((current, alternative) => {
-      let index = alternative.get("computedIndex");
-      if (index && index >= current) {
-        return index+1;
-      } else {
+  getNextAlternativeVersion() {
+    return this.get("alternatives")
+    .then(alternatives => {
+      return alternatives.reduce((current, alternative) => {
+        let version = alternative.get("alternativeVersion");
+        if (version > current) {
+          return version;
+        }
         return current;
-      }
-    }, 1);*/
-  }),
+      }, 0)+1;
+    });
+  },
   /*joinedSkills:computed("skills", function() {
     // TODO: à arranger (record, pas texte)
     let skills = this.get("skills");

@@ -14,43 +14,31 @@ export default Alternative.extend({
     save() {
       this.get("application").send("isLoading");
       let challenge = this.get("challenge");
-      let skillChecks;
-      if (challenge.get("skills")) {
-        skillChecks = Promise.resolve(true);
-      } else {
-        let store = this.get("store");
-        // skills need to be set
-        let skillRequests = this.get("template").get("skills").reduce((current, skill) => {
-          let request = store.query("workbenchSkill", {filterByFormula:"FIND('"+skill+"', {Acquis prod})"})
-          .then((result) => {
-            if (result.get("length")>0) {
-              return result.get("firstObject").get("id");
-            } else {
-              let newSkill = store.createRecord("workbenchSkill", {skillId:skill, name:skill});
-              return newSkill.save()
-              .then(() => {
-                return newSkill.get("id");
-              });
-            }
-          });
-          current.push(request);
-          return current;
-        }, []);
-        skillChecks = Promise.all(skillRequests)
-        .then(ids => {
-          challenge.set("skills", ids);
-        });
-      }
-      return skillChecks
+      return this._saveChallenge()
       .then(() => {
-        return this._saveChallenge();
+        this.get("application").send("showMessage", "Déclinaison enregistrée", true);
+        return challenge.get("skills");
+      })
+      .then(skills => {
+        if (skills.length > 0) {
+          let skill = skills.firstObject;
+          return skill.reload();
+        } else {
+          return Promise.resolve(true);
+        }
       })
       .then(() => {
+        return this.get("template").getNextAlternativeVersion();
+      })
+      .then(version => {
+        challenge.set("alternativeVersion", version);
+        return challenge.save();
+      })
+      .then(() => {
+        let version = challenge.get("alternativeVersion");
+        this.get("application").send("showMessage", "Déclinaison numéro "+version, true);
         this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Déclinaison enregistrée", true);
-        this.get("parentController").send("addChallenge", challenge);
-        this.transitionToRoute("competence.templates.single.alternatives.single", this.get("competence.id"), this.get("template.id"), challenge.get("id"));
-        this.get("parentController").send("refresh");
+        this.transitionToRoute("competence.templates.single.alternatives.single", this.get("competence"), this.get("template"), challenge);
       }).catch(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Erreur lors de la création", false);

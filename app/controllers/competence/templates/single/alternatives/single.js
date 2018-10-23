@@ -9,9 +9,13 @@ export default Template.extend({
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
-  challengeTitle:computed("challenge", function() {
-    let index = this.get("challenge.alternativeVersion");
-    return "Déclinaison n°"+index;
+  challengeTitle:computed("creation", "challenge", function() {
+    if (this.get("creation")) {
+      return "Nouvelle déclinaison";
+    } else {
+      let index = this.get("challenge.alternativeVersion");
+      return "Déclinaison n°"+index;
+    }
   }),
   actions:{
     preview() {
