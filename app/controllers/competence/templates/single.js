@@ -167,9 +167,9 @@ export default Controller.extend({
     },
     init() {
       if (!this.get("challenge.isValidated")) {
-        console.log("pas validated");
         this.get("parentController").send("switchDraft", true);
-        //TODO : if no skill, set listView
+      } else {
+        this.get("parentController").send("switchProduction", true);
       }
     }
   },
