@@ -8,7 +8,7 @@ export default Controller.extend({
   access:service(),
   config:service(),
   mayCreateTemplate:computed("config.access", function() {
-    return this.get("access").mayCreateTemplate;
+    return this.get("access").mayCreateTemplate();
   }),
   actions: {
     close() {
