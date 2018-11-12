@@ -10,8 +10,8 @@ export default Service.extend({
     let config = this.get("config");
     let user = config.get("pixUser");
     let password = config.get("pixPassword");
-    let workbenchUser = config.get("pixWorkbenchUser");
-    let workbenchPassword = config.get("pixWorkbenchPassword");
+    /*let workbenchUser = config.get("pixWorkbenchUser");
+    let workbenchPassword = config.get("pixWorkbenchPassword");*/
     if (user && user.length>0 && password && password.length>0) {
       let dataStaging = {
         data: {
@@ -26,7 +26,7 @@ export default Service.extend({
           "Content-type": "application/json"
         }
       };
-      let dataWorkbench = {
+      /*let dataWorkbench = {
         data: {
           data: {
             attributes: {
@@ -38,16 +38,16 @@ export default Service.extend({
         headers: {
           "Content-type": "application/json"
         }
-      }
+      }*/
       let requests = [
-        this.get("ajax").post(config.get("pixStaging")+"/api/authentications", dataStaging),
-        this.get("ajax").post(config.get("pixWorkbench")+"/api/authentications", dataWorkbench)
+        this.get("ajax").post(config.get("pixStaging")+"/api/authentications", dataStaging)/*,
+        this.get("ajax").post(config.get("pixWorkbench")+"/api/authentications", dataWorkbench)*/
       ];
       Promise.all(requests)
       .then((responses) => {
         this.set("tokens", {
-          staging:responses[0].data.attributes.token,
-          workbench:responses[1].data.attributes.token
+          staging:responses[0].data.attributes.token/*,
+          workbench:responses[1].data.attributes.token*/
         });
         this.set("connected", true);
       })
