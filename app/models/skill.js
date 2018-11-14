@@ -21,6 +21,7 @@ export default DS.Model.extend({
   tubeId:DS.attr(),
   template: null,
   level:DS.attr(),
+  status:DS.attr(),
   workbenchCount:computed("workbenchChallenges", function() {
     return this.get("workbenchChallenges").get('length');
   }),

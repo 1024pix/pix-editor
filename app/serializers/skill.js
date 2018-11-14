@@ -12,7 +12,8 @@ export default ApplicationSerializer.extend({
     tutoMoreIds: "En savoir plus",
     competence:"Compétence",
     tubeId:"Tube",
-    level:"Level"
+    level:"Level",
+    status:"Status"
   },
   payloadKeyFromModelName: function() {
     return "Acquis";
