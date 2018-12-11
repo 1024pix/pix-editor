@@ -142,9 +142,9 @@ export default Controller.extend({
         if (result) {
           let defaultLogMessage;
           if (this.get("challenge.isTemplate")) {
-            defaultLogMessage = "Mise en production de la déclinaison";
-          } else {
             defaultLogMessage = "Mise en production du prototype";
+          } else {
+            defaultLogMessage = "Mise en production de la déclinaison";
           }
           this.get("application").send("getChangelog", defaultLogMessage, (changelog) => {
             this.get("application").send("isLoading");
