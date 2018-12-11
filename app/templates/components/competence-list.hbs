@@ -1,6 +1,6 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item skillNames" onclick={{action "sortBy" "skillNames" "array"}}>Acquis</div>
+    <div class="list-item authorText" onclick={{action "sortBy" "authorText" "string"}}>Auteur</div>
     <div class="list-item instructions" onclick={{action "sortBy" "instructions" "string"}}>Consigne</div>
     <div class="list-item type" onclick={{action "sortBy" "type" "string"}}>Type</div>
     <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
@@ -12,7 +12,7 @@
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
   }}
   {{#link-to link competenceModel item tagName="div" class="list-row"}}
-    <div class="list-item">{{item.skillNames}}</div>
+    <div class="list-item">{{item.authorText}}</div>
     <div class="list-item">{{item.instructions}}</div>
     <div class="list-item">{{item.type}}</div>
     <div class="list-item">{{item.status}}</div>
