@@ -7,28 +7,28 @@
     {{#if (and challenge.isTemplate (not creation))}}
         <a class="ui icon item" onclick={{action "showVersions"}}><i class="clone icon"></i>&nbsp;v{{challenge.version}}</a>
     {{/if}}
+    {{#if (or mayValidate mayArchive)}}
+      {{#ui-dropdown class="icon"}}
+      <a class="ui icon item"><i class="bolt icon"></i></a>
+        <div class="menu">
+          {{#if mayValidate}}
+            <a class="item validate"  onclick={{action "validate"}}>
+              <i class="checkmark icon"></i>
+              Valider
+            </a>
+          {{/if}}
+          {{#if mayArchive}}
+            <a class="item archive"  onclick={{action "archive"}}>
+              <i class="trash alternate icon"></i>
+              Archiver
+            </a>
+          {{/if}}
+        </div>
+      {{/ui-dropdown}}
+    {{/if}}
       </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
       {{challengeTitle}}
-      {{#if (or mayValidate mayArchive)}}
-        {{#ui-dropdown class="icon"}}
-          <i class="sort down icon"></i>
-          <div class="menu">
-            {{#if mayValidate}}
-              <a class="item validate"  onclick={{action "validate"}}>
-                <i class="checkmark icon"></i>
-                Valider
-              </a>
-            {{/if}}
-            {{#if mayArchive}}
-              <a class="item archive"  onclick={{action "archive"}}>
-                <i class="trash alternate icon"></i>
-                Archiver
-              </a>
-            {{/if}}
-          </div>
-        {{/ui-dropdown}}
-      {{/if}}
     </div>
     <div class="ui right menu">
       {{#if maximized}}
