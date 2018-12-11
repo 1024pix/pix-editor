@@ -32,7 +32,7 @@ export default Controller.extend({
       return this.get("challenge.skillNames");
     }
   }),
-  mayEdit:computed("config.access", "challenge", function() {
+  mayEdit:computed("config.access", "challenge", "challenge.status", function() {
     return this.get("access").mayEdit(this.get("challenge"));
   }),
   mayDuplicate:computed("config.access", "challenge", function() {
@@ -44,10 +44,10 @@ export default Controller.extend({
   mayAccessAirtable:computed("config.access", function() {
     return this.get("access").mayAccessAirtable();
   }),
-  mayValidate:computed("config.access", "challenge", function() {
+  mayValidate:computed("config.access", "challenge", "challenge.status", function() {
     return this.get("access").mayValidate(this.get("challenge"));
   }),
-  mayArchive:computed("config.access", "challenge", function() {
+  mayArchive:computed("config.access", "challenge", "challenge.status", function() {
     return this.get("access").mayArchive(this.get("challenge"));
   }),
   actions:{
