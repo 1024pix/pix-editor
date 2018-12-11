@@ -4,10 +4,20 @@ import {computed} from '@ember/object';
 
 export default DS.Model.extend({
   needsRefresh:false,
-  area: DS.belongsTo("area"),
-  name: DS.attr("string", { readOnly: true }),
+  area: DS.belongsTo('area'),
+  name: DS.attr('string', { readOnly: true }),
   code: DS.attr(),
-  tubes: DS.hasMany("tube"),
+  rawTubes: DS.hasMany('tube'),
+  tubes:computed('rawTubes', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('rawTubes')
+        .then(tubes => {
+          return tubes.filter(tube => {
+            return tube.get('name') !== '@workbench';
+          });
+        })
+    });
+  }),
   sortedTubes:computed('tubes.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('tubes')
@@ -16,8 +26,8 @@ export default DS.Model.extend({
         })
     });
   }),
-  loaded:computed("tubes.[]", function() {
-    return this.get("tubes")
+  loaded:computed('tubes.[]', function() {
+    return this.get('tubes')
     .then(tubes => {
       let waitForTubes = tubes.reduce((promises, tube) => {
         promises.push(tube.get('loaded'));
@@ -29,10 +39,10 @@ export default DS.Model.extend({
       return true;
     })
   }),
-  tubeCount:computed("tubes", function() {
-    return this.get("tubes").length;
+  tubeCount:computed('tubes', function() {
+    return this.get('tubes').length;
   }),
-  skillCount:computed("tubes.[]", function() {
+  skillCount:computed('tubes.[]', function() {
     return DS.PromiseObject.create({
       promise:this.get('tubes')
         .then(tubes => {
@@ -46,6 +56,35 @@ export default DS.Model.extend({
           return counts.reduce((count, value)=> {
             return count+value;
           },0);
+        })
+    });
+  }),
+  workbenchSkill:computed('rawTubes', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('rawTubes')
+        .then(tubes => {
+          return tubes.find(tube => {
+            return tube.get('name') === '@workbench';
+          })
+        })
+        .then(workbenchTube => {
+          return workbenchTube.get('skills');
+        })
+        .then(workbenchSkills => {
+          return workbenchSkills.get('firstObject');
+        })
+    });
+  }),
+  workbenchTemplates:computed('workbenchSkill', 'workbenchSkill.templates.{[],@each.status}', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('workbenchSkill')
+        .then(skill => {
+          return skill.get('templates');
+        })
+        .then(templates => {
+          return templates.filter(template => {
+            return !template.get('isArchived');
+          })
         })
     });
   }),

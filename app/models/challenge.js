@@ -34,6 +34,9 @@ export default DS.Model.extend({
   isTemplate:computed("genealogy", function(){
     return (this.get("genealogy") === "Prototype 1");
   }),
+  isWorkbench:computed('skillNames', function() {
+    return this.get('skillNames')[0] === '@workbench';
+  }),
   isValidated:computed("status", function(){
     let status = this.get("status");
     return ["validé", "validé sans test", "pré-validé"].includes(status);
@@ -248,5 +251,9 @@ export default DS.Model.extend({
       }
       return value;
     }
+  }),
+  authorText:computed('author', function() {
+    let author = this.get('author');
+    return author.join(', ');
   })
 });
