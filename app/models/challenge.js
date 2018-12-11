@@ -35,7 +35,16 @@ export default DS.Model.extend({
     return (this.get("genealogy") === "Prototype 1");
   }),
   isWorkbench:computed('skillNames', function() {
-    return this.get('skillNames')[0] === '@workbench';
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+        .then(skills => {
+          if (skills.length > 0) {
+            let skill = skills.get('firstObject');
+            return skill.get('name') === '@workbench';
+          }
+          return false;
+        })
+    });
   }),
   isValidated:computed("status", function(){
     let status = this.get("status");
@@ -254,6 +263,9 @@ export default DS.Model.extend({
   }),
   authorText:computed('author', function() {
     let author = this.get('author');
-    return author.join(', ');
+    if (author) {
+      return author.join(', ');
+    }
+    return '';
   })
 });
