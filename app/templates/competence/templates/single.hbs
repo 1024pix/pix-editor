@@ -5,7 +5,7 @@
         <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
     {{/if}}
     {{#if (not edition)}}
-      {{#if (and challenge.isTemplate (not challenge.isWorkbench))}}
+      {{#if (and challenge.isTemplate (not challenge.isWorkbench.content))}}
           <a class="ui icon item" onclick={{action "showVersions"}}><i class="clone icon"></i>&nbsp;v{{challenge.version}}</a>
       {{/if}}
       {{#if (or mayValidate mayArchive)}}
