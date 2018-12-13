@@ -2,48 +2,37 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
-    //TODO: à améliorer
-    let set = {templateId:false, alternativeId:false, competenceId:false};
     return this.get("store").query("challenge", {filterByFormula:"AND(FIND('"+params.challenge_id+"', RECORD_ID()) , Statut != 'archive')", maxRecords:1})
-    .then(result => {
-      if (result.get("length")>0) {
-        let challenge = result.get("firstObject");
-        if (challenge.get("isTemplate")) {
-          set.templateId = challenge.get("id");
-        } else {
-          set.alternativeId = challenge.get("id");
-        }
-        let skills = challenge.get("skills");
-        if (skills.length >0) {
-          return this.get("store").findRecord("skill", skills[0]);
-        }
-      }
-      return Promise.resolve(false);
-    })
-    .then(skill => {
-      if (skill) {
-        set.competenceId = skill.get("competence")[0];
-        if (set.alternativeId) {
-          return this.get("store").query("challenge", {filterByFormula:"AND(OR(RECORD_ID() = '"+skill.get("challengeIds").join("',RECORD_ID() ='")+"'), {Généalogie} = 'Prototype 1', Statut != 'archive')"});
-        }
-      }
-      return Promise.resolve(false);
-    })
-    .then(result => {
-      if (result && result.get("length") > 0) {
-        let template = result.get("firstObject");
-        set.templateId = template.get("id");
-      }
-      return set;
+    .then(challenges => {
+      return challenges.get('firstObject');
     });
   },
   afterModel(model) {
-    if (model.templateId && model.competenceId) {
-      if (model.alternativeId) {
-        this.transitionTo("competence.templates.single.alternatives.single", model.competenceId, model.templateId, model.alternativeId);
-      } else {
-        this.transitionTo("competence.templates.single", model.competenceId, model.templateId);
-      }
+    let competenceId = null;
+    if (model) {
+      return model.get('skills')
+      .then(skills => {
+        return skills.get('firstObject');
+      })
+      .then(skill => {
+        if (skill) {
+          competenceId = skill.get('competence')[0];
+          return model.get('template');
+        } else {
+          return Promise.resolve(null);
+        }
+      })
+      .then(template => {
+        if (competenceId !== null) {
+          if (template) {
+            return this.transitionTo("competence.templates.single.alternatives.single", competenceId, template.get('id'), model.get('id'));
+          } else {
+            return this.transitionTo("competence.templates.single", competenceId, model.get('id'));
+          }
+        } else {
+          return this.transitionTo("index");
+        }
+      });
     } else {
       this.transitionTo("index");
     }
