@@ -34,16 +34,16 @@ export default DS.Model.extend({
   isTemplate:computed("genealogy", function(){
     return (this.get("genealogy") === "Prototype 1");
   }),
-  isWorkbench:computed('skillNames', function() {
-    return DS.PromiseObject.create({
-      promise:this.get('skills')
-        .then(skills => {
-          if (skills.length > 0) {
-            let skill = skills.get('firstObject');
-            return skill.get('name') === '@workbench';
-          }
-          return false;
-        })
+  isWorkbench:computed('skills', function() {
+    return this.get('skills')
+    .then(skills => {
+      const skill = skills.get('firstObject');
+      if (skill) {
+        console.log(skill.get('name'));
+        return skill.get('name') === '@workbench';
+      }
+      console.log('false');
+      return false;
     });
   }),
   isValidated:computed("status", function(){

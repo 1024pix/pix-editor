@@ -43,7 +43,6 @@ export default Service.extend({
   mayValidate(challenge) {
     let production = challenge.get("isValidated");
     let archived = challenge.get("isArchived");
-    //TODO: use promise
     let workbench = challenge.get('isWorkbench');
     return this.isAdmin() && !production && !archived && !workbench;
   },

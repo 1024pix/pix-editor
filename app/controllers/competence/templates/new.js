@@ -18,10 +18,7 @@ export default Template.extend({
       return this._saveChallenge()
       .then(() => {
         this.get("application").send("showMessage", "Prototype enregistré", true);
-        return challenge.get('isWorkbench');
-      })
-      .then(workbench => {
-        if (workbench) {
+        if (challenge.get('isWorkbench')) {
           return Promise.resolve(false);
         } else {
           return challenge.get("firstSkill");

@@ -28,7 +28,6 @@ export default Controller.extend({
   challengeTitle:computed("creation","challenge", function() {
     if (this.get("creation")) {
       return "Nouveau prototype";
-      //TODO: use promise
     } else if (this.get('challenge.isWorkbench')) {
       return '';
     } else {
@@ -210,7 +209,6 @@ export default Controller.extend({
       let parentController = this.get("parentController");
       if (!this.get("challenge.isValidated")) {
         parentController.send("switchDraft", false);
-        //TODO:use promise
         if (this.get('challenge.isWorkbench')) {
           parentController.send("setListView");
         }
