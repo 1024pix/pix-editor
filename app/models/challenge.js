@@ -226,15 +226,6 @@ export default DS.Model.extend({
       }, 0)+1;
     });
   },
-  /*joinedSkills:computed("skills", function() {
-    // TODO: à arranger (record, pas texte)
-    let skills = this.get("skills");
-    if (skills) {
-      return skills.join(",");
-    } else {
-      return "";
-    }
-  }),*/
   isTextBased:computed("type", function() {
     let type = this.get("type");
     return ["QROC","QROCM","QROCM-ind","QROCM-dep"].includes(type);
