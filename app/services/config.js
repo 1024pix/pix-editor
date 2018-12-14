@@ -1,6 +1,6 @@
 import Service from '@ember/service';
 import {configPrivate} from "../config-private";
-import CryptoJS from "cryptojs";
+import CryptoJS from "crypto-js";
 import {computed} from "@ember/object";
 import {inject as service} from '@ember/service';
 
