@@ -14,6 +14,7 @@ export default Component.extend({
   pixPassword:"",
   saved:false,
   authors:alias("config.authors"),
+  // eslint-disable-next-line ember/no-observers
   displayManager:observer("display", function() {
     if (this.get("display")) {
       $(".config-form").modal('show');
@@ -27,6 +28,7 @@ export default Component.extend({
       this.set("saved", false);
     }
   }),
+  // eslint-disable-next-line ember/no-observers
   authorsUpdate:observer("airtableKey", "configKey", function() {
     if (this.get("airtableKey") && this.get("configKey")) {
       let config = this.get("config");

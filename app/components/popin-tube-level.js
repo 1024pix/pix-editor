@@ -7,6 +7,7 @@ import $ from "jquery";
 export default Component.extend({
   tube:null,
   paginatedQuery:service(),
+  // eslint-disable-next-line ember/no-observers
   displayManager:observer("display", function() {
     if (this.get("display")) {
       $(".popin-tube-level").modal('show');

@@ -39,7 +39,9 @@ export default Controller.extend({
   competenceHidden:computed("childComponentMaximized", function() {
     return this.get("childComponentMaximized")?"hidden":"";
   }),
+  // eslint-disable-next-line ember/no-observers
   childComponentAdapter:observer("skillMode", function() {
+    // TODO: replace observer by computed
     let skillMode = this.get("skillMode");
     let currentRoute = this.get("router.currentRouteName");
     if (skillMode) {

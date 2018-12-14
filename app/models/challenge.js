@@ -39,10 +39,8 @@ export default DS.Model.extend({
     .then(skills => {
       const skill = skills.get('firstObject');
       if (skill) {
-        console.log(skill.get('name'));
         return skill.get('name') === '@workbench';
       }
-      console.log('false');
       return false;
     });
   }),

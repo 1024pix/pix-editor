@@ -12,6 +12,7 @@ export default Component.extend({
   logEntryEdition:false,
   list:true,
   mayEditEntry:false,
+  // eslint-disable-next-line ember/no-observers
   displayManager:observer("display", function() {
     if (this.get("display")) {
       $(".challenge-log").modal('show');

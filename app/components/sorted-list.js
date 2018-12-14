@@ -9,6 +9,7 @@ export default Component.extend({
     this._super(...arguments);
     this.columns = [100];
   },
+  // eslint-disable-next-line ember/no-observers
   sortManager:observer("list", function() {
     $("."+this.get("listType")+" .list-header .list-item").removeClass("sorting");
   }),
