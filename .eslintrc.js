@@ -21,8 +21,11 @@ module.exports = {
     // node files
     {
       files: [
-        'testem.js',
+        '.eslintrc.js',
+        '.template-lintrc.js',
         'ember-cli-build.js',
+        'testem.js',
+        'blueprints/*/index.js',
         'config/**/*.js',
         'lib/*/index.js',
         'scripts/*.js'
@@ -33,7 +36,7 @@ module.exports = {
       },
       env: {
         browser: false,
-        node: true,
+        node: true
       }
     }
   ]
