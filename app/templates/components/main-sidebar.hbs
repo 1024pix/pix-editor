@@ -15,7 +15,7 @@
   </div>
   <div class="content">
     {{#each area.sortedCompetences as |competence|}}
-      {{#link-to "competence" competence.id class="item" invokeAction=(action execute 'hide')}}{{competence.name}}{{/link-to}}
+      {{#link-to "competence" competence.id class="item" invokeAction=(action execute "hide")}}{{competence.name}}{{/link-to}}
     {{/each}}
   </div>
   {{/each}}

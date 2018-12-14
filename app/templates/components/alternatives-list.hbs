@@ -9,7 +9,7 @@
 <div class="list-body">
   {{#ember-collection
     items=list
-    cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
+    cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
   {{#link-to "competence.templates.single.alternatives.single" competenceModel challengeModel item tagName="div" class=(concat "list-row" (if (not item.isValidated) " draft" ""))}}
     <div class="list-item">{{item.alternativeVersion}}</div>

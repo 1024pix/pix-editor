@@ -48,7 +48,7 @@
 
     </div>
     {{/each}}
-    {{input type='file' id='target-profile__open-file' change=(action "openFile")}}
+    {{input type="file" id="target-profile__open-file" change=(action "openFile")}}
   </div>
   </div>
   {{popin-tube-level set=(action "setProfileTube") unset=(action "unsetProfileTube") closed=(action "tubeLevelHidden") display=displayTubeLevel level=selectedTubeLevel selectedSkills=selectedTubeSkills tube=selectedTube}}

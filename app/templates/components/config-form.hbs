@@ -24,7 +24,7 @@
               <i class="dropdown icon"></i>
               <div class="menu">
                 {{#each authors as |option|}}
-                  <div data-value="{{map-value mapper option.name}}" class="item">
+                  <div data-value={{map-value mapper option.name}} class="item">
                     {{option.name}}
                   </div>
                 {{/each}}
