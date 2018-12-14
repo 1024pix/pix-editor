@@ -3,9 +3,9 @@
     <div class="item header">{{skill.name}}</div>
     <div class="ui right menu">
       {{#if maximized}}
-        <a class="ui icon item" onclick={{action "minimize"}}><i class="icon window minimize"></i></a>
+        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
       {{else}}
-        <a class="ui icon item" onclick={{action "maximize"}}><i class="icon window maximize"></i></a>
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
       {{/if}}
       <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
     </div>

@@ -10,21 +10,22 @@
           <i class="plus square outline icon"></i> Nouvel acquis
         </a>
       {{else}}
-        <a class="left item" onclick={{action "newChallenge"}}>
-          <i class="plus square outline icon"></i> Nouveau prototype
-        </a>
+      <div class="ui top attached tabular menu">
+        <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>En production</div>
+        <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft" true}}>Atelier</div>
+      </div>
       {{/if}}
     {{/unless}}
     <a class="right item" onclick={{action "refresh" true}}>
-      <i class="refresh icon"></i> Actualiser
+      <i class="sync alternate icon"></i> Actualiser
     </a>
   </div>
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
-    {{competence-list list=challenges itemCount=challengeCount competenceModel=model hidden=(not listView) link=challengeLink}}
-    {{competence-grid tubes=competence.tubes competenceModel=model hidden=listView skillMode=skillMode link=challengeLink}}
+    {{competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=(not listView) link=skillLink production=production}}
+    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView skillMode=skillMode link=skillLink production=production}}
   </div>
   <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
-  {{#if (not skillMode)}}
+  {{#if (and (not skillMode) (not production))}}
     <a class={{concat "item" (if (not listView) " active" "")}} onclick={{action "setGridView"}}>
       <i class="grid layout icon"></i>
     </a>
@@ -32,10 +33,16 @@
       <i class="align justify icon"></i>
     </a>
   {{/if}}
-    <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount}}</div><div class="competence-info">Acquix : {{competence.skillCount}}</div></div>
+  {{#if (or production skillMode)}}
+    <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount}}</div><div class="competence-info">Acquix : {{competence.skillCount.content}}</div></div>
+  {{/if}}
   {{#if skillMode}}
     <a class="right item" onclick={{action "shareSkills"}}>
       <i class="share square icon"></i>
+    </a>
+  {{else if (and (not production) mayCreateTemplate)}}
+    <a class="right item" onclick={{action "newTemplate"}}>
+      <i class="plus square outline icon"></i> Nouveau prototype
     </a>
   {{/if}}
   </div>

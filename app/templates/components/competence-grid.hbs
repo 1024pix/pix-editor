@@ -3,43 +3,11 @@
   {{#each tubes as |tube|}}
   <tr>
     <td>{{tube.name}}</td>
-    {{#each tube.skills as |skill|}}
-      {{#if skillMode}}
-        {{#if skill.name}}
-          {{#link-to "competence.skill" competenceModel skill tagName="td" class="skill link"}}
-          <div class="skill-name {{skill.descriptionCSS}}">
-            {{skill.name}}
-          </div>
-          <div class="help {{skill.clueCSS}}">
-            {{#if skill.clue}}
-            <i class={{concat "idea icon " skill.clueCSS}}></i>
-            {{else}}
-            <i class="icon"></i>
-            {{/if}}
-            <span class="tuto-count">{{skill.tutoSolutionCount}} - <{{skill.tutoMoreCount}}</span>
-          </div>
-          {{/link-to}}
-        {{else}}
-          <td></td>
-        {{/if}}
+    {{#each tube.filledSkills as |skill|}}
+      {{#if (and skill.name (or skillMode (not production)  skill.productionTemplate))}}
+          {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
       {{else}}
-        {{#if skill.template}}
-        {{#link-to link competenceModel skill.template tagName="td" class=(concat "skill link " skill.template.statusCSS)}}{{skill.name}}
-        <div class="alternative">
-          <span class="production">{{skill.alternativeCount}}</span> - <span class="workbench">{{skill.workbenchCount}}</span>
-          {{#if skill.template.notDeclinable}}
-            <span class="not-declinable">NR</span>
-          {{/if}}
-        </div>
-        {{/link-to}}
-        {{else if skill}}
-        <td class='skill'>
-          {{skill.name}}
-          <div class="alternative">&nbsp;</div>
-        </td>
-        {{else}}
         <td></td>
-        {{/if}}
       {{/if}}
     {{/each}}
   </tr>

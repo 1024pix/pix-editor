@@ -1,0 +1,103 @@
+<div class={{concat "challenge-header " challenge.statusCSS}}>
+  <div class="ui menu">
+      <div class="ui left menu">
+    {{#if mayAccessLog}}
+        <a class="ui icon item" onclick={{action "challengeLog"}}><i class="icon window chat"></i></a>
+    {{/if}}
+    {{#if (not edition)}}
+      {{#if (and challenge.isTemplate (not challenge.isWorkbench))}}
+          <a class="ui icon item" onclick={{action "showVersions"}}><i class="clone icon"></i>&nbsp;v{{challenge.version}}</a>
+      {{/if}}
+      {{#if (or mayValidate mayArchive)}}
+        {{#ui-dropdown class="icon"}}
+        <a class="ui icon item"><i class="bolt icon"></i></a>
+          <div class="menu">
+            {{#if mayValidate}}
+              <a class="item validate"  onclick={{action "validate"}}>
+                <i class="checkmark icon"></i>
+                Valider
+              </a>
+            {{/if}}
+            {{#if mayArchive}}
+              <a class="item archive"  onclick={{action "archive"}}>
+                <i class="trash alternate icon"></i>
+                Archiver
+              </a>
+            {{/if}}
+          </div>
+        {{/ui-dropdown}}
+      {{/if}}
+    {{/if}}
+      </div>
+    <div class={{concat "item header" (if creation " creation" "")}}>
+      {{challengeTitle}}
+    </div>
+    <div class="ui right menu">
+      {{#if maximized}}
+        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
+      {{else}}
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
+      {{/if}}
+      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+    </div>
+  </div>
+</div>
+<div class="challenge">
+  <div class="challenge-data {{elementClass}}">
+    {{challenge-form challenge=challenge showIllustration=(action 'showIllustration') edition=edition alternative=alternative}}
+    {{#if copyOperation}}
+      {{textarea value=challenge.preview id=copyZoneId}}
+    {{/if}}
+  </div>
+<div class="ui vertical compact labeled icon menu challenge-menu">
+  {{#if edition}}
+    <a class="item important-action" onclick={{action "save"}}>
+      <i class="save icon"></i>
+      Enregistrer
+    </a>
+    {{#if mayUpdateCache}}
+      <div class="item">
+        {{ui-checkbox label="mise à jour cache" checked=updateCache onChange=(action (mut updateCache))}}
+      </div>
+    {{/if}}
+    <a class="item" onclick={{action "cancelEdit"}}>
+      <i class="ban icon"></i>
+      Annuler
+    </a>
+  {{else}}
+    <a class="item" onclick={{action "preview"}}>
+      <i class="eye icon"></i>
+      Prévisualiser
+    </a>
+    {{#if mayEdit}}
+      <a class="item" onclick={{action "edit"}}>
+        <i class="edit icon"></i>
+        Modifier
+      </a>
+    {{/if}}
+    {{#if mayDuplicate}}
+      <a class="item" onclick={{action "duplicate"}}>
+        <i class="copy icon"></i>
+        Dupliquer
+      </a>
+    {{/if}}
+    {{#if mayAccessAirtable}}
+      <a class="item" onclick={{action "openAirtable"}}>
+        <i class="table icon"></i>
+        Airtable
+      </a>
+    {{/if}}
+    <a class="item"  onclick={{action "copyLink"}}>
+      <i class="linkify icon"></i>
+      Copier lien
+    </a>
+    {{#if (not alternative)}}
+      <a class="item alternatives"  onclick={{action "showAlternatives"}}>
+        <i class="cubes icon"></i>
+        Déclinaisons &gt;&gt;
+      </a>
+    {{/if}}
+  {{/if}}
+</div>
+</div>
+{{outlet}}

@@ -4,7 +4,7 @@ export default ApplicationSerializer.extend({
 
   attrs:{
     name:"Nom",
-    liteValue:"Lite"
+    access:"Accès"
   },
 
   payloadKeyFromModelName: function() {

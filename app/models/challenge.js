@@ -1,13 +1,9 @@
 import DS from "ember-data";
 import {computed} from "@ember/object";
 import {inject as service} from "@ember/service";
-import { A } from "@ember/array";
 
 export default DS.Model.extend({
-  init() {
-    this._super(...arguments);
-    this.sortedAlternatives = {production:[], workbench:[]};
-  },
+  skills:DS.hasMany('skill'),
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
@@ -21,29 +17,38 @@ export default DS.Model.extend({
   pedagogy:DS.attr(),
   author:DS.attr(),
   declinable:DS.attr(),
-  version:DS.attr(),
+  version:DS.attr('number'),
   genealogy:DS.attr(),
   skillNames:DS.attr({readOnly:true}),
-  skills:DS.attr(),
-  workbench:false,
   status:DS.attr(),
   preview:DS.attr({readOnly:true}),
   pixId:DS.attr(),
-  alternativeIndex:DS.attr(),
   scoring:DS.attr(),
   timer:DS.attr('number'),
   embedURL:DS.attr(),
   embedTitle:DS.attr(),
   embedHeight:DS.attr('number'),
-
+  alternativeVersion:DS.attr('number'),
   myStore:service("store"),
   config:service(),
-  template:computed("genealogy", function(){
-    return (this.get("genealogy") == "Prototype 1");
+  isTemplate:computed("genealogy", function(){
+    return (this.get("genealogy") === "Prototype 1");
   }),
-  validated:computed("status", function(){
+  isWorkbench:computed('skills', function() {
+    return this.get('skills')
+    .then(skills => {
+      const skill = skills.get('firstObject');
+      if (skill) {
+        console.log(skill.get('name'));
+        return skill.get('name') === '@workbench';
+      }
+      console.log('false');
+      return false;
+    });
+  }),
+  isValidated:computed("status", function(){
     let status = this.get("status");
-    return ["validated", "validé sans test", "pré-validé"].includes(status);
+    return ["validé", "validé sans test", "pré-validé"].includes(status);
   }),
   notDeclinable:computed('declinable', function() {
     let declinable = this.get("declinable");
@@ -58,18 +63,15 @@ export default DS.Model.extend({
       return null;
     }
   }),
-  alternativeCount:0,
   statusCSS:computed("status", function() {
     let status = this.get("status");
     switch (status) {
       case "validé":
-        return "validated";
       case "validé sans test":
-        return "validated_no_test";
+      case "pré-validé":
+        return "validated";
       case "proposé":
         return "suggested";
-      case "pré-validé":
-        return "prevalidated";
       case "archive":
         return "archived";
     }
@@ -80,6 +82,11 @@ export default DS.Model.extend({
   }),
   archive() {
     this.set("status", "archive");
+    return this.save();
+  },
+  validate() {
+    this.set("status", "validé");
+    return this.save();
   },
   _getJSON(fieldsToRemove) {
     let data = this.toJSON({includeId:false});
@@ -102,65 +109,129 @@ export default DS.Model.extend({
     }
     return data;
   },
-  clone(fieldsToRemove) {
-    let data = this._getJSON(fieldsToRemove);
+  clone() {
+    let ignoredFields = ["skills", "author"];
+    if (this.get("isTemplate")) {
+      ignoredFields.push("version");
+    } else {
+      ignoredFields.push("alternativeVersion");
+    }
+    let data = this._getJSON(ignoredFields);
     data.status = "proposé";
-    return this.get("myStore").createRecord(this.constructor.modelName, data);
+    data.author = [this.get("config").get("author")];
+    return this.get("skills")
+    .then(skills => {
+      data.skills = skills;
+      return this.get("myStore").createRecord(this.constructor.modelName, data);
+    });
   },
   derive() {
-    let data = this._getJSON(["competence", "skills", "skillNames"]);
-    data.status = "proposé";
-    data.genealogy = "Décliné 1";
-    data.author = [this.get("config").get("author")];
-    return this.get("myStore").createRecord("workbenchChallenge", data);
+    return this.clone()
+    .then(alternative => {
+      alternative.set("version", this.get("version"));
+      alternative.set("genealogy", "Décliné 1");
+      return alternative;
+    });
   },
-  publish() {
-    let data = this._getJSON(["competence", "skills", "alternativeIndex"]);
-    data.workbench = false;
-    return this.get("myStore").createRecord("challenge", data);
-  },
-  alternatives:computed("sortedAlternatives", function() {
-    let set = this.get("sortedAlternatives");
-    let productionAlternatives = set.production.toArray();
-    let workbenchAlternatives = set.workbench.toArray();
-    let result = new A();
-    result.pushObjects(productionAlternatives);
-    result.pushObjects(workbenchAlternatives);
-    return result;
-  }),
-  alternativesCount:computed("alternatives", function() {
-    return this.get("alternatives").length;
-  }),
-  nextComputedIndex:computed("alternatives", function() {
-    return this.get("alternatives").reduce((current, alternative) => {
-      let index = alternative.get("computedIndex");
-      if (index && index >= current) {
-        return index+1;
-      } else {
-        return current;
-      }
-    }, 1);
-  }),
-  joinedSkills:computed("skills", function() {
-    let skills = this.get("skills");
-    if (skills) {
-      return skills.join(",");
-    } else {
-      return "";
+  alternatives:computed('isTemplate','version', 'skills.@each.alternatives', function() {
+    if (!this.get('isTemplate')) {
+      return [];
     }
+    let currentVersion = this.get('version');
+    return DS.PromiseArray.create({
+      promise:this.get('skills')
+        .then((skills) => {
+          let firstSkill = skills.firstObject;
+          if (firstSkill) {
+            return firstSkill.get('alternatives')
+            .then(alternatives => {
+              return alternatives.filter(alternative => {
+                return (alternative.get('version') === currentVersion);
+              });
+            });
+          } else {
+            return [];
+          }
+        })
+    })
   }),
-  productionAlternativeCount:computed("sortedAlternatives", function() {
-    return this.get("sortedAlternatives").production.length;
+  firstSkill:computed('skills', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+        .then((skills) => {
+          return skills.firstObject;
+        })
+    });
   }),
-  workbenchAlternativeCount:computed("sortedAlternatives", function() {
-    return this.get("sortedAlternatives").workbench.length;
+  template:computed('isTemplate','version', 'firstSkill.templates', function() {
+    if (this.get('isTemplate')) {
+      return null;
+    }
+    let currentVersion = this.get('version');
+    return DS.PromiseObject.create({
+      promise:this.get('firstSkill')
+        .then(firstSkill => {
+          if (firstSkill) {
+            return firstSkill.get('templates')
+            .then(templates => {
+              return templates.find(template => {
+                return (template.get('version') === currentVersion);
+              });
+            });
+          } else {
+            return null;
+          }
+        })
+    })
   }),
+  sortedAlternatives:computed("alternatives.[]", function() {
+    return DS.PromiseArray.create({
+      promise:this.get("alternatives")
+        .then(alternatives => {
+          return alternatives.sort((a, b) => {
+            return a.get("alternativeVersion")>b.get("alternativeVersion");
+          });
+        })
+    })
+  }),
+  productionAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
+    return DS.PromiseArray.create({
+      promise:this.get("sortedAlternatives")
+        .then(alternatives => {
+          return alternatives.filter(alternative => {
+            return alternative.get("isValidated");
+          });
+        })
+    });
+  }),
+  draftAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
+    return DS.PromiseArray.create({
+      promise:this.get("sortedAlternatives")
+        .then(alternatives => {
+          return alternatives.filter(alternative => {
+            return !alternative.get("isValidated");
+          });
+        })
+    });
+  }),
+  getNextAlternativeVersion() {
+    return this.get("alternatives")
+    .then(alternatives => {
+      return alternatives.reduce((current, alternative) => {
+        let version = alternative.get("alternativeVersion");
+        if (version > current) {
+          return version;
+        }
+        return current;
+      }, 0)+1;
+    });
+  },
   isTextBased:computed("type", function() {
     let type = this.get("type");
     return ["QROC","QROCM","QROCM-ind","QROCM-dep"].includes(type);
   }),
   supportsScoring:computed("type", function() {
-    return this.get("type") == "QROCM-dep";
+    return this.get("type") === "QROCM-dep";
   }),
   timerOn:computed("timer", {
     get() {
@@ -180,5 +251,12 @@ export default DS.Model.extend({
       }
       return value;
     }
+  }),
+  authorText:computed('author', function() {
+    let author = this.get('author');
+    if (author) {
+      return author.join(', ');
+    }
+    return '';
   })
 });

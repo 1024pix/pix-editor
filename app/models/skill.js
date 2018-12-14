@@ -4,14 +4,12 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   init() {
     this._super(...arguments);
-    this.challenges = [];
-    this.workbenchChallenges = [];
     this.tutoMore = [];
     this.tutoSolutions = [];
   },
-  name: DS.attr("string", { readOnly: true }),
+  name: DS.attr('string', {readonly:true}),
+  challenges:DS.hasMany('challenge'),
   competence: DS.attr(),
-  challengeIds: DS.attr(),
   clue:DS.attr(),
   clueStatus:DS.attr(),
   description:DS.attr(),
@@ -19,12 +17,7 @@ export default DS.Model.extend({
   tutoSolutionIds:DS.attr(),
   tutoMoreIds:DS.attr(),
   tubeId:DS.attr(),
-  template: null,
   level:DS.attr(),
-  status:DS.attr(),
-  workbenchCount:computed("workbenchChallenges", function() {
-    return this.get("workbenchChallenges").get('length');
-  }),
   descriptionCSS:computed("descriptionStatus" , function() {
     let status = this.get("descriptionStatus");
     if (!status) {
@@ -75,5 +68,76 @@ export default DS.Model.extend({
     } else {
       return 0;
     }
-  })
+  }),
+  templates:computed('challenges.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('challenges')
+        .then(challenges => {
+          return challenges.filter((challenge) => {
+            return challenge.get('isTemplate');
+          })
+        })
+    })
+  }),
+  sortedTemplates:computed('templates.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('templates')
+        .then(templates => {
+          return templates.sort((a, b) => {
+            return a.get("version")<b.get("version");
+          });
+        })
+    })
+  }),
+  productionTemplate:computed('templates.@each.isValidated', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('templates')
+      .then((templates) => {
+        return templates.find((template) => {
+          return template.get('isValidated');
+        });
+      })
+    });
+  }),
+  draftTemplates:computed('templates.@each.isValidated', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('templates')
+      .then((templates) => {
+        return templates.filter((template) => {
+          return !template.get('isValidated');
+        });
+      })
+    });
+  }),
+  alternatives:computed('challenges.[]', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('challenges')
+      .then((challenges) => {
+        return challenges.filter((challenge) => {
+          return !challenge.get('isTemplate');
+        });
+      })
+    });
+  }),
+  loaded:computed('challenges.[]', function() {
+    return this.get('challenges')
+    .then(() => {
+      return true;
+    });
+  }),
+  refresh() {
+    return this.hasMany('challenges').reload();
+  },
+  getNextVersion() {
+    return this.get("templates")
+    .then(templates => {
+      return templates.reduce((current, template) => {
+        let version = template.get("version");
+        if (version > current) {
+          return version;
+        }
+        return current;
+      }, 0)+1;
+    });
+  }
 });

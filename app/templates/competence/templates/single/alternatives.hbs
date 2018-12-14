@@ -1,0 +1,27 @@
+<div class="main-title  {{if config.lite "lite" ""}}">
+  <h1>
+  <div class="ui right floated menu">
+    {{#link-to "competence.templates.single" competence challenge class="ui icon item"}}<i class="icon window close"></i>{{/link-to}}
+  </div>
+      Déclinaisons de {{challenge.skillNames}}
+
+  </h1>
+</div>
+<div class="ui top attached borderless labelled icon menu {{listHidden}}">
+  <div class="ui top attached tabular menu">
+    <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>En production</div>
+    <div class="item draft {{if production "" "active"}}"  onclick={{action "switchDraft" true}}>Atelier</div>
+  </div>
+</div>
+<div class="ui attached segment competence {{size}} {{listHidden}}">
+  {{alternatives-list list=(if production challenge.productionAlternatives challenge.draftAlternatives) itemCount=(if production challenge.productionAlternatives.length challenge.draftAlternatives.length) competenceModel=competence challengeModel=challenge hidden=false}}
+</div>
+<div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
+  <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{challenge.draftAlternatives.length}}</span></div></div>
+  {{#if (and (not production) mayCreateAlternative)}}
+    <a class="right item" onclick={{action "newAlternative"}}>
+      <i class="plus square outline icon"></i> Nouvelle déclinaison
+    </a>
+  {{/if}}
+</div>
+{{outlet}}

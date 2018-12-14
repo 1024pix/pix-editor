@@ -24,12 +24,13 @@ export default ApplicationSerializer.extend({
     competence:"competences",
     skills:"Acquix",
     pixId:"Identifiant",
-    alternativeIndex:"Indice_aval",
     scoring:"Scoring",
     timer:"Timer",
     embedURL:"Embed URL",
     embedTitle:"Embed title",
-    embedHeight:"Embed height"
+    embedHeight:"Embed height",
+    version:"Version prototype",
+    alternativeVersion:"Version déclinaison"
   },
 
   payloadKeyFromModelName: function() {

@@ -1,0 +1,21 @@
+<div class="list-header">
+  <div class="list-row">
+    <div class="list-item version" onclick={{action "sortBy" "version" "int"}}>Version</div>
+    <div class="list-item instructions" onclick={{action "sortBy" "instructions" "string"}}>Consigne</div>
+    <div class="list-item authors" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
+    <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
+  </div>
+</div>
+<div class="list-body">
+  {{#ember-collection
+    items=list
+    cell-layout=(percentage-columns-layout itemCount columns 40) as |item index|
+  }}
+  {{#link-to "competence.templates.single" competenceModel item tagName="div" class="list-row"}}
+    <div class="list-item">{{item.version}}</div>
+    <div class="list-item">{{item.instructions}}</div>
+    <div class="list-item">{{item.author}}</div>
+    <div class="list-item {{item.statusCSS}}">{{item.status}}</div>
+  {{/link-to}}
+  {{/ember-collection}}
+</div>

@@ -22,6 +22,14 @@ module.exports = function(defaults) {
   // modules that you would like to import into your application
   // please specify an object with the list of modules as keys
   // along with the exports of each module as its value.
+  // TODO: remove this once outline icons are included in ember-semantic-ui
+  'eot,svg,ttf,woff,woff2'.split(',').forEach(type => {
+    ['brand', 'outline'].forEach(asset => {
+      app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/${asset}-icons.${type}`, {
+        destDir: 'assets/themes/default/assets/fonts'
+      });
+    });
+  });
 
   return app.toTree();
 };

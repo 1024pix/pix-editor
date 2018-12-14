@@ -1,8 +1,9 @@
-import AirtableAdapter from "ember-airtable/adapter";
+import DS from 'ember-data';
 import { inject as service } from '@ember/service';
 import {computed} from "@ember/object";
 
-export default AirtableAdapter.extend({
+export default DS.RESTAdapter.extend({
+  host: 'https://api.airtable.com',
   config:service(),
   headers:computed("config.airtableKey", function() {
     return {
@@ -49,7 +50,7 @@ export default AirtableAdapter.extend({
     return groups;
   },
   findMany (store, type, ids, snapshots) {
-    let recordsText = "OR(RECORD_ID() = '"+ids.join("',RECORD_ID() ='")+"')";
+    let recordsText = 'OR(' + ids.map(id => `RECORD_ID() = '${id}'`).join(",") + ')';
     let url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
     return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
   }
