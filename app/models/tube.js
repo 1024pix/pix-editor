@@ -6,7 +6,17 @@ export default DS.Model.extend({
   description: DS.attr(),
   competenceIds: DS.attr(),
   selectedLevel:false,
-  skills:DS.hasMany('skill'),
+  rawSkills:DS.hasMany('skill'),
+  skills:computed('rawSkills', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('rawSkills')
+        .then(skills => {
+          return skills.filter(skill => {
+            return skill.get('status') === 'actif';
+          });
+        })
+    });
+  }),
   skillCount:computed('skills', function() {
     return this.get('skills').length;
   }),

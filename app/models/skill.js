@@ -18,6 +18,7 @@ export default DS.Model.extend({
   tutoMoreIds:DS.attr(),
   tubeId:DS.attr(),
   level:DS.attr(),
+  status:DS.attr(),
   descriptionCSS:computed("descriptionStatus" , function() {
     let status = this.get("descriptionStatus");
     if (!status) {
