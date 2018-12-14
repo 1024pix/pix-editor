@@ -68,7 +68,7 @@ export default DS.Model.extend({
           })
         })
         .then(workbenchTube => {
-          return workbenchTube.get('skills');
+          return workbenchTube.get('rawSkills');
         })
         .then(workbenchSkills => {
           return workbenchSkills.get('firstObject');
