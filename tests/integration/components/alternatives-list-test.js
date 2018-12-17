@@ -12,15 +12,7 @@ module('Integration | Component | alternatives-list', function(hooks) {
 
     await render(hbs`{{alternatives-list}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.list-body').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#alternatives-list}}
-        template block text
-      {{/alternatives-list}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

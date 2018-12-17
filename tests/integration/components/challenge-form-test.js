@@ -10,17 +10,12 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{challenge-form}}`);
+    this.set('showIllustrationAction', function() {});
+    this.set('challengeData', {t1:false, t2:false, t3:false})
 
-    assert.equal(this.element.textContent.trim(), '');
+    await render(hbs`{{challenge-form showIllustration=(action showIllustrationAction) challenge=challengeData}}`);
 
-    // Template block usage:
-    await render(hbs`
-      {{#challenge-form}}
-        template block text
-      {{/challenge-form}}
-    `);
+    assert.dom('.ui.form').exists();
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

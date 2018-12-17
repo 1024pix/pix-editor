@@ -12,15 +12,7 @@ module('Integration | Component | templates-list', function(hooks) {
 
     await render(hbs`{{templates-list}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.list-body').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#templates-list}}
-        template block text
-      {{/templates-list}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

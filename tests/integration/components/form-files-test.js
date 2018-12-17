@@ -12,15 +12,7 @@ module('Integration | Component | form-files', function(hooks) {
 
     await render(hbs`{{form-files}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-files}}
-        template block text
-      {{/form-files}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

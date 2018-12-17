@@ -10,17 +10,9 @@ module('Integration | Component | form-mde.hbs', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{form-mde.hbs}}`);
+    await render(hbs`{{form-mde}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-mde.hbs}}
-        template block text
-      {{/form-mde.hbs}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

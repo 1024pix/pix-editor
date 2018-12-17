@@ -10,17 +10,12 @@ module('Integration | Component | note-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{note-form}}`);
+    this.set('closeAction', function() {});
+    this.set('editAction', function() {});
 
-    assert.equal(this.element.textContent.trim(), '');
+    await render(hbs`{{note-form close=(action closeAction) edit=(action editAction)}}`);
 
-    // Template block usage:
-    await render(hbs`
-      {{#note-form}}
-        template block text
-      {{/note-form}}
-    `);
+    assert.dom('.ui.content').exists();
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

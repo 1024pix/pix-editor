@@ -17,10 +17,14 @@ export default Service.extend({
     return localConfigCorrectlyLoaded && privateConfigDecrypted;
   },
   authors:computed("airtableKey", "configKey", "airtableEditorBase", function() {
-    try {
-      return this.get("store").query("author", {sort:[{field: "Nom", direction:"asc"}]});
-    }
-    catch (error) {
+    if (this.get("airtableKey") && this.get("airtableEditorBase")) {
+      try {
+        return this.get("store").query("author", {sort:[{field: "Nom", direction:"asc"}]});
+      }
+      catch (error) {
+        return [];
+      }
+    } else {
       return [];
     }
   }),

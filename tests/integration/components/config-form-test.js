@@ -12,15 +12,7 @@ module('Integration | Component | config-form', function(hooks) {
 
     await render(hbs`{{config-form}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.config-form').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#config-form}}
-        template block text
-      {{/config-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

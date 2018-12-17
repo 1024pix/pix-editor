@@ -12,15 +12,7 @@ module('Integration | Component | form-input', function(hooks) {
 
     await render(hbs`{{form-input}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-input}}
-        template block text
-      {{/form-input}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

@@ -9,18 +9,12 @@ module('Integration | Component | popin-changelog', function(hooks) {
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
+    this.set('closedAction', function() {});
+    this.set('denyAction', function() {});
 
-    await render(hbs`{{popin-changelog}}`);
+    await render(hbs`{{popin-changelog deny=(action denyAction) closed=(action closedAction)}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.popin-changelog').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#popin-changelog}}
-        template block text
-      {{/popin-changelog}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

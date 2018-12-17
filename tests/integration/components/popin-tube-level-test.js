@@ -10,17 +10,11 @@ module('Integration | Component | popin-tube-level', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{popin-tube-level}}`);
+    this.set('actionSet', function() {});
+    this.set('actionClosed', function() {});
+    await render(hbs`{{popin-tube-level closed=(action actionClosed) set=(action actionSet)}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.popin-tube-level').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#popin-tube-level}}
-        template block text
-      {{/popin-tube-level}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

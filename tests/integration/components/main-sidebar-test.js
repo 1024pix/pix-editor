@@ -10,17 +10,13 @@ module('Integration | Component | main-sidebar', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{main-sidebar}}`);
+    this.set('executeAction', function() {});
+    this.set('openConfigurationAction', function() {});
+
+    await render(hbs`{{main-sidebar execute=(action executeAction) openConfiguration=(action openConfigurationAction)}}`);
 
     assert.equal(this.element.textContent.trim(), '');
+    //assert.dom('#main-sidebar').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#main-sidebar}}
-        template block text
-      {{/main-sidebar}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

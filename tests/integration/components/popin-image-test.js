@@ -10,17 +10,11 @@ module('Integration | Component | popin-image', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{popin-image}}`);
+    this.set('closedAction', function() {});
 
-    assert.equal(this.element.textContent.trim(), '');
+    await render(hbs`{{popin-image closed=(action closedAction)}}`);
 
-    // Template block usage:
-    await render(hbs`
-      {{#popin-image}}
-        template block text
-      {{/popin-image}}
-    `);
+    assert.dom('.popin-image').exists();
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

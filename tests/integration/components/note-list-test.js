@@ -12,15 +12,7 @@ module('Integration | Component | note-list', function(hooks) {
 
     await render(hbs`{{note-list}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.list-body').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#note-list}}
-        template block text
-      {{/note-list}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

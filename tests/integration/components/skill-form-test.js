@@ -12,15 +12,7 @@ module('Integration | Component | skill-form', function(hooks) {
 
     await render(hbs`{{skill-form}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.ui.form').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#skill-form}}
-        template block text
-      {{/skill-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

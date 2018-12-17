@@ -12,15 +12,7 @@ module('Integration | Component | form-illustration', function(hooks) {
 
     await render(hbs`{{form-illustration}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-illustration}}
-        template block text
-      {{/form-illustration}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

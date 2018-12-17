@@ -12,15 +12,7 @@ module('Integration | Component | form-textarea', function(hooks) {
 
     await render(hbs`{{form-textarea}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-textarea}}
-        template block text
-      {{/form-textarea}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

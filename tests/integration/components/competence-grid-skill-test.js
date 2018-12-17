@@ -10,17 +10,9 @@ module('Integration | Component | competence-grid-skill', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{competence-grid-skill}}`);
+    await render(hbs`{{competence-grid-skill skillMode=true}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.skill-name').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#competence-grid-skill}}
-        template block text
-      {{/competence-grid-skill}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

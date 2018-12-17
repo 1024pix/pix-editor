@@ -12,15 +12,7 @@ module('Integration | Component | form-select', function(hooks) {
 
     await render(hbs`{{form-select}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.field').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#form-select}}
-        template block text
-      {{/form-select}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

@@ -12,15 +12,7 @@ module('Integration | Component | competence-grid', function(hooks) {
 
     await render(hbs`{{competence-grid}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.ui.celled.table').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#competence-grid}}
-        template block text
-      {{/competence-grid}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
