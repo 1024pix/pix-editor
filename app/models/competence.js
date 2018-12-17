@@ -42,7 +42,7 @@ export default DS.Model.extend({
   tubeCount:computed('tubes', function() {
     return this.get('tubes').length;
   }),
-  skillCount:computed('tubes.[]', function() {
+  skillCount:computed('tubes.@each.skillCount', function() {
     return DS.PromiseObject.create({
       promise:this.get('tubes')
         .then(tubes => {
