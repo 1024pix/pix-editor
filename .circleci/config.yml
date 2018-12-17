@@ -52,13 +52,13 @@ workflows:
   build_test_and_deploy:
     jobs:
       - build
-      #- test:
-      #    requires:
-      #      - build
+      - test:
+          requires:
+            - build
       - deploy_to_ghpages:
           requires:
             - build
-          #  - test
+            - test
           filters:
             branches:
               only: master
