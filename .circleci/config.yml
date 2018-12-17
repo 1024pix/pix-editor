@@ -58,7 +58,7 @@ workflows:
       - deploy_to_ghpages:
           requires:
             - build
-            - test
+          #  - test
           filters:
             branches:
               only: master
