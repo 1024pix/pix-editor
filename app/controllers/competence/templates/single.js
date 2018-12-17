@@ -25,10 +25,10 @@ export default Controller.extend({
   pixConnector:service(),
   copyZoneId:"copyZone",
   mayUpdateCache:alias("pixConnector.connected"),
-  challengeTitle:computed("creation","challenge", function() {
+  challengeTitle:computed("creation","challenge", "challenge.isWorkbench.content", function() {
     if (this.get("creation")) {
       return "Nouveau prototype";
-    } else if (this.get('challenge.isWorkbench')) {
+    } else if (this.get('challenge.isWorkbench.content')) {
       return '';
     } else {
       return this.get("challenge.skillNames");
@@ -46,7 +46,7 @@ export default Controller.extend({
   mayAccessAirtable:computed("config.access", function() {
     return this.get("access").mayAccessAirtable();
   }),
-  mayValidate:computed("config.access", "challenge", "challenge.status", function() {
+  mayValidate:computed("config.access", "challenge", "challenge.{status,isWorkbench.content}", function() {
     return this.get("access").mayValidate(this.get("challenge"));
   }),
   mayArchive:computed("config.access", "challenge", "challenge.status", function() {
@@ -209,9 +209,12 @@ export default Controller.extend({
       let parentController = this.get("parentController");
       if (!this.get("challenge.isValidated")) {
         parentController.send("switchDraft", false);
-        if (this.get('challenge.isWorkbench')) {
-          parentController.send("setListView");
-        }
+        return this.get('challenge.isWorkbench')
+        .then(workbench => {
+          if (workbench) {
+            parentController.send("setListView");
+          }
+        });
       } else {
         parentController.send("switchProduction", false);
       }

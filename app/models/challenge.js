@@ -35,13 +35,15 @@ export default DS.Model.extend({
     return (this.get("genealogy") === "Prototype 1");
   }),
   isWorkbench:computed('skills', function() {
-    return this.get('skills')
-    .then(skills => {
-      const skill = skills.get('firstObject');
-      if (skill) {
-        return skill.get('name') === '@workbench';
-      }
-      return false;
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+        .then(skills => {
+          const skill = skills.get('firstObject');
+          if (skill) {
+            return skill.get('name') === '@workbench';
+          }
+          return false;
+        })
     });
   }),
   isValidated:computed("status", function(){
