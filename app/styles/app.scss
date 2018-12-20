@@ -955,6 +955,16 @@ img.clickable {
         .tube-name {
           display:none;
         }
+
+        svg {
+          stroke:black;
+          stroke-width:1;
+          fill:#dddddd;
+
+          &.selected-level {
+            fill:#88ff22;
+          }
+        }
       }
     }
 
