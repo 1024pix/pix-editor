@@ -1,6 +1,8 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
+import $ from "jquery";
+
 
 export default Controller.extend({
   displayTubeLevel:false,
@@ -19,9 +21,10 @@ export default Controller.extend({
       this.set('selectedTube',tube);
       this.set('selectedTubeLevel',tube.get("selectedLevel"));
       this.set('selectedTubeSkills', tube.get("selectedSkills"));
-      this.set('displayTubeLevel', true);
+      $('.popin-tube-level').modal('show');
     },
     tubeLevelHidden() {
+      $('.popin-tube-level').modal('hide');
       this.set('displayTubeLevel', false);
     },
     setProfileTube(tube, level, skills) {

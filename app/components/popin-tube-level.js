@@ -1,18 +1,9 @@
 import Component from '@ember/component';
-import { observer, computed } from '@ember/object';
-import { inject as service } from "@ember/service";
+import { computed } from '@ember/object';
 import DS from 'ember-data';
-import $ from "jquery";
 
 export default Component.extend({
   tube:null,
-  paginatedQuery:service(),
-  // eslint-disable-next-line ember/no-observers
-  displayManager:observer("display", function() {
-    if (this.get("display")) {
-      $(".popin-tube-level").modal('show');
-    }
-  }),
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
     if (tube) {
@@ -46,11 +37,11 @@ export default Component.extend({
         return ids;
       }, []);
       this.get("set")(this.get("tube"), level, skillIds);
-      $(".popin-tube-level").modal('hide');
+      this.get("closed")();
     },
     unset() {
       this.get("unset")(this.get("tube"));
-      $(".popin-tube-level").modal('hide');
+      this.get("closed")();
     }
   }
 
