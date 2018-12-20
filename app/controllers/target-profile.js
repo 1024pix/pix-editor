@@ -5,7 +5,6 @@ import $ from "jquery";
 
 
 export default Controller.extend({
-  displayTubeLevel:false,
   selectedTube:null,
   selectedTubeLevel:false,
   fileSaver: service('file-saver'),
