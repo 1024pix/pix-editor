@@ -89,7 +89,7 @@ export default DS.Model.extend({
     });
   }),
   refresh() {
-    return this.hasMany('tubes').reload()
+    return this.hasMany('rawTubes').reload()
     .then(tubes => {
       let refreshTubes = tubes.reduce((promises, tube) => {
         promises.push(tube.refresh());

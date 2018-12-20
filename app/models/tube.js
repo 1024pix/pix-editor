@@ -54,7 +54,7 @@ export default DS.Model.extend({
     });
   }),
   refresh() {
-    return this.hasMany('skills').reload()
+    return this.hasMany('rawSkills').reload()
     .then(skills => {
       let refreshSkills = skills.reduce((promises, skill) => {
         promises.push(skill.refresh());
