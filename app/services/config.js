@@ -6,35 +6,41 @@ import {inject as service} from '@ember/service';
 
 export default Service.extend({
   store:service(),
+  loaded:false,
+  author:"",
   init() {
     this._super(...arguments);
     this.localConfigKeys = ["airtableKey", "configKey", "author", "access"];
     this.localConfigKeysOptional = ["pixUser", "pixPassword"];
+    this._load();
   },
-  check() {
-    let localConfigCorrectlyLoaded = this.load();
-    let privateConfigDecrypted = this.decrypt();
-    return localConfigCorrectlyLoaded && privateConfigDecrypted;
-  },
-  authors:computed("airtableKey", "configKey", "airtableEditorBase", function() {
+  decrypted:computed("configKey", function() {
+    return this._decrypt();
+  }),
+  check:computed("decrypted", function() {
+    return this.loaded && this.get("decrypted");
+  }),
+  authors:computed("airtableKey", "decrypted", "airtableEditorBase", function() {
     if (this.get("airtableKey") && this.get("airtableEditorBase")) {
       try {
         return this.get("store").query("author", {sort:[{field: "Nom", direction:"asc"}]});
       }
-      catch (error) {
-        return [];
+      catch(e) {
+        return Promise.resolve([]);
       }
-    } else {
-      return [];
     }
+    return Promise.resolve([]);
   }),
   authorNames:computed("authors", function() {
-    return this.get("authors").reduce((current, value) => {
-      current.push(value.get("name"));
-      return current;
-    }, []);
+    return this.get("authors").
+      then(authors => {
+        return authors.reduce((current, value) => {
+          current.push(value.get("name"));
+            return current;
+        }, []);
+      });
   }),
-  load() {
+  _load() {
     try {
       let localConfig = localStorage.getItem("pix-config");
       if (localConfig) {
@@ -61,11 +67,11 @@ export default Service.extend({
     }
     catch (error) {
       console.error(error);
-      return false;
+      this.set("loaded", false);
     }
-    return true;
+    this.set("loaded", true);
   },
-  decrypt() {
+  _decrypt() {
     try {
       let key = this.get("configKey");
       let value = CryptoJS.AES.decrypt(configPrivate.encrypted, key);

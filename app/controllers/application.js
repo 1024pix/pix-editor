@@ -51,13 +51,13 @@ export default Controller.extend({
       this.set("loadingMessage", "");
     },
     openConfiguration() {
-      this.set("displayConfig", true);
+      $('.config-form').modal('show');
     },
     configUpdated() {
       this.send("refresh");
     },
     configHidden() {
-      this.set("displayConfig", false);
+      $('.config-form').modal('hide');
     },
     showPopinImage(src) {
       this.set("popinImageSrc", src);

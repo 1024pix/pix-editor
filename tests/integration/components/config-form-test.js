@@ -10,7 +10,7 @@ module('Integration | Component | config-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{config-form}}`);
+    await render(hbs`{{config-form class='config-form'}}`);
 
     assert.dom('.config-form').exists();
 

@@ -1,4 +1,4 @@
-{{#ui-modal name="profile" class="config-form" context=".application" onApprove=(action "saveConfig") onHidden=(action "closed")}}
+{{#ui-modal name="profile" class=class onApprove=(action "saveConfig") onHidden=(action "closed") context=".application" detachable=false}}
   <div class="header">
     Configuration
   </div>
@@ -8,29 +8,31 @@
         <div class="field">
           <label>Clé airtable</label>
           <div class="ui input">
-            {{input value=airtableKey}}
+            {{input value=(mut airtableKey)}}
           </div>
         </div>
         <div class="field">
           <label>Clé config</label>
           <div class="ui input">
-            {{input value=configKey}}
+            {{input value=(mut configKey)}}
           </div>
         </div>
-        <div class="field">
-          <label>Auteur</label>
-            {{#ui-dropdown class="selection" selected=author onChange=(action (mut author)) as |execute mapper|}}
+        {{#if authors.length}}
+          <div class="field">
+            <label>Auteur</label>
+            {{#ui-dropdown class="author-selection search selection" selected=author onChange=(action (mut author))}}
               <div class="default text">Sélectionnez votre trigramme</div>
               <i class="dropdown icon"></i>
               <div class="menu">
                 {{#each authors as |option|}}
-                  <div data-value={{map-value mapper option.name}} class="item">
+                  <div data-value={{option.name}} class="item">
                     {{option.name}}
                   </div>
                 {{/each}}
               </div>
             {{/ui-dropdown}}
-        </div>
+          </div>
+        {{/if}}
         <h4 class="ui dividing header">Paramètres optionnels</h4>
         {{#ui-accordion class="field"}}
           <div class="title">

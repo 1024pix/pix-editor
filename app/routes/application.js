@@ -7,7 +7,7 @@ export default Route.extend({
   config:service(),
   pixConnector:service(),
   beforeModel() {
-    if (this.get("config").check()) {
+    if (this.get("config.check")) {
       this.set("configured", true);
     } else {
       this.set("configured", false);

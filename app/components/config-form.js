@@ -1,63 +1,93 @@
 import Component from '@ember/component';
-import $ from "jquery";
-import { observer } from '@ember/object';
+import { computed } from '@ember/object';
 import {inject as service} from '@ember/service';
-import { alias } from "@ember/object/computed";
+import DS from "ember-data";
 
 export default Component.extend({
+  tagName:"",
   config:service(),
   access:service(),
-  airtableKey:"",
-  configKey:"",
-  author:"",
-  pixUser:"",
-  pixPassword:"",
   saved:false,
-  authors:alias("config.authors"),
-  // eslint-disable-next-line ember/no-observers
-  displayManager:observer("display", function() {
-    if (this.get("display")) {
-      $(".config-form").modal('show');
-      let config = this.get("config");
-      config.load();
-      this.set("airtableKey", config.get("airtableKey"));
-      this.set("configKey", config.get("configKey"));
-      this.set("author", config.get("author"));
-      this.set("pixUser", config.get("pixUser"));
-      this.set("pixPassword", config.get("pixPassword"));
-      this.set("saved", false);
+  newAuthor:null,
+  init() {
+    this._super();
+    this.oldValues = {};
+  },
+  _setValue(key, value) {
+    if (this.oldValues[key] == null) {
+      this.oldValues[key] = this.get("config."+key);
+    }
+    this.set("config."+key, value);
+    return value;
+  },
+  _restoreValue(key) {
+    if (this.oldValues[key] != null) {
+      this.set(key, this.oldValues[key]);
+    }
+  },
+  airtableKey:computed("config.airtableKey", {
+    get() {
+      return this.get("config.airtableKey");
+    },
+    set(key, value) {
+      return this._setValue("airtableKey", value);
     }
   }),
-  // eslint-disable-next-line ember/no-observers
-  authorsUpdate:observer("airtableKey", "configKey", function() {
-    if (this.get("airtableKey") && this.get("configKey")) {
-      let config = this.get("config");
-      config.set("airtableKey", this.get("airtableKey"));
-      config.set("configKey", this.get("configKey"));
-      config.check();
+  configKey:computed("config.configKey", {
+    get() {
+      return this.get("config.configKey");
+    },
+    set(key, value) {
+      return this._setValue("configKey", value);
+    }
+  }),
+  author:computed("config.author", {
+    get() {
+      return this.get("config.author");
+    },
+    set(key, value) {
+      return this._setValue("author", value);
+    }
+  }),
+  pixUser:computed("config.pixUser", {
+    get() {
+      return this.get("config.pixUser");
+    },
+    set(key, value) {
+      return this._setValue("pixUser", value);
+    }
+  }),
+  pixPassword:computed("config.pixPassword", {
+    get() {
+      return this.get("config.pixPassword");
+    },
+    set(key, value) {
+      return this._setValue("pixPassword", value);
+    }
+  }),
+  authors:computed("config.{decrypted,authors}", function() {
+    if (this.get("config.decrypted")) {
+      return DS.PromiseArray.create({
+        promise:this.get("config.authors")
+      })
+    } else {
+      return [];
     }
   }),
   actions:{
     saveConfig() {
       let config = this.get("config");
-      config.set("airtableKey", this.get("airtableKey"));
-      config.set("configKey", this.get("configKey"));
       let author = this.get("author");
       let access = this.get("access");
       let accessLevel = access.get("readOnly");
-      config.set("author", author);
       this.get("authors").then(authors => {
         let authorRecord = authors.find((value) => {
           return value.get("name") === author;
         });
         if (authorRecord) {
-          console.log(authorRecord.get("access"));
           accessLevel = access.getLevel(authorRecord.get("access"));
         }
-        console.log(accessLevel);
         config.set("access", accessLevel);
-        config.set("pixUser", this.get("pixUser"));
-        config.set("pixPassword", this.get("pixPassword"));
         config.save();
         this.set("saved", true);
       });
@@ -65,7 +95,14 @@ export default Component.extend({
     closed() {
       if (this.get("saved")) {
         this.get("update")();
+      } else {
+        this._restoreValue("airtableKey");
+        this._restoreValue("configKey");
+        this._restoreValue("author");
+        this._restoreValue("pixUser");
+        this._restoreValue("pixPassword");
       }
+      this.oldValues = {};
       this.get("closed")();
     }
   }
