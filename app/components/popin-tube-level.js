@@ -3,6 +3,7 @@ import { computed } from '@ember/object';
 import DS from 'ember-data';
 
 export default Component.extend({
+  tagName:"",
   tube:null,
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
