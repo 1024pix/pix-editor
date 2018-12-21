@@ -26,8 +26,8 @@ export default DS.Model.extend({
         })
     });
   }),
-  loaded:computed('tubes.[]', function() {
-    return this.get('tubes')
+  loaded:computed('rawTubes.[]', function() {
+    return this.get('rawTubes')
     .then(tubes => {
       let waitForTubes = tubes.reduce((promises, tube) => {
         promises.push(tube.get('loaded'));
@@ -84,7 +84,7 @@ export default DS.Model.extend({
         .then(templates => {
           return templates.filter(template => {
             return !template.get('isArchived');
-          })
+          });
         })
     });
   }),
