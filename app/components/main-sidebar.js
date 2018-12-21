@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import ENV from "pixeditor/config/environment";
 import {inject as service} from "@ember/service";
-import {computed} from "@ember/object";
+import {alias} from "@ember/object/computed";
 
 export default Component.extend({
   tagName:"",
@@ -23,12 +23,8 @@ export default Component.extend({
     };
 
   },
-  searching:computed("searchResults.isPending", function() {
-    return (this.get("searchResults.isPending"));
-  }),
-  author:computed("config.author",function() {
-    return this.get("config").get("author");
-  }),
+  searching:alias("searchResults.isPending"),
+  author:alias("config.author"),
   getSearchResults(settings, callback) {
     let query = settings.urlData.query;
     if (query.substr(0,1) === "@") {
