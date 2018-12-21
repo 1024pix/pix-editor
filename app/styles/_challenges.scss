@@ -1,0 +1,277 @@
+.alternative {
+  color:rgba(0, 0, 0, 0.87);
+  font-size:12px;
+  .production {
+    color:$production-alternative-color;
+  }
+  .draft {
+    color:$draft-alternative-color;
+  }
+  .not-declinable {
+    font-weight:bold;
+  }
+}
+
+
+.challenge,
+.skill-details {
+  flex:1 1 0;
+  overflow:hidden;
+  display:flex;
+  flex-direction:row;
+  .ui.labeled.icon.menu .item {
+    text-align:left;
+    > .icon:not(.dropdown) {
+      display:inline;
+      margin-right:10px !important;
+    }
+  }
+
+  label .ui.icon.right {
+    border:none;
+    box-shadow:none;
+  }
+
+  .ui.cards > .card {
+
+    .header .ui.button > .icon {
+      margin-right:0;
+    }
+
+    > .content,
+    > .content > .header {
+      font-size:14px;
+    }
+  }
+}
+
+img.clickable {
+  max-height:80px;
+  max-width:400px;
+  cursor:pointer;
+}
+
+.modal img {
+  max-height:500px;
+  margin:auto;
+}
+
+
+%challenge-header {
+  border-top:1px solid rgba(34, 36, 38, 0.15);
+  border-bottom:1px solid rgba(34, 36, 38, 0.15);
+  .creation {
+    font-style:italic;
+  }
+
+  .ui.menu .ui.dropdown {
+    i {
+      font-size:14px;
+    }
+
+    .menu > .item {
+
+      font-size:16px !important;
+
+      &.validate{
+        color:$production-color !important;
+        background-color:$production-background-color !important;
+      }
+      &.archive{
+        color:$archived-color !important;
+        background-color:$archived-background-color !important;
+      }
+    }
+  }
+
+  .ui.menu {
+    border-radius:0;
+    border:none;
+    box-shadow:none;
+    background:transparent;
+    color:inherit;
+
+    .item {
+      color:inherit;
+      &.header {
+        padding-top:10px;
+        padding-bottom:10px;
+        flex:1;
+        justify-content:center;
+        font-size:20px;
+        font-weight:normal;
+      }
+    }
+
+    > .item:first-child {
+      border-radius:0;
+    }
+
+    .item::before {
+      display:none;
+    }
+  }
+
+  &.suggested {
+    background-color:$suggested-background-color !important;
+    color:$suggested-color;
+  }
+  &.prevalidated {
+    background-color:$prevalidated-background-color !important;
+    color:$prevalidated-color;
+  }
+  &.validated_no_test {
+    background-color:$validated-no-test-background-color !important;
+    color:$validated-no-test-color;
+  }
+  &.validated {
+    background-color:$validated-background-color !important;
+    color:$validated-color;
+  }
+  &.archived {
+    background-color:$archived-background-color !important;
+    color:$archived-color;
+  }
+  &.to-be-submitted {
+    background-color:$to-be-submitted-background-color !important;
+    color:$to-be-submitted-color;
+  }
+  &.need-work {
+    background-color:$need-work-background-color !important;
+    color:$need-work-color;
+  }
+}
+
+%challenge-data {
+  padding:10px 20px;
+  box-sizing:border-box;
+  flex:1;
+  overflow:scroll;
+  .ui.form {
+    margin-bottom:20px;
+
+    .label-input {
+      width:70px;
+      padding:9px 5px;
+      text-align:left;
+    }
+
+    .disabled.field {
+      pointer-events:auto;
+      opacity:1;
+      > label {
+        opacity:1;
+      }
+    }
+
+    .mde-preview {
+      border-radius:0.28571429rem;
+      border:1px solid rgba(34, 36, 38, 0.15);
+      padding:0.78571429em 1em;
+      height:95px;
+      overflow:scroll;
+      background-color:#f9f9f9;
+    }
+
+    .field.disabled {
+      textarea,
+      input[type="text"],
+      .selection {
+        background-color:#f9f9f9;
+      }
+    }
+
+    .field.textArea.maximized{
+      background-color:#ffffff;
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index:100;
+      margin-bottom:0;
+
+      .field {
+        height:100%;
+        display:flex;
+        flex-direction:column;
+        align-items:strech;
+        margin:10px;
+
+        label {
+          margin-top:5px;
+        }
+
+        textarea {
+          display:block;
+          flex-grow:1;
+          margin-bottom:20px;
+        }
+
+      }
+
+    }
+  }
+}
+
+%challenge-menu {
+  border:none;
+  box-shadow:none;
+  margin-top:0;
+  border-left:1px solid rgba(34, 36, 38, 0.15);
+
+  div.item::before {
+    display:none;
+  }
+
+  .item {
+
+    &.alternatives {
+      color:#2185d0;
+    }
+  }
+}
+
+.ui.menu.challenge-menu {
+  @extend %challenge-menu;
+}
+
+.challenge-header {
+  @extend %challenge-header;
+}
+
+.challenge-data {
+  @extend %challenge-data;
+}
+
+#copyZone {
+  position:absolute;
+  color:#ffffff;
+  background:transparent;
+  right:0;
+  bottom:0;
+  border:none;
+  outline:none;
+}
+
+.template-list,
+.alternative-list {
+  @extend %list;
+}
+
+.file-remove {
+  cursor:pointer;
+}
+
+.file-remove i {
+  vertical-align:top
+}
+
+.ui.form .field > label.file-upload {
+  margin-top:5px;
+}
+
+.ui.icon.menu .item.important-action,
+.ui.icon.menu .item.important-action:hover{
+  color:#d02181;
+}

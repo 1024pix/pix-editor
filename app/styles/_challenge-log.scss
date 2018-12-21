@@ -1,0 +1,98 @@
+.challenge-log {
+  .tab.segment {
+    min-height:400px;
+    max-height:400px;
+    padding:0;
+      &.ui.bottom.attached:last-child {
+        margin-bottom:1rem;
+      }
+
+    &.active {
+      display:flex;
+      flex-direction:column;
+    }
+  }
+
+
+  .own-note-list,
+  .changelog-entry-list,
+  .note-list {
+    flex:1;
+
+    .list-row .list-item {
+      &:first-child {
+        border-left:none;
+      }
+    }
+  }
+
+  .note-list {
+    .list-row .list-item {
+      &:first-child,
+      &:nth-child(2),
+      &:nth-child(4) {
+        width:15%;
+      }
+
+      &:nth-child(3) {
+        width:55%;
+      }
+    }
+  }
+
+  .own-note-list {
+    .list-row .list-item {
+      &:first-child,
+      &:nth-child(3) {
+        width:20%;
+      }
+
+      &:nth-child(2) {
+        width:60%;
+      }
+    }
+  }
+
+  .changelog-entry-list {
+    .list-row .list-item {
+      &:first-child {
+        border-left:none;
+      }
+
+      &:first-child,
+      &:nth-child(2) {
+        width:20%;
+      }
+
+      &:nth-child(3) {
+        width:60%;
+      }
+    }
+  }
+
+  .ui.menu.note-menu {
+    justify-content:center;
+
+    .item {
+      color:#2185d0;
+    }
+
+  }
+
+  .ui.form {
+    .field.disabled, .field.disabled label {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .field.disabled textarea, .field.disabled .selection {
+      background-color:#f9f9f9;
+    }
+  }
+}
+
+.own-note-list,
+.changelog-entry-list,
+.note-list {
+  @extend %list;
+}

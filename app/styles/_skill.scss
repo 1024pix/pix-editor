@@ -1,0 +1,29 @@
+.main-title {
+  .skill-mode {
+    float:right;
+    margin-top:2px;
+    font-weight:normal;
+    font-size:14px;
+    color:rgba(255,255,255,0.5);
+
+    &.active {
+      color:#ffffff;
+    }
+
+    .checkbox {
+      margin-left:10px;
+    }
+  }
+}
+
+.skill-header {
+  @extend %challenge-header;
+}
+
+.skill-data {
+  @extend %challenge-data;
+}
+
+.ui.menu.skill-menu {
+  @extend %challenge-menu;
+}
