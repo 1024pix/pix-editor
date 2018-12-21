@@ -12,7 +12,7 @@ module('Integration | Component | popin-tube-level', function(hooks) {
 
     this.set('actionSet', function() {});
     this.set('actionClosed', function() {});
-    await render(hbs`{{popin-tube-level closed=(action actionClosed) set=(action actionSet)}}`);
+    await render(hbs`{{popin-tube-level closed=(action actionClosed) set=(action actionSet) class='popin-tube-level'}}`);
 
     assert.dom('.popin-tube-level').exists();
 
