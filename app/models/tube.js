@@ -12,7 +12,7 @@ export default DS.Model.extend({
       promise:this.get('rawSkills')
         .then(skills => {
           return skills.filter(skill => {
-            return skill.get('status') === 'actif';
+            return skill.get('status') !== 'périmé';
           });
         })
     });
