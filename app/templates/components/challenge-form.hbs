@@ -32,7 +32,9 @@
 {{#if (not alternative)}}
   {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
 {{/if}}
+{{#if authors.isFulfilled}}
   {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
+{{/if}}
 {{#if (not alternative)}}
   {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
 {{/if}}
