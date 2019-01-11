@@ -1,5 +1,5 @@
 import Controller from "@ember/controller";
-import {computed, observer} from "@ember/object";
+import {computed } from "@ember/object";
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
 import { alias } from "@ember/object/computed";
@@ -38,32 +38,6 @@ export default Controller.extend({
   }),
   competenceHidden:computed("childComponentMaximized", function() {
     return this.get("childComponentMaximized")?"hidden":"";
-  }),
-  // eslint-disable-next-line ember/no-observers
-  childComponentAdapter:observer("skillMode", function() {
-    // TODO: replace observer by computed
-    let skillMode = this.get("skillMode");
-    let currentRoute = this.get("router.currentRouteName");
-    if (skillMode) {
-      this.set("listView", false);
-    }
-    if (skillMode && currentRoute.startsWith("competence.templates.single")) {
-      let challenge = this.get("challengeController").get("challenge");
-      let skills = challenge.get("skills");
-      if (skills.length>0) {
-        this.transitionToRoute("competence.skill", this.get("competence"), skills[0]);
-      } else {
-        this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-      }
-    } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
-      let skill = this.get("skillController").get("skill");
-      let template = skill.get("template");
-      if (template) {
-        this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-      } else {
-        this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-      }
-    }
   }),
   size:computed("router.currentRouteName", function() {
     if (this.get("router.currentRouteName") == 'competence.index') {
@@ -144,6 +118,47 @@ export default Controller.extend({
     switchDraft(closeChild) {
       this.set("production", false);
       if (closeChild) {
+        this.send("closeChildComponent");
+      }
+    },
+    changeMode() {
+      let skillMode = !this.get("skillMode");
+      this.set('skillMode', skillMode);
+      let currentRoute = this.get("router.currentRouteName");
+      if (skillMode) {
+        this.set("listView", false);
+      }
+      if (skillMode && currentRoute.startsWith("competence.templates.single")) {
+        let challenge = this.get("challengeController").get("challenge");
+        return challenge.get('isWorkbench')
+        .then(workbench => {
+          if (workbench) {
+            this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+            this.send("closeChildComponent");
+          } else {
+            return challenge.get('skills')
+            .then(skills => {
+              if (skills.length>0) {
+                this.transitionToRoute("competence.skill", this.get("competence"), skills.get('firstObject'));
+              } else {
+                this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+                this.send("closeChildComponent");
+              }
+            });
+          }
+        });
+      } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
+        let skill = this.get("skillController").get("skill");
+        return skill.get('productionTemplate')
+        .then(template => {
+          if (template) {
+            this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+          } else {
+            this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+            this.send("closeChildComponent");
+          }
+        });
+      } else {
         this.send("closeChildComponent");
       }
     }

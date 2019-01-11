@@ -1,6 +1,6 @@
 <div class="main-left">
   <div class="main-title {{if config.lite "lite" ""}}">
-    <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action (mut skillMode))}}</div>
+    <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action "changeMode")}}</div>
   </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
