@@ -13,7 +13,7 @@ export default Component.extend({
     add(file) {
       let value = this.get("value");
       let list = value?value.slice():[];
-      list.push({file:file, url:"", filename:file.get("name")});
+      list.unshift({file:file, url:"", filename:file.get("name")});
       this.set("value", list);
     }
   }

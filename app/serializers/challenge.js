@@ -48,6 +48,9 @@ export default ApplicationSerializer.extend({
         }
       }
     });
+    if (attributes["attachments"]) {
+      attributes["attachments"] = attributes["attachments"].reverse();
+    }
     return attributes;
   },
   serializeAttribute(snapshot, json, key) {
@@ -58,6 +61,12 @@ export default ApplicationSerializer.extend({
         json[payloadKey] = "Activé";
       } else {
         json[payloadKey] = "Désactivé";
+      }
+    } else if (key === "attachements"){
+      let payloadKey =  this._getMappedKey(key, snapshot.type);
+      let value = snapshot.attr(key);
+      if (value) {
+        json[payloadKey] = value.reverse();
       }
     } else {
       return this._super(...arguments);
