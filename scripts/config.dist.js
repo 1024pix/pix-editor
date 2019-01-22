@@ -1,6 +1,5 @@
 module.exports = {
   airtableBase:"BASE",
-  airtableWorkbenchBase:"BASE",
   airtableEditorBase:"BASE",
   airtableUrl:"URL",
   tableChallenges:"TABLE",
@@ -12,8 +11,5 @@ module.exports = {
   storagePassword:"PASSWORD",
   storageKey:"KEY",
   storageAuth:"URL",
-  pixStaging:"URL",
-  pixWorkbench:"URL",
-  pixWorkbenchUser:"user",
-  pixWorkbenchPassword:"password"
+  pixStaging:"URL"
 };
