@@ -17,6 +17,12 @@ export default Service.extend({
   mayCreateTemplate() {
     return this.isEditor();
   },
+  mayCreateTube() {
+    return this.isEditor();
+  },
+  mayEditTube() {
+    return this.isEditor();
+  },
   mayCreateAlternative() {
     return this.isReplicator();
   },

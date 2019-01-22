@@ -36,6 +36,9 @@ export default Controller.extend({
   mayCreateTemplate:computed("config.access", function() {
     return this.get("access").mayCreateTemplate();
   }),
+  mayCreateTube:computed("config.access", function() {
+    return this.get("access").mayCreateTube();
+  }),
   competenceHidden:computed("childComponentMaximized", function() {
     return this.get("childComponentMaximized")?"hidden":"";
   }),
@@ -99,7 +102,7 @@ export default Controller.extend({
     copyChallenge(challenge) {
       this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { from: challenge.get("id")}});
     },
-    soon() {
+    newTube() {
       this.get("application").send("showMessage", "Bientôt disponible...", true);
     },
     showAlternatives(challenge) {

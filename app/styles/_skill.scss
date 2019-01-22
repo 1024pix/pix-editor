@@ -37,3 +37,7 @@
 .ui.menu.skill-menu {
   @extend %challenge-menu;
 }
+
+.skill-details {
+  @extend .challenge;
+}

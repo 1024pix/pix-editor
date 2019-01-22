@@ -1,0 +1,43 @@
+<div class="tube-header">
+  <div class="ui menu">
+    <div class="item header">{{tube.name}}</div>
+    <div class="ui right menu">
+      {{#if maximized}}
+        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
+      {{else}}
+        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
+      {{/if}}
+      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+    </div>
+  </div>
+</div>
+<div class="tube-details">
+  <div class="tube-data">
+    {{tube-form tube=tube edition=edition}}
+  </div>
+  <div class="ui vertical compact labeled icon menu tube-menu">
+    {{#if edition}}
+      <a class="item important-action" onclick={{action "save"}}>
+        <i class="save icon"></i>
+        Enregistrer
+      </a>
+      <a class="item" onclick={{action "cancelEdit"}}>
+        <i class="ban icon"></i>
+        Annuler
+      </a>
+    {{else}}
+      {{#if mayEdit}}
+        <a class="item" onclick={{action "edit"}}>
+          <i class="edit icon"></i>
+          Modifier
+        </a>
+      {{/if}}
+      {{#if mayAccessAirtable}}
+        <a class="item" onclick={{action "openAirtable"}}>
+          <i class="table icon"></i>
+          Airtable
+        </a>
+      {{/if}}
+    {{/if}}
+  </div>
+</div>

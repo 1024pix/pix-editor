@@ -4,7 +4,7 @@ module.exports = {
   airtableUrl:"URL",
   tableChallenges:"TABLE",
   tableSkills:"TABLE",
-  tableWorkbench:"TABLE",
+  tableTubes:"TABLE",
   storagePost:"URL",
   storageTenant:"ID",
   storageUser:"USER",

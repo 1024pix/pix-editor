@@ -19,6 +19,10 @@ Router.map(function() {
       })
       this.route('list', {path:'/list/:skill_id'});
     });
+    this.route('tube', {path:'/tube'}, function() {
+      this.route('index', {path:'/:tube_id'});
+      this.route('new');
+    });
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});

@@ -5,9 +5,9 @@
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}
-      {{#if skillMode}}
-        <a class="left item" onclick={{action "soon"}}>
-          <i class="plus square outline icon"></i> Nouvel acquis
+      {{#if (and skillMode mayCreateTube)}}
+        <a class="left item" onclick={{action "newTube"}}>
+          <i class="plus square outline icon"></i> Nouveau tube
         </a>
       {{else}}
       <div class="ui top attached tabular menu">
