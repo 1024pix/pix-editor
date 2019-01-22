@@ -57,7 +57,7 @@ img.clickable {
 }
 
 
-%challenge-header {
+.challenge-header {
   border-top:1px solid rgba(34, 36, 38, 0.15);
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
   .creation {
@@ -142,7 +142,7 @@ img.clickable {
   }
 }
 
-%challenge-data {
+.challenge-data {
   padding:10px 20px;
   box-sizing:border-box;
   flex:1;
@@ -234,14 +234,6 @@ img.clickable {
 
 .ui.menu.challenge-menu {
   @extend %challenge-menu;
-}
-
-.challenge-header {
-  @extend %challenge-header;
-}
-
-.challenge-data {
-  @extend %challenge-data;
 }
 
 #copyZone {

@@ -17,7 +17,7 @@
 }
 
 .skill-header {
-  @extend %challenge-header;
+  @extend .challenge-header;
   &.suggested,
   &.prevalidated,
   &.validated_no_test,
@@ -26,11 +26,12 @@
   &.need-work,
   &.to-be-submitted {
     background-color:#444488 !important;
+    color:#ffffff !important;
   }
 }
 
 .skill-data {
-  @extend %challenge-data;
+  @extend .challenge-data;
 }
 
 .ui.menu.skill-menu {
