@@ -1,3 +1,6 @@
 <form action="" class="ui form">
+  {{#if edition}}
+    {{form-input value=tube.name edition=edition label="Nom"}}
+  {{/if}}
     {{form-textarea title="Description" value=tube.description edition=edition}}
 </form>

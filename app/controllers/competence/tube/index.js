@@ -58,6 +58,7 @@ export default Controller.extend({
         this.set("edition", false);
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Tube mis à jour", true);
+        return tube.refresh();
       })
       .catch((error) => {
         console.error(error);
