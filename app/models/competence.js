@@ -4,7 +4,6 @@ import {computed} from '@ember/object';
 
 export default DS.Model.extend({
   needsRefresh:false,
-  area: DS.belongsTo('area'),
   name: DS.attr('string', { readOnly: true }),
   code: DS.attr(),
   rawTubes: DS.hasMany('tube'),
