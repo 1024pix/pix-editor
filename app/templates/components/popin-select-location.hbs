@@ -1,0 +1,20 @@
+<i class="close icon"></i>
+<div class="header">
+  Emplacement de {{name}}
+</div>
+<div class="content">
+  <form action="" class="ui form">
+    {{#if competencesNames.isFulfilled}}
+      {{form-select title="Compétence" value=competenceName options=competencesNames edition=true}}
+    {{/if}}
+  </form>
+</div>
+<div class="actions">
+  <div class="ui deny button">
+    Annuler
+  </div>
+  <div class="ui green button" {{action "set"}}>
+    <i class="checkmark icon"></i>
+    Déplacer
+  </div>
+</div>

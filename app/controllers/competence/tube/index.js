@@ -13,6 +13,8 @@ export default Controller.extend({
   tube:alias('model'),
   application:controller(),
   parentController:controller("competence"),
+  areas:null,
+  competence:null,
   access:service(),
   config:service(),
   mayAccessAirtable:computed("config.access", function() {
@@ -71,6 +73,36 @@ export default Controller.extend({
       let tube = this.get("tube");
       let config = this.get("config");
       window.open(config.get("airtableUrl")+config.get("tableTubes")+"/"+tube.get("id"), "airtable");
+    },
+    selectCompetence() {
+      $('.tube-select-competence').modal('show');
+    },
+    setCompetence(newCompetence) {
+      let tube = this.get('tube');
+      let competence = this.get('competence');
+      this.get("application").send("isLoading");
+      return competence.get('rawTubes')
+      .then(tubes => {
+        tubes.removeObject(tube);
+        return competence.save();
+      })
+      .then(() => {
+        return newCompetence.get('rawTubes');
+      })
+      .then(tubes => {
+        tubes.pushObject(tube);
+        return newCompetence.save();
+      })
+      .then(() => {
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Tube mis à jour", true);
+        this.transitionToRoute("competence.tube.index", newCompetence, tube);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Erreur lors de la mise à jour du tube", true);
+      });
     }
   }
 });
