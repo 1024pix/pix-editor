@@ -5,6 +5,7 @@ import { oneWay } from '@ember/object/computed';
 import DS from 'ember-data';
 
 export default UiModal.extend({
+  areas:null,
   classNameBindings: ['class'],
   competenceName:oneWay('competence.name'),
   willInitSemantic(settings) {
@@ -15,6 +16,9 @@ export default UiModal.extend({
   },
   competences:computed('areas', function() {
     let areas = this.get('areas');
+    if (!areas) {
+      return Promise.resolve([]);
+    }
     let getCompetences = areas.reduce((requests, area) => {
       requests.push(area.get('sortedCompetences'));
       return requests;

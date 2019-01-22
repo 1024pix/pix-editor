@@ -12,15 +12,7 @@ module('Integration | Component | tube-form', function(hooks) {
 
     await render(hbs`{{tube-form}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.form').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#tube-form}}
-        template block text
-      {{/tube-form}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
