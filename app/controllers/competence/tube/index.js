@@ -7,6 +7,7 @@ import $ from "jquery";
 
 export default Controller.extend({
   edition:false,
+  creation:false,
   maximized:false,
   wasMaximized:false,
   tube:alias('model'),
@@ -53,7 +54,7 @@ export default Controller.extend({
     save() {
       this.get("application").send("isLoading");
       let tube = this.get("tube");
-      tube.save()
+      return tube.save()
       .then(()=> {
         this.set("edition", false);
         this.get("application").send("finishedLoading");

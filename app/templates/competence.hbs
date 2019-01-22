@@ -5,9 +5,9 @@
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}
-      {{#if (and skillMode mayCreateTube)}}
-        <a class="left item" onclick={{action "newTube"}}>
-          <i class="plus square outline icon"></i> Nouveau tube
+      {{#if skillMode}}
+        <a class="left item" onclick={{action "shareSkills"}}>
+          <i class="share square icon"></i> Exporter
         </a>
       {{else}}
       <div class="ui top attached tabular menu">
@@ -37,9 +37,11 @@
     <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount}}</div><div class="competence-info">Acquix : {{competence.skillCount.content}}</div></div>
   {{/if}}
   {{#if skillMode}}
-    <a class="right item" onclick={{action "shareSkills"}}>
-      <i class="share square icon"></i>
-    </a>
+    {{#if mayCreateTube}}
+      <a class="left item" onclick={{action "newTube"}}>
+        <i class="plus square outline icon"></i> Nouveau tube
+      </a>
+    {{/if}}
   {{else if (and (not production) mayCreateTemplate)}}
     <a class="right item" onclick={{action "newTemplate"}}>
       <i class="plus square outline icon"></i> Nouveau prototype

@@ -103,7 +103,7 @@ export default Controller.extend({
       this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { from: challenge.get("id")}});
     },
     newTube() {
-      this.get("application").send("showMessage", "Bientôt disponible...", true);
+      this.transitionToRoute("competence.tube.new", this.get("competence"));
     },
     showAlternatives(challenge) {
       this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), challenge);

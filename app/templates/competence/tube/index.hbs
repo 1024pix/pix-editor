@@ -1,6 +1,12 @@
 <div class="tube-header">
   <div class="ui menu">
-    <div class="item header">{{tube.name}}</div>
+    <div class="item header {{if creation 'creation'}}">
+      {{#if creation}}
+        Nouveau tube
+      {{else}}
+        {{tube.name}}
+      {{/if}}
+    </div>
     <div class="ui right menu">
       {{#if maximized}}
         <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
