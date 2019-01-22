@@ -40,12 +40,15 @@
     &.skill {
       text-align:center;
       &.active,
-      &.active .skill-name,
-      &.active .help {
+      &.active .skill-name {
         color:red !important;
       }
       &.link {
         cursor:pointer;
+
+        &.skill-mode {
+          background-color:#444488 !important;
+        }
 
         .skill-name {
           margin:-5px -5px 0 -5px;
@@ -55,6 +58,7 @@
         .help {
           margin: 0 -5px -5px -5px;
           padding: 0 5px 5px 5px;
+          color:$suggested-background-color;
         }
 
         .tuto-count {
@@ -64,7 +68,7 @@
         &.production,
         &.production.active,
         .skill-name.production,
-        .help.production {
+        .help i.production {
           background-color:$production-background-color !important;
           color:$production-color;
         }
@@ -72,7 +76,7 @@
         &.draft,
         &.draft.active,
         .skill-name.draft,
-        .help.draft {
+        .help i.draft {
           background-color:$draft-background-color !important;
           color:$draft-color;
         }
@@ -80,54 +84,54 @@
         &.suggested,
         &.suggested.active,
         .skill-name.suggested,
-        .help.suggested {
-          background-color:$suggested-background-color !important;
-          color:$suggested-color;
+        .help i.suggested {
+          /*background-color:$suggested-background-color !important;*/
+          color:$suggested-background-color;
         }
 
         &.prevalidated,
         &.prevalidated.active,
         .skill-name.prevalidated,
-        .help.prevalidated {
-          background-color:$prevalidated-background-color !important;
-          color:$prevalidated-color;
+        .help i.prevalidated {
+          /*background-color:$prevalidated-background-color !important;*/
+          color:$prevalidated-background-color;
         }
 
         &.validated_no_test,
         &.validated_no_test.active {
-          background-color:$validated-no-test-background-color !important;
-          color:$validated-no-test-color;
+          /*background-color:$validated-no-test-background-color !important;*/
+          color:$validated-no-test-background-color;
         }
 
         &.validated,
         &.validated.active,
         .skill-name.validated,
-        .help.validated {
-          background-color:$validated-background-color !important;
-          color:$validated-color;
+        .help i.validated {
+          /*background-color:$validated-background-color !important;*/
+          color:$validated-background-color;
         }
 
         &.link.archived,
         &.link.archived.active,
         .skill-name.archived,
-        .help.archived {
+        .help i.archived {
           background-color:$archived-background-color !important;
           color:$archived-color;
         }
 
         .skill-name.to-be-submitted,
-        .help.to-be-submitted {
+        .help i.to-be-submitted {
           background-color:$to-be-submitted-background-color !important;
           color:$to-be-submitted-color;
         }
 
         .skill-name.need-work,
-        .help.need-work {
+        .help i.need-work {
           background-color:$need-work-background-color !important;
           color:$need-work-color;
         }
 
-        .help.na {
+        .help i.na {
           background-color:$na-background-color !important;
           color:$na-color;
         }
