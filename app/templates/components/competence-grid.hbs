@@ -1,22 +1,24 @@
 <table class="ui celled table definition tubes">
   <tbody>
   {{#each tubes as |tube|}}
-  <tr>
-    <td>
-      {{#if skillMode}}
-        {{#link-to "competence.tube.index" competenceModel tube}}{{tube.name}}{{/link-to}}
-      {{else}}
-        {{tube.name}}
-      {{/if}}
-    </td>
-    {{#each tube.filledSkills as |skill|}}
-      {{#if (and skill.name (or skillMode (not production)  skill.productionTemplate))}}
-          {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
-      {{else}}
-        <td></td>
-      {{/if}}
-    {{/each}}
-  </tr>
+    {{#if (or skillMode tube.skillCount) }}
+      <tr>
+        <td>
+          {{#if skillMode}}
+            {{#link-to "competence.tube.index" competenceModel tube}}{{tube.name}}{{/link-to}}
+          {{else}}
+            {{tube.name}}
+          {{/if}}
+        </td>
+        {{#each tube.filledSkills as |skill|}}
+          {{#if (and skill.name (or skillMode (not production)  skill.productionTemplate))}}
+              {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
+          {{else}}
+            <td></td>
+          {{/if}}
+        {{/each}}
+      </tr>
+    {{/if}}
   {{/each}}
   </tbody>
 </table>
