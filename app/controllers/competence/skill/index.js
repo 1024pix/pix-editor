@@ -6,7 +6,7 @@ import $ from "jquery";
 
 export default Controller.extend({
   maximized:false,
-  competence:controller(),
+  parentController:controller("competence"),
   application:controller(),
   config:service(),
   skill:alias("model"),
@@ -15,15 +15,15 @@ export default Controller.extend({
   actions: {
     maximize() {
       this.set("maximized", true);
-      this.get("competence").send("maximizeChildComponent");
+      this.get("parentController").send("maximizeChildComponent");
     },
     minimize() {
       this.set("maximized", false);
-      this.get("competence").send("minimizeChildComponent");
+      this.get("parentController").send("minimizeChildComponent");
     },
     close() {
       this.set("maximized", false);
-      this.get("competence").send("closeChildComponent");
+      this.get("parentController").send("closeChildComponent");
     },
     preview() {
       let challenge = this.get("skill").get("template");

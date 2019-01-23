@@ -141,6 +141,20 @@
         color:#08cf08;
       }
     }
+    .add-skill {
+      display:block;
+      width:100%;
+      text-align:center;
+
+      &:not(:hover) i {
+        visibility:hidden;
+      }
+
+      &:hover i {
+        visibility:visible;
+      }
+
+    }
   }
 }
 

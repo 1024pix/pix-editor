@@ -21,7 +21,7 @@ export default Service.extend({
   mayCreateTube() {
     return this.isEditor();
   },
-  mayEditTube() {
+  mayEditSkills() {
     return this.isEditor();
   },
   mayMoveTube(tube) {

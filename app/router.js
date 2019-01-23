@@ -8,7 +8,6 @@ const Router = EmberRouter.extend({
 
 Router.map(function() {
   this.route('competence', {path:'/competence/:competence_id'}, function() {
-    this.route('skill', {path:'/skill/:skill_id'});
     this.route('templates', {path:'/templates'}, function() {
       this.route('new', {path:'/new'});
       this.route('single', {path:'/:template_id'}, function() {
@@ -22,6 +21,10 @@ Router.map(function() {
     this.route('tube', {path:'/tube'}, function() {
       this.route('index', {path:'/:tube_id'});
       this.route('new');
+    });
+    this.route('skill', {path:'/skill'}, function() {
+      this.route('index', {path:'/:skill_id'});
+      this.route('new', {path:'/new/:tube_id/:level'});
     });
   });
   this.route('skill', {path:'/skill/:skill_name'});

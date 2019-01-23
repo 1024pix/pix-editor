@@ -21,7 +21,7 @@ export default Controller.extend({
     return this.get("access").mayAccessAirtable();
   }),
   mayEdit:computed("config.access", function() {
-    return this.get("access").mayEditTube();
+    return this.get("access").mayEditSkills();
   }),
   mayMove:computed("config.access", "tube", function() {
     return this.get('access').mayMoveTube(this.get('tube'));

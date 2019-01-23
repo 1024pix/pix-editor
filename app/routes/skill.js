@@ -7,7 +7,7 @@ export default Route.extend({
   afterModel(model) {
     if (model.get("length") > 0) {
       let skill = model.get("firstObject");
-      this.transitionTo("competence.skill", skill.get("competence")[0], skill.get("id"));
+      this.transitionTo("competence.skill.index", skill.get("competence")[0], skill.get("id"));
     } else {
       // redirect to home page
       this.transitionTo("index");

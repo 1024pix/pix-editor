@@ -14,7 +14,7 @@ export default Controller.extend({
   access:service(),
   application:controller(),
   challengeController:controller("competence.templates.single"),
-  skillController:controller("competence.skill"),
+  skillController:controller("competence.skill.index"),
   competence:alias("model"),
   init() {
     this._super(...arguments);
@@ -142,7 +142,7 @@ export default Controller.extend({
             return challenge.get('skills')
             .then(skills => {
               if (skills.length>0) {
-                this.transitionToRoute("competence.skill", this.get("competence"), skills.get('firstObject'));
+                this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
               } else {
                 this.transitionToRoute("competence.index",  this.get("competence").get("id"));
                 this.send("closeChildComponent");
@@ -152,15 +152,19 @@ export default Controller.extend({
         });
       } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
-        return skill.get('productionTemplate')
-        .then(template => {
-          if (template) {
-            this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-          } else {
-            this.transitionToRoute("competence.index",  this.get("competence").get("id"));
-            this.send("closeChildComponent");
-          }
-        });
+        if (skill) {
+          return skill.get('productionTemplate')
+          .then(template => {
+            if (template) {
+              this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+            } else {
+              this.transitionToRoute("competence.index",  this.get("competence").get("id"));
+              this.send("closeChildComponent");
+            }
+          });
+        } else {
+          this.send("closeChildComponent");
+        }
       } else {
         this.send("closeChildComponent");
       }

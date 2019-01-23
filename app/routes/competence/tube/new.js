@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import Tube from './index';
 
-export default Route.extend({
+export default Tube.extend({
   templateName: "competence/tube/index",
   model() {
     return this.get("store").createRecord("tube");

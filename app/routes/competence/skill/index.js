@@ -2,6 +2,7 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
+    console.log(params.skill_id);
     return this.get("store").findRecord("skill", params.skill_id);
   },
   setupController(controller) {

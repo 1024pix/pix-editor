@@ -9,7 +9,7 @@ export default Component.extend({
     let link = this.get("link");
     let template = this.get("skill.productionTemplate");
     if (skillMode) {
-      return "competence.skill";
+      return "competence.skill.index";
     }
     if (production && template) {
       return link;
