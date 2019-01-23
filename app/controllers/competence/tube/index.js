@@ -23,6 +23,9 @@ export default Controller.extend({
   mayEdit:computed("config.access", function() {
     return this.get("access").mayEditTube();
   }),
+  mayMove:computed("config.access", "tube", function() {
+    return this.get('access').mayMoveTube(this.get('tube'));
+  }),
   actions: {
     maximize() {
       this.set("maximized", true);

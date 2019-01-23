@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import {inject as service} from '@ember/service';
+import DS from 'ember-data';
 
 const READ_ONLY = 1;
 const REPLICATOR = 2;
@@ -22,6 +23,19 @@ export default Service.extend({
   },
   mayEditTube() {
     return this.isEditor();
+  },
+  mayMoveTube(tube) {
+    let level = this.get("config.access");
+    return DS.PromiseObject.create({
+      promise:tube.get('hasProductionChallenge')
+      .then(result => {
+        if (result) {
+          return level === ADMIN;
+        } else {
+          return level >= EDITOR;
+        }
+      })
+    });
   },
   mayCreateAlternative() {
     return this.isReplicator();
