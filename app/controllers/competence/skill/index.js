@@ -3,15 +3,23 @@ import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import $ from "jquery";
+import { computed } from '@ember/object';
 
 export default Controller.extend({
   maximized:false,
   parentController:controller("competence"),
   application:controller(),
   config:service(),
+  access:service(),
   skill:alias("model"),
   wasMaximized:false,
   edition:false,
+  mayEdit:computed("config.access", function() {
+    return this.get("access").mayEditSkills();
+  }),
+  mayAccessAirtable:computed("config.access", function() {
+    return this.get("access").mayAccessAirtable();
+  }),
   actions: {
     maximize() {
       this.set("maximized", true);
@@ -26,8 +34,10 @@ export default Controller.extend({
       this.get("parentController").send("closeChildComponent");
     },
     preview() {
-      let challenge = this.get("skill").get("template");
-      window.open(challenge.get("preview"), challenge.get("id"));
+      this.get("skill.productionTemplate")
+      .then(challenge => {
+        window.open(challenge.get("preview"), challenge.get("id"));
+      });
     },
     openAirtable() {
       let skill = this.get("skill");

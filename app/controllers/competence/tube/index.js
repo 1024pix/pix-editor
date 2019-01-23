@@ -23,7 +23,7 @@ export default Controller.extend({
   mayEdit:computed("config.access", function() {
     return this.get("access").mayEditSkills();
   }),
-  mayMove:computed("config.access", "tube", function() {
+  mayMove:computed("config.access", "tube", "tube.hasProductionChallenge", function() {
     return this.get('access').mayMoveTube(this.get('tube'));
   }),
   actions: {

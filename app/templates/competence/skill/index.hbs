@@ -15,7 +15,6 @@
   <div class="skill-data">
     {{skill-form skill=skill edition=edition}}
   </div>
-{{#unless config.lite}}
   <div class="ui vertical compact labeled icon menu skill-menu">
     {{#if edition}}
       <a class="item important-action" onclick={{action "save"}}>
@@ -27,23 +26,26 @@
         Annuler
       </a>
     {{else}}
-      {{#if skill.template}}
+      {{#if skill.productionTemplate}}
         <a class="item" onclick={{action "preview"}}>
           <i class="eye icon"></i>
           Prévisualiser
         </a>
       {{/if}}
-      <a class="item" onclick={{action "edit"}}>
-        <i class="edit icon"></i>
-        Modifier
-      </a>
-      <a class="item" onclick={{action "openAirtable"}}>
-        <i class="table icon"></i>
-        Airtable
-      </a>
+      {{#if mayEdit}}
+        <a class="item" onclick={{action "edit"}}>
+          <i class="edit icon"></i>
+          Modifier
+        </a>
+      {{/if}}
+      {{#if mayAccessAirtable}}
+        <a class="item" onclick={{action "openAirtable"}}>
+          <i class="table icon"></i>
+          Airtable
+        </a>
+      {{/if}}
     {{/if}}
   </div>
-{{/unless}}
 </div>
 
 {{outlet}}
