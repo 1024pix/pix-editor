@@ -4,21 +4,16 @@ import {inject as service} from "@ember/service";
 export default Route.extend({
   paginatedQuery:service(),
   model(params) {
-    let model = null;
     return this.get('store').findRecord("competence", params.competence_id)
-    .then((competence) => {
-      model = competence;
-      if (model.get('needsRefresh')) {
-        return model.refresh();
-      } else {
-        return Promise.resolve();
-      }
-    }).then(() => {
-      model.set('needsRefresh', false);
-      return model.get('loaded');
-    }).then(() => {
-      return model;
-    })
+  },
+  afterModel(model) {
+    if (model.get('needsRefresh')) {
+      return model.refresh()
+      .then(() => {
+        model.set('needsRefresh', false);
+        return model.get('loaded');
+      });
+    }
   },
   setupController(controller, model) {
     this._super(...arguments);
