@@ -7,7 +7,7 @@ export default DS.Model.extend({
   name: DS.attr('string', { readOnly: true }),
   code: DS.attr(),
   rawTubes: DS.hasMany('tube'),
-  tubes:computed('rawTubes', function() {
+  tubes:computed('rawTubes.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('rawTubes')
         .then(tubes => {
