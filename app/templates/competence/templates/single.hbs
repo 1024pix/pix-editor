@@ -91,7 +91,7 @@
       <i class="linkify icon"></i>
       Copier lien
     </a>
-    {{#if (not alternative)}}
+    {{#if (and (not alternative) (not challenge.isWorkbench))}}
       <a class="item alternatives"  onclick={{action "showAlternatives"}}>
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
