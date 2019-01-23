@@ -1,7 +1,7 @@
 <table class="ui celled table definition tubes">
   <tbody>
   {{#each tubes as |tube|}}
-    {{#if (or skillMode tube.skillCount) }}
+    {{#if (or skillMode (not production) tube.hasProductionChallenge) }}
       <tr>
         <td>
           {{#if skillMode}}

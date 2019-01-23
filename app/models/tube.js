@@ -40,6 +40,27 @@ export default DS.Model.extend({
         })
     });
   }),
+  hasProductionChallenge:computed('skills.@each.productionTemplate', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+      .then(skills => {
+        let getProductionChallenges = skills.reduce((requests, skill) => {
+          requests.push(skill.get('productionTemplate'));
+          return requests;
+        }, []);
+        return Promise.all(getProductionChallenges);
+      })
+      .then(productionChallenges => {
+        let challengeCount = productionChallenges.reduce((count, challenge) => {
+          if (challenge) {
+            return count+1;
+          }
+          return count;
+        },0);
+        return challengeCount>0;
+      })
+    })
+  }),
   loaded:computed('skills.[]', function() {
     return this.get('skills')
     .then(skills => {

@@ -163,7 +163,8 @@ export default Controller.extend({
               this.get("application").send("showMessage", "Mise en production réussie", true);
               this.get("parentController").send("switchProduction", true);
             })
-            .catch(() =>{
+            .catch((error) =>{
+              console.error(error);
               this.get("application").send("finishedLoading");
               this.get("application").send("showMessage", "Erreur lors de la mise en production", false);
             });
