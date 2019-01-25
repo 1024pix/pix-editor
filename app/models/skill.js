@@ -8,6 +8,7 @@ export default DS.Model.extend({
     this.tutoSolutions = [];
   },
   name: DS.attr('string', {readOnly:true}),
+  tube: DS.belongsTo('tube'),
   challenges:DS.hasMany('challenge'),
   competence: DS.attr(),
   clue:DS.attr(),
@@ -16,7 +17,6 @@ export default DS.Model.extend({
   descriptionStatus:DS.attr(),
   tutoSolutionIds:DS.attr(),
   tutoMoreIds:DS.attr(),
-  tubeId:DS.attr(),
   level:DS.attr(),
   status:DS.attr(),
   descriptionCSS:computed("descriptionStatus" , function() {

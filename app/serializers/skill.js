@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
     tutoSolutionIds: "Comprendre",
     tutoMoreIds: "En savoir plus",
     competence:"Compétence",
-    tubeId:"Tube",
+    tube:"Tube",
     level:"Level",
     status:"Status"
   },

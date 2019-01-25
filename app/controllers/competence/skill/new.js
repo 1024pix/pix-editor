@@ -17,18 +17,13 @@ export default Skill.extend({
       this.get("application").send("isLoading");
       let skill = this.get("skill");
       let tube = this.get("tube");
-      skill.save()
-      .then(()=> {
-        return tube.get('rawSkills');
-      })
-      .then(skills => {
-        skills.pushObject(skill);
-        return tube.save();
+      return tube.get('competence')
+      .then(competence=> {
+        skill.set("tube", tube);
+        skill.set("competence", [competence.get('id')]);
+        return skill.save()
       })
       .then(() => {
-        return tube.refresh();
-      })
-      .then(()=> {
         this.set("edition", false);
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Acquis créé", true);
