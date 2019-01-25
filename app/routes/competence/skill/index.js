@@ -8,6 +8,8 @@ export default Route.extend({
     this._super(...arguments);
     controller.set("maximized", false);
     controller.set("edition", false);
+    controller.set("areas", this.modelFor('application'));
+    controller.set("competence", this.modelFor('competence'));
     this.controllerFor("competence").set("skillMode", true);
   },
   actions: {

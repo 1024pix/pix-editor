@@ -14,11 +14,17 @@ export default Controller.extend({
   skill:alias("model"),
   wasMaximized:false,
   edition:false,
+  skillName:computed("skill", function() {
+    return `${this.get('skill.id')} (${this.get('skill.name')})`;
+  }),
   mayEdit:computed("config.access", function() {
     return this.get("access").mayEditSkills();
   }),
   mayAccessAirtable:computed("config.access", function() {
     return this.get("access").mayAccessAirtable();
+  }),
+  mayMove:computed("config.access", "skill", "skill.productionTemplate", function() {
+    return this.get('access').mayMoveSkill(this.get('skill'));
   }),
   actions: {
     maximize() {
@@ -69,6 +75,27 @@ export default Controller.extend({
         this.set("edition", false);
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Acquis mis à jour", true);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Erreur lors de la mise à jour de l'acquis", true);
+      });
+    },
+    moveSkill() {
+      $('.skill-select-location').modal('show');
+    },
+    setLocation(competence, newTube, level) {
+      let skill = this.get('skill');
+      this.get("application").send("isLoading");
+      skill.set('tube', newTube);
+      skill.set('level', level);
+      skill.set('competence', [competence.get('id')]);
+      return skill.save()
+      .then(() => {
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Acquis mis à jour", true);
+        this.transitionToRoute("competence.skill.index", competence, skill);
       })
       .catch((error) => {
         console.error(error);

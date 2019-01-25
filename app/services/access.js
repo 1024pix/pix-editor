@@ -37,6 +37,19 @@ export default Service.extend({
       })
     });
   },
+  mayMoveSkill(skill) {
+    let level = this.get("config.access");
+    return DS.PromiseObject.create({
+      promise:skill.get('productionTemplate')
+      .then(result => {
+        if (result) {
+          return level === ADMIN;
+        } else {
+          return level >= EDITOR;
+        }
+      })
+    });
+  },
   mayCreateAlternative() {
     return this.isReplicator();
   },

@@ -1,5 +1,10 @@
 <div class="skill-header {{skill.descriptionCSS}}">
   <div class="ui menu">
+    <div class="ui left menu">
+      {{#if mayMove}}
+        <a class="ui icon item" onclick={{action "moveSkill"}}><i class="icon random"></i></a>
+      {{/if}}
+    </div>
     <div class="item header">{{skill.name}}</div>
     <div class="ui right menu">
       {{#if maximized}}
@@ -47,5 +52,4 @@
     {{/if}}
   </div>
 </div>
-
-{{outlet}}
+{{popin-select-location class="skill-select-location" onChange=(action "setLocation") name=skillName areas=areas competence=competence selectTubeLevel=true tube=skill.tube level=skill.level}}

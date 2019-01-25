@@ -7,6 +7,14 @@
     {{#if competencesNames.isFulfilled}}
       {{form-select title="Compétence" value=competenceName options=competencesNames edition=true}}
     {{/if}}
+    {{#if selectTubeLevel}}
+      {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
+        {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
+        {{#if levels.isFulfilled}}
+          {{form-select title="Niveau" value=selectedLevel options=levels edition=true}}
+        {{/if}}
+      {{/if}}
+    {{/if}}
   </form>
 </div>
 <div class="actions">
