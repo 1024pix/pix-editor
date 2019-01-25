@@ -28,7 +28,7 @@ export default DS.Model.extend({
       })
     });
   }),
-  filledSkills:computed('sortedSkills.[]', function() {
+  filledSkills:computed('sortedSkills.{[],@each.level}', function() {
     return DS.PromiseArray.create({
       promise:this.get('sortedSkills')
         .then(skills => {
