@@ -7,7 +7,7 @@ export default DS.Model.extend({
   competence: DS.belongsTo('competence'),
   selectedLevel:false,
   rawSkills:DS.hasMany('skill'),
-  skills:computed('rawSkills', function() {
+  skills:computed('rawSkills.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('rawSkills')
         .then(skills => {
@@ -28,7 +28,7 @@ export default DS.Model.extend({
       })
     });
   }),
-  filledSkills:computed('sortedSkills', function() {
+  filledSkills:computed('sortedSkills.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('sortedSkills')
         .then(skills => {
