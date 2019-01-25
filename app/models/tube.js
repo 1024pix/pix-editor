@@ -4,7 +4,7 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   name: DS.attr(),
   description: DS.attr(),
-  competenceIds: DS.attr(),
+  competence: DS.belongsTo('competence'),
   selectedLevel:false,
   rawSkills:DS.hasMany('skill'),
   skills:computed('rawSkills', function() {

@@ -70,6 +70,17 @@ export default DS.RESTSerializer.extend({
     if (relationship.options && relationship.options.readOnly) {
       return;
     }
-    return this._super(snapshot, json, relationship);
+    let key = relationship.key;
+    let belongsToId = snapshot.belongsTo(key, { id: true });
+
+    // if provided, use the mapping provided by `attrs` in
+    // the serializer
+    let payloadKey = this._getMappedKey(key, snapshot.type);
+    if (payloadKey === key && this.keyForRelationship) {
+      payloadKey = this.keyForRelationship(key, 'belongsTo', 'serialize');
+    }
+
+    json[payloadKey] = [belongsToId];
   }
+
 });

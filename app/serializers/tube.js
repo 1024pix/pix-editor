@@ -4,7 +4,7 @@ export default ApplicationSerializer.extend({
   attrs:{
     name:"Nom",
     description:"Description",
-    competenceIds:"Competences",
+    competence:"Competences",
     rawSkills:"Acquis"
   },
   payloadKeyFromModelName: function() {

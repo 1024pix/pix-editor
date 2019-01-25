@@ -82,20 +82,9 @@ export default Controller.extend({
     },
     setCompetence(newCompetence) {
       let tube = this.get('tube');
-      let competence = this.get('competence');
       this.get("application").send("isLoading");
-      return competence.get('rawTubes')
-      .then(tubes => {
-        tubes.removeObject(tube);
-        return competence.save();
-      })
-      .then(() => {
-        return newCompetence.get('rawTubes');
-      })
-      .then(tubes => {
-        tubes.pushObject(tube);
-        return newCompetence.save();
-      })
+      tube.set('competence', newCompetence);
+      return tube.save()
       .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Tube mis à jour", true);
