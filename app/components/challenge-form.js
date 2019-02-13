@@ -10,7 +10,11 @@ export default Component.extend({
     this.options = {
       'types': ["QCU", "QCM", "QROC", "QROCM-ind", "QROCM-dep", "QRU"],
       'pedagogy': ["e-preuve", "q-savoir", "q-situation"],
-      'declinable':["", "facilement", "difficilement", "permutation", "non"]
+      'declinable':["", "facilement", "difficilement", "permutation", "non"],
+      'accessibility1':["RAS","OK", "Acquis Non Pertinent", "KO", "A tester"],
+      'accessibility2':["RAS","OK","KO"],
+      'responsive':["Tablette", "Smartphone", "Tablette/Smartphone"],
+      'spoil':["Non Sp", "Difficilement Sp", "Facilement Sp"]
     }
   },
   authors:computed("config.authorNames", function() {

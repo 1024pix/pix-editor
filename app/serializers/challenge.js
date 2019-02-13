@@ -30,7 +30,11 @@ export default ApplicationSerializer.extend({
     embedTitle:"Embed title",
     embedHeight:"Embed height",
     version:"Version prototype",
-    alternativeVersion:"Version déclinaison"
+    alternativeVersion:"Version déclinaison",
+    accessibility1:"Non voyant",
+    accessibility2:"Daltonien",
+    spoil:"Spoil",
+    responsive:"Responsive"
   },
 
   payloadKeyFromModelName: function() {

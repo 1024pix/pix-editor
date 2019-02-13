@@ -29,6 +29,10 @@ export default DS.Model.extend({
   embedTitle:DS.attr(),
   embedHeight:DS.attr('number'),
   alternativeVersion:DS.attr('number'),
+  accessibility1:DS.attr(),
+  accessibility2:DS.attr(),
+  spoil:DS.attr(),
+  responsive:DS.attr(),
   myStore:service("store"),
   config:service(),
   isTemplate:computed("genealogy", function(){
