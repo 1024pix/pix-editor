@@ -34,7 +34,8 @@ export default ApplicationSerializer.extend({
     accessibility1:"Non voyant",
     accessibility2:"Daltonien",
     spoil:"Spoil",
-    responsive:"Responsive"
+    responsive:"Responsive",
+    alternativeText:"Texte alternatif illustration"
   },
 
   payloadKeyFromModelName: function() {

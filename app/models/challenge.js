@@ -33,6 +33,7 @@ export default DS.Model.extend({
   accessibility2:DS.attr(),
   spoil:DS.attr(),
   responsive:DS.attr(),
+  alternativeText:DS.attr(),
   myStore:service("store"),
   config:service(),
   isTemplate:computed("genealogy", function(){
