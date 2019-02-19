@@ -20,6 +20,7 @@ export default Template.extend({
       .then(challenge => this._setVersion(challenge))
       .then(challenge => {
         this.set("edition", false);
+        this.send("minimize");
         this._message("Prototype enregistré");
         this.transitionToRoute("competence.templates.single", this.get("competence"), challenge);
       })
@@ -27,7 +28,6 @@ export default Template.extend({
         this._errorMessage("Erreur lors de la création");
       })
       .finally(() => {
-        this.send("minimize");
         this.get("application").send("finishedLoading");
       })
     }
