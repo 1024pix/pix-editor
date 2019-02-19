@@ -9,53 +9,57 @@ export default Template.extend({
     cancelEdit() {
       this.get("store").deleteRecord(this.get("challenge"));
       this.set("edition", false);
-      this.get("application").send("showMessage", "Création annulée", true);
+      this._message("Création annulée");
       this.get("parentController").send("closeChildComponent");
     },
     save() {
       this.get("application").send("isLoading");
-      let challenge = this.get("challenge");
-      return this._saveChallenge()
-      .then(() => {
-        this.get("application").send("showMessage", "Prototype enregistré", true);
-        return challenge.get('isWorkbench');
-      })
-      .then(workbench => {
-        if (workbench) {
-          return Promise.resolve(false);
-        } else {
-          return challenge.get("firstSkill");
-        }
-      })
-      .then(firstSkill => {
-        if (firstSkill) {
-          return firstSkill.reload()
-          .then(() => {
-            return firstSkill.getNextVersion();
-          })
-        } else {
-          return Promise.resolve(0);
-        }
-      })
-      .then(version => {
-        if (version>0) {
-          challenge.set("version", version);
-          return challenge.save();
-        } else {
-          return Promise.resolve(true);
-        }
-      })
-      .then(() => {
-        let version = challenge.get("version");
-        if (version > 0) {
-          this.get("application").send("showMessage", "Nouvelle version : "+version, true);
-        }
-        this.get("application").send("finishedLoading");
+      return this._handleIllustration(this.get("challenge"))
+      .then(challenge => this._handleAttachments(challenge))
+      .then(challenge => this._saveChallenge(challenge))
+      .then(challenge => this._setVersion(challenge))
+      .then(challenge => {
+        this.set("edition", false);
+        this._message("Prototype enregistré");
         this.transitionToRoute("competence.templates.single", this.get("competence"), challenge);
-      }).catch(() => {
+      })
+      .catch(() => {
+        this._errorMessage("Erreur lors de la création");
+      })
+      .finally(() => {
+        this.send("minimize");
         this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Erreur lors de la création", false);
-      });
+      })
     }
+  },
+  _setVersion(challenge) {
+    return challenge.get('isWorkbench')
+    .then(workbench => {
+      if (workbench) {
+        return challenge;
+      }
+      return challenge.get("firstSkill")
+      .then(firstSkill => {
+        if (!firstSkill) {
+          return challenge;
+        }
+        return firstSkill.reload()
+        .then(skill => skill.getNextVersion())
+        .then(version => {
+          if (version>0) {
+            challenge.set("version", version);
+            return challenge.save()
+          }
+          return challenge;
+        });
+      });
+    })
+    .then(challenge => {
+      let version = challenge.get("version");
+      if (version > 0) {
+        this._message(`Nouvelle version : ${version}`, true);
+      }
+      return challenge;
+    })
   }
 });
