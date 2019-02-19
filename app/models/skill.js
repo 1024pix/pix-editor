@@ -140,5 +140,16 @@ export default DS.Model.extend({
         return current;
       }, 0)+1;
     });
+  },
+  isActive:computed('status', function() {
+    return this.get('status') === 'actif';
+  }),
+  activate() {
+    this.set('status', 'actif');
+    return this.save();
+  },
+  deactivate() {
+    this.set('status', 'en construction');
+    return this.save();
   }
 });

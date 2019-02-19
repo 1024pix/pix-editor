@@ -149,11 +149,11 @@ export default Controller.extend({
         }
         this.get("application").send("getChangelog", defaultLogMessage, (changelog) => {
           this.get("application").send("isLoading");
-          // TODO: validate skill as well
           return this._validationChecks(this.get("challenge"))
           .then(challenge => this._archivePreviousTemplate(challenge))
           .then(challenge => challenge.validate())
           .then(challenge => this._handleChangelog(challenge, changelog))
+          .then(challenge => this._checkSkillsValidation(challenge))
           .then(challenge => this._validateAlternatives(challenge))
           .then(() => {
             this._message("Mise en production réussie");
@@ -170,13 +170,13 @@ export default Controller.extend({
     },
     archive() {
       // TODO: archive alternative challenges as well
-      // TODO: invalidate skill as well
       return this._confirm("Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?")
       .then(() => {
         this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
           this.get("application").send("isLoading");
           return this.get("challenge").archive()
           .then(challenge => this._handleChangelog(challenge, changelog))
+          .then(challenge => this._checkSkillsValidation(challenge))
           .then(() => {
             this._message("Épreuve archivée");
             this.send("close");
@@ -272,6 +272,40 @@ export default Controller.extend({
       .catch(() => Promise.resolve())
       .finally(() => challenge);
     })
+  },
+  _checkSkillsValidation(challenge) {
+    return challenge.get("skills")
+    .then(skills => {
+      if (skills.length === 0) {
+        return true;
+      }
+      let skillChecks = skills.reduce((current, skill) => {
+        current.push(skill.get("productionTemplate")
+        .then(template => {
+          if (template) {
+            if (!skill.get("isActive")) {
+              return skill.activate()
+              .then(skill => {
+                this._message(`Activation de l'acquis ${skill.get("name")}`);
+                return skill;
+              });
+            }
+          } else {
+            if (skill.get("isActive")) {
+              return skill.deactivate()
+              .then(skill => {
+                this._message(`Désactivation de l'acquis ${skill.get("name")}`);
+                return skill;
+              });
+            }
+          }
+          return skill;
+        }));
+        return current;
+      }, []);
+      return Promise.all(skillChecks);
+    })
+    .then(() => challenge);
   },
   _handleIllustration(challenge) {
     // check for illustration upload
