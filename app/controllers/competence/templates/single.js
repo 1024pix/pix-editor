@@ -169,12 +169,12 @@ export default Controller.extend({
       .catch(() => this._message("Mise en production abandonnée"));
     },
     archive() {
-      // TODO: archive alternative challenges as well
       return this._confirm("Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?")
       .then(() => {
         this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
           this.get("application").send("isLoading");
           return this.get("challenge").archive()
+          .then(challenge => this._archiveAlternatives(challenge))
           .then(challenge => this._handleChangelog(challenge, changelog))
           .then(challenge => this._checkSkillsValidation(challenge))
           .then(() => {
@@ -272,6 +272,25 @@ export default Controller.extend({
       .catch(() => Promise.resolve())
       .finally(() => challenge);
     })
+  },
+  _archiveAlternatives(challenge) {
+    if (!challenge.get("isTemplate")) {
+      return Promise.resolve(challenge);
+    }
+    return challenge.get("alternatives")
+    .then(alternatives => {
+      if (alternatives.length === 0) {
+        return challenge;
+      }
+      let alternativesArchive = alternatives.reduce((current, alternative) => {
+        current.push(alternative.archive()
+        .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} archivée`))
+        );
+        return current;
+      }, []);
+      return Promise.all(alternativesArchive);
+    })
+    .then(() => challenge);
   },
   _checkSkillsValidation(challenge) {
     return challenge.get("skills")
