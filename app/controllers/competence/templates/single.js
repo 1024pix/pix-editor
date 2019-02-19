@@ -149,13 +149,12 @@ export default Controller.extend({
         }
         this.get("application").send("getChangelog", defaultLogMessage, (changelog) => {
           this.get("application").send("isLoading");
-          // TODO: validate alternative challenges as well
           // TODO: validate skill as well
           return this._validationChecks(this.get("challenge"))
           .then(challenge => this._archivePreviousTemplate(challenge))
-          .then(challenge => this._archivePreviousTemplate(challenge))
           .then(challenge => challenge.validate())
           .then(challenge => this._handleChangelog(challenge, changelog))
+          .then(challenge => this._validateAlternatives(challenge))
           .then(() => {
             this._message("Mise en production réussie");
             this.get("parentController").send("switchProduction", true);
@@ -170,6 +169,8 @@ export default Controller.extend({
       .catch(() => this._message("Mise en production abandonnée"));
     },
     archive() {
+      // TODO: archive alternative challenges as well
+      // TODO: invalidate skill as well
       return this._confirm("Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?")
       .then(() => {
         this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
@@ -247,6 +248,29 @@ export default Controller.extend({
       return this._confirm("Archivage du prototype précédent", "Êtes-vous sûr de vouloir archiver le prototype précédent ?")
       .then(() => template.archive())
       .then(() => challenge);
+    })
+  },
+  _validateAlternatives(challenge) {
+    if (!challenge.get("isTemplate")) {
+      return Promise.resolve(challenge);
+    }
+    return challenge.get("alternatives")
+    .then(alternatives => {
+      if (alternatives.length === 0) {
+        return challenge;
+      }
+      return this._confirm("Mise en production des déclinaisons", "Souhaitez-vous mettre en production les déclinaisons également ?")
+      .then(() => {
+        let alternativesPublication = alternatives.reduce((current, alternative) => {
+          current.push(alternative.validate()
+          .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
+          );
+          return current;
+        }, []);
+        return Promise.all(alternativesPublication);
+      })
+      .catch(() => Promise.resolve())
+      .finally(() => challenge);
     })
   },
   _handleIllustration(challenge) {
