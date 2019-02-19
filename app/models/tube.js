@@ -17,7 +17,7 @@ export default DS.Model.extend({
         })
     });
   }),
-  skillCount:computed('skills', function() {
+  skillCount:computed('skills.[]', function() {
     return this.get('skills').length;
   }),
   sortedSkills:computed('skills.[]', function() {
