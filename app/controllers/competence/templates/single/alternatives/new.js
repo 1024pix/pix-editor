@@ -8,41 +8,36 @@ export default Alternative.extend({
   actions:{
     cancelEdit() {
       this.set("edition", false);
-      this.get("application").send("showMessage", "Création annulée", true);
+      this._message("Création annulée");
       this.get("parentController").send("closeChildComponent");
     },
     save() {
       this.get("application").send("isLoading");
-      let challenge = this.get("challenge");
-      return this._saveChallenge()
-      .then(() => {
-        this.get("application").send("showMessage", "Déclinaison enregistrée", true);
-        return challenge.get("skills");
-      })
-      .then(skills => {
-        if (skills.length > 0) {
-          let skill = skills.firstObject;
-          return skill.reload();
-        } else {
-          return Promise.resolve(true);
-        }
-      })
-      .then(() => {
-        return this.get("template").getNextAlternativeVersion();
-      })
-      .then(version => {
-        challenge.set("alternativeVersion", version);
-        return challenge.save();
-      })
-      .then(() => {
-        let version = challenge.get("alternativeVersion");
-        this.get("application").send("showMessage", "Déclinaison numéro "+version, true);
-        this.get("application").send("finishedLoading");
+      return this._handleIllustration(this.get("challenge"))
+      .then(challenge => this._handleAttachments(challenge))
+      .then(challenge => this._saveChallenge(challenge))
+      .then(challenge => this._setAlternativeVersion(challenge))
+      .then(challenge => {
+        this.set("edition", false);
+        this.send("minimize");
+        this._message(`Déclinaison numéro ${challenge.get("alternativeVersion")} enregistrée`);
         this.transitionToRoute("competence.templates.single.alternatives.single", this.get("competence"), this.get("template"), challenge);
-      }).catch(() => {
+      })
+      .catch(() => {
+        this._errorMessage("Erreur lors de la création");
+      })
+      .finally(() => {
         this.get("application").send("finishedLoading");
-        this.get("application").send("showMessage", "Erreur lors de la création", false);
-      });
+      })
     }
+  },
+  _setAlternativeVersion(challenge) {
+    return challenge.get("firstSkill")
+    .then(skill => skill.reload())
+    .then(() => this.get("template").getNextAlternativeVersion())
+    .then(version => {
+      challenge.set("alternativeVersion", version);
+      return challenge.save();
+    })
   }
 });
