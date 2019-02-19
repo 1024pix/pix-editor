@@ -256,24 +256,21 @@ export default Controller.extend({
     }
     return challenge.get("draftAlternatives")
     .then(alternatives => {
+      alternatives = alternatives.filter(alternative => {
+        return !alternative.get("isArchived");
+      });
       if (alternatives.length === 0) {
         return challenge;
       }
       return this._confirm("Mise en production des déclinaisons", "Souhaitez-vous mettre en production les déclinaisons proposées ?")
       .then(() => {
         let alternativesPublication = alternatives.reduce((current, alternative) => {
-          if (!alternative.get("isArchived")) {
-            current.push(alternative.validate()
-            .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
-            );
-          }
+          current.push(alternative.validate()
+          .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
+          );
           return current;
         }, []);
-        if (alternativesPublication.length>0){
-          return Promise.all(alternativesPublication);
-        } else {
-          return challenge;
-        }
+        return Promise.all(alternativesPublication);
       })
       .catch(() => Promise.resolve())
       .finally(() => challenge);
@@ -285,6 +282,9 @@ export default Controller.extend({
     }
     return challenge.get("alternatives")
     .then(alternatives => {
+      alternatives = alternatives.filter(alternative => {
+        return !alternative.get("isArchived");
+      });
       if (alternatives.length === 0) {
         return challenge;
       }
