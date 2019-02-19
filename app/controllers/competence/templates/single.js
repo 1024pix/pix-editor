@@ -254,20 +254,26 @@ export default Controller.extend({
     if (!challenge.get("isTemplate")) {
       return Promise.resolve(challenge);
     }
-    return challenge.get("alternatives")
+    return challenge.get("draftAlternatives")
     .then(alternatives => {
       if (alternatives.length === 0) {
         return challenge;
       }
-      return this._confirm("Mise en production des déclinaisons", "Souhaitez-vous mettre en production les déclinaisons également ?")
+      return this._confirm("Mise en production des déclinaisons", "Souhaitez-vous mettre en production les déclinaisons proposées ?")
       .then(() => {
         let alternativesPublication = alternatives.reduce((current, alternative) => {
-          current.push(alternative.validate()
-          .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
-          );
+          if (!alternative.get("isArchived")) {
+            current.push(alternative.validate()
+            .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
+            );
+          }
           return current;
         }, []);
-        return Promise.all(alternativesPublication);
+        if (alternativesPublication.length>0){
+          return Promise.all(alternativesPublication);
+        } else {
+          return challenge;
+        }
       })
       .catch(() => Promise.resolve())
       .finally(() => challenge);
