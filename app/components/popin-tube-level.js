@@ -1,18 +1,10 @@
-import UiModal from 'semantic-ui-ember/components/ui-modal';
+import PopinBase from './popin-base';
 import { computed } from '@ember/object';
 import DS from 'ember-data';
-import $ from 'jquery';
 
 
-export default UiModal.extend({
-  classNameBindings: ['class'],
+export default PopinBase.extend({
   tube:null,
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    // remove any previously created modal with same class name
-    $(`.${this.get('class')}`).remove();
-    settings.detachable = true;
-  },
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
     if (tube) {

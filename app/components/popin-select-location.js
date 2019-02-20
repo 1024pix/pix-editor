@@ -1,22 +1,14 @@
-import UiModal from 'semantic-ui-ember/components/ui-modal';
-import $ from 'jquery';
+import PopinBase from './popin-base';
 import {computed} from '@ember/object';
 import { oneWay } from '@ember/object/computed';
 import DS from 'ember-data';
 
-export default UiModal.extend({
+export default PopinBase.extend({
   areas:null,
-  classNameBindings: ['class'],
   competenceName:oneWay('competence.name'),
   tubeName:oneWay('tube.name'),
   selectedLevel:oneWay('level'),
   selectTubeLevel:false,
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    // remove any previously created modal with same class name
-    $(`.${this.get('class')}`).remove();
-    settings.detachable = true;
-  },
   competences:computed('areas', function() {
     let areas = this.get('areas');
     if (!areas) {
