@@ -22,10 +22,6 @@ export default Controller.extend({
       this.set('selectedTubeSkills', tube.get("selectedSkills"));
       $('.popin-tube-level').modal('show');
     },
-    tubeLevelHidden() {
-      $('.popin-tube-level').modal('hide');
-      this.set('displayTubeLevel', false);
-    },
     setProfileTube(tube, level, skills) {
       tube.set('selectedLevel', level);
       tube.set('selectedSkills', skills);

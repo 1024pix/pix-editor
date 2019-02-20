@@ -1,32 +1,30 @@
-{{#ui-modal class=class context=".application" onApprove=(action set) onHidden=(action closed) detachable=true}}
-  <i class="close icon"></i>
-  <div class="header">
-    {{tube.name}}
-  </div>
-  <div class="content">
-    <div class="levels {{if skills.isPending "loading"}}">
-      {{#if skills.isPending}}
-        <div class="ui active centered inline loader"></div>
-      {{/if}}
-      {{#each skills as |skill|}}
-        {{#if skill}}
-          <div class="level {{if skill._selected "selected"}}" onclick={{action "select" skill}} >
-            {{skill.level}}
-          </div>
-        {{else}}
-          <div class="level disabled"></div>
-        {{/if}}
-      {{/each}}
-    </div>
-  </div>
-  <div class="actions">
-    <div class="ui deny button">
-      Annuler
-    </div>
-    {{#if mayUnset}}
-    <div class="ui black right button" onclick={{action "unset"}}>
-      Effacer
-    </div>
+<i class="close icon"></i>
+<div class="header">
+  {{tube.name}}
+</div>
+<div class="content">
+  <div class="levels {{if skills.isPending "loading"}}">
+    {{#if skills.isPending}}
+      <div class="ui active centered inline loader"></div>
     {{/if}}
+    {{#each skills as |skill|}}
+      {{#if skill}}
+        <div class="level {{if skill._selected "selected"}}" onclick={{action "select" skill}} >
+          {{skill.level}}
+        </div>
+      {{else}}
+        <div class="level disabled"></div>
+      {{/if}}
+    {{/each}}
   </div>
-{{/ui-modal}}
+</div>
+<div class="actions">
+  <div class="ui deny button">
+    Annuler
+  </div>
+  {{#if mayUnset}}
+  <div class="ui black right button" onclick={{action "clear"}}>
+    Effacer
+  </div>
+  {{/if}}
+</div>

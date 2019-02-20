@@ -1,10 +1,18 @@
-import Component from '@ember/component';
+import UiModal from 'semantic-ui-ember/components/ui-modal';
 import { computed } from '@ember/object';
 import DS from 'ember-data';
+import $ from 'jquery';
 
-export default Component.extend({
-  tagName:"",
+
+export default UiModal.extend({
+  classNameBindings: ['class'],
   tube:null,
+  willInitSemantic(settings) {
+    this._super(...arguments);
+    // remove any previously created modal with same class name
+    $(`.${this.get('class')}`).remove();
+    settings.detachable = true;
+  },
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
     if (tube) {
@@ -37,12 +45,12 @@ export default Component.extend({
         }
         return ids;
       }, []);
-      this.get("set")(this.get("tube"), level, skillIds);
-      this.get("closed")();
+      this.get("setTubeLevel")(this.get("tube"), level, skillIds);
+      this.execute('hide');
     },
-    unset() {
-      this.get("unset")(this.get("tube"));
-      this.get("closed")();
+    clear() {
+      this.get("clearTube")(this.get("tube"));
+      this.execute('hide');
     }
   }
 

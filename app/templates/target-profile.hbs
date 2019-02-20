@@ -51,4 +51,4 @@
   {{input type="file" id="target-profile__open-file" change=(action "openFile")}}
 </div>
 </div>
-{{popin-tube-level set=(action "setProfileTube") unset=(action "unsetProfileTube") closed=(action "tubeLevelHidden") level=selectedTubeLevel selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}
+{{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}
