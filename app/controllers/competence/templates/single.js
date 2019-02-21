@@ -381,10 +381,11 @@ export default Controller.extend({
     if (this.get("mayUpdateCache") && this.get("updateCache")) {
       this._loadingMessage("Mise à jour du cache...");
       return this.get("pixConnector").updateCache(challenge)
+      .then(() => {
+        return challenge;
+      })
       .catch(() => {
         this._errorMessage("Impossible de mettre à jour le cache");
-      })
-      .finally(() => {
         return challenge;
       })
     }
