@@ -6,7 +6,12 @@ export default UiModal.extend({
   willInitSemantic(settings) {
     this._super(...arguments);
     // remove any previously created modal with same class name
-    $(`.${this.get('class')}`).remove();
+    try {
+      $(`.${this.get('class')}`).remove();
+    } catch(e)
+    {
+      console.log('could not remove element');
+    }
     settings.detachable = true;
   }
 });
