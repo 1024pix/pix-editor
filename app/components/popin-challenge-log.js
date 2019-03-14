@@ -1,10 +1,10 @@
-import Component from "@ember/component";
-import { observer, computed } from "@ember/object";
+import PopinBase from "./popin-base";
+import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import DS from 'ember-data';
-import $ from "jquery";
+import $ from 'jquery';
 
-export default Component.extend({
+export default PopinBase.extend({
   store:service(),
   paginatedQuery:service(),
   config:service(),
@@ -12,12 +12,6 @@ export default Component.extend({
   logEntryEdition:false,
   list:true,
   mayEditEntry:false,
-  // eslint-disable-next-line ember/no-observers
-  displayManager:observer("display", function() {
-    if (this.get("display")) {
-      $(".challenge-log").modal('show');
-    }
-  }),
   notes:computed("challenge", function() {
     let challenge = this.get("challenge");
     if (challenge) {
@@ -33,13 +27,12 @@ export default Component.extend({
   ownNotes:computed("notes.isFulfilled", function() {
     let notes = this.get("notes");
     if (notes.get("isFulfilled")) {
+      console.debug(notes);
       let author = this.get("config").get("author");
-      return notes.reduce((current, note) => {
-        if (note.get("author") === author) {
-          current.push(note);
-        }
-        return current;
-      }, []);
+      console.debug(author);
+      let test = notes.filter(note => note.get("author") == author);
+      console.debug(test);
+      return test;
     } else {
       return [];
     }
@@ -80,7 +73,7 @@ export default Component.extend({
   }),
   didRender() {
     this._super(...arguments);
-    $('.challenge-log .menu .item').tab();
+    $(`.${this.get("class")} .menu .item`).tab();
   },
   actions: {
     addNote() {

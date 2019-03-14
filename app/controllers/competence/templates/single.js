@@ -188,7 +188,7 @@ export default Controller.extend({
       .catch(() => this._message("Archivage abandonné"))
     },
     challengeLog() {
-      this.get("application").send("showChallengeLog", this.get("challenge"), this.get("competence"));
+      $('.popin-challenge-log').modal('show');
     },
     init() {
       let parentController = this.get("parentController");

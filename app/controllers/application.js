@@ -102,14 +102,6 @@ export default Controller.extend({
     },
     changelogHidden() {
       this.set("displayChangelog", false);
-    },
-    showChallengeLog(challenge, competence) {
-      this.set("challengeLogged", challenge);
-      this.set("competenceLogged", competence);
-      this.set("displayChallengeLog", true);
-    },
-    challengeLogHidden() {
-      this.set("displayChallengeLog", false);
     }
   }
 });
