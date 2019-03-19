@@ -48,17 +48,25 @@ jobs:
           cp -r dist/* deploy
           cd deploy
           echo "editor.pix.fr" > CNAME
-          git add . --force
+          git add .
           git commit -m "Deploy to gh-pages"
           git push origin gh-pages
+          git rm -Rf deploy
+          git worktree prune
 workflows:
   version: 2
   build_test_and_deploy:
     jobs:
       - build
+          filters:
+            branches:
+              only: master
       - test:
           requires:
             - build
+          filters:
+            branches:
+              only: master
       - deploy_to_ghpages:
           requires:
             - build
