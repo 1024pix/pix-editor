@@ -9,9 +9,14 @@
   <a class="left item" onclick={{action "save"}}>
     <i class="save icon"></i> Enregistrer
   </a>
-  <a class="right item" onclick={{action "generate"}}>
-    <i class="download icon"></i> Identifiants
-  </a>
+  <div class="right menu">
+    <a class="item" onclick={{action "generate"}}>
+      <i class="download icon"></i> Identifiants
+    </a>
+    <a class="item" onclick={{action "getProfileId"}}>
+      <i class="code icon"></i> SQL
+    </a>
+  </div>
 </div>
 <div class="ui attached target-profile {{if extended "extended"}}">
   {{#each model as |area|}}
@@ -52,3 +57,4 @@
 </div>
 </div>
 {{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}
+{{popin-single-entry class="popin-enter-profile-id" title="Identifiant du profil cible" label="Identifiant" setValue=(action "generateSQL")}}

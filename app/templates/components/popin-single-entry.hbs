@@ -1,0 +1,21 @@
+<i class="close icon"></i>
+<div class="header">
+  {{title}}
+</div>
+<div class="content">
+  <form class="ui form">
+    <div class="field">
+      <label>{{label}}</label>
+      {{form-input value=value edition=true}}
+    </div>
+  </form>
+</div>
+<div class="actions">
+  <div class="ui deny button">
+    Annuler
+  </div>
+  <div class="ui green button" {{action "validate"}}>
+    <i class="checkmark icon"></i>
+    Valider
+  </div>
+</div>

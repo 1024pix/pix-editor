@@ -68,6 +68,30 @@ export default Controller.extend({
       let fileName = 'profil_'+(new Date()).toLocaleString('fr-FR')+'.json';
       this.get("fileSaver").saveAs(JSON.stringify(data), fileName);
     },
+    getProfileId() {
+      $('.popin-enter-profile-id').modal('show');
+    },
+    generateSQL(profileId) {
+      let areas = this.get('model')
+      let ids = areas.reduce((areaValues, area) => {
+        let competences = area.get('competences');
+        return competences.reduce((competenceValues, competence) => {
+          let tubes = competence.get('tubes');
+          return tubes.reduce((tubeValues, tube) => {
+            if (tube.get("selectedLevel")) {
+              tubeValues = tubeValues.concat(tube.get("selectedSkills"));
+            }
+            return tubeValues;
+          }, competenceValues);
+        }, areaValues);
+      }, []);
+      let sql = ids.reduce((content, id) => {
+        return content+`\n${profileId},${id}`
+      },'targetProfileId,skillId');
+
+      let fileName = `sql_generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.txt`;
+      this.get("fileSaver").saveAs(sql, fileName);
+    },
     load() {
       let fileInput = document.getElementById('target-profile__open-file');
       fileInput.click();
