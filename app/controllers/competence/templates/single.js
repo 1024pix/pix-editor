@@ -9,6 +9,7 @@ import { computed } from '@ember/object';
 export default Controller.extend({
   elementClass:"template-challenge",
   popinImageClass:"template-popin-image",
+  popinLogClass:"popin-template-log",
   parentController:controller("competence"),
   config:service(),
   access:service(),
@@ -191,7 +192,7 @@ export default Controller.extend({
       .catch(() => this._message("Archivage abandonné"))
     },
     challengeLog() {
-      $('.popin-challenge-log').modal('show');
+      $(`.${this.get('popinLogClass')}`).modal('show');
     },
     init() {
       let parentController = this.get("parentController");

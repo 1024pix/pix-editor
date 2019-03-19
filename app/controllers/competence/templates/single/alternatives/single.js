@@ -6,6 +6,7 @@ import {inject as controller} from '@ember/controller';
 export default Template.extend({
   alternative:true,
   popinImageClass:"alternative-popin-image",
+  popinLogClass:"popin-alternative-log",
   copyZoneId:"copyZoneDraft",
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
