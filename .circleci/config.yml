@@ -46,7 +46,7 @@ jobs:
       - run: |
           cd dist
           echo "editor.pix.fr" > CNAME
-          git add .
+          git add . --force
           git commit -m "Deploy to gh-pages"
           git push origin gh-pages --force
 workflows:
