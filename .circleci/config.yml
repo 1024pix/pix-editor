@@ -42,13 +42,14 @@ jobs:
           git config push.default upstream
           git worktree add -b gh-pages dist
           git branch --set-upstream gh-pages origin/gh-pages
+          rm -Rf dist/*
       - run: npm run build:production
       - run: |
           cd dist
           echo "editor.pix.fr" > CNAME
           git add . --force
           git commit -m "Deploy to gh-pages"
-          git push origin gh-pages --force
+          git push origin gh-pages
 workflows:
   version: 2
   build_test_and_deploy:
