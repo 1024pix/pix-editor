@@ -39,18 +39,15 @@ jobs:
       - run: |
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
-          git config push.default upstream
+          #git config push.default upstream
+          git worktree add dist gh-pages
       - run: npm run build:production
       - run: |
-          echo "editor.pix.fr" > dist/CNAME
-          cp -R .circleci dist/.circleci
-          git add --force dist/
-          git commit -m "deploying on gh-pages"
-          git subtree split --prefix=dist -b github-deploy
-          git branch github-deploy --set-upstream-to origin/gh-pages
-          git push origin github-deploy --force
-          #git subtree push --prefix=dist subtree_origin master
-
+          cd dist
+          echo "editor.pix.fr" > CNAME
+          git add --all
+          git commit -m "Deploy to gh-pages"
+          git push origin gh-pages --force
 workflows:
   version: 2
   build_test_and_deploy:
