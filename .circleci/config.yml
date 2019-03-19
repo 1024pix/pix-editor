@@ -40,14 +40,15 @@ jobs:
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
           git config push.default upstream
-          git worktree add -b gh-pages dist gh-pages
-          rm -Rf dist/*
+          git worktree add -b gh-pages deploy
+          git branch gh-pages --set-upstream-to origin/gh-pages
+          rm -Rf deploy/*
       - run: npm run build:production
       - run: |
-          cd dist
+          cp -r dist/* deploy
+          cd deploy
           echo "editor.pix.fr" > CNAME
           git add . --force
-          git config --list
           git commit -m "Deploy to gh-pages"
           git push origin gh-pages
 workflows:
