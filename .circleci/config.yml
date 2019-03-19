@@ -39,9 +39,9 @@ jobs:
       - run: |
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
-          #git config push.default upstream
-          git worktree add -b gh-pages dist
-          git branch --set-upstream gh-pages origin/gh-pages
+          git config push.default upstream
+          git worktree add dist gh-pages
+          #git branch --set-upstream gh-pages origin/gh-pages
       - run: npm run build:production
       - run: |
           cd dist
