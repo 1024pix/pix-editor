@@ -42,10 +42,11 @@ jobs:
           git config push.default upstream
           git branch $CIRCLE_BRANCH --set-upstream-to origin/gh-pages
       - run: npm run build:production
-      #- run: |
-       #   echo "editor.pix.fr" > dist/CNAME
-        #  git add --force dist/
-         # git commit -m "deploying on gh-pages"
+      - run: |
+          echo "editor.pix.fr" > dist/CNAME
+          git add --force dist/
+          git commit -m "deploying on gh-pages"
+          git subtree push --prefix=dist origin master
           #git push origin `git subtree split --prefix=dist master`:gh-pages --force
           #git subtree push --prefix=dist subtree_origin master
 
