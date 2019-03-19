@@ -43,6 +43,7 @@ jobs:
           git worktree add -b gh-pages deploy
           git branch gh-pages --set-upstream-to origin/gh-pages
           rm -Rf deploy/*
+          rm -Rf deploy/.*
       - run: npm run build:production
       - run: |
           cp -r dist/* deploy
