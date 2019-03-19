@@ -46,7 +46,7 @@ jobs:
           echo "editor.pix.fr" > dist/CNAME
           git add --force dist/
           git commit -m "deploying on gh-pages"
-          git subtree push --prefix=dist origin master
+          git subtree push --prefix=dist origin gh-pages
           #git push origin `git subtree split --prefix=dist master`:gh-pages --force
           #git subtree push --prefix=dist subtree_origin master
 
