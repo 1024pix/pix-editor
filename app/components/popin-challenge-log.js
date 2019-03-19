@@ -27,11 +27,8 @@ export default PopinBase.extend({
   ownNotes:computed("notes.isFulfilled", function() {
     let notes = this.get("notes");
     if (notes.get("isFulfilled")) {
-      console.debug(notes);
       let author = this.get("config").get("author");
-      console.debug(author);
       let test = notes.filter(note => note.get("author") == author);
-      console.debug(test);
       return test;
     } else {
       return [];
