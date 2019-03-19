@@ -8,6 +8,7 @@ import { computed } from '@ember/object';
 
 export default Controller.extend({
   elementClass:"template-challenge",
+  popinImageClass:"template-popin-image",
   parentController:controller("competence"),
   config:service(),
   access:service(),
@@ -55,7 +56,9 @@ export default Controller.extend({
   actions:{
     showIllustration: function(){
       let illustration = this.get("challenge.illustration")[0];
-      this.get("application").send("showPopinImage", illustration.url);
+      this.set("popinImageSrc", illustration.url);
+      $(`.${this.get('popinImageClass')}`).modal("show");
+      this.get("application").send("showPopinImage", );
     },
     maximize() {
       this.set("maximized", true);

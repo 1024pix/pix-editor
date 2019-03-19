@@ -59,13 +59,6 @@ export default Controller.extend({
     configHidden() {
       $('.config-form').modal('hide');
     },
-    showPopinImage(src) {
-      this.set("popinImageSrc", src);
-      this.set("displayPopinImage", true);
-    },
-    popinImageHidden() {
-      this.set("displayPopinImage", false);
-    },
     confirm(title, message, callback) {
       this.confirmCallback = callback;
       this.set("confirmTitle", title);
