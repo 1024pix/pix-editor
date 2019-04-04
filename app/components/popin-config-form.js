@@ -1,17 +1,23 @@
-import Component from '@ember/component';
+import PopinBase from "./popin-base";
 import { computed } from '@ember/object';
 import {inject as service} from '@ember/service';
 import DS from "ember-data";
 
-export default Component.extend({
-  tagName:"",
+export default PopinBase.extend({
   config:service(),
   access:service(),
   saved:false,
   newAuthor:null,
   init() {
-    this._super();
+    this._super(...arguments);
     this.oldValues = {};
+  },
+  willInitSemantic(settings) {
+    this._super(...arguments);
+    let that = this;
+    settings.onHidden = () => {
+      that.send('onHidden');
+    }
   },
   _setValue(key, value) {
     if (this.oldValues[key] == null) {
@@ -90,9 +96,10 @@ export default Component.extend({
         config.set("access", accessLevel);
         config.save();
         this.set("saved", true);
+        this.execute("hide");
       });
     },
-    closed() {
+    onHidden() {
       if (this.get("saved")) {
         this.get("update")();
       } else {
@@ -103,7 +110,6 @@ export default Component.extend({
         this._restoreValue("pixPassword");
       }
       this.oldValues = {};
-      this.get("closed")();
     }
   }
 });

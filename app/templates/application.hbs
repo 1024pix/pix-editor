@@ -29,7 +29,7 @@
       {{/if}}
     </div>
   </div>
-  {{config-form update=(action "configUpdated") closed=(action "configHidden") class="config-form"}}
+  {{popin-config-form update=(action "configUpdated") class="popin-config-form"}}
   {{popin-confirm title=confirmTitle content=confirmContent approve=(action "confirmApprove") deny=(action "confirmDeny") closed=(action "confirmHidden") display=displayConfirm}}
   {{popin-changelog approve=(action "changelogApprove") deny=(action "changelogDeny") closed=(action "changelogHidden") display=displayChangelog value=changelogDefault}}
 </div>

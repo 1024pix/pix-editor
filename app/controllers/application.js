@@ -51,13 +51,10 @@ export default Controller.extend({
       this.set("loadingMessage", "");
     },
     openConfiguration() {
-      $('.config-form').modal('show');
+      $('.popin-config-form').modal('show');
     },
     configUpdated() {
       this.send("refresh");
-    },
-    configHidden() {
-      $('.config-form').modal('hide');
     },
     confirm(title, message, callback) {
       this.confirmCallback = callback;
