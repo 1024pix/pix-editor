@@ -249,8 +249,9 @@ export default Controller.extend({
       if (template == null) {
         return challenge;
       }
-      return this._confirm("Archivage du prototype précédent", "Êtes-vous sûr de vouloir archiver le prototype précédent ?")
+      return this._confirm("Archivage du prototype précédent", "Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?")
       .then(() => template.archive())
+      .then(() => this._archiveAlternatives(template))
       .then(() => challenge);
     })
   },
