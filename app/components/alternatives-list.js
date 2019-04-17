@@ -1,5 +1,6 @@
-import CompetenceList from './competence-list';
+import SortedList from './sorted-list';
 
-export default CompetenceList.extend({
+export default SortedList.extend({
+  classNameBindings: ["hidden", "listType"],
   listType: "alternative-list"
 });

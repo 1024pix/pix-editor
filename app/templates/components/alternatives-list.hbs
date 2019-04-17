@@ -2,13 +2,13 @@
   <div class="list-row">
     <div class="list-item alternativeVersion" onclick={{action "sortBy" "alternativeVersion" "int"}}>Indice</div>
     <div class="list-item instructions" onclick={{action "sortBy" "instructions" "string"}}>Consigne</div>
-    <div class="list-item authors" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
+    <div class="list-item author" onclick={{action "sortBy" "author" "array"}}>Auteur</div>
     <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
   </div>
 </div>
 <div class="list-body">
   {{#ember-collection
-    items=list
+    items=sortedList
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
   {{#link-to "competence.templates.single.alternatives.single" competenceModel challengeModel item tagName="div" class=(concat "list-row" (if (not item.isValidated) " draft" ""))}}

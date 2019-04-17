@@ -8,7 +8,7 @@
 </div>
 <div class="list-body">
   {{#ember-collection
-    items=list
+    items=sortedList
     scroll-left=scrollLeft scroll-top=scrollTop scroll-change=(action "scrollChange")
     cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}

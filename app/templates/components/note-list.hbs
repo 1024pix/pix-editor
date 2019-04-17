@@ -1,19 +1,19 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item computedIndex" onclick={{action "sortBy" "date" "int"}}>Date</div>
+    <div class="list-item date" onclick={{action "sortBy" "date" "int"}}>Date</div>
     {{#if displayAuthor}}
-      <div class="list-item instructions" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
+      <div class="list-item author" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
     {{/if}}
-    <div class="list-item status" onclick={{action "sortBy" "text" "string"}}>Texte</div>
+    <div class="list-item text" onclick={{action "sortBy" "text" "string"}}>Texte</div>
     {{#if displayStatus}}
-      <div class="list-item workbench" onclick={{action "sortBy" "status" "string"}}>Statut</div>
+      <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
     {{/if}}
   </div>
 </div>
 <div class="list-body">
   {{#if itemCount}}
     {{#ember-collection
-      items=list
+      items=sortedList
       cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
     }}
     <div class="list-row" onclick={{action show item}}>
