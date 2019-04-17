@@ -152,6 +152,8 @@ export default DS.Model.extend({
             .then(alternatives => {
               return alternatives.filter(alternative => {
                 return (alternative.get('version') === currentVersion);
+              }).sort((a, b) => {
+                return a.get("alternativeVersion")>b.get("alternativeVersion");
               });
             });
           } else {
@@ -189,19 +191,9 @@ export default DS.Model.extend({
         })
     })
   }),
-  sortedAlternatives:computed("alternatives.[]", function() {
+  productionAlternatives:computed("alternatives.@each.isValidated", function() {
     return DS.PromiseArray.create({
       promise:this.get("alternatives")
-        .then(alternatives => {
-          return alternatives.sort((a, b) => {
-            return a.get("alternativeVersion")>b.get("alternativeVersion");
-          });
-        })
-    })
-  }),
-  productionAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
-    return DS.PromiseArray.create({
-      promise:this.get("sortedAlternatives")
         .then(alternatives => {
           return alternatives.filter(alternative => {
             return alternative.get("isValidated");
@@ -209,9 +201,9 @@ export default DS.Model.extend({
         })
     });
   }),
-  draftAlternatives:computed("sortedAlternatives.@each.isValidated", function() {
+  draftAlternatives:computed("alternatives.@each.isValidated", function() {
     return DS.PromiseArray.create({
-      promise:this.get("sortedAlternatives")
+      promise:this.get("alternatives")
         .then(alternatives => {
           return alternatives.filter(alternative => {
             return !alternative.get("isValidated");
