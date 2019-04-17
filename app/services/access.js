@@ -82,6 +82,9 @@ export default Service.extend({
   mayArchive(challenge) {
     return this.mayEdit(challenge);
   },
+  mayMove(challenge) {
+    return this.isAdmin() && challenge.get("isTemplate") && challenge.get("isSuggested");
+  },
   isReplicator() {
     let level = this.get("config.access");
     return (level >= REPLICATOR);
