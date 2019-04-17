@@ -60,11 +60,6 @@ export default Controller.extend({
   mayMove:computed("config.access", "challenge", function() {
     return this.get("access").mayMove(this.get("challenge"));
   }),
-  getChangelog(defaultMessage, callback) {
-    this.changelogCallback = callback;
-    this.set("changelogDefault", defaultMessage);
-    $(`.${this.get('popinChangelogClass')}`).modal('show');
-  },
   actions:{
     showIllustration: function(){
       let illustration = this.get("challenge.illustration")[0];
@@ -129,7 +124,7 @@ export default Controller.extend({
       this._message("Modification annulée");
     },
     save() {
-      this.getChangelog(this.get("defaultSaveChangelog"), (changelog) => {
+      this._getChangelog(this.get("defaultSaveChangelog"), (changelog) => {
         this.get("application").send("isLoading");
         return this._handleIllustration(this.get("challenge"))
         .then(challenge => this._handleAttachments(challenge))
@@ -162,7 +157,7 @@ export default Controller.extend({
         } else {
           defaultLogMessage = "Mise en production de la déclinaison";
         }
-        this.getChangelog(defaultLogMessage, (changelog) => {
+        this._getChangelog(defaultLogMessage, (changelog) => {
           this.get("application").send("isLoading");
           return this._validationChecks(this.get("challenge"))
           .then(challenge => this._archivePreviousTemplate(challenge))
@@ -186,7 +181,7 @@ export default Controller.extend({
     archive() {
       return this._confirm("Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?")
       .then(() => {
-        this.getChangelog("Archivage de l'épreuve", (changelog) => {
+        this._getChangelog("Archivage de l'épreuve", (changelog) => {
           this.get("application").send("isLoading");
           return this.get("challenge").archive()
           .then(challenge => this._archiveAlternatives(challenge))
@@ -244,7 +239,7 @@ export default Controller.extend({
         this._errorMessage("Aucun acquis sélectionné");
         return;
       }
-      this.getChangelog("Changement d'acquis de l'épreuve", (changelog) => {
+      this._getChangelog("Changement d'acquis de l'épreuve", (changelog) => {
         this.get("application").send("isLoading");
         let challenge = this.get('challenge');
         let alternatives;
@@ -497,5 +492,10 @@ export default Controller.extend({
   _error(text) {
     this._errorMessage(text);
     return Promise.reject();
+  },
+  _getChangelog(defaultMessage, callback) {
+    this.changelogCallback = callback;
+    this.set("changelogDefault", defaultMessage);
+    $(`.${this.get('popinChangelogClass')}`).modal('show');
   }
 });
