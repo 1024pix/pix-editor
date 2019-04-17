@@ -55,6 +55,10 @@ export default DS.Model.extend({
     let status = this.get("status");
     return ["validé", "validé sans test", "pré-validé"].includes(status);
   }),
+  isSuggested:computed("status", function() {
+    let status = this.get("status");
+    return status === "proposé";
+  }),
   notDeclinable:computed('declinable', function() {
     let declinable = this.get("declinable");
     return (declinable && declinable === "non");
@@ -215,11 +219,7 @@ export default DS.Model.extend({
     return this.get("alternatives")
     .then(alternatives => {
       return alternatives.reduce((current, alternative) => {
-        let version = alternative.get("alternativeVersion");
-        if (version > current) {
-          return version;
-        }
-        return current;
+        return Math.max(current, alternative.get("alternativeVersion"));
       }, 0)+1;
     });
   },
@@ -255,5 +255,14 @@ export default DS.Model.extend({
       return author.join(', ');
     }
     return '';
+  }),
+  skillLevels:computed('skills', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('skills')
+        .then(skills => skills.reduce((current, skill) => {
+          current.push(skill.get('level'));
+          return current;
+        }, []))
+    });
   })
 });
