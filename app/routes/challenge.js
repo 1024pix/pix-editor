@@ -2,39 +2,27 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
-    return this.get("store").query("challenge", {filterByFormula:"AND(FIND('"+params.challenge_id+"', RECORD_ID()) , Statut != 'archive')", maxRecords:1})
+    return this.get('store').query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()) , Statut != 'archive')`, maxRecords:1})
     .then(challenges => {
       return challenges.get('firstObject');
     });
   },
   afterModel(model) {
-    let competenceId = null;
     if (model) {
-      return model.get('skills')
-      .then(skills => {
-        return skills.get('firstObject');
-      })
-      .then(skill => {
-        if (skill) {
-          competenceId = skill.get('competence')[0];
-          return model.get('template');
+      return model.get('firstSkill')
+      .then(skill => skill.get('tube'))
+      .then(tube => tube.get('competence'))
+      .then(competence => {
+        if (model.get('isTemplate')) {
+          return this.transitionTo('competence.templates.single', competence, model);
         } else {
-          return Promise.resolve(null);
+          return model.get('template')
+          .then(template => this.transitionTo('competence.templates.single.alternatives.single', competence, template, model))
         }
       })
-      .then(template => {
-        if (competenceId !== null) {
-          if (template) {
-            return this.transitionTo("competence.templates.single.alternatives.single", competenceId, template.get('id'), model.get('id'));
-          } else {
-            return this.transitionTo("competence.templates.single", competenceId, model.get('id'));
-          }
-        } else {
-          return this.transitionTo("index");
-        }
-      });
+      .catch(() => this.transitionTo("index"));
     } else {
-      this.transitionTo("index");
+      return this.transitionTo("index");
     }
   }
 });
