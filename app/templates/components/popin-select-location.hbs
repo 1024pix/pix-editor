@@ -1,6 +1,10 @@
 <i class="close icon"></i>
 <div class="header">
-  Emplacement de {{name}}
+  {{#if title}}
+    {{title}}
+  {{else}}
+    Emplacement de {{name}}
+  {{/if}}
 </div>
 <div class="content">
   <form action="" class="ui form">
@@ -11,7 +15,7 @@
       {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
         {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
         {{#if levels.isFulfilled}}
-          {{form-select title="Niveau" value=selectedLevel options=levels edition=true}}
+          {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
         {{/if}}
       {{/if}}
     {{/if}}

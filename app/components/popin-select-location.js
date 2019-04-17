@@ -4,11 +4,14 @@ import { oneWay } from '@ember/object/computed';
 import DS from 'ember-data';
 
 export default PopinBase.extend({
+  title:null,
   areas:null,
+  selectEmptyLevels:false,
   competenceName:oneWay('competence.name'),
   tubeName:oneWay('tube.name'),
   selectedLevel:oneWay('level'),
   selectTubeLevel:false,
+  multipleLevel:false,
   competences:computed('areas', function() {
     let areas = this.get('areas');
     if (!areas) {
@@ -58,11 +61,16 @@ export default PopinBase.extend({
     });
   }),
   levels:computed('selectedTube', function() {
+    let selectEmptyLevels = this.get('selectEmptyLevels');
     return DS.PromiseArray.create({
       promise:this.get('selectedTube')
       .then(tube => tube?tube.get('filledSkills'):[])
       .then(skills => skills.reduce((table, skill, index) => {
         if (skill === false) {
+          if (selectEmptyLevels) {
+            table.push(index+1);
+          }
+        } else if (!selectEmptyLevels) {
           table.push(index+1);
         }
         return table;
@@ -72,14 +80,32 @@ export default PopinBase.extend({
   actions: {
     set() {
       if (this.get('selectTubeLevel')) {
-        return this.get('selectedCompetence')
-        .then(competence => {
-          return this.get('selectedTube')
-          .then(tube => {
-            this.get('onChange')(competence, tube, this.get('selectedLevel'));
-            this.execute('hide');
+        if (this.get('selectEmptyLevels')) {
+          return this.get('selectedCompetence')
+          .then(competence => {
+            return this.get('selectedTube')
+            .then(tube => {
+              this.get('onChange')(competence, tube, this.get('selectedLevel'));
+              this.execute('hide');
+            });
           });
+        } else {
+          let levels;
+          if (this.get('multipleLevel')) {
+            levels = this.get('selectedLevel');
+          } else {
+            levels = [this.get('selectedLevel')];
+          }
+          return this.get('selectedTube')
+          .then(tube => tube.get('filledSkills'))
+          .then(skills => {
+            let selectedSkills = levels.map(level => {
+              return skills[level-1];
+            });
+            this.get('onChange')(selectedSkills);
+            this.execute('hide');
         });
+        }
       } else {
         return this.get('selectedCompetence')
         .then(competence => {
