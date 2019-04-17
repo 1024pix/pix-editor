@@ -80,6 +80,11 @@ export default PopinBase.extend({
       return [];
     }
   }),
+  didInsertElement() {
+    // fix a bug with semantic ui accordion that is not correctly
+    // initialized in popin
+    this.$('.ui.accordion').accordion();
+  },
   actions:{
     saveConfig() {
       let config = this.get("config");
