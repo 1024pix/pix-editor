@@ -7,8 +7,6 @@ export default Controller.extend({
   loadingMessage:"",
   displayConfig:false,
   popinImageSrc:"",
-  displayPopinImage:false,
-  displayConfirm:false,
   displayChangelog:false,
   confirmTitle:"",
   confirmContent:"",
@@ -60,7 +58,7 @@ export default Controller.extend({
       this.confirmCallback = callback;
       this.set("confirmTitle", title);
       this.set("confirmContent", message);
-      this.set("displayConfirm", true);
+      $('.popin-confirm').modal('show');
     },
     confirmApprove() {
       if (this.confirmCallback) {
@@ -71,9 +69,6 @@ export default Controller.extend({
       if (this.confirmCallback) {
         this.confirmCallback(false);
       }
-    },
-    confirmHidden() {
-      this.set("displayConfirm", false);
     },
     getChangelog(defaultMessage, callback) {
       this.changelogCallback = callback;

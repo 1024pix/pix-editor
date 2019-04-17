@@ -1,16 +1,14 @@
-{{#ui-modal class="mini popin-confirm" context=".application" closable=true  onApprove=(action approve) onDeny=(action deny) onHidden=(action closed)}}
-  <div class="header">{{title}}</div>
-  <div class="content">
-    {{content}}
+<div class="header">{{title}}</div>
+<div class="content">
+  {{content}}
+</div>
+<div class="actions">
+  <div class="ui blue cancel button">
+    <i class="remove icon"></i>
+    Annuler
   </div>
-  <div class="actions">
-    <div class="ui blue cancel button">
-      <i class="remove icon"></i>
-      Annuler
-    </div>
-    <div class="ui green ok button">
-      <i class="checkmark icon"></i>
-      Oui
-    </div>
+  <div class="ui green ok button">
+    <i class="checkmark icon"></i>
+    Oui
   </div>
-{{/ui-modal}}
+</div>
