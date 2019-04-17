@@ -1,6 +1,6 @@
 {{#ui-sidebar class=class id="main-sidebar" dimPage=true closable=true context=".application" as |execute|}}
 <div class="header">Pix Editor</div>
-{{#ui-search showNoResults=true apiSettings=searchAPISettings error=searchErrors}}
+{{#ui-search showNoResults=true apiSettings=searchAPISettings error=searchErrors onSelect=(action hideSidebar)}}
   <div class="ui icon input">
     <input class="prompt" placeholder="Acquix ou recordId" type="text">
     <i class="search icon"></i>

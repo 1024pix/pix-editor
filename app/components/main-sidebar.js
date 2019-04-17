@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import ENV from "pixeditor/config/environment";
 import {inject as service} from "@ember/service";
 import {alias} from "@ember/object/computed";
+import $ from "jquery";
 
 export default Component.extend({
   tagName:"",
@@ -41,7 +42,7 @@ export default Component.extend({
         });
       });
     } else {
-      return this.get("store").query("challenge", {filterByFormula:"AND(FIND('"+query+"', RECORD_ID()) , Statut != 'archive')", maxRecords:20})
+      return this.get("store").query("challenge", {filterByFormula:`AND(FIND('${query}', RECORD_ID()) , Statut != 'archive')`, maxRecords:20})
       .then(challenges => {
         const results = challenges.reduce((current, challenge) => {
           let id = challenge.get("id");
@@ -54,5 +55,8 @@ export default Component.extend({
         });
       });
     }
+  },
+  hideSidebar() {
+    $('#main-sidebar').sidebar('hide');
   }
 });
