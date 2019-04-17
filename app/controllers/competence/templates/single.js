@@ -10,6 +10,7 @@ export default Controller.extend({
   elementClass:"template-challenge",
   popinImageClass:"template-popin-image",
   popinLogClass:"popin-template-log",
+  popinChangelogClass:"popin-changelog",
   parentController:controller("competence"),
   config:service(),
   access:service(),
@@ -22,6 +23,7 @@ export default Controller.extend({
   alternative:false,
   changelogCallback:null,
   defaultSaveChangelog:"Mise à jour du prototype",
+  changelogApprove:"",
   challenge:alias("model"),
   application:controller(),
   storage:service(),
@@ -58,7 +60,7 @@ export default Controller.extend({
   getChangelog(defaultMessage, callback) {
     this.changelogCallback = callback;
     this.set("changelogDefault", defaultMessage);
-    $('.popin-changelog').modal('show');
+    $(`.${this.get('popinChangelogClass')}`).modal('show');
   },
   actions:{
     showIllustration: function(){

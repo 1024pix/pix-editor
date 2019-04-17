@@ -7,6 +7,7 @@ export default Template.extend({
   alternative:true,
   popinImageClass:"alternative-popin-image",
   popinLogClass:"popin-alternative-log",
+  popinChangelogClass:"popin-alternative-changelog",
   copyZoneId:"copyZoneDraft",
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
