@@ -10,7 +10,6 @@ export default Controller.extend({
   application:controller(),
   competenceController:controller("competence"),
   childComponentMaximized:false,
-  production:true,
   mayCreateAlternative:computed("config.access", function() {
     return this.get("access").mayCreateAlternative();
   }),
@@ -44,17 +43,11 @@ export default Controller.extend({
     refresh() {
       this.get("competenceController").send("refresh");
     },
-    switchProduction(closeChild) {
-      this.set("production", true);
-      if (closeChild) {
-        this.send("closeChildComponent");
-      }
+    switchDraft() {
+      // does nothing
     },
-    switchDraft(closeChild) {
-      this.set("production", false);
-      if (closeChild) {
-        this.send("closeChildComponent");
-      }
+    switchProduction() {
+      // does nothing
     }
   }
 });
