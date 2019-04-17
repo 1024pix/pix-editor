@@ -30,7 +30,7 @@ export default Controller.extend({
   pixConnector:service(),
   copyZoneId:"copyZone",
   mayUpdateCache:alias("pixConnector.connected"),
-  challengeTitle:computed("creation","challenge", "challenge.isWorkbench.content", function() {
+  challengeTitle:computed("creation","challenge", "challenge.{skillNames,isWorkbench.content}", function() {
     if (this.get("creation")) {
       return "Nouveau prototype";
     } else if (this.get('challenge.isWorkbench.content')) {
@@ -56,6 +56,9 @@ export default Controller.extend({
   }),
   mayArchive:computed("config.access", "challenge", "challenge.status", function() {
     return this.get("access").mayArchive(this.get("challenge"));
+  }),
+  mayMove:computed("config.access", "challenge", function() {
+    return this.get("access").mayMove(this.get("challenge"));
   }),
   getChangelog(defaultMessage, callback) {
     this.changelogCallback = callback;
@@ -232,6 +235,54 @@ export default Controller.extend({
       if (this.changelogCallback) {
         this.changelogCallback(false);
       }
+    },
+    moveTemplate() {
+      $(".template-select-location").modal('show');
+    },
+    setSkills(skills) {
+      if (skills.length === 0) {
+        this._errorMessage("Aucun acquis sélectionné");
+        return;
+      }
+      this.getChangelog("Changement d'acquis de l'épreuve", (changelog) => {
+        this.get("application").send("isLoading");
+        let challenge = this.get('challenge');
+        let alternatives;
+        let templateVersion;
+        let findNextVersion = skills.reduce((current, skill) => {
+          current.push(skill.getNextVersion());
+          return current;
+        }, []);
+        return challenge.get('alternatives')
+        .then(savedAlternatives => {
+          alternatives =  savedAlternatives;
+          return Promise.all(findNextVersion)
+        })
+        .then(versions => {
+          templateVersion = versions.reduce((current, version) => {
+            return Math.max(version,current);
+          }, 1);
+          challenge.set('skills', skills);
+          challenge.set('version', templateVersion);
+          return challenge.save()
+        })
+        .then(challenge => this._handleChangelog(challenge, changelog))
+        .then(() => {
+          this._message("Changement d'acquis effectué pour le prototype");
+          let updateAlternatives = alternatives.reduce((current, alternative) => {
+            alternative.set('skills', skills);
+            alternative.set('version', templateVersion);
+            current.push(alternative.save()
+            .then(() => {
+              this._message(`Changement d'acquis effectué pour la déclinaison n°${alternative.get('alternativeVersion')}`);
+            }));
+            return current;
+          }, []);
+          return Promise.all(updateAlternatives);
+        })
+        .catch(() => this._errorMessage("Erreur lors du changement des acquis"))
+        .finally(() => this.get("application").send("finishedLoading"));
+      })
     }
   },
   _validationChecks(challenge) {

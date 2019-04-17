@@ -27,6 +27,9 @@
           </div>
         {{/ui-dropdown}}
       {{/if}}
+      {{#if mayMove}}
+        <a class="ui icon item" onclick={{action "moveTemplate"}}><i class="icon random"></i></a>
+      {{/if}}
     {{/if}}
       </div>
     <div class={{concat "item header" (if creation " creation" "")}}>
@@ -103,4 +106,5 @@
 {{popin-challenge-log challenge=challenge competence=competence class=popinLogClass}}
 {{popin-image src=popinImageSrc class=popinImageClass}}
 {{popin-changelog approve=(action "changelogApprove") onDeny=(action "changelogDeny") value=changelogDefault class=popinChangelogClass}}
+{{popin-select-location class="template-select-location" onChange=(action "setSkills") title="Acquis du prototype" areas=areas competence=competence selectTubeLevel=true tube=challenge.firstSkill.tube level=challenge.skillLevels multipleLevel=true}}
 {{outlet}}
