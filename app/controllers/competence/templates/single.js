@@ -241,41 +241,32 @@ export default Controller.extend({
       }
       this._getChangelog("Changement d'acquis de l'épreuve", (changelog) => {
         this.get("application").send("isLoading");
-        let challenge = this.get('challenge');
-        let alternatives;
+        let template = this.get('challenge');
         let templateVersion;
-        let findNextVersion = skills.reduce((current, skill) => {
-          current.push(skill.getNextVersion());
-          return current;
-        }, []);
-        return challenge.get('alternatives')
-        .then(savedAlternatives => {
-          alternatives =  savedAlternatives;
-          return Promise.all(findNextVersion)
+        return this._getNextTemplateVersion(skills)
+        .then(version => {
+          templateVersion = version;
+          return this.get('challenge.alternatives');
         })
-        .then(versions => {
-          templateVersion = versions.reduce((current, version) => {
-            return Math.max(version,current);
-          }, 1);
-          challenge.set('skills', skills);
-          challenge.set('version', templateVersion);
-          return challenge.save()
-        })
-        .then(challenge => this._handleChangelog(challenge, changelog))
-        .then(() => {
-          this._message("Changement d'acquis effectué pour le prototype");
-          let updateAlternatives = alternatives.reduce((current, alternative) => {
-            alternative.set('skills', skills);
-            alternative.set('version', templateVersion);
-            current.push(alternative.save()
-            .then(() => {
-              this._message(`Changement d'acquis effectué pour la déclinaison n°${alternative.get('alternativeVersion')}`);
-            }));
+        .then(challenges => {
+          challenges.pushObject(template);
+          let updateChallenges = challenges.reduce((current, challenge) => {
+            challenge.set('skills', skills);
+            challenge.set('version', templateVersion);
+            current.push(challenge.save()
+              .then(() => {
+                if (challenge.get('isTemplate')) {
+                  this._message("Changement d'acquis effectué pour le prototype");
+                } else {
+                  this._message(`Changement d'acquis effectué pour la déclinaison n°${challenge.get('alternativeVersion')}`);
+                }
+              })
+            );
             return current;
           }, []);
-          return Promise.all(updateAlternatives);
+          return Promise.all(updateChallenges);
         })
-        .catch(() => this._errorMessage("Erreur lors du changement des acquis"))
+        .then(() => this._handleChangelog(template, changelog))
         .finally(() => this.get("application").send("finishedLoading"));
       })
     }
@@ -497,5 +488,17 @@ export default Controller.extend({
     this.changelogCallback = callback;
     this.set("changelogDefault", defaultMessage);
     $(`.${this.get('popinChangelogClass')}`).modal('show');
+  },
+  _getNextTemplateVersion(skills) {
+    let findNextVersion = skills.reduce((current, skill) => {
+      current.push(skill.getNextVersion());
+      return current;
+    }, []);
+    return Promise.all(findNextVersion)
+    .then(versions => {
+      return versions.reduce((current, version) => {
+        return Math.max(version,current);
+      }, 1);
+    });
   }
 });
