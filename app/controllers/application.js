@@ -11,10 +11,6 @@ export default Controller.extend({
   confirmTitle:"",
   confirmContent:"",
   confirmCallback:null,
-  changelogDefault:"",
-  changelogCallback:null,
-  challengeLogged:null,
-  competenceLogged:null,
   config:service(),
   init() {
     this._super(...arguments);
@@ -69,24 +65,6 @@ export default Controller.extend({
       if (this.confirmCallback) {
         this.confirmCallback(false);
       }
-    },
-    getChangelog(defaultMessage, callback) {
-      this.changelogCallback = callback;
-      this.set("changelogDefault", defaultMessage);
-      this.set("displayChangelog", true);
-    },
-    changelogApprove(value) {
-      if (this.changelogCallback) {
-        this.changelogCallback(value);
-      }
-    },
-    changelogDeny() {
-      if (this.changelogCallback) {
-        this.changelogCallback(false);
-      }
-    },
-    changelogHidden() {
-      this.set("displayChangelog", false);
     }
   }
 });

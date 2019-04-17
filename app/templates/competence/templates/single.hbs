@@ -102,4 +102,5 @@
 </div>
 {{popin-challenge-log challenge=challenge competence=competence class=popinLogClass}}
 {{popin-image src=popinImageSrc class=popinImageClass}}
+{{popin-changelog approve=(action "changelogApprove") onDeny=(action "changelogDeny") value=changelogDefault class="popin-changelog"}}
 {{outlet}}

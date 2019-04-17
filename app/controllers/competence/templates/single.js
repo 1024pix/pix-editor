@@ -20,6 +20,7 @@ export default Controller.extend({
   wasMaximized:false,
   updateCache:true,
   alternative:false,
+  changelogCallback:null,
   defaultSaveChangelog:"Mise à jour du prototype",
   challenge:alias("model"),
   application:controller(),
@@ -54,6 +55,11 @@ export default Controller.extend({
   mayArchive:computed("config.access", "challenge", "challenge.status", function() {
     return this.get("access").mayArchive(this.get("challenge"));
   }),
+  getChangelog(defaultMessage, callback) {
+    this.changelogCallback = callback;
+    this.set("changelogDefault", defaultMessage);
+    $('.popin-changelog').modal('show');
+  },
   actions:{
     showIllustration: function(){
       let illustration = this.get("challenge.illustration")[0];
@@ -118,7 +124,7 @@ export default Controller.extend({
       this._message("Modification annulée");
     },
     save() {
-      this.get("application").send("getChangelog", this.get("defaultSaveChangelog"), (changelog) => {
+      this.getChangelog(this.get("defaultSaveChangelog"), (changelog) => {
         this.get("application").send("isLoading");
         return this._handleIllustration(this.get("challenge"))
         .then(challenge => this._handleAttachments(challenge))
@@ -151,7 +157,7 @@ export default Controller.extend({
         } else {
           defaultLogMessage = "Mise en production de la déclinaison";
         }
-        this.get("application").send("getChangelog", defaultLogMessage, (changelog) => {
+        this.getChangelog(defaultLogMessage, (changelog) => {
           this.get("application").send("isLoading");
           return this._validationChecks(this.get("challenge"))
           .then(challenge => this._archivePreviousTemplate(challenge))
@@ -175,7 +181,7 @@ export default Controller.extend({
     archive() {
       return this._confirm("Archivage", "Êtes-vous sûr de vouloir archiver l'épreuve ?")
       .then(() => {
-        this.get("application").send("getChangelog", "Archivage de l'épreuve", (changelog) => {
+        this.getChangelog("Archivage de l'épreuve", (changelog) => {
           this.get("application").send("isLoading");
           return this.get("challenge").archive()
           .then(challenge => this._archiveAlternatives(challenge))
@@ -214,6 +220,16 @@ export default Controller.extend({
       .then(firstSkill => {
         this.transitionToRoute("competence.templates.list", firstSkill);
       })
+    },
+    changelogApprove(value) {
+      if (this.changelogCallback) {
+        this.changelogCallback(value);
+      }
+    },
+    changelogDeny() {
+      if (this.changelogCallback) {
+        this.changelogCallback(false);
+      }
     }
   },
   _validationChecks(challenge) {

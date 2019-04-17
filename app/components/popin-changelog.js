@@ -1,15 +1,11 @@
-import Component from '@ember/component';
-import { observer } from '@ember/object';
-import $ from "jquery";
+import PopinBase from "./popin-base";
 
-export default Component.extend({
+export default PopinBase.extend({
   value:"",
-  // eslint-disable-next-line ember/no-observers
-  displayManager:observer("display", function() {
-    if (this.get("display")) {
-      $(".popin-changelog").modal('show');
-    }
-  }),
+  willInitSemantic(settings) {
+    this._super(...arguments);
+    settings.closable = false;
+  },
   actions:{
     confirm() {
       this.get("approve")(this.get("value"));
