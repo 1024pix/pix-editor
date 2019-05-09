@@ -92,7 +92,7 @@
         &.prevalidated,
         &.prevalidated.active,
         .skill-name.prevalidated,
-        .help i.prevalidated {
+        .help i.prevalidated {
           /*background-color:$prevalidated-background-color !important;*/
           color:$prevalidated-background-color;
         }
@@ -115,20 +115,20 @@
         &.link.archived.active,
         .skill-name.archived,
         .help i.archived {
-          background-color:$archived-background-color !important;
-          color:$archived-color;
+          /*background-color:$archived-background-color !important;*/
+          color:$archived-background-color;
         }
 
         .skill-name.to-be-submitted,
         .help i.to-be-submitted {
-          background-color:$to-be-submitted-background-color !important;
-          color:$to-be-submitted-color;
+          /*background-color:$to-be-submitted-background-color !important;*/
+          color:$to-be-submitted-background-color;
         }
 
         .skill-name.need-work,
         .help i.need-work {
-          background-color:$need-work-background-color !important;
-          color:$need-work-color;
+          /*background-color:$need-work-background-color !important;*/
+          color:$need-work-background-color;
         }
 
         .help i.na {

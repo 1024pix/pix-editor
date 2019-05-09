@@ -4,7 +4,7 @@
       {{skill.name}}
     </div>
     <div class="help">
-      {{#if skill.clue}}
+      {{#if (or skill.clue skill.clueNA)}}
       <i class={{concat "idea icon " skill.clueCSS}}></i>
       {{else}}
       <i class="icon"></i>

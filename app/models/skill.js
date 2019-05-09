@@ -35,6 +35,9 @@ export default DS.Model.extend({
       return this._getCSSFromStatus(status);
     }
   }),
+  clueNA:computed("clueStatus", function() {
+    return (this.get("clueStatus") === "inapplicable");
+  }),
   _getCSSFromStatus(status) {
     switch(status) {
       case "pré-validé":
