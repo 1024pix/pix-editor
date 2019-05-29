@@ -33,7 +33,9 @@
       <i class="align justify icon"></i>
     </a>
   {{/if}}
-  {{#if (or production skillMode)}}
+  {{#if (and production (not skillMode))}}
+    <div class="item competence-info"><div class="competence-info">Tubes : {{competence.productionTubeCount.content}}</div><div class="competence-info">Acquix : {{competence.productionSkillCount.content}}</div></div>
+  {{else}}
     <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount.content}}</div><div class="competence-info">Acquix : {{competence.skillCount.content}}</div></div>
   {{/if}}
   {{#if skillMode}}
