@@ -76,51 +76,31 @@ export default DS.Model.extend({
   templates:computed('challenges.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('challenges')
-        .then(challenges => {
-          return challenges.filter((challenge) => {
-            return challenge.get('isTemplate');
-          })
-        })
+        .then(challenges => challenges.filter((challenge) => challenge.get('isTemplate')))
     })
   }),
   sortedTemplates:computed('templates.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('templates')
-        .then(templates => {
-          return templates.sort((a, b) => {
-            return a.get("version")<b.get("version");
-          });
-        })
+        .then(templates => templates.sort((a, b) => a.get("version")<b.get("version")))
     })
   }),
   productionTemplate:computed('templates.@each.isValidated', function() {
     return DS.PromiseObject.create({
       promise:this.get('templates')
-      .then((templates) => {
-        return templates.find((template) => {
-          return template.get('isValidated');
-        });
-      })
+      .then(templates => templates.find(template => template.get('isValidated')))
     });
   }),
   draftTemplates:computed('templates.@each.isValidated', function() {
     return DS.PromiseArray.create({
       promise:this.get('templates')
-      .then((templates) => {
-        return templates.filter((template) => {
-          return !template.get('isValidated');
-        });
-      })
+      .then(templates => templates.filter((template) => !template.get('isValidated')))
     });
   }),
   alternatives:computed('challenges.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('challenges')
-      .then((challenges) => {
-        return challenges.filter((challenge) => {
-          return !challenge.get('isTemplate');
-        });
-      })
+      .then(challenges => challenges.filter((challenge) => !challenge.get('isTemplate')))
     });
   }),
   loaded:computed('challenges.[]', function() {
