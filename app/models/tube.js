@@ -20,6 +20,18 @@ export default DS.Model.extend({
   skillCount:computed('skills.[]', function() {
     return this.get('skills').length;
   }),
+  productionSkillCount:computed('skills.@each.productionTemplate', function() {
+    return DS.PromiseObject.create({
+      promise:this.get('skills')
+      .then(skills => {
+        const getProductionChallenges = skills.map(skill => skill.get('productionTemplate'));
+        return Promise.all(getProductionChallenges);
+      })
+      .then(productionChallenges => {
+        return productionChallenges.filter(challenge => challenge != null).length;
+      })
+    })
+  }),
   sortedSkills:computed('skills.[]', function() {
     return DS.PromiseArray.create({
       promise:this.get('skills')
@@ -40,34 +52,16 @@ export default DS.Model.extend({
         })
     });
   }),
-  hasProductionChallenge:computed('skills.@each.productionTemplate', function() {
+  hasProductionChallenge:computed('productionSkillCount', function() {
     return DS.PromiseObject.create({
-      promise:this.get('skills')
-      .then(skills => {
-        let getProductionChallenges = skills.reduce((requests, skill) => {
-          requests.push(skill.get('productionTemplate'));
-          return requests;
-        }, []);
-        return Promise.all(getProductionChallenges);
-      })
-      .then(productionChallenges => {
-        let challengeCount = productionChallenges.reduce((count, challenge) => {
-          if (challenge) {
-            return count+1;
-          }
-          return count;
-        },0);
-        return challengeCount>0;
-      })
+      promise:this.get('productionSkillCount')
+      .then(count => count > 0)
     })
   }),
   loaded:computed('skills.[]', function() {
     return this.get('skills')
     .then(skills => {
-      let waitForSkills = skills.reduce((promises, skill) => {
-        promises.push(skill.get('loaded'));
-        return promises;
-      }, []);
+      let waitForSkills = skills.map(skill => skill.get('loaded'));
       return Promise.all(waitForSkills);
     })
     .then(() => {
@@ -77,10 +71,7 @@ export default DS.Model.extend({
   refresh() {
     return this.hasMany('rawSkills').reload()
     .then(skills => {
-      let refreshSkills = skills.reduce((promises, skill) => {
-        promises.push(skill.refresh());
-        return promises;
-      }, []);
+      const refreshSkills = skills.map(skill => skill.refresh());
       return Promise.all(refreshSkills);
     });
   },
