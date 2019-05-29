@@ -219,7 +219,12 @@ export default DS.Model.extend({
     return this.get("alternatives")
     .then(alternatives => {
       return alternatives.reduce((current, alternative) => {
-        return Math.max(current, alternative.get("alternativeVersion"));
+        const version = alternative.get("alternativeVersion");
+        if (!isNaN(version)) {
+          return Math.max(current, version);
+        } else {
+          return current;
+        }
       }, 0)+1;
     });
   },
