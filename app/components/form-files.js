@@ -1,7 +1,9 @@
 import Component from '@ember/component';
+import { inject as service } from '@ember/service';
 
 export default Component.extend({
   classNames:['field'],
+  filePath:service(),
   actions: {
     remove(index) {
       // clone instead of removeAt, so that rollbackAttributes
@@ -11,12 +13,12 @@ export default Component.extend({
       this.set("value", list);
     },
     add(file) {
-      const value = this.get("value");
+      const value = this.get('value');
       let list = value?value.slice():[];
-      list.unshift({file:file, url:"", filename:file.get("name")});
-      this.set("value", list);
+      list.unshift({file:file, url:'', filename:file.get('name')});
+      this.set('value', list);
       if (this.get('baseName') == null) {
-        this.set('baseName', file.get("name").replace(/\.[^/.]+$/, ""));
+        this.set('baseName', this.get('filePath').getBaseName(file.get('name')));
       }
     }
   }
