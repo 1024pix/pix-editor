@@ -36,6 +36,7 @@ export default DS.Model.extend({
   alternativeText:DS.attr(),
   myStore:service("store"),
   config:service(),
+  _definedBaseName:DS.attr({readOnly:true}),
   isTemplate:computed("genealogy", function(){
     return (this.get("genealogy") === "Prototype 1");
   }),
@@ -269,5 +270,24 @@ export default DS.Model.extend({
           return current;
         }, []))
     });
-  })
+  }),
+  attachmentBaseName:computed('_definedBaseName', 'attachments.[]', {
+    get() {
+      if (this.get('_definedBaseName')) {
+        return this.get('_definedBaseName');
+      }
+      const attachments = this.get('attachments');
+      if (attachments && attachments.length > 0) {
+        return attachments[0].filename.replace(/\.[^/.]+$/, "");
+      }
+      return null;
+    },
+    set(key, value) {
+      this.set('_definedBaseName', value);
+      return value;
+    }
+  }),
+  baseNameUpdated() {
+    return Object.keys(this.changedAttributes()).includes('_definedBaseName');
+  }
 });
