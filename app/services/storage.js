@@ -4,11 +4,9 @@ import { inject as service } from '@ember/service';
 export default Service.extend({
   config:service(),
   ajax:service(),
-  getExtension(filename) {
-    return filename.split(".").pop();
-  },
-  uploadFile(file) {
-    let url = this.get("config").get("storagePost") + Date.now()+ "." + this.getExtension(file.get("name"));
+  filePath:service(),
+  uploadFile(file, fileName) {
+    let url = this.get("config").get("storagePost") + Date.now()+ "." + this.get('filePath').getExtension(file.get("name"));
     let that = this;
     return this.getStorageToken()
     .then(function(token) {
@@ -26,7 +24,7 @@ export default Service.extend({
       });
     })
     .then(function() {
-      return {url:url, filename:file.get("name")};
+      return {url:url, filename:fileName?fileName:file.get("name")};
     });
   },
   uploadFiles(files) {

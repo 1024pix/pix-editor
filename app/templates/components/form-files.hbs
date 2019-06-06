@@ -16,5 +16,11 @@
       Ajouter un fichier...
     </a>
   {{/file-upload}}
+  {{#if value.length}}
+    <div class="ui input">
+        <div class="label-input">Nom :</div>
+        {{input value=baseName}}
+    </div>
+  {{/if}}
 {{/if}}
 </div>

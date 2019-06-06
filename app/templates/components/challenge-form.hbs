@@ -28,7 +28,7 @@
 {{#if challenge.illustration}}
   {{form-textarea value=challenge.alternativeText title="Texte alternatif" edition=edition}}
 {{/if}}
-  {{form-files title="Pièces jointes" value=challenge.attachments edition=edition }}
+  {{form-files title="Pièces jointes" value=challenge.attachments baseName=challenge.attachmentBaseName edition=edition}}
   {{form-input title="Embed" value=challenge.embedURL edition=edition label="URL"}}
   {{form-input value=challenge.embedHeight edition=edition label="Hauteur"}}
   {{form-input value=challenge.embedTitle edition=edition label="Titre"}}

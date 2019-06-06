@@ -30,6 +30,7 @@ export default Controller.extend({
   pixConnector:service(),
   copyZoneId:"copyZone",
   mayUpdateCache:alias("pixConnector.connected"),
+  filePath:service(),
   challengeTitle:computed("creation","challenge", "challenge.{skillNames,isWorkbench.content}", function() {
     if (this.get("creation")) {
       return "Nouveau prototype";
@@ -409,27 +410,31 @@ export default Controller.extend({
   },
   _handleAttachments(challenge) {
     // check for attachments upload
-    let attachments = challenge.get("attachments");
+    let attachments = challenge.get('attachments');
     if (attachments) {
-      let storage = this.get("storage");
-      let uploadRequired = false;
-      let uploadAttachments = attachments.reduce((current, value) => {
+      const baseName = challenge.get('attachmentBaseName');
+      const filePath = this.get('filePath');
+      const baseNameUpdated = challenge.baseNameUpdated();
+      let storage = this.get('storage');
+      let uploadAttachments = attachments.map((value) => {
         if (value.file) {
-          current.push(storage.uploadFile(value.file));
-          uploadRequired = true;
+          const fileName = baseName+'.'+filePath.getExtension(value.file.get('name'));
+          return storage.uploadFile(value.file, fileName);
         } else {
-          current.push(Promise.resolve(value));
+          if (baseNameUpdated) {
+            let newValue = {url:value.url,filename:baseName+'.'+filePath.getExtension(value.filename)};
+            return Promise.resolve(newValue);
+          } else {
+            return Promise.resolve(value);
+          }
         }
-        return current;
-      }, []);
-      if (uploadRequired) {
-        this._loadingMessage("Envoi des pièces jointes...");
-        return Promise.all(uploadAttachments)
-        .then(newAttachments => {
-          challenge.set("attachments", newAttachments);
-          return challenge;
-        })
-      }
+      });
+      this._loadingMessage('Gestion des pièces jointes...');
+      return Promise.all(uploadAttachments)
+      .then(newAttachments => {
+        challenge.set('attachments', newAttachments);
+        return challenge;
+      })
     }
     return Promise.resolve(challenge);
   },

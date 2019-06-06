@@ -11,10 +11,13 @@ export default Component.extend({
       this.set("value", list);
     },
     add(file) {
-      let value = this.get("value");
+      const value = this.get("value");
       let list = value?value.slice():[];
       list.unshift({file:file, url:"", filename:file.get("name")});
       this.set("value", list);
+      if (this.get('baseName') == null) {
+        this.set('baseName', file.get("name").replace(/\.[^/.]+$/, ""));
+      }
     }
   }
 });
