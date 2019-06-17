@@ -47,7 +47,7 @@ export default Component.extend({
         });
       });
     } else {
-      this.get('store').query('challenge', {filterByFormula:`AND(FIND('${query.toLowerCase()}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`, maxRecords:20})
+      this.get('store').query('challenge', {filterByFormula:`AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`, maxRecords:20})
       .then(challenges => {
         const results = challenges.map(challenge => ({title:challenge.get('instructions').substr(0,100), url:this.get('router').urlFor('challenge', challenge.get('id'))}));
         callback({
