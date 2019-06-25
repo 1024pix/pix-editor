@@ -1,7 +1,21 @@
 <div class="main-left">
   <div class="main-title {{if config.lite "lite" ""}}">
-    <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action "changeMode")}}</div>
-  </h1>
+    <h1>{{competence.name}}</h1>
+      {{#ui-dropdown class="selection" selected="Classique" onChange=(action "selectView" value=target.value)}}
+        <div class="default text">Classique</div>
+        <i class="dropdown icon"></i>
+        <div class="menu">
+          {{#each listViews as |view|}}
+            <div data-value="{{view.id}}" class="item">
+              {{view.title}}
+            </div>
+          {{/each}}
+        </div>
+      {{/ui-dropdown}}
+<!--      <div class={{!concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{!ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action "changeMode")}}-->
+<!--    </div>-->
+
+
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}

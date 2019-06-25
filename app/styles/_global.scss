@@ -153,6 +153,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 }
 .main-title {
+  display: flex;
+  justify-content: space-between;
   box-sizing:border-box;
   padding:0 10px;
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
@@ -168,22 +170,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     padding:6px 0;
     color:#FFFFFF;
 
-    .ui.right.floated.menu {
-      background:transparent;
-      border:none;
-      box-shadow:none;
-      min-height:0;
-      a {
-        padding-top:7px;
-        padding-bottom:0;
-        background-color:transparent;
-        box-shadow:none;
-        border:none;
-        i {
-          color:#ffffff;
-        }
-      }
     }
+
+    .ui.selection.dropdown {
+      align-self: center;
 
   }
 }
