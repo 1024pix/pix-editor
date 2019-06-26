@@ -27,6 +27,19 @@ export default Component.extend({
       return template;
     }
     return this.get("skill");
+  }),
+  isItSpoilable:computed("skill.productionTemplate.spoil", function(){
+    let spoil = this.get("skill.productionTemplate.spoil");
+    if(spoil === "Non Sp"){
+      return "not-sp"
+    }
+    if(spoil === "Difficilement Sp"){
+      return "hard-sp"
+    }
+    if(spoil === "Facilement Sp"){
+      return 'easy-sp'
+    }
+    return 'is-sp'
   })
 
 });

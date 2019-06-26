@@ -12,6 +12,12 @@
       <span class="tuto-count">{{skill.tutoSolutionCount}} - {{skill.tutoMoreCount}}</span>
     </div>
   {{/link-to}}
+{{else if spoilMode}}
+  <td class="{{isItSpoilable}}">
+    <div class="skill-name {{skill.descriptionCSS}}">
+      {{skill.name}}
+    </div>
+  </td>
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
     {{skill.name}}

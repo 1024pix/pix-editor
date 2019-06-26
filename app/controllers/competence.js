@@ -3,10 +3,12 @@ import {computed} from "@ember/object";
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
 import {alias} from "@ember/object/computed";
+import { isEqual } from '@ember/utils';
 
 export default Controller.extend({
   childComponentMaximized: false,
   skillMode: false,
+  spoilMode:false,
   selectedView: 'classique',
   listViews: [
     {
@@ -15,7 +17,11 @@ export default Controller.extend({
     }, {
       title: 'Gestion des acquis',
       id: 'acquis'
-    }]
+    },{
+    title:'spoil',
+      id:'spoil'
+    }
+  ]
   ,
   listView: false,
   production: true,
@@ -135,10 +141,13 @@ export default Controller.extend({
       }
     },
     selectView(value) {
-      let skillMode = !this.get("skillMode");
+      let skillMode = isEqual(value, 'acquis');
       this.set('skillMode', skillMode);
+      let spoilMode = isEqual(value, 'spoil');
+      this.set('spoilMode', spoilMode);
+      console.log(skillMode, spoilMode)
       let currentRoute = this.get("router.currentRouteName");
-      if (value==='acquis') {
+      if (skillMode || spoilMode) {
         this.set("listView", false);
       }
       if (value==='acquis' && currentRoute.startsWith("competence.templates.single")) {
