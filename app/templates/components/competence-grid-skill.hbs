@@ -13,11 +13,41 @@
     </div>
   {{/link-to}}
 {{else if spoilMode}}
-  <td class="{{isItSpoilable}}">
+  <td class="" >
     <div class="skill-name {{skill.descriptionCSS}}">
       {{skill.name}}
     </div>
+   <div class="info">
+     <p class="info-child sp {{isItSpoilable}}" data-tooltip="{{if skill.productionTemplate.spoil skill.productionTemplate.spoil "Sp"}}" data-position="left center">
+       SP
+     </p>
+     <p class="info-child responsive {{isItResponsive}}" data-tooltip="{{if skill.productionTemplate.responsive skill.productionTemplate.responsive "Non responsive"}}" data-position="left center">
+       R
+     </p>
+     <p class="info-child blind {{isItA11Y}}" data-tooltip="{{if skill.productionTemplate.accessibility1 skill.productionTemplate.accessibility1 "Accessibilité non testé"}}" data-position="left center">
+       A11Y
+     </p>
+
+     <p class="info-child colorblind {{isItColorblind}}" data-tooltip="{{if skill.productionTemplate.accessibility2 skill.productionTemplate.accessibility2 "Non daltonien"}}" data-position="left center">
+       D
+     </p>
+     <p class="info-child clue {{isItClue}}" data-tooltip="{{if skill.clueStatus skill.clueStatus "Pas d'indice"}}" data-position="left center">
+       I
+     </p>
+<!--     <p class="tutorial">-->
+<!--       T-->
+<!--     </p>-->
+<!--     <p class="internet">-->
+<!--       @-->
+<!--     </p>-->
+   </div>
   </td>
+{{else if spoilMode2}}
+<td>
+  <div class="skill-name {{skill.descriptionCSS}}">
+    {{skill.name}}
+  </div>
+</td>
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
     {{skill.name}}

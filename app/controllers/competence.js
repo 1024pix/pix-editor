@@ -9,6 +9,7 @@ export default Controller.extend({
   childComponentMaximized: false,
   skillMode: false,
   spoilMode:false,
+  spoilMode2:false,
   selectedView: 'classique',
   listViews: [
     {
@@ -20,9 +21,11 @@ export default Controller.extend({
     },{
     title:'spoil',
       id:'spoil'
+    },{
+    title:'spoil2',
+      id:'spoil2'
     }
-  ]
-  ,
+  ],
   listView: false,
   production: true,
   router: service(),
@@ -145,9 +148,10 @@ export default Controller.extend({
       this.set('skillMode', skillMode);
       let spoilMode = isEqual(value, 'spoil');
       this.set('spoilMode', spoilMode);
-      console.log(skillMode, spoilMode)
+      let spoilMode2 = isEqual(value, 'spoil2');
+      this.set('spoilMode2', spoilMode2);
       let currentRoute = this.get("router.currentRouteName");
-      if (skillMode || spoilMode) {
+      if (skillMode || spoilMode || spoilMode2) {
         this.set("listView", false);
       }
       if (value==='acquis' && currentRoute.startsWith("competence.templates.single")) {

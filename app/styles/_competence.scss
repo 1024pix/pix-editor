@@ -1,84 +1,87 @@
 .competence {
   flex: 1 1 0;
-  overflow:hidden;
-  display:flex;
-  flex-direction:column;
-  justify-content:stretch;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
 
   &.half {
-    max-height:30%;
+    max-height: 30%;
   }
 
   .table {
-    margin:0;
-    box-sizing:border-box;
-    border:none;
+    margin: 0;
+    box-sizing: border-box;
+    border: none;
   }
 }
 
 .competence-grid {
-  height:100%;
-  overflow:scroll;
+  height: 100%;
+  overflow: scroll;
   /*flex: 1 1 0;*/
-  min-height:0;
+  min-height: 0;
 }
 
 .ui.table.tubes.definition {
-  font-size:15px;
-  border-radius:0;
-  margin-top:-1px;
+  font-size: 15px;
+  border-radius: 0;
+  margin-top: -1px;
+
   td {
-    box-sizing:border-box;
-    padding:5px;
+    box-sizing: border-box;
+    padding: 5px;
     /*background-color:#F9FAFB;*/
 
     &:first-child:not(.ignored) {
-      background-color:#F9FAFB;
-      padding-left:10px;
+      background-color: #F9FAFB;
+      padding-left: 10px;
     }
 
     &.skill {
-      text-align:center;
+      text-align: center;
+
       &.active,
       &.active .skill-name {
-        color:red !important;
+        color: red !important;
       }
+
       &.link {
-        cursor:pointer;
+        cursor: pointer;
 
         &.skill-mode {
-          background-color:#444488 !important;
+          background-color: #444488 !important;
         }
 
         .skill-name {
-          margin:-5px -5px 0 -5px;
+          margin: -5px -5px 0 -5px;
           padding: 5px 5px 0 5px;
         }
 
         .help {
           margin: 0 -5px -5px -5px;
           padding: 0 5px 5px 5px;
-          color:$suggested-background-color;
+          color: $suggested-background-color;
         }
 
         .tuto-count {
-          font-size:12px;
+          font-size: 12px;
         }
 
         &.production,
         &.production.active,
         .skill-name.production,
         .help i.production {
-          background-color:$production-background-color !important;
-          color:$production-color;
+          background-color: $production-background-color !important;
+          color: $production-color;
         }
 
         &.draft,
         &.draft.active,
         .skill-name.draft,
         .help i.draft {
-          background-color:$draft-background-color !important;
-          color:$draft-color;
+          background-color: $draft-background-color !important;
+          color: $draft-color;
         }
 
         &.suggested,
@@ -86,7 +89,7 @@
         .skill-name.suggested,
         .help i.suggested {
           /*background-color:$suggested-background-color !important;*/
-          color:$suggested-background-color;
+          color: $suggested-background-color;
         }
 
         &.prevalidated,
@@ -94,13 +97,13 @@
         .skill-name.prevalidated,
         .help i.prevalidated {
           /*background-color:$prevalidated-background-color !important;*/
-          color:$prevalidated-background-color;
+          color: $prevalidated-background-color;
         }
 
         &.validated_no_test,
         &.validated_no_test.active {
           /*background-color:$validated-no-test-background-color !important;*/
-          color:$validated-no-test-background-color;
+          color: $validated-no-test-background-color;
         }
 
         &.validated,
@@ -108,7 +111,7 @@
         .skill-name.validated,
         .help i.validated {
           /*background-color:$validated-background-color !important;*/
-          color:$validated-background-color;
+          color: $validated-background-color;
         }
 
         &.link.archived,
@@ -116,76 +119,168 @@
         .skill-name.archived,
         .help i.archived {
           /*background-color:$archived-background-color !important;*/
-          color:$archived-background-color;
+          color: $archived-background-color;
         }
 
         .skill-name.to-be-submitted,
         .help i.to-be-submitted {
           /*background-color:$to-be-submitted-background-color !important;*/
-          color:$to-be-submitted-background-color;
+          color: $to-be-submitted-background-color;
         }
 
         .skill-name.need-work,
         .help i.need-work {
           /*background-color:$need-work-background-color !important;*/
-          color:$need-work-background-color;
+          color: $need-work-background-color;
         }
 
         .help i.na {
-          color:$na-color;
+          color: $na-color;
         }
       }
 
       idea.icon.validated {
-        color:#08cf08;
+        color: #08cf08;
       }
     }
+
     .add-skill {
-      display:block;
-      width:100%;
-      text-align:center;
+      display: block;
+      width: 100%;
+      text-align: center;
 
       &:not(:hover) i {
-        visibility:hidden;
+        visibility: hidden;
       }
 
       &:hover i {
-        visibility:visible;
+        visibility: visible;
       }
 
     }
+
+    .info {
+      display: flex;
+      flex-wrap:wrap;
+      justify-content: center;
+     text-align:center;
+      width: 100%;
+    .info-child{
+      width:calc(100% / 3);
+      margin:0;
+      border:1px solid white;
+      &.sp {
+        &.not-sp {
+          background: #017351;
+          color: white;
+        }
+
+        &.hard-sp {
+          background: #03C383;
+        }
+
+        &.easy-sp {
+          background: #FBBF45;
+        }
+
+        &.is-sp {
+          background: #ED0345;
+          color:white;
+        }
+      }
+      &.responsive{
+        color:white;
+        &.tab-r{
+          background:#01545A;
+        }
+        &.phone-r{
+          background:#710162;
+        }
+        &.tab-phone-r{
+          background-color: #110141;
+        }
+        &.not-r{
+          background: #ED0345;
+        }
+      }
+      &.blind{
+        &.ok-blind{
+          background: #03C383;
+        }
+        &.not-relevant-blind{
+          background: #1A1334;
+          color:white;
+        }
+        &.not-blind{
+          background: #ED0345;
+          color:white;
+        }
+        &.to-test-blind{
+          background: #EF6A32;
+        }
+      }
+      &.colorblind{
+        &.ok-colorblind{
+          background: #03C383;
+        }
+        &.not-colorblind{
+          background: #ED0345;
+          color:white;
+        }
+      }
+      &.clue{
+        &.waiting-clue{
+          background:#26294A;
+          color:white;
+        }
+        &.ok-clue{
+          background:#03C383;
+        }
+        &.light-ok-clue{
+          background: #79eac5;
+        }
+        &.propose-clue{
+          background:#FBBF45;
+        }
+        &.reworked-clue{
+          background: #f9dca2;
+        }
+        &.archive-clue{
+          background: #A12A5E;
+          color:white;
+        }
+        &.not-clue{
+          background:#ED0345;
+          color:white;
+        }
+      }
+
+    }
+    }
   }
+
+
 }
 
 .template-list,
 .alternative-list {
   .list-row {
     .suggested {
-      background-color:$suggested-background-color !important;
-      color:$suggested-color;
+      background-color: $suggested-background-color !important;
+      color: $suggested-color;
     }
+
     .validated {
-      background-color:$validated-background-color !important;
-      color:$validated-color;
+      background-color: $validated-background-color !important;
+      color: $validated-color;
     }
+
     .archived {
-      background-color:$archived-background-color !important;
-      color:$archived-color;
+      background-color: $archived-background-color !important;
+      color: $archived-color;
     }
   }
 }
 
-.not-sp{
-  background:#017351;
-  color:white;
-}
-.hard-sp{
-  background:#03C383;
-}
-.easy-sp{
-  background:#AAD962;
-}
-.is-sp{
-  background:#FBBF45;
 
-}
+
