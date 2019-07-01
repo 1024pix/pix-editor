@@ -139,7 +139,7 @@
         }
       }
 
-      idea.icon.validated {
+      .idea.icon.validated {
         color: #08cf08;
       }
     }
@@ -170,88 +170,94 @@
       margin:0;
       border:1px solid white;
       &.sp {
+
         &.not-sp {
-          background: #017351;
+          background: #01432b;
           color: white;
         }
 
         &.hard-sp {
-          background: #03C383;
+          background: #01734c;
         }
 
         &.easy-sp {
-          background: #FBBF45;
+          background: #03b675;
         }
 
         &.is-sp {
-          background: #ED0345;
-          color:white;
+          background: #03ffa6;
         }
       }
       &.responsive{
-        color:white;
+
         &.tab-r{
-          background:#01545A;
+          background: #81026a;
+          color:white;
         }
         &.phone-r{
-          background:#710162;
+          background: #81026a;
+          color:white;
+
         }
         &.tab-phone-r{
-          background-color: #110141;
+          background:#500142;
+          color:white;
         }
         &.not-r{
-          background: #ED0345;
+          background: #ff02d0;
         }
       }
       &.blind{
         &.ok-blind{
-          background: #03C383;
+          background: #33000e;
+          color:white;
         }
         &.not-relevant-blind{
-          background: #1A1334;
+          background: #33000e;
           color:white;
         }
         &.not-blind{
-          background: #ED0345;
-          color:white;
+          background: #ed0040;
         }
         &.to-test-blind{
-          background: #EF6A32;
+          background: #860025;
+          color:white;
+
         }
       }
       &.colorblind{
         &.ok-colorblind{
-          background: #03C383;
+          background: #84740d;
+          color:white;
         }
         &.not-colorblind{
-          background: #ED0345;
-          color:white;
+          background: #FFE119;
         }
       }
       &.clue{
         &.waiting-clue{
-          background:#26294A;
-          color:white;
+          background: #5f66bd;
         }
         &.ok-clue{
-          background:#03C383;
+          background: #1c1e36;
+          color:white;
         }
         &.light-ok-clue{
-          background: #79eac5;
+          background: #383c6b;
+          color:white;
         }
         &.propose-clue{
-          background:#FBBF45;
+          background: #5f66bd;
         }
         &.reworked-clue{
-          background: #f9dca2;
+          background: #5f66bd;
         }
         &.archive-clue{
-          background: #A12A5E;
-          color:white;
+          background: #9cccff;
         }
         &.not-clue{
-          background:#ED0345;
-          color:white;
+          background: #9cccff;
+
         }
       }
 
