@@ -158,110 +158,136 @@
       }
 
     }
-    
+
     .info {
       display: flex;
-      flex-wrap:wrap;
+      flex-wrap: wrap;
       justify-content: center;
-     text-align:center;
+      text-align: center;
       width: 100%;
-    .info-child{
-      width:calc(100% / 3);
-      margin:0;
-      border:1px solid white;
-      &.sp {
 
-        &.not-sp {
-          background: #01432b;
-          color: white;
+      .info-child {
+        width: calc(100% / 3);
+        margin: 0;
+        border: 1px solid white;
+
+        &.sp {
+
+          &.not-sp {
+            background: #01432b;
+            color: white;
+          }
+
+          &.hard-sp {
+            background: #01734c;
+          }
+
+          &.easy-sp {
+            background: #03b675;
+          }
+
+          &.is-sp {
+            background: #03ffa6;
+          }
         }
 
-        &.hard-sp {
-          background: #01734c;
+        &.responsive {
+
+          &.tab-r {
+            background: #81026a;
+            color: white;
+          }
+
+          &.phone-r {
+            background: #81026a;
+            color: white;
+
+          }
+
+          &.tab-phone-r {
+            background: #500142;
+            color: white;
+          }
+
+          &.not-r {
+            background: #ff02d0;
+          }
         }
 
-        &.easy-sp {
-          background: #03b675;
+        &.blind {
+          &.ok-blind {
+            background: #33000e;
+            color: white;
+          }
+
+          &.not-relevant-blind {
+            background: #33000e;
+            color: white;
+          }
+
+          &.not-blind {
+            background: #ed0040;
+          }
+
+          &.to-test-blind {
+            background: #860025;
+            color: white;
+
+          }
         }
 
-        &.is-sp {
-          background: #03ffa6;
+        &.colorblind {
+          &.ok-colorblind {
+            background: #84740d;
+            color: white;
+          }
+
+          &.not-colorblind {
+            background: #FFE119;
+          }
         }
+
+        &.clue {
+          &.waiting-clue {
+            background: #5f66bd;
+          }
+
+          &.ok-clue {
+            background: #1c1e36;
+            color: white;
+          }
+
+          &.light-ok-clue {
+            background: #383c6b;
+            color: white;
+          }
+
+          &.propose-clue {
+            background: #5f66bd;
+          }
+
+          &.reworked-clue {
+            background: #5f66bd;
+          }
+
+          &.archive-clue {
+            background: #9cccff;
+          }
+
+          &.not-clue {
+            background: #9cccff;
+
+          }
+        }
+
       }
-      &.responsive{
-
-        &.tab-r{
-          background: #81026a;
-          color:white;
-        }
-        &.phone-r{
-          background: #81026a;
-          color:white;
-
-        }
-        &.tab-phone-r{
-          background:#500142;
-          color:white;
-        }
-        &.not-r{
-          background: #ff02d0;
-        }
-      }
-      &.blind{
-        &.ok-blind{
-          background: #33000e;
-          color:white;
-        }
-        &.not-relevant-blind{
-          background: #33000e;
-          color:white;
-        }
-        &.not-blind{
-          background: #ed0040;
-        }
-        &.to-test-blind{
-          background: #860025;
-          color:white;
-
-        }
-      }
-      &.colorblind{
-        &.ok-colorblind{
-          background: #84740d;
-          color:white;
-        }
-        &.not-colorblind{
-          background: #FFE119;
-        }
-      }
-      &.clue{
-        &.waiting-clue{
-          background: #5f66bd;
-        }
-        &.ok-clue{
-          background: #1c1e36;
-          color:white;
-        }
-        &.light-ok-clue{
-          background: #383c6b;
-          color:white;
-        }
-        &.propose-clue{
-          background: #5f66bd;
-        }
-        &.reworked-clue{
-          background: #5f66bd;
-        }
-        &.archive-clue{
-          background: #9cccff;
-        }
-        &.not-clue{
-          background: #9cccff;
-
-        }
-      }
-
     }
+    .colored-note{
+      display:flex;
+      justify-content: space-between;
+      span:nth-child(2){
+        color:orangered;
+      }
     }
   }
 
@@ -288,5 +314,21 @@
   }
 }
 
-
+.colored-note-details {
+  tr {
+    &:nth-child(even) {
+      background: #FFA300;
+      color: white;
+    }
+    &:nth-child(odd) {
+      background: #FFCE4D;
+    }
+    td{
+      padding:5px;
+      &:nth-child(2){
+        text-align : center;
+      }
+    }
+  }
+}
 

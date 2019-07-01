@@ -43,11 +43,21 @@
    </div>
   </td>
 {{else if spoilMode2}}
-<td   style="background: {{concat "rgba(56,112,255," truthyColor ")"}}">
-  <div class="skill-name {{skill.descriptionCSS}}">
-    {{skill.name}}
+<td style="background: {{concat "rgba(56,112,255," truthyColor ")"}}">
+  {{#ui-popup html=(concat
+    '<table class="colored-note-details">
+    <tr><td>Spoil </td><td> ' (if skill.productionTemplate.spoil skill.productionTemplate.spoil "Non testé") '</td></tr>
+    <tr><td>Responsive </td><td> ' (if skill.productionTemplate.responsive skill.productionTemplate.responsive "Non testé") '</td></tr>
+    <tr><td>A11Y </td><td> ' (if skill.productionTemplate.accessibility1 skill.productionTemplate.accessibility1 "Non testé") '</td></tr>
+    <tr><td>Daltonien </td><td> ' (if skill.productionTemplate.accessibility2 skill.productionTemplate.accessibility2 "Non testé") '</td></tr>
+    <tr><td>Indice </td><td> ' (if skill.clueStatus skill.clueStatus "Pas d'indice") '</td></tr>
+    </table>')}}
+  <div class="skill-name {{skill.descriptionCSS}} colored-note" >
+    <span>{{skill.name}}</span>
+    <span>{{truthyColor}}</span>
   </div>
 
+  {{/ui-popup}}
 </td>
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
