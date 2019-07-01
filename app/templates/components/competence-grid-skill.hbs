@@ -13,7 +13,7 @@
     </div>
   {{/link-to}}
 {{else if spoilMode}}
-  <td class="" >
+  <td>
     <div class="skill-name {{skill.descriptionCSS}}">
       {{skill.name}}
     </div>
@@ -43,10 +43,11 @@
    </div>
   </td>
 {{else if spoilMode2}}
-<td>
+<td   style="background: {{concat "rgba(56,112,255," truthyColor ")"}}">
   <div class="skill-name {{skill.descriptionCSS}}">
     {{skill.name}}
   </div>
+
 </td>
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}

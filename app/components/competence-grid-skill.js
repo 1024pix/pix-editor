@@ -169,6 +169,7 @@ export default Component.extend({
         }
         return 0
       };
-      return spoilWeight()*5/3 + responsiveWeight()*2 +colorblindWeight()*3 + a11YWeight()*3/2 + clueWeight()
+      const result = (spoilWeight()*5/3 + responsiveWeight()*2 +colorblindWeight()*3 + a11YWeight()*3/2 + clueWeight())/19
+      return result.toFixed(2)
     })
 });
