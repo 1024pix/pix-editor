@@ -8,8 +8,7 @@ import { isEqual } from '@ember/utils';
 export default Controller.extend({
   childComponentMaximized: false,
   skillMode: false,
-  spoilMode:false,
-  spoilMode2:false,
+  qualityMode:false,
   selectedView: 'classique',
   listViews: [
     {
@@ -19,11 +18,8 @@ export default Controller.extend({
       title: 'Gestion des acquis',
       id: 'acquis'
     },{
-    title:'spoil',
-      id:'spoil'
-    },{
-    title:'spoil2',
-      id:'spoil2'
+    title:'Qualité',
+      id:'quality'
     }
   ],
   listView: false,
@@ -146,12 +142,10 @@ export default Controller.extend({
     selectView(value) {
       let skillMode = isEqual(value, 'acquis');
       this.set('skillMode', skillMode);
-      let spoilMode = isEqual(value, 'spoil');
-      this.set('spoilMode', spoilMode);
-      let spoilMode2 = isEqual(value, 'spoil2');
-      this.set('spoilMode2', spoilMode2);
+      let quality = isEqual(value, 'quality');
+      this.set('qualityMode', quality);
       let currentRoute = this.get("router.currentRouteName");
-      if (skillMode || spoilMode || spoilMode2) {
+      if (skillMode || quality) {
         this.set("listView", false);
       }
       if (value==='acquis' && currentRoute.startsWith("competence.templates.single")) {
@@ -174,51 +168,6 @@ export default Controller.extend({
             }
           });
       } else if (value==='classique' && currentRoute.startsWith("competence.skill")) {
-        let skill = this.get("skillController").get("skill");
-        if (skill) {
-          return skill.get('productionTemplate')
-            .then(template => {
-              if (template) {
-                this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-              } else {
-                this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                this.send("closeChildComponent");
-              }
-            });
-        } else {
-          this.send("closeChildComponent");
-        }
-      } else {
-        this.send("closeChildComponent");
-      }
-    },
-    changeMode() {
-      let skillMode = !this.get("skillMode");
-      this.set('skillMode', skillMode);
-      let currentRoute = this.get("router.currentRouteName");
-      if (skillMode) {
-        this.set("listView", false);
-      }
-      if (skillMode && currentRoute.startsWith("competence.templates.single")) {
-        let challenge = this.get("challengeController").get("challenge");
-        return challenge.get('isWorkbench')
-          .then(workbench => {
-            if (workbench) {
-              this.transitionToRoute("competence.index", this.get("competence").get("id"));
-              this.send("closeChildComponent");
-            } else {
-              return challenge.get('skills')
-                .then(skills => {
-                  if (skills.length > 0) {
-                    this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-                  } else {
-                    this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                    this.send("closeChildComponent");
-                  }
-                });
-            }
-          });
-      } else if (!skillMode && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
         if (skill) {
           return skill.get('productionTemplate')
