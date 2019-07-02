@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  tagName:"td",
+  tagName:"div",
   classNameBindings:["qualityClassColor"],
   qualityIndication:computed("skill.productionTemplate.spoil",
     "skill.productionTemplate.responsive",
@@ -78,14 +78,14 @@ export default Component.extend({
         return 0
       };
       const result = (spoilWeight()*5/3 + responsiveWeight()*2 +colorblindWeight()*3 + a11YWeight()*3/2 + clueWeight())/19;
-      return result.toFixed(2)
+      return (result*100).toFixed(0)
     }),
   qualityClassColor:computed('qualityIndication', function(){
    const qualityIndication = this.get('qualityIndication');
-   if(qualityIndication<0.5){
+   if(qualityIndication<50){
      return 'quality bad-quality'
    }
-   if(qualityIndication<0.8){
+   if(qualityIndication<80){
      return 'quality medium-quality'
    }
    return 'quality good-quality'

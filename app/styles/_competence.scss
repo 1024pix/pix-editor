@@ -31,7 +31,7 @@
   td {
     box-sizing: border-box;
     padding: 5px;
-    /*background-color:#F9FAFB;*/
+
 
     &:first-child:not(.ignored) {
       background-color: #F9FAFB;
@@ -143,22 +143,36 @@
         color: #08cf08;
       }
     }
-    &.quality{
+    &.quality-skill-link{
+      padding:0;
+      .quality {
+        padding:5px;
+        height: 100%;
+        cursor: pointer;
+        &.bad-quality {
+          background: #EA2700;
+          color: white;
+        }
 
-      &.bad-quality {
-        background: #EA2700;
-        color: white;
-      }
+        &.medium-quality {
+          background: #F3AC0B;
+        }
 
-      &.medium-quality {
-        background: #F3AC0B;
-      }
+        &.good-quality {
+          background: #0DC600;
+        }
 
-      &.good-quality {
-        background: #0DC600;
+        .half-tutorial {
+          color: #aaa
+        }
       }
-      .half-tutorial{
-        color:#aaa
+      &.active{
+        .quality{
+
+        box-shadow: #000 0 0 7px;
+        opacity: .8;
+        }
+
       }
     }
     .add-skill {

@@ -148,26 +148,31 @@ export default Controller.extend({
       if (skillMode || quality) {
         this.set("listView", false);
       }
-      if (value==='acquis' && currentRoute.startsWith("competence.templates.single")) {
-        let challenge = this.get("challengeController").get("challenge");
-        return challenge.get('isWorkbench')
-          .then(workbench => {
-            if (workbench) {
-              this.transitionToRoute("competence.index", this.get("competence").get("id"));
-              this.send("closeChildComponent");
-            } else {
-              return challenge.get('skills')
-                .then(skills => {
-                  if (skills.length > 0) {
-                    this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-                  } else {
-                    this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                    this.send("closeChildComponent");
-                  }
-                });
-            }
-          });
-      } else if (value==='classique' && currentRoute.startsWith("competence.skill")) {
+      if(quality && !this.get('production')){
+        this.set('production', true)
+      }
+      if (currentRoute.startsWith("competence.templates.single")) {
+        if(value==='acquis'){
+          let challenge = this.get("challengeController").get("challenge");
+          return challenge.get('isWorkbench')
+            .then(workbench => {
+              if (workbench) {
+                this.transitionToRoute("competence.index", this.get("competence").get("id"));
+                this.send("closeChildComponent");
+              } else {
+                return challenge.get('skills')
+                  .then(skills => {
+                    if (skills.length > 0) {
+                      this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+                    } else {
+                      this.transitionToRoute("competence.index", this.get("competence").get("id"));
+                      this.send("closeChildComponent");
+                    }
+                  });
+              }
+            });
+        }
+      } else if ((value==='classique'||value==='quality') && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
         if (skill) {
           return skill.get('productionTemplate')
