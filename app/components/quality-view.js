@@ -2,8 +2,9 @@ import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 export default Component.extend({
-  tagName:"",
-  truthyColor:computed("skill.productionTemplate.spoil",
+  tagName:"td",
+  classNameBindings:["qualityClassColor"],
+  qualityIndication:computed("skill.productionTemplate.spoil",
     "skill.productionTemplate.responsive",
     "skill.productionTemplate.accessibility1",
     "skill.productionTemplate.accessibility2",
@@ -76,17 +77,27 @@ export default Component.extend({
         }
         return 0
       };
-      const result = (spoilWeight()*5/3 + responsiveWeight()*2 +colorblindWeight()*3 + a11YWeight()*3/2 + clueWeight())/19
+      const result = (spoilWeight()*5/3 + responsiveWeight()*2 +colorblindWeight()*3 + a11YWeight()*3/2 + clueWeight())/19;
       return result.toFixed(2)
     }),
+  qualityClassColor:computed('qualityIndication', function(){
+   const qualityIndication = this.get('qualityIndication');
+   if(qualityIndication<0.5){
+     return 'quality bad-quality'
+   }
+   if(qualityIndication<0.8){
+     return 'quality medium-quality'
+   }
+   return 'quality good-quality'
+  }),
   haveTutorial:computed("skill.tutoSolutionCount", "skill.tutoMoreCount", function(){
     const tutoSolution = this.get('skill.tutoSolutionCount');
     const tutoMore = this.get('skill.tutoMoreCount');
     if(tutoSolution>0 && tutoMore>0){
-      return 'black'
+      return 'have-tutorial'
     }
     if(tutoSolution>0 || tutoMore>0){
-      return 'grey'
+      return 'half-tutorial'
     }
     return false
   }),

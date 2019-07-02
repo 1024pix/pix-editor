@@ -143,7 +143,24 @@
         color: #08cf08;
       }
     }
+    &.quality{
 
+      &.bad-quality {
+        background: #EA2700;
+        color: white;
+      }
+
+      &.medium-quality {
+        background: #F3AC0B;
+      }
+
+      &.good-quality {
+        background: #0DC600;
+      }
+      .half-tutorial{
+        color:#aaa
+      }
+    }
     .add-skill {
       display: block;
       width: 100%;
@@ -159,134 +176,13 @@
 
     }
 
-    .info {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      text-align: center;
-      width: 100%;
 
-      .info-child {
-        width: calc(100% / 3);
-        margin: 0;
-        border: 1px solid white;
-
-        &.sp {
-
-          &.not-sp {
-            background: #01432b;
-            color: white;
-          }
-
-          &.hard-sp {
-            background: #01734c;
-          }
-
-          &.easy-sp {
-            background: #03b675;
-          }
-
-          &.is-sp {
-            background: #03ffa6;
-          }
-        }
-
-        &.responsive {
-
-          &.tab-r {
-            background: #81026a;
-            color: white;
-          }
-
-          &.phone-r {
-            background: #81026a;
-            color: white;
-
-          }
-
-          &.tab-phone-r {
-            background: #500142;
-            color: white;
-          }
-
-          &.not-r {
-            background: #ff02d0;
-          }
-        }
-
-        &.blind {
-          &.ok-blind {
-            background: #33000e;
-            color: white;
-          }
-
-          &.not-relevant-blind {
-            background: #33000e;
-            color: white;
-          }
-
-          &.not-blind {
-            background: #ed0040;
-          }
-
-          &.to-test-blind {
-            background: #860025;
-            color: white;
-
-          }
-        }
-
-        &.colorblind {
-          &.ok-colorblind {
-            background: #84740d;
-            color: white;
-          }
-
-          &.not-colorblind {
-            background: #FFE119;
-          }
-        }
-
-        &.clue {
-          &.waiting-clue {
-            background: #5f66bd;
-          }
-
-          &.ok-clue {
-            background: #1c1e36;
-            color: white;
-          }
-
-          &.light-ok-clue {
-            background: #383c6b;
-            color: white;
-          }
-
-          &.propose-clue {
-            background: #5f66bd;
-          }
-
-          &.reworked-clue {
-            background: #5f66bd;
-          }
-
-          &.archive-clue {
-            background: #9cccff;
-          }
-
-          &.not-clue {
-            background: #9cccff;
-
-          }
-        }
-
-      }
-    }
-    .colored-note{
+    .quality-indication{
       display:flex;
       justify-content: space-between;
       span:nth-child(2){
-        color:orangered;
+        margin-left: 10px;
+        font-weight: bold;
       }
     }
   }
@@ -314,7 +210,7 @@
   }
 }
 
-.colored-note-details {
+.quality-indication-details {
   tr {
     &:nth-child(even) {
       background: #FFA300;
