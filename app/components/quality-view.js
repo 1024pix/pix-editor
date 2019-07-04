@@ -13,7 +13,7 @@ export default Component.extend({
           'Facilement Sp': 1,
           'default': 0
         };
-        return (quality[spoil] || quality['default']) / 3 * weight
+        return (quality[spoil] || quality['default']) / 3 * weight;
       }
 
       function responsiveWeight(responsive) {
@@ -24,7 +24,7 @@ export default Component.extend({
           'Tablette/Smartphone': 2,
           'default': 0
         };
-        return (quality[responsive] || quality['default']) / 2 * weight
+        return (quality[responsive] || quality['default']) / 2 * weight;
       }
 
       function colorblindWeight(colorblind) {
@@ -34,7 +34,7 @@ export default Component.extend({
           'OK': 1,
           'default': 0
         };
-        return (quality[colorblind] || quality['default']) * weight
+        return (quality[colorblind] || quality['default']) * weight;
       }
 
       function a11YWeight(a11Y) {
@@ -46,7 +46,7 @@ export default Component.extend({
           'KO': 0,
           'default': 0
         };
-        return (quality[a11Y] || quality['default']) / 2 * weight
+        return (quality[a11Y] || quality['default']) / 2 * weight;
       }
 
       function clueWeight(clue) {
@@ -60,7 +60,7 @@ export default Component.extend({
           'archiver': 0,
           'default': 0
         };
-        return (quality[clue] || quality['default']) / 4 * weight
+        return (quality[clue] || quality['default']) / 4 * weight;
       }
 
       const allWeight = 19;
@@ -71,37 +71,37 @@ export default Component.extend({
       const clue = clueWeight(this.get('skill.clueStatus'));
 
       const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
-      return Math.round(result * 100)
+      return Math.round(result * 100);
     }),
   qualityClassColor: computed('qualityIndication', function () {
     const qualityIndication = this.get('qualityIndication');
     if (qualityIndication < 50) {
-      return 'quality bad-quality'
+      return 'quality bad-quality';
     }
     if (qualityIndication < 80) {
-      return 'quality medium-quality'
+      return 'quality medium-quality';
     }
-    return 'quality good-quality'
+    return 'quality good-quality';
   }),
   classTutorial: computed("skill[tutoSolutionCount,tutoMoreCount]", function () {
     const tutoSolution = this.get('skill.tutoSolutionCount');
     const tutoMore = this.get('skill.tutoMoreCount');
     if (tutoSolution > 0 && tutoMore > 0) {
-      return 'have-tutorial'
+      return 'have-tutorial';
     }
     if (tutoSolution > 0 || tutoMore > 0) {
-      return 'half-tutorial'
+      return 'half-tutorial';
     }
-    return false
+    return false;
   }),
   popupBuild: computed("skill[productionTemplate[spoil,responsive,accessibility1,accessibility2,timer],clueStatus,tutoSolutionCount,tutoMoreCount]",
     "classTutorial",
     function () {
       function isNonTested(skillDetail) {
         if (skillDetail) {
-          return skillDetail
+          return skillDetail;
         }
-        return 'Non testé'
+        return 'Non testé';
       }
 
       const spoil = isNonTested(this.get('skill.productionTemplate.spoil'));
@@ -111,16 +111,16 @@ export default Component.extend({
       const clue = () => {
         const skillClue = this.get('skill.clueStatus');
         if (skillClue){
-          return skillClue
+          return skillClue;
         }
-        return "Pas d'indice"
+        return "Pas d'indice";
       };
       const timer = () =>{
         const skillTimer = this.get('skill.productionTemplate.timer');
         if(skillTimer){
-          return `<tr><td>Timer</td><td>${skillTimer} s</td></tr>`
+          return `<tr><td>Timer</td><td>${skillTimer} s</td></tr>`;
         }
-        return ''
+        return '';
       };
 
 
@@ -130,9 +130,9 @@ export default Component.extend({
         const tutoMoreCount = this.get('skill.tutoMoreCount');
         if(haveTuto){
           return `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
-                  <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`
+                  <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`;
         }
-        return ''
+        return '';
       };
       return `<tr><td>Spoil </td><td> ${spoil} </td></tr>
               <tr><td>Responsive </td><td> ${responsive} </td></tr>
@@ -140,7 +140,7 @@ export default Component.extend({
               <tr><td>Daltonien </td><td> ${colorblind} </td></tr>
               <tr><td>Indice </td><td> ${clue()} </td></tr>
               ${haveTuto()}
-              ${timer()}`
+              ${timer()}`;
     }
   )
 });

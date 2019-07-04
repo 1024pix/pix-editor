@@ -149,7 +149,7 @@ export default Controller.extend({
         this.set("listView", false);
       }
       if(quality && !this.get('production')){
-        this.set('production', true)
+        this.set('production', true);
       }
       if (currentRoute.startsWith("competence.templates.single")) {
         if(value==='acquis'){
