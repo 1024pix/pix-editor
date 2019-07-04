@@ -1,8 +1,8 @@
 <div class="main-left">
   <div class="ui main-title {{if config.lite "lite" ""}} ">
     <h1 class="ui left floated header">{{competence.name}}</h1>
-    {{#ui-dropdown class="selection ui small right floated header" selected="Epreuves" onChange=(action "selectView" value=target.value)}}
-      <div class="default text">Epreuves</div>
+    {{#ui-dropdown class="selection ui small right floated header" selected=currentView onChange=(action "selectView") }}
+    <div class="default text"></div>
       <i class="dropdown icon"></i>
       <div class="menu">
         {{#each listViews as |view|}}

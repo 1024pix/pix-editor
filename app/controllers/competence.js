@@ -6,9 +6,9 @@ import {alias} from "@ember/object/computed";
 
 export default Controller.extend({
   childComponentMaximized: false,
+  currentView: 'challenges',
   skillMode: false,
   qualityMode:false,
-  selectedView: 'epreuves',
   listViews:null,
   listView: false,
   production: true,
@@ -35,18 +35,16 @@ export default Controller.extend({
       propertyName: "status"
     }
     ];
-    this.listViews = [
-      {
-        title: 'Epreuves',
-        id: 'epreuves'
-      }, {
-        title: 'Gestion des acquis',
-        id: 'acquis'
-      },{
-        title:'Qualité',
-        id:'quality'
-      }
-    ];
+    this.listViews = [{
+      title: 'Epreuves',
+      id: 'challenges'
+    }, {
+      title: 'Gestion des acquis',
+      id: 'skills'
+    },{
+      title:'Qualité',
+      id:'quality'
+    }];
   },
   mayCreateTemplate: computed("config.access", function () {
     return this.get("access").mayCreateTemplate();
@@ -140,7 +138,9 @@ export default Controller.extend({
       }
     },
     selectView(value) {
-      let skillMode = value ==='acquis';
+      this.set('currentView', value);
+
+      let skillMode = value ==='skills';
       this.set('skillMode', skillMode);
       let quality = value ==='quality';
       this.set('qualityMode', quality);
@@ -172,7 +172,7 @@ export default Controller.extend({
               }
             });
         }
-      } else if ((value==='epreuves'||value==='quality') && currentRoute.startsWith("competence.skill")) {
+      } else if ((value==='challenges'||value==='quality') && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
         if (skill) {
           return skill.get('productionTemplate')
