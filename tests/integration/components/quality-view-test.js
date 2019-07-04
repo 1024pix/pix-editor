@@ -12,15 +12,8 @@ module('Integration | Component | quality-view', function(hooks) {
 
     await render(hbs`{{quality-view}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.equal(this.element.textContent.trim(), '0');
 
-    // Template block usage:
-    await render(hbs`
-      {{#quality-view}}
-        template block text
-      {{/quality-view}}
-    `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

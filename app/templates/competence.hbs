@@ -1,17 +1,17 @@
 <div class="main-left">
-  <div class="main-title {{if config.lite "lite" ""}}">
-    <h1>{{competence.name}}</h1>
-      {{#ui-dropdown class="selection" selected="Classique" onChange=(action "selectView" value=target.value)}}
-        <div class="default text">Classique</div>
-        <i class="dropdown icon"></i>
-        <div class="menu">
-          {{#each listViews as |view|}}
-            <div data-value="{{view.id}}" class="item">
-              {{view.title}}
-            </div>
-          {{/each}}
-        </div>
-      {{/ui-dropdown}}
+  <div class="ui main-title {{if config.lite "lite" ""}} ">
+    <h1 class="ui left floated header">{{competence.name}}</h1>
+    {{#ui-dropdown class="selection ui small right floated header" selected="Epreuves" onChange=(action "selectView" value=target.value)}}
+      <div class="default text">Epreuves</div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        {{#each listViews as |view|}}
+          <div data-value={{view.id}} class="item">
+            {{view.title}}
+          </div>
+        {{/each}}
+      </div>
+    {{/ui-dropdown}}
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}

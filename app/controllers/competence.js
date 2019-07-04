@@ -3,25 +3,13 @@ import {computed} from "@ember/object";
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
 import {alias} from "@ember/object/computed";
-import { isEqual } from '@ember/utils';
 
 export default Controller.extend({
   childComponentMaximized: false,
   skillMode: false,
   qualityMode:false,
-  selectedView: 'classique',
-  listViews: [
-    {
-      title: 'Classique',
-      id: 'classique'
-    }, {
-      title: 'Gestion des acquis',
-      id: 'acquis'
-    },{
-    title:'Qualité',
-      id:'quality'
-    }
-  ],
+  selectedView: 'epreuves',
+  listViews:null,
   listView: false,
   production: true,
   router: service(),
@@ -46,6 +34,18 @@ export default Controller.extend({
       title: "Statut",
       propertyName: "status"
     }
+    ];
+    this.listViews = [
+      {
+        title: 'Epreuves',
+        id: 'epreuves'
+      }, {
+        title: 'Gestion des acquis',
+        id: 'acquis'
+      },{
+        title:'Qualité',
+        id:'quality'
+      }
     ];
   },
   mayCreateTemplate: computed("config.access", function () {
@@ -140,9 +140,9 @@ export default Controller.extend({
       }
     },
     selectView(value) {
-      let skillMode = isEqual(value, 'acquis');
+      let skillMode = value ==='acquis';
       this.set('skillMode', skillMode);
-      let quality = isEqual(value, 'quality');
+      let quality = value ==='quality';
       this.set('qualityMode', quality);
       let currentRoute = this.get("router.currentRouteName");
       if (skillMode || quality) {
@@ -172,7 +172,7 @@ export default Controller.extend({
               }
             });
         }
-      } else if ((value==='classique'||value==='quality') && currentRoute.startsWith("competence.skill")) {
+      } else if ((value==='epreuves'||value==='quality') && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
         if (skill) {
           return skill.get('productionTemplate')

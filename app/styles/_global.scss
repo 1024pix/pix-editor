@@ -153,8 +153,6 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 }
 .main-title {
-  display: flex;
-  justify-content: space-between;
   box-sizing:border-box;
   padding:0 10px;
   border-bottom:1px solid rgba(34, 36, 38, 0.15);
@@ -164,7 +162,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     background-color:#7C0E6A;
   }
 
-  h1 {
+  h1.ui.header {
     font-size:20px;
     font-weight:normal;
     margin-bottom:0;
@@ -174,7 +172,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     }
 
     .ui.selection.dropdown {
-      align-self: center;
+      margin-top: 5px;
 
   }
 }
