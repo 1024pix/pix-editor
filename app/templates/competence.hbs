@@ -1,7 +1,17 @@
 <div class="main-left">
-  <div class="main-title {{if config.lite "lite" ""}}">
-    <h1>{{competence.name}} <div class={{concat "skill-mode" (if skillMode " active" "")}}>Gestion des acquis{{ui-checkbox checked=skillMode class="toggle skill-mode" onChange=(action "changeMode")}}</div>
-  </h1>
+  <div class="ui main-title {{if config.lite "lite" ""}} ">
+    <h1 class="ui left floated header">{{competence.name}}</h1>
+    {{#ui-dropdown class="selection ui small right floated header" selected=currentView onChange=(action "selectView") }}
+    <div class="default text"></div>
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        {{#each listViews as |view|}}
+          <div data-value={{view.id}} class="item">
+            {{view.title}}
+          </div>
+        {{/each}}
+      </div>
+    {{/ui-dropdown}}
   </div>
   <div class="ui top attached borderless labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
     {{#unless config.lite}}
@@ -9,6 +19,7 @@
         <a class="left item" onclick={{action "shareSkills"}}>
           <i class="share square icon"></i> Exporter
         </a>
+      {{else if (or qualityMode)}}
       {{else}}
       <div class="ui top attached tabular menu">
         <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>En production</div>
@@ -22,7 +33,7 @@
   </div>
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
     {{competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=(not listView) link=skillLink production=production}}
-    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView skillMode=skillMode link=skillLink production=production}}
+    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView qualityMode=qualityMode skillMode=skillMode link=skillLink production=production}}
   </div>
   <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
   {{#if (and (not skillMode) (not production))}}

@@ -12,7 +12,7 @@
         </td>
         {{#each tube.filledSkills as |skill index|}}
           {{#if (and skill.name (or skillMode (not production)  skill.productionTemplate))}}
-              {{competence-grid-skill skill=skill skillMode=skillMode production=production link=link competenceModel=competenceModel}}
+              {{competence-grid-skill skill=skill skillMode=skillMode qualityMode=qualityMode production=production link=link competenceModel=competenceModel}}
           {{else if (and skillMode mayAddSkill)}}
             <td>{{#link-to "competence.skill.new" competenceModel tube.id index class="add-skill"}} <i class="icon plus circle"></i>{{/link-to}}</td>
           {{else}}

@@ -12,6 +12,10 @@
       <span class="tuto-count">{{skill.tutoSolutionCount}} - {{skill.tutoMoreCount}}</span>
     </div>
   {{/link-to}}
+{{else if qualityMode}}
+  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class="quality-skill-link"}}
+  {{quality-view skill=skill}}
+  {{/link-to}}
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
     {{skill.name}}

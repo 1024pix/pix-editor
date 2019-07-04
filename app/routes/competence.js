@@ -4,7 +4,7 @@ import {inject as service} from "@ember/service";
 export default Route.extend({
   paginatedQuery:service(),
   model(params) {
-    return this.get('store').findRecord("competence", params.competence_id)
+    return this.get('store').findRecord("competence", params.competence_id);
   },
   afterModel(model) {
     if (model.get('needsRefresh')) {

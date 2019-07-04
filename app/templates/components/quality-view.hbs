@@ -1,0 +1,18 @@
+  {{#ui-popup html=(concat
+    "<table class='quality-indication-details'>"
+    popupBuild
+    "</table>")}}
+    <div class=" quality-indication">
+      <span>{{skill.name}}</span>
+      <span>{{qualityIndication}}</span>
+    </div>
+    {{#if classTutorial}}
+      <i class="lab icon {{classTutorial}}"></i>
+    {{/if}}
+    {{#if skill.productionTemplate.timer }}
+      <i class="time icon"></i>
+    {{/if}}
+    {{#if (and (not classTutorial) (not skill.productionTemplate.timer))}}
+    <br>
+      {{/if}}
+  {{/ui-popup}}
