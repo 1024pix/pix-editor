@@ -6,5 +6,9 @@ export default DS.Model.extend({
   source: DS.attr(),
   format: DS.attr(),
   link: DS.attr(),
-  license: DS.attr()
+  license: DS.attr(),
+  tags: DS.attr(),
+  level: DS.attr(),
+  date: DS.attr(),
+  crush: DS.attr(),
 });

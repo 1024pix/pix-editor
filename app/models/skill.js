@@ -2,11 +2,7 @@ import DS from 'ember-data';
 import {computed} from '@ember/object';
 
 export default DS.Model.extend({
-  init() {
-    this._super(...arguments);
-    this.tutoMore = [];
-    this.tutoSolutions = [];
-  },
+
   name: DS.attr('string', {readOnly:true}),
   tube: DS.belongsTo('tube'),
   challenges:DS.hasMany('challenge'),
@@ -15,8 +11,8 @@ export default DS.Model.extend({
   clueStatus:DS.attr(),
   description:DS.attr(),
   descriptionStatus:DS.attr(),
-  tutoSolutionIds:DS.attr(),
-  tutoMoreIds:DS.attr(),
+  tutoSolution:DS.hasMany('tutorial'),
+  tutoMore:DS.hasMany('tutorial'),
   level:DS.attr(),
   status:DS.attr(),
   descriptionCSS:computed("descriptionStatus" , function() {
