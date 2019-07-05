@@ -152,7 +152,7 @@ export default Controller.extend({
         this.set('production', true);
       }
       if (currentRoute.startsWith("competence.templates.single")) {
-        if(value==='acquis'){
+        if(value==='skills'){
           let challenge = this.get("challengeController").get("challenge");
           return challenge.get('isWorkbench')
             .then(workbench => {
