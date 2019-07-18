@@ -188,9 +188,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .ui.selection.dropdown {
-    min-height:40px;
-    height:40px;
+    min-height:0px;
+    height:auto;
     margin:2px 0;
+    padding:8px;
   }
 
 }
