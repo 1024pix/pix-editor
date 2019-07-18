@@ -191,7 +191,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     min-height:0px;
     height:auto;
     margin:2px 0;
-    padding:8px;
+    padding:8px 40px 8px 8px;
+    min-width:0;
+    width:150px;
   }
 
 }

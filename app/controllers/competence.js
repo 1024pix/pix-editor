@@ -39,7 +39,7 @@ export default Controller.extend({
       title: 'Epreuves',
       id: 'challenges'
     }, {
-      title: 'Gestion des acquis',
+      title: 'Acquis',
       id: 'skills'
     },{
       title:'Qualité',
