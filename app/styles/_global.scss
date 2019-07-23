@@ -165,16 +165,37 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   h1.ui.header {
     font-size:20px;
     font-weight:normal;
-    margin-bottom:0;
-    padding:12px 0;
+    margin:0;
+    padding:6px 0;
     color:#FFFFFF;
 
+    .ui.right.floated.menu {
+      background:transparent;
+      border:none;
+      box-shadow:none;
+      min-height:0;
+      a {
+        padding-top:7px;
+        padding-bottom:0;
+        background-color:transparent;
+        box-shadow:none;
+        border:none;
+        i {
+          color:#ffffff;
+        }
+      }
     }
-
-    .ui.selection.dropdown {
-      margin-top: 5px;
-
   }
+
+  .ui.selection.dropdown {
+    min-height:0px;
+    height:auto;
+    margin:2px 0;
+    padding:8px 40px 8px 8px;
+    min-width:0;
+    width:150px;
+  }
+
 }
 
 %list {
