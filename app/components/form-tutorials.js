@@ -12,7 +12,6 @@ export default Component.extend({
   loading:alias("tutorials.isPending"),
   actions: {
     openCreateTutoModal: function() {
-      console.log("alo",this.get('popinCreateTutoClass'));
       $(`.${this.get('popinCreateTutoClass')}`).modal('show');
     },
   }

@@ -2,21 +2,19 @@ import PopinBase from "./popin-base";
 
 
 export default PopinBase.extend({
-
+  isCrush:false,
   willInitSemantic(settings) {
     this._super(...arguments);
     settings.closable = false;
   },
   actions: {
-
-    approveModal: function(element, component) {
-      alert('approve ' + component.get('name'));
-      return false;
+    saveTutorial(){
+      console.log('saveTuto')
     },
-
-    denyModal: function(element, component) {
-      alert('deny ' + component.get('name'));
-      return true;
+    toCrush(){
+     let isCrush = !this.get('isCrush');
+      this.set('isCrush', isCrush);
     }
+
   }
 });

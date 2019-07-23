@@ -1,24 +1,101 @@
 <i class="close icon"></i>
 <div class="header">
-  Profile Picture
+    Ajouter un tutoriel
 </div>
-<div class="image content">
-  <div class="ui medium image">
-    <img src="http://semantic-ui.com/images/avatar/large/chris.jpg">
-  </div>
-  <div class="description">
-    <div class="ui header">We've auto-chosen a profile image for you.</div>
-    <p>We've grabbed the following image from the <a href="https://www.gravatar.com" target="_blank">gravatar</a> image
-      associated with your registered e-mail address.</p>
-    <p>Is it okay to use this photo?</p>
-  </div>
-</div>
+<form class="ui form">
+    <div class="ui stacked segment">
+        <div class="field">
+            <label>Titre</label>
+            {{input type="text" placeholder="Titre"}}
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Lien</label>
+                {{input type="text" placeholder="Lien"}}
+            </div>
+            <div class="field">
+                <label>Source</label>
+                {{input type="text" placeholder="Source"}}
+            </div>
+            <div class="field">
+                <label>License</label>
+                {{input type="text" placeholder="License"}}
+            </div>
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Format</label>
+                {{#ui-dropdown class="selection ui small"}}
+                    <div class="default text"></div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">
+                            Vidéo
+                        </div>
+                        <div class="item">
+                            Site
+                        </div>
+                    </div>
+                {{/ui-dropdown}}
+            </div>
+            <div class="field">
+                <label>Durée</label>
+                {{input type="text" placeholder="Durée"}}
+            </div>
+            <div class="field">
+                <label>Niveau</label>
+                {{#ui-dropdown class="selection ui small"}}
+                    <div class="default text"></div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">1</div>
+                        <div class="item">2</div>
+                        <div class="item">3</div>
+                        <div class="item">4</div>
+                        <div class="item">5</div>
+                        <div class="item">6</div>
+                        <div class="item">7</div>
+                        <div class="item">8</div>
+                        <div class="item">9</div>
+                        <div class="item">10</div>
+                    </div>
+                {{/ui-dropdown}}
+            </div>
+        </div>
+        <div class="fields">
+            <div class="twelve wide field">
+                <label>Tags</label>
+                {{#ui-dropdown class="fluid multiple selection"}}
+                    <i class="dropdown icon"></i>
+                    <div class="default text">Tags</div>
+                    <div class="menu">
+
+                        <div class="item">
+                            test0
+                        </div>
+                        <div class="item">
+                            test1
+                        </div>
+                        <div class="item">
+                            test2
+                        </div>
+
+                    </div>
+                {{/ui-dropdown}}
+            </div>
+            <div class="field">
+                <label>Coup de coeur</label>
+                <div onclick={{action "toCrush"}} class="ui circular icon button ">
+                    <i class="icon heart {{if isCrush "" "outline" }}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <div class="actions">
-  <div class="ui black deny button">
-    Nope
-  </div>
-  <div class="ui positive right labeled icon button">
-    Yep, that's me
-    <i class="checkmark icon"></i>
-  </div>
+    <div onclick={{action "saveTutorial"}} class="ui positive right labeled icon button">
+        Enregistrer
+        <i class="checkmark icon"></i>
+    </div>
 </div>
