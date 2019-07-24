@@ -1,13 +1,15 @@
 <div class="field {{if edition "" " disabled"}}">
   <label>
     {{title}}
-
-      <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated" title="Ajouter un tutoriel">
+      {{#if (not edition)}}
+      <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated" title="Créer un tutoriel">
           <i class="icon add"></i>
       </div>
+          {{create-tutorial kindTuto=title skillName=skillName application=application class=popinCreateTutoClass}}
+      {{/if}}
+
   </label>
 
-{{create-tutorial kindTuto=title skillName=skillName class=popinCreateTutoClass}}
   {{#if loading}}
     <div class="ui active centered inline loader"></div>
   {{else}}
