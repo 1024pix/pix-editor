@@ -2,12 +2,12 @@
   <label>
     {{title}}
 
-      <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button small floated" title="Ajouter un tutoriel">
+      <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated" title="Ajouter un tutoriel">
           <i class="icon add"></i>
       </div>
   </label>
 
-{{create-tutorial class=popinCreateTutoClass}}
+{{create-tutorial kindTuto=title skillName=skillName class=popinCreateTutoClass}}
   {{#if loading}}
     <div class="ui active centered inline loader"></div>
   {{else}}

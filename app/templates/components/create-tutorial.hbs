@@ -1,88 +1,42 @@
 <i class="close icon"></i>
 <div class="header">
     Ajouter un tutoriel
+    {{kindTuto}}, {{skillName}}
 </div>
 <form class="ui form">
     <div class="ui stacked segment">
         <div class="field">
             <label>Titre</label>
-            {{input type="text" placeholder="Titre"}}
+            {{input type="text" value=item.title placeholder="Titre"}}
         </div>
         <div class="three fields">
             <div class="field">
                 <label>Lien</label>
-                {{input type="text" placeholder="Lien"}}
+                {{input type="text" value=item.link placeholder="Lien"}}
             </div>
             <div class="field">
                 <label>Source</label>
-                {{input type="text" placeholder="Source"}}
+                {{input type="text" value=item.source placeholder="Source"}}
             </div>
             <div class="field">
                 <label>License</label>
-                {{input type="text" placeholder="License"}}
+                {{input type="text" value=item.licence placeholder="License"}}
             </div>
         </div>
         <div class="three fields">
-            <div class="field">
-                <label>Format</label>
-                {{#ui-dropdown class="selection ui small"}}
-                    <div class="default text"></div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item">
-                            Vidéo
-                        </div>
-                        <div class="item">
-                            Site
-                        </div>
-                    </div>
-                {{/ui-dropdown}}
-            </div>
+            {{form-select title="Format" value=item.format options=options.format edition=edition}}
+
             <div class="field">
                 <label>Durée</label>
-                {{input type="text" placeholder="Durée"}}
+                {{input type="text" value=item.duration placeholder="Durée"}}
             </div>
-            <div class="field">
-                <label>Niveau</label>
-                {{#ui-dropdown class="selection ui small"}}
-                    <div class="default text"></div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item">1</div>
-                        <div class="item">2</div>
-                        <div class="item">3</div>
-                        <div class="item">4</div>
-                        <div class="item">5</div>
-                        <div class="item">6</div>
-                        <div class="item">7</div>
-                        <div class="item">8</div>
-                        <div class="item">9</div>
-                        <div class="item">10</div>
-                    </div>
-                {{/ui-dropdown}}
-            </div>
+            {{form-select title="Niveau" value=item.level options=options.level edition=edition}}
+
         </div>
         <div class="fields">
-            <div class="twelve wide field">
-                <label>Tags</label>
-                {{#ui-dropdown class="fluid multiple selection"}}
-                    <i class="dropdown icon"></i>
-                    <div class="default text">Tags</div>
-                    <div class="menu">
+<!--            <div class="twelve wide field">-->
+            {{form-select title="Tags" multiple=true value=item.tags options=options.tags edition=edition}}
 
-                        <div class="item">
-                            test0
-                        </div>
-                        <div class="item">
-                            test1
-                        </div>
-                        <div class="item">
-                            test2
-                        </div>
-
-                    </div>
-                {{/ui-dropdown}}
-            </div>
             <div class="field">
                 <label>Coup de coeur</label>
                 <div onclick={{action "toCrush"}} class="ui circular icon button ">
@@ -94,8 +48,8 @@
 </form>
 
 <div class="actions">
-    <div onclick={{action "saveTutorial"}} class="ui positive right labeled icon button">
+    <div onclick={{action "saveTutorial" item kindTuto skillName}} class="ui positive right labeled icon button">
         Enregistrer
-        <i class="checkmark icon"></i>
+        <i class="save icon"></i>
     </div>
 </div>
