@@ -8,11 +8,16 @@ import DS from 'ember-data';
 export default Component.extend({
   classNames:['field'],
   popinCreateTutoClass: 'popinCreateTutoClass',
+  popinFindTutoClass: 'popinFindTutoClass',
   store:service(),
   loading:alias("tutorials.isPending"),
   actions: {
     openCreateTutoModal: function() {
       $(`.${this.get('popinCreateTutoClass')}`).modal('show');
+    },
+    openFindTutoModal: function() {
+      console.log('alo');
+      $(`.${this.get('popinFindTutoClass')}`).modal('show');
     },
   }
 });

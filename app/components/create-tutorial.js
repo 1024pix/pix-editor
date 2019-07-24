@@ -6,7 +6,20 @@ export default PopinBase.extend({
   isCrush: false,
   edition:true,
   options:{
-    'format':['Vidéo', 'site'],
+    'format':[
+      "vidéo",
+      "image",
+      "son",
+      "site",
+      "pdf",
+      "slide",
+      "outil",
+      "page",
+      "jeu",
+      "audio",
+      "frise",
+      "video"
+    ],
     'level':['1','2','3','4','5','6','7','8','9','10'],
     'tags':['t0', 't1', 't2']
   },

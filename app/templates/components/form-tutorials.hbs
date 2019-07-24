@@ -1,43 +1,56 @@
 <div class="field {{if edition "" " disabled"}}">
-  <label>
-    {{title}}
-      {{#if (not edition)}}
-      <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated" title="Créer un tutoriel">
-          <i class="icon add"></i>
-      </div>
-          {{create-tutorial kindTuto=title skillName=skillName application=application class=popinCreateTutoClass}}
-      {{/if}}
-
-  </label>
-
-  {{#if loading}}
-    <div class="ui active centered inline loader"></div>
-  {{else}}
-    <div class="ui cards">
-      {{#each tutorials as |tutorial|}}
-        <div class="card">
-          <div class="content">
-            <div class="header">
-              <a class="ui right floated button basic" href={{tutorial.link}} target="_blank" rel="noopener">
-                <i class="external icon"></i>
-              </a>
-              {{tutorial.title}}
+    <label>
+        {{title}}
+        {{#if (not edition)}}
+            <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated"
+                 title="Créer un tutoriel">
+                <i class="icon add"></i>
             </div>
-            <div class="description">
-              <div>Format : {{tutorial.format}}</div>
-              <div>Durée : {{tutorial.duration}}</div>
-              <div>Source : {{tutorial.source}}</div>
+            {{create-tutorial kindTuto=title skillName=skillName application=application class=popinCreateTutoClass}}
+        {{/if}}
+
+    </label>
+
+    {{#if loading}}
+        <div class="ui active centered inline loader"></div>
+    {{else}}
+        <div class="ui cards">
+            {{#each tutorials as |tutorial|}}
+                <div class="card">
+                    <div class="content">
+                        <div class="header">
+                            <a class="ui right floated button basic" href={{tutorial.link}} target="_blank"
+                               rel="noopener">
+                                <i class="external icon"></i>
+                            </a>
+                            {{tutorial.title}}
+                        </div>
+                        <div class="description">
+                            <div>Format : {{tutorial.format}}</div>
+                            <div>Durée : {{tutorial.duration}}</div>
+                            <div>Source : {{tutorial.source}}</div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+            {{#if empty}}
+                <div class="card">
+                    <div class="content">
+                        aucun élément
+                    </div>
+                </div>
+            {{/if}}
+            <div class="ui middle aligned centered grid">
+                <div class="centered row">
+                    <div class="ui segment column" style="margin-left:20px">
+                        <div onclick={{action "openFindTutoModal"}} class="ui icon button" title="Ajouter un tutoriel">
+                            <i class="icon add"></i>
+                        </div>
+                        {{popin-find-tutorial kindTuto=title skillName=skillName application=application class=popinFindTutoClass}}
+                    </div>
+                </div>
             </div>
-          </div>
+
         </div>
-      {{/each}}
-      {{#if empty}}
-        <div class="card">
-          <div class="content">
-            aucun élément
-          </div>
-        </div>
-      {{/if}}
-    </div>
-  {{/if}}
+    {{/if}}
 </div>
