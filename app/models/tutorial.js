@@ -7,7 +7,7 @@ export default DS.Model.extend({
   format: DS.attr(),
   link: DS.attr(),
   license: DS.attr(),
-  tags: DS.attr(),
+  tags: DS.hasMany('tag'),
   level: DS.attr(),
   date: DS.attr(),
   crush: DS.attr(),
