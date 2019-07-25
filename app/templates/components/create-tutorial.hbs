@@ -36,22 +36,26 @@
             <div class="field">
                 <label>Rechercher tags</label>
                 {{!form-select title="Tags" multiple=true value=item.tags options=options.tags edition=edition}}
-            {{#ui-search showNoResults=true maxResults=4 apiSettings=searchAPISettings error=searchErrors onSelect=(action "selectTag")}}
-                <div class="ui icon input">
-                    <input class="prompt" placeholder="Nom" type="text">
-                    <i class="search icon"></i>
-                </div>
-                <div class="results"></div>
-            {{/ui-search}}
+                {{#ui-search class="search-tag-input" showNoResults=true maxResults=4 apiSettings=searchAPISettings
+                             error=searchErrors onSelect=(action "selectTag")}}
+                    <div class="ui icon input">
+                        <input class="prompt" placeholder="Nom" type="text">
+                        <i class="search icon"></i>
+                    </div>
+                    <div class="results"></div>
+                {{/ui-search}}
             </div>
             <div class="twelve wide field">
-                <label>Tags</label>
-                {{#each selectedTags as |tag|}}
-                    <button {{action "unselectTag" tag.id}} class="ui mini labeled icon button">
-                        <i class="close icon"></i>
-                        {{tag.title}}
-                    </button>
-                {{/each}}
+                {{#if haveTagsSelected}}
+                    <label>Tags</label>
+                    {{#each selectedTags as |tag|}}
+                        <button {{action "unselectTag" tag.id}} class="ui mini labeled icon button btn-selected-tag"
+                                                                style="margin-bottom:5px">
+                            <i class="close icon"></i>
+                            {{tag.title}}
+                        </button>
+                    {{/each}}
+                {{/if}}
             </div>
         </div>
         <div class="fields">
