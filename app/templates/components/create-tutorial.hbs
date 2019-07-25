@@ -33,9 +33,28 @@
 
         </div>
         <div class="fields">
-<!--            <div class="twelve wide field">-->
-            {{form-select title="Tags" multiple=true value=item.tags options=options.tags edition=edition}}
-
+            <div class="field">
+                <label>Rechercher tags</label>
+                {{!form-select title="Tags" multiple=true value=item.tags options=options.tags edition=edition}}
+            {{#ui-search showNoResults=true maxResults=4 apiSettings=searchAPISettings error=searchErrors onSelect=(action "selectTag")}}
+                <div class="ui icon input">
+                    <input class="prompt" placeholder="Nom" type="text">
+                    <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+            {{/ui-search}}
+            </div>
+            <div class="twelve wide field">
+                <label>Tags</label>
+                {{#each selectedTags as |tag|}}
+                    <button {{action "unselectTag" tag.id}} class="ui mini labeled icon button">
+                        <i class="close icon"></i>
+                        {{tag.title}}
+                    </button>
+                {{/each}}
+            </div>
+        </div>
+        <div class="fields">
             <div class="field">
                 <label>Coup de coeur</label>
                 <div onclick={{action "toCrush"}} class="ui circular icon button ">
