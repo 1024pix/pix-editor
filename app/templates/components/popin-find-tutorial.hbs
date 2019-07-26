@@ -1,10 +1,20 @@
 <i class="close icon"></i>
 <div class="header">
-    Trouver un tutoriel pour {{skillName}}
+    Trouver un tutoriel "{{kindTuto}}"  // {{skill.name}}
 </div>
 {{!#each tutorialList as |tutorial|}}
     {{!tutorial.title}}
 {{!/each}}
+{{#ui-search class="search-tag-input" showNoResults=true maxResults=4 apiSettings=searchAPISettings
+             error=searchErrors onSelect=(action "selectTag")}}
+    <div class="ui icon input">
+        <input class="prompt" placeholder="Rachercher tutoriel" type="text">
+        <i class="search icon"></i>
+    </div>
+    <div class="results"></div>
+{{/ui-search}}
+
+
 
 <div class="actions">
     <div  class="ui positive right labeled icon button">

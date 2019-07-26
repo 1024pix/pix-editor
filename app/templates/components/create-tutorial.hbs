@@ -1,6 +1,6 @@
 <i class="close icon"></i>
 <div class="header">
-    Créer un tutoriel pour {{skill.name}}
+    Créer un tutoriel
 </div>
 <form class="ui form">
     <div class="ui stacked segment">
@@ -48,11 +48,14 @@
                 {{#if haveTagsSelected}}
                     <label>Tags</label>
                     {{#each selectedTags as |tag|}}
-                        <button {{action "unselectTag" tag.id}} class="ui mini labeled icon button btn-selected-tag"
-                                                                style="margin-bottom:5px">
-                            <i class="close icon"></i>
-                            {{tag.title}}
-                        </button>
+                        <div class="ui mini labeled button btn-selected-tag" tabindex="0">
+                            <div {{action "unselectTag" tag.id}} class="ui icon button">
+                                <i class="close icon"></i>
+                            </div>
+                            <p class="ui basic label">
+                                {{tag.title}}
+                            </p>
+                        </div>
                     {{/each}}
                 {{/if}}
             </div>
@@ -60,7 +63,7 @@
         <div class="fields">
             <div class="field">
                 <label>Coup de coeur</label>
-                <div onclick={{action "toCrush"}} class="ui circular icon button ">
+                <div onclick={{action "toCrush"}} class="ui circular icon button crush">
                     <i class="icon heart {{if isCrush "" "outline" }}"></i>
                 </div>
             </div>
@@ -69,7 +72,7 @@
 </form>
 
 <div class="actions">
-    <div onclick={{action "saveTutorial" item kindTuto skill}} class="ui positive right labeled icon button">
+    <div onclick={{action "saveTutorial" item tutorials}} class="ui positive right labeled icon button">
         Enregistrer
         <i class="save icon"></i>
     </div>

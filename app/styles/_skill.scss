@@ -1,23 +1,24 @@
 .main-title {
   .skill-mode {
-    float:right;
-    margin-top:2px;
-    font-weight:normal;
-    font-size:14px;
-    color:rgba(255,255,255,0.5);
+    float: right;
+    margin-top: 2px;
+    font-weight: normal;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
 
     &.active {
-      color:#ffffff;
+      color: #ffffff;
     }
 
     .checkbox {
-      margin-left:10px;
+      margin-left: 10px;
     }
   }
 }
 
 .skill-header {
   @extend .challenge-header;
+
   &.suggested,
   &.prevalidated,
   &.validated_no_test,
@@ -25,8 +26,8 @@
   &.archived,
   &.need-work,
   &.to-be-submitted {
-    background-color:#444488 !important;
-    color:#ffffff !important;
+    background-color: #444488 !important;
+    color: #ffffff !important;
   }
 }
 
@@ -40,7 +41,21 @@
 
 .skill-details {
   @extend .challenge;
-  .find-tutorial-card{
-    margin-left:20px;
-  }
+
 }
+
+.popinCreateTutoClass {
+  .btn-selected-tag {
+    margin-bottom: 5px;
+  }
+
+  .crush {
+    color: red;
+
+    &:hover {
+      color: red;
+    }
+  }
+
+}
+

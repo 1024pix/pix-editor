@@ -1,16 +1,24 @@
 <div class="field {{if edition "" " disabled"}}">
     <label>
         {{title}}
-        {{#if (not edition)}}
-            <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated"
-                 title="Créer un tutoriel">
-                <i class="icon add"></i>
-            </div>
-            {{create-tutorial kindTuto=title skill=skill application=application class=popinCreateTutoClass}}
-        {{/if}}
-
     </label>
-
+    {{#if edition}}
+        {{#ui-search class="search-tutorial-input" showNoResults=true maxResults=5 apiSettings=searchAPISettings
+                     error=searchErrors onSelect=(action "selectTutorial" tutorials)}}
+            <div class="ui icon input">
+                <input class="prompt" placeholder="Ajouter/créer tutoriel" type="text">
+                <i class="search icon"></i>
+            </div>
+            <div class="results"></div>
+        {{/ui-search}}
+<!--        <div onclick={{action "openCreateTutoModal"}} class="ui circular icon button floated"-->
+<!--             title="Créer un tutoriel">-->
+<!--            <i class="icon add"></i>-->
+<!--        </div>-->
+        {{create-tutorial tutorials=tutorials application=application class=popinCreateTutoClass}}
+    {{/if}}
+</div>
+<div >
     {{#if loading}}
         <div class="ui active centered inline loader"></div>
     {{else}}
@@ -40,16 +48,6 @@
                     </div>
                 </div>
             {{/if}}
-            <div class="ui middle aligned centered grid">
-                <div class="centered row">
-                    <div class="ui segment column find-tutorial-card" >
-                        <div onclick={{action "openFindTutoModal"}} class="ui icon button" title="Ajouter un tutoriel">
-                            <i class="icon add"></i>
-                        </div>
-                        {{popin-find-tutorial kindTuto=title skillName=skillName application=application class=popinFindTutoClass}}
-                    </div>
-                </div>
-            </div>
 
         </div>
     {{/if}}

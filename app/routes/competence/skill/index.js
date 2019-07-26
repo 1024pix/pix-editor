@@ -5,6 +5,8 @@ export default Route.extend({
     return this.get("store").findRecord("skill", params.skill_id);
   },
   afterModel(model) {
+    model.pinRelationships()
+    console.log(model)
     const skillMode = this.controllerFor("competence").get("skillMode");
     if (!skillMode) {
       return model.get('productionTemplate')
