@@ -11,4 +11,6 @@ export default DS.Model.extend({
   level: DS.attr(),
   date: DS.attr(),
   crush: DS.attr(),
+  tutoSolution:DS.hasMany('skill', {inverse : 'tutoSolution'}),
+  tutoMore:DS.hasMany('skill', {inverse: 'tutoMore'})
 });

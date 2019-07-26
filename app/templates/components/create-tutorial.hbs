@@ -1,6 +1,6 @@
 <i class="close icon"></i>
 <div class="header">
-    Créer un tutoriel pour {{skillName}}
+    Créer un tutoriel pour {{skill.name}}
 </div>
 <form class="ui form">
     <div class="ui stacked segment">
@@ -23,19 +23,18 @@
             </div>
         </div>
         <div class="three fields">
-            {{form-select title="Format" value=item.format options=options.format edition=edition}}
+            {{form-select title="Format" defaultText="Format" value=item.format options=options.format edition=edition}}
 
             <div class="field">
                 <label>Durée</label>
                 {{input type="text" value=item.duration placeholder="Durée"}}
             </div>
-            {{form-select title="Niveau" value=item.level options=options.level edition=edition}}
+            {{form-select title="Niveau" defaultText="Niveau" value=item.level options=options.level edition=edition}}
 
         </div>
         <div class="fields">
             <div class="field">
                 <label>Rechercher tags</label>
-                {{!form-select title="Tags" multiple=true value=item.tags options=options.tags edition=edition}}
                 {{#ui-search class="search-tag-input" showNoResults=true maxResults=4 apiSettings=searchAPISettings
                              error=searchErrors onSelect=(action "selectTag")}}
                     <div class="ui icon input">
@@ -70,7 +69,7 @@
 </form>
 
 <div class="actions">
-    <div onclick={{action "saveTutorial" item kindTuto skillName}} class="ui positive right labeled icon button">
+    <div onclick={{action "saveTutorial" item kindTuto skill}} class="ui positive right labeled icon button">
         Enregistrer
         <i class="save icon"></i>
     </div>

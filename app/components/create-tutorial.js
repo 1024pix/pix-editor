@@ -15,10 +15,6 @@ export default PopinBase.extend({
   //   // return (!(selectedTags.length = 0));
   // }),
   haveTagsSelected:false,
-  options: {
-    'format': ["vidéo", "image", "son", "site", "pdf", "slide", "outil", "page", "jeu", "audio", "frise", "video"],
-    'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-  },
   store: service(),
   query: '',
   willInitSemantic(settings) {
@@ -37,7 +33,11 @@ export default PopinBase.extend({
       }
     };
     this.set('selectedTags', []);
-    this.set('item', {})
+    this.set('item', {});
+    this.set('options',{
+      'format': ["vidéo", "image", "son", "site", "pdf", "slide", "outil", "page", "jeu", "audio", "frise", "video"],
+      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    })
   },
   getSearchResults(setting, callback) {
     let query = setting.urlData.query;
@@ -81,15 +81,18 @@ export default PopinBase.extend({
         this.set('haveTagsSelected', false)
       }
     },
-    saveTutorial(item) {
+    saveTutorial(item, kindTuto, skill) {
       this.get("application").send("isLoading");
+      let tutoStyle = kindTuto === "Pour en savoir plus "?"tutoMore":"tutoSolution";
       let isCrush = this.get('isCrush');
       const selectedTags = this.get('selectedTags');
       const date = new Date();
       item.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       item.crush = isCrush ? 'yes' : "";
       item.tags = selectedTags;
+      item[tutoStyle] = [skill];
       this.store.createRecord('tutorial', item).save()
+
         .then(() => {
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Tutoriel créé", true);

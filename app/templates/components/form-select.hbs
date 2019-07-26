@@ -1,7 +1,7 @@
 <div class={{concat "field" (if edition "" " disabled")}}>
   <label>{{title}}</label>
   {{#ui-dropdown class=(concat "selection" (if edition "" " disabled") (if multiple " multiple")) selected=value showOnFocus=false onChange=(action (mut value)) as |execute mapper|}}
-  <div class="default text"></div>
+  <div class="default text">{{if defaultText defaultText ""}}</div>
   <i class="dropdown icon"></i>
   <div class="menu">
     {{#each options as |option|}}
