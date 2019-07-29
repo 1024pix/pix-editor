@@ -5,8 +5,7 @@ export default Route.extend({
     return this.get("store").findRecord("skill", params.skill_id);
   },
   afterModel(model) {
-    model.pinRelationships()
-    console.log(model)
+    model.pinRelationships();
     const skillMode = this.controllerFor("competence").get("skillMode");
     if (!skillMode) {
       return model.get('productionTemplate')
@@ -32,6 +31,9 @@ export default Route.extend({
           !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         transition.abort();
       } else {
+        this.controller.get('model').rollbackAttributes();
+        this.controller.get('model').rollbackRelationships();
+
         return true;
       }
     }

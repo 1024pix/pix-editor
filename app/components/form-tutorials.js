@@ -5,7 +5,7 @@ import {alias} from '@ember/object/computed';
 
 export default Component.extend({
   classNames:['field'],
-  popinCreateTutoClass: 'popinCreateTutoClass',
+  popinCreateTutoClass:'popinCreateTutoClass',
   store:service(),
   loading:alias("tutorials.isPending"),
   init() {
@@ -19,6 +19,7 @@ export default Component.extend({
         that.getSearchTutorialResults(settings, callback);
       }
     };
+    this.set('titleSearch', {})
   },
   getSearchTutorialResults(setting, callback) {
     let query = setting.urlData.query;
@@ -29,7 +30,7 @@ export default Component.extend({
     })
       .then((tutorials) => {
         const results = tutorials.map(tutorial => ({title: tutorial.get('title'), id: tutorial.get('id')}));
-        results.pushObject({title:'Nouveau <i class="add icon"></i>',  description: 'Ajouter un tutoriel',id:'create'});
+        results.push({title:'Nouveau <i class="add icon"></i>',  description: 'Ajouter un tutoriel',id:'create'});
         callback({
           success: true,
           results: results
@@ -39,24 +40,28 @@ export default Component.extend({
   actions: {
 
     selectTutorial(tutorials, item){
-      console.log('item:',item, 'tuto:',  tutorials);
       if(item.id === 'create'){
+         const value = $(`.search-tuto-input`).search("get value");
+         this.set('titleSearch', {title:value});
         $(`.${this.get('popinCreateTutoClass')}`).modal('show');
       }else{
         return this.get('store').findRecord('tutorial', item.id)
           .then((tutorial)=>{
             tutorials.pushObject(tutorial);
             setTimeout(()=>{
-              $('.search-tutorial-input').search("set value", "")
+              $(`.search-tuto-input`).search("set value", "")
             },1)
           })
-
       }
-
       setTimeout(()=>{
-        $('.search-tutorial-input').search("set value", "")
+        $(`.search-tuto-input`).search("set value", "")
       },1)
-    }
+      return true;
+    },
+    unselectTutorial(tutorials,tutorial){
+      tutorials.removeObject(tutorial)
+    },
+
 
   }
 });

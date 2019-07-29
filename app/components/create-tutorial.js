@@ -1,14 +1,14 @@
 import PopinBase from "./popin-base";
 import {inject as service} from '@ember/service';
-import {computed} from '@ember/object';
-import { isEmpty } from '@ember/utils';
+import {isEmpty} from '@ember/utils';
 
 
 export default PopinBase.extend({
   isCrush: false,
   edition: true,
-  haveTagsSelected:false,
+  haveTagsSelected: false,
   store: service(),
+  searchAPISettings:null,
   query: '',
   willInitSemantic(settings) {
     this._super(...arguments);
@@ -21,18 +21,19 @@ export default PopinBase.extend({
       noResults: 'Pas de résultat'
     };
     this.searchAPISettings = {
-      responseAsync: function (settings, callback) {
-        that.getSearchResults(settings, callback);
+      responseAsync(settings, callback) {
+        that.getSearchTagsResults(settings, callback);
       }
     };
+
     this.set('selectedTags', []);
     this.set('item', {});
-    this.set('options',{
+    this.set('options', {
       'format': ["vidéo", "image", "son", "site", "pdf", "slide", "outil", "page", "jeu", "audio", "frise", "video"],
       'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     })
   },
-  getSearchResults(setting, callback) {
+  getSearchTagsResults(setting, callback) {
     let query = setting.urlData.query;
     this.get('store').query('tag', {
       filterByFormula: `FIND('${query}', Nom)`,
@@ -41,6 +42,7 @@ export default PopinBase.extend({
     })
       .then((tags) => {
         const results = tags.map(tag => ({title: tag.get('title'), id: tag.get('id')}));
+        results.push({title: 'Ajouter <i class="add icon"></i>', description: 'Ajouter un tag', id: 'create'});
         callback({
           success: true,
           results: results
@@ -50,43 +52,53 @@ export default PopinBase.extend({
   actions: {
     selectTag(item) {
       const selectedTags = this.get('selectedTags');
-      return this.get('store').findRecord('tag', item.id)
-        .then((tag) => {
-          if (selectedTags.indexOf(tag) === -1) {
-            selectedTags.pushObject(tag);
-            this.set('haveTagsSelected', true);
-          }
-          setTimeout(()=>{
-            this.$('.search-tag-input').search("set value", "");
+      if (item.id === 'create') {
+        this.get("application").send("isLoading");
+        this.store.createRecord('tag', {
+          title: this.$(`.search-tag-input`).search("get value")
+        }).then((tag) => {
+          selectedTags.pushObject(tag);
+          this.set('haveTagsSelected', true);
+          setTimeout(() => {
+            this.$(`.search-tag-input`).search("set value", "");
           }, 1)
         });
+      } else {
+
+        return this.get('store').findRecord('tag', item.id)
+          .then((tag) => {
+            if (selectedTags.indexOf(tag) === -1) {
+              selectedTags.pushObject(tag);
+              this.set('haveTagsSelected', true);
+            }
+            setTimeout(() => {
+              this.$(`.search-tag-input`).search("set value", "");
+            }, 1)
+          });
+      }
     },
-    unselectTag(id) {
+    unselectTag(id, classTuto) {
       const selectedTags = this.get('selectedTags');
       selectedTags.forEach((tag) => {
         if (tag.id === id) {
           selectedTags.removeObject(tag)
         }
       });
-      if(isEmpty(selectedTags)){
+      if (isEmpty(selectedTags)) {
         this.set('haveTagsSelected', false)
       }
     },
     saveTutorial(item, tutorials) {
-      // console.log(item, tutorials)
       this.get("application").send("isLoading");
-      // let tutoStyle = kindTuto === "Pour en savoir plus "?"tutoMore":"tutoSolution";
       let isCrush = this.get('isCrush');
       const selectedTags = this.get('selectedTags');
       const date = new Date();
       item.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
       item.crush = isCrush ? 'yes' : "";
       item.tags = selectedTags;
-      // item[tutoStyle] = [skill];
       this.store.createRecord('tutorial', item).save()
 
         .then((tutorial) => {
-          // tutorial.set('skill', tutoStyle)
           tutorials.pushObject(tutorial);
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Tutoriel créé", true);
@@ -96,13 +108,15 @@ export default PopinBase.extend({
         .catch((error) => {
           console.error(error);
           this.get("application").send("finishedLoading");
-          this.get("application").send("showMessage", "Erreur lors de la création de l'acquis", true);
+          this.get("application").send("showMessage", "Erreur lors de la création du tutoriel", true);
         })
-    }
-    ,
+    },
     toCrush() {
       let isCrush = !this.get('isCrush');
       this.set('isCrush', isCrush);
+    },
+    toto() {
+      window.alert("toto")
     }
 
   }

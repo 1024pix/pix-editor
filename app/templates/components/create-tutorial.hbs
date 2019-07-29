@@ -35,8 +35,8 @@
         <div class="fields">
             <div class="field">
                 <label>Rechercher tags</label>
-                {{#ui-search class="search-tag-input" showNoResults=true maxResults=4 apiSettings=searchAPISettings
-                             error=searchErrors onSelect=(action "selectTag")}}
+                {{#ui-search class=(concat "search-tag-input" classTuto) showNoResults=true maxResults=5 apiSettings=searchAPISettings
+                             error=searchErrors onSelect=(action "selectTag" )}}
                     <div class="ui icon input">
                         <input class="prompt" placeholder="Nom" type="text">
                         <i class="search icon"></i>
@@ -49,7 +49,7 @@
                     <label>Tags</label>
                     {{#each selectedTags as |tag|}}
                         <div class="ui mini labeled button btn-selected-tag" tabindex="0">
-                            <div {{action "unselectTag" tag.id}} class="ui icon button">
+                            <div {{action "unselectTag" tag.id classTuto}} class="ui icon button">
                                 <i class="close icon"></i>
                             </div>
                             <p class="ui basic label">
@@ -70,7 +70,6 @@
         </div>
     </div>
 </form>
-
 <div class="actions">
     <div onclick={{action "saveTutorial" item tutorials}} class="ui positive right labeled icon button">
         Enregistrer
