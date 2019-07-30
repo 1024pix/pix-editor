@@ -35,8 +35,8 @@
         <div class="fields">
             <div class="field">
                 <label>Rechercher tags</label>
-                {{#ui-search class=(concat "search-tag-input" classTuto) showNoResults=true maxResults=5 apiSettings=searchAPISettings
-                             error=searchErrors onSelect=(action "selectTag" )}}
+                {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
+                             onSelect=(action "selectTag")}}
                     <div class="ui icon input">
                         <input class="prompt" placeholder="Nom" type="text">
                         <i class="search icon"></i>

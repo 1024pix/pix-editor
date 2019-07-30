@@ -3,7 +3,7 @@
         {{title}}
     </label>
     {{#if edition}}
-        {{#ui-search class=(concat "search-tuto-input") showNoResults=true maxResults=5 apiSettings=searchAPISettings
+        {{#ui-search class=(concat "search-tuto-" searchClass) showNoResults=true maxResults=5 apiSettings=searchAPISettings
                      error=searchErrors onSelect=(action "selectTutorial" tutorials)}}
             <div class="ui icon input">
                 <input class="prompt" placeholder="Ajouter/créer tutoriel" type="text">
@@ -12,6 +12,7 @@
             <div class="results"></div>
         {{/ui-search}}
     {{/if}}
+
 </div>
 <div >
     {{#if loading}}
@@ -38,6 +39,7 @@
                             <div>Durée : {{tutorial.duration}}</div>
                             <div>Source : {{tutorial.source}}</div>
                         </div>
+
                     </div>
                 </div>
             {{/each}}
@@ -52,4 +54,3 @@
         </div>
     {{/if}}
 </div>
-{{create-tutorial item=titleSearch tutorials=tutorials application=application class=popinCreateTutoClass titleSearch=titleSearch }}

@@ -5,7 +5,6 @@ import {alias} from '@ember/object/computed';
 
 export default Component.extend({
   classNames:['field'],
-  popinCreateTutoClass:'popinCreateTutoClass',
   store:service(),
   loading:alias("tutorials.isPending"),
   init() {
@@ -19,7 +18,7 @@ export default Component.extend({
         that.getSearchTutorialResults(settings, callback);
       }
     };
-    this.set('titleSearch', {})
+    // this.set('titleSearch', {})
   },
   getSearchTutorialResults(setting, callback) {
     let query = setting.urlData.query;
@@ -40,23 +39,23 @@ export default Component.extend({
   actions: {
 
     selectTutorial(tutorials, item){
+      const searchClass = this.get('searchClass');
+      const searchInput = $(`.search-tuto-${searchClass}`);
       if(item.id === 'create'){
-         const value = $(`.search-tuto-input`).search("get value");
-         this.set('titleSearch', {title:value});
-        $(`.${this.get('popinCreateTutoClass')}`).modal('show');
+        const openModal = this.get('openModal');
+        openModal(tutorials,searchInput.search("get value"))
       }else{
         return this.get('store').findRecord('tutorial', item.id)
           .then((tutorial)=>{
             tutorials.pushObject(tutorial);
             setTimeout(()=>{
-              $(`.search-tuto-input`).search("set value", "")
+              searchInput.search("set value", "")
             },1)
           })
       }
       setTimeout(()=>{
-        $(`.search-tuto-input`).search("set value", "")
-      },1)
-      return true;
+        searchInput.search("set value", "")
+      },1);
     },
     unselectTutorial(tutorials,tutorial){
       tutorials.removeObject(tutorial)

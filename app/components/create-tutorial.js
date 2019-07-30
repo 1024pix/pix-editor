@@ -17,9 +17,6 @@ export default PopinBase.extend({
   init() {
     this._super(...arguments);
     let that = this;
-    this.searchErrors = {
-      noResults: 'Pas de résultat'
-    };
     this.searchAPISettings = {
       responseAsync(settings, callback) {
         that.getSearchTagsResults(settings, callback);
@@ -30,8 +27,8 @@ export default PopinBase.extend({
     this.set('item', {});
     this.set('options', {
       'format': ["vidéo", "image", "son", "site", "pdf", "slide", "outil", "page", "jeu", "audio", "frise", "video"],
-      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-    })
+      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+    });
   },
   getSearchTagsResults(setting, callback) {
     let query = setting.urlData.query;
@@ -53,10 +50,11 @@ export default PopinBase.extend({
     selectTag(item) {
       const selectedTags = this.get('selectedTags');
       if (item.id === 'create') {
-        this.get("application").send("isLoading");
+        // this.get("application").send("isLoading");
         this.store.createRecord('tag', {
           title: this.$(`.search-tag-input`).search("get value")
-        }).then((tag) => {
+        }).save()
+          .then((tag) => {
           selectedTags.pushObject(tag);
           this.set('haveTagsSelected', true);
           setTimeout(() => {
@@ -114,9 +112,6 @@ export default PopinBase.extend({
     toCrush() {
       let isCrush = !this.get('isCrush');
       this.set('isCrush', isCrush);
-    },
-    toto() {
-      window.alert("toto")
     }
 
   }
