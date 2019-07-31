@@ -3,10 +3,11 @@
         {{title}}
     </label>
     {{#if edition}}
-        {{#ui-search class=(concat "search-tuto-" searchClass) showNoResults=true maxResults=5 apiSettings=searchAPISettings
-                     error=searchErrors onSelect=(action "selectTutorial" tutorials)}}
+        <label>Ajouter/créer tutoriel</label>
+        {{#ui-search class=(concat "search-tuto-" searchClass) maxResults=101 apiSettings=searchAPISettings
+                      onSelect=(action "selectTutorial" tutorials)}}
             <div class="ui icon input">
-                <input class="prompt" placeholder="Ajouter/créer tutoriel" type="text">
+                <input class="prompt" placeholder="commencer la recherche par > pour rechercher par Tag" type="text">
                 <i class="search icon"></i>
             </div>
             <div class="results"></div>
@@ -37,9 +38,14 @@
                         <div class="description">
                             <div>Format : {{tutorial.format}}</div>
                             <div>Durée : {{tutorial.duration}}</div>
-                            <div>Source : {{tutorial.source}}</div>
+                            <div>Source : {{tutorial.source}}
+                                {{#if tutorial.isCrush}}
+                                    <div class="ui right floated">
+                                        <i class="red heart icon"></i>
+                                    </div>
+                                {{/if}}
+                            </div>
                         </div>
-
                     </div>
                 </div>
             {{/each}}

@@ -43,7 +43,12 @@
   @extend .challenge;
 
 }
-
+.serch-tuto-more,.search-tuto-solution{
+  .results{
+    max-height: 350px;
+    overflow-y: scroll;
+  }
+}
 .popin-create-tuto {
   .btn-selected-tag {
     margin-bottom: 5px;
