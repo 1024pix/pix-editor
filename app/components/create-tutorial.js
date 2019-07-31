@@ -8,7 +8,7 @@ export default PopinBase.extend({
   edition: true,
   haveTagsSelected: false,
   store: service(),
-  searchAPISettings:null,
+  searchAPISettings: null,
   query: '',
   willInitSemantic(settings) {
     this._super(...arguments);
@@ -40,7 +40,7 @@ export default PopinBase.extend({
     })
       .then((tags) => {
         const results = tags.map(tag => ({title: tag.get('title'), id: tag.get('id')}));
-        results.push({title: 'Ajouter <i class="add icon"></i>', description: 'Ajouter un tag', id: 'create'});
+        results.push({title: 'Ajouter <i class="add icon"></i>', description: 'Créer un tag[note]', id: 'create'});
         callback({
           success: true,
           results: results
@@ -52,16 +52,36 @@ export default PopinBase.extend({
       const selectedTags = this.get('selectedTags');
       if (item.id === 'create') {
         // this.get("application").send("isLoading");
-        this.store.createRecord('tag', {
-          title: this.$(`.search-tag-input`).search("get value")
-        }).save()
-          .then((tag) => {
-          selectedTags.pushObject(tag);
-          this.set('haveTagsSelected', true);
-          setTimeout(() => {
-            this.$(`.search-tag-input`).search("set value", "");
-          }, 1)
-        });
+        const value = this.$(`.search-tag-input`).search("get value");
+        if (value.indexOf('[') !== -1) {
+          const pos = value.indexOf('[');
+          const length = value.length;
+          const title = value.slice(0, pos);
+          const notes = value.slice(pos + 1, length - 1);
+          this.store.createRecord('tag', {
+            title,
+            notes
+          }).save()
+            .then((tag) => {
+              selectedTags.pushObject(tag);
+              this.set('haveTagsSelected', true);
+              setTimeout(() => {
+                this.$(`.search-tag-input`).search("set value", "");
+              }, 1)
+            });
+        } else {
+          this.store.createRecord('tag', {
+            title: value
+          }).save()
+            .then((tag) => {
+              selectedTags.pushObject(tag);
+              this.set('haveTagsSelected', true);
+              setTimeout(() => {
+                this.$(`.search-tag-input`).search("set value", "");
+              }, 1)
+            });
+        }
+
       } else {
 
         return this.get('store').findRecord('tag', item.id)
