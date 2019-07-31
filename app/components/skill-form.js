@@ -14,7 +14,6 @@ export default Component.extend({
   },
   actions:{
     openModal(tutorials,title){
-      console.log(title);
       this.set('searchTitle', {title:title});
       this.set('tutorials',tutorials);
       $(`.${this.get('popinCreateTuto')}`).modal('show');

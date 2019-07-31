@@ -147,6 +147,13 @@ export default DS.Model.extend({
     let tutoMore = this.get(`_pinnedRelationships.tutoMore`);
     this.set('tutoMore', tutoMore);
 
+  },
+  save() {
+    return this._super(...arguments)
+      .then(result => {
+        this.pinRelationships();
+        return result;
+      })
   }
 
 });

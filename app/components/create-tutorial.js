@@ -18,6 +18,7 @@ export default PopinBase.extend({
     this._super(...arguments);
     let that = this;
     this.searchAPISettings = {
+
       responseAsync(settings, callback) {
         that.getSearchTagsResults(settings, callback);
       }
@@ -75,7 +76,7 @@ export default PopinBase.extend({
           });
       }
     },
-    unselectTag(id, classTuto) {
+    unselectTag(id) {
       const selectedTags = this.get('selectedTags');
       selectedTags.forEach((tag) => {
         if (tag.id === id) {
