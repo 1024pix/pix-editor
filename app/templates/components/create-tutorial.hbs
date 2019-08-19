@@ -17,10 +17,8 @@
                 <label>Source</label>
                 {{input type="text" value=item.source placeholder="Source"}}
             </div>
-            <div class="field">
-                <label>License</label>
-                {{input type="text" value=item.license placeholder="License"}}
-            </div>
+            {{form-select title="License" defaultText="License" value=item.license options=options.license edition=edition}}
+
         </div>
         <div class="three fields">
             {{form-select title="Format" defaultText="Format" value=item.format options=options.format edition=edition}}

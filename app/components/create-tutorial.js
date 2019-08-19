@@ -23,12 +23,12 @@ export default PopinBase.extend({
         that.getSearchTagsResults(settings, callback);
       }
     };
-
     this.set('selectedTags', []);
     this.set('item', {});
     this.set('options', {
-      'format': ["vidéo", "image", "son", "site", "pdf", "slide", "outil", "page", "jeu", "audio", "frise", "video"],
-      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+      'format': ["audio","frise", "image", "jeu", "outil", "page", "pdf", "site", "slide", "son", "vidéo"],
+      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+      'license':['CC-BY-SA', '(c)', 'Youtube']
     });
   },
   getSearchTagsResults(setting, callback) {
