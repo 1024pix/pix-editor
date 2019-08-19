@@ -56,16 +56,16 @@ export default DS.Model.extend({
     }
     return "suggested";
   },
-  tutoSolutionCount: computed("tutoSolutionIds", function () {
-    let ids = this.get("tutoSolutionIds");
+  tutoSolutionCount: computed("tutoSolution", function () {
+    let ids = this.get("tutoSolution");
     if (ids) {
       return ids.length;
     } else {
       return 0;
     }
   }),
-  tutoMoreCount: computed("tutoMoreIds", function () {
-    let ids = this.get("tutoMoreIds");
+  tutoMoreCount: computed("tutoMore", function () {
+    let ids = this.get("tutoMore");
     if (ids) {
       return ids.length;
     } else {
