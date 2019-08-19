@@ -26,7 +26,7 @@ export default Component.extend({
     if (query[0] === ">") {
       query = query.substring(1);
       this.get('store').query('tutorial', {
-        filterByFormula: `FIND('${query}', Tags)`,
+        filterByFormula: `FIND('${query}', LOWER(Tags))`,
         maxRecords: 100,
         sort: [{field: 'Titre', direction: 'asc'}]
       })
@@ -52,7 +52,7 @@ export default Component.extend({
         })
     } else {
       this.get('store').query('tutorial', {
-        filterByFormula: `FIND('${query}', Titre)`,
+        filterByFormula: `FIND('${query}', LOWER(Titre))`,
         maxRecords: 100,
         sort: [{field: 'Titre', direction: 'asc'}]
       })
