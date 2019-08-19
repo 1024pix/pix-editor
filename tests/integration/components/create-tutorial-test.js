@@ -14,13 +14,6 @@ module('Integration | Component | create-tutorial', function(hooks) {
 
     assert.equal(this.element.textContent.trim(), '');
 
-    // Template block usage:
-    await render(hbs`
-      {{#create-tutorial}}
-        template block text
-      {{/create-tutorial}}
-    `);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

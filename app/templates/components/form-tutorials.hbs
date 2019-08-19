@@ -3,7 +3,6 @@
         {{title}}
     </label>
     {{#if edition}}
-<!--        <label>Ajouter/créer tutoriel</label>-->
         {{#ui-search class=(concat "search-tuto-" searchClass) maxResults=101 apiSettings=searchAPISettings
                       onSelect=(action "selectTutorial" tutorials)}}
             <div class="ui icon input">

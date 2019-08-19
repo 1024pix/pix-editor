@@ -26,9 +26,9 @@ export default PopinBase.extend({
     this.set('selectedTags', []);
     this.set('item', {});
     this.set('options', {
-      'format': ["audio","frise", "image", "jeu", "outil", "page", "pdf", "site", "slide", "son", "vidéo"],
+      'format': ["audio", "frise", "image", "jeu", "outil", "page", "pdf", "site", "slide", "son", "vidéo"],
       'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-      'license':['CC-BY-SA', '(c)', 'Youtube']
+      'license': ['CC-BY-SA', '(c)', 'Youtube']
     });
   },
   getSearchTagsResults(setting, callback) {
