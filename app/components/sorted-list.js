@@ -118,8 +118,8 @@ export default Component.extend({
       }
       this.set('sortType', type);
       let className = this.get("listType");
-      $(`.${className} .list-header .list-item`).removeClass('sorting');
-      let sortElement = $(`.${className} .list-header .list-item.${field}`);
+      $(`.${className} .list-header .list-sorted`).removeClass('sorting');
+      let sortElement = $(`.${className} .list-header .list-sorted.${field}`);
       sortElement.addClass('sorting');
       if (this.get('ascending')) {
         sortElement.removeClass("descending");
