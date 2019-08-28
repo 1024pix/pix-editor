@@ -2,26 +2,5 @@
     <div class="main-title">
         <h1 class="ui header">Journal</h1>
     </div>
-<table class="ui selectable celled table">
-    <thead>
-    <tr>
-        <th>Acquis</th>
-        <th>Compétence</th>
-        <th>Description</th>
-        <th>Auteur</th>
-        <th>Date</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#each model as |note|}}
-        <tr>
-<td>{{note.skills}}</td>
-<td>{{note.competence}}</td>
-<td>{{note.text}}</td>
-<td>{{note.author}}</td>
-<td>{{note.createdAt}}</td>
-    </tr>
-      {{/each}}
-    </tbody>
-</table>
+    {{log-list list=model}}
 </div>

@@ -1,0 +1,41 @@
+.list-log {
+  float:left;
+  height:100%;
+  border-left:1px solid rgba(34, 36, 38, 0.1);
+  border-bottom:1px solid rgba(34, 36, 38, 0.1);
+  box-sizing:border-box;
+  padding:10px;
+  overflow:hidden;
+  white-space:nowrap;
+
+  &:first-child,
+  &:nth-child(2),
+  &:nth-child(4) ,
+  &:nth-child(5) {
+    width:15%;
+  }
+
+  &:nth-child(3) {
+    width:40%;
+  }
+
+  &.sorting::after {
+    display: inline-block;
+    font-style: normal;
+    font-weight: 400;
+    text-decoration: inherit;
+    height: 1em;
+    width: auto;
+    opacity: .8;
+    margin: 0 0 0 .5em;
+    font-family: Icons;
+  }
+
+  &.sorting.descending::after {
+    content: '\f0d7';
+  }
+
+  &.sorting.ascending::after {
+    content: '\f0d8';
+  }
+}

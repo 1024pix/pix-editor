@@ -1,0 +1,24 @@
+<div class="list-header">
+    <div class="list-row">
+        <div class="list-log skillName" {{action "sortBy" "skillName" "string"}}>Acquis</div>
+        <div class="list-log competenceName" {{action "sortBy" "competenceName" "string"}}>Compétence</div>
+        <div class="list-log descriptionText" {{action "sortBy" "descriptionText" "string"}}>Description</div>
+        <div class="list-log authorText" {{action "sortBy" "authorText" "string"}}>Auteur</div>
+        <div class="list-log date" {{action "sortBy" "date" "date"}}>Date</div>
+    </div>
+</div>
+<div class="list-body">
+  {{#ember-collection
+          items=sortedList
+          scroll-left=scrollLeft scroll-top=scrollTop scroll-change=(action "scrollChange")
+          cell-layout=(percentage-columns-layout 10 columns 40) as |item|
+  }}
+    {{#link-to "target-profile" tagName="div" class="list-row"}}
+        <div class="list-log">{{item.skills}}</div>
+        <div class="list-log">{{item.competence}}</div>
+        <div class="list-log">{{item.text}}</div>
+        <div class="list-log">{{item.author}}</div>
+        <div class="list-log">{{item.date}}</div>
+    {{/link-to}}
+  {{/ember-collection}}
+</div>
