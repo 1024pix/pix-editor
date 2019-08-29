@@ -64,8 +64,6 @@ export default Component.extend({
         .then((tutorials) => {
           const results = tutorials.map((tutorial) => {
             const haveTags = tutorial.get('tagsTitle').content !== null && tutorial.get('tagsTitle').content !== '';
-            console.log(tutorial.get('tagsTitle').content !== null && tutorial.get('tagsTitle').content !== '',tutorial.get('tagsTitle'))
-
             return {
               title: tutorial.get('title'),
               description: haveTags ? `TAG : ${tutorial.get('tagsTitle').content}` : '',
