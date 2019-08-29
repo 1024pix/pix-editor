@@ -92,7 +92,7 @@ export default Component.extend({
       let list = this.get('list');
       if (Array.isArray(list)) {
         return this.sortElements(list);
-      } else {
+      } else{
         return DS.PromiseArray.create({
           promise: this.get("list")
           .then(list => {
