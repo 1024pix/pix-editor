@@ -22,7 +22,7 @@ export default Component.extend({
   },
   getSearchTutorialResults(setting, callback) {
 
-    let query = setting.urlData.query;
+    let query = setting.urlData.query.toLowerCase();
     if (query[0] === ">") {
       query = query.substring(1);
       this.get('store').query('tutorial', {

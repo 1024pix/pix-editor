@@ -32,9 +32,9 @@ export default PopinBase.extend({
     });
   },
   getSearchTagsResults(setting, callback) {
-    let query = setting.urlData.query;
+    let query = setting.urlData.query.toLowerCase();
     this.get('store').query('tag', {
-      filterByFormula: `FIND('${query}', Nom)`,
+      filterByFormula: `FIND('${query}', LOWER(Nom))`,
       maxRecords: 4,
       sort: [{field: 'Nom', direction: 'asc'}]
     })
@@ -51,7 +51,6 @@ export default PopinBase.extend({
     selectTag(item) {
       const selectedTags = this.get('selectedTags');
       if (item.id === 'create') {
-        // this.get("application").send("isLoading");
         const value = this.$(`.search-tag-input`).search("get value");
         if (value.indexOf('[') !== -1) {
           const pos = value.indexOf('[');
