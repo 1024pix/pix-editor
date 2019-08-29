@@ -2,5 +2,10 @@
     <div class="main-title">
         <h1 class="ui header">Journal</h1>
     </div>
-    {{log-list model=model}}
+<!--  {{!#each model as |data|}}-->
+<!--    <p>{{!data.skills}}</p>-->
+<!--  {{!/each}}-->
+<!--    <button {{!action 'next'}}>Load More</button>-->
+
+  {{log-list model=model itemCount=model.length}}
 </div>
