@@ -4,7 +4,7 @@ import {isEmpty} from '@ember/utils';
 
 
 export default PopinBase.extend({
-  isCrush: false,
+  isFavorite: false,
   edition: true,
   haveTagsSelected: false,
   store: service(),
@@ -109,11 +109,11 @@ export default PopinBase.extend({
     },
     saveTutorial(item, tutorials) {
       this.get("application").send("isLoading");
-      let isCrush = this.get('isCrush');
+      let isFavorite = this.get('isFavorite');
       const selectedTags = this.get('selectedTags');
       const date = new Date();
       item.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-      item.crush = isCrush ? 'yes' : "";
+      item.crush = isFavorite ? 'yes' : "";
       item.tags = selectedTags;
       this.store.createRecord('tutorial', item).save()
 
@@ -131,8 +131,8 @@ export default PopinBase.extend({
         })
     },
     toCrush() {
-      let isCrush = !this.get('isCrush');
-      this.set('isCrush', isCrush);
+      let isFavorite = !this.get('isFavorite');
+      this.set('isFavorite', isFavorite);
     }
 
   }
