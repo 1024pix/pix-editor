@@ -1,12 +1,17 @@
 import PopinBase from "./popin-base";
 import {inject as service} from '@ember/service';
 import {isEmpty} from '@ember/utils';
+import { computed } from '@ember/object';
+
 
 
 export default PopinBase.extend({
   isFavorite: false,
   edition: true,
-  haveTagsSelected: false,
+  hasSelectedTag:computed('selectedTags.[]', function(){
+    const selectedTags = this.get('selectedTags');
+    return selectedTags.length>0
+  }),
   store: service(),
   searchAPISettings: null,
   query: '',
@@ -63,7 +68,6 @@ export default PopinBase.extend({
           }).save()
             .then((tag) => {
               selectedTags.pushObject(tag);
-              this.set('haveTagsSelected', true);
               setTimeout(() => {
                 this.$(`.search-tag-input`).search("set value", "");
               }, 1)
@@ -74,7 +78,6 @@ export default PopinBase.extend({
           }).save()
             .then((tag) => {
               selectedTags.pushObject(tag);
-              this.set('haveTagsSelected', true);
               setTimeout(() => {
                 this.$(`.search-tag-input`).search("set value", "");
               }, 1)
@@ -87,7 +90,6 @@ export default PopinBase.extend({
           .then((tag) => {
             if (selectedTags.indexOf(tag) === -1) {
               selectedTags.pushObject(tag);
-              this.set('haveTagsSelected', true);
             }
             setTimeout(() => {
               this.$(`.search-tag-input`).search("set value", "");
@@ -102,9 +104,6 @@ export default PopinBase.extend({
           selectedTags.removeObject(tag)
         }
       });
-      if (isEmpty(selectedTags)) {
-        this.set('haveTagsSelected', false)
-      }
     },
     saveTutorial(item, tutorials) {
       this.get("application").send("isLoading");

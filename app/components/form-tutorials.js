@@ -98,14 +98,10 @@ export default Component.extend({
       setTimeout(() => {
         searchInput.search("set value", "")
       }, 1);
-    }
-    ,
+    },
     unselectTutorial(tutorials, tutorial) {
       tutorials.removeObject(tutorial)
     }
-    ,
-
-
   }
 })
 ;
