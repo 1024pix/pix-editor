@@ -12,7 +12,8 @@ export default Component.extend({
     this._super();
     this.currentCount = 0;
     this.columns = [100];
-    // this.pageSize = 10;
+    this.loadedLog = [].pushObject(this.model);
+
   },
   scrollTop: computed('itemCount', {
     get() {
@@ -36,7 +37,6 @@ export default Component.extend({
     linkToCompetence(competenceNumber, skillId) {
       this.get('store').query('competence', {
         filterByFormula: `FIND('${competenceNumber}', {Sous-domaine})`,
-        // fields: ['Sous-domaine']
       })
         .then((competence) => {
           const competenceId = competence.map(competence => {
@@ -48,21 +48,15 @@ export default Component.extend({
             this.get('router').transitionTo('competence.templates.single', competenceId[0].id, skillId)
           }
         }).catch(e => console.log(e));
+    },
+    fetch(){
+       this.get('store').query("note", {
+        sort: [{field: 'Date', direction: 'desc'}]
+      }).then(data=>{
+         data.map(el=>console.log(el.get('date')))
+
+        return this.get('loadedLog').pushObject(data.toArray())
+      })
     }
-    // fetch(pageOffset, pageSize, stats) {
-    //   // function which returns a "thenable" (*required*)
-    //   let params = {
-    //     pageSize: 10,
-    //     sort: [{field: 'Date', direction: 'desc'}]
-    //   };
-    //   console.log(pageSize, stats)
-    //   // fetch a page of records at the pageOffset
-    //   return this.get('store').query("note", params).then(data => {
-    //     let meta = data.get("meta");
-    //     console.log('meta', meta);
-    //     stats = meta.offset;
-    //     return data.toArray();
-    //   });
-    // }
   }
 });

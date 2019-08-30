@@ -1,3 +1,4 @@
+<button {{action "fetch"}}>Voir plus</button>
 <div class="list-header">
     <div class="list-row">
         <div class="list-log competenceName" {{action "sortBy" "competenceName" "string"}}>Compétence</div>
@@ -9,24 +10,18 @@
 </div>
 <div class="list-body">
   {{#ember-collection
-          items=model
+          items=loadedLog
           scroll-left=scrollLeft scroll-top=scrollTop scroll-change=(action "scrollChange")
           cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
-    {{!#link-to "competence" competence_id tagName="div" class="list-row"}}
-      <div {{action "linkToCompetence" item.competence item.skills}}class="list-row">
+      <div {{action "linkToCompetence" item.competence item.skills}} class="list-row">
           <div class="list-log">{{item.competence}}</div>
           <div class="list-log">{{item.skills}}</div>
           <div class="list-log">{{item.text}}</div>
           <div class="list-log">{{item.author}}</div>
           <div class="list-log">{{item.date}}</div>
       </div>
-    {{!/link-to}}
   {{/ember-collection}}
-  {{!#impagination-dataset page-size=pageSize fetch=(action "fetch") as |dataset|}}
-    {{!#each dataset as |data|}}
-<!--        <p>{{!data.content.author}} / {{!data.content.date}} / {{!data.content.competence}}</p>-->
-<!--    {{!/each}}-->
-<!--      <button {{!action dataset.setReadOffset 10}}>Load More</button>-->
-  {{!/impagination-dataset}}
+
+
 </div>
