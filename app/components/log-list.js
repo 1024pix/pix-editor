@@ -53,6 +53,7 @@ export default Component.extend({
     },
     fetch() {
       this.get('store').query("note", {
+        filterByFormula:'FIND("oui", Production)',
         sort: [{field: 'Date', direction: 'desc'}],
         nextPage: true
       }).then(data => {
