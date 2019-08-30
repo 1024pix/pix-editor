@@ -14,8 +14,13 @@ export default Component.extend({
     this._super();
     this.currentCount = 0;
     this.columns = [100];
-    this.loadedLog = [...this.model.toArray()];
+    this.button = {button:true};
+    this.loadedNotes = [];
   },
+  loadedLog: computed('model', 'loadedNotes', function() {
+    console.debug(this.get('loadedNotes'));
+    return [...this.get('model').toArray(), ...this.get('loadedNotes'), this.get('button')];
+  }),
   scrollTop: computed('itemCount', {
     get() {
       let count = this.get('itemCount');
@@ -38,7 +43,7 @@ export default Component.extend({
     },
     linkToCompetence(competenceNumber, skillId) {
       this.get('store').query('competence', {
-        filterByFormula: `FIND('${competenceNumber}', {Sous-domaine})`,
+        filterByFormula: `FIND('${competenceNumber}', {Sous-domaine})`
       })
         .then((competence) => {
           const competenceId = competence.map(competence => {
@@ -53,9 +58,11 @@ export default Component.extend({
     },
     fetch() {
       this.get('store').query("note", {
-        sort: [{field: 'Date', direction: 'desc'}]
+        sort: [{field: 'Date', direction: 'desc' }],
+        nextPage:true
       }).then(data => {
-        return data.forEach((el) => this.get('loadedLog').pushObject(el));
+        let loadedNotes = this.get('loadedNotes');
+        this.set('loadedNotes', loadedNotes.concat(data.toArray()));
       })
     }
   }

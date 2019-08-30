@@ -1,4 +1,3 @@
-<button {{action "fetch"}}>Voir plus</button>
 <div class="list-header">
     <div class="list-row">
         <div class="list-log competenceName" {{action "sortBy" "competenceName" "string"}}>Compétence</div>
@@ -16,8 +15,11 @@
           scroll-left=scrollLeft scroll-top=scrollMemory scroll-change=(action "scrollChange")
           cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
+    {{#if item.button}}
+        <button {{action "fetch"}} class="more-log">Voir plus</button>
+    {{else}}
       <div  class="list-row">
-          <div class="list-log">{{item.competence}}</div>
+      <div class="list-log">{{item.competence}}</div>
           <div class="list-log">{{item.skills}}</div>
 
 
@@ -31,5 +33,7 @@
           <div class="list-log">{{item.date}}</div>
           <div {{action "linkToCompetence" item.competence item.skills}} class="list-log"><i class="eye icon"></i></div>
       </div>
+    {{/if}}
+
   {{/ember-collection}}
 </div>
