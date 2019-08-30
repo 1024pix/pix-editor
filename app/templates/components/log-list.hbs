@@ -10,8 +10,9 @@
 </div>
 <div class="list-body">
   {{#ember-collection
+          class="ember-collection"
           items=loadedLog
-          scroll-left=scrollLeft scroll-top=scrollTop scroll-change=(action "scrollChange")
+          scroll-left=scrollLeft scroll-top=scrollMemory scroll-change=(action "scrollChange")
           cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
       <div {{action "linkToCompetence" item.competence item.skills}} class="list-row">
@@ -22,6 +23,4 @@
           <div class="list-log">{{item.date}}</div>
       </div>
   {{/ember-collection}}
-
-
 </div>

@@ -5,7 +5,6 @@ import {inject as service} from "@ember/service";
 export default Component.extend({
   classNameBindings: ["listType"],
   listType: "template-list",
-  scrollLeft: 0,
   store: service(),
   router: service(),
   itemCount: computed('loadedLog.[]', function () {
@@ -16,8 +15,6 @@ export default Component.extend({
     this.currentCount = 0;
     this.columns = [100];
     this.loadedLog = [...this.model.toArray()];
-    console.log(this.loadedLog)
-
   },
   scrollTop: computed('itemCount', {
     get() {
@@ -37,6 +34,7 @@ export default Component.extend({
     scrollChange(scrollLeft, scrollTop) {
       this.set('scrollLeft', scrollLeft);
       this.set('scrollTop', scrollTop);
+      this.set('scrollMemory', scrollTop)
     },
     linkToCompetence(competenceNumber, skillId) {
       this.get('store').query('competence', {
@@ -51,7 +49,7 @@ export default Component.extend({
           } else {
             this.get('router').transitionTo('competence.templates.single', competenceId[0].id, skillId)
           }
-        }).catch(e => console.log(e));
+        }).catch(e => console.log(`link not found : ${e}`));
     },
     fetch() {
       this.get('store').query("note", {
