@@ -8,11 +8,15 @@ export default Component.extend({
   scrollLeft: 0,
   store: service(),
   router: service(),
+  itemCount: computed('loadedLog.[]', function () {
+    return this.get('loadedLog').length
+  }),
   init() {
     this._super();
     this.currentCount = 0;
     this.columns = [100];
-    this.loadedLog = [].pushObject(this.model);
+    this.loadedLog = [...this.model.toArray()];
+    console.log(this.loadedLog)
 
   },
   scrollTop: computed('itemCount', {
@@ -49,13 +53,11 @@ export default Component.extend({
           }
         }).catch(e => console.log(e));
     },
-    fetch(){
-       this.get('store').query("note", {
+    fetch() {
+      this.get('store').query("note", {
         sort: [{field: 'Date', direction: 'desc'}]
-      }).then(data=>{
-         data.map(el=>console.log(el.get('date')))
-
-        return this.get('loadedLog').pushObject(data.toArray())
+      }).then(data => {
+        return data.forEach((el) => this.get('loadedLog').pushObject(el));
       })
     }
   }
