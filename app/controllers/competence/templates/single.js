@@ -458,7 +458,7 @@ export default Controller.extend({
   },
   _handleChangelog(challenge, changelog) {
     if (changelog) {
-      let entry = this.get("store").createRecord("changelogEntry",{text:changelog, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:challenge.get("joinedSkills"), createdAt:(new Date()).toISOString(), production:!challenge.get("workbench")});
+      let entry = this.get("store").createRecord("changelogEntry",{text:changelog, challengeId:challenge.get("id"), author:this.get("config").get("author"), competence: this.get("competence.code"), skills:challenge.get("joinedSkills"), createdAt:(new Date()).toISOString(), production:!challenge.get("isWorkbench")});
       return entry.save()
       .then(() => { return challenge; })
     } else {

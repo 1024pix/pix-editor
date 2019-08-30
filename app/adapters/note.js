@@ -14,7 +14,7 @@ export default ApplicationAdapter.extend({
   query(store, type, query) {
     const offset = this.get('offset');
     if (query.nextPage && offset) {
-      delete query.nextPage
+      delete query.nextPage;
       query.offset = offset;
       return this._super(store, type, query)
         .then((data) => {

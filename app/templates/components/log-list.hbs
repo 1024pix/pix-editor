@@ -1,11 +1,10 @@
 <div class="list-header">
     <div class="list-row">
-        <div class="list-log competenceName" {{action "sortBy" "competenceName" "string"}}>Compétence</div>
-        <div class="list-log skillName" {{action "sortBy" "skillName" "string"}}>Acquis</div>
-        <div class="list-log descriptionText" {{action "sortBy" "descriptionText" "string"}}>Description</div>
-        <div class="list-log authorText" {{action "sortBy" "authorText" "string"}}>Auteur</div>
-        <div class="list-log date" {{action "sortBy" "date" "date"}}>Date</div>
-        <div class="list-log date">Lien</div>
+        <div class="list-log competenceName">Compétence</div>
+        <div class="list-log descriptionText">Description</div>
+        <div class="list-log authorText">Auteur</div>
+        <div class="list-log">Date</div>
+        <div class="list-log">Lien</div>
     </div>
 </div>
 <div class="list-body body-log">
@@ -16,23 +15,20 @@
           cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
     {{#if item.button}}
-        <button {{action "fetch"}} class="more-log">Voir plus</button>
+        <div {{action "fetch"}} class="ui yellow bottom attached button" tabindex="0">Voir plus</div>
     {{else}}
-      <div  class="list-row">
-      <div class="list-log">{{item.competence}}</div>
-          <div class="list-log">{{item.skills}}</div>
-
-
+        <div class="list-row">
+            <div class="list-log">{{item.competence}}</div>
             <div class="list-log">
-        {{#ui-popup html=(concat "<p>" item.text "</p>")}}
-              {{item.text}}
-        {{/ui-popup}}
-
+              {{#ui-popup html=(concat "<p>" item.text "</p>")}}
+                {{item.text}}
+              {{/ui-popup}}
             </div>
-          <div class="list-log">{{item.author}}</div>
-          <div class="list-log">{{item.date}}</div>
-          <div {{action "linkToCompetence" item.competence item.skills}} class="list-log"><i class="eye icon"></i></div>
-      </div>
+            <div class="list-log">{{item.author}}</div>
+            <div class="list-log">{{item.date}}</div>
+            <div {{action "linkToCompetence" item.competence item.skills}} class="list-log"><i class="eye icon"></i>
+            </div>
+        </div>
     {{/if}}
 
   {{/ember-collection}}

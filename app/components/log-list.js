@@ -14,11 +14,10 @@ export default Component.extend({
     this._super();
     this.currentCount = 0;
     this.columns = [100];
-    this.button = {button:true};
+    this.button = {button: true};
     this.loadedNotes = [];
   },
-  loadedLog: computed('model', 'loadedNotes', function() {
-    console.debug(this.get('loadedNotes'));
+  loadedLog: computed('model', 'loadedNotes', function () {
     return [...this.get('model').toArray(), ...this.get('loadedNotes'), this.get('button')];
   }),
   scrollTop: computed('itemCount', {
@@ -41,7 +40,7 @@ export default Component.extend({
       this.set('scrollTop', scrollTop);
       this.set('scrollMemory', scrollTop)
     },
-    linkToCompetence(competenceNumber, skillId) {
+    linkToCompetence(competenceNumber) {
       this.get('store').query('competence', {
         filterByFormula: `FIND('${competenceNumber}', {Sous-domaine})`
       })
@@ -49,17 +48,13 @@ export default Component.extend({
           const competenceId = competence.map(competence => {
             return {code: competence.get('code'), id: competence.get('id')}
           });
-          if (!skillId) {
-            this.get('router').transitionTo('competence', competenceId[0].id)
-          } else {
-            this.get('router').transitionTo('competence.templates.single', competenceId[0].id, skillId)
-          }
+          this.get('router').transitionTo('competence', competenceId[0].id)
         }).catch(e => console.log(`link not found : ${e}`));
     },
     fetch() {
       this.get('store').query("note", {
-        sort: [{field: 'Date', direction: 'desc' }],
-        nextPage:true
+        sort: [{field: 'Date', direction: 'desc'}],
+        nextPage: true
       }).then(data => {
         let loadedNotes = this.get('loadedNotes');
         this.set('loadedNotes', loadedNotes.concat(data.toArray()));

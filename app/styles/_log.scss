@@ -16,37 +16,17 @@
   overflow:hidden;
   white-space:nowrap;
 
-  &:first-child,
-  &:nth-child(2),
-  &:nth-child(5) {
+  &:first-child{
     width:15%;
   }
-  &:nth-child(3) {
-    width:40%;
+  &:nth-child(2) {
+    width:60%;
   }
+  &:nth-child(3),
   &:nth-child(4) {
     width:10%;
   }
-  &:nth-child(6) {
+  &:nth-child(5) {
     width:5%;
-  }
-  &.sorting::after {
-    display: inline-block;
-    font-style: normal;
-    font-weight: 400;
-    text-decoration: inherit;
-    height: 1em;
-    width: auto;
-    opacity: .8;
-    margin: 0 0 0 .5em;
-    font-family: Icons;
-  }
-
-  &.sorting.descending::after {
-    content: '\f0d7';
-  }
-
-  &.sorting.ascending::after {
-    content: '\f0d8';
   }
 }
