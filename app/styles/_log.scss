@@ -1,3 +1,11 @@
+.body-log{
+  .list-row{
+    &:hover{
+      background: rgba(52,152,219,.2);
+    }
+  }
+}
+
 .list-log {
   float:left;
   height:100%;
@@ -10,15 +18,18 @@
 
   &:first-child,
   &:nth-child(2),
-  &:nth-child(4) ,
   &:nth-child(5) {
     width:15%;
   }
-
   &:nth-child(3) {
     width:40%;
   }
-
+  &:nth-child(4) {
+    width:10%;
+  }
+  &:nth-child(6) {
+    width:5%;
+  }
   &.sorting::after {
     display: inline-block;
     font-style: normal;

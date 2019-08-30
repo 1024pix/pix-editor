@@ -6,21 +6,23 @@
         <div class="list-log descriptionText" {{action "sortBy" "descriptionText" "string"}}>Description</div>
         <div class="list-log authorText" {{action "sortBy" "authorText" "string"}}>Auteur</div>
         <div class="list-log date" {{action "sortBy" "date" "date"}}>Date</div>
+        <div class="list-log date">Lien</div>
     </div>
 </div>
-<div class="list-body">
+<div class="list-body body-log">
   {{#ember-collection
           class="ember-collection"
           items=loadedLog
           scroll-left=scrollLeft scroll-top=scrollMemory scroll-change=(action "scrollChange")
           cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
   }}
-      <div {{action "linkToCompetence" item.competence item.skills}} class="list-row">
+      <div  class="list-row">
           <div class="list-log">{{item.competence}}</div>
           <div class="list-log">{{item.skills}}</div>
           <div class="list-log">{{item.text}}</div>
           <div class="list-log">{{item.author}}</div>
           <div class="list-log">{{item.date}}</div>
+          <div {{action "linkToCompetence" item.competence item.skills}} class="list-log"><i class="eye icon"></i></div>
       </div>
   {{/ember-collection}}
 </div>
