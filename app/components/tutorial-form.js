@@ -1,6 +1,5 @@
 import PopinBase from "./popin-base";
 import {inject as service} from '@ember/service';
-import {isEmpty} from '@ember/utils';
 import { computed } from '@ember/object';
 
 
