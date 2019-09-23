@@ -11,9 +11,7 @@ export default ApplicationSerializer.extend({
     tags: "Tags",
     level: "niveau",
     date: "Date maj",
-    crush: "CoupDeCoeur",
-    tutoSolution: "Solution à",
-    tutoMore: "En savoir plus"
+    crush: "CoupDeCoeur"
   },
 
   payloadKeyFromModelName: function() {
