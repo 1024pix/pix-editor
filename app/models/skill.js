@@ -135,11 +135,14 @@ export default DS.Model.extend({
     return this.save();
   },
   pinRelationships() {
-    let pinnedRelationships = {
-      tutoSolution: this.get('tutoSolution').toArray(),
-      tutoMore: this.get('tutoMore').toArray()
-    };
-    this.set('_pinnedRelationships', pinnedRelationships);
+    const requests = [this.get('tutoSolution'), this.get('tutoMore')];
+    return Promise.all(requests)
+    .then(tutorials => {
+      this.set('_pinnedRelationships', {
+        tutoSolution:tutorials[0].toArray(),
+        tutoMore:tutorials[1].toArray()
+      });
+    })
   },
   rollbackRelationships() {
     let tutoSolution = this.get(`_pinnedRelationships.tutoSolution`);
