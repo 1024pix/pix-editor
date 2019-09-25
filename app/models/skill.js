@@ -145,6 +145,7 @@ export default DS.Model.extend({
     })
   },
   rollbackRelationships() {
+    this.rollbackAttributes();
     let tutoSolution = this.get(`_pinnedRelationships.tutoSolution`);
     this.set('tutoSolution', tutoSolution);
     let tutoMore = this.get(`_pinnedRelationships.tutoMore`);
