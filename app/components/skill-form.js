@@ -13,7 +13,7 @@ export default Component.extend({
     this.set('popinCreateTuto', "popin-create-tuto");
   },
   actions:{
-    openModal(tutorials,title){
+    openCreateTutorialModal(tutorials,title){
       this.set('searchTitle', {title:title});
       this.set('tutorials',tutorials);
       $(`.${this.get('popinCreateTuto')}`).modal('show');

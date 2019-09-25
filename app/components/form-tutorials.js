@@ -83,8 +83,8 @@ export default Component.extend({
       const searchClass = this.get('searchClass');
       const searchInput = $(`.search-tuto-${searchClass}`);
       if (item.id === 'create') {
-        const openModal = this.get('openModal');
-        openModal(tutorials, searchInput.search("get value"))
+        const createTutorial = this.get('openCreateTutorialModal');
+        createTutorial(tutorials, searchInput.search("get value"))
       } else {
         return this.get('store').findRecord('tutorial', item.id)
           .then((tutorial) => {
