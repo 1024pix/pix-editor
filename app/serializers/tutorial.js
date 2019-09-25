@@ -7,7 +7,11 @@ export default ApplicationSerializer.extend({
     source: "Source",
     format: "Format",
     link: "Lien",
-    license: "License"
+    license: "License",
+    tags: "Tags",
+    level: "niveau",
+    date: "Date maj",
+    crush: "CoupDeCoeur"
   },
 
   payloadKeyFromModelName: function() {

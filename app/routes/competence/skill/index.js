@@ -15,6 +15,8 @@ export default Route.extend({
           this.transitionTo("competence.templates.list", this.modelFor('competence'), model);
         }
       });
+    } else {
+      return model.pinRelationships();
     }
   },
   setupController(controller) {
@@ -30,6 +32,8 @@ export default Route.extend({
           !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         transition.abort();
       } else {
+        this.controller.get('model').rollbackAttributes();
+
         return true;
       }
     }

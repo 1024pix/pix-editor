@@ -1,0 +1,79 @@
+<i class="close icon"></i>
+<div class="header">
+    Créer un tutoriel
+</div>
+<form class="ui form">
+    <div class="ui stacked segment">
+        <div class="field">
+            <label>Titre</label>
+            {{input type="text" value=item.title placeholder="Titre"}}
+        </div>
+        <div class="three fields">
+            <div class="field">
+                <label>Lien</label>
+                {{input type="text" value=item.link placeholder="Lien"}}
+            </div>
+            <div class="field">
+                <label>Source</label>
+                {{input type="text" value=item.source placeholder="Source"}}
+            </div>
+            {{form-select title="License" defaultText="License" value=item.license options=options.license edition=edition}}
+
+        </div>
+        <div class="three fields">
+            {{form-select title="Format" defaultText="Format" value=item.format options=options.format edition=edition}}
+
+            <div class="field">
+                <label>Durée</label>
+                {{input type="text" value=item.duration placeholder="Durée"}}
+            </div>
+            {{form-select title="Niveau" defaultText="Niveau" value=item.level options=options.level edition=edition}}
+
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label>Rechercher tags</label>
+                {{#if _initialized}}
+
+                    {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
+                                 onSelect=(action "selectTag")}}
+                        <div class="ui icon input">
+                            <input class="prompt" placeholder="Nom" type="text">
+                            <i class="search icon"></i>
+                        </div>
+                        <div class="results"></div>
+                    {{/ui-search}}
+                {{/if}}
+            </div>
+            <div class="twelve wide field">
+                {{#if hasSelectedTag}}
+                    <label>Tags</label>
+                    {{#each selectedTags as |tag|}}
+                        <div class="ui mini labeled button btn-selected-tag" tabindex="0">
+                            <div {{action "unselectTag" tag.id}} class="ui icon button">
+                                <i class="close icon"></i>
+                            </div>
+                            <p class="ui basic label">
+                                {{tag.title}}
+                            </p>
+                        </div>
+                    {{/each}}
+                {{/if}}
+            </div>
+        </div>
+        <div class="fields">
+            <div class="field">
+                <label>Coup de coeur</label>
+                <div onclick={{action "toCrush"}} class="ui circular icon button crush">
+                    <i class="icon heart {{if isFavorite "" "outline" }}"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="actions">
+    <div onclick={{action "saveTutorial" item tutorials}} class="ui positive right labeled icon button">
+        Enregistrer
+        <i class="save icon"></i>
+    </div>
+</div>
