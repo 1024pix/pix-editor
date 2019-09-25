@@ -11,22 +11,20 @@ export default Service.extend({
     let user = config.get("pixUser");
     let password = config.get("pixPassword");
     if (user && user.length>0 && password && password.length>0) {
+      let credentialsData = new URLSearchParams({
+        username:user,
+        password:password,
+        scope:'pix'
+      });
       let dataStaging = {
-        data: {
-          data: {
-            attributes: {
-              email:user,
-              password:password
-            }
-          }
-        },
+        data: credentialsData.toString(),
         headers: {
-          "Content-type": "application/json"
+          "Content-type": "application/x-www-form-urlencoded; charset=utf-8"
         }
       };
-      this.get("ajax").post(config.get("pixStaging")+"/api/authentications", dataStaging)
+      this.get("ajax").post(config.get("pixStaging")+"/api/token", dataStaging)
       .then((response) => {
-        this.set("token", response.data.attributes.token);
+        this.set("token", response.access_token);
         this.set("connected", true);
       })
       .catch(() => {
