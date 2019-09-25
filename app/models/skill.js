@@ -144,14 +144,14 @@ export default DS.Model.extend({
       });
     })
   },
-  rollbackRelationships() {
-    this.rollbackAttributes();
+  rollbackAttributes(){
+    this._super(...arguments);
     let tutoSolution = this.get(`_pinnedRelationships.tutoSolution`);
     this.set('tutoSolution', tutoSolution);
     let tutoMore = this.get(`_pinnedRelationships.tutoMore`);
     this.set('tutoMore', tutoMore);
-
   },
+
   save() {
     return this._super(...arguments)
       .then(result => {

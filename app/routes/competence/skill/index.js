@@ -32,7 +32,7 @@ export default Route.extend({
           !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         transition.abort();
       } else {
-        this.controller.get('model').rollbackRelationships();
+        this.controller.get('model').rollbackAttributes();
 
         return true;
       }

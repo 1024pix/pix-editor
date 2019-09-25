@@ -60,7 +60,7 @@ export default Controller.extend({
     cancelEdit() {
       this.set("edition", false);
       let skill = this.get("skill");
-      skill.rollbackRelationships();
+      skill.rollbackAttributes();
       let previousState = this.get("wasMaximized");
       if (!previousState) {
         this.send("minimize");
