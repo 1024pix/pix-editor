@@ -19,63 +19,41 @@ export default Component.extend({
       }
     };
   },
+  _searchTutorial(query, callback, tagSearch) {
+    this.get('store').query('tutorial', {
+      filterByFormula: tagSearch ? `FIND('${query}', LOWER(Tags))` : `FIND('${query}', LOWER(Titre))`,
+      maxRecords: 100,
+      sort: [{field: 'Titre', direction: 'asc'}]
+    })
+      .then((tutorials) => {
+        const titleLoad = tutorials.map(tutorial => tutorial.get('tagsTitle'));
+        return Promise.all(titleLoad)
+          .then(() => tutorials);
+      })
+      .then((tutorials) => {
+        const results = tutorials.map((tutorial) => {
+          const haveTags = tagSearch ? true : tutorial.get('tagsTitle').content !== null && tutorial.get('tagsTitle').content !== '';
+          return {
+            title: tutorial.get('title'),
+            description: haveTags ? `TAG : ${tutorial.get('tagsTitle').content}` : '',
+            id: tutorial.get('id')
+          }
+        });
+        results.push({title: 'Nouveau <i class="add icon"></i>', description: 'Ajouter un tutoriel', id: 'create'});
+        callback({
+          success: true,
+          results: results
+        });
+      })
+  },
   getSearchTutorialResults(setting, callback) {
-
+    let tagSearch = false;
     let query = setting.urlData.query.toLowerCase();
     if (query[0] === ">") {
       query = query.substring(1);
-      this.get('store').query('tutorial', {
-        filterByFormula: `FIND('${query}', LOWER(Tags))`,
-        maxRecords: 100,
-        sort: [{field: 'Titre', direction: 'asc'}]
-      })
-        .then((tutorials) => {
-          const titleLoad = tutorials.map(tutorial => tutorial.get('tagsTitle'));
-          return Promise.all(titleLoad)
-            .then(() => tutorials);
-        })
-        .then((tutorials) => {
-
-          const results = tutorials.map((tutorial) => {
-            return {
-              title: tutorial.get('title'),
-              description: `TAG : ${tutorial.get('tagsTitle').content}`,
-              id: tutorial.get('id')
-            }
-          });
-          results.push({title: 'Nouveau <i class="add icon"></i>', description: 'Ajouter un tutoriel', id: 'create'});
-          callback({
-            success: true,
-            results: results
-          });
-        })
-    } else {
-      this.get('store').query('tutorial', {
-        filterByFormula: `FIND('${query}', LOWER(Titre))`,
-        maxRecords: 100,
-        sort: [{field: 'Titre', direction: 'asc'}]
-      })
-        .then((tutorials) => {
-          const titleLoad = tutorials.map(tutorial => tutorial.get('tagsTitle'));
-          return Promise.all(titleLoad)
-            .then(() => tutorials);
-        })
-        .then((tutorials) => {
-          const results = tutorials.map((tutorial) => {
-            const haveTags = tutorial.get('tagsTitle').content !== null && tutorial.get('tagsTitle').content !== '';
-            return {
-              title: tutorial.get('title'),
-              description: haveTags ? `TAG : ${tutorial.get('tagsTitle').content}` : '',
-              id: tutorial.get('id')
-            }
-          });
-          results.push({title: 'Nouveau <i class="add icon"></i>', description: 'Ajouter un tutoriel', id: 'create'});
-          callback({
-            success: true,
-            results: results
-          });
-        })
+      tagSearch = true
     }
+    this._searchTutorial(query,callback,tagSearch)
   },
   actions: {
 
