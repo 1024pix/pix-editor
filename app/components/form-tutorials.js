@@ -18,7 +18,6 @@ export default Component.extend({
         that.getSearchTutorialResults(settings, callback);
       }
     };
-    // this.set('titleSearch', {})
   },
   getSearchTutorialResults(setting, callback) {
 

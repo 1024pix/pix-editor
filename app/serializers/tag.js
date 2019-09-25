@@ -5,7 +5,6 @@ export default ApplicationSerializer.extend({
     title: 'Nom',
     description: 'Description',
     notes: 'Notes',
-    // attachment: 'Pièce jointe',
     skills: 'Acquis',
     tutorials: 'Tutoriels',
   },
