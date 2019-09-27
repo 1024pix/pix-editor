@@ -9,7 +9,7 @@ export default PopinBase.extend({
     let tube = this.get('tube');
     if (tube) {
       return DS.PromiseArray.create({
-        promise:tube.get('skills')
+        promise:tube.get('productionSkills')
           .then(skills => {
             let selected = this.get("selectedSkills");
             return skills.reduce((orderedSkills, skill) => {

@@ -20,6 +20,27 @@ export default DS.Model.extend({
   skillCount:computed('skills.[]', function() {
     return this.get('skills').length;
   }),
+  productionSkills:computed('skills.@each.productionTemplate', function() {
+    return DS.PromiseArray.create({
+      promise:this.get('skills')
+        .then(skills => {
+          const checkProductionChallenges = skills.map(skill => {
+            return skill.get('productionTemplate')
+              .then(template => {
+                if (template != null) {
+                  return skill;
+                } else {
+                  return null;
+                }
+              })
+          });
+          return Promise.all(checkProductionChallenges)
+        })
+        .then(skills => {
+          return skills.filter(skill => skill !== null)
+        })
+    });
+  }),
   productionSkillCount:computed('skills.@each.productionTemplate', function() {
     return DS.PromiseObject.create({
       promise:this.get('skills')
