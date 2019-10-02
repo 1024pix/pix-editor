@@ -5,5 +5,6 @@
   {{form-select title="Statut de l'indice" value=skill.clueStatus options=options.clueStatus edition=edition}}
   {{form-tutorials title="Pour réussir la prochaine fois" skill=skill tutorials=skill.tutoSolution searchClass="solution" edition=edition openCreateTutorialModal=(action "openCreateTutorialModal")}}
   {{form-tutorials title="Pour en savoir plus" skill=skill tutorials=skill.tutoMore edition=edition searchClass="more" openCreateTutorialModal=(action "openCreateTutorialModal")}}
+  {{form-quality title="Qualité" challenge=skill.productionTemplate edition=edition}}
   {{tutorial-form item=searchTitle tutorials=tutorials application=application class="popin-create-tuto"}}
 </form>
