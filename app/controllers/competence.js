@@ -89,6 +89,9 @@ export default Controller.extend({
   }),
   _transitionToSkillFromChallengeRoute() {
     let challenge = this.get("challengeController").get("challenge");
+    if (!challenge) {
+      return
+    }
     return challenge.get('isWorkbench')
       .then(workbench => {
         if (workbench) {
@@ -180,31 +183,41 @@ export default Controller.extend({
       const switchToSkillView = value === 'skills';
       const switchToQualityView = value === 'quality';
       const switchToChallengeView = value === 'challenges';
+
       const comeFromChallengeRoute = this.get('challengeMode');
+      const production = this.get('production');
 
       this.set('currentView', value);
       this.set('skillMode', switchToSkillView);
       this.set('qualityMode', switchToQualityView);
       this.set('challengeMode', switchToChallengeView);
 
+      this.set("listView", false);
+
       if (switchToSkillView) {
-        this.set("listView", false);
         if (comeFromChallengeRoute) {
+          if (!production) {
+            this.send("closeChildComponent");
+            return
+          }
           this._transitionToSkillFromChallengeRoute();
         }
       }
       if (switchToQualityView) {
-        this.set("listView", false);
         if (comeFromChallengeRoute) {
+          if (!production) {
+            this.send("closeChildComponent");
+            return
+          }
           this._transitionToSkillFromChallengeRoute();
         } else {
           const template = await this._getSkillProductionTemplate();
-          if(!template){
+          if (!template) {
             this.send("closeChildComponent");
           }
         }
       }
-      if (value === 'challenges') {
+      if (switchToChallengeView) {
         this._transitionToChallengeFromSkill()
       }
 
