@@ -182,28 +182,30 @@ export default Controller.extend({
 
     selectView(value) {
       this.set('currentView', value);
-      let skillMode = value === 'skills';
+      const skillMode = value === 'skills';
       this.set('skillMode', skillMode);
-      let qualityMode = value === 'quality';
+      const qualityMode = value === 'quality';
       this.set('qualityMode', qualityMode);
-      let currentRoute = this.get("router.currentRouteName");
-      if (skillMode || qualityMode) {
+      const currentRoute = this.get("router.currentRouteName");
+      const comeFromChallengeRoute = currentRoute.startsWith("competence.templates.single");
+      if (skillMode) {
         this.set("listView", false);
-      }
-      if (currentRoute.startsWith("competence.templates.single")) {
-
-        if (skillMode || qualityMode) {
+        if (comeFromChallengeRoute) {
           this._transitionToSkillFromChallengeRoute();
         }
-      } else if (currentRoute.startsWith("competence.skill")) {
-        if (skillMode) {
-          return
-        }
-        if (value === 'challenges' || qualityMode) {
+      }
+      if (qualityMode) {
+        this.set("listView", false);
+        this.set("production", true);
+        if (comeFromChallengeRoute) {
+          this._transitionToSkillFromChallengeRoute();
+        } else {
           this._transitionToChallengeFromSkill(qualityMode)
         }
-      } else {
-        this.send("closeChildComponent");
+      }
+      if (value === 'challenges') {
+        this._transitionToChallengeFromSkill()
+
       }
     }
   }
