@@ -106,6 +106,28 @@ export default Controller.extend({
         }
       });
   },
+  _transitionToChallengeFromSkill(qualityMode) {
+    let skill = this.get("skillController").get("skill");
+    if (skill) {
+      return skill.get('productionTemplate')
+        .then(template => {
+          if (template) {
+            if (qualityMode) {
+              return
+            }
+            this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+          } else {
+            if (qualityMode) {
+              this.send("closeChildComponent");
+            }
+            this.transitionToRoute("competence.index", this.get("competence").get("id"));
+            this.send("closeChildComponent");
+          }
+        });
+    } else {
+      this.send("closeChildComponent");
+    }
+  },
   actions: {
     maximizeChildComponent() {
       this.set("childComponentMaximized", true);
@@ -158,7 +180,7 @@ export default Controller.extend({
       }
     },
 
- selectView(value) {
+    selectView(value) {
       this.set('currentView', value);
       let skillMode = value === 'skills';
       this.set('skillMode', skillMode);
@@ -174,33 +196,14 @@ export default Controller.extend({
       if (currentRoute.startsWith("competence.templates.single")) {
 
         if (skillMode || qualityMode) {
-         this._transitionToSkillFromChallengeRoute();
+          this._transitionToSkillFromChallengeRoute();
         }
       } else if (currentRoute.startsWith("competence.skill")) {
         if (skillMode) {
           return
         }
-        if (value === 'challenges'|| qualityMode) {
-          let skill = this.get("skillController").get("skill");
-          if (skill) {
-            return skill.get('productionTemplate')
-              .then(template => {
-                if (template) {
-                  if(qualityMode){
-                    return
-                  }
-                  this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-                } else {
-                  if(qualityMode){
-                    this.send("closeChildComponent");
-                  }
-                  this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                  this.send("closeChildComponent");
-                }
-              });
-          } else {
-            this.send("closeChildComponent");
-          }
+        if (value === 'challenges' || qualityMode) {
+          this._transitionToChallengeFromSkill(qualityMode)
         }
       } else {
         this.send("closeChildComponent");
