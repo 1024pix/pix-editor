@@ -86,6 +86,26 @@ export default Controller.extend({
       return "competence.templates.single";
     }
   }),
+  _transitionToSkillFromChallengeRoute() {
+    let challenge = this.get("challengeController").get("challenge");
+    return challenge.get('isWorkbench')
+      .then(workbench => {
+        if (workbench) {
+          this.transitionToRoute("competence.index", this.get("competence").get("id"));
+          this.send("closeChildComponent");
+        } else {
+          return challenge.get('skills')
+            .then(skills => {
+              if (skills.length > 0) {
+                this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+              } else {
+                this.transitionToRoute("competence.index", this.get("competence").get("id"));
+                this.send("closeChildComponent");
+              }
+            });
+        }
+      });
+  },
   actions: {
     maximizeChildComponent() {
       this.set("childComponentMaximized", true);
@@ -137,26 +157,8 @@ export default Controller.extend({
         this.send("closeChildComponent");
       }
     },
-    transitionToSkillFromChallengeRoute() {
-      let challenge = this.get("challengeController").get("challenge");
-      return challenge.get('isWorkbench')
-        .then(workbench => {
-          if (workbench) {
-            this.transitionToRoute("competence.index", this.get("competence").get("id"));
-            this.send("closeChildComponent");
-          } else {
-            return challenge.get('skills')
-              .then(skills => {
-                if (skills.length > 0) {
-                  this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-                } else {
-                  this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                  this.send("closeChildComponent");
-                }
-              });
-          }
-        });
-    }, selectView(value) {
+
+ selectView(value) {
       this.set('currentView', value);
       let skillMode = value === 'skills';
       this.set('skillMode', skillMode);
@@ -172,10 +174,10 @@ export default Controller.extend({
       if (currentRoute.startsWith("competence.templates.single")) {
 
         if (skillMode || qualityMode) {
-          return this.transitionToSkillFromChallengeRoute();
+         this._transitionToSkillFromChallengeRoute();
         }
       } else if (currentRoute.startsWith("competence.skill")) {
-        if(skillMode){
+        if (skillMode) {
           return
         }
         if (value === 'challenges'|| qualityMode) {
