@@ -51,6 +51,9 @@
 
         &.skill-mode {
           background-color: #444488 !important;
+          &.draft-skill{
+            background-color: #5f66bd !important;
+          }
         }
 
         .skill-name {
