@@ -106,25 +106,26 @@ export default Controller.extend({
         }
       });
   },
-  _transitionToChallengeFromSkill(qualityMode) {
+  _getSkillProductionTemplate() {
     let skill = this.get("skillController").get("skill");
     if (skill) {
       return skill.get('productionTemplate')
-        .then(template => {
-          if (template) {
-            if (qualityMode) {
-              return
-            }
-            this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-          } else {
-            if (qualityMode) {
-              this.send("closeChildComponent");
-            }
-            this.transitionToRoute("competence.index", this.get("competence").get("id"));
-            this.send("closeChildComponent");
-          }
-        });
+    }
+    this.send("closeChildComponent");
+
+  },
+  async _transitionToChallengeFromSkill(qualityMode) {
+    const template = await this._getSkillProductionTemplate();
+    if (template) {
+      if (qualityMode) {
+        return
+      }
+      this.transitionToRoute("competence.templates.single", this.get("competence"), template);
     } else {
+      if (qualityMode) {
+        this.send("closeChildComponent");
+      }
+      this.transitionToRoute("competence.index", this.get("competence").get("id"));
       this.send("closeChildComponent");
     }
   },
