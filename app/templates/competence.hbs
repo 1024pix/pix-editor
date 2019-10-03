@@ -36,7 +36,7 @@
     {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView qualityMode=qualityMode skillMode=skillMode link=skillLink production=production}}
   </div>
   <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
-  {{#if (and (not skillMode) (not production))}}
+  {{#if (and (not skillMode) (not qualityMode) (not production))}}
     <a class={{concat "item" (if (not listView) " active" "")}} onclick={{action "setGridView"}}>
       <i class="grid layout icon"></i>
     </a>

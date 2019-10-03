@@ -114,17 +114,11 @@ export default Controller.extend({
     this.send("closeChildComponent");
 
   },
-  async _transitionToChallengeFromSkill(qualityMode) {
+  async _transitionToChallengeFromSkill() {
     const template = await this._getSkillProductionTemplate();
     if (template) {
-      if (qualityMode) {
-        return
-      }
       this.transitionToRoute("competence.templates.single", this.get("competence"), template);
     } else {
-      if (qualityMode) {
-        this.send("closeChildComponent");
-      }
       this.transitionToRoute("competence.index", this.get("competence").get("id"));
       this.send("closeChildComponent");
     }
@@ -181,7 +175,7 @@ export default Controller.extend({
       }
     },
 
-    selectView(value) {
+    async selectView(value) {
       this.set('currentView', value);
       const skillMode = value === 'skills';
       this.set('skillMode', skillMode);
@@ -197,16 +191,17 @@ export default Controller.extend({
       }
       if (qualityMode) {
         this.set("listView", false);
-        this.set("production", true);
         if (comeFromChallengeRoute) {
           this._transitionToSkillFromChallengeRoute();
         } else {
-          this._transitionToChallengeFromSkill(qualityMode)
+          const template = await this._getSkillProductionTemplate();
+          if(!template){
+            this.send("closeChildComponent");
+          }
         }
       }
       if (value === 'challenges') {
         this._transitionToChallengeFromSkill()
-
       }
     }
   }
