@@ -19,7 +19,7 @@
         <a class="left item" onclick={{action "shareSkills"}}>
           <i class="share square icon"></i> Exporter
         </a>
-      {{else if (or qualityMode)}}
+      {{else if qualityMode}}
       {{else}}
       <div class="ui top attached tabular menu">
         <div class="item production {{if production "active" ""}}" onclick={{action "switchProduction" true}}>En production</div>

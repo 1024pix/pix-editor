@@ -142,17 +142,18 @@ export default Controller.extend({
 
       let skillMode = value ==='skills';
       this.set('skillMode', skillMode);
-      let quality = value ==='quality';
-      this.set('qualityMode', quality);
+      let qualityMode = value ==='quality';
+      this.set('qualityMode', qualityMode);
       let currentRoute = this.get("router.currentRouteName");
-      if (skillMode || quality) {
+      if (skillMode || qualityMode) {
         this.set("listView", false);
       }
-      if(quality && !this.get('production')){
+      if(qualityMode && !this.get('production')){
         this.set('production', true);
       }
       if (currentRoute.startsWith("competence.templates.single")) {
-        if(value==='skills'){
+
+        if(skillMode || qualityMode){
           let challenge = this.get("challengeController").get("challenge");
           return challenge.get('isWorkbench')
             .then(workbench => {
@@ -160,6 +161,7 @@ export default Controller.extend({
                 this.transitionToRoute("competence.index", this.get("competence").get("id"));
                 this.send("closeChildComponent");
               } else {
+                console.log('ici');
                 return challenge.get('skills')
                   .then(skills => {
                     if (skills.length > 0) {
@@ -172,7 +174,7 @@ export default Controller.extend({
               }
             });
         }
-      } else if ((value==='challenges'||value==='quality') && currentRoute.startsWith("competence.skill")) {
+      } else if (value==='challenges' && currentRoute.startsWith("competence.skill")) {
         let skill = this.get("skillController").get("skill");
         if (skill) {
           return skill.get('productionTemplate')
