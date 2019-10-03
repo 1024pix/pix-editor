@@ -8,8 +8,8 @@ export default Controller.extend({
   childComponentMaximized: false,
   currentView: 'challenges',
   skillMode: false,
-  qualityMode:false,
-  listViews:null,
+  qualityMode: false,
+  listViews: null,
   listView: false,
   production: true,
   router: service(),
@@ -41,9 +41,9 @@ export default Controller.extend({
     }, {
       title: 'Acquis',
       id: 'skills'
-    },{
-      title:'Qualité',
-      id:'quality'
+    }, {
+      title: 'Qualité',
+      id: 'quality'
     }];
   },
   mayCreateTemplate: computed("config.access", function () {
@@ -140,20 +140,20 @@ export default Controller.extend({
     selectView(value) {
       this.set('currentView', value);
 
-      let skillMode = value ==='skills';
+      let skillMode = value === 'skills';
       this.set('skillMode', skillMode);
-      let qualityMode = value ==='quality';
+      let qualityMode = value === 'quality';
       this.set('qualityMode', qualityMode);
       let currentRoute = this.get("router.currentRouteName");
       if (skillMode || qualityMode) {
         this.set("listView", false);
       }
-      if(qualityMode && !this.get('production')){
+      if (qualityMode && !this.get('production')) {
         this.set('production', true);
       }
       if (currentRoute.startsWith("competence.templates.single")) {
 
-        if(skillMode || qualityMode){
+        if (skillMode || qualityMode) {
           let challenge = this.get("challengeController").get("challenge");
           return challenge.get('isWorkbench')
             .then(workbench => {
@@ -173,20 +173,31 @@ export default Controller.extend({
               }
             });
         }
-      } else if (value==='challenges' && currentRoute.startsWith("competence.skill")) {
-        let skill = this.get("skillController").get("skill");
-        if (skill) {
-          return skill.get('productionTemplate')
-            .then(template => {
-              if (template) {
-                this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-              } else {
-                this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                this.send("closeChildComponent");
-              }
-            });
-        } else {
-          this.send("closeChildComponent");
+      } else if (currentRoute.startsWith("competence.skill")) {
+        if(skillMode){
+          return
+        }
+        if (value === 'challenges'|| qualityMode) {
+          let skill = this.get("skillController").get("skill");
+          if (skill) {
+            return skill.get('productionTemplate')
+              .then(template => {
+                if (template) {
+                  if(qualityMode){
+                    return
+                  }
+                  this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+                } else {
+                  if(qualityMode){
+                    this.send("closeChildComponent");
+                  }
+                  this.transitionToRoute("competence.index", this.get("competence").get("id"));
+                  this.send("closeChildComponent");
+                }
+              });
+          } else {
+            this.send("closeChildComponent");
+          }
         }
       } else {
         this.send("closeChildComponent");
