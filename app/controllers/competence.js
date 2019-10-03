@@ -137,9 +137,27 @@ export default Controller.extend({
         this.send("closeChildComponent");
       }
     },
-    selectView(value) {
+    transitionToSkillFromChallengeRoute() {
+      let challenge = this.get("challengeController").get("challenge");
+      return challenge.get('isWorkbench')
+        .then(workbench => {
+          if (workbench) {
+            this.transitionToRoute("competence.index", this.get("competence").get("id"));
+            this.send("closeChildComponent");
+          } else {
+            return challenge.get('skills')
+              .then(skills => {
+                if (skills.length > 0) {
+                  this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+                } else {
+                  this.transitionToRoute("competence.index", this.get("competence").get("id"));
+                  this.send("closeChildComponent");
+                }
+              });
+          }
+        });
+    }, selectView(value) {
       this.set('currentView', value);
-
       let skillMode = value === 'skills';
       this.set('skillMode', skillMode);
       let qualityMode = value === 'quality';
@@ -154,24 +172,7 @@ export default Controller.extend({
       if (currentRoute.startsWith("competence.templates.single")) {
 
         if (skillMode || qualityMode) {
-          let challenge = this.get("challengeController").get("challenge");
-          return challenge.get('isWorkbench')
-            .then(workbench => {
-              if (workbench) {
-                this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                this.send("closeChildComponent");
-              } else {
-                return challenge.get('skills')
-                  .then(skills => {
-                    if (skills.length > 0) {
-                      this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-                    } else {
-                      this.transitionToRoute("competence.index", this.get("competence").get("id"));
-                      this.send("closeChildComponent");
-                    }
-                  });
-              }
-            });
+          return this.transitionToSkillFromChallengeRoute();
         }
       } else if (currentRoute.startsWith("competence.skill")) {
         if(skillMode){
