@@ -7,8 +7,6 @@ import {alias} from "@ember/object/computed";
 export default Controller.extend({
   childComponentMaximized: false,
   currentView: 'challenges',
-  skillMode: false,
-  qualityMode: false,
   listViews: null,
   listView: false,
   production: true,
@@ -21,6 +19,9 @@ export default Controller.extend({
   competence: alias("model"),
   init() {
     this._super(...arguments);
+    this.skillMode = false;
+    this.qualityMode = false;
+    this.challengeMode = true;
     this.listColumns = [{
       title: "Acquis",
       propertyName: "skills"
@@ -176,20 +177,23 @@ export default Controller.extend({
     },
 
     async selectView(value) {
+      const switchToSkillView = value === 'skills';
+      const switchToQualityView = value === 'quality';
+      const switchToChallengeView = value === 'challenges';
+      const comeFromChallengeRoute = this.get('challengeMode');
+
       this.set('currentView', value);
-      const skillMode = value === 'skills';
-      this.set('skillMode', skillMode);
-      const qualityMode = value === 'quality';
-      this.set('qualityMode', qualityMode);
-      const currentRoute = this.get("router.currentRouteName");
-      const comeFromChallengeRoute = currentRoute.startsWith("competence.templates.single");
-      if (skillMode) {
+      this.set('skillMode', switchToSkillView);
+      this.set('qualityMode', switchToQualityView);
+      this.set('challengeMode', switchToChallengeView);
+
+      if (switchToSkillView) {
         this.set("listView", false);
         if (comeFromChallengeRoute) {
           this._transitionToSkillFromChallengeRoute();
         }
       }
-      if (qualityMode) {
+      if (switchToQualityView) {
         this.set("listView", false);
         if (comeFromChallengeRoute) {
           this._transitionToSkillFromChallengeRoute();
@@ -203,6 +207,7 @@ export default Controller.extend({
       if (value === 'challenges') {
         this._transitionToChallengeFromSkill()
       }
+
     }
   }
 });
