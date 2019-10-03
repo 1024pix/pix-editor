@@ -6,7 +6,8 @@ export default Route.extend({
   },
   afterModel(model) {
     const skillMode = this.controllerFor("competence").get("skillMode");
-    if (!skillMode) {
+    const qualityMode = this.controllerFor("competence").get("qualityMode");
+    if (!(skillMode || qualityMode)) {
       return model.get('productionTemplate')
       .then(template => {
         if (template) {

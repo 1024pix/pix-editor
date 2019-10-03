@@ -161,7 +161,6 @@ export default Controller.extend({
                 this.transitionToRoute("competence.index", this.get("competence").get("id"));
                 this.send("closeChildComponent");
               } else {
-                console.log('ici');
                 return challenge.get('skills')
                   .then(skills => {
                     if (skills.length > 0) {
