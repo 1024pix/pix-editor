@@ -190,9 +190,6 @@ export default Controller.extend({
       if (skillMode || qualityMode) {
         this.set("listView", false);
       }
-      if (qualityMode && !this.get('production')) {
-        this.set('production', true);
-      }
       if (currentRoute.startsWith("competence.templates.single")) {
 
         if (skillMode || qualityMode) {
