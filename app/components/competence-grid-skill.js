@@ -12,7 +12,7 @@ export default Component.extend({
     if (skillMode || qualityMode) {
       return "competence.skill.index";
     }
-    if ((production && template)) {
+    if (production && template) {
       return link;
     }
     return "competence.templates.list";

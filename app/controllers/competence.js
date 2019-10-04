@@ -95,7 +95,6 @@ export default Controller.extend({
     return challenge.get('isWorkbench')
       .then(workbench => {
         if (workbench) {
-          this.transitionToRoute("competence.index", this.get("competence").get("id"));
           this.send("closeChildComponent");
         } else {
           return challenge.get('skills')
@@ -103,7 +102,6 @@ export default Controller.extend({
               if (skills.length > 0) {
                 this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
               } else {
-                this.transitionToRoute("competence.index", this.get("competence").get("id"));
                 this.send("closeChildComponent");
               }
             });
@@ -123,7 +121,6 @@ export default Controller.extend({
     if (template) {
       this.transitionToRoute("competence.templates.single", this.get("competence"), template);
     } else {
-      this.transitionToRoute("competence.index", this.get("competence").get("id"));
       this.send("closeChildComponent");
     }
   },
