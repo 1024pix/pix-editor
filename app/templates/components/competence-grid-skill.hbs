@@ -1,5 +1,5 @@
-{{#if skillMode}}
-  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link skill-mode" (if (not skill.productionTemplate) " draft-skill"))}}
+{{#if (eq view 'skills')}}
+  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill skill-cell link skill-mode" (if (not skill.productionTemplate) " draft-skill"))}}
     <div class="skill-name {{skill.descriptionCSS}}">
       {{skill.name}}
     </div>
@@ -12,12 +12,12 @@
       <span class="tuto-count">{{skill.tutoSolutionCount}} - {{skill.tutoMoreCount}}</span>
     </div>
   {{/link-to}}
-{{else if qualityMode}}
-  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class="quality-skill-link"}}
+{{else if (eq view 'quality')}}
+  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class="skill-cell quality-skill-link"}}
   {{quality-view skill=skill}}
   {{/link-to}}
 {{else}}
-  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill link " (if production "production" "draft"))}}
+  {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill skill-cell link " (if production "production" "draft"))}}
     {{skill.name}}
     <div class="alternative">
       {{#if production}}

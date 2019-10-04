@@ -1,0 +1,16 @@
+<td class="tube-name">
+  {{# if (eq view "skills")}}
+    {{#link-to "competence.tube.index" competenceModel tube}}{{tube.name}}{{/link-to}}
+  {{else}}
+    {{tube.name}}
+  {{/if}}
+</td>
+{{#each filteredSkills as |skill|}}
+  {{#if skill}}
+    {{competence-grid-skill skill=skill production=mayAddSkill link=link competenceModel=competenceModel}}
+  {{else if (and (eq view "skills") mayAddSkill)}}
+      <td>{{#link-to "competence.skill.new" competenceModel tube.id index class="add-skill"}} <i class="icon plus circle"></i>{{/link-to}}</td>
+  {{else}}
+      <td class="skill-cell skill-cell__empty"></td>
+  {{/if}}
+{{/each}}

@@ -33,7 +33,7 @@
   </div>
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
     {{competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=(not listView) link=skillLink production=production}}
-    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView qualityMode=qualityMode skillMode=skillMode challengeMode=challengeMode link=skillLink production=production}}
+    {{competence-grid tubes=competence.sortedTubes competenceModel=model hidden=listView view=currentView link=skillLink production=production}}
   </div>
   <div class="ui borderless bottom attached labelled icon menu {{competenceHidden}} {{if skillMode "skill-mode" ""}}">
   {{#if (and challengeMode (not production))}}
