@@ -1,13 +1,13 @@
 import Component from '@ember/component';
-import { computed } from '@ember/object';
+import {computed} from '@ember/object';
 
 export default Component.extend({
-  tagName:"",
-  skillLink:computed("link", "view", "production", "skill.productionTemplate", function() {
+  tagName: "",
+  skillLink: computed("link", "view", "production", "skill.productionTemplate", function () {
     const view = this.get('view');
-    let production = this.get("production");
-    let link = this.get("link");
-    let template = this.get("skill.productionTemplate");
+    const production = this.get("production");
+    const link = this.get("link");
+    const template = this.get("skill.productionTemplate");
     if (view === 'skills' || view === 'quality') {
       return "competence.skill.index";
     }
@@ -16,11 +16,14 @@ export default Component.extend({
     }
     return "competence.templates.list";
   }),
-  skillLinkElement:computed("view", "production", "skill.productionTemplate", function() {
+  skillLinkElement: computed("view", "production", "skill.productionTemplate", function () {
     const view = this.get('view');
-    let production = this.get("production");
-    let template = this.get("skill.productionTemplate");
-    if (view === 'skills' || view === 'quality') {
+    const production = this.get("production");
+    const template = this.get("skill.productionTemplate");
+    if (view === 'skills') {
+      return this.get("skill");
+    }
+    if (view === 'quality' && template) {
       return this.get("skill");
     }
     if (production && template) {

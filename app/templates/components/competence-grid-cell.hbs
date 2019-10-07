@@ -1,0 +1,19 @@
+{{#if (and skill (eq view "challenges") hasStatusProduction skill.productionTemplate)}}
+  {{competence-grid-skill view=view skill=skill production=hasStatusProduction link=link
+                          competenceModel=competenceModel}}
+{{else if (and skill (eq view "challenges") (not hasStatusProduction))}}
+  {{competence-grid-skill view=view skill=skill production=hasStatusProduction link=link
+                          competenceModel=competenceModel}}
+{{else if (and skill (eq view "skills") )}}
+  {{competence-grid-skill view=view skill=skill production=hasStatusProduction link=link
+                          competenceModel=competenceModel}}
+{{else if (and skill (eq view "quality") skill.productionTemplate)}}
+  {{competence-grid-skill view=view skill=skill production=hasStatusProduction link=link
+                          competenceModel=competenceModel}}
+
+{{else if (and (eq view "skills") mayAddSkill)}}
+    <td>{{#link-to "competence.skill.new" competenceModel tubeId index class="add-skill"}}
+        <i class="icon plus circle"></i>{{/link-to}}</td>
+{{else}}
+    <td class="skill-cell__empty"></td>
+{{/if}}

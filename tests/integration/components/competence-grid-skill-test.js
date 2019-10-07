@@ -7,10 +7,9 @@ module('Integration | Component | competence-grid-skill', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{competence-grid-skill skillMode=true}}`);
+
+    await render(hbs`{{competence-grid-skill view="skills"}}`);
 
     assert.dom('.skill-name').exists();
 
