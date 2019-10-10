@@ -10,7 +10,7 @@
             {{tube.name}}
           {{/if}}
         </td>
-        {{#each tube.filledSkills as |skill index|}}
+        {{#each tube.filledSkills as |skill|}}
          {{competence-grid-cell view=view skill=skill hasStatusProduction=production link=link competenceModel=competenceModel}}
         {{/each}}
       </tr>
