@@ -87,24 +87,26 @@ export default Controller.extend({
       return "competence.templates.single";
     }
   }),
-  async _transitionToSkillFromChallengeRoute() {
+  _transitionToSkillFromChallengeRoute() {
     let challenge = this.get("challengeController").get("challenge");
     if (!challenge) {
       return
     }
-    const workbench = await challenge.get('isWorkbench');
-    if (workbench) {
-      this.send("closeChildComponent");
-    } else {
-      const skills = await challenge.get('skills');
-      if (skills.length > 0) {
-        this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-      } else {
-        this.send("closeChildComponent");
-      }
-
-    }
-
+    return challenge.get('isWorkbench')
+      .then(workbench => {
+        if (workbench) {
+          this.send("closeChildComponent");
+        } else {
+          return challenge.get('skills')
+            .then(skills => {
+              if (skills.length > 0) {
+                this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+              } else {
+                this.send("closeChildComponent");
+              }
+            });
+        }
+      });
   },
   _getSkillProductionTemplate() {
     let skill = this.get("skillController").get("skill");
@@ -114,13 +116,15 @@ export default Controller.extend({
     this.send("closeChildComponent");
 
   },
-  async _transitionToChallengeFromSkill() {
-    const template = await this._getSkillProductionTemplate();
-    if (template) {
-      this.transitionToRoute("competence.templates.single", this.get("competence"), template);
-    } else {
-      this.send("closeChildComponent");
-    }
+  _transitionToChallengeFromSkill() {
+    return this._getSkillProductionTemplate()
+      .then(template => {
+        if (template) {
+          this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+        } else {
+          this.send("closeChildComponent");
+        }
+      })
   },
   actions: {
     maximizeChildComponent() {
