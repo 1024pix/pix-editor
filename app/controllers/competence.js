@@ -114,6 +114,7 @@ export default Controller.extend({
       return skill.get('productionTemplate')
     }
     this.send("closeChildComponent");
+    return Promise.resolve();
 
   },
   _transitionToChallengeFromSkill() {

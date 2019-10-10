@@ -1,6 +1,7 @@
 import Component from '@ember/component';
 import {computed} from '@ember/object';
 import {inject as service} from '@ember/service';
+import DS from 'ember-data';
 
 
 export default Component.extend({
@@ -21,23 +22,25 @@ export default Component.extend({
     return this.get("access").mayEditSkills();
   }),
 
-  filteredSkill: computed('skill','skill.productionTemplate','view', function () {
+  displaySkill: computed('skill','skill.productionTemplate','skill.productionTemplate.isFulfilled','hasStatusProduction','view', function () {
     const skill = this.get('skill');
-    const productionTemplate = this.get('skill.productionTemplate');
-    const view = this.get('view');
     if(skill){
-      if ((view === 'challenges') && this.get('hasStatusProduction') && productionTemplate) {
-        return skill;
+      const templateLoaded = this.get('skill.productionTemplate.isFulfilled');
+      if (!templateLoaded) {
+        return false;
       }
-      if ((view === 'challenges') && !this.get('hasStatusProduction')) {
-        return skill;
-      }
-      if(view === 'skills'){
-        return skill;
-      }
-      if((view === 'quality') && productionTemplate) {
-        return skill;
-      }
+      const view = this.get('view');
+      return DS.PromiseObject.create({
+        promise:this.get('skill.productionTemplate').then(productionTemplate => {
+          if ((view === 'challenges' && (this.get('hasStatusProduction') && productionTemplate))
+            || (view === 'challenges' && !this.get('hasStatusProduction'))
+            || (view === 'skills')
+            || (view === 'quality' && productionTemplate) ) {
+            return true;
+          }
+        })
+
+      })
     }
     return false;
   })
