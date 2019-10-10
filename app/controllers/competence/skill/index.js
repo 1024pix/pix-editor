@@ -63,7 +63,9 @@ export default Controller.extend({
       skill.rollbackAttributes();
       this.get('skill.productionTemplate')
         .then((challenge) => {
-          challenge.rollbackAttributes();
+          if(challenge){
+            challenge.rollbackAttributes();
+          }
           let previousState = this.get("wasMaximized");
           if (!previousState) {
             this.send("minimize");
@@ -80,7 +82,9 @@ export default Controller.extend({
       let skill = this.get("skill");
       this.get('skill.productionTemplate')
         .then((challenge)=>{
-          challenge.save();
+          if(challenge){
+            challenge.save();
+          }
         })
         .then(()=>{
           skill.save()
