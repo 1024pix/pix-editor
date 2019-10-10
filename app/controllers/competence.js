@@ -87,26 +87,24 @@ export default Controller.extend({
       return "competence.templates.single";
     }
   }),
-  _transitionToSkillFromChallengeRoute() {
+  async _transitionToSkillFromChallengeRoute() {
     let challenge = this.get("challengeController").get("challenge");
     if (!challenge) {
       return
     }
-    return challenge.get('isWorkbench')
-      .then(workbench => {
-        if (workbench) {
-          this.send("closeChildComponent");
-        } else {
-          return challenge.get('skills')
-            .then(skills => {
-              if (skills.length > 0) {
-                this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
-              } else {
-                this.send("closeChildComponent");
-              }
-            });
-        }
-      });
+    const workbench = await challenge.get('isWorkbench');
+    if (workbench) {
+      this.send("closeChildComponent");
+    } else {
+      const skills = await challenge.get('skills');
+      if (skills.length > 0) {
+        this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+      } else {
+        this.send("closeChildComponent");
+      }
+
+    }
+
   },
   _getSkillProductionTemplate() {
     let skill = this.get("skillController").get("skill");
