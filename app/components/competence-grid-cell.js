@@ -33,13 +33,13 @@ export default Component.extend({
         return skill;
       }
       if(view === 'skills'){
-        return skill
+        return skill;
       }
       if((view === 'quality') && productionTemplate) {
-        return skill
+        return skill;
       }
     }
-    return false
+    return false;
   })
 
 });
