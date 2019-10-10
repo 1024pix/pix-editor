@@ -178,7 +178,7 @@ export default Controller.extend({
       }
     },
 
-    async selectView(value) {
+     selectView(value) {
       const switchToSkillView = value === 'skills';
       const switchToQualityView = value === 'quality';
       const switchToChallengeView = value === 'challenges';
@@ -199,7 +199,7 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return
           }
-          this._transitionToSkillFromChallengeRoute();
+         return this._transitionToSkillFromChallengeRoute();
         }
       }
       if (switchToQualityView) {
@@ -208,16 +208,18 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return
           }
-          this._transitionToSkillFromChallengeRoute();
+         return this._transitionToSkillFromChallengeRoute();
         } else {
-          const template = await this._getSkillProductionTemplate();
-          if (!template) {
-            this.send("closeChildComponent");
-          }
+          return this._getSkillProductionTemplate()
+            .then(template => {
+              if (!template) {
+                this.send("closeChildComponent");
+              }
+            })
         }
       }
       if (switchToChallengeView) {
-        this._transitionToChallengeFromSkill()
+       return this._transitionToChallengeFromSkill()
       }
 
     }
