@@ -168,7 +168,7 @@ export default Controller.extend({
           .then(challenge => this._validateAlternatives(challenge))
           .then(() => {
             this._message("Mise en production réussie");
-            this.get("parentController").send("switchProduction", true);
+            this.get("parentController").send("selectView", "production", true);
           })
           .catch((error) =>{
             console.error(error);
@@ -204,7 +204,7 @@ export default Controller.extend({
     init() {
       let parentController = this.get("parentController");
       if (!this.get("challenge.isValidated")) {
-        parentController.send("switchDraft", false);
+        parentController.send("selectView", "workbench");
         return this.get('challenge.isWorkbench')
         .then(workbench => {
           if (workbench) {
@@ -212,7 +212,7 @@ export default Controller.extend({
           }
         });
       } else {
-        parentController.send("switchProduction", false);
+        parentController.send("selectView", "production");
       }
       this.set("maximized", parentController.get("childComponentMaximized"));
     },

@@ -1,119 +1,91 @@
-import Controller from "@ember/controller";
-import {computed} from "@ember/object";
+import Controller from '@ember/controller';
+import {computed} from '@ember/object';
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
-import {alias} from "@ember/object/computed";
+import {alias} from '@ember/object/computed';
 
 export default Controller.extend({
   childComponentMaximized: false,
-  currentView: 'challenges',
-  listViews: null,
-  listView: false,
-  production: true,
+  view: 'production',
   router: service(),
   config: service(),
   access: service(),
   application: controller(),
-  challengeController: controller("competence.templates.single"),
-  skillController: controller("competence.skill.index"),
-  competence: alias("model"),
-  init() {
-    this._super(...arguments);
-    this.skillMode = false;
-    this.qualityMode = false;
-    this.challengeMode = true;
-    this.listColumns = [{
-      title: "Acquis",
-      propertyName: "skills"
-    }, {
-      title: "Consigne",
-      propertyName: "instructions"
-    }, {
-      title: "Type",
-      propertyName: "type"
-    }, {
-      title: "Statut",
-      propertyName: "status"
+  challengeController: controller('competence.templates.single'),
+  skillController: controller('competence.skill.index'),
+  competence: alias('model'),
+  competenceHidden:computed('childComponentMaximized', function(){
+    return this.get('childComponentMaximized')?'hidden':'';
+  }),
+  mainView:computed('view', function() {
+    const view = this.get('view');
+    switch(view) {
+      case 'production':
+      case 'workbench':
+      case 'workbench-list':
+        return 'challenges';
+      default:
+        return view;
     }
-    ];
-    this.listViews = [{
-      title: 'Epreuves',
-      id: 'challenges'
-    }, {
-      title: 'Acquis',
-      id: 'skills'
-    }, {
-      title: 'Qualité',
-      id: 'quality'
-    }];
-  },
-  mayCreateTemplate: computed("config.access", function () {
-    return this.get("access").mayCreateTemplate();
   }),
-  mayCreateTube: computed("config.access", function () {
-    return this.get("access").mayCreateTube();
-  }),
-  competenceHidden: computed("childComponentMaximized", function () {
-    return this.get("childComponentMaximized") ? "hidden" : "";
-  }),
-  size: computed("router.currentRouteName", function () {
-    if (this.get("router.currentRouteName") == 'competence.index') {
-      return "full";
+  size: computed('router.currentRouteName', function () {
+    if (this.get('router.currentRouteName') == 'competence.index') {
+      return 'full';
     } else {
-      return "half";
+      return 'half';
     }
   }),
-  twoColumns: computed("router.currentRouteName", function () {
-    let routeName = this.get("router.currentRouteName");
+  twoColumns: computed('router.currentRouteName', function () {
+    let routeName = this.get('router.currentRouteName');
     switch (routeName) {
-      case "competence.templates.single.alternatives":
-      case "competence.templates.single.alternatives.index":
-      case "competence.templates.single.alternatives.single":
-      case "competence.templates.single.alternatives.new":
+      case 'competence.templates.single.alternatives':
+      case 'competence.templates.single.alternatives.index':
+      case 'competence.templates.single.alternatives.single':
+      case 'competence.templates.single.alternatives.new':
         return true;
       default:
         return false;
     }
   }),
-  skillLink: computed("twoColumns", "production", function () {
-    let twoColumns = this.get("twoColumns");
-    if (this.get("production")) {
+  skillLink: computed('twoColumns', 'view', function () {
+    let twoColumns = this.get('twoColumns');
+    if (this.get('view') === 'production') {
       if (twoColumns) {
-        return "competence.templates.single.alternatives";
+        return 'competence.templates.single.alternatives';
       } else {
-        return "competence.templates.single";
+        return 'competence.templates.single';
       }
     } else {
-      return "competence.templates.single";
+      return 'competence.templates.single';
     }
   }),
   _transitionToSkillFromChallengeRoute() {
-    let challenge = this.get("challengeController").get("challenge");
+    let challenge = this.get('challengeController').get('challenge');
     if (!challenge) {
       return
     }
     return challenge.get('isWorkbench')
       .then(workbench => {
         if (workbench) {
-          this.send("closeChildComponent");
+          this.send('closeChildComponent');
         } else {
           return challenge.get('skills')
             .then(skills => {
               if (skills.length > 0) {
-                this.transitionToRoute("competence.skill.index", this.get("competence"), skills.get('firstObject'));
+                this.transitionToRoute('competence.skill.index', this.get('competence'), skills.get('firstObject'));
               } else {
-                this.send("closeChildComponent");
+                this.send('closeChildComponent');
               }
             });
         }
       });
   },
   _getSkillProductionTemplate() {
-    let skill = this.get("skillController").get("skill");
+    let skill = this.get('skillController').get('skill');
     if (skill) {
       return skill.get('productionTemplate')
     }
-    this.send("closeChildComponent");
+    this.send('closeChildComponent');
     return Promise.resolve();
 
   },
@@ -121,93 +93,72 @@ export default Controller.extend({
     return this._getSkillProductionTemplate()
       .then(template => {
         if (template) {
-          this.transitionToRoute("competence.templates.single", this.get("competence"), template);
+          this.transitionToRoute('competence.templates.single', this.get('competence'), template);
         } else {
-          this.send("closeChildComponent");
+          this.send('closeChildComponent');
         }
       })
   },
   actions: {
     maximizeChildComponent() {
-      this.set("childComponentMaximized", true);
+      this.set('childComponentMaximized', true);
     },
     minimizeChildComponent() {
-      this.set("childComponentMaximized", false);
+      this.set('childComponentMaximized', false);
     },
     closeChildComponent() {
-      this.set("childComponentMaximized", false);
-      this.transitionToRoute("competence", this.get("competence").get("id"));
+      this.set('childComponentMaximized', false);
+      this.transitionToRoute('competence', this.get('competence'));
     },
     refresh(closeChild) {
       if (closeChild) {
-        this.send("closeChildComponent");
+        this.send('closeChildComponent');
       }
-      this.send("refreshModel");
-    },
-    setListView() {
-      this.set("listView", true);
-    },
-    setGridView() {
-      this.set("listView", false);
+      this.send('refreshModel');
     },
     newTemplate() {
-      this.transitionToRoute("competence.templates.new", this.get("competence"));
+      this.transitionToRoute('competence.templates.new', this.get('competence'));
     },
     copyChallenge(challenge) {
-      this.transitionToRoute("competence.templates.new", this.get("competence"), {queryParams: {from: challenge.get("id")}});
+      this.transitionToRoute('competence.templates.new', this.get('competence'), {queryParams: {from: challenge.get('id')}});
     },
     newTube() {
-      this.transitionToRoute("competence.tube.new", this.get("competence"));
+      this.transitionToRoute('competence.tube.new', this.get('competence'));
     },
     showAlternatives(challenge) {
-      this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), challenge);
+      this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
     shareSkills() {
-      this.get("application").send("showMessage", "Bientôt disponible...", true);
+      this.get('application').send('showMessage', 'Bientôt disponible...', true);
     },
-    switchProduction(closeChild) {
-      this.set("production", true);
-      this.set("listView", false);
-      if (closeChild) {
-        this.send("closeChildComponent");
+    selectView(value, closeChild) {
+      const previousView = this.get('view');
+      const previousMainView = this.get('mainView');
+
+      if (value === 'challenges') {
+        this.set('view', 'production');
+      } else {
+        this.set('view', value);
       }
-    },
-    switchDraft(closeChild) {
-      this.set("production", false);
+
       if (closeChild) {
-        this.send("closeChildComponent");
+        this.send('closeChildComponent');
       }
-    },
 
-     selectView(value) {
-      const switchToSkillView = value === 'skills';
-      const switchToQualityView = value === 'quality';
-      const switchToChallengeView = value === 'challenges';
-
-      const comeFromChallengeRoute = this.get('challengeMode');
-      const production = this.get('production');
-
-      this.set('currentView', value);
-      this.set('skillMode', switchToSkillView);
-      this.set('qualityMode', switchToQualityView);
-      this.set('challengeMode', switchToChallengeView);
-
-      this.set("listView", false);
-
-      if (switchToSkillView) {
-        if (comeFromChallengeRoute) {
-          if (!production) {
+      if (value === 'skills') {
+        if (previousMainView === 'challenges') {
+          if (previousView !== 'production') {
             this.send("closeChildComponent");
-            return
+            return;
           }
          return this._transitionToSkillFromChallengeRoute();
         }
       }
-      if (switchToQualityView) {
-        if (comeFromChallengeRoute) {
-          if (!production) {
+      if (value === 'quality') {
+        if (previousMainView === 'challenges') {
+          if (previousView !== 'production') {
             this.send("closeChildComponent");
-            return
+            return;
           }
          return this._transitionToSkillFromChallengeRoute();
         } else {
@@ -219,10 +170,9 @@ export default Controller.extend({
             })
         }
       }
-      if (switchToChallengeView) {
+      if (value === 'challenges') {
        return this._transitionToChallengeFromSkill()
       }
-
     }
   }
 });

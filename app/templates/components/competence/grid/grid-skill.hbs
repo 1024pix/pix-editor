@@ -14,7 +14,7 @@
   {{/link-to}}
 {{else if (eq view "quality")}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class="skill-cell quality-skill-link"}}
-  {{quality-view skill=skill}}
+  {{competence/grid/skill-quality skill=skill}}
   {{/link-to}}
 {{else}}
   {{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill skill-cell link " (if production "production" "draft"))}}

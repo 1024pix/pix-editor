@@ -1,17 +1,17 @@
 <table class="ui celled table definition tubes">
   <tbody>
   {{#each tubes as |tube|}}
-    {{#if (or skillMode (not production) tube.hasProductionChallenge) }}
+    {{#if (or displayAllTubes tube.hasProductionChallenge) }}
       <tr>
         <td>
-          {{#if skillMode}}
+          {{#if (eq view "skills")}}
             {{#link-to "competence.tube.index" competenceModel tube}}{{tube.name}}{{/link-to}}
           {{else}}
             {{tube.name}}
           {{/if}}
         </td>
         {{#each tube.filledSkills as |skill|}}
-         {{competence-grid-cell view=view skill=skill hasStatusProduction=production link=link competenceModel=competenceModel}}
+         {{competence/grid/grid-cell view=view skill=skill link=link competenceModel=competenceModel}}
         {{/each}}
       </tr>
     {{/if}}

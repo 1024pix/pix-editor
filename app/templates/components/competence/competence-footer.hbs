@@ -1,0 +1,23 @@
+{{#if displayWorkbenchViews}}
+  <a class={{concat "item" (if (eq view "workbench") " active" "")}} onclick={{action selectView "workbench"}}>
+    <i class="grid layout icon"></i>
+  </a>
+  <a class={{concat "item" (if (eq view "workbench-list") " active" "")}} onclick={{action selectView "workbench-list"}}>
+    <i class="align justify icon"></i>
+  </a>
+{{/if}}
+{{#if displayProductionStats}}
+  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.productionTubeCount.content}}</div><div class="competence-info">Acquix : {{competence.productionSkillCount.content}}</div></div>
+{{else}}
+  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount.content}}</div><div class="competence-info">Acquix : {{competence.skillCount.content}}</div></div>
+{{/if}}
+{{#if mayCreateTube}}
+  <a class="left item" onclick={{action newTube}}>
+    <i class="plus square outline icon"></i> Nouveau tube
+  </a>
+{{/if}}
+{{#if mayCreateTemplate}}
+    <a class="right item" onclick={{action newTemplate}}>
+        <i class="plus square outline icon"></i> Nouveau prototype
+    </a>
+{{/if}}

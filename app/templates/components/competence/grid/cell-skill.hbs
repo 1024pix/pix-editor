@@ -1,0 +1,13 @@
+{{#link-to skillLink competenceModel skillLinkElement tagName="td" class=(concat "skill skill-cell link skill-mode" (if (not skill.productionTemplate) " draft-skill"))}}
+  <div class="skill-name {{skill.descriptionCSS}}">
+    {{skill.name}}
+  </div>
+  <div class="help">
+    {{#if (or skill.clue skill.clueNA)}}
+    <i class={{concat "idea icon " skill.clueCSS}}></i>
+    {{else}}
+    <i class="icon"></i>
+    {{/if}}
+    <span class="tuto-count">{{skill.tutoSolutionCount}} - {{skill.tutoMoreCount}}</span>
+  </div>
+{{/link-to}}

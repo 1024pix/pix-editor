@@ -3,7 +3,6 @@ import {computed} from '@ember/object';
 import {inject as service} from '@ember/service';
 import DS from 'ember-data';
 
-
 export default Component.extend({
 
   // Element
@@ -18,11 +17,11 @@ export default Component.extend({
   hasStatusProduction: false,
 
   // Computed
-  mayAddSkill: computed("config.access", function () {
-    return this.get("access").mayEditSkills();
+  mayAddSkill: computed('view', 'config.access', function () {
+    return this.get('view') === 'skills' && this.get('access').mayEditSkills();
   }),
 
-  displaySkill: computed('skill','skill.productionTemplate','skill.productionTemplate.isFulfilled','hasStatusProduction','view', function () {
+  displaySkill: computed('skill','skill.{productionTemplate,isFulfilled}','hasStatusProduction','view', function () {
     const skill = this.get('skill');
     if(skill){
       const templateLoaded = this.get('skill.productionTemplate.isFulfilled');
@@ -32,8 +31,8 @@ export default Component.extend({
       const view = this.get('view');
       return DS.PromiseObject.create({
         promise:this.get('skill.productionTemplate').then(productionTemplate => {
-          if ((view === 'challenges' && (this.get('hasStatusProduction') && productionTemplate))
-            || (view === 'challenges' && !this.get('hasStatusProduction'))
+          if ((view === 'production' && productionTemplate)
+            || (view === 'workbench')
             || (view === 'skills')
             || (view === 'quality' && productionTemplate) ) {
             return true;

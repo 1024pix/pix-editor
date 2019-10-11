@@ -1,4 +1,4 @@
-import SortedList from './sorted-list';
+import SortedList from '../sorted-list';
 import {computed} from '@ember/object';
 
 export default SortedList.extend({

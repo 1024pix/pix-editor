@@ -2,6 +2,7 @@ import Component from '@ember/component';
 import {computed} from '@ember/object';
 
 export default Component.extend({
+  tagName: "",
   classNameBindings: ["qualityClassColor"],
   qualityIndication: computed("skill[productionTemplate[spoil,responsive,accessibility1,accessibility2],clueStatus]", function () {
 

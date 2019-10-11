@@ -79,8 +79,8 @@
           color: $production-color;
         }
 
-        &.draft,
-        &.draft.active,
+        &.workbench,
+        &.workbench.active,
         .skill-name.draft,
         .help i.draft {
           background-color: $draft-background-color !important;
