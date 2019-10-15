@@ -5,7 +5,7 @@ import DS from 'ember-data';
 
 export default Component.extend({
   tagName: '',
-  qualityIndication: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2},skill.clueStatus', function () {
+  qualityIndication: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2}','skill.clueStatus', function (){
     return DS.PromiseObject.create({
       promise: this.get('skill.productionTemplate').then(productionTemplate => {
         const allWeight = 19;
@@ -14,6 +14,7 @@ export default Component.extend({
         const colorblind = this._colorblindWeight(productionTemplate.get('accessibility2'));
         const a11Y = this._a11YWeight(productionTemplate.get('accessibility1'));
         const clue = this._clueWeight(this.get('skill.clueStatus'));
+        console.log(spoil,responsive,colorblind,a11Y,clue);
 
         const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
         return Math.round(result * 100);
@@ -21,14 +22,17 @@ export default Component.extend({
     })
   }),
   qualityClassColor: computed('qualityIndication', function () {
-    const qualityIndication = this.get('qualityIndication');
-    if (qualityIndication < 50) {
-      return 'quality bad-quality';
-    }
-    if (qualityIndication < 80) {
-      return 'quality medium-quality';
-    }
-    return 'quality good-quality';
+    return DS.PromiseObject.create({
+      promise: this.get('qualityIndication').then(qualityIndication => {
+        if (qualityIndication < 50) {
+          return 'quality bad-quality';
+        }
+        if (qualityIndication < 80) {
+          return 'quality medium-quality';
+        }
+        return 'quality good-quality';
+      })
+    })
   }),
   classTutorial: computed("skill.{tutoSolutionCount,tutoMoreCount}", function () {
     const tutoSolution = this.get('skill.tutoSolutionCount');
@@ -41,55 +45,33 @@ export default Component.extend({
     }
     return false;
   }),
-  popupBuild: computed("skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer},skill.{clueStatus,tutoSolutionCount,tutoMoreCount}",
-    "classTutorial",
-    function () {
-      function isNonTested(skillDetail) {
-        if (skillDetail) {
-          return skillDetail;
-        }
-        return 'Non testé';
-      }
-
-      const spoil = isNonTested(this.get('skill.productionTemplate.spoil'));
-      const responsive = isNonTested(this.get('skill.productionTemplate.responsive'));
-      const blind = isNonTested(this.get('skill.productionTemplate.accessibility1'));
-      const colorblind = isNonTested(this.get('skill.productionTemplate.accessibility2'));
-      const clue = () => {
+  popupBuild: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer}','skill.{clueStatus,tutoSolutionCount,tutoMoreCount}', 'classTutorial', function () {
+    return DS.PromiseObject.create({
+      promise:this.get('skill.productionTemplate').then(productionTemplate => {
+        const spoil = this._isNonTested(productionTemplate.get('spoil'));
+        const responsive = this._isNonTested(productionTemplate.get('responsive'));
+        const blind = this._isNonTested(productionTemplate.get('accessibility1'));
+        const colorblind = this._isNonTested(productionTemplate.get('accessibility2'));
         const skillClue = this.get('skill.clueStatus');
-        if (skillClue) {
-          return skillClue;
-        }
-        return "Pas d'indice";
-      };
-      const timer = () => {
+        const clue = skillClue?skillClue:'Pas d\'indice';
         const skillTimer = this.get('skill.productionTemplate.timer');
-        if (skillTimer) {
-          return `<tr><td>Timer</td><td>${skillTimer} s</td></tr>`;
-        }
-        return '';
-      };
-
-
-      const haveTuto = () => {
-        const haveTuto = this.get('classTutorial');
+        const timer = skillTimer?`<tr><td>Timer</td><td>${skillTimer} s</td></tr>`:'';
+        const classTuto = this.get('classTutorial');
         const tutoSolutionCount = this.get('skill.tutoSolutionCount');
         const tutoMoreCount = this.get('skill.tutoMoreCount');
-        if (haveTuto) {
-          return `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
-                  <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`;
-        }
-        return '';
-      };
-      return `<tr><td>Spoil </td><td> ${spoil} </td></tr>
-              <tr><td>Responsive </td><td> ${responsive} </td></tr>
-              <tr><td>Non/Mal voyant </td><td> ${blind} </td></tr>
-              <tr><td>Daltonien </td><td> ${colorblind} </td></tr>
-              <tr><td>Indice </td><td> ${clue()} </td></tr>
-              ${haveTuto()}
-              ${timer()}`;
-    }
-  ),
+        const haveTuto = classTuto?`<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
+                                    <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`:'';
+        return `<tr><td>Spoil </td><td> ${spoil} </td></tr>
+                <tr><td>Responsive </td><td> ${responsive} </td></tr>
+                <tr><td>Non/Mal voyant </td><td> ${blind} </td></tr>
+                <tr><td>Daltonien </td><td> ${colorblind} </td></tr>
+                <tr><td>Indice </td><td> ${clue} </td></tr>
+                ${haveTuto}
+                ${timer}`;
+
+      })
+    })
+  }),
   _spoilWeight(spoil) {
     const weight = 5;
     const quality = {
@@ -142,5 +124,11 @@ export default Component.extend({
       'default': 0
     };
     return (quality[clue] || quality['default']) / 4 * weight;
+  },
+  _isNonTested(skillDetail) {
+    if (skillDetail) {
+      return skillDetail;
+    }
+    return 'Non testé';
   }
 });

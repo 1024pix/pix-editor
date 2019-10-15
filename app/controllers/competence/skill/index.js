@@ -81,13 +81,17 @@ export default Controller.extend({
       this.get("application").send("isLoading");
       let skill = this.get("skill");
       this.get('skill.productionTemplate')
-        .then((challenge)=>{
-          if(challenge){
-            challenge.save();
+        .then((challenge) => {
+          if (challenge) {
+            console.log('sauvegarde du template');
+            console.debug(challenge);
+            return challenge.save();
+          } else {
+            return Promise.resolve();
           }
         })
         .then(()=>{
-          skill.save()
+          return skill.save();
         })
         .then(() => {
           this.set("edition", false);
