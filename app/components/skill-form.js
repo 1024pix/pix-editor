@@ -9,12 +9,12 @@ export default Component.extend({
       'descriptionStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"]
     };
     this.set('tutorials', []);
-    this.set('searchTitle', {});
+    this.set('searchTitle', '');
     this.set('popinCreateTuto', "popin-create-tuto");
   },
   actions:{
     openCreateTutorialModal(tutorials,title){
-      this.set('searchTitle', {title:title});
+      this.set('searchTitle', title);
       this.set('tutorials',tutorials);
       $(`.${this.get('popinCreateTuto')}`).modal('show');
     }

@@ -1,7 +1,7 @@
 <div class={{concat "field" (if edition "" " disabled")}}>
     <label>
         {{#if edition}}
-            <a onClick={{action "toggleMaximized"}} class={{concat "ui compact icon right floated button" (if maximized " primary" " basic")}}><i class="maximize icon"></i></a>
+            <a onClick={{action "toggleMaximized"}} class={{concat "ui compact icon right floated button" (if maximized " primary" " basic")}}><i class={{concat (if maximized "compress " "expand ")  "icon"}}></i></a>
             {{#if helpContent}}
             <div class="ui compact icon right floated button basic">
                 {{ui-popup tagName="i" class="help icon" html=helpContent}}

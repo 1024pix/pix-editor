@@ -7,6 +7,7 @@ export default Alternative.extend({
   defaultSaveChangelog:"Création de la déclinaison",
   actions:{
     cancelEdit() {
+      this.get("store").deleteRecord(this.get("challenge"));
       this.set("edition", false);
       this._message("Création annulée");
       this.get("parentController").send("closeChildComponent");

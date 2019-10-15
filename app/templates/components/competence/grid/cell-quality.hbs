@@ -1,10 +1,11 @@
+{{#link-to "competence.skill.index" competenceModel skill tagName="td" class="skill-cell quality-skill-link"}}
   {{#ui-popup html=(concat
     "<table class='quality-indication-details'>"
-    popupBuild
-    "</table>")}}
+    popupBuild.content
+    "</table>") class=qualityClassColor.content}}
     <div class=" quality-indication">
       <span>{{skill.name}}</span>
-      <span>{{qualityIndication}}</span>
+      <span>{{qualityIndication.content}}</span>
     </div>
     {{#if classTutorial}}
       <i class="lab icon {{classTutorial}}"></i>
@@ -16,3 +17,4 @@
     <br>
       {{/if}}
   {{/ui-popup}}
+{{/link-to}}

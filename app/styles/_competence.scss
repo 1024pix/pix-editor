@@ -51,6 +51,9 @@
 
         &.skill-mode {
           background-color: #444488 !important;
+          &.draft-skill{
+            background-color: #5f66bd !important;
+          }
         }
 
         .skill-name {
@@ -76,8 +79,8 @@
           color: $production-color;
         }
 
-        &.draft,
-        &.draft.active,
+        &.workbench,
+        &.workbench.active,
         .skill-name.draft,
         .help i.draft {
           background-color: $draft-background-color !important;
