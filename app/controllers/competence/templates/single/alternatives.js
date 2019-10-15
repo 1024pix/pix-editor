@@ -43,10 +43,7 @@ export default Controller.extend({
     refresh() {
       this.get("competenceController").send("refresh");
     },
-    switchDraft() {
-      // does nothing
-    },
-    switchProduction() {
+    selectView() {
       // does nothing
     }
   }
