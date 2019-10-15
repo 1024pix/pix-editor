@@ -83,8 +83,6 @@ export default Controller.extend({
       this.get('skill.productionTemplate')
         .then((challenge) => {
           if (challenge) {
-            console.log('sauvegarde du template');
-            console.debug(challenge);
             return challenge.save();
           } else {
             return Promise.resolve();

@@ -14,7 +14,6 @@ export default Component.extend({
         const colorblind = this._colorblindWeight(productionTemplate.get('accessibility2'));
         const a11Y = this._a11YWeight(productionTemplate.get('accessibility1'));
         const clue = this._clueWeight(this.get('skill.clueStatus'));
-        console.log(spoil,responsive,colorblind,a11Y,clue);
 
         const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
         return Math.round(result * 100);
