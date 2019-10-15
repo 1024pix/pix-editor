@@ -17,7 +17,7 @@ export default Controller.extend({
   competenceHidden:computed('childComponentMaximized', function(){
     return this.get('childComponentMaximized')?'hidden':'';
   }),
-  mainView:computed('view', function() {
+  section:computed('view', function() {
     const view = this.get('view');
     switch(view) {
       case 'production':
@@ -131,22 +131,26 @@ export default Controller.extend({
     shareSkills() {
       this.get('application').send('showMessage', 'Bientôt disponible...', true);
     },
+    selectSection(value) {
+      if (value === 'challenges') {
+        this.send('selectView', 'production');
+        return this._transitionToChallengeFromSkill()
+      } else {
+        this.send('selectView', value);
+      }
+    },
     selectView(value, closeChild) {
       const previousView = this.get('view');
-      const previousMainView = this.get('mainView');
+      const previousSection = this.get('section');
 
-      if (value === 'challenges') {
-        this.set('view', 'production');
-      } else {
-        this.set('view', value);
-      }
+      this.set('view', value);
 
       if (closeChild) {
         this.send('closeChildComponent');
       }
 
       if (value === 'skills') {
-        if (previousMainView === 'challenges') {
+        if (previousSection === 'challenges') {
           if (previousView !== 'production') {
             this.send("closeChildComponent");
             return;
@@ -155,7 +159,7 @@ export default Controller.extend({
         }
       }
       if (value === 'quality') {
-        if (previousMainView === 'challenges') {
+        if (previousSection === 'challenges') {
           if (previousView !== 'production') {
             this.send("closeChildComponent");
             return;
@@ -169,9 +173,6 @@ export default Controller.extend({
               }
             })
         }
-      }
-      if (value === 'challenges') {
-       return this._transitionToChallengeFromSkill()
       }
     }
   }

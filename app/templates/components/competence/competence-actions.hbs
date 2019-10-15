@@ -3,10 +3,10 @@
     <a class="left item" onclick={{action shareSkills}}>
       <i class="share square icon"></i> Exporter
     </a>
-  {{else if (eq mainView "challenges")}}
+  {{else if (eq section "challenges")}}
     <div class="ui top attached tabular menu">
       <div class="item production {{if (eq view "production") "active" ""}}" onclick={{action selectView "production"}}>En production</div>
-      <div class="item workbench {{if (not-eq view "production") "" "active"}}"  onclick={{action selectView "workbench"}}>Atelier</div>
+      <div class="item workbench {{if (eq view "production") "" "active"}}"  onclick={{action selectView "workbench"}}>Atelier</div>
     </div>
   {{/if}}
 {{/unless}}

@@ -2,18 +2,17 @@ import Route from '@ember/routing/route';
 
 export default Route.extend({
   model(params) {
-    return this.get("store").findRecord("skill", params.skill_id);
+    return this.get('store').findRecord('skill', params.skill_id);
   },
   afterModel(model) {
-    const skillMode = this.controllerFor("competence").get("skillMode");
-    const qualityMode = this.controllerFor("competence").get("qualityMode");
-    if (!(skillMode || qualityMode)) {
+    const section = this.controllerFor('competence').get('section');
+    if (section === 'challenges') {
       return model.get('productionTemplate')
       .then(template => {
         if (template) {
-          this.transitionTo("competence.templates.single", this.modelFor('competence'), template);
+          this.transitionTo('competence.templates.single', this.modelFor('competence'), template);
         } else {
-          this.transitionTo("competence.templates.list", this.modelFor('competence'), model);
+          this.transitionTo('competence.templates.list', this.modelFor('competence'), model);
         }
       });
     } else {
@@ -22,14 +21,14 @@ export default Route.extend({
   },
   setupController(controller) {
     this._super(...arguments);
-    controller.set("maximized", false);
-    controller.set("edition", false);
-    controller.set("areas", this.modelFor('application'));
-    controller.set("competence", this.modelFor('competence'));
+    controller.set('maximized', false);
+    controller.set('edition', false);
+    controller.set('areas', this.modelFor('application'));
+    controller.set('competence', this.modelFor('competence'));
   },
   actions: {
     willTransition(transition) {
-      if (this.controller.get("edition") &&
+      if (this.controller.get('edition') &&
           !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
         transition.abort();
       } else {

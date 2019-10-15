@@ -2,11 +2,11 @@
     {{#if (eq view "production")}}
       {{competence/grid/cell-production skill=skill link=link competenceModel=competenceModel}}
     {{else if (eq view "workbench")}}
-      {{competence/grid/cell-workbench skill=skill link=link competenceModel=competenceModel}}
+      {{competence/grid/cell-workbench skill=skill competenceModel=competenceModel}}
     {{else if (eq view "quality")}}
-      {{competence/grid/cell-quality skill=skill link=link competenceModel=competenceModel}}
+      {{competence/grid/cell-quality skill=skill competenceModel=competenceModel}}
     {{else if (eq view "skills")}}
-      {{competence/grid/cell-skill skill=skill link=link competenceModel=competenceModel}}
+      {{competence/grid/cell-skill skill=skill competenceModel=competenceModel}}
   {{/if}}
 {{else if mayAddSkill}}
     <td>{{#link-to "competence.skill.new" competenceModel tubeId index class="add-skill"}}

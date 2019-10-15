@@ -12,7 +12,7 @@ export default Component.extend({
   }),
   init() {
     this._super(...arguments);
-    this.mainViews = [{
+    this.sections = [{
       title: 'Epreuves',
       id: 'challenges'
     }, {

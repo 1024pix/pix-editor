@@ -21,7 +21,7 @@ export default Component.extend({
     return this.get('view') === 'skills' && this.get('access').mayEditSkills();
   }),
 
-  displaySkill: computed('skill','skill.{productionTemplate,isFulfilled}','hasStatusProduction','view', function () {
+  displaySkill: computed('skill','skill.{productionTemplate,productionTemplate.isFulfilled}','hasStatusProduction','view', function () {
     const skill = this.get('skill');
     if(skill){
       const templateLoaded = this.get('skill.productionTemplate.isFulfilled');

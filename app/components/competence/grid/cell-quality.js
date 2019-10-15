@@ -2,9 +2,8 @@ import Component from '@ember/component';
 import {computed} from '@ember/object';
 
 export default Component.extend({
-  tagName: "",
-  classNameBindings: ["qualityClassColor"],
-  qualityIndication: computed("skill[productionTemplate[spoil,responsive,accessibility1,accessibility2],clueStatus]", function () {
+  tagName:'',
+  qualityIndication: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2},skill.clueStatus', function () {
 
       function spoilWeight(spoil) {
         const weight = 5;
@@ -84,7 +83,7 @@ export default Component.extend({
     }
     return 'quality good-quality';
   }),
-  classTutorial: computed("skill[tutoSolutionCount,tutoMoreCount]", function () {
+  classTutorial: computed("skill.{tutoSolutionCount,tutoMoreCount}", function () {
     const tutoSolution = this.get('skill.tutoSolutionCount');
     const tutoMore = this.get('skill.tutoMoreCount');
     if (tutoSolution > 0 && tutoMore > 0) {
@@ -95,7 +94,7 @@ export default Component.extend({
     }
     return false;
   }),
-  popupBuild: computed("skill[productionTemplate[spoil,responsive,accessibility1,accessibility2,timer],clueStatus,tutoSolutionCount,tutoMoreCount]",
+  popupBuild: computed("skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer},skill.{clueStatus,tutoSolutionCount,tutoMoreCount}",
     "classTutorial",
     function () {
       function isNonTested(skillDetail) {

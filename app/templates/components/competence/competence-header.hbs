@@ -1,9 +1,9 @@
 <h1 class="ui left floated header">{{competence.name}}</h1>
-{{#ui-dropdown class="selection ui small right floated header" selected=mainView onChange=(action selectView) }}
+{{#ui-dropdown class="selection ui small right floated header" selected=section onChange=(action selectSection) }}
 <div class="default text"></div>
   <i class="dropdown icon"></i>
   <div class="menu">
-    {{#each mainViews as |view|}}
+    {{#each sections as |view|}}
       <div data-value={{view.id}} class="item">
         {{view.title}}
       </div>
