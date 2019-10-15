@@ -208,7 +208,7 @@ export default Controller.extend({
         return this.get('challenge.isWorkbench')
         .then(workbench => {
           if (workbench) {
-            parentController.send("setListView");
+            parentController.send("selectView", "workbench-list");
           }
         });
       } else {
