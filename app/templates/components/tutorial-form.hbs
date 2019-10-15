@@ -6,35 +6,37 @@
     <div class="ui stacked segment">
         <div class="field">
             <label>Titre</label>
-            {{input type="text" value=item.title placeholder="Titre"}}
+            {{input type="text" value=title placeholder="Titre"}}
         </div>
         <div class="three fields">
             <div class="field">
                 <label>Lien</label>
-                {{input type="text" value=item.link placeholder="Lien"}}
+                {{input type="text" value=tutorial.link placeholder="Lien"}}
             </div>
             <div class="field">
                 <label>Source</label>
-                {{input type="text" value=item.source placeholder="Source"}}
+                {{input type="text" value=tutorial.source placeholder="Source"}}
             </div>
-            {{form-select title="License" defaultText="License" value=item.license options=options.license edition=edition}}
-
+            {{#if _initialized}}
+              {{form-select title="License" defaultText="Licence" value=tutorial.license options=options.license edition=true}}
+            {{/if}}
         </div>
         <div class="three fields">
-            {{form-select title="Format" defaultText="Format" value=item.format options=options.format edition=edition}}
-
+            {{#if _initialized}}
+              {{form-select title="Format" defaultText="Format" value=tutorial.format options=options.format edition=true}}
+            {{/if}}
             <div class="field">
                 <label>Durée (hh:mm:ss)</label>
-                {{input type="text" value=item.duration placeholder="Durée (hh:mm:ss)"}}
+                {{input type="text" value=tutorial.duration placeholder="Durée (hh:mm:ss)"}}
             </div>
-            {{form-select title="Niveau" defaultText="Niveau" value=item.level options=options.level edition=edition}}
-
+            {{#if _initialized}}
+              {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
+            {{/if}}
         </div>
         <div class="fields">
             <div class="field">
                 <label>Rechercher tags</label>
                 {{#if _initialized}}
-
                     {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
                                  onSelect=(action "selectTag")}}
                         <div class="ui icon input">
@@ -72,7 +74,7 @@
     </div>
 </form>
 <div class="actions">
-    <div onclick={{action "saveTutorial" item tutorials}} class="ui positive right labeled icon button">
+    <div onclick={{action "saveTutorial" tutorials}} class="ui positive right labeled icon button">
         Enregistrer
         <i class="save icon"></i>
     </div>
