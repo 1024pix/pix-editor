@@ -2,5 +2,10 @@
   {{#if edition}}
     {{form-input value=tube.name edition=edition label="Nom"}}
   {{/if}}
-    {{form-textarea title="Description" value=tube.description edition=edition}}
+  {{form-input value=tube.title edition=edition label="Titre"}}
+  {{form-textarea title="Description" value=tube.description edition=edition}}
+    <div class="ui raised segment">
+      {{form-input value=tube.practicalTitle edition=edition label="Titre pratique"}}
+      {{form-textarea title="Description pratique" value=tube.practicalDescription edition=edition}}
+    </div>
 </form>
