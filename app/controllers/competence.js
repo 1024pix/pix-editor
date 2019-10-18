@@ -14,12 +14,12 @@ export default Controller.extend({
   challengeController: controller('competence.templates.single'),
   skillController: controller('competence.skill.index'),
   competence: alias('model'),
-  competenceHidden:computed('childComponentMaximized', function(){
-    return this.get('childComponentMaximized')?'hidden':'';
+  competenceHidden: computed('childComponentMaximized', function () {
+    return this.get('childComponentMaximized') ? 'hidden' : '';
   }),
-  section:computed('view', function() {
+  section: computed('view', function () {
     const view = this.get('view');
-    switch(view) {
+    switch (view) {
       case 'production':
       case 'workbench':
       case 'workbench-list':
@@ -128,8 +128,36 @@ export default Controller.extend({
     showAlternatives(challenge) {
       this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
-    shareSkills() {
-      this.get('application').send('showMessage', 'Bientôt disponible...', true);
+     shareSkills() {
+      let buildCSV  = [];
+      const competence = this.get('competence');
+      competence.get('productionTubes')
+        .then(productionTubes => {
+          productionTubes.forEach(productionTube => {
+            productionTube.get('filledSkills')
+              .then( async filledSkills => {
+                const skills = await filledSkills.reduce((array, skill) => {
+                  if (skill) {
+                    skill.get('productionTemplate')
+                      .then(template => {
+                        if (template) {
+                          array.push([skill,template.instructions]) ;
+                          return array
+                        }
+                      })
+                  }
+                  return array
+                }, []);
+                skills.forEach(skill=>{
+                  buildCSV.push([competence.name,productionTube.name,skill[0].name,skill[0].description,skill[1],skill[0].clue])
+                });
+                return buildCSV
+              })
+          });
+
+          console.log(buildCSV)
+        })
+
     },
     selectSection(value) {
       if (value === 'challenges') {
@@ -155,7 +183,7 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return;
           }
-         return this._transitionToSkillFromChallengeRoute();
+          return this._transitionToSkillFromChallengeRoute();
         }
       }
       if (value === 'quality') {
@@ -164,7 +192,7 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return;
           }
-         return this._transitionToSkillFromChallengeRoute();
+          return this._transitionToSkillFromChallengeRoute();
         } else {
           return this._getSkillProductionTemplate()
             .then(template => {
