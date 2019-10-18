@@ -10,6 +10,7 @@ export default Controller.extend({
   router: service(),
   config: service(),
   access: service(),
+  fileSaver: service('file-saver'),
   application: controller(),
   challengeController: controller('competence.templates.single'),
   skillController: controller('competence.skill.index'),
@@ -99,6 +100,12 @@ export default Controller.extend({
         }
       })
   },
+  _formatCSVString(str){
+    if(str){
+      return str.replace(/"/g, '\"')
+    }
+     return ' '
+  },
   actions: {
     maximizeChildComponent() {
       this.set('childComponentMaximized', true);
@@ -128,34 +135,42 @@ export default Controller.extend({
     showAlternatives(challenge) {
       this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
-     shareSkills() {
-      let buildCSV  = [];
+    shareSkills() {
+      let buildCSV = [];
       const competence = this.get('competence');
       competence.get('productionTubes')
-        .then(productionTubes => {
-          productionTubes.forEach(productionTube => {
+        .then(async productionTubes => {
+         await productionTubes.forEach(productionTube => {
             productionTube.get('filledSkills')
-              .then( async filledSkills => {
+              .then(async filledSkills => {
                 const skills = await filledSkills.reduce((array, skill) => {
                   if (skill) {
                     skill.get('productionTemplate')
                       .then(template => {
                         if (template) {
-                          array.push([skill,template.instructions]) ;
+                          array.push([skill, template.instructions]);
                           return array
                         }
                       })
                   }
                   return array
                 }, []);
-                skills.forEach(skill=>{
-                  buildCSV.push([competence.name,productionTube.name,skill[0].name,skill[0].description,skill[1],skill[0].clue])
+                skills.forEach(skill => {
+                 const description = this._formatCSVString(skill[0].description);
+                 const instruction = this._formatCSVString(skill[1]);
+                 const clue = this._formatCSVString(skill[0].clue);
+                  buildCSV.push(['"'+competence.name, productionTube.name, skill[0].name, description, instruction, clue+'"'])
                 });
                 return buildCSV
               })
           });
-
-          console.log(buildCSV)
+          return buildCSV
+        }).then(()=>{
+        const content = buildCSV.reduce((content, row) => {
+          return content +`\n${row.join('","')}`
+        }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
+        const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+        this.get("fileSaver").saveAs(content, fileName);
         })
 
     },
