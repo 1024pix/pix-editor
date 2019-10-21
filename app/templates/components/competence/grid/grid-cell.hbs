@@ -9,7 +9,6 @@
       {{competence/grid/cell-skill skill=skill competenceModel=competenceModel}}
   {{/if}}
 {{else if mayAddSkill}}
-  {{log competenceModel tubeId index}}
     <td>{{#link-to "competence.skill.new" competenceModel tubeId index class="add-skill"}}
         <i class="icon plus circle"></i>{{/link-to}}</td>
 {{else}}

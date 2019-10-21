@@ -161,10 +161,8 @@ export default Controller.extend({
                  const clue = this._formatCSVString(skill[0].clue);
                   buildCSV.push(['"'+competence.name, productionTube.name, skill[0].name, description, instruction, clue+'"'])
                 });
-                return buildCSV
               })
           });
-          return buildCSV
         }).then(()=>{
         const content = buildCSV.reduce((content, row) => {
           return content +`\n${row.join('","')}`
