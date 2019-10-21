@@ -102,7 +102,7 @@ export default Controller.extend({
   },
   _formatCSVString(str){
     if(str){
-      return str.replace(/"/g, '\"')
+      return str.replace(/"/g, '""')
     }
      return ' '
   },
