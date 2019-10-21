@@ -100,11 +100,11 @@ export default Controller.extend({
         }
       })
   },
-  _formatCSVString(str){
-    if(str){
-      return str.replace(/"/g, '""')
+  _formatCSVString(str) {
+    if (str) {
+      return str.replace(/"/g, '""');
     }
-     return ' '
+    return ' ';
   },
   actions: {
     maximizeChildComponent() {
@@ -140,7 +140,7 @@ export default Controller.extend({
       const competence = this.get('competence');
       competence.get('productionTubes')
         .then(async productionTubes => {
-         await productionTubes.forEach(productionTube => {
+          await productionTubes.forEach(productionTube => {
             productionTube.get('filledSkills')
               .then(async filledSkills => {
                 const skills = await filledSkills.reduce((array, skill) => {
@@ -149,27 +149,27 @@ export default Controller.extend({
                       .then(template => {
                         if (template) {
                           array.push([skill, template.instructions]);
-                          return array
+                          return array;
                         }
                       })
                   }
-                  return array
+                  return array;
                 }, []);
                 skills.forEach(skill => {
-                 const description = this._formatCSVString(skill[0].description);
-                 const instruction = this._formatCSVString(skill[1]);
-                 const clue = this._formatCSVString(skill[0].clue);
-                  buildCSV.push(['"'+competence.name, productionTube.name, skill[0].name, description, instruction, clue+'"'])
+                  const description = this._formatCSVString(skill[0].description);
+                  const instruction = this._formatCSVString(skill[1]);
+                  const clue = this._formatCSVString(skill[0].clue);
+                  buildCSV.push(['"' + competence.name, productionTube.name, skill[0].name, description, instruction, clue + '"']);
                 });
               })
           });
-        }).then(()=>{
+        }).then(() => {
         const content = buildCSV.reduce((content, row) => {
-          return content +`\n${row.join('","')}`
+          return content + `\n${row.join('","')}`
         }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
         const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
         this.get("fileSaver").saveAs(content, fileName);
-        })
+      })
 
     },
     selectSection(value) {

@@ -99,7 +99,7 @@ export default Component.extend({
             let skills = '';
             for (const skill of filledSkills) {
               if (skill) {
-                const productionTemplate = await skill.get('productionTemplate')
+                const productionTemplate = await skill.get('productionTemplate');
                 if (productionTemplate) {
                   skills += `${skill.name},`;
                 } else {
@@ -113,7 +113,6 @@ export default Component.extend({
             const tubeDescription = this._formatCSVString(productionTube.description);
             const tubePracticalDescription = this._formatCSVString(productionTube.practicalDescription);
             buildCSV.push(['"' + area.name, competence.name, productionTube.name, productionTube.title, tubeDescription, productionTube.practicalTitle, tubePracticalDescription, skills + '"']);
-            console.log(buildCSV)
           }
 
         }
