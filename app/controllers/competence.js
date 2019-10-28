@@ -136,41 +136,41 @@ export default Controller.extend({
       this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
     shareSkills() {
-      let buildCSV = [];
       const competence = this.get('competence');
-      competence.get('productionTubes')
-        .then(async productionTubes => {
-          await productionTubes.forEach(productionTube => {
-            productionTube.get('filledSkills')
-              .then(async filledSkills => {
-                const skills = await filledSkills.reduce((array, skill) => {
-                  if (skill) {
-                    skill.get('productionTemplate')
-                      .then(template => {
-                        if (template) {
-                          array.push([skill, template.instructions]);
-                          return array;
-                        }
-                      })
-                  }
-                  return array;
-                }, []);
-                skills.forEach(skill => {
-                  const description = this._formatCSVString(skill[0].description);
-                  const instruction = this._formatCSVString(skill[1]);
-                  const clue = this._formatCSVString(skill[0].clue);
-                  buildCSV.push(['"' + competence.name, productionTube.name, skill[0].name, description, instruction, clue + '"']);
-                });
-              })
-          });
-        }).then(() => {
-        const content = buildCSV.reduce((content, row) => {
-          return content + `\n${row.join('","')}`
-        }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
-        const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-        this.get("fileSaver").saveAs(content, fileName);
-      })
+      return competence.get('productionTubes')
+        .then(productionTubes => {
+          const getFilledSkills = productionTubes.map(productionTube =>  productionTube.get('filledSkills'));
+          return Promise.all(getFilledSkills);
+        })
+        .then(filledSkills => {
+          const getSkillData =  filledSkills.flat()
+            .filter(filledSkill => filledSkill !== false)
+              .map(filledSkill => {
+                return filledSkill.get('productionTemplate')
+                  .then(productionTemplate => {
+                    if (productionTemplate) {
+                      return filledSkill.get('tube')
+                        .then(tube => {
+                          const description = this._formatCSVString(filledSkill.description);
+                          const instruction = this._formatCSVString(productionTemplate.instructions);
+                          const clue = this._formatCSVString(filledSkill.clue);
+                          return ['"' + competence.name, tube.name, filledSkill.name, description, instruction, clue + '"'];
+                        });
+                    } else {
+                      return Promise.resolve(false);
+                    }
+                  })
 
+          });
+          return Promise.all(getSkillData)
+        }).then(skillData => {
+          debugger
+          const contentCSV = skillData.filter(item => item !== false).reduce((content, item) => {
+            return content + `\n${item.join('","')}`;
+          }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
+          const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+          this.get("fileSaver").saveAs(contentCSV, fileName);
+        });
     },
     selectSection(value) {
       if (value === 'challenges') {
