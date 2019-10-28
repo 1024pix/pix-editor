@@ -87,43 +87,58 @@ export default Component.extend({
     return ' '
   },
   actions: {
-    async shareAreas() {
-      let buildCSV = [];
-      const areas = this.get('areas').toArray();
-      for (const area of areas) {
-        const competences = area.get('sortedCompetences');
-        for (const competence of competences) {
-          const productionTubes = await competence.get('productionTubes');
-          for (const productionTube of productionTubes) {
-            const filledSkills = await productionTube.get('filledSkills');
-            let skills = '';
-            for (const skill of filledSkills) {
-              if (skill) {
-                const productionTemplate = await skill.get('productionTemplate');
-                if (productionTemplate) {
-                  skills += `${skill.name},`;
-                } else {
-                  skills += '░,';
-                }
-              } else {
-                skills += '░,';
-              }
-            }
-            skills = skills.substring(0, skills.length - 1);
-            const tubeDescription = this._formatCSVString(productionTube.description);
-            const tubePracticalDescription = this._formatCSVString(productionTube.practicalDescription);
-            buildCSV.push(['"' + area.name, competence.name, productionTube.name, productionTube.title, tubeDescription, productionTube.practicalTitle, tubePracticalDescription, skills + '"']);
-          }
-
-        }
-      }
-
-      const content = buildCSV.reduce((content, row) => {
-        return content + `\n${row.join('","')}`
-      }, '"Sujet","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
-      const fileName = `Description_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
-      this.get("fileSaver").saveAs(content, fileName);
-
+    shareAreas() {
+      const areas = this.get('areas');
+      const getData = areas.map(area => {
+        return area.get('sortedCompetences')
+          .map(competence => {
+            return competence.get('productionTubes')
+              .then(productionTubes => {
+                const getFilledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills').then(filledSkills => ({
+                  tube: productionTube,
+                  skills: filledSkills
+                })));
+                return Promise.all(getFilledSkills);
+              })
+              .then(filledSkills => {
+                const getTubeRows = filledSkills.map( item => {
+                  const getSkillsData = item.skills.map(skill => {
+                    if (skill === false) {
+                      return Promise.resolve('░,');
+                    } else {
+                      return skill.get('productionTemplate')
+                        .then(productionTemplate => {
+                          if (productionTemplate) {
+                            return `${skill.name},`;
+                          } else {
+                            return '░,';
+                          }
+                        });
+                    }
+                  });
+                  return Promise.all(getSkillsData).then(skillValues => {
+                    debugger
+                    skillValues = skillValues.join(',');
+                    skillValues = skillValues.substring(0, skillValues.length - 1);
+                    const productionTube = item.tube;
+                    const tubeDescription = this._formatCSVString(productionTube.description);
+                    const tubePracticalDescription = this._formatCSVString(productionTube.practicalDescription);
+                    return [area.name, competence.name, productionTube.name, productionTube.title, tubeDescription, productionTube.practicalTitle, tubePracticalDescription, skillValues];
+                  });
+                });
+                return Promise.all(getTubeRows);
+              });
+          });
+      });
+      return Promise.all(getData.flat())
+        .then(data => {
+          console.log(data.flat())
+          const contentCSV = data.flat().reduce((content, data) => {
+            return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
+          }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
+          const fileName = `Description_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
+          this.get("fileSaver").saveAs(contentCSV, fileName);
+        });
 
     }
   }

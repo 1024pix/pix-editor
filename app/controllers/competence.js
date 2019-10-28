@@ -139,32 +139,31 @@ export default Controller.extend({
       const competence = this.get('competence');
       return competence.get('productionTubes')
         .then(productionTubes => {
-          const getFilledSkills = productionTubes.map(productionTube =>  productionTube.get('filledSkills'));
+          const getFilledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills'));
           return Promise.all(getFilledSkills);
         })
         .then(filledSkills => {
-          const getSkillData =  filledSkills.flat()
+          const getSkillData = filledSkills.flat()
             .filter(filledSkill => filledSkill !== false)
-              .map(filledSkill => {
-                return filledSkill.get('productionTemplate')
-                  .then(productionTemplate => {
-                    if (productionTemplate) {
-                      return filledSkill.get('tube')
-                        .then(tube => {
-                          const description = this._formatCSVString(filledSkill.description);
-                          const instruction = this._formatCSVString(productionTemplate.instructions);
-                          const clue = this._formatCSVString(filledSkill.clue);
-                          return ['"' + competence.name, tube.name, filledSkill.name, description, instruction, clue + '"'];
-                        });
-                    } else {
-                      return Promise.resolve(false);
-                    }
-                  })
+            .map(filledSkill => {
+              return filledSkill.get('productionTemplate')
+                .then(productionTemplate => {
+                  if (productionTemplate) {
+                    return filledSkill.get('tube')
+                      .then(tube => {
+                        const description = this._formatCSVString(filledSkill.description);
+                        const instruction = this._formatCSVString(productionTemplate.instructions);
+                        const clue = this._formatCSVString(filledSkill.clue);
+                        return ['"' + competence.name, tube.name, filledSkill.name, description, instruction, clue + '"'];
+                      });
+                  } else {
+                    return Promise.resolve(false);
+                  }
+                })
 
-          });
+            });
           return Promise.all(getSkillData)
         }).then(skillData => {
-          debugger
           const contentCSV = skillData.filter(item => item !== false).reduce((content, item) => {
             return content + `\n${item.join('","')}`;
           }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
