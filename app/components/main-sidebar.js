@@ -104,22 +104,20 @@ export default Component.extend({
                 const getTubeRows = filledSkills.map( item => {
                   const getSkillsData = item.skills.map(skill => {
                     if (skill === false) {
-                      return Promise.resolve('░,');
+                      return Promise.resolve('░');
                     } else {
                       return skill.get('productionTemplate')
                         .then(productionTemplate => {
                           if (productionTemplate) {
-                            return `${skill.name},`;
+                            return `${skill.name}`;
                           } else {
-                            return '░,';
+                            return '░';
                           }
                         });
                     }
                   });
                   return Promise.all(getSkillsData).then(skillValues => {
-                    debugger
                     skillValues = skillValues.join(',');
-                    skillValues = skillValues.substring(0, skillValues.length - 1);
                     const productionTube = item.tube;
                     const tubeDescription = this._formatCSVString(productionTube.description);
                     const tubePracticalDescription = this._formatCSVString(productionTube.practicalDescription);
@@ -132,7 +130,6 @@ export default Component.extend({
       });
       return Promise.all(getData.flat())
         .then(data => {
-          console.log(data.flat())
           const contentCSV = data.flat().reduce((content, data) => {
             return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
           }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');

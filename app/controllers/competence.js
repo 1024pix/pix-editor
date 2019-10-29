@@ -154,7 +154,7 @@ export default Controller.extend({
                         const description = this._formatCSVString(filledSkill.description);
                         const instruction = this._formatCSVString(productionTemplate.instructions);
                         const clue = this._formatCSVString(filledSkill.clue);
-                        return ['"' + competence.name, tube.name, filledSkill.name, description, instruction, clue + '"'];
+                        return [competence.name, tube.name, filledSkill.name, description, instruction, clue];
                       });
                   } else {
                     return Promise.resolve(false);
@@ -164,8 +164,8 @@ export default Controller.extend({
             });
           return Promise.all(getSkillData)
         }).then(skillData => {
-          const contentCSV = skillData.filter(item => item !== false).reduce((content, item) => {
-            return content + `\n${item.join('","')}`;
+          const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
+            return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
           }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
           const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
           this.get("fileSaver").saveAs(contentCSV, fileName);
