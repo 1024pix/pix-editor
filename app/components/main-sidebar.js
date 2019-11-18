@@ -134,7 +134,7 @@ export default Component.extend({
           const contentCSV = data.flat().reduce((content, data) => {
             return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
           }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
-          const fileName = `Description_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
+          const fileName = `Export_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
           this.get('fileSaver').saveAs(contentCSV, fileName);
           this.get('showMessage')('Sujets exportés', true);
         })
