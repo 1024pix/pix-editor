@@ -10,16 +10,17 @@ export default Controller.extend({
   router: service(),
   config: service(),
   access: service(),
+  fileSaver: service('file-saver'),
   application: controller(),
   challengeController: controller('competence.templates.single'),
   skillController: controller('competence.skill.index'),
   competence: alias('model'),
-  competenceHidden:computed('childComponentMaximized', function(){
-    return this.get('childComponentMaximized')?'hidden':'';
+  competenceHidden: computed('childComponentMaximized', function () {
+    return this.get('childComponentMaximized') ? 'hidden' : '';
   }),
-  section:computed('view', function() {
+  section: computed('view', function () {
     const view = this.get('view');
-    switch(view) {
+    switch (view) {
       case 'production':
       case 'workbench':
       case 'workbench-list':
@@ -99,6 +100,12 @@ export default Controller.extend({
         }
       })
   },
+  _formatCSVString(str) {
+    if (str) {
+      return str.replace(/"/g, '""');
+    }
+    return ' ';
+  },
   actions: {
     maximizeChildComponent() {
       this.set('childComponentMaximized', true);
@@ -128,8 +135,45 @@ export default Controller.extend({
     showAlternatives(challenge) {
       this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
-    shareSkills() {
-      this.get('application').send('showMessage', 'Bientôt disponible...', true);
+    exportSkills() {
+      this.get('application').send('isLoading','Export des acquis...');
+      const competence = this.get('competence');
+      return competence.get('productionTubes')
+        .then(productionTubes => {
+          const getFilledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills'));
+          return Promise.all(getFilledSkills);
+        })
+        .then(filledSkills => {
+          const getSkillData = filledSkills.flat()
+            .filter(filledSkill => filledSkill !== false)
+            .map(filledSkill => {
+              return filledSkill.get('productionTemplate')
+                .then(productionTemplate => {
+                  if (productionTemplate) {
+                    return filledSkill.get('tube')
+                      .then(tube => {
+                        const description = this._formatCSVString(filledSkill.description);
+                        const instruction = this._formatCSVString(productionTemplate.instructions);
+                        const clue = this._formatCSVString(filledSkill.clue);
+                        return [competence.name, tube.name, filledSkill.name, description, instruction, clue];
+                      });
+                  } else {
+                    return Promise.resolve(false);
+                  }
+                })
+
+            });
+          return Promise.all(getSkillData)
+        }).then(skillData => {
+          const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
+            return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
+          }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
+          const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+          this.get("fileSaver").saveAs(contentCSV, fileName);
+          this.get('application').send('showMessage', 'acquis exportés', true);
+        }).finally(() => {
+          this.get('application').send('finishedLoading');
+        })
     },
     selectSection(value) {
       if (value === 'challenges') {
@@ -155,7 +199,7 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return;
           }
-         return this._transitionToSkillFromChallengeRoute();
+          return this._transitionToSkillFromChallengeRoute();
         }
       }
       if (value === 'quality') {
@@ -164,7 +208,7 @@ export default Controller.extend({
             this.send("closeChildComponent");
             return;
           }
-         return this._transitionToSkillFromChallengeRoute();
+          return this._transitionToSkillFromChallengeRoute();
         } else {
           return this._getSkillProductionTemplate()
             .then(template => {
