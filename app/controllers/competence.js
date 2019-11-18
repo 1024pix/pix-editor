@@ -135,7 +135,8 @@ export default Controller.extend({
     showAlternatives(challenge) {
       this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
     },
-    shareSkills() {
+    exportSkills() {
+      this.get('application').send('isLoading','Export des acquis...');
       const competence = this.get('competence');
       return competence.get('productionTubes')
         .then(productionTubes => {
@@ -167,9 +168,12 @@ export default Controller.extend({
           const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
             return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
           }, '"Comptétence","Tube","Acquis","Description","consigne","indice"');
-          const fileName = `Description_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+          const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
           this.get("fileSaver").saveAs(contentCSV, fileName);
-        });
+          this.get('application').send('showMessage', 'acquis exportés', true);
+        }).finally(() => {
+          this.get('application').send('finishedLoading');
+        })
     },
     selectSection(value) {
       if (value === 'challenges') {
