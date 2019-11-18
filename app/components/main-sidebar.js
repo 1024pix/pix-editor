@@ -88,6 +88,7 @@ export default Component.extend({
   },
   actions: {
     shareAreas() {
+      this.get('isLoading')('Récupération des sujets');
       const areas = this.get('areas');
       const getData = areas.map(area => {
         return area.get('sortedCompetences')
@@ -134,7 +135,11 @@ export default Component.extend({
             return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
           }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
           const fileName = `Description_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
-          this.get("fileSaver").saveAs(contentCSV, fileName);
+          this.get('fileSaver').saveAs(contentCSV, fileName);
+          this.get('showMessage')('Sujets exportés', true);
+        })
+        .finally(() => {
+          this.get('finishedLoading')();
         });
 
     }
