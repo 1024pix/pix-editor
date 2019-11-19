@@ -25,7 +25,7 @@ export default Component.extend({
   }),
   helpInstructions: "<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)",
   helpSuggestions:computed("challenge.type", function() {
-    let type = this.get("challenge.type");
+    const type = this.get("challenge.type");
     switch(type) {
       case "QCU":
         return "- réponse 1<br>- réponse 2<br>- ...";
@@ -44,7 +44,7 @@ export default Component.extend({
     }
   }),
   helpAnswers:computed("challenge.type", function() {
-    let type = this.get("challenge.type");
+    const type = this.get("challenge.type");
     switch(type) {
       case "QCU":
         return "n<br><br><i>n = numéro de la bonne réponse</i>";
@@ -62,7 +62,7 @@ export default Component.extend({
   }),
   helpScoring:"n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses",
   typeIsQROC: computed('challenge.type', function(){
-    let type = this.get("challenge.type");
+    const type = this.get("challenge.type");
     switch(type){
       case "QROC":
         return true;
@@ -73,5 +73,9 @@ export default Component.extend({
       default:
         return false;
     }
+  }),
+  isWorkbench: computed('challenge.status', function(){
+    const status = this.get('challenge.status');
+    return status === 'proposé'
   })
 });
