@@ -47,7 +47,7 @@
 </div>
 <div class="challenge">
   <div class="challenge-data {{elementClass}}">
-    {{challenge-form challenge=challenge showIllustration=(action "showIllustration") edition=edition alternative=alternative}}
+    {{challenge-form challenge=challenge showIllustration=(action "showIllustration") edition=edition alternative=alternative creation=creation}}
     {{#if copyOperation}}
       {{textarea value=challenge.preview id=copyZoneId}}
     {{/if}}
