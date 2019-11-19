@@ -10,7 +10,8 @@ export default Component.extend({
     this.options = {
       'types': ["QCU", "QCM", "QROC", "QROCM-ind", "QROCM-dep", "QRU"],
       'pedagogy': ["e-preuve", "q-savoir", "q-situation"],
-      'declinable':["", "facilement", "difficilement", "permutation", "non"]
+      'declinable':["", "facilement", "difficilement", "permutation", "non"],
+      'format':["petit", "mots", "phrase", "paragraphe"]
     }
   },
   authors:computed("config.authorNames", function() {
@@ -55,5 +56,18 @@ export default Component.extend({
         return false;
     }
   }),
-  helpScoring:"n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses"
+  helpScoring:"n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses",
+  typeIsQROC: computed('challenge.type', function(){
+    let type = this.get("challenge.type");
+    switch(type){
+      case "QROC":
+        return true;
+      case "QROCM-ind":
+        return true;
+      case "QROCM-dep":
+        return true;
+      default:
+        return false;
+    }
+  })
 });
