@@ -21,6 +21,7 @@ export default Skill.extend({
       .then(competence=> {
         skill.set("tube", tube);
         skill.set("competence", [competence.get('id')]);
+        skill.set('status', "en construction");
         return skill.save()
       })
       .then(() => {
