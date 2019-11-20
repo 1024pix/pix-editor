@@ -6,7 +6,7 @@ export default Component.extend({
   config:service(),
   access:service(),
   classNames:['ui', 'borderless', 'bottom', 'attached', 'labelled', 'icon', 'menu'],
-  classNameBindings:['hiddenClass', 'skillCkass'],
+  classNameBindings:['hiddenClass', 'skillClass'],
   hiddenClass:computed('hidden', function(){
     return this.get('hidden')?'hidden':'';
   }),
