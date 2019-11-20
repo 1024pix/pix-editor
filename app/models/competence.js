@@ -66,6 +66,14 @@ export default DS.Model.extend({
         .then(tubes => tubes.length)
     });
   }),
+  selectedProductionTubeCount:computed('tubes.@each.selectedLevel', function(){
+    return DS.PromiseObject.create({
+      promise:this.get('productionTubes')
+        .then(tubes => {
+          return tubes.filter(tube => tube.get('selectedLevel')).length
+        })
+    });
+  }),
   skillCount:computed('tubes.@each.skillCount', function() {
     return DS.PromiseObject.create({
       promise:this.get('tubes')
