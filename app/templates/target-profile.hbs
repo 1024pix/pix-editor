@@ -30,7 +30,7 @@
       {{competence.name}}
     </h4>
     <div class="target-profile-competence">
-      {{#each competence.sortedTubes as |tube|}}
+      {{#each competence.productionTubes as |tube|}}
       <div class="target-profile-tube" onclick={{action "displayTube" tube}} title={{tube.name}} onmouseover={{action "showTubeName" tube.name competence}} onmouseout={{action "hideTubeName" competence}}>
         <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="32" height="32" xmlns:xlink="http://www.w3.org/1999/xlink"
         class={{if tube.selectedLevel "selected-level"}}>
@@ -44,6 +44,7 @@
         </div>
       </div>
       {{/each}}
+       <p class="selected-tube-count">{{competence.selectedProductionTubeCount.content}}/{{competence.productionTubeCount.content}}</p>
     </div>
     <div class="tube-name">
       {{if competence._tubeName competence._tubeName}}

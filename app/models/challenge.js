@@ -7,6 +7,7 @@ export default DS.Model.extend({
   competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
+  format:DS.attr(),
   suggestion:DS.attr(),
   answers:DS.attr(),
   t1:DS.attr(),

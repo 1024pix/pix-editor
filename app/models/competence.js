@@ -27,9 +27,10 @@ export default DS.Model.extend({
           return Promise.all(testProduction);
         })
         .then(tests => {
-          return allTubes.filter((tube, index) => {
+          const productionTubes = allTubes.filter((tube, index) => {
             return tests[index];
           });
+           return productionTubes.sortBy('name');
         })
     });
   }),
@@ -37,7 +38,7 @@ export default DS.Model.extend({
     return DS.PromiseArray.create({
       promise:this.get('tubes')
         .then(tubes => {
-          return tubes.filterBy('name');
+          return tubes.sortBy('name');
         })
     });
   }),
@@ -60,10 +61,18 @@ export default DS.Model.extend({
         .then(tubes => tubes.length)
     });
   }),
-  productionTubeCount:computed('tubes', function() {
+  productionTubeCount:computed('productionTubes', function() {
     return DS.PromiseObject.create({
       promise:this.get('productionTubes')
         .then(tubes => tubes.length)
+    });
+  }),
+  selectedProductionTubeCount:computed('productionTubes.@each.selectedLevel', function(){
+    return DS.PromiseObject.create({
+      promise:this.get('productionTubes')
+        .then(tubes => {
+          return tubes.filter(tube => tube.get('selectedLevel')).length
+        })
     });
   }),
   skillCount:computed('tubes.@each.skillCount', function() {

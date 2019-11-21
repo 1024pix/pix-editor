@@ -9,6 +9,7 @@ export default ApplicationSerializer.extend({
     genealogy:"Généalogie",
     skillNames:"acquis",
     type:"Type d'épreuve",
+    format:"Format",
     suggestion:"Propositions",
     answers:"Bonnes réponses",
     t1:"T1 - Espaces, casse & accents",
@@ -35,7 +36,7 @@ export default ApplicationSerializer.extend({
     accessibility2:"Daltonien",
     spoil:"Spoil",
     responsive:"Responsive",
-    alternativeText:"Texte alternatif illustration"
+    alternativeText:"Texte alternatif illustration",
   },
 
   payloadKeyFromModelName: function() {

@@ -1,53 +1,81 @@
 <form action="" class="ui form">
   {{form-mde title="Consigne" value=challenge.instructions edition=edition helpContent=helpInstructions}}
-{{#if (not alternative)}}
-  {{form-select title="Type" value=challenge.type options=options.types edition=edition}}
-{{/if}}
+  {{#if (not alternative)}}
+    {{form-select title="Type" value=challenge.type options=options.types edition=edition}}
+  {{/if}}
+  {{#if typeIsQROC}}
+    {{form-select title="Format QROC" value=challenge.format defaultText="Mots" options=options.format edition=edition}}
+  {{/if}}
   {{form-textarea title="Propositions" value=challenge.suggestion edition=edition helpContent=helpSuggestions}}
   {{form-textarea title="Réponses" value=challenge.answers edition=edition helpContent=helpAnswers}}
-{{#if challenge.isTextBased}}
-  <div class={{concat "field" (if edition "" " disabled")}}>
-    <label>Tolérance</label>
-    <div class="three fields">
-      <div class="field">
-        {{ui-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 readonly=(not edition) onChange=(action (mut challenge.t1))}}
+  {{#if challenge.isTextBased}}
+      <div class={{concat "field" (if edition "" " disabled")}}>
+          <label>Tolérance</label>
+          <div class="three fields">
+              <div class="field">
+                {{ui-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 readonly=(not edition)
+                              onChange=(action (mut challenge.t1))}}
+              </div>
+              <div class="field">
+                {{ui-checkbox label="T2 (ponctuation)" checked=challenge.t2 readonly=(not edition)
+                              onChange=(action (mut challenge.t2))}}
+              </div>
+              <div class="field">
+                {{ui-checkbox label="T3 (distance d'édition)" checked=challenge.t3 readonly=(not edition)
+                              onChange=(action (mut challenge.t3))}}
+              </div>
+          </div>
       </div>
-      <div class="field">
-        {{ui-checkbox label="T2 (ponctuation)" checked=challenge.t2 readonly=(not edition) onChange=(action (mut challenge.t2))}}
-      </div>
-      <div class="field">
-        {{ui-checkbox label="T3 (distance d'édition)" checked=challenge.t3 readonly=(not edition) onChange=(action (mut challenge.t3))}}
-      </div>
-    </div>
-  </div>
-{{/if}}
-{{#if challenge.supportsScoring}}
-  {{form-textarea value=challenge.scoring title="Scoring" edition=edition helpContent=helpScoring}}
-{{/if}}
-  {{form-illustration title="Illustration" value=challenge.illustration edition=edition display=(action showIllustration)}}
-{{#if challenge.illustration}}
-  {{form-textarea value=challenge.alternativeText title="Texte alternatif" edition=edition}}
-{{/if}}
-  {{form-files title="Pièces jointes" value=challenge.attachments baseName=challenge.attachmentBaseName edition=edition}}
+  {{/if}}
+  {{#if challenge.supportsScoring}}
+    {{form-textarea value=challenge.scoring title="Scoring" edition=edition helpContent=helpScoring}}
+  {{/if}}
+  {{form-illustration title="Illustration" value=challenge.illustration edition=edition
+                      display=(action showIllustration)}}
+  {{#if challenge.illustration}}
+    {{form-textarea value=challenge.alternativeText title="Texte alternatif" edition=edition}}
+  {{/if}}
+  {{form-files title="Pièces jointes" value=challenge.attachments baseName=challenge.attachmentBaseName
+               edition=edition}}
   {{form-input title="Embed" value=challenge.embedURL edition=edition label="URL"}}
   {{form-input value=challenge.embedHeight edition=edition label="Hauteur"}}
   {{form-input value=challenge.embedTitle edition=edition label="Titre"}}
-{{#if (not alternative)}}
-  {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
-{{/if}}
-{{#if authors.isFulfilled}}
-  {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
-{{/if}}
-{{#if (not alternative)}}
-  {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
-{{/if}}
-<div class={{concat "field" (if edition "" " disabled")}}>
-  <label for="">{{ui-checkbox label="Timer" checked=challenge.timerOn readonly=(not edition) onChange=(action (mut challenge.timerOn))}}</label>
-  {{#if challenge.timer}}
-    {{form-input value=challenge.timer edition=edition}}
+  {{#if (not alternative)}}
+    {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
   {{/if}}
-</div>
-{{#if (not edition)}}
-  {{form-input value=challenge.id title="Record id" edition=edition}}
-{{/if}}
+  {{#if authors.isFulfilled}}
+    {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
+  {{/if}}
+  {{#if (not alternative)}}
+    {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
+  {{/if}}
+    <div class={{concat "field" (if edition "" " disabled")}}>
+        <label for="">{{ui-checkbox label="Timer" checked=challenge.timerOn readonly=(not edition)
+                                    onChange=(action (mut challenge.timerOn))}}</label>
+      {{#if challenge.timer}}
+        {{form-input value=challenge.timer edition=edition}}
+      {{/if}}
+    </div>
+  {{#if challenge.isSuggested}}
+      <div class={{concat "field" (if edition "" " disabled")}}>
+          <label>Qualité</label>
+          <div class="four fields">
+              <div class="field">
+                {{form-select title="Non voyant" value=challenge.accessibility1 edition=edition multiple=false options=options.accessibility1}}
+              </div>
+              <div class="field">
+                {{form-select title="Daltonien" value=challenge.accessibility2 edition=edition multiple=false options=options.accessibility2}}
+              </div>
+              <div class="field">
+                {{form-select title="Spoil" value=challenge.spoil edition=edition multiple=false options=options.spoil}}
+              </div>
+              <div class="field">
+                {{form-select title="Responsive" value=challenge.responsive edition=edition multiple=false options=options.responsive}}
+              </div>
+          </div>
+      </div>
+  {{/if}}
+  {{#if (not edition)}}
+    {{form-input value=challenge.id title="Record id" edition=edition}}
+  {{/if}}
 </form>
