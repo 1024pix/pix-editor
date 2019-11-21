@@ -60,13 +60,13 @@ export default DS.Model.extend({
         .then(tubes => tubes.length)
     });
   }),
-  productionTubeCount:computed('tubes', function() {
+  productionTubeCount:computed('productionTubes', function() {
     return DS.PromiseObject.create({
       promise:this.get('productionTubes')
         .then(tubes => tubes.length)
     });
   }),
-  selectedProductionTubeCount:computed('tubes.@each.selectedLevel', function(){
+  selectedProductionTubeCount:computed('productionTubes.@each.selectedLevel', function(){
     return DS.PromiseObject.create({
       promise:this.get('productionTubes')
         .then(tubes => {
