@@ -56,7 +56,7 @@
         {{form-input value=challenge.timer edition=edition}}
       {{/if}}
     </div>
-  {{#if (or creation challenge.isSuggested)}}
+  {{#if challenge.isSuggested}}
       <div class={{concat "field" (if edition "" " disabled")}}>
           <label>Qualité</label>
           <div class="four fields">
