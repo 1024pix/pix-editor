@@ -65,9 +65,7 @@ export default Component.extend({
     const type = this.get("challenge.type");
     switch(type){
       case "QROC":
-        return true;
       case "QROCM-ind":
-        return true;
       case "QROCM-dep":
         return true;
       default:
