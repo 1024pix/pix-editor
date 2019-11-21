@@ -4,7 +4,7 @@ export default Skill.extend({
   templateName: "competence/skill/index",
   model() {
     return {
-      skill:this.get("store").createRecord("skill")
+      skill:this.get("store").createRecord("skill",{status:'en construction'})
     };
   },
   afterModel(model) {
