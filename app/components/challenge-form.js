@@ -71,9 +71,5 @@ export default Component.extend({
       default:
         return false;
     }
-  }),
-  isWorkbench: computed('challenge.status', function(){
-    const status = this.get('challenge.status');
-    return status === 'proposé'
   })
 });
