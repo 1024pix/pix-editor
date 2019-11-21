@@ -27,9 +27,10 @@ export default DS.Model.extend({
           return Promise.all(testProduction);
         })
         .then(tests => {
-          return allTubes.filter((tube, index) => {
+          const productionTubes = allTubes.filter((tube, index) => {
             return tests[index];
           });
+           return productionTubes.sortBy('name');
         })
     });
   }),
@@ -37,7 +38,7 @@ export default DS.Model.extend({
     return DS.PromiseArray.create({
       promise:this.get('tubes')
         .then(tubes => {
-          return tubes.filterBy('name');
+          return tubes.sortBy('name');
         })
     });
   }),
