@@ -5,7 +5,9 @@ import {computed} from '@ember/object';
 export default DS.Model.extend({
   needsRefresh:false,
   name: DS.attr('string', { readOnly: true }),
+  title:DS.attr,
   code: DS.attr(),
+  description:DS.attr(),
   rawTubes: DS.hasMany('tube'),
   tubes:computed('rawTubes.[]', function() {
     return DS.PromiseArray.create({
