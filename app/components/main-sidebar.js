@@ -93,11 +93,12 @@ export default Component.extend({
       const getData = areas.map(area => {
         return area.get('sortedCompetences')
           .map(competence => {
-            return competence.get('productionTubes')
-              .then(productionTubes => {
-                const getFilledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills').then(filledSkills => ({
+            return competence.get('rawTubes')
+              .then(rawTubes => {
+                //TODO: filtrer les tubes pour ne garder que les tubes en production (nécessite de charger les challenges...)
+                const getFilledSkills = rawTubes.map(productionTube => productionTube.get('rawSkills').then(() => ({
                   tube: productionTube,
-                  skills: filledSkills
+                  skills: productionTube.get('filledSkills')
                 })));
                 return Promise.all(getFilledSkills);
               })
@@ -107,8 +108,9 @@ export default Component.extend({
                     if (skill === false) {
                       return Promise.resolve('░');
                     } else {
-                      return skill.get('productionTemplate')
-                        .then(productionTemplate => {
+                      return skill.get('challenges')
+                        .then(() => {
+                          const productionTemplate = skill.get('productionTemplate');
                           if (productionTemplate) {
                             return `${skill.name}`;
                           } else {
