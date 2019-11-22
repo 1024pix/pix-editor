@@ -10,14 +10,7 @@ export default DS.Model.extend({
   tubes:computed('rawTubes.[]', function() {
     return this.get('rawTubes').filter(tube => {
       return tube.get('name') !== '@workbench';
-    });    /*return DS.PromiseArray.create({
-      promise:this.get('rawTubes')
-        .then(tubes => {
-          return tubes.filter(tube => {
-            return tube.get('name') !== '@workbench';
-          });
-        })
-    });*/
+    });
   }),
   productionTubes:computed('rawTubes.[]', function() {
     let allTubes = this.get('rawTubes');
