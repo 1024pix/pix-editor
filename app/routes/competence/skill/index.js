@@ -7,14 +7,12 @@ export default Route.extend({
   afterModel(model) {
     const section = this.controllerFor('competence').get('section');
     if (section === 'challenges') {
-      return model.get('productionTemplate')
-      .then(template => {
-        if (template) {
-          this.transitionTo('competence.templates.single', this.modelFor('competence'), template);
-        } else {
-          this.transitionTo('competence.templates.list', this.modelFor('competence'), model);
-        }
-      });
+      const template = model.get('productionTemplate');
+    if (template) {
+        this.transitionTo('competence.templates.single', this.modelFor('competence'), template);
+      } else {
+        this.transitionTo('competence.templates.list', this.modelFor('competence'), model);
+      }
     } else {
       return model.pinRelationships();
     }

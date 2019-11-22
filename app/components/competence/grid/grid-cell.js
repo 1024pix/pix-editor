@@ -1,7 +1,6 @@
 import Component from '@ember/component';
 import {computed} from '@ember/object';
 import {inject as service} from '@ember/service';
-import DS from 'ember-data';
 
 export default Component.extend({
 
@@ -24,22 +23,15 @@ export default Component.extend({
   displaySkill: computed('skill','skill.{productionTemplate,productionTemplate.isFulfilled}','hasStatusProduction','view', function () {
     const skill = this.get('skill');
     if(skill){
-      const templateLoaded = this.get('skill.productionTemplate.isFulfilled');
-      if (!templateLoaded) {
-        return false;
-      }
       const view = this.get('view');
-      return DS.PromiseObject.create({
-        promise:this.get('skill.productionTemplate').then(productionTemplate => {
-          if ((view === 'production' && productionTemplate)
-            || (view === 'workbench')
-            || (view === 'skills')
-            || (view === 'quality' && productionTemplate) ) {
-            return true;
-          }
-        })
-
-      })
+      const productionTemplate = this.get('skill.productionTemplate');
+      if ((view === 'production' && productionTemplate)
+        || (view === 'workbench')
+        || (view === 'skills')
+        || (view === 'quality' && productionTemplate) ) {
+        return true;
+      }
+      return false;
     }
     return false;
   })
