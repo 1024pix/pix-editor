@@ -17,10 +17,7 @@ export default PopinBase.extend({
     if (!areas) {
       return Promise.resolve([]);
     }
-    let getCompetences = areas.reduce((requests, area) => {
-      requests.push(area.get('sortedCompetences'));
-      return requests;
-    }, []);
+    const getCompetences = areas.map(area => area.get('sortedCompetences'));
     return DS.PromiseArray.create({
       promise:Promise.all(getCompetences)
       .then(areaCompetences => {
@@ -43,9 +40,14 @@ export default PopinBase.extend({
     });
   }),
   tubes:computed('selectedCompetence', function() {
+    let selectedCompetence;
     return DS.PromiseArray.create({
       promise:this.get('selectedCompetence')
-      .then(competence => competence.get('sortedTubes'))
+      .then(competence => {
+        selectedCompetence = competence;
+        return competence.get('rawTubes');
+      })
+      .then(() => selectedCompetence.get('sortedTubes'))
     });
   }),
   tubesNames:computed('tubes', function() {
@@ -62,19 +64,29 @@ export default PopinBase.extend({
   }),
   levels:computed('selectedTube', function() {
     let selectEmptyLevels = this.get('selectEmptyLevels');
+    let selectedTube;
     return DS.PromiseArray.create({
       promise:this.get('selectedTube')
-      .then(tube => tube?tube.get('filledSkills'):[])
-      .then(skills => skills.reduce((table, skill, index) => {
-        if (skill === false) {
-          if (selectEmptyLevels) {
+      .then(tube => {
+        selectedTube = tube;
+        return tube?tube.get('rawSkills'):null;
+      })
+      .then(result => {
+        if (result == null) {
+          return [];
+        }
+        const skills = selectedTube.get('filledSkills');
+        return skills.reduce((table, skill, index) => {
+          if (skill === false) {
+            if (selectEmptyLevels) {
+              table.push(index+1);
+            }
+          } else if (!selectEmptyLevels) {
             table.push(index+1);
           }
-        } else if (!selectEmptyLevels) {
-          table.push(index+1);
-        }
-        return table;
-      }, []))
+          return table;
+        }, []);
+      })
     });
   }),
   actions: {
