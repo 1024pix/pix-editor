@@ -1,11 +1,24 @@
 <div class="ui grid">
-    <h2 class="row">
-        <div class="column center">
-           {{competence.code}}
+    <h2 class="row competence-profile {{concat "area-profile-" area}}">
+        <div class="column center competence-code">
+            <p>{{competence.code}}</p>
+
         </div>
         <div class="fourteen wide column">
             <div>{{competence.title}}</div>
             <div class="competence-description">{{competence.description}}</div>
         </div>
     </h2>
+    <div class="row">
+        <div class="five wide column">salut</div>
+        <div class="eleven wide column">
+          {{#each competence.productionTubes as |tube|}}
+              <div class="tube-profile">
+                  <i class="square outline icon">5</i> {{tube.practicalTitle}}
+                  {{!ui-checkbox label=tube.practicalTitle onChange=(action "showTube" tube)}}
+                  <p>{{competence.practicalDescription}}</p>
+              </div>
+          {{/each}}
+        </div>
+    </div>
 </div>

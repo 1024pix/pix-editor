@@ -4,6 +4,7 @@ export default ApplicationSerializer.extend({
 
   attrs:{
     name:"Nom",
+    code:"Code",
     competences:"Competences (identifiants)"
   },
 
