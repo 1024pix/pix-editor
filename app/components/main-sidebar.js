@@ -35,46 +35,46 @@ export default Component.extend({
         maxRecords: 20,
         sort: [{field: 'Nom', direction: 'asc'}]
       })
-        .then(skills => {
-          const results = skills.map(skill => ({
-            title: skill.get('name'),
-            url: this.get('router').urlFor('skill', skill.get('name'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
+      .then(skills => {
+        const results = skills.map(skill => ({
+          title: skill.get('name'),
+          url: this.get('router').urlFor('skill', skill.get('name'))
+        }));
+        callback({
+          success: true,
+          results: results
         });
+      });
     } else if (query.substr(0, 3) === 'rec') {
       this.get('store').query('challenge', {
         filterByFormula: `AND(FIND('${query}', RECORD_ID()) , Statut != 'archive')`,
         maxRecords: 20
       })
-        .then(challenges => {
-          const results = challenges.map(challenge => ({
-            title: challenge.get('id'),
-            url: this.get('router').urlFor('challenge', challenge.get('id'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
+      .then(challenges => {
+        const results = challenges.map(challenge => ({
+          title: challenge.get('id'),
+          url: this.get('router').urlFor('challenge', challenge.get('id'))
+        }));
+        callback({
+          success: true,
+          results: results
         });
+      });
     } else {
       this.get('store').query('challenge', {
         filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
         maxRecords: 20
       })
-        .then(challenges => {
-          const results = challenges.map(challenge => ({
-            title: challenge.get('instructions').substr(0, 100),
-            url: this.get('router').urlFor('challenge', challenge.get('id'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
+      .then(challenges => {
+        const results = challenges.map(challenge => ({
+          title: challenge.get('instructions').substr(0, 100),
+          url: this.get('router').urlFor('challenge', challenge.get('id'))
+        }));
+        callback({
+          success: true,
+          results: results
         });
+      });
     }
   },
   hideSidebar() {
