@@ -21,7 +21,7 @@
   {{/each}}
 {{/ui-accordion}}
 <div class="secondary-links">
-  {{#link-to "target-profile"}}<i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
+  {{#link-to "target-profile" invokeAction=(action execute "hide")}}<i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
     <p {{action "shareAreas"}}><i class="share square icon"></i> Exporter les sujets</p>
 </div>
 <div class="ui labelled icon menu">
