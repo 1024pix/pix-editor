@@ -61,10 +61,26 @@ export default Controller.extend({
   mayMove:computed('config.access', 'challenge', function() {
     return this.get('access').mayMove(this.get('challenge'));
   }),
+  _executeCopy() {
+    const element = document.getElementById(this.get('copyZoneId'));
+    element.select();
+    try {
+      var successful = document.execCommand('copy');
+      if (!successful) {
+        this._errorMessage('Erreur lors de la copie');
+      } else {
+        this._message('lien copié');
+      }
+    } catch (err) {
+      this._errorMessage('Erreur lors de la copie');
+    }
+    this.set('copyOperation', false);
+  },
   actions:{
     showIllustration: function(){
       let illustration = this.get('challenge.illustration')[0];
       this.set('popinImageSrc', illustration.url);
+      this.ele
       $(`.${this.get('popinImageClass')}`).modal('show');
       this.get('application').send('showPopinImage', );
     },
@@ -91,21 +107,7 @@ export default Controller.extend({
     },
     copyLink() {
       this.set('copyOperation', true);
-      scheduleOnce('afterRender', this, function() {
-        let element = document.getElementById(this.get('copyZoneId'));
-        element.select();
-        try {
-          var successful = document.execCommand('copy');
-          if (!successful) {
-            this._errorMessage('Erreur lors de la copie');
-          } else {
-            this._message('lien copié');
-          }
-        } catch (err) {
-          this._errorMessage('Erreur lors de la copie');
-        }
-        this.set('copyOperation', false);
-      });
+      scheduleOnce('afterRender', this, this._executeCopy);
     },
     edit() {
       let state = this.get('maximized');

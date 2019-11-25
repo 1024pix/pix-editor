@@ -6,14 +6,15 @@ export default Route.extend({
   configured:false,
   config:service(),
   pixConnector:service(),
+  _openConfiguration() {
+    this.controller.send('openConfiguration');
+  },
   beforeModel() {
     if (this.get('config.check')) {
       this.set('configured', true);
     } else {
       this.set('configured', false);
-      scheduleOnce('afterRender', this, function() {
-        this.controller.send('openConfiguration');
-      });
+      scheduleOnce('afterRender', this, this._openConfiguration);
     }
   },
   model() {
