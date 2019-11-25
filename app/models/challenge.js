@@ -80,7 +80,9 @@ export default DS.Model.extend({
         return 'suggested';
       case 'archive':
         return 'archived';
-    }
+      default:
+        return '';
+     }
   }),
   isArchived: computed('status', function() {
     let status = this.get('status');
