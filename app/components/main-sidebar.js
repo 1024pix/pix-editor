@@ -90,10 +90,10 @@ export default Component.extend({
     shareAreas() {
       this.get('isLoading')('Récupération des sujets');
       const areas = this.get('areas');
-      const getCompetences = areas.map(area => area.get('sortedCompetences'));
+      const getCompetences = areas.map(area => area.get('competences'));
       return Promise.all(getCompetences)
       .then(areaCompetences => {
-        const getTubes = areaCompetences.flat().map(competence => competence.get('rawTubes'));
+        const getTubes = areaCompetences.map(competences => competences.map(competence => competence.get('rawTubes'))).flat();
         return Promise.all(getTubes);
       })
       .then(competenceTubes => {
