@@ -7,24 +7,24 @@ export default Route.extend({
   config:service(),
   pixConnector:service(),
   beforeModel() {
-    if (this.get("config.check")) {
-      this.set("configured", true);
+    if (this.get('config.check')) {
+      this.set('configured', true);
     } else {
-      this.set("configured", false);
+      this.set('configured', false);
       scheduleOnce('afterRender', this, function() {
-        this.controller.send("openConfiguration");
+        this.controller.send('openConfiguration');
       });
     }
   },
   model() {
-    if (this.get("configured")) {
+    if (this.get('configured')) {
       let store = this.get('store');
       return store.findAll('area');
     }
   },
   afterModel() {
-    if (this.get("configured")) {
-      this.get("pixConnector").connect();
+    if (this.get('configured')) {
+      this.get('pixConnector').connect();
     }
   },
   actions:{
