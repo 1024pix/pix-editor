@@ -97,11 +97,11 @@ export default Component.extend({
         return Promise.all(getTubes);
       })
       .then(competenceTubes => {
-        const getSkills = competenceTubes.flat().map(tubes => tubes.map(tube => tube.get('rawSkills'))).flat();
+        const getSkills = competenceTubes.map(tubes => tubes.map(tube => tube.get('rawSkills'))).flat();
         return Promise.all(getSkills);
       })
       .then(tubeSkills => {
-        const getChallenges = tubeSkills.flat().map(skills => skills.map(skill => skill.get('challenges'))).flat();
+        const getChallenges = tubeSkills.map(skills => skills.map(skill => skill.get('challenges'))).flat();
         return Promise.all(getChallenges);
       })
       .then(() => {
