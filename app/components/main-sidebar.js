@@ -82,7 +82,7 @@ export default Component.extend({
   },
   _formatCSVString(str) {
     if (str) {
-      return str.replace(/"/g, '""')
+      return '"'+str.replace(/"/g, '""')+'"';
     }
     return ' '
   },
@@ -90,60 +90,49 @@ export default Component.extend({
     shareAreas() {
       this.get('isLoading')('Récupération des sujets');
       const areas = this.get('areas');
-      const getData = areas.map(area => {
-        return area.get('sortedCompetences')
-          .map(competence => {
-            return competence.get('rawTubes')
-              .then(rawTubes => {
-                //TODO: filtrer les tubes pour ne garder que les tubes en production (nécessite de charger les challenges...)
-                const getFilledSkills = rawTubes.map(productionTube => productionTube.get('rawSkills').then(() => ({
-                  tube: productionTube,
-                  skills: productionTube.get('filledSkills')
-                })));
-                return Promise.all(getFilledSkills);
-              })
-              .then(filledSkills => {
-                const getTubeRows = filledSkills.map( item => {
-                  const getSkillsData = item.skills.map(skill => {
-                    if (skill === false) {
-                      return Promise.resolve('░');
-                    } else {
-                      return skill.get('challenges')
-                        .then(() => {
-                          const productionTemplate = skill.get('productionTemplate');
-                          if (productionTemplate) {
-                            return `${skill.name}`;
-                          } else {
-                            return '░';
-                          }
-                        });
-                    }
-                  });
-                  return Promise.all(getSkillsData).then(skillValues => {
-                    skillValues = skillValues.join(',');
-                    const productionTube = item.tube;
-                    const tubeDescription = this._formatCSVString(productionTube.description);
-                    const tubePracticalDescription = this._formatCSVString(productionTube.practicalDescription);
-                    return [area.name, competence.name, productionTube.name, productionTube.title, tubeDescription, productionTube.practicalTitle, tubePracticalDescription, skillValues];
-                  });
-                });
-                return Promise.all(getTubeRows);
-              });
-          });
+      const getCompetences = areas.map(area => area.get('sortedCompetences'));
+      return Promise.all(getCompetences)
+      .then(areaCompetences => {
+        const getTubes = areaCompetences.flat().map(competence => competence.get('rawTubes'));
+        return Promise.all(getTubes);
+      })
+      .then(competenceTubes => {
+        const getSkills = competenceTubes.flat().map(tubes => tubes.map(tube => tube.get('rawSkills'))).flat();
+        return Promise.all(getSkills);
+      })
+      .then(tubeSkills => {
+        const getChallenges = tubeSkills.flat().map(skills => skills.map(skill => skill.get('challenges'))).flat();
+        return Promise.all(getChallenges);
+      })
+      .then(() => {
+        const csvContent = areas.reduce((content, area) => {
+          return area.get('sortedCompetences').reduce((content, competence) => {
+            return competence.get('productionTubes').reduce((content, tube) => {
+              let fields = [
+                area.get('name'),
+                competence.get('name'),
+                tube.get('name'),
+                tube.get('title'),
+                tube.get('description'),
+                tube.get('practicalTitle'),
+                tube.get('practicalDescription'),
+                tube.get('productionSkills').reduce((table, skill) => {
+                  table[skill.get('level')-1] = skill.get('name');
+                  return table;
+                }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(',')
+              ]
+              fields = fields.map(field => this._formatCSVString(field));
+              return content + '\n' + fields.join(',');
+            }, content)
+          }, content)
+        }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
+        const fileName = `Export_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
+        this.get('fileSaver').saveAs(csvContent, fileName);
+        this.get('showMessage')('Sujets exportés', true);
+      })
+      .finally(() => {
+        this.get('finishedLoading')();
       });
-      return Promise.all(getData.flat())
-        .then(data => {
-          const contentCSV = data.flat().reduce((content, data) => {
-            return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
-          }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
-          const fileName = `Export_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
-          this.get('fileSaver').saveAs(contentCSV, fileName);
-          this.get('showMessage')('Sujets exportés', true);
-        })
-        .finally(() => {
-          this.get('finishedLoading')();
-        });
-
     }
   }
 });

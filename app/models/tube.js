@@ -19,9 +19,7 @@ export default DS.Model.extend({
     return this.get('skills').length;
   }),
   productionSkills:computed('skills.@each.productionTemplate', function() {
-    return this.get('skills').filter(skill => {
-      skill.get('productionTemplate') !== null;
-    })
+    return this.get('skills').filter(skill => skill.get('productionTemplate') != null);
   }),
   productionSkillCount:computed('skills.@each.productionTemplate', function() {
     return this.get('skills').map(skill => skill.get('productionTemplate')).filter(challenge => challenge != null).length;
