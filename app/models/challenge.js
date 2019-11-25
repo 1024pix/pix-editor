@@ -220,13 +220,8 @@ export default DS.Model.extend({
     return '';
   }),
   skillLevels:computed('skills', function() {
-    return DS.PromiseArray.create({
-      promise:this.get('skills')
-        .then(skills => skills.reduce((current, skill) => {
-          current.push(skill.get('level'));
-          return current;
-        }, []))
-    });
+    const skills = this.get('skills');
+    return skills.map(skill => skill.get('level'));
   }),
   attachmentBaseName:computed('_definedBaseName', 'attachments.[]', {
     get() {
