@@ -22,78 +22,6 @@
   overflow-x: hidden;
   overflow-y: scroll;
 
-  .ui.vertical.segment {
-    border-color: rgba(34, 36, 38, 0.05);
-    padding-bottom: 0;
-  }
-
-  .target-profile-segment {
-
-    .target-profile-competence {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      flex-wrap: wrap;
-      padding-top: 5px;
-
-      .selected-tube-count {
-        margin-left: 5px;
-        color: grey;
-      }
-
-      .target-profile-tube {
-        text-align: center;
-        margin: 0;
-        cursor: pointer;
-        width: 32px;
-
-        .tube-name {
-          display: none;
-        }
-
-        svg {
-          stroke: black;
-          stroke-width: 1;
-          fill: #dddddd;
-
-          &.selected-level {
-            fill: #88ff22;
-          }
-        }
-      }
-    }
-
-    > .tube-name {
-      padding: 0;
-      min-height: 20px;
-      font-size: 12px;
-    }
-
-  }
-
-  &.extended {
-    .target-profile-segment.ui.vertical.segment {
-      padding-bottom: 14px;
-
-      > .tube-name {
-        display: none;
-      }
-
-      .target-profile-competence {
-
-        .target-profile-tube {
-          margin: 5px 7px;
-          width: 100px;
-
-          .tube-name {
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        }
-      }
-    }
-  }
 
   #target-profile__open-file {
     display: none;
@@ -141,6 +69,7 @@
   }
 
   .tubes-profile {
+    padding: 0 !important;
     background: #F3F3F3;
 
     .tube-description {
@@ -151,7 +80,7 @@
 
     .tube-profile {
       display: flex;
-      padding: 5px 0;
+      align-items: stretch;
 
       & > div {
         display: flex;
@@ -159,14 +88,23 @@
 
         .icon {
           position: relative;
+          padding: 10px 0;
+          margin-right: 10px;
           font-size: 1.8rem !important;
-        &:hover{
-          cursor: pointer;
-        }
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          &.active {
+            color: #57C884
+          }
+
           span {
             position: absolute;
-            top: 0;
+            top: 10px;
             left: 50%;
+            color: white;
             transform: translateX(-50%);
             font-size: 1.5rem
           }
@@ -174,14 +112,31 @@
 
         p {
           font-weight: bold;
+          width: 100%;
+          padding: 10px 5px;
+
+          &.active {
+            background-color: #B7E1CD;
+          }
         }
+
       }
 
       & > p {
         flex-grow: 1;
+        padding: 10px 5px;
+
+        &.active {
+          background-color: #B7E1CD;
+        }
       }
 
     }
+  }
+  .selected-tube-count{
+    text-align:right;
+    width:100%;
+    margin:5px 10px 0 0;
   }
 }
 

@@ -9,7 +9,7 @@ export default Controller.extend({
   selectedTubeLevel:false,
   fileSaver: service('file-saver'),
   application:controller(),
-  extended:false,
+  showTubeDetails:false,
 
   init() {
     this._super();

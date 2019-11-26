@@ -1,9 +1,9 @@
 <div class="main-left">
     <div class="main-title">
         <h1 class="ui header">Générateur de profil cible
-            <div class="target-profile-mode {{if extended "active"}}">Vue étendue{{ui-checkbox checked=extended
+            <div class="target-profile-mode {{if showTubeDetails "active"}}">Détails des sujet{{ui-checkbox checked=showTubeDetails
                                                                                                class="toggle target-profile-mode"
-                                                                                               onChange=(action (mut extended))}}</div>
+                                                                                               onChange=(action (mut showTubeDetails))}}</div>
         </h1>
     </div>
     <div class="ui top attached borderless labelled icon menu">
@@ -22,7 +22,7 @@
             </a>
         </div>
     </div>
-    <div class="ui attached target-profile {{if extended "extended"}}">
+    <div class="ui attached target-profile">
       {{#each model as |area|}}
           <div>
               <div class="ui horizontal divider">
@@ -30,7 +30,7 @@
               </div>
             {{#each area.sortedCompetences as |competence|}}
               {{target-profile/competence-profile competence=competence area=area.code displayTube=(action "displayTube") level=selectedTubeLevel
-              selectedSkills=selectedTubeSkills extended=extended clearTube=(action "unsetProfileTube") setTubeLevel=(action "setProfileTube")}}
+              selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails clearTube=(action "unsetProfileTube") setTubeLevel=(action "setProfileTube")}}
             {{/each}}
 
           </div>

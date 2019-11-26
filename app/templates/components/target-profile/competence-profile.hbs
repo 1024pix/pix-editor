@@ -2,7 +2,6 @@
   <h2 class="row competence-profile {{concat "area-profile-" area}}">
     <div class="column center competence-code">
       <p>{{competence.code}}</p>
-
     </div>
     <div class="fourteen wide column">
       <div>{{competence.title}}</div>
@@ -10,22 +9,22 @@
     </div>
   </h2>
   <div class="row tubes-profile">
-    <div class="five wide column tube-description"><p>salut</p></div>
+    <div class="five wide column tube-description"><p></p></div>
     <div class="eleven wide column">
       {{#each competence.productionTubes as |tube|}}
         <div class="tube-profile">
           <div>
-            <i class="square outline icon {{concat (if tube.selectedLevel "active" "")}}" {{action 'showTube' tube}}>
+            <i class="square icon {{concat (if tube.selectedLevel "active" "outline")}}" {{action 'showTube' tube}}>
               {{#if tube.selectedLevel}}
                 <span class="max-skill-level">{{tube.selectedLevel}}</span>
               {{/if}}
             </i>
-            <p>{{tube.name}}{{tube.practicalTitle}}</p>
+            <p class="{{concat (if tube.selectedLevel "active" "")}}">{{tube.name}} : {{tube.practicalTitle}}</p>
           </div>
-          {{!ui-checkbox label=tube.practicalTitle onChange=(action "showTube" tube)}}
-          <p>{{tube.practicalDescription}}</p>
+          <p class="{{concat (if tube.selectedLevel "active" "")}}">{{tube.practicalDescription}}</p>
         </div>
       {{/each}}
     </div>
   </div>
+  <p class="selected-tube-count">{{competence.selectedProductionTubeCount.content}}/{{competence.productionTubeCount.content}}</p>
 </div>

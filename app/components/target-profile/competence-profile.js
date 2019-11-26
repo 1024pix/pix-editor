@@ -5,10 +5,9 @@ export default Component.extend({
   actions: {
 
     showTube(tube) {
-      const extended = this.get('extended');
+      const showTubeDetails = this.get('showTubeDetails');
       const isSelected = tube.get('selectedLevel');
-      console.log('isSelected', extended, isSelected)
-      if (extended) {
+      if (showTubeDetails) {
         return this.get('displayTube')(tube)
       }
       if (isSelected) {
