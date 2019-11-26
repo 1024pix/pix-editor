@@ -8,11 +8,29 @@ export default Route.extend({
   },
   afterModel(model) {
     if (model.get('needsRefresh')) {
-      return model.refresh()
+      return model.hasMany('rawTubes').reload()
+      .then(tubes => {
+        const getSkills = tubes.map(tube => tube.hasMany('rawSkills').reload());
+        return Promise.all(getSkills);
+      })
+      .then(skillsSet => {
+        // TODO: this bugs when a challenge is attached to several skills
+        const getChallenges = skillsSet.map( skills => skills.map(skill => skill.hasMany('challenges').reload())).flat();
+        return Promise.all(getChallenges);
+      })
       .then(() => {
         model.set('needsRefresh', false);
-        return model.get('loaded');
       });
+    } else {
+      return model.get('rawTubes')
+      .then(tubes => {
+        const getSkills = tubes.map(tube => tube.get('rawSkills'));
+        return Promise.all(getSkills);
+      })
+      .then(skillsSet => {
+        const getChallenges = skillsSet.map( skills => skills.map(skill => skill.get('challenges'))).flat();
+        return Promise.all(getChallenges);
+      })
     }
   },
   setupController(controller, model) {

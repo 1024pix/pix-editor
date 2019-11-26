@@ -7,9 +7,9 @@
   </a>
 {{/if}}
 {{#if displayProductionStats}}
-  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.productionTubeCount.content}}</div><div class="competence-info">Acquix : {{competence.productionSkillCount.content}}</div></div>
+  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.productionTubeCount}}</div><div class="competence-info">Acquix : {{competence.productionSkillCount}}</div></div>
 {{else}}
-  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount.content}}</div><div class="competence-info">Acquix : {{competence.skillCount.content}}</div></div>
+  <div class="item competence-info"><div class="competence-info">Tubes : {{competence.tubeCount}}</div><div class="competence-info">Acquix : {{competence.skillCount}}</div></div>
 {{/if}}
 {{#if mayCreateTube}}
   <a class="left item" onclick={{action newTube}}>

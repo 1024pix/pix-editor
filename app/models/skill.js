@@ -73,55 +73,28 @@ export default DS.Model.extend({
     }
   }),
   templates: computed('challenges.[]', function () {
-    return DS.PromiseArray.create({
-      promise: this.get('challenges')
-        .then(challenges => challenges.filter((challenge) => challenge.get('isTemplate')))
-    })
+    return this.get('challenges').filter((challenge) => challenge.get('isTemplate'));
   }),
   sortedTemplates: computed('templates.[]', function () {
-    return DS.PromiseArray.create({
-      promise: this.get('templates')
-        .then(templates => templates.sort((a, b) => a.get("version") < b.get("version")))
-    })
+    return this.get('templates').sort((a, b) => a.get("version") < b.get("version"));
   }),
   productionTemplate: computed('templates.@each.isValidated', function () {
-    return DS.PromiseObject.create({
-      promise: this.get('templates')
-        .then(templates => templates.find(template => template.get('isValidated')))
-    });
+    return this.get('templates').find(template => template.get('isValidated'));
   }),
   draftTemplates: computed('templates.@each.isValidated', function () {
-    return DS.PromiseArray.create({
-      promise: this.get('templates')
-        .then(templates => templates.filter((template) => !template.get('isValidated')))
-    });
+    return this.get('templates').filter((template) => !template.get('isValidated'));
   }),
   alternatives: computed('challenges.[]', function () {
-    return DS.PromiseArray.create({
-      promise: this.get('challenges')
-        .then(challenges => challenges.filter((challenge) => !challenge.get('isTemplate')))
-    });
+    return this.get('challenges').filter((challenge) => !challenge.get('isTemplate'));
   }),
-  loaded: computed('challenges.[]', function () {
-    return this.get('challenges')
-      .then(() => {
-        return true;
-      });
-  }),
-  refresh() {
-    return this.hasMany('challenges').reload();
-  },
   getNextVersion() {
-    return this.get("templates")
-      .then(templates => {
-        return templates.reduce((current, template) => {
-          let version = template.get("version");
-          if (version > current) {
-            return version;
-          }
-          return current;
-        }, 0) + 1;
-      });
+    return this.get('templates').reduce((current, template) => {
+      let version = template.get("version");
+      if (version > current) {
+        return version;
+      }
+      return current;
+    }, 0) + 1;
   },
   isActive: computed('status', function () {
     return this.get('status') === 'actif';
@@ -146,9 +119,9 @@ export default DS.Model.extend({
   },
   rollbackAttributes(){
     this._super(...arguments);
-    let tutoSolution = this.get(`_pinnedRelationships.tutoSolution`);
+    let tutoSolution = this.get('_pinnedRelationships.tutoSolution');
     this.set('tutoSolution', tutoSolution);
-    let tutoMore = this.get(`_pinnedRelationships.tutoMore`);
+    let tutoMore = this.get('_pinnedRelationships.tutoMore');
     this.set('tutoMore', tutoMore);
   },
 

@@ -33,33 +33,29 @@ export default Template.extend({
     }
   },
   _setVersion(challenge) {
-    return challenge.get('isWorkbench')
-    .then(workbench => {
-      if (workbench) {
-        return challenge;
-      }
-      return challenge.get("firstSkill")
-      .then(firstSkill => {
-        if (!firstSkill) {
-          return challenge;
+    let operation;
+    if (challenge.get('isWorkbench')) {
+      operation = Promise.resolve(challenge);
+    } else {
+      const firstSkill = challenge.get('firstSkill');
+      if (!firstSkill) {
+        operation = Promise.resolve(challenge);
+      } else {
+        const version = firstSkill.getNextVersion();
+        if (version > 0) {
+          challenge.set('version', version);
+          operation = challenge.save()
+        } else {
+          operation = Promise.resolve(challenge);
         }
-        return firstSkill.reload()
-        .then(skill => skill.getNextVersion())
-        .then(version => {
-          if (version>0) {
-            challenge.set("version", version);
-            return challenge.save()
-          }
-          return challenge;
-        });
-      });
-    })
-    .then(challenge => {
-      let version = challenge.get("version");
+      }
+    }
+    return operation.then(challenge => {
+      let version = challenge.get('version');
       if (version > 0) {
         this._message(`Nouvelle version : ${version}`, true);
       }
       return challenge;
-    })
+    });
   }
 });

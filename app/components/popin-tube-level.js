@@ -1,6 +1,5 @@
 import PopinBase from './popin-base';
 import { computed } from '@ember/object';
-import DS from 'ember-data';
 
 
 export default PopinBase.extend({
@@ -8,18 +7,14 @@ export default PopinBase.extend({
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
     if (tube) {
-      return DS.PromiseArray.create({
-        promise:tube.get('productionSkills')
-          .then(skills => {
-            let selected = this.get("selectedSkills");
-            return skills.reduce((orderedSkills, skill) => {
-              let level = skill.get('level');
-              skill.set("_selected", selected.includes(skill.id));
-              orderedSkills[level-1] = skill;
-              return orderedSkills;
-            }, [null, null, null, null, null, null, null, null]);
-          })
-        });
+      const skills = tube.get('productionSkills')
+      let selected = this.get("selectedSkills");
+      return skills.reduce((orderedSkills, skill) => {
+        let level = skill.get('level');
+        skill.set("_selected", selected.includes(skill.id));
+        orderedSkills[level-1] = skill;
+        return orderedSkills;
+      }, [null, null, null, null, null, null, null, null]);
     } else {
       return [];
     }

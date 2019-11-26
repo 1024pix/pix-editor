@@ -6,25 +6,26 @@ export default Route.extend({
   configured:false,
   config:service(),
   pixConnector:service(),
+  _openConfiguration() {
+    this.controller.send('openConfiguration');
+  },
   beforeModel() {
-    if (this.get("config.check")) {
-      this.set("configured", true);
+    if (this.get('config.check')) {
+      this.set('configured', true);
     } else {
-      this.set("configured", false);
-      scheduleOnce('afterRender', this, function() {
-        this.controller.send("openConfiguration");
-      });
+      this.set('configured', false);
+      scheduleOnce('afterRender', this, this._openConfiguration);
     }
   },
   model() {
-    if (this.get("configured")) {
+    if (this.get('configured')) {
       let store = this.get('store');
       return store.findAll('area');
     }
   },
   afterModel() {
-    if (this.get("configured")) {
-      this.get("pixConnector").connect();
+    if (this.get('configured')) {
+      this.get('pixConnector').connect();
     }
   },
   actions:{

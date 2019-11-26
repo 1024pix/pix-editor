@@ -89,7 +89,7 @@ export default Controller.extend({
         return content+`\n${profileId},${id}`
       },'targetProfileId,skillId');
 
-      let fileName = `sql_generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+      let fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
       this.get("fileSaver").saveAs(sql, fileName);
     },
     load() {
