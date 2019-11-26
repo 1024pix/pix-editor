@@ -72,6 +72,7 @@
     padding: 0 !important;
     background: #F3F3F3;
 
+
     .tube-description {
       display: flex !important;
       justify-content: center;
@@ -82,15 +83,20 @@
       display: flex;
       align-items: stretch;
 
+      &:hover {
+        background: rgba(50,170,220,.1);
+      }
+
       & > div {
         display: flex;
-        flex-grow: 1;
+        align-items: center;
+        width: 33%;
 
         .icon {
           position: relative;
-          padding: 10px 0;
-          margin-right: 10px;
+          margin: 0 10px;
           font-size: 1.8rem !important;
+          transform: translateY(0.2rem);
 
           &:hover {
             cursor: pointer;
@@ -102,7 +108,7 @@
 
           span {
             position: absolute;
-            top: 10px;
+            top: 0;
             left: 50%;
             color: white;
             transform: translateX(-50%);
@@ -116,27 +122,27 @@
           padding: 10px 5px;
 
           &.active {
-            background-color: #B7E1CD;
+            background-color: rgba(87,200,130,.3)
           }
         }
-
       }
 
       & > p {
-        flex-grow: 1;
+        width: 67%;
         padding: 10px 5px;
 
         &.active {
-          background-color: #B7E1CD;
+          background-color: rgba(87,200,130,.3)
         }
       }
 
     }
   }
-  .selected-tube-count{
-    text-align:right;
-    width:100%;
-    margin:5px 10px 0 0;
+
+  .selected-tube-count {
+    text-align: right;
+    width: 100%;
+    margin: 5px 10px 0 0;
   }
 }
 

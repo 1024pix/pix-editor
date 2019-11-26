@@ -46,6 +46,7 @@ export default Controller.extend({
       tube.set('selectedSkills', []);
     },
     generate() {
+      debugger
      const ids = this.getSelectedSkillsIds();
       let fileName = 'profil_identifiants_'+(new Date()).toLocaleString('fr-FR')+'.txt';
       this.get("fileSaver").saveAs(ids.join(","), fileName);

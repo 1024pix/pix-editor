@@ -14,7 +14,6 @@ export default Component.extend({
         return this.get("clearTube")(tube)
       }
       const productionSkill = tube.get("productionSkills");
-
       const level = productionSkill[productionSkill.length - 1].get('level');
       const skillIds = productionSkill.reduce((ids, skill) => {
         if (skill) {
@@ -24,8 +23,6 @@ export default Component.extend({
         return ids;
       }, []);
       this.get('setTubeLevel')(tube, level, skillIds);
-
-
     }
   }
 });
