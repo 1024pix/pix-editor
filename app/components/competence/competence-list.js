@@ -12,10 +12,11 @@ export default SortedList.extend({
   scrollTop:computed('itemCount', {
     get() {
       let count = this.get('itemCount');
-      if (count !== this.gcurrentCount) {
+      if (count !== this.currentCount) {
         this.currentCount = count;
         return 0;
       }
+      return this.get('scrollValue');
     },
     set(key, value) {
       this.set('scrollValue', value);

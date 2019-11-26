@@ -9,8 +9,12 @@ export default Route.extend({
   },
   afterModel(model) {
     if (model) {
-      return model.get('firstSkill')
-      .then(skill => skill.get('tube'))
+      return model.get('rawSkills')
+      .then(() => {
+        const firstSkill = model.get('firstSkill');
+        return firstSkill.get('challenges') // in order to load model.template later on
+        .then(() => firstSkill.get('tube'));
+      })
       .then(tube => tube.get('competence'))
       .then(competence => {
         if (model.get('isTemplate')) {

@@ -40,10 +40,8 @@ export default Controller.extend({
       this.get("parentController").send("closeChildComponent");
     },
     preview() {
-      this.get("skill.productionTemplate")
-        .then(challenge => {
-          window.open(challenge.get("preview"), challenge.get("id"));
-        });
+      const template = this.get("skill.productionTemplate");
+      window.open(template.get("preview"), template.get("id"));
     },
     openAirtable() {
       let skill = this.get("skill");
@@ -61,46 +59,39 @@ export default Controller.extend({
       this.set("edition", false);
       let skill = this.get("skill");
       skill.rollbackAttributes();
-      this.get('skill.productionTemplate')
-        .then((challenge) => {
-          if(challenge){
-            challenge.rollbackAttributes();
-          }
-          let previousState = this.get("wasMaximized");
-          if (!previousState) {
-            this.send("minimize");
-          }
-          this.get("application").send("showMessage", "Modification annulée", true);
-        })
-        .catch((error) => {
-          console.log(error);
-          this.get("application").send("showMessage", "erreur", true);
-        });
+      const challenge = this.get('skill.productionTemplate');
+      if (challenge) {
+        challenge.rollbackAttributes();
+      }
+      let previousState = this.get("wasMaximized");
+      if (!previousState) {
+        this.send("minimize");
+      }
+      this.get("application").send("showMessage", "Modification annulée", true);
     },
     save() {
       this.get("application").send("isLoading");
       let skill = this.get("skill");
-      this.get('skill.productionTemplate')
-        .then((challenge) => {
-          if (challenge) {
-            return challenge.save();
-          } else {
-            return Promise.resolve();
-          }
-        })
-        .then(()=>{
-          return skill.save();
-        })
-        .then(() => {
-          this.set("edition", false);
-          this.get("application").send("finishedLoading");
-          this.get("application").send("showMessage", "Acquis mis à jour", true);
-        })
-        .catch((error) => {
-          console.error(error);
-          this.get("application").send("finishedLoading");
-          this.get("application").send("showMessage", "Erreur lors de la mise à jour de l'acquis", true);
-        });
+      const template = this.get('skill.productionTemplate');
+      let operation;
+      if (template) {
+        operation = template.save();
+      } else {
+        operation = Promise.resolve();
+      }
+      return operation.then(()=>{
+        return skill.save();
+      })
+      .then(() => {
+        this.set("edition", false);
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Acquis mis à jour", true);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.get("application").send("finishedLoading");
+        this.get("application").send("showMessage", "Erreur lors de la mise à jour de l'acquis", true);
+      });
     },
     moveSkill() {
       $('.skill-select-location').modal('show');

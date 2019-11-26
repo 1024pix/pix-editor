@@ -16,8 +16,9 @@ export default DS.Model.extend({
   isFavorite:computed('crush', function(){
     const crush = this.get('crush');
     if(crush){
-      return crush.toLowerCase() === 'yes'
+      return crush.toLowerCase() === 'yes';
     }
+    return false;
   }),
   tagsTitle:computed('tags.[]', function(){
     return DS.PromiseObject.create({

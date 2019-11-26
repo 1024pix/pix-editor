@@ -61,25 +61,20 @@ export default Controller.extend({
     }
   }),
   _transitionToSkillFromChallengeRoute() {
-    let challenge = this.get('challengeController').get('challenge');
+    const challenge = this.get('challengeController').get('challenge');
     if (!challenge) {
-      return
+      return;
     }
-    return challenge.get('isWorkbench')
-      .then(workbench => {
-        if (workbench) {
-          this.send('closeChildComponent');
-        } else {
-          return challenge.get('skills')
-            .then(skills => {
-              if (skills.length > 0) {
-                this.transitionToRoute('competence.skill.index', this.get('competence'), skills.get('firstObject'));
-              } else {
-                this.send('closeChildComponent');
-              }
-            });
-        }
-      });
+    if (challenge.get('isWorkbench')) {
+      this.send('closeChildComponent');
+    } else {
+      const skills = challenge.get('skills');
+      if (skills.length > 0) {
+        this.transitionToRoute('competence.skill.index', this.get('competence'), skills.get('firstObject'));
+      } else {
+        this.send('closeChildComponent');
+      }
+    }
   },
   _getSkillProductionTemplate() {
     let skill = this.get('skillController').get('skill');
@@ -87,18 +82,14 @@ export default Controller.extend({
       return skill.get('productionTemplate')
     }
     this.send('closeChildComponent');
-    return Promise.resolve();
-
   },
   _transitionToChallengeFromSkill() {
-    return this._getSkillProductionTemplate()
-      .then(template => {
-        if (template) {
-          this.transitionToRoute('competence.templates.single', this.get('competence'), template);
-        } else {
-          this.send('closeChildComponent');
-        }
-      })
+    const template = this._getSkillProductionTemplate();
+    if (template) {
+      this.transitionToRoute('competence.templates.single', this.get('competence'), template);
+    } else {
+      this.send('closeChildComponent');
+    }
   },
   _formatCSVString(str) {
     if (str) {
@@ -208,12 +199,9 @@ export default Controller.extend({
           }
           return this._transitionToSkillFromChallengeRoute();
         } else {
-          return this._getSkillProductionTemplate()
-            .then(template => {
-              if (!template) {
-                this.send("closeChildComponent");
-              }
-            })
+          if (!this._getSkillProductionTemplate()) {
+            this.send("closeChildComponent");
+          }
         }
       }
     }

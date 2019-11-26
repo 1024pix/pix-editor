@@ -20,6 +20,21 @@ export default Template.extend({
       return "Déclinaison n°"+index;
     }
   }),
+  _executeCopy() {
+    const element = document.getElementById(this.get("copyZoneId"));
+    element.select();
+    try {
+      var successful = document.execCommand("copy");
+      if (!successful) {
+        this.get("application").send("showMessage", "Erreur lors de la copie", false);
+      } else {
+        this.get("application").send("showMessage", "lien copié", true);
+      }
+    } catch (err) {
+      this.get("application").send("showMessage", "Erreur lors de la copie", false);
+    }
+    this.set("copyOperation", false);
+  },
   actions:{
     preview() {
       let challenge = this.get("challenge");
@@ -30,23 +45,10 @@ export default Template.extend({
       let config = this.get("config");
       window.open(config.get("airtableUrl")+config.get("tableChallenges")+"/"+challenge.get("id"), "airtable");
     },
+
     copyLink() {
       this.set("copyOperation", true);
-      scheduleOnce('afterRender', this, function() {
-        let element = document.getElementById(this.get("copyZoneId"));
-        element.select();
-        try {
-          var successful = document.execCommand("copy");
-          if (!successful) {
-            this.get("application").send("showMessage", "Erreur lors de la copie", false);
-          } else {
-            this.get("application").send("showMessage", "lien copié", true);
-          }
-        } catch (err) {
-          this.get("application").send("showMessage", "Erreur lors de la copie", false);
-        }
-        this.set("copyOperation", false);
-      });
+      scheduleOnce('afterRender', this, this._executeCopy);
     }
   }
 });

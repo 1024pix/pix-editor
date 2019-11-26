@@ -14,7 +14,7 @@
       <i class="download icon"></i> Identifiants
     </a>
     <a class="item" onclick={{action "getProfileId"}}>
-      <i class="code icon"></i> SQL
+      <i class="code icon"></i> CSV
     </a>
   </div>
 </div>
@@ -44,7 +44,7 @@
         </div>
       </div>
       {{/each}}
-       <p class="selected-tube-count">{{competence.selectedProductionTubeCount.content}}/{{competence.productionTubeCount.content}}</p>
+       <p class="selected-tube-count">{{competence.selectedProductionTubeCount}}/{{competence.productionTubeCount}}</p>
     </div>
     <div class="tube-name">
       {{if competence._tubeName competence._tubeName}}
