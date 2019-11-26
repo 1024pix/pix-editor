@@ -29,7 +29,8 @@
                 {{area.name}}
               </div>
             {{#each area.sortedCompetences as |competence|}}
-              {{target-profile/competence-profile competence=competence area=area.code diplayTube=(action "displayTube")}}
+              {{target-profile/competence-profile competence=competence area=area.code displayTube=(action "displayTube") level=selectedTubeLevel
+              selectedSkills=selectedTubeSkills extended=extended clearTube=(action "unsetProfileTube") setTubeLevel=(action "setProfileTube")}}
             {{/each}}
 
           </div>

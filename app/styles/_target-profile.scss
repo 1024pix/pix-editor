@@ -100,23 +100,30 @@
   }
 
   .competence-profile {
-    color:white;
+    color: white;
+    margin-bottom: 0;
+    margin-top: 1.5em;
 
-    &.area-profile-1{
-      background:#F1A141;
+    &.area-profile-1 {
+      background: #F1A141;
     }
-    &.area-profile-2{
-      background:#57C884;
+
+    &.area-profile-2 {
+      background: #57C884;
     }
-    &.area-profile-3{
-      background:#12A3FF;
+
+    &.area-profile-3 {
+      background: #12A3FF;
     }
-    &.area-profile-4{
-      background:#FF3F94;
+
+    &.area-profile-4 {
+      background: #FF3F94;
     }
-    &.area-profile-5{
-      background:#574DA6;
+
+    &.area-profile-5 {
+      background: #574DA6;
     }
+
     .competence-code {
       display: flex !important;
       justify-content: center;
@@ -131,6 +138,50 @@
       font-size: 1rem;
     }
 
+  }
+
+  .tubes-profile {
+    background: #F3F3F3;
+
+    .tube-description {
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tube-profile {
+      display: flex;
+      padding: 5px 0;
+
+      & > div {
+        display: flex;
+        flex-grow: 1;
+
+        .icon {
+          position: relative;
+          font-size: 1.8rem !important;
+        &:hover{
+          cursor: pointer;
+        }
+          span {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem
+          }
+        }
+
+        p {
+          font-weight: bold;
+        }
+      }
+
+      & > p {
+        flex-grow: 1;
+      }
+
+    }
   }
 }
 

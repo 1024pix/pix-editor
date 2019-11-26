@@ -27,7 +27,7 @@ export default DS.Model.extend({
     return DS.PromiseArray.create({
       promise:this.get('skills')
         .then(skills => {
-          const checkProductionChallenges = skills.map(skill => {
+          const checkProductionChallenges = skills.sortBy('level').map(skill => {
             return skill.get('productionTemplate')
               .then(template => {
                 if (template != null) {
