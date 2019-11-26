@@ -81,9 +81,9 @@
 
     .tube-profile {
       display: flex;
-      align-items: stretch;
 
       &:hover {
+        cursor: pointer;
         background: rgba(50,170,220,.1);
       }
 
@@ -92,34 +92,38 @@
         align-items: center;
         width: 33%;
 
+
         .icon {
           position: relative;
           margin: 0 10px;
           font-size: 1.8rem !important;
           transform: translateY(0.2rem);
 
-          &:hover {
-            cursor: pointer;
-          }
-
           &.active {
             color: #57C884
           }
 
-          span {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            color: white;
-            transform: translateX(-50%);
-            font-size: 1.5rem
-          }
+        }
+        .max-skill-level {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 100%;
+          width:30px;
+          margin-right:10px
         }
 
         p {
           font-weight: bold;
-          width: 100%;
           padding: 10px 5px;
+        }
+
+        .practicalTitle-profile{
+
+          display:flex;
+          height:100%;
+          width: 100%;
+          align-items: center;
 
           &.active {
             background-color: rgba(87,200,130,.3)
@@ -127,7 +131,7 @@
         }
       }
 
-      & > p {
+      .practicalDescription-profile{
         width: 67%;
         padding: 10px 5px;
 
