@@ -19,9 +19,9 @@
                 <span class="max-skill-level">{{tube.selectedLevel}}</span>
               {{/if}}
             </i>
-            <p class="{{concat (if tube.selectedLevel "active" "")}}">{{tube.practicalTitle}}</p>
+            <p class="practicalTitle-profile {{concat (if tube.selectedLevel " active" "")}}">{{tube.practicalTitle}}</p>
           </div>
-          <p class="{{concat (if tube.selectedLevel "active" "")}}">{{tube.practicalDescription}}</p>
+          <p class="practicalDescription-profile {{concat (if tube.selectedLevel " active" "")}}">{{tube.practicalDescription}}</p>
         </div>
       {{/each}}
     </div>
