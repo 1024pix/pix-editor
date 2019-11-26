@@ -25,9 +25,6 @@
     <div class="ui attached target-profile">
       {{#each model as |area|}}
           <div>
-              <div class="ui horizontal divider">
-                {{area.name}}
-              </div>
             {{#each area.sortedCompetences as |competence|}}
               {{target-profile/competence-profile competence=competence area=area.code displayTube=(action "displayTube") level=selectedTubeLevel
               selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails clearTube=(action "unsetProfileTube") setTubeLevel=(action "setProfileTube")}}
