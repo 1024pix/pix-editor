@@ -14,7 +14,7 @@
       {{#each competence.productionTubes as |tube|}}
         <div class="tube-profile">
           <div>
-            <i class="square icon {{concat (if tube.selectedLevel "active" "outline")}}" {{action 'showTube' tube}}>
+            <i class="square icon {{concat (if tube.selectedLevel "active" "outline")}}" {{action "showTube" tube}}>
               {{#if tube.selectedLevel}}
                 <span class="max-skill-level">{{tube.selectedLevel}}</span>
               {{/if}}
@@ -26,5 +26,5 @@
       {{/each}}
     </div>
   </div>
-  <p class="selected-tube-count">{{competence.selectedProductionTubeCount.content}}/{{competence.productionTubeCount.content}}</p>
+  <p class="selected-tube-count">{{competence.selectedProductionTubeCount}}/{{competence.productionTubeCount}}</p>
 </div>

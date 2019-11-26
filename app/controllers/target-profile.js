@@ -15,6 +15,21 @@ export default Controller.extend({
     this._super();
     this.set("selectedTubeSkills", []);
   },
+  getSelectedSkillsIds(){
+    let areas = this.get('model');
+    return areas.reduce((areaValues, area) => {
+      let competences = area.get('competences');
+      return competences.reduce((competenceValues, competence) => {
+        let tubes = competence.get('tubes');
+        return tubes.reduce((tubeValues, tube) => {
+          if (tube.get("selectedLevel")) {
+            tubeValues = tubeValues.concat(tube.get("selectedSkills"));
+          }
+          return tubeValues;
+        }, competenceValues);
+      }, areaValues);
+    }, []);
+  },
   actions: {
     displayTube(tube) {
       this.set('selectedTube',tube);
@@ -31,24 +46,12 @@ export default Controller.extend({
       tube.set('selectedSkills', []);
     },
     generate() {
-      let areas = this.get('model')
-      let ids = areas.reduce((areaValues, area) => {
-        let competences = area.get('competences');
-        return competences.reduce((competenceValues, competence) => {
-          let tubes = competence.get('tubes');
-          return tubes.reduce((tubeValues, tube) => {
-            if (tube.get("selectedLevel")) {
-              tubeValues = tubeValues.concat(tube.get("selectedSkills"));
-            }
-            return tubeValues;
-          }, competenceValues);
-        }, areaValues);
-      }, []);
+     const ids = this.getSelectedSkillsIds();
       let fileName = 'profil_identifiants_'+(new Date()).toLocaleString('fr-FR')+'.txt';
       this.get("fileSaver").saveAs(ids.join(","), fileName);
     },
     save() {
-      let areas = this.get('model')
+      let areas = this.get('model');
       let data = areas.reduce((areaValues, area) => {
         let competences = area.get('competences');
         return competences.reduce((competenceValues, competence) => {
@@ -72,20 +75,8 @@ export default Controller.extend({
       $('.popin-enter-profile-id').modal('show');
     },
     generateSQL(profileId) {
-      let areas = this.get('model')
-      let ids = areas.reduce((areaValues, area) => {
-        let competences = area.get('competences');
-        return competences.reduce((competenceValues, competence) => {
-          let tubes = competence.get('tubes');
-          return tubes.reduce((tubeValues, tube) => {
-            if (tube.get("selectedLevel")) {
-              tubeValues = tubeValues.concat(tube.get("selectedSkills"));
-            }
-            return tubeValues;
-          }, competenceValues);
-        }, areaValues);
-      }, []);
-      let sql = ids.reduce((content, id) => {
+      const ids = this.getSelectedSkillsIds();
+      const sql = ids.reduce((content, id) => {
         return content+`\n${profileId},${id}`
       },'targetProfileId,skillId');
 
@@ -125,7 +116,7 @@ export default Controller.extend({
             })
           });
           application.send("showMessage", "Fichier correctement chargé", true);
-        }
+        };
         reader.readAsText(file);
       } catch(error) {
         this.get("application").send("showMessage", "Erreur lors de l'ouverture du fichier", false);
