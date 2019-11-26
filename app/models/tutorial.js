@@ -18,7 +18,7 @@ export default DS.Model.extend({
     if(crush){
       return crush.toLowerCase() === 'yes';
     }
-    return 'no';
+    return false;
   }),
   tagsTitle:computed('tags.[]', function(){
     return DS.PromiseObject.create({
