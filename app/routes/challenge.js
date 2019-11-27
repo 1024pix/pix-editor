@@ -9,7 +9,7 @@ export default Route.extend({
   },
   afterModel(model) {
     if (model) {
-      return model.get('rawSkills')
+      return model.get('skills')
       .then(() => {
         const firstSkill = model.get('firstSkill');
         return firstSkill.get('challenges') // in order to load model.template later on
@@ -20,8 +20,7 @@ export default Route.extend({
         if (model.get('isTemplate')) {
           return this.transitionTo('competence.templates.single', competence, model);
         } else {
-          return model.get('template')
-          .then(template => this.transitionTo('competence.templates.single.alternatives.single', competence, template, model))
+          return this.transitionTo('competence.templates.single.alternatives.single', competence, model.get('template'), model);
         }
       })
       .catch(() => this.transitionTo("index"));
