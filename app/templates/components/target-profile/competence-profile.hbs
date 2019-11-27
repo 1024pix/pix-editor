@@ -4,26 +4,26 @@
       <p>{{competence.code}}</p>
     </div>
     <div class="fourteen wide column">
-      <div>{{competence.title}}</div>
+      <div class="competence-titre">{{competence.title}}</div>
       <div class="competence-description">{{competence.description}}</div>
     </div>
   </h2>
   <div class="row tubes-profile">
-    <div class="five wide column tube-description">
+    <div class="four wide column tube-description">
       <p></p>
     </div>
-    <div class="eleven wide column">
+    <div class="twelve wide column">
       {{#each competence.productionTubes as |tube|}}
         <div class="tube-profile" {{action "showTube" tube}}>
+
           <div class="{{concat (if tube.selectedLevel " active" "")}}">
             <i class="square icon {{concat (if tube.selectedLevel "active check" "outline")}}">
-
             </i>
             {{#if showTubeDetails}}
-              <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel 0}}</p></div>
+              <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel ""}}</p></div>
             {{/if}}
             <div class="practicalTitle-profile {{concat (if tube.selectedLevel " active" "")}}">
-              <p>{{tube.practicalTitle}}</p></div>
+              <p>{{if showTubeDetails tube.name tube.practicalTitle }}</p></div>
           </div>
           <p class="practicalDescription-profile {{concat
                   (if tube.selectedLevel " active" "")}}">{{tube.practicalDescription}}</p>
