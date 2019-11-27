@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
+import { computed } from '@ember/object';
 import $ from "jquery";
 
 
@@ -10,11 +11,19 @@ export default Controller.extend({
   fileSaver: service('file-saver'),
   application:controller(),
   showTubeDetails:false,
-
   init() {
     this._super();
     this.set("selectedTubeSkills", []);
   },
+  globalSelectTubeCount:computed('model.@each.getSelectedTubeCount', function(){
+    let selectedProductionTubeCount = 0,productionTubeCount = 0;
+    const areas = this.get('model');
+    areas.forEach(area=>{
+      selectedProductionTubeCount += area.getSelectedTubeCount.selectedProductionTubeCount;
+      productionTubeCount += area.getSelectedTubeCount.productionTubeCount;
+    });
+   return {selectedProductionTubeCount, productionTubeCount}
+  }),
   getSelectedSkillsIds(){
     let areas = this.get('model');
     return areas.reduce((areaValues, area) => {

@@ -1,39 +1,49 @@
 <div class="main-left">
-    <div class="main-title">
-        <h1 class="ui header">Générateur de profil cible
-            <div class="target-profile-mode {{if showTubeDetails "active"}}">Détails des sujets{{ui-checkbox checked=showTubeDetails
-                                                                                               class="toggle target-profile-mode"
-                                                                                               onChange=(action (mut showTubeDetails))}}</div>
-        </h1>
+  <div class="main-title">
+    <h1 class="ui header">Générateur de profil cible
+      <div class="target-profile-mode {{if showTubeDetails "active"}}">Détails des sujets{{ui-checkbox
+              checked=showTubeDetails
+              class="toggle target-profile-mode"
+              onChange=(action (mut showTubeDetails))}}</div>
+    </h1>
+  </div>
+  <div class="ui top attached borderless labelled icon menu">
+    <a class="first left item" onclick={{action "load"}}>
+      <i class="folder open icon"></i> Ouvrir
+    </a>
+    <a class="left item" onclick={{action "save"}}>
+      <i class="save icon"></i> Enregistrer
+    </a>
+    <div class="right menu">
+      <a class="item" onclick={{action "generate"}}>
+        <i class="download icon"></i> Identifiants
+      </a>
+      <a class="item" onclick={{action "getProfileId"}}>
+        <i class="code icon"></i> CSV
+      </a>
     </div>
-    <div class="ui top attached borderless labelled icon menu">
-        <a class="first left item" onclick={{action "load"}}>
-            <i class="folder open icon"></i> Ouvrir
-        </a>
-        <a class="left item" onclick={{action "save"}}>
-            <i class="save icon"></i> Enregistrer
-        </a>
-        <div class="right menu">
-            <a class="item" onclick={{action "generate"}}>
-                <i class="download icon"></i> Identifiants
-            </a>
-            <a class="item" onclick={{action "getProfileId"}}>
-                <i class="code icon"></i> CSV
-            </a>
-        </div>
-    </div>
-    <div class="ui attached target-profile">
-      {{#each model as |area|}}
-          <div>
-            {{#each area.sortedCompetences as |competence|}}
-              {{target-profile/competence-profile competence=competence area=area.code displayTube=(action "displayTube") level=selectedTubeLevel
-              selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails clearTube=(action "unsetProfileTube") setTubeLevel=(action "setProfileTube")}}
-            {{/each}}
+  </div>
+  <div class="ui attached target-profile">
 
-          </div>
-      {{/each}}
-      {{input type="file" id="target-profile__open-file" change=(action "openFile")}}
-    </div>
+    <h2 class="target-profile-title">
+      <span>Référentiel Pix</span>
+      <span>{{globalSelectTubeCount.selectedProductionTubeCount}}
+        / {{globalSelectTubeCount.productionTubeCount}}</span>
+    </h2>
+
+    {{#each model as |area|}}
+      <div>
+        {{#each area.sortedCompetences as |competence|}}
+          {{target-profile/competence-profile competence=competence area=area.code displayTube=(action "displayTube")
+                                              level=selectedTubeLevel
+                                              selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails
+                                              clearTube=(action "unsetProfileTube")
+                                              setTubeLevel=(action "setProfileTube")}}
+        {{/each}}
+      </div>
+    {{/each}}
+    {{input type="file" id="target-profile__open-file" change=(action "openFile")}}
+  </div>
 </div>
 {{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel
                    selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}

@@ -27,6 +27,14 @@
     display: none;
   }
 
+  .target-profile-title{
+    display:flex;
+    justify-content: space-between;
+    background:black;
+    color:white;
+    margin:0;
+    padding: 15px calc(100% / 16);
+  }
   .competence-profile {
     color: white;
     margin-bottom: 0;
