@@ -15,7 +15,18 @@
     }
   }
 }
-
+.target-profile-title{
+  display:flex;
+  width: 100%;
+  top:120px;
+  left:60px;
+  justify-content: space-between;
+  background:black;
+  color:white;
+  margin:0;
+  padding: 15px calc(100% / 16 + 1rem);
+  font-size:2.5rem
+}
 .target-profile {
   width: 100%;
   overflow-x: hidden;
@@ -25,15 +36,6 @@
     display: none;
   }
 
-  .target-profile-title{
-    display:flex;
-    justify-content: space-between;
-    background:black;
-    color:white;
-    margin:0;
-    padding: 15px calc(100% / 16 + 1rem);
-    font-size:2.5rem
-  }
   .ui.grid{
     margin:0;
   }

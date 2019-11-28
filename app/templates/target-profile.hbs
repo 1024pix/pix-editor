@@ -27,13 +27,13 @@
       </a>
     </div>
   </div>
-  <div class="ui attached target-profile">
+  <h2 class="target-profile-title">
+    <span>Référentiel Pix</span>
+    <span>{{globalSelectTubeCount.selectedProductionTubeCount}}
+      / {{globalSelectTubeCount.productionTubeCount}}</span>
 
-    <h2 class="target-profile-title">
-      <span>Référentiel Pix</span>
-      <span>{{globalSelectTubeCount.selectedProductionTubeCount}}
-        / {{globalSelectTubeCount.productionTubeCount}}</span>
-    </h2>
+  </h2>
+  <div class="ui attached target-profile">
 
     {{#each model as |area|}}
       {{target-profile/area-profile area=area displayTube=(action "displayTube")

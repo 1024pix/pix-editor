@@ -15,9 +15,9 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     const area = EmberObject.create({
       name:'area_name',
       competences:[
-        {name:'competence1', selectedProductionTubeCount:2},
-        {name:'competence2', selectedProductionTubeCount:0},
-        {name:'competence3', selectedProductionTubeCount:5},
+        {name:'competence_1', selectedProductionTubeCount:2},
+        {name:'competence_2', selectedProductionTubeCount:0},
+        {name:'competence_3', selectedProductionTubeCount:5},
       ]
     });
     this.set('area', area);
@@ -29,6 +29,6 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     //then
 
-    assert.equal(this.element.querySelectorAll('.tubes-profile').length  ,2)
+    assert.equal(this.element.querySelectorAll('.competence-profile').length  ,2)
   });
 });
