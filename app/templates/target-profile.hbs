@@ -5,6 +5,10 @@
               checked=showTubeDetails
               class="toggle target-profile-mode"
               onChange=(action (mut showTubeDetails))}}</div>
+      <div class="target-profile-mode {{if filter "active"}}">Filtrer les sujets séléctionnés{{ui-checkbox
+              checked=filter
+              class="toggle target-profile-mode"
+              onChange=(action (mut filter))}}</div>
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
@@ -15,9 +19,6 @@
       <i class="save icon"></i> Enregistrer
     </a>
     <div class="right menu">
-      <a class="item" onclick={{action "setFilter"}}>
-        <i class="filter icon"></i> Filtrer
-      </a>
       <a class="item" onclick={{action "generate"}}>
         <i class="download icon"></i> Identifiants
       </a>

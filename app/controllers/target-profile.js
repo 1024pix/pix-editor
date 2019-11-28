@@ -41,10 +41,6 @@ export default Controller.extend({
     }, []);
   },
   actions: {
-    setFilter(){
-      const filter = this.get('filter');
-      this.set('filter', !filter);
-    },
     displayTube(tube) {
       this.set('selectedTube',tube);
       this.set('selectedTubeLevel',tube.get("selectedLevel"));

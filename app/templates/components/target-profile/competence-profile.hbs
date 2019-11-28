@@ -17,12 +17,12 @@
         <div class="tube-profile" {{action "showTube" tube}}>
 
           <div class={{if tube.selectedLevel "active"}}>
-            <i class="square icon {{concat (if tube.selectedLevel "active check" "outline")}}">
+            <i class="square icon {{if tube.selectedLevel "active check" "outline"}}">
             </i>
             {{#if showTubeDetails}}
               <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel ""}}</p></div>
             {{/if}}
-            <div class="practicalTitle-profile {{concat (if tube.selectedLevel " active" "")}}">
+            <div class="practicalTitle-profile {{if tube.selectedLevel " active"}}">
               <p>{{if showTubeDetails tube.name tube.practicalTitle }}</p></div>
           </div>
           <p class="practicalDescription-profile {{concat

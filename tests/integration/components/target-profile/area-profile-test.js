@@ -29,6 +29,6 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     //then
 
-    assert.equal(this.element.querySelectorAll('.tubes-profile').length,0)
+    assert.equal(this.element.querySelectorAll('.tubes-profile').length  ,2)
   });
 });

@@ -1,11 +1,9 @@
-<div>
-  {{#each filterCompetences as |competence|}}
-    {{target-profile/competence-profile competence=competence areaCode=area.code displayTube=displayTube
-                                        level=level
-                                        selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails
-                                        clearTube=clearTube
-                                        setTubeLevel=setTubeLevel
-                                        filter=filter
-    }}
-  {{/each}}
-</div>
+{{#each filterCompetences as |competence|}}
+  {{target-profile/competence-profile competence=competence areaCode=area.code displayTube=displayTube
+                                      level=level
+                                      selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails
+                                      clearTube=clearTube
+                                      setTubeLevel=setTubeLevel
+                                      filter=filter
+  }}
+{{/each}}
