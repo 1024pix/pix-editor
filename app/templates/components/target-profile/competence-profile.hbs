@@ -1,5 +1,5 @@
 <div class="ui grid">
-  <h2 class="row competence-profile {{concat "area-profile-" area}}">
+  <h2 class="row competence-profile {{concat "area-profile-" areaCode}}">
     <div class="column center competence-code">
       <p>{{competence.code}}</p>
     </div>
@@ -13,10 +13,10 @@
       <p></p>
     </div>
     <div class="twelve wide column">
-      {{#each competence.productionTubes as |tube|}}
+      {{#each filterTube as |tube|}}
         <div class="tube-profile" {{action "showTube" tube}}>
 
-          <div class="{{concat (if tube.selectedLevel " active" "")}}">
+          <div class={{if tube.selectedLevel "active"}}>
             <i class="square icon {{concat (if tube.selectedLevel "active check" "outline")}}">
             </i>
             {{#if showTubeDetails}}

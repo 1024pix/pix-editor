@@ -11,6 +11,7 @@ export default Controller.extend({
   fileSaver: service('file-saver'),
   application:controller(),
   showTubeDetails:false,
+  filter:false,
   init() {
     this._super();
     this.set("selectedTubeSkills", []);
@@ -40,6 +41,10 @@ export default Controller.extend({
     }, []);
   },
   actions: {
+    setFilter(){
+      const filter = this.get('filter');
+      this.set('filter', !filter);
+    },
     displayTube(tube) {
       this.set('selectedTube',tube);
       this.set('selectedTubeLevel',tube.get("selectedLevel"));
