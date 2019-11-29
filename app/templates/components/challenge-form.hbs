@@ -75,6 +75,17 @@
           </div>
       </div>
   {{/if}}
+  <div class={{concat "field" (if edition "" " disabled")}}>
+      <label>Internationalisation</label>
+      <div class="two fields">
+          <div class="field">
+            {{form-select title="Langue" value=challenge.language edition=edition multiple=false options=options.language}}
+          </div>
+          <div class="field">
+            {{form-select title="Géographie" value=challenge.area edition=edition multiple=false options=options.area}}
+          </div>
+      </div>
+  </div>
   {{#if (not edition)}}
     {{form-input value=challenge.id title="Record id" edition=edition}}
   {{/if}}
