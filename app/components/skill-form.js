@@ -6,7 +6,8 @@ export default Component.extend({
     this._super(...arguments);
     this.options = {
       'clueStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé", "inapplicable"],
-      'descriptionStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"]
+      'descriptionStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"],
+      'i18n': ["France", "Monde", "Union Européenne"]
     };
     this.set('tutorials', []);
     this.set('searchTitle', '');
