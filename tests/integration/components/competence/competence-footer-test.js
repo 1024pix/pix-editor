@@ -7,20 +7,24 @@ module('Integration | Component | competence/competence-footer', function(hooks)
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{competence/competence-footer}}`);
+    // given
 
-    assert.equal(this.element.textContent.trim(), '');
+    this.set('mayCreateTube', true);
+    this.set('externalAction', () => {
+    });
 
-    // Template block usage:
-    await render(hbs`
-      {{#competence/competence-footer}}
-        template block text
-      {{/competence/competence-footer}}
-    `);
+    // when
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    await render(hbs`{{competence/competence-footer
+    mayCreateTube=mayCreateTube
+    selectView=(action externalAction)
+    newTube=(action externalAction)
+    newTemplate=(action externalAction)
+     }}`);
+
+    // then
+
+    assert.equal(this.element.querySelector('a.left.item').textContent.trim(), 'Nouveau tube');
   });
 });

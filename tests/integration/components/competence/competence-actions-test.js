@@ -3,15 +3,23 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module.only('Integration | Component | competence/competence-actions', function(hooks) {
+module('Integration | Component | competence/competence-actions', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
 
     // given
 
+    this.set('config', {lite:false});
+    this.set('externalAction', ()=>{});
+
     // when
-    await render(hbs`{{competence/competence-actions section="challenges"}}`);
+    await render(hbs`{{competence/competence-actions
+      shareSkills=(action externalAction)
+      selectView=(action externalAction)
+      refresh=(action externalAction)
+      config=config
+      section="challenges"}}`);
 
     // then
 

@@ -7,11 +7,16 @@ module('Integration | Component | competence-list', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{competence-list}}`);
+    // given
 
-    assert.dom('.list-body').exists();
+
+    // when
+    await render(hbs`{{competence/competence-list}}`);
+
+
+    // then
+
+    assert.dom('.list-header').exists();
   });
 });
