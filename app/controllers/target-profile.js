@@ -137,7 +137,10 @@ export default Controller.extend({
     },
     hideTubeName(competence) {
       competence.set("_tubeName", null);
+    },
+    scrollTo(anchor){
+      const target = document.querySelector(`#${anchor}`)
+      document.querySelector('.target-profile').scrollTo({top:target.offsetTop-154,left:0,behavior:'smooth'})
     }
-
   }
 });

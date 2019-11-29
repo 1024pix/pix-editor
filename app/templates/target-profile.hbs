@@ -31,7 +31,23 @@
     <span>Référentiel Pix</span>
     <span>{{globalSelectTubeCount.selectedProductionTubeCount}}
       / {{globalSelectTubeCount.productionTubeCount}}</span>
-
+    {{#ui-dropdown class="icon item"}}
+      <i class="bars icon"></i>
+      <div class="menu">
+        {{#each model as |area|}}
+          <div data-value="{{area.code}}" class="item">
+            <i class="dropdown icon"></i>
+            <span class="text">{{area.name}}</span>
+            <div class="menu">
+              {{#each area.competences as |competence|}}
+                <div class="item"{{action "scrollTo"
+                                          (concat "competence-profile-anchor-" competence.id)}}>{{competence.code}} {{competence.title}}</div>
+              {{/each}}
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/ui-dropdown}}
   </h2>
   <div class="ui attached target-profile">
 
