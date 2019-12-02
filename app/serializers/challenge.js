@@ -37,6 +37,8 @@ export default ApplicationSerializer.extend({
     spoil:"Spoil",
     responsive:"Responsive",
     alternativeText:"Texte alternatif illustration",
+    language:"Langue",
+    area:"Géographie"
   },
 
   payloadKeyFromModelName: function() {

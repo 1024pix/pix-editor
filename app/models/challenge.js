@@ -35,6 +35,8 @@ export default DS.Model.extend({
   spoil:DS.attr(),
   responsive:DS.attr(),
   alternativeText:DS.attr(),
+  language:DS.attr(),
+  area:DS.attr(),
   myStore:service('store'),
   config:service(),
   _definedBaseName:DS.attr({readOnly:true}),

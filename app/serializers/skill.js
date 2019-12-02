@@ -13,7 +13,8 @@ export default ApplicationSerializer.extend({
     competence:"Compétence",
     tube:"Tube",
     level:"Level",
-    status:"Status"
+    status:"Status",
+    i18n:"Internationalisation"
   },
   payloadKeyFromModelName: function() {
     return "Acquis";
