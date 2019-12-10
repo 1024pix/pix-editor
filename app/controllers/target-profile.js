@@ -26,12 +26,12 @@ export default Controller.extend({
       return count + area.get('productionTubeCount');
     }, 0)
   }),
-  getSelectedSkillsIds(){
-    let areas = this.get('model');
+  _getSelectedSkillsIds(){
+    const areas = this.get('model');
     return areas.reduce((areaValues, area) => {
-      let competences = area.get('competences');
+      const competences = area.get('competences');
       return competences.reduce((competenceValues, competence) => {
-        let tubes = competence.get('tubes');
+        const tubes = competence.get('tubes');
         return tubes.reduce((tubeValues, tube) => {
           if (tube.get("selectedLevel")) {
             tubeValues = tubeValues.concat(tube.get("selectedSkills"));
@@ -57,7 +57,7 @@ export default Controller.extend({
       tube.set('selectedSkills', []);
     },
     generate() {
-     const ids = this.getSelectedSkillsIds();
+     const ids = this._getSelectedSkillsIds();
       let fileName = 'profil_identifiants_'+(new Date()).toLocaleString('fr-FR')+'.txt';
       this.get("fileSaver").saveAs(ids.join(","), fileName);
     },
@@ -86,7 +86,7 @@ export default Controller.extend({
       $('.popin-enter-profile-id').modal('show');
     },
     generateSQL(profileId) {
-      const ids = this.getSelectedSkillsIds();
+      const ids = this._getSelectedSkillsIds();
       const sql = ids.reduce((content, id) => {
         return content+`\n${profileId},${id}`
       },'targetProfileId,skillId');
