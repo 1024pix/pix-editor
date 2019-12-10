@@ -2,25 +2,25 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import EmberObject from '@ember/object';
+
 
 module('Integration | Component | competence/competence-header', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+   // given
 
-    await render(hbs`{{competence/competence-header}}`);
+    const competence = EmberObject.create({name:'competence_name'});
+    this.set('competence', competence);
+    this.set('externalAction', ()=>{});
 
-    assert.equal(this.element.textContent.trim(), '');
+   //  when
 
-    // Template block usage:
-    await render(hbs`
-      {{#competence/competence-header}}
-        template block text
-      {{/competence/competence-header}}
-    `);
+    await render(hbs`{{competence/competence-header competence=competence selectSection=(action externalAction)}}`);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+   //  then
+    assert.dom('h1').exists();
+    assert.equal(this.element.querySelector('h1').textContent.trim(), 'competence_name');
   });
 });

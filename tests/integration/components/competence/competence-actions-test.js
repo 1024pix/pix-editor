@@ -7,20 +7,23 @@ module('Integration | Component | competence/competence-actions', function(hooks
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{competence/competence-actions}}`);
+    // given
 
-    assert.equal(this.element.textContent.trim(), '');
+    this.set('config', {lite:false});
+    this.set('externalAction', ()=>{});
 
-    // Template block usage:
-    await render(hbs`
-      {{#competence/competence-actions}}
-        template block text
-      {{/competence/competence-actions}}
-    `);
+    // when
+    await render(hbs`{{competence/competence-actions
+      shareSkills=(action externalAction)
+      selectView=(action externalAction)
+      refresh=(action externalAction)
+      config=config
+      section="challenges"}}`);
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    // then
+
+    assert.equal(this.element.querySelector('.production').textContent.trim(), 'En production');
+
   });
 });

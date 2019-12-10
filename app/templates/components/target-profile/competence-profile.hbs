@@ -1,0 +1,41 @@
+<div class="ui grid">
+  <h2 id="competence-profile-anchor-{{competence.id}}" class="row competence-profile area-profile-{{areaCode}}">
+    <div class="column competence-code right aligned">
+      {{competence.code}}
+    </div>
+    <div class="fourteen wide column">
+      <div class="competence-titre">{{competence.title}}</div>
+    </div>
+    <div class="column center competence-info">
+      <div class="ui compact icon button basic">
+        {{ui-popup tagName="i" class="info icon" content=competence.description variation="very wide"}}
+      </div>
+    </div>
+  </h2>
+  <div class="row tubes-profile">
+    <div class="four wide column tube-description">
+      <p></p>
+    </div>
+    <div class="twelve wide column">
+      {{#each filterTube as |tube|}}
+        <div class="tube-profile" {{action "showTube" tube}}>
+
+          <div class={{if tube.selectedLevel "active"}}>
+            <i class="square icon {{if tube.selectedLevel "active check" "outline"}}">
+            </i>
+            {{#if showTubeDetails}}
+              <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel ""}}</p></div>
+            {{/if}}
+            <div class="practicalTitle-profile {{if tube.selectedLevel " active"}}">
+              <p>{{if showTubeDetails tube.name tube.practicalTitle }}</p></div>
+          </div>
+          <p class="practicalDescription-profile {{if tube.selectedLevel " active"}}">{{tube.practicalDescription}}</p>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="fifteen wide column"></div>
+    <div class="column selected-tube-count">{{competence.selectedProductionTubeCount}}/{{competence.productionTubeCount}}</div>
+  </div>
+</div>
