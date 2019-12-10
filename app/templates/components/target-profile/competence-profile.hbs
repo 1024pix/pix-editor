@@ -25,8 +25,7 @@
             <div class="practicalTitle-profile {{if tube.selectedLevel " active"}}">
               <p>{{if showTubeDetails tube.name tube.practicalTitle }}</p></div>
           </div>
-          <p class="practicalDescription-profile {{concat
-                  (if tube.selectedLevel " active" "")}}">{{tube.practicalDescription}}</p>
+          <p class="practicalDescription-profile {{if tube.selectedLevel " active"}}">{{tube.practicalDescription}}</p>
         </div>
       {{/each}}
     </div>
