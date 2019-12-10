@@ -11,7 +11,7 @@ module('Integration | Component | target-profile/competence-profile', function(h
 
     // given
 
-    const competence = EmberObject.create({description:'competence_description'});
+    const competence = EmberObject.create({description:'competence_description', title:'competence_title'});
     this.set('competence', competence);
 
     // when
@@ -20,6 +20,6 @@ module('Integration | Component | target-profile/competence-profile', function(h
 
     // then
 
-   assert.equal(this.element.querySelector('.competence-description').textContent.trim(), 'competence_description')
+   assert.equal(this.element.querySelector('.competence-title').textContent.trim(), 'competence_title')
   });
 });
