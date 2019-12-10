@@ -16,14 +16,15 @@ export default Controller.extend({
     this._super();
     this.set("selectedTubeSkills", []);
   },
-  globalSelectTubeCount:computed('model.@each.getSelectedTubeCount', function(){
-    let selectedProductionTubeCount = 0,productionTubeCount = 0;
-    const areas = this.get('model');
-    areas.forEach(area=>{
-      selectedProductionTubeCount += area.getSelectedTubeCount.selectedProductionTubeCount;
-      productionTubeCount += area.getSelectedTubeCount.productionTubeCount;
-    });
-   return {selectedProductionTubeCount, productionTubeCount}
+  selectedTubeCount:computed('model.@each.selectedProductionTubeCount', function(){
+    return this.get('model').reduce((count, area) => {
+      return count + area.get('selectedProductionTubeCount');
+    }, 0)
+  }),
+  tubeCount:computed('model.@each.productionTubeCount', function(){
+    return this.get('model').reduce((count, area) => {
+      return count + area.get('productionTubeCount');
+    }, 0)
   }),
   getSelectedSkillsIds(){
     let areas = this.get('model');

@@ -9,13 +9,14 @@ export default DS.Model.extend({
   competences: DS.hasMany('competence'),
   competencesSorting: Object.freeze(['code']),
   sortedCompetences: sort('competences','competencesSorting'),
-  getSelectedTubeCount: computed('competences.@each.{selectedProductionTubeCount,productionTubeCount}', function(){
-   let selectedProductionTubeCount = 0, productionTubeCount = 0;
-    const competences = this.get('competences');
-    competences.forEach(competence=>{
-      selectedProductionTubeCount += competence.selectedProductionTubeCount;
-      productionTubeCount += competence.productionTubeCount;
-    });
-    return {selectedProductionTubeCount, productionTubeCount}
+  selectedProductionTubeCount:computed('competences.@each.selectedProductionTubeCount', function() {
+    return this.get('competences').reduce((count, competence) => {
+      return count+competence.get('selectedProductionTubeCount');
+    }, 0);
+  }),
+  productionTubeCount:computed('competences.@each.productionTubeCount', function() {
+    return this.get('competences').reduce((count, competence) => {
+      return count+competence.get('productionTubeCount');
+    }, 0);
   })
 });
