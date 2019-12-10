@@ -16,16 +16,8 @@
   }
 }
 .target-profile-title{
-  display:flex;
-  width: 100%;
-  top:120px;
-  left:60px;
-  justify-content: space-between;
   background:black;
   color:white;
-  margin:0;
-  padding: 15px calc(100% / 16 + 1rem);
-  font-size:2.5rem
 }
 .target-profile {
   width: 100%;
@@ -62,24 +54,21 @@
     &.area-profile-5 {
       background: #574DA6;
     }
+    .competence-info {
+      .ui.basic.button {
+        border-radius:50%;
+        border: solid 1px #ffffff98;
+        box-shadow:none;
+        i {
+          color:white;
 
-    .competence-code {
-      display: flex !important;
-      justify-content: center;
-      align-items: center;
-
-      p {
-        font-size: 2.5rem;
+          &.visible {
+            color:black;
+          }
+        }
       }
     }
 
-    .competence-titre{
-      font-size: 2.2rem;
-    }
-    .competence-description {
-      font-size: 1rem;
-      line-height: 1.3rem;
-    }
 
   }
 
@@ -150,7 +139,7 @@
 
       .practicalDescription-profile{
         width: 67%;
-        padding: 10px 5px;
+        padding: 10px 50px 10px 5px;
 
         &.active {
           background-color: rgba(87,200,130,.3)
@@ -158,12 +147,6 @@
       }
 
     }
-  }
-
-  .selected-tube-count {
-    text-align: right;
-    width: 100%;
-    margin: 5px 10px 1.5rem 0;
   }
 }
 
