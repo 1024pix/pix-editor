@@ -7,9 +7,11 @@
       <div class="competence-title">{{competence.title}}</div>
     </div>
     <div class="column center competence-info">
-      <div class="ui compact icon button basic">
-        {{ui-popup tagName="i" class="info icon" content=competence.description variation="very wide"}}
-      </div>
+      {{#ui-popup content=competence.description variation="very wide"}}
+        <div class="ui compact icon button basic">
+          <i class="info icon"></i>
+        </div>
+      {{/ui-popup}}
     </div>
   </h2>
   <div class="row tubes-profile">
