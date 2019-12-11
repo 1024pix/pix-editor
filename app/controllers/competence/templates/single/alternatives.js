@@ -9,7 +9,8 @@ export default Controller.extend({
   access:service(),
   application:controller(),
   competenceController:controller("competence"),
-  childComponentMaximized:false,
+  queryParams:['secondMaximized'],
+  secondMaximized:false,
   mayCreateAlternative:computed("config.access", function() {
     return this.get("access").mayCreateAlternative();
   }),
@@ -20,21 +21,15 @@ export default Controller.extend({
       return "half";
     }
   }),
-  listHidden:computed("childComponentMaximized", function() {
-    return this.get("childComponentMaximized")?"hidden":"";
+  listHidden:computed("secondMaximized", function() {
+    return this.get("secondMaximized")?"hidden":"";
   }),
   actions: {
     newAlternative() {
       this.transitionToRoute("competence.templates.single.alternatives.new", this.get("competence"),  this.get("challenge"));
     },
-    maximizeChildComponent() {
-      this.set("childComponentMaximized", true);
-    },
-    minimizeChildComponent() {
-      this.set("childComponentMaximized", false);
-    },
     closeChildComponent() {
-      this.set("childComponentMaximized", false);
+      this.set("secondMaximized", false);
       this.transitionToRoute("competence.templates.single.alternatives", this.get("competence"), this.get("challenge"));
     },
     copyChallenge(challenge) {

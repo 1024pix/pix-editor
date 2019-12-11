@@ -14,7 +14,7 @@ export default Controller.extend({
   parentController:controller('competence'),
   config:service(),
   access:service(),
-  maximized:false,
+  maximized:alias('parentController.firstMaximized'),
   copyOperation:false,
   edition:false,
   creation:false,
@@ -86,11 +86,9 @@ export default Controller.extend({
     },
     maximize() {
       this.set('maximized', true);
-      this.get('parentController').send('maximizeChildComponent');
     },
     minimize() {
       this.set('maximized', false);
-      this.get('parentController').send('minimizeChildComponent');
     },
     close() {
       this.set('maximized', false);
@@ -213,7 +211,6 @@ export default Controller.extend({
       } else {
         parentController.send('selectView', 'production');
       }
-      this.set('maximized', parentController.get('childComponentMaximized'));
     },
     showVersions() {
       this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));

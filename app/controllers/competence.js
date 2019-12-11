@@ -5,7 +5,8 @@ import {inject as controller} from '@ember/controller';
 import {alias} from '@ember/object/computed';
 
 export default Controller.extend({
-  childComponentMaximized: false,
+  queryParams:['firstMaximized'],
+  firstMaximized:false,
   view: 'production',
   router: service(),
   config: service(),
@@ -15,8 +16,8 @@ export default Controller.extend({
   challengeController: controller('competence.templates.single'),
   skillController: controller('competence.skill.index'),
   competence: alias('model'),
-  competenceHidden: computed('childComponentMaximized', function () {
-    return this.get('childComponentMaximized') ? 'hidden' : '';
+  competenceHidden: computed('firstMaximized', function () {
+    return this.get('firstMaximized') ? 'hidden' : '';
   }),
   section: computed('view', function () {
     const view = this.get('view');
@@ -98,14 +99,8 @@ export default Controller.extend({
     return ' ';
   },
   actions: {
-    maximizeChildComponent() {
-      this.set('childComponentMaximized', true);
-    },
-    minimizeChildComponent() {
-      this.set('childComponentMaximized', false);
-    },
     closeChildComponent() {
-      this.set('childComponentMaximized', false);
+      this.set('firstMaximized', false);
       this.transitionToRoute('competence', this.get('competence'));
     },
     refresh(closeChild) {

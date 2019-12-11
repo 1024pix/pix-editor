@@ -6,8 +6,8 @@ import $ from "jquery";
 import {computed} from '@ember/object';
 
 export default Controller.extend({
-  maximized: false,
   parentController: controller("competence"),
+  maximized: alias('parentController.firstMaximized'),
   application: controller(),
   config: service(),
   access: service(),
@@ -29,11 +29,9 @@ export default Controller.extend({
   actions: {
     maximize() {
       this.set("maximized", true);
-      this.get("parentController").send("maximizeChildComponent");
     },
     minimize() {
       this.set("maximized", false);
-      this.get("parentController").send("minimizeChildComponent");
     },
     close() {
       this.set("maximized", false);
