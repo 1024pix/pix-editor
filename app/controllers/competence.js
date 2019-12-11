@@ -118,9 +118,6 @@ export default Controller.extend({
     newTube() {
       this.transitionToRoute('competence.tube.new', this.get('competence'));
     },
-    showAlternatives(challenge) {
-      this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), challenge);
-    },
     exportSkills() {
       this.get('application').send('isLoading','Export des acquis...');
       const competence = this.get('competence');

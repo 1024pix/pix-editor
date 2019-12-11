@@ -147,7 +147,7 @@ export default Controller.extend({
       this.get('parentController').send('copyChallenge', this.get('challenge'));
     },
     showAlternatives() {
-      this.get('parentController').send('showAlternatives', this.get('challenge'));
+      this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), this.get('challenge'), { queryParams: { secondMaximized: false }});
     },
     validate() {
       return this._confirm('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
