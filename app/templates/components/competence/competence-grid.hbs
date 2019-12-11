@@ -4,14 +4,14 @@
     {{#if (or displayAllTubes tube.hasProductionChallenge) }}
       <tr>
         <td>
-          {{#if (eq view "skills")}}
-            {{#link-to "competence.tube.index" competenceModel tube}}{{tube.name}}{{/link-to}}
+          {{#if (eq section "skills")}}
+            {{#link-to "competence.tubes.single" competenceModel tube}}{{tube.name}}{{/link-to}}
           {{else}}
             {{tube.name}}
           {{/if}}
         </td>
         {{#each tube.filledSkills as |skill index|}}
-         {{competence/grid/grid-cell view=view skill=skill link=link tubeId=tube.id competenceModel=competenceModel index=index}}
+         {{competence/grid/grid-cell section=section view=view skill=skill link=link tubeId=tube.id competenceModel=competenceModel index=index}}
         {{/each}}
       </tr>
     {{/if}}

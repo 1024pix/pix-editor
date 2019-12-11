@@ -38,7 +38,9 @@ export default Route.extend({
       let model = this.modelFor(this.routeName);
       model.set('needsRefresh', true);
       this.refresh();
-    },
+    }
+    // TODO: understand this
+    /*,
     willTransition(transition) {
       try {
         if (transition.targetName === "challenge") {
@@ -67,6 +69,6 @@ export default Route.extend({
         // do nothing
       }
       return true;
-    }
+    }*/
   }
 });

@@ -204,12 +204,12 @@ export default Controller.extend({
     init() {
       let parentController = this.get('parentController');
       if (!this.get('challenge.isValidated')) {
-        parentController.send('selectView', 'workbench');
+        parentController.set('view', 'workbench');
         if (this.get('challenge.isWorkbench')) {
-          parentController.send('selectView', 'workbench-list');
+          parentController.set('view', 'workbench-list');
         }
       } else {
-        parentController.send('selectView', 'production');
+        parentController.set('view', 'production');
       }
     },
     showVersions() {

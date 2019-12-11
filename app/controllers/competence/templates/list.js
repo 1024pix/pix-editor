@@ -26,7 +26,7 @@ export default Controller.extend({
       })
     },
     init() {
-      this.get("parentController").send("selectView", "workbench");
+      this.get("parentController").set("view", "workbench");
     }
   }
 });
