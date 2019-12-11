@@ -24,16 +24,7 @@ export default Component.extend({
       if (isSelected) {
         return this.get("clearTube")(tube)
       }
-      const productionSkill = tube.get("productionSkills");
-      const level = productionSkill[productionSkill.length - 1].get('level');
-      const skillIds = productionSkill.reduce((ids, skill) => {
-        if (skill) {
-          skill.set('_selected', true);
-          ids.push(skill.id);
-        }
-        return ids;
-      }, []);
-      this.get('setTubeLevel')(tube, level, skillIds);
+      this.get('setTubeLevel')(tube);
     }
   }
 });
