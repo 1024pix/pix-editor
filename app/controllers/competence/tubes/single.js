@@ -86,7 +86,7 @@ export default Controller.extend({
       .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Tube mis à jour", true);
-        this.transitionToRoute("competence.tube.index", newCompetence, tube);
+        this.transitionToRoute("competence.tubes.single", newCompetence, tube);
       })
       .catch((error) => {
         console.error(error);

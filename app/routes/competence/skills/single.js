@@ -5,7 +5,8 @@ export default Route.extend({
     return this.get('store').findRecord('skill', params.skill_id);
   },
   afterModel(model) {
-    const section = this.controllerFor('competence').get('section');
+    //TODO: understand this
+    /*const section = this.controllerFor('competence').get('section');
     if (section === 'challenges') {
       const template = model.get('productionTemplate');
     if (template) {
@@ -15,7 +16,8 @@ export default Route.extend({
       }
     } else {
       return model.pinRelationships();
-    }
+    }*/
+    return model.pinRelationships();
   },
   setupController(controller) {
     this._super(...arguments);
@@ -23,6 +25,7 @@ export default Route.extend({
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
     controller.set('competence', this.modelFor('competence'));
+    this.controllerFor('competence').set('section', 'skills');
   },
   actions: {
     willTransition(transition) {
@@ -31,7 +34,13 @@ export default Route.extend({
         transition.abort();
       } else {
         this.controller.get('model').rollbackAttributes();
-
+        if (transition.targetName === 'competence.templates.index') {
+          const skill = this.controller.get('skill');
+          const template = skill.get('productionTemplate');
+          if (template) {
+            return this.transitionTo('competence.templates.single', this.controller.get('competence'), template);
+          }
+        }
         return true;
       }
     }

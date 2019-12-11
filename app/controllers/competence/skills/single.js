@@ -104,7 +104,7 @@ export default Controller.extend({
         .then(() => {
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Acquis mis à jour", true);
-          this.transitionToRoute("competence.skill.index", competence, skill);
+          this.transitionToRoute("competence.skills.single", competence, skill);
         })
         .catch((error) => {
           console.error(error);

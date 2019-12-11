@@ -16,7 +16,7 @@ export default Tube.extend({
         this.get('application').send('showMessage', 'Tube créé', true);
       })
       .then(() => {
-        this.transitionToRoute("competence.tube.index", competence, tube);
+        this.transitionToRoute("competence.tubes.single", competence, tube);
       })
       .catch((error) => {
         console.error(error);

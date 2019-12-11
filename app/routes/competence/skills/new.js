@@ -21,5 +21,6 @@ export default Skill.extend({
     this._super(...arguments);
     controller.set('competence', this.modelFor('competence'));
     controller.send("edit");
+    this.controllerFor('competence').set('section', 'skills');
   }
 });
