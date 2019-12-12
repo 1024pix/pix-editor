@@ -7,8 +7,7 @@ export default Component.extend({
   hiddenClass:computed('hidden', function() {
     return this.get('hidden')?'hidden':'';
   }),
-  displayAllTubes:computed('view', function() {
-    const view = this.get('view');
-    return (view === 'skills' || view === 'workbench');
+  displayAllTubes:computed('section', 'view', function() {
+    return this.get('section') === 'skills' || this.get('view') === 'workbench';
   })
 });
