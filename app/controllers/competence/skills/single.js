@@ -35,7 +35,7 @@ export default Controller.extend({
     },
     close() {
       this.set("maximized", false);
-      this.get("parentController").send("closeChildComponent");
+      this.transitionToRoute('competence.skills', this.get('competence'));
     },
     preview() {
       const template = this.get("skill.productionTemplate");
