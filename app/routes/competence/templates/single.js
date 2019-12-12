@@ -30,12 +30,12 @@ export default Route.extend({
           transition.abort();
         }
       } else {
-        if (transition.targetName === 'competence.skills.index') {
+        if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
           const challenge = this.controller.get('challenge');
           if (!challenge.get('isWorkbench')) {
             const skills = challenge.get('skills');
             if (skills.length > 0) {
-              return this.transitionTo('competence.skills.single', this.controller.get('competence'), skills.get('firstObject'));
+              return this.transitionTo(transition.targetName.replace('index', 'single'), this.controller.get('competence'), skills.get('firstObject'));
             }
           }
         }

@@ -28,7 +28,8 @@ export default Controller.extend({
       case 'competence.index':
       case 'competence.skills.index':
       case 'competence.templates.index':
-        return 'full';
+      case 'competence.quality.index':
+              return 'full';
       default:
         return 'half';
     }
@@ -134,8 +135,7 @@ export default Controller.extend({
           this.transitionToRoute('competence.templates', this.get('competence'));
           break;
         case 'quality':
-          //TODO: créer une route dédiée
-          this.set('section', 'quality');
+          this.transitionToRoute('competence.quality', this.get('competence'));
           break;
       }
     }

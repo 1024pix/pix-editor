@@ -26,6 +26,9 @@ Router.map(function() {
       this.route('single', {path:'/:skill_id'});
       this.route('new', {path:'/new/:tube_id/:level'});
     });
+    this.route('quality', function() {
+      this.route('single', {path:'/:skill_id'});
+    });
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});
