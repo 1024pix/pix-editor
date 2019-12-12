@@ -4,13 +4,21 @@ export default Route.extend({
   model(params) {
     return this.get('store').findRecord('challenge', params.template_id);
   },
-  setupController(controller) {
+  setupController(controller, model) {
     this._super(...arguments);
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
     controller.set('competence', this.modelFor('competence'));
-    this.controllerFor('competence').set('section', 'challenges');
-    controller.send('init');
+    const competenceController = this.controllerFor('competence');
+    competenceController.set('section', 'challenges');
+    if (!model.get('isValidated')) {
+      competenceController.set('view', 'workbench');
+      if (model.get('isWorkbench')) {
+        competenceController.set('view', 'workbench-list');
+      }
+    } else {
+      competenceController.set('view', 'production');
+    }
   },
   actions: {
     willTransition(transition) {

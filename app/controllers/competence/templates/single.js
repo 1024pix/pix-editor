@@ -200,17 +200,6 @@ export default Controller.extend({
     challengeLog() {
       $(`.${this.get('popinLogClass')}`).modal('show');
     },
-    init() {
-      let parentController = this.get('parentController');
-      if (!this.get('challenge.isValidated')) {
-        parentController.set('view', 'workbench');
-        if (this.get('challenge.isWorkbench')) {
-          parentController.set('view', 'workbench-list');
-        }
-      } else {
-        parentController.set('view', 'production');
-      }
-    },
     showVersions() {
       this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));
     },
