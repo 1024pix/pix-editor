@@ -3,6 +3,8 @@ import Route from '@ember/routing/route';
 export default Route.extend({
   setupController() {
     this._super(...arguments);
-    this.controllerFor('competence').set('section', 'skills');
+    const competenceController = this.controllerFor('competence');
+    competenceController.set('section', 'skills');
+    competenceController.set('firstMaximized', false);
   }
 });

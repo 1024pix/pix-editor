@@ -125,10 +125,10 @@ export default Controller.extend({
     selectSection(value) {
       switch(value) {
         case 'skills':
-          this.transitionToRoute('competence.skills', this.get('competence'), {queryParams: {firstMaximized: false}});
+          this.transitionToRoute('competence.skills', this.get('competence'));
           break;
         case 'challenges':
-          this.transitionToRoute('competence.templates', this.get('competence'), {queryParams: {firstMaximized: false}});
+          this.transitionToRoute('competence.templates', this.get('competence'));
           break;
         case 'quality':
           //TODO: créer une route dédiée
