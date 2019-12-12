@@ -5,18 +5,6 @@ export default Route.extend({
     return this.get('store').findRecord('skill', params.skill_id);
   },
   afterModel(model) {
-    //TODO: understand this
-    /*const section = this.controllerFor('competence').get('section');
-    if (section === 'challenges') {
-      const template = model.get('productionTemplate');
-    if (template) {
-        this.transitionTo('competence.templates.single', this.modelFor('competence'), template);
-      } else {
-        this.transitionTo('competence.templates.list', this.modelFor('competence'), model);
-      }
-    } else {
-      return model.pinRelationships();
-    }*/
     return model.pinRelationships();
   },
   setupController(controller) {
