@@ -1,7 +1,7 @@
 import Tube from './single';
 
 export default Tube.extend({
-  templateName: "competence/tube/single",
+  templateName: "competence/tubes/single",
   model() {
     return this.get("store").createRecord("tube");
   },
