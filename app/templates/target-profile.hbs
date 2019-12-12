@@ -38,7 +38,7 @@
                 <i class="dropdown icon"></i>
                 <span class="text">{{area.name}}</span>
                 <div class="menu">
-                  {{#each area.competences as |competence|}}
+                  {{#each area.sortedCompetences as |competence|}}
                     <div class="item"{{action "scrollTo"
                                               (concat "competence-profile-anchor-" competence.id)}}>{{competence.code}} {{competence.title}}</div>
                   {{/each}}
