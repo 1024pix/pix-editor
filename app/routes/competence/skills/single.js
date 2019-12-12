@@ -12,7 +12,9 @@ export default Route.extend({
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
     controller.set('competence', this.modelFor('competence'));
-    this.controllerFor('competence').set('section', 'skills');
+    const competenceController = this.controllerFor('competence');
+    competenceController.set('section', 'skills');
+    competenceController.set('view', null);
   },
   actions: {
     willTransition(transition) {

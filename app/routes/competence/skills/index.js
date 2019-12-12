@@ -5,6 +5,7 @@ export default Route.extend({
     this._super(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.set('section', 'skills');
+    competenceController.set('view', null);
     competenceController.set('firstMaximized', false);
   }
 });
