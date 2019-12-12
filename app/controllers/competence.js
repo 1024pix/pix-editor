@@ -81,7 +81,7 @@ export default Controller.extend({
       this.transitionToRoute('competence.templates.new', this.get('competence'), {queryParams: {from: challenge.get('id')}});
     },
     newTube() {
-      this.transitionToRoute('competence.tube.new', this.get('competence'));
+      this.transitionToRoute('competence.tubes.new', this.get('competence'));
     },
     exportSkills() {
       this.get('application').send('isLoading','Export des acquis...');
