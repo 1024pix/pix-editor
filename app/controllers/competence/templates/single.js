@@ -91,7 +91,7 @@ export default Controller.extend({
     },
     close() {
       this.set('maximized', false);
-      this.get('parentController').send('closeChildComponent');
+      this.transitionToRoute('competence.templates', this.get('competence'));
     },
     preview() {
       let challenge = this.get('challenge');
