@@ -39,36 +39,5 @@ export default Route.extend({
       model.set('needsRefresh', true);
       this.refresh();
     }
-    // TODO: understand this
-    /*,
-    willTransition(transition) {
-      try {
-        if (transition.targetName === "challenge") {
-          let challengeId = transition.params.challenge.challenge_id;
-          let competence = this.modelFor("competence");
-          let productionIds = competence.get("productionChallengeIds");
-          if (productionIds.includes(challengeId)) {
-            let challenge = this.get("store").peekRecord("challenge", challengeId);
-            if (challenge) {
-              if (challenge.template) {
-                this.transitionTo("competence.templates.single", competence, challenge);
-              } else {
-                let skills = competence.get("skills");
-                let skill = skills.filter((skill) => {
-                  return skill.get("challenges").includes(challenge);
-                });
-                if (skill.length > 0  && skill[0].template) {
-                  this.transitionTo("competence.templates.single.alternatives.single", competence, skill[0].template, challenge);
-                }
-              }
-            }
-          }
-        }
-      }
-      catch(error) {
-        // do nothing
-      }
-      return true;
-    }*/
   }
 });
