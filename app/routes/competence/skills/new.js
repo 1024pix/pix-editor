@@ -1,7 +1,7 @@
-import Skill from './index';
+import Skill from './single';
 
 export default Skill.extend({
-  templateName: "competence/skill/index",
+  templateName: "competence/skills/single",
   model() {
     return {
       skill:this.get("store").createRecord("skill",{status:'en construction'})
@@ -19,8 +19,6 @@ export default Skill.extend({
   },
   setupController(controller) {
     this._super(...arguments);
-    controller.set('competence', this.modelFor('competence'));
-    controller.send("edit");
-    this.controllerFor('competence').set('section', 'skills');
+    controller.send('edit');
   }
 });
