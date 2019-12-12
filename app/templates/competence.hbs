@@ -2,8 +2,8 @@
   {{competence/competence-header competence=competence section=section selectSection=(action "selectSection")}}
   {{competence/competence-actions section=section view=view refresh=(action "refresh") selectView=(action "selectView") hidden=firstMaximized shareSkills=(action "exportSkills")}}
   <div class="ui attached segment competence {{size}} {{competenceHidden}}">
-    {{competence/competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=(not-eq view "workbench-list") link=skillLink}}
-    {{competence/competence-grid tubes=competence.sortedTubes competenceModel=model hidden=(eq view "workbench-list") section=section view=view link=skillLink production=production}}
+    {{competence/competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=displayGrid link=skillLink}}
+    {{competence/competence-grid tubes=competence.sortedTubes competenceModel=model hidden=(not displayGrid) section=section view=view link=skillLink production=production}}
   </div>
   {{competence/competence-footer competence=competence section=section view=view selectView=(action "selectView") hidden=firstMaximized newTube=(action "newTube") newTemplate=(action "newTemplate")}}
   {{outlet}}

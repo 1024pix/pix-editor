@@ -20,6 +20,9 @@ export default Controller.extend({
   competenceHidden: computed('firstMaximized', function () {
     return this.get('firstMaximized') ? 'hidden' : '';
   }),
+  displayGrid: computed('section', 'view', function() {
+    return this.get('section') != 'challenges' || this.get('view') != 'workbench-list';
+  }),
   size: computed('router.currentRouteName', function () {
     switch(this.get('router.currentRouteName')) {
       case 'competence.index':
