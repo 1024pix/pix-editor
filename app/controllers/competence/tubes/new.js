@@ -1,4 +1,4 @@
-import Tube from './index';
+import Tube from './single';
 
 export default Tube.extend({
   competence:null,
