@@ -30,7 +30,7 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     const area = EmberObject.create({
       name: 'area_name',
-      competences: [
+      sortedCompetences: [
         competence_1,
         competence_2,
         competence_3,
