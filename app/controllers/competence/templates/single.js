@@ -82,7 +82,6 @@ export default Controller.extend({
       this.set('popinImageSrc', illustration.url);
       this.ele
       $(`.${this.get('popinImageClass')}`).modal('show');
-      this.get('application').send('showPopinImage', );
     },
     maximize() {
       this.set('maximized', true);
