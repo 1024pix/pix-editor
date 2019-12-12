@@ -14,7 +14,7 @@ export default Controller.extend({
   parentController:controller('competence'),
   config:service(),
   access:service(),
-  maximized:false,
+  maximized:alias('parentController.firstMaximized'),
   copyOperation:false,
   edition:false,
   creation:false,
@@ -82,19 +82,16 @@ export default Controller.extend({
       this.set('popinImageSrc', illustration.url);
       this.ele
       $(`.${this.get('popinImageClass')}`).modal('show');
-      this.get('application').send('showPopinImage', );
     },
     maximize() {
       this.set('maximized', true);
-      this.get('parentController').send('maximizeChildComponent');
     },
     minimize() {
       this.set('maximized', false);
-      this.get('parentController').send('minimizeChildComponent');
     },
     close() {
       this.set('maximized', false);
-      this.get('parentController').send('closeChildComponent');
+      this.transitionToRoute('competence.templates', this.get('competence'));
     },
     preview() {
       let challenge = this.get('challenge');
@@ -149,7 +146,7 @@ export default Controller.extend({
       this.get('parentController').send('copyChallenge', this.get('challenge'));
     },
     showAlternatives() {
-      this.get('parentController').send('showAlternatives', this.get('challenge'));
+      this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), this.get('challenge'), { queryParams: { secondMaximized: false }});
     },
     validate() {
       return this._confirm('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
@@ -202,18 +199,6 @@ export default Controller.extend({
     },
     challengeLog() {
       $(`.${this.get('popinLogClass')}`).modal('show');
-    },
-    init() {
-      let parentController = this.get('parentController');
-      if (!this.get('challenge.isValidated')) {
-        parentController.send('selectView', 'workbench');
-        if (this.get('challenge.isWorkbench')) {
-          parentController.send('selectView', 'workbench-list');
-        }
-      } else {
-        parentController.send('selectView', 'production');
-      }
-      this.set('maximized', parentController.get('childComponentMaximized'));
     },
     showVersions() {
       this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));

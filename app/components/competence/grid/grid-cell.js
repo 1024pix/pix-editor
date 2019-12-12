@@ -16,22 +16,26 @@ export default Component.extend({
   hasStatusProduction: false,
 
   // Computed
-  mayAddSkill: computed('view', 'config.access', function () {
-    return this.get('view') === 'skills' && this.get('access').mayEditSkills();
+  mayAddSkill: computed('section', 'config.access', function () {
+    return this.get('section') === 'skills' && this.get('access').mayEditSkills();
   }),
 
-  displaySkill: computed('skill','skill.{productionTemplate,productionTemplate.isFulfilled}','hasStatusProduction','view', function () {
+  displaySkill: computed('skill','skill.{productionTemplate,productionTemplate.isFulfilled}','hasStatusProduction','section', 'view', function () {
     const skill = this.get('skill');
     if(skill){
+      const section = this.get('section');
       const view = this.get('view');
       const productionTemplate = this.get('skill.productionTemplate');
-      if ((view === 'production' && productionTemplate)
-        || (view === 'workbench')
-        || (view === 'skills')
-        || (view === 'quality' && productionTemplate) ) {
-        return true;
+      switch(section) {
+        case 'challenges':
+          return ((view === 'production' && productionTemplate)
+          || (view === 'workbench'));
+        case 'quality':
+          return (productionTemplate != null);
+        case 'skills':
+        default:
+          return true;
       }
-      return false;
     }
     return false;
   })

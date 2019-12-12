@@ -18,12 +18,12 @@ Router.map(function() {
       })
       this.route('list', {path:'/list/:skill_id'});
     });
-    this.route('tube', function() {
-      this.route('index', {path:'/:tube_id'});
+    this.route('tubes', function() {
+      this.route('single', {path:'/:tube_id'});
       this.route('new');
     });
-    this.route('skill', function() {
-      this.route('index', {path:'/:skill_id'});
+    this.route('skills', function() {
+      this.route('single', {path:'/:skill_id'});
       this.route('new', {path:'/new/:tube_id/:level'});
     });
   });

@@ -6,8 +6,8 @@ import $ from "jquery";
 import {computed} from '@ember/object';
 
 export default Controller.extend({
-  maximized: false,
   parentController: controller("competence"),
+  maximized: alias('parentController.firstMaximized'),
   application: controller(),
   config: service(),
   access: service(),
@@ -29,15 +29,13 @@ export default Controller.extend({
   actions: {
     maximize() {
       this.set("maximized", true);
-      this.get("parentController").send("maximizeChildComponent");
     },
     minimize() {
       this.set("maximized", false);
-      this.get("parentController").send("minimizeChildComponent");
     },
     close() {
       this.set("maximized", false);
-      this.get("parentController").send("closeChildComponent");
+      this.transitionToRoute('competence.skills', this.get('competence'));
     },
     preview() {
       const template = this.get("skill.productionTemplate");
@@ -106,7 +104,7 @@ export default Controller.extend({
         .then(() => {
           this.get("application").send("finishedLoading");
           this.get("application").send("showMessage", "Acquis mis à jour", true);
-          this.transitionToRoute("competence.skill.index", competence, skill);
+          this.transitionToRoute("competence.skills.single", competence, skill);
         })
         .catch((error) => {
           console.error(error);

@@ -2,6 +2,7 @@ import Template from '../../single';
 import {computed} from '@ember/object';
 import {scheduleOnce} from '@ember/runloop';
 import {inject as controller} from '@ember/controller';
+import { alias } from '@ember/object/computed';
 
 export default Template.extend({
   alternative:true,
@@ -11,6 +12,7 @@ export default Template.extend({
   copyZoneId:"copyZoneDraft",
   elementClass:"alternative-challenge",
   parentController:controller("competence.templates.single.alternatives"),
+  maximized:alias('parentController.secondMaximized'),
   defaultSaveChangelog:"Mise à jour de la déclinaison",
   challengeTitle:computed("creation", "challenge", function() {
     if (this.get("creation")) {

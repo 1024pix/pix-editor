@@ -8,11 +8,11 @@ import $ from "jquery";
 export default Controller.extend({
   edition:false,
   creation:false,
-  maximized:false,
   wasMaximized:false,
   tube:alias('model'),
   application:controller(),
   parentController:controller("competence"),
+  maximized:alias('parentController.firstMaximized'),
   areas:null,
   competence:null,
   access:service(),
@@ -29,11 +29,9 @@ export default Controller.extend({
   actions: {
     maximize() {
       this.set("maximized", true);
-      this.get("parentController").send("maximizeChildComponent");
     },
     minimize() {
       this.set("maximized", false);
-      this.get("parentController").send("minimizeChildComponent");
     },
     close() {
       this.set("maximized", false);
@@ -88,7 +86,7 @@ export default Controller.extend({
       .then(() => {
         this.get("application").send("finishedLoading");
         this.get("application").send("showMessage", "Tube mis à jour", true);
-        this.transitionToRoute("competence.tube.index", newCompetence, tube);
+        this.transitionToRoute("competence.tubes.single", newCompetence, tube);
       })
       .catch((error) => {
         console.error(error);

@@ -10,23 +10,26 @@ export default Component.extend({
   hiddenClass:computed('hidden', function(){
     return this.get('hidden')?'hidden':'';
   }),
-  skillClass:computed('view', function(){
-    return (this.get('view') === 'skills')?'skill-mode':'';
+  skillClass:computed('section', function(){
+    return (this.get('section') === 'skills')?'skill-mode':'';
   }),
-  displayWorkbenchViews:computed('view', function() {
+  displayWorkbenchViews:computed('section', 'view', function() {
+    const section = this.get('section');
     const view = this.get('view');
-    return view === 'workbench' || view === 'workbench-list';
+    return section === 'challenges' && view !== 'production';
   }),
-  displayProductionStats:computed('view', function() {
+  displayProductionStats:computed('section', 'view', function() {
+    const section = this.get('section');
     const view = this.get('view');
-    return view === 'quality' || view === 'production';
+    return section === 'quality' || (section === 'challenges' && view === 'production');
   }),
-  mayCreateTube:computed('view', 'config.access', function() {
-    return this.get('view') === 'skills' && this.get('access').mayCreateTube();
+  mayCreateTube:computed('section', 'config.access', function() {
+    return this.get('section') === 'skills' && this.get('access').mayCreateTube();
   }),
-  mayCreateTemplate:computed('view', 'config.access', function() {
+  mayCreateTemplate:computed('section', 'view', 'config.access', function() {
+    const section = this.get('section');
     const view = this.get('view');
-    return (view === 'workbench' || view === 'workbench-list') && this.get('access').mayCreateTemplate();
+    return section === 'challenges' && (view === 'workbench' || view === 'workbench-list') && this.get('access').mayCreateTemplate();
   })
 
 });

@@ -24,9 +24,6 @@ export default Controller.extend({
           this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { fromSkill: this.get("model").get("id")}});
         }
       })
-    },
-    init() {
-      this.get("parentController").send("selectView", "workbench");
     }
   }
 });

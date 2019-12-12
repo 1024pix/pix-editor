@@ -1,4 +1,4 @@
-import Skill from './index';
+import Skill from './single';
 import { alias } from '@ember/object/computed';
 
 export default Skill.extend({

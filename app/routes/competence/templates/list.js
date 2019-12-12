@@ -7,6 +7,8 @@ export default Route.extend({
   setupController(controller) {
     this._super(...arguments);
     controller.set("competence", this.modelFor("competence"));
-    controller.send("init");
+    const competenceController = this.controllerFor('competence');
+    competenceController.set("view", "workbench");
+    competenceController.set("firstMaximized", false);
   }
 });
