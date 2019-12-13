@@ -14,9 +14,15 @@ export default Route.extend({
         return Promise.all(getSkills);
       })
       .then(skillsSet => {
-        // TODO: this bugs when a challenge is attached to several skills
-        const getChallenges = skillsSet.map( skills => skills.map(skill => skill.hasMany('challenges').reload())).flat();
-        return Promise.all(getChallenges);
+        // cannot use skills.hasMany('challenges').reload() since
+        // it bugs when a challenge is linked to several skills
+        const challenges = skillsSet.map( skills => skills.reduce((list, skill) => {
+          return list.concat(skill.hasMany('challenges').ids());
+        }, [])).flat();
+        const uniqueChallenges = [...new Set(challenges)];
+        const store = this.get('store');
+        const reloadChallenges = uniqueChallenges.map(challengeId => store.findRecord('challenge', challengeId, { reload: true }));
+        return Promise.all(reloadChallenges);
       })
       .then(() => {
         model.set('needsRefresh', false);

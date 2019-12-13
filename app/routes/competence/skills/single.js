@@ -28,8 +28,10 @@ export default Route.extend({
           const template = skill.get('productionTemplate');
           if (template) {
             return this.transitionTo('competence.templates.single', this.controller.get('competence'), template);
+          } else {
+            return this.transitionTo('competence.templates.list', this.controller.get('competence'), skill);
           }
-        } else if (transition.targetName === 'competence.quality.index') {
+        } else if (transition.targetName === 'competence.quality.index' && this.controller.get('skill.productionTemplate')) {
           return this.transitionTo('competence.quality.single', this.controller.get('competence'), this.controller.get('skill'));
         }
 

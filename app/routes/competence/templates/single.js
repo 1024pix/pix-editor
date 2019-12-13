@@ -34,8 +34,13 @@ export default Route.extend({
           const challenge = this.controller.get('challenge');
           if (!challenge.get('isWorkbench')) {
             const skills = challenge.get('skills');
-            if (skills.length > 0) {
-              return this.transitionTo(transition.targetName.replace('index', 'single'), this.controller.get('competence'), skills.get('firstObject'));
+            const skill = skills.get('firstObject');
+            if (skill) {
+              if (transition.targetName === 'competence.quality.index' && skill.get('productionTemplate')) {
+                return this.transitionTo('competence.quality.single', this.controller.get('competence'), skill);
+              } else if (transition.targetName === 'competence.skills.index') {
+                return this.transitionTo('competence.skills.single', this.controller.get('competence'), skill);
+              }
             }
           }
         }
