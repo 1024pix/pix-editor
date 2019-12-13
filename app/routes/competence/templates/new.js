@@ -19,8 +19,9 @@ export default Template.extend({
   },
   setupController(controller) {
     this._super(...arguments);
+    const competenceController = this.controllerFor('competence');
+    competenceController.set('maximized', true);
     controller.send("edit");
-    controller.send("init");
   },
   resetController(controller, isExiting) {
     if (isExiting) {
