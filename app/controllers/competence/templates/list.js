@@ -15,15 +15,13 @@ export default Controller.extend({
       this.get("parentController").send("closeChildComponent");
     },
     newVersion() {
-      return this.get("model.sortedTemplates")
-      .then(templates => {
-        if (templates.length>0) {
-          let template = templates.get("firstObject");
-          this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { from: template.get("id")}});
-        } else {
-          this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { fromSkill: this.get("model").get("id")}});
-        }
-      })
+      const templates = this.get("model.sortedTemplates")
+      if (templates.length>0) {
+        let template = templates.get("firstObject");
+        this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { from: template.get("id")}});
+      } else {
+        this.transitionToRoute("competence.templates.new", this.get("competence"), { queryParams: { fromSkill: this.get("model").get("id")}});
+      }
     }
   }
 });
