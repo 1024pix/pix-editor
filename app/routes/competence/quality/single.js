@@ -1,20 +1,12 @@
-import Route from '@ember/routing/route';
+import SkillRoute from '../skills/single';
 
-export default Route.extend({
-  model(params) {
-    return this.get('store').findRecord('skill', params.skill_id);
-  },
-  afterModel(model) {
-    return model.pinRelationships();
-  },
-  setupController(controller) {
+export default SkillRoute.extend({
+  templateName: "competence/skills/single",
+
+  setupController() {
     this._super(...arguments);
-    controller.set('edition', false);
-    controller.set('areas', this.modelFor('application'));
-    controller.set('competence', this.modelFor('competence'));
     const competenceController = this.controllerFor('competence');
-    competenceController.set('section', 'skills');
-    competenceController.set('view', null);
+    competenceController.set('section', 'quality');
   },
   actions: {
     willTransition(transition) {
@@ -29,12 +21,12 @@ export default Route.extend({
           if (template) {
             return this.transitionTo('competence.templates.single', this.controller.get('competence'), template);
           }
-        } else if (transition.targetName === 'competence.quality.index') {
-          return this.transitionTo('competence.quality.single', this.controller.get('competence'), this.controller.get('skill'));
+        } else if (transition.targetName === 'competence.skills.index') {
+          return this.transitionTo('competence.skills.single', this.controller.get('competence'), this.controller.get('skill'));
         }
-
         return true;
       }
     }
   }
+
 });

@@ -10,6 +10,18 @@ export default Route.extend({
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
     controller.set('competence', this.modelFor('competence'));
-    this.controllerFor('competence').set('view', 'skills');
+    const competenceController = this.controllerFor('competence');
+    competenceController.set('section', 'skills');
+    competenceController.set('view', null);
+  },
+  actions: {
+    willTransition(transition) {
+      if (this.controller.get('edition') &&
+        !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+        transition.abort();
+      } else {
+        return true;
+      }
+    }
   }
 });
