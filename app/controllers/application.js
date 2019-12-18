@@ -17,12 +17,6 @@ export default Controller.extend({
     this.messages = [];
   },
   actions: {
-    loadCompetence(id) {
-      this.transitionToRoute("competence", id);
-    },
-    toggleSidebar(){
-      $('#main-sidebar').sidebar('toggle');
-    },
     showMessage(content, positive) {
       let messages = this.get("messages");
       let id = "message_"+Date.now();

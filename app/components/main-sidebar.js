@@ -2,7 +2,6 @@ import Component from '@ember/component';
 import ENV from 'pixeditor/config/environment';
 import {inject as service} from '@ember/service';
 import {alias} from '@ember/object/computed';
-import $ from 'jquery';
 
 export default Component.extend({
   tagName: '',
@@ -77,9 +76,7 @@ export default Component.extend({
       });
     }
   },
-  hideSidebar() {
-    $('#main-sidebar').sidebar('hide');
-  },
+
   _formatCSVString(str) {
     if (str) {
       return '"'+str.replace(/"/g, '""')+'"';
@@ -120,7 +117,7 @@ export default Component.extend({
                   table[skill.get('level')-1] = skill.get('name');
                   return table;
                 }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(',')
-              ]
+              ];
               fields = fields.map(field => this._formatCSVString(field));
               return content + '\n' + fields.join(',');
             }, content)
