@@ -138,8 +138,8 @@ export default DS.Model.extend({
     alternative.set('genealogy', 'Décliné 1');
     return alternative;
   },
-  alternatives:computed('isTemplate','version', 'firstSkill.alternatives', function() {
-    if (!this.get('isTemplate')) {
+  alternatives:computed('isTemplate','version', 'isWorkbench', 'firstSkill.alternatives', function() {
+    if (!this.get('isTemplate') || this.get('isWorkbench')) {
       return [];
     }
     let currentVersion = this.get('version');
