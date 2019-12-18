@@ -20,7 +20,7 @@
     </div>
     <div class="twelve wide column">
       {{#each filterTube as |tube|}}
-        <div class="tube-profile" {{action "showTube" tube}}>
+        <div class="tube-profile" {{action "clickOnTube" tube}}>
 
           <div class={{if tube.selectedLevel "active"}}>
             <i class="square icon {{if tube.selectedLevel "active check" "outline"}}">

@@ -15,16 +15,16 @@ export default Component.extend({
   }),
 
   actions: {
-    showTube(tube) {
+    clickOnTube(tube) {
       const showTubeDetails = this.get('showTubeDetails');
       const isSelected = tube.get('selectedLevel');
       if (showTubeDetails) {
-        return this.get('displayTube')(tube)
+        this.get('displayTube')(tube);
+      } else if (isSelected) {
+        this.get('clearTube')(tube);
+      } else {
+        this.get('setTubeLevel')(tube);
       }
-      if (isSelected) {
-        return this.get("clearTube")(tube)
-      }
-      this.get('setTubeLevel')(tube);
     }
   }
 });
