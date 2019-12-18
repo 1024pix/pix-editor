@@ -50,15 +50,7 @@ export default Controller.extend({
     },
     setProfileTube(tube, level, skills) {
       if (!level) {
-        const productionSkill = tube.get("productionSkills");
-        level = productionSkill[productionSkill.length - 1].get('level');
-        skills = productionSkill.reduce((ids, skill) => {
-          if (skill) {
-            skill.set('_selected', true);
-            ids.push(skill.id);
-          }
-          return ids;
-        }, []);
+        [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
       }
       tube.set('selectedLevel', level);
       tube.set('selectedSkills', skills);
@@ -111,12 +103,11 @@ export default Controller.extend({
     },
     openFile(event) {
       try {
-        const that = this;
         const file = event.target.files[0];
         const reader = new FileReader();
         const areas = this.get("model");
         const application = this.get("application");
-        reader.onload = function (event) {
+        reader.onload = (event) => {
           const data = event.target.result;
           const tubes = JSON.parse(data);
           const indexedTubes = tubes.reduce((values, tube) => {
@@ -130,7 +121,9 @@ export default Controller.extend({
               tubes.forEach(tube => {
                 if (indexedTubes[tube.id]) {
                   if (indexedTubes[tube.id].level === 'max') {
-                    that.send('setProfileTube',tube)
+                    const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
+                    tube.set("selectedLevel", level);
+                    tube.set("selectedSkills", skills);
                   } else {
                     tube.set("selectedLevel", indexedTubes[tube.id].level);
                     tube.set("selectedSkills", indexedTubes[tube.id].skills);
@@ -143,6 +136,7 @@ export default Controller.extend({
             })
           });
           application.send("showMessage", "Fichier correctement chargé", true);
+          //TODO: find a better way to be able to reload same file
           document.getElementById('target-profile__open-file').value = '';
         };
         reader.readAsText(file);
@@ -160,5 +154,17 @@ export default Controller.extend({
       const target = document.querySelector(`#${anchor}`);
       document.querySelector('.target-profile').scrollTo({top: target.offsetTop - 154, left: 0, behavior: 'smooth'})
     }
+  },
+  _getTubeSkillsAndMaxLevel(tube) {
+    const productionSkill = tube.get("productionSkills");
+    const level = productionSkill[productionSkill.length - 1].get('level');
+    const skills = productionSkill.reduce((ids, skill) => {
+      if (skill) {
+        skill.set('_selected', true);
+        ids.push(skill.id);
+      }
+      return ids;
+    }, []);
+    return [skills, level];
   }
 });
