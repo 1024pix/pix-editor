@@ -1,5 +1,5 @@
 <div class="ui container">
-  <div class="inverted menu left vertical main-sidebar wide ui sidebar ember-view uncover visible {{if config.lite "lite" ""}}">
+  <div class="inverted menu left vertical main-sidebar wide ui sidebar uncover visible {{if config.lite "lite" ""}}">
     <div class="header">Pix Editor</div>
     {{#ui-search showNoResults=true apiSettings=searchAPISettings error=searchErrors
                  onSelect=(action burger.state.actions.close)}}
@@ -9,20 +9,26 @@
       </div>
       <div class="results"></div>
     {{/ui-search}}
-    {{#ui-accordion class="inverted"}}
+    {{#accordion-list as |accordion|}}
+    <div class="ui accordion inverted">
       {{#each areas as |area|}}
-        <div class="title">
-          <i class="dropdown icon"></i>
-          {{area.name}}
-        </div>
-        <div class="content">
-          {{#each area.sortedCompetences as |competence|}}
-            {{#link-to "competence" competence.id class="item"
-                       invokeAction=(action burger.state.actions.close)}}{{competence.name}}{{/link-to}}
-          {{/each}}
-        </div>
+        {{#accordion.item as |accordionItem|}}
+          {{#accordionItem.toggle class="title"}}
+              <i class="dropdown icon"></i>
+              {{area.name}}
+          {{/accordionItem.toggle}}
+          {{#accordionItem.panel}}
+            <div class="content">
+              {{#each area.sortedCompetences as |competence|}}
+                {{#link-to "competence" competence.id class="item"
+                           invokeAction=(action burger.state.actions.close)}}{{competence.name}}{{/link-to}}
+              {{/each}}
+            </div>
+          {{/accordionItem.panel}}
+        {{/accordion.item}}
       {{/each}}
-    {{/ui-accordion}}
+    </div>
+    {{/accordion-list}}
     <div class="secondary-links">
       {{#link-to "target-profile" invokeAction=(action burger.state.actions.close)}}
         <i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
