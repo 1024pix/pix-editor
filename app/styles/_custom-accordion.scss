@@ -1,0 +1,5 @@
+.title.AccordionToggle.is-active{
+  &>i{
+    transform: rotate(90deg)!important;
+  }
+}
