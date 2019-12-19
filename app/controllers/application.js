@@ -11,6 +11,7 @@ export default Controller.extend({
   confirmTitle:"",
   confirmContent:"",
   confirmCallback:null,
+  displayModal_configuration:false,
   config:service(),
   init() {
     this._super(...arguments);
@@ -41,7 +42,7 @@ export default Controller.extend({
       this.set("loadingMessage", "");
     },
     openConfiguration() {
-      $('.popin-config-form').modal('show');
+      this.set('displayModal_configuration', true)
     },
     configUpdated() {
       this.send("refresh");

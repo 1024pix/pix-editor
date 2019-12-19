@@ -1,23 +1,17 @@
-import PopinBase from "./popin-base";
+import Component from '@ember/component';
 import { computed } from '@ember/object';
 import {inject as service} from '@ember/service';
 import DS from "ember-data";
 
-export default PopinBase.extend({
+export default Component.extend({
   config:service(),
   access:service(),
   saved:false,
   newAuthor:null,
+  displayModal:false,
   init() {
     this._super(...arguments);
     this.oldValues = {};
-  },
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    let that = this;
-    settings.onHidden = () => {
-      that.send('onHidden');
-    }
   },
   _setValue(key, value) {
     if (this.oldValues[key] == null) {
@@ -89,6 +83,19 @@ export default PopinBase.extend({
       return [];
     }
   }),
+  _closeModal(){
+    if (this.get("saved")) {
+      this.get("update")();
+    } else {
+      this._restoreValue("airtableKey");
+      this._restoreValue("configKey");
+      this._restoreValue("author");
+      this._restoreValue("pixUser");
+      this._restoreValue("pixPassword");
+    }
+    this.oldValues = {};
+    this.set('displayModal', false);
+  },
   actions:{
     saveConfig() {
       let config = this.get("config");
@@ -105,20 +112,11 @@ export default PopinBase.extend({
         config.set("access", accessLevel);
         config.save();
         this.set("saved", true);
-        this.execute("hide");
+        this._closeModal();
       });
     },
-    onHidden() {
-      if (this.get("saved")) {
-        this.get("update")();
-      } else {
-        this._restoreValue("airtableKey");
-        this._restoreValue("configKey");
-        this._restoreValue("author");
-        this._restoreValue("pixUser");
-        this._restoreValue("pixPassword");
-      }
-      this.oldValues = {};
+    closeModal(){
+      this._closeModal();
     }
   }
 });
