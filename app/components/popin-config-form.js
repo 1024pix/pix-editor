@@ -49,7 +49,6 @@ export default PopinBase.extend({
   }),
   author:computed("config.author", {
     get() {
-      console.debug(this.get('config.author'));
       return this.get("config.author");
     },
     set(key, value) {

@@ -1,4 +1,4 @@
-{{#burger-menu width=350 animation="reveal" open=true as |burger|}}
+{{#burger-menu width=350 animation="reveal" open=(if (eq currentRouteName "index") true false) as |burger|}}
   {{#burger.menu as |menu|}}
     {{main-sidebar areas=model burger=burger config=config openConfiguration=(action "openConfiguration") isLoading=(action "isLoading") finishedLoading=(action "finishedLoading") showMessage=(action "showMessage")}}
   {{/burger.menu}}
