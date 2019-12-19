@@ -49,6 +49,7 @@ export default PopinBase.extend({
   }),
   author:computed("config.author", {
     get() {
+      console.debug(this.get('config.author'));
       return this.get("config.author");
     },
     set(key, value) {
@@ -80,11 +81,15 @@ export default PopinBase.extend({
       return [];
     }
   }),
-  didInsertElement() {
-    // fix a bug with semantic ui accordion that is not correctly
-    // initialized in popin
-    this.$('.ui.accordion').accordion();
-  },
+  authorNames:computed("config.{decrypted,authorNames}", function() {
+    if (this.get("config.decrypted")) {
+      return DS.PromiseArray.create({
+        promise:this.get("config.authorNames")
+      })
+    } else {
+      return [];
+    }
+  }),
   actions:{
     saveConfig() {
       let config = this.get("config");
