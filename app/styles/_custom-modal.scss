@@ -6,20 +6,15 @@
   }
 
   .ember-modal-dialog {
+    width: 100vw;
+    background-color: transparent;
+    box-shadow: none;
+
     .ui.modal {
+      margin: 0 auto;
       position: static !important;
     }
   }
 }
 
-@media only screen and (min-width: 768px) {
-  .ui.modal {
-    width: 100%;
-  }
-}
 
-@media only screen and (min-width: 992px) {
-  .ui.modal {
-    width:850px;
-  }
-}

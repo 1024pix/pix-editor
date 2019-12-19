@@ -1,4 +1,11 @@
-<i class="close icon"></i>
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui modal visible active">
+<i class="close icon" {{action "closeModal"}}></i>
 <div class="header">
     Créer un tutoriel
 </div>
@@ -17,26 +24,19 @@
                 <label>Source</label>
                 {{input type="text" value=tutorial.source placeholder="Source"}}
             </div>
-            {{#if _initialized}}
               {{form-select title="License" defaultText="Licence" value=tutorial.license options=options.license edition=true}}
-            {{/if}}
         </div>
         <div class="three fields">
-            {{#if _initialized}}
               {{form-select title="Format" defaultText="Format" value=tutorial.format options=options.format edition=true}}
-            {{/if}}
             <div class="field">
                 <label>Durée (hh:mm:ss)</label>
                 {{input type="text" value=tutorial.duration placeholder="Durée (hh:mm:ss)"}}
             </div>
-            {{#if _initialized}}
               {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
-            {{/if}}
         </div>
         <div class="fields">
             <div class="field">
                 <label>Rechercher tags</label>
-                {{#if _initialized}}
                     {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
                                  onSelect=(action "selectTag")}}
                         <div class="ui icon input">
@@ -45,7 +45,6 @@
                         </div>
                         <div class="results"></div>
                     {{/ui-search}}
-                {{/if}}
             </div>
             <div class="twelve wide field">
                 {{#if hasSelectedTag}}
@@ -67,7 +66,7 @@
             <div class="field">
                 <label>Coup de coeur</label>
                 <div onclick={{action "toCrush"}} class="ui circular icon button crush">
-                    <i class="icon heart {{if isFavorite "" "outline" }}"></i>
+                    <i class="icon red heart {{if isFavorite "" "outline" }}"></i>
                 </div>
             </div>
         </div>
@@ -79,3 +78,6 @@
         <i class="save icon"></i>
     </div>
 </div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}

@@ -1,8 +1,8 @@
-import PopinBase from './popin-base';
+import Component from '@ember/component';
 import {inject as service} from '@ember/service';
 import { computed } from '@ember/object';
 
-export default PopinBase.extend({
+export default Component.extend({
   isFavorite: false,
   edition: true,
   tutorial:null,
@@ -67,7 +67,7 @@ export default PopinBase.extend({
     selectTag(item) {
       const selectedTags = this.get('selectedTags');
       if (item.id === 'create') {
-        const value = this.$(`.search-tag-input`).search('get value');
+        const value = document.querySelector(`.search-tag-input`).search('get value');
         if (value.indexOf('[') !== -1) {
           const pos = value.indexOf('[');
           const length = value.length;
@@ -80,7 +80,7 @@ export default PopinBase.extend({
             .then((tag) => {
               selectedTags.pushObject(tag);
               setTimeout(() => {
-                this.$(`.search-tag-input`).search('set value', '');
+                document.querySelector(`.search-tag-input`).search('set value', '');
               }, 1)
             });
         } else {
@@ -90,7 +90,7 @@ export default PopinBase.extend({
             .then((tag) => {
               selectedTags.pushObject(tag);
               setTimeout(() => {
-                this.$(`.search-tag-input`).search('set value', '');
+                document.querySelector(`.search-tag-input`).search('set value', '');
               }, 1)
             });
         }
@@ -103,7 +103,7 @@ export default PopinBase.extend({
               selectedTags.pushObject(tag);
             }
             setTimeout(() => {
-              this.$(`.search-tag-input`).search('set value', '');
+              this.querySelector(`.search-tag-input`).search('set value', '');
             }, 1)
           });
       }
@@ -133,6 +133,7 @@ export default PopinBase.extend({
           tutorials.pushObject(tutorial);
           this.get('application').send('finishedLoading');
           this.get('application').send('showMessage', 'Tutoriel créé', true);
+          this.set('display', false);
         })
         .catch((error) => {
           console.error(error);
@@ -141,8 +142,10 @@ export default PopinBase.extend({
         })
     },
     toCrush() {
-      let isFavorite = !this.get('isFavorite');
-      this.set('isFavorite', isFavorite);
+      this.toggleProperty('isFavorite');
+    },
+    closeModal(){
+      this.set('display', false);
     }
 
   }

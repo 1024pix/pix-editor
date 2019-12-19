@@ -8,7 +8,6 @@ export default Component.extend({
   access:service(),
   saved:false,
   newAuthor:null,
-  displayModal:false,
   init() {
     this._super(...arguments);
     this.oldValues = {};
@@ -94,7 +93,7 @@ export default Component.extend({
       this._restoreValue("pixPassword");
     }
     this.oldValues = {};
-    this.set('displayModal', false);
+    this.set('display', false);
   },
   actions:{
     saveConfig() {

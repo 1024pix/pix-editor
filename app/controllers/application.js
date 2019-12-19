@@ -11,7 +11,7 @@ export default Controller.extend({
   confirmTitle:"",
   confirmContent:"",
   confirmCallback:null,
-  displayModal_configuration:false,
+  displayConfiguration:false,
   config:service(),
   init() {
     this._super(...arguments);
@@ -42,7 +42,7 @@ export default Controller.extend({
       this.set("loadingMessage", "");
     },
     openConfiguration() {
-      this.set('displayModal_configuration', true)
+      this.set('displayConfiguration', true)
     },
     configUpdated() {
       this.send("refresh");
