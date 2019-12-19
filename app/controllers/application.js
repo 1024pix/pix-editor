@@ -18,17 +18,19 @@ export default Controller.extend({
   },
   actions: {
     showMessage(content, positive) {
-      let messages = this.get("messages");
-      let id = "message_"+Date.now();
+      const messages = this.get("messages");
+      const id = "message_"+Date.now();
       messages.pushObject({text:content, positive:positive?true:false, id:id});
-      let that = this;
       window.setTimeout(()=> {
-        $("#"+id).transition({animation:"fade", onComplete() {
-          let messages = that.get("messages");
-          messages.removeAt(0);
+        const nodeMessage = document.getElementById(id);
+        if(nodeMessage){
+          nodeMessage.addEventListener('transitionend', ()=>{
+            messages.removeAt(0);
+          });
+          nodeMessage.style.transition = 'opacity .8s ease';
+          nodeMessage.style.opacity = '0';
         }
-      });
-      }, 3000)
+      }, 3000);
     },
     isLoading(message) {
       this.set("loading", true);
