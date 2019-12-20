@@ -208,11 +208,13 @@ export default Controller.extend({
       if (this.changelogCallback) {
         this.changelogCallback(value);
       }
+      this.set('displayChangeLog', false);
     },
     changelogDeny() {
       if (this.changelogCallback) {
         this.changelogCallback(false);
       }
+      this.set('displayChangeLog', false);
     },
     moveTemplate() {
       this.set('displaySelectLocation', true)
@@ -455,7 +457,7 @@ export default Controller.extend({
   _getChangelog(defaultMessage, callback) {
     this.changelogCallback = callback;
     this.set('changelogDefault', defaultMessage);
-    $(`.${this.get('popinChangelogClass')}`).modal('show');
+    this.set('displayChangeLog', true);
   },
   _getNextTemplateVersion(skills) {
     return skills.map(skill => skill.getNextVersion()).reduce((current, version) => {
