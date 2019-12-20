@@ -1,13 +1,13 @@
-import PopinBase from './popin-base';
+import Component from '@ember/component';
 import { computed } from '@ember/object';
 
 
-export default PopinBase.extend({
+export default Component.extend({
   tube:null,
   skills:computed("tube", "selectedSkills", function() {
     let tube = this.get('tube');
     if (tube) {
-      const skills = tube.get('productionSkills')
+      const skills = tube.get('productionSkills');
       let selected = this.get("selectedSkills");
       return skills.reduce((orderedSkills, skill) => {
         let level = skill.get('level');
@@ -33,11 +33,14 @@ export default PopinBase.extend({
         return ids;
       }, []);
       this.get("setTubeLevel")(this.get("tube"), level, skillIds);
-      this.execute('hide');
+      this.set('display', false);
     },
     clear() {
       this.get("clearTube")(this.get("tube"));
-      this.execute('hide');
+      this.set('display', false);
+    },
+    closeModal(){
+      this.set('display', false);
     }
   }
 

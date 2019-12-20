@@ -12,6 +12,8 @@ export default Controller.extend({
   application: controller(),
   showTubeDetails: false,
   filter: false,
+  displayTubeLevel: false,
+  displaySingleEntry:false,
   init() {
     this._super();
     this.set("selectedTubeSkills", []);
@@ -46,7 +48,7 @@ export default Controller.extend({
       this.set('selectedTube', tube);
       this.set('selectedTubeLevel', tube.get("selectedLevel"));
       this.set('selectedTubeSkills', tube.get("selectedSkills"));
-      $('.popin-tube-level').modal('show');
+      this.set('displayTubeLevel', true);
     },
     setProfileTube(tube, level, skills) {
       if (!level) {
@@ -86,7 +88,7 @@ export default Controller.extend({
       this.get("fileSaver").saveAs(JSON.stringify(data), fileName);
     },
     getProfileId() {
-      $('.popin-enter-profile-id').modal('show');
+     this.set('displaySingleEntry', true)
     },
     generateSQL(profileId) {
       const ids = this._getSelectedSkillsIds();

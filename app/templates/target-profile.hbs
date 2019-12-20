@@ -67,6 +67,6 @@
   </div>
 </div>
 {{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel
-                   selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}
+                   selectedSkills=selectedTubeSkills tube=selectedTube display=displayTubeLevel}}
 {{popin-single-entry class="popin-enter-profile-id" title="Identifiant du profil cible" label="Identifiant"
-                     setValue=(action "generateSQL")}}
+                     setValue=(action "generateSQL") display=displaySingleEntry}}
