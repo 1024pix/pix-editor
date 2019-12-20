@@ -104,7 +104,7 @@
 </div>
 </div>
 {{popin-challenge-log challenge=challenge competence=competence class=popinLogClass}}
-{{popin-image src=popinImageSrc class=popinImageClass}}
+{{popin-image src=popinImageSrc display=displayImage}}
 {{popin-changelog approve=(action "changelogApprove") onDeny=(action "changelogDeny") value=changelogDefault class=popinChangelogClass}}
 {{#if mayMove}}
   {{popin-select-location display=displaySelectLocation onChange=(action "setSkills") title="Acquis du prototype" areas=areas competence=competence selectTubeLevel=true tube=challenge.firstSkill.tube level=challenge.skillLevels multipleLevel=true}}

@@ -22,6 +22,7 @@ export default Controller.extend({
   updateCache: true,
   alternative: false,
   displaySelectLocation: false,
+  displayImage:false,
   changelogCallback: null,
   defaultSaveChangelog: 'Mise à jour du prototype',
   changelogApprove: '',
@@ -81,9 +82,7 @@ export default Controller.extend({
     showIllustration: function () {
       let illustration = this.get('challenge.illustration')[0];
       this.set('popinImageSrc', illustration.url);
-      //todo fautes???
-      this.ele
-      $(`.${this.get('popinImageClass')}`).modal('show');
+      this.set('displayImage', true);
     },
     maximize() {
       this.set('maximized', true);

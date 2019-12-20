@@ -1,4 +1,14 @@
-<i class="close icon"></i>
-<div class="image content">
-  <img class="image" src={{src}} alt="illustration">
-</div>
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui modal visible active">
+      <i class="close icon" {{action "closeModal"}}></i>
+      <div class="image content">
+        <img class="image" src={{src}} alt="illustration">
+      </div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}
