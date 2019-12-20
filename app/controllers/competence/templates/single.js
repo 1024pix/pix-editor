@@ -63,6 +63,11 @@ export default Controller.extend({
   mayMove: computed('config.access', 'challenge', function () {
     return this.get('access').mayMove(this.get('challenge'));
   }),
+  level: computed('challenge.skillLevels', function(){
+    const challenge = this.get('challenge');
+    if(challenge.skillLevels[0]) return challenge.skillLevels;
+    return false;
+  }),
   _executeCopy() {
     const element = document.getElementById(this.get('copyZoneId'));
     element.select();

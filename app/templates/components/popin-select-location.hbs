@@ -21,8 +21,8 @@
           {{#if selectTubeLevel}}
             {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
               {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
-              {{#if levels.isFulfilled}}
-                {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
+              {{#if levels.isFulfilled }}
+                  {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
               {{/if}}
             {{/if}}
 

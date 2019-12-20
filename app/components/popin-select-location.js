@@ -84,7 +84,6 @@ export default Component.extend({
               this.get('onChange')(competence, tube, this.get('selectedLevel'));
               this.set('display', false);
             });
-
         } else {
           let levels;
           if (this.get('multipleLevel')) {
