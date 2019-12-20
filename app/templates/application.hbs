@@ -35,7 +35,7 @@
     </div>
   </div>
   {{popin-config-form update=(action "configUpdated") display=displayConfiguration class="popin-config-form"}}
-  {{popin-confirm title=confirmTitle content=confirmContent onApprove=(action "confirmApprove") onDeny=(action "confirmDeny") class="popin-confirm"}}
+  {{popin-confirm title=confirmTitle content=confirmContent onApprove=(action "confirmApprove") onDeny=(action "confirmDeny") display=displayConfirm}}
 </div>
   {{/burger.outlet}}
 {{/burger-menu}}

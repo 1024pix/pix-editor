@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import $ from 'jquery';
 import {inject as service} from '@ember/service';
 
 export default Controller.extend({
@@ -12,6 +11,7 @@ export default Controller.extend({
   confirmContent:"",
   confirmCallback:null,
   displayConfiguration:false,
+  displayConfirm:false,
   config:service(),
   init() {
     this._super(...arguments);
@@ -51,17 +51,19 @@ export default Controller.extend({
       this.confirmCallback = callback;
       this.set("confirmTitle", title);
       this.set("confirmContent", message);
-      $('.popin-confirm').modal('show');
+      this.set('displayConfirm', true);
     },
     confirmApprove() {
       if (this.confirmCallback) {
         this.confirmCallback(true);
       }
+      this.set('displayConfirm', false)
     },
     confirmDeny() {
       if (this.confirmCallback) {
         this.confirmCallback(false);
       }
+      this.set('displayConfirm', false)
     }
   }
 });
