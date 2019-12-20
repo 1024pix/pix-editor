@@ -107,6 +107,6 @@
 {{popin-image src=popinImageSrc class=popinImageClass}}
 {{popin-changelog approve=(action "changelogApprove") onDeny=(action "changelogDeny") value=changelogDefault class=popinChangelogClass}}
 {{#if mayMove}}
-  {{popin-select-location class="template-select-location" onChange=(action "setSkills") title="Acquis du prototype" areas=areas competence=competence selectTubeLevel=true tube=challenge.firstSkill.tube level=challenge.skillLevels multipleLevel=true}}
+  {{popin-select-location display=displaySelectLocation onChange=(action "setSkills") title="Acquis du prototype" areas=areas competence=competence selectTubeLevel=true tube=challenge.firstSkill.tube level=challenge.skillLevels multipleLevel=true}}
 {{/if}}
 {{outlet}}

@@ -14,6 +14,7 @@ export default Controller.extend({
   skill: alias("model"),
   wasMaximized: false,
   edition: false,
+  displaySelectLocation:false,
   skillName: computed("skill", function () {
     return `${this.get('skill.id')} (${this.get('skill.name')})`;
   }),
@@ -92,7 +93,7 @@ export default Controller.extend({
       });
     },
     moveSkill() {
-      $('.skill-select-location').modal('show');
+     this.set('displaySelectLocation', true)
     },
     setLocation(competence, newTube, level) {
       let skill = this.get('skill');

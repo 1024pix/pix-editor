@@ -9,6 +9,7 @@ export default Controller.extend({
   edition:false,
   creation:false,
   wasMaximized:false,
+  displaySelectLocation:false,
   tube:alias('model'),
   application:controller(),
   parentController:controller("competence"),
@@ -76,7 +77,7 @@ export default Controller.extend({
       window.open(config.get("airtableUrl")+config.get("tableTubes")+"/"+tube.get("id"), "airtable");
     },
     selectCompetence() {
-      $('.tube-select-competence').modal('show');
+     this.set('displaySelectLocation', true)
     },
     setCompetence(newCompetence) {
       let tube = this.get('tube');

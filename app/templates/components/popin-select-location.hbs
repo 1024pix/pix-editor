@@ -1,32 +1,43 @@
-<i class="close icon"></i>
-<div class="header">
-  {{#if title}}
-    {{title}}
-  {{else}}
-    Emplacement de {{name}}
-  {{/if}}
-</div>
-<div class="content">
-  <form action="" class="ui form">
-    {{#if competencesNames.isFulfilled}}
-      {{form-select title="Compétence" value=competenceName options=competencesNames edition=true}}
-    {{/if}}
-    {{#if selectTubeLevel}}
-      {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
-        {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
-        {{#if levels.isFulfilled}}
-          {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui standard modal visible active">
+      <i class="close icon" {{action "closeModal"}}></i>
+      <div class="header">
+        {{#if title}}
+          {{title}}
+        {{else}}
+          Emplacement de {{name}}
         {{/if}}
-      {{/if}}
-    {{/if}}
-  </form>
-</div>
-<div class="actions">
-  <div class="ui deny button">
-    Annuler
-  </div>
-  <div class="ui green button" {{action "set"}}>
-    <i class="checkmark icon"></i>
-    Déplacer
-  </div>
-</div>
+      </div>
+      <div class="content">
+        <form action="" class="ui form">
+          {{#if competencesNames}}
+            {{form-select title="Compétence" value=competenceName options=competencesNames edition=true}}
+          {{/if}}
+          {{#if selectTubeLevel}}
+            {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
+              {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
+              {{#if levels.isFulfilled}}
+                {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
+              {{/if}}
+            {{/if}}
+
+          {{/if}}
+        </form>
+      </div>
+      <div class="actions">
+        <div class="ui deny button" {{action "closeModal"}}>
+          Annuler
+        </div>
+        <div class="ui green button" {{action "set"}}>
+          <i class="checkmark icon"></i>
+          Déplacer
+        </div>
+      </div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}
