@@ -9,23 +9,27 @@
           <a class="ui icon item" onclick={{action "showVersions"}}><i class="clone icon"></i>&nbsp;v{{challenge.version}}</a>
       {{/if}}
       {{#if (or mayValidate mayArchive)}}
-        {{#ui-dropdown class="icon"}}
-        <a class="ui icon item"><i class="bolt icon"></i></a>
-          <div class="menu">
-            {{#if mayValidate}}
-              <a class="item validate"  onclick={{action "validate"}}>
-                <i class="checkmark icon"></i>
-                Valider
-              </a>
-            {{/if}}
-            {{#if mayArchive}}
-              <a class="item archive"  onclick={{action "archive"}}>
-                <i class="trash alternate icon"></i>
-                Archiver
-              </a>
-            {{/if}}
-          </div>
-        {{/ui-dropdown}}
+
+        {{#basic-dropdown class="icon ui dropdown " horizontalPosition="left" as |dd|}}
+          {{#dd.trigger }}<a class="ui icon item"><i class="bolt icon"></i></a>{{/dd.trigger}}
+
+          {{#dd.content class="dropdown-content slide-fade"}}
+
+              {{#if mayValidate}}
+                <a class="item validate"  onclick={{action "validate"}}>
+                  <i class="checkmark icon"></i>
+                  Valider
+                </a>
+              {{/if}}
+              {{#if mayArchive}}
+                <a class="item archive"  onclick={{action "archive"}}>
+                  <i class="trash alternate icon"></i>
+                  Archiver
+                </a>
+              {{/if}}
+
+          {{/dd.content}}
+        {{/basic-dropdown}}
       {{/if}}
       {{#if mayMove}}
         <a class="ui icon item" onclick={{action "moveTemplate"}}><i class="icon random"></i></a>

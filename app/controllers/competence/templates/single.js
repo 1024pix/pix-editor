@@ -131,7 +131,6 @@ export default Controller.extend({
       this._message('Modification annulée');
     },
     save() {
-      debugger
       this._getChangelog(this.get('defaultSaveChangelog'), (changelog) => {
         this.get('application').send('isLoading');
         return this._handleIllustration(this.get('challenge'))
@@ -421,7 +420,6 @@ export default Controller.extend({
     return Promise.resolve(challenge);
   },
   _handleChangelog(challenge, changelog) {
-    debugger
     if (changelog) {
       let entry = this.get('store').createRecord('changelogEntry', {
         text: changelog,

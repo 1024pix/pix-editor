@@ -3,12 +3,17 @@ import {inject as service} from '@ember/service';
 import {computed} from "@ember/object";
 
 export default Component.extend({
-  classNames:['ui', 'main-title'],
-  classNameBindings:['liteClass'],
+  classNames: ['ui', 'main-title'],
+  classNameBindings: ['liteClass'],
   config: service(),
-  liteClass:computed('config.lite', function() {
+  liteClass: computed('config.lite', function () {
     const lite = this.get('config.lite');
-    return lite?'lite':'';
+    return lite ? 'lite' : '';
+  }),
+  selectedSection: computed('section', function () {
+    const section = this.get('section');
+    const selectedItem = this.get('sections').filter(el=>el.id === section);
+    return selectedItem[0];
   }),
   init() {
     this._super(...arguments);
@@ -22,11 +27,9 @@ export default Component.extend({
       title: 'Qualité',
       id: 'quality'
     }];
-    this.set('selectedSection', this.get('sections')[0]);
   },
-  actions:{
-    selectView(view){
-      this.set('selectedSection', view);
+  actions: {
+    selectView(view) {
       this.get('selectSection')(view);
     }
   }
