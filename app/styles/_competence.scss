@@ -1,3 +1,12 @@
+.select-section{
+  min-width: 150px;
+}
+.select-section-dropdown {
+  li {
+    padding-top: .5em;
+    padding-bottom: .5em;
+  }
+}
 .competence {
   flex: 1 1 0;
   overflow: hidden;

@@ -22,5 +22,12 @@ export default Component.extend({
       title: 'Qualité',
       id: 'quality'
     }];
+    this.set('selectedSection', this.get('sections')[0]);
+  },
+  actions:{
+    selectView(view){
+      this.set('selectedSection', view);
+      this.get('selectSection')(view);
+    }
   }
 });

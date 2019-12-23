@@ -1,12 +1,7 @@
 <h1 class="ui left floated header">{{competence.name}}</h1>
-{{#ui-dropdown class="selection ui small right floated header" selected=section onChange=(action selectSection) }}
-<div class="default text"></div>
-  <i class="dropdown icon"></i>
-  <div class="menu">
-    {{#each sections as |view|}}
-      <div data-value={{view.id}} class="item">
-        {{view.title}}
-      </div>
-    {{/each}}
-  </div>
-{{/ui-dropdown}}
+<div class="selection ui small right floated header select-section">
+  {{#power-select dropdownClass="select-section-dropdown" searchEnabled=false options=sections selected=selectedSection
+                  onchange=(action "selectView") as |section|}}
+    {{section.title}}
+  {{/power-select}}
+</div>
