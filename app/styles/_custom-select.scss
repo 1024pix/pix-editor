@@ -8,12 +8,12 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 }
 
 @keyframes drop-effect {
-  0%{
+  0% {
     opacity: 0;
     transform-origin: top center;
-    transform: scale(1,0);
+    transform: scale(1, 0);
   }
-  100%{
+  100% {
     opacity: 1;
     transform-origin: top center;
     transform: scale(1);
@@ -21,6 +21,7 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 }
 
 .slide-fade {
+  background-color: red;
   will-change: transform, opacity;
 
   &.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioning-in {
@@ -35,7 +36,40 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 .dropdown-content {
   display: flex;
   flex-direction: column;
+  box-shadow: 0 4px 10px rgba(34, 36, 38, 0.4);
+
+  &.rounded {
+    border-radius: 5px;
+  }
+
   .item:hover {
+    background: rgba(50, 170, 220, .1);
+    cursor: pointer;
+  }
+}
+
+.dropdown-multi {
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(34, 36, 38, 0.4);
+
+  .sub-trigger{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .sub-trigger, .item {
+
+    font-size: 16px;
+    padding: 5px;
+
+    &:hover {
+      background: rgba(50, 170, 220, .1);
       cursor: pointer;
+    }
+
+    & > i {
+      transform: rotate(-90deg);
+    }
   }
 }

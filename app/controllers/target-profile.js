@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
 import {computed} from '@ember/object';
-import $ from "jquery";
 
 
 export default Controller.extend({
@@ -18,6 +17,15 @@ export default Controller.extend({
     this._super();
     this.set("selectedTubeSkills", []);
   },
+  calculatePosition(trigger, content){
+    let { top, left, width } = trigger.getBoundingClientRect();
+    let style = {
+      left: left + width,
+      top: top +  window.pageYOffset
+    };
+    return { style };
+  },
+
   selectedTubeCount: computed('model.@each.selectedProductionTubeCount', function () {
     return this.get('model').reduce((count, area) => {
       return count + area.get('selectedProductionTubeCount');
@@ -88,7 +96,7 @@ export default Controller.extend({
       this.get("fileSaver").saveAs(JSON.stringify(data), fileName);
     },
     getProfileId() {
-     this.set('displaySingleEntry', true)
+      this.set('displaySingleEntry', true)
     },
     generateSQL(profileId) {
       const ids = this._getSelectedSkillsIds();
@@ -155,7 +163,21 @@ export default Controller.extend({
     scrollTo(anchor) {
       const target = document.querySelector(`#${anchor}`);
       document.querySelector('.target-profile').scrollTo({top: target.offsetTop - 154, left: 0, behavior: 'smooth'})
+    },
+    prevent() {
+      return false;
+    },
+    open(dropdown) {
+
+        dropdown.actions.open();
+
+    },
+
+    close(dropdown) {
+      dropdown.actions.close();
+
     }
+
   },
   _getTubeSkillsAndMaxLevel(tube) {
     const productionSkill = tube.get("productionSkills");
