@@ -1,26 +1,40 @@
-<i class="close icon"></i>
-<div class="header">
-  Journal de {{challenge.skillNames}}
-</div>
-<div class="ui content segment basic {{if loading "loading" ""}} {{if list "" "hidden"}}">
-  <div class="ui top attached tabular menu">
-    <a class="item active" data-tab="own">Mes notes</a>
-    <a class="item" data-tab="notes">Toutes les notes</a>
-    <a class="item" data-tab="changelog">Changelog</a>
-  </div>
-  <div class="ui bottom attached tab segment active" data-tab="own">
-    {{note-list list=ownNotes itemCount=ownCount listType="own-note-list" displayAuthor=false show=(action "showOwnNote")}}
-    <div class="ui text menu note-menu">
-      <a class="item" onclick={{action "addNote"}}><i class="plus icon"></i>Nouvelle note</a>
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          containerClassNames="popin-template-log"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui modal visible active">
+      <i class="close icon" {{action "closeModal"}}></i>
+      <div class="header">
+        Journal de {{challenge.skillNames}}
+      </div>
+      <div class="ui content segment basic {{if loading "loading" ""}} {{if list "" "hidden"}}">
+        <div class="ui top attached tabular menu">
+          <a class="item active" data-tab="own">Mes notes</a>
+          <a class="item" data-tab="notes">Toutes les notes</a>
+          <a class="item" data-tab="changelog">Changelog</a>
+        </div>
+        <div class="ui bottom attached tab segment active" data-tab="own">
+          {{note-list list=ownNotes itemCount=ownCount listType="own-note-list" displayAuthor=false
+                      show=(action "showOwnNote")}}
+          <div class="ui text menu note-menu">
+            <a class="item" onclick={{action "addNote"}}><i class="plus icon"></i>Nouvelle note</a>
+          </div>
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="notes">
+          {{note-list list=notes itemCount=notesCount listType="note-list" show=(action "showNote")}}
+        </div>
+        <div class="ui bottom attached tab segment" data-tab="changelog">
+          {{note-list list=changelogEntries itemCount=changelogEntriesCount listType="changelog-entry-list"
+                      displayStatus=false show=(action "showChangelogEntry")}}
+        </div>
+      </div>
+      {{#unless list}}
+        {{note-form entry=logEntry edition=logEntryEdition close=(action "closeLogForm") update=(action "update")
+                    mayEdit=mayEditEntry edit=(action "editEntry")}}
+      {{/unless}}
     </div>
-  </div>
-  <div class="ui bottom attached tab segment" data-tab="notes">
-    {{note-list list=notes itemCount=notesCount listType="note-list" show=(action "showNote")}}
-  </div>
-  <div class="ui bottom attached tab segment" data-tab="changelog">
-    {{note-list list=changelogEntries itemCount=changelogEntriesCount listType="changelog-entry-list" displayStatus=false show=(action "showChangelogEntry")}}
-  </div>
-</div>
-{{#unless list}}
-  {{note-form entry=logEntry edition=logEntryEdition close=(action "closeLogForm") update=(action "update") mayEdit=mayEditEntry edit=(action "editEntry")}}
-{{/unless}}
+  {{/modal-dialog}}
+{{/if}}

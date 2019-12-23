@@ -23,6 +23,7 @@ export default Controller.extend({
   alternative: false,
   displaySelectLocation: false,
   displayImage:false,
+  displayChallengeLog:false,
   changelogCallback: null,
   defaultSaveChangelog: 'Mise à jour du prototype',
   changelogApprove: '',
@@ -130,6 +131,7 @@ export default Controller.extend({
       this._message('Modification annulée');
     },
     save() {
+      debugger
       this._getChangelog(this.get('defaultSaveChangelog'), (changelog) => {
         this.get('application').send('isLoading');
         return this._handleIllustration(this.get('challenge'))
@@ -204,7 +206,7 @@ export default Controller.extend({
         .catch(() => this._message('Archivage abandonné'))
     },
     challengeLog() {
-      $(`.${this.get('popinLogClass')}`).modal('show');
+    this.set('displayChallengeLog', true);
     },
     showVersions() {
       this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));
@@ -419,6 +421,7 @@ export default Controller.extend({
     return Promise.resolve(challenge);
   },
   _handleChangelog(challenge, changelog) {
+    debugger
     if (changelog) {
       let entry = this.get('store').createRecord('changelogEntry', {
         text: changelog,

@@ -5,79 +5,81 @@
           onClose=(action "closeModal")
   }}
     <div class="ui modal visible active">
-<i class="close icon" {{action "closeModal"}}></i>
-<div class="header">
-    Créer un tutoriel
-</div>
-<form class="ui form">
-    <div class="ui stacked segment">
-        <div class="field">
+      <i class="close icon" {{action "closeModal"}}></i>
+      <div class="header">
+        Créer un tutoriel
+      </div>
+      <form class="ui form">
+        <div class="ui stacked segment">
+          <div class="field">
             <label>Titre</label>
             {{input type="text" value=title placeholder="Titre"}}
-        </div>
-        <div class="three fields">
+          </div>
+          <div class="three fields">
             <div class="field">
-                <label>Lien</label>
-                {{input type="text" value=tutorial.link placeholder="Lien"}}
+              <label>Lien</label>
+              {{input type="text" value=tutorial.link placeholder="Lien"}}
             </div>
             <div class="field">
-                <label>Source</label>
-                {{input type="text" value=tutorial.source placeholder="Source"}}
+              <label>Source</label>
+              {{input type="text" value=tutorial.source placeholder="Source"}}
             </div>
-              {{form-select title="License" defaultText="Licence" value=tutorial.license options=options.license edition=true}}
-        </div>
-        <div class="three fields">
-              {{form-select title="Format" defaultText="Format" value=tutorial.format options=options.format edition=true}}
+            {{form-select title="License" defaultText="Licence" value=tutorial.license options=options.license
+                          edition=true}}
+          </div>
+          <div class="three fields">
+            {{form-select title="Format" defaultText="Format" value=tutorial.format options=options.format
+                          edition=true}}
             <div class="field">
-                <label>Durée (hh:mm:ss)</label>
-                {{input type="text" value=tutorial.duration placeholder="Durée (hh:mm:ss)"}}
+              <label>Durée (hh:mm:ss)</label>
+              {{input type="text" value=tutorial.duration placeholder="Durée (hh:mm:ss)"}}
             </div>
-              {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
-        </div>
-        <div class="fields">
+            {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
+          </div>
+          <div class="fields">
             <div class="field">
-                <label>Rechercher tags</label>
-                    {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
-                                 onSelect=(action "selectTag")}}
-                        <div class="ui icon input">
-                            <input class="prompt" placeholder="Nom" type="text">
-                            <i class="search icon"></i>
-                        </div>
-                        <div class="results"></div>
-                    {{/ui-search}}
+              <label>Rechercher tags</label>
+              {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
+                           onSelect=(action "selectTag")}}
+                <div class="ui icon input">
+                  <input class="prompt" placeholder="Nom" type="text">
+                  <i class="search icon"></i>
+                </div>
+                <div class="results"></div>
+              {{/ui-search}}
             </div>
             <div class="twelve wide field">
-                {{#if hasSelectedTag}}
-                    <label>Tags</label>
-                    {{#each selectedTags as |tag|}}
-                        <div class="ui mini labeled button btn-selected-tag" tabindex="0">
-                            <div {{action "unselectTag" tag.id}} class="ui icon button">
-                                <i class="close icon"></i>
-                            </div>
-                            <p class="ui basic label">
-                                {{tag.title}}
-                            </p>
-                        </div>
-                    {{/each}}
-                {{/if}}
+              {{#if hasSelectedTag}}
+                <label>Tags</label>
+                {{#each selectedTags as |tag|}}
+                  <div class="ui mini labeled button btn-selected-tag" tabindex="0">
+                    <div {{action "unselectTag" tag.id}} class="ui icon button">
+                      <i class="close icon"></i>
+                    </div>
+                    <p class="ui basic label">
+                      {{tag.title}}
+                    </p>
+                  </div>
+                {{/each}}
+              {{/if}}
             </div>
-        </div>
-        <div class="fields">
+          </div>
+          <div class="fields">
             <div class="field">
-                <label>Coup de coeur</label>
-                <div onclick={{action "toCrush"}} class="ui circular icon button crush">
-                    <i class="icon red heart {{if isFavorite "" "outline" }}"></i>
-                </div>
+              <label>Coup de coeur</label>
+              <div onclick={{action "toCrush"}} class="ui circular icon button crush">
+                <i class="icon red heart {{if isFavorite "" "outline" }}"></i>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
-</form>
-<div class="actions">
-    <div onclick={{action "saveTutorial" tutorials}} class="ui positive right labeled icon button">
-        Enregistrer
-        <i class="save icon"></i>
-    </div>
-</div>
+      </form>
+      <div class="actions">
+        <div onclick={{action "saveTutorial" tutorials}} class="ui positive right labeled icon button">
+          Enregistrer
+          <i class="save icon"></i>
+        </div>
+      </div>
     </div>
   {{/modal-dialog}}
 {{/if}}

@@ -1,10 +1,10 @@
-import PopinBase from "./popin-base";
+import Component from '@ember/component';
 import { computed } from "@ember/object";
 import { inject as service } from "@ember/service";
 import DS from 'ember-data';
 import $ from 'jquery';
 
-export default PopinBase.extend({
+export default Component.extend({
   store:service(),
   paginatedQuery:service(),
   config:service(),
@@ -112,6 +112,9 @@ export default PopinBase.extend({
     },
     editEntry() {
       this.set("logEntryEdition", true);
+    },
+    closeModal(){
+      this.set('display', false);
     }
   }
 });
