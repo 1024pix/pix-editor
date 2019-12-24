@@ -37,24 +37,19 @@ export default Component.extend({
 
     selectTutorial(tutorials, item) {
       const searchClass = this.get('searchClass');
-      const searchInput = $(`.search-tuto-${searchClass}`);
+      const searchInput = document.querySelector(`.search-tuto-${searchClass} .ember-power-select-search-input`);
       if (item.id === 'create') {
         const createTutorial = this.get('openCreateTutorialModal');
-        createTutorial(tutorials, searchInput.search("get value"))
+        createTutorial(tutorials, searchInput.value)
       } else {
         return this.get('store').findRecord('tutorial', item.id)
           .then((tutorial) => {
             tutorials.pushObject(tutorial);
-            setTimeout(() => {
-              searchInput.search("set value", "")
-            }, 1)
           })
       }
-      setTimeout(() => {
-        searchInput.search("set value", "")
-      }, 1);
     },
     getSearchTutorialResults(query) {
+      query=query.toLowerCase();
       let tagSearch = false;
       if (query[0] === ">") {
         query = query.substring(1);

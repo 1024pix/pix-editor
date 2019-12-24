@@ -4,10 +4,9 @@
   </label>
   {{#if edition}}
     {{#power-select search=(action "getSearchTutorialResults")
-                    selected=selected
                     placeholder="commencer la recherche par > pour rechercher par Tag"
                     onchange=(action "selectTutorial" tutorials)
-                    dropdownClass="search-result"
+                    dropdownClass=(concat "search-result  search-tuto-" searchClass)
                     triggerComponent="power-select-custom-trigger"
                     searchMessage=""
                     searchPlaceholder="Rechercher..."

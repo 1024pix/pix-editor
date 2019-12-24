@@ -36,17 +36,32 @@
             </div>
             {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
           </div>
-          <div class="fields">
+          <div class="three fields">
             <div class="field">
               <label>Rechercher tags</label>
-              {{#ui-search class="search-tag-input" maxResults=5 apiSettings=searchAPISettings
-                           onSelect=(action "selectTag")}}
-                <div class="ui icon input">
-                  <input class="prompt" placeholder="Nom" type="text">
-                  <i class="search icon"></i>
+              {{#power-select search=(action "getSearchTagsResults")
+                              placeholder="Nom"
+                              onchange=(action "selectTag")
+                              dropdownClass="search-result tutorial-search"
+                              triggerComponent="power-select-custom-trigger"
+                              searchMessage=""
+                              searchPlaceholder="Rechercher..."
+                              loadingMessage="Recherche en cours..."
+              as |repo|}}
+                <div class="search-title">
+                  {{#if (eq repo.id "create")}}
+                    {{repo.title}} <i class="add icon"></i>
+                  {{else}}
+                    {{repo.title}}
+                  {{/if}}
                 </div>
-                <div class="results"></div>
-              {{/ui-search}}
+                <div class="search-description">
+                  {{#if repo.description}}
+                    {{repo.description}}
+                  {{/if}}
+                </div>
+              {{/power-select}}
+
             </div>
             <div class="twelve wide field">
               {{#if hasSelectedTag}}
