@@ -1,62 +1,78 @@
 <div class="field {{if edition "" " disabled"}}">
-    <label>
-        {{title}}
-    </label>
-    {{#if edition}}
-        {{#ui-search class=(concat "search-tuto-" searchClass) maxResults=101 apiSettings=searchAPISettings
-                      onSelect=(action "selectTutorial" tutorials)}}
-            <div class="ui icon input">
-                <input class="prompt" placeholder="commencer la recherche par > pour rechercher par Tag" type="text">
-                <i class="search icon"></i>
-            </div>
-            <div class="results"></div>
-        {{/ui-search}}
-    {{/if}}
+  <label>
+    {{title}}
+  </label>
+  {{#if edition}}
+    {{#power-select search=(action "getSearchTutorialResults")
+                    selected=selected
+                    placeholder="commencer la recherche par > pour rechercher par Tag"
+                    onchange=(action "selectTutorial" tutorials)
+                    dropdownClass="search-result"
+                    triggerComponent="power-select-custom-trigger"
+                    searchMessage=""
+                    searchPlaceholder="Rechercher..."
+                    loadingMessage="Recherche en cours..."
+    as |repo|}}
+
+      <div class="search-title">
+        {{#if (eq repo.id "create")}}
+          {{repo.title}} <i class="add icon"></i>
+        {{else}}
+          {{repo.title}}
+        {{/if}}
+      </div>
+      <div class="search-description">
+        {{#if repo.description}}
+          {{repo.description}}
+        {{/if}}
+      </div>
+    {{/power-select}}
+  {{/if}}
 
 </div>
-<div >
-    {{#if loading}}
-        <div class="ui active centered inline loader"></div>
-    {{else}}
-        <div class="ui cards">
-            {{#each tutorials as |tutorial|}}
-                <div class="card">
-                    <div class="content">
-                        <div class="header">
-                            {{#if edition}}
-                                <div {{action "unselectTutorial" tutorials tutorial}} class="ui right floated icon button">
-                                    <i class="close icon"></i>
-                                </div>
-                            {{/if}}
-                            <a class="ui right floated button basic" href={{tutorial.link}} target="_blank"
-                               rel="noopener">
-                                <i class="external icon"></i>
-                            </a>
-                            {{tutorial.title}}
-                        </div>
-                        <div class="description">
-                            <div>Format : {{tutorial.format}}</div>
-                            <div>Durée : {{tutorial.duration}}</div>
-                            <div>Source : {{tutorial.source}}
-                                {{#if tutorial.isFavorite}}
-                                    <div class="ui right floated">
-                                        <i class="red heart icon"></i>
-                                    </div>
-                                {{/if}}
-                            </div>
-                        </div>
-                    </div>
+<div>
+  {{#if loading}}
+    <div class="ui active centered inline loader"></div>
+  {{else}}
+    <div class="ui cards">
+      {{#each tutorials as |tutorial|}}
+        <div class="card">
+          <div class="content">
+            <div class="header">
+              {{#if edition}}
+                <div {{action "unselectTutorial" tutorials tutorial}} class="ui right floated icon button">
+                  <i class="close icon"></i>
                 </div>
-                {{else}}
-                    <div class="card">
-                        <div class="content">
-                            aucun élément
-                        </div>
-                    </div>
-
-            {{/each}}
-
-
+              {{/if}}
+              <a class="ui right floated button basic" href={{tutorial.link}} target="_blank"
+                 rel="noopener">
+                <i class="external icon"></i>
+              </a>
+              {{tutorial.title}}
+            </div>
+            <div class="description">
+              <div>Format : {{tutorial.format}}</div>
+              <div>Durée : {{tutorial.duration}}</div>
+              <div>Source : {{tutorial.source}}
+                {{#if tutorial.isFavorite}}
+                  <div class="ui right floated">
+                    <i class="red heart icon"></i>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
         </div>
-    {{/if}}
+      {{else}}
+        <div class="card">
+          <div class="content">
+            aucun élément
+          </div>
+        </div>
+
+      {{/each}}
+
+
+    </div>
+  {{/if}}
 </div>

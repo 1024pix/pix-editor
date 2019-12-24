@@ -10,73 +10,9 @@ export default Component.extend({
   store: service(),
   router: service(),
   fileSaver: service('file-saver'),
-  query: '',
-  init() {
-    this._super(...arguments);
-    let that = this;
-    this.searchErrors = {
-      noResults: 'Pas de résultat'
-    };
-    this.searchAPISettings = {
-      responseAsync: function (settings, callback) {
-        that.getSearchResults(settings, callback);
-      }
-    };
-
-  },
-  searching: alias('searchResults.isPending'),
+  selected: null,
+  routeModel:null,
   author: alias('config.author'),
-  getSearchResults(settings, callback) {
-    let query = settings.urlData.query;
-    if (query.substr(0, 1) === '@') {
-      this.get('store').query('skill', {
-        filterByFormula: `FIND('${query}', Nom)`,
-        maxRecords: 20,
-        sort: [{field: 'Nom', direction: 'asc'}]
-      })
-        .then(skills => {
-          const results = skills.map(skill => ({
-            title: skill.get('name'),
-            url: this.get('router').urlFor('skill', skill.get('name'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
-        });
-    } else if (query.substr(0, 3) === 'rec') {
-      this.get('store').query('challenge', {
-        filterByFormula: `AND(FIND('${query}', RECORD_ID()) , Statut != 'archive')`,
-        maxRecords: 20
-      })
-        .then(challenges => {
-          const results = challenges.map(challenge => ({
-            title: challenge.get('id'),
-            url: this.get('router').urlFor('challenge', challenge.get('id'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
-        });
-    } else {
-      this.get('store').query('challenge', {
-        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
-        maxRecords: 20
-      })
-        .then(challenges => {
-          const results = challenges.map(challenge => ({
-            title: challenge.get('instructions').substr(0, 100),
-            url: this.get('router').urlFor('challenge', challenge.get('id'))
-          }));
-          callback({
-            success: true,
-            results: results
-          });
-        });
-    }
-  },
-
   _formatCSVString(str) {
     if (str) {
       return '"' + str.replace(/"/g, '""') + '"';
@@ -130,6 +66,56 @@ export default Component.extend({
         .finally(() => {
           this.get('finishedLoading')();
         });
+    },
+    getSearchResults(query) {
+      if (query.substr(0, 1) === '@') {
+        this.set('routeModel', 'skill');
+        return this.get('store').query('skill', {
+          filterByFormula: `FIND('${query}', Nom)`,
+          maxRecords: 20,
+          sort: [{field: 'Nom', direction: 'asc'}]
+        })
+          .then(skills => {
+            return skills.map(skill => ({
+              title: skill.get('name'),
+              name:  skill.get('name')
+            }));
+          });
+      } else if (query.substr(0, 3) === 'rec') {
+        this.set('routeModel', 'challenge');
+        return this.get('store').query('challenge', {
+          filterByFormula: `AND(FIND('${query}', RECORD_ID()) , Statut != 'archive')`,
+          maxRecords: 20
+        })
+          .then(challenges => {
+            return challenges.map(challenge => ({
+              title: challenge.get('id'),
+              id: challenge.get('id')
+            }));
+          });
+      } else {
+        this.set('routeModel', 'challenge');
+        return this.get('store').query('challenge', {
+          filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
+          maxRecords: 20
+        })
+          .then(challenges => {
+            return challenges.map(challenge => ({
+              title: challenge.get('instructions').substr(0, 100),
+              id:challenge.get('id'),
+            }));
+          });
+      }
+    },
+    linkTo(item) {
+     const route = this.get('routeModel');
+     const router = this.get('router');
+     if(route==='skill'){
+       router.transitionTo(route, item.name);
+     }else{
+       router.transitionTo(route, item.id);
+     }
+
     }
   }
 });
