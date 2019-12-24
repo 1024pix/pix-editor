@@ -13,16 +13,13 @@
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
-                {{ui-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 readonly=(not edition)
-                              onChange=(action (mut challenge.t1))}}
+                {{custom-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 disabled=(not edition)}}
               </div>
               <div class="field">
-                {{ui-checkbox label="T2 (ponctuation)" checked=challenge.t2 readonly=(not edition)
-                              onChange=(action (mut challenge.t2))}}
+                {{custom-checkbox  label="T2 (ponctuation)" checked=challenge.t2 disabled=(not edition)}}
               </div>
               <div class="field">
-                {{ui-checkbox label="T3 (distance d'édition)" checked=challenge.t3 readonly=(not edition)
-                              onChange=(action (mut challenge.t3))}}
+                {{custom-checkbox  label="T3 (distance d'édition)" checked=challenge.t3 disabled=(not edition)}}
               </div>
           </div>
       </div>
@@ -50,8 +47,7 @@
     {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
   {{/if}}
     <div class={{concat "field" (if edition "" " disabled")}}>
-        <label for="">{{ui-checkbox label="Timer" checked=challenge.timerOn readonly=(not edition)
-                                    onChange=(action (mut challenge.timerOn))}}</label>
+        {{custom-checkbox label="Timer" checked=challenge.timerOn disabled=(not edition)}}
       {{#if challenge.timer}}
         {{form-input value=challenge.timer edition=edition}}
       {{/if}}

@@ -64,7 +64,7 @@
     </a>
     {{#if mayUpdateCache}}
       <div class="item">
-        {{ui-checkbox label="mise à jour cache" checked=updateCache onChange=(action (mut updateCache))}}
+        {{custom-checkbox label="mise à jour cache" checked=updateCache}}
       </div>
     {{/if}}
     <a class="item" onclick={{action "cancelEdit"}}>
