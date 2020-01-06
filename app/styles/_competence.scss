@@ -157,10 +157,12 @@
     }
     &.quality-skill-link{
       padding:0;
+
       .quality {
         padding:5px;
         height: 100%;
         cursor: pointer;
+
         &.bad-quality {
           background: #EA2700;
           color: white;
@@ -246,10 +248,17 @@
     }
     td{
       padding:5px;
+      background:transparent !important;
+      color:inherit !important;
+
       &:nth-child(2){
         text-align : center;
       }
     }
   }
+}
+
+.quality-tooltip{
+  max-width: 350px;
 }
 

@@ -7,11 +7,12 @@
       <div class="competence-title">{{competence.title}}</div>
     </div>
     <div class="column center competence-info">
-      {{#ui-popup content=competence.description variation="very wide"}}
-        <div class="ui compact icon button basic">
-          <i class="info icon"></i>
-        </div>
-      {{/ui-popup}}
+      <div class="ui compact icon button basic"  >
+        {{#ember-tooltip tooltipClass="custom-tooltip large" side="right-start"}}
+          {{competence.description}}
+        {{/ember-tooltip}}
+        <i class="info icon"></i>
+      </div>
     </div>
   </h2>
   <div class="row tubes-profile">
