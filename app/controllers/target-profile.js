@@ -17,7 +17,7 @@ export default Controller.extend({
     this._super();
     this.set("selectedTubeSkills", []);
   },
-  calculatePosition(trigger, content){
+  calculatePosition(trigger){
     let { top, left, width } = trigger.getBoundingClientRect();
     let style = {
       left: left + width,

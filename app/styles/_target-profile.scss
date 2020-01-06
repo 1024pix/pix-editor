@@ -1,16 +1,18 @@
 .main-title {
-  .target-profile-mode {
+  .target-profile-filter {
+    display: flex;
+    align-items: center;
     float: right;
     margin-top: 2px;
     font-weight: normal;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, .5);
 
     &.active {
-      color: #ffffff;
+      color: rgba(255, 255, 255, .9);
     }
 
-    .checkbox {
+    .ui.toggle.checkbox {
       margin-left: 10px;
     }
   }
@@ -20,7 +22,7 @@
   background: black;
   color: white;
 
-  .trigger-menu{
+  .trigger-menu {
     cursor: pointer;
   }
 }
@@ -199,3 +201,4 @@
     }
   }
 }
+

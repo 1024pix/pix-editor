@@ -1,14 +1,24 @@
 <div class="main-left">
   <div class="main-title">
     <h1 class="ui header">Générateur de profil cible
-      <div class="target-profile-mode {{if showTubeDetails "active"}}">Détails des sujets{{ui-checkbox
-              checked=showTubeDetails
-              class="toggle target-profile-mode"
-              onChange=(action (mut showTubeDetails))}}</div>
-      <div class="target-profile-mode {{if filter "active"}}">Filtrer les sujets sélectionnés{{ui-checkbox
-              checked=filter
-              class="toggle target-profile-mode"
-              onChange=(action (mut filter))}}</div>
+      <div class="target-profile-filter {{if showTubeDetails "active"}}">
+        Détails des sujets
+        <div class="ui toggle checkbox ">
+          {{input type="checkbox"
+                  checked=showTubeDetails
+                  class="toggle"}}
+          <label class="checkbox-label"></label>
+        </div>
+      </div>
+      <div class="target-profile-filter {{if filter "active"}}">
+        Filtrer les sujets sélectionnés
+        <div class="ui toggle checkbox ">
+          {{input type="checkbox"
+                  checked=filter
+                  class="toggle"}}
+          <label class="checkbox-label"></label>
+        </div>
+      </div>
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
