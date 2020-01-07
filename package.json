@@ -24,6 +24,7 @@
     "broccoli-asset-rev": "^2.7.0",
     "ember-accordion": "^0.7.0",
     "ember-ajax": "^5.0.0",
+    "ember-aria-tabs": "^2.1.2",
     "ember-auto-import": "^1.2.19",
     "ember-burger-menu": "^3.3.3",
     "ember-cli": "~3.8.3",
