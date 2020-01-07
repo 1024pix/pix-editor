@@ -1,5 +1,4 @@
 import Component from '@ember/component';
-import $ from "jquery";
 import {computed} from '@ember/object';
 import DS from 'ember-data';
 
@@ -117,16 +116,18 @@ export default Component.extend({
         this.set('ascending', true);
       }
       this.set('sortType', type);
-      let className = this.get("listType");
-      $(`.${className} .list-header .list-item`).removeClass('sorting');
-      let sortElement = $(`.${className} .list-header .list-item.${field}`);
-      sortElement.addClass('sorting');
+      const className = this.get("listType");
+      document.querySelectorAll(`.${className} .list-header .list-item`).forEach(el=>{
+      el.classList.remove('sorting');
+      });
+      const sortElement =  document.querySelector(`.${className} .list-header .list-item.${field}`);
+      sortElement.classList.add('sorting');
       if (this.get('ascending')) {
-        sortElement.removeClass("descending");
-        sortElement.addClass("ascending");
+        sortElement.classList.remove("descending");
+        sortElement.classList.add("ascending");
       } else {
-        sortElement.removeClass("ascending");
-        sortElement.addClass("descending");
+        sortElement.classList.remove("ascending");
+        sortElement.classList.add("descending");
       }
     }
   }

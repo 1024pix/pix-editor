@@ -1,5 +1,4 @@
 import Controller from '@ember/controller';
-import $ from 'jquery';
 import {inject as controller} from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {scheduleOnce} from '@ember/runloop';
@@ -118,7 +117,7 @@ export default Controller.extend({
       this.set('wasMaximized', state);
       this.send('maximize');
       this.set('edition', true);
-      $('.' + this.get('elementClass') + '.challenge-data').scrollTop(0);
+      document.querySelector(`.${this.get('elementClass')}.challenge-data`).scrollTop = 0;
     },
     cancelEdit() {
       this.set('edition', false);
