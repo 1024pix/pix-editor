@@ -11,7 +11,7 @@ export default Component.extend({
   router: service(),
   fileSaver: service('file-saver'),
   selected: null,
-  routeModel:null,
+  routeModel: null,
   author: alias('config.author'),
   _formatCSVString(str) {
     if (str) {
@@ -78,7 +78,7 @@ export default Component.extend({
           .then(skills => {
             return skills.map(skill => ({
               title: skill.get('name'),
-              name:  skill.get('name')
+              name: skill.get('name')
             }));
           });
       } else if (query.substr(0, 3) === 'rec') {
@@ -102,20 +102,20 @@ export default Component.extend({
           .then(challenges => {
             return challenges.map(challenge => ({
               title: challenge.get('instructions').substr(0, 100),
-              id:challenge.get('id'),
+              id: challenge.get('id'),
             }));
           });
       }
     },
     linkTo(item) {
-     const route = this.get('routeModel');
-     const router = this.get('router');
-     if(route==='skill'){
-       router.transitionTo(route, item.name);
-     }else{
-       router.transitionTo(route, item.id);
-     }
-
+      const route = this.get('routeModel');
+      const router = this.get('router');
+      this.get('burger.state.actions.close')();
+      if (route === 'skill') {
+        router.transitionTo(route, item.name);
+      } else {
+        router.transitionTo(route, item.id);
+      }
     }
   }
 });

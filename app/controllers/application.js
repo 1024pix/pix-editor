@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
 import {inject as service} from '@ember/service';
+import {computed} from '@ember/object';
+
 
 export default Controller.extend({
   loading:false,
@@ -13,10 +15,28 @@ export default Controller.extend({
   displayConfiguration:false,
   displayConfirm:false,
   config:service(),
+  router:service(),
+  _menuOpen:false,
   init() {
     this._super(...arguments);
     this.messages = [];
   },
+  openMenuState:computed('router.currentRouteName', '_menuOpen', {
+    get(key) {
+      if (this.get('router.currentRouteName') === 'index') {
+        return true;
+      } else {
+        return this.get('_menuOpen');
+      }
+    },
+    set(key,value) {
+      this.set('_menuOpen', value);
+      return value;
+    }
+  }),
+  lockedMenu:computed('displayConfiguration',  function () {
+    return this.get('displayConfiguration');
+  }),
   actions: {
     showMessage(content, positive) {
       const messages = this.get("messages");
