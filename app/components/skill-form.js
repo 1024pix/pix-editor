@@ -11,7 +11,6 @@ export default Component.extend({
     };
     this.set('tutorials', []);
     this.set('searchTitle', '');
-    // this.set('popinCreateTuto', "popin-create-tuto");
   },
   actions:{
     openCreateTutorialModal(tutorials,title){

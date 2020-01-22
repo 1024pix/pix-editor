@@ -37,9 +37,9 @@ export default Component.extend({
 
   actions: {
     getSearchTagsResults(query) {
-      query=query.toLowerCase();
+      const queryLowerCase = query.toLowerCase();
       return this.get('store').query('tag', {
-        filterByFormula: `FIND('${query}', LOWER(Nom))`,
+        filterByFormula: `FIND('${queryLowerCase}', LOWER(Nom))`,
         maxRecords: 4,
         sort: [{field: 'Nom', direction: 'asc'}]
       })
