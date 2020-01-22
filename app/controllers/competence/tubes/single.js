@@ -44,7 +44,7 @@ export default Controller.extend({
       this.set("edition", true);
       const tubeData = document.querySelector(".tube-data");
       if(tubeData){
-        tubeData.scrollTop
+        tubeData.scrollTop = 0;
       }
     },
     cancelEdit() {

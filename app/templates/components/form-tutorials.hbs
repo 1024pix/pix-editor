@@ -11,18 +11,18 @@
                     searchMessage=""
                     searchPlaceholder="Rechercher..."
                     loadingMessage="Recherche en cours..."
-    as |repo|}}
+    as |result|}}
 
       <div class="search-title">
         {{#if (eq repo.id "create")}}
-          {{repo.title}} <i class="add icon"></i>
+          {{result.title}} <i class="add icon"></i>
         {{else}}
-          {{repo.title}}
+          {{result.title}}
         {{/if}}
       </div>
       <div class="search-description">
-        {{#if repo.description}}
-          {{repo.description}}
+        {{#if result.description}}
+          {{result.description}}
         {{/if}}
       </div>
     {{/power-select}}

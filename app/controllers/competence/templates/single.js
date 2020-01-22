@@ -65,8 +65,11 @@ export default Controller.extend({
   }),
   level: computed('challenge.skillLevels', function(){
     const challenge = this.get('challenge');
-    if(challenge.skillLevels[0]) return challenge.skillLevels;
-    return false;
+    if(challenge.skillLevels[0]){
+      return challenge.skillLevels;
+    }else{
+      return false;
+    }
   }),
   _executeCopy() {
     const element = document.getElementById(this.get('copyZoneId'));
