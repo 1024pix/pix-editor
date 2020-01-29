@@ -1,7 +1,9 @@
 {{#link-to "competence.quality.single" competenceModel skill tagName="td" class="skill-cell quality-skill-link"}}
   {{#ember-tooltip tooltipClass="custom-tooltip quality-tooltip" arrowClass="custom-arrow" side="right-start"}}
     <table class="quality-indication-details">
-      {{{popupBuild}}}
+      <tbody>
+        {{popupBuild}}
+      </tbody>
     </table>
   {{/ember-tooltip}}
   <div class="quality {{qualityClassColor}}">

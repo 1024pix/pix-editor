@@ -1,6 +1,6 @@
 import Component from '@ember/component';
 import {computed} from '@ember/object';
-
+import { htmlSafe } from '@ember/template';
 
 export default Component.extend({
   tagName: '',
@@ -52,13 +52,13 @@ export default Component.extend({
     const tutoMoreCount = this.get('skill.tutoMoreCount');
     const haveTuto = classTuto?`<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
                                 <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`:'';
-    return `<tr><td>Spoil </td><td> ${spoil} </td></tr>
+    return htmlSafe(`<tr><td>Spoil </td><td> ${spoil} </td></tr>
             <tr><td>Responsive </td><td> ${responsive} </td></tr>
             <tr><td>Non/Mal voyant </td><td> ${blind} </td></tr>
             <tr><td>Daltonien </td><td> ${colorblind} </td></tr>
             <tr><td>Indice </td><td> ${clue} </td></tr>
             ${haveTuto}
-            ${timer}`;
+            ${timer}`);
   }),
   _spoilWeight(spoil) {
     const weight = 5;
