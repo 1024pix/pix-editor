@@ -10,17 +10,9 @@ module('Integration | Component | custom-checkbox', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{custom-checkbox}}`);
+    await render(hbs`{{custom-checkbox label="search"}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.ui.checkbox').exists();
 
-    // Template block usage:
-    await render(hbs`
-      {{#custom-checkbox}}
-        template block text
-      {{/custom-checkbox}}
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });

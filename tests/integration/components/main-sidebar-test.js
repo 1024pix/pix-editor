@@ -12,12 +12,26 @@ module('Integration | Component | main-sidebar', function(hooks) {
     //
     // this.set('executeAction', function() {});
     // this.set('openConfigurationAction', function() {});
+    this.set('openAction', function() {});
+    this.set('loadingAction', function() {});
+    this.set('finishedAction', function() {});
+    this.set('messageAction', function() {});
+    this.set('burger', {
+      state:{
+        actions:{
+          close:function() {}
+        }
+      }
+    });
 
-    await render(hbs`{{main-sidebar}}`);
+    await render(hbs`{{main-sidebar openConfiguration=(action openAction)
+    isLoading=(action loadingAction)
+    finishedLoading=(action finishedAction)
+    showMessage=(action messageAction)
+    burger=burger
+    }}`);
 
-    assert.equal(this.element.textContent.trim(), 'Pix Editor');
-    //assert.dom('#main-sidebar').exists();
-
+    assert.dom('.main-sidebar').exists();
   });
 });
 

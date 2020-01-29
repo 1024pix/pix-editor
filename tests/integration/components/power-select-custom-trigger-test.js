@@ -14,13 +14,7 @@ module('Integration | Component | power-select-custom-trigger', function(hooks) 
 
     assert.equal(this.element.textContent.trim(), '');
 
-    // Template block usage:
-    await render(hbs`
-      {{#power-select-custom-trigger}}
-        template block text
-      {{/power-select-custom-trigger}}
-    `);
+    assert.dom('.search.icon.custom-trigger').exists();
 
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
