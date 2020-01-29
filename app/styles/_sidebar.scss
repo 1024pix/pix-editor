@@ -21,6 +21,12 @@
         color:rgba(255, 255, 255, 0.9);
       }
     }
+
+    .ember-power-select-dropdown.ember-basic-dropdown-content--in-place {
+      width:auto;
+      left:5px;
+      right:5px;
+    }
   }
 
 
