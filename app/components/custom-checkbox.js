@@ -4,5 +4,8 @@ export default Component.extend({
   name:null,
   label:null,
   disabled:false,
-  ignorableAttrs: ['checked', 'label', 'disabled'],
+  init() {
+    this._super(...arguments);
+    this.ignorableAttrs = ['checked', 'label', 'disabled'];
+  }
 });
