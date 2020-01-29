@@ -54,7 +54,7 @@ export default Controller.extend({
   mayAccessAirtable: computed('config.access', function () {
     return this.get('access').mayAccessAirtable();
   }),
-  mayValidate: computed('config.access', 'challenge', 'challenge.{status,isWorkbench.content}', function () {
+  mayValidate:computed('config.access', 'challenge', 'challenge.{status,isWorkbench}', function() {
     return this.get('access').mayValidate(this.get('challenge'));
   }),
   mayArchive: computed('config.access', 'challenge', 'challenge.status', function () {
