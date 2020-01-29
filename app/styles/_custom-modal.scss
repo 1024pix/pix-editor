@@ -1,0 +1,20 @@
+.ember-modal-overlay {
+  z-index: 100 !important;
+
+  &.custom-overlay-modal {
+    background-color: rgba(0, 0, 0, .5);
+  }
+
+  .ember-modal-dialog {
+    width: 100vw;
+    background-color: transparent;
+    box-shadow: none;
+
+    .ui.modal {
+      margin: 0 auto;
+      position: static !important;
+    }
+  }
+}
+
+

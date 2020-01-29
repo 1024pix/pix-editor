@@ -1,8 +1,12 @@
 {{#link-to "competence.quality.single" competenceModel skill tagName="td" class="skill-cell quality-skill-link"}}
-  {{#ui-popup html=(concat
-    "<table class='quality-indication-details'>"
-    popupBuild
-    "</table>") class=qualityClassColor}}
+  {{#ember-tooltip tooltipClass="custom-tooltip quality-tooltip" arrowClass="custom-arrow" side="right-start"}}
+    <table class="quality-indication-details">
+      <tbody>
+        {{popupBuild}}
+      </tbody>
+    </table>
+  {{/ember-tooltip}}
+  <div class="quality {{qualityClassColor}}">
     <div class=" quality-indication">
       <span>{{skill.name}}</span>
       <span>{{qualityIndication}}</span>
@@ -14,7 +18,7 @@
       <i class="time icon"></i>
     {{/if}}
     {{#if (and (not classTutorial) (not skill.productionTemplate.timer))}}
-    <br>
-      {{/if}}
-  {{/ui-popup}}
+      <br>
+    {{/if}}
+  </div>
 {{/link-to}}

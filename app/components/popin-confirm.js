@@ -1,9 +1,6 @@
-import PopinBase from "./popin-base";
+import Component from '@ember/component';
 
-export default PopinBase.extend({
+export default Component.extend({
   classNames:['mini'],
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    settings.closable = false;
-  }
+
 });

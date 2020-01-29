@@ -1,10 +1,13 @@
-import PopinBase from './popin-base';
+import Component from '@ember/component';
 
-export default PopinBase.extend({
+export default Component.extend({
   actions:{
     validate() {
-      this.execute('hide');
+     this.set('display', false);
       this.get('setValue')(this.get('value'));
+    },
+    closeModal(){
+      this.set('display', false);
     }
   }
 });

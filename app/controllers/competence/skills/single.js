@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import {inject as controller} from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {alias} from '@ember/object/computed';
-import $ from "jquery";
 import {computed} from '@ember/object';
 
 export default Controller.extend({
@@ -14,6 +13,7 @@ export default Controller.extend({
   skill: alias("model"),
   wasMaximized: false,
   edition: false,
+  displaySelectLocation:false,
   skillName: computed("skill", function () {
     return `${this.get('skill.id')} (${this.get('skill.name')})`;
   }),
@@ -51,7 +51,7 @@ export default Controller.extend({
       this.set("wasMaximized", state);
       this.send("maximize");
       this.set("edition", true);
-      $(".skill-data").scrollTop(0);
+      document.querySelector(".skill-data").scrollTop = 0;
     },
     cancelEdit() {
       this.set("edition", false);
@@ -92,7 +92,7 @@ export default Controller.extend({
       });
     },
     moveSkill() {
-      $('.skill-select-location').modal('show');
+     this.set('displaySelectLocation', true)
     },
     setLocation(competence, newTube, level) {
       let skill = this.get('skill');

@@ -1,9 +1,9 @@
-import PopinBase from "./popin-base";
+import Component from '@ember/component';
 import { computed } from '@ember/object';
 import {inject as service} from '@ember/service';
 import DS from "ember-data";
 
-export default PopinBase.extend({
+export default Component.extend({
   config:service(),
   access:service(),
   saved:false,
@@ -11,13 +11,6 @@ export default PopinBase.extend({
   init() {
     this._super(...arguments);
     this.oldValues = {};
-  },
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    let that = this;
-    settings.onHidden = () => {
-      that.send('onHidden');
-    }
   },
   _setValue(key, value) {
     if (this.oldValues[key] == null) {
@@ -80,10 +73,27 @@ export default PopinBase.extend({
       return [];
     }
   }),
-  didInsertElement() {
-    // fix a bug with semantic ui accordion that is not correctly
-    // initialized in popin
-    this.$('.ui.accordion').accordion();
+  authorNames:computed("config.{decrypted,authorNames}", function() {
+    if (this.get("config.decrypted")) {
+      return DS.PromiseArray.create({
+        promise:this.get("config.authorNames")
+      })
+    } else {
+      return [];
+    }
+  }),
+  _closeModal(){
+    if (this.get("saved")) {
+      this.get("update")();
+    } else {
+      this._restoreValue("airtableKey");
+      this._restoreValue("configKey");
+      this._restoreValue("author");
+      this._restoreValue("pixUser");
+      this._restoreValue("pixPassword");
+    }
+    this.oldValues = {};
+    this.set('display', false);
   },
   actions:{
     saveConfig() {
@@ -101,20 +111,11 @@ export default PopinBase.extend({
         config.set("access", accessLevel);
         config.save();
         this.set("saved", true);
-        this.execute("hide");
+        this._closeModal();
       });
     },
-    onHidden() {
-      if (this.get("saved")) {
-        this.get("update")();
-      } else {
-        this._restoreValue("airtableKey");
-        this._restoreValue("configKey");
-        this._restoreValue("author");
-        this._restoreValue("pixUser");
-        this._restoreValue("pixPassword");
-      }
-      this.oldValues = {};
+    closeModal(){
+      this._closeModal();
     }
   }
 });

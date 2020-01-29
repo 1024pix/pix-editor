@@ -127,7 +127,7 @@ export default Controller.extend({
       this.send('closeChildComponent');
     },
     selectSection(value) {
-      switch(value) {
+      switch(value.id) {
         case 'skills':
           this.transitionToRoute('competence.skills', this.get('competence'));
           break;

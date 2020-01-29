@@ -1,14 +1,23 @@
-<div class="header">{{title}}</div>
-<div class="content">
-  {{content}}
-</div>
-<div class="actions">
-  <div class="ui blue cancel button">
-    <i class="remove icon"></i>
-    Annuler
-  </div>
-  <div class="ui green ok button">
-    <i class="checkmark icon"></i>
-    Oui
-  </div>
-</div>
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+  }}
+    <div class="ui standard modal visible active">
+      <div class="header">{{title}}</div>
+      <div class="content">
+        {{content}}
+      </div>
+      <div class="actions">
+        <div class="ui blue cancel button" {{action onDeny}}>
+          <i class="remove icon" ></i>
+          Annuler
+        </div>
+        <div class="ui green ok button" {{action onApprove}}>
+          <i class="checkmark icon" ></i>
+          Oui
+        </div>
+      </div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}

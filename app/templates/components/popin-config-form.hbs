@@ -1,66 +1,75 @@
-<div class="header">
-  Configuration
-</div>
-<div class="content">
-  <div class="description">
-    <form class="ui form">
-      <div class="field">
-        <label>Clé airtable</label>
-        <div class="ui input">
-          {{input value=(mut airtableKey)}}
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui standard modal visible active">
+      <div class="header">
+        Configuration
+      </div>
+      <div class="content">
+        <div class="description">
+          <form class="ui form">
+            <div class="field">
+              <label>Clé airtable</label>
+              <div class="ui input">
+                {{input value=(mut airtableKey)}}
+              </div>
+            </div>
+            <div class="field">
+              <label>Clé config</label>
+              <div class="ui input">
+                {{input value=(mut configKey)}}
+              </div>
+            </div>
+            {{#if authors.length}}
+              <div class="field">
+                <label>Auteur</label>
+                {{#power-select placeholder="Sélectionnez votre trigramme" options=authorNames selected=author
+                                onchange=(action (mut author)) as |auth|}}
+                  {{auth}}
+                {{/power-select}}
+              </div>
+            {{/if}}
+            <h4 class="ui dividing header">Paramètres optionnels</h4>
+            {{#accordion-list as |accordion|}}
+              <div class="ui accordion ">
+                {{#accordion.item as |accordionItem|}}
+                  {{#accordionItem.toggle class="title"}}
+                    <i class="dropdown icon"></i>
+                    Compte Pix (mise à jour du cache)
+                  {{/accordionItem.toggle}}
+                  {{#accordionItem.panel}}
+                    <div class="content">
+                      <div class="field">
+                        <label>Adresse e-mail</label>
+                        <div class="ui input">
+                          {{input value=pixUser}}
+                        </div>
+                      </div>
+                      <div class="field">
+                        <label>Mot de passe</label>
+                        <div class="ui input">
+                          {{input value=pixPassword type="password"}}
+                        </div>
+                      </div>
+                    </div>
+                  {{/accordionItem.panel}}
+                {{/accordion.item}}
+              </div>
+            {{/accordion-list}}
+          </form>
         </div>
       </div>
-      <div class="field">
-        <label>Clé config</label>
-        <div class="ui input">
-          {{input value=(mut configKey)}}
+      <div class="actions">
+        <div class="ui deny button" {{action "closeModal"}}>
+          Annuler
+        </div>
+        <div class="ui right button" {{action "saveConfig"}}>
+          Enregistrer
         </div>
       </div>
-      {{#if authors.length}}
-        <div class="field">
-          <label>Auteur</label>
-          {{#ui-dropdown class="author-selection search selection" selected=author onChange=(action (mut author))}}
-            <div class="default text">Sélectionnez votre trigramme</div>
-            <i class="dropdown icon"></i>
-            <div class="menu">
-              {{#each authors as |option|}}
-                <div data-value={{option.name}} class="item">
-                  {{option.name}}
-                </div>
-              {{/each}}
-            </div>
-          {{/ui-dropdown}}
-        </div>
-      {{/if}}
-      <h4 class="ui dividing header">Paramètres optionnels</h4>
-      {{#ui-accordion class="field"}}
-        <div class="title">
-          <i class="icon dropdown"></i>
-          Compte Pix (mise à jour du cache)
-        </div>
-        <div class="content">
-          <div class="field">
-            <label>Adresse e-mail</label>
-            <div class="ui input">
-              {{input value=pixUser}}
-            </div>
-          </div>
-          <div class="field">
-            <label>Mot de passe</label>
-            <div class="ui input">
-              {{input value=pixPassword type="password"}}
-            </div>
-          </div>
-        </div>
-      {{/ui-accordion}}
-    </form>
-  </div>
-</div>
-<div class="actions">
-  <div class="ui deny button">
-    Annuler
-  </div>
-  <div class="ui right button" {{action "saveConfig"}}>
-    Enregistrer
-  </div>
-</div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}

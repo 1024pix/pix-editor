@@ -3,12 +3,12 @@ import {computed} from '@ember/object';
 import {alias} from '@ember/object/computed';
 import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
-import $ from "jquery";
 
 export default Controller.extend({
   edition:false,
   creation:false,
   wasMaximized:false,
+  displaySelectLocation:false,
   tube:alias('model'),
   application:controller(),
   parentController:controller("competence"),
@@ -38,11 +38,14 @@ export default Controller.extend({
       this.get("parentController").send("closeChildComponent");
     },
     edit() {
-      let state = this.get("maximized");
+      const state = this.get("maximized");
       this.set("wasMaximized", state);
       this.send("maximize");
       this.set("edition", true);
-      $(".tube-data").scrollTop(0);
+      const tubeData = document.querySelector(".tube-data");
+      if(tubeData){
+        tubeData.scrollTop = 0;
+      }
     },
     cancelEdit() {
       this.set("edition", false);
@@ -76,7 +79,7 @@ export default Controller.extend({
       window.open(config.get("airtableUrl")+config.get("tableTubes")+"/"+tube.get("id"), "airtable");
     },
     selectCompetence() {
-      $('.tube-select-competence').modal('show');
+     this.set('displaySelectLocation', true)
     },
     setCompetence(newCompetence) {
       let tube = this.get('tube');

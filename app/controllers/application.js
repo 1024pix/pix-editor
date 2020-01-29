@@ -1,6 +1,7 @@
 import Controller from '@ember/controller';
-import $ from 'jquery';
 import {inject as service} from '@ember/service';
+import {computed} from '@ember/object';
+
 
 export default Controller.extend({
   loading:false,
@@ -11,30 +12,46 @@ export default Controller.extend({
   confirmTitle:"",
   confirmContent:"",
   confirmCallback:null,
+  displayConfiguration:false,
+  displayConfirm:false,
   config:service(),
+  router:service(),
+  _menuOpen:false,
   init() {
     this._super(...arguments);
     this.messages = [];
   },
+  openMenuState:computed('router.currentRouteName', '_menuOpen', {
+    get() {
+      if (this.get('router.currentRouteName') === 'index') {
+        return true;
+      } else {
+        return this.get('_menuOpen');
+      }
+    },
+    set(key,value) {
+      this.set('_menuOpen', value);
+      return value;
+    }
+  }),
+  lockedMenu:computed('displayConfiguration',  function () {
+    return this.get('displayConfiguration');
+  }),
   actions: {
-    loadCompetence(id) {
-      this.transitionToRoute("competence", id);
-    },
-    toggleSidebar(){
-      $('#main-sidebar').sidebar('toggle');
-    },
     showMessage(content, positive) {
-      let messages = this.get("messages");
-      let id = "message_"+Date.now();
+      const messages = this.get("messages");
+      const id = "message_"+Date.now();
       messages.pushObject({text:content, positive:positive?true:false, id:id});
-      let that = this;
       window.setTimeout(()=> {
-        $("#"+id).transition({animation:"fade", onComplete() {
-          let messages = that.get("messages");
-          messages.removeAt(0);
+        const nodeMessage = document.getElementById(id);
+        if(nodeMessage){
+          nodeMessage.addEventListener('transitionend', ()=>{
+            messages.removeAt(0);
+          });
+          nodeMessage.style.transition = 'opacity .8s ease';
+          nodeMessage.style.opacity = '0';
         }
-      });
-      }, 3000)
+      }, 3000);
     },
     isLoading(message) {
       this.set("loading", true);
@@ -45,7 +62,7 @@ export default Controller.extend({
       this.set("loadingMessage", "");
     },
     openConfiguration() {
-      $('.popin-config-form').modal('show');
+      this.set('displayConfiguration', true)
     },
     configUpdated() {
       this.send("refresh");
@@ -54,17 +71,19 @@ export default Controller.extend({
       this.confirmCallback = callback;
       this.set("confirmTitle", title);
       this.set("confirmContent", message);
-      $('.popin-confirm').modal('show');
+      this.set('displayConfirm', true);
     },
     confirmApprove() {
       if (this.confirmCallback) {
         this.confirmCallback(true);
       }
+      this.set('displayConfirm', false)
     },
     confirmDeny() {
       if (this.confirmCallback) {
         this.confirmCallback(false);
       }
+      this.set('displayConfirm', false)
     }
   }
 });

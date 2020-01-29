@@ -23,9 +23,13 @@ export default Route.extend({
       return store.findAll('area');
     }
   },
-  afterModel() {
+  afterModel(model) {
     if (this.get('configured')) {
       this.get('pixConnector').connect();
+    }
+    if (model) {
+      const getCompetences = model.map((area => area.get('competences')));
+      return Promise.all(getCompetences);
     }
   },
   actions:{

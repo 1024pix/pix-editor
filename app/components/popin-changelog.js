@@ -1,11 +1,7 @@
-import PopinBase from "./popin-base";
+import Component from '@ember/component';
 
-export default PopinBase.extend({
+export default Component.extend({
   value:"",
-  willInitSemantic(settings) {
-    this._super(...arguments);
-    settings.closable = false;
-  },
   actions:{
     confirm() {
       this.get("approve")(this.get("value"));

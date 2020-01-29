@@ -1,14 +1,24 @@
 <div class="main-left">
   <div class="main-title">
     <h1 class="ui header">Générateur de profil cible
-      <div class="target-profile-mode {{if showTubeDetails "active"}}">Détails des sujets{{ui-checkbox
-              checked=showTubeDetails
-              class="toggle target-profile-mode"
-              onChange=(action (mut showTubeDetails))}}</div>
-      <div class="target-profile-mode {{if filter "active"}}">Filtrer les sujets sélectionnés{{ui-checkbox
-              checked=filter
-              class="toggle target-profile-mode"
-              onChange=(action (mut filter))}}</div>
+      <div class="target-profile-filter {{if showTubeDetails "active"}}">
+        Détails des sujets
+        <div class="ui toggle checkbox ">
+          {{input type="checkbox"
+                  checked=showTubeDetails
+                  class="toggle"}}
+          <label class="checkbox-label"></label>
+        </div>
+      </div>
+      <div class="target-profile-filter {{if filter "active"}}">
+        Filtrer les sujets sélectionnés
+        <div class="ui toggle checkbox ">
+          {{input type="checkbox"
+                  checked=filter
+                  class="toggle"}}
+          <label class="checkbox-label"></label>
+        </div>
+      </div>
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
@@ -30,23 +40,36 @@
   <h2 class="ui top attached padded grid target-profile-title">
     <div class="row">
       <div class="right aligned column">
-        {{#ui-dropdown class="icon item"}}
-          <i class="bars icon"></i>
-          <div class="menu">
+        {{#basic-dropdown  horizontalPosition="left" as |dd|}}
+          {{#dd.trigger class="trigger-menu"}}<i class="bars icon"></i>{{/dd.trigger}}
+          {{#dd.content class="dropdown-multi profile-menu slide-fade"}}
             {{#each model as |area|}}
-              <div data-value={{area.code}} class="item">
-                <i class="dropdown icon"></i>
-                <span class="text">{{area.name}}</span>
-                <div class="menu">
+
+                {{#basic-dropdown class="sub-menu" calculatePosition=calculatePosition as |dd|}}
+                {{#dd.trigger       onMouseDown=(action "prevent")
+                                    onMouseEnter=(action "open")
+                                    onMouseLeave=(action "close")
+                                    class="sub-trigger"}}
+                  {{area.name}} <i class="icon dropdown"></i>
+                {{/dd.trigger}}
+                {{#dd.content onMouseEnter=(action "open")
+                              onMouseLeave=(action "close")
+                              class="dropdown-multi slide-fade"}}
+
                   {{#each area.sortedCompetences as |competence|}}
-                    <div class="item"{{action "scrollTo"
-                                              (concat "competence-profile-anchor-" competence.id)}}>{{competence.code}} {{competence.title}}</div>
+                    <div class="item area-profile-{{area.code}}" {{action "scrollTo"
+                                                                          (concat "competence-profile-anchor-" competence.id)}}>
+                      <b>{{competence.code}}</b> {{competence.title}}</div>
                   {{/each}}
-                </div>
-              </div>
+
+                {{/dd.content}}
+              {{/basic-dropdown}}
+
             {{/each}}
-          </div>
-        {{/ui-dropdown}}
+          {{/dd.content}}
+        {{/basic-dropdown}}
+
+
       </div>
       <div class="five wide column">Référentiel Pix</div>
       <div class="six wide center aligned column"></div>
@@ -67,6 +90,6 @@
   </div>
 </div>
 {{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel
-                   selectedSkills=selectedTubeSkills tube=selectedTube class="popin-tube-level"}}
+                   selectedSkills=selectedTubeSkills tube=selectedTube display=displayTubeLevel}}
 {{popin-single-entry class="popin-enter-profile-id" title="Identifiant du profil cible" label="Identifiant"
-                     setValue=(action "generateSQL")}}
+                     setValue=(action "generateSQL") display=displaySingleEntry}}

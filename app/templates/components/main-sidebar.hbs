@@ -1,35 +1,52 @@
-{{#ui-sidebar class=class id="main-sidebar" dimPage=true closable=true context=".application" as |execute|}}
-<div class="header">Pix Editor</div>
-{{#ui-search showNoResults=true apiSettings=searchAPISettings error=searchErrors onSelect=(action hideSidebar)}}
-  <div class="ui icon input">
-    <input class="prompt" placeholder="Acquix ou recordId" type="text">
-    <i class="search icon"></i>
+<div class="ui container">
+  <div class="inverted menu left vertical main-sidebar wide ui sidebar uncover visible {{if config.lite "lite" ""}}">
+    <div class="header">Pix Editor</div>
+    {{#power-select search=(action "getSearchResults")
+                    placeholder="Acquix ou recordId"
+                    onchange=(action "linkTo")
+                    renderInPlace=true
+                    triggerComponent="power-select-custom-trigger"
+                    class="sidebar-search"
+                    tagName="div"
+                    searchMessage=""
+                    searchPlaceholder="Rechercher..."
+                    loadingMessage="Recherche en cours..."
+                    noMatchesMessage="Pas de résultat"
+    as |result|}}
+      {{result.title}}
+    {{/power-select}}
+    {{#accordion-list as |accordion|}}
+      <div class="ui accordion inverted">
+        {{#each areas as |area|}}
+          {{#accordion.item as |accordionItem|}}
+            {{#accordionItem.toggle class="title"}}
+              <i class="dropdown icon"></i>
+              {{area.name}}
+            {{/accordionItem.toggle}}
+            {{#accordionItem.panel}}
+              <div class="content">
+                {{#each area.sortedCompetences as |competence|}}
+                  {{#link-to "competence" competence.id class="item"
+                             invokeAction=(action burger.state.actions.close)}}{{competence.name}}{{/link-to}}
+                {{/each}}
+              </div>
+            {{/accordionItem.panel}}
+          {{/accordion.item}}
+        {{/each}}
+      </div>
+    {{/accordion-list}}
+    <div class="secondary-links">
+      {{#link-to "target-profile" invokeAction=(action burger.state.actions.close)}}
+        <i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
+      <p {{action "shareAreas"}}><i class="share square icon"></i> Exporter les sujets</p>
+    </div>
+    <div class="ui labelled icon menu">
+      <a class="item" onclick={{action openConfiguration}}><i class="wrench icon"></i>Configuration</a>
+      <div class="right item">
+        {{#if author}}
+          {{author}} -
+        {{/if}}
+        Version {{version}}</div>
+    </div>
   </div>
-  <div class="results"></div>
-{{/ui-search}}
-{{#ui-accordion class="inverted"}}
-  {{#each areas as |area|}}
-  <div class="title">
-    <i class="dropdown icon"></i>
-    {{area.name}}
-  </div>
-  <div class="content">
-    {{#each area.sortedCompetences as |competence|}}
-      {{#link-to "competence" competence.id class="item" invokeAction=(action execute "hide")}}{{competence.name}}{{/link-to}}
-    {{/each}}
-  </div>
-  {{/each}}
-{{/ui-accordion}}
-<div class="secondary-links">
-  {{#link-to "target-profile" invokeAction=(action execute "hide")}}<i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
-    <p {{action "shareAreas"}}><i class="share square icon"></i> Exporter les sujets</p>
 </div>
-<div class="ui labelled icon menu">
-<a class="item" onclick={{action openConfiguration}}><i class="wrench icon"></i>Configuration</a>
-<div class="right item">
-  {{#if author}}
-    {{author}} -
-  {{/if}}
-   Version {{version}}</div>
-</div>
-{{/ui-sidebar}}

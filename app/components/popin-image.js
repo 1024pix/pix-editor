@@ -1,5 +1,10 @@
-import PopinBase from './popin-base';
+import Component from '@ember/component';
 
-export default PopinBase.extend({
-  classNames:['small']
+export default Component.extend({
+  classNames:['small'],
+  actions:{
+    closeModal(){
+      this.set('display', false)
+    }
+  }
 });

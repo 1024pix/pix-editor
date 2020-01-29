@@ -1,30 +1,40 @@
-<i class="close icon"></i>
-<div class="header">
-  {{tube.name}}
-</div>
-<div class="content">
-  <div class="levels {{if skills.isPending "loading"}}">
-    {{#if skills.isPending}}
-      <div class="ui active centered inline loader"></div>
-    {{/if}}
-    {{#each skills as |skill|}}
-      {{#if skill}}
-        <div class="level {{if skill._selected "selected"}}" onclick={{action "select" skill}} >
-          {{skill.level}}
+{{#if display}}
+  {{#modal-dialog
+          targetAttachment="center"
+          overlayClassNames="custom-overlay-modal"
+          onClose=(action "closeModal")
+  }}
+    <div class="ui modal visible active popin-tube-level">
+      <i class="close icon" {{action "closeModal"}}></i>
+      <div class="header">
+        {{tube.name}}
+      </div>
+      <div class="content">
+        <div class="levels {{if skills.isPending "loading"}}">
+          {{#if skills.isPending}}
+            <div class="ui active centered inline loader"></div>
+          {{/if}}
+          {{#each skills as |skill|}}
+            {{#if skill}}
+              <div class="level {{if skill._selected "selected"}}" onclick={{action "select" skill}} >
+                {{skill.level}}
+              </div>
+            {{else}}
+              <div class="level disabled"></div>
+            {{/if}}
+          {{/each}}
         </div>
-      {{else}}
-        <div class="level disabled"></div>
-      {{/if}}
-    {{/each}}
-  </div>
-</div>
-<div class="actions">
-  <div class="ui deny button">
-    Annuler
-  </div>
-  {{#if mayUnset}}
-  <div class="ui black right button" onclick={{action "clear"}}>
-    Effacer
-  </div>
-  {{/if}}
-</div>
+      </div>
+      <div class="actions">
+        <div class="ui deny button" {{action "closeModal"}}>
+          Annuler
+        </div>
+        {{#if mayUnset}}
+          <div class="ui black right button" onclick={{action "clear"}}>
+            Effacer
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  {{/modal-dialog}}
+{{/if}}

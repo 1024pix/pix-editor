@@ -188,7 +188,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .ui.selection.dropdown {
-    min-height:0px;
+    min-height:0;
     height:auto;
     margin:2px 0;
     padding:8px 40px 8px 8px;
@@ -285,3 +285,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 }
 
+.elephant{
+  width:100%;
+  height:100%;
+  background: url("/elephant.png") no-repeat center left -300px;
+}

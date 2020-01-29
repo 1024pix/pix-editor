@@ -1,34 +1,57 @@
-<div class="ui container fluid application pushable">
-  <div class={{concat "ui page dimmer inverted" (if loading " active" "")}}>
-      <div class="ui text loader">{{loadingMessage}}</div>
-  </div>
-  {{main-sidebar areas=model loadCompetence=(action "loadCompetence") class=(concat "inverted menu left vertical main-sidebar wide " (if (eq currentRouteName "index") "visible" "") (if config.lite "lite" "")) openConfiguration=(action "openConfiguration") isLoading=(action "isLoading") finishedLoading=(action "finishedLoading") showMessage=(action "showMessage")}}
-  <div class="pusher">
-    <div class="ui vertical inverted icon menu main-menu {{if config.lite "lite" ""}}">
-      <a class="item" onclick={{action "toggleSidebar"}}>
-        <i class="bars icon"></i>
-      </a>
-    </div>
-    <div class="main">
-      {{outlet}}
-      {{#if messages.length}}
-        <div class="messages">
-          {{#each messages as |message|}}
-            <div class={{concat "ui floating message " (if message.positive "positive" "warning")}} id={{message.id}}>
-              <p>
-                {{#if message.positive}}
-                <i class="check icon"></i>
-                {{else}}
-                <i class="exclamation icon"></i>
-                {{/if}}
-                {{message.text}}
-              </p>
-            </div>
-          {{/each}}
+{{#burger-menu
+        width=350
+        animation="reveal"
+        open=openMenuState
+        locked=lockedMenu
+    as |burger|}}
+  {{#burger.menu}}
+    {{main-sidebar areas=model
+                   burger=burger
+                   config=config
+                   openConfiguration=(action "openConfiguration")
+                   isLoading=(action "isLoading")
+                   finishedLoading=(action "finishedLoading")
+                   showMessage=(action "showMessage")}}
+  {{/burger.menu}}
+  {{#burger.outlet}}
+    {{openMenu}}
+    <div class="ui container fluid application pushable">
+      <div class={{concat "ui page dimmer inverted" (if loading " active" "")}}>
+        <div class="ui text loader">{{loadingMessage}}</div>
+      </div>
+      <div class="pusher">
+        <div class="ui vertical inverted icon menu main-menu {{if config.lite "lite" ""}}">
+          <a class="item" {{action burger.state.actions.toggle}}>
+            <i class="bars icon"></i>
+          </a>
         </div>
-      {{/if}}
+        <div class="main">
+          {{#if (eq currentRouteName "index")}}
+            <div class="elephant"></div>
+          {{/if}}
+          {{outlet}}
+          {{#if messages.length}}
+            <div class="messages">
+              {{#each messages as |message|}}
+                <div class={{concat "ui floating message " (if message.positive "positive" "warning")}}
+                     id={{message.id}}>
+                  <p>
+                    {{#if message.positive}}
+                      <i class="check icon"></i>
+                    {{else}}
+                      <i class="exclamation icon"></i>
+                    {{/if}}
+                    {{message.text}}
+                  </p>
+                </div>
+              {{/each}}
+            </div>
+          {{/if}}
+        </div>
+      </div>
+      {{popin-config-form update=(action "configUpdated") display=displayConfiguration class="popin-config-form"}}
+      {{popin-confirm title=confirmTitle content=confirmContent onApprove=(action "confirmApprove")
+                      onDeny=(action "confirmDeny") display=displayConfirm}}
     </div>
-  </div>
-  {{popin-config-form update=(action "configUpdated") class="popin-config-form"}}
-  {{popin-confirm title=confirmTitle content=confirmContent onApprove=(action "confirmApprove") onDeny=(action "confirmDeny") class="popin-confirm"}}
-</div>
+  {{/burger.outlet}}
+{{/burger-menu}}
