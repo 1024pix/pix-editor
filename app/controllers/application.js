@@ -22,7 +22,7 @@ export default Controller.extend({
     this.messages = [];
   },
   openMenuState:computed('router.currentRouteName', '_menuOpen', {
-    get(key) {
+    get() {
       if (this.get('router.currentRouteName') === 'index') {
         return true;
       } else {
