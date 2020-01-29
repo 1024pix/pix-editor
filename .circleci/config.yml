@@ -23,7 +23,8 @@ jobs:
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - restore_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
-      - run: npm test
+      - run: |
+          JOBS=2 npm test
 
   deploy_to_ghpages:
     docker:
