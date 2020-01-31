@@ -1,9 +1,9 @@
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
+import fetch from 'fetch';
 
 export default Service.extend({
   config:service(),
-  ajax:service(),
   filePath:service(),
   uploadFile(file, fileName) {
     let url = this.get("config").get("storagePost") + Date.now()+ "." + this.get('filePath').getExtension(file.get("name"));
@@ -48,10 +48,18 @@ export default Service.extend({
           }
         }
       };
-      return this.get("ajax").post(config.get("storageAuth"), {data:data, headers:{"Content-type": "application/json"}})
-      .then(function(response) {
+      return fetch(config.get("storageAuth"), {
+        method:'POST',
+        headers:{"Content-type": "application/json"},
+        body:JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(response => {
         config.set("storageToken", response.token);
         return config.get("storageToken");
+      })
+      .catch((error) => {
+        console.error(error);
       });
     }
   }
