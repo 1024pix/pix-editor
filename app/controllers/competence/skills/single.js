@@ -3,6 +3,8 @@ import {inject as controller} from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {alias} from '@ember/object/computed';
 import {computed} from '@ember/object';
+import {scheduleOnce} from '@ember/runloop';
+
 
 export default Controller.extend({
   parentController: controller("competence"),
@@ -26,6 +28,9 @@ export default Controller.extend({
   mayMove: computed("config.access", "skill", "skill.productionTemplate", function () {
     return this.get('access').mayMoveSkill(this.get('skill'));
   }),
+  _scrollToTop() {
+    document.querySelector(".skill-data").scrollTop = 0;
+  },
   actions: {
     maximize() {
       this.set("maximized", true);
@@ -51,7 +56,7 @@ export default Controller.extend({
       this.set("wasMaximized", state);
       this.send("maximize");
       this.set("edition", true);
-      document.querySelector(".skill-data").scrollTop = 0;
+      scheduleOnce('afterRender', this, this._scrollToTop);
     },
     cancelEdit() {
       this.set("edition", false);

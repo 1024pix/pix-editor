@@ -86,6 +86,9 @@ export default Controller.extend({
     }
     this.set('copyOperation', false);
   },
+  _scrollToTop() {
+    document.querySelector(`.${this.get('elementClass')}.challenge-data`).scrollTop = 0;
+  },
   actions: {
     showIllustration: function () {
       let illustration = this.get('challenge.illustration')[0];
@@ -120,7 +123,7 @@ export default Controller.extend({
       this.set('wasMaximized', state);
       this.send('maximize');
       this.set('edition', true);
-      document.querySelector(`.${this.get('elementClass')}.challenge-data`).scrollTop = 0;
+      scheduleOnce('afterRender', this, this._scrollToTop);
     },
     cancelEdit() {
       this.set('edition', false);

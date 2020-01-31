@@ -3,6 +3,7 @@ import {computed} from '@ember/object';
 import {alias} from '@ember/object/computed';
 import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
+import {scheduleOnce} from '@ember/runloop';
 
 export default Controller.extend({
   edition:false,
@@ -26,6 +27,12 @@ export default Controller.extend({
   mayMove:computed("config.access", "tube", "tube.hasProductionChallenge", function() {
     return this.get('access').mayMoveTube(this.get('tube'));
   }),
+  _scrollToTop() {
+    const tubeData = document.querySelector('.tube-data');
+    if(tubeData){
+      tubeData.scrollTop = 0;
+    }
+  },
   actions: {
     maximize() {
       this.set("maximized", true);
@@ -42,10 +49,7 @@ export default Controller.extend({
       this.set("wasMaximized", state);
       this.send("maximize");
       this.set("edition", true);
-      const tubeData = document.querySelector(".tube-data");
-      if(tubeData){
-        tubeData.scrollTop = 0;
-      }
+      scheduleOnce('afterRender', this, this._scrollToTop);
     },
     cancelEdit() {
       this.set("edition", false);
