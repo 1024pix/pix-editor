@@ -286,10 +286,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .elephant{
-  position:absolute;
-  bottom:5px;
-  right:5px;
-  width:189px;
-  height:150px;
-  background: url("/assets/images/elephant.png") no-repeat;
+  width: 100%;
+  height: 100%;
+  background: url("/assets/images/elephant_v2.png") center center no-repeat;
+  background-size: contain;
 }
