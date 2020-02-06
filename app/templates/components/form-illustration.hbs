@@ -14,9 +14,11 @@
   {{/if}}
   {{#if this.edition}}
     <FileUpload @name="illustration" @accept="image/*" @onfileadd={{this.add}}>
-      <button class="ui button" type="button">
+    {{!-- template-lint-disable link-href-attributes  --}}
+      <a class="ui button">
         Choisir une image...
-      </button>
+      </a>
+    {{!-- template-lint-enable link-href-attributes  --}}
     </FileUpload>
   {{/if}}
 </div>

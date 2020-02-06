@@ -12,9 +12,11 @@
 {{/if}}
 {{#if this.edition}}
   <FileUpload @name="files" @onfileadd={{this.add}}>
-    <button class="ui button" type="button">
+    {{!-- template-lint-disable link-href-attributes  --}}
+    <a class="ui button">
       Ajouter un fichier...
-    </button>
+    </a>
+    {{!-- template-lint-enable link-href-attributes  --}}
   </FileUpload>
   {{#if this.value.length}}
     <div class="ui input">
