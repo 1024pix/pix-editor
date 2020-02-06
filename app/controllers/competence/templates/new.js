@@ -1,37 +1,45 @@
+import classic from 'ember-classic-decorator';
 import Template from './single';
+import { action } from '@ember/object';
 
-export default Template.extend({
-  creation:true,
-  mayUpdateCache:false,
-  queryParams: ['from'],
-  defaultSaveChangelog:"Création du prototype",
-  actions:{
-    cancelEdit() {
-      this.get("store").deleteRecord(this.get("challenge"));
-      this.set("edition", false);
-      this._message("Création annulée");
-      this.get("parentController").send("closeChildComponent");
-    },
-    save() {
-      this.get("application").send("isLoading");
-      return this._handleIllustration(this.get("challenge"))
-      .then(challenge => this._handleAttachments(challenge))
-      .then(challenge => this._saveChallenge(challenge))
-      .then(challenge => this._setVersion(challenge))
-      .then(challenge => {
-        this.set("edition", false);
-        this.send("minimize");
-        this._message("Prototype enregistré");
-        this.transitionToRoute("competence.templates.single", this.get("competence"), challenge);
-      })
-      .catch(() => {
-        this._errorMessage("Erreur lors de la création");
-      })
-      .finally(() => {
-        this.get("application").send("finishedLoading");
-      })
-    }
-  },
+@classic
+export default class NewController extends Template {
+
+  creation = true;
+  mayUpdateCache = false;
+  queryParams = ['from'];
+
+  defaultSaveChangelog = 'Création du prototype';
+
+  @action
+  cancelEdit() {
+    this.get('store').deleteRecord(this.get('challenge'));
+    this.set('edition', false);
+    this._message('Création annulée');
+    this.get('parentController').send('closeChildComponent');
+  }
+
+  @action
+  save() {
+    this.get('application').send('isLoading');
+    return this._handleIllustration(this.get('challenge'))
+    .then(challenge => this._handleAttachments(challenge))
+    .then(challenge => this._saveChallenge(challenge))
+    .then(challenge => this._setVersion(challenge))
+    .then(challenge => {
+      this.set('edition', false);
+      this.send('minimize');
+      this._message('Prototype enregistré');
+      this.transitionToRoute('competence.templates.single', this.get('competence'), challenge);
+    })
+    .catch(() => {
+      this._errorMessage('Erreur lors de la création');
+    })
+    .finally(() => {
+      this.get('application').send('finishedLoading');
+    })
+  }
+
   _setVersion(challenge) {
     let operation;
     if (challenge.get('isWorkbench')) {
@@ -58,4 +66,4 @@ export default Template.extend({
       return challenge;
     });
   }
-});
+}

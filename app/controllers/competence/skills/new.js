@@ -24,24 +24,24 @@ export default class NewController extends Skill {
 
   @action
   save() {
-    this.get("application").send("isLoading");
-    let skill = this.get("skill");
-    let tube = this.get("tube");
+    this.get('application').send('isLoading');
+    let skill = this.get('skill');
+    let tube = this.get('tube');
     return tube.get('competence')
     .then(competence=> {
-      skill.set("tube", tube);
-      skill.set("competence", [competence.get('id')]);
+      skill.set('tube', tube);
+      skill.set('competence', [competence.get('id')]);
       return skill.save()
     })
     .then(() => {
-      this.set("edition", false);
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Acquis créé", true);
+      this.set('edition', false);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Acquis créé', true);
     })
     .catch((error) => {
       console.error(error);
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Erreur lors de la création de l'acquis", true);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Erreur lors de la création de l\'acquis', true);
     });
   }
 }
