@@ -29,7 +29,7 @@
       <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
     </div>
     <div class="ui labelled icon menu">
-      <a class="item" href="#" onclick={{this.openConfiguration}}><i class="wrench icon"></i>Configuration</a>
+      <button class="ui button item" type="button" onclick={{this.openConfiguration}}><i class="wrench icon"></i>Configuration</button>
       <div class="right item">
         {{#if this.author}}
           {{this.author}} -

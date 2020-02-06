@@ -2,37 +2,37 @@
   <div class="ui menu">
       <div class="ui left menu">
     {{#if this.mayAccessLog}}
-        <a class="ui icon item" {{on "click" this.challengeLog}} href="#"><i class="icon window chat"></i></a>
+        <button class="ui button icon item" {{on "click" this.challengeLog}} type="button"><i class="icon window chat"></i></button>
     {{/if}}
     {{#if (not this.edition)}}
       {{#if (and this.challenge.isTemplate (not this.challenge.isWorkbench))}}
-          <a class="ui icon item" {{on "click" this.showVersions}} href="#"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</a>
+          <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
       {{/if}}
       {{#if (or this.mayValidate this.mayArchive)}}
 
         <BasicDropdown @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
-          <dd.trigger><a class="ui icon item" href="#"><i class="bolt icon"></i></a></dd.trigger>
+          <dd.trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.trigger>
 
           <dd.content @class="dropdown-content dropdown-content-challenge slide-fade">
 
               {{#if this.mayValidate}}
-                <a class="item validate"  {{on "click" this.validate}} href="#">
+                <button class="ui button validate item"  {{on "click" this.validate}} type="button">
                   <i class="checkmark icon"></i>
                   Valider
-                </a>
+                </button>
               {{/if}}
               {{#if this.mayArchive}}
-                <a class="item archive"  {{on "click" this.archive}} href="#">
+                <button class="ui button archive item"  {{on "click" this.archive}} type="button">
                   <i class="trash alternate icon"></i>
                   Archiver
-                </a>
+                </button>
               {{/if}}
 
           </dd.content>
         </BasicDropdown>
       {{/if}}
       {{#if this.mayMove}}
-        <a class="ui icon item" {{on "click" this.moveTemplate}} href="#"><i class="icon random"></i></a>
+        <button class="ui icon button item" {{on "click" this.moveTemplate}} type="button"><i class="icon random"></i></button>
       {{/if}}
     {{/if}}
       </div>
@@ -41,11 +41,11 @@
     </div>
     <div class="ui right menu">
       {{#if this.maximized}}
-        <a class="ui icon item" {{on "click" this.minimize}} href="#"><i class="window minimize icon"></i></a>
+        <button class="ui icon button item" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
       {{else}}
-        <a class="ui icon item" {{on "click" this.maximize}} href="#"><i class="window maximize outline icon"></i></a>
+        <button class="ui icon button item" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
       {{/if}}
-      <a class="ui icon item" {{on "click" this.close}} href="#"><i class="icon window close"></i></a>
+      <button class="ui icon button item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
   </div>
 </div>
@@ -56,51 +56,51 @@
       <Textarea @value={{this.challenge.preview}} @id={{this.copyZoneId}} />    {{/if}}  </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
   {{#if this.edition}}
-    <a class="item important-action" {{on "click" this.save}} href="#">
+    <button class="ui button item important-action" {{on "click" this.save}} type="button">
       <i class="save icon"></i>
       Enregistrer
-    </a>
+    </button>
     {{#if this.mayUpdateCache}}
       <div class="item">
         <CustomCheckbox @label="mise à jour cache" @checked={{this.updateCache}} />
       </div>
     {{/if}}
-    <a class="item" {{on "click" this.cancelEdit}} href="#">
+    <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
       <i class="ban icon"></i>
       Annuler
-    </a>
+    </button>
   {{else}}
-    <a class="item" {{on "click" this.previewTemplate}} href="#">
+    <button class="ui button item" {{on "click" this.previewTemplate}} type="button">
       <i class="eye icon"></i>
       Prévisualiser
-    </a>
+    </button>
     {{#if this.mayEdit}}
-      <a class="item" {{on "click" this.edit}} href="#">
+      <button class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>
         Modifier
-      </a>
+      </button>
     {{/if}}
     {{#if this.mayDuplicate}}
-      <a class="item" {{on "click" this.duplicate}} href="#">
+      <button class="ui button item" {{on "click" this.duplicate}} type="button">
         <i class="copy icon"></i>
         Dupliquer
-      </a>
+      </button>
     {{/if}}
     {{#if this.mayAccessAirtable}}
-      <a class="item" {{on "click" this.openAirtable}} href="#">
+      <button class="ui button item" {{on "click" this.openAirtable}} type="button">
         <i class="table icon"></i>
         Airtable
-      </a>
+      </button>
     {{/if}}
-    <a class="item" {{on "click" this.copyLink}} href="#">
+    <button class="ui button item" {{on "click" this.copyLink}} type="button">
       <i class="linkify icon"></i>
       Copier lien
-    </a>
+    </button>
     {{#if (and (not this.alternative) (not this.challenge.isWorkbench))}}
-      <a class="item alternatives"  {{on "click" this.showAlternatives}} href="#">
+      <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
-      </a>
+      </button>
     {{/if}}
   {{/if}}
 </div>

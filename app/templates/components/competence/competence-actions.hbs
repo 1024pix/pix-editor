@@ -1,8 +1,8 @@
 {{#unless this.config.lite}}
   {{#if (eq this.section "skills")}}
-    <a class="left item" href="#" {{on "click" this.shareSkills}}>
+    <button class="ui button left item" type="button" {{on "click" this.shareSkills}}>
       <i class="share square icon"></i> Exporter
-    </a>
+    </button>
   {{else if (eq this.section "challenges")}}
     <div class="ui top attached tabular menu">
       <div class="item production {{if (eq this.view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
@@ -10,6 +10,6 @@
     </div>
   {{/if}}
 {{/unless}}
-<a class="right item" {{on "click" (fn this.refresh true)}} href="#">
+<button class="ui button right item" {{on "click" (fn this.refresh true)}} type="button">
   <i class="sync alternate icon"></i> Actualiser
-</a>
+</button>

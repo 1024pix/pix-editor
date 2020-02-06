@@ -11,18 +11,18 @@
   </form>
 </div>
 <div class="actions">
-  <a class="ui right button" {{on "click" this.close}} href="#">
+  <button class="ui right button" {{on "click" this.close}} type="button">
     Retour
-  </a>
+  </button>
   {{#if this.edition}}
-  <a class="ui green right button" {{on "click" this.save}} href="#">
+  <button class="ui green right button" {{on "click" this.save}} type="button">
     Enregistrer
-  </a>
+  </button>
   {{else}}
     {{#if this.mayEdit}}
-    <a class="ui green right button" {{on "click" this.edit}} href="#">
+    <button class="ui green right button" {{on "click" this.edit}} type="button">
       Modifier
-    </a>
+    </button>
     {{/if}}
   {{/if}}
 </div>

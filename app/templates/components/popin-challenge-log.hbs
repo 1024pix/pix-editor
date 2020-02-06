@@ -19,7 +19,7 @@
             <div class="ui bottom attached tab segment active" data-tab="own">
               <NoteList @list={{this.ownNotes}} @itemCount={{this.ownCount}} @listType="own-note-list" @displayAuthor={{false}} @show={{this.showOwnNote}} />
               <div class="ui text menu note-menu">
-                <a class="item" {{on "click" this.addNote}} href="#"><i class="plus icon"></i>Nouvelle note</a>
+                <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
               </div>
             </div>
           </at.tabPanel>

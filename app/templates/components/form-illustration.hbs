@@ -9,14 +9,14 @@
       {{this.value.0.file.name}} ({{this.value.0.file.size}} octets)
     {{/if}}
     {{#if this.edition}}
-      <a {{on "click" this.remove}} class="file-remove" href="#"><i class="remove icon"></i></a>
+      <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
     {{/if}}
   {{/if}}
   {{#if this.edition}}
     <FileUpload @name="illustration" @accept="image/*" @onfileadd={{this.add}}>
-      <a class="ui button" href="#">
+      <button class="ui button" type="button">
         Choisir une image...
-      </a>
+      </button>
     </FileUpload>
   {{/if}}
 </div>

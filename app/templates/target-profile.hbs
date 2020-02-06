@@ -18,19 +18,19 @@
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
-    <a class="first left item" {{on "click" this.load}} href="#">
+    <button class="ui button first left item" {{on "click" this.load}} type="button">
       <i class="folder open icon"></i> Ouvrir
-    </a>
-    <a class="left item" {{on "click" this.save}} href="#">
+    </button>
+    <button class="ui button left item" {{on "click" this.save}} type="button">
       <i class="save icon"></i> Enregistrer
-    </a>
+    </button>
     <div class="right menu">
-      <a class="item" {{on "click" this.generate}} href="#">
+      <button class="ui button item" {{on "click" this.generate}} type="button">
         <i class="download icon"></i> Identifiants
-      </a>
-      <a class="item" {{on "click" this.getProfileId}} href="#">
+      </button>
+      <button class="ui button item" {{on "click" this.getProfileId}} type="button">
         <i class="code icon"></i> CSV
-      </a>
+      </button>
     </div>
   </div>
   <h2 class="ui top attached padded grid target-profile-title">

@@ -1,10 +1,10 @@
 {{#if this.displayWorkbenchViews}}
-  <a class={{concat "item" (if (eq this.view "workbench") " active" "")}} {{on "click" (fn @selectView "workbench")}} href="#">
+  <button class={{concat "ui button item" (if (eq this.view "workbench") " active" "")}} {{on "click" (fn @selectView "workbench")}} type="button">
     <i class="grid layout icon"></i>
-  </a>
-  <a class={{concat "item" (if (eq this.view "workbench-list") " active" "")}} {{on "click" (fn @selectView "workbench-list")}} href="#">
+  </button>
+  <button class={{concat "ui button item" (if (eq this.view "workbench-list") " active" "")}} {{on "click" (fn @selectView "workbench-list")}} type="button">
     <i class="align justify icon"></i>
-  </a>
+  </button>
 {{/if}}
 {{#if this.displayProductionStats}}
   <div class="item competence-info"><div class="competence-info">Tubes : {{this.competence.productionTubeCount}}</div><div class="competence-info">Acquix : {{this.competence.productionSkillCount}}</div></div>
@@ -12,12 +12,12 @@
   <div class="item competence-info"><div class="competence-info">Tubes : {{this.competence.tubeCount}}</div><div class="competence-info">Acquix : {{this.competence.skillCount}}</div></div>
 {{/if}}
 {{#if this.mayCreateTube}}
-  <a class="left item" {{on "click" this.newTube}} href="#">
+  <button class="ui button left item" {{on "click" this.newTube}} type="button">
     <i class="plus square outline icon"></i> Nouveau tube
-  </a>
+  </button>
 {{/if}}
 {{#if this.mayCreateTemplate}}
-    <a class="right item" {{on "click" this.newTemplate}} href="#">
+    <button class="ui button right item" {{on "click" this.newTemplate}} type="button">
         <i class="plus square outline icon"></i> Nouveau prototype
-    </a>
+    </button>
 {{/if}}

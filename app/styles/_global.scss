@@ -34,12 +34,18 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .pusher {
     display:flex;
     flex-direction:row;
+
   }
 }
 
 .ui.menu.main-menu {
   border-radius:0;
   border-right:1px solid rgba(34, 36, 38, 0.15);
+
+  .ui.icon.button {
+    color: #ffffff;
+  }
+
 }
 
 .main {
@@ -117,7 +123,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     background-color:#F9FAFB;
     }
 
-    a.item.left.first {
+    .ui.button.item.left.first {
       margin-right:0 !important;
     }
 
@@ -174,7 +180,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       border:none;
       box-shadow:none;
       min-height:0;
-      a {
+      .ui.button {
         padding-top:7px;
         padding-bottom:0;
         background-color:transparent;
@@ -290,4 +296,13 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   height: 100%;
   background: url("/assets/images/elephant_v2.png") center center no-repeat;
   background-size: contain;
+}
+
+.ui.button {
+  background-color:transparent;
+  color:#000000;
+
+  &:hover {
+    background-color:rgba(0, 0, 0, 0.03);
+  }
 }
