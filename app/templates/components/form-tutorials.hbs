@@ -2,9 +2,8 @@
   <label>
     {{this.title}}
   </label>
-  {{#if this.edition}}
-    <PowerSelect @search={{this.getSearchTutorialResults}} @placeholder="commencer la recherche par > pour rechercher par Tag" @onchange={{fn this.selectTutorial this.tutorials}} @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}} @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|> pour rechercher par Tag" @onchange={{fn this.selectTutorial this.tutorials}} @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}} @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
-
+  {{#if @edition}}
+    <PowerSelect @search={{this.getSearchTutorialResults}} @placeholder="commencer la recherche par > pour rechercher par Tag" @onchange={{fn this.selectTutorial this.tutorials}} @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}} @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
       <div class="search-title">
         {{#if (eq this.repo.id "create")}}
           {{result.title}} <i class="add icon"></i>
@@ -30,8 +29,8 @@
         <div class="card">
           <div class="content">
             <div class="header">
-              {{#if this.edition}}
-                <div {{fn this.unselectTutorial this.tutorials tutorial}} class="ui right floated icon button">
+              {{#if @edition}}
+                <div {{on "click" (fn this.unselectTutorial this.tutorials tutorial)}} class="ui right floated icon button">
                   <i class="close icon"></i>
                 </div>
               {{/if}}
