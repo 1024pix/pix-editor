@@ -54,7 +54,6 @@ export default class SingleController extends Controller {
   displayChallengeLog = false;
   changelogCallback = null;
   defaultSaveChangelog = 'Mise à jour du prototype';
-  changelogApprove = '';
   copyZoneId = 'copyZone';
 
   @computed('creation', 'challenge', 'challenge.{skillNames,isWorkbench}')
