@@ -14,7 +14,7 @@
     {{this.title}}
   </label>
   {{#if this.edition}}
-    <SimpleMde @value={{this.value}} @change={{mut this.value}} @options={{this.simpleMDEOptions}} />
+    <SimpleMde @value={{this.value}} @change={{fn (mut this.value)}} @options={{this.simpleMDEOptions}} />
   {{else}}
     <div class="mde-preview">
       {{simple-mde-preview this.value}}

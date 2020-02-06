@@ -22,7 +22,7 @@
             {{#if this.authors.length}}
               <div class="field">
                 <label>Auteur</label>
-                <PowerSelect @placeholder="Sélectionnez votre trigramme" @options={{this.authorNames}} @selected={{this.author}} @onchange={{mut this.author}} as |auth|>
+                <PowerSelect @placeholder="Sélectionnez votre trigramme" @options={{this.authorNames}} @selected={{this.author}} @onchange={{fn (mut this.author)}} as |auth|>
                   {{auth}}
                 </PowerSelect>
               </div>
