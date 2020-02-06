@@ -1,12 +1,12 @@
-<div class={{concat "field" (if edition "" " disabled")}}>
-  <label>{{title}}</label>
-{{#if multiple}}
-  {{#power-select-multiple placeholder=(if defaultText defaultText "") options=options searchEnabled=false disabled=(if edition false true) selected=value onchange=(action (mut value)) as |option|}}
+<div class={{concat "field" (if this.edition "" " disabled")}}>
+  <label>{{@title}}</label>
+{{#if this.multiple}}
+  <PowerSelectMultiple @placeholder={{if this.defaultText this.defaultText ""}} @options={{this.options}} @searchEnabled={{false}} @disabled={{if this.edition false true}} @selected={{this.value}} @onchange={{mut this.value}} as |option|>
     {{option}}
-  {{/power-select-multiple}}
+  </PowerSelectMultiple>
 {{else}}
-  {{#power-select placeholder=(if defaultText defaultText "") searchEnabled=false options=options disabled=(if edition false true) selected=value onchange=(action (mut value)) as |option|}}
+  <PowerSelect @placeholder={{if @defaultText @defaultText ""}} @searchEnabled={{false}} @options={{@options}} @disabled={{if @edition false true}} @selected={{this.value}} @onchange={{mut this.value}} as |option|>
     {{option}}
-  {{/power-select}}
+  </PowerSelect>
 {{/if}}
 </div>

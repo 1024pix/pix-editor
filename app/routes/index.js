@@ -1,5 +1,7 @@
+import classic from 'ember-classic-decorator';
+import { classNames } from '@ember-decorators/component';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
-  classNames:['index']
-});
+@classic
+@classNames('index')
+export default class IndexRoute extends Route {}

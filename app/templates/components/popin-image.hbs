@@ -1,14 +1,10 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active">
-      <i class="close icon" {{action "closeModal"}}></i>
+      <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="image content">
-        <img class="image" src={{src}} alt="illustration">
+        <img class="image" src={{this.src}} alt="illustration">
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

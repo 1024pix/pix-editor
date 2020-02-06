@@ -1,6 +1,8 @@
+import classic from 'ember-classic-decorator';
 import SortedList from './sorted-list';
 
-export default SortedList.extend({
-  displayAuthor:true,
-  displayStatus:true
-});
+@classic
+export default class NoteList extends SortedList {
+  displayAuthor = true;
+  displayStatus = true;
+}

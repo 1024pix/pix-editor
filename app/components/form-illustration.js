@@ -1,13 +1,18 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
+import { classNames } from '@ember-decorators/component';
 import Component from '@ember/component';
 
-export default Component.extend({
-  classNames:['field'],
-    actions:{
-      remove() {
-        this.set("value", []);
-      },
-      add(file) {
-        this.set("value", [{file:file}]);
-      }
-    }
-});
+@classic
+@classNames('field')
+export default class FormIllustration extends Component {
+  @action
+  remove() {
+    this.set("value", []);
+  }
+
+  @action
+  add(file) {
+    this.set("value", [{file:file}]);
+  }
+}

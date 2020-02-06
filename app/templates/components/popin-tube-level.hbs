@@ -1,22 +1,18 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active popin-tube-level">
-      <i class="close icon" {{action "closeModal"}}></i>
+      <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="header">
-        {{tube.name}}
+        {{this.tube.name}}
       </div>
       <div class="content">
-        <div class="levels {{if skills.isPending "loading"}}">
-          {{#if skills.isPending}}
+        <div class="levels {{if this.skills.isPending "loading"}}">
+          {{#if this.skills.isPending}}
             <div class="ui active centered inline loader"></div>
           {{/if}}
-          {{#each skills as |skill|}}
+          {{#each this.skills as |skill|}}
             {{#if skill}}
-              <div class="level {{if skill._selected "selected"}}" onclick={{action "select" skill}} >
+              <div class="level {{if skill._selected "selected"}}" {{on "click" (fn this.select skill)}} >
                 {{skill.level}}
               </div>
             {{else}}
@@ -26,15 +22,15 @@
         </div>
       </div>
       <div class="actions">
-        <div class="ui deny button" {{action "closeModal"}}>
+        <div class="ui deny button" {{on "click" this.closeModal}}>
           Annuler
         </div>
-        {{#if mayUnset}}
-          <div class="ui black right button" onclick={{action "clear"}}>
+        {{#if this.mayUnset}}
+          <div class="ui black right button" {{on "click" this.clear}}>
             Effacer
           </div>
         {{/if}}
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

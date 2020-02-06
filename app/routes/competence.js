@@ -1,11 +1,17 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
-import {inject as service} from "@ember/service";
 
-export default Route.extend({
-  paginatedQuery:service(),
+@classic
+export default class CompetenceRoute extends Route {
+  @service
+  paginatedQuery;
+
   model(params) {
     return this.get('store').findRecord("competence", params.competence_id);
-  },
+  }
+
   afterModel(model) {
     if (model.get('needsRefresh')) {
       return model.hasMany('rawTubes').reload()
@@ -38,12 +44,12 @@ export default Route.extend({
         return Promise.all(getChallenges);
       })
     }
-  },
-  actions: {
-    refreshModel() {
-      let model = this.modelFor(this.routeName);
-      model.set('needsRefresh', true);
-      this.refresh();
-    }
   }
-});
+
+  @action
+  refreshModel() {
+    let model = this.modelFor(this.routeName);
+    model.set('needsRefresh', true);
+    this.refresh();
+  }
+}

@@ -1,13 +1,13 @@
-<div class="skill-header {{skill.descriptionCSS}}">
+<div class="skill-header {{this.skill.descriptionCSS}}">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if mayMove}}
+      {{#if this.mayMove}}
         <a class="ui icon item" onclick={{action "moveSkill"}}><i class="icon random"></i></a>
       {{/if}}
     </div>
-    <div class="item header">{{skill.name}}</div>
+    <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
-      {{#if maximized}}
+      {{#if this.maximized}}
         <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
       {{else}}
         <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
@@ -18,10 +18,10 @@
 </div>
 <div class="skill-details">
   <div class="skill-data">
-    {{skill-form skill=skill application=application edition=edition}}
+    <SkillForm @skill={{this.skill}} @application={{this.application}} @edition={{this.edition}} />
   </div>
   <div class="ui vertical compact labeled icon menu skill-menu">
-    {{#if edition}}
+    {{#if this.edition}}
       <a class="item important-action" onclick={{action "save"}}>
         <i class="save icon"></i>
         Enregistrer
@@ -31,19 +31,19 @@
         Annuler
       </a>
     {{else}}
-      {{#if skill.productionTemplate}}
+      {{#if this.skill.productionTemplate}}
         <a class="item" onclick={{action "preview"}}>
           <i class="eye icon"></i>
           Prévisualiser
         </a>
       {{/if}}
-      {{#if mayEdit}}
+      {{#if this.mayEdit}}
         <a class="item" onclick={{action "edit"}}>
           <i class="edit icon"></i>
           Modifier
         </a>
       {{/if}}
-      {{#if mayAccessAirtable}}
+      {{#if this.mayAccessAirtable}}
         <a class="item" onclick={{action "openAirtable"}}>
           <i class="table icon"></i>
           Airtable
@@ -52,4 +52,4 @@
     {{/if}}
   </div>
 </div>
-{{popin-select-location display=displaySelectLocation onChange=(action "setLocation") name=skillName areas=areas competence=competence selectTubeLevel=true tube=skill.tube level=skill.level selectEmptyLevels=true}}
+<PopinSelectLocation @display={{this.displaySelectLocation}} @onChange={{action "setLocation"}} @name={{this.skillName}} @areas={{this.areas}} @competence={{this.competence}} @selectTubeLevel={{true}} @tube={{this.skill.tube}} @level={{this.skill.level}} @selectEmptyLevels={{true}} />

@@ -1,38 +1,27 @@
-{{#burger-menu
-        width=350
-        animation="reveal"
-        open=openMenuState
-        locked=lockedMenu
-    as |burger|}}
-  {{#burger.menu}}
-    {{main-sidebar areas=model
-                   burger=burger
-                   config=config
-                   openConfiguration=(action "openConfiguration")
-                   isLoading=(action "isLoading")
-                   finishedLoading=(action "finishedLoading")
-                   showMessage=(action "showMessage")}}
-  {{/burger.menu}}
-  {{#burger.outlet}}
-    {{openMenu}}
+<BurgerMenu @width={{350}} @animation="reveal" @open={{this.openMenuState}} @locked={{this.lockedMenu}} as |burger|>
+  <burger.menu>
+    <MainSidebar @areas={{this.model}} @burger={{burger}} @config={{this.config}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
+  </burger.menu>
+  <burger.outlet>
+    {{this.openMenu}}
     <div class="ui container fluid application pushable">
-      <div class={{concat "ui page dimmer inverted" (if loading " active" "")}}>
-        <div class="ui text loader">{{loadingMessage}}</div>
+      <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
+        <div class="ui text loader">{{this.loadingMessage}}</div>
       </div>
       <div class="pusher">
-        <div class="ui vertical inverted icon menu main-menu {{if config.lite "lite" ""}}">
-          <a class="item" {{action burger.state.actions.toggle}}>
+        <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
+          <a class="item" href="#" {{on "click" burger.state.actions.toggle}}>
             <i class="bars icon"></i>
           </a>
         </div>
         <div class="main">
-          {{#if (eq currentRouteName "index")}}
+          {{#if (eq this.currentRouteName "index")}}
             <div class="elephant"></div>
           {{/if}}
           {{outlet}}
-          {{#if messages.length}}
+          {{#if this.messages.length}}
             <div class="messages">
-              {{#each messages as |message|}}
+              {{#each this.messages as |message|}}
                 <div class={{concat "ui floating message " (if message.positive "positive" "warning")}}
                      id={{message.id}}>
                   <p>
@@ -49,9 +38,8 @@
           {{/if}}
         </div>
       </div>
-      {{popin-config-form update=(action "configUpdated") display=displayConfiguration class="popin-config-form"}}
-      {{popin-confirm title=confirmTitle content=confirmContent onApprove=(action "confirmApprove")
-                      onDeny=(action "confirmDeny") display=displayConfirm}}
+      <PopinConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" />
+      <PopinConfirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
     </div>
-  {{/burger.outlet}}
-{{/burger-menu}}
+  </burger.outlet>
+</BurgerMenu>

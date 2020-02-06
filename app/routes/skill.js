@@ -1,9 +1,12 @@
+import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
+@classic
+export default class SkillRoute extends Route {
   model(params) {
     return this.get("store").query("skill", {filterByFormula:"FIND('"+params.skill_name+"', {Nom})", maxRecords:1});
-  },
+  }
+
   afterModel(model) {
     if (model.get("length") > 0) {
       let skill = model.get("firstObject");
@@ -13,4 +16,4 @@ export default Route.extend({
       this.transitionTo("index");
     }
   }
-});
+}

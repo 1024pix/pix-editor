@@ -1,9 +1,13 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
 import Component from '@ember/component';
 
-export default Component.extend({
-  displayTutorialForm:false,
+@classic
+export default class SkillForm extends Component {
+  displayTutorialForm = false;
+
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.options = {
       'clueStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé", "inapplicable"],
       'descriptionStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"],
@@ -11,12 +15,12 @@ export default Component.extend({
     };
     this.set('tutorials', []);
     this.set('searchTitle', '');
-  },
-  actions:{
-    openCreateTutorialModal(tutorials,title){
-      this.set('searchTitle', title);
-      this.set('tutorials',tutorials);
-      this.set('displayTutorialForm', true)
-    }
   }
-});
+
+  @action
+  openCreateTutorialModal(tutorials, title) {
+    this.set('searchTitle', title);
+    this.set('tutorials',tutorials);
+    this.set('displayTutorialForm', true)
+  }
+}

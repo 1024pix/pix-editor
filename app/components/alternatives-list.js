@@ -1,6 +1,9 @@
+import classic from 'ember-classic-decorator';
+import { classNameBindings } from '@ember-decorators/component';
 import SortedList from './sorted-list';
 
-export default SortedList.extend({
-  classNameBindings: ["hidden", "listType"],
-  listType: "alternative-list"
-});
+@classic
+@classNameBindings("hidden", "listType")
+export default class AlternativesList extends SortedList {
+  listType = "alternative-list";
+}

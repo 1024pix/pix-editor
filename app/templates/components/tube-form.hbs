@@ -1,11 +1,11 @@
 <form action="" class="ui form">
-  {{#if edition}}
-    {{form-input value=tube.name edition=edition label="Nom"}}
+  {{#if this.edition}}
+    <FormInput @value={{this.tube.name}} @edition={{this.edition}} @label="Nom" />
   {{/if}}
-  {{form-input value=tube.title edition=edition label="Titre"}}
-  {{form-textarea title="Description" value=tube.description edition=edition}}
+  <FormInput @value={{this.tube.title}} @edition={{this.edition}} @label="Titre" />
+  <FormTextarea @title="Description" @value={{this.tube.description}} @edition={{this.edition}} />
     <div class="ui raised segment">
-      {{form-input value=tube.practicalTitle edition=edition label="Titre pratique"}}
-      {{form-textarea title="Description pratique" value=tube.practicalDescription edition=edition}}
+      <FormInput @value={{this.tube.practicalTitle}} @edition={{this.edition}} @label="Titre pratique" />
+      <FormTextarea @title="Description pratique" @value={{this.tube.practicalDescription}} @edition={{this.edition}} />
     </div>
 </form>

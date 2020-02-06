@@ -1,70 +1,86 @@
+import classic from 'ember-classic-decorator';
+import { action, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import { computed } from '@ember/object';
-import {inject as service} from '@ember/service';
 import DS from "ember-data";
 
-export default Component.extend({
-  config:service(),
-  access:service(),
-  saved:false,
-  newAuthor:null,
+@classic
+export default class PopinConfigForm extends Component {
+  @service
+  config;
+
+  @service
+  access;
+
+  saved = false;
+  newAuthor = null;
+
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.oldValues = {};
-  },
+  }
+
   _setValue(key, value) {
     if (this.oldValues[key] == null) {
       this.oldValues[key] = this.get("config."+key);
     }
     this.set("config."+key, value);
     return value;
-  },
+  }
+
   _restoreValue(key) {
     if (this.oldValues[key] != null) {
       this.set(key, this.oldValues[key]);
     }
-  },
-  airtableKey:computed("config.airtableKey", {
-    get() {
-      return this.get("config.airtableKey");
-    },
-    set(key, value) {
-      return this._setValue("airtableKey", value);
-    }
-  }),
-  configKey:computed("config.configKey", {
-    get() {
-      return this.get("config.configKey");
-    },
-    set(key, value) {
-      return this._setValue("configKey", value);
-    }
-  }),
-  author:computed("config.author", {
-    get() {
-      return this.get("config.author");
-    },
-    set(key, value) {
-      return this._setValue("author", value);
-    }
-  }),
-  pixUser:computed("config.pixUser", {
-    get() {
-      return this.get("config.pixUser");
-    },
-    set(key, value) {
-      return this._setValue("pixUser", value);
-    }
-  }),
-  pixPassword:computed("config.pixPassword", {
-    get() {
-      return this.get("config.pixPassword");
-    },
-    set(key, value) {
-      return this._setValue("pixPassword", value);
-    }
-  }),
-  authors:computed("config.{decrypted,authors}", function() {
+  }
+
+  @computed("config.airtableKey")
+  get airtableKey() {
+    return this.get("config.airtableKey");
+  }
+
+  set airtableKey(value) {
+    return this._setValue("airtableKey", value);
+  }
+
+  @computed("config.configKey")
+  get configKey() {
+    return this.get("config.configKey");
+  }
+
+  set configKey(value) {
+    return this._setValue("configKey", value);
+  }
+
+  @computed("config.author")
+  get author() {
+    return this.get("config.author");
+  }
+
+  set author(value) {
+    return this._setValue("author", value);
+  }
+
+  @computed("config.pixUser")
+  get pixUser() {
+    return this.get("config.pixUser");
+  }
+
+  set pixUser(value) {
+    return this._setValue("pixUser", value);
+  }
+
+  @computed("config.pixPassword")
+  get pixPassword() {
+    return this.get("config.pixPassword");
+  }
+
+  set pixPassword(value) {
+    return this._setValue("pixPassword", value);
+  }
+
+  @computed("config.{decrypted,authors}")
+  get authors() {
     if (this.get("config.decrypted")) {
       return DS.PromiseArray.create({
         promise:this.get("config.authors")
@@ -72,8 +88,10 @@ export default Component.extend({
     } else {
       return [];
     }
-  }),
-  authorNames:computed("config.{decrypted,authorNames}", function() {
+  }
+
+  @computed("config.{decrypted,authorNames}")
+  get authorNames() {
     if (this.get("config.decrypted")) {
       return DS.PromiseArray.create({
         promise:this.get("config.authorNames")
@@ -81,8 +99,9 @@ export default Component.extend({
     } else {
       return [];
     }
-  }),
-  _closeModal(){
+  }
+
+  _closeModal() {
     if (this.get("saved")) {
       this.get("update")();
     } else {
@@ -94,28 +113,30 @@ export default Component.extend({
     }
     this.oldValues = {};
     this.set('display', false);
-  },
-  actions:{
-    saveConfig() {
-      let config = this.get("config");
-      let author = this.get("author");
-      let access = this.get("access");
-      let accessLevel = access.get("readOnly");
-      this.get("authors").then(authors => {
-        let authorRecord = authors.find((value) => {
-          return value.get("name") === author;
-        });
-        if (authorRecord) {
-          accessLevel = access.getLevel(authorRecord.get("access"));
-        }
-        config.set("access", accessLevel);
-        config.save();
-        this.set("saved", true);
-        this._closeModal();
-      });
-    },
-    closeModal(){
-      this._closeModal();
-    }
   }
-});
+
+  @action
+  saveConfig() {
+    let config = this.get("config");
+    let author = this.get("author");
+    let access = this.get("access");
+    let accessLevel = access.get("readOnly");
+    this.get("authors").then(authors => {
+      let authorRecord = authors.find((value) => {
+        return value.get("name") === author;
+      });
+      if (authorRecord) {
+        accessLevel = access.getLevel(authorRecord.get("access"));
+      }
+      config.set("access", accessLevel);
+      config.save();
+      this.set("saved", true);
+      this._closeModal();
+    });
+  }
+
+  @action
+  closeModal() {
+    this._closeModal();
+  }
+}

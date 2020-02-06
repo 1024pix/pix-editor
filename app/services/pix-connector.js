@@ -1,11 +1,16 @@
+import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import fetch from 'fetch';
 import { inject as service } from '@ember/service';
 
-export default Service.extend({
-  config:service(),
-  tokens:false,
-  connected:false,
+@classic
+export default class PixConnectorService extends Service {
+  @service
+  config;
+
+  tokens = false;
+  connected = false;
+
   connect() {
     let config = this.get("config");
     let user = config.get("pixUser");
@@ -34,7 +39,8 @@ export default Service.extend({
     } else {
       this.set("connected", false);
     }
-  },
+  }
+
   updateCache(challenge) {
     if (this.get("connected")) {
       let url = this.get("config").get("pixStaging")+"/api/cache/";
@@ -61,4 +67,4 @@ export default Service.extend({
       return Promise.reject();
     }
   }
-});
+}

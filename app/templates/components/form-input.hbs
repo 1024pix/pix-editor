@@ -1,9 +1,9 @@
-<div class={{concat "field" (if edition "" " disabled")}}>
-  <label >{{title}}</label>
+<div class={{concat "field" (if this.edition "" " disabled")}}>
+  <label>{{this.title}}</label>
   <div class="ui input">
-    {{#if label}}
-      <div class="label-input">{{label}} : </div>
+    {{#if this.label}}
+      <div class="label-input">{{this.label}} : </div>
     {{/if}}
-    {{input value=value readonly=(not edition)}}
+    <Input @value={{this.value}} @readonly={{not this.edition}} />
   </div>
 </div>

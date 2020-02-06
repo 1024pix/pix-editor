@@ -1,38 +1,34 @@
 <div class="main-left">
   <div class="main-title">
     <h1 class="ui header">Générateur de profil cible
-      <div class="target-profile-filter {{if showTubeDetails "active"}}">
+      <div class="target-profile-filter {{if this.showTubeDetails "active"}}">
         Détails des sujets
         <div class="ui toggle checkbox ">
-          {{input type="checkbox"
-                  checked=showTubeDetails
-                  class="toggle"}}
+          <Input @type="checkbox" @checked={{this.showTubeDetails}} class="toggle" />
           <label class="checkbox-label"></label>
         </div>
       </div>
-      <div class="target-profile-filter {{if filter "active"}}">
+      <div class="target-profile-filter {{if this.filter "active"}}">
         Filtrer les sujets sélectionnés
         <div class="ui toggle checkbox ">
-          {{input type="checkbox"
-                  checked=filter
-                  class="toggle"}}
+          <Input @type="checkbox" @checked={{this.filter}} class="toggle" />
           <label class="checkbox-label"></label>
         </div>
       </div>
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
-    <a class="first left item" onclick={{action "load"}}>
+    <a class="first left item" {{on "click" this.load}} href="#">
       <i class="folder open icon"></i> Ouvrir
     </a>
-    <a class="left item" onclick={{action "save"}}>
+    <a class="left item" {{on "click" this.save}} href="#">
       <i class="save icon"></i> Enregistrer
     </a>
     <div class="right menu">
-      <a class="item" onclick={{action "generate"}}>
+      <a class="item" {{on "click" this.generate}} href="#">
         <i class="download icon"></i> Identifiants
       </a>
-      <a class="item" onclick={{action "getProfileId"}}>
+      <a class="item" {{on "click" this.getProfileId}} href="#">
         <i class="code icon"></i> CSV
       </a>
     </div>
@@ -40,56 +36,44 @@
   <h2 class="ui top attached padded grid target-profile-title">
     <div class="row">
       <div class="right aligned column">
-        {{#basic-dropdown  horizontalPosition="left" as |dd|}}
-          {{#dd.trigger class="trigger-menu"}}<i class="bars icon"></i>{{/dd.trigger}}
-          {{#dd.content class="dropdown-multi profile-menu slide-fade"}}
-            {{#each model as |area|}}
+        <BasicDropdown @horizontalPosition="left" as |dd|>
+          <dd.trigger @class="trigger-menu"><i class="bars icon"></i></dd.trigger>
+          <dd.content @class="dropdown-multi profile-menu slide-fade">
+            {{#each this.model as |area|}}
 
-                {{#basic-dropdown class="sub-menu" calculatePosition=calculatePosition as |dd|}}
-                {{#dd.trigger       onMouseDown=(action "prevent")
-                                    onMouseEnter=(action "open")
-                                    onMouseLeave=(action "close")
-                                    class="sub-trigger"}}
+                <BasicDropdown @class="sub-menu" @calculatePosition={{this.calculatePosition}} as |dd|>
+                <dd.trigger @onMouseDown={{this.prevent}} @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="sub-trigger">
                   {{area.name}} <i class="icon dropdown"></i>
-                {{/dd.trigger}}
-                {{#dd.content onMouseEnter=(action "open")
-                              onMouseLeave=(action "close")
-                              class="dropdown-multi slide-fade"}}
+                </dd.trigger>
+                <dd.content @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="dropdown-multi slide-fade">
 
                   {{#each area.sortedCompetences as |competence|}}
-                    <div class="item area-profile-{{area.code}}" {{action "scrollTo"
-                                                                          (concat "competence-profile-anchor-" competence.id)}}>
+                    <div class="item area-profile-{{area.code}}" {{on "click" (fn this.scrollTo
+                                                                          (concat "competence-profile-anchor-" competence.id))}}>
                       <b>{{competence.code}}</b> {{competence.title}}</div>
                   {{/each}}
 
-                {{/dd.content}}
-              {{/basic-dropdown}}
+                </dd.content>
+              </BasicDropdown>
 
             {{/each}}
-          {{/dd.content}}
-        {{/basic-dropdown}}
+          </dd.content>
+        </BasicDropdown>
 
 
       </div>
       <div class="five wide column">Référentiel Pix</div>
       <div class="six wide center aligned column"></div>
-      <div class="four wide right aligned column">{{selectedTubeCount}}/{{tubeCount}}</div>
+      <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
     </div>
   </h2>
   <div class="ui attached target-profile">
 
-    {{#each model as |area|}}
-      {{target-profile/area-profile area=area displayTube=(action "displayTube")
-                                    level=selectedTubeLevel
-                                    selectedSkills=selectedTubeSkills showTubeDetails=showTubeDetails
-                                    clearTube=(action "unsetProfileTube")
-                                    setTubeLevel=(action "setProfileTube")
-                                    filter=filter}}
+    {{#each this.model as |area|}}
+      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
     {{/each}}
-    {{input type="file" id="target-profile__open-file" change=(action "openFile")}}
+    <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
   </div>
 </div>
-{{popin-tube-level setTubeLevel=(action "setProfileTube") clearTube=(action "unsetProfileTube") level=selectedTubeLevel
-                   selectedSkills=selectedTubeSkills tube=selectedTube display=displayTubeLevel}}
-{{popin-single-entry class="popin-enter-profile-id" title="Identifiant du profil cible" label="Identifiant"
-                     setValue=(action "generateSQL") display=displaySingleEntry}}
+<PopinTubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @display={{this.displayTubeLevel}} />
+<PopinSingleEntry @class="popin-enter-profile-id" @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @display={{this.displaySingleEntry}} />

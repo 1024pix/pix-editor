@@ -1,16 +1,16 @@
-<div class="main-title  {{if config.lite "lite" ""}}">
+<div class="main-title  {{if this.config.lite "lite" ""}}">
   <h1 class="ui header">
   <div class="ui right floated menu">
     <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
   </div>
-      Prototypes de {{model.name}}
+      Prototypes de {{this.model.name}}
   </h1>
 </div>
-<div class="ui attached segment competence {{size}} {{listHidden}}">
-  {{templates-list list=model.sortedTemplates itemCount=model.templates.length competenceModel=competence hidden=false}}
+<div class="ui attached segment competence {{this.size}} {{this.listHidden}}">
+  <TemplatesList @list={{this.model.sortedTemplates}} @itemCount={{this.model.templates.length}} @competenceModel={{this.competence}} @hidden={{false}} />
 </div>
-<div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
-  {{#if mayCreateTemplate}}
+<div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
+  {{#if this.mayCreateTemplate}}
     <a class="right item" onclick={{action "newVersion"}}>
       <i class="plus square outline icon"></i> Nouvelle version
     </a>

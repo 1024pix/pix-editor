@@ -1,8 +1,5 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
     <div class="ui standard modal visible active">
       <div class="header">
         Message pour le changelog
@@ -13,20 +10,19 @@
             <div class="field">
               <label>Texte</label>
               <div class="ui input">
-                {{textarea value=value rows="4"}}
-              </div>
+                <Textarea @value={{this.value}} @rows="4" />              </div>
             </div>
           </form>
         </div>
       </div>
       <div class="actions">
-        <div class="ui deny button" {{action onDeny}}>
+        <div class="ui deny button" {{on "click" this.onDeny}}>
           Ignorer
         </div>
-        <div class="ui positive right button" {{action onApprove value}}>
+        <div class="ui positive right button" {{on "click" (fn this.onApprove this.value)}}>
           Enregistrer
         </div>
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

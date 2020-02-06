@@ -1,22 +1,18 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item authorText" onclick={{action "sortBy" "authorText" "string"}}>Auteur</div>
-    <div class="list-item instructions" onclick={{action "sortBy" "instructions" "string"}}>Consigne</div>
-    <div class="list-item type" onclick={{action "sortBy" "type" "string"}}>Type</div>
-    <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
+    <div class="list-item authorText" {{on "click" (fn @sortBy "authorText" "string")}}>Auteur</div>
+    <div class="list-item instructions" {{on "click" (fn @sortBy "instructions" "string")}}>Consigne</div>
+    <div class="list-item type" {{on "click" (fn @sortBy "type" "string")}}>Type</div>
+    <div class="list-item status" {{on "click" (fn @sortBy "status" "string")}}>Statut</div>
   </div>
 </div>
 <div class="list-body">
-  {{#ember-collection
-    items=sortedList
-    scroll-left=scrollLeft scroll-top=scrollTop scroll-change=(action "scrollChange")
-    cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
-  }}
-  {{#link-to link competenceModel item tagName="div" class="list-row"}}
+  <EmberCollection @items={{this.sortedList}} @scroll-left={{this.scrollLeft}} @scroll-top={{this.scrollTop}} @scroll-change={{this.scrollChange}} @cell-layout={{percentage-columns-layout this.itemCount this.columns 40}} as |item|>
+  <LinkTo @route={{this.link}} @models={{array this.competenceModel item}} @tagName="div" class="list-row">
     <div class="list-item">{{item.authorText}}</div>
     <div class="list-item">{{item.instructions}}</div>
     <div class="list-item">{{item.type}}</div>
     <div class="list-item">{{item.status}}</div>
-  {{/link-to}}
-  {{/ember-collection}}
+  </LinkTo>
+  </EmberCollection>
 </div>

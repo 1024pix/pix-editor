@@ -1,28 +1,24 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui standard modal visible active">
-      <i class="close icon" {{action "closeModal"}}></i>
+      <i class="close icon" {{this.closeModal}}></i>
       <div class="header">
-        {{#if title}}
-          {{title}}
+        {{#if this.title}}
+          {{this.title}}
         {{else}}
-          Emplacement de {{name}}
+          Emplacement de {{this.name}}
         {{/if}}
       </div>
       <div class="content">
         <form action="" class="ui form">
-          {{#if competencesNames}}
-            {{form-select title="Compétence" value=competenceName options=competencesNames edition=true}}
+          {{#if this.competencesNames}}
+            <FormSelect @title="Compétence" @value={{this.competenceName}} @options={{this.competencesNames}} @edition={{true}} />
           {{/if}}
-          {{#if selectTubeLevel}}
-            {{#if (and tube.isFulfilled tubesNames.isFulfilled)}}
-              {{form-select title="Tube" value=tubeName options=tubesNames edition=true}}
-              {{#if levels.isFulfilled }}
-                  {{form-select title="Niveau" value=selectedLevel options=levels edition=true multiple=multipleLevel}}
+          {{#if this.selectTubeLevel}}
+            {{#if (and this.tube.isFulfilled this.tubesNames.isFulfilled)}}
+              <FormSelect @title="Tube" @value={{this.tubeName}} @options={{this.tubesNames}} @edition={{true}} />
+              {{#if this.levels.isFulfilled }}
+                  <FormSelect @title="Niveau" @value={{this.selectedLevel}} @options={{this.levels}} @edition={{true}} @multiple={{this.multipleLevel}} />
               {{/if}}
             {{/if}}
 
@@ -30,14 +26,14 @@
         </form>
       </div>
       <div class="actions">
-        <div class="ui deny button" {{action "closeModal"}}>
+        <div class="ui deny button" {{on "click" this.closeModal}}>
           Annuler
         </div>
-        <div class="ui green button" {{action "set"}}>
+        <div class="ui green button" {{on "click" this.set}}>
           <i class="checkmark icon"></i>
           Déplacer
         </div>
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

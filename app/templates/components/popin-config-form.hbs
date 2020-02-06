@@ -1,9 +1,5 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui standard modal visible active">
       <div class="header">
         Configuration
@@ -14,62 +10,61 @@
             <div class="field">
               <label>Clé airtable</label>
               <div class="ui input">
-                {{input value=(mut airtableKey)}}
+                <Input @value={{mut this.airtableKey}} />
               </div>
             </div>
             <div class="field">
               <label>Clé config</label>
               <div class="ui input">
-                {{input value=(mut configKey)}}
+                <Input @value={{mut this.configKey}} />
               </div>
             </div>
-            {{#if authors.length}}
+            {{#if this.authors.length}}
               <div class="field">
                 <label>Auteur</label>
-                {{#power-select placeholder="Sélectionnez votre trigramme" options=authorNames selected=author
-                                onchange=(action (mut author)) as |auth|}}
+                <PowerSelect @placeholder="Sélectionnez votre trigramme" @options={{this.authorNames}} @selected={{this.author}} @onchange={{mut this.author}} as |auth|>
                   {{auth}}
-                {{/power-select}}
+                </PowerSelect>
               </div>
             {{/if}}
             <h4 class="ui dividing header">Paramètres optionnels</h4>
-            {{#accordion-list as |accordion|}}
+            <AccordionList as |accordion|>
               <div class="ui accordion ">
-                {{#accordion.item as |accordionItem|}}
-                  {{#accordionItem.toggle class="title"}}
+                <accordion.item as |accordionItem|>
+                  <accordionItem.toggle @class="title">
                     <i class="dropdown icon"></i>
                     Compte Pix (mise à jour du cache)
-                  {{/accordionItem.toggle}}
-                  {{#accordionItem.panel}}
+                  </accordionItem.toggle>
+                  <accordionItem.panel>
                     <div class="content">
                       <div class="field">
                         <label>Adresse e-mail</label>
                         <div class="ui input">
-                          {{input value=pixUser}}
+                          <Input @value={{this.pixUser}} />
                         </div>
                       </div>
                       <div class="field">
                         <label>Mot de passe</label>
                         <div class="ui input">
-                          {{input value=pixPassword type="password"}}
+                          <Input @value={{this.pixPassword}} @type="password" />
                         </div>
                       </div>
                     </div>
-                  {{/accordionItem.panel}}
-                {{/accordion.item}}
+                  </accordionItem.panel>
+                </accordion.item>
               </div>
-            {{/accordion-list}}
+            </AccordionList>
           </form>
         </div>
       </div>
       <div class="actions">
-        <div class="ui deny button" {{action "closeModal"}}>
+        <div class="ui deny button" {{on "click" this.closeModal}}>
           Annuler
         </div>
-        <div class="ui right button" {{action "saveConfig"}}>
+        <div class="ui right button" {{on "click" this.saveConfig}}>
           Enregistrer
         </div>
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

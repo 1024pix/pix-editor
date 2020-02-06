@@ -1,22 +1,31 @@
+import classic from 'ember-classic-decorator';
+import { classNames, classNameBindings } from '@ember-decorators/component';
+import { action, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
-import {computed} from "@ember/object";
 
-export default Component.extend({
-  classNames: ['ui', 'main-title'],
-  classNameBindings: ['liteClass'],
-  config: service(),
-  liteClass: computed('config.lite', function () {
+@classic
+@classNames('ui', 'main-title')
+@classNameBindings('liteClass')
+export default class CompetenceHeader extends Component {
+  @service
+  config;
+
+  @computed('config.lite')
+  get liteClass() {
     const lite = this.get('config.lite');
     return lite ? 'lite' : '';
-  }),
-  selectedSection: computed('section', function () {
+  }
+
+  @computed('section')
+  get selectedSection() {
     const section = this.get('section');
     const selectedItem = this.get('sections').filter(el=>el.id === section);
     return selectedItem[0];
-  }),
+  }
+
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.sections = [{
       title: 'Epreuves',
       id: 'challenges'
@@ -27,10 +36,10 @@ export default Component.extend({
       title: 'Qualité',
       id: 'quality'
     }];
-  },
-  actions: {
-    selectView(view) {
-      this.get('selectSection')(view);
-    }
   }
-});
+
+  @action
+  selectView(view) {
+    this.get('selectSection')(view);
+  }
+}

@@ -1,11 +1,11 @@
 <form action="" class="ui form">
-  {{form-textarea title="Description" value=skill.description edition=edition}}
-  {{form-select title="Statut de la description" value=skill.descriptionStatus options=options.descriptionStatus edition=edition}}
-  {{form-textarea title="Indice" value=skill.clue edition=edition}}
-  {{form-select title="Statut de l'indice" value=skill.clueStatus options=options.clueStatus edition=edition}}
-  {{form-quality title="Qualité" challenge=skill.productionTemplate edition=edition}}
-  {{form-tutorials title="Pour réussir la prochaine fois" skill=skill tutorials=skill.tutoSolution searchClass="solution" edition=edition openCreateTutorialModal=(action "openCreateTutorialModal")}}
-  {{form-tutorials title="Pour en savoir plus" skill=skill tutorials=skill.tutoMore edition=edition searchClass="more" openCreateTutorialModal=(action "openCreateTutorialModal")}}
-  {{tutorial-form defaultTitle=searchTitle tutorials=tutorials application=application display=displayTutorialForm}}
-  {{form-select title="Internationalisation" value=skill.i18n options=options.i18n edition=edition}}
+  <FormTextarea @title="Description" @value={{this.skill.description}} @edition={{this.edition}} />
+  <FormSelect @title="Statut de la description" @value={{this.skill.descriptionStatus}} @options={{this.options.descriptionStatus}} @edition={{this.edition}} />
+  <FormTextarea @title="Indice" @value={{this.skill.clue}} @edition={{this.edition}} />
+  <FormSelect @title="Statut de l'indice" @value={{this.skill.clueStatus}} @options={{this.options.clueStatus}} @edition={{this.edition}} />
+  <FormQuality @title="Qualité" @challenge={{this.skill.productionTemplate}} @edition={{this.edition}} />
+  <FormTutorials @title="Pour réussir la prochaine fois" @skill={{this.skill}} @tutorials={{this.skill.tutoSolution}} @searchClass="solution" @edition={{this.edition}} @openCreateTutorialModal={{this.openCreateTutorialModal}} />
+  <FormTutorials @title="Pour en savoir plus" @skill={{this.skill}} @tutorials={{this.skill.tutoMore}} @edition={{this.edition}} @searchClass="more" @openCreateTutorialModal={{this.openCreateTutorialModal}} />
+  <TutorialForm @defaultTitle={{this.searchTitle}} @tutorials={{this.tutorials}} @application={{this.application}} @display={{this.displayTutorialForm}} />
+  <FormSelect @title="Internationalisation" @value={{this.skill.i18n}} @options={{this.options.i18n}} @edition={{this.edition}} />
 </form>

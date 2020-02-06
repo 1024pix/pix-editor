@@ -1,23 +1,23 @@
 <div class="field">
   <label>
-    {{#if edition}}
-      {{#if helpContent}}
+    {{#if this.edition}}
+      {{#if this.helpContent}}
         <div class="ui compact icon right floated button basic">
           <i class="help icon">
-            {{#ember-tooltip side="left-start" tooltipClass="custom-tooltip"}}
-              {{safeHelpContent}}
-            {{/ember-tooltip}}
+            <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
+              {{this.safeHelpContent}}
+            </EmberTooltip>
           </i>
         </div>
       {{/if}}
     {{/if}}
-    {{title}}
+    {{this.title}}
   </label>
-  {{#if edition}}
-    {{simple-mde value=value change=(action (mut value)) options=simpleMDEOptions}}
+  {{#if this.edition}}
+    <SimpleMde @value={{this.value}} @change={{mut this.value}} @options={{this.simpleMDEOptions}} />
   {{else}}
     <div class="mde-preview">
-      {{simple-mde-preview value}}
+      {{simple-mde-preview this.value}}
     </div>
   {{/if}}
 </div>

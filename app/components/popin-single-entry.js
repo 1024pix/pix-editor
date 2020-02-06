@@ -1,13 +1,17 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
 import Component from '@ember/component';
 
-export default Component.extend({
-  actions:{
-    validate() {
-     this.set('display', false);
-      this.get('setValue')(this.get('value'));
-    },
-    closeModal(){
-      this.set('display', false);
-    }
+@classic
+export default class PopinSingleEntry extends Component {
+  @action
+  validate() {
+   this.set('display', false);
+    this.get('setValue')(this.get('value'));
   }
-});
+
+  @action
+  closeModal() {
+    this.set('display', false);
+  }
+}

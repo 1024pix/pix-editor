@@ -1,25 +1,25 @@
 <div class="field">
-{{#if (or value.length edition)}}
-  <label>{{title}}</label>
+{{#if (or this.value.length this.edition)}}
+  <label>{{this.title}}</label>
 {{/if}}
-{{#if value.length}}
-  {{#each value as |file key|}}
-    <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener"><i class="file icon"></i> {{file.filename}}</a>
-    {{#if edition}}
-      <a onclick={{action "remove" key}} class="file-remove"><i class="remove icon"></i></a>
+{{#if this.value.length}}
+  {{#each this.value as |file key|}}
+    <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i class="file icon"></i> {{file.filename}}</a>
+    {{#if this.edition}}
+      <a {{on "click" (fn this.remove key)}} class="file-remove" href="#"><i class="remove icon"></i></a>
     {{/if}}
   {{/each}}
 {{/if}}
-{{#if edition}}
-  {{#file-upload name="files" onfileadd=(action "add")}}
-    <a class="ui button">
+{{#if this.edition}}
+  <FileUpload @name="files" @onfileadd={{this.add}}>
+    <a class="ui button" href="#">
       Ajouter un fichier...
     </a>
-  {{/file-upload}}
-  {{#if value.length}}
+  </FileUpload>
+  {{#if this.value.length}}
     <div class="ui input">
         <div class="label-input">Nom :</div>
-        {{input value=baseName}}
+        <Input @value={{this.baseName}} />
     </div>
   {{/if}}
 {{/if}}

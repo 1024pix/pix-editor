@@ -1,19 +1,19 @@
 <div class="tube-header">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if mayMove}}
+      {{#if this.mayMove}}
         <a class="ui icon item" onclick={{action "selectCompetence"}}><i class="icon random"></i></a>
       {{/if}}
     </div>
-    <div class="item header {{if creation "creation"}}">
-      {{#if creation}}
+    <div class="item header {{if this.creation "creation"}}">
+      {{#if this.creation}}
         Nouveau tube
       {{else}}
-        {{tube.name}}
+        {{this.tube.name}}
       {{/if}}
     </div>
     <div class="ui right menu">
-      {{#if maximized}}
+      {{#if this.maximized}}
         <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
       {{else}}
         <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
@@ -24,10 +24,10 @@
 </div>
 <div class="tube-details">
   <div class="tube-data">
-    {{tube-form tube=tube edition=edition}}
+    <TubeForm @tube={{this.tube}} @edition={{this.edition}} />
   </div>
   <div class="ui vertical compact labeled icon menu tube-menu">
-    {{#if edition}}
+    {{#if this.edition}}
       <a class="item important-action" onclick={{action "save"}}>
         <i class="save icon"></i>
         Enregistrer
@@ -37,13 +37,13 @@
         Annuler
       </a>
     {{else}}
-      {{#if mayEdit}}
+      {{#if this.mayEdit}}
         <a class="item" onclick={{action "edit"}}>
           <i class="edit icon"></i>
           Modifier
         </a>
       {{/if}}
-      {{#if mayAccessAirtable}}
+      {{#if this.mayAccessAirtable}}
         <a class="item" onclick={{action "openAirtable"}}>
           <i class="table icon"></i>
           Airtable
@@ -52,4 +52,4 @@
     {{/if}}
   </div>
 </div>
-{{popin-select-location class="tube-select-competence" display=displaySelectLocation onChange=(action "setCompetence") name=tube.name areas=areas competence=competence}}
+<PopinSelectLocation @class="tube-select-competence" @display={{this.displaySelectLocation}} @onChange={{action "setCompetence"}} @name={{this.tube.name}} @areas={{this.areas}} @competence={{this.competence}} />
