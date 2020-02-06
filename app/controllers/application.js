@@ -93,18 +93,18 @@ export default class ApplicationController extends Controller {
 
   @action
   confirmApprove() {
+    this.set('displayConfirm', false)
     if (this.confirmCallback) {
       this.confirmCallback(true);
     }
-    this.set('displayConfirm', false)
   }
 
   @action
   confirmDeny() {
+    this.set('displayConfirm', false)
     if (this.confirmCallback) {
       this.confirmCallback(false);
     }
-    this.set('displayConfirm', false)
   }
 
 }
