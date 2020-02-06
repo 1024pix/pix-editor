@@ -13,7 +13,7 @@
 <div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
   <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
   {{#if this.mayCreateAlternative}}
-    <a class="right item" onclick={{action "newAlternative"}}>
+    <a class="right item" {{on "click" this.newAlternative}} href="#">
       <i class="plus square outline icon"></i> Nouvelle déclinaison
     </a>
   {{/if}}

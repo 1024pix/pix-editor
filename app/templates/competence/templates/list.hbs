@@ -1,7 +1,7 @@
 <div class="main-title  {{if this.config.lite "lite" ""}}">
   <h1 class="ui header">
   <div class="ui right floated menu">
-    <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+    <a class="ui icon item" {{on "click" this.close}} href="#"><i class="icon window close"></i></a>
   </div>
       Prototypes de {{this.model.name}}
   </h1>
@@ -11,7 +11,7 @@
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
   {{#if this.mayCreateTemplate}}
-    <a class="right item" onclick={{action "newVersion"}}>
+    <a class="right item" {{on "click" this.newVersion}} href="#">
       <i class="plus square outline icon"></i> Nouvelle version
     </a>
   {{/if}}

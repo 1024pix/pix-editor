@@ -2,7 +2,7 @@
   <div class="ui menu">
     <div class="ui left menu">
       {{#if this.mayMove}}
-        <a class="ui icon item" onclick={{action "selectCompetence"}}><i class="icon random"></i></a>
+        <a class="ui icon item" {{on "click" this.selectCompetence}} href="#"><i class="icon random"></i></a>
       {{/if}}
     </div>
     <div class="item header {{if this.creation "creation"}}">
@@ -14,11 +14,11 @@
     </div>
     <div class="ui right menu">
       {{#if this.maximized}}
-        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
+        <a class="ui icon item" {{on "click" this.minimize}} href="#"><i class="window minimize icon"></i></a>
       {{else}}
-        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
+        <a class="ui icon item" {{on "click" this.maximize}} href="#"><i class="window maximize outline icon"></i></a>
       {{/if}}
-      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+      <a class="ui icon item" {{on "click" this.close}} href="#"><i class="icon window close"></i></a>
     </div>
   </div>
 </div>
@@ -28,23 +28,23 @@
   </div>
   <div class="ui vertical compact labeled icon menu tube-menu">
     {{#if this.edition}}
-      <a class="item important-action" onclick={{action "save"}}>
+      <a class="item important-action" {{on "click" this.save}} href="#">
         <i class="save icon"></i>
         Enregistrer
       </a>
-      <a class="item" onclick={{action "cancelEdit"}}>
+      <a class="item" {{on "click" this.cancelEdit}} href="#">
         <i class="ban icon"></i>
         Annuler
       </a>
     {{else}}
       {{#if this.mayEdit}}
-        <a class="item" onclick={{action "edit"}}>
+        <a class="item" {{on "click" this.edit}} href="#">
           <i class="edit icon"></i>
           Modifier
         </a>
       {{/if}}
       {{#if this.mayAccessAirtable}}
-        <a class="item" onclick={{action "openAirtable"}}>
+        <a class="item" {{on "click" this.openAirtable}} href="#">
           <i class="table icon"></i>
           Airtable
         </a>
@@ -52,4 +52,4 @@
     {{/if}}
   </div>
 </div>
-<PopinSelectLocation @class="tube-select-competence" @display={{this.displaySelectLocation}} @onChange={{action "setCompetence"}} @name={{this.tube.name}} @areas={{this.areas}} @competence={{this.competence}} />
+<PopinSelectLocation @class="tube-select-competence" @display={{this.displaySelectLocation}} @onChange={{this.setCompetence}} @name={{this.tube.name}} @areas={{this.areas}} @competence={{this.competence}} />
