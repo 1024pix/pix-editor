@@ -1,9 +1,11 @@
+import classic from 'ember-classic-decorator';
+import { action, computed } from '@ember/object';
 import Component from '@ember/component';
-import {computed} from '@ember/object';
 
-export default Component.extend({
-
-  filterTube: computed('competence.productionTubes.@each.selectedLevel', 'filter', function () {
+@classic
+export default class CompetenceProfile extends Component {
+  @computed('competence.productionTubes.@each.selectedLevel', 'filter')
+  get filterTube() {
     const filter = this.get('filter');
     const competence = this.get('competence');
     if(filter){
@@ -12,19 +14,18 @@ export default Component.extend({
       })
     }
     return competence.get('productionTubes');
-  }),
+  }
 
-  actions: {
-    clickOnTube(tube) {
-      const showTubeDetails = this.get('showTubeDetails');
-      const isSelected = tube.get('selectedLevel');
-      if (showTubeDetails) {
-        this.get('displayTube')(tube);
-      } else if (isSelected) {
-        this.get('clearTube')(tube);
-      } else {
-        this.get('setTubeLevel')(tube);
-      }
+  @action
+  clickOnTube(tube) {
+    const showTubeDetails = this.get('showTubeDetails');
+    const isSelected = tube.get('selectedLevel');
+    if (showTubeDetails) {
+      this.get('displayTube')(tube);
+    } else if (isSelected) {
+      this.get('clearTube')(tube);
+    } else {
+      this.get('setTubeLevel')(tube);
     }
   }
-});
+}

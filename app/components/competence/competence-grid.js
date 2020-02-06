@@ -1,13 +1,19 @@
+import classic from 'ember-classic-decorator';
+import { classNames, classNameBindings } from '@ember-decorators/component';
+import { computed } from '@ember/object';
 import Component from '@ember/component';
-import {computed} from "@ember/object";
 
-export default Component.extend({
-  classNames: ['competence-grid'],
-  classNameBindings: ['hiddenClass'],
-  hiddenClass:computed('hidden', function() {
+@classic
+@classNames('competence-grid')
+@classNameBindings('hiddenClass')
+export default class CompetenceGrid extends Component {
+  @computed('hidden')
+  get hiddenClass() {
     return this.get('hidden')?'hidden':'';
-  }),
-  displayAllTubes:computed('section', 'view', function() {
+  }
+
+  @computed('section', 'view')
+  get displayAllTubes() {
     return this.get('section') === 'skills' || this.get('view') === 'workbench';
-  })
-});
+  }
+}

@@ -28,6 +28,10 @@
   &.to-be-submitted {
     background-color: #444488 !important;
     color: #ffffff !important;
+
+    .ui.button {
+      color: #ffffff !important;
+    }
   }
 }
 

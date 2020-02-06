@@ -1,2 +1,4 @@
+import classic from 'ember-classic-decorator';
 import TriggerComponent from 'ember-power-select/components/power-select/trigger';
-export default TriggerComponent.extend();
+@classic
+export default class PowerSelectCustomTrigger extends TriggerComponent {}

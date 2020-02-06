@@ -1,52 +1,40 @@
 <div class="ui container">
-  <div class="inverted menu left vertical main-sidebar wide ui sidebar uncover visible {{if config.lite "lite" ""}}">
+  <div class="inverted menu left vertical main-sidebar wide ui sidebar uncover visible {{if this.config.lite "lite" ""}}">
     <div class="header">Pix Editor</div>
-    {{#power-select search=(action "getSearchResults")
-                    placeholder="Acquix ou recordId"
-                    onchange=(action "linkTo")
-                    renderInPlace=true
-                    triggerComponent="power-select-custom-trigger"
-                    class="sidebar-search"
-                    tagName="div"
-                    searchMessage=""
-                    searchPlaceholder="Rechercher..."
-                    loadingMessage="Recherche en cours..."
-                    noMatchesMessage="Pas de résultat"
-    as |result|}}
+    <PowerSelect @search={{this.getSearchResults}} @placeholder="Acquix ou recordId" @onchange={{this.linkTo}} @renderInPlace={{true}} @triggerComponent="power-select-custom-trigger" @class="sidebar-search" @tagName="div" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." @noMatchesMessage="Pas de résultat" as |result|>
       {{result.title}}
-    {{/power-select}}
-    {{#accordion-list as |accordion|}}
+    </PowerSelect>
+    <AccordionList as |accordion|>
       <div class="ui accordion inverted">
-        {{#each areas as |area|}}
-          {{#accordion.item as |accordionItem|}}
-            {{#accordionItem.toggle class="title"}}
+        {{#each this.areas as |area|}}
+          <accordion.item as |accordionItem|>
+            <accordionItem.toggle @class="title">
               <i class="dropdown icon"></i>
               {{area.name}}
-            {{/accordionItem.toggle}}
-            {{#accordionItem.panel}}
+            </accordionItem.toggle>
+            <accordionItem.panel>
               <div class="content">
                 {{#each area.sortedCompetences as |competence|}}
-                  {{#link-to "competence" competence.id class="item"
-                             invokeAction=(action burger.state.actions.close)}}{{competence.name}}{{/link-to}}
+                  <LinkTo @route="competence" @model={{competence.id}} class="item" @invokeAction={{@burger.state.actions.close}}>{{competence.name}}</LinkTo>
                 {{/each}}
               </div>
-            {{/accordionItem.panel}}
-          {{/accordion.item}}
+            </accordionItem.panel>
+          </accordion.item>
         {{/each}}
       </div>
-    {{/accordion-list}}
+    </AccordionList>
     <div class="secondary-links">
-      {{#link-to "target-profile" invokeAction=(action burger.state.actions.close)}}
-        <i class="crosshairs icon"></i> Générateur de profil cible{{/link-to}}
-      <p {{action "shareAreas"}}><i class="share square icon"></i> Exporter les sujets</p>
+      <LinkTo @route="target-profile" @invokeAction={{@burger.state.actions.close}}>
+        <i class="crosshairs icon"></i> Générateur de profil cible</LinkTo>
+      <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
     </div>
     <div class="ui labelled icon menu">
-      <a class="item" onclick={{action openConfiguration}}><i class="wrench icon"></i>Configuration</a>
+      <button class="ui button item" type="button" onclick={{this.openConfiguration}}><i class="wrench icon"></i>Configuration</button>
       <div class="right item">
-        {{#if author}}
-          {{author}} -
+        {{#if this.author}}
+          {{this.author}} -
         {{/if}}
-        Version {{version}}</div>
+        Version {{this.version}}</div>
     </div>
   </div>
 </div>

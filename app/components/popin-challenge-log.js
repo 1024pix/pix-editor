@@ -1,17 +1,27 @@
+import classic from 'ember-classic-decorator';
+import { action, computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import { computed } from "@ember/object";
-import { inject as service } from "@ember/service";
 import DS from 'ember-data';
 
-export default Component.extend({
-  store:service(),
-  paginatedQuery:service(),
-  config:service(),
-  logEntry:null,
-  logEntryEdition:false,
-  list:true,
-  mayEditEntry:false,
-  notes:computed("challenge", function() {
+@classic
+export default class PopinChallengeLog extends Component {
+  @service
+  store;
+
+  @service
+  paginatedQuery;
+
+  @service
+  config;
+
+  logEntry = null;
+  logEntryEdition = false;
+  list = true;
+  mayEditEntry = false;
+
+  @computed("challenge")
+  get notes() {
     let challenge = this.get("challenge");
     if (challenge) {
       let production = (challenge.get("workbench")?"non":"oui");
@@ -22,8 +32,10 @@ export default Component.extend({
     } else {
       return [];
     }
-  }),
-  ownNotes:computed("notes.isFulfilled", function() {
+  }
+
+  @computed("notes.isFulfilled")
+  get ownNotes() {
     let notes = this.get("notes");
     if (notes.get("isFulfilled")) {
       let author = this.get("config").get("author");
@@ -32,8 +44,10 @@ export default Component.extend({
     } else {
       return [];
     }
-  }),
-  changelogEntries:computed("challenge", function() {
+  }
+
+  @computed("challenge")
+  get changelogEntries() {
     let challenge = this.get("challenge");
     let pq = this.get("paginatedQuery");
     if (challenge) {
@@ -44,72 +58,94 @@ export default Component.extend({
     } else {
       return [];
     }
-  }),
-  loading:computed("changelogEntries.isPending", "notes.isPending", function() {
+  }
+
+  @computed("changelogEntries.isPending", "notes.isPending")
+  get loading() {
     let entries = this.get("changelogEntries");
     let notes = this.get("notes");
     return entries.get("isPending") || notes.get("isPending");
-  }),
-  ownCount:computed("ownNotes", function() {
+  }
+
+  @computed("ownNotes")
+  get ownCount() {
     return this.get("ownNotes").length;
-  }),
-  notesCount:computed("notes.isFulfilled", function() {
+  }
+
+  @computed("notes.isFulfilled")
+  get notesCount() {
     if (this.get("notes.isFulfilled")) {
       return this.get("notes.length");
     } else {
       return 0;
     }
-  }),
-  changelogEntriesCount:computed("changelogEntries.isFulfilled", function() {
+  }
+
+  @computed("changelogEntries.isFulfilled")
+  get changelogEntriesCount() {
     if (this.get("changelogEntries.isFulfilled")) {
       return this.get("changelogEntries.length");
     } else {
       return 0;
     }
-  }),
-  actions: {
-    addNote() {
-      let newNote = this.get("store").createRecord("note", {
-        challengeId:this.get("challenge.id"),
-        author:this.get("config").get("author"),
-        competence:this.get("competence.code"),
-        skills:this.get("challenge.joinedSkills"),
-        production:!this.get("challenge.workbench")
-      });
-      this.set("logEntry", newNote);
-      this.set("list", false);
-      this.set("logEntryEdition", true);
-    },
-    update() {
-      this.set("list", true);
-      this.notifyPropertyChange("challenge");
-    },
-    closeLogForm() {
-      this.set("list", true);
-    },
-    showOwnNote(note) {
-      this.set("logEntryEdition", false);
-      this.set("logEntry", note);
-      this.set("mayEditEntry", true);
-      this.set("list", false);
-    },
-    showNote(note) {
-      this.set("logEntryEdition", false);
-      this.set("logEntry", note);
-      this.set("mayEditEntry", (note.get("author") == this.get("config.author")));
-      this.set("list", false);
-    },
-    showChangelogEntry(entry) {
-      this.set("logEntryEdition", false);
-      this.set("logEntry", entry);
-      this.set("mayEditEntry", false);
-      this.set("list", false);
-    },
-    editEntry() {
-      this.set("logEntryEdition", true);
-    },
-    closeModal(){
-      this.set('display', false);
-    }
   }
-});
+
+  @action
+  addNote() {
+    let newNote = this.get("store").createRecord("note", {
+      challengeId:this.get("challenge.id"),
+      author:this.get("config").get("author"),
+      competence:this.get("competence.code"),
+      skills:this.get("challenge.joinedSkills"),
+      production:!this.get("challenge.workbench")
+    });
+    this.set("logEntry", newNote);
+    this.set("list", false);
+    this.set("logEntryEdition", true);
+  }
+
+  @action
+  update() {
+    this.set("list", true);
+    this.notifyPropertyChange("challenge");
+  }
+
+  @action
+  closeLogForm() {
+    this.set("list", true);
+  }
+
+  @action
+  showOwnNote(note) {
+    this.set("logEntryEdition", false);
+    this.set("logEntry", note);
+    this.set("mayEditEntry", true);
+    this.set("list", false);
+  }
+
+  @action
+  showNote(note) {
+    this.set("logEntryEdition", false);
+    this.set("logEntry", note);
+    this.set("mayEditEntry", (note.get("author") == this.get("config.author")));
+    this.set("list", false);
+  }
+
+  @action
+  showChangelogEntry(entry) {
+    this.set("logEntryEdition", false);
+    this.set("logEntry", entry);
+    this.set("mayEditEntry", false);
+    this.set("list", false);
+  }
+
+  @action
+  editEntry() {
+    this.set("logEntryEdition", true);
+  }
+
+  @action
+  closeModal() {
+    this.set('display', false);
+  }
+}

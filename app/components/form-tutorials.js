@@ -1,11 +1,18 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
+import { classNames } from '@ember-decorators/component';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 import Component from '@ember/component';
-import {inject as service} from '@ember/service';
-import {alias} from '@ember/object/computed';
 
-export default Component.extend({
-  classNames: ['field'],
-  store: service(),
-  loading: alias("tutorials.isPending"),
+@classic
+@classNames('field')
+export default class FormTutorials extends Component {
+  @service
+  store;
+
+  @alias("tutorials.isPending")
+  loading;
 
   _searchTutorial(query, tagSearch) {
     return this.get('store').query('tutorial', {
@@ -30,35 +37,36 @@ export default Component.extend({
         results.push({title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create'});
         return results
       })
-  },
+  }
 
-  actions: {
-
-    selectTutorial(tutorials, item) {
-      const searchClass = this.get('searchClass');
-      const searchInput = document.querySelector(`.search-tuto-${searchClass} .ember-power-select-search-input`);
-      if (item.id === 'create') {
-        const createTutorial = this.get('openCreateTutorialModal');
-        createTutorial(tutorials, searchInput.value)
-      } else {
-        return this.get('store').findRecord('tutorial', item.id)
-          .then((tutorial) => {
-            tutorials.pushObject(tutorial);
-          })
-      }
-    },
-    getSearchTutorialResults(query) {
-      query=query.toLowerCase();
-      let tagSearch = false;
-      if (query[0] === ">") {
-        query = query.substring(1);
-        tagSearch = true
-      }
-      return this._searchTutorial(query, tagSearch)
-    },
-    unselectTutorial(tutorials, tutorial) {
-      tutorials.removeObject(tutorial)
+  @action
+  selectTutorial(tutorials, item) {
+    const searchClass = this.get('searchClass');
+    const searchInput = document.querySelector(`.search-tuto-${searchClass} .ember-power-select-search-input`);
+    if (item.id === 'create') {
+      const createTutorial = this.get('openCreateTutorialModal');
+      createTutorial(tutorials, searchInput.value)
+    } else {
+      return this.get('store').findRecord('tutorial', item.id)
+        .then((tutorial) => {
+          tutorials.pushObject(tutorial);
+        })
     }
   }
-})
-;
+
+  @action
+  getSearchTutorialResults(query) {
+    query=query.toLowerCase();
+    let tagSearch = false;
+    if (query[0] === ">") {
+      query = query.substring(1);
+      tagSearch = true
+    }
+    return this._searchTutorial(query, tagSearch)
+  }
+
+  @action
+  unselectTutorial(tutorials, tutorial) {
+    tutorials.removeObject(tutorial)
+  }
+}

@@ -1,9 +1,11 @@
-import Component from '@ember/component';
+import classic from 'ember-classic-decorator';
 import { computed } from '@ember/object';
+import Component from '@ember/component';
 
-export default Component.extend({
-
-  filterCompetences:computed('area.sortedCompetences.@each.selectedProductionTubeCount', 'filter', function(){
+@classic
+export default class AreaProfile extends Component {
+  @computed('area.sortedCompetences.@each.selectedProductionTubeCount', 'filter')
+  get filterCompetences() {
     const area = this.get('area');
     const filter = this.get('filter');
     if(filter){
@@ -12,6 +14,5 @@ export default Component.extend({
       })
     }
     return area.get('sortedCompetences')
-  })
-
-});
+  }
+}

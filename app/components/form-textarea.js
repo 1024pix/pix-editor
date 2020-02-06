@@ -1,18 +1,22 @@
+import classic from 'ember-classic-decorator';
+import { classNames, classNameBindings } from '@ember-decorators/component';
+import { action, computed } from '@ember/object';
 import Component from '@ember/component';
-import { computed } from '@ember/object';
 import { htmlSafe } from '@ember/template';
 
-export default Component.extend({
-  classNames:['field', 'textArea'],
-  classNameBindings:['maximized'],
-  maximized:false,
-  safeHelpContent:computed('helpContent', function() {
+@classic
+@classNames('field', 'textArea')
+@classNameBindings('maximized')
+export default class FormTextarea extends Component {
+  maximized = false;
+
+  @computed('helpContent')
+  get safeHelpContent() {
     return htmlSafe(this.get('helpContent'));
-  }),
-  actions:{
-    toggleMaximized() {
-      this.set('maximized', !this.get('maximized'));
-    }
   }
 
-});
+  @action
+  toggleMaximized() {
+    this.set('maximized', !this.get('maximized'));
+  }
+}

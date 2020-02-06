@@ -1,88 +1,86 @@
 <form action="" class="ui form">
-  {{form-mde title="Consigne" value=challenge.instructions edition=edition helpContent=helpInstructions}}
-  {{#if (not alternative)}}
-    {{form-select title="Type" value=challenge.type options=options.types edition=edition}}
+  <FormMde @title="Consigne" @value={{this.challenge.instructions}} @edition={{this.edition}} @helpContent={{this.helpInstructions}} />
+  {{#if (not this.alternative)}}
+    <FormSelect @title="Type" @value={{this.challenge.type}} @options={{this.options.types}} @edition={{this.edition}} />
   {{/if}}
-  {{#if typeIsQROC}}
-    {{form-select title="Format QROC" value=challenge.format defaultText="Mots" options=options.format edition=edition}}
+  {{#if this.typeIsQROC}}
+    <FormSelect @title="Format QROC" @value={{this.challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{this.edition}} />
   {{/if}}
-  {{form-textarea title="Propositions" value=challenge.suggestion edition=edition helpContent=helpSuggestions}}
-  {{form-textarea title="Réponses" value=challenge.answers edition=edition helpContent=helpAnswers}}
-  {{#if challenge.isTextBased}}
-      <div class={{concat "field" (if edition "" " disabled")}}>
+  <FormTextarea @title="Propositions" @value={{this.challenge.suggestion}} @edition={{this.edition}} @helpContent={{this.helpSuggestions}} />
+  <FormTextarea @title="Réponses" @value={{this.challenge.answers}} @edition={{this.edition}} @helpContent={{this.helpAnswers}} />
+  {{#if this.challenge.isTextBased}}
+      <div class={{concat "field" (if this.edition "" " disabled")}}>
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
-                {{custom-checkbox label="T1 (espaces/casse/accents)" checked=challenge.t1 disabled=(not edition)}}
+                <CustomCheckbox @label="T1 (espaces/casse/accents)" @checked={{this.challenge.t1}} @disabled={{not this.edition}} />
               </div>
               <div class="field">
-                {{custom-checkbox  label="T2 (ponctuation)" checked=challenge.t2 disabled=(not edition)}}
+                <CustomCheckbox @label="T2 (ponctuation)" @checked={{this.challenge.t2}} @disabled={{not this.edition}} />
               </div>
               <div class="field">
-                {{custom-checkbox  label="T3 (distance d'édition)" checked=challenge.t3 disabled=(not edition)}}
+                <CustomCheckbox @label="T3 (distance d'édition)" @checked={{this.challenge.t3}} @disabled={{not this.edition}} />
               </div>
           </div>
       </div>
   {{/if}}
-  {{#if challenge.supportsScoring}}
-    {{form-textarea value=challenge.scoring title="Scoring" edition=edition helpContent=helpScoring}}
+  {{#if this.challenge.supportsScoring}}
+    <FormTextarea @value={{this.challenge.scoring}} @title="Scoring" @edition={{this.edition}} @helpContent={{this.helpScoring}} />
   {{/if}}
-  {{form-illustration title="Illustration" value=challenge.illustration edition=edition
-                      display=(action showIllustration)}}
-  {{#if challenge.illustration}}
-    {{form-textarea value=challenge.alternativeText title="Texte alternatif" edition=edition}}
+  <FormIllustration @title="Illustration" @value={{this.challenge.illustration}} @edition={{this.edition}} @display={{this.showIllustration}} />
+  {{#if this.challenge.illustration}}
+    <FormTextarea @value={{this.challenge.alternativeText}} @title="Texte alternatif" @edition={{this.edition}} />
   {{/if}}
-  {{form-files title="Pièces jointes" value=challenge.attachments baseName=challenge.attachmentBaseName
-               edition=edition}}
-  {{form-input title="Embed" value=challenge.embedURL edition=edition label="URL"}}
-  {{form-input value=challenge.embedHeight edition=edition label="Hauteur"}}
-  {{form-input value=challenge.embedTitle edition=edition label="Titre"}}
-  {{#if (not alternative)}}
-    {{form-select title="Type pédagogie" value=challenge.pedagogy options=options.pedagogy edition=edition}}
+  <FormFiles @title="Pièces jointes" @value={{this.challenge.attachments}} @baseName={{this.challenge.attachmentBaseName}} @edition={{this.edition}} />
+  <FormInput @title="Embed" @value={{this.challenge.embedURL}} @edition={{this.edition}} @label="URL" />
+  <FormInput @value={{this.challenge.embedHeight}} @edition={{this.edition}} @label="Hauteur" />
+  <FormInput @value={{this.challenge.embedTitle}} @edition={{this.edition}} @label="Titre" />
+  {{#if (not this.alternative)}}
+    <FormSelect @title="Type pédagogie" @value={{this.challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{this.edition}} />
   {{/if}}
-  {{#if authors.isFulfilled}}
-    {{form-select title="Auteur" value=challenge.author options=authors edition=edition multiple=true}}
+  {{#if this.authors.isFulfilled}}
+    <FormSelect @title="Auteur" @value={{this.challenge.author}} @options={{this.authors}} @edition={{this.edition}} @multiple={{true}} />
   {{/if}}
-  {{#if (not alternative)}}
-    {{form-select title="Déclinable" value=challenge.declinable options=options.declinable edition=edition}}
+  {{#if (not this.alternative)}}
+    <FormSelect @title="Déclinable" @value={{this.challenge.declinable}} @options={{this.options.declinable}} @edition={{this.edition}} />
   {{/if}}
-    <div class={{concat "field" (if edition "" " disabled")}}>
-        {{custom-checkbox label="Timer" checked=challenge.timerOn disabled=(not edition)}}
-      {{#if challenge.timer}}
-        {{form-input value=challenge.timer edition=edition}}
+    <div class={{concat "field" (if this.edition "" " disabled")}}>
+        <CustomCheckbox @label="Timer" @checked={{this.challenge.timerOn}} @disabled={{not this.edition}} />
+      {{#if this.challenge.timer}}
+        <FormInput @value={{this.challenge.timer}} @edition={{this.edition}} />
       {{/if}}
     </div>
-  {{#if challenge.isSuggested}}
-      <div class={{concat "field" (if edition "" " disabled")}}>
+  {{#if this.challenge.isSuggested}}
+      <div class={{concat "field" (if this.edition "" " disabled")}}>
           <label>Qualité</label>
           <div class="four fields">
               <div class="field">
-                {{form-select title="Non voyant" value=challenge.accessibility1 edition=edition multiple=false options=options.accessibility1}}
+                <FormSelect @title="Non voyant" @value={{this.challenge.accessibility1}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.accessibility1}} />
               </div>
               <div class="field">
-                {{form-select title="Daltonien" value=challenge.accessibility2 edition=edition multiple=false options=options.accessibility2}}
+                <FormSelect @title="Daltonien" @value={{this.challenge.accessibility2}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.accessibility2}} />
               </div>
               <div class="field">
-                {{form-select title="Spoil" value=challenge.spoil edition=edition multiple=false options=options.spoil}}
+                <FormSelect @title="Spoil" @value={{this.challenge.spoil}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.spoil}} />
               </div>
               <div class="field">
-                {{form-select title="Responsive" value=challenge.responsive edition=edition multiple=false options=options.responsive}}
+                <FormSelect @title="Responsive" @value={{this.challenge.responsive}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.responsive}} />
               </div>
           </div>
       </div>
   {{/if}}
-  <div class={{concat "field" (if edition "" " disabled")}}>
+  <div class={{concat "field" (if this.edition "" " disabled")}}>
       <label>Internationalisation</label>
       <div class="two fields">
           <div class="field">
-            {{form-select title="Langue" value=challenge.language edition=edition multiple=false options=options.language}}
+            <FormSelect @title="Langue" @value={{this.challenge.language}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.language}} />
           </div>
           <div class="field">
-            {{form-select title="Géographie" value=challenge.area edition=edition multiple=false options=options.area}}
+            <FormSelect @title="Géographie" @value={{this.challenge.area}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.area}} />
           </div>
       </div>
   </div>
-  {{#if (not edition)}}
-    {{form-input value=challenge.id title="Record id" edition=edition}}
+  {{#if (not this.edition)}}
+    <FormInput @value={{this.challenge.id}} @title="Record id" @edition={{this.edition}} />
   {{/if}}
 </form>

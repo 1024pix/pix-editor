@@ -1,10 +1,17 @@
+import classic from 'ember-classic-decorator';
+import { tagName } from '@ember-decorators/component';
+import { computed } from '@ember/object';
 import Component from '@ember/component';
-import {computed} from '@ember/object';
 import { htmlSafe } from '@ember/template';
 
-export default Component.extend({
-  tagName: '',
-  qualityIndication: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2}','skill.clueStatus', function (){
+@classic
+@tagName('')
+export default class CellQuality extends Component {
+  @computed(
+    'skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2}',
+    'skill.clueStatus'
+  )
+  get qualityIndication() {
     const productionTemplate = this.get('skill.productionTemplate');
     const allWeight = 19;
     const spoil = this._spoilWeight(productionTemplate.get('spoil'));
@@ -15,8 +22,10 @@ export default Component.extend({
 
     const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
     return Math.round(result * 100);
-  }),
-  qualityClassColor: computed('qualityIndication', function () {
+  }
+
+  @computed('qualityIndication')
+  get qualityClassColor() {
     const qualityIndication = this.get('qualityIndication');
     if (qualityIndication < 50) {
       return 'quality bad-quality';
@@ -25,8 +34,10 @@ export default Component.extend({
       return 'quality medium-quality';
     }
     return 'quality good-quality';
-  }),
-  classTutorial: computed("skill.{tutoSolutionCount,tutoMoreCount}", function () {
+  }
+
+  @computed("skill.{tutoSolutionCount,tutoMoreCount}")
+  get classTutorial() {
     const tutoSolution = this.get('skill.tutoSolutionCount');
     const tutoMore = this.get('skill.tutoMoreCount');
     if (tutoSolution > 0 && tutoMore > 0) {
@@ -36,8 +47,14 @@ export default Component.extend({
       return 'half-tutorial';
     }
     return false;
-  }),
-  popupBuild: computed('skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer}','skill.{clueStatus,tutoSolutionCount,tutoMoreCount}', 'classTutorial', function () {
+  }
+
+  @computed(
+    'skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer}',
+    'skill.{clueStatus,tutoSolutionCount,tutoMoreCount}',
+    'classTutorial'
+  )
+  get popupBuild() {
     const productionTemplate = this.get('skill.productionTemplate');
     const spoil = this._isNonTested(productionTemplate.get('spoil'));
     const responsive = this._isNonTested(productionTemplate.get('responsive'));
@@ -59,7 +76,8 @@ export default Component.extend({
             <tr><td>Indice </td><td> ${clue} </td></tr>
             ${haveTuto}
             ${timer}`);
-  }),
+  }
+
   _spoilWeight(spoil) {
     const weight = 5;
     const quality = {
@@ -69,7 +87,8 @@ export default Component.extend({
       'default': 0
     };
     return (quality[spoil] || quality['default']) / 3 * weight;
-  },
+  }
+
   _responsiveWeight(responsive) {
     const weight = 4;
     const quality = {
@@ -79,7 +98,8 @@ export default Component.extend({
       'default': 0
     };
     return (quality[responsive] || quality['default']) / 2 * weight;
-  },
+  }
+
   _colorblindWeight(colorblind) {
     const weight = 3;
     const quality = {
@@ -88,7 +108,8 @@ export default Component.extend({
       'default': 0
     };
     return (quality[colorblind] || quality['default']) * weight;
-  },
+  }
+
   _a11YWeight(a11Y) {
     const weight = 3;
     const quality = {
@@ -99,7 +120,8 @@ export default Component.extend({
       'default': 0
     };
     return (quality[a11Y] || quality['default']) / 2 * weight;
-  },
+  }
+
   _clueWeight(clue) {
     const weight = 4;
     const quality = {
@@ -112,11 +134,12 @@ export default Component.extend({
       'default': 0
     };
     return (quality[clue] || quality['default']) / 4 * weight;
-  },
+  }
+
   _isNonTested(skillDetail) {
     if (skillDetail) {
       return skillDetail;
     }
     return 'Non testé';
   }
-});
+}

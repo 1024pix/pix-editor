@@ -1,9 +1,13 @@
+import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import {inject as service} from '@ember/service';
 import { A } from '@ember/array';
 
-export default Service.extend({
-  store:service(),
+@classic
+export default class PaginatedQueryService extends Service {
+  @service
+  store;
+
   query(model, parameters) {
     let store = this.get("store");
     function queryPage(model, parameters, current) {
@@ -23,4 +27,4 @@ export default Service.extend({
     }
     return queryPage(model, parameters);
   }
-});
+}

@@ -1,55 +1,43 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          containerClassNames="popin-template-log"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @containerClassNames="popin-template-log" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active">
-      <i class="close icon" {{action "closeModal"}}></i>
+      <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="header">
-        Journal de {{challenge.skillNames}}
+        Journal de {{this.challenge.skillNames}}
       </div>
 
-      <div class="ui content segment basic custom-tab {{if loading "loading" ""}} {{if list "" "hidden"}}">
-        {{#aria-tabs as |at|}}
+      <div class="ui content segment basic custom-tab {{if this.loading "loading" ""}} {{if this.list "" "hidden"}}">
+        <AriaTabs as |at|>
           <div class="ui top attached tabular menu">
-            {{#at.tabList as |tl|}}
-              {{#tl.tab}}Mes notes{{/tl.tab}}
-              {{#tl.tab}}Toutes les notes {{/tl.tab}}
-              {{#tl.tab}}Changelog{{/tl.tab}}
-            {{/at.tabList}}
+            <at.tabList as |tl|>
+              <tl.tab>Mes notes</tl.tab>
+              <tl.tab>Toutes les notes </tl.tab>
+              <tl.tab>Changelog</tl.tab>
+            </at.tabList>
           </div>
-          {{#at.tabPanel}}
+          <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="own">
-              {{note-list list=ownNotes itemCount=ownCount listType="own-note-list" displayAuthor=false
-                          show=(action "showOwnNote")}}
+              <NoteList @list={{this.ownNotes}} @itemCount={{this.ownCount}} @listType="own-note-list" @displayAuthor={{false}} @show={{this.showOwnNote}} />
               <div class="ui text menu note-menu">
-                <a class="item" onclick={{action "addNote"}}><i class="plus icon"></i>Nouvelle note</a>
+                <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
               </div>
             </div>
-          {{/at.tabPanel}}
-          {{#at.tabPanel}}
+          </at.tabPanel>
+          <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="notes">
-              {{note-list list=notes itemCount=notesCount listType="note-list" show=(action "showNote")}}
+              <NoteList @list={{this.notes}} @itemCount={{this.notesCount}} @listType="note-list" @show={{this.showNote}} />
             </div>
-          {{/at.tabPanel}}
-          {{#at.tabPanel}}
+          </at.tabPanel>
+          <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="notes">
-              {{note-list list=changelogEntries itemCount=changelogEntriesCount listType="changelog-entry-list"
-                          displayStatus=false show=(action "showChangelogEntry")}}
+              <NoteList @list={{this.changelogEntries}} @itemCount={{this.changelogEntriesCount}} @listType="changelog-entry-list" @displayStatus={{false}} @show={{this.showChangelogEntry}} />
             </div>
-          {{/at.tabPanel}}
-        {{/aria-tabs}}
+          </at.tabPanel>
+        </AriaTabs>
       </div>
-
-
-
-
-      {{#unless list}}
-        {{note-form entry=logEntry edition=logEntryEdition close=(action "closeLogForm") update=(action "update")
-                    mayEdit=mayEditEntry edit=(action "editEntry")}}
+      {{#unless this.list}}
+        <NoteForm @entry={{this.logEntry}} @edition={{this.logEntryEdition}} @close={{this.closeLogForm}} @update={{this.update}} @mayEdit={{this.mayEditEntry}} @edit={{this.editEntry}} />
       {{/unless}}
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

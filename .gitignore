@@ -27,3 +27,8 @@ scripts/config.js
 scripts/config-production.js
 scripts/config-test.js
 app/config-private-test.js
+
+# intellij
+
+.idea/
+app/.idea/

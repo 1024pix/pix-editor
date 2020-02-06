@@ -1,55 +1,55 @@
 <div class="tube-header">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if mayMove}}
-        <a class="ui icon item" onclick={{action "selectCompetence"}}><i class="icon random"></i></a>
+      {{#if this.mayMove}}
+        <button class="ui button icon item" {{on "click" this.selectCompetence}} type="button"><i class="icon random"></i></button>
       {{/if}}
     </div>
-    <div class="item header {{if creation "creation"}}">
-      {{#if creation}}
+    <div class="item header {{if this.creation "creation"}}">
+      {{#if this.creation}}
         Nouveau tube
       {{else}}
-        {{tube.name}}
+        {{this.tube.name}}
       {{/if}}
     </div>
     <div class="ui right menu">
-      {{#if maximized}}
-        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
+      {{#if this.maximized}}
+        <button class="ui button icon item" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
       {{else}}
-        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
+        <button class="ui button icon item" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
       {{/if}}
-      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+      <button class="ui button icon item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
   </div>
 </div>
 <div class="tube-details">
   <div class="tube-data">
-    {{tube-form tube=tube edition=edition}}
+    <TubeForm @tube={{this.tube}} @edition={{this.edition}} />
   </div>
   <div class="ui vertical compact labeled icon menu tube-menu">
-    {{#if edition}}
-      <a class="item important-action" onclick={{action "save"}}>
+    {{#if this.edition}}
+      <button class="ui button item important-action" {{on "click" this.save}} type="button">
         <i class="save icon"></i>
         Enregistrer
-      </a>
-      <a class="item" onclick={{action "cancelEdit"}}>
+      </button>
+      <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
         <i class="ban icon"></i>
         Annuler
-      </a>
+      </button>
     {{else}}
-      {{#if mayEdit}}
-        <a class="item" onclick={{action "edit"}}>
+      {{#if this.mayEdit}}
+        <button class="ui button item" {{on "click" this.edit}} type="button">
           <i class="edit icon"></i>
           Modifier
-        </a>
+        </button>
       {{/if}}
-      {{#if mayAccessAirtable}}
-        <a class="item" onclick={{action "openAirtable"}}>
+      {{#if this.mayAccessAirtable}}
+        <button class="ui button item" {{on "click" this.openAirtable}} type="button">
           <i class="table icon"></i>
           Airtable
-        </a>
+        </button>
       {{/if}}
     {{/if}}
   </div>
 </div>
-{{popin-select-location class="tube-select-competence" display=displaySelectLocation onChange=(action "setCompetence") name=tube.name areas=areas competence=competence}}
+<PopinSelectLocation @class="tube-select-competence" @display={{this.displaySelectLocation}} @onChange={{this.setCompetence}} @name={{this.tube.name}} @areas={{this.areas}} @competence={{this.competence}} />

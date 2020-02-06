@@ -1,55 +1,55 @@
-<div class="skill-header {{skill.descriptionCSS}}">
+<div class="skill-header {{this.skill.descriptionCSS}}">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if mayMove}}
-        <a class="ui icon item" onclick={{action "moveSkill"}}><i class="icon random"></i></a>
+      {{#if this.mayMove}}
+        <button class="ui icon button" {{on "click" this.moveSkill}} type="button"><i class="icon random"></i></button>
       {{/if}}
     </div>
-    <div class="item header">{{skill.name}}</div>
+    <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
-      {{#if maximized}}
-        <a class="ui icon item" onclick={{action "minimize"}}><i class="window minimize icon"></i></a>
+      {{#if this.maximized}}
+        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
       {{else}}
-        <a class="ui icon item" onclick={{action "maximize"}}><i class="window maximize outline icon"></i></a>
+        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
       {{/if}}
-      <a class="ui icon item" onclick={{action "close"}}><i class="icon window close"></i></a>
+      <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
   </div>
 </div>
 <div class="skill-details">
   <div class="skill-data">
-    {{skill-form skill=skill application=application edition=edition}}
+    <SkillForm @skill={{this.skill}} @application={{this.application}} @edition={{this.edition}} />
   </div>
   <div class="ui vertical compact labeled icon menu skill-menu">
-    {{#if edition}}
-      <a class="item important-action" onclick={{action "save"}}>
+    {{#if this.edition}}
+      <button class="ui button important-action item" {{on "click" this.save}} type="button">
         <i class="save icon"></i>
         Enregistrer
-      </a>
-      <a class="item" onclick={{action "cancelEdit"}}>
+      </button>
+      <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
         <i class="ban icon"></i>
         Annuler
-      </a>
+      </button>
     {{else}}
-      {{#if skill.productionTemplate}}
-        <a class="item" onclick={{action "preview"}}>
+      {{#if this.skill.productionTemplate}}
+        <button class="ui button item" {{on "click" this.previewTemplate}} type="button">
           <i class="eye icon"></i>
           Prévisualiser
-        </a>
+        </button>
       {{/if}}
-      {{#if mayEdit}}
-        <a class="item" onclick={{action "edit"}}>
+      {{#if this.mayEdit}}
+        <button class="ui button item" {{on "click" this.edit}} type="button">
           <i class="edit icon"></i>
           Modifier
-        </a>
+        </button>
       {{/if}}
-      {{#if mayAccessAirtable}}
-        <a class="item" onclick={{action "openAirtable"}}>
+      {{#if this.mayAccessAirtable}}
+        <button class="ui button item" {{on "click" this.openAirtable}} type="button">
           <i class="table icon"></i>
           Airtable
-        </a>
+        </button>
       {{/if}}
     {{/if}}
   </div>
 </div>
-{{popin-select-location display=displaySelectLocation onChange=(action "setLocation") name=skillName areas=areas competence=competence selectTubeLevel=true tube=skill.tube level=skill.level selectEmptyLevels=true}}
+<PopinSelectLocation @display={{this.displaySelectLocation}} @onChange={{this.setLocation}} @name={{this.skillName}} @areas={{this.areas}} @competence={{this.competence}} @selectTubeLevel={{true}} @tube={{this.skill.tube}} @level={{this.skill.level}} @selectEmptyLevels={{true}} />

@@ -1,12 +1,16 @@
+import classic from 'ember-classic-decorator';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from "@ember/component";
-import {computed} from "@ember/object";
-import {inject as service} from "@ember/service";
 import DS from "ember-data";
 
-export default Component.extend({
-  config:service(),
+@classic
+export default class ChallengeForm extends Component {
+  @service
+  config;
+
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.options = {
       'types': ["QCU", "QCM", "QROC", "QROCM-ind", "QROCM-dep", "QRU"],
       'pedagogy': ["e-preuve", "q-savoir", "q-situation"],
@@ -19,14 +23,19 @@ export default Component.extend({
       'language':["Allemand", "Anglais", "Espagnol", "Franco Français", "Francophone", "Italie"],
       'area':["Algérie","Allemagne","Argentine","Belgique","Brésil","Canada","Chine","Côte d'ivoire","Espagne","France","Grèce","Institutions internationales","Italie","Japon","Kenya","La Palestine","Liban","Libye","Maroc","Mexique","Neutre","Pakistan","Portugal","Sénégal","Suisse","Syrie","Tunisie","UK","USA","Vénézuela"]
     }
-  },
-  authors:computed("config.authorNames", function() {
+  }
+
+  @computed("config.authorNames")
+  get authors() {
     return DS.PromiseArray.create({
       promise:this.get("config.authorNames")
     });
-  }),
-  helpInstructions: "<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)",
-  helpSuggestions:computed("challenge.type", function() {
+  }
+
+  helpInstructions = "<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)";
+
+  @computed("challenge.type")
+  get helpSuggestions() {
     const type = this.get("challenge.type");
     switch(type) {
       case "QCU":
@@ -44,8 +53,10 @@ export default Component.extend({
       default:
         return false;
     }
-  }),
-  helpAnswers:computed("challenge.type", function() {
+  }
+
+  @computed("challenge.type")
+  get helpAnswers() {
     const type = this.get("challenge.type");
     switch(type) {
       case "QCU":
@@ -61,9 +72,12 @@ export default Component.extend({
       default:
         return false;
     }
-  }),
-  helpScoring:"n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses",
-  typeIsQROC: computed('challenge.type', function(){
+  }
+
+  helpScoring = "n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses";
+
+  @computed('challenge.type')
+  get typeIsQROC() {
     const type = this.get("challenge.type");
     switch(type){
       case "QROC":
@@ -73,5 +87,5 @@ export default Component.extend({
       default:
         return false;
     }
-  })
-});
+  }
+}

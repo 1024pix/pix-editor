@@ -1,10 +1,7 @@
+import classic from 'ember-classic-decorator';
 import Component from '@ember/component';
 
-export default Component.extend({
-  value:"",
-  actions:{
-    confirm() {
-      this.get("approve")(this.get("value"));
-    }
-  }
-});
+@classic
+export default class PopinChangelog extends Component {
+  value = "";
+}

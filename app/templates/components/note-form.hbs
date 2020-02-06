@@ -1,29 +1,28 @@
 <div class="ui content">
   <form class="ui form">
     <div class="field">
-      {{form-select title="Statut" value=entry.status options=options.status edition=edition}}
+      <FormSelect @title="Statut" @value={{this.entry.status}} @options={{this.options.status}} @edition={{this.edition}} />
     </div>
-    <div class="field {{if edition "" "disabled"}}">
+    <div class="field {{if this.edition "" "disabled"}}">
       <label>Texte</label>
       <div class="ui input">
-        {{textarea value=entry.text rows="4" readonly=(not edition)}}
-      </div>
+        <Textarea @value={{this.entry.text}} @rows="4" @readonly={{not this.edition}} />      </div>
     </div>
   </form>
 </div>
 <div class="actions">
-  <a class="ui right button" onclick={{action close}}>
+  <button class="ui right button" {{on "click" this.close}} type="button">
     Retour
-  </a>
-  {{#if edition}}
-  <a class="ui green right button" onclick={{action "save"}}>
+  </button>
+  {{#if this.edition}}
+  <button class="ui green right button" {{on "click" this.save}} type="button">
     Enregistrer
-  </a>
+  </button>
   {{else}}
-    {{#if mayEdit}}
-    <a class="ui green right button" onclick={{action edit}}>
+    {{#if this.mayEdit}}
+    <button class="ui green right button" {{on "click" this.edit}} type="button">
       Modifier
-    </a>
+    </button>
     {{/if}}
   {{/if}}
 </div>

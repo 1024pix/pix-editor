@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-import { merge } from '@ember/polyfills';
+import { assign } from '@ember/polyfills';
 import { pluralize } from 'ember-inflector';
 
 export default DS.RESTSerializer.extend({
@@ -23,7 +23,7 @@ export default DS.RESTSerializer.extend({
       delete payload.offset;
 
       payload[modelNamePlural].forEach((record) => {
-        merge(record, record.fields);
+        assign(record, record.fields);
         delete record.fields;
         record.created = record.createdTime;
         delete record.createdTime;

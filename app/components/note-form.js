@@ -1,22 +1,26 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
+import { tagName } from '@ember-decorators/component';
 import Component from '@ember/component';
 
-export default Component.extend({
-  tagName:"",
+@classic
+@tagName("")
+export default class NoteForm extends Component {
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.options = {
       status:["en cours", "terminé", "archive"]
     };
-  },
-  actions:{
-    save() {
-      let entry = this.get("entry");
-      if (!entry.get("id")) {
-        entry.set("createdAt", (new Date()).toISOString());
-      }
-      //TODO: show loading
-      entry.save()
-      .then(this.get("update")());
-    }
   }
-});
+
+  @action
+  save() {
+    let entry = this.get("entry");
+    if (!entry.get("id")) {
+      entry.set("createdAt", (new Date()).toISOString());
+    }
+    //TODO: show loading
+    entry.save()
+    .then(this.get("update")());
+  }
+}

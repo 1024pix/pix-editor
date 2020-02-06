@@ -1,18 +1,17 @@
-<div class={{concat "field" (if edition "" " disabled")}}>
+<div class={{concat "field" (if this.edition "" " disabled")}}>
     <label>
-        {{#if edition}}
-            <a onClick={{action "toggleMaximized"}} class={{concat "ui compact icon right floated button" (if maximized " primary" " basic")}}><i class={{concat (if maximized "compress " "expand ")  "icon"}}></i></a>
-            {{#if helpContent}}
+        {{#if this.edition}}
+            <button {{on "click" this.toggleMaximized}} class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}} type="button"><i class={{concat (if this.maximized "compress " "expand ")  "icon"}}></i></button>
+            {{#if this.helpContent}}
             <div class="ui compact icon right floated button basic">
               <i class="help icon">
-                {{#ember-tooltip side="left-start" tooltipClass="custom-tooltip"}}
-                  {{safeHelpContent}}
-                {{/ember-tooltip}}
+                <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
+                  {{this.safeHelpContent}}
+                </EmberTooltip>
               </i>
             </div>
             {{/if}}
         {{/if}}
-        {{title}}
+        {{this.title}}
     </label>
-    {{textarea value=value rows="4" readonly=(not edition) class="attached"}}
-</div>
+    <Textarea @value={{this.value}} @rows="4" @readonly={{not this.edition}} class="attached" /></div>

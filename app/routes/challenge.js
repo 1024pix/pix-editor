@@ -1,12 +1,15 @@
+import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
+@classic
+export default class ChallengeRoute extends Route {
   model(params) {
     return this.get('store').query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()) , Statut != 'archive')`, maxRecords:1})
     .then(challenges => {
       return challenges.get('firstObject');
     });
-  },
+  }
+
   afterModel(model) {
     if (model) {
       return model.get('skills')
@@ -28,4 +31,4 @@ export default Route.extend({
       return this.transitionTo("index");
     }
   }
-});
+}

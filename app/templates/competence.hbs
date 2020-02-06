@@ -1,14 +1,14 @@
 <div class="main-left">
-  {{competence/competence-header competence=competence section=section selectSection=(action "selectSection")}}
-  {{competence/competence-actions section=section view=view refresh=(action "refresh") selectView=(action "selectView") hidden=firstMaximized shareSkills=(action "exportSkills")}}
-  <div class="ui attached segment competence {{size}} {{competenceHidden}}">
-    {{competence/competence-list list=competence.workbenchTemplates itemCount=competence.workbenchTemplates.length competenceModel=model hidden=displayGrid link=skillLink}}
-    {{competence/competence-grid tubes=competence.sortedTubes competenceModel=model hidden=(not displayGrid) section=section view=view link=skillLink production=production}}
+  <Competence::CompetenceHeader @competence={{this.competence}} @section={{this.section}} @selectSection={{this.selectSection}} />
+  <Competence::CompetenceActions @section={{this.section}} @view={{this.view}} @refresh={{this.refresh}} @selectView={{this.selectView}} @hidden={{this.firstMaximized}} @shareSkills={{this.exportSkills}} />
+  <div class="ui attached segment competence {{this.size}} {{this.competenceHidden}}">
+    <Competence::CompetenceList @list={{this.competence.workbenchTemplates}} @itemCount={{this.competence.workbenchTemplates.length}} @competenceModel={{this.model}} @hidden={{this.displayGrid}} @link={{this.skillLink}} />
+    <Competence::CompetenceGrid @tubes={{this.competence.sortedTubes}} @competenceModel={{this.model}} @hidden={{not this.displayGrid}} @section={{this.section}} @view={{this.view}} @link={{this.skillLink}} @production={{this.production}} />
   </div>
-  {{competence/competence-footer competence=competence section=section view=view selectView=(action "selectView") hidden=firstMaximized newTube=(action "newTube") newTemplate=(action "newTemplate")}}
+  <Competence::CompetenceFooter @competence={{this.competence}} @section={{this.section}} @view={{this.view}} @selectView={{this.selectView}} @hidden={{this.firstMaximized}} @newTube={{this.newTube}} @newTemplate={{this.newTemplate}} />
   {{outlet}}
 </div>
-{{#if twoColumns}}
+{{#if this.twoColumns}}
 <div class="main-right">
   {{outlet "mainRight"}}
 </div>

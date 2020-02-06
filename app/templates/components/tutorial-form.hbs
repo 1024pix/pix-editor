@@ -1,11 +1,7 @@
-{{#if display}}
-  {{#modal-dialog
-          targetAttachment="center"
-          overlayClassNames="custom-overlay-modal"
-          onClose=(action "closeModal")
-  }}
+{{#if this.display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active">
-      <i class="close icon" {{action "closeModal"}}></i>
+      <i class="close icon" {{this.closeModal}}></i>
       <div class="header">
         Créer un tutoriel
       </div>
@@ -13,41 +9,31 @@
         <div class="ui stacked segment">
           <div class="field">
             <label>Titre</label>
-            {{input type="text" value=title placeholder="Titre"}}
+            <Input @type="text" @value={{this.title}} placeholder="Titre" />
           </div>
           <div class="three fields">
             <div class="field">
               <label>Lien</label>
-              {{input type="text" value=tutorial.link placeholder="Lien"}}
+              <Input @type="text" @value={{this.tutorial.link}} placeholder="Lien" />
             </div>
             <div class="field">
               <label>Source</label>
-              {{input type="text" value=tutorial.source placeholder="Source"}}
+              <Input @type="text" @value={{this.tutorial.source}} placeholder="Source" />
             </div>
-            {{form-select title="License" defaultText="Licence" value=tutorial.license options=options.license
-                          edition=true}}
+            <FormSelect @title="License" @defaultText="Licence" @value={{this.tutorial.license}} @options={{this.options.license}} @edition={{true}} />
           </div>
           <div class="three fields">
-            {{form-select title="Format" defaultText="Format" value=tutorial.format options=options.format
-                          edition=true}}
+            <FormSelect @title="Format" @defaultText="Format" @value={{this.tutorial.format}} @options={{this.options.format}} @edition={{true}} />
             <div class="field">
               <label>Durée (hh:mm:ss)</label>
-              {{input type="text" value=tutorial.duration placeholder="Durée (hh:mm:ss)"}}
+              <Input @type="text" @value={{this.tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
             </div>
-            {{form-select title="Niveau" defaultText="Niveau" value=tutorial.level options=options.level edition=true}}
+            <FormSelect @title="Niveau" @defaultText="Niveau" @value={{this.tutorial.level}} @options={{this.options.level}} @edition={{true}} />
           </div>
           <div class="three fields">
             <div class="field">
               <label>Rechercher tags</label>
-              {{#power-select search=(action "getSearchTagsResults")
-                              placeholder="Nom"
-                              onchange=(action "selectTag")
-                              dropdownClass="search-result tutorial-search"
-                              triggerComponent="power-select-custom-trigger"
-                              searchMessage=""
-                              searchPlaceholder="Rechercher..."
-                              loadingMessage="Recherche en cours..."
-              as |result|}}
+              <PowerSelect @search={{this.getSearchTagsResults}} @placeholder="Nom" @onchange={{this.selectTag}} @dropdownClass="search-result tutorial-search" @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
                 <div class="search-title">
                   {{#if (eq result.id "create")}}
                     {{result.title}} <i class="add icon"></i>
@@ -60,14 +46,14 @@
                     {{result.description}}
                   {{/if}}
                 </div>
-              {{/power-select}}
+              </PowerSelect>
             </div>
             <div class="twelve wide field">
-              {{#if hasSelectedTag}}
+              {{#if this.hasSelectedTag}}
                 <label>Tags</label>
-                {{#each selectedTags as |tag|}}
+                {{#each this.selectedTags as |tag|}}
                   <div class="ui mini labeled button btn-selected-tag" tabindex="0">
-                    <div {{action "unselectTag" tag.id}} class="ui icon button">
+                    <div {{on "click" (fn this.unselectTag tag.id)}} class="ui icon button">
                       <i class="close icon"></i>
                     </div>
                     <p class="ui basic label">
@@ -81,19 +67,19 @@
           <div class="fields">
             <div class="field">
               <label>Coup de coeur</label>
-              <div onclick={{action "toCrush"}} class="ui circular icon button crush">
-                <i class="icon red heart {{if isFavorite "" "outline" }}"></i>
+              <div {{on "click" this.toCrush}} class="ui circular icon button crush">
+                <i class="icon red heart {{if this.isFavorite "" "outline" }}"></i>
               </div>
             </div>
           </div>
         </div>
       </form>
       <div class="actions">
-        <div onclick={{action "saveTutorial" tutorials}} class="ui positive right labeled icon button">
+        <div {{on "click" (fn this.saveTutorial this.tutorials)}} class="ui positive right labeled icon button">
           Enregistrer
           <i class="save icon"></i>
         </div>
       </div>
     </div>
-  {{/modal-dialog}}
+  </ModalDialog>
 {{/if}}

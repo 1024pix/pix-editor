@@ -1,31 +1,28 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item date" onclick={{action "sortBy" "date" "int"}}>Date</div>
-    {{#if displayAuthor}}
-      <div class="list-item author" onclick={{action "sortBy" "author" "string"}}>Auteur</div>
+    <div class="list-item date" {{on "click" (fn this.sortBy "date" "int")}}>Date</div>
+    {{#if this.displayAuthor}}
+      <div class="list-item author" {{on "click" (fn this.sortBy "author" "string")}}>Auteur</div>
     {{/if}}
-    <div class="list-item text" onclick={{action "sortBy" "text" "string"}}>Texte</div>
-    {{#if displayStatus}}
-      <div class="list-item status" onclick={{action "sortBy" "status" "string"}}>Statut</div>
+    <div class="list-item text" {{on "click" (fn this.sortBy "text" "string")}}>Texte</div>
+    {{#if this.displayStatus}}
+      <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
     {{/if}}
   </div>
 </div>
 <div class="list-body">
-  {{#if itemCount}}
-    {{#ember-collection
-      items=sortedList
-      cell-layout=(percentage-columns-layout itemCount columns 40) as |item|
-    }}
-    <div class="list-row" onclick={{action show item}}>
+  {{#if this.itemCount}}
+    <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout this.itemCount this.columns 40}} as |item|>
+    <div class="list-row" {{on "click" (fn this.show item)}}>
       <div class="list-item">{{item.date}}</div>
-      {{#if displayAuthor}}
+      {{#if this.displayAuthor}}
         <div class="list-item">{{item.author}}</div>
       {{/if}}
       <div class="list-item">{{item.text}}</div>
-      {{#if displayStatus}}
+      {{#if this.displayStatus}}
         <div class="list-item">{{item.status}}</div>
       {{/if}}
     </div>
-    {{/ember-collection}}
+    </EmberCollection>
   {{/if}}
 </div>

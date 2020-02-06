@@ -1,21 +1,21 @@
-<div class="main-title  {{if config.lite "lite" ""}}">
+<div class="main-title  {{if this.config.lite "lite" ""}}">
   <h1 class="ui header">
   <div class="ui right floated menu">
-    {{#link-to "competence.templates.single" competence challenge class="ui icon item"}}<i class="icon window close"></i>{{/link-to}}
+    <LinkTo @route="competence.templates.single" @models={{array this.competence this.challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
   </div>
-      Déclinaisons de {{challenge.skillNames}}
+      Déclinaisons de {{this.challenge.skillNames}}
 
   </h1>
 </div>
-<div class="ui attached segment competence {{size}} {{listHidden}}">
-  {{alternatives-list list=challenge.alternatives itemCount=challenge.alternatives.length competenceModel=competence challengeModel=challenge hidden=false}}
+<div class="ui attached segment competence {{this.size}} {{this.listHidden}}">
+  <AlternativesList @list={{this.challenge.alternatives}} @itemCount={{this.challenge.alternatives.length}} @competenceModel={{this.competence}} @challengeModel={{this.challenge}} @hidden={{false}} />
 </div>
-<div class="ui borderless bottom attached labelled icon menu {{listHidden}}">
-  <div class="item competence-info"><div>En production : <span class="production">{{challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{challenge.draftAlternatives.length}}</span></div></div>
-  {{#if mayCreateAlternative}}
-    <a class="right item" onclick={{action "newAlternative"}}>
+<div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
+  <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
+  {{#if this.mayCreateAlternative}}
+    <button class="ui button right item" {{on "click" this.newAlternative}} type="button">
       <i class="plus square outline icon"></i> Nouvelle déclinaison
-    </a>
+    </button>
   {{/if}}
 </div>
 {{outlet}}

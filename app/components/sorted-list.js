@@ -1,15 +1,19 @@
+import classic from 'ember-classic-decorator';
+import { classNameBindings } from '@ember-decorators/component';
+import { action, computed } from '@ember/object';
 import Component from '@ember/component';
-import {computed} from '@ember/object';
 import DS from 'ember-data';
 
-export default Component.extend({
-  classNameBindings: ["listType"],
-  listType: "sorted-list",
-  list:null,
-  sortField:null,
-  sortType:null,
-  ascending:true,
-  sortElements:function(elements) {
+@classic
+@classNameBindings("listType")
+export default class SortedList extends Component {
+  listType = "sorted-list";
+  list = null;
+  sortField = null;
+  sortType = null;
+  ascending = true;
+
+  sortElements(elements) {
     let field = this.get('sortField');
     let type = this.get('sortType');
     let sort1, sort2;
@@ -84,8 +88,10 @@ export default Component.extend({
       });
     }
     return elements;
-  },
-  sortedList: computed('list', 'sortField', 'ascending', function() {
+  }
+
+  @computed('list', 'sortField', 'ascending')
+  get sortedList() {
     let field = this.get('sortField');
     if (field) {
       let list = this.get('list');
@@ -102,33 +108,34 @@ export default Component.extend({
     } else {
       return this.get('list');
     }
-  }),
+  }
+
   init() {
-    this._super(...arguments);
+    super.init(...arguments);
     this.columns = [100];
-  },
-  actions:{
-    sortBy(field, type) {
-      if (field === this.get('sortField')) {
-        this.set('ascending', !this.get('ascending'));
-      } else {
-        this.set('sortField', field);
-        this.set('ascending', true);
-      }
-      this.set('sortType', type);
-      const className = this.get("listType");
-      document.querySelectorAll(`.${className} .list-header .list-item`).forEach(el=>{
-      el.classList.remove('sorting');
-      });
-      const sortElement =  document.querySelector(`.${className} .list-header .list-item.${field}`);
-      sortElement.classList.add('sorting');
-      if (this.get('ascending')) {
-        sortElement.classList.remove("descending");
-        sortElement.classList.add("ascending");
-      } else {
-        sortElement.classList.remove("ascending");
-        sortElement.classList.add("descending");
-      }
+  }
+
+  @action
+  sortBy(field, type) {
+    if (field === this.get('sortField')) {
+      this.set('ascending', !this.get('ascending'));
+    } else {
+      this.set('sortField', field);
+      this.set('ascending', true);
+    }
+    this.set('sortType', type);
+    const className = this.get("listType");
+    document.querySelectorAll(`.${className} .list-header .list-item`).forEach(el=>{
+    el.classList.remove('sorting');
+    });
+    const sortElement =  document.querySelector(`.${className} .list-header .list-item.${field}`);
+    sortElement.classList.add('sorting');
+    if (this.get('ascending')) {
+      sortElement.classList.remove("descending");
+      sortElement.classList.add("ascending");
+    } else {
+      sortElement.classList.remove("ascending");
+      sortElement.classList.add("descending");
     }
   }
-});
+}

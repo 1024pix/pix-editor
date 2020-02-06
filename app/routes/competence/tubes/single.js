@@ -1,11 +1,15 @@
+import classic from 'ember-classic-decorator';
+import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
+@classic
+export default class SingleRoute extends Route {
   model(params) {
     return this.get('store').findRecord('tube', params.tube_id);
-  },
+  }
+
   setupController(controller) {
-    this._super(...arguments);
+    super.setupController(...arguments);
     controller.set('maximized', false);
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
@@ -13,15 +17,15 @@ export default Route.extend({
     const competenceController = this.controllerFor('competence');
     competenceController.set('section', 'skills');
     competenceController.set('view', null);
-  },
-  actions: {
-    willTransition(transition) {
-      if (this.controller.get('edition') &&
-        !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
-        transition.abort();
-      } else {
-        return true;
-      }
+  }
+
+  @action
+  willTransition(transition) {
+    if (this.controller.get('edition') &&
+      !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+      transition.abort();
+    } else {
+      return true;
     }
   }
-});
+}

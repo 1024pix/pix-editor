@@ -1,26 +1,39 @@
+import classic from 'ember-classic-decorator';
+import { tagName } from '@ember-decorators/component';
+import { computed } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import {computed} from '@ember/object';
-import {inject as service} from '@ember/service';
 
-export default Component.extend({
+@classic
+@tagName("")
+export default class GridCell extends Component {
+  @service
+  access;
 
-  // Element
-  tagName:"",
-  access: service(),
-  config: service(),
+  @service
+  config;
 
   // Props
-  skill: null,
-  view: null,
-  productionTemplate: null,
-  hasStatusProduction: false,
+  skill = null;
+
+  view = null;
+  productionTemplate = null;
+  hasStatusProduction = false;
 
   // Computed
-  mayAddSkill: computed('section', 'config.access', function () {
+  @computed('section', 'config.access')
+  get mayAddSkill() {
     return this.get('section') === 'skills' && this.get('access').mayEditSkills();
-  }),
+  }
 
-  displaySkill: computed('skill','skill.{productionTemplate,productionTemplate.isFulfilled}','hasStatusProduction','section', 'view', function () {
+  @computed(
+    'skill',
+    'skill.{productionTemplate,productionTemplate.isFulfilled}',
+    'hasStatusProduction',
+    'section',
+    'view'
+  )
+  get displaySkill() {
     const skill = this.get('skill');
     if(skill){
       const section = this.get('section');
@@ -38,6 +51,5 @@ export default Component.extend({
       }
     }
     return false;
-  })
-
-});
+  }
+}

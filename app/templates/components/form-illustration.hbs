@@ -1,22 +1,24 @@
 <div class="field">
-  {{#if (or value.length edition)}}
-    <label>{{title}}</label>
+  {{#if (or this.value.length this.edition)}}
+    <label>{{this.title}}</label>
   {{/if}}
-  {{#if value.length}}
-    {{#if value.[0].url}}
-      <img src={{value.[0].url}} alt="" class="clickable" onclick={{action display}}>
+  {{#if this.value.length}}
+    {{#if this.value.0.url}}
+      <img src={{this.value.0.url}} alt="" class="clickable" {{on "click" this.display}} role="presentation">
     {{else}}
-      {{value.[0].file.name}} ({{value.[0].file.size}} octets)
+      {{this.value.0.file.name}} ({{this.value.0.file.size}} octets)
     {{/if}}
-    {{#if edition}}
-      <a onclick={{action "remove"}} class="file-remove"><i class="remove icon"></i></a>
+    {{#if this.edition}}
+      <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
     {{/if}}
   {{/if}}
-  {{#if edition}}
-    {{#file-upload name="illustration" accept="image/*" onfileadd=(action "add")}}
+  {{#if this.edition}}
+    <FileUpload @name="illustration" @accept="image/*" @onfileadd={{this.add}}>
+    {{!-- template-lint-disable link-href-attributes  --}}
       <a class="ui button">
         Choisir une image...
       </a>
-    {{/file-upload}}
+    {{!-- template-lint-enable link-href-attributes  --}}
+    </FileUpload>
   {{/if}}
 </div>

@@ -47,6 +47,8 @@
       font-size: 14px;
     }
   }
+
+
 }
 
 img.clickable {
@@ -65,6 +67,8 @@ img.clickable {
 
       font-size: 16px !important;
       padding: .7em 1.4em;
+      margin:0;
+      border-radius:0;
 
       &.validate {
         color: $production-color !important;
@@ -120,6 +124,8 @@ img.clickable {
     .item::before {
       display: none;
     }
+
+
   }
 
   &.suggested {

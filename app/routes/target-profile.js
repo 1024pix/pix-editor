@@ -1,11 +1,16 @@
+import classic from 'ember-classic-decorator';
+import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
-import {inject as service} from "@ember/service";
 
-export default Route.extend({
-  paginatedQuery:service(),
+@classic
+export default class TargetProfileRoute extends Route {
+  @service
+  paginatedQuery;
+
   model() {
     return this.modelFor('application');
-  },
+  }
+
   afterModel(model) {
     const getCompetences = model.map(area => area.get('competences'));
     return Promise.all(getCompetences)
@@ -22,4 +27,4 @@ export default Route.extend({
       return Promise.all(getChallenges);
     })
   }
-});
+}

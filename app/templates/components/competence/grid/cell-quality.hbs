@@ -1,24 +1,24 @@
-{{#link-to "competence.quality.single" competenceModel skill tagName="td" class="skill-cell quality-skill-link"}}
-  {{#ember-tooltip tooltipClass="custom-tooltip quality-tooltip" arrowClass="custom-arrow" side="right-start"}}
+<LinkTo @route="competence.quality.single" @models={{array this.competenceModel this.skill}} @tagName="td" class="skill-cell quality-skill-link">
+  <EmberTooltip @tooltipClass="custom-tooltip quality-tooltip" @arrowClass="custom-arrow" @side="right-start">
     <table class="quality-indication-details">
       <tbody>
-        {{popupBuild}}
+        {{this.popupBuild}}
       </tbody>
     </table>
-  {{/ember-tooltip}}
-  <div class="quality {{qualityClassColor}}">
+  </EmberTooltip>
+  <div class="quality {{this.qualityClassColor}}">
     <div class=" quality-indication">
-      <span>{{skill.name}}</span>
-      <span>{{qualityIndication}}</span>
+      <span>{{this.skill.name}}</span>
+      <span>{{this.qualityIndication}}</span>
     </div>
-    {{#if classTutorial}}
-      <i class="lab icon {{classTutorial}}"></i>
+    {{#if this.classTutorial}}
+      <i class="lab icon {{this.classTutorial}}"></i>
     {{/if}}
-    {{#if skill.productionTemplate.timer }}
+    {{#if this.skill.productionTemplate.timer }}
       <i class="time icon"></i>
     {{/if}}
-    {{#if (and (not classTutorial) (not skill.productionTemplate.timer))}}
+    {{#if (and (not this.classTutorial) (not this.skill.productionTemplate.timer))}}
       <br>
     {{/if}}
   </div>
-{{/link-to}}
+</LinkTo>

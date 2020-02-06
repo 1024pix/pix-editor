@@ -1,10 +1,16 @@
+import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
+import fetch from 'fetch';
 
-export default Service.extend({
-  config:service(),
-  ajax:service(),
-  filePath:service(),
+@classic
+export default class StorageService extends Service {
+  @service
+  config;
+
+  @service
+  filePath;
+
   uploadFile(file, fileName) {
     let url = this.get("config").get("storagePost") + Date.now()+ "." + this.get('filePath').getExtension(file.get("name"));
     let that = this;
@@ -26,14 +32,16 @@ export default Service.extend({
     .then(function() {
       return {url:url, filename:fileName?fileName:file.get("name")};
     });
-  },
+  }
+
   uploadFiles(files) {
     var requests = [];
     for (var i = 0; i<files.length;i++) {
       requests.push(this.uploadFile(files[i]));
     }
     return Promise.all(requests);
-  },
+  }
+
   getStorageToken(renew) {
     let config = this.get("config");
     if (!renew && typeof config.get("storageToken") !== "undefined") {
@@ -48,11 +56,19 @@ export default Service.extend({
           }
         }
       };
-      return this.get("ajax").post(config.get("storageAuth"), {data:data, headers:{"Content-type": "application/json"}})
-      .then(function(response) {
+      return fetch(config.get("storageAuth"), {
+        method:'POST',
+        headers:{"Content-type": "application/json"},
+        body:JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(response => {
         config.set("storageToken", response.token);
         return config.get("storageToken");
+      })
+      .catch((error) => {
+        console.error(error);
       });
     }
   }
-});
+}
