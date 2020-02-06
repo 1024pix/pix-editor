@@ -16,10 +16,10 @@
         </div>
       </div>
       <div class="actions">
-        <div class="ui deny button" {{on "click" this.onDeny}}>
+        <div class="ui deny button" {{on "click" @onDeny}}>
           Ignorer
         </div>
-        <div class="ui positive right button" {{on "click" (fn this.onApprove this.value)}}>
+        <div class="ui positive right button" {{on "click" (fn @onApprove this.value)}}>
           Enregistrer
         </div>
       </div>
