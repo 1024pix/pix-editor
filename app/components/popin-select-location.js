@@ -1,18 +1,29 @@
+import classic from 'ember-classic-decorator';
 import Component from '@ember/component';
-import {computed} from '@ember/object';
+import {computed,action} from '@ember/object';
 import {oneWay} from '@ember/object/computed';
 import DS from 'ember-data';
 
-export default Component.extend({
-  title: null,
-  areas: null,
-  selectEmptyLevels: false,
-  competenceName: oneWay('competence.name'),
-  tubeName: oneWay('tube.name'),
-  selectedLevel: oneWay('level'),
-  selectTubeLevel: false,
-  multipleLevel: false,
-  competences: computed('areas', function () {
+@classic
+export default class PopinSelectLocation extends Component {
+
+  title = null;
+  areas = null;
+  selectEmptyLevels = false;
+  selectTubeLevel = false;
+  multipleLevel = false;
+
+  @oneWay('competence.name')
+  competenceName;
+
+  @oneWay('tube.name')
+  tubeName;
+
+  @oneWay('level')
+  selectedLevel;
+
+  @computed('areas')
+  get competences() {
     const areas = this.get('areas');
     if (!areas) {
       return [];
@@ -21,33 +32,45 @@ export default Component.extend({
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
-  }),
-  competencesNames: computed('competences', function () {
+  }
+
+  @computed('competences')
+  get competencesNames() {
     return this.get('competences').map(competence => competence.get('name'));
-  }),
-  selectedCompetence: computed('competenceName', function () {
+  }
+
+  @computed('competenceName')
+  get selectedCompetence() {
     return this.get('competences').find(competence => competence.get('name') === this.get('competenceName'));
-  }),
-  tubes: computed('selectedCompetence', function () {
+  }
+
+  @computed('selectedCompetence')
+  get tubes() {
     const selectedCompetence = this.get('selectedCompetence');
     return DS.PromiseArray.create({
       promise: selectedCompetence.get('rawTubes')
         .then(() => selectedCompetence.get('sortedTubes'))
     });
-  }),
-  tubesNames: computed('tubes', function () {
+  }
+
+  @computed('tubes')
+  get tubesNames() {
     return DS.PromiseArray.create({
       promise: this.get('tubes')
         .then(tubes => tubes.map(tube => tube.get('name')))
     })
-  }),
-  selectedTube: computed('tubes', 'tubeName', function () {
+  }
+
+  @computed('tubes', 'tubeName')
+  get selectedTube() {
     return DS.PromiseObject.create({
       promise: this.get('tubes')
         .then(tubes => tubes.find(tube => tube.get('name') === this.get('tubeName')))
     });
-  }),
-  levels: computed('selectedTube', function () {
+  }
+
+  @computed('selectedTube')
+  get levels() {
     let selectEmptyLevels = this.get('selectEmptyLevels');
     let selectedTube;
     return DS.PromiseArray.create({
@@ -73,43 +96,44 @@ export default Component.extend({
           }, []);
         })
     });
-  }),
-  actions: {
-    set() {
-      if (this.get('selectTubeLevel')) {
-        if (this.get('selectEmptyLevels')) {
-          const competence = this.get('selectedCompetence');
-          return this.get('selectedTube')
-            .then(tube => {
-              this.get('onChange')(competence, tube, this.get('selectedLevel'));
-              this.set('display', false);
-            });
-        } else {
-          let levels;
-          if (this.get('multipleLevel')) {
-            levels = this.get('selectedLevel');
-          } else {
-            levels = [this.get('selectedLevel')];
-          }
-          return this.get('selectedTube')
-            .then(tube => tube.get('filledSkills'))
-            .then(skills => {
-              let selectedSkills = levels.map(level => {
-                return skills[level - 1];
-              });
-              this.get('onChange')(selectedSkills);
-              this.set('display', false);
-            });
-        }
-      } else {
-        const competence = this.get('selectedCompetence');
-        this.get('onChange')(competence);
-        this.set('display', false);
+  }
 
+  @action
+  setLocation() {
+    if (this.get('selectTubeLevel')) {
+      if (this.get('selectEmptyLevels')) {
+        const competence = this.get('selectedCompetence');
+        return this.get('selectedTube')
+          .then(tube => {
+            this.get('onChange')(competence, tube, this.get('selectedLevel'));
+            this.set('display', false);
+          });
+      } else {
+        let levels;
+        if (this.get('multipleLevel')) {
+          levels = this.get('selectedLevel');
+        } else {
+          levels = [this.get('selectedLevel')];
+        }
+        return this.get('selectedTube')
+          .then(tube => tube.get('filledSkills'))
+          .then(skills => {
+            let selectedSkills = levels.map(level => {
+              return skills[level - 1];
+            });
+            this.get('onChange')(selectedSkills);
+            this.set('display', false);
+          });
       }
-    },
-    closeModal() {
+    } else {
+      const competence = this.get('selectedCompetence');
+      this.get('onChange')(competence);
       this.set('display', false);
     }
   }
-});
+
+  @action
+  closeModal() {
+    this.set('display', false);
+  }
+}
