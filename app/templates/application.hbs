@@ -1,4 +1,4 @@
-<BurgerMenu @width={{350}} @animation="reveal" @open={{this.openMenuState}} @locked={{this.lockedMenu}} as |burger|>
+<BurgerMenu @width={{350}} @animation="reveal" @open={{this.menuOpen}} @locked={{this.lockedMenu}} as |burger|>
   <burger.menu>
     <MainSidebar @areas={{this.model}} @burger={{burger}} @config={{this.config}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
   </burger.menu>
@@ -10,9 +10,11 @@
       </div>
       <div class="pusher">
         <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
-          <a class="item" href="#" {{on "click" burger.state.actions.toggle}}>
+          {{!-- template-lint-disable --}}
+          <button class="ui icon button" type="button" {{action burger.state.actions.toggle}}>
             <i class="bars icon"></i>
-          </a>
+          </button>
+          {{!-- template-lint-enable --}}
         </div>
         <div class="main">
           {{#if (eq this.currentRouteName "index")}}

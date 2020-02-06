@@ -16,6 +16,7 @@ export default class ApplicationController extends Controller {
   confirmCallback = null;
   displayConfiguration = false;
   displayConfirm = false;
+  _menuOpen = false;
 
   @service
   config;
@@ -23,7 +24,6 @@ export default class ApplicationController extends Controller {
   @service
   router;
 
-  _menuOpen = false;
 
   init() {
     super.init(...arguments);
@@ -31,17 +31,12 @@ export default class ApplicationController extends Controller {
   }
 
   @computed('router.currentRouteName', '_menuOpen')
-  get openMenuState() {
+  get menuOpen() {
     if (this.get('router.currentRouteName') === 'index') {
       return true;
     } else {
       return this.get('_menuOpen');
     }
-  }
-
-  set openMenuState(value) {
-    this.set('_menuOpen', value);
-    return value;
   }
 
   @computed('displayConfiguration')
@@ -111,4 +106,5 @@ export default class ApplicationController extends Controller {
     }
     this.set('displayConfirm', false)
   }
+
 }
