@@ -208,9 +208,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   open(dropdown) {
-
       dropdown.actions.open();
-
   }
 
   @action
