@@ -127,40 +127,27 @@ export default class CompetenceController extends Controller {
   exportSkills() {
     this.get('application').send('isLoading','Export des acquis...');
     const competence = this.get('competence');
-    return competence.get('productionTubes')
-      .then(productionTubes => {
-        const getFilledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills'));
-        return Promise.all(getFilledSkills);
-      })
-      .then(filledSkills => {
-        const getSkillData = filledSkills.flat()
-          .filter(filledSkill => filledSkill !== false)
-          .map(filledSkill => {
-            return filledSkill.get('productionTemplate')
-              .then(productionTemplate => {
-                if (productionTemplate) {
-                  return filledSkill.get('tube')
-                    .then(tube => {
-                      const description = this._formatCSVString(filledSkill.description);
-                      return [competence.name, tube.name, filledSkill.name, description];
-                    });
-                } else {
-                  return Promise.resolve(false);
-                }
-              })
-
-          });
-        return Promise.all(getSkillData)
-      }).then(skillData => {
-        const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
-          return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
-        }, '"Compétence","Tube","Acquis","Description"');
-        const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-        this.get("fileSaver").saveAs(contentCSV, fileName);
-        this.get('application').send('showMessage', 'acquis exportés', true);
-      }).finally(() => {
-        this.get('application').send('finishedLoading');
-      })
+    const productionTubes = competence.get('productionTubes');
+    const filledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills'));
+    const skillData = filledSkills.flat()
+      .filter(filledSkill => filledSkill !== false)
+      .map(filledSkill => {
+        const productionTemplate = filledSkill.get('productionTemplate');
+        if (productionTemplate) {
+          const tube = filledSkill.get('tube');
+          const description = this._formatCSVString(filledSkill.description);
+          return [competence.get('name'), tube.get('name'), filledSkill.get('name'), description];
+        } else {
+          return false;
+        }
+      });
+    const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
+      return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
+    }, '"Compétence","Tube","Acquis","Description"');
+    const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+    this.get("fileSaver").saveAs(contentCSV, fileName);
+    this.get('application').send('showMessage', 'acquis exportés', true);
+    this.get('application').send('finishedLoading');
   }
 
   @action
