@@ -5,6 +5,7 @@ import Component from '@ember/component';
 @classic
 export default class SkillForm extends Component {
   displayTutorialForm = false;
+  searchTitle = '';
 
   init() {
     super.init(...arguments);
@@ -14,7 +15,6 @@ export default class SkillForm extends Component {
       'i18n': ["France", "Monde", "Union Européenne"]
     };
     this.set('tutorials', []);
-    this.set('searchTitle', '');
   }
 
   @action
