@@ -1,7 +1,7 @@
 {{#if this.display}}
   <ModalDialog @targetAttachment="center" @containerClassNames="popin-template-log" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active">
-      <i class="close icon" {{this.closeModal}}></i>
+      <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="header">
         Journal de {{this.challenge.skillNames}}
       </div>

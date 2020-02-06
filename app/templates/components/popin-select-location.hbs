@@ -1,7 +1,7 @@
 {{#if this.display}}
   <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui standard modal visible active">
-      <i class="close icon" {{this.closeModal}}></i>
+      <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="header">
         {{#if this.title}}
           {{this.title}}
@@ -29,7 +29,7 @@
         <div class="ui deny button" {{on "click" this.closeModal}}>
           Annuler
         </div>
-        <div class="ui green button" {{on "click" this.set}}>
+        <div class="ui green button" {{on "click" this.setLocation}}>
           <i class="checkmark icon"></i>
           Déplacer
         </div>
