@@ -1,17 +1,17 @@
-<div class={{concat "field" (if this.edition "" " disabled")}}>
-    <label>{{this.title}}</label>
+<div class={{concat "field" (if @edition "" " disabled")}}>
+    <label>{{@title}}</label>
     <div class="four fields">
         <div class="field">
-          <FormSelect @title="Non voyant" @value={{this.challenge.accessibility1}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.accessibility1}} />
+          <FormSelect @title="Non voyant" @value={{@challenge.accessibility1}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility1}} />
         </div>
         <div class="field">
-          <FormSelect @title="Daltonien" @value={{this.challenge.accessibility2}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.accessibility2}} />
+          <FormSelect @title="Daltonien" @value={{@challenge.accessibility2}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility2}} />
         </div>
         <div class="field">
-          <FormSelect @title="Spoil" @value={{this.challenge.spoil}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.spoil}} />
+          <FormSelect @title="Spoil" @value={{@challenge.spoil}} @edition={{@edition}} @multiple={{false}} @options={{this.options.spoil}} />
         </div>
         <div class="field">
-          <FormSelect @title="Responsive" @value={{this.challenge.responsive}} @edition={{this.edition}} @multiple={{false}} @options={{this.options.responsive}} />
+          <FormSelect @title="Responsive" @value={{@challenge.responsive}} @edition={{@edition}} @multiple={{false}} @options={{this.options.responsive}} />
         </div>
     </div>
 </div>
