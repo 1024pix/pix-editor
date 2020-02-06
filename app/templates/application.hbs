@@ -17,7 +17,7 @@
           {{!-- template-lint-enable --}}
         </div>
         <div class="main">
-          {{#if (eq this.currentRouteName "index")}}
+          {{#if this.isIndex}}
             <div class="elephant"></div>
           {{/if}}
           {{outlet}}

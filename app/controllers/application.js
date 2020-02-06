@@ -24,7 +24,6 @@ export default class ApplicationController extends Controller {
   @service
   router;
 
-
   init() {
     super.init(...arguments);
     this.messages = [];
@@ -42,6 +41,11 @@ export default class ApplicationController extends Controller {
   @computed('displayConfiguration')
   get lockedMenu() {
     return this.get('displayConfiguration');
+  }
+
+  @computed('router.currentRouteName')
+  get isIndex() {
+    return (this.get('router.currentRouteName') === 'index');
   }
 
   @action
