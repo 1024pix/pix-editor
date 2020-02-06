@@ -1,9 +1,9 @@
 <div class="list-header">
   <div class="list-row">
-    <div class="list-item authorText" {{on "click" (fn @sortBy "authorText" "string")}}>Auteur</div>
-    <div class="list-item instructions" {{on "click" (fn @sortBy "instructions" "string")}}>Consigne</div>
-    <div class="list-item type" {{on "click" (fn @sortBy "type" "string")}}>Type</div>
-    <div class="list-item status" {{on "click" (fn @sortBy "status" "string")}}>Statut</div>
+    <div class="list-item authorText" {{on "click" (fn this.sortBy "authorText" "string")}}>Auteur</div>
+    <div class="list-item instructions" {{on "click" (fn this.sortBy "instructions" "string")}}>Consigne</div>
+    <div class="list-item type" {{on "click" (fn this.sortBy "type" "string")}}>Type</div>
+    <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
   </div>
 </div>
 <div class="list-body">
