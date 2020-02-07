@@ -7,6 +7,7 @@ export default DS.Model.extend({
   description: DS.attr(),
   practicalTitle: DS.attr(),
   practicalDescription: DS.attr(),
+  pixId: DS.attr(),
   competence: DS.belongsTo('competence'),
   selectedLevel:false,
   rawSkills:DS.hasMany('skill'),
