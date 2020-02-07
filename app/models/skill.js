@@ -18,6 +18,7 @@ export default DS.Model.extend({
   tutoMore: DS.hasMany('tutorial'),
   level: DS.attr(),
   status: DS.attr(),
+  pixId:DS.attr(),
   i18n: DS.attr(),
   descriptionCSS: computed("descriptionStatus", function () {
     let status = this.get("descriptionStatus");
