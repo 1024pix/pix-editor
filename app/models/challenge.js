@@ -39,6 +39,7 @@ export default DS.Model.extend({
   area:DS.attr(),
   myStore:service('store'),
   config:service(),
+  idGenerator:service(),
   _definedBaseName:DS.attr({readOnly:true}),
   isTemplate:computed('genealogy', function(){
     return (this.get('genealogy') === 'Prototype 1');
@@ -121,6 +122,7 @@ export default DS.Model.extend({
     data.status = 'proposé';
     data.author = [this.get('config').get('author')];
     data.skills = this.get('skills');
+    data.pixId = this.get('idGenerator').newId();
     return this.get('myStore').createRecord(this.constructor.modelName, data);
   },
   derive() {
