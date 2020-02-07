@@ -1,4 +1,4 @@
 <div class="ui checkbox">
-  <Input @type="checkbox" @checked={{this.checked}} @disabled={{this.disabled}} />
-  <label>{{this.label}}</label>
+  <Input @type="checkbox" @checked={{this.checked}} @disabled={{@disabled}}/>
+  <label {{on "click" this.toggle}}>{{@label}}</label>
 </div>
