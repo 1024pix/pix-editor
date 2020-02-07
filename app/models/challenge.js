@@ -62,15 +62,6 @@ export default DS.Model.extend({
     let declinable = this.get('declinable');
     return (declinable && declinable === 'non');
   }),
-  computedIndex:computed('pixId', function() {
-    let pixId = this.get('pixId');
-    if (pixId) {
-      let parts = pixId.split("_");
-      return parseInt(parts[parts.length - 1]);
-    } else {
-      return null;
-    }
-  }),
   statusCSS:computed('status', function() {
     let status = this.get('status');
     switch (status) {
