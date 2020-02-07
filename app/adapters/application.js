@@ -18,6 +18,8 @@ export default DS.RESTAdapter.extend({
   }),
   pathForType(type) {
     switch (type) {
+      case "challenge":
+        return "Epreuves";
       case "skill":
         return "Acquis";
       case "tutorial":
