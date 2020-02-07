@@ -1,8 +1,7 @@
 import ApplicationSerializer from './application';
 
 export default ApplicationSerializer.extend({
-  //TODO: remove this when field id has been removed
-  primaryKey: 'Record ID',
+ primaryKey: 'Record ID',
 
   attrs:{
     instructions:"Consigne",
