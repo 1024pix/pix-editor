@@ -30,7 +30,6 @@ export default DS.RESTSerializer.extend({
       });
     } else {
       payload[type.modelName] = payload.fields;
-      payload[type.modelName].id = payload.id;
       payload[type.modelName].created = payload.createdTime;
       delete payload.id;
       delete payload.fields;
