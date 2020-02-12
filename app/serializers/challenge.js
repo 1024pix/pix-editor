@@ -23,7 +23,7 @@ export default ApplicationSerializer.extend({
     preview:"Preview",
     competence:"competences",
     skills:"Acquix",
-    pixId:"id",
+    pixId:"id persistant",
     scoring:"Scoring",
     timer:"Timer",
     embedURL:"Embed URL",

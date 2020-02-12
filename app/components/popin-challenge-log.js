@@ -93,7 +93,7 @@ export default class PopinChallengeLog extends Component {
   @action
   addNote() {
     let newNote = this.get("store").createRecord("note", {
-      challengeId:this.get("challenge.id"),
+      challengeId:this.get("challenge.pixId"),
       author:this.get("config").get("author"),
       competence:this.get("competence.code"),
       skills:this.get("challenge.joinedSkills"),

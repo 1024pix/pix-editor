@@ -105,7 +105,7 @@ export default class TargetProfileController extends Controller {
         return tubes.reduce((tubeValues, tube) => {
           if (tube.get("selectedLevel")) {
             tubeValues.push({
-              id: tube.id,
+              id: tube.get('pixId'),
               level: tube.get("selectedLevel"),
               skills: tube.get("selectedSkills")
             })
@@ -151,7 +151,7 @@ export default class TargetProfileController extends Controller {
         const data = event.target.result;
         const tubes = JSON.parse(data);
         const indexedTubes = tubes.reduce((values, tube) => {
-          values[tube.id] = tube;
+          values[tube.get('pixId')] = tube;
           return values;
         }, {});
         areas.forEach(area => {
@@ -159,14 +159,14 @@ export default class TargetProfileController extends Controller {
           competences.forEach(competence => {
             const tubes = competence.get('tubes');
             tubes.forEach(tube => {
-              if (indexedTubes[tube.id]) {
-                if (indexedTubes[tube.id].level === 'max') {
+              if (indexedTubes[tube.get('pixId')]) {
+                if (indexedTubes[tube.get('pixId')].level === 'max') {
                   const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
                   tube.set("selectedLevel", level);
                   tube.set("selectedSkills", skills);
                 } else {
-                  tube.set("selectedLevel", indexedTubes[tube.id].level);
-                  tube.set("selectedSkills", indexedTubes[tube.id].skills);
+                  tube.set("selectedLevel", indexedTubes[tube.get('pixId')].level);
+                  tube.set("selectedSkills", indexedTubes[tube.get('pixId')].skills);
                 }
               } else {
                 tube.set("selectedLevel", false);
@@ -223,7 +223,7 @@ export default class TargetProfileController extends Controller {
     const skills = productionSkill.reduce((ids, skill) => {
       if (skill) {
         skill.set('_selected', true);
-        ids.push(skill.id);
+        ids.push(skill.get('pixId'));
       }
       return ids;
     }, []);

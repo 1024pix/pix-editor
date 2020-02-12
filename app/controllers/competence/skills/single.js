@@ -32,7 +32,7 @@ export default class SingleController extends Controller {
 
   @computed('skill')
   get skillName() {
-    return `${this.get('skill.id')} (${this.get('skill.name')})`;
+    return `${this.get('skill.pixId')} (${this.get('skill.name')})`;
   }
 
   @computed('config.access')

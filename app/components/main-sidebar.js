@@ -103,7 +103,7 @@ export default class MainSidebar extends Component {
     } else if (query.substr(0, 3) === 'rec') {
       this.set('routeModel', 'challenge');
       return this.get('store').query('challenge', {
-        filterByFormula: `AND(FIND('${query}', RECORD_ID()) , Statut != 'archive')`,
+        filterByFormula: `AND(FIND('${query}', {id persistant}) , Statut != 'archive')`,
         maxRecords: 20
       })
         .then(challenges => {

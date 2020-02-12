@@ -17,7 +17,7 @@ export default ApplicationSerializer.extend({
     level:"Level",
     status:"Status",
     i18n:"Internationalisation",
-    pixId:"id"
+    pixId:"id persistant"
   },
   payloadKeyFromModelName: function() {
     return "Acquis";

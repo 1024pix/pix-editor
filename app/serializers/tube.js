@@ -11,7 +11,7 @@ export default ApplicationSerializer.extend({
     practicalDescription: "Description pratique",
     competence: "Competences",
     rawSkills: "Acquis",
-    pixId: "id"
+    pixId: "id persistant"
   },
   payloadKeyFromModelName: function () {
     return 'Tubes';
