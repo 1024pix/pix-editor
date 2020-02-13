@@ -21,7 +21,7 @@ export default ApplicationSerializer.extend({
     declinable:"Déclinable",
     status:"Statut",
     preview:"Preview",
-    competence:"competences",
+    competence:"Compétences (via tube)",
     skills:"Acquix",
     pixId:"id persistant",
     scoring:"Scoring",
