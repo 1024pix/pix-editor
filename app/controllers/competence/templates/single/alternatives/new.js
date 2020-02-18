@@ -5,7 +5,6 @@ import {action} from '@ember/object';
 @classic
 export default class NewController extends Alternative {
   creation = true;
-  mayUpdateCache = false;
   queryParams = ['from', 'workbench'];
   defaultSaveChangelog = 'Création de la déclinaison';
 
@@ -24,6 +23,7 @@ export default class NewController extends Alternative {
     .then(challenge => this._handleAttachments(challenge))
     .then(challenge => this._saveChallenge(challenge))
     .then(challenge => this._setAlternativeVersion(challenge))
+    .then(challenge => this._handleCache(challenge))
     .then(challenge => {
       this.set('edition', false);
       this.send('minimize');

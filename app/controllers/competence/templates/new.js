@@ -6,7 +6,6 @@ import { action } from '@ember/object';
 export default class NewController extends Template {
 
   creation = true;
-  mayUpdateCache = false;
   queryParams = ['from'];
 
   defaultSaveChangelog = 'Création du prototype';
@@ -26,6 +25,7 @@ export default class NewController extends Template {
     .then(challenge => this._handleAttachments(challenge))
     .then(challenge => this._saveChallenge(challenge))
     .then(challenge => this._setVersion(challenge))
+    .then(challenge => this._handleCache(challenge))
     .then(challenge => {
       this.set('edition', false);
       this.send('minimize');
