@@ -1,7 +1,7 @@
 import ApplicationSerializer from './application';
 
 export default ApplicationSerializer.extend({
-primaryKey: 'Record Id',
+primaryKey: 'Record ID',
   attrs: {
     name:'Référence',
     title:'Titre',
