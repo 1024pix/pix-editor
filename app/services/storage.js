@@ -61,10 +61,15 @@ export default class StorageService extends Service {
         headers:{"Content-type": "application/json"},
         body:JSON.stringify(data)
       })
-      .then(response => response.json())
+      .then(response => response.ok?response.json():false)
       .then(response => {
-        config.set("storageToken", response.token);
-        return config.get("storageToken");
+        if (response) {
+          config.set("storageToken", response.token);
+          return config.get("storageToken");
+        } else {
+          console.error('could not get storage token');
+          return false;
+        }
       })
       .catch((error) => {
         console.error(error);

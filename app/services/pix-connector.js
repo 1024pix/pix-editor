@@ -1,6 +1,7 @@
 import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import fetch from 'fetch';
+import { isNotFoundResponse } from 'ember-fetch/errors';
 import { inject as service } from '@ember/service';
 
 @classic
@@ -28,10 +29,14 @@ export default class PixConnectorService extends Service {
         },
         body:credentialsData.toString()
       })
-      .then(response => response.json())
+      .then(response => response.ok ? response.json():false)
       .then((response) => {
-        this.set("token", response.access_token);
-        this.set("connected", true);
+        if (response) {
+          this.set("token", response.access_token);
+          this.set("connected", true);
+        } else {
+          this.set("connected", false);
+        }
       })
       .catch(() => {
         this.set("connected", false)
@@ -50,6 +55,11 @@ export default class PixConnectorService extends Service {
         method:'DELETE',
         headers: {
           Authorization: "Bearer "+token
+        }
+      })
+      .then((response) => {
+        if (!response.ok && !isNotFoundResponse(response)) {
+          problem = true;
         }
       })
       .catch((error) => {
