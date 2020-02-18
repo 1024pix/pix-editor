@@ -4,7 +4,6 @@ import {inject as service} from '@ember/service';
 
 export default DS.Model.extend({
   skills:DS.hasMany('skill'),
-  competence:DS.attr(),
   instructions:DS.attr(),
   type:DS.attr(),
   format:DS.attr(),
