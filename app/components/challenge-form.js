@@ -21,7 +21,7 @@ export default class ChallengeForm extends Component {
       'responsive':["Tablette", "Smartphone", "Tablette/Smartphone", "Non"],
       'spoil':["Non Sp", "Difficilement Sp", "Facilement Sp"],
       'language':["Allemand", "Anglais", "Espagnol", "Franco Français", "Francophone", "Italie"],
-      'area':["Algérie","Allemagne","Argentine","Belgique","Brésil","Canada","Chine","Côte d'ivoire","Espagne","France","Grèce","Institutions internationales","Italie","Japon","Kenya","La Palestine","Liban","Libye","Maroc","Mexique","Neutre","Pakistan","Portugal","Sénégal","Suisse","Syrie","Tunisie","UK","USA","Vénézuela"]
+      'area':["Algérie","Allemagne","Argentine","Belgique","Bénin", "Brésil", "Burkina Faso", "Burundi", "Cameroun","Canada","Chine","Les Comores", "Congo", "Côte d'ivoire", "Djibouti", "Espagne","France","Gabon", "Guinée", "Grèce","Institutions internationales","Israël", "Italie","Japon","Kenya","La Palestine","Liban","Libye","Madagascar", "Mali", "Maroc","Mexique","Neutre","Niger", "Pakistan","Portugal","République centrafricaine", "Rwanda", "Sénégal", "Seychelles", "Suisse","Syrie","Tchad", "Togo", "Tunisie","UK","USA","Vénézuela"]
     }
   }
 
