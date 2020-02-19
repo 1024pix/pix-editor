@@ -51,7 +51,7 @@ export default class PixConnectorService extends Service {
       let url = this.get("config").get("pixStaging")+"/api/cache/";
       let token = this.get("token");
       let problem = false;
-      return fetch(url+"Epreuves_"+challenge.get("id"), {
+      return fetch(url+"Epreuves_"+challenge.get("pixId"), {
         method:'DELETE',
         headers: {
           Authorization: "Bearer "+token
