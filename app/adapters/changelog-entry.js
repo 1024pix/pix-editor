@@ -1,4 +1,6 @@
+import classic from 'ember-classic-decorator';
 import NoteAdapter from './note';
 
-export default NoteAdapter.extend({
-});
+@classic
+export default class ChangelogEntryAdapter extends NoteAdapter {
+}
