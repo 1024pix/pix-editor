@@ -151,7 +151,7 @@ export default class TargetProfileController extends Controller {
         const data = event.target.result;
         const tubes = JSON.parse(data);
         const indexedTubes = tubes.reduce((values, tube) => {
-          values[tube.get('pixId')] = tube;
+          values[tube.id] = tube;
           return values;
         }, {});
         areas.forEach(area => {
