@@ -9,6 +9,7 @@ export default DS.Model.extend({
   code: DS.attr(),
   description:DS.attr(),
   rawTubes: DS.hasMany('tube'),
+  pixId:DS.attr(),
   tubes:computed('rawTubes.[]', function() {
     return this.get('rawTubes').filter(tube => {
       return tube.get('name') !== '@workbench';
