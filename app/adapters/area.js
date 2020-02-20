@@ -1,11 +1,14 @@
+import classic from 'ember-classic-decorator';
 import ApplicationAdapter from './application';
 
-export default ApplicationAdapter.extend({
+@classic
+export default class AreaAdapter extends ApplicationAdapter {
+
   findAll(store, type, sinceToken) {
-    return this.query(store, type,{ since: sinceToken, sort:[{field: "Nom", direction: "asc"}] });
-  },
+    return this.query(store, type,{ since: sinceToken, sort:[{field: 'Nom', direction: 'asc'}] });
+  }
 
   pathForType() {
-    return "Domaines";
+    return 'Domaines';
   }
-});
+}
