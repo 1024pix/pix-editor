@@ -1,14 +1,17 @@
+import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 import { assign } from '@ember/polyfills';
 import { pluralize } from 'ember-inflector';
 
-export default DS.RESTSerializer.extend({
-  payloadKeyFromModelName: function(modelName) {
+@classic
+export default class ApplicationSerializer extends DS.RESTSerializer {
+
+  payloadKeyFromModelName(modelName) {
     if (modelName === 'area') {
       return 'Domaines';
     }
-    return this._super(modelName);
-  },
+    return super.payloadKeyFromModelName(modelName);
+  }
 
   normalizeResponse(store, type, payload) {
     const modelNamePlural = pluralize(type.modelName);
@@ -36,34 +39,34 @@ export default DS.RESTSerializer.extend({
       delete payload.createdTime;
     }
 
-    return this._super(...arguments);
-  },
+    return super.normalizeResponse(...arguments);
+  }
 
   serializeIntoHash(data, type, record, options) {
     data['fields'] = this.serialize(record, options);
-  },
+  }
 
   serialize(snapshot, options) {
-    let json = this._super(snapshot, options);
+    let json = super.serialize(snapshot, options);
 
     delete json.created;
 
     return json;
-  },
+  }
 
   serializeAttribute(snapshot, json, key, attribute) {
     if (attribute.options && attribute.options.readOnly) {
       return;
     }
-    this._super(...arguments);
-  },
+    return super.serializeAttribute(...arguments);
+  }
 
   serializeHasMany(snapshot, json, relationship) {
     if (relationship.options && relationship.options.readOnly) {
       return;
     }
-    return this._super(snapshot, json, relationship);
-  },
+    return super.serializeHasMany(snapshot, json, relationship);
+  }
 
   serializeBelongsTo(snapshot, json, relationship) {
     if (relationship.options && relationship.options.readOnly) {
@@ -82,4 +85,4 @@ export default DS.RESTSerializer.extend({
     json[payloadKey] = [belongsToId];
   }
 
-});
+}
