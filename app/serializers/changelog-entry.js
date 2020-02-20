@@ -1,4 +1,6 @@
+import classic from 'ember-classic-decorator';
 import NoteSerializer from './note';
 
-export default NoteSerializer.extend({
-});
+@classic
+export default class ChangelogEntryClass extends NoteSerializer {
+}

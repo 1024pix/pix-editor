@@ -1,13 +1,15 @@
+import classic from 'ember-classic-decorator';
 import ApplicationSerializer from './application';
 
-export default ApplicationSerializer.extend({
+@classic
+export default class AuthorSerializer extends ApplicationSerializer {
 
-  attrs:{
-    name:"Nom",
-    access:"Accès"
-  },
+  attrs = {
+    name:'Nom',
+    access:'Accès'
+  };
 
-  payloadKeyFromModelName: function() {
+  payloadKeyFromModelName() {
     return 'Auteurs';
   }
-});
+}

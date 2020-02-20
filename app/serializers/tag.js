@@ -1,16 +1,18 @@
+import classic from 'ember-classic-decorator';
 import ApplicationSerializer from './application';
 
-export default ApplicationSerializer.extend({
-  attrs: {
+@classic
+export default class TagSerializer extends ApplicationSerializer {
+  attrs = {
     title: 'Nom',
     description: 'Description',
     notes: 'Notes',
     skills: 'Acquis',
     tutorials: 'Tutoriels',
-  },
+  };
 
-  payloadKeyFromModelName: function() {
+  payloadKeyFromModelName() {
     return 'Tags';
   }
 
-});
+}

@@ -1,14 +1,16 @@
+import classic from 'ember-classic-decorator';
 import ApplicationSerializer from './application';
 
-export default ApplicationSerializer.extend({
+@classic
+export default class AreaSerializer extends ApplicationSerializer {
 
-  attrs:{
-    name:"Nom",
-    code:"Code",
-    competences:"Competences (identifiants)"
-  },
+  attrs = {
+    name:'Nom',
+    code:'Code',
+    competences:'Competences (identifiants)'
+  };
 
-  payloadKeyFromModelName: function() {
+  payloadKeyFromModelName() {
     return 'Domaines';
   }
-  });
+}
