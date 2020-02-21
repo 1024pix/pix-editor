@@ -1,4 +1,3 @@
-import classic from 'ember-classic-decorator';
 import { action } from '@ember/object';
 import { tagName } from '@ember-decorators/component';
 import { inject as service } from '@ember/service';
@@ -6,7 +5,6 @@ import { alias } from '@ember/object/computed';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
 
-@classic
 @tagName('')
 export default class MainSidebar extends Component {
   version = ENV.APP.version;

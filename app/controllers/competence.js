@@ -1,54 +1,39 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import Controller from '@ember/controller';
 import {inject as controller} from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
-@classic
 export default class CompetenceController extends Controller {
   queryParams = ['firstMaximized', 'view'];
-  firstMaximized = false;
-  view = 'production';
-  section = 'challenges';
 
-  @service
-  router;
+  @tracked view = 'production';
+  @tracked section = 'challenges';
+  @tracked firstMaximized = false;
 
-  @service
-  config;
+  @service router;
+  @service config;
+  @service access;
+  @service('file-saver') fileSaver;
 
-  @service
-  access;
-
-  @service('file-saver')
-  fileSaver;
-
-  @controller
-  application;
-
-  @controller('competence.templates.single')
-  challengeController;
-
-  @controller('competence.skills.single')
-  skillController;
+  @controller application;
+  @controller('competence.templates.single') challengeController;
+  @controller('competence.skills.single') skillController;
 
   @alias('model')
   competence;
 
-  @computed('firstMaximized')
   get competenceHidden() {
-    return this.get('firstMaximized') ? 'hidden' : '';
+    return this.firstMaximized ? 'hidden' : '';
   }
 
-  @computed('section', 'view')
   get displayGrid() {
-    return this.get('section') != 'challenges' || this.get('view') != 'workbench-list';
+    return this.section != 'challenges' || this.view != 'workbench-list';
   }
 
-  @computed('router.currentRouteName')
   get size() {
-    switch(this.get('router.currentRouteName')) {
+    switch(this.router.currentRouteName) {
       case 'competence.index':
       case 'competence.skills.index':
       case 'competence.templates.index':
@@ -59,10 +44,8 @@ export default class CompetenceController extends Controller {
     }
   }
 
-  @computed('router.currentRouteName')
   get twoColumns() {
-    let routeName = this.get('router.currentRouteName');
-    switch (routeName) {
+    switch (this.router.currentRouteName) {
       case 'competence.templates.single.alternatives':
       case 'competence.templates.single.alternatives.index':
       case 'competence.templates.single.alternatives.single':
@@ -73,10 +56,9 @@ export default class CompetenceController extends Controller {
     }
   }
 
-  @computed('twoColumns', 'section', 'view')
   get skillLink() {
-    let twoColumns = this.get('twoColumns');
-    if (this.get('section') === 'challenges' && this.get('view') === 'production') {
+    let twoColumns = this.twoColumns;
+    if (this.section === 'challenges' && this.view === 'production') {
       if (twoColumns) {
         return 'competence.templates.single.alternatives';
       } else {
@@ -96,8 +78,8 @@ export default class CompetenceController extends Controller {
 
   @action
   closeChildComponent() {
-    this.set('firstMaximized', false);
-    this.transitionToRoute('competence', this.get('competence'));
+    this.firstMaximized = false;
+    this.transitionToRoute('competence', this.competence);
   }
 
   @action
@@ -110,33 +92,33 @@ export default class CompetenceController extends Controller {
 
   @action
   newTemplate() {
-    this.transitionToRoute('competence.templates.new', this.get('competence'));
+    this.transitionToRoute('competence.templates.new', this.competence);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.new', this.get('competence'), {queryParams: {from: challenge.get('id')}});
+    this.transitionToRoute('competence.templates.new', this.competence, {queryParams: {from: challenge.id}});
   }
 
   @action
   newTube() {
-    this.transitionToRoute('competence.tubes.new', this.get('competence'));
+    this.transitionToRoute('competence.tubes.new', this.competence);
   }
 
   @action
   exportSkills() {
-    this.get('application').send('isLoading','Export des acquis...');
-    const competence = this.get('competence');
-    const productionTubes = competence.get('productionTubes');
-    const filledSkills = productionTubes.map(productionTube => productionTube.get('filledSkills'));
+    this.application.send('isLoading','Export des acquis...');
+    const competence = this.competence;
+    const productionTubes = competence.productionTubes;
+    const filledSkills = productionTubes.map(productionTube => productionTube.filledSkills);
     const skillData = filledSkills.flat()
       .filter(filledSkill => filledSkill !== false)
       .map(filledSkill => {
-        const productionTemplate = filledSkill.get('productionTemplate');
+        const productionTemplate = filledSkill.productionTemplate;
         if (productionTemplate) {
-          const tube = filledSkill.get('tube');
+          const tube = filledSkill.tube;
           const description = this._formatCSVString(filledSkill.description);
-          return [competence.get('name'), tube.get('name'), filledSkill.get('name'), description];
+          return [competence.name, tube.get('name'), filledSkill.name, description];
         } else {
           return false;
         }
@@ -145,14 +127,14 @@ export default class CompetenceController extends Controller {
       return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
     }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-    this.get('fileSaver').saveAs(contentCSV, fileName);
-    this.get('application').send('showMessage', 'acquis exportés', true);
-    this.get('application').send('finishedLoading');
+    this.fileSaver.saveAs(contentCSV, fileName);
+    this.application.send('showMessage', 'acquis exportés', true);
+    this.application.send('finishedLoading');
   }
 
   @action
   selectView(value) {
-    this.set('view',value);
+    this.view = value;
     this.send('closeChildComponent');
   }
 
@@ -160,13 +142,13 @@ export default class CompetenceController extends Controller {
   selectSection(value) {
     switch(value.id) {
       case 'skills':
-        this.transitionToRoute('competence.skills', this.get('competence'));
+        this.transitionToRoute('competence.skills', this.competence);
         break;
       case 'challenges':
-        this.transitionToRoute('competence.templates', this.get('competence'));
+        this.transitionToRoute('competence.templates', this.competence);
         break;
       case 'quality':
-        this.transitionToRoute('competence.quality', this.get('competence'));
+        this.transitionToRoute('competence.quality', this.competence);
         break;
     }
   }
