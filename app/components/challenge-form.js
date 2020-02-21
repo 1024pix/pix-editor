@@ -2,7 +2,6 @@ import classic from 'ember-classic-decorator';
 import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@ember/component';
-import DS from 'ember-data';
 
 @classic
 export default class ChallengeForm extends Component {
@@ -27,9 +26,7 @@ export default class ChallengeForm extends Component {
 
   @computed('config.authorNames')
   get authors() {
-    return DS.PromiseArray.create({
-      promise:this.get('config.authorNames')
-    });
+    return this.get('config.authorNames')
   }
 
   helpInstructions = '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
