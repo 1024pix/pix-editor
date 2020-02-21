@@ -145,7 +145,7 @@ export default class CompetenceController extends Controller {
       return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
     }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-    this.get("fileSaver").saveAs(contentCSV, fileName);
+    this.get('fileSaver').saveAs(contentCSV, fileName);
     this.get('application').send('showMessage', 'acquis exportés', true);
     this.get('application').send('finishedLoading');
   }

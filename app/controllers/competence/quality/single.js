@@ -6,7 +6,7 @@ import Skill from '../skills/single';
 export default class SingleController extends Skill {
   @action
   close() {
-    this.set("maximized", false);
+    this.set('maximized', false);
     this.transitionToRoute('competence.quality', this.get('competence'));
   }
 }

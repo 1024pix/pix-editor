@@ -9,7 +9,7 @@ export default class PaginatedQueryService extends Service {
   store;
 
   query(model, parameters) {
-    let store = this.get("store");
+    let store = this.get('store');
     function queryPage(model, parameters, current) {
       if (!current) {
         current = A();

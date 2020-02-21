@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 import Component from '@ember/component';
 
 @classic
-@tagName("")
+@tagName('')
 export default class GridCell extends Component {
   @service
   access;

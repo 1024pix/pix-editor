@@ -50,7 +50,7 @@ export default class SingleRoute extends Route {
           }
         }
       }
-      this.controller.set("edition", false);
+      this.controller.set('edition', false);
       return true;
     }
   }

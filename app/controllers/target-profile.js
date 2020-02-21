@@ -23,7 +23,7 @@ export default class TargetProfileController extends Controller {
 
   init() {
     super.init();
-    this.set("selectedTubeSkills", []);
+    this.set('selectedTubeSkills', []);
   }
 
   calculatePosition(trigger) {
@@ -56,8 +56,8 @@ export default class TargetProfileController extends Controller {
       return competences.reduce((competenceValues, competence) => {
         const tubes = competence.get('tubes');
         return tubes.reduce((tubeValues, tube) => {
-          if (tube.get("selectedLevel")) {
-            tubeValues = tubeValues.concat(tube.get("selectedSkills"));
+          if (tube.get('selectedLevel')) {
+            tubeValues = tubeValues.concat(tube.get('selectedSkills'));
           }
           return tubeValues;
         }, competenceValues);
@@ -68,8 +68,8 @@ export default class TargetProfileController extends Controller {
   @action
   displayTube(tube) {
     this.set('selectedTube', tube);
-    this.set('selectedTubeLevel', tube.get("selectedLevel"));
-    this.set('selectedTubeSkills', tube.get("selectedSkills"));
+    this.set('selectedTubeLevel', tube.get('selectedLevel'));
+    this.set('selectedTubeSkills', tube.get('selectedSkills'));
     this.set('displayTubeLevel', true);
   }
 
@@ -92,7 +92,7 @@ export default class TargetProfileController extends Controller {
   generate() {
     const ids = this._getSelectedSkillsIds();
     let fileName = 'profil_identifiants_' + (new Date()).toLocaleString('fr-FR') + '.txt';
-    this.get("fileSaver").saveAs(ids.join(","), fileName);
+    this.get('fileSaver').saveAs(ids.join(','), fileName);
   }
 
   @action
@@ -103,11 +103,11 @@ export default class TargetProfileController extends Controller {
       return competences.reduce((competenceValues, competence) => {
         let tubes = competence.get('tubes');
         return tubes.reduce((tubeValues, tube) => {
-          if (tube.get("selectedLevel")) {
+          if (tube.get('selectedLevel')) {
             tubeValues.push({
               id: tube.get('pixId'),
-              level: tube.get("selectedLevel"),
-              skills: tube.get("selectedSkills")
+              level: tube.get('selectedLevel'),
+              skills: tube.get('selectedSkills')
             })
           }
           return tubeValues;
@@ -115,7 +115,7 @@ export default class TargetProfileController extends Controller {
       }, areaValues);
     }, []);
     let fileName = 'profil_' + (new Date()).toLocaleString('fr-FR') + '.json';
-    this.get("fileSaver").saveAs(JSON.stringify(data), fileName);
+    this.get('fileSaver').saveAs(JSON.stringify(data), fileName);
   }
 
   @action
@@ -131,7 +131,7 @@ export default class TargetProfileController extends Controller {
     }, 'targetProfileId,skillId');
 
     let fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-    this.get("fileSaver").saveAs(sql, fileName);
+    this.get('fileSaver').saveAs(sql, fileName);
   }
 
   @action
@@ -145,8 +145,8 @@ export default class TargetProfileController extends Controller {
     try {
       const file = event.target.files[0];
       const reader = new FileReader();
-      const areas = this.get("model");
-      const application = this.get("application");
+      const areas = this.get('model');
+      const application = this.get('application');
       reader.onload = (event) => {
         const data = event.target.result;
         const tubes = JSON.parse(data);
@@ -162,37 +162,37 @@ export default class TargetProfileController extends Controller {
               if (indexedTubes[tube.get('pixId')]) {
                 if (indexedTubes[tube.get('pixId')].level === 'max') {
                   const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
-                  tube.set("selectedLevel", level);
-                  tube.set("selectedSkills", skills);
+                  tube.set('selectedLevel', level);
+                  tube.set('selectedSkills', skills);
                 } else {
-                  tube.set("selectedLevel", indexedTubes[tube.get('pixId')].level);
-                  tube.set("selectedSkills", indexedTubes[tube.get('pixId')].skills);
+                  tube.set('selectedLevel', indexedTubes[tube.get('pixId')].level);
+                  tube.set('selectedSkills', indexedTubes[tube.get('pixId')].skills);
                 }
               } else {
-                tube.set("selectedLevel", false);
-                tube.set("selectedSkills", []);
+                tube.set('selectedLevel', false);
+                tube.set('selectedSkills', []);
               }
             });
           })
         });
-        application.send("showMessage", "Fichier correctement chargé", true);
+        application.send('showMessage', 'Fichier correctement chargé', true);
         //TODO: find a better way to be able to reload same file
         document.getElementById('target-profile__open-file').value = '';
       };
       reader.readAsText(file);
     } catch (error) {
-      this.get("application").send("showMessage", "Erreur lors de l'ouverture du fichier", false);
+      this.get('application').send('showMessage', 'Erreur lors de l\'ouverture du fichier', false);
     }
   }
 
   @action
   showTubeName(name, competence) {
-    competence.set("_tubeName", name);
+    competence.set('_tubeName', name);
   }
 
   @action
   hideTubeName(competence) {
-    competence.set("_tubeName", null);
+    competence.set('_tubeName', null);
   }
 
   @action
@@ -218,7 +218,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _getTubeSkillsAndMaxLevel(tube) {
-    const productionSkill = tube.get("productionSkills");
+    const productionSkill = tube.get('productionSkills');
     const level = productionSkill[productionSkill.length - 1].get('level');
     const skills = productionSkill.reduce((ids, skill) => {
       if (skill) {

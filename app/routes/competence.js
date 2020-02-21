@@ -9,7 +9,7 @@ export default class CompetenceRoute extends Route {
   paginatedQuery;
 
   model(params) {
-    return this.get('store').findRecord("competence", params.competence_id);
+    return this.get('store').findRecord('competence', params.competence_id);
   }
 
   afterModel(model) {

@@ -250,7 +250,7 @@ export default class SingleController extends Controller {
             })
             .catch((error) => {
               console.error(error);
-              this._errorMessage("Erreur lors de la mise en production");
+              this._errorMessage('Erreur lors de la mise en production');
             })
             .finally(() => this.get('application').send('finishedLoading'))
         });
@@ -354,8 +354,8 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     } else {
       const template = challenge.get('template');
-      if (!template.get("isValidated")) {
-        return this._error("Le prototype correspondant n'est pas validé");
+      if (!template.get('isValidated')) {
+        return this._error('Le prototype correspondant n\'est pas validé');
       }
       return Promise.resolve(challenge);
     }

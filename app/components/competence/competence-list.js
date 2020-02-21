@@ -4,9 +4,9 @@ import { action, computed } from '@ember/object';
 import SortedList from '../sorted-list';
 
 @classic
-@classNameBindings("hidden", "listType")
+@classNameBindings('hidden', 'listType')
 export default class CompetenceList extends SortedList {
-  listType = "template-list";
+  listType = 'template-list';
   scrollLeft = 0;
 
   init() {

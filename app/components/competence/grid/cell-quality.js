@@ -36,7 +36,7 @@ export default class CellQuality extends Component {
     return 'quality good-quality';
   }
 
-  @computed("skill.{tutoSolutionCount,tutoMoreCount}")
+  @computed('skill.{tutoSolutionCount,tutoMoreCount}')
   get classTutorial() {
     const tutoSolution = this.get('skill.tutoSolutionCount');
     const tutoMore = this.get('skill.tutoMoreCount');

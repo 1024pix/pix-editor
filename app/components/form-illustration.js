@@ -8,11 +8,11 @@ import Component from '@ember/component';
 export default class FormIllustration extends Component {
   @action
   remove() {
-    this.set("value", []);
+    this.set('value', []);
   }
 
   @action
   add(file) {
-    this.set("value", [{file:file}]);
+    this.set('value', [{file:file}]);
   }
 }

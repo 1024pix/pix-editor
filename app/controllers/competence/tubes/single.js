@@ -19,7 +19,7 @@ export default class SingleController extends Controller {
   @controller
   application;
 
-  @controller("competence")
+  @controller('competence')
   parentController;
 
   @alias('parentController.firstMaximized')
@@ -34,17 +34,17 @@ export default class SingleController extends Controller {
   @service
   config;
 
-  @computed("config.access")
+  @computed('config.access')
   get mayAccessAirtable() {
-    return this.get("access").mayAccessAirtable();
+    return this.get('access').mayAccessAirtable();
   }
 
-  @computed("config.access")
+  @computed('config.access')
   get mayEdit() {
-    return this.get("access").mayEditSkills();
+    return this.get('access').mayEditSkills();
   }
 
-  @computed("config.access", "tube", "tube.hasProductionChallenge")
+  @computed('config.access', 'tube', 'tube.hasProductionChallenge')
   get mayMove() {
     return this.get('access').mayMoveTube(this.get('tube'));
   }
@@ -58,64 +58,64 @@ export default class SingleController extends Controller {
 
   @action
   maximize() {
-    this.set("maximized", true);
+    this.set('maximized', true);
   }
 
   @action
   minimize() {
-    this.set("maximized", false);
+    this.set('maximized', false);
   }
 
   @action
   close() {
-    this.set("maximized", false);
-    this.get("parentController").send("closeChildComponent");
+    this.set('maximized', false);
+    this.get('parentController').send('closeChildComponent');
   }
 
   @action
   edit() {
-    const state = this.get("maximized");
-    this.set("wasMaximized", state);
-    this.send("maximize");
-    this.set("edition", true);
+    const state = this.get('maximized');
+    this.set('wasMaximized', state);
+    this.send('maximize');
+    this.set('edition', true);
     scheduleOnce('afterRender', this, this._scrollToTop);
   }
 
   @action
   cancelEdit() {
-    this.set("edition", false);
-    let tube = this.get("tube");
+    this.set('edition', false);
+    let tube = this.get('tube');
     tube.rollbackAttributes();
-    let previousState = this.get("wasMaximized");
+    let previousState = this.get('wasMaximized');
     if (!previousState) {
-      this.send("minimize");
+      this.send('minimize');
     }
-    this.get("application").send("showMessage", "Modification annulée", true);
+    this.get('application').send('showMessage', 'Modification annulée', true);
   }
 
   @action
   save() {
-    this.get("application").send("isLoading");
-    let tube = this.get("tube");
+    this.get('application').send('isLoading');
+    let tube = this.get('tube');
     return tube.save()
     .then(()=> {
-      this.set("edition", false);
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Tube mis à jour", true);
+      this.set('edition', false);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Tube mis à jour', true);
       return tube.hasMany('rawSkills').reload();
     })
     .catch((error) => {
       console.error(error);
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Erreur lors de la mise à jour du tube", true);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Erreur lors de la mise à jour du tube', true);
     });
   }
 
   @action
   openAirtable() {
-    let tube = this.get("tube");
-    let config = this.get("config");
-    window.open(config.get("airtableUrl")+config.get("tableTubes")+"/"+tube.get("id"), "airtable");
+    let tube = this.get('tube');
+    let config = this.get('config');
+    window.open(`${config.get('airtableUrl')}${config.get('tableTubes')}/${tube.get('id')}`, 'airtable');
   }
 
   @action
@@ -126,18 +126,18 @@ export default class SingleController extends Controller {
   @action
   setCompetence(newCompetence) {
     let tube = this.get('tube');
-    this.get("application").send("isLoading");
+    this.get('application').send('isLoading');
     tube.set('competence', newCompetence);
     return tube.save()
     .then(() => {
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Tube mis à jour", true);
-      this.transitionToRoute("competence.tubes.single", newCompetence, tube);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Tube mis à jour', true);
+      this.transitionToRoute('competence.tubes.single', newCompetence, tube);
     })
     .catch((error) => {
       console.error(error);
-      this.get("application").send("finishedLoading");
-      this.get("application").send("showMessage", "Erreur lors de la mise à jour du tube", true);
+      this.get('application').send('finishedLoading');
+      this.get('application').send('showMessage', 'Erreur lors de la mise à jour du tube', true);
     });
   }
 }

@@ -4,10 +4,10 @@ import Service from '@ember/service';
 @classic
 export default class FilePathService extends Service {
   getExtension(path) {
-    return path.split(".").pop();
+    return path.split('.').pop();
   }
 
   getBaseName(path) {
-    return path.replace(/\.[^/.]+$/, "");
+    return path.replace(/\.[^/.]+$/, '');
   }
 }

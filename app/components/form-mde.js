@@ -17,7 +17,7 @@ export default class FormMde extends Component {
     this.simpleMDEOptions = {
       status:false,
       spellChecker:false,
-      hideIcons: ["heading", "image", "guide", "side-by-side"]
+      hideIcons: ['heading', 'image', 'guide', 'side-by-side']
     };
   }
 }

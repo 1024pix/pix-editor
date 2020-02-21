@@ -31,7 +31,7 @@ export default class MainSidebar extends Component {
 
   _formatCSVString(str) {
     if (str) {
-      return '"' + str.replace(/"/g, '""') + '"';
+      return `"${str.replace(/"/g, '""')}"`;
     }
     return ' '
   }

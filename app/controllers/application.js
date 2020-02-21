@@ -7,12 +7,12 @@ import Controller from '@ember/controller';
 @classic
 export default class ApplicationController extends Controller {
   loading = false;
-  loadingMessage = "";
+  loadingMessage = '';
   displayConfig = false;
-  popinImageSrc = "";
+  popinImageSrc = '';
   displayChangelog = false;
-  confirmTitle = "";
-  confirmContent = "";
+  confirmTitle = '';
+  confirmContent = '';
   confirmCallback = null;
   displayConfiguration = false;
   displayConfirm = false;
@@ -50,8 +50,8 @@ export default class ApplicationController extends Controller {
 
   @action
   showMessage(content, positive) {
-    const messages = this.get("messages");
-    const id = "message_"+Date.now();
+    const messages = this.get('messages');
+    const id = 'message_'+Date.now();
     messages.pushObject({text:content, positive:positive?true:false, id:id});
     window.setTimeout(()=> {
       const nodeMessage = document.getElementById(id);
@@ -67,14 +67,14 @@ export default class ApplicationController extends Controller {
 
   @action
   isLoading(message) {
-    this.set("loading", true);
-    this.set("loadingMessage", message);
+    this.set('loading', true);
+    this.set('loadingMessage', message);
   }
 
   @action
   finishedLoading() {
-    this.set("loading", false);
-    this.set("loadingMessage", "");
+    this.set('loading', false);
+    this.set('loadingMessage', '');
   }
 
   @action
@@ -84,14 +84,14 @@ export default class ApplicationController extends Controller {
 
   @action
   configUpdated() {
-    this.send("refresh");
+    this.send('refresh');
   }
 
   @action
   confirm(title, message, callback) {
     this.confirmCallback = callback;
-    this.set("confirmTitle", title);
-    this.set("confirmContent", message);
+    this.set('confirmTitle', title);
+    this.set('confirmContent', message);
     this.set('displayConfirm', true);
   }
 

@@ -210,7 +210,7 @@ export default class ChallengeModel extends Model {
     }
     const attachments = this.get('attachments');
     if (attachments && attachments.length > 0) {
-      return attachments[0].filename.replace(/\.[^/.]+$/, "");
+      return attachments[0].filename.replace(/\.[^/.]+$/, '');
     }
     return null;
   }

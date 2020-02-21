@@ -11,10 +11,10 @@ export default class NoteAdapter extends ApplicationAdapter {
 
   @computed('config.airtableEditorBase')
   get namespace() {
-    return "v0/"+this.get("config").get("airtableEditorBase");
+    return 'v0/'+this.get('config').get('airtableEditorBase');
   }
 
   pathForType() {
-    return "Notes";
+    return 'Notes';
   }
 }

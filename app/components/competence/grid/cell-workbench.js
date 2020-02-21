@@ -3,5 +3,5 @@ import { tagName } from '@ember-decorators/component';
 import Component from '@ember/component';
 
 @classic
-@tagName("")
+@tagName('')
 export default class CellWorkbench extends Component {}

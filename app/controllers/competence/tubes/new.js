@@ -20,7 +20,7 @@ export default class NewController extends Tube {
       this.get('application').send('showMessage', 'Tube créé', true);
     })
     .then(() => {
-      this.transitionToRoute("competence.tubes.single", competence, tube);
+      this.transitionToRoute('competence.tubes.single', competence, tube);
     })
     .catch((error) => {
       console.error(error);

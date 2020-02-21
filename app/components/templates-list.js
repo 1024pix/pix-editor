@@ -3,7 +3,7 @@ import { classNameBindings } from '@ember-decorators/component';
 import SortedList from './sorted-list';
 
 @classic
-@classNameBindings("hidden", "listType")
+@classNameBindings('hidden', 'listType')
 export default class TemplatesList extends SortedList {
-  listType = "template-list";
+  listType = 'template-list';
 }

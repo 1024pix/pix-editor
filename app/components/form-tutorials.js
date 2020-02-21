@@ -11,7 +11,7 @@ export default class FormTutorials extends Component {
   @service
   store;
 
-  @alias("tutorials.isPending")
+  @alias('tutorials.isPending')
   loading;
 
   _searchTutorial(query, tagSearch) {
@@ -58,7 +58,7 @@ export default class FormTutorials extends Component {
   getSearchTutorialResults(query) {
     query=query.toLowerCase();
     let tagSearch = false;
-    if (query[0] === ">") {
+    if (query[0] === '>') {
       query = query.substring(1);
       tagSearch = true
     }

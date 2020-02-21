@@ -26,9 +26,9 @@ export default class ChallengeRoute extends Route {
           return this.transitionTo('competence.templates.single.alternatives.single', competence, model.get('template'), model);
         }
       })
-      .catch(() => this.transitionTo("index"));
+      .catch(() => this.transitionTo('index'));
     } else {
-      return this.transitionTo("index");
+      return this.transitionTo('index');
     }
   }
 }

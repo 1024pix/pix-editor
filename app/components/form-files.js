@@ -14,9 +14,9 @@ export default class FormFiles extends Component {
   remove(index) {
     // clone instead of removeAt, so that rollbackAttributes
     // may work
-    let list = this.get("value").slice();
+    let list = this.get('value').slice();
     list.splice(index, 1);
-    this.set("value", list);
+    this.set('value', list);
   }
 
   @action

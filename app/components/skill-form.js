@@ -10,9 +10,9 @@ export default class SkillForm extends Component {
   init() {
     super.init(...arguments);
     this.options = {
-      'clueStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé", "inapplicable"],
-      'descriptionStatus': ["Proposé", "Validé", "pré-validé", "à soumettre", "à retravailler", "archivé"],
-      'i18n': ["France", "Monde", "Union Européenne"]
+      'clueStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé', 'inapplicable'],
+      'descriptionStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé'],
+      'i18n': ['France', 'Monde', 'Union Européenne']
     };
     this.set('tutorials', []);
   }
