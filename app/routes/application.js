@@ -57,9 +57,4 @@ export default class ApplicationRoute extends Route {
       return true;
     }
   }
-
-  @action
-  refresh() {
-    this.refresh();
-  }
 }

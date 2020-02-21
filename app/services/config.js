@@ -1,118 +1,139 @@
-import classic from 'ember-classic-decorator';
-import { computed } from '@ember/object';
 import Service from '@ember/service';
 import {configPrivate} from '../config-private';
 import CryptoJS from 'crypto-js';
 import {inject as service} from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
-@classic
+
 export default class ConfigService extends Service {
-  @service
-  store;
 
-  loaded = false;
-  author = '';
+  @service store;
 
-  init() {
-    super.init(...arguments);
-    this.localConfigKeys = ['airtableKey', 'configKey', 'author', 'access'];
-    this.localConfigKeysOptional = ['pixUser', 'pixPassword'];
-    this._load();
-  }
+  @tracked author;
+  @tracked configKey;
+  @tracked airtableKey;
+  @tracked access;
+  @tracked pixUser;
+  @tracked pixPassword;
+  @tracked access;
+  @tracked pixUser;
+  @tracked pixPassword;
+  @tracked airtableBase;
+  @tracked airtableEditorBase;
+  @tracked airtableUrl;
+  @tracked tableChallenges;
+  @tracked tableSkills;
+  @tracked tableTubes;
+  @tracked storagePost;
+  @tracked storageTenant;
+  @tracked storageUser;
+  @tracked storagePassword;
+  @tracked storageKey;
+  @tracked storageAuth;
+  @tracked pixStaging;
+  @tracked authors;
+  @tracked authorNames;
 
-  @computed('configKey')
-  get decrypted() {
-    return this._decrypt();
-  }
+  @tracked loaded = false;
+  @tracked decrypted = false;
 
-  @computed('decrypted')
-  get check() {
-    return this.loaded && this.get('decrypted');
-  }
+  _localConfigKeys = ['airtableKey', 'configKey', 'author', 'access'];
+  _localConfigKeysOptional = ['pixUser', 'pixPassword'];
 
-  @computed('airtableKey', 'decrypted', 'airtableEditorBase')
-  get authors() {
-    if (this.get('airtableKey') && this.get('airtableEditorBase')) {
-      try {
-        return this.get('store').query('author', {sort:[{field: 'Nom', direction:'asc'}]});
-      }
-      catch(e) {
-        return Promise.resolve([]);
-      }
+  constructor() {
+    super(...arguments);
+    this.load();
+    if (this.loaded) {
+      this.decrypt();
     }
-    return Promise.resolve([]);
   }
 
-  @computed('authors')
-  get authorNames() {
-    return this.get('authors').
-      then(authors => {
-        return authors.reduce((current, value) => {
-          current.push(value.get('name'));
-            return current;
-        }, []);
-      });
+  get check() {
+    return this.loaded && this.decrypted;
   }
 
-  _load() {
+  load() {
+    this.loaded = false;
     try {
       let localConfig = localStorage.getItem('pix-config');
       if (localConfig) {
         let incomplete = false;
         localConfig = JSON.parse(localConfig);
-        this.localConfigKeys.forEach((key) => {
+        this._localConfigKeys.forEach((key) => {
           if (typeof localConfig[key] == 'undefined') {
             incomplete = true;
           } else {
-            this.set(key, localConfig[key]);
+            this[key] = localConfig[key];
           }
         });
-        this.localConfigKeysOptional.forEach((key) => {
+        this._localConfigKeysOptional.forEach((key) => {
           if (typeof localConfig[key] !== 'undefined') {
-            this.set(key, localConfig[key]);
+            this[key] = localConfig[key];
           }
         });
         if (incomplete) {
           throw 'local config incomplete';
         }
+        this.loaded = true;
       } else {
         throw 'no local config';
       }
     }
     catch (error) {
       console.error(error);
-      this.set('loaded', false);
+      this.loaded = false;
     }
-    this.set('loaded', true);
+    return this.loaded;
   }
 
-  _decrypt() {
+  decrypt() {
+    this.decrypted = false;
     try {
-      let key = this.get('configKey');
+      let key = this.configKey;
       let value = CryptoJS.AES.decrypt(configPrivate.encrypted, key);
       let encryptedConfig = JSON.parse(value.toString(CryptoJS.enc.Utf8));
       Object.keys(encryptedConfig).forEach((key) => {
-        this.set(key, encryptedConfig[key]);
+        this[key] = encryptedConfig[key];
       });
-      return true;
+      this.decrypted = true;
     } catch (error) {
       console.error(error);
-      return false;
+      this.decrypted = false;
     }
+    if (this.decrypted && this.airtableKey) {
+      this.loadAuthors();
+    }
+    return this.decrypted;
   }
 
   save() {
-    let localConfig = this.localConfigKeys.reduce((current, key) => {
-      current[key] = this.get(key);
+    let localConfig = this._localConfigKeys.reduce((current, key) => {
+      current[key] = this[key];
       return current;
     }, {});
-    localConfig = this.localConfigKeysOptional.reduce((current, key) => {
-      let value = this.get(key);
+    localConfig = this._localConfigKeysOptional.reduce((current, key) => {
+      let value = this[key];
       if (value && typeof value !=='undefined' && (typeof value.length === 'undefined' || value.length>0)) {
         current[key] = value;
       }
       return current;
     }, localConfig);
     localStorage.setItem('pix-config', JSON.stringify(localConfig));
+  }
+
+  loadAuthors() {
+    try {
+      this.store.query('author', {sort:[{field: 'Nom', direction:'asc'}]})
+      .then(authors => {
+        this.authors = authors;
+        this.authorNames = authors.reduce((current, value) => {
+          current.push(value.name);
+          return current;
+        }, []);
+      });
+    } catch (e) {
+      this.authors = null;
+      this.authorNames = null;
+    }
   }
 }

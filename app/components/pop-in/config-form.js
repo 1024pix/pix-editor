@@ -1,138 +1,117 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
-import DS from 'ember-data';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
-@classic
 export default class PopinConfigForm extends Component {
-  @service
-  config;
+  @service config;
 
-  @service
-  access;
+  @service access;
 
-  saved = false;
-  newAuthor = null;
+  @tracked saved = false;
 
-  init() {
-    super.init(...arguments);
-    this.oldValues = {};
-  }
+  oldValues = {};
 
   _setValue(key, value) {
     if (this.oldValues[key] == null) {
-      this.oldValues[key] = this.get('config.'+key);
+      this.oldValues[key] = this.config[key];
     }
-    this.set('config.'+key, value);
+    this.config[key] = value;
     return value;
   }
 
   _restoreValue(key) {
     if (this.oldValues[key] != null) {
-      this.set(key, this.oldValues[key]);
+      this.config[key] = this.oldValues[key];
     }
   }
 
-  @computed('config.airtableKey')
   get airtableKey() {
-    return this.get('config.airtableKey');
+    return this.config.airtableKey;
   }
 
   set airtableKey(value) {
-    return this._setValue('airtableKey', value);
+    this._setValue('airtableKey', value);
+    if (this.config.decrypted) {
+      this.config.loadAuthors();
+    }
+    return value;
   }
 
-  @computed('config.configKey')
   get configKey() {
-    return this.get('config.configKey');
+    return this.config.configKey;
   }
 
   set configKey(value) {
-    return this._setValue('configKey', value);
+    this._setValue('configKey', value);
+    this.config.decrypt();
+    return value;
   }
 
-  @computed('config.author')
   get author() {
-    return this.get('config.author');
+    return this.config.author;
   }
 
   set author(value) {
     return this._setValue('author', value);
   }
 
-  @computed('config.pixUser')
   get pixUser() {
-    return this.get('config.pixUser');
+    return this.config.pixUser;
   }
 
   set pixUser(value) {
     return this._setValue('pixUser', value);
   }
 
-  @computed('config.pixPassword')
   get pixPassword() {
-    return this.get('config.pixPassword');
+    return this.config.pixPassword;
   }
 
   set pixPassword(value) {
     return this._setValue('pixPassword', value);
   }
 
-  @computed('config.{decrypted,authors}')
   get authors() {
-    if (this.get('config.decrypted')) {
-      return DS.PromiseArray.create({
-        promise:this.get('config.authors')
-      })
-    } else {
-      return [];
-    }
+    return this.config.authors;
   }
 
-  @computed('config.{decrypted,authorNames}')
   get authorNames() {
-    if (this.get('config.decrypted')) {
-      return DS.PromiseArray.create({
-        promise:this.get('config.authorNames')
-      })
-    } else {
-      return [];
-    }
+    return this.config.authorNames;
   }
 
   _closeModal() {
-    if (this.get('saved')) {
-      this.get('update')();
-    } else {
+    this.args.close();
+    if (!this.saved) {
       this._restoreValue('airtableKey');
       this._restoreValue('configKey');
       this._restoreValue('author');
       this._restoreValue('pixUser');
       this._restoreValue('pixPassword');
+      this.oldValues = {};
+    } else {
+      this.oldValues = {};
+      this.args.update();
     }
-    this.oldValues = {};
-    this.set('display', false);
   }
 
   @action
   saveConfig() {
-    let config = this.get('config');
-    let author = this.get('author');
-    let access = this.get('access');
-    let accessLevel = access.get('readOnly');
-    this.get('authors').then(authors => {
-      let authorRecord = authors.find((value) => {
-        return value.get('name') === author;
-      });
-      if (authorRecord) {
-        accessLevel = access.getLevel(authorRecord.get('access'));
-      }
-      config.set('access', accessLevel);
-      config.save();
-      this.set('saved', true);
-      this._closeModal();
+    const config = this.config;
+    const author = this.author;
+    const access = this.access;
+    let accessLevel = access.readOnly;
+    const authors = this.authors;
+    const authorRecord = authors.find((value) => {
+      return value.name === author;
     });
+    if (authorRecord) {
+      accessLevel = access.getLevel(authorRecord.access);
+    }
+    config.access = accessLevel;
+    config.save();
+    this.saved = true;
+    this._closeModal();
   }
 
   @action

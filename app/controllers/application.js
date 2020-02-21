@@ -84,7 +84,7 @@ export default class ApplicationController extends Controller {
 
   @action
   configUpdated() {
-    this.send('refresh');
+    window.location.reload(true);
   }
 
   @action
@@ -109,6 +109,11 @@ export default class ApplicationController extends Controller {
     if (this.confirmCallback) {
       this.confirmCallback(false);
     }
+  }
+
+  @action
+  closeConfiguration() {
+    this.set('displayConfiguration', false);
   }
 
 }
