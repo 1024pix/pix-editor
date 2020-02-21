@@ -33,7 +33,7 @@ export default class ConfigService extends Service {
   @tracked pixStaging;
   @tracked authors;
   @tracked authorNames;
-
+  @tracked lite;
   @tracked loaded = false;
   @tracked decrypted = false;
 

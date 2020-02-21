@@ -1,6 +1,8 @@
-<h1 class="ui left floated header">{{this.competence.name}}</h1>
-<div class="selection ui small right floated header select-section">
-  <PowerSelect @dropdownClass="select-section-dropdown" @searchEnabled={{false}} @options={{this.sections}} @selected={{this.selectedSection}} @onchange={{this.selectView}} as |section|>
-    {{section.title}}
-  </PowerSelect>
+<div class="ui main-title {{this.liteClass}}">
+  <h1 class="ui left floated header">{{@competence.name}}</h1>
+  <div class="selection ui small right floated header select-section">
+    <PowerSelect @dropdownClass="select-section-dropdown" @searchEnabled={{false}} @options={{this.sections}} @selected={{this.selectedSection}} @onchange={{@selectSection}} as |section|>
+      {{section.title}}
+    </PowerSelect>
+  </div>
 </div>
