@@ -1,11 +1,16 @@
+import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
-export default Route.extend({
+@classic
+export default class SingleRoute extends Route {
+
   model(params) {
     return this.get('store').findRecord('challenge', params.template_id);
-  },
+  }
+
   setupController(controller, model) {
-    this._super(...arguments);
+    super.setupController(...arguments);
     controller.set('edition', false);
     controller.set('areas', this.modelFor('application'));
     controller.set('competence', this.modelFor('competence'));
@@ -19,34 +24,34 @@ export default Route.extend({
     } else {
       competenceController.set('view', 'production');
     }
-  },
-  actions: {
-    willTransition(transition) {
-      if (this.controller.get('edition')) {
-        if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
-          this.controller.send('cancelEdit');
-          return true;
-        } else {
-          transition.abort();
-        }
+  }
+
+  @action
+  willTransition(transition) {
+    if (this.controller.get('edition')) {
+      if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+        this.controller.send('cancelEdit');
+        return true;
       } else {
-        if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
-          const challenge = this.controller.get('challenge');
-          if (!challenge.get('isWorkbench')) {
-            const skills = challenge.get('skills');
-            const skill = skills.get('firstObject');
-            if (skill) {
-              if (transition.targetName === 'competence.quality.index' && skill.get('productionTemplate')) {
-                return this.transitionTo('competence.quality.single', this.controller.get('competence'), skill);
-              } else if (transition.targetName === 'competence.skills.index') {
-                return this.transitionTo('competence.skills.single', this.controller.get('competence'), skill);
-              }
+        transition.abort();
+      }
+    } else {
+      if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
+        const challenge = this.controller.get('challenge');
+        if (!challenge.get('isWorkbench')) {
+          const skills = challenge.get('skills');
+          const skill = skills.get('firstObject');
+          if (skill) {
+            if (transition.targetName === 'competence.quality.index' && skill.get('productionTemplate')) {
+              return this.transitionTo('competence.quality.single', this.controller.get('competence'), skill);
+            } else if (transition.targetName === 'competence.skills.index') {
+              return this.transitionTo('competence.skills.single', this.controller.get('competence'), skill);
             }
           }
         }
-        this.controller.set("edition", false);
-        return true;
       }
+      this.controller.set("edition", false);
+      return true;
     }
   }
-});
+}

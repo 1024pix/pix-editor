@@ -4,7 +4,7 @@ import SkillRoute from '../skills/single';
 
 @classic
 export default class SingleRoute extends SkillRoute {
-  templateName = "competence/skills/single";
+  templateName = 'competence/skills/single';
 
   setupController() {
     super.setupController(...arguments);

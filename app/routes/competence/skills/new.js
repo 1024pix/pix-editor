@@ -1,16 +1,16 @@
 import classic from 'ember-classic-decorator';
-import Skill from './single';
+import SingleRoute from './single';
 import { inject as service } from '@ember/service';
 
 @classic
-export default class NewRoute extends Skill {
-  templateName = "competence/skills/single";
+export default class NewRoute extends SingleRoute {
+  templateName = 'competence/skills/single';
   @service
   idGenerator;
 
   model() {
     return {
-      skill:this.get("store").createRecord("skill",{status:'en construction', pixId:this.get('idGenerator').newId()})
+      skill:this.get('store').createRecord('skill',{status:'en construction', pixId:this.get('idGenerator').newId()})
     };
   }
 

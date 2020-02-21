@@ -1,8 +1,10 @@
+import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
 
-export default Route.extend({
+@classic
+export default class IndexRoute extends Route {
   setupController() {
-    this._super(...arguments);
+    super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.set('section', 'challenges');
     competenceController.set('firstMaximized', false);
@@ -10,4 +12,4 @@ export default Route.extend({
       competenceController.set('view', 'production');
     }
   }
-});
+}
