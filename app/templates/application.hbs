@@ -1,6 +1,6 @@
 <BurgerMenu @width={{350}} @animation="reveal" @open={{this.menuOpen}} @locked={{this.lockedMenu}} as |burger|>
   <burger.menu>
-    <MainSidebar @areas={{this.model}} @burger={{burger}} @config={{this.config}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
+    <MainSidebar @areas={{this.model}} @burger={{burger}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
   </burger.menu>
   <burger.outlet>
     {{this.openMenu}}

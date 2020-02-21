@@ -6,7 +6,7 @@
     </PowerSelect>
     <AccordionList as |accordion|>
       <div class="ui accordion inverted">
-        {{#each this.areas as |area|}}
+        {{#each @areas as |area|}}
           <accordion.item as |accordionItem|>
             <accordionItem.toggle @class="title">
               <i class="dropdown icon"></i>
@@ -29,7 +29,7 @@
       <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
     </div>
     <div class="ui labelled icon menu">
-      <button class="ui button item" type="button" onclick={{this.openConfiguration}}><i class="wrench icon"></i>Configuration</button>
+      <button class="ui button item" type="button" {{on "click" @openConfiguration}}><i class="wrench icon"></i>Configuration</button>
       <div class="right item">
         {{#if this.author}}
           {{this.author}} -

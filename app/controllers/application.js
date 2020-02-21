@@ -9,8 +9,6 @@ import { tracked } from '@glimmer/tracking';
 @classic
 export default class ApplicationController extends Controller {
 
-  loading = false;
-  loadingMessage = '';
   displayConfig = false;
   displayChangelog = false;
   popinImageSrc = '';
@@ -19,19 +17,17 @@ export default class ApplicationController extends Controller {
   confirmCallback = null;
   displayConfirm = false;
 
+  @tracked loading = false;
+  @tracked loadingMessage = '';
   @tracked _menuOpen = false;
   @tracked displayConfiguration = false;
 
-  @service
-  config;
-
-  @service
-  router;
+  @service config;
+  @service router;
 
   messages = A([]);
 
   get menuOpen() {
-    // TODO: find a way to keep menu open when config is displayed
     if (this.router.currentRouteName === 'index' || this.lockedMenu) {
       return true;
     } else {
