@@ -1,22 +1,26 @@
 import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Controller from '@ember/controller';
+import { A } from '@ember/array';
+import { tracked } from '@glimmer/tracking';
 
 
 @classic
 export default class ApplicationController extends Controller {
+
   loading = false;
   loadingMessage = '';
   displayConfig = false;
-  popinImageSrc = '';
   displayChangelog = false;
+  popinImageSrc = '';
   confirmTitle = '';
   confirmContent = '';
   confirmCallback = null;
-  displayConfiguration = false;
   displayConfirm = false;
-  _menuOpen = false;
+
+  @tracked _menuOpen = false;
+  @tracked displayConfiguration = false;
 
   @service
   config;
@@ -24,33 +28,28 @@ export default class ApplicationController extends Controller {
   @service
   router;
 
-  init() {
-    super.init(...arguments);
-    this.messages = [];
-  }
+  messages = A([]);
 
-  @computed('router.currentRouteName', '_menuOpen')
   get menuOpen() {
-    if (this.get('router.currentRouteName') === 'index') {
+    // TODO: find a way to keep menu open when config is displayed
+    if (this.router.currentRouteName === 'index' || this.lockedMenu) {
       return true;
     } else {
-      return this.get('_menuOpen');
+      return this._menuOpen;
     }
   }
 
-  @computed('displayConfiguration')
   get lockedMenu() {
-    return this.get('displayConfiguration');
+    return this.displayConfiguration;
   }
 
-  @computed('router.currentRouteName')
   get isIndex() {
-    return (this.get('router.currentRouteName') === 'index');
+    return (this.router.currentRouteName === 'index');
   }
 
   @action
   showMessage(content, positive) {
-    const messages = this.get('messages');
+    const messages = this.messages;
     const id = 'message_'+Date.now();
     messages.pushObject({text:content, positive:positive?true:false, id:id});
     window.setTimeout(()=> {
@@ -67,19 +66,19 @@ export default class ApplicationController extends Controller {
 
   @action
   isLoading(message) {
-    this.set('loading', true);
-    this.set('loadingMessage', message);
+    this.loading = true;
+    this.loadingMessage = message;
   }
 
   @action
   finishedLoading() {
-    this.set('loading', false);
-    this.set('loadingMessage', '');
+    this.loading = false;
+    this.loadingMessage = '';
   }
 
   @action
   openConfiguration() {
-    this.set('displayConfiguration', true)
+    this.displayConfiguration = true;
   }
 
   @action
@@ -90,14 +89,14 @@ export default class ApplicationController extends Controller {
   @action
   confirm(title, message, callback) {
     this.confirmCallback = callback;
-    this.set('confirmTitle', title);
-    this.set('confirmContent', message);
-    this.set('displayConfirm', true);
+    this.confirmTitle = title;
+    this.confirmContent = message;
+    this.displayConfirm = true;
   }
 
   @action
   confirmApprove() {
-    this.set('displayConfirm', false)
+    this.displayConfirm =  false;
     if (this.confirmCallback) {
       this.confirmCallback(true);
     }
@@ -105,7 +104,7 @@ export default class ApplicationController extends Controller {
 
   @action
   confirmDeny() {
-    this.set('displayConfirm', false)
+    this.displayConfirm = false;
     if (this.confirmCallback) {
       this.confirmCallback(false);
     }
@@ -113,7 +112,7 @@ export default class ApplicationController extends Controller {
 
   @action
   closeConfiguration() {
-    this.set('displayConfiguration', false);
+    this.displayConfiguration = false;
   }
 
 }
