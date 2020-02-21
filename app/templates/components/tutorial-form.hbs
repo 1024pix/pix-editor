@@ -20,15 +20,15 @@
               <label>Source</label>
               <Input @type="text" @value={{this.tutorial.source}} placeholder="Source" />
             </div>
-            <FormSelect @title="License" @defaultText="Licence" @value={{this.tutorial.license}} @options={{this.options.license}} @edition={{true}} />
+            <FormItems::Select @title="License" @defaultText="Licence" @value={{this.tutorial.license}} @options={{this.options.license}} @edition={{true}} />
           </div>
           <div class="three fields">
-            <FormSelect @title="Format" @defaultText="Format" @value={{this.tutorial.format}} @options={{this.options.format}} @edition={{true}} />
+            <FormItems::Select @title="Format" @defaultText="Format" @value={{this.tutorial.format}} @options={{this.options.format}} @edition={{true}} />
             <div class="field">
               <label>Durée (hh:mm:ss)</label>
               <Input @type="text" @value={{this.tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
             </div>
-            <FormSelect @title="Niveau" @defaultText="Niveau" @value={{this.tutorial.level}} @options={{this.options.level}} @edition={{true}} />
+            <FormItems::Select @title="Niveau" @defaultText="Niveau" @value={{this.tutorial.level}} @options={{this.options.level}} @edition={{true}} />
           </div>
           <div class="three fields">
             <div class="field">

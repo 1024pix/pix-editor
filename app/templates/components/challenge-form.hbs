@@ -1,13 +1,13 @@
 <form action="" class="ui form">
-  <FormMde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} />
+  <FormItems::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} />
   {{#if (not this.alternative)}}
-    <FormSelect @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} />
+    <FormItems::Select @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} />
   {{/if}}
   {{#if this.typeIsQROC}}
-    <FormSelect @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} />
+    <FormItems::Select @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} />
   {{/if}}
-  <FormTextarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
-  <FormTextarea @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
+  <FormItems::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
+  <FormItems::Textarea @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
   {{#if @challenge.isTextBased}}
       <div class={{concat "field" (if @edition "" " disabled")}}>
           <label>Tolérance</label>
@@ -25,29 +25,29 @@
       </div>
   {{/if}}
   {{#if @challenge.supportsScoring}}
-    <FormTextarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
+    <FormItems::Textarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
   {{/if}}
-  <FormIllustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @display={{this.showIllustration}} />
+  <FormItems::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @display={{this.showIllustration}} />
   {{#if @challenge.illustration}}
-    <FormTextarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
+    <FormItems::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
   {{/if}}
-  <FormFiles @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @edition={{@edition}} />
-  <FormInput @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
-  <FormInput @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
-  <FormInput @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
+  <FormItems::Files @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @edition={{@edition}} />
+  <FormItems::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
+  <FormItems::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
+  <FormItems::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
   {{#if (not this.alternative)}}
-    <FormSelect @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} />
+    <FormItems::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} />
   {{/if}}
   {{#if this.authors.isFulfilled}}
-    <FormSelect @title="Auteur" @value={{@challenge.author}} @options={{this.authors}} @edition={{@edition}} @multiple={{true}} />
+    <FormItems::Select @title="Auteur" @value={{@challenge.author}} @options={{this.authors}} @edition={{@edition}} @multiple={{true}} />
   {{/if}}
   {{#if (not this.alternative)}}
-    <FormSelect @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} />
+    <FormItems::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} />
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>
         <CustomCheckbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
       {{#if @challenge.timer}}
-        <FormInput @value={{@challenge.timer}} @edition={{@edition}} />
+        <FormItems::Input @value={{@challenge.timer}} @edition={{@edition}} />
       {{/if}}
     </div>
   {{#if @challenge.isSuggested}}
@@ -55,16 +55,16 @@
           <label>Qualité</label>
           <div class="four fields">
               <div class="field">
-                <FormSelect @title="Non voyant" @value={{@challenge.accessibility1}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility1}} />
+                <FormItems::Select @title="Non voyant" @value={{@challenge.accessibility1}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility1}} />
               </div>
               <div class="field">
-                <FormSelect @title="Daltonien" @value={{@challenge.accessibility2}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility2}} />
+                <FormItems::Select @title="Daltonien" @value={{@challenge.accessibility2}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility2}} />
               </div>
               <div class="field">
-                <FormSelect @title="Spoil" @value={{@challenge.spoil}} @edition={{@edition}} @multiple={{false}} @options={{this.options.spoil}} />
+                <FormItems::Select @title="Spoil" @value={{@challenge.spoil}} @edition={{@edition}} @multiple={{false}} @options={{this.options.spoil}} />
               </div>
               <div class="field">
-                <FormSelect @title="Responsive" @value={{@challenge.responsive}} @edition={{@edition}} @multiple={{false}} @options={{this.options.responsive}} />
+                <FormItems::Select @title="Responsive" @value={{@challenge.responsive}} @edition={{@edition}} @multiple={{false}} @options={{this.options.responsive}} />
               </div>
           </div>
       </div>
@@ -73,14 +73,14 @@
       <label>Internationalisation</label>
       <div class="two fields">
           <div class="field">
-            <FormSelect @title="Langue" @value={{@challenge.language}} @edition={{@edition}} @multiple={{false}} @options={{this.options.language}} />
+            <FormItems::Select @title="Langue" @value={{@challenge.language}} @edition={{@edition}} @multiple={{false}} @options={{this.options.language}} />
           </div>
           <div class="field">
-            <FormSelect @title="Géographie" @value={{@challenge.area}} @edition={{@edition}} @multiple={{false}} @options={{this.options.area}} />
+            <FormItems::Select @title="Géographie" @value={{@challenge.area}} @edition={{@edition}} @multiple={{false}} @options={{this.options.area}} />
           </div>
       </div>
   </div>
   {{#if (not @edition)}}
-    <FormInput @value={{@challenge.pixId}} @title="Id" @edition={{false}} />
+    <FormItems::Input @value={{@challenge.pixId}} @title="Id" @edition={{false}} />
   {{/if}}
 </form>

@@ -6,7 +6,7 @@ import { htmlSafe } from '@ember/template';
 
 @classic
 @classNames('field')
-export default class FormMde extends Component {
+export default class Mde extends Component {
   @computed('helpContent')
   get safeHelpContent() {
     return htmlSafe(this.get('helpContent'));

@@ -4,6 +4,6 @@ import Component from '@ember/component';
 
 @classic
 @classNames('field')
-export default class FormSelect extends Component {
+export default class Select extends Component {
   value = false;
 }

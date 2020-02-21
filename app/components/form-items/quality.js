@@ -2,7 +2,7 @@ import classic from 'ember-classic-decorator';
 import Component from '@ember/component';
 
 @classic
-export default class FormQuality extends Component {
+export default class Quality extends Component {
   init() {
     super.init(...arguments);
     this.options = {

@@ -6,7 +6,7 @@ import Component from '@ember/component';
 
 @classic
 @classNames('field')
-export default class FormFiles extends Component {
+export default class Files extends Component {
   @service
   filePath;
 

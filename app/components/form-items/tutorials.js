@@ -7,7 +7,7 @@ import Component from '@ember/component';
 
 @classic
 @classNames('field')
-export default class FormTutorials extends Component {
+export default class Tutorials extends Component {
   @service
   store;
 

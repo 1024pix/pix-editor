@@ -7,7 +7,7 @@ import { htmlSafe } from '@ember/template';
 @classic
 @classNames('field', 'textArea')
 @classNameBindings('maximized')
-export default class FormTextarea extends Component {
+export default class Textarea extends Component {
   maximized = false;
 
   @computed('helpContent')

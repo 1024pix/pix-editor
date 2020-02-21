@@ -5,7 +5,7 @@ import Component from '@ember/component';
 
 @classic
 @classNames('field')
-export default class FormIllustration extends Component {
+export default class Illustration extends Component {
   @action
   remove() {
     this.set('value', []);
