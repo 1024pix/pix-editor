@@ -105,10 +105,10 @@
   {{/if}}
 </div>
 </div>
-<PopinChallengeLog @display={{this.displayChallengeLog}} @challenge={{this.challenge}} @competence={{this.competence}} @class={{this.popinLogClass}} />
-<PopinImage @src={{this.popinImageSrc}} @display={{this.displayImage}} />
-<PopinChangelog @display={{this.displayChangeLog}} @onApprove={{this.changelogApprove}} @onDeny={{this.changelogDeny}} @value={{this.changelogDefault}} />
+<PopIn::ChallengeLog @display={{this.displayChallengeLog}} @challenge={{this.challenge}} @competence={{this.competence}} @class={{this.popinLogClass}} />
+<PopIn::Image @src={{this.popinImageSrc}} @display={{this.displayImage}} />
+<PopIn::Changelog @display={{this.displayChangeLog}} @onApprove={{this.changelogApprove}} @onDeny={{this.changelogDeny}} @value={{this.changelogDefault}} />
 {{#if this.mayMove}}
-  <PopinSelectLocation @display={{this.displaySelectLocation}} @onChange={{this.setSkills}} @title="Acquis du prototype" @areas={{this.areas}} @competence={{this.competence}} @selectTubeLevel={{true}} @tube={{this.challenge.firstSkill.tube}} @level={{this.level}} @multipleLevel={{true}} />
+  <PopIn::SelectLocation @display={{this.displaySelectLocation}} @onChange={{this.setSkills}} @title="Acquis du prototype" @areas={{this.areas}} @competence={{this.competence}} @selectTubeLevel={{true}} @tube={{this.challenge.firstSkill.tube}} @level={{this.level}} @multipleLevel={{true}} />
 {{/if}}
 {{outlet}}

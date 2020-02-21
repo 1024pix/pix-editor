@@ -40,8 +40,8 @@
           {{/if}}
         </div>
       </div>
-      <PopinConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" />
-      <PopinConfirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
+      <PopIn::ConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" />
+      <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
     </div>
   </burger.outlet>
 </BurgerMenu>
