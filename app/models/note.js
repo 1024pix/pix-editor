@@ -1,18 +1,23 @@
-import DS from 'ember-data';
-import {computed} from "@ember/object";
+import classic from 'ember-classic-decorator';
+import {computed} from '@ember/object';
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  text:DS.attr(),
-  challengeId:DS.attr(),
-  author:DS.attr(),
-  competence:DS.attr(),
-  skills:DS.attr(),
-  production:DS.attr(),
-  createdAt:DS.attr(),
-  status:DS.attr(),
-  changelog:DS.attr("boolean", {defaultValue: false }),
-  date:computed("createdAt", function() {
-    let createdDate = this.get("createdAt");
-    return (new Date(createdDate)).toLocaleDateString("fr");
-  })
-});
+@classic
+export default class NoteModel extends Model {
+
+  @attr text;
+  @attr challengeId;
+  @attr author;
+  @attr competence;
+  @attr skills;
+  @attr production;
+  @attr createdAt;
+  @attr status;
+  @attr('boolean', {defaultValue: false }) changelog;
+
+  @computed('createdAt')
+  get date() {
+    let createdDate = this.get('createdAt');
+    return (new Date(createdDate)).toLocaleDateString('fr');
+  }
+}

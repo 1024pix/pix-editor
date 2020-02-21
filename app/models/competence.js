@@ -1,48 +1,69 @@
-import DS from 'ember-data';
+import classic from 'ember-classic-decorator';
 import {computed} from '@ember/object';
+import Model, { attr, hasMany } from '@ember-data/model';
 
+@classic
+export default class CompetenceModel extends Model {
+  needsRefresh = false;
 
-export default DS.Model.extend({
-  needsRefresh:false,
-  name: DS.attr('string', { readOnly: true }),
-  title:DS.attr(),
-  code: DS.attr(),
-  description:DS.attr(),
-  rawTubes: DS.hasMany('tube'),
-  pixId:DS.attr(),
-  tubes:computed('rawTubes.[]', function() {
+  @attr('string', { readOnly: true }) name;
+  @attr title;
+  @attr code;
+  @attr description;
+  @attr pixId;
+
+  @hasMany('tube') rawTubes;
+
+  @computed('rawTubes.[]')
+  get tubes() {
     return this.get('rawTubes').filter(tube => {
       return tube.get('name') !== '@workbench';
     });
-  }),
-  productionTubes:computed('rawTubes.[]', function() {
+  }
+
+  @computed('rawTubes.[]')
+  get productionTubes() {
     let allTubes = this.get('rawTubes');
     allTubes = allTubes.filter(tube => tube.get('hasProductionChallenge'));
     return allTubes.sortBy('name');
-  }),
-  sortedTubes:computed('tubes.[]', function() {
+  }
+
+  @computed('tubes.[]')
+  get sortedTubes() {
     return this.get('tubes').sortBy('name');
-  }),
-  tubeCount:computed('tubes', function() {
+  }
+
+  @computed('tubes')
+  get tubeCount() {
     return this.get('tubes').length;
-  }),
-  productionTubeCount:computed('productionTubes', function() {
+  }
+
+  @computed('productionTubes')
+  get productionTubeCount() {
     return this.get('productionTubes').length;
-  }),
-  selectedProductionTubeCount:computed('productionTubes.@each.selectedLevel', function(){
+  }
+
+  @computed('productionTubes.@each.selectedLevel')
+  get selectedProductionTubeCount(){
     return this.get('productionTubes').filter(tube => tube.get('selectedLevel')).length;
-  }),
-  skillCount:computed('tubes.@each.skillCount', function() {
+  }
+
+  @computed('tubes.@each.skillCount')
+  get skillCount() {
     return this.get('tubes').map(tube => tube.get('skillCount')).reduce((count, value)=> {
       return count+value;
     },0);
-  }),
-  productionSkillCount:computed('tubes.@each.productionSkillCount', function() {
+  }
+
+  @computed('tubes.@each.productionSkillCount')
+  get productionSkillCount() {
     return this.get('tubes').map(tube => tube.get('productionSkillCount')).reduce((count, value)=> {
       return count+value;
     },0);
-  }),
-  workbenchSkill:computed('rawTubes', function() {
+  }
+
+  @computed('rawTubes')
+  get workbenchSkill() {
     const workbenchTube = this.get('rawTubes').find(tube => {
       return tube.get('name') === '@workbench';
     });
@@ -50,13 +71,15 @@ export default DS.Model.extend({
       return workbenchTube.get('rawSkills').get('firstObject');
     }
     return null;
-  }),
-  workbenchTemplates:computed('workbenchSkill', 'workbenchSkill.templates.{[],@each.status}', function() {
+  }
+
+  @computed('workbenchSkill', 'workbenchSkill.templates.{[],@each.status}')
+  get workbenchTemplates() {
     const workbenchSkill = this.get('workbenchSkill');
     if (workbenchSkill)
     return workbenchSkill.get('templates').filter(template => {
       return !template.get('isArchived');
     });
     return [];
-  })
-});
+  }
+}

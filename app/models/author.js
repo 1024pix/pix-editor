@@ -1,6 +1,8 @@
-import DS from 'ember-data';
+import classic from 'ember-classic-decorator';
+import Model, { attr } from '@ember-data/model';
 
-export default DS.Model.extend({
-  name: DS.attr(),
-  access: DS.attr()
-});
+@classic
+export default class AuthorModel extends Model {
+  @attr name;
+  @attr access;
+}

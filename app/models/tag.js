@@ -1,9 +1,12 @@
-import DS from 'ember-data';
+import classic from 'ember-classic-decorator';
+import Model, { attr, hasMany } from '@ember-data/model';
 
-export default DS.Model.extend({
-  title: DS.attr(),
-  description: DS.attr(),
-  notes: DS.attr(),
-  skills: DS.hasMany('skill'),
-  tutorials: DS.hasMany('tutorial'),
-});
+@classic
+export default class TagModel extends Model {
+  @attr title;
+  @attr description;
+  @attr notes;
+
+  @hasMany('skill') skills;
+  @hasMany('tutorial') tutorials;
+}

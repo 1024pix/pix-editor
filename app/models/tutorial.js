@@ -1,28 +1,35 @@
-import DS from 'ember-data';
+import classic from 'ember-classic-decorator';
+import Model, { attr, hasMany } from '@ember-data/model';
 import {computed} from '@ember/object';
+import DS from 'ember-data';
 
-export default DS.Model.extend({
-  title: DS.attr(),
-  duration: DS.attr(),
-  source: DS.attr(),
-  format: DS.attr(),
-  link: DS.attr(),
-  license: DS.attr(),
-  tags: DS.hasMany('tag'),
-  level: DS.attr(),
-  date: DS.attr(),
-  crush: DS.attr(),
+@classic
+export default class TutorialModel extends Model {
+  @attr title;
+  @attr duration;
+  @attr source;
+  @attr format;
+  @attr link;
+  @attr license;
+  @attr level;
+  @attr date;
+  @attr crush;
 
-  isFavorite:computed('crush', function(){
+  @hasMany('tag') tags;
+
+  @computed('crush')
+  get isFavorite() {
     const crush = this.get('crush');
     if(crush){
       return crush.toLowerCase() === 'yes';
     }
     return false;
-  }),
-  tagsTitle:computed('tags.[]', function(){
+  }
+
+  @computed('tags.[]')
+  get tagsTitle() {
     return DS.PromiseObject.create({
       promise:this.get('tags').then((tags)=> tags.map((tag)=>tag.get('title')).join(' | '))
     })
-  })
-});
+  }
+}

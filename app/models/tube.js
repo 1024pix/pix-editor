@@ -1,44 +1,65 @@
-import DS from 'ember-data';
+import classic from 'ember-classic-decorator';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import {computed} from '@ember/object';
 
-export default DS.Model.extend({
-  name: DS.attr(),
-  title: DS.attr(),
-  description: DS.attr(),
-  practicalTitle: DS.attr(),
-  practicalDescription: DS.attr(),
-  pixId: DS.attr(),
-  competence: DS.belongsTo('competence'),
-  selectedLevel:false,
-  rawSkills:DS.hasMany('skill'),
-  skills:computed('rawSkills.[]', function() {
+@classic
+export default class TubeModel extends Model {
+
+  init() {
+    this.set('selectedSkills', []);
+    return super.init(...arguments);
+  }
+
+  @attr name;
+  @attr title;
+  @attr description;
+  @attr practicalTitle;
+  @attr practicalDescription;
+  @attr pixId;
+
+  @belongsTo('competence') competence;
+  @hasMany('skill') rawSkills;
+
+  selectedLevel = false;
+
+  @computed('rawSkills.[]')
+  get skills() {
     return this.get('rawSkills').filter(skill => {
       return skill.get('status') !== 'périmé';
     });
-  }),
-  skillCount:computed('skills.[]', function() {
+  }
+
+  @computed('skills.[]')
+  get skillCount() {
     return this.get('skills').length;
-  }),
-  productionSkills:computed('sortedSkills.@each.productionTemplate', function() {
+  }
+
+  @computed('sortedSkills.@each.productionTemplate')
+  get productionSkills() {
     return this.get('sortedSkills').filter(skill => skill.get('productionTemplate') != null);
-  }),
-  productionSkillCount:computed('skills.@each.productionTemplate', function() {
+  }
+
+  @computed('skills.@each.productionTemplate')
+  get productionSkillCount() {
     return this.get('skills').map(skill => skill.get('productionTemplate')).filter(challenge => challenge != null).length;
-  }),
-  sortedSkills:computed('skills.[]', function() {
+  }
+
+  @computed('skills.[]')
+  get sortedSkills() {
     return this.get('skills').sortBy('level');
-  }),
-  filledSkills:computed('sortedSkills.{[],@each.level}', function() {
+  }
+
+  @computed('sortedSkills.{[],@each.level}')
+  get filledSkills() {
     return this.get('sortedSkills').reduce((grid, skill) => {
         grid[skill.get('level')-1] = skill;
         return grid;
       },[false, false, false, false, false, false, false]);
-  }),
-  hasProductionChallenge:computed('productionSkillCount', function() {
-    return this.get('productionSkillCount') > 0;
-  }),
-  init() {
-    this.set('selectedSkills', []);
-    return this._super(...arguments);
   }
-});
+
+  @computed('productionSkillCount')
+  get hasProductionChallenge() {
+    return this.get('productionSkillCount') > 0;
+  }
+
+}

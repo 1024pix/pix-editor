@@ -1,6 +1,8 @@
-import DS from 'ember-data';
-import Note from "./note";
+import classic from 'ember-classic-decorator';
+import NoteModel from './note';
+import { attr } from '@ember-data/model';
 
-export default Note.extend({
-  changelog:DS.attr("boolean", {defaultValue: true })
-});
+@classic
+export default class ChangelogEntryModel extends NoteModel {
+  @attr('boolean', {defaultValue: true }) changelog;
+}
