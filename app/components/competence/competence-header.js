@@ -15,7 +15,7 @@ export default class CompetenceHeader extends Component {
     }];
 
   get liteClass() {
-    return this.config.lite ? 'lite' : '';
+    return this.config.lite ? ' lite ' : '';
   }
 
   get selectedSection() {
