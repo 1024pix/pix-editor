@@ -33,7 +33,7 @@
           <div class="three fields">
             <div class="field">
               <label>Rechercher tags</label>
-              <PowerSelect @search={{this.getSearchTagsResults}} @placeholder="Nom" @onchange={{this.selectTag}} @dropdownClass="search-result tutorial-search" @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
+              <PowerSelect @search={{this.getSearchTagsResults}} @placeholder="Nom" @onChange={{this.selectTag}} @dropdownClass="search-result tutorial-search" @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
                 <div class="search-title">
                   {{#if (eq result.id "create")}}
                     {{result.title}} <i class="add icon"></i>
