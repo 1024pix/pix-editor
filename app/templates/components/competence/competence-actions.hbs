@@ -1,15 +1,17 @@
-{{#unless this.config.lite}}
-  {{#if (eq this.section "skills")}}
-    <button class="ui button left item" type="button" {{on "click" this.shareSkills}}>
-      <i class="share square icon"></i> Exporter
-    </button>
-  {{else if (eq this.section "challenges")}}
-    <div class="ui top attached tabular menu">
-      <div class="item production {{if (eq this.view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
-      <div class="item workbench {{if (eq this.view "production") "" "active"}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
-    </div>
-  {{/if}}
-{{/unless}}
-<button class="ui button right item" {{on "click" (fn this.refresh true)}} type="button">
-  <i class="sync alternate icon"></i> Actualiser
-</button>
+<div class="ui top attached borderless labelled icon menu {{this.hiddenClass}} {{this.skillClass}}">
+  {{#unless this.config.lite}}
+    {{#if (eq @section "skills")}}
+      <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
+        <i class="share square icon"></i> Exporter
+      </button>
+    {{else if (eq @section "challenges")}}
+      <div class="ui top attached tabular menu">
+        <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
+        <div class="item workbench {{if (eq @view "production") "" "active"}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
+      </div>
+    {{/if}}
+  {{/unless}}
+  <button class="ui button right item" {{on "click" (fn @refresh true)}} type="button">
+    <i class="sync alternate icon"></i> Actualiser
+  </button>
+</div>
