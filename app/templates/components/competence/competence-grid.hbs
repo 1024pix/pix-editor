@@ -1,20 +1,22 @@
-<table class="ui celled table definition tubes">
-  <tbody>
-  {{#each this.tubes as |tube|}}
-    {{#if (or this.displayAllTubes tube.hasProductionChallenge) }}
-      <tr>
-        <td>
-          {{#if (eq this.section "skills")}}
-            <LinkTo @route="competence.tubes.single" @models={{array this.competenceModel tube}}>{{tube.name}}</LinkTo>
-          {{else}}
-            {{tube.name}}
-          {{/if}}
-        </td>
-        {{#each tube.filledSkills as |skill index|}}
-         <Competence::Grid::GridCell @section={{this.section}} @view={{@view}} @skill={{skill}} @link={{this.link}} @tubeId={{tube.pixId}} @competenceModel={{this.competenceModel}} @index={{index}} />
-        {{/each}}
-      </tr>
-    {{/if}}
-  {{/each}}
-  </tbody>
-</table>
+<div class="competence-grid{{this.hiddenClass}}">
+  <table class="ui celled table definition tubes">
+    <tbody>
+    {{#each @tubes as |tube|}}
+      {{#if (or this.displayAllTubes tube.hasProductionChallenge) }}
+        <tr>
+          <td>
+            {{#if (eq @section "skills")}}
+              <LinkTo @route="competence.tubes.single" @models={{array @competenceModel tube}}>{{tube.name}}</LinkTo>
+            {{else}}
+              {{tube.name}}
+            {{/if}}
+          </td>
+          {{#each tube.filledSkills as |skill index|}}
+          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.pixId}} @competenceModel={{@competenceModel}} @index={{index}} />
+          {{/each}}
+        </tr>
+      {{/if}}
+    {{/each}}
+    </tbody>
+  </table>
+</div>
