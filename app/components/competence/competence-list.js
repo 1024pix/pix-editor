@@ -1,37 +1,33 @@
-import classic from 'ember-classic-decorator';
-import { classNameBindings } from '@ember-decorators/component';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import SortedList from '../sorted-list';
 
-@classic
-@classNameBindings('hidden', 'listType')
 export default class CompetenceList extends SortedList {
   listType = 'template-list';
   scrollLeft = 0;
+  currentCount = 0;
+  scrollValue = 0;
 
-  init() {
-    super.init();
-    this.currentCount = 0;
+  get hiddenClass() {
+    return this.args.hidden?' hidden ':'';
   }
 
-  @computed('itemCount')
   get scrollTop() {
-    let count = this.get('itemCount');
+    let count = this.args.itemCount;
     if (count !== this.currentCount) {
       this.currentCount = count;
       return 0;
     }
-    return this.get('scrollValue');
+    return this.scrollValue;
   }
 
   set scrollTop(value) {
-    this.set('scrollValue', value);
+    this.scrollValue = value;
     return value;
   }
 
   @action
   scrollChange(scrollLeft, scrollTop) {
-    this.set('scrollLeft', scrollLeft);
-    this.set('scrollTop', scrollTop);
+    this.scrollLeft = scrollLeft;
+    this.scrollTop = scrollTop;
   }
 }

@@ -1,23 +1,21 @@
-import classic from 'ember-classic-decorator';
-import { classNameBindings } from '@ember-decorators/component';
-import { action, computed } from '@ember/object';
-import Component from '@ember/component';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import DS from 'ember-data';
+import { tracked } from '@glimmer/tracking';
 
-@classic
-@classNameBindings('listType')
 export default class SortedList extends Component {
   listType = 'sorted-list';
-  list = null;
-  sortField = null;
-  sortType = null;
-  ascending = true;
+  columns = [100];
+
+  @tracked ascending = true;
+  @tracked sortField = null;
+  @tracked sortType = null;
 
   sortElements(elements) {
-    let field = this.get('sortField');
-    let type = this.get('sortType');
+    let field = this.sortField;
+    let type = this.sortType;
     let sort1, sort2;
-    if (this.get('ascending')) {
+    if (this.ascending) {
       sort1 = -1;
       sort2 = 1;
     } else {
@@ -90,47 +88,41 @@ export default class SortedList extends Component {
     return elements;
   }
 
-  @computed('list', 'sortField', 'ascending')
   get sortedList() {
-    let field = this.get('sortField');
+    let field = this.sortField;
     if (field) {
-      let list = this.get('list');
+      let list = this.args.list;
       if (Array.isArray(list)) {
         return this.sortElements(list);
       } else {
         return DS.PromiseArray.create({
-          promise: this.get('list')
+          promise: this.args.list
           .then(list => {
             return this.sortElements(list.toArray());
           })
         });
       }
     } else {
-      return this.get('list');
+      return this.args.list;
     }
-  }
-
-  init() {
-    super.init(...arguments);
-    this.columns = [100];
   }
 
   @action
   sortBy(field, type) {
-    if (field === this.get('sortField')) {
-      this.set('ascending', !this.get('ascending'));
+    if (field === this.sortField) {
+      this.ascending = !this.ascending;
     } else {
-      this.set('sortField', field);
-      this.set('ascending', true);
+      this.sortField = field;
+      this.ascending = true;
     }
-    this.set('sortType', type);
+    this.sortType = type;
     const className = this.get('listType');
     document.querySelectorAll(`.${className} .list-header .list-item`).forEach(el=>{
-    el.classList.remove('sorting');
+      el.classList.remove('sorting');
     });
     const sortElement =  document.querySelector(`.${className} .list-header .list-item.${field}`);
     sortElement.classList.add('sorting');
-    if (this.get('ascending')) {
+    if (this.ascending) {
       sortElement.classList.remove('descending');
       sortElement.classList.add('ascending');
     } else {
