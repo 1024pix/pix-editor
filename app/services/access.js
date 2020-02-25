@@ -10,8 +10,7 @@ const ADMIN = 4;
 
 @classic
 export default class AccessService extends Service {
-  @service
-  config;
+  @service config;
 
   readOnly = READ_ONLY;
 

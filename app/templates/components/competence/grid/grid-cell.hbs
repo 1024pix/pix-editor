@@ -1,17 +1,17 @@
 {{#if this.displaySkill}}
-    {{#if (eq this.section "challenges")}}
-      {{#if (eq this.view "production")}}
-        <Competence::Grid::CellProduction @skill={{this.skill}} @link={{this.link}} @competenceModel={{this.competenceModel}} />
-      {{else if (eq this.view "workbench")}}
-        <Competence::Grid::CellWorkbench @skill={{this.skill}} @competenceModel={{this.competenceModel}} />
+    {{#if (eq @section "challenges")}}
+      {{#if (eq @view "production")}}
+        <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} @competenceModel={{@competenceModel}} />
+      {{else if (eq @view "workbench")}}
+        <Competence::Grid::CellWorkbench @skill={{@skill}} @competenceModel={{@competenceModel}} />
       {{/if}}
-    {{else if (eq this.section "quality")}}
-      <Competence::Grid::CellQuality @skill={{this.skill}} @competenceModel={{this.competenceModel}} />
-    {{else if (eq this.section "skills")}}
-      <Competence::Grid::CellSkill @skill={{this.skill}} @competenceModel={{this.competenceModel}} />
+    {{else if (eq @section "quality")}}
+      <Competence::Grid::CellQuality @skill={{@skill}} @competenceModel={{@competenceModel}} />
+    {{else if (eq @section "skills")}}
+      <Competence::Grid::CellSkill @skill={{@skill}} @competenceModel={{@competenceModel}} />
   {{/if}}
 {{else if this.mayAddSkill}}
-    <td><LinkTo @route="competence.skills.new" @models={{array this.competenceModel this.tubeId this.index}} class="add-skill">
+    <td><LinkTo @route="competence.skills.new" @models={{array @competenceModel @tubeId @index}} class="add-skill">
         <i class="icon plus circle"></i></LinkTo></td>
 {{else}}
     <td class="skill-cell__empty"></td>

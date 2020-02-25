@@ -1,13 +1,13 @@
-<LinkTo @route="competence.skills.single" @models={{array this.competenceModel this.skill}} @tagName="td" class={{concat "skill skill-cell link skill-mode" (if (not this.skill.productionTemplate) " draft-skill")}}>
-  <div class="skill-name {{this.skill.descriptionCSS}}">
-    {{this.skill.name}}
+<LinkTo @route="competence.skills.single" @models={{array @competenceModel @skill}} @tagName="td" class={{concat "skill skill-cell link skill-mode" (if (not @skill.productionTemplate) " draft-skill")}}>
+  <div class="skill-name {{@skill.descriptionCSS}}">
+    {{@skill.name}}
   </div>
   <div class="help">
-    {{#if (or this.skill.clue this.skill.clueNA)}}
-    <i class={{concat "idea icon " this.skill.clueCSS}}></i>
+    {{#if (or @skill.clue @skill.clueNA)}}
+    <i class={{concat "idea icon " @skill.clueCSS}}></i>
     {{else}}
     <i class="icon"></i>
     {{/if}}
-    <span class="tuto-count">{{this.skill.tutoSolutionCount}} - {{this.skill.tutoMoreCount}}</span>
+    <span class="tuto-count">{{@skill.tutoSolutionCount}} - {{@skill.tutoMoreCount}}</span>
   </div>
 </LinkTo>

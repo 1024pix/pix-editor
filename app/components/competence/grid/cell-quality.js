@@ -1,32 +1,23 @@
-import classic from 'ember-classic-decorator';
-import { tagName } from '@ember-decorators/component';
-import { computed } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { htmlSafe } from '@ember/template';
 
-@classic
-@tagName('')
 export default class CellQuality extends Component {
-  @computed(
-    'skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2}',
-    'skill.clueStatus'
-  )
+
   get qualityIndication() {
-    const productionTemplate = this.get('skill.productionTemplate');
+    const productionTemplate = this.args.skill.productionTemplate;
     const allWeight = 19;
-    const spoil = this._spoilWeight(productionTemplate.get('spoil'));
-    const responsive = this._responsiveWeight(productionTemplate.get('responsive'));
-    const colorblind = this._colorblindWeight(productionTemplate.get('accessibility2'));
-    const a11Y = this._a11YWeight(productionTemplate.get('accessibility1'));
-    const clue = this._clueWeight(this.get('skill.clueStatus'));
+    const spoil = this._spoilWeight(productionTemplate.spoil);
+    const responsive = this._responsiveWeight(productionTemplate.responsive);
+    const colorblind = this._colorblindWeight(productionTemplate.accessibility2);
+    const a11Y = this._a11YWeight(productionTemplate.accessibility1);
+    const clue = this._clueWeight(this.args.skill.clueStatus);
 
     const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
     return Math.round(result * 100);
   }
 
-  @computed('qualityIndication')
   get qualityClassColor() {
-    const qualityIndication = this.get('qualityIndication');
+    const qualityIndication = this.qualityIndication;
     if (qualityIndication < 50) {
       return 'quality bad-quality';
     }
@@ -36,10 +27,9 @@ export default class CellQuality extends Component {
     return 'quality good-quality';
   }
 
-  @computed('skill.{tutoSolutionCount,tutoMoreCount}')
   get classTutorial() {
-    const tutoSolution = this.get('skill.tutoSolutionCount');
-    const tutoMore = this.get('skill.tutoMoreCount');
+    const tutoSolution = this.args.skill.tutoSolutionCount;
+    const tutoMore = this.args.skill.tutoMoreCount;
     if (tutoSolution > 0 && tutoMore > 0) {
       return 'have-tutorial';
     }
@@ -49,24 +39,19 @@ export default class CellQuality extends Component {
     return false;
   }
 
-  @computed(
-    'skill.productionTemplate.{spoil,responsive,accessibility1,accessibility2,timer}',
-    'skill.{clueStatus,tutoSolutionCount,tutoMoreCount}',
-    'classTutorial'
-  )
   get popupBuild() {
-    const productionTemplate = this.get('skill.productionTemplate');
-    const spoil = this._isNonTested(productionTemplate.get('spoil'));
-    const responsive = this._isNonTested(productionTemplate.get('responsive'));
-    const blind = this._isNonTested(productionTemplate.get('accessibility1'));
-    const colorblind = this._isNonTested(productionTemplate.get('accessibility2'));
-    const skillClue = this.get('skill.clueStatus');
+    const productionTemplate = this.args.skill.productionTemplate;
+    const spoil = this._isNonTested(productionTemplate.spoil);
+    const responsive = this._isNonTested(productionTemplate.responsive);
+    const blind = this._isNonTested(productionTemplate.accessibility1);
+    const colorblind = this._isNonTested(productionTemplate.accessibility2);
+    const skillClue = this.args.skill.clueStatus;
     const clue = skillClue?skillClue:'Pas d\'indice';
-    const skillTimer = this.get('skill.productionTemplate.timer');
+    const skillTimer = productionTemplate.timer;
     const timer = skillTimer?`<tr><td>Timer</td><td>${skillTimer} s</td></tr>`:'';
-    const classTuto = this.get('classTutorial');
-    const tutoSolutionCount = this.get('skill.tutoSolutionCount');
-    const tutoMoreCount = this.get('skill.tutoMoreCount');
+    const classTuto = this.classTutorial;
+    const tutoSolutionCount = this.args.skill.tutoSolutionCount;
+    const tutoMoreCount = this.args.skill.tutoMoreCount;
     const haveTuto = classTuto?`<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
                                 <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`:'';
     return htmlSafe(`<tr><td>Spoil </td><td> ${spoil} </td></tr>

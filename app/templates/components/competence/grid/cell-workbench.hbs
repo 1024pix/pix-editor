@@ -1,8 +1,8 @@
-<LinkTo @route="competence.templates.list" @models={{array this.competenceModel this.skill}} @tagName="td" class="skill skill-cell link workbench">
-  {{this.skill.name}}
+<LinkTo @route="competence.templates.list" @models={{array @competenceModel @skill}} @tagName="td" class="skill skill-cell link workbench">
+  {{@skill.name}}
   <div class="alternative">
-    <span class="draft">{{this.skill.templates.length}}</span>
-    {{#if this.skill.template.notDeclinable}}
+    <span class="draft">{{@skill.templates.length}}</span>
+    {{#if @skill.template.notDeclinable}}
       <span class="not-declinable">NR</span>
     {{/if}}
   </div>

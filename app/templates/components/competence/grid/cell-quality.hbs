@@ -1,4 +1,4 @@
-<LinkTo @route="competence.quality.single" @models={{array this.competenceModel this.skill}} @tagName="td" class="skill-cell quality-skill-link">
+<LinkTo @route="competence.quality.single" @models={{array @competenceModel @skill}} @tagName="td" class="skill-cell quality-skill-link">
   <EmberTooltip @tooltipClass="custom-tooltip quality-tooltip" @arrowClass="custom-arrow" @side="right-start">
     <table class="quality-indication-details">
       <tbody>
@@ -8,16 +8,16 @@
   </EmberTooltip>
   <div class="quality {{this.qualityClassColor}}">
     <div class=" quality-indication">
-      <span>{{this.skill.name}}</span>
+      <span>{{@skill.name}}</span>
       <span>{{this.qualityIndication}}</span>
     </div>
     {{#if this.classTutorial}}
       <i class="lab icon {{this.classTutorial}}"></i>
     {{/if}}
-    {{#if this.skill.productionTemplate.timer }}
+    {{#if @skill.productionTemplate.timer }}
       <i class="time icon"></i>
     {{/if}}
-    {{#if (and (not this.classTutorial) (not this.skill.productionTemplate.timer))}}
+    {{#if (and (not this.classTutorial) (not @skill.productionTemplate.timer))}}
       <br>
     {{/if}}
   </div>
