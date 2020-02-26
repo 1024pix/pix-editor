@@ -27,7 +27,7 @@
   {{#if @challenge.supportsScoring}}
     <Fields::Textarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
   {{/if}}
-  <Fields::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @display={{this.showIllustration}} />
+  <Fields::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @display={{this.showIllustration}} />
   {{#if @challenge.illustration}}
     <Fields::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
   {{/if}}
