@@ -1,28 +1,28 @@
 <div class="field">
-{{#if (or this.value.length this.edition)}}
-  <label>{{this.title}}</label>
-{{/if}}
-{{#if this.value.length}}
-  {{#each this.value as |file key|}}
-    <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i class="file icon"></i> {{file.filename}}</a>
-    {{#if this.edition}}
-      <button {{on "click" (fn this.remove key)}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
-    {{/if}}
-  {{/each}}
-{{/if}}
-{{#if this.edition}}
-  <FileUpload @name="files" @onfileadd={{this.add}}>
-    {{!-- template-lint-disable link-href-attributes  --}}
-    <a class="ui button">
-      Ajouter un fichier...
-    </a>
-    {{!-- template-lint-enable link-href-attributes  --}}
-  </FileUpload>
-  {{#if this.value.length}}
-    <div class="ui input">
-        <div class="label-input">Nom :</div>
-        <Input @value={{this.baseName}} />
-    </div>
+  {{#if (or @value.length @edition)}}
+    <label>{{@title}}</label>
   {{/if}}
-{{/if}}
+  {{#if @value.length}}
+    {{#each @value as |file key|}}
+      <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i class="file icon"></i> {{file.filename}}</a>
+      {{#if @edition}}
+        <button {{on "click" (fn this.remove key)}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
+      {{/if}}
+    {{/each}}
+  {{/if}}
+  {{#if @edition}}
+    <FileUpload @name="files" @onfileadd={{this.add}}>
+      {{!-- template-lint-disable link-href-attributes  --}}
+      <a class="ui button">
+        Ajouter un fichier...
+      </a>
+      {{!-- template-lint-enable link-href-attributes  --}}
+    </FileUpload>
+    {{#if @value.length}}
+      <div class="ui input">
+          <div class="label-input">Nom :</div>
+          <Input @value={{@baseName}} />
+      </div>
+    {{/if}}
+  {{/if}}
 </div>

@@ -31,7 +31,7 @@
   {{#if @challenge.illustration}}
     <Fields::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
   {{/if}}
-  <Fields::Files @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @edition={{@edition}} />
+  <Fields::Files @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @setValue={{fn (mut @challenge.attachments)}} @edition={{@edition}} />
   <Fields::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
   <Fields::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Fields::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
