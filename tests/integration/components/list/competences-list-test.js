@@ -12,7 +12,7 @@ module('Integration | Component | competence-list', function(hooks) {
 
 
     // when
-    await render(hbs`{{competence/competence-list}}`);
+    await render(hbs`{{list/competence-list}}`);
 
 
     // then

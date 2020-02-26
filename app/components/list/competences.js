@@ -1,7 +1,7 @@
 import { action } from '@ember/object';
-import SortedList from '../sorted-list';
+import SortedList from './sorted';
 
-export default class CompetenceList extends SortedList {
+export default class CompetencesList extends SortedList {
   listType = 'template-list';
   scrollLeft = 0;
   currentCount = 0;

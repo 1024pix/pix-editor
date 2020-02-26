@@ -8,7 +8,7 @@
   </h1>
 </div>
 <div class="ui attached segment competence {{this.size}} {{this.listHidden}}">
-  <AlternativesList @list={{this.challenge.alternatives}} @itemCount={{this.challenge.alternatives.length}} @competenceModel={{this.competence}} @challengeModel={{this.challenge}} @hidden={{false}} />
+  <List::Alternatives @list={{this.challenge.alternatives}} @itemCount={{this.challenge.alternatives.length}} @competenceModel={{this.competence}} @challengeModel={{this.challenge}} @hidden={{false}} />
 </div>
 <div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
   <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>

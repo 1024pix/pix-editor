@@ -17,7 +17,7 @@
           </div>
           <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="own">
-              <NoteList @list={{this.ownNotes}} @itemCount={{this.ownCount}} @listType="own-note-list" @displayAuthor={{false}} @show={{this.showOwnNote}} />
+              <List::Notes @list={{this.ownNotes}} @itemCount={{this.ownCount}} @listType="own-note-list" @displayAuthor={{false}} @show={{this.showOwnNote}} />
               <div class="ui text menu note-menu">
                 <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
               </div>
@@ -25,12 +25,12 @@
           </at.tabPanel>
           <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="notes">
-              <NoteList @list={{this.notes}} @itemCount={{this.notesCount}} @listType="note-list" @show={{this.showNote}} />
+              <List::Notes @list={{this.notes}} @itemCount={{this.notesCount}} @listType="note-list" @show={{this.showNote}} />
             </div>
           </at.tabPanel>
           <at.tabPanel>
             <div class="ui bottom attached tab segment active" data-tab="notes">
-              <NoteList @list={{this.changelogEntries}} @itemCount={{this.changelogEntriesCount}} @listType="changelog-entry-list" @displayStatus={{false}} @show={{this.showChangelogEntry}} />
+              <List::Notes @list={{this.changelogEntries}} @itemCount={{this.changelogEntriesCount}} @listType="changelog-entry-list" @displayStatus={{false}} @show={{this.showChangelogEntry}} />
             </div>
           </at.tabPanel>
         </AriaTabs>

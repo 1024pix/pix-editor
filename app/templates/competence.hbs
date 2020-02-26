@@ -2,7 +2,7 @@
   <Competence::CompetenceHeader @competence={{this.competence}} @section={{this.section}} @selectSection={{this.selectSection}} />
   <Competence::CompetenceActions @section={{this.section}} @view={{this.view}} @refresh={{this.refresh}} @selectView={{this.selectView}} @hidden={{this.firstMaximized}} @shareSkills={{this.exportSkills}} />
   <div class="ui attached segment competence {{this.size}} {{this.competenceHidden}}">
-    <Competence::CompetenceList @list={{this.competence.workbenchTemplates}} @itemCount={{this.competence.workbenchTemplates.length}} @competenceModel={{this.model}} @hidden={{this.displayGrid}} @link={{this.skillLink}} />
+    <List::Competences @list={{this.competence.workbenchTemplates}} @itemCount={{this.competence.workbenchTemplates.length}} @competenceModel={{this.model}} @hidden={{this.displayGrid}} @link={{this.skillLink}} />
     <Competence::CompetenceGrid @tubes={{this.competence.sortedTubes}} @competenceModel={{this.model}} @hidden={{not this.displayGrid}} @section={{this.section}} @view={{this.view}} @link={{this.skillLink}} @production={{this.production}} />
   </div>
   <Competence::CompetenceFooter @competence={{this.competence}} @section={{this.section}} @view={{this.view}} @selectView={{this.selectView}} @hidden={{this.firstMaximized}} @newTube={{this.newTube}} @newTemplate={{this.newTemplate}} />
