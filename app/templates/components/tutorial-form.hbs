@@ -20,15 +20,15 @@
               <label>Source</label>
               <Input @type="text" @value={{this.tutorial.source}} placeholder="Source" />
             </div>
-            <Fields::Select @title="License" @defaultText="Licence" @value={{this.tutorial.license}} @options={{this.options.license}} @edition={{true}} />
+            <Fields::Select @title="License" @defaultText="Licence" @value={{this.tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut this.tutorial.license)}}/>
           </div>
           <div class="three fields">
-            <Fields::Select @title="Format" @defaultText="Format" @value={{this.tutorial.format}} @options={{this.options.format}} @edition={{true}} />
+            <Fields::Select @title="Format" @defaultText="Format" @value={{this.tutorial.format}} @options={{this.options.format}} @edition={{true}} @setValue={{fn (mut this.tutorial.format)}}/>
             <div class="field">
               <label>Durée (hh:mm:ss)</label>
               <Input @type="text" @value={{this.tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
             </div>
-            <Fields::Select @title="Niveau" @defaultText="Niveau" @value={{this.tutorial.level}} @options={{this.options.level}} @edition={{true}} />
+            <Fields::Select @title="Niveau" @defaultText="Niveau" @value={{this.tutorial.level}} @options={{this.options.level}} @edition={{true}} @setValue={{fn (mut this.tutorial.level)}}/>
           </div>
           <div class="three fields">
             <div class="field">

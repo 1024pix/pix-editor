@@ -1,7 +1,7 @@
 <div class="ui content">
   <form class="ui form">
     <div class="field">
-      <Fields::Select @title="Statut" @value={{this.entry.status}} @options={{this.options.status}} @edition={{this.edition}} />
+      <Fields::Select @title="Statut" @value={{this.entry.status}} @options={{this.options.status}} @edition={{this.edition}} @setValue={{fn (mut this.entry.status)}}/>
     </div>
     <div class="field {{if this.edition "" "disabled"}}">
       <label>Texte</label>
