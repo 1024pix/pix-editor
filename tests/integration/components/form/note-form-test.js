@@ -3,16 +3,19 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | tube-form', function(hooks) {
+module('Integration | Component | note-form', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{tube-form}}`);
+    this.set('closeAction', function() {});
+    this.set('editAction', function() {});
 
-    assert.dom('.form').exists();
+    await render(hbs`{{form/note close=(action closeAction) edit=(action editAction)}}`);
+
+    assert.dom('.ui.content').exists();
 
   });
 });

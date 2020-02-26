@@ -51,7 +51,7 @@
 </div>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}">
-    <ChallengeForm @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}} @alternative={{this.alternative}} />
+    <Form::Challenge @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}} @alternative={{this.alternative}} />
     {{#if this.copyOperation}}
       <Textarea @value={{this.challenge.preview}} @id={{this.copyZoneId}} />    {{/if}}  </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
