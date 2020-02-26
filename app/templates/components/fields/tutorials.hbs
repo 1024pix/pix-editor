@@ -1,9 +1,18 @@
 <div class="field {{if this.edition "" " disabled"}}">
   <label>
-    {{this.title}}
+    {{@title}}
   </label>
   {{#if @edition}}
-    <PowerSelect @search={{this.getSearchTutorialResults}} @placeholder="commencer la recherche par > pour rechercher par Tag" @onChange={{fn this.selectTutorial this.tutorials}} @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}} @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
+    <PowerSelect
+      @searchEnabled={{true}}
+      @search={{this.getSearchTutorialResults}}
+      @placeholder="commencer la recherche par > pour rechercher par Tag"
+      @onChange={{this.addTutorial}}
+      @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}}
+      @triggerComponent="power-select-custom-trigger"
+      @searchMessage=""
+      @searchPlaceholder="Rechercher..."
+      @loadingMessage="Recherche en cours..." as |result|>
       <div class="search-title">
         {{#if (eq this.repo.id "create")}}
           {{result.title}} <i class="add icon"></i>
@@ -20,17 +29,17 @@
   {{/if}}
 
 </div>
-<div>
-  {{#if this.loading}}
+<div class="field">
+  {{#if @tutorials.isPending}}
     <div class="ui active centered inline loader"></div>
   {{else}}
     <div class="ui cards">
-      {{#each this.tutorials as |tutorial|}}
+      {{#each @tutorials as |tutorial|}}
         <div class="card">
           <div class="content">
             <div class="header">
               {{#if @edition}}
-                <div {{on "click" (fn this.unselectTutorial this.tutorials tutorial)}} class="ui right floated icon button">
+                <div {{on "click" (fn @removeTutorial tutorial)}} class="ui right floated icon button">
                   <i class="close icon"></i>
                 </div>
               {{/if}}
@@ -59,10 +68,7 @@
             aucun élément
           </div>
         </div>
-
       {{/each}}
-
-
     </div>
   {{/if}}
 </div>

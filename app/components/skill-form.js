@@ -1,26 +1,31 @@
-import classic from 'ember-classic-decorator';
 import { action } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 
-@classic
 export default class SkillForm extends Component {
   displayTutorialForm = false;
   searchTitle = '';
-
-  init() {
-    super.init(...arguments);
-    this.options = {
-      'clueStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé', 'inapplicable'],
-      'descriptionStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé'],
-      'i18n': ['France', 'Monde', 'Union Européenne']
-    };
-    this.set('tutorials', []);
-  }
+  options = {
+    'clueStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé', 'inapplicable'],
+    'descriptionStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé'],
+    'i18n': ['France', 'Monde', 'Union Européenne']
+  };
+  tutorials = [];
 
   @action
-  openCreateTutorialModal(tutorials, title) {
-    this.set('searchTitle', title);
-    this.set('tutorials',tutorials);
-    this.set('displayTutorialForm', true)
+  openCreateTutorialModal(title) {
+    this.searchTitle = title;
+    this.tutorials = this.args.skill.tutorials;
+    this.displayTutorialForm = true;
   }
+
+  addTutorial(tutorials, tutorial) {
+    // not a very best practice to update list from here...
+    tutorials.pushObject(tutorial);
+  }
+
+  removeTutorial(tutorials, tutorial) {
+    // not a very best practice to update list from here...
+    tutorials.removeObject(tutorial);
+  }
+
 }

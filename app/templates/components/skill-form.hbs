@@ -6,8 +6,8 @@
   {{#if @skill.productionTemplate}}
     <Fields::Quality @title="Qualité" @challenge={{@skill.productionTemplate}} @edition={{@edition}} />
   {{/if}}
-  <Fields::Tutorials @title="Pour réussir la prochaine fois" @skill={{@skill}} @tutorials={{@skill.tutoSolution}} @searchClass="solution" @edition={{@edition}} @openCreateTutorialModal={{this.openCreateTutorialModal}} />
-  <Fields::Tutorials @title="Pour en savoir plus" @skill={{@skill}} @tutorials={{@skill.tutoMore}} @edition={{@edition}} @searchClass="more" @openCreateTutorialModal={{this.openCreateTutorialModal}} />
+  <Fields::Tutorials @title="Pour réussir la prochaine fois" @skill={{@skill}} @tutorials={{@skill.tutoSolution}} @searchClass="solution" @edition={{@edition}} @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoSolution}} @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}/>
+  <Fields::Tutorials @title="Pour en savoir plus" @skill={{@skill}} @tutorials={{@skill.tutoMore}} @edition={{@edition}} @searchClass="more" @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoMore}} @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
   <TutorialForm @defaultTitle={{this.searchTitle}} @tutorials={{this.tutorials}} @application={{@application}} @display={{this.displayTutorialForm}} />
   <Fields::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
   {{#if (not @edition)}}
