@@ -105,9 +105,16 @@ export default class PopinChallengeLog extends Component {
   }
 
   @action
-  update() {
-    this.set('list', true);
-    this.notifyPropertyChange('challenge');
+  saveEntry() {
+    const entry = this.get('logEntry');
+    if (!entry.get('id')) {
+      entry.set('createdAt', (new Date()).toISOString());
+    }
+    entry.save()
+    .then(() => {
+      this.set('list', true);
+      this.notifyPropertyChange('challenge');
+    });
   }
 
   @action

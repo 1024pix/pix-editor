@@ -1,26 +1,27 @@
 <div class="ui content">
   <form class="ui form">
     <div class="field">
-      <Field::Select @title="Statut" @value={{this.entry.status}} @options={{this.options.status}} @edition={{this.edition}} @setValue={{fn (mut this.entry.status)}}/>
+      <Field::Select @title="Statut" @value={{@entry.status}} @options={{this.options.status}} @edition={{@edition}} @setValue={{fn (mut @entry.status)}}/>
     </div>
-    <div class="field {{if this.edition "" "disabled"}}">
+    <div class="field {{if @edition "" "disabled"}}">
       <label>Texte</label>
       <div class="ui input">
-        <Textarea @value={{this.entry.text}} @rows="4" @readonly={{not this.edition}} />      </div>
+        <Textarea @value={{@entry.text}} @rows="4" @readonly={{not @edition}} />
+      </div>
     </div>
   </form>
 </div>
 <div class="actions">
-  <button class="ui right button" {{on "click" this.close}} type="button">
+  <button class="ui right button" {{on "click" @close}} type="button">
     Retour
   </button>
-  {{#if this.edition}}
-  <button class="ui green right button" {{on "click" this.save}} type="button">
+  {{#if @edition}}
+  <button class="ui green right button" {{on "click" @save}} type="button">
     Enregistrer
   </button>
   {{else}}
-    {{#if this.mayEdit}}
-    <button class="ui green right button" {{on "click" this.edit}} type="button">
+    {{#if @mayEdit}}
+    <button class="ui green right button" {{on "click" @edit}} type="button">
       Modifier
     </button>
     {{/if}}
