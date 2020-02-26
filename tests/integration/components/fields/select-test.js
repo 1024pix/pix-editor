@@ -10,7 +10,7 @@ module('Integration | Component | form-select', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{form-items/select}}`);
+    await render(hbs`{{fields/select}}`);
 
     assert.dom('.field').exists();
 
