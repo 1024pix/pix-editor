@@ -1,6 +1,6 @@
 <form action="" class="ui form">
   <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
-  {{#if (not this.alternative)}}
+  {{#if (not @alternative)}}
     <Field::Select @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} @setValue={{fn (mut @challenge.type)}}/>
   {{/if}}
   {{#if this.typeIsQROC}}
@@ -27,7 +27,7 @@
   {{#if @challenge.supportsScoring}}
     <Field::Textarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
   {{/if}}
-  <Field::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @display={{this.showIllustration}} />
+  <Field::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @display={{@showIllustration}} />
   {{#if @challenge.illustration}}
     <Field::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
   {{/if}}
@@ -35,13 +35,13 @@
   <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
   <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
-  {{#if (not this.alternative)}}
+  {{#if (not @alternative)}}
     <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}
   {{#if this.authors.isFulfilled}}
     <Field::Select @title="Auteur" @value={{@challenge.author}} @options={{this.authors}} @edition={{@edition}} @multiple={{true}} @setValue={{fn (mut @challenge.author)}}/>
   {{/if}}
-  {{#if (not this.alternative)}}
+  {{#if (not @alternative)}}
     <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>

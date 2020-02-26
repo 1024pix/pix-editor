@@ -1,39 +1,32 @@
-import classic from 'ember-classic-decorator';
-import { computed } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 
-@classic
 export default class ChallengeForm extends Component {
-  @service
-  config;
+  @service config;
 
-  init() {
-    super.init(...arguments);
-    this.options = {
-      'types': ['QCU', 'QCM', 'QROC', 'QROCM-ind', 'QROCM-dep', 'QRU'],
-      'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
-      'declinable':['', 'facilement', 'difficilement', 'permutation', 'non'],
-      'format':['petit', 'mots', 'phrase', 'paragraphe'],
-      'accessibility1':['RAS','OK', 'Acquis Non Pertinent', 'KO', 'A tester'],
-      'accessibility2':['RAS','OK','KO'],
-      'responsive':['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
-      'spoil':['Non Sp', 'Difficilement Sp', 'Facilement Sp'],
-      'language':['Allemand', 'Anglais', 'Espagnol', 'Franco Français', 'Francophone', 'Italie'],
-      'area':['Algérie','Allemagne','Argentine','Belgique','Bénin', 'Brésil', 'Burkina Faso', 'Burundi', 'Cameroun','Canada','Chine','Les Comores', 'Congo', 'Côte d\'ivoire', 'Djibouti', 'Espagne','France','Gabon', 'Guinée', 'Grèce','Institutions internationales','Israël', 'Italie','Japon','Jordanie', 'Kenya','La Palestine','Liban','Libye','Madagascar', 'Mali', 'Maroc','Mexique','Neutre','Niger', 'Pakistan','Portugal','République centrafricaine', 'Rwanda', 'Sénégal', 'Seychelles', 'Suisse','Syrie','Tchad', 'Togo', 'Tunisie','UK','USA','Vénézuela']
-    }
-  }
-
-  @computed('config.authorNames')
-  get authors() {
-    return this.get('config.authorNames')
+  options = {
+    'types': ['QCU', 'QCM', 'QROC', 'QROCM-ind', 'QROCM-dep', 'QRU'],
+    'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
+    'declinable':['', 'facilement', 'difficilement', 'permutation', 'non'],
+    'format':['petit', 'mots', 'phrase', 'paragraphe'],
+    'accessibility1':['RAS','OK', 'Acquis Non Pertinent', 'KO', 'A tester'],
+    'accessibility2':['RAS','OK','KO'],
+    'responsive':['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
+    'spoil':['Non Sp', 'Difficilement Sp', 'Facilement Sp'],
+    'language':['Allemand', 'Anglais', 'Espagnol', 'Franco Français', 'Francophone', 'Italie'],
+    'area':['Algérie','Allemagne','Argentine','Belgique','Bénin', 'Brésil', 'Burkina Faso', 'Burundi', 'Cameroun','Canada','Chine','Les Comores', 'Congo', 'Côte d\'ivoire', 'Djibouti', 'Espagne','France','Gabon', 'Guinée', 'Grèce','Institutions internationales','Israël', 'Italie','Japon','Jordanie', 'Kenya','La Palestine','Liban','Libye','Madagascar', 'Mali', 'Maroc','Mexique','Neutre','Niger', 'Pakistan','Portugal','République centrafricaine', 'Rwanda', 'Sénégal', 'Seychelles', 'Suisse','Syrie','Tchad', 'Togo', 'Tunisie','UK','USA','Vénézuela']
   }
 
   helpInstructions = '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
 
-  @computed('challenge.type')
+  helpScoring = 'n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses';
+
+  get authors() {
+    return this.config.authorNames;
+  }
+
   get helpSuggestions() {
-    const type = this.get('challenge.type');
+    const type = this.args.challenge.type;
     switch(type) {
       case 'QCU':
         return '- réponse 1<br>- réponse 2<br>- ...';
@@ -52,9 +45,8 @@ export default class ChallengeForm extends Component {
     }
   }
 
-  @computed('challenge.type')
   get helpAnswers() {
-    const type = this.get('challenge.type');
+    const type = this.args.challenge.type;
     switch(type) {
       case 'QCU':
         return 'n<br><br><i>n = numéro de la bonne réponse</i>';
@@ -71,11 +63,8 @@ export default class ChallengeForm extends Component {
     }
   }
 
-  helpScoring = 'n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses';
-
-  @computed('challenge.type')
   get typeIsQROC() {
-    const type = this.get('challenge.type');
+    const type = this.args.challenge.type;
     switch(type){
       case 'QROC':
       case 'QROCM-ind':
