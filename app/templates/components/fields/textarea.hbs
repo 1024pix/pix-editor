@@ -1,8 +1,8 @@
-<div class={{concat "field" (if this.edition "" " disabled")}}>
+<div class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}}>
     <label>
-        {{#if this.edition}}
+        {{#if @edition}}
             <button {{on "click" this.toggleMaximized}} class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}} type="button"><i class={{concat (if this.maximized "compress " "expand ")  "icon"}}></i></button>
-            {{#if this.helpContent}}
+            {{#if @helpContent}}
             <div class="ui compact icon right floated button basic">
               <i class="help icon">
                 <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
@@ -12,6 +12,6 @@
             </div>
             {{/if}}
         {{/if}}
-        {{this.title}}
+        {{@title}}
     </label>
-    <Textarea @value={{this.value}} @rows="4" @readonly={{not this.edition}} class="attached" /></div>
+    <Textarea @value={{@value}} @rows="4" @readonly={{not @edition}} class="attached" /></div>

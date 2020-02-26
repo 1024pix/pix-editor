@@ -1,22 +1,18 @@
-import classic from 'ember-classic-decorator';
-import { classNames, classNameBindings } from '@ember-decorators/component';
-import { action, computed } from '@ember/object';
-import Component from '@ember/component';
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import { htmlSafe } from '@ember/template';
+import { tracked } from '@glimmer/tracking';
 
-@classic
-@classNames('field', 'textArea')
-@classNameBindings('maximized')
 export default class Textarea extends Component {
-  maximized = false;
 
-  @computed('helpContent')
+  @tracked maximized = false;
+
   get safeHelpContent() {
-    return htmlSafe(this.get('helpContent'));
+    return htmlSafe(this.args.helpContent);
   }
 
   @action
   toggleMaximized() {
-    this.set('maximized', !this.get('maximized'));
+    this.maximized = !this.maximized;
   }
 }
