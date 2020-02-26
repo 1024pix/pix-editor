@@ -1,10 +1,15 @@
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class Tutorials extends Component {
 
+  @tracked displayTutorialForm = false;
+  defaultTitle = '';
+
   @service store;
+
   _searchTutorial(query, tagSearch) {
     return this.store.query('tutorial', {
       filterByFormula: tagSearch ? `FIND('${query}', LOWER(Tags))` : `FIND('${query}', LOWER(Titre))`,
@@ -31,12 +36,10 @@ export default class Tutorials extends Component {
   }
 
   @action
-  addTutorial(item) {
-    const searchClass = this.args.searchClass;
-    const searchInput = document.querySelector(`.search-tuto-${searchClass} .ember-power-select-search-input`);
+  addTutorial(item, options) {
     if (item.id === 'create') {
-      const createTutorial = this.args.openCreateTutorialModal;
-      createTutorial(searchInput.value)
+      this.defaultTitle = options.searchText;
+      this.displayTutorialForm = true;
     } else {
       return this.store.findRecord('tutorial', item.id)
         .then((tutorial) => {
@@ -54,6 +57,11 @@ export default class Tutorials extends Component {
       tagSearch = true
     }
     return this._searchTutorial(query, tagSearch)
+  }
+
+  @action
+  closeModal() {
+    this.displayTutorialForm = false;
   }
 
 }

@@ -1,53 +1,46 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { A } from '@ember/array';
+import { tracked } from '@glimmer/tracking';
 
-@classic
 export default class TutorialForm extends Component {
-  isFavorite = false;
   edition = true;
-  tutorial = null;
 
-  @computed('selectedTags.[]')
+  options =  {
+    'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
+    'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    'license': ['CC-BY-SA', '(c)', 'Youtube']
+  };
+
+  @tracked selectedTags = A([]);
+  @tracked isFavorite = false;
+  @tracked tutorial = {};
+  @service store;
+
   get hasSelectedTag() {
-    const selectedTags = this.get('selectedTags');
-    return selectedTags.length>0
-  }
-
-  @service
-  store;
-
-  init() {
-    super.init(...arguments);
-    this.options =  {
-      'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
-      'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
-      'license': ['CC-BY-SA', '(c)', 'Youtube']
-    };
-    this.set('selectedTags', []);
+    return this.selectedTags.length>0
   }
 
   didReceiveAttrs() {
     super.didReceiveAttrs(...arguments);
-    this.set('selectedTags', []);
-    this.set('tutorial', this.store.createRecord('tutorial'));
+    this.selectedTags = A([]);
+    this.tutorial = this.store.createRecord('tutorial');
   }
 
-  @computed('defaultTitle', 'tutorial.title')
   get title() {
-    return this.get('tutorial.title')?this.get('tutorial.title'):this.get('defaultTitle');
+    return this.tutorial.title?this.tutorial.title:this.args.defaultTitle;
   }
 
   set title(value) {
-    this.set('tutorial.title', value);
+    this.tutorial.title = value;
     return value;
   }
 
   @action
   getSearchTagsResults(query) {
     const queryLowerCase = query.toLowerCase();
-    return this.get('store').query('tag', {
+    return this.store.query('tag', {
       filterByFormula: `FIND('${queryLowerCase}', LOWER(Nom))`,
       maxRecords: 4,
       sort: [{field: 'Nom', direction: 'asc'}]
@@ -61,7 +54,7 @@ export default class TutorialForm extends Component {
 
   @action
   selectTag(item) {
-    const selectedTags = this.get('selectedTags');
+    const selectedTags = this.selectedTags;
     if (item.id === 'create') {
       const value = document.querySelector(`.tutorial-search .ember-power-select-search-input`).value;
       if (value.indexOf('[') !== -1) {
@@ -85,7 +78,7 @@ export default class TutorialForm extends Component {
           });
       }
     } else {
-      return this.get('store').findRecord('tag', item.id)
+      return this.store.findRecord('tag', item.id)
         .then((tag) => {
           if (selectedTags.indexOf(tag) === -1) {
             selectedTags.pushObject(tag);
@@ -96,7 +89,7 @@ export default class TutorialForm extends Component {
 
   @action
   unselectTag(id) {
-    const selectedTags = this.get('selectedTags');
+    const selectedTags = this.selectedTags;
     selectedTags.forEach((tag) => {
       if (tag.id === id) {
         selectedTags.removeObject(tag)
@@ -105,39 +98,35 @@ export default class TutorialForm extends Component {
   }
 
   @action
-  saveTutorial(tutorials) {
-    this.get('application').send('isLoading');
-    let isFavorite = this.get('isFavorite');
-    const selectedTags = this.get('selectedTags');
+  saveTutorial() {
+    this.args.application.send('isLoading');
+    let isFavorite = this.isFavorite;
+    const selectedTags = this.selectedTags;
     const date = new Date();
-    let item = this.get('tutorial');
-    if (!item.get('title')) {
-      item.set('title', this.get('defaultTitle'));
+    let item = this.tutorial;
+    if (!item.title) {
+      item.title = this.defaultTitle;
     }
-    item.set('date', `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`);
-    item.set('crush', isFavorite ? 'yes' : '');
-    item.set('tags', selectedTags);
+    item.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+    item.crush = isFavorite ? 'yes' : '';
+    item.tags = selectedTags;
+    console.debug(item)
     item.save()
       .then((tutorial) => {
-        tutorials.pushObject(tutorial);
-        this.get('application').send('finishedLoading');
-        this.get('application').send('showMessage', 'Tutoriel créé', true);
-        this.set('display', false);
+        this.args.application.send('finishedLoading');
+        this.args.application.send('showMessage', 'Tutoriel créé', true);
+        this.args.addTutorial(tutorial);
+        this.args.close();
       })
       .catch((error) => {
         console.error(error);
-        this.get('application').send('finishedLoading');
-        this.get('application').send('showMessage', 'Erreur lors de la création du tutoriel', true);
+        this.args.application.send('finishedLoading');
+        this.args.application.send('showMessage', 'Erreur lors de la création du tutoriel', true);
       })
   }
 
   @action
   toCrush() {
-    this.toggleProperty('isFavorite');
-  }
-
-  @action
-  closeModal() {
-    this.set('display', false);
+    this.isFavorite = !this.isFavorite;
   }
 }

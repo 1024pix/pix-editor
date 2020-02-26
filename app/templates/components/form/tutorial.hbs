@@ -1,7 +1,7 @@
-{{#if this.display}}
-  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+{{#if @display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{@close}}>
     <div class="ui modal visible active">
-      <i class="close icon" {{on "click" this.closeModal}}></i>
+      <i class="close icon" {{on "click" @close}}></i>
       <div class="header">
         Créer un tutoriel
       </div>
@@ -75,7 +75,7 @@
         </div>
       </form>
       <div class="actions">
-        <div {{on "click" (fn this.saveTutorial this.tutorials)}} class="ui positive right labeled icon button">
+        <div {{on "click" (fn this.saveTutorial)}} class="ui positive right labeled icon button">
           Enregistrer
           <i class="save icon"></i>
         </div>
