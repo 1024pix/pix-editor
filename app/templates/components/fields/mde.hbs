@@ -1,7 +1,7 @@
 <div class="field">
   <label>
-    {{#if this.edition}}
-      {{#if this.helpContent}}
+    {{#if @edition}}
+      {{#if @helpContent}}
         <div class="ui compact icon right floated button basic">
           <i class="help icon">
             <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
@@ -11,13 +11,13 @@
         </div>
       {{/if}}
     {{/if}}
-    {{this.title}}
+    {{@title}}
   </label>
-  {{#if this.edition}}
-    <SimpleMde @value={{this.value}} @change={{fn (mut this.value)}} @options={{this.simpleMDEOptions}} />
+  {{#if @edition}}
+    <SimpleMde @value={{@value}} @change={{@setValue}} @options={{this.simpleMDEOptions}} />
   {{else}}
     <div class="mde-preview">
-      {{simple-mde-preview this.value}}
+      {{simple-mde-preview @value}}
     </div>
   {{/if}}
 </div>

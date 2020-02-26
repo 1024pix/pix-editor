@@ -1,5 +1,5 @@
 <form action="" class="ui form">
-  <Fields::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} />
+  <Fields::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
   {{#if (not this.alternative)}}
     <Fields::Select @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} />
   {{/if}}

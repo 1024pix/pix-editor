@@ -1,23 +1,16 @@
-import classic from 'ember-classic-decorator';
-import { classNames } from '@ember-decorators/component';
-import { computed } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
 import { htmlSafe } from '@ember/template';
 
-@classic
-@classNames('field')
 export default class Mde extends Component {
-  @computed('helpContent')
+
+  simpleMDEOptions = {
+    status:false,
+    spellChecker:false,
+    hideIcons: ['heading', 'image', 'guide', 'side-by-side']
+  };
+
   get safeHelpContent() {
-    return htmlSafe(this.get('helpContent'));
+    return htmlSafe(this.args.helpContent);
   }
 
-  init() {
-    super.init(...arguments);
-    this.simpleMDEOptions = {
-      status:false,
-      spellChecker:false,
-      hideIcons: ['heading', 'image', 'guide', 'side-by-side']
-    };
-  }
 }
