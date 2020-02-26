@@ -1,16 +1,16 @@
 <form action="" class="ui form">
-  <Fields::Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} />
-  <Fields::Select @title="Statut de la description" @value={{@skill.descriptionStatus}} @options={{this.options.descriptionStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.descriptionStatus)}}/>
-  <Fields::Textarea @title="Indice" @value={{@skill.clue}} @edition={{@edition}} />
-  <Fields::Select @title="Statut de l'indice" @value={{@skill.clueStatus}} @options={{this.options.clueStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.clueStatus)}}/>
+  <Field::Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} />
+  <Field::Select @title="Statut de la description" @value={{@skill.descriptionStatus}} @options={{this.options.descriptionStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.descriptionStatus)}}/>
+  <Field::Textarea @title="Indice" @value={{@skill.clue}} @edition={{@edition}} />
+  <Field::Select @title="Statut de l'indice" @value={{@skill.clueStatus}} @options={{this.options.clueStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.clueStatus)}}/>
   {{#if @skill.productionTemplate}}
-    <Fields::Quality @title="Qualité" @challenge={{@skill.productionTemplate}} @edition={{@edition}} />
+    <Field::Quality @title="Qualité" @challenge={{@skill.productionTemplate}} @edition={{@edition}} />
   {{/if}}
-  <Fields::Tutorials @title="Pour réussir la prochaine fois" @skill={{@skill}} @tutorials={{@skill.tutoSolution}} @searchClass="solution" @edition={{@edition}} @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoSolution}} @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}/>
-  <Fields::Tutorials @title="Pour en savoir plus" @skill={{@skill}} @tutorials={{@skill.tutoMore}} @edition={{@edition}} @searchClass="more" @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoMore}} @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
+  <Field::Tutorials @title="Pour réussir la prochaine fois" @skill={{@skill}} @tutorials={{@skill.tutoSolution}} @searchClass="solution" @edition={{@edition}} @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoSolution}} @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}/>
+  <Field::Tutorials @title="Pour en savoir plus" @skill={{@skill}} @tutorials={{@skill.tutoMore}} @edition={{@edition}} @searchClass="more" @openCreateTutorialModal={{this.openCreateTutorialModal}} @addTutorial={{fn this.addTutorial @skill.tutoMore}} @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
   <TutorialForm @defaultTitle={{this.searchTitle}} @tutorials={{this.tutorials}} @application={{@application}} @display={{this.displayTutorialForm}} />
-  <Fields::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
+  <Field::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
   {{#if (not @edition)}}
-    <Fields::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
+    <Field::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
   {{/if}}
 </form>

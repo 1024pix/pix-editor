@@ -12,13 +12,13 @@
       <div class="content">
         <form action="" class="ui form">
           {{#if this.competencesNames}}
-            <Fields::Select @title="Compétence" @value={{this.competenceName}} @options={{this.competencesNames}} @edition={{true}} @setValue={{fn (mut this.competenceName)}}/>
+            <Field::Select @title="Compétence" @value={{this.competenceName}} @options={{this.competencesNames}} @edition={{true}} @setValue={{fn (mut this.competenceName)}}/>
           {{/if}}
           {{#if this.selectTubeLevel}}
             {{#if (and this.tube.isFulfilled this.tubesNames.isFulfilled)}}
-              <Fields::Select @title="Tube" @value={{this.tubeName}} @options={{this.tubesNames}} @edition={{true}} @setValue={{fn (mut this.tubeName)}}/>
+              <Field::Select @title="Tube" @value={{this.tubeName}} @options={{this.tubesNames}} @edition={{true}} @setValue={{fn (mut this.tubeName)}}/>
               {{#if this.levels.isFulfilled }}
-                  <Fields::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.levels}} @edition={{true}} @multiple={{this.multipleLevel}} @setValue={{fn (mut this.selectedLevel)}} />
+                  <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.levels}} @edition={{true}} @multiple={{this.multipleLevel}} @setValue={{fn (mut this.selectedLevel)}} />
               {{/if}}
             {{/if}}
 

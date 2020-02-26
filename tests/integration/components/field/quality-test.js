@@ -8,7 +8,7 @@ module('Integration | Component | form-quality', function(hooks) {
 
   test('it renders', async function(assert) {
 
-    await render(hbs`{{fields/quality title="form_title"}}`);
+    await render(hbs`{{field/quality title="form_title"}}`);
 
     assert.equal(this.element.getElementsByTagName("label")[0].textContent.trim(), 'form_title');
 
