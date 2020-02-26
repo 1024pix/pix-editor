@@ -1,28 +1,30 @@
-<div class="list-header">
-  <div class="list-row">
-    <div class="list-item date" {{on "click" (fn this.sortBy "date" "int")}}>Date</div>
-    {{#if this.displayAuthor}}
-      <div class="list-item author" {{on "click" (fn this.sortBy "author" "string")}}>Auteur</div>
-    {{/if}}
-    <div class="list-item text" {{on "click" (fn this.sortBy "text" "string")}}>Texte</div>
-    {{#if this.displayStatus}}
-      <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
-    {{/if}}
-  </div>
-</div>
-<div class="list-body">
-  {{#if this.itemCount}}
-    <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout this.itemCount this.columns 40}} as |item|>
-    <div class="list-row" {{on "click" (fn this.show item)}}>
-      <div class="list-item">{{item.date}}</div>
+<div class="{{@listType}}">
+  <div class="list-header">
+    <div class="list-row">
+      <div class="list-item date" {{on "click" (fn this.sortBy "date" "int")}}>Date</div>
       {{#if this.displayAuthor}}
-        <div class="list-item">{{item.author}}</div>
+        <div class="list-item author" {{on "click" (fn this.sortBy "author" "string")}}>Auteur</div>
       {{/if}}
-      <div class="list-item">{{item.text}}</div>
+      <div class="list-item text" {{on "click" (fn this.sortBy "text" "string")}}>Texte</div>
       {{#if this.displayStatus}}
-        <div class="list-item">{{item.status}}</div>
+        <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
       {{/if}}
     </div>
-    </EmberCollection>
-  {{/if}}
+  </div>
+  <div class="list-body">
+    {{#if @itemCount}}
+      <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
+      <div class="list-row" {{on "click" (fn @show item)}}>
+        <div class="list-item">{{item.date}}</div>
+        {{#if this.displayAuthor}}
+          <div class="list-item">{{item.author}}</div>
+        {{/if}}
+        <div class="list-item">{{item.text}}</div>
+        {{#if this.displayStatus}}
+          <div class="list-item">{{item.status}}</div>
+        {{/if}}
+      </div>
+      </EmberCollection>
+    {{/if}}
+  </div>
 </div>

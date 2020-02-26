@@ -1,8 +1,18 @@
-import classic from 'ember-classic-decorator';
 import SortedList from './sorted-list';
 
-@classic
 export default class NoteList extends SortedList {
-  displayAuthor = true;
-  displayStatus = true;
+
+  get displayAuthor() {
+    if (typeof this.args.displayAuthor !== 'undefined') {
+      return this.args.displayAuthor;
+    }
+    return true;
+  }
+
+  get displayStatus() {
+    if (typeof this.args.displayStatus !== 'undefined') {
+      return this.args.displayStatus;
+    }
+    return true;
+  }
 }
