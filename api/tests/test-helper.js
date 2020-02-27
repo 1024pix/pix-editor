@@ -8,8 +8,6 @@ chai.use(require('chai-sorted'));
 // Sinon
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
-// Other
-const _ = require('lodash');
 
 /**
  * @returns string
@@ -58,7 +56,6 @@ const hFake = {
   },
   continue: Symbol('continue'),
 };
-
 
 function catchErr(promiseFn, ctx) {
   return async (...args) => {

@@ -1,4 +1,3 @@
-const Pack = require('../package');
 const Metrics = require('./infrastructure/plugins/metrics');
 const settings = require('./config');
 const Blipp = require('blipp');

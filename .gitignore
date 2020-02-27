@@ -28,5 +28,5 @@ pix-editor/scripts/config-test.js
 pix-editor/app/config-private-test.js
 
 # intellij
-pix-editor/.idea/
+.idea/
 pix-editor/app/.idea/
