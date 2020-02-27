@@ -21,7 +21,7 @@ module.exports = (function() {
   const config = {
     rootPath: path.normalize(__dirname + '/..'),
 
-    port: parseInt(process.env.PORT, 10) || 3001,
+    port: parseInt(process.env.PORT, 10) || 3002,
 
     environment: (process.env.NODE_ENV || 'development'),
 
