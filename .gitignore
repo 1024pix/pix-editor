@@ -23,12 +23,11 @@ testem.log
 .node_modules.ember-try/
 bower.json.ember-try
 package.json.ember-try
-scripts/config.js
-scripts/config-production.js
-scripts/config-test.js
-app/config-private-test.js
+pix-editor/scripts/config.js
+pix-editor/scripts/config-production.js
+pix-editor/scripts/config-test.js
+pix-editor/app/config-private-test.js
 
 # intellij
-
-.idea/
-app/.idea/
+pix-editor/.idea/
+pix-editor/app/.idea/
