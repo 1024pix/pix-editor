@@ -68,7 +68,17 @@ function catchErr(promiseFn, ctx) {
   };
 }
 
+// Nock
+const nock = require('nock');
+nock.disableNetConnect();
+
+// airtableBuilder
+const AirtableBuilder = require('./tooling/airtable-builder/airtable-builder');
+const airtableBuilder = new AirtableBuilder({ nock });
+
 module.exports = {
+  airtableBuilder,
+  domainBuilder: require('./tooling/domain-builder/factory'),
   expect,
   hFake,
   sinon,
