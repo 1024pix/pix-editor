@@ -1,11 +1,7 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import { A } from '@ember/array';
-import { tracked } from '@glimmer/tracking';
 
 export default class TutorialForm extends Component {
-  edition = true;
 
   options =  {
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
@@ -13,28 +9,8 @@ export default class TutorialForm extends Component {
     'license': ['CC-BY-SA', '(c)', 'Youtube']
   };
 
-  @tracked selectedTags = A([]);
-  @tracked isFavorite = false;
-  @tracked tutorial = {};
-  @service store;
-
   get hasSelectedTag() {
     return this.selectedTags.length>0
-  }
-
-  didReceiveAttrs() {
-    super.didReceiveAttrs(...arguments);
-    this.selectedTags = A([]);
-    this.tutorial = this.store.createRecord('tutorial');
-  }
-
-  get title() {
-    return this.tutorial.title?this.tutorial.title:this.args.defaultTitle;
-  }
-
-  set title(value) {
-    this.tutorial.title = value;
-    return value;
   }
 
   @action
@@ -54,7 +30,7 @@ export default class TutorialForm extends Component {
 
   @action
   selectTag(item) {
-    const selectedTags = this.selectedTags;
+    const tutorial = this.args.tutorial;
     if (item.id === 'create') {
       const value = document.querySelector(`.tutorial-search .ember-power-select-search-input`).value;
       if (value.indexOf('[') !== -1) {
@@ -67,21 +43,21 @@ export default class TutorialForm extends Component {
           notes
         }).save()
           .then((tag) => {
-            selectedTags.pushObject(tag);
+            tutorial.tags.pushObject(tag);
           });
       } else {
         this.store.createRecord('tag', {
           title: value
         }).save()
           .then((tag) => {
-            selectedTags.pushObject(tag);
+            tutorial.tags.pushObject(tag);
           });
       }
     } else {
       return this.store.findRecord('tag', item.id)
         .then((tag) => {
-          if (selectedTags.indexOf(tag) === -1) {
-            selectedTags.pushObject(tag);
+          if (tutorial.tags.indexOf(tag) === -1) {
+            tutorial.tags.pushObject(tag);
           }
         });
     }
@@ -89,44 +65,16 @@ export default class TutorialForm extends Component {
 
   @action
   unselectTag(id) {
-    const selectedTags = this.selectedTags;
-    selectedTags.forEach((tag) => {
+    const tutorial = this.arg.tutorial;
+    tutorial.tags.forEach((tag) => {
       if (tag.id === id) {
-        selectedTags.removeObject(tag)
+        tutorial.tags.removeObject(tag)
       }
     });
   }
 
   @action
-  saveTutorial() {
-    this.args.application.send('isLoading');
-    let isFavorite = this.isFavorite;
-    const selectedTags = this.selectedTags;
-    const date = new Date();
-    let item = this.tutorial;
-    if (!item.title) {
-      item.title = this.defaultTitle;
-    }
-    item.date = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
-    item.crush = isFavorite ? 'yes' : '';
-    item.tags = selectedTags;
-    console.debug(item)
-    item.save()
-      .then((tutorial) => {
-        this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Tutoriel créé', true);
-        this.args.addTutorial(tutorial);
-        this.args.close();
-      })
-      .catch((error) => {
-        console.error(error);
-        this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Erreur lors de la création du tutoriel', true);
-      })
-  }
-
-  @action
-  toCrush() {
-    this.isFavorite = !this.isFavorite;
+  toggleCrush() {
+    this.args.tutorial.crush = !this.args.tutorial.crush;
   }
 }

@@ -5,10 +5,13 @@ import { tracked } from '@glimmer/tracking';
 
 export default class Tutorials extends Component {
 
-  @tracked displayTutorialForm = false;
+  @tracked displayTutorialPopin = false;
+  @tracked newTutorial = null;
   defaultTitle = '';
 
   @service store;
+
+  @service idGenerator;
 
   _searchTutorial(query, tagSearch) {
     return this.store.query('tutorial', {
@@ -38,8 +41,9 @@ export default class Tutorials extends Component {
   @action
   addTutorial(item, options) {
     if (item.id === 'create') {
-      this.defaultTitle = options.searchText;
-      this.displayTutorialForm = true;
+      const date = new Date();
+      this.newTutorial = this.store.createRecord('tutorial', {pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`});
+      this.displayTutorialPopin = true;
     } else {
       return this.store.findRecord('tutorial', item.id)
         .then((tutorial) => {
@@ -60,8 +64,27 @@ export default class Tutorials extends Component {
   }
 
   @action
-  closeModal() {
-    this.displayTutorialForm = false;
+  closeTutorialPopin() {
+    this.displayTutorialPopin = false;
+  }
+
+  @action
+  saveTutorial() {
+    this.displayTutorialPopin = false;
+    this.args.application.send('isLoading');
+    this.newTutorial.save()
+      .then((tutorial) => {
+        console.log('ici');
+        this.args.application.send('finishedLoading');
+        this.args.application.send('showMessage', 'Tutoriel créé', true);
+        this.args.addTutorial(tutorial);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.args.application.send('finishedLoading');
+        this.args.application.send('showMessage', 'Erreur lors de la création du tutoriel', true);
+      })
+
   }
 
 }

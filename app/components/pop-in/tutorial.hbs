@@ -1,0 +1,17 @@
+{{#if @display}}
+  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{@close}}>
+    <div class="ui modal visible active">
+      <i class="close icon" {{on "click" @close}}></i>
+      <div class="header">
+        Créer un tutoriel
+      </div>
+      <Form::Tutorial @tutorial={{@tutorial}} />
+      <div class="actions">
+        <div {{on "click" @saveTutorial}} class="ui positive right labeled icon button">
+          Enregistrer
+          <i class="save icon"></i>
+        </div>
+      </div>
+    </div>
+  </ModalDialog>
+{{/if}}

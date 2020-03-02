@@ -14,17 +14,9 @@ export default class TutorialModel extends Model {
   @attr level;
   @attr date;
   @attr crush;
+  @attr pixId;
 
   @hasMany('tag') tags;
-
-  @computed('crush')
-  get isFavorite() {
-    const crush = this.get('crush');
-    if(crush){
-      return crush.toLowerCase() === 'yes';
-    }
-    return false;
-  }
 
   @computed('tags.[]')
   get tagsTitle() {

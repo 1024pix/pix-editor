@@ -10,6 +10,7 @@ export default class SkillForm extends Component {
 
   addTutorial(tutorials, tutorial) {
     // not a very best practice to update list from here...
+    console.log('add tutorial');
     tutorials.pushObject(tutorial);
   }
 

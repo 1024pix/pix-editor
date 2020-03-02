@@ -53,7 +53,7 @@
               <div>Format : {{tutorial.format}}</div>
               <div>Durée : {{tutorial.duration}}</div>
               <div>Source : {{tutorial.source}}
-                {{#if tutorial.isFavorite}}
+                {{#if tutorial.crush}}
                   <div class="ui right floated">
                     <i class="red heart icon"></i>
                   </div>
@@ -72,5 +72,5 @@
     </div>
   {{/if}}
 </div>
-<Form::Tutorial @defaultTitle={{this.defaultTitle}} @application={{@application}} @display={{this.displayTutorialForm}} @close={{this.closeModal}} @addTutorial={{@addTutorial}}/>
+<Pop-in::Tutorial @tutorial={{this.newTutorial}} @display={{this.displayTutorialPopin}} @close={{this.closeTutorialPopin}} @saveTutorial={{this.saveTutorial}}/>
 
