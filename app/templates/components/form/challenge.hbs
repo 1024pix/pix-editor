@@ -13,13 +13,13 @@
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
-                <CustomCheckbox @label="T1 (espaces/casse/accents)" @checked={{@challenge.t1}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T1 (espaces/casse/accents)" @checked={{@challenge.t1}} @disabled={{not @edition}} />
               </div>
               <div class="field">
-                <CustomCheckbox @label="T2 (ponctuation)" @checked={{@challenge.t2}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T2 (ponctuation)" @checked={{@challenge.t2}} @disabled={{not @edition}} />
               </div>
               <div class="field">
-                <CustomCheckbox @label="T3 (distance d'édition)" @checked={{@challenge.t3}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T3 (distance d'édition)" @checked={{@challenge.t3}} @disabled={{not @edition}} />
               </div>
           </div>
       </div>
@@ -45,7 +45,7 @@
     <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>
-        <CustomCheckbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
+        <Field::Checkbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
       {{#if @challenge.timer}}
         <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
       {{/if}}
