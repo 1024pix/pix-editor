@@ -9,9 +9,9 @@ chai.use(require('chai-sorted'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 
-/**
- * @returns string
- */
+afterEach(() => {
+  return sinon.restore();
+});
 
 // Hapi
 const hFake = {
