@@ -1,68 +1,75 @@
 <form class="ui form">
-  <div class="ui stacked segment">
+  <div class="field">
+    <label>Titre</label>
+    <Input @type="text" @value={{@tutorial.title}} placeholder="Titre" />
+  </div>
+  <div class="three fields">
     <div class="field">
-      <label>Titre</label>
-      <Input @type="text" @value={{@tutorial.title}} placeholder="Titre" />
+      <label>Lien</label>
+      <Input @type="text" @value={{@tutorial.link}} placeholder="Lien" />
     </div>
-    <div class="three fields">
-      <div class="field">
-        <label>Lien</label>
-        <Input @type="text" @value={{@tutorial.link}} placeholder="Lien" />
-      </div>
-      <div class="field">
-        <label>Source</label>
-        <Input @type="text" @value={{@tutorial.source}} placeholder="Source" />
-      </div>
-      <Field::Select @title="License" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
+    <div class="field">
+      <label>Source</label>
+      <Input @type="text" @value={{@tutorial.source}} placeholder="Source" />
     </div>
-    <div class="three fields">
-      <Field::Select @title="Format" @defaultText="Format" @value={{@tutorial.format}} @options={{this.options.format}} @edition={{true}} @setValue={{fn (mut @tutorial.format)}}/>
-      <div class="field">
-        <label>Durée (hh:mm:ss)</label>
-        <Input @type="text" @value={{@tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
-      </div>
-      <Field::Select @title="Niveau" @defaultText="Niveau" @value={{@tutorial.level}} @options={{this.options.level}} @edition={{true}} @setValue={{fn (mut @tutorial.level)}}/>
+    <Field::Select @title="License" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
+  </div>
+  <div class="three fields">
+    <Field::Select @title="Format" @defaultText="Format" @value={{@tutorial.format}} @options={{this.options.format}} @edition={{true}} @setValue={{fn (mut @tutorial.format)}}/>
+    <div class="field">
+      <label>Durée (hh:mm:ss)</label>
+      <Input @type="text" @value={{@tutorial.duration}} placeholder="Durée (hh:mm:ss)" />
     </div>
-    <div class="three fields">
-      <div class="field">
-        <label>Rechercher tags</label>
-        <PowerSelect @search={{this.getSearchTagsResults}} @placeholder="Nom" @onChange={{this.selectTag}} @dropdownClass="search-result tutorial-search" @triggerComponent="power-select-custom-trigger" @searchMessage="" @searchPlaceholder="Rechercher..." @loadingMessage="Recherche en cours..." as |result|>
-          <div class="search-title">
-            {{#if (eq result.id "create")}}
-              {{result.title}} <i class="add icon"></i>
-            {{else}}
-              {{result.title}}
-            {{/if}}
-          </div>
-          <div class="search-description">
-            {{#if result.description}}
-              {{result.description}}
-            {{/if}}
-          </div>
-        </PowerSelect>
-      </div>
-      <div class="twelve wide field">
-        {{#if @tutorial.tags.length}}
-          <label>Tags</label>
-          {{#each @tutorial.tags as |tag|}}
-            <div class="ui mini labeled button btn-selected-tag" tabindex="0">
-              <div {{on "click" (fn this.unselectTag tag.id)}} class="ui icon button">
-                <i class="close icon"></i>
-              </div>
-              <p class="ui basic label">
-                {{tag.title}}
-              </p>
-            </div>
-          {{/each}}
-        {{/if}}
-      </div>
-    </div>
-    <div class="fields">
-      <div class="field">
-        <label>Coup de coeur</label>
-        <div {{on "click" this.toggleCrush}} class="ui circular icon button crush">
-          <i class="icon red heart {{if @tutorial.crush "" "outline" }}"></i>
+    <Field::Select @title="Niveau" @defaultText="Niveau" @value={{@tutorial.level}} @options={{this.options.level}} @edition={{true}} @setValue={{fn (mut @tutorial.level)}}/>
+  </div>
+  <div class="three fields">
+    <div class="field">
+      <label>Rechercher tags</label>
+      <PowerSelect
+        @searchEnabled={{true}}
+        @search={{this.getSearchTagsResults}}
+        @placeholder="Nom"
+        @onChange={{this.selectTag}}
+        @dropdownClass="search-result tutorial-search"
+        @triggerComponent="power-select-custom-trigger"
+        @searchMessage=""
+        @searchPlaceholder="Rechercher..."
+        @loadingMessage="Recherche en cours..." as |result|>
+        <div class="search-title">
+          {{#if (eq result.id "create")}}
+            {{result.title}} <i class="add icon"></i>
+          {{else}}
+            {{result.title}}
+          {{/if}}
         </div>
+        <div class="search-description">
+          {{#if result.description}}
+            {{result.description}}
+          {{/if}}
+        </div>
+      </PowerSelect>
+    </div>
+    <div class="twelve wide field">
+      {{#if @tutorial.tags.length}}
+        <label>Tags</label>
+        {{#each @tutorial.tags as |tag|}}
+          <div class="ui mini labeled button btn-selected-tag" tabindex="0">
+            <div {{on "click" (fn this.unselectTag tag.id)}} class="ui icon button">
+              <i class="close icon"></i>
+            </div>
+            <p class="ui basic label">
+              {{tag.title}}
+            </p>
+          </div>
+        {{/each}}
+      {{/if}}
+    </div>
+  </div>
+  <div class="fields">
+    <div class="field">
+      <label>Coup de coeur</label>
+      <div {{on "click" this.toggleCrush}} class="ui circular icon button crush">
+        <i class="icon red heart {{if @tutorial.crush "" "outline" }}"></i>
       </div>
     </div>
   </div>

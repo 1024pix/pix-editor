@@ -1,7 +1,11 @@
-import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class TutorialForm extends Component {
+
+  @service store;
+  @service idGenerator;
 
   options =  {
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
@@ -39,8 +43,9 @@ export default class TutorialForm extends Component {
         const title = value.slice(0, pos);
         const notes = value.slice(pos + 1, length - 1);
         this.store.createRecord('tag', {
-          title,
-          notes
+          title:title,
+          notes:notes,
+          pixId:this.idGenerator.newId()
         }).save()
           .then((tag) => {
             tutorial.tags.pushObject(tag);

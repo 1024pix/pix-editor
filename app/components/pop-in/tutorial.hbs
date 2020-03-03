@@ -5,8 +5,13 @@
       <div class="header">
         Créer un tutoriel
       </div>
-      <Form::Tutorial @tutorial={{@tutorial}} />
+      <div class="content">
+        <Form::Tutorial @tutorial={{@tutorial}} />
+      </div>
       <div class="actions">
+        <div class="ui deny button" {{on "click" @close}}>
+          Annuler
+        </div>
         <div {{on "click" @saveTutorial}} class="ui positive right labeled icon button">
           Enregistrer
           <i class="save icon"></i>
