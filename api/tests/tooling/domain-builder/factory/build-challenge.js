@@ -1,6 +1,10 @@
 const faker = require('faker');
 const buildSkillCollection = require('./build-skill-collection');
 
+const Challenge = {
+  Type: { QCM: 'QCM' }
+};
+
 module.exports = function buildChallenge(
   {
     id = faker.random.uuid(),

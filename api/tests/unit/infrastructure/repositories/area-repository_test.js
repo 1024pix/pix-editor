@@ -2,7 +2,7 @@ const { expect, sinon, domainBuilder } = require('../../../test-helper');
 const areaDatasource = require('../../../../lib/infrastructure/datasources/airtable/area-datasource');
 const areaRepository = require('../../../../lib/infrastructure/repositories/area-repository');
 
-describe('Unit | Repository | area-repository', function () {
+describe('Unit | Repository | area-repository', function() {
 
   beforeEach(() => {
     sinon.stub(areaDatasource, 'list');
