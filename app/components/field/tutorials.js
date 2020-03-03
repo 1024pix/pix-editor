@@ -74,7 +74,6 @@ export default class Tutorials extends Component {
     this.args.application.send('isLoading');
     this.newTutorial.save()
       .then((tutorial) => {
-        console.log('ici');
         this.args.application.send('finishedLoading');
         this.args.application.send('showMessage', 'Tutoriel créé', true);
         this.args.addTutorial(tutorial);
