@@ -12,19 +12,17 @@
     </div>
   </div>
   <div class="list-body">
-    {{#if @itemCount}}
-      <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-      <div class="list-row" {{on "click" (fn @show item)}}>
-        <div class="list-item">{{item.date}}</div>
-        {{#if this.displayAuthor}}
-          <div class="list-item">{{item.author}}</div>
-        {{/if}}
-        <div class="list-item">{{item.text}}</div>
-        {{#if this.displayStatus}}
-          <div class="list-item">{{item.status}}</div>
-        {{/if}}
-      </div>
-      </EmberCollection>
-    {{/if}}
+    <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
+    <div class="list-row" {{on "click" (fn @show item)}}>
+      <div class="list-item">{{item.date}}</div>
+      {{#if this.displayAuthor}}
+        <div class="list-item">{{item.author}}</div>
+      {{/if}}
+      <div class="list-item">{{item.text}}</div>
+      {{#if this.displayStatus}}
+        <div class="list-item">{{item.status}}</div>
+      {{/if}}
+    </div>
+    </EmberCollection>
   </div>
 </div>

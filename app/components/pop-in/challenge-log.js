@@ -1,158 +1,161 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Component from '@ember/component';
-import DS from 'ember-data';
+import { A } from '@ember/array';
 
-@classic
 export default class PopinChallengeLog extends Component {
-  @service
-  store;
+  @service store;
+  @service paginatedQuery;
+  @service config;
 
-  @service
-  paginatedQuery;
+  @tracked notesLoaded = false;
+  @tracked changelogLoaded = false;
 
-  @service
-  config;
-
-  logEntry = null;
-  logEntryEdition = false;
-  list = true;
+  @tracked logEntry = null;
+  @tracked logEntryEdition = false;
+  @tracked list = true;
   mayEditEntry = false;
 
-  @computed('challenge')
+  _notes = A([]);
+  _entries = A([]);
+
   get notes() {
-    let challenge = this.get('challenge');
-    if (challenge) {
-      let production = (challenge.get('workbench')?'non':'oui');
-      let pq = this.get('paginatedQuery');
-      return DS.PromiseArray.create({
-        promise: pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.get('id')}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
-      });
-    } else {
-      return [];
+    if (!this.notesLoaded) {
+      return this._loadNotes()
     }
+    return this._notes;
   }
 
-  @computed('notes.isFulfilled')
   get ownNotes() {
-    let notes = this.get('notes');
-    if (notes.get('isFulfilled')) {
-      let author = this.get('config').get('author');
-      let test = notes.filter(note => note.get('author') == author);
-      return test;
-    } else {
+    if (!this.notesLoaded) {
+      this._loadNotes();
+      // wait for notes to be loaded
       return [];
+    } else {
+      const notes = this.notes;
+      const author = this.config.author;
+      return notes.filter(note => note.author == author);
     }
   }
 
-  @computed('challenge')
   get changelogEntries() {
-    let challenge = this.get('challenge');
-    let pq = this.get('paginatedQuery');
-    if (challenge) {
-      let production = (challenge.get('workbench')?'non':'oui');
-      return DS.PromiseArray.create({
-        promise:pq.query('changelogEntry', {filterByFormula:`AND(Record_Id = '${challenge.get('id')}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{field: 'Date', direction: 'desc'}]})
-      });
-    } else {
-      return [];
+    if (!this.changelogLoaded) {
+      const challenge = this.args.challenge;
+      if (challenge) {
+        const pq = this.paginatedQuery;
+        const production = (challenge.workbench?'non':'oui');
+        return pq.query('changelogEntry', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{field: 'Date', direction: 'desc'}]})
+        .then(entries => {
+          this._entries = entries;
+          this.changelogLoaded = true;
+          return entries;
+        })
+      }
     }
+    return this._entries;
   }
 
-  @computed('changelogEntries.isPending', 'notes.isPending')
-  get loading() {
-    let entries = this.get('changelogEntries');
-    let notes = this.get('notes');
-    return entries.get('isPending') || notes.get('isPending');
-  }
-
-  @computed('ownNotes')
   get ownCount() {
-    return this.get('ownNotes').length;
+    if (this.notesLoaded) {
+      return this.ownNotes.length;
+    }
+    return 0;
   }
 
-  @computed('notes.isFulfilled')
   get notesCount() {
-    if (this.get('notes.isFulfilled')) {
-      return this.get('notes.length');
-    } else {
-      return 0;
+    if (this.notesLoaded) {
+      return this.notes.length;
     }
+    return 0;
   }
 
-  @computed('changelogEntries.isFulfilled')
   get changelogEntriesCount() {
-    if (this.get('changelogEntries.isFulfilled')) {
-      return this.get('changelogEntries.length');
-    } else {
-      return 0;
+    if (this.changelogLoaded) {
+      return this.changelogEntries.length;
     }
+    return 0;
   }
 
   @action
   addNote() {
-    let newNote = this.get('store').createRecord('note', {
-      challengeId:this.get('challenge.pixId'),
-      author:this.get('config').get('author'),
-      competence:this.get('competence.code'),
-      skills:this.get('challenge.joinedSkills'),
-      production:!this.get('challenge.workbench')
+    let newNote = this.store.createRecord('note', {
+      challengeId:this.args.challenge.pixId,
+      author:this.config.author,
+      competence:this.args.competence.code,
+      skills:this.args.challenge.joinedSkills,
+      production:!this.args.challenge.workbench
     });
-    this.set('logEntry', newNote);
-    this.set('list', false);
-    this.set('logEntryEdition', true);
+    this.logEntry = newNote;
+    this.list = false;
+    this.logEntryEdition = true;
   }
 
   @action
   saveEntry() {
-    const entry = this.get('logEntry');
-    if (!entry.get('id')) {
-      entry.set('createdAt', (new Date()).toISOString());
+    const entry = this.logEntry;
+    if (!entry.id) {
+      entry.createdAt = (new Date()).toISOString();
     }
     entry.save()
     .then(() => {
-      this.set('list', true);
-      this.notifyPropertyChange('challenge');
+      this.list = true;
+      this.changelogLoaded = false;
+      this.notesLoaded = false;
     });
   }
 
   @action
   closeLogForm() {
-    this.set('list', true);
+    this.list = true;
   }
 
   @action
   showOwnNote(note) {
-    this.set('logEntryEdition', false);
-    this.set('logEntry', note);
-    this.set('mayEditEntry', true);
-    this.set('list', false);
+    this.logEntryEdition = false;
+    this.logEntry = note;
+    this.mayEditEntry = true;
+    this.list = false;
   }
 
   @action
   showNote(note) {
-    this.set('logEntryEdition', false);
-    this.set('logEntry', note);
-    this.set('mayEditEntry', (note.get('author') == this.get('config.author')));
-    this.set('list', false);
+    this.logEntryEdition = false;
+    this.logEntry = note;
+    this.mayEditEntry = (note.author == this.config.author);
+    this.list = false;
   }
 
   @action
   showChangelogEntry(entry) {
-    this.set('logEntryEdition', false);
-    this.set('logEntry', entry);
-    this.set('mayEditEntry', false);
-    this.set('list', false);
+    this.logEntryEdition = false;
+    this.logEntry = entry;
+    this.mayEditEntry = false;
+    this.list = false;
   }
 
   @action
   editEntry() {
-    this.set('logEntryEdition', true);
+    this.logEntryEdition = true;
   }
 
   @action
-  closeModal() {
-    this.set('display', false);
+  close() {
+    this.notesLoaded = false;
+    this.changelogLoaded = false;
+    this.args.close();
   }
+
+  _loadNotes() {
+    const challenge = this.args.challenge;
+    const production = (challenge.workbench?'non':'oui');
+    const pq = this.paginatedQuery;
+    return pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
+    .then(notes => {
+      this._notes = notes;
+      this.notesLoaded = true;
+      return notes;
+    })
+  }
+
 }

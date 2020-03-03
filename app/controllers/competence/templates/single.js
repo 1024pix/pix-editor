@@ -285,6 +285,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  closeChallengeLog() {
+    this.set('displayChallengeLog', false);
+  }
+
+  @action
   showVersions() {
     this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));
   }

@@ -105,7 +105,7 @@
   {{/if}}
 </div>
 </div>
-<PopIn::ChallengeLog @display={{this.displayChallengeLog}} @challenge={{this.challenge}} @competence={{this.competence}} @class={{this.popinLogClass}} />
+<PopIn::ChallengeLog @display={{this.displayChallengeLog}} @challenge={{this.challenge}} @competence={{this.competence}} @class={{this.popinLogClass}} @close={{this.closeChallengeLog}} />
 <PopIn::Image @src={{this.popinImageSrc}} @display={{this.displayImage}} />
 <PopIn::Changelog @display={{this.displayChangeLog}} @onApprove={{this.changelogApprove}} @onDeny={{this.changelogDeny}} @value={{this.changelogDefault}} />
 {{#if this.mayMove}}
