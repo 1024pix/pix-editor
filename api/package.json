@@ -6,6 +6,10 @@
     "node": "12.14.1",
     "npm": "6.13.4"
   },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
   "scripts": {
     "clean": "rm -rf node_modules",
     "coverage": "NODE_ENV=test nyc --silent _mocha --recursive --exit --reporter dot tests && nyc report --reporter=lcov --report-dir=./coverage",
@@ -20,7 +24,7 @@
     "test:api:watch": "NODE_ENV=test mocha --recursive tests --watch --reporter dot",
     "test:lint": "npm test && npm run lint"
   },
-  "author": "",
+  "author": "GIP Pix",
   "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^19.1.1",
