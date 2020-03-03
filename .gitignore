@@ -4,6 +4,10 @@
 **/dist
 **/tmp
 
+# coverage reports
+**/coverage
+**/.nyc_output
+
 # dependencies
 **/node_modules
 
@@ -12,7 +16,6 @@ api/.env*
 /.pnp*
 /.sass-cache
 /connect.lock
-/coverage/*
 /libpeerconnection.log
 npm-debug.log*
 yarn-error.log
