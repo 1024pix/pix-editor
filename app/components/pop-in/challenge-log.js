@@ -15,7 +15,7 @@ export default class PopinChallengeLog extends Component {
   @tracked logEntry = null;
   @tracked logEntryEdition = false;
   @tracked list = true;
-  mayEditEntry = false;
+  @tracked mayEditEntry = false;
 
   _notes = A([]);
   _entries = A([]);
