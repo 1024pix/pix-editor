@@ -1,20 +1,20 @@
-{{#if this.display}}
-  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
-    <div class="ui standard modal visible active">
-      <div class="header">{{@title}}</div>
-      <div class="content">
-        {{@content}}
+{{#if @display}}
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
+  <div class="ui standard modal visible active">
+    <div class="header">{{@title}}</div>
+    <div class="content">
+      {{@content}}
+    </div>
+    <div class="actions">
+      <div class="ui blue cancel button" {{on "click" @onDeny}}>
+        <i class="remove icon" ></i>
+        Annuler
       </div>
-      <div class="actions">
-        <div class="ui blue cancel button" {{on "click" @onDeny}}>
-          <i class="remove icon" ></i>
-          Annuler
-        </div>
-        <div class="ui green ok button" {{on "click" @onApprove}}>
-          <i class="checkmark icon" ></i>
-          Oui
-        </div>
+      <div class="ui green ok button" {{on "click" @onApprove}}>
+        <i class="checkmark icon" ></i>
+        Oui
       </div>
     </div>
-  </ModalDialog>
+  </div>
+</ModalDialog>
 {{/if}}

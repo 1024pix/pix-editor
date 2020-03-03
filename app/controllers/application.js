@@ -10,11 +10,11 @@ export default class ApplicationController extends Controller {
   displayConfig = false;
   displayChangelog = false;
   popinImageSrc = '';
-  confirmTitle = '';
-  confirmContent = '';
   confirmCallback = null;
-  displayConfirm = false;
 
+  @tracked confirmTitle = '';
+  @tracked confirmContent = '';
+  @tracked displayConfirm = false;
   @tracked loading = false;
   @tracked loadingMessage = '';
   @tracked _menuOpen = false;
