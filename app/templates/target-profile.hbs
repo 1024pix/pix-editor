@@ -37,15 +37,15 @@
     <div class="row">
       <div class="right aligned column">
         <BasicDropdown @horizontalPosition="left" as |dd|>
-          <dd.trigger @class="trigger-menu"><i class="bars icon"></i></dd.trigger>
-          <dd.content @class="dropdown-multi profile-menu slide-fade">
+          <dd.Trigger @class="trigger-menu"><i class="bars icon"></i></dd.Trigger>
+          <dd.Content @class="dropdown-multi profile-menu slide-fade">
             {{#each this.model as |area|}}
 
                 <BasicDropdown @class="sub-menu" @calculatePosition={{this.calculatePosition}} as |dd|>
-                <dd.trigger @onMouseDown={{this.prevent}} @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="sub-trigger">
+                <dd.Trigger @onMouseDown={{this.prevent}} @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="sub-trigger">
                   {{area.name}} <i class="icon dropdown"></i>
-                </dd.trigger>
-                <dd.content @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="dropdown-multi slide-fade">
+                </dd.Trigger>
+                <dd.Content @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="dropdown-multi slide-fade">
 
                   {{#each area.sortedCompetences as |competence|}}
                     <div class="item area-profile-{{area.code}}" {{on "click" (fn this.scrollTo
@@ -53,14 +53,11 @@
                       <b>{{competence.code}}</b> {{competence.title}}</div>
                   {{/each}}
 
-                </dd.content>
+                </dd.Content>
               </BasicDropdown>
-
             {{/each}}
-          </dd.content>
+          </dd.Content>
         </BasicDropdown>
-
-
       </div>
       <div class="five wide column">Référentiel Pix</div>
       <div class="six wide center aligned column"></div>
