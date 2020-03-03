@@ -134,9 +134,14 @@ export default class SingleController extends Controller {
 
   @action
   showIllustration() {
-      let illustration = this.get('challenge.illustration')[0];
-      this.set('popinImageSrc', illustration.url);
-      this.set('displayImage', true);
+    let illustration = this.get('challenge.illustration')[0];
+    this.set('popinImageSrc', illustration.url);
+    this.set('displayImage', true);
+  }
+
+  @action
+  closeImage() {
+    this.set('displayImage', false);
   }
 
   @action
