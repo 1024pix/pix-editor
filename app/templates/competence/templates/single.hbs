@@ -105,6 +105,16 @@
 <PopIn::Image @src={{this.popinImageSrc}} @display={{this.displayImage}} @close={{this.closeImage}}/>
 <PopIn::Changelog @display={{this.displayChangeLog}} @onApprove={{this.changelogApprove}} @onDeny={{this.changelogDeny}} @defaultValue={{this.changelogDefault}} />
 {{#if this.mayMove}}
-  <PopIn::SelectLocation @display={{this.displaySelectLocation}} @onChange={{this.setSkills}} @title="Acquis du prototype" @areas={{this.areas}} @competence={{this.competence}} @selectTubeLevel={{true}} @tube={{this.challenge.firstSkill.tube}} @level={{this.level}} @multipleLevel={{true}} />
+  <PopIn::SelectLocation
+    @display={{this.displaySelectLocation}}
+    @onChange={{this.setSkills}}
+    @title="Acquis du prototype"
+    @areas={{this.areas}}
+    @competence={{this.competence}}
+    @selectTubeLevel={{true}}
+    @tube={{this.challenge.firstSkill.tube}}
+    @level={{this.level}}
+    @multipleLevel={{true}}
+    @close={{this.closeSelectLocation}} />
 {{/if}}
 {{outlet}}

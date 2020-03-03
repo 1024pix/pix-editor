@@ -52,4 +52,12 @@
     {{/if}}
   </div>
 </div>
-<PopIn::SelectLocation @class="tube-select-competence" @display={{this.displaySelectLocation}} @onChange={{this.setCompetence}} @name={{this.tube.name}} @areas={{this.areas}} @competence={{this.competence}} />
+<PopIn::SelectLocation
+  @class="tube-select-competence"
+  @display={{this.displaySelectLocation}}
+  @onChange={{this.setCompetence}}
+  @name={{this.tube.name}}
+  @areas={{this.areas}}
+  @selectTubeLevel={{false}}
+  @competence={{this.competence}}
+  @close={{this.closeSelectLocation}} />

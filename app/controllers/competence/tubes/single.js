@@ -120,7 +120,12 @@ export default class SingleController extends Controller {
 
   @action
   selectCompetence() {
-   this.set('displaySelectLocation', true)
+   this.set('displaySelectLocation', true);
+  }
+
+  @action
+  closeSelectLocation() {
+    this.set('displaySelectLocation', false);
   }
 
   @action

@@ -317,7 +317,12 @@ export default class SingleController extends Controller {
 
   @action
   moveTemplate() {
-    this.set('displaySelectLocation', true)
+    this.set('displaySelectLocation', true);
+  }
+
+  @action
+  closeSelectLocation() {
+    this.set('displaySelectLocation', false);
   }
 
   @action

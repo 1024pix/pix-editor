@@ -143,6 +143,8 @@ export default class PopinChallengeLog extends Component {
   close() {
     this.notesLoaded = false;
     this.changelogLoaded = false;
+    this._notes = A([]);
+    this._entries = A([]);
     this.args.close();
   }
 

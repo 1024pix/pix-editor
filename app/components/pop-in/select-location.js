@@ -1,116 +1,146 @@
-import classic from 'ember-classic-decorator';
-import Component from '@ember/component';
-import {computed,action} from '@ember/object';
-import {oneWay} from '@ember/object/computed';
+import Component from '@glimmer/component';
+import {action} from '@ember/object';
 import DS from 'ember-data';
+import { tracked } from '@glimmer/tracking';
+import { A } from '@ember/array';
 
-@classic
 export default class PopinSelectLocation extends Component {
 
-  title = null;
-  areas = null;
-  selectEmptyLevels = false;
-  selectTubeLevel = false;
-  multipleLevel = false;
+  @tracked _selectedCompetence = null;
+  @tracked _selectedTube = null;
+  @tracked tubesLoaded = false;
+  @tracked levelsLoaded = false;
 
-  @oneWay('competence.name')
-  competenceName;
+  _tubes = A([]);
+  _levels = [];
 
-  @oneWay('tube.name')
-  tubeName;
-
-  @oneWay('level')
-  selectedLevel;
-
-  @computed('areas')
-  get competences() {
-    const areas = this.get('areas');
-    if (!areas) {
-      return [];
+  get selectedCompetence() {
+    if (this._selectedCompetence) {
+      return this._selectedCompetence;
     }
-    const areaCompetences = areas.map(area => area.get('sortedCompetences'));
+    return this.competenceList.find(item => (item.data == this.args.competence));
+  }
+
+  set selectedCompetence(value) {
+    this._selectedCompetence = value;
+    return value;
+  }
+
+  get competences() {
+    const areas = this.args.areas;
+    const areaCompetences = areas.map(area => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
   }
 
-  @computed('competences')
-  get competencesNames() {
-    return this.get('competences').map(competence => competence.get('name'));
+  get competenceList() {
+    return this.competences.map(competence => ({
+      label:competence.get('name'),
+      data:competence
+    }));
   }
 
-  @computed('competenceName')
-  get selectedCompetence() {
-    return this.get('competences').find(competence => competence.get('name') === this.get('competenceName'));
-  }
-
-  @computed('selectedCompetence')
   get tubes() {
-    const selectedCompetence = this.get('selectedCompetence');
-    return DS.PromiseArray.create({
-      promise: selectedCompetence.get('rawTubes')
-        .then(() => selectedCompetence.get('sortedTubes'))
+    if (!this.tubesLoaded) {
+      this._loadTubes();
+    }
+    return this._tubes;
+  }
+
+  get tubeList() {
+    if (!this.tubesLoaded) {
+      this._loadTubes();
+      return A([]);
+    } else {
+      console.log('loaded');
+      return this.tubes.map(tube => ({
+        label:tube.name,
+        data:tube
+      }))
+    }
+  }
+
+  _loadTubes() {
+    const competence = this.selectedCompetence.data;
+    console.log('ici');
+    competence.get('rawTubes')
+    .then(() => {
+      console.log('raw tubes loaded');
+      this._tubes = competence.get('sortedTubes');
+      this.tubesLoaded = true;
     });
   }
 
-  @computed('tubes')
-  get tubesNames() {
-    return DS.PromiseArray.create({
-      promise: this.get('tubes')
-        .then(tubes => tubes.map(tube => tube.get('name')))
-    })
-  }
-
-  @computed('tubes', 'tubeName')
   get selectedTube() {
-    return DS.PromiseObject.create({
-      promise: this.get('tubes')
-        .then(tubes => tubes.find(tube => tube.get('name') === this.get('tubeName')))
-    });
+    if (this._selectedTube) {
+      return this._selectedTube;
+    }
+    console.debug(this.tubeList, this.tubeList.find(item => (item.data == this.args.tube)));
+    return this.tubeList.find(item => (item.data == this.args.tube));
   }
 
-  @computed('selectedTube')
+  set selectedTube(value) {
+    this._selectedTube = value;
+    return value;
+  }
+
   get levels() {
-    let selectEmptyLevels = this.get('selectEmptyLevels');
-    let selectedTube;
-    return DS.PromiseArray.create({
-      promise: this.get('selectedTube')
-        .then(tube => {
-          selectedTube = tube;
-          return tube ? tube.get('rawSkills') : null;
-        })
-        .then(result => {
-          if (result == null) {
-            return [];
-          }
-          const skills = selectedTube.get('filledSkills');
-          return skills.reduce((table, skill, index) => {
-            if (skill === false) {
-              if (selectEmptyLevels) {
-                table.push(index + 1);
-              }
-            } else if (!selectEmptyLevels) {
+    if (!this.levelsLoaded && this.tubesLoaded) {
+      const selectedTube = this.selectedTube.data;
+      return selectedTube.rawSkills
+      .then(() => {
+        const skills = selectedTube.filledSkills;
+        const selectEmptyLevels = this.args.selectEmptyLevels;
+        this._levels = skills.reduce((table, skill, index) => {
+          if (skill === false) {
+            if (selectEmptyLevels) {
               table.push(index + 1);
             }
-            return table;
-          }, []);
-        })
-    });
+          } else if (!selectEmptyLevels) {
+            table.push(index + 1);
+          }
+          return table;
+        }, []);
+        this.levelsLoaded = true;
+      })
+    }
+    return this._levels;
+  }
+
+  @action
+  selectCompetence(item) {
+    this.selectedCompetence = item;
+    this.tubesLoaded = false;
+    this.levelsLoaded = false;
+  }
+
+  @action
+  selectTube(item) {
+    this.selectedTube = item;
+    this.levelsLoaded = false;
+  }
+
+  @action
+  selectLevels(levels) {
+    console.debug(levels);
+    this.selectedLevels = levels;
   }
 
   @action
   setLocation() {
-    if (this.get('selectTubeLevel')) {
-      if (this.get('selectEmptyLevels')) {
-        const competence = this.get('selectedCompetence');
+    this.args.close();
+    const competence = this.selectedCompetence.data;
+    if (this.args.selectTubeLevel) {
+      if (this.args.selectEmptyLevels) {
         return this.get('selectedTube')
           .then(tube => {
             this.get('onChange')(competence, tube, this.get('selectedLevel'));
-            this.set('display', false);
+            this._reset();
           });
       } else {
         let levels;
-        if (this.get('multipleLevel')) {
+        if (this.args.multipleLevel) {
           levels = this.get('selectedLevel');
         } else {
           levels = [this.get('selectedLevel')];
@@ -122,18 +152,27 @@ export default class PopinSelectLocation extends Component {
               return skills[level - 1];
             });
             this.get('onChange')(selectedSkills);
-            this.set('display', false);
+            this._reset();
           });
       }
     } else {
-      const competence = this.get('selectedCompetence');
       this.get('onChange')(competence);
-      this.set('display', false);
+      this._reset();
     }
   }
 
   @action
   closeModal() {
-    this.set('display', false);
+    this._reset();
+    this.args.close();
+  }
+
+  _reset() {
+    this._selectedCompetence = null;
+    this._selectedTube = null;
+    this.tubesLoaded = false;
+    this.levelsLoaded = false;
+    this._tubes = A([]);
+    this._levels = A([]);
   }
 }

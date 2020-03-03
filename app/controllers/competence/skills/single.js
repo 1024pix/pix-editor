@@ -158,4 +158,9 @@ export default class SingleController extends Controller {
         this.get('application').send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
       });
   }
+
+  @action
+  closeSelectLocation() {
+    this.set('displaySelectLocation', false);
+  }
 }
