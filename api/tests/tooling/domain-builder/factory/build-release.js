@@ -1,5 +1,5 @@
-const buildArea = require('./build-area');
-const buildCompetence = require('./build-competence');
+const buildArea = require('./build-area-airtable-data-object');
+const buildCompetence = require('./build-competence-airtable-data-object');
 
 module.exports = function buildRelease() {
   const area = buildArea({
@@ -15,15 +15,9 @@ module.exports = function buildRelease() {
     name: 'Mener une recherche et une veille d’information',
     index:  '1.1',
     description: '1.1 Mener une recherche et une veille d’information',
-    skills: [],
-    area: {
-      code: '1',
-      color: 'jaffa',
-      id: 'recvoGdo7z2z7pXWa',
-      title: 'Information et données'
-    }
+    skillIds: [],
+    area
   });
-  area.competences = [competence];
 
   return {
     areas: [area],

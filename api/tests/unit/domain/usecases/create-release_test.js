@@ -3,7 +3,7 @@ const domainBuilder = require('../../../tooling/domain-builder/factory');
 const createRelease = require('../../../../lib/domain/usecases/create-release');
 
 describe('Unit | UseCase | Create Release', () => {
-  let areaRepository, competenceRepository;
+  let areaDatasource, competenceDatasource;
   let expectedCreatedRelease;
 
   beforeEach(() => {
@@ -12,33 +12,33 @@ describe('Unit | UseCase | Create Release', () => {
       content: domainBuilder.buildRelease()
     };
 
-    areaRepository = {
+    areaDatasource = {
       list: sinon.spy(async () => expectedCreatedRelease.content.areas)
     };
-    competenceRepository = {
+    competenceDatasource = {
       list: sinon.spy(async () => expectedCreatedRelease.content.competences)
     };
   });
 
   it('should retrieve area from repository', async () => {
     // when
-    await createRelease({ areaRepository, competenceRepository });
+    await createRelease({ areaDatasource, competenceDatasource });
 
     // then
-    expect(areaRepository.list).to.be.called;
+    expect(areaDatasource.list).to.be.called;
   });
 
   it('should retrieve competences from repository', async () => {
     // when
-    await createRelease({ areaRepository, competenceRepository });
+    await createRelease({ areaDatasource, competenceDatasource });
 
     // then
-    expect(competenceRepository.list).to.be.called;
+    expect(competenceDatasource.list).to.be.called;
   });
 
   it('should return created release with id and content', async () => {
     // when
-    const result = await createRelease({ areaRepository, competenceRepository });
+    const result = await createRelease({ areaDatasource, competenceDatasource });
 
     // then
     expect(result).to.deep.equal(expectedCreatedRelease);

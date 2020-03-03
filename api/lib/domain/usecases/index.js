@@ -2,8 +2,8 @@ const _ = require('lodash');
 const injectDefaults = require('../../infrastructure/utils/inject-defaults');
 
 const dependencies = {
-  areaRepository: require('../../infrastructure/repositories/area-repository'),
-  competenceRepository: require('../../infrastructure/repositories/competence-repository'),
+  areaDatasource: require('../../infrastructure/datasources/airtable/area-datasource'),
+  competenceDatasource: require('../../infrastructure/datasources/airtable/competence-datasource'),
 };
 
 function injectDependencies(usecases) {
