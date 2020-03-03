@@ -13,7 +13,7 @@ module.exports = function buildCompetence({
   origin = 'Pix',
 } = {}) {
 
-  return new {
+  return {
     id,
     // attributes
     name,

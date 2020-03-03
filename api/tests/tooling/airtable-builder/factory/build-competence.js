@@ -3,6 +3,7 @@ module.exports = function buildCompetence({
   domaineIds = [
     'recvoGdo7z2z7pXWa',
   ],
+  description = '1.1 Mener une recherche et une veille d’information',
   epreuves = [
     'rec02tVrimXNkgaLD',
     'rec0gm0GFue3PQB3k',
@@ -81,6 +82,7 @@ module.exports = function buildCompetence({
       'Domaine Titre': domaineTitre,
       'Domaine Code': domaineCode,
       'Origine': origin,
+      'Description': description,
     },
     'createdTime': createdTime,
   };

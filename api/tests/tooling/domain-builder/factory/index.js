@@ -5,6 +5,7 @@ module.exports = {
   buildSkillCollection : require('./build-skill-collection'),
   buildChallenge: require('./build-challenge'),
   buildCompetence: require('./build-competence'),
+  buildCompetenceAirtableDataObject: require('./build-competence-airtable-data-object'),
   buildCourse: require('./build-course'),
   buildSkill: require('./build-skill'),
   buildTube: require('./build-tube'),

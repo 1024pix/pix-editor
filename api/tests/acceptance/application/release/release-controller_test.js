@@ -7,6 +7,10 @@ describe('Acceptance | Controller | release-controller', () => {
       .mockList({ tableName: 'Domaines' })
       .returns([airtableBuilder.factory.buildArea()])
       .activate();
+    airtableBuilder
+      .mockList({ tableName: 'Competences' })
+      .returns([airtableBuilder.factory.buildCompetence({ acquisViaTubes: [] })])
+      .activate();
   });
 
   describe('POST /releases - Create a release from current Airtable data', () => {
