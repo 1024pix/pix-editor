@@ -5,6 +5,7 @@ import { alias } from '@ember/object/computed';
 import Controller from '@ember/controller';
 import {inject as controller} from '@ember/controller';
 import {scheduleOnce} from '@ember/runloop';
+import {tracked} from '@glimmer/tracking';
 
 @classic
 export default class SingleController extends Controller {
@@ -27,7 +28,7 @@ export default class SingleController extends Controller {
   skill;
 
   wasMaximized = false;
-  edition = false;
+  @tracked edition = false;
   displaySelectLocation = false;
 
   @computed('skill')

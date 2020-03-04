@@ -5,24 +5,18 @@ import {inject as service} from '@ember/service';
 import {scheduleOnce} from '@ember/runloop';
 import {alias} from '@ember/object/computed';
 import {action, computed} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
 
 @classic
 export default class SingleController extends Controller {
 
-  @service
-  config;
+  @tracked edition = false;
 
-  @service
-  access;
-
-  @service
-  storage
-
-  @service
-  pixConnector
-
-  @service
-  filePath;
+  @service config;
+  @service access;
+  @service storage
+  @service pixConnector
+  @service filePath;
 
   @alias('parentController.firstMaximized')
   maximized;
@@ -44,7 +38,6 @@ export default class SingleController extends Controller {
   popinLogClass = 'popin-template-log';
   popinChangelogClass ='popin-changelog';
   copyOperation = false;
-  edition = false;
   creation = false;
   wasMaximized = false;
   updateCache = true;

@@ -3,18 +3,18 @@ import Controller from '@ember/controller';
 import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import {computed, action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
 
 @classic
 export default class ListController extends Controller {
 
+  @tracked competence;
+
   @controller('competence')
   parentController;
 
-  @service
-  access;
-
-  @service
-  config;
+  @service access;
+  @service config;
 
   @computed('config.access')
   get mayCreateTemplate() {

@@ -1,16 +1,14 @@
-import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
 
-@classic
 export default class AlternativesRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
     let challenge = this.modelFor('competence.templates.single');
-    controller.set('challenge', challenge);
+    controller.challenge = challenge;
     let competence = this.modelFor('competence');
-    controller.set('competence', competence);
-    controller.set('childComponentMaximized', false);
+    controller.competence = competence;
+    controller.childComponentMaximized = false;
   }
 
   renderTemplate() {

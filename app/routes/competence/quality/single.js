@@ -1,8 +1,6 @@
-import classic from 'ember-classic-decorator';
-import { action } from '@ember/object';
 import SkillRoute from '../skills/single';
+import { action } from '@ember/object';
 
-@classic
 export default class SingleRoute extends SkillRoute {
   templateName = 'competence/skills/single';
 
@@ -14,19 +12,19 @@ export default class SingleRoute extends SkillRoute {
 
   @action
   willTransition(transition) {
-    if (this.controller.get('edition') &&
+    if (this.controller.edition &&
         !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      this.controller.get('model').rollbackAttributes();
+      this.controller.model.rollbackAttributes();
       if (transition.targetName === 'competence.templates.index') {
-        const skill = this.controller.get('skill');
-        const template = skill.get('productionTemplate');
+        const skill = this.controller.skill;
+        const template = skill.productionTemplate;
         if (template) {
-          return this.transitionTo('competence.templates.single', this.controller.get('competence'), template);
+          return this.transitionTo('competence.templates.single', this.controller.competence, template);
         }
       } else if (transition.targetName === 'competence.skills.index') {
-        return this.transitionTo('competence.skills.single', this.controller.get('competence'), this.controller.get('skill'));
+        return this.transitionTo('competence.skills.single', this.controller.competence, this.controller.skill);
       }
       return true;
     }

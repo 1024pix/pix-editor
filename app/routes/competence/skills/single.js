@@ -1,11 +1,10 @@
-import classic from 'ember-classic-decorator';
-import { action } from '@ember/object';
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 
-@classic
 export default class SingleRoute extends Route {
+
   model(params) {
-    return this.get('store').findRecord('skill', params.skill_id);
+    return this.store.findRecord('skill', params.skill_id);
   }
 
   afterModel(model) {
@@ -14,31 +13,31 @@ export default class SingleRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.set('edition', false);
-    controller.set('areas', this.modelFor('application'));
-    controller.set('competence', this.modelFor('competence'));
+    controller.edition = false;
+    controller.areas = this.modelFor('application');
+    controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
-    competenceController.set('section', 'skills');
-    competenceController.set('view', null);
+    competenceController.section = 'skills';
+    competenceController.view = null;
   }
 
   @action
   willTransition(transition) {
-    if (this.controller.get('edition') &&
+    if (this.controller.edition &&
         !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      this.controller.get('model').rollbackAttributes();
+      this.controller.model.rollbackAttributes();
       if (transition.targetName === 'competence.templates.index') {
-        const skill = this.controller.get('skill');
-        const template = skill.get('productionTemplate');
+        const skill = this.controller.skill;
+        const template = skill.productionTemplate;
         if (template) {
-          return this.transitionTo('competence.templates.single', this.controller.get('competence'), template);
+          return this.transitionTo('competence.templates.single', this.controller.competence, template);
         } else {
-          return this.transitionTo('competence.templates.list', this.controller.get('competence'), skill);
+          return this.transitionTo('competence.templates.list', this.controller.competence, skill);
         }
-      } else if (transition.targetName === 'competence.quality.index' && this.controller.get('skill.productionTemplate')) {
-        return this.transitionTo('competence.quality.single', this.controller.get('competence'), this.controller.get('skill'));
+      } else if (transition.targetName === 'competence.quality.index' && this.controller.skill.productionTemplate) {
+        return this.transitionTo('competence.quality.single', this.controller.competence, this.controller.skill);
       }
 
       return true;

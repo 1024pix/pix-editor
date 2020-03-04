@@ -5,10 +5,13 @@ import { alias } from '@ember/object/computed';
 import Controller from '@ember/controller';
 import { inject as controller } from '@ember/controller';
 import {scheduleOnce} from '@ember/runloop';
+import {tracked} from '@glimmer/tracking';
 
 @classic
 export default class SingleController extends Controller {
-  edition = false;
+
+  @tracked edition = false;
+
   creation = false;
   wasMaximized = false;
   displaySelectLocation = false;

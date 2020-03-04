@@ -3,24 +3,21 @@ import Controller from '@ember/controller';
 import { computed, action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { inject as controller } from '@ember/controller';
+import {tracked} from '@glimmer/tracking';
 
 @classic
 export default class AlternativesController extends Controller {
 
-  @service
-  router;
+  @tracked challenge = null;
+  @tracked competence = null;
 
-  @service
-  config;
+  @service router;
+  @service config;
+  @service access;
 
-  @service
-  access;
+  @controller application;
 
-  @controller
-  application;
-
-  @controller('competence')
-  competenceController;
+  @controller('competence') competenceController;
 
   queryParams = ['secondMaximized'];
 
