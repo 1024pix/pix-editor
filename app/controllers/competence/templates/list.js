@@ -1,11 +1,9 @@
-import classic from 'ember-classic-decorator';
 import Controller from '@ember/controller';
 import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
-import {computed, action} from '@ember/object';
+import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 
-@classic
 export default class ListController extends Controller {
 
   @tracked competence;
@@ -16,24 +14,23 @@ export default class ListController extends Controller {
   @service access;
   @service config;
 
-  @computed('config.access')
   get mayCreateTemplate() {
-    return this.get('access').mayCreateTemplate();
+    return this.access.mayCreateTemplate();
   }
 
   @action
   close() {
-    this.get('parentController').send('closeChildComponent');
+    this.parentController.send('closeChildComponent');
   }
 
   @action
   newVersion() {
-    const templates = this.get('model.sortedTemplates')
+    const templates = this.model.sortedTemplates;
     if (templates.length>0) {
-      let template = templates.get('firstObject');
-      this.transitionToRoute('competence.templates.new', this.get('competence'), { queryParams: { from: template.get('id')}});
+      let template = templates.firstObject;
+      this.transitionToRoute('competence.templates.new', this.competence, { queryParams: { from: template.id}});
     } else {
-      this.transitionToRoute('competence.templates.new', this.get('competence'), { queryParams: { fromSkill: this.get('model').get('id')}});
+      this.transitionToRoute('competence.templates.new', this.competence/*, { queryParams: { fromSkill: this.model.id}}*/);
     }
   }
 }

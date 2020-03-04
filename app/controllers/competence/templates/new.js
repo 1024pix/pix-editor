@@ -1,10 +1,12 @@
 import Template from './single';
-import { action } from '@ember/object';
+import {action} from '@ember/object';
+import {tracked} from '@glimmer/tracking';
 
 export default class NewController extends Template {
 
   creation = true;
   queryParams = ['from'];
+  @tracked from = '';
 
   defaultSaveChangelog = 'Création du prototype';
 
