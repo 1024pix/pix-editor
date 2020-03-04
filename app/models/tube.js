@@ -1,7 +1,7 @@
 import classic from 'ember-classic-decorator';
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import {computed} from '@ember/object';
-
+import {tracked} from '@glimmer/tracking';
 @classic
 export default class TubeModel extends Model {
 
@@ -20,7 +20,7 @@ export default class TubeModel extends Model {
   @belongsTo('competence') competence;
   @hasMany('skill') rawSkills;
 
-  selectedLevel = false;
+  @tracked selectedLevel = false;
 
   @computed('rawSkills.[]')
   get skills() {

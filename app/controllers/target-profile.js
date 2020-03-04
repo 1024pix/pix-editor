@@ -1,30 +1,22 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import {inject as controller} from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
-
-@classic
 export default class TargetProfileController extends Controller {
-  selectedTube = null;
-  selectedTubeLevel = false;
 
-  @service('file-saver')
-  fileSaver;
+  @tracked selectedTubeSkills = [];
+  @tracked selectedTube = null;
+  @tracked selectedTubeLevel = false;
+  @tracked showTubeDetails = false;
+  @tracked filter = false;
+  @tracked displayTubeLevel = false;
+  @tracked displaySingleEntry = false;
 
-  @controller
-  application;
+  @service('file-saver') fileSaver;
 
-  showTubeDetails = false;
-  filter = false;
-  displayTubeLevel = false;
-  displaySingleEntry = false;
-
-  init() {
-    super.init();
-    this.set('selectedTubeSkills', []);
-  }
+  @controller application;
 
   calculatePosition(trigger) {
     let { top, left, width } = trigger.getBoundingClientRect();
@@ -35,29 +27,26 @@ export default class TargetProfileController extends Controller {
     return { style };
   }
 
-  @computed('model.@each.selectedProductionTubeCount')
   get selectedTubeCount() {
-    return this.get('model').reduce((count, area) => {
-      return count + area.get('selectedProductionTubeCount');
+    return this.model.reduce((count, area) => {
+      return count + area.selectedProductionTubeCount;
     }, 0)
   }
 
-  @computed('model.@each.productionTubeCount')
   get tubeCount() {
-    return this.get('model').reduce((count, area) => {
-      return count + area.get('productionTubeCount');
+    return this.model.reduce((count, area) => {
+      return count + area.productionTubeCount;
     }, 0)
   }
 
   _getSelectedSkillsIds() {
-    const areas = this.get('model');
-    return areas.reduce((areaValues, area) => {
-      const competences = area.get('competences');
+    return this.model.reduce((areaValues, area) => {
+      const competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
-        const tubes = competence.get('tubes');
+        const tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
-          if (tube.get('selectedLevel')) {
-            tubeValues = tubeValues.concat(tube.get('selectedSkills'));
+          if (tube.selectedLevel) {
+            tubeValues = tubeValues.concat(tube.selectedSkills);
           }
           return tubeValues;
         }, competenceValues);
@@ -67,15 +56,15 @@ export default class TargetProfileController extends Controller {
 
   @action
   displayTube(tube) {
-    this.set('selectedTube', tube);
-    this.set('selectedTubeLevel', tube.get('selectedLevel'));
-    this.set('selectedTubeSkills', tube.get('selectedSkills'));
-    this.set('displayTubeLevel', true);
+    this.selectedTube = tube;
+    this.selectedTubeLevel = tube.selectedLevel;
+    this.selectedTubeSkills = tube.selectedSkills;
+    this.displayTubeLevel = true;
   }
 
   @action
   closeTubeLevel() {
-    this.set('displayTubeLevel', false);
+    this.displayTubeLevel = false;
   }
 
   @action
@@ -83,36 +72,35 @@ export default class TargetProfileController extends Controller {
     if (!level) {
       [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
     }
-    tube.set('selectedLevel', level);
-    tube.set('selectedSkills', skills);
+    tube.selectedLevel = level;
+    tube.selectedSkills = skills;
   }
 
   @action
   unsetProfileTube(tube) {
-    tube.set('selectedLevel', false);
-    tube.set('selectedSkills', []);
+    tube.selectedLevel = false;
+    tube.selectedSkills = [];
   }
 
   @action
   generate() {
     const ids = this._getSelectedSkillsIds();
     let fileName = 'profil_identifiants_' + (new Date()).toLocaleString('fr-FR') + '.txt';
-    this.get('fileSaver').saveAs(ids.join(','), fileName);
+    this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
   @action
   save() {
-    let areas = this.get('model');
-    let data = areas.reduce((areaValues, area) => {
-      let competences = area.get('competences');
+    let data = this.model.reduce((areaValues, area) => {
+      let competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
-        let tubes = competence.get('tubes');
+        let tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
-          if (tube.get('selectedLevel')) {
+          if (tube.selectedLevel) {
             tubeValues.push({
-              id: tube.get('pixId'),
-              level: tube.get('selectedLevel'),
-              skills: tube.get('selectedSkills')
+              id: tube.pixId,
+              level: tube.selectedLevel,
+              skills: tube.selectedSkills
             })
           }
           return tubeValues;
@@ -125,12 +113,12 @@ export default class TargetProfileController extends Controller {
 
   @action
   getProfileId() {
-    this.set('displaySingleEntry', true);
+    this.displaySingleEntry = true;
   }
 
   @action
   closeSingleEntry() {
-    this.set('displaySingleEntry', false);
+    this.displaySingleEntry = false;
   }
 
   @action
@@ -141,7 +129,7 @@ export default class TargetProfileController extends Controller {
     }, 'targetProfileId,skillId');
 
     let fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
-    this.get('fileSaver').saveAs(sql, fileName);
+    this.fileSaver.saveAs(sql, fileName);
   }
 
   @action
@@ -155,8 +143,8 @@ export default class TargetProfileController extends Controller {
     try {
       const file = event.target.files[0];
       const reader = new FileReader();
-      const areas = this.get('model');
-      const application = this.get('application');
+      const areas = this.model;
+      const application = this.application;
       reader.onload = (event) => {
         const data = event.target.result;
         const tubes = JSON.parse(data);
@@ -165,22 +153,22 @@ export default class TargetProfileController extends Controller {
           return values;
         }, {});
         areas.forEach(area => {
-          const competences = area.get('competences');
+          const competences = area.competences;
           competences.forEach(competence => {
-            const tubes = competence.get('tubes');
+            const tubes = competence.tubes;
             tubes.forEach(tube => {
-              if (indexedTubes[tube.get('pixId')]) {
-                if (indexedTubes[tube.get('pixId')].level === 'max') {
+              if (indexedTubes[tube.pixId]) {
+                if (indexedTubes[tube.pixId].level === 'max') {
                   const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
-                  tube.set('selectedLevel', level);
-                  tube.set('selectedSkills', skills);
+                  tube.selectedLevel = level;
+                  tube.selectedSkills = skills;
                 } else {
-                  tube.set('selectedLevel', indexedTubes[tube.get('pixId')].level);
-                  tube.set('selectedSkills', indexedTubes[tube.get('pixId')].skills);
+                  tube.selectedLevel = indexedTubes[tube.pixId].level;
+                  tube.selectedSkills = indexedTubes[tube.pixId].skills;
                 }
               } else {
-                tube.set('selectedLevel', false);
-                tube.set('selectedSkills', []);
+                tube.selectedLevel = false;
+                tube.selectedSkills = [];
               }
             });
           })
@@ -191,18 +179,18 @@ export default class TargetProfileController extends Controller {
       };
       reader.readAsText(file);
     } catch (error) {
-      this.get('application').send('showMessage', 'Erreur lors de l\'ouverture du fichier', false);
+      this.application.send('showMessage', 'Erreur lors de l\'ouverture du fichier', false);
     }
   }
 
   @action
   showTubeName(name, competence) {
-    competence.set('_tubeName', name);
+    competence._tubeName =  name;
   }
 
   @action
   hideTubeName(competence) {
-    competence.set('_tubeName', null);
+    competence._tubeName = null;
   }
 
   @action
@@ -228,12 +216,12 @@ export default class TargetProfileController extends Controller {
   }
 
   _getTubeSkillsAndMaxLevel(tube) {
-    const productionSkill = tube.get('productionSkills');
-    const level = productionSkill[productionSkill.length - 1].get('level');
+    const productionSkill = tube.productionSkills;
+    const level = productionSkill[productionSkill.length - 1].level;
     const skills = productionSkill.reduce((ids, skill) => {
       if (skill) {
-        skill.set('_selected', true);
-        ids.push(skill.get('pixId'));
+        skill._selected = true;
+        ids.push(skill.pixId);
       }
       return ids;
     }, []);
