@@ -1,45 +1,39 @@
-import classic from 'ember-classic-decorator';
-import { action } from '@ember/object';
 import Route from '@ember/routing/route';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 
-@classic
 export default class ApplicationRoute extends Route {
   configured = false;
 
-  @service
-  config;
-
-  @service
-  pixConnector;
+  @service config;
+  @service pixConnector;
 
   _openConfiguration() {
     this.controller.send('openConfiguration');
   }
 
   beforeModel() {
-    if (this.get('config.check')) {
-      this.set('configured', true);
+    if (this.config.check) {
+      this.configured = true;
     } else {
-      this.set('configured', false);
+      this.configured = false;
       scheduleOnce('afterRender', this, this._openConfiguration);
     }
   }
 
   model() {
-    if (this.get('configured')) {
-      let store = this.get('store');
-      return store.findAll('area');
+    if (this.configured) {
+      return this.store.findAll('area');
     }
   }
 
   afterModel(model) {
-    if (this.get('configured')) {
-      this.get('pixConnector').connect();
+    if (this.configured) {
+      this.pixConnector.connect();
     }
     if (model) {
-      const getCompetences = model.map((area => area.get('competences')));
+      const getCompetences = model.map((area => area.competences));
       return Promise.all(getCompetences);
     }
   }
@@ -48,9 +42,9 @@ export default class ApplicationRoute extends Route {
   loading(transition) {
     let controller = this.controller;
     if (controller) {
-      controller.set('loading', true);
+      controller.loading = true;
       transition.promise.finally(function() {
-        controller.set('loading', false);
+        controller.loading = false;
       });
       return false;
     } else {
