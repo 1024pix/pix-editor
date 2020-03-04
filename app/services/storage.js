@@ -1,18 +1,14 @@
-import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import { inject as service } from '@ember/service';
 import fetch from 'fetch';
 
-@classic
 export default class StorageService extends Service {
-  @service
-  config;
 
-  @service
-  filePath;
+  @service config;
+  @service filePath;
 
   uploadFile(file, fileName) {
-    let url = this.get('config').get('storagePost') + Date.now()+ '.' + this.get('filePath').getExtension(file.get('name'));
+    let url = this.config.storagePost + Date.now()+ '.' + this.filePath.getExtension(file.name);
     let that = this;
     return this.getStorageToken()
     .then(function(token) {
@@ -30,7 +26,7 @@ export default class StorageService extends Service {
       });
     })
     .then(function() {
-      return {url:url, filename:fileName?fileName:file.get('name')};
+      return {url:url, filename:fileName?fileName:file.name};
     });
   }
 
@@ -43,20 +39,20 @@ export default class StorageService extends Service {
   }
 
   getStorageToken(renew) {
-    let config = this.get('config');
-    if (!renew && typeof config.get('storageToken') !== 'undefined') {
-      return Promise.resolve(config.get('storageToken'));
+    const config = this.config;
+    if (!renew && typeof config.storageToken !== 'undefined') {
+      return Promise.resolve(config.storageToken);
     } else {
       var data = {
         'auth':{
-          'tenantName':config.get('storageTenant'),
+          'tenantName':config.storageTenant,
           'passwordCredentials':{
-            'username':config.get('storageUser'),
-            'password':config.get('storagePassword')
+            'username':config.storageUser,
+            'password':config.storagePassword
           }
         }
       };
-      return fetch(config.get('storageAuth'), {
+      return fetch(config.storageAuth, {
         method:'POST',
         headers:{'Content-type': 'application/json'},
         body:JSON.stringify(data)
@@ -64,8 +60,8 @@ export default class StorageService extends Service {
       .then(response => response.ok?response.json():false)
       .then(response => {
         if (response) {
-          config.set('storageToken', response.token);
-          return config.get('storageToken');
+          config.storageToken = response.token;
+          return config.storageToken;
         } else {
           console.error('could not get storage token');
           return false;

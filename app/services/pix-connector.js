@@ -1,28 +1,25 @@
-import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import fetch from 'fetch';
 import { isNotFoundResponse } from 'ember-fetch/errors';
 import { inject as service } from '@ember/service';
 
-@classic
 export default class PixConnectorService extends Service {
-  @service
-  config;
+  @service config;
 
   tokens = false;
   connected = false;
 
   connect() {
-    let config = this.get('config');
-    let user = config.get('pixUser');
-    let password = config.get('pixPassword');
+    const config = this.config;
+    const user = config.pixUser;
+    const password = config.pixPassword;
     if (user && user.length>0 && password && password.length>0) {
       let credentialsData = new URLSearchParams({
         username:user,
         password:password,
         scope:'pix'
       });
-      fetch(config.get('pixStaging')+'/api/token', {
+      fetch(config.pixStaging+'/api/token', {
         method:'POST',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'
@@ -47,11 +44,11 @@ export default class PixConnectorService extends Service {
   }
 
   updateCache(challenge) {
-    if (this.get('connected')) {
-      let url = this.get('config').get('pixStaging')+'/api/cache/';
-      let token = this.get('token');
+    if (this.connected) {
+      let url = this.config.pixStaging+'/api/cache/';
+      let token = this.token;
       let problem = false;
-      return fetch(url+'Epreuves_'+challenge.get('pixId'), {
+      return fetch(url+'Epreuves_'+challenge.pixId, {
         method:'DELETE',
         headers: {
           Authorization: 'Bearer '+token
