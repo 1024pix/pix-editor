@@ -1,4 +1,3 @@
-import classic from 'ember-classic-decorator';
 import Service from '@ember/service';
 import {inject as service} from '@ember/service';
 
@@ -8,14 +7,13 @@ const EDITOR = 3;
 const ADMIN = 4;
 
 
-@classic
 export default class AccessService extends Service {
   @service config;
 
   readOnly = READ_ONLY;
 
   isReadonly() {
-    let level = this.get('config.access');
+    let level = this.config.access;
     return (level === READ_ONLY);
   }
 
@@ -32,8 +30,8 @@ export default class AccessService extends Service {
   }
 
   mayMoveTube(tube) {
-    let level = this.get('config.access');
-    if (tube.get('hasProductionChallenge')) {
+    let level = this.config.access;
+    if (tube.hasProductionChallenge) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -41,8 +39,8 @@ export default class AccessService extends Service {
   }
 
   mayMoveSkill(skill) {
-    let level = this.get('config.access');
-    if (skill.get('productionTemplate')) {
+    let level = this.config.access;
+    if (skill.productionTemplate) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -54,22 +52,22 @@ export default class AccessService extends Service {
   }
 
   mayEdit(challenge) {
-    let level = this.get('config.access');
-    let production = challenge.get('isValidated');
-    let archived = challenge.get('isArchived');
-    let template = challenge.get('isTemplate');
+    let level = this.config.access;
+    let production = challenge.isValidated;
+    let archived = challenge.isArchived;
+    let template = challenge.isTemplate;
     return !archived && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !template))));
   }
 
   mayDuplicate(challenge) {
-    let level = this.get('config.access');
-    let template = challenge.get('isTemplate');
+    let level = this.config.access;
+    let template = challenge.isTemplate;
     return level >= EDITOR || (!template && level === REPLICATOR);
   }
 
   mayAccessLog(challenge) {
-    let level = this.get('config.access');
-    let template = challenge.get('isTemplate');
+    let level = this.config.access;
+    let template = challenge.isTemplate;
     return level >= EDITOR || (!template && level === REPLICATOR);
   }
 
@@ -78,9 +76,9 @@ export default class AccessService extends Service {
   }
 
   mayValidate(challenge) {
-    let production = challenge.get('isValidated');
-    let archived = challenge.get('isArchived');
-    let workbench = challenge.get('isWorkbench');
+    let production = challenge.isValidated;
+    let archived = challenge.isArchived;
+    let workbench = challenge.isWorkbench;
     return this.isAdmin() && !production && !archived && !workbench;
   }
 
@@ -89,21 +87,21 @@ export default class AccessService extends Service {
   }
 
   mayMove(challenge) {
-    return this.isAdmin() && challenge.get('isTemplate') && challenge.get('isSuggested');
+    return this.isAdmin() && challenge.isTemplate && challenge.isSuggested;
   }
 
   isReplicator() {
-    let level = this.get('config.access');
+    let level = this.config.access;
     return (level >= REPLICATOR);
   }
 
   isEditor() {
-    let level = this.get('config.access');
+    let level = this.config.access;
     return (level >= EDITOR);
   }
 
   isAdmin() {
-    let level = this.get('config.access');
+    let level = this.config.access;
     return (level === ADMIN);
   }
 
