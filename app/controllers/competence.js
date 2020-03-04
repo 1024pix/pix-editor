@@ -1,7 +1,7 @@
+import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
-import Controller from '@ember/controller';
 import {inject as controller} from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 

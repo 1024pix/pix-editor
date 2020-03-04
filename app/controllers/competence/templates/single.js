@@ -1,16 +1,32 @@
-import classic from 'ember-classic-decorator';
 import Controller from '@ember/controller';
 import {inject as controller} from '@ember/controller';
 import {inject as service} from '@ember/service';
 import {scheduleOnce} from '@ember/runloop';
 import {alias} from '@ember/object/computed';
-import {action, computed} from '@ember/object';
+import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
 
-@classic
 export default class SingleController extends Controller {
 
+  wasMaximized = false;
+  updateCache = true;
+  alternative = false;
+  changelogCallback = null;
+  defaultSaveChangelog = 'Mise à jour du prototype';
+  copyZoneId = 'copyZone';
+  elementClass = 'template-challenge';
+  popinImageClass = 'template-popin-image';
+  popinLogClass = 'popin-template-log';
+  popinChangelogClass ='popin-changelog';
+
   @tracked edition = false;
+  @tracked creation = false;
+  @tracked popinImageSrc = '';
+  @tracked displayImage = false;
+  @tracked displaySelectLocation = false;
+  @tracked displayChallengeLog = false;
+  @tracked displayChangeLog = false;
+  @tracked copyOperation = false;
 
   @service config;
   @service access;
@@ -33,71 +49,46 @@ export default class SingleController extends Controller {
   @controller('competence')
   parentController
 
-  elementClass = 'template-challenge';
-  popinImageClass = 'template-popin-image';
-  popinLogClass = 'popin-template-log';
-  popinChangelogClass ='popin-changelog';
-  copyOperation = false;
-  creation = false;
-  wasMaximized = false;
-  updateCache = true;
-  alternative = false;
-  displaySelectLocation = false;
-  displayImage = false;
-  displayChallengeLog = false;
-  changelogCallback = null;
-  defaultSaveChangelog = 'Mise à jour du prototype';
-  copyZoneId = 'copyZone';
-
-  @computed('creation', 'challenge', 'challenge.{skillNames,isWorkbench}')
   get challengeTitle() {
-    if (this.get('creation')) {
+    if (this.creation) {
       return 'Nouveau prototype';
-    } else if (this.get('challenge.isWorkbench')) {
+    } else if (this.challenge.isWorkbench) {
       return '';
     } else {
-      return this.get('challenge.skillNames');
+      return this.challenge.skillNames;
     }
   }
 
-  @computed('config.access', 'challenge', 'challenge.status')
   get mayEdit() {
-    return this.get('access').mayEdit(this.get('challenge'));
+    return this.access.mayEdit(this.challenge);
   }
 
-  @computed('config.access', 'challenge')
   get mayDuplicate() {
-    return this.get('access').mayDuplicate(this.get('challenge'));
+    return this.access.mayDuplicate(this.challenge);
   }
 
-  @computed('config.access', 'challenge')
   get mayAccessLog() {
-    return this.get('access').mayAccessLog(this.get('challenge'));
+    return this.access.mayAccessLog(this.challenge);
   }
 
-  @computed('config.access')
   get mayAccessAirtable() {
-    return this.get('access').mayAccessAirtable();
+    return this.access.mayAccessAirtable();
   }
 
-  @computed('config.access', 'challenge', 'challenge.{status,isWorkbench}')
   get mayValidate() {
-    return this.get('access').mayValidate(this.get('challenge'));
+    return this.access.mayValidate(this.challenge);
   }
 
-  @computed('config.access', 'challenge', 'challenge.status')
   get mayArchive() {
-    return this.get('access').mayArchive(this.get('challenge'));
+    return this.access.mayArchive(this.challenge);
   }
 
-  @computed('config.access', 'challenge')
   get mayMove() {
-    return this.get('access').mayMove(this.get('challenge'));
+    return this.access.mayMove(this.challenge);
   }
 
-  @computed('challenge.skillLevels')
   get level() {
-    const challenge = this.get('challenge');
+    const challenge = this.challenge;
     if (challenge.skillLevels[0]){
       return challenge.skillLevels;
     } else {
@@ -105,8 +96,231 @@ export default class SingleController extends Controller {
     }
   }
 
+  @action
+  showIllustration() {
+    let illustration = this.challenge.illustration[0];
+    this.popinImageSrc = illustration.url;
+    this.displayImage = true;
+  }
+
+  @action
+  closeIllustration() {
+    this.displayImage = false;
+  }
+
+  @action
+  maximize() {
+    this.maximized = true;
+  }
+
+  @action
+  minimize() {
+    this.maximized = false;
+  }
+
+  @action
+  close() {
+    this.maximized = false;
+    this.transitionToRoute('competence.templates', this.competence);
+  }
+
+  @action
+  previewTemplate() {
+    const challenge = this.challenge;
+    window.open(challenge.preview, challenge.id);
+  }
+
+  @action
+  openAirtable() {
+    const challenge = this.challenge;
+    const config = this.config;
+    window.open(config.airtableUrl + config.tableChallenges + '/' + challenge.id, 'airtable');
+  }
+
+  @action
+  copyLink() {
+    this.copyOperation = true;
+    scheduleOnce('afterRender', this, this._executeCopy);
+  }
+
+  @action
+  edit() {
+    this.wasMaximized = this.maximized;
+    this.send('maximize');
+    this.edition = true;
+    scheduleOnce('afterRender', this, this._scrollToTop);
+  }
+
+  @action
+  cancelEdit() {
+    this.edition = false;
+    this.challenge.rollbackAttributes();
+    const previousState = this.wasMaximized;
+    if (!previousState) {
+      this.send('minimize');
+    }
+    this._message('Modification annulée');
+  }
+
+  @action
+  save() {
+    this._getChangelog(this.defaultSaveChangelog, (changelog) => {
+      this.application.send('isLoading');
+      return this._handleIllustration(this.challenge)
+        .then(challenge => this._handleAttachments(challenge))
+        .then(challenge => this._saveChallenge(challenge))
+        .then(challenge => this._handleCache(challenge))
+        .then(challenge => this._handleChangelog(challenge, changelog))
+        .then(() => {
+          this.edition = false;
+          if (!this.wasMaximized) {
+            this.send('minimize');
+          }
+          this._message('Épreuve mise à jour');
+        })
+        .catch(() => this._errorMessage('Erreur lors de la mise à jour'))
+        .finally(() => this.application.send('finishedLoading'));
+    });
+  }
+
+  @action
+  duplicate() {
+    this.parentController.send('copyChallenge', this.challenge);
+  }
+
+  @action
+  showAlternatives() {
+    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge, {queryParams: {secondMaximized: false}});
+  }
+
+  @action
+  validate() {
+    return this._confirm('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
+      .then(() => {
+        let defaultLogMessage;
+        if (this.challenge.isTemplate) {
+          defaultLogMessage = 'Mise en production du prototype';
+        } else {
+          defaultLogMessage = 'Mise en production de la déclinaison';
+        }
+        this._getChangelog(defaultLogMessage, (changelog) => {
+          this.application.send('isLoading');
+          return this._validationChecks(this.challenge)
+            .then(challenge => this._archivePreviousTemplate(challenge))
+            .then(challenge => challenge.validate())
+            .then(challenge => this._handleChangelog(challenge, changelog))
+            .then(challenge => this._checkSkillsValidation(challenge))
+            .then(challenge => this._validateAlternatives(challenge))
+            .then(() => {
+              this._message('Mise en production réussie');
+              this.parentController.send('selectView', 'production', true);
+            })
+            .catch((error) => {
+              console.error(error);
+              this._errorMessage('Erreur lors de la mise en production');
+            })
+            .finally(() => this.application.send('finishedLoading'))
+        });
+      })
+      .catch(() => this._message('Mise en production abandonnée'));
+  }
+
+  @action
+  archive() {
+    return this._confirm('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
+      .then(() => {
+        this._getChangelog('Archivage de l\'épreuve', (changelog) => {
+          this.application.send('isLoading');
+          return this.challenge.archive()
+            .then(challenge => this._archiveAlternatives(challenge))
+            .then(challenge => this._handleChangelog(challenge, changelog))
+            .then(challenge => this._checkSkillsValidation(challenge))
+            .then(() => {
+              this._message('Épreuve archivée');
+              this.send('close');
+            })
+            .catch(() => this._errorMessage('Erreur lors de l\'archivage'))
+            .finally(() => this.application.send('finishedLoading'));
+        });
+      })
+      .catch(() => this._message('Archivage abandonné'))
+  }
+
+  @action
+  challengeLog() {
+    this.displayChallengeLog = true;
+  }
+
+  @action
+  closeChallengeLog() {
+    this.displayChallengeLog = false;
+  }
+
+  @action
+  showVersions() {
+    this.transitionToRoute('competence.templates.list', this.challenge.firstSkill);
+  }
+
+  @action
+  changelogApprove(value) {
+    if (this.changelogCallback) {
+      this.changelogCallback(value);
+    }
+    this.displayChangeLog = false;
+  }
+
+  @action
+  changelogDeny() {
+    if (this.changelogCallback) {
+      this.changelogCallback(false);
+    }
+    this.displayChangeLog = false;
+  }
+
+  @action
+  moveTemplate() {
+    this.displaySelectLocation = true;
+  }
+
+  @action
+  closeMoveTemplate() {
+    this.displaySelectLocation = false;
+  }
+
+  @action
+  setSkills(skills) {
+    if (skills.length === 0) {
+      this._errorMessage('Aucun acquis sélectionné');
+      return;
+    }
+    this._getChangelog('Changement d\'acquis de l\'épreuve', (changelog) => {
+      this.application.send('isLoading');
+      let template = this.challenge;
+      const templateVersion = this._getNextTemplateVersion(skills);
+      const challenges = this.challenge.alternatives;
+      challenges.pushObject(template);
+      let updateChallenges = challenges.reduce((current, challenge) => {
+        challenge.skills = skills;
+        challenge.version = templateVersion;
+        current.push(challenge.save()
+          .then(() => {
+            if (challenge.isTemplate) {
+              this._message('Changement d\'acquis effectué pour le prototype');
+            } else {
+              this._message(`Changement d'acquis effectué pour la déclinaison n°${challenge.alternativeVersion}`);
+            }
+          })
+        );
+        return current;
+      }, []);
+      return Promise.all(updateChallenges)
+        .then(() => this._handleChangelog(template, changelog))
+        .finally(() => this.application.send('finishedLoading'));
+    });
+  }
+
   _executeCopy() {
-    const element = document.getElementById(this.get('copyZoneId'));
+    const element = document.getElementById(this.copyZoneId);
     element.select();
     try {
       var successful = document.execCommand('copy');
@@ -118,251 +332,26 @@ export default class SingleController extends Controller {
     } catch (err) {
       this._errorMessage('Erreur lors de la copie');
     }
-    this.set('copyOperation', false);
+    this.copyOperation = false;
   }
 
   _scrollToTop() {
-    document.querySelector(`.${this.get('elementClass')}.challenge-data`).scrollTop = 0;
-  }
-
-  @action
-  showIllustration() {
-    let illustration = this.get('challenge.illustration')[0];
-    this.set('popinImageSrc', illustration.url);
-    this.set('displayImage', true);
-  }
-
-  @action
-  closeImage() {
-    this.set('displayImage', false);
-  }
-
-  @action
-  maximize() {
-    this.set('maximized', true);
-  }
-
-  @action
-  minimize() {
-    this.set('maximized', false);
-  }
-
-  @action
-  close() {
-    this.set('maximized', false);
-    this.transitionToRoute('competence.templates', this.get('competence'));
-  }
-
-  @action
-  previewTemplate() {
-    let challenge = this.get('challenge');
-    window.open(challenge.get('preview'), challenge.get('id'));
-  }
-
-  @action
-  openAirtable() {
-    let challenge = this.get('challenge');
-    let config = this.get('config');
-    window.open(config.get('airtableUrl') + config.get('tableChallenges') + '/' + challenge.get('id'), 'airtable');
-  }
-
-  @action
-  copyLink() {
-    this.set('copyOperation', true);
-    scheduleOnce('afterRender', this, this._executeCopy);
-  }
-
-  @action
-  edit() {
-    let state = this.get('maximized');
-    this.set('wasMaximized', state);
-    this.send('maximize');
-    this.set('edition', true);
-    scheduleOnce('afterRender', this, this._scrollToTop);
-  }
-
-  @action
-  cancelEdit() {
-    this.set('edition', false);
-    let challenge = this.get('challenge');
-    challenge.rollbackAttributes();
-    let previousState = this.get('wasMaximized');
-    if (!previousState) {
-      this.send('minimize');
-    }
-    this._message('Modification annulée');
-  }
-
-  @action
-  save() {
-    this._getChangelog(this.get('defaultSaveChangelog'), (changelog) => {
-      this.get('application').send('isLoading');
-      return this._handleIllustration(this.get('challenge'))
-        .then(challenge => this._handleAttachments(challenge))
-        .then(challenge => this._saveChallenge(challenge))
-        .then(challenge => this._handleCache(challenge))
-        .then(challenge => this._handleChangelog(challenge, changelog))
-        .then(() => {
-          this.set('edition', false);
-          if (!this.get('wasMaximized')) {
-            this.send('minimize');
-          }
-          this._message('Épreuve mise à jour');
-        })
-        .catch(() => this._errorMessage('Erreur lors de la mise à jour'))
-        .finally(() => this.get('application').send('finishedLoading'));
-    });
-  }
-
-  @action
-  duplicate() {
-    this.get('parentController').send('copyChallenge', this.get('challenge'));
-  }
-
-  @action
-  showAlternatives() {
-    this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), this.get('challenge'), {queryParams: {secondMaximized: false}});
-  }
-
-  @action
-  validate() {
-    return this._confirm('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
-      .then(() => {
-        let defaultLogMessage;
-        if (this.get('challenge.isTemplate')) {
-          defaultLogMessage = 'Mise en production du prototype';
-        } else {
-          defaultLogMessage = 'Mise en production de la déclinaison';
-        }
-        this._getChangelog(defaultLogMessage, (changelog) => {
-          this.get('application').send('isLoading');
-          return this._validationChecks(this.get('challenge'))
-            .then(challenge => this._archivePreviousTemplate(challenge))
-            .then(challenge => challenge.validate())
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(challenge => this._validateAlternatives(challenge))
-            .then(() => {
-              this._message('Mise en production réussie');
-              this.get('parentController').send('selectView', 'production', true);
-            })
-            .catch((error) => {
-              console.error(error);
-              this._errorMessage('Erreur lors de la mise en production');
-            })
-            .finally(() => this.get('application').send('finishedLoading'))
-        });
-      })
-      .catch(() => this._message('Mise en production abandonnée'));
-  }
-
-  @action
-  archive() {
-    return this._confirm('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
-      .then(() => {
-        this._getChangelog('Archivage de l\'épreuve', (changelog) => {
-          this.get('application').send('isLoading');
-          return this.get('challenge').archive()
-            .then(challenge => this._archiveAlternatives(challenge))
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(() => {
-              this._message('Épreuve archivée');
-              this.send('close');
-            })
-            .catch(() => this._errorMessage('Erreur lors de l\'archivage'))
-            .finally(() => this.get('application').send('finishedLoading'));
-        });
-      })
-      .catch(() => this._message('Archivage abandonné'))
-  }
-
-  @action
-  challengeLog() {
-    this.set('displayChallengeLog', true);
-  }
-
-  @action
-  closeChallengeLog() {
-    this.set('displayChallengeLog', false);
-  }
-
-  @action
-  showVersions() {
-    this.transitionToRoute('competence.templates.list', this.get('challenge.firstSkill'));
-  }
-
-  @action
-  changelogApprove(value) {
-    if (this.changelogCallback) {
-      this.changelogCallback(value);
-    }
-    this.set('displayChangeLog', false);
-  }
-
-  @action
-  changelogDeny() {
-    if (this.changelogCallback) {
-      this.changelogCallback(false);
-    }
-    this.set('displayChangeLog', false);
-  }
-
-  @action
-  moveTemplate() {
-    this.set('displaySelectLocation', true);
-  }
-
-  @action
-  closeSelectLocation() {
-    this.set('displaySelectLocation', false);
-  }
-
-  @action
-  setSkills(skills) {
-    if (skills.length === 0) {
-      this._errorMessage('Aucun acquis sélectionné');
-      return;
-    }
-    this._getChangelog('Changement d\'acquis de l\'épreuve', (changelog) => {
-      this.get('application').send('isLoading');
-      let template = this.get('challenge');
-      const templateVersion = this._getNextTemplateVersion(skills);
-      const challenges = this.get('challenge.alternatives');
-      challenges.pushObject(template);
-      let updateChallenges = challenges.reduce((current, challenge) => {
-        challenge.set('skills', skills);
-        challenge.set('version', templateVersion);
-        current.push(challenge.save()
-          .then(() => {
-            if (challenge.get('isTemplate')) {
-              this._message('Changement d\'acquis effectué pour le prototype');
-            } else {
-              this._message(`Changement d'acquis effectué pour la déclinaison n°${challenge.get('alternativeVersion')}`);
-            }
-          })
-        );
-        return current;
-      }, []);
-      return Promise.all(updateChallenges)
-        .then(() => this._handleChangelog(template, changelog))
-        .finally(() => this.get('application').send('finishedLoading'));
-    });
+    document.querySelector(`.${this.elementClass}.challenge-data`).scrollTop = 0;
   }
 
   _validationChecks(challenge) {
     this._loadingMessage('Vérifications');
-    if (challenge.get('isValidated')) {
+    if (challenge.isValidated) {
       return this._error('L\'épreuve est déjà en production');
     }
-    if (challenge.get('isTemplate')) {
-      if (challenge.get('firstSkill') == null) {
+    if (challenge.isTemplate) {
+      if (challenge.firstSkill == null) {
         return this._error('L\'épreuve n\'est pas rattachée à un acquis');
       }
       return Promise.resolve(challenge);
     } else {
-      const template = challenge.get('template');
-      if (!template.get('isValidated')) {
+      const template = challenge.template;
+      if (!template.isValidated) {
         return this._error('Le prototype correspondant n\'est pas validé');
       }
       return Promise.resolve(challenge);
@@ -370,11 +359,11 @@ export default class SingleController extends Controller {
   }
 
   _archivePreviousTemplate(challenge) {
-    if (!challenge.get('isTemplate')) {
+    if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const skill = challenge.get('firstSkill');
-    const template = skill.get('productionTemplate');
+    const skill = challenge.firstSkill;
+    const template = skill.productionTemplate;
     if (template == null) {
       return Promise.resolve(challenge);
     }
@@ -385,11 +374,11 @@ export default class SingleController extends Controller {
   }
 
   _validateAlternatives(challenge) {
-    if (!challenge.get('isTemplate')) {
+    if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const alternatives = challenge.get('draftAlternatives').filter(alternative => {
-      return !alternative.get('isArchived');
+    const alternatives = challenge.draftAlternatives.filter(alternative => {
+      return !alternative.isArchived;
     });
     if (alternatives.length === 0) {
       return Promise.resolve(challenge);
@@ -398,7 +387,7 @@ export default class SingleController extends Controller {
       .then(() => {
         let alternativesPublication = alternatives.reduce((current, alternative) => {
           current.push(alternative.validate()
-            .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} mise en production`))
+            .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`))
           );
           return current;
         }, []);
@@ -409,16 +398,16 @@ export default class SingleController extends Controller {
   }
 
   _archiveAlternatives(challenge) {
-    if (!challenge.get('isTemplate')) {
+    if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const toArchive = challenge.get('alternatives').filter(alternative => !alternative.get('isArchived'));
+    const toArchive = challenge.alternatives.filter(alternative => !alternative.isArchived);
     if (toArchive.length === 0) {
       return Promise.resolve(challenge);
     }
     let alternativesArchive = toArchive.reduce((current, alternative) => {
       current.push(alternative.archive()
-        .then(alternative => this._message(`Alternative n°${alternative.get('alternativeVersion')} archivée`))
+        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`))
       );
       return current;
     }, []);
@@ -427,25 +416,25 @@ export default class SingleController extends Controller {
   }
 
   _checkSkillsValidation(challenge) {
-    const skills = challenge.get('skills');
+    const skills = challenge.skills;
     if (skills.length === 0) {
       return Promise.resolve(challenge);
     }
     let skillChecks = skills.reduce((current, skill) => {
-      const template = skill.get('productionTemplate');
+      const template = skill.productionTemplate;
       if (template) {
-        if (!skill.get('isActive')) {
+        if (!skill.isActive) {
           current.push(skill.activate()
             .then(skill => {
-              this._message(`Activation de l'acquis ${skill.get('name')}`);
+              this._message(`Activation de l'acquis ${skill.name}`);
               return skill;
             }));
         }
       } else {
-        if (skill.get('isActive')) {
+        if (skill.isActive) {
           current.push(skill.deactivate()
             .then(skill => {
-              this._message(`Désactivation de l'acquis ${skill.get('name')}`);
+              this._message(`Désactivation de l'acquis ${skill.name}`);
               return skill;
             }));
         }
@@ -457,13 +446,13 @@ export default class SingleController extends Controller {
 
   _handleIllustration(challenge) {
     // check for illustration upload
-    let illustration = challenge.get('illustration');
-    if (illustration && illustration.length > 0 && illustration.get('firstObject').file) {
-      let file = illustration.get('firstObject').file;
+    let illustration = challenge.illustration;
+    if (illustration && illustration.length > 0 && illustration.firstObject.file) {
+      let file = illustration.firstObject.file;
       this._loadingMessage('Envoi de l\'illustration...');
-      return this.get('storage').uploadFile(file)
+      return this.storage.uploadFile(file)
         .then((newIllustration) => {
-          challenge.set('illustration', [{url: newIllustration.url, filename: newIllustration.filename}]);
+          challenge.illustration = [{url: newIllustration.url, filename: newIllustration.filename}];
           return challenge;
         })
     } else {
@@ -473,15 +462,15 @@ export default class SingleController extends Controller {
 
   _handleAttachments(challenge) {
     // check for attachments upload
-    let attachments = challenge.get('attachments');
+    let attachments = challenge.attachments;
     if (attachments) {
-      const baseName = challenge.get('attachmentBaseName');
-      const filePath = this.get('filePath');
+      const baseName = challenge.attachmentBaseName;
+      const filePath = this.filePath;
       const baseNameUpdated = challenge.baseNameUpdated();
-      let storage = this.get('storage');
+      let storage = this.storage;
       let uploadAttachments = attachments.map((value) => {
         if (value.file) {
-          const fileName = baseName + '.' + filePath.getExtension(value.file.get('name'));
+          const fileName = baseName + '.' + filePath.getExtension(value.file.name);
           return storage.uploadFile(value.file, fileName);
         } else {
           if (baseNameUpdated) {
@@ -495,7 +484,7 @@ export default class SingleController extends Controller {
       this._loadingMessage('Gestion des pièces jointes...');
       return Promise.all(uploadAttachments)
         .then(newAttachments => {
-          challenge.set('attachments', newAttachments);
+          challenge.attachments = newAttachments;
           return challenge;
         })
     }
@@ -508,9 +497,9 @@ export default class SingleController extends Controller {
   }
 
   _handleCache(challenge) {
-    if (this.get('mayUpdateCache') && this.get('updateCache')) {
+    if (this.mayUpdateCache && this.updateCache) {
       this._loadingMessage('Mise à jour du cache...');
-      return this.get('pixConnector').updateCache(challenge)
+      return this.pixConnector.updateCache(challenge)
         .then(() => {
           return challenge;
         })
@@ -524,14 +513,14 @@ export default class SingleController extends Controller {
 
   _handleChangelog(challenge, changelog) {
     if (changelog) {
-      let entry = this.get('store').createRecord('changelogEntry', {
+      let entry = this.store.createRecord('changelogEntry', {
         text: changelog,
-        challengeId: challenge.get('id'),
-        author: this.get('config').get('author'),
-        competence: this.get('competence.code'),
-        skills: challenge.get('joinedSkills'),
+        challengeId: challenge.id,
+        author: this.config.author,
+        competence: this.competence.code,
+        skills: challenge.joinedSkills,
         createdAt: (new Date()).toISOString(),
-        production: !challenge.get('workbench')
+        production: !challenge.workbench
       });
       return entry.save()
         .then(() => challenge);
@@ -542,7 +531,7 @@ export default class SingleController extends Controller {
 
   _confirm(title, text, parameter) {
     return new Promise((resolve, reject) => {
-      this.get('application').send('confirm', title, text, (result) => {
+      this.application.send('confirm', title, text, (result) => {
         if (result) {
           resolve(parameter);
         } else {
@@ -553,15 +542,15 @@ export default class SingleController extends Controller {
   }
 
   _message(text) {
-    this.get('application').send('showMessage', text, true);
+    this.application.send('showMessage', text, true);
   }
 
   _loadingMessage(text) {
-    this.get('application').send('isLoading', text);
+    this.application.send('isLoading', text);
   }
 
   _errorMessage(text) {
-    this.get('application').send('showMessage', text, false);
+    this.application.send('showMessage', text, false);
   }
 
   _error(text) {
@@ -571,8 +560,8 @@ export default class SingleController extends Controller {
 
   _getChangelog(defaultMessage, callback) {
     this.changelogCallback = callback;
-    this.set('changelogDefault', defaultMessage);
-    this.set('displayChangeLog', true);
+    this.changelogDefault = defaultMessage;
+    this.displayChangeLog = true;
   }
 
   _getNextTemplateVersion(skills) {

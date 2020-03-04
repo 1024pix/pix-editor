@@ -101,9 +101,21 @@
   {{/if}}
 </div>
 </div>
-<PopIn::ChallengeLog @display={{this.displayChallengeLog}} @challenge={{this.challenge}} @competence={{this.competence}} @class={{this.popinLogClass}} @close={{this.closeChallengeLog}} />
-<PopIn::Image @src={{this.popinImageSrc}} @display={{this.displayImage}} @close={{this.closeImage}}/>
-<PopIn::Changelog @display={{this.displayChangeLog}} @onApprove={{this.changelogApprove}} @onDeny={{this.changelogDeny}} @defaultValue={{this.changelogDefault}} />
+<PopIn::ChallengeLog
+  @display={{this.displayChallengeLog}}
+  @challenge={{this.challenge}}
+  @competence={{this.competence}}
+  @class={{this.popinLogClass}}
+  @close={{this.closeChallengeLog}} />
+<PopIn::Image
+  @src={{this.popinImageSrc}}
+  @display={{this.displayImage}}
+  @close={{this.closeIllustration}}/>
+<PopIn::Changelog
+  @display={{this.displayChangeLog}}
+  @onApprove={{this.changelogApprove}}
+  @onDeny={{this.changelogDeny}}
+  @defaultValue={{this.changelogDefault}} />
 {{#if this.mayMove}}
   <PopIn::SelectLocation
     @display={{this.displaySelectLocation}}
@@ -115,6 +127,6 @@
     @tube={{this.challenge.firstSkill.tube}}
     @level={{this.level}}
     @multipleLevel={{true}}
-    @close={{this.closeSelectLocation}} />
+    @close={{this.closeMoveTemplate}} />
 {{/if}}
 {{outlet}}
