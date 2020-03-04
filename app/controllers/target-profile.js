@@ -120,7 +120,12 @@ export default class TargetProfileController extends Controller {
 
   @action
   getProfileId() {
-    this.set('displaySingleEntry', true)
+    this.set('displaySingleEntry', true);
+  }
+
+  @action
+  closeSingleEntry() {
+    this.set('displaySingleEntry', false);
   }
 
   @action

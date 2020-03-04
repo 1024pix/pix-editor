@@ -1,17 +1,20 @@
-import classic from 'ember-classic-decorator';
+import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import Component from '@ember/component';
+import { tracked } from '@glimmer/tracking';
 
-@classic
 export default class PopinSingleEntry extends Component {
+
+  @tracked value = '';
+
   @action
   validate() {
-   this.set('display', false);
-    this.get('setValue')(this.get('value'));
+    this.args.setValue(this.value);
+    this.closeModal();
   }
 
   @action
   closeModal() {
-    this.set('display', false);
+    this.value = '';
+    this.args.close();
   }
 }
