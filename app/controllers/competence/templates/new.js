@@ -1,8 +1,6 @@
-import classic from 'ember-classic-decorator';
 import Template from './single';
 import { action } from '@ember/object';
 
-@classic
 export default class NewController extends Template {
 
   creation = true;
@@ -12,46 +10,46 @@ export default class NewController extends Template {
 
   @action
   cancelEdit() {
-    this.get('store').deleteRecord(this.get('challenge'));
-    this.set('edition', false);
+    this.store.deleteRecord(this.challenge);
+    this.edition = false;
     this._message('Création annulée');
-    this.get('parentController').send('closeChildComponent');
+    this.parentController.send('closeChildComponent');
   }
 
   @action
   save() {
-    this.get('application').send('isLoading');
-    return this._handleIllustration(this.get('challenge'))
+    this.application.send('isLoading');
+    return this._handleIllustration(this.challenge)
     .then(challenge => this._handleAttachments(challenge))
     .then(challenge => this._saveChallenge(challenge))
     .then(challenge => this._setVersion(challenge))
     .then(challenge => this._handleCache(challenge))
     .then(challenge => {
-      this.set('edition', false);
+      this.edition = false;
       this.send('minimize');
       this._message('Prototype enregistré');
-      this.transitionToRoute('competence.templates.single', this.get('competence'), challenge);
+      this.transitionToRoute('competence.templates.single', this.competence, challenge);
     })
     .catch(() => {
       this._errorMessage('Erreur lors de la création');
     })
     .finally(() => {
-      this.get('application').send('finishedLoading');
+      this.application.send('finishedLoading');
     })
   }
 
   _setVersion(challenge) {
     let operation;
-    if (challenge.get('isWorkbench')) {
+    if (challenge.isWorkbench) {
       operation = Promise.resolve(challenge);
     } else {
-      const firstSkill = challenge.get('firstSkill');
+      const firstSkill = challenge.firstSkill;
       if (!firstSkill) {
         operation = Promise.resolve(challenge);
       } else {
         const version = firstSkill.getNextVersion();
         if (version > 0) {
-          challenge.set('version', version);
+          challenge.version = version;
           operation = challenge.save()
         } else {
           operation = Promise.resolve(challenge);
@@ -59,7 +57,7 @@ export default class NewController extends Template {
       }
     }
     return operation.then(challenge => {
-      let version = challenge.get('version');
+      let version = challenge.version;
       if (version > 0) {
         this._message(`Nouvelle version : ${version}`, true);
       }
