@@ -1,11 +1,9 @@
-import classic from 'ember-classic-decorator';
 import Template from '../../single';
-import {computed, action} from '@ember/object';
+import {action} from '@ember/object';
 import {scheduleOnce} from '@ember/runloop';
 import {inject as controller} from '@ember/controller';
-import { alias } from '@ember/object/computed';
+import {alias} from '@ember/object/computed';
 
-@classic
 export default class SingleController extends Template {
 
   alternative = true;
@@ -23,18 +21,17 @@ export default class SingleController extends Template {
 
   defaultSaveChangelog = 'Mise à jour de la déclinaison';
 
-  @computed('creation', 'challenge')
   get challengeTitle() {
-    if (this.get('creation')) {
+    if (this.creation) {
       return 'Nouvelle déclinaison';
     } else {
-      let index = this.get('challenge.alternativeVersion');
+      let index = this.challenge.alternativeVersion;
       return 'Déclinaison n°'+index;
     }
   }
 
   _executeCopy() {
-    const element = document.getElementById(this.get('copyZoneId'));
+    const element = document.getElementById(this.copyZoneId);
     element.select();
     try {
       var successful = document.execCommand('copy');
@@ -51,20 +48,18 @@ export default class SingleController extends Template {
 
   @action
   preview() {
-    let challenge = this.get('challenge');
-    window.open(challenge.get('preview'), challenge.get('id'));
+    let challenge = this.challenge;
+    window.open(challenge.preview, challenge.id);
   }
 
   @action
   openAirtable() {
-    let challenge = this.get('challenge');
-    let config = this.get('config');
-    window.open(config.get('airtableUrl')+config.get('tableChallenges')+'/'+challenge.get('id'), 'airtable');
+    window.open(this.config.airtableUrl+this.config.tableChallenges+'/'+this.challenge.id, 'airtable');
   }
 
   @action
   copyLink() {
-    this.set('copyOperation', true);
+    this.copyOperation = true;
     scheduleOnce('afterRender', this, this._executeCopy);
   }
 }
