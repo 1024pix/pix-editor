@@ -1,66 +1,59 @@
-import classic from 'ember-classic-decorator';
 import Controller from '@ember/controller';
-import { computed, action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { inject as controller } from '@ember/controller';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
+import {inject as controller} from '@ember/controller';
 import {tracked} from '@glimmer/tracking';
 
-@classic
 export default class AlternativesController extends Controller {
+
+  queryParams = ['secondMaximized'];
 
   @tracked challenge = null;
   @tracked competence = null;
+  @tracked secondMaximized = false;
 
   @service router;
   @service config;
   @service access;
 
   @controller application;
-
   @controller('competence') competenceController;
 
-  queryParams = ['secondMaximized'];
-
-  secondMaximized = false;
-
-  @computed('config.access')
   get mayCreateAlternative() {
-    return this.get('access').mayCreateAlternative();
+    return this.access.mayCreateAlternative();
   }
 
-  @computed('router.currentRouteName')
   get size() {
-    if (this.get('router.currentRouteName') == 'competence.templates.single.alternatives.index') {
+    if (this.router.currentRouteName == 'competence.templates.single.alternatives.index') {
       return 'full';
     } else {
       return 'half';
     }
   }
 
-  @computed('secondMaximized')
   get listHidden() {
-    return this.get('secondMaximized')?'hidden':'';
+    return this.secondMaximized?'hidden':'';
   }
 
   @action
   newAlternative() {
-    this.transitionToRoute('competence.templates.single.alternatives.new', this.get('competence'),  this.get('challenge'));
+    this.transitionToRoute('competence.templates.single.alternatives.new', this.competence,  this.challenge);
   }
 
   @action
   closeChildComponent() {
-    this.set('secondMaximized', false);
-    this.transitionToRoute('competence.templates.single.alternatives', this.get('competence'), this.get('challenge'));
+    this.secondMaximized = false;
+    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.single.alternatives.new', this.get('competence'),  this.get('challenge'), { queryParams: {from: challenge.get('id')}});
+    this.transitionToRoute('competence.templates.single.alternatives.new', this.competence,  this.challenge, { queryParams: {from: challenge.id}});
   }
 
   @action
   refresh() {
-    this.get('competenceController').send('refresh');
+    this.competenceController.send('refresh');
   }
 
   @action
