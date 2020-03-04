@@ -1,29 +1,23 @@
-import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 import { inject as service } from '@ember/service';
-import {computed} from '@ember/object';
 
-@classic
 export default class ApplicationAdapter extends DS.RESTAdapter {
 
   host = 'https://api.airtable.com';
 
-  @service
-  config;
+  @service config;
 
-  @computed('config.airtableKey')
   get headers() {
     return {
       Accept: 'application/json',
       // API Token
-      Authorization: 'Bearer '+this.get('config').get('airtableKey')
+      Authorization: 'Bearer '+this.config.airtableKey
     }
   }
 
-  @computed('config.airtableBase')
   get namespace() {
   // API Version + Base ID
-  return 'v0/'+this.get('config').get('airtableBase');
+  return 'v0/'+this.config.airtableBase;
   }
 
   pathForType(type) {

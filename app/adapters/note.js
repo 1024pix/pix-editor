@@ -1,17 +1,12 @@
-import classic from 'ember-classic-decorator';
 import ApplicationAdapter from './application';
 import { inject as service } from '@ember/service';
-import {computed} from '@ember/object';
 
-@classic
 export default class NoteAdapter extends ApplicationAdapter {
 
-  @service
-  config;
+  @service config;
 
-  @computed('config.airtableEditorBase')
   get namespace() {
-    return 'v0/'+this.get('config').get('airtableEditorBase');
+    return 'v0/'+this.config.airtableEditorBase;
   }
 
   pathForType() {
