@@ -1,54 +1,46 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import Controller from '@ember/controller';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
+import {alias} from '@ember/object/computed';
 import {inject as controller} from '@ember/controller';
 import {scheduleOnce} from '@ember/runloop';
 import {tracked} from '@glimmer/tracking';
 
-@classic
 export default class SingleController extends Controller {
+
+  wasMaximized = false;
+
+  @tracked edition = false;
+  @tracked displaySelectLocation = false;
+
   @controller('competence')
   parentController;
 
   @alias('parentController.firstMaximized')
   maximized;
 
-  @controller
-  application;
-
-  @service
-  config;
-
-  @service
-  access;
-
   @alias('model')
   skill;
 
-  wasMaximized = false;
-  @tracked edition = false;
-  displaySelectLocation = false;
+  @controller application;
 
-  @computed('skill')
+  @service config;
+  @service access;
+
   get skillName() {
-    return `${this.get('skill.pixId')} (${this.get('skill.name')})`;
+    return `${this.skill.pixId} (${this.skill.name})`;
   }
 
-  @computed('config.access')
   get mayEdit() {
-    return this.get('access').mayEditSkills();
+    return this.access.mayEditSkills();
   }
 
-  @computed('config.access')
   get mayAccessAirtable() {
-    return this.get('access').mayAccessAirtable();
+    return this.access.mayAccessAirtable();
   }
 
-  @computed('config.access', 'skill', 'skill.productionTemplate')
   get mayMove() {
-    return this.get('access').mayMoveSkill(this.get('skill'));
+    return this.access.mayMoveSkill(this.skill);
   }
 
   _scrollToTop() {
@@ -57,63 +49,60 @@ export default class SingleController extends Controller {
 
   @action
   previewTemplate() {
-    const template = this.get('skill.productionTemplate');
-    window.open(template.get('preview'), template.get('id'));
+    const template = this.skill.productionTemplate;
+    window.open(template.preview, template.id);
   }
 
   @action
   openAirtable() {
-    let skill = this.get('skill');
-    let config = this.get('config');
-    window.open(config.get('airtableUrl') + config.get('tableSkills') + '/' + skill.get('id'), 'airtable');
+    window.open(this.config.airtableUrl + this.config.tableSkills + '/' + this.skill.id, 'airtable');
   }
 
   @action
   maximize() {
-    this.set('maximized', true);
+    this.maximized = true;
   }
 
   @action
   minimize() {
-    this.set('maximized', false);
+    this.maximized = false;
   }
 
   @action
   close() {
-    this.set('maximized', false);
-    this.transitionToRoute('competence.skills', this.get('competence'));
+    this.maximized = false;
+    this.transitionToRoute('competence.skills', this.competence);
   }
 
   @action
   edit() {
-    let state = this.get('maximized');
-    this.set('wasMaximized', state);
-    this.get('maximize')();
-    this.set('edition', true);
+    this.wasMaximized = this.maximized;
+    this.maximize();
+    this.edition = true;
     scheduleOnce('afterRender', this, this._scrollToTop);
   }
 
   @action
   cancelEdit() {
-    this.set('edition', false);
-    let skill = this.get('skill');
+    this.edition = false;
+    let skill = this.skill;
     skill.rollbackAttributes();
-    const challenge = this.get('skill.productionTemplate');
+    const challenge = this.skill.productionTemplate;
     if (challenge) {
       challenge.rollbackAttributes();
     }
-    let previousState = this.get('wasMaximized');
+    let previousState = this.wasMaximized;
     if (!previousState) {
-      this.get('minimize')();
+      this.minimize();
     }
-    this.get('application').send('showMessage', 'Modification annulée', true);
+    this.application.send('showMessage', 'Modification annulée', true);
   }
 
   @action
   save() {
-    this.get('application').send('isLoading');
-    let skill = this.get('skill');
-    const template = this.get('skill.productionTemplate');
+    this.application.send('isLoading');
+    let skill = this.skill;
+    const template = this.skill.productionTemplate;
     let operation;
     if (template) {
       operation = template.save();
@@ -124,44 +113,44 @@ export default class SingleController extends Controller {
       return skill.save();
     })
     .then(() => {
-      this.set('edition', false);
-      this.get('application').send('finishedLoading');
-      this.get('application').send('showMessage', 'Acquis mis à jour', true);
+      this.edition = false;
+      this.application.send('finishedLoading');
+      this.application.send('showMessage', 'Acquis mis à jour', true);
     })
     .catch((error) => {
       console.error(error);
-      this.get('application').send('finishedLoading');
-      this.get('application').send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
+      this.application.send('finishedLoading');
+      this.application.send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
     });
   }
 
   @action
   moveSkill() {
-   this.set('displaySelectLocation', true)
+   this.displaySelectLocation = true;
   }
 
   @action
   setLocation(competence, newTube, level) {
-    let skill = this.get('skill');
-    this.get('application').send('isLoading');
-    skill.set('tube', newTube);
-    skill.set('level', level);
-    skill.set('competence', [competence.get('id')]);
+    let skill = this.skill;
+    this.application.send('isLoading');
+    skill.tube = newTube;
+    skill.level = level;
+    skill.competence = [competence.get('id')];
     return skill.save()
       .then(() => {
-        this.get('application').send('finishedLoading');
-        this.get('application').send('showMessage', 'Acquis mis à jour', true);
+        this.application.send('finishedLoading');
+        this.application.send('showMessage', 'Acquis mis à jour', true);
         this.transitionToRoute('competence.skills.single', competence, skill);
       })
       .catch((error) => {
         console.error(error);
-        this.get('application').send('finishedLoading');
-        this.get('application').send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
+        this.application.send('finishedLoading');
+        this.application.send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
       });
   }
 
   @action
   closeSelectLocation() {
-    this.set('displaySelectLocation', false);
+    this.displaySelectLocation = false;
   }
 }
