@@ -1,12 +1,10 @@
-import classic from 'ember-classic-decorator';
-import { action } from '@ember/object';
 import Skill from '../skills/single';
+import { action } from '@ember/object';
 
-@classic
 export default class SingleController extends Skill {
   @action
   close() {
-    this.set('maximized', false);
-    this.transitionToRoute('competence.quality', this.get('competence'));
+    this.maximized = false;
+    this.transitionToRoute('competence.quality', this.competence);
   }
 }
