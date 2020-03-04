@@ -1,29 +1,27 @@
-import classic from 'ember-classic-decorator';
 import Route from '@ember/routing/route';
 
-@classic
 export default class ChallengeRoute extends Route {
   model(params) {
-    return this.get('store').query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()) , Statut != 'archive')`, maxRecords:1})
+    return this.store.query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()) , Statut != 'archive')`, maxRecords:1})
     .then(challenges => {
-      return challenges.get('firstObject');
+      return challenges.firstObject;
     });
   }
 
   afterModel(model) {
     if (model) {
-      return model.get('skills')
+      return model.skills
       .then(() => {
-        const firstSkill = model.get('firstSkill');
-        return firstSkill.get('challenges') // in order to load model.template later on
-        .then(() => firstSkill.get('tube'));
+        const firstSkill = model.firstSkill;
+        return firstSkill.challenges // in order to load model.template later on
+        .then(() => firstSkill.tube);
       })
-      .then(tube => tube.get('competence'))
+      .then(tube => tube.competence)
       .then(competence => {
-        if (model.get('isTemplate')) {
+        if (model.isTemplate) {
           return this.transitionTo('competence.templates.single', competence, model);
         } else {
-          return this.transitionTo('competence.templates.single.alternatives.single', competence, model.get('template'), model);
+          return this.transitionTo('competence.templates.single.alternatives.single', competence, model.template, model);
         }
       })
       .catch(() => this.transitionTo('index'));
