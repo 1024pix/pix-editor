@@ -1,9 +1,7 @@
-import classic from 'ember-classic-decorator';
 import DS from 'ember-data';
 import { assign } from '@ember/polyfills';
 import { pluralize } from 'ember-inflector';
 
-@classic
 export default class ApplicationSerializer extends DS.RESTSerializer {
 
   payloadKeyFromModelName(modelName) {

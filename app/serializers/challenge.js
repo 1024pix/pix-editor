@@ -1,7 +1,5 @@
-import classic from 'ember-classic-decorator';
 import ApplicationSerializer from './application';
 
-@classic
 export default class ChallengeSerializer extends ApplicationSerializer {
 
   primaryKey = 'Record ID';
