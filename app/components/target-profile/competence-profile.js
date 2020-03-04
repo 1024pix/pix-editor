@@ -1,31 +1,24 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
-@classic
 export default class CompetenceProfile extends Component {
-  @computed('competence.productionTubes.@each.selectedLevel', 'filter')
-  get filterTube() {
-    const filter = this.get('filter');
-    const competence = this.get('competence');
-    if(filter){
-      return competence.get('productionTubes').filter(tube => {
-        return tube.selectedLevel
-      })
+
+  get filteredTubes() {
+    const competence = this.args.competence;
+    if(this.args.filter){
+      return competence.productionTubes.filter(tube => tube.selectedLevel);
     }
-    return competence.get('productionTubes');
+    return competence.productionTubes;
   }
 
   @action
   clickOnTube(tube) {
-    const showTubeDetails = this.get('showTubeDetails');
-    const isSelected = tube.get('selectedLevel');
-    if (showTubeDetails) {
-      this.get('displayTube')(tube);
-    } else if (isSelected) {
-      this.get('clearTube')(tube);
+    if (this.args.showTubeDetails) {
+      this.args.displayTube(tube);
+    } else if (tube.selectedLevel) {
+      this.args.clearTube(tube);
     } else {
-      this.get('setTubeLevel')(tube);
+      this.args.setTubeLevel(tube);
     }
   }
 }
