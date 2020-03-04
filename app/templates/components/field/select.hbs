@@ -5,7 +5,7 @@
     {{option}}
   </PowerSelectMultiple>
 {{else}}
-  <PowerSelect @placeholder={{if @defaultText @defaultText ""}} @searchEnabled={{false}} @options={{@options}} @disabled={{if @edition false true}} @selected={{@value}} @onChange={{@setValue}} as |option|>
+  <PowerSelect @placeholder={{if @defaultText @defaultText ""}} @searchEnabled={{false}} @options={{@options}} @disabled={{if @edition false true}} @selected={{if @value @value "" }} @onChange={{@setValue}} as |option|>
     {{#if option.label}}
       {{option.label}}
     {{else}}

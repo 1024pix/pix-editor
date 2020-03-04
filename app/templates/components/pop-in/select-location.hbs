@@ -14,7 +14,9 @@
           <Field::Select @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
           {{#if @selectTubeLevel}}
             <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
-            <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}} />
+            {{#if this.selectedTube}}
+              <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}} />
+            {{/if}}
           {{/if}}
         </form>
       </div>
