@@ -1,9 +1,15 @@
 const _ = require('lodash');
 const injectDefaults = require('../../infrastructure/utils/inject-defaults');
+const airtableDatasource = require('../../infrastructure/datasources/airtable');
 
 const dependencies = {
-  areaDatasource: require('../../infrastructure/datasources/airtable/area-datasource'),
-  competenceDatasource: require('../../infrastructure/datasources/airtable/competence-datasource'),
+  areaDatasource: airtableDatasource.AreaDatasource,
+  challengeDatasource: airtableDatasource.ChallengeDatasource,
+  competenceDatasource: airtableDatasource.CompetenceDatasource,
+  courseDatasource: airtableDatasource.CourseDatasource,
+  skillDatasource: airtableDatasource.SkillDatasource,
+  tubeDatasource: airtableDatasource.TubeDatasource,
+  tutorialDatasource: airtableDatasource.TutorialDatasource
 };
 
 function injectDependencies(usecases) {
