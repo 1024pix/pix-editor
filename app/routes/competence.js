@@ -1,19 +1,16 @@
-import classic from 'ember-classic-decorator';
+import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Route from '@ember/routing/route';
 
-@classic
 export default class CompetenceRoute extends Route {
-  @service
-  paginatedQuery;
+  @service paginatedQuery;
 
   model(params) {
-    return this.get('store').findRecord('competence', params.competence_id);
+    return this.store.findRecord('competence', params.competence_id);
   }
 
   afterModel(model) {
-    if (model.get('needsRefresh')) {
+    if (model.needsRefresh) {
       return model.hasMany('rawTubes').reload()
       .then(tubes => {
         const getSkills = tubes.map(tube => tube.hasMany('rawSkills').reload());
@@ -26,21 +23,21 @@ export default class CompetenceRoute extends Route {
           return list.concat(skill.hasMany('challenges').ids());
         }, [])).flat();
         const uniqueChallenges = [...new Set(challenges)];
-        const store = this.get('store');
+        const store = this.store;
         const reloadChallenges = uniqueChallenges.map(challengeId => store.findRecord('challenge', challengeId, { reload: true }));
         return Promise.all(reloadChallenges);
       })
       .then(() => {
-        model.set('needsRefresh', false);
+        model.needsRefresh = false;
       });
     } else {
-      return model.get('rawTubes')
+      return model.rawTubes
       .then(tubes => {
-        const getSkills = tubes.map(tube => tube.get('rawSkills'));
+        const getSkills = tubes.map(tube => tube.rawSkills);
         return Promise.all(getSkills);
       })
       .then(skillsSet => {
-        const getChallenges = skillsSet.map( skills => skills.map(skill => skill.get('challenges'))).flat();
+        const getChallenges = skillsSet.map( skills => skills.map(skill => skill.challenges)).flat();
         return Promise.all(getChallenges);
       })
     }
@@ -49,7 +46,7 @@ export default class CompetenceRoute extends Route {
   @action
   refreshModel() {
     let model = this.modelFor(this.routeName);
-    model.set('needsRefresh', true);
+    model.needsRefresh = true;
     this.refresh();
   }
 }
