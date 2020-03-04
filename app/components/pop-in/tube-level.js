@@ -1,56 +1,47 @@
-import classic from 'ember-classic-decorator';
-import { action, computed } from '@ember/object';
-import Component from '@ember/component';
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
 
 
-@classic
 export default class PopinTubeLevel extends Component {
-  tube = null;
 
-  @computed('tube', 'selectedSkills')
   get skills() {
-    let tube = this.get('tube');
-    if (tube) {
-      const skills = tube.get('productionSkills');
-      let selected = this.get('selectedSkills');
-      return skills.reduce((orderedSkills, skill) => {
-        let level = skill.get('level');
-        skill.set('_selected', selected.includes(skill.get('pixId')));
-        orderedSkills[level-1] = skill;
-        return orderedSkills;
-      }, [null, null, null, null, null, null, null, null]);
-    } else {
-      return [];
-    }
+    const tube = this.args.tube;
+    const skills = tube.get('productionSkills');
+    const selected = this.args.selectedSkills;
+    return skills.reduce((orderedSkills, skill) => {
+      const level = skill.level;
+      skill._selected = selected.includes(skill.pixId);
+      orderedSkills[level-1] = skill;
+      return orderedSkills;
+    }, [null, null, null, null, null, null, null, null]);
   }
 
-  @computed('level')
   get mayUnset() {
-    let value = this.get('level');
+    let value = this.args.level;
     return value != false;
   }
 
   @action
   select(skill) {
-    let level = skill.get('level');
-    let skillIds = this.get('skills').reduce((ids, skill) => {
-      if (skill && (skill.get('level')<=level)) {
-        ids.push(skill.get('pixId'));
+    let level = skill.level;
+    let skillIds = this.skills.reduce((ids, skill) => {
+      if (skill && (skill.level<=level)) {
+        ids.push(skill.pixId);
       }
       return ids;
     }, []);
-    this.get('setTubeLevel')(this.get('tube'), level, skillIds);
-    this.set('display', false);
+    this.args.setTubeLevel(this.args.tube, level, skillIds);
+    this.closeModal();
   }
 
   @action
   clear() {
-    this.get('clearTube')(this.get('tube'));
-    this.set('display', false);
+    this.args.clearTube(this.args.tube);
+    this.closeModal();
   }
 
   @action
   closeModal() {
-    this.set('display', false);
+    this.args.close();
   }
 }

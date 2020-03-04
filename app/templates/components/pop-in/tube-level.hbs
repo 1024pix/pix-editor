@@ -1,15 +1,12 @@
-{{#if this.display}}
+{{#if @display}}
   <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
     <div class="ui modal visible active popin-tube-level">
       <i class="close icon" {{on "click" this.closeModal}}></i>
       <div class="header">
-        {{this.tube.name}}
+        {{@tube.name}}
       </div>
       <div class="content">
-        <div class="levels {{if this.skills.isPending "loading"}}">
-          {{#if this.skills.isPending}}
-            <div class="ui active centered inline loader"></div>
-          {{/if}}
+        <div class="levels">
           {{#each this.skills as |skill|}}
             {{#if skill}}
               <div class="level {{if skill._selected "selected"}}" {{on "click" (fn this.select skill)}} >

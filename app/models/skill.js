@@ -1,6 +1,7 @@
 import classic from 'ember-classic-decorator';
 import {computed} from '@ember/object';
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
 @classic
 export default class SkillModel extends Model {
@@ -32,6 +33,8 @@ export default class SkillModel extends Model {
 
   @hasMany('tutorial')
   tutoMore;
+
+  @tracked _selected = false;
 
   @computed('descriptionStatus')
   get descriptionCSS() {

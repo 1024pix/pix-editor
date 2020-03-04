@@ -74,6 +74,11 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
+  closeTubeLevel() {
+    this.set('displayTubeLevel', false);
+  }
+
+  @action
   setProfileTube(tube, level, skills) {
     if (!level) {
       [skills, level] = this._getTubeSkillsAndMaxLevel(tube);

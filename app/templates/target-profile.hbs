@@ -72,5 +72,5 @@
     <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
   </div>
 </div>
-<PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @display={{this.displayTubeLevel}} />
+<PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @display={{this.displayTubeLevel}} @close={{this.closeTubeLevel}}/>
 <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @display={{this.displaySingleEntry}} @close={{this.closeSingleEntry}} />
