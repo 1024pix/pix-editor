@@ -1,15 +1,9 @@
-import classic from 'ember-classic-decorator';
-import {computed} from '@ember/object';
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
-@classic
 export default class SkillModel extends Model {
 
-  init() {
-    super.init(...arguments);
-    this.set('_pinnedRelationships', {})
-  }
+  _pinnedRelationships = {};
 
   @attr('string', {readOnly: true}) name;
   @attr competence;
@@ -36,9 +30,8 @@ export default class SkillModel extends Model {
 
   @tracked _selected = false;
 
-  @computed('descriptionStatus')
   get descriptionCSS() {
-    let status = this.get('descriptionStatus');
+    const status = this.descriptionStatus;
     if (!status) {
       return 'suggested';
     } else {
@@ -46,9 +39,8 @@ export default class SkillModel extends Model {
     }
   }
 
-  @computed('clueStatus')
   get clueCSS () {
-    let status = this.get('clueStatus');
+    const status = this.clueStatus;
     if (!status) {
       return 'suggested';
     } else {
@@ -56,14 +48,12 @@ export default class SkillModel extends Model {
     }
   }
 
-  @computed('clueStatus')
   get clueNA() {
-    return (this.get('clueStatus') === 'inapplicable');
+    return (this.clueStatus === 'inapplicable');
   }
 
-  @computed('tutoSolution')
   get tutoSolutionCount() {
-    let ids = this.get('tutoSolution');
+    const ids = this.tutoSolution;
     if (ids) {
       return ids.length;
     } else {
@@ -71,9 +61,8 @@ export default class SkillModel extends Model {
     }
   }
 
-  @computed('tutoMore')
   get tutoMoreCount() {
-    let ids = this.get('tutoMore');
+    const ids = this.tutoMore;
     if (ids) {
       return ids.length;
     } else {
@@ -81,39 +70,33 @@ export default class SkillModel extends Model {
     }
   }
 
-  @computed('challenges.[]')
   get templates() {
-    return this.get('challenges').filter((challenge) => challenge.get('isTemplate'));
+    return this.challenges.filter(challenge => challenge.isTemplate);
   }
 
-  @computed('templates.[]')
   get sortedTemplates() {
-    return this.get('templates').sort((a, b) => a.get('version') < b.get('version'));
+    return this.templates.sort((a, b) => a.version < b.version);
   }
 
-  @computed('templates.@each.isValidated')
   get productionTemplate() {
-    return this.get('templates').find(template => template.get('isValidated'));
+    return this.templates.find(template => template.isValidated);
   }
 
-  @computed('templates.@each.isValidated')
   get draftTemplates() {
-    return this.get('templates').filter((template) => !template.get('isValidated'));
+    return this.templates.filter(template => !template.isValidated);
   }
 
-  @computed('challenges.[]')
   get alternatives() {
-    return this.get('challenges').filter((challenge) => !challenge.get('isTemplate'));
+    return this.challenges.filter(challenge => !challenge.isTemplate);
   }
 
-  @computed('status')
   get isActive() {
-    return this.get('status') === 'actif';
+    return this.status === 'actif';
   }
 
   getNextVersion() {
-    return this.get('templates').reduce((current, template) => {
-      let version = template.get('version');
+    return this.templates.reduce((current, template) => {
+      let version = template.version;
       if (version > current) {
         return version;
       }
@@ -122,32 +105,32 @@ export default class SkillModel extends Model {
   }
 
   activate() {
-    this.set('status', 'actif');
+    this.status = 'actif';
     return this.save();
   }
 
   deactivate() {
-    this.set('status', 'en construction');
+    this.status = 'en construction';
     return this.save();
   }
 
   pinRelationships() {
-    const requests = [this.get('tutoSolution'), this.get('tutoMore')];
+    const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)
     .then(tutorials => {
-      this.set('_pinnedRelationships', {
-        tutoSolution:tutorials[0].toArray(),
-        tutoMore:tutorials[1].toArray()
-      });
+      this._pinnedRelationships = {
+          tutoSolution:tutorials[0].toArray(),
+          tutoMore:tutorials[1].toArray()
+      };
     })
   }
 
   rollbackAttributes() {
     super.rollbackAttributes(...arguments);
-    let tutoSolution = this.get('_pinnedRelationships.tutoSolution');
-    this.set('tutoSolution', tutoSolution);
-    let tutoMore = this.get('_pinnedRelationships.tutoMore');
-    this.set('tutoMore', tutoMore);
+    const tutoSolution = this._pinnedRelationships.tutoSolution;
+    this.tutoSolution = tutoSolution;
+    const tutoMore = this._pinnedRelationships.tutoMore;
+    this.tutoMore = tutoMore;
   }
 
   save() {

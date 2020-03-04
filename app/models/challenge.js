@@ -1,9 +1,6 @@
-import classic from 'ember-classic-decorator';
-import {computed} from '@ember/object';
 import {inject as service} from '@ember/service';
 import Model, { attr, hasMany } from '@ember-data/model';
 
-@classic
 export default class ChallengeModel extends Model {
 
   @attr instructions;
@@ -42,50 +39,38 @@ export default class ChallengeModel extends Model {
 
   @hasMany('skill') skills;
 
-  @service('store')
-  myStore;
+  @service('store') myStore;
+  @service config;
+  @service idGenerator;
 
-  @service
-  config;
-
-  @service
-  idGenerator;
-
-  @computed('genealogy')
   get isTemplate() {
-    return (this.get('genealogy') === 'Prototype 1');
+    return (this.genealogy === 'Prototype 1');
   }
 
-  @computed('firstSkill')
   get isWorkbench() {
-    const skill = this.get('firstSkill');
+    const skill = this.firstSkill;
     if (skill) {
-      return skill.get('name') === '@workbench';
+      return skill.name === '@workbench';
     }
     return false;
   }
 
-  @computed('status')
   get isValidated() {
-    const status = this.get('status');
+    const status = this.status;
     return ['validé', 'validé sans test', 'pré-validé'].includes(status);
   }
 
-  @computed('status')
   get isSuggested() {
-    const status = this.get('status');
-    return status === 'proposé';
+    return this.status === 'proposé';
   }
 
-  @computed('declinable')
   get notDeclinable() {
-    let declinable = this.get('declinable');
+    const declinable = this.declinable;
     return (declinable && declinable === 'non');
   }
 
-  @computed('status')
   get statusCSS() {
-    let status = this.get('status');
+    const status = this.status;
     switch (status) {
       case 'validé':
       case 'validé sans test':
@@ -100,115 +85,96 @@ export default class ChallengeModel extends Model {
      }
   }
 
-  @computed('status')
   get isArchived() {
-    let status = this.get('status');
+    const status = this.status;
     return (status === 'archive');
   }
-  @computed('isTemplate','version', 'isWorkbench', 'firstSkill.alternatives')
   get alternatives() {
-    if (!this.get('isTemplate') || this.get('isWorkbench')) {
+    if (!this.isTemplate || this.isWorkbench) {
       return [];
     }
-    let currentVersion = this.get('version');
-    const skill = this.get('firstSkill');
-    if (skill){
-      return skill.get('alternatives').filter(alternative => {
-          return (alternative.get('version') === currentVersion);
+    let currentVersion = this.version;
+    const skill = this.firstSkill;
+    if (skill) {
+      return skill.alternatives.filter(alternative => {
+          return (alternative.version === currentVersion);
         }).sort((a, b) => {
-          return a.get('alternativeVersion')>b.get('alternativeVersion');
+          return a.alternativeVersion>b.alternativeVersion;
         });
     } else {
       return [];
     }
   }
 
-  @computed('skills')
   get firstSkill() {
-    return this.get('skills.firstObject');
+    return this.skills.firstObject;
   }
 
-  @computed('isTemplate','version', 'firstSkill.templates')
   get template() {
-    if (this.get('isTemplate')) {
+    if (this.isTemplate) {
       return null;
     }
-    let currentVersion = this.get('version');
-    const skill = this.get('firstSkill');
+    const currentVersion = this.version;
+    const skill = this.firstSkill;
     if (skill) {
-      return skill.get('templates').find(template => {
-        return (template.get('version') === currentVersion);
-      });
+      return skill.templates.find(template => (template.version === currentVersion));
     }
     return null;
   }
 
-  @computed('alternatives.@each.isValidated')
   get productionAlternatives() {
-    return this.get('alternatives').filter(alternative => {
-      return alternative.get('isValidated');
-    });
+    return this.alternatives.filter(alternative => alternative.isValidated);
   }
 
-  @computed('alternatives.@each.isValidated')
   get draftAlternatives() {
-    return this.get('alternatives').filter(alternative => {
-      return !alternative.get('isValidated');
-    });
+    return this.alternatives.filter(alternative => !alternative.isValidated);
   }
 
-  @computed('type')
   get isTextBased() {
-    let type = this.get('type');
+    const type = this.type;
     return ['QROC','QROCM','QROCM-ind','QROCM-dep'].includes(type);
   }
 
-  @computed('type')
   get supportsScoring() {
-    return this.get('type') === 'QROCM-dep';
+    return this.type === 'QROCM-dep';
   }
 
-  @computed('timer')
   get timerOn() {
-    let timer = this.get('timer');
+    let timer = this.timer;
     return (timer && timer>0)?true:false;
   }
 
   set timerOn(value) {
-  let timer = this.get('timer');
+  let timer = this.timer;
     if (value) {
       if (!timer || timer === 0) {
-        this.set('timer', 1);
+        this.timer = 1;
       }
     } else {
       if (timer && timer > 0) {
-        this.set('timer', 0);
+        this.timer = 0;
       }
     }
     return value;
   }
 
-  @computed('author')
   get authorText() {
-    let author = this.get('author');
+    const author = this.author;
     if (author) {
       return author.join(', ');
     }
     return '';
   }
 
-  @computed('skills')
   get skillLevels() {
-    const skills = this.get('skills');
-    return skills.map(skill => skill.get('level'));
+    return this.skills.map(skill => skill.level);
   }
 
-  @computed('_definedBaseName', 'attachments.[]')
   get attachmentBaseName() {
-    if (this.get('_definedBaseName')) {
-      return this.get('_definedBaseName');
+    if (this._definedBaseName) {
+      return this._definedBaseName;
     }
-    const attachments = this.get('attachments');
+    const attachments = this.attachments;
     if (attachments && attachments.length > 0) {
       return attachments[0].filename.replace(/\.[^/.]+$/, '');
     }
@@ -216,45 +182,45 @@ export default class ChallengeModel extends Model {
   }
 
   set attachmentBaseName(value) {
-    this.set('_definedBaseName', value);
+    this._definedBaseName = value;
     return value;
   }
 
   archive() {
-    this.set('status', 'archive');
+    this.status = 'archive';
     return this.save();
   }
 
   validate() {
-    this.set('status', 'validé');
+    this.status = 'validé';
     return this.save();
   }
 
   clone() {
     let ignoredFields = ['skills', 'author'];
-    if (this.get('isTemplate')) {
+    if (this.isTemplate) {
       ignoredFields.push('version');
     } else {
       ignoredFields.push('alternativeVersion');
     }
     let data = this._getJSON(ignoredFields);
     data.status = 'proposé';
-    data.author = [this.get('config').get('author')];
-    data.skills = this.get('skills');
-    data.pixId = this.get('idGenerator').newId();
-    return this.get('myStore').createRecord(this.constructor.modelName, data);
+    data.author = [this.config.author];
+    data.skills = this.skills;
+    data.pixId = this.idGenerator.newId();
+    return this.myStore.createRecord(this.constructor.modelName, data);
   }
 
   derive() {
     const alternative = this.clone();
-    alternative.set('version', this.get('version'));
-    alternative.set('genealogy', 'Décliné 1');
+    alternative.version = this.version;
+    alternative.genealogy = 'Décliné 1';
     return alternative;
   }
 
   getNextAlternativeVersion() {
-    return this.get('alternatives').reduce((current, alternative) => {
-      const version = alternative.get('alternativeVersion');
+    return this.alternatives.reduce((current, alternative) => {
+      const version = alternative.alternativeVersion;
       if (!isNaN(version)) {
         return Math.max(current, version);
       } else {
@@ -262,8 +228,6 @@ export default class ChallengeModel extends Model {
       }
     }, 0)+1;
   }
-
-
 
   baseNameUpdated() {
     return Object.keys(this.changedAttributes()).includes('_definedBaseName');

@@ -1,9 +1,5 @@
-import classic from 'ember-classic-decorator';
 import Model, { attr, hasMany } from '@ember-data/model';
-import {computed} from '@ember/object';
-import DS from 'ember-data';
 
-@classic
 export default class TutorialModel extends Model {
   @attr title;
   @attr duration;
@@ -18,10 +14,7 @@ export default class TutorialModel extends Model {
 
   @hasMany('tag') tags;
 
-  @computed('tags.[]')
   get tagsTitle() {
-    return DS.PromiseObject.create({
-      promise:this.get('tags').then((tags)=> tags.map((tag)=>tag.get('title')).join(' | '))
-    })
+    return this.tags.map(tag=>tag.title).join(' | ');
   }
 }

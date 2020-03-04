@@ -20,16 +20,16 @@ export default class Tutorials extends Component {
       sort: [{field: 'Titre', direction: 'asc'}]
     })
       .then((tutorials) => {
-        const titleLoad = tutorials.map(tutorial => tutorial.tagsTitle);
-        return Promise.all(titleLoad)
+        const tagsLoad = tutorials.map(tutorial => tutorial.tags);
+        return Promise.all(tagsLoad)
           .then(() => tutorials);
       })
       .then((tutorials) => {
         const results = tutorials.map((tutorial) => {
-          const haveTags = tagSearch ? true : tutorial.tagsTitle.content !== null && tutorial.tagsTitle.content !== '';
+          const haveTags = tagSearch ? true : tutorial.tagsTitle !== null && tutorial.tagsTitle !== '';
           return {
             title: tutorial.title,
-            description: haveTags ? `TAG : ${tutorial.tagsTitle.content}` : false,
+            description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
             id: tutorial.id
           }
         });

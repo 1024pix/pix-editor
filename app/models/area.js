@@ -1,10 +1,7 @@
-import classic from 'ember-classic-decorator';
 import Model, { attr, hasMany } from '@ember-data/model';
 import {sort} from '@ember/object/computed';
-import { computed } from '@ember/object';
 
 
-@classic
 export default class AreaModel extends Model {
   @attr name;
   @attr code;
@@ -16,17 +13,15 @@ export default class AreaModel extends Model {
   @sort('competences','competencesSorting')
   sortedCompetences;
 
-  @computed('competences.@each.selectedProductionTubeCount')
   get selectedProductionTubeCount() {
-    return this.get('competences').reduce((count, competence) => {
-      return count+competence.get('selectedProductionTubeCount');
+    return this.competences.reduce((count, competence) => {
+      return count+competence.selectedProductionTubeCount;
     }, 0);
   }
 
-  @computed('competences.@each.productionTubeCount')
   get productionTubeCount() {
-    return this.get('competences').reduce((count, competence) => {
-      return count+competence.get('productionTubeCount');
+    return this.competences.reduce((count, competence) => {
+      return count+competence.productionTubeCount;
     }, 0);
   }
 
