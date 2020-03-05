@@ -70,7 +70,7 @@ export default class TutorialForm extends Component {
 
   @action
   unselectTag(id) {
-    const tutorial = this.arg.tutorial;
+    const tutorial = this.args.tutorial;
     tutorial.tags.forEach((tag) => {
       if (tag.id === id) {
         tutorial.tags.removeObject(tag)
