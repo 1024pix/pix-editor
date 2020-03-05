@@ -1,7 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class SingleRoute extends Route {
+
+  @service currentData
 
   model(params) {
     return this.store.findRecord('challenge', params.template_id);
@@ -34,15 +37,15 @@ export default class SingleRoute extends Route {
       }
     } else {
       if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
-        const challenge = this.controller.challenge;
+        const challenge = this.controller.model;
         if (!challenge.isWorkbench) {
           const skills = challenge.skills;
           const skill = skills.firstObject;
           if (skill) {
             if (transition.targetName === 'competence.quality.index' && skill.productionTemplate) {
-              return this.transitionTo('competence.quality.single', this.controller.competence, skill);
+              return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), skill);
             } else if (transition.targetName === 'competence.skills.index') {
-              return this.transitionTo('competence.skills.single', this.controller.competence, skill);
+              return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), skill);
             }
           }
         }
