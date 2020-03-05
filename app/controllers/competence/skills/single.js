@@ -16,7 +16,7 @@ export default class SingleController extends Controller {
   @controller('competence')
   parentController;
 
-  @alias('parentController.firstMaximized')
+  @alias('parentController.leftMaximized')
   maximized;
 
   @alias('model')
@@ -60,18 +60,17 @@ export default class SingleController extends Controller {
 
   @action
   maximize() {
-    this.maximized = true;
+    this.parentController.maximizeLeft(true);
   }
 
   @action
   minimize() {
-    this.maximized = false;
+    this.parentController.maximizeLeft(false);
   }
 
   @action
   close() {
-    this.maximized = false;
-    this.transitionToRoute('competence.skills', this.competence);
+    this.parentController.send('closeChildComponent');
   }
 
   @action
@@ -91,8 +90,7 @@ export default class SingleController extends Controller {
     if (challenge) {
       challenge.rollbackAttributes();
     }
-    let previousState = this.wasMaximized;
-    if (!previousState) {
+    if (!this.wasMaximized) {
       this.minimize();
     }
     this.application.send('showMessage', 'Modification annulée', true);
