@@ -6,11 +6,11 @@ import {inject as controller} from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceController extends Controller {
-  queryParams = ['firstMaximized', 'view'];
+  queryParams = ['leftMaximized', 'view'];
 
   @tracked view = 'production';
   @tracked section = 'challenges';
-  @tracked firstMaximized = false;
+  @tracked leftMaximized = false;
 
   @service router;
   @service config;
@@ -24,8 +24,22 @@ export default class CompetenceController extends Controller {
   @alias('model')
   competence;
 
-  get competenceHidden() {
-    return this.firstMaximized ? 'hidden' : '';
+  setSection(value) {
+    if (this.section !== value) {
+      this.section = value;
+    }
+  }
+
+  setView(value) {
+    if (this.view !== value) {
+      this.view = value;
+    }
+  }
+
+  maximizeLeft(value) {
+    if (this.leftMaximized !== value) {
+      this.leftMaximized = value;
+    }
   }
 
   get displayGrid() {
@@ -78,14 +92,14 @@ export default class CompetenceController extends Controller {
 
   @action
   closeChildComponent() {
-    this.firstMaximized = false;
+    this.maximizeLeft(false);
     this.transitionToRoute('competence', this.competence);
   }
 
   @action
   refresh(closeChild) {
     if (closeChild) {
-      this.send('closeChildComponent');
+      this.closeChildComponent();
     }
     this.send('refreshModel');
   }
@@ -134,8 +148,8 @@ export default class CompetenceController extends Controller {
 
   @action
   selectView(value) {
-    this.view = value;
-    this.send('closeChildComponent');
+    this.setView(value);
+    this.closeChildComponent();
   }
 
   @action

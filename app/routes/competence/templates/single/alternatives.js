@@ -2,10 +2,12 @@ import Route from '@ember/routing/route';
 
 export default class AlternativesRoute extends Route {
 
+  model() {
+    return this.modelFor('competence.templates.single');
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
-    let challenge = this.modelFor('competence.templates.single');
-    controller.challenge = challenge;
     let competence = this.modelFor('competence');
     controller.competence = competence;
     controller.childComponentMaximized = false;
@@ -17,4 +19,9 @@ export default class AlternativesRoute extends Route {
       outlet: 'mainRight'
     })
   }
+
+  resetController(controller) {
+    controller.rightMaximized = false;
+  }
+
 }

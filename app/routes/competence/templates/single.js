@@ -13,14 +13,15 @@ export default class SingleRoute extends Route {
     controller.areas = this.modelFor('application');
     controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
-    competenceController.section = 'challenges';
+    competenceController.setSection('challenges');
     if (!model.isValidated) {
-      competenceController.view = 'workbench';
       if (model.isWorkbench) {
-        competenceController.view = 'workbench-list';
+        competenceController.setView('workbench-list');
+      } else {
+        competenceController.setView('workbench');
       }
     } else {
-      competenceController.view = 'production';
+      competenceController.setView('production');
     }
   }
 

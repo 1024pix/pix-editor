@@ -1,10 +1,10 @@
-import Template from '../../single';
+import TemplateController from '../../single';
 import {action} from '@ember/object';
 import {scheduleOnce} from '@ember/runloop';
 import {inject as controller} from '@ember/controller';
 import {alias} from '@ember/object/computed';
 
-export default class SingleController extends Template {
+export default class SingleController extends TemplateController {
 
   alternative = true;
   popinImageClass = 'alternative-popin-image';
@@ -16,7 +16,7 @@ export default class SingleController extends Template {
   @controller('competence.templates.single.alternatives')
   parentController;
 
-  @alias('parentController.secondMaximized')
+  @alias('parentController.rightMaximized')
   maximized;
 
   defaultSaveChangelog = 'Mise à jour de la déclinaison';
@@ -62,4 +62,16 @@ export default class SingleController extends Template {
     this.copyOperation = true;
     scheduleOnce('afterRender', this, this._executeCopy);
   }
+
+  @action
+  maximize() {
+    this.parentController.maximizeRight(true);
+  }
+
+  @action
+  minimize() {
+    this.parentController.maximizeRight(false);
+  }
+
+
 }

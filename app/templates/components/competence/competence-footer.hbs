@@ -1,4 +1,4 @@
-<div class="ui borderless bottom attached labelled icon menu{{this.hiddenClass}}{{this.skillClass}}">
+<div class="ui borderless bottom attached labelled icon menu{{this.skillClass}}">
   {{#if this.displayWorkbenchViews}}
     <button class={{concat "ui button item" (if (eq @view "workbench") " active" "")}} {{on "click" (fn @selectView "workbench")}} type="button">
       <i class="grid layout icon"></i>

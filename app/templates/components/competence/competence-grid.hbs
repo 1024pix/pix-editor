@@ -1,4 +1,4 @@
-<div class="competence-grid{{this.hiddenClass}}">
+<div class="competence-grid">
   <table class="ui celled table definition tubes">
     <tbody>
     {{#each @tubes as |tube|}}
@@ -6,13 +6,13 @@
         <tr>
           <td>
             {{#if (eq @section "skills")}}
-              <LinkTo @route="competence.tubes.single" @models={{array @competenceModel tube}}>{{tube.name}}</LinkTo>
+              <LinkTo @route="competence.tubes.single" @model={{tube}}>{{tube.name}}</LinkTo>
             {{else}}
               {{tube.name}}
             {{/if}}
           </td>
           {{#each tube.filledSkills as |skill index|}}
-          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.pixId}} @competenceModel={{@competenceModel}} @index={{index}} />
+          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.pixId}} @index={{index}} />
           {{/each}}
         </tr>
       {{/if}}

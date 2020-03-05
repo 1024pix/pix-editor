@@ -3,7 +3,6 @@
     <MainSidebar @areas={{this.model}} @burger={{burger}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
   </burger.menu>
   <burger.outlet>
-    {{this.openMenu}}
     <div class="ui container fluid application pushable">
       <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
         <div class="ui text loader">{{this.loadingMessage}}</div>

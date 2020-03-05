@@ -7,10 +7,6 @@ export default class CompetencesList extends SortedList {
   currentCount = 0;
   scrollValue = 0;
 
-  get hiddenClass() {
-    return this.args.hidden?' hidden ':'';
-  }
-
   get scrollTop() {
     let count = this.args.itemCount;
     if (count !== this.currentCount) {

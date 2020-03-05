@@ -5,10 +5,6 @@ export default class CompetenceFooter extends Component {
 
   @service access;
 
-  get hiddenClass() {
-    return this.args.hidden?' hidden ':'';
-  }
-
   get skillClass() {
     return this.args.section === 'skills'?' skill-mode ':'';
   }

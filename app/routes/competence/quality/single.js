@@ -7,7 +7,7 @@ export default class SingleRoute extends SkillRoute {
   setupController() {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
-    competenceController.set('section', 'quality');
+    competenceController.setSection('quality');
   }
 
   @action

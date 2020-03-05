@@ -1,18 +1,16 @@
-{{#if this.displaySkill}}
-    {{#if (eq @section "challenges")}}
-      {{#if (eq @view "production")}}
-        <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} @competenceModel={{@competenceModel}} />
-      {{else if (eq @view "workbench")}}
-        <Competence::Grid::CellWorkbench @skill={{@skill}} @competenceModel={{@competenceModel}} />
-      {{/if}}
-    {{else if (eq @section "quality")}}
-      <Competence::Grid::CellQuality @skill={{@skill}} @competenceModel={{@competenceModel}} />
-    {{else if (eq @section "skills")}}
-      <Competence::Grid::CellSkill @skill={{@skill}} @competenceModel={{@competenceModel}} />
-  {{/if}}
-{{else if this.mayAddSkill}}
-    <td><LinkTo @route="competence.skills.new" @models={{array @competenceModel @tubeId @index}} class="add-skill">
-        <i class="icon plus circle"></i></LinkTo></td>
+{{#if (eq this.cellType "production")}}
+  <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} />
+{{else if (eq this.cellType "workbench")}}
+  <Competence::Grid::CellWorkbench @skill={{@skill}} />
+{{else if (eq this.cellType "skill")}}
+  <Competence::Grid::CellSkill @skill={{@skill}} />
+{{else if (eq this.cellType "add-skill")}}
+  <td>
+    <LinkTo @route="competence.skills.new" @models={{array @tubeId @index}} class="add-skill">
+    <i class="icon plus circle"></i></LinkTo>
+  </td>
+{{else if (eq this.cellType "quality")}}
+  <Competence::Grid::CellQuality @skill={{@skill}} />
 {{else}}
-    <td class="skill-cell__empty"></td>
+  <td class="skill-cell__empty"></td>
 {{/if}}

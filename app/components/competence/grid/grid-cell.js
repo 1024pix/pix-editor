@@ -6,30 +6,36 @@ export default class GridCell extends Component {
   @service access;
   @service config;
 
-  skill = null;
-  productionTemplate = null;
-  hasStatusProduction = false;
-
-  get mayAddSkill() {
-    return this.args.section === 'skills' && this.access.mayEditSkills();
-  }
-
-  get displaySkill() {
+  get cellType() {
     const skill = this.args.skill;
-    if (skill) {
-      const view = this.args.view;
-      const productionTemplate = skill.productionTemplate;
-      switch(this.args.section) {
-        case 'challenges':
-          return ((view === 'production' && productionTemplate)
-          || (view === 'workbench'));
-        case 'quality':
-          return (productionTemplate != null);
-        case 'skills':
-        default:
-          return true;
-      }
+    switch(this.args.section) {
+      case 'challenges':
+        switch(this.args.view) {
+          case 'production':
+            if (skill && skill.productionTemplate) {
+              return 'production';
+            }
+            break;
+          case 'workbench':
+            if (skill) {
+              return 'workbench';
+            }
+            break;
+        }
+        break;
+      case 'skills':
+        if (skill) {
+          return 'skill';
+        } else if (this.access.mayEditSkills()) {
+          return 'add-skill';
+        }
+        break;
+      case 'quality':
+        if (skill && skill.productionTemplate) {
+          return 'quality';
+        }
+        break;
     }
-    return false;
+    return 'empty';
   }
 }

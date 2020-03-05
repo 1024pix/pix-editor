@@ -11,9 +11,9 @@ export default class ListRoute extends Route {
     super.setupController(...arguments);
     controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
-    competenceController.section = 'challenges';
-    competenceController.view = 'workbench';
-    competenceController.firstMaximized = false;
+    competenceController.setSection('challenges');
+    competenceController.setView('workbench');
+    competenceController.maximizeLeft(false);
   }
 
   @action

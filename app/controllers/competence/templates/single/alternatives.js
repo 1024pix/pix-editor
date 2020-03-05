@@ -3,14 +3,17 @@ import {action} from '@ember/object';
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
 import {tracked} from '@glimmer/tracking';
+import { alias } from '@ember/object/computed';
 
 export default class AlternativesController extends Controller {
 
-  queryParams = ['secondMaximized'];
+  queryParams = ['rightMaximized'];
 
-  @tracked challenge = null;
+  @alias('model')
+  challenge;
+
   @tracked competence = null;
-  @tracked secondMaximized = false;
+  @tracked rightMaximized = false;
 
   @service router;
   @service config;
@@ -31,8 +34,10 @@ export default class AlternativesController extends Controller {
     }
   }
 
-  get listHidden() {
-    return this.secondMaximized?'hidden':'';
+  maximizeRight(value) {
+    if (this.rightMaximized != value) {
+      this.rightMaximized = value;
+    }
   }
 
   @action
@@ -42,7 +47,7 @@ export default class AlternativesController extends Controller {
 
   @action
   closeChildComponent() {
-    this.secondMaximized = false;
+    this.maximizeRight(false);
     this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge);
   }
 

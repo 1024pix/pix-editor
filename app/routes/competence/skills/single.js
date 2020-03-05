@@ -17,8 +17,8 @@ export default class SingleRoute extends Route {
     controller.areas = this.modelFor('application');
     controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
-    competenceController.section = 'skills';
-    competenceController.view = null;
+    competenceController.setSection('skills');
+    competenceController.setView(null);
   }
 
   @action

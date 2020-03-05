@@ -4,10 +4,8 @@ export default class IndexRoute extends Route {
   setupController() {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
-    competenceController.section = 'challenges';
-    competenceController.firstMaximized = false;
-    if (competenceController.view === null) {
-      competenceController.view = 'production';
-    }
+    competenceController.setSection('challenges');
+    competenceController.maximizeLeft(false);
+    competenceController.setView('production');
   }
 }

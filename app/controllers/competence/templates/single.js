@@ -34,7 +34,7 @@ export default class SingleController extends Controller {
   @service pixConnector
   @service filePath;
 
-  @alias('parentController.firstMaximized')
+  @alias('parentController.leftMaximized')
   maximized;
 
   @alias('pixConnector.connected')
@@ -110,18 +110,17 @@ export default class SingleController extends Controller {
 
   @action
   maximize() {
-    this.maximized = true;
+    this.parentController.maximizeLeft(true);
   }
 
   @action
   minimize() {
-    this.maximized = false;
+    this.parentController.maximizeLeft(false);
   }
 
   @action
   close() {
-    this.maximized = false;
-    this.transitionToRoute('competence.templates', this.competence);
+    this.parentController.send('closeChildComponent');
   }
 
   @action
@@ -146,7 +145,7 @@ export default class SingleController extends Controller {
   @action
   edit() {
     this.wasMaximized = this.maximized;
-    this.send('maximize');
+    this.maximize();
     this.edition = true;
     scheduleOnce('afterRender', this, this._scrollToTop);
   }
@@ -155,9 +154,8 @@ export default class SingleController extends Controller {
   cancelEdit() {
     this.edition = false;
     this.challenge.rollbackAttributes();
-    const previousState = this.wasMaximized;
-    if (!previousState) {
-      this.send('minimize');
+    if (!this.wasMaximized) {
+      this.minimize();
     }
     this._message('Modification annulée');
   }
@@ -174,7 +172,7 @@ export default class SingleController extends Controller {
         .then(() => {
           this.edition = false;
           if (!this.wasMaximized) {
-            this.send('minimize');
+            this.minimize();
           }
           this._message('Épreuve mise à jour');
         })
@@ -190,7 +188,7 @@ export default class SingleController extends Controller {
 
   @action
   showAlternatives() {
-    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge, {queryParams: {secondMaximized: false}});
+    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge);
   }
 
   @action

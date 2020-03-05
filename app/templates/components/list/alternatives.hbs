@@ -9,7 +9,7 @@
   </div>
   <div class="list-body">
     <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-    <LinkTo @route="competence.templates.single.alternatives.single" @models={{array @competenceModel @challengeModel item}} @tagName="div" class={{concat "list-row" (if (not item.isValidated) " draft" "")}}>
+    <LinkTo @route="competence.templates.single.alternatives.single" @model={{item}} @tagName="div" class={{concat "list-row" (if (not item.isValidated) " draft" "")}}>
       <div class="list-item">{{item.alternativeVersion}}</div>
       <div class="list-item">{{item.instructions}}</div>
       <div class="list-item">{{item.author}}</div>

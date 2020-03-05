@@ -1,4 +1,4 @@
-<LinkTo @route="competence.skills.single" @models={{array @competenceModel @skill}} @tagName="td" class={{concat "skill skill-cell link skill-mode" (if (not @skill.productionTemplate) " draft-skill")}}>
+<LinkTo @route="competence.skills.single" @model={{@skill}} @tagName="td" class={{concat "skill skill-cell link skill-mode" (if (not @skill.productionTemplate) " draft-skill")}}>
   <div class="skill-name {{@skill.descriptionCSS}}">
     {{@skill.name}}
   </div>
