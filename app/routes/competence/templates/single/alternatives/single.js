@@ -9,8 +9,6 @@ export default class SingleRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.edition = false;
-    controller.areas = this.modelFor('application');
-    controller.competence = this.modelFor('competence');
   }
 
   @action

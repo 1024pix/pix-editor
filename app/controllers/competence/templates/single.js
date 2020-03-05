@@ -33,6 +33,7 @@ export default class SingleController extends Controller {
   @service storage
   @service pixConnector
   @service filePath;
+  @service currentData;
 
   @alias('parentController.leftMaximized')
   maximized;
@@ -188,7 +189,7 @@ export default class SingleController extends Controller {
 
   @action
   showAlternatives() {
-    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge);
+    this.transitionToRoute('competence.templates.single.alternatives', this.currentData.getCompetence(), this.challenge);
   }
 
   @action
@@ -515,7 +516,7 @@ export default class SingleController extends Controller {
         text: changelog,
         challengeId: challenge.id,
         author: this.config.author,
-        competence: this.competence.code,
+        competence: this.currentData.getCompetence().code,
         skills: challenge.joinedSkills,
         createdAt: (new Date()).toISOString(),
         production: !challenge.workbench

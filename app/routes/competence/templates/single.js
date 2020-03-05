@@ -10,8 +10,6 @@ export default class SingleRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
-    controller.areas = this.modelFor('application');
-    controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('challenges');
     if (!model.isValidated) {

@@ -4,12 +4,14 @@ import { inject as service } from '@ember/service';
 
 export default class CompetenceRoute extends Route {
   @service paginatedQuery;
+  @service currentData;
 
   model(params) {
     return this.store.findRecord('competence', params.competence_id);
   }
 
   afterModel(model) {
+    this.currentData.setCompetence(model);
     if (model.needsRefresh) {
       return model.hasMany('rawTubes').reload()
       .then(tubes => {

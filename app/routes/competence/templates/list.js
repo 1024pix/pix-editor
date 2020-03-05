@@ -7,9 +7,8 @@ export default class ListRoute extends Route {
     return this.store.findRecord('skill', params.skill_id);
   }
 
-  setupController(controller) {
+  setupController() {
     super.setupController(...arguments);
-    controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('challenges');
     competenceController.setView('workbench');

@@ -8,9 +8,7 @@ export default class AlternativesRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    let competence = this.modelFor('competence');
-    controller.competence = competence;
-    controller.childComponentMaximized = false;
+    controller.maximizeRight(false);
   }
 
   renderTemplate() {

@@ -2,6 +2,7 @@ import Component from '@glimmer/component';
 import {action} from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { inject as service } from '@ember/service';
 
 export default class PopinSelectLocation extends Component {
 
@@ -11,6 +12,8 @@ export default class PopinSelectLocation extends Component {
   @tracked levelsLoaded = false;
   @tracked selectedLevels = null;
 
+  @service currentData;
+
   _tubes = A([]);
   _levels = [];
 
@@ -18,7 +21,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedCompetence) {
       return this._selectedCompetence;
     }
-    return this.competenceList.find(item => (item.data == this.args.competence));
+    return this.competenceList.find(item => (item.data == this.currentData.getCompetence()));
   }
 
   set selectedCompetence(value) {
@@ -27,7 +30,7 @@ export default class PopinSelectLocation extends Component {
   }
 
   get competences() {
-    const areas = this.args.areas;
+    const areas = this.currentData.getAreas();
     const areaCompetences = areas.map(area => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);

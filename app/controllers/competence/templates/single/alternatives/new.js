@@ -1,11 +1,13 @@
 import Alternative from './single';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
+import {inject as service} from '@ember/service';
 
 export default class NewController extends Alternative {
   creation = true;
   queryParams = ['from'];
   @tracked from = '';
+  @service currentData;
 
   defaultSaveChangelog = 'Création de la déclinaison';
 
@@ -29,7 +31,7 @@ export default class NewController extends Alternative {
       this.edition = false;
       this.send('minimize');
       this._message(`Déclinaison numéro ${challenge.alternativeVersion} enregistrée`);
-      this.transitionToRoute('competence.templates.single.alternatives.single', this.competence, this.template, challenge);
+      this.transitionToRoute('competence.templates.single.alternatives.single', this.currentData.getCompetence(), this.template, challenge);
     })
     .catch((error) => {
       this._errorMessage('Erreur lors de la création');

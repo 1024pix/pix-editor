@@ -8,6 +8,7 @@ export default class ApplicationRoute extends Route {
 
   @service config;
   @service pixConnector;
+  @service currentData;
 
   _openConfiguration() {
     this.controller.send('openConfiguration');
@@ -33,6 +34,7 @@ export default class ApplicationRoute extends Route {
       this.pixConnector.connect();
     }
     if (model) {
+      this.currentData.setAreas(model);
       const getCompetences = model.map((area => area.competences));
       return Promise.all(getCompetences);
     }

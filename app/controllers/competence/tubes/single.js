@@ -10,8 +10,6 @@ export default class SingleController extends Controller {
 
   @tracked edition = false;
   @tracked displaySelectLocation = false;
-  @tracked areas = null;
-  @tracked competence = null;
 
   creation = false;
   wasMaximized = false;

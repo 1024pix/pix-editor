@@ -1,17 +1,22 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class SingleRoute extends Route {
+
+  @service currentData;
+
   model(params) {
     return this.store.findRecord('tube', params.tube_id);
   }
 
+  afterModel(model) {
+    this.currentData.setTemplate(model);
+  }
+
   setupController(controller) {
     super.setupController(...arguments);
-    controller.maximized = false;
     controller.edition = false;
-    controller.areas = this.modelFor('application');
-    controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
     competenceController.setView(null);

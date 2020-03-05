@@ -6,10 +6,10 @@
       Prototypes de {{this.model.name}}
   </h1>
 </div>
-<div class="ui attached segment competence {{this.size}} {{this.listHidden}}">
-  <List::Templates @list={{this.model.sortedTemplates}} @itemCount={{this.model.templates.length}} @competenceModel={{this.competence}} @hidden={{false}} />
+<div class="ui attached segment competence {{this.size}}">
+  <List::Templates @list={{this.model.sortedTemplates}} @itemCount={{this.model.templates.length}} @hidden={{false}} />
 </div>
-<div class="ui borderless bottom attached labelled icon menu {{this.listHidden}}">
+<div class="ui borderless bottom attached labelled icon menu">
   {{#if this.mayCreateTemplate}}
     <button class="ui button right item" {{on "click" this.newVersion}} type="button">
       <i class="plus square outline icon"></i> Nouvelle version

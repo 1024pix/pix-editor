@@ -9,7 +9,7 @@
   </div>
   <div class="list-body">
     <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-    <LinkTo @route="competence.templates.single" @models={{array @competenceModel item}} @tagName="div" class="list-row">
+    <LinkTo @route="competence.templates.single" @model={{item}} @tagName="div" class="list-row">
       <div class="list-item">{{item.version}}</div>
       <div class="list-item">{{item.instructions}}</div>
       <div class="list-item">{{item.author}}</div>

@@ -17,7 +17,6 @@ export default class NewRoute extends Route {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.competence = this.modelFor('competence');
     controller.template = this.modelFor('competence/templates/single');
     controller.send('edit');
   }

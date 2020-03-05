@@ -24,7 +24,7 @@ export default class NewRoute extends TemplateRoute {
   setupController(controller) {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
-    competenceController.maximized = true;
+    competenceController.maximizeLeft(true);
     controller.send('edit');
   }
 

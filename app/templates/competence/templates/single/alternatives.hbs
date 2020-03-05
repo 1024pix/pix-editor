@@ -1,7 +1,7 @@
 <div class="main-title  {{if this.config.lite "lite" ""}}">
   <h1 class="ui header">
   <div class="ui right floated menu">
-    <LinkTo @route="competence.templates.single" @models={{array this.competence this.challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
+    <LinkTo @route="competence.templates.single" @model={{this.challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
   </div>
       Déclinaisons de {{this.challenge.skillNames}}
 

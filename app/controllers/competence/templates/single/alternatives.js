@@ -18,6 +18,7 @@ export default class AlternativesController extends Controller {
   @service router;
   @service config;
   @service access;
+  @service currentData;
 
   @controller application;
   @controller('competence') competenceController;
@@ -42,18 +43,18 @@ export default class AlternativesController extends Controller {
 
   @action
   newAlternative() {
-    this.transitionToRoute('competence.templates.single.alternatives.new', this.competence,  this.challenge);
+    this.transitionToRoute('competence.templates.single.alternatives.new', this.currentData.getCompetence(),  this.challenge);
   }
 
   @action
   closeChildComponent() {
     this.maximizeRight(false);
-    this.transitionToRoute('competence.templates.single.alternatives', this.competence, this.challenge);
+    this.transitionToRoute('competence.templates.single.alternatives', this.currentData.getCompetence(), this.challenge);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.single.alternatives.new', this.competence,  this.challenge, { queryParams: {from: challenge.id}});
+    this.transitionToRoute('competence.templates.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, { queryParams: {from: challenge.id}});
   }
 
   @action
@@ -65,4 +66,5 @@ export default class AlternativesController extends Controller {
   selectView() {
     // does nothing
   }
+
 }

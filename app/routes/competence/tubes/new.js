@@ -12,7 +12,6 @@ export default class NewRoute extends Tube {
 
   setupController(controller) {
     super.setupController(...arguments);
-    controller.competence = this.modelFor('competence');
     controller.send('edit');
   }
 }

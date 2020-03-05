@@ -1,7 +1,11 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class SingleRoute extends Route {
+
+  @service
+  currentData;
 
   model(params) {
     return this.store.findRecord('skill', params.skill_id);
@@ -14,8 +18,6 @@ export default class SingleRoute extends Route {
   setupController(controller) {
     super.setupController(...arguments);
     controller.edition = false;
-    controller.areas = this.modelFor('application');
-    controller.competence = this.modelFor('competence');
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
     competenceController.setView(null);
@@ -32,12 +34,12 @@ export default class SingleRoute extends Route {
         const skill = this.controller.skill;
         const template = skill.productionTemplate;
         if (template) {
-          return this.transitionTo('competence.templates.single', this.controller.competence, template);
+          return this.transitionTo('competence.templates.single', this.currentData.getCompetence(), template);
         } else {
-          return this.transitionTo('competence.templates.list', this.controller.competence, skill);
+          return this.transitionTo('competence.templates.list', this.currentData.getCompetence(), skill);
         }
       } else if (transition.targetName === 'competence.quality.index' && this.controller.skill.productionTemplate) {
-        return this.transitionTo('competence.quality.single', this.controller.competence, this.controller.skill);
+        return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controller.skill);
       }
 
       return true;
