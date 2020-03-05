@@ -243,7 +243,7 @@ buildChallenge.untimed = function buildUntimedChallenge({
     'recvoGdo7z2z7pXWa',
   ],
   createdTime = '2016-08-24T11:59:02.000Z',
-  format = 'petit',
+  format = 'mots',
   illustrationAlt = 'texte alternatif à l\'image',
 } = {}) {
 

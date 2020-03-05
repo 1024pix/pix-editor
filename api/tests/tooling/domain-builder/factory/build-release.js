@@ -1,5 +1,6 @@
 const buildArea = require('./build-area-airtable-data-object');
 const buildCompetence = require('./build-competence-airtable-data-object');
+const buildChallenge = require('./build-challenge-airtable-data-object');
 
 module.exports = function buildRelease() {
   const area = buildArea({
@@ -19,8 +20,12 @@ module.exports = function buildRelease() {
     area
   });
 
+  const challenge = buildChallenge();
+
+
   return {
     areas: [area],
-    competences: [competence]
+    competences: [competence],
+    challenges: [challenge],
   };
 };
