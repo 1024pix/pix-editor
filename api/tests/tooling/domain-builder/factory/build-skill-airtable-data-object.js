@@ -1,20 +1,24 @@
-module.exports = function({
-  id = 'recTIddrkopID28Ep',
-  name = '@accesDonnées1',
-  hint = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
-  hintStatus = 'Validé',
-  tutorialIds = ['receomyzL0AmpMFGw'],
-  pixValue = 2.4,
-  competenceId = 'recABCD1234'
-} = {}) {
-
+module.exports = function buildSkill(
+  {
+    id = 'recTIddrkopID28Ep',
+    name = '@accesDonnées1',
+    hint = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
+    hintStatus = 'Validé',
+    tutorialIds = ['receomyzL0AmpMFGw'],
+    learningMoreTutorialIds = ['recQbjXNAPsVJthXh', 'rec3DkUX0a6RNi2Hz'],
+    competenceId = 'recofJCxg0NqTqTdP',
+    pixValue = 2.4,
+    status = 'actif',
+  } = {}) {
   return {
     id,
     name,
     hint,
     hintStatus,
     tutorialIds,
-    pixValue,
+    learningMoreTutorialIds,
     competenceId,
+    pixValue,
+    status,
   };
 };

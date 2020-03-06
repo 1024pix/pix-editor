@@ -1,7 +1,7 @@
 module.exports = function buildSkill({
   id = 'recTIddrkopID28Ep',
-  indice = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ? Dans quelle condition une application peut-elle utiliser les données de géolocalisation du t...',
-  statutDeLIndice = 'Proposé',
+  indice = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
+  statutDeLIndice = 'Validé',
   epreuves = [
     'recF2iWmZKIuOsKO1',
     'recYu7YmDXXt5Owo8',
@@ -30,7 +30,7 @@ module.exports = function buildSkill({
     'recofJCxg0NqTqTdP',
   ],
   createdTime = '2018-01-31T12:41:07.000Z',
-  pixValue = 2,
+  pixValue = 2.4,
 } = {}) {
 
   return {

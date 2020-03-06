@@ -5,6 +5,7 @@ module.exports = async function createRelease(
     challengeDatasource,
     tubeDatasource,
     courseDatasource,
+    skillDatasource,
   } = {}) {
   const id = '2020-03-02:fr';
   const content = {
@@ -13,6 +14,7 @@ module.exports = async function createRelease(
     challenges: await challengeDatasource.list(),
     tubes: await tubeDatasource.list(),
     courses: await courseDatasource.list(),
+    skills: await skillDatasource.list(),
   };
   return { id, content };
 };
