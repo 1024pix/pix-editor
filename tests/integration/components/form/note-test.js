@@ -3,16 +3,20 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | skill-form', function(hooks) {
+module('Integration | Component | note-form', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{form/skill}}`);
+    this.set('closeAction', function() {});
+    this.set('editAction', function() {});
+    this.set('entry', {status:false});
 
-    assert.dom('.ui.form').exists();
+    await render(hbs`{{form/note close=(action closeAction) edit=(action editAction) entry=entry}}`);
+
+    assert.dom('.ui.content').exists();
 
   });
 });

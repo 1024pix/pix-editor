@@ -3,12 +3,14 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | form-quality', function(hooks) {
+module('Integration | Component | quality', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
 
-    await render(hbs`{{field/quality title="form_title"}}`);
+    this.set('challenge', {accessibility1:false, accessibility2:false, spoil:false, responsive:false});
+
+    await render(hbs`{{field/quality title="form_title" challenge=challenge}}`);
 
     assert.equal(this.element.getElementsByTagName("label")[0].textContent.trim(), 'form_title');
 

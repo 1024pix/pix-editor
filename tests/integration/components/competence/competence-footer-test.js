@@ -25,6 +25,6 @@ module('Integration | Component | competence/competence-footer', function(hooks)
 
     // then
 
-    assert.equal(this.element.querySelector('button.left.item').textContent.trim(), 'Nouveau tube');
+    assert.dom('.ui.borderless.bottom').exists();
   });
 });

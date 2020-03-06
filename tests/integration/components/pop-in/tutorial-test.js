@@ -14,13 +14,5 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
 
     assert.equal(this.element.textContent.trim(), '');
 
-    // Template block usage:
-    await render(hbs`
-      <PopIn::Tutorial>
-        template block text
-      </PopIn::Tutorial>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
