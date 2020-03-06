@@ -1,6 +1,5 @@
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import DS from 'ember-data';
 import { tracked } from '@glimmer/tracking';
 
 export default class SortedList extends Component {
@@ -89,19 +88,8 @@ export default class SortedList extends Component {
   }
 
   get sortedList() {
-    let field = this.sortField;
-    if (field) {
-      let list = this.args.list;
-      if (Array.isArray(list)) {
-        return this.sortElements(list);
-      } else {
-        return DS.PromiseArray.create({
-          promise: this.args.list
-          .then(list => {
-            return this.sortElements(list.toArray());
-          })
-        });
-      }
+    if (this.sortField) {
+      return this.sortElements(this.args.list);
     } else {
       return this.args.list;
     }
