@@ -29,7 +29,10 @@ export default class SingleRoute extends Route {
         !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      this.controller.model.rollbackAttributes();
+      if (this.controller.model.rollbackAttributes) {
+        // may not exist if it was a new skill
+        this.controller.model.rollbackAttributes();
+      }
       if (transition.targetName === 'competence.templates.index') {
         const skill = this.controller.skill;
         const template = skill.productionTemplate;
