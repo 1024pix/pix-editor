@@ -25,7 +25,10 @@ describe('Unit | UseCase | Create Release', () => {
       },
       tubeDatasource: {
         list: sinon.spy(async () => expectedCreatedRelease.content.tubes)
-      }
+      },
+      courseDatasource: {
+        list: sinon.spy(async () => expectedCreatedRelease.content.courses)
+      },
     };
 
     // when
@@ -50,6 +53,11 @@ describe('Unit | UseCase | Create Release', () => {
   it('should retrieve tubes from repository', async () => {
     // then
     expect(datasources.tubeDatasource.list).to.be.called;
+  });
+
+  it('should retrieve courses from repository', async () => {
+    // then
+    expect(datasources.courseDatasource.list).to.be.called;
   });
 
   it('should return created release with id and content', async () => {

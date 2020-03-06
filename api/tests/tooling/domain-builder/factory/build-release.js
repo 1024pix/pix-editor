@@ -2,6 +2,7 @@ const buildArea = require('./build-area-airtable-data-object');
 const buildCompetence = require('./build-competence-airtable-data-object');
 const buildChallenge = require('./build-challenge-airtable-data-object');
 const buildTube = require('./build-tube-airtable-data-object');
+const buildCourse = require('./build-course-airtable-data-object');
 
 module.exports = function buildRelease() {
   const area = buildArea({
@@ -11,7 +12,6 @@ module.exports = function buildRelease() {
     name: '1. Information et données',
     title: 'Information et données'
   });
-
   const competence = buildCompetence({
     id: 'recsvLz0W2ShyfD63',
     name: 'Mener une recherche et une veille d’information',
@@ -20,14 +20,15 @@ module.exports = function buildRelease() {
     skillIds: [],
     area
   });
-
   const challenge = buildChallenge();
   const tube = buildTube();
+  const course = buildCourse();
 
   return {
     areas: [area],
     competences: [competence],
     challenges: [challenge],
     tubes: [tube],
+    courses: [course]
   };
 };

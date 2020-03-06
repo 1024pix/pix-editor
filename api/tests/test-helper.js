@@ -10,6 +10,7 @@ const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 
 afterEach(() => {
+  airtableBuilder.cleanAll();
   return sinon.restore();
 });
 
