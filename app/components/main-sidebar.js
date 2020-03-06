@@ -120,7 +120,7 @@ export default class MainSidebar extends Component {
   linkTo(item) {
     const route = this.routeModel;
     const router = this.router;
-    this.args.burger.state.actions.close();
+    this.args.close();
     if (route === 'skill') {
       router.transitionTo(route, item.name);
     } else {

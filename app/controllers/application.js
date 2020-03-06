@@ -109,4 +109,15 @@ export default class ApplicationController extends Controller {
     }
   }
 
+  @action
+  toggleMenu() {
+    this._menuOpen = !this._menuOpen;
+  }
+
+  @action
+  closeMenu() {
+    if (this._menuOpen) {
+      this._menuOpen = false;
+    }
+  }
 }

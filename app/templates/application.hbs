@@ -1,46 +1,40 @@
-<BurgerMenu @width={{350}} @animation="reveal" @open={{this.menuOpen}} @locked={{this.lockedMenu}} as |burger|>
-  <burger.menu>
-    <MainSidebar @areas={{this.model}} @burger={{burger}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} />
-  </burger.menu>
-  <burger.outlet>
-    <div class="ui container fluid application pushable">
-      <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
-        <div class="ui text loader">{{this.loadingMessage}}</div>
-      </div>
-      <div class="pusher">
-        <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
-          {{!-- template-lint-disable --}}
-          <button class="ui icon button" type="button" {{action burger.state.actions.toggle}}>
-            <i class="bars icon"></i>
-          </button>
-          {{!-- template-lint-enable --}}
-        </div>
-        <div class="main">
-          {{#if this.isIndex}}
-            <div class="elephant"></div>
-          {{/if}}
-          {{outlet}}
-          {{#if this.messages.length}}
-            <div class="messages">
-              {{#each this.messages as |message|}}
-                <div class={{concat "ui floating message " (if message.positive "positive" "warning")}}
-                     id={{message.id}}>
-                  <p>
-                    {{#if message.positive}}
-                      <i class="check icon"></i>
-                    {{else}}
-                      <i class="exclamation icon"></i>
-                    {{/if}}
-                    {{message.text}}
-                  </p>
-                </div>
-              {{/each}}
-            </div>
-          {{/if}}
-        </div>
-      </div>
-      <PopIn::ConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" @close={{this.closeConfiguration}}/>
-      <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
+<div class="ui container fluid application">
+  <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
+    <div class="ui text loader">{{this.loadingMessage}}</div>
+  </div>
+  <MainSidebar @areas={{this.model}} @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @showMessage={{this.showMessage}} @open={{this.menuOpen}} @close={{this.closeMenu}}/>
+  <div class="pusher">
+    <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
+      {{!-- template-lint-disable --}}
+      <button class="ui icon button" type="button" {{on "click" this.toggleMenu}}>
+        <i class="bars icon"></i>
+      </button>
+      {{!-- template-lint-enable --}}
     </div>
-  </burger.outlet>
-</BurgerMenu>
+    <div class="main" {{on "click" this.closeMenu}}>
+      {{#if this.isIndex}}
+        <div class="elephant"></div>
+      {{/if}}
+      {{outlet}}
+      {{#if this.messages.length}}
+        <div class="messages">
+          {{#each this.messages as |message|}}
+            <div class={{concat "ui floating message " (if message.positive "positive" "warning")}}
+                  id={{message.id}}>
+              <p>
+                {{#if message.positive}}
+                  <i class="check icon"></i>
+                {{else}}
+                  <i class="exclamation icon"></i>
+                {{/if}}
+                {{message.text}}
+              </p>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  <PopIn::ConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" @close={{this.closeConfiguration}}/>
+  <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
+</div>

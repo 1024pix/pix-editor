@@ -34,8 +34,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .pusher {
     display:flex;
     flex-direction:row;
-
+    transition: transform 0.5s;
   }
+
 }
 
 .ui.menu.main-menu {

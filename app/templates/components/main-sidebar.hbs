@@ -1,52 +1,50 @@
-<div class="ui container">
-  <div class="inverted menu left vertical main-sidebar wide ui sidebar uncover visible {{if this.config.lite "lite" ""}}">
-    <div class="header">Pix Editor</div>
-    <PowerSelect
-      @searchEnabled={{true}}
-      @search={{this.getSearchResults}}
-      @placeholder="Acquix ou recordId"
-      @onChange={{this.linkTo}}
-      @renderInPlace={{true}}
-      @triggerComponent="power-select/custom-trigger"
-      @class="sidebar-search"
-      @tagName="div"
-      @searchMessage=""
-      @searchPlaceholder="Rechercher..."
-      @loadingMessage="Recherche en cours..."
-      @noMatchesMessage="Pas de résultat" as |result|>
-      {{result.title}}
-    </PowerSelect>
-    <AccordionList as |accordion|>
-      <div class="ui accordion inverted">
-        {{#each @areas as |area|}}
-          <accordion.item as |accordionItem|>
-            <accordionItem.toggle @class="title">
-              <i class="dropdown icon"></i>
-              {{area.name}}
-            </accordionItem.toggle>
-            <accordionItem.panel>
-              <div class="content">
-                {{#each area.sortedCompetences as |competence|}}
-                  <LinkTo @route="competence" @model={{competence.id}} class="item" @invokeAction={{@burger.state.actions.close}}>{{competence.name}}</LinkTo>
-                {{/each}}
-              </div>
-            </accordionItem.panel>
-          </accordion.item>
-        {{/each}}
-      </div>
-    </AccordionList>
-    <div class="secondary-links">
-      <LinkTo @route="target-profile" @invokeAction={{@burger.state.actions.close}}>
-        <i class="crosshairs icon"></i> Générateur de profil cible</LinkTo>
-      <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
+<div class="ui inverted left wide sidebar {{if @open "visible "}}main-sidebar menu vertical {{if this.config.lite "lite" ""}}">
+  <div class="header">Pix Editor</div>
+  <PowerSelect
+    @searchEnabled={{true}}
+    @search={{this.getSearchResults}}
+    @placeholder="Acquix ou recordId"
+    @onChange={{this.linkTo}}
+    @renderInPlace={{true}}
+    @triggerComponent="power-select/custom-trigger"
+    @class="sidebar-search"
+    @tagName="div"
+    @searchMessage=""
+    @searchPlaceholder="Rechercher..."
+    @loadingMessage="Recherche en cours..."
+    @noMatchesMessage="Pas de résultat" as |result|>
+    {{result.title}}
+  </PowerSelect>
+  <AccordionList as |accordion|>
+    <div class="ui accordion inverted">
+      {{#each @areas as |area|}}
+        <accordion.item as |accordionItem|>
+          <accordionItem.toggle @class="title">
+            <i class="dropdown icon"></i>
+            {{area.name}}
+          </accordionItem.toggle>
+          <accordionItem.panel>
+            <div class="content">
+              {{#each area.sortedCompetences as |competence|}}
+                <LinkTo @route="competence" @model={{competence.id}} class="item" @invokeAction={{@close}}> {{competence.name}}</LinkTo>
+              {{/each}}
+            </div>
+          </accordionItem.panel>
+        </accordion.item>
+      {{/each}}
     </div>
-    <div class="ui labelled icon menu">
-      <button class="ui button item" type="button" {{on "click" @openConfiguration}}><i class="wrench icon"></i>Configuration</button>
-      <div class="right item">
-        {{#if this.author}}
-          {{this.author}} -
-        {{/if}}
-        Version {{this.version}}</div>
-    </div>
+  </AccordionList>
+  <div class="secondary-links">
+    <LinkTo @route="target-profile"  @invokeAction={{@close}}>
+      <i class="crosshairs icon"></i> Générateur de profil cible</LinkTo>
+    <p {{on "click" this.shareAreas}}><i class="share square icon"></i> Exporter les sujets</p>
+  </div>
+  <div class="ui labelled icon menu">
+    <button class="ui button item" type="button" {{on "click" @openConfiguration}}><i class="wrench icon"></i>Configuration</button>
+    <div class="right item">
+      {{#if this.author}}
+        {{this.author}} -
+      {{/if}}
+      Version {{this.version}}</div>
   </div>
 </div>

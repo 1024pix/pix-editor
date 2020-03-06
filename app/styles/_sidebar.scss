@@ -1,5 +1,10 @@
 .main-sidebar {
 
+  &.ui.sidebar {
+    transition: transform 0.5s, visibility 0.5s;
+    z-index:99;
+  }
+
   .header {
     height: 50px;
     padding: 15px 5px;
@@ -43,7 +48,7 @@
     width: 100%;
   }
 
-  &.ui.vertical.inverted.menu {
+  .ui.vertical.inverted.menu {
 
     .menu .item {
       padding: 10px;
