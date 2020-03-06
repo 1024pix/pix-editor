@@ -24,10 +24,10 @@ export default class SingleRoute extends SkillRoute {
         const skill = this.controller.skill;
         const template = skill.productionTemplate;
         if (template) {
-          return this.transitionTo('competence.templates.single', this.templateName.getCompetence(), template);
+          return this.transitionTo('competence.templates.single', this.currentData.getCompetence(), template);
         }
       } else if (transition.targetName === 'competence.skills.index') {
-        return this.transitionTo('competence.skills.single', this.templateName.getCompetence(), this.controller.model);
+        return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controller.model);
       }
       return true;
     }
