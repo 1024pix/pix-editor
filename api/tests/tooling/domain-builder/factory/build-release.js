@@ -4,6 +4,7 @@ const buildChallenge = require('./build-challenge-airtable-data-object');
 const buildTube = require('./build-tube-airtable-data-object');
 const buildCourse = require('./build-course-airtable-data-object');
 const buildSkill = require('./build-skill-airtable-data-object');
+const buildTutorial = require('./build-tutorial-airtable-data-object');
 
 module.exports = function buildRelease() {
   const area = buildArea({
@@ -21,17 +22,14 @@ module.exports = function buildRelease() {
     skillIds: [],
     area
   });
-  const challenge = buildChallenge();
-  const tube = buildTube();
-  const course = buildCourse();
-  const skill = buildSkill();
 
   return {
     areas: [area],
     competences: [competence],
-    challenges: [challenge],
-    tubes: [tube],
-    courses: [course],
-    skills: [skill],
+    challenges: [buildChallenge()],
+    tubes: [buildTube()],
+    courses: [buildCourse()],
+    skills: [buildSkill()],
+    tutorials: [buildTutorial()],
   };
 };

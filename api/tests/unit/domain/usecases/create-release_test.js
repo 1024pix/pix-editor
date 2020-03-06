@@ -32,6 +32,9 @@ describe('Unit | UseCase | Create Release', () => {
       skillDatasource: {
         list: sinon.spy(async () => expectedCreatedRelease.content.skills)
       },
+      tutorialDatasource: {
+        list: sinon.spy(async () => expectedCreatedRelease.content.tutorials)
+      },
     };
 
     // when
@@ -66,6 +69,11 @@ describe('Unit | UseCase | Create Release', () => {
   it('should retrieve skills from repository', async () => {
     // then
     expect(datasources.skillDatasource.list).to.be.called;
+  });
+
+  it('should retrieve tutorials from repository', async () => {
+    // then
+    expect(datasources.tutorialDatasource.list).to.be.called;
   });
 
   it('should return created release with id and content', async () => {

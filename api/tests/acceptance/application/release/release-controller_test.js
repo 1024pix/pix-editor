@@ -1,6 +1,6 @@
 const { expect, domainBuilder, airtableBuilder } = require('../../../test-helper');
 const createServer = require('../../../../server');
-const { buildArea, buildCompetence, buildChallenge, buildTube, buildCourse, buildSkill } = airtableBuilder.factory;
+const { buildArea, buildCompetence, buildChallenge, buildTube, buildCourse, buildSkill, buildTutorial } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
   beforeEach(() => {
@@ -27,6 +27,10 @@ describe('Acceptance | Controller | release-controller', () => {
     airtableBuilder
       .mockList({ tableName: 'Acquis' })
       .returns([buildSkill()])
+      .activate();
+    airtableBuilder
+      .mockList({ tableName: 'Tutoriels' })
+      .returns([buildTutorial()])
       .activate();
   });
 
