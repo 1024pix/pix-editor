@@ -1,20 +1,6 @@
 <div class='{{this.listType}}'>
-  <div class="list-header">
-    <div class="list-row">
-      <div class="list-item authorText" {{on "click" (fn this.sortBy "authorText" "string")}}>Auteur</div>
-      <div class="list-item instructions" {{on "click" (fn this.sortBy "instructions" "string")}}>Consigne</div>
-      <div class="list-item type" {{on "click" (fn this.sortBy "type" "string")}}>Type</div>
-      <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
-    </div>
-  </div>
-  <div class="list-body">
-    <EmberCollection @items={{this.sortedList}} @scroll-left={{this.scrollLeft}} @scroll-top={{this.scrollTop}} @scroll-change={{this.scrollChange}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-    <LinkTo @route={{@link}} @models={{array @competenceModel item}} @tagName="div" class="list-row">
-      <div class="list-item">{{item.authorText}}</div>
-      <div class="list-item">{{item.instructions}}</div>
-      <div class="list-item">{{item.type}}</div>
-      <div class="list-item">{{item.status}}</div>
-    </LinkTo>
-    </EmberCollection>
-  </div>
+  <EmberTable as |t|>
+    <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}} @onUpdateSorts={{this.testSort}} @sorts={{this.sorts}}/>
+    <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} @selection={{this.current}}/>
+  </EmberTable>
 </div>

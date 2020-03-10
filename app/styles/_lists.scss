@@ -1,0 +1,42 @@
+.ember-table {
+  table {
+    th {
+      background-color:#F9FAFB;
+      border-left:1px solid rgba(34,36,38,.1);
+      border-bottom:1px solid rgba(34,36,38,.1);
+      padding:10px;
+      text-align:left;
+
+      .et-sort-indicator {
+
+        &:before {
+          font-family: Icons;
+          display: inline-block;
+          border: none;
+          line-height: 1;
+          color:#b9b9b9;
+          content: '\f0d7';
+        }
+
+        &.is-ascending:before {
+          content: '\f0d8';
+        }
+      }
+
+
+    }
+    td {
+      border-left:1px solid rgba(34,36,38,.1);
+      border-bottom:1px solid rgba(34,36,38,.1);
+      padding:10px;
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow: ellipsis;
+      cursor:pointer;
+    }
+
+    tr.is-selected td {
+      background-color:#ffc;
+    }
+  }
+}

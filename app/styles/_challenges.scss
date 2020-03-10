@@ -264,11 +264,6 @@ img.clickable {
   outline: none;
 }
 
-.template-list,
-.alternative-list {
-  @extend %list;
-}
-
 .file-remove {
   cursor: pointer;
 }
