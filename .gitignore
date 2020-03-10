@@ -31,5 +31,4 @@ pix-editor/scripts/config-test.js
 pix-editor/app/config-private-test.js
 
 # intellij
-.idea/
-pix-editor/app/.idea/
+**/.idea
