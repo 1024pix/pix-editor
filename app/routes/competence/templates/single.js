@@ -10,6 +10,11 @@ export default class SingleRoute extends Route {
     return this.store.findRecord('challenge', params.template_id);
   }
 
+  afterModel(model) {
+    super.afterModel(...arguments);
+    this.currentData.setTemplate(model);
+  }
+
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
