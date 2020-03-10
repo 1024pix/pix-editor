@@ -1,9 +1,10 @@
 import Service from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class CurrentDataService extends Service {
-  _areas = null;
-  _competence = null;
-  _template = null;
+  @tracked _areas = null;
+  @tracked _competence = null;
+  @tracked _template = null;
 
   setAreas(areas) {
     this._areas = areas;
