@@ -24,10 +24,6 @@
     border: none;
   }
 
-  .template-list{
-    height:100%;
-  }
-
 }
 
 .competence-grid {
@@ -224,22 +220,7 @@
 
 .template-list,
 .alternative-list {
-  .list-row {
-    .suggested {
-      background-color: $suggested-background-color !important;
-      color: $suggested-color;
-    }
-
-    .validated {
-      background-color: $validated-background-color !important;
-      color: $validated-color;
-    }
-
-    .archived {
-      background-color: $archived-background-color !important;
-      color: $archived-color;
-    }
-  }
+  height:100%;
 }
 
 .quality-indication-details {

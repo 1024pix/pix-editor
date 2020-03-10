@@ -34,19 +34,10 @@
       text-overflow: ellipsis;
       cursor:pointer;
 
+
       &.suggested {
         background-color: $suggested-background-color !important;
         color: $suggested-color;
-      }
-
-      &.prevalidated {
-        background-color: $prevalidated-background-color !important;
-        color: $prevalidated-color;
-      }
-
-      &.validated_no_test {
-        background-color: $validated-no-test-background-color !important;
-        color: $validated-no-test-color;
       }
 
       &.validated {
@@ -59,15 +50,6 @@
         color: $archived-color;
       }
 
-      &.to-be-submitted {
-        background-color: $to-be-submitted-background-color !important;
-        color: $to-be-submitted-color;
-      }
-
-      &.need-work {
-        background-color: $need-work-background-color !important;
-        color: $need-work-color;
-      }
 
     }
 

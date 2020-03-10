@@ -1,20 +1,12 @@
-<div class='{{this.listType}}{{this.hiddenClass}}'>
-  <div class="list-header">
-    <div class="list-row">
-      <div class="list-item alternativeVersion" {{on "click" (fn this.sortBy "alternativeVersion" "int")}}>Indice</div>
-      <div class="list-item instructions" {{on "click" (fn this.sortBy "instructions" "string")}}>Consigne</div>
-      <div class="list-item author" {{on "click" (fn this.sortBy "author" "array")}}>Auteur</div>
-      <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
-    </div>
-  </div>
-  <div class="list-body">
-    <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-    <LinkTo @route="competence.templates.single.alternatives.single" @model={{item}} @tagName="div" class={{concat "list-row" (if (not item.isValidated) " draft" "")}}>
-      <div class="list-item">{{item.alternativeVersion}}</div>
-      <div class="list-item">{{item.instructions}}</div>
-      <div class="list-item">{{item.author}}</div>
-      <div class="list-item {{item.statusCSS}}">{{item.status}}</div>
-    </LinkTo>
-    </EmberCollection>
-  </div>
+<div class='{{this.listType}}'>
+  <EmberTable as |t|>
+    <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}}/>
+    <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} as |b|>
+      <b.row as |r|>
+        <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+          {{value}}
+        </r.cell>
+      </b.row>
+    </t.body>
+  </EmberTable>
 </div>
