@@ -13,21 +13,17 @@ export default class CompetencesList extends SortedList {
   headers = [{
     name:'Auteur',
     valuePath:'authorText',
-    className:'authorText',
     maxWidth:150
   },{
     name:'Consigne',
-    valuePath:'instructions',
-    className:'instructions'
+    valuePath:'instructions'
   },{
     name:'Type',
     valuePath:'type',
-    className:'type',
     maxWidth:150
   },{
     name:'Statut',
     valuePath:'status',
-    className:'status',
     maxWidth:150
   }];
 
