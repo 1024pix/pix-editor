@@ -1,12 +1,14 @@
 import Template from './single';
 import {action} from '@ember/object';
 import {tracked} from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class NewController extends Template {
 
   creation = true;
   queryParams = ['from'];
   @tracked from = '';
+  @service currentData;
 
   defaultSaveChangelog = 'Création du prototype';
 
@@ -30,9 +32,9 @@ export default class NewController extends Template {
       this.edition = false;
       this.send('minimize');
       this._message('Prototype enregistré');
-      this.transitionToRoute('competence.templates.single', this.competence, challenge);
+      this.transitionToRoute('competence.templates.single', this.currentData.getCompetence(), challenge);
     })
-    .catch(() => {
+    .catch((e) => {
       this._errorMessage('Erreur lors de la création');
     })
     .finally(() => {
