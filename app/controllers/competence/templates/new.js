@@ -34,7 +34,7 @@ export default class NewController extends Template {
       this._message('Prototype enregistré');
       this.transitionToRoute('competence.templates.single', this.currentData.getCompetence(), challenge);
     })
-    .catch((e) => {
+    .catch(() => {
       this._errorMessage('Erreur lors de la création');
     })
     .finally(() => {
