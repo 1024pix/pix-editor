@@ -1,4 +1,15 @@
 <EmberTable as |t|>
-  <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}} @onUpdateSorts={{this.sortBy}} @sorts={{this.sorts}}/>
-  <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} @selection={{this.current}}/>
+  <t.head
+    @columns={{this.headers}}
+    @widthConstraint={{'eq-container'}}
+    @resizeMode={{'fluid'}}
+    @onUpdateSorts={{this.sortBy}}
+    @sorts={{this.sorts}}
+    @sortFunction={{this.sort}}/>
+  <t.body
+    @rows={{@list}}
+    @rowSelectionMode={{'single'}}
+    @checkboxSelectionMode={{'none'}}
+    @onSelect={{this.selectRow}}
+    @selection={{this.current}}/>
 </EmberTable>

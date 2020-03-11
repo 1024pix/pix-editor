@@ -3,6 +3,13 @@ import { action } from '@ember/object';
 
 export default class NoteList extends SortedList {
 
+  sortHandlers = {
+    date:{
+      type:'date',
+      field:'createdAt'
+    }
+  }
+
   get headers() {
      let headers = [{
       name:'Date',
@@ -35,7 +42,7 @@ export default class NoteList extends SortedList {
     this.args.show(row);
   }
 
-  get sortedList() {
+  get list() {
     if (Array.isArray(this.args.list)) {
       return this.args.list;
     } else {

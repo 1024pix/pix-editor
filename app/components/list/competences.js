@@ -13,7 +13,7 @@ export default class CompetencesList extends SortedList {
     maxWidth:150
   },{
     name:'Consigne',
-    valuePath:'instructions'
+    valuePath:'instructions',
   },{
     name:'Type',
     valuePath:'type',

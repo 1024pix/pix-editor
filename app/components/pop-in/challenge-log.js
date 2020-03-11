@@ -80,7 +80,6 @@ export default class PopinChallengeLog extends Component {
   @action
   addNote() {
     const competence = this.args.challenge.firstSkill.tube.get('competence');
-    console.debug(competence);
     let newNote = this.store.createRecord('note', {
       challengeId:this.args.challenge.pixId,
       author:this.config.author,
