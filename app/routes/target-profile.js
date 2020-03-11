@@ -1,8 +1,6 @@
 import Route from '@ember/routing/route';
-import { inject as service } from '@ember/service';
 
 export default class TargetProfileRoute extends Route {
-  @service paginatedQuery;
 
   model() {
     return this.modelFor('application');
