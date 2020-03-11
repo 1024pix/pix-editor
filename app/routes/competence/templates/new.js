@@ -29,7 +29,6 @@ export default class NewRoute extends TemplateRoute {
   }
 
   resetController(controller, isExiting) {
-    console.log('reset ? ', isExiting);
     if (isExiting) {
       controller.from = '';
     }
