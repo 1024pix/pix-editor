@@ -12,7 +12,7 @@ module('Integration | Component | note-list', function(hooks) {
 
     await render(hbs`{{list/notes}}`);
 
-    assert.dom('.list-body').exists();
+    assert.dom('.ember-table').exists();
 
   });
 });

@@ -12,7 +12,7 @@ module('Integration | Component | alternatives-list', function(hooks) {
 
     await render(hbs`{{list/alternatives}}`);
 
-    assert.dom('.list-body').exists();
+    assert.dom('.ember-table').exists();
 
   });
 });

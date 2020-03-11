@@ -16,6 +16,6 @@ module('Integration | Component | competences-list', function(hooks) {
 
 
     // then
-    assert.dom('.template-list').exists();
+    assert.dom('.ember-table').exists();
   });
 });

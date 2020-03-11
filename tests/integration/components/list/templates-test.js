@@ -12,7 +12,7 @@ module('Integration | Component | templates-list', function(hooks) {
 
     await render(hbs`{{list/templates}}`);
 
-    assert.dom('.list-body').exists();
+    assert.dom('.ember-table').exists();
 
   });
 });
