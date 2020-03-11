@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 
-export default class TargetProfileRoute extends Route {
+export default class StatisticsRoute extends Route {
 
   model() {
     return this.modelFor('application');
@@ -22,4 +22,5 @@ export default class TargetProfileRoute extends Route {
       return Promise.all(getChallenges);
     })
   }
+
 }

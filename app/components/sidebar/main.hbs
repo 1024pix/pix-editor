@@ -1,0 +1,22 @@
+<div class="ui inverted left wide sidebar {{if @open "visible "}}main-sidebar menu vertical {{if this.config.lite "lite" ""}}">
+  <div class="header">Pix Editor</div>
+  <Sidebar::Search @close={{@close}} />
+  <Sidebar::Navigation @areas={{@areas}} @close={{@close}}/>
+  <div class="secondary-links">
+    <LinkTo @route="target-profile"  @invokeAction={{@close}}>
+      <i class="crosshairs icon"></i> Générateur de profil cible
+    </LinkTo>
+    <Sidebar::Export @areas={{@areas}} @isLoading={{@isLoading}} @finishedLoading={{@finishedLoading}} @showMessage={{@showMessage}}/>
+    <LinkTo @route="statistics"  @invokeAction={{@close}}>
+      <i class="chart bar icon"></i> Statistiques
+    </LinkTo>
+  </div>
+  <div class="ui labelled icon menu">
+    <button class="ui button item" type="button" {{on "click" @openConfiguration}}><i class="wrench icon"></i>Configuration</button>
+    <div class="right item">
+      {{#if this.author}}
+        {{this.author}} -
+      {{/if}}
+      Version {{this.version}}</div>
+  </div>
+</div>
