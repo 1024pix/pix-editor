@@ -1,28 +1,10 @@
-<div class="{{@listType}}">
-  <div class="list-header">
-    <div class="list-row">
-      <div class="list-item date" {{on "click" (fn this.sortBy "date" "int")}}>Date</div>
-      {{#if this.displayAuthor}}
-        <div class="list-item author" {{on "click" (fn this.sortBy "author" "string")}}>Auteur</div>
-      {{/if}}
-      <div class="list-item text" {{on "click" (fn this.sortBy "text" "string")}}>Texte</div>
-      {{#if this.displayStatus}}
-        <div class="list-item status" {{on "click" (fn this.sortBy "status" "string")}}>Statut</div>
-      {{/if}}
-    </div>
-  </div>
-  <div class="list-body">
-    <EmberCollection @items={{this.sortedList}} @cell-layout={{percentage-columns-layout @itemCount this.columns 40}} as |item|>
-    <div class="list-row" {{on "click" (fn @show item)}}>
-      <div class="list-item">{{item.date}}</div>
-      {{#if this.displayAuthor}}
-        <div class="list-item">{{item.author}}</div>
-      {{/if}}
-      <div class="list-item">{{item.text}}</div>
-      {{#if this.displayStatus}}
-        <div class="list-item">{{item.status}}</div>
-      {{/if}}
-    </div>
-    </EmberCollection>
-  </div>
-</div>
+<EmberTable as |t|>
+  <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}} @onUpdateSorts={{this.sortBy}} @sorts={{this.sorts}}/>
+  <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} as |b|>
+    <b.row as |r|>
+      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+        {{value}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</EmberTable>

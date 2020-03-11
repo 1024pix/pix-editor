@@ -3,14 +3,14 @@ import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class SortedList extends Component {
-  listType = 'sorted-list';
-  columns = [100];
 
   @tracked ascending = true;
   @tracked sortField = null;
-  @tracked sortType = null;
 
-  sortElements(elements) {
+  @tracked sorts = [];
+  //@tracked sortType = null;
+
+  /*sortElements(elements) {
     let field = this.sortField;
     let type = this.sortType;
     let sort1, sort2;
@@ -88,14 +88,17 @@ export default class SortedList extends Component {
   }
 
   get sortedList() {
-    if (this.sortField) {
+    if (this.sortField && this.args.list.count > 0) {
       return this.sortElements(this.args.list);
     } else {
       return this.args.list;
     }
-  }
+  }*/
 
-  @action
+  get sortedList() {
+    return this.args.list;
+  }
+  /*@action
   sortBy(field, type) {
     if (field === this.sortField) {
       this.ascending = !this.ascending;
@@ -117,5 +120,22 @@ export default class SortedList extends Component {
       sortElement.classList.remove('ascending');
       sortElement.classList.add('descending');
     }
+  }*/
+
+  @action
+  sortBy(params) {
+    if (params.length > 0) {
+      const field = params[0].valuePath;
+      this.sortField = field;
+      this.ascending = params[0].isAscending;
+      this.sorts = params;
+    } else {
+      this.ascending = !this.ascending;
+      this.sorts = [{
+        valuePath:this.sortField,
+        isAscending:this.ascending
+      }]
+    }
   }
+
 }

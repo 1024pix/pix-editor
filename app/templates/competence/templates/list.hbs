@@ -7,7 +7,7 @@
   </h1>
 </div>
 <div class="ui attached segment competence {{this.size}}">
-  <List::Templates @list={{this.model.sortedTemplates}} @itemCount={{this.model.templates.length}} @hidden={{false}} />
+  <List::Templates @list={{this.model.sortedTemplates}} />
 </div>
 <div class="ui borderless bottom attached labelled icon menu">
   {{#if this.mayCreateTemplate}}

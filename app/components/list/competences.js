@@ -1,14 +1,11 @@
 import { action } from '@ember/object';
 import SortedList from './sorted';
 import { inject as service } from '@ember/service';
-import { tracked } from '@glimmer/tracking';
 
 export default class CompetencesList extends SortedList {
-  listType = 'template-list';
+
   @service router;
   @service currentData;
-
-  @tracked sorts = [];
 
   headers = [{
     name:'Auteur',
@@ -43,19 +40,4 @@ export default class CompetencesList extends SortedList {
     return this.currentData.getTemplate();
   }
 
-  @action
-  testSort(params) {
-    if (params.length > 0) {
-      const field = params[0].valuePath;
-      this.sortField = field;
-      this.ascending = params[0].isAscending;
-      this.sorts = params;
-    } else {
-      this.ascending = !this.ascending;
-      this.sorts = [{
-        valuePath:this.sortField,
-        isAscending:this.ascending
-      }]
-    }
-  }
 }

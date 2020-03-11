@@ -1,12 +1,10 @@
-<div class='{{this.listType}}'>
-  <EmberTable as |t|>
-    <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}}/>
-    <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} as |b|>
-      <b.row as |r|>
-        <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
-          {{value}}
-        </r.cell>
-      </b.row>
-    </t.body>
-  </EmberTable>
-</div>
+<EmberTable as |t|>
+  <t.head @columns={{this.headers}} @widthConstraint={{'eq-container'}} @resizeMode={{'fluid'}} @onUpdateSorts={{this.sortBy}} @sorts={{this.sorts}}/>
+  <t.body @rows={{this.sortedList}} @rowSelectionMode={{'single'}} @checkboxSelectionMode={{'none'}} @onSelect={{this.selectRow}} as |b|>
+    <b.row as |r|>
+      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+        {{value}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</EmberTable>

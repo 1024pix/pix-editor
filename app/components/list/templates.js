@@ -1,8 +1,10 @@
-import CompetenceList from './competences';
+import SortedList from './sorted';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
-export default class TemplatesList extends CompetenceList {
-  listType = 'template-list';
+export default class TemplatesList extends SortedList {
+
+  @service router;
 
   headers = [{
     name:'Version',

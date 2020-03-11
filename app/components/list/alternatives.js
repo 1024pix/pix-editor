@@ -1,9 +1,10 @@
-import SortedList from './competences';
+import SortedList from './sorted';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class AlternativesList extends SortedList {
 
-  listType = 'alternative-list';
+  @service router;
 
   headers = [{
     name:'Indice',
