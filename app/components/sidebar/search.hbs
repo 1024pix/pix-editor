@@ -1,0 +1,15 @@
+  <PowerSelect
+    @searchEnabled={{true}}
+    @search={{this.getSearchResults}}
+    @placeholder="Acquix ou recordId"
+    @onChange={{this.linkTo}}
+    @renderInPlace={{true}}
+    @triggerComponent="power-select/custom-trigger"
+    @class="sidebar-search"
+    @tagName="div"
+    @searchMessage=""
+    @searchPlaceholder="Rechercher..."
+    @loadingMessage="Recherche en cours..."
+    @noMatchesMessage="Pas de résultat" as |result|>
+    {{result.title}}
+  </PowerSelect>
