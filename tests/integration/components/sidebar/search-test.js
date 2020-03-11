@@ -12,15 +12,6 @@ module('Integration | Component | sidebar/search', function(hooks) {
 
     await render(hbs`<Sidebar::Search />`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <Sidebar::Search>
-        template block text
-      </Sidebar::Search>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom('.sidebar-search').exists();
   });
 });

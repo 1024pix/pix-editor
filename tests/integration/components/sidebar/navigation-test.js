@@ -12,15 +12,6 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
     await render(hbs`<Sidebar::Navigation />`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <Sidebar::Navigation>
-        template block text
-      </Sidebar::Navigation>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom('.ui.accordion.inverted').exists();
   });
 });

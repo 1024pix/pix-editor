@@ -12,15 +12,6 @@ module('Integration | Component | sidebar/export', function(hooks) {
 
     await render(hbs`<Sidebar::Export />`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <Sidebar::Export>
-        template block text
-      </Sidebar::Export>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom('p').exists();
   });
 });
