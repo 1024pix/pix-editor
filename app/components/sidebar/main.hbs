@@ -7,6 +7,7 @@
       <i class="crosshairs icon"></i> Générateur de profil cible
     </LinkTo>
     <Sidebar::Export @areas={{@areas}} @isLoading={{@isLoading}} @finishedLoading={{@finishedLoading}} @showMessage={{@showMessage}}/>
+    <Sidebar::Stats @areas={{@areas}} />
   </div>
   <div class="ui labelled icon menu">
     <button class="ui button item" type="button" {{on "click" @openConfiguration}}><i class="wrench icon"></i>Configuration</button>
