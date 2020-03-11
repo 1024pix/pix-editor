@@ -24,7 +24,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
       }
     });
 
-    await render(hbs`{{main-sidebar openConfiguration=(action openAction)
+    await render(hbs`{{sidebar/main openConfiguration=(action openAction)
     isLoading=(action loadingAction)
     finishedLoading=(action finishedAction)
     showMessage=(action messageAction)
