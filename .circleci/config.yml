@@ -16,9 +16,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:10.14-browsers
-        environment:
-          CHROME_BIN: "/usr/bin/google-chrome"
+      - image: circleci/node:latest
     steps:
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - restore_cache:
