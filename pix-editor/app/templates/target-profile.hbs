@@ -31,6 +31,9 @@
       <button class="ui button item" {{on "click" this.getProfileId}} type="button">
         <i class="code icon"></i> CSV
       </button>
+      <button class="ui button item" {{on "click" this.exportPdf}} type="button">
+        <i class="pdf file icon"></i> PDF
+      </button>
     </div>
   </div>
   <h2 class="ui top attached padded grid target-profile-title">
@@ -64,12 +67,12 @@
       <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
     </div>
   </h2>
-  <div class="ui attached target-profile">
-
-    {{#each this.model as |area|}}
-      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
-    {{/each}}
-    <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
+    <div class="ui attached target-profile">
+      {{#each this.model as |area|}}
+        <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
+      {{/each}}
+      <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
+    </div>
   </div>
 </div>
 {{#if this.displayTubeLevel}}
