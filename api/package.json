@@ -1,0 +1,54 @@
+{
+  "name": "learning-content-api",
+  "version": "1.0.0",
+  "description": "API permettant d'intéragir avec le référentiel de contenu Pix",
+  "engines": {
+    "node": "12.14.1",
+    "npm": "6.13.4"
+  },
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "coverage": "NODE_ENV=test nyc --silent _mocha --recursive --exit --reporter dot tests && nyc report --reporter=lcov --report-dir=./coverage",
+    "lint": "eslint lib tests",
+    "lint:fix": "eslint lib tests --fix",
+    "start": "node bin/www",
+    "start:watch": "nodemon --signal SIGTERM bin/www",
+    "test": "NODE_ENV=test npm run && npm run test:api",
+    "test:api": "NODE_ENV=test mocha --recursive --exit --reporter dot tests",
+    "test:api:unit": "env NODE_ENV=test mocha --recursive --exit --reporter dot tests/unit",
+    "test:api:debug": "NODE_ENV=test mocha --inspect-brk=9229 --recursive --exit --reporter dot tests",
+    "test:api:watch": "NODE_ENV=test mocha --recursive tests --watch --reporter dot",
+    "test:lint": "npm test && npm run lint"
+  },
+  "author": "GIP Pix",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/hapi": "^19.1.1",
+    "@hapi/inert": "^6.0.1",
+    "@hapi/vision": "^6.0.0",
+    "airtable": "^0.8.1",
+    "blipp": "^4.0.1",
+    "bunyan": "^1.8.12",
+    "dotenv": "^8.2.0",
+    "faker": "4.1.0",
+    "jsonapi-serializer": "^3.6.6",
+    "lodash": "^4.17.15",
+    "prom-client": "^12.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-sorted": "^0.2.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-mocha": "^6.3.0",
+    "mocha": "^7.1.0",
+    "nock": "12.0.2",
+    "nyc": "15.0.0",
+    "sinon": "^9.0.0",
+    "sinon-chai": "^3.5.0"
+  }
+}
