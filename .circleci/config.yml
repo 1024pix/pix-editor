@@ -1,20 +1,22 @@
 ---
-version: 2
+version: 2.0
 
 jobs:
-  build:
+  pix-editor-build:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
-      - run: npm install
+      - run: |
+          cd pix-editor
+          npm install
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - save_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
           paths:
             - ~
 
-  test:
+  pix-editor-test:
     docker:
       - image: circleci/node:latest-browsers
         environment:
@@ -24,6 +26,7 @@ jobs:
       - restore_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
       - run: |
+          cd pix-editor
           JOBS=2 npm test
 
   deploy_to_ghpages:
@@ -38,6 +41,7 @@ jobs:
             - "ee:d4:4c:1e:b4:d2:77:17:71:af:a4:86:2d:65:39:4b"
       - run: ssh-keyscan github.com > ~/.ssh/known_hosts
       - run: |
+          cd pix-editor
           git config user.email "$GITHUB_EMAIL"
           git config user.name "$GITHUB_NAME"
           git config push.default upstream
@@ -46,32 +50,76 @@ jobs:
           git worktree prune
           git worktree add deploy gh-pages
           rm -Rf deploy/*
-      - run: npm run build:production
       - run: |
+          cd pix-editor
+          npm run build:production
+      - run: |
+          cd pix-editor
           cp -r dist/* deploy
           cd deploy
           echo "editor.pix.fr" > CNAME
           git add .
           git commit --allow-empty -m "Deploy to gh-pages"
           git push origin gh-pages
+
+  checkout:
+    docker:
+      - image: circleci/node:12.14.0
+    working_directory: ~/pix-editor
+    steps:
+      - checkout
+      - persist_to_workspace:
+          root: ~/pix-editor
+          paths:
+            - .
+  api_build_and_test:
+    docker:
+      - image: circleci/node:12.14.0
+    working_directory: ~/pix-editor/api
+    steps:
+      - attach_workspace:
+          at: ~/pix-editor
+      - run: cat package*.json > cachekey
+      - restore_cache:
+          keys:
+            - v7-api-npm-{{ checksum "cachekey" }}
+      - run: npm ci
+      - save_cache:
+          key: v7-api-npm-{{ checksum "cachekey" }}
+          paths:
+            - ~/.npm
+      - run:
+          command: |
+            npm run lint
+            npm test
+
 workflows:
   version: 2
   build_test_and_deploy:
     jobs:
-      - build:
+      - checkout:
+          filters:
+            branches:
+              ignore:
+                - master
+                - gh-pages
+      - api_build_and_test:
+          requires:
+            - checkout
+      - pix-editor-build:
           filters:
             branches:
               only: master
-      - test:
+      - pix-editor-test:
           requires:
-            - build
+            - pix-editor-build
           filters:
             branches:
               only: master
       - deploy_to_ghpages:
           requires:
-            - build
-            - test
+            - pix-editor-build
+            - pix-editor-test
           filters:
             branches:
               only: master

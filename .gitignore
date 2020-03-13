@@ -1,34 +1,34 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
+**/dist
+**/tmp
+
+# coverage reports
+**/coverage
+**/.nyc_output
 
 # dependencies
-/node_modules
-/bower_components
+**/node_modules
 
 # misc
-/.env*
+api/.env*
 /.pnp*
 /.sass-cache
 /connect.lock
-/coverage/*
 /libpeerconnection.log
 npm-debug.log*
 yarn-error.log
 testem.log
 
 # ember-try
-.node_modules.ember-try/
-bower.json.ember-try
-package.json.ember-try
-scripts/config.js
-scripts/config-production.js
-scripts/config-test.js
-app/config-private-test.js
+**/.node_modules.ember-try/
+**/bower.json.ember-try
+**/package.json.ember-try
+pix-editor/scripts/config.js
+pix-editor/scripts/config-production.js
+pix-editor/scripts/config-test.js
+pix-editor/app/config-private-test.js
 
 # intellij
-
-.idea/
-app/.idea/
+**/.idea
