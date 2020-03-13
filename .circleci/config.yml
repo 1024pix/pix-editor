@@ -59,7 +59,7 @@ jobs:
           cd deploy
           echo "editor.pix.fr" > CNAME
           git add .
-          git commit --allow-empty -m "Deploy to gh-pages"
+          git commit --allow-empty -m "Deploy to gh-pages [skip ci]"
           git push origin gh-pages
 
   checkout:
