@@ -1,27 +1,25 @@
-{{#if @display}}
-  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-    <div class="ui modal visible active">
-      <i class="close icon" {{on "click" this.closeModal}}></i>
-      <div class="header">
-        {{@title}}
-      </div>
-      <div class="content">
-        <form class="ui form">
-          <div class="field">
-            <label>{{@label}}</label>
-            <Field::Input @value={{this.value}} @edition={{true}} />
-          </div>
-        </form>
-      </div>
-      <div class="actions">
-        <div class="ui deny button" {{on "click" this.closeModal}}>
-          Annuler
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+  <div class="ui modal visible active">
+    <i class="close icon" {{on "click" this.closeModal}}></i>
+    <div class="header">
+      {{@title}}
+    </div>
+    <div class="content">
+      <form class="ui form">
+        <div class="field">
+          <label>{{@label}}</label>
+          <Field::Input @value={{this.value}} @edition={{true}} />
         </div>
-        <div class="ui green button" {{on "click" this.validate}}>
-          <i class="checkmark icon"></i>
-          Valider
-        </div>
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui deny button" {{on "click" this.closeModal}}>
+        Annuler
+      </div>
+      <div class="ui green button" {{on "click" this.validate}}>
+        <i class="checkmark icon"></i>
+        Valider
       </div>
     </div>
-  </ModalDialog>
-{{/if}}
+  </div>
+</ModalDialog>

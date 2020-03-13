@@ -13,7 +13,7 @@ module('Integration | Component | popin-single-entry', function(hooks) {
     await render(hbs`{{pop-in/single-entry}}`);
 
     //assert.equal(this.element.textContent.trim(), '');
-    assert.ok(true);
+    assert.dom('.ember-modal-dialog').exists();
 
   });
 });

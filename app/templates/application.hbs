@@ -35,6 +35,10 @@
       {{/if}}
     </div>
   </div>
-  <PopIn::ConfigForm @update={{this.configUpdated}} @display={{this.displayConfiguration}} @class="popin-config-form" @close={{this.closeConfiguration}}/>
-  <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} @display={{this.displayConfirm}} />
+  {{#if this.displayConfiguration}}
+    <PopIn::ConfigForm @update={{this.configUpdated}} @class="popin-config-form" @close={{this.closeConfiguration}}/>
+  {{/if}}
+  {{#if this.displayConfirm}}
+    <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} />
+  {{/if}}
 </div>

@@ -9,12 +9,11 @@ module('Integration | Component | popin-changelog', function(hooks) {
   test('it renders', async function(assert) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
-    this.set('closedAction', function() {});
+    this.set('closeAction', function() {});
     this.set('denyAction', function() {});
 
-    await render(hbs`{{pop-in/changelog deny=(action denyAction) closed=(action closedAction)}}`);
+    await render(hbs`{{pop-in/changelog deny=(action denyAction) close=(action closeAction)}}`);
 
-    //assert.dom('.popin-changelog').exists();
-    assert.ok(true);
+    assert.dom('.ember-modal-dialog').exists();
   });
 });

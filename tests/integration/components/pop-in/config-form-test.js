@@ -10,9 +10,8 @@ module('Integration | Component | popin-config-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{pop-in/config-form class='popin-config-form'}}`);
+    await render(hbs`{{pop-in/config-form}}`);
 
-    //assert.dom('.popin-config-form').exists();
-    assert.ok(true);
+    assert.dom('.ember-modal-dialog').exists();
   });
 });

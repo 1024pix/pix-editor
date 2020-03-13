@@ -52,10 +52,11 @@
     {{/if}}
   </div>
 </div>
+{{#if this.displaySelectLocation}}
 <PopIn::SelectLocation
   @class="tube-select-competence"
-  @display={{this.displaySelectLocation}}
   @onChange={{this.setCompetence}}
   @name={{this.tube.name}}
   @selectTubeLevel={{false}}
   @close={{this.closeSelectCompetence}} />
+{{/if}}

@@ -1,43 +1,41 @@
-{{#if @display}}
-  <ModalDialog @targetAttachment="center" @containerClassNames="popin-template-log" @overlayClassNames="custom-overlay-modal" @onClose={{this.close}}>
-    <div class="ui modal visible active">
-      <i class="close icon" {{on "click" this.close}}></i>
-      <div class="header">
-        Journal de {{@challenge.skillNames}}
-      </div>
-      {{#if this.list}}
-        <div class="ui content segment basic custom-tab">
-          <AriaTabs as |at|>
-            <div class="ui top attached tabular menu">
-              <at.tabList as |tl|>
-                <tl.tab>Mes notes</tl.tab>
-                <tl.tab>Toutes les notes </tl.tab>
-                <tl.tab>Changelog</tl.tab>
-              </at.tabList>
-            </div>
-            <at.tabPanel>
-              <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="own">
-                <List::Notes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
-                <div class="ui text menu note-menu">
-                  <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
-                </div>
-              </div>
-            </at.tabPanel>
-            <at.tabPanel>
-              <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="notes">
-                <List::Notes @list={{this.notes}} @show={{this.showNote}} />
-              </div>
-            </at.tabPanel>
-            <at.tabPanel>
-              <div class="ui bottom attached tab segment active {{if (not this.changelogLoaded) "loading"}}" data-tab="notes">
-                <List::Notes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
-              </div>
-            </at.tabPanel>
-          </AriaTabs>
-        </div>
-      {{else}}
-        <Form::Note @entry={{this.logEntry}} @edition={{this.logEntryEdition}} @close={{this.closeLogForm}} @save={{this.saveEntry}} @mayEdit={{this.mayEditEntry}} @edit={{this.editEntry}} />
-      {{/if}}
+<ModalDialog @targetAttachment="center" @containerClassNames="popin-template-log" @overlayClassNames="custom-overlay-modal" @onClose={{this.close}}>
+  <div class="ui modal visible active">
+    <i class="close icon" {{on "click" this.close}}></i>
+    <div class="header">
+      Journal de {{@challenge.skillNames}}
     </div>
-  </ModalDialog>
-{{/if}}
+    {{#if this.list}}
+      <div class="ui content segment basic custom-tab">
+        <AriaTabs as |at|>
+          <div class="ui top attached tabular menu">
+            <at.tabList as |tl|>
+              <tl.tab>Mes notes</tl.tab>
+              <tl.tab>Toutes les notes </tl.tab>
+              <tl.tab>Changelog</tl.tab>
+            </at.tabList>
+          </div>
+          <at.tabPanel>
+            <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="own">
+              <List::Notes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
+              <div class="ui text menu note-menu">
+                <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
+              </div>
+            </div>
+          </at.tabPanel>
+          <at.tabPanel>
+            <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="notes">
+              <List::Notes @list={{this.notes}} @show={{this.showNote}} />
+            </div>
+          </at.tabPanel>
+          <at.tabPanel>
+            <div class="ui bottom attached tab segment active {{if (not this.changelogLoaded) "loading"}}" data-tab="notes">
+              <List::Notes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
+            </div>
+          </at.tabPanel>
+        </AriaTabs>
+      </div>
+    {{else}}
+      <Form::Note @entry={{this.logEntry}} @edition={{this.logEntryEdition}} @close={{this.closeLogForm}} @save={{this.saveEntry}} @mayEdit={{this.mayEditEntry}} @edit={{this.editEntry}} />
+    {{/if}}
+  </div>
+</ModalDialog>

@@ -151,14 +151,16 @@ export default class PopinChallengeLog extends Component {
 
   _loadNotes() {
     const challenge = this.args.challenge;
-    const production = (challenge.workbench?'non':'oui');
-    const pq = this.paginatedQuery;
-    return pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
-    .then(notes => {
-      this._notes = notes;
-      this.notesLoaded = true;
-      return notes;
-    })
+    if (challenge) {
+      const production = (challenge.workbench?'non':'oui');
+      const pq = this.paginatedQuery;
+      return pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
+      .then(notes => {
+        this._notes = notes;
+        this.notesLoaded = true;
+        return notes;
+      });
+    }
   }
 
 }

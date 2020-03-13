@@ -1,34 +1,32 @@
-{{#if @display}}
-  <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-    <div class="ui standard modal visible active">
-      <i class="close icon" {{on "click" this.closeModal}}></i>
-      <div class="header">
-        {{#if @title}}
-          {{@title}}
-        {{else}}
-          Emplacement de {{@name}}
-        {{/if}}
-      </div>
-      <div class="content">
-        <form action="" class="ui form">
-          <Field::Select @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
-          {{#if @selectTubeLevel}}
-            <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
-            {{#if this.selectedTube}}
-              <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}} />
-            {{/if}}
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+  <div class="ui standard modal visible active">
+    <i class="close icon" {{on "click" this.closeModal}}></i>
+    <div class="header">
+      {{#if @title}}
+        {{@title}}
+      {{else}}
+        Emplacement de {{@name}}
+      {{/if}}
+    </div>
+    <div class="content">
+      <form action="" class="ui form">
+        <Field::Select @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
+        {{#if @selectTubeLevel}}
+          <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
+          {{#if this.selectedTube}}
+            <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}} />
           {{/if}}
-        </form>
+        {{/if}}
+      </form>
+    </div>
+    <div class="actions">
+      <div class="ui deny button" {{on "click" this.closeModal}}>
+        Annuler
       </div>
-      <div class="actions">
-        <div class="ui deny button" {{on "click" this.closeModal}}>
-          Annuler
-        </div>
-        <div class="ui green button" {{on "click" this.setLocation}}>
-          <i class="checkmark icon"></i>
-          Déplacer
-        </div>
+      <div class="ui green button" {{on "click" this.setLocation}}>
+        <i class="checkmark icon"></i>
+        Déplacer
       </div>
     </div>
-  </ModalDialog>
-{{/if}}
+  </div>
+</ModalDialog>

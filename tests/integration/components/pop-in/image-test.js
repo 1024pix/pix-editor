@@ -10,11 +10,10 @@ module('Integration | Component | popin-image', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    this.set('closedAction', function() {});
+    this.set('closeAction', function() {});
 
-    await render(hbs`{{pop-in/image closed=(action closedAction)}}`);
+    await render(hbs`{{pop-in/image close=(action closeAction)}}`);
 
-    //assert.dom('.popin-image').exists();
-    assert.ok(true);
+    assert.dom('.ember-modal-dialog').exists();
   });
 });

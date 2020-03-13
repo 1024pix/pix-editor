@@ -52,8 +52,8 @@
     {{/if}}
   </div>
 </div>
+{{#if this.displaySelectLocation}}
 <PopIn::SelectLocation
-  @display={{this.displaySelectLocation}}
   @onChange={{this.setLocation}}
   @name={{this.skillName}}
   @selectTubeLevel={{true}}
@@ -62,3 +62,4 @@
   @selectEmptyLevels={{true}}
   @close={{this.closeSelectLocation}}
   />
+{{/if}}

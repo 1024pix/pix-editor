@@ -12,7 +12,12 @@ module('Integration | Component | popin-tube-level', function(hooks) {
 
     this.set('setTubeLevel', function() {});
     this.set('clearTube', function() {});
-    await render(hbs`{{pop-in/tube-level clearTube=(action clearTube) setTubeLevel=(action setTubeLevel) class='popin-tube-level'}}`);
+    this.set('tube', {
+      get() {
+        return [];
+      }
+    });
+    await render(hbs`{{pop-in/tube-level clearTube=(action clearTube) setTubeLevel=(action setTubeLevel) tube=tube}}`);
 
     assert.ok(true);
 
