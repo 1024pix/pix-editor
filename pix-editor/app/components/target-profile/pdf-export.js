@@ -11,14 +11,16 @@ export default class TargetProfilePdfExportComponent extends Component {
     const pSize = 10;
     const marginX = 40;
     const extraMarginX = 20;
-    const marginY = 30;
+    const marginY = 40;
     const pdf = new jsPDF('p', 'pt', 'a4');
-    //const colors = ['#F1A141','#57C884','#12A3FF','#FF3F94','#574DA6'];
     const colors = [[241,161,65],[87,200,132],[18,163,255],[255,63,148],[87,77,166]];
     const areas = this.args.model;
     let y = marginY;
+    const filteredArea = areas.find(area => (area.competences.find(competence=> competence.selectedProductionTubeCount > 0) !== undefined));
+    const filter = filteredArea !== undefined;
     areas.forEach((area,index) => {
-      area.competences.filter(competence => competence.selectedProductionTubeCount > 0).forEach(competence => {
+      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0):area.sortedCompetences;
+      competences.forEach(competence => {
         /*pdf.setFillColor(colors[index]);
         pdf.setDrawColor(0);
         pdf.rect(marginX, y-rectHeight+h1MarginTop, 595 - 2*marginX, rectHeight, "F");
@@ -41,7 +43,8 @@ export default class TargetProfilePdfExportComponent extends Component {
           }
         ]];
 
-        const tubeValues = competence.productionTubes.filter(tube => tube.selectedLevel).reduce((values,tube) => {
+        const tubes = filter?competence.productionTubes.filter(tube => tube.selectedLevel):competence.productionTubes;
+        const tubeValues = tubes.reduce((values,tube) => {
           values.push([{content:tube.practicalTitle, styles:{cellWidth:200, fontStyle:'bold', fontSize:pSize}},tube.practicalDescription]);
           return values;
         }, []);
