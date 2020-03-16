@@ -12,15 +12,7 @@ module('Integration | Component | target-profile/pdf-export', function(hooks) {
 
     await render(hbs`<TargetProfile::PdfExport />`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom('.ui.button.item').exists();
 
-    // Template block usage:
-    await render(hbs`
-      <TargetProfile::PdfExport>
-        template block text
-      </TargetProfile::PdfExport>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
   });
 });
