@@ -119,14 +119,15 @@
   @defaultValue={{this.changelogDefault}} />
 {{/if}}
 {{#if this.mayMove}}
-  <PopIn::SelectLocation
-    @display={{this.displaySelectLocation}}
-    @onChange={{this.setSkills}}
-    @title="Acquis du prototype"
-    @selectTubeLevel={{true}}
-    @tube={{this.challenge.firstSkill.tube}}
-    @level={{this.level}}
-    @multipleLevel={{true}}
-    @close={{this.closeMoveTemplate}} />
+  {{#if this.displaySelectLocation}}
+    <PopIn::SelectLocation
+      @onChange={{this.setSkills}}
+      @title="Acquis du prototype"
+      @selectTubeLevel={{true}}
+      @tube={{this.challenge.firstSkill.tube}}
+      @level={{this.level}}
+      @multipleLevel={{true}}
+      @close={{this.closeMoveTemplate}} />
+  {{/if}}
 {{/if}}
 {{outlet}}
