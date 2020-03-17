@@ -261,7 +261,7 @@ export default class StatisticsI18nComponent extends Component {
     if (!this._i18nUnescoCountries) {
       const countries = this.i18nCountryCounts.countries;
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 3);
-      this._i18nAfricanCountries = names.reduce((current, name) => {
+      this._i18nUnescoCountries = names.reduce((current, name) => {
         const values = countries.get(name);
         current.push({name:name, validated:values[0], suggested:values[1]});
         return current;
