@@ -1,3 +1,6 @@
-<button class="ui button item" {{on "click" this.exportPdf}} type="button">
+<button class="ui button item" {{on "click" this.export}} type="button">
   <i class="pdf file icon"></i> PDF
 </button>
+{{#if this.displayTitleInput}}
+  <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Titre de l'export" @label="Titre" @setValue={{this.generatePDF}} @close={{this.closeTitleInput}} />
+{{/if}}

@@ -76,5 +76,5 @@
   <PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @close={{this.closeTubeLevel}}/>
 {{/if}}
 {{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
+  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
 {{/if}}
