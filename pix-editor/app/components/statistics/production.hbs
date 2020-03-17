@@ -1,0 +1,74 @@
+<h2 class="ui header">
+  <i class="rocket icon"></i>
+  <div class="content">
+    En production
+  </div>
+</h2>
+<div class="ui three column padded grid">
+  <div class="column">
+    <div class="ui blue segment center aligned">
+      <div class="ui header">
+        {{this.productionTubeTotal}}
+        <div class="sub header">
+          Tubes
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui blue segment center aligned">
+      <div class="ui header">
+        {{this.productionSkillTotal}}
+        <div class="sub header">
+          Acquis
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui blue segment center aligned">
+      <div class="ui header">
+        {{this.productionChallengeTotal}}
+        <div class="sub header">
+          Épreuves
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="three columns">
+    <div class="ui blue segment five column grid center aligned statistics-table">
+      <div class="column">
+        Compétence
+      </div>
+      <div class="column">
+        Tubes
+      </div>
+      <div class="column">
+        Acquis
+      </div>
+      <div class="column">
+        Épreuves
+      </div>
+      <div class="teal column">
+        Part
+      </div>
+      {{#each this.productionData as |item|}}
+        <div class="column">
+          {{item.name}}
+        </div>
+        <div class="column">
+          {{item.tubes}}
+        </div>
+        <div class="column">
+          {{item.skills}}
+        </div>
+        <div class="column">
+          {{item.challenges}}
+        </div>
+        <div class="teal column">
+          {{item.rate}}&nbsp;%
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

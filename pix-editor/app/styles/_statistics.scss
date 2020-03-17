@@ -1,3 +1,10 @@
 .statistics {
-  overflow-y:auto;
+  overflow:auto;
+
+  .statistics-table {
+    &.ui.grid > .column:not(.row) {
+      padding-top:7px;
+      padding-bottom:7px;
+    }
+  }
 }

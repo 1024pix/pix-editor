@@ -1,0 +1,115 @@
+<h2 class="ui header">
+  <i class="globe icon"></i>
+  <div class="content">
+    Internationalisation
+  </div>
+</h2>
+<div class="ui four column padded grid">
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nWorldSkills}}
+        <div class="sub header">
+          Acquis Monde
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nEuropeanSkills}}
+        <div class="sub header">
+          Acquis Europe
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nFrenchSkills}}
+        <div class="sub header">
+          Acquis France
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column"></div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nNeutralTotal.validated}} ({{this.i18nNeutralTotal.suggested}})
+        <div class="sub header">
+          Neutres
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nOccidentTotal.validated}} ({{this.i18nOccidentTotal.suggested}})
+        <div class="sub header">
+          Occident
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nAfricaTotal.validated}} ({{this.i18nAfricaTotal.suggested}})
+        <div class="sub header">
+          Afrique
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column">
+    <div class="ui yellow segment center aligned">
+      <div class="ui header">
+        {{this.i18nUnescoTotal.validated}} ({{this.i18nUnescoTotal.suggested}})
+        <div class="sub header">
+          Pays UNESCO
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="four columns">
+    <div class="ui yellow segment five column grid center aligned statistics-table">
+      <div class="column">
+        Compétence
+      </div>
+      <div class="column">
+        Neutres
+      </div>
+      <div class="column">
+        Pays Occident
+      </div>
+      <div class="column">
+        Pays Afrique
+      </div>
+      <div class="column">
+        Pays UNESCO
+      </div>
+      {{#each this.i18nData as |item|}}
+        <div class="column">
+          {{item.name}}
+        </div>
+        <div class="column">
+          {{item.neutralValidated}} ({{item.neutralSuggested}})
+        </div>
+        <div class="column">
+          {{item.occidentValidated}} ({{item.occidentSuggested}})
+        </div>
+        <div class="column">
+          {{item.africaValidated}} ({{item.africaSuggested}})
+        </div>
+        <div class="column">
+          {{item.unescoValidated}} ({{item.unescoSuggested}})
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
