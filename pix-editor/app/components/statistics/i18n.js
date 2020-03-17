@@ -11,9 +11,13 @@ export default class StatisticsI18nComponent extends Component {
   _i18nWorldSkills = null;
   _i18nEuropeanSkills = null;
   _i18nFrenchSkills = null;
+  _i18nOccidentCountries = null;
+  _i18nAfricanCountries = null;
+  _i18nUnescoCountries = null;
 
   _i18nAreas = new Map([
     ['Neutre',0],
+    ['Institutions internationales',0],
     ['Allemagne',1],
     ['Argentine', 1],
     ['Belgique', 1],
@@ -64,45 +68,66 @@ export default class StatisticsI18nComponent extends Component {
     if (!this._i18nCountryCounts) {
       this._i18nCountryCounts = this.args.areas.reduce((current, area) => {
         return area.competences.reduce((current, competence) => {
-          current[competence.code] = competence.tubes.reduce((current, tube) => {
+          const competenceCountries =  competence.tubes.reduce((current, tube) => {
             return tube.productionSkills.reduce((current, skill) => {
               if (skill.i18n === 'Monde') {
                 return skill.challenges.reduce((current, challenge) => {
-                  if (this._i18nAreas.has(challenge.area)) {
-                    const index = this._i18nAreas.get(challenge.area);
-                    if (challenge.isValidated) {
-                      current[index][0]++;
-                    } else if (challenge.isSuggested) {
-                      current[index][1]++;
-                    }
-                  } else {
-                    console.log(challenge.area);
+                  const area = challenge.area;
+                  if (!current.has(area)) {
+                    current.set(area, [0,0]);
+                  }
+                  let value = current.get(area);
+                  if (challenge.isValidated) {
+                    value[0]++;
+                    current.set(area, value);
+                  } else if (challenge.isSuggested) {
+                    value[1]++;
+                    current.set(area, value);
                   }
                   return current;
                 }, current);
               }
               return current;
             }, current);
-          }, [[0,0],[0,0],[0,0],[0,0]]);
+          }, new Map());
+
+          const countries = current.countries;
+          const areaCounts = [[0,0],[0,0],[0,0],[0,0]];
+
+          for (let [country, values] of competenceCountries) {
+            if (!countries.has(country)) {
+              countries.set(country, values);
+            } else {
+              const counts = countries.get(country);
+              countries.set(country, [counts[0]+values[0], counts[1]+values[1]]);
+            }
+            if (this._i18nAreas.has(country)) {
+              const index = this._i18nAreas.get(country);
+              areaCounts[index][0] += values[0];
+              areaCounts[index][1] += values[1];
+            }
+          }
+          current.areas[competence.code] = areaCounts;
           return current;
         }, current);
-      }, {});
+      }, {areas:{}, countries:new Map()});
     }
     return this._i18nCountryCounts;
   }
 
   get i18nData() {
     if (!this._i18nData) {
+      const areaCounts = this.i18nCountryCounts.areas;
       this._i18nData = this.args.competenceCodes.map(code => ({
         name:code,
-        neutralValidated:this.i18nCountryCounts[code][0][0],
-        neutralSuggested:this.i18nCountryCounts[code][0][1],
-        occidentValidated:this.i18nCountryCounts[code][2][0],
-        occidentSuggested:this.i18nCountryCounts[code][2][1],
-        africaValidated:this.i18nCountryCounts[code][2][0],
-        africaSuggested:this.i18nCountryCounts[code][2][1],
-        unescoValidated:this.i18nCountryCounts[code][3][0],
-        unescoSuggested:this.i18nCountryCounts[code][3][1]
+        neutralValidated:areaCounts[code][0][0],
+        neutralSuggested:areaCounts[code][0][1],
+        occidentValidated:areaCounts[code][1][0],
+        occidentSuggested:areaCounts[code][1][1],
+        africaValidated:areaCounts[code][2][0],
+        africaSuggested:areaCounts[code][2][1],
+        unescoValidated:areaCounts[code][3][0],
+        unescoSuggested:areaCounts[code][3][1]
       }));
     }
     return this._i18nData;
@@ -206,5 +231,43 @@ export default class StatisticsI18nComponent extends Component {
     return this._i18nFrenchSkills;
   }
 
+  get i18nOccidentCountries() {
+    if (!this._i18nOccidentCountries) {
+      const countries = this.i18nCountryCounts.countries;
+      const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 1);
+      this._i18nOccidentCountries = names.reduce((current, name) => {
+        const values = countries.get(name);
+        current.push({name:name, validated:values[0], suggested:values[1]});
+        return current;
+      }, []);
+    }
+    return this._i18nOccidentCountries;
+  }
+
+  get i18nAfricanCountries() {
+    if (!this._i18nAfricanCountries) {
+      const countries = this.i18nCountryCounts.countries;
+      const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 2);
+      this._i18nAfricanCountries = names.reduce((current, name) => {
+        const values = countries.get(name);
+        current.push({name:name, validated:values[0], suggested:values[1]});
+        return current;
+      }, []);
+    }
+    return this._i18nAfricanCountries;
+  }
+
+  get i18nUnescoCountries() {
+    if (!this._i18nUnescoCountries) {
+      const countries = this.i18nCountryCounts.countries;
+      const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 3);
+      this._i18nAfricanCountries = names.reduce((current, name) => {
+        const values = countries.get(name);
+        current.push({name:name, validated:values[0], suggested:values[1]});
+        return current;
+      }, []);
+    }
+    return this._i18nUnescoCountries;
+  }
 
 }

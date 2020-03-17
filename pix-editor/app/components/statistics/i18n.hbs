@@ -113,3 +113,47 @@
     </div>
   </div>
 </div>
+<div class="ui two column padded grid">
+    <div class="column">
+      <div class="ui yellow segment two column grid center aligned statistics-table">
+        <div class="column">
+          Pays Occident
+        </div>
+        <div class="column">
+          Épreuves
+        </div>
+        {{#each this.i18nOccidentCountries as |country|}}
+          <div class="column">{{country.name}}</div>
+          <div class="column">{{country.validated}} ({{country.suggested}})</div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui yellow segment two column grid center aligned statistics-table">
+        <div class="column">
+          Pays Afrique
+        </div>
+        <div class="column">
+          Épreuves
+        </div>
+        {{#each this.i18nAfricanCountries as |country|}}
+          <div class="column">{{country.name}}</div>
+          <div class="column">{{country.validated}} ({{country.suggested}})</div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="column">
+      <div class="ui yellow segment two column grid center aligned statistics-table">
+        <div class="column">
+          Pays UNESCO
+        </div>
+        <div class="column">
+          Épreuves
+        </div>
+        {{#each this.i18nUnescoCountries as |country|}}
+          <div class="column">{{country.name}}</div>
+          <div class="column">{{country.validated}} ({{country.suggested}})</div>
+        {{/each}}
+      </div>
+    </div>
+</div>
