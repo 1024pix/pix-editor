@@ -12,7 +12,7 @@ export default class StorageService extends Service {
     let that = this;
     return this.getStorageToken()
     .then(function(token) {
-      return file.uploadBinary(url, {method:'put', headers:{'X-Subject-Token': token}})
+      return file.uploadBinary(url, {method:'put', headers:{'X-Auth-Token': token}})
       .catch((error) => {
         if (error.response && error.response.status === 401) {
           // token expired: get a new one
