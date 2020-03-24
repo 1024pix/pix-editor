@@ -12,7 +12,7 @@ export default class StorageService extends Service {
     let that = this;
     return this.getStorageToken()
     .then(function(token) {
-      return file.uploadBinary(url, {method:'put', headers:{'X-Auth-Token': token}})
+      return file.uploadBinary(url, {method:'put', headers:{'X-Subject-Token': token}})
       .catch((error) => {
         if (error.response && error.response.status === 401) {
           // token expired: get a new one
@@ -44,11 +44,22 @@ export default class StorageService extends Service {
       return Promise.resolve(config.storageToken);
     } else {
       var data = {
-        'auth':{
-          'tenantName':config.storageTenant,
-          'passwordCredentials':{
-            'username':config.storageUser,
-            'password':config.storagePassword
+        'auth': {
+          'identity': {
+            'methods': ['password'],
+            'password': {
+              'user': {
+                'name': config.storageUser,
+                'domain': { 'id': 'default' },
+                'password': config.storagePassword
+              }
+            }
+          },
+          'scope': {
+            'project': {
+              'name': config.storageTenant,
+              'domain': { 'id': 'default' }
+            }
           }
         }
       };
