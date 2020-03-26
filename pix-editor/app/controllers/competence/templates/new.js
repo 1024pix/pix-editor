@@ -6,7 +6,7 @@ import { inject as service } from '@ember/service';
 export default class NewController extends Template {
 
   creation = true;
-  queryParams = ['from'];
+  queryParams = ['from', 'fromSkill'];
   @tracked from = '';
   @service currentData;
 

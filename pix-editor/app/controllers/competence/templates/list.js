@@ -28,7 +28,7 @@ export default class ListController extends Controller {
       let template = templates.firstObject;
       this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), { queryParams: { from: template.id}});
     } else {
-      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence()/*, { queryParams: { fromSkill: this.model.id}}*/);
+      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.model.id}});
     }
   }
 }
