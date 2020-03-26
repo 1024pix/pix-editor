@@ -31,22 +31,25 @@
       <button class="ui button item" {{on "click" this.getProfileId}} type="button">
         <i class="code icon"></i> CSV
       </button>
-      <TargetProfile::PdfExport @model={{this.model}}/>
+      <TargetProfile::PdfExport @model={{this.areas}}/>
     </div>
   </div>
   <h2 class="ui top attached padded grid target-profile-title">
     <div class="row">
       <div class="right aligned column">
-        <TargetProfile::Navigation @areas={{this.model}} />
+        <TargetProfile::Navigation @areas={{this.areas}} />
       </div>
-      <div class="five wide column">
-        Référentiel Pix</div>
+      <div class="two wide column">Référentiel :
+      </div>
+      <div class="three wide column">
+          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}} @setValue={{this.selectSources}} @edition={{true}} />
+      </div>
       <div class="six wide center aligned column"></div>
       <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
     </div>
   </h2>
   <div class="ui attached target-profile">
-    {{#each this.model as |area|}}
+    {{#each this.areas as |area|}}
       <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
     {{/each}}
     <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />

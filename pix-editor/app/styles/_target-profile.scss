@@ -25,6 +25,15 @@
   .trigger-menu {
     cursor: pointer;
   }
+
+  .ember-power-select-trigger {
+    font-size:14px;
+    padding:0.1em 16px 0.1em 0.3em;
+  }
+
+  .ember-power-select-multiple-option {
+    background-color:#ffffff;
+  }
 }
 
 .target-profile {

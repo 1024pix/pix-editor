@@ -12,6 +12,7 @@ export default class TargetProfileController extends Controller {
   @tracked filter = false;
   @tracked displayTubeLevel = false;
   @tracked displaySingleEntry = false;
+  @tracked _selectedSources = null;
 
   @service('file-saver') fileSaver;
   @service currentData;
@@ -28,6 +29,31 @@ export default class TargetProfileController extends Controller {
     return this.model.reduce((count, area) => {
       return count + area.productionTubeCount;
     }, 0)
+  }
+
+  get sources() {
+    return this.currentData.getSources();
+  }
+
+  get selectedSources() {
+    if (!this._selectedSources) {
+      return [this.currentData.getSource()];
+    }
+    return this._selectedSources;
+  }
+
+  set selectedSources(value) {
+    this._selectedSources = value;
+    return value;
+  }
+
+  get areas() {
+    return this.model.filter(area => this.selectedSources.includes(area.source));
+  }
+
+  @action
+  selectSources(values) {
+    this.selectedSources = values;
   }
 
   _getSelectedSkillsIds() {
