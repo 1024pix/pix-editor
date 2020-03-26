@@ -12,6 +12,7 @@ export default class CompetenceRoute extends Route {
 
   afterModel(model) {
     this.currentData.setCompetence(model);
+    this.currentData.setSource(model.source);
     if (model.needsRefresh) {
       return model.hasMany('rawTubes').reload()
       .then(tubes => {
