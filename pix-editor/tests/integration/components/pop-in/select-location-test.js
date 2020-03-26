@@ -18,6 +18,12 @@ module('Integration | Component | popin-select-location', function(hooks) {
       getAreas() {
         return [];
       }
+      getSources() {
+        return [];
+      }
+      getSource() {
+        return '';
+      }
     });
 
     await render(hbs`{{pop-in/select-location class="test"}}`);

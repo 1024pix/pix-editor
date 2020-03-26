@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import Service from '@ember/service';
 
 module('Integration | Component | main-sidebar', function(hooks) {
   setupRenderingTest(hooks);
@@ -21,6 +22,18 @@ module('Integration | Component | main-sidebar', function(hooks) {
         actions:{
           close:function() {}
         }
+      }
+    });
+
+    this.owner.register('service:currentData', class MockService extends Service {
+      getAreas() {
+        return [];
+      }
+      getSources() {
+        return [];
+      }
+      getSource() {
+        return '';
       }
     });
 
