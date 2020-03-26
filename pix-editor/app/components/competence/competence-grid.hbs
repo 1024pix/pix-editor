@@ -12,7 +12,7 @@
             {{/if}}
           </td>
           {{#each tube.filledSkills as |skill index|}}
-          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.pixId}} @index={{index}} />
+          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.id}} @index={{index}} />
           {{/each}}
         </tr>
       {{/if}}
