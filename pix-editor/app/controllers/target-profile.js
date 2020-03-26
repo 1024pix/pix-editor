@@ -162,6 +162,7 @@ export default class TargetProfileController extends Controller {
       const reader = new FileReader();
       const areas = this.model;
       const application = this.application;
+      const that = this;
       reader.onload = (event) => {
         const data = event.target.result;
         const tubes = JSON.parse(data);
@@ -169,6 +170,7 @@ export default class TargetProfileController extends Controller {
           values[tube.id] = tube;
           return values;
         }, {});
+        const sources = [];
         areas.forEach(area => {
           const competences = area.competences;
           competences.forEach(competence => {
@@ -183,6 +185,9 @@ export default class TargetProfileController extends Controller {
                   tube.selectedLevel = indexedTubes[tube.pixId].level;
                   tube.selectedSkills = indexedTubes[tube.pixId].skills;
                 }
+                if (!sources.includes(competence.source)) {
+                  sources.push(competence.source);
+                }
               } else {
                 tube.selectedLevel = false;
                 tube.selectedSkills = [];
@@ -190,6 +195,7 @@ export default class TargetProfileController extends Controller {
             });
           })
         });
+        that.selectedSources = sources;
         application.send('showMessage', 'Fichier correctement chargé', true);
         //TODO: find a better way to be able to reload same file
         document.getElementById('target-profile__open-file').value = '';
