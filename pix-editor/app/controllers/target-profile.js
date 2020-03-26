@@ -14,17 +14,9 @@ export default class TargetProfileController extends Controller {
   @tracked displaySingleEntry = false;
 
   @service('file-saver') fileSaver;
+  @service currentData;
 
   @controller application;
-
-  calculatePosition(trigger) {
-    let { top, left, width } = trigger.getBoundingClientRect();
-    let style = {
-      left: left + width,
-      top: top +  window.pageYOffset
-    };
-    return { style };
-  }
 
   get selectedTubeCount() {
     return this.model.reduce((count, area) => {
@@ -190,28 +182,6 @@ export default class TargetProfileController extends Controller {
   @action
   hideTubeName(competence) {
     competence._tubeName = null;
-  }
-
-  @action
-  scrollTo(anchor) {
-    const target = document.querySelector(`#${anchor}`);
-    document.querySelector('.target-profile').scrollTo({top: target.offsetTop - 154, left: 0, behavior: 'smooth'})
-  }
-
-  @action
-  prevent() {
-    return false;
-  }
-
-  @action
-  open(dropdown) {
-      dropdown.actions.open();
-  }
-
-  @action
-  close(dropdown) {
-    dropdown.actions.close();
-
   }
 
   _getTubeSkillsAndMaxLevel(tube) {

@@ -1,0 +1,18 @@
+<BasicDropdown @horizontalPosition="left" as |dd|>
+  <dd.Trigger @class="trigger-menu"><i class="bars icon"></i></dd.Trigger>
+  <dd.Content @class="dropdown-multi profile-menu slide-fade">
+    {{#each @areas as |area|}}
+        <BasicDropdown @class="sub-menu" @calculatePosition={{this.calculatePosition}} as |dd|>
+        <dd.Trigger @onMouseDown={{this.prevent}} @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="sub-trigger">
+          {{area.name}} <i class="icon dropdown"></i>
+        </dd.Trigger>
+        <dd.Content @onMouseEnter={{this.open}} @onMouseLeave={{this.close}} @class="dropdown-multi slide-fade">
+          {{#each area.sortedCompetences as |competence|}}
+            <div class="item area-profile-{{area.code}}" {{on "click" (fn this.scrollTo (concat "competence-profile-anchor-" competence.id))}}>
+              <b>{{competence.code}}</b> {{competence.title}}</div>
+          {{/each}}
+        </dd.Content>
+      </BasicDropdown>
+    {{/each}}
+  </dd.Content>
+</BasicDropdown>
