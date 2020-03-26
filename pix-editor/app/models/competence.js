@@ -9,6 +9,7 @@ export default class CompetenceModel extends Model {
   @attr code;
   @attr description;
   @attr pixId;
+  @attr source;
 
   @hasMany('tube') rawTubes;
 

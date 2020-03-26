@@ -5,6 +5,8 @@ export default class CurrentDataService extends Service {
   @tracked _areas = null;
   @tracked _competence = null;
   @tracked _template = null;
+  @tracked _sources = null;
+  @tracked _source = null;
 
   setAreas(areas) {
     this._areas = areas;
@@ -18,8 +20,24 @@ export default class CurrentDataService extends Service {
     this._template = template;
   }
 
+  setSources(sources) {
+    this._sources = sources;
+  }
+
+  setSource(source) {
+    this._source = source;
+  }
+
   getAreas() {
-    return this._areas;
+    return this._areas.filter(area => area.source === this._source);
+  }
+
+  getSources() {
+    return this._sources;
+  }
+
+  getSource() {
+    return this._source;
   }
 
   getCompetence() {

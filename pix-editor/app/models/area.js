@@ -25,4 +25,8 @@ export default class AreaModel extends Model {
     }, 0);
   }
 
+  get source() {
+    return this.competences.firstObject.source;
+  }
+
 }

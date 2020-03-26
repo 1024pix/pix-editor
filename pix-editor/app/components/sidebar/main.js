@@ -7,8 +7,13 @@ export default class SidebarMain extends Component {
   version = ENV.APP.version;
 
   @service config;
+  @service currentData;
 
   @alias('config.author')
   author;
+
+  get areas() {
+    return this.currentData.getAreas();
+  }
 
 }

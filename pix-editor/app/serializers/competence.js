@@ -9,7 +9,8 @@ export default class CompetenceSerializer extends ApplicationSerializer {
     code:'Sous-domaine',
     rawTubes:'Tubes',
     description:'Description',
-    pixId:'id persistant'
+    pixId:'id persistant',
+    source:'Origine'
   };
 
   payloadKeyFromModelName() {

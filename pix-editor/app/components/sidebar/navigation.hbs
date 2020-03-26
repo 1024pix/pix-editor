@@ -1,6 +1,9 @@
+<PowerSelect @searchEnabled={{false}} @options={{this.sources}} @selected={{this.source}} @onChange={{this.setSource}} as |option|>
+  {{option}}
+</PowerSelect>
 <AccordionList as |accordion|>
   <div class="ui accordion inverted">
-    {{#each @areas as |area|}}
+    {{#each this.areas as |area|}}
       <accordion.item as |accordionItem|>
         <accordionItem.toggle @class="title">
           <i class="dropdown icon"></i>
