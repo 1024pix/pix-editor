@@ -20,13 +20,13 @@ export default class TargetProfileController extends Controller {
   @controller application;
 
   get selectedTubeCount() {
-    return this.model.reduce((count, area) => {
+    return this.areas.reduce((count, area) => {
       return count + area.selectedProductionTubeCount;
     }, 0)
   }
 
   get tubeCount() {
-    return this.model.reduce((count, area) => {
+    return this.areas.reduce((count, area) => {
       return count + area.productionTubeCount;
     }, 0)
   }
@@ -57,7 +57,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _getSelectedSkillsIds() {
-    return this.model.reduce((areaValues, area) => {
+    return this.areas.reduce((areaValues, area) => {
       const competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
         const tubes = competence.tubes;
@@ -108,7 +108,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   save() {
-    let data = this.model.reduce((areaValues, area) => {
+    let data = this.areas.reduce((areaValues, area) => {
       let competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
         let tubes = competence.tubes;
