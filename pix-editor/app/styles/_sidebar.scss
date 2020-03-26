@@ -12,6 +12,17 @@
     color: #ffffff;
   }
 
+  .ember-power-select-trigger {
+    margin:10px 5px;
+    background-color:transparent;
+    color:rgba(255, 255, 255, 0.5);
+    border-color:transparent;
+
+    .ember-power-select-status-icon {
+      border-top-color:transparent;
+    }
+  }
+
   .sidebar-search {
     .ember-basic-dropdown-trigger {
       margin: 0 5px;
