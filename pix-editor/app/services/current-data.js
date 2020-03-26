@@ -28,8 +28,11 @@ export default class CurrentDataService extends Service {
     this._source = source;
   }
 
-  getAreas() {
-    return this._areas.filter(area => area.source === this._source);
+  getAreas(filteredBySource = true) {
+    if (filteredBySource)
+      return this._areas.filter(area => area.source === this._source);
+    else
+      return this._areas;
   }
 
   getSources() {

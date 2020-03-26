@@ -10,6 +10,7 @@
     </div>
     <div class="content">
       <form action="" class="ui form">
+        <Field::Select @title="Référentiel" @value={{this.selectedSource}} @options={{this.sources}} @edition={{true}} @setValue={{this.selectSource}} />
         <Field::Select @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
         {{#if @selectTubeLevel}}
           <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>

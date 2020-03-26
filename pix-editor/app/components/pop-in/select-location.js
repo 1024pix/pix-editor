@@ -8,6 +8,7 @@ export default class PopinSelectLocation extends Component {
 
   @tracked _selectedCompetence = null;
   @tracked _selectedTube = null;
+  @tracked _selectedSource = null;
   @tracked tubesLoaded = false;
   @tracked levelsLoaded = false;
   @tracked selectedLevels = null;
@@ -16,6 +17,22 @@ export default class PopinSelectLocation extends Component {
 
   _tubes = A([]);
   _levels = [];
+
+  get sources() {
+    return this.currentData.getSources();
+  }
+
+  get selectedSource() {
+    if (this._selectedSource) {
+      return this._selectedSource;
+    }
+    return this.currentData.getSource();
+  }
+
+  set selectedSource(value) {
+    this._selectedSource = value;
+    return value;
+  }
 
   get selectedCompetence() {
     if (this._selectedCompetence) {
@@ -30,8 +47,8 @@ export default class PopinSelectLocation extends Component {
   }
 
   get competences() {
-    const areas = this.currentData.getAreas();
-    const areaCompetences = areas.map(area => area.sortedCompetences);
+    const areas = this.currentData.getAreas(false);
+    const areaCompetences = areas.filter(area=> area.source === this.selectedSource).map(area => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
@@ -64,12 +81,14 @@ export default class PopinSelectLocation extends Component {
   }
 
   _loadTubes() {
-    const competence = this.selectedCompetence.data;
-    competence.get('rawTubes')
-    .then(() => {
-      this._tubes = competence.get('sortedTubes');
-      this.tubesLoaded = true;
-    });
+    if (this.selectedCompetence) {
+      const competence = this.selectedCompetence.data;
+      competence.get('rawTubes')
+      .then(() => {
+        this._tubes = competence.get('sortedTubes');
+        this.tubesLoaded = true;
+      });
+    }
   }
 
   get selectedTube() {
@@ -108,19 +127,23 @@ export default class PopinSelectLocation extends Component {
   }
 
   @action
+  selectSource(source) {
+    this.selectedSource = source;
+    this.selectCompetence(null);
+  }
+
+  @action
   selectCompetence(item) {
     this.selectedCompetence = item;
-    this.selectedTube = null;
+    this.selectTube(null);
     this.tubesLoaded = false;
-    this.levelsLoaded = false;
-    this.selectedLevels = null;
   }
 
   @action
   selectTube(item) {
     this.selectedTube = item;
+    this.selectLevels(null);
     this.levelsLoaded = false;
-    this.selectedLevels = null;
   }
 
   @action
