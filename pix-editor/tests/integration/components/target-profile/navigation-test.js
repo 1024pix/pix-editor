@@ -12,15 +12,6 @@ module('Integration | Component | target-profile/navigation', function(hooks) {
 
     await render(hbs`<TargetProfile::Navigation />`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <TargetProfile::Navigation>
-        template block text
-      </TargetProfile::Navigation>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom('.ember-basic-dropdown-trigger').exists();
   });
 });
