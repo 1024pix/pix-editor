@@ -35,6 +35,11 @@ export default class GridCell extends Component {
           return 'quality';
         }
         break;
+      case 'i18n' :
+        if (skill && skill.productionTemplate) {
+          return 'i18n';
+        }
+        break;
     }
     return 'empty';
   }
