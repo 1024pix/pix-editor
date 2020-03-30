@@ -1,5 +1,5 @@
 import EmberRouter from '@ember/routing/router';
-import config from './config/environment';
+import config from '../config/environment';
 
 export default class Router extends EmberRouter {
   location = config.locationType;
@@ -15,7 +15,7 @@ Router.map(function() {
           this.route('new');
           this.route('single', {path:'/:alternative_id'});
         });
-      })
+      });
       this.route('list', {path:'/list/:skill_id'});
     });
     this.route('tubes', function() {
@@ -29,6 +29,7 @@ Router.map(function() {
     this.route('quality', function() {
       this.route('single', {path:'/:skill_id'});
     });
+    this.route('i18n', function() {});
   });
   this.route('skill', {path:'/skill/:skill_name'});
   this.route('challenge', {path:'/challenge/:challenge_id'});
