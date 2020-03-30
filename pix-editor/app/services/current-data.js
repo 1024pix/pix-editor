@@ -29,7 +29,7 @@ export default class CurrentDataService extends Service {
   }
 
   getAreas(filteredBySource = true) {
-    if (filteredBySource)
+    if (filteredBySource && this._areas)
       return this._areas.filter(area => area.source === this._source);
     else
       return this._areas;
