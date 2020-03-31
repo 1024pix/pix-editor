@@ -1,3 +1,20 @@
+<div class="skill-header {{this.skill.descriptionCSS}}">
+  <div class="ui menu">
+    <div class="item header">{{this.skill.name}}</div>
+    <div class="ui right menu">
+      {{#if this.maximized}}
+        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
+      {{else}}
+        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
+      {{/if}}
+      <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+    </div>
+  </div>
+</div>
 <div class="single i18n">
-  {{this.skill.name}}
+  {{#each this.skill.sortedTemplates as |template| }}
+    <div>
+      Langue : {{template.language}} Statut : {{template.isValidated}} Déclinaisons :{{template.alternatives.length}}
+    </div>
+  {{/each}}
 </div>
