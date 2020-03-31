@@ -52,6 +52,7 @@ export default class CompetenceController extends Controller {
       case 'competence.skills.index':
       case 'competence.templates.index':
       case 'competence.quality.index':
+      case 'competence.i18n.index':
               return 'full';
       default:
         return 'half';
