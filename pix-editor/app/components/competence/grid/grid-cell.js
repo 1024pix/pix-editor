@@ -36,7 +36,7 @@ export default class GridCell extends Component {
         }
         break;
       case 'i18n' :
-        if (skill && skill.productionTemplate) {
+        if (skill) {
           return 'i18n';
         }
         break;
