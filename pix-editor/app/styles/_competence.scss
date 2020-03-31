@@ -66,6 +66,14 @@
           }
         }
 
+        &.i18n {
+          height: 45px;
+          background-color: #444488;
+          &.draft-skill{
+            background-color: #5f66bd ;
+          }
+        }
+
         .skill-name {
           margin: -5px -5px 0 -5px;
           padding: 5px 5px 0 5px;
