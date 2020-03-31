@@ -3,11 +3,11 @@ import Component from '@glimmer/component';
 export default class CompetenceGridCellI18nComponent extends Component {
 
 
-  get skillFlags(){
-    const languages = this._skillLanguages;
-   return  languages.reduce((flags, language)=>{
+  get skillFlags() {
+    const languages = this._skillLanguages.sort();
+    return languages.reduce((flags, language) => {
       return [...flags, this._flagByLanguage(language)]
-    },[])
+    }, [])
   }
 
   get _skillLanguages() {

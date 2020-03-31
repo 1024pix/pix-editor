@@ -256,3 +256,16 @@
   max-width: 350px;
 }
 
+.flag.fr-fr{
+  position: relative;
+
+  &::after{
+    content:"FR";
+    position: absolute;
+    font-size:10px;
+    font-style:normal;
+    top:1px;
+    left:2px;
+    color:black;
+  }
+}
