@@ -2,4 +2,10 @@
   <div class="skill-name {{@skill.descriptionCSS}}">
     {{@skill.name}}
   </div>
+  <div class="flags">
+    {{#each this.skillFlags as |flag|}}
+      <i class="{{flag}} flag"></i>
+    {{/each}}
+  </div>
+
 </LinkTo>
