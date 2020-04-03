@@ -2,6 +2,8 @@ import Controller from '@ember/controller';
 import {action} from '@ember/object';
 import {alias} from '@ember/object/computed';
 import {inject as controller} from '@ember/controller';
+import { htmlSafe } from '@ember/template';
+
 
 export default class CompetenceI18nSingleController extends Controller {
 
@@ -13,6 +15,10 @@ export default class CompetenceI18nSingleController extends Controller {
 
   @alias('model')
   skill;
+
+  get safeHelpContent() {
+    return htmlSafe(this.args.helpContent);
+  }
 
   @action
   maximize() {
@@ -28,4 +34,5 @@ export default class CompetenceI18nSingleController extends Controller {
   close() {
     this.parentController.send('closeChildComponent');
   }
+
 }

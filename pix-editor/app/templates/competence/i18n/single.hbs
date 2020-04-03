@@ -3,18 +3,38 @@
     <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
       {{#if this.maximized}}
-        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
+        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>
+        </button>
       {{else}}
-        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
+        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i
+                class="window maximize outline icon"></i></button>
       {{/if}}
       <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
   </div>
 </div>
 <div class="single i18n">
-  {{#each this.skill.sortedTemplates as |template| }}
-    <div>
-      Langue : {{template.language}} Statut : {{template.isValidated}} Déclinaisons :{{template.alternatives.length}}
-    </div>
-  {{/each}}
+  <table class="ui fixed table">
+    <thead>
+    <tr>
+      <th>Consigne</th>
+      <th>Langues</th>
+      <th>Déclinaisons</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#each this.skill.productionTemplates as |template| }}
+      <tr>
+        <td>
+          <div class="instruction-preview">
+            {{simple-mde-preview template.instructions}}
+          </div>
+        </td>
+
+        <td>{{template.language}}</td>
+        <td>{{template.alternatives.length}}</td>
+      </tr>
+    {{/each}}
+    </tbody>
+  </table>
 </div>
