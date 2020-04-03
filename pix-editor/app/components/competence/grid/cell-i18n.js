@@ -16,6 +16,15 @@ export default class CompetenceGridCellI18nComponent extends Component {
       if (!alternative.language) {
         return languages;
       }
+      //todo when alternative.language is alternative.languages
+      // if (alternative.languages || alternative.languages.length !== 0) {
+      //   alternative.languages.forEach(language=>{
+      //     if(!languages.includes(language)){
+      //       languages = [...languages, language]
+      //     }
+      //   });
+      // }
+      // return languages;
       return languages.includes(alternative.language) ? languages : [...languages, alternative.language];
     }, []);
   }
