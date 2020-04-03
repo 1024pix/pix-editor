@@ -5,27 +5,25 @@ export default class CompetenceGridCellI18nComponent extends Component {
 
   get skillFlags() {
     const languages = this._skillLanguages.sort();
-    return languages.reduce((flags, language) => {
-      return [...flags, this._flagByLanguage(language)]
-    }, [])
+    return languages.map(language => this._flagByLanguage(language));
   }
 
   get _skillLanguages() {
-    const alternatives = this.args.skill.alternatives;
-    return alternatives.reduce((languages, alternative) => {
-      if (!alternative.language) {
+    const templates = this.args.skill.productionTemplates;
+    return templates.reduce((languages, template) => {
+      if (!template.language) {
         return languages;
       }
       //todo when alternative.language is alternative.languages
       // if (alternative.languages || alternative.languages.length !== 0) {
       //   alternative.languages.forEach(language=>{
       //     if(!languages.includes(language)){
-      //       languages = [...languages, language]
+      //       languages.push(language);
       //     }
       //   });
       // }
       // return languages;
-      return languages.includes(alternative.language) ? languages : [...languages, alternative.language];
+      return languages.includes(template.language) ? languages : [...languages, template.language];
     }, []);
   }
 
