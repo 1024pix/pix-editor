@@ -7,6 +7,15 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   z-index: 1002 !important;
 }
 
+.ember-power-select-multiple-options .ember-power-select-multiple-option {
+    background: none;
+    border-color:#ddd;
+}
+
+.ember-power-select-trigger {
+  height:36px;
+}
+
 @keyframes drop-effect {
   0% {
     opacity: 0;

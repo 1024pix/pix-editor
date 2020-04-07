@@ -73,7 +73,7 @@
       <label>Internationalisation</label>
       <div class="two fields">
           <div class="field">
-            <Field::Select @title="Langue" @value={{@challenge.languages}} @edition={{@edition}} @multiple={{true}} @options={{this.options.language}} @setValue={{fn (mut @challenge.languages)}}/>
+            <Field::Select @title="Langue(s)" @value={{@challenge.languages}} @edition={{@edition}} @multiple={{true}} @options={{this.options.languages}} @setValue={{fn (mut @challenge.languages)}}/>
           </div>
           <div class="field">
             <Field::Select @title="Géographie" @value={{@challenge.area}} @edition={{@edition}} @multiple={{false}} @options={{this.options.area}} @setValue={{fn (mut @challenge.area)}} />
