@@ -33,7 +33,7 @@ export default class ChallengeModel extends Model {
   @attr spoil;
   @attr responsive;
   @attr alternativeText;
-  @attr language;
+  @attr languages;
   @attr area;
   @attr({readOnly:true}) _definedBaseName;
 
