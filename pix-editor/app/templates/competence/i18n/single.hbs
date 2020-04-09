@@ -1,4 +1,4 @@
-<div class="skill-header {{this.skill.descriptionCSS}}">
+<div class="i18n-header">
   <div class="ui menu">
     <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
@@ -30,8 +30,7 @@
             {{simple-mde-preview template.instructions}}
           </div>
         </td>
-
-        <td>{{template.language}}</td>
+        <td>{{template.language}} <i class="{{flag-by-language template.language}} flag"></i></td>
         <td>{{template.alternatives.length}}</td>
       </tr>
     {{/each}}
