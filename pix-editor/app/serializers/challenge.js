@@ -36,7 +36,7 @@ export default class ChallengeSerializer extends ApplicationSerializer {
     spoil:'Spoil',
     responsive:'Responsive',
     alternativeText:'Texte alternatif illustration',
-    language:'Langue',
+    languages:'Langues',
     area:'Géographie'
   };
 
