@@ -1,0 +1,10 @@
+.i18n-header {
+  @extend .challenge-header;
+
+    background-color: #684AB6 !important;
+    color: #ffffff !important;
+
+    .ui.button {
+      color: #ffffff !important;
+    }
+  }
