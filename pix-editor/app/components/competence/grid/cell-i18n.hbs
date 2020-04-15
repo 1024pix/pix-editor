@@ -1,5 +1,5 @@
-<LinkTo @route="competence.i18n.single" @model={{@skill}} @tagName="td" class={{concat "skill skill-cell link i18n" (if (not @skill.productionTemplate) " draft-skill")}}>
-  <div class="skill-name {{@skill.descriptionCSS}}">
+<LinkTo @route="competence.i18n.single" @model={{@skill}} @tagName="td" class="skill skill-cell link i18n">
+  <div class="skill-i18n-name">
     {{@skill.name}}
   </div>
   <div class="flags">
@@ -7,5 +7,4 @@
       <i class="{{flag}} flag"></i>
     {{/each}}
   </div>
-
 </LinkTo>
