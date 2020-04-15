@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
 export function flagByLanguage(language) {
-  console.log(language)
     switch (language[0]) {
       case "Francophone" :
         return "fr";
