@@ -10,6 +10,20 @@
 }
 
 .i18n.single {
+  .instruction-preview  {
+    >*{
+      margin:0;
+      padding:0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    :not(*:first-child){
+      display: none;
+    }
+  }
+
   .language{
     margin-right:.8em;
   }
