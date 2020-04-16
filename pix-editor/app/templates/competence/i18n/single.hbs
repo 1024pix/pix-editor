@@ -30,7 +30,11 @@
             {{simple-mde-preview template.instructions}}
           </div>
         </td>
-        <td>{{template.language}} <i class="{{flag-by-language template.language}} flag"></i></td>
+        <td>
+          {{#each template.languages as |language| }}
+            <span class="language"><i class="{{flag-by-language language}} flag"></i>{{language}}</span>
+          {{/each}}
+        </td>
         <td>{{template.alternatives.length}}</td>
       </tr>
     {{/each}}
