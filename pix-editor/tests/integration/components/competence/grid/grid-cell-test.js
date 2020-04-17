@@ -9,11 +9,23 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
 
   test('it renders', async function (assert) {
     // given
+    const section = "i18n";
+    const challenge = {
+      id: 'rec456789',
+      languages: ['Francophone'],
+    };
+    const skill = {
+      id: 'rec123456',
+      name: 'skill1',
+      productionTemplates: [challenge]
+    };
+    this.set('section', section);
+    this.set('skill', skill);
 
     // when
-    await render(hbs`{{competence/grid/grid-cell view="challenges" displaySkill=false mayAddSkill=false}}`);
+    await render(hbs`<Competence::Grid::GridCell @section={{this.section}} @skill={{this.skill}}/>`);
 
     // then
-    assert.dom('.skill-cell__empty').exists();
+    assert.dom('.i18n').exists();
   });
 });

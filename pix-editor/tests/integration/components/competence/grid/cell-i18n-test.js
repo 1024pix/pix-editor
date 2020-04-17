@@ -6,21 +6,33 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it should display one flag by uniq language', async function(assert) {
+    // given
+    const section = "i18n";
+    const challenge1 = {
+      id: 'rec456789',
+      languages: ['Francophone','Franco Français']
+    };
+    const challenge2 = {
+      id: 'rec987654',
+      languages: ['Anglais']
+    };
+    const challenge3 = {
+      id: 'rec147258',
+      languages: ['Francophone']
+    };
+    const skill = {
+      id: 'rec123456',
+      name: 'skill1',
+      productionTemplates: [challenge1,challenge2,challenge3]
+    };
+    this.set('section', section);
+    this.set('skill', skill);
 
-    await render(hbs`<Competence::Grid::CellI18n />`);
+    // when
+    await render(hbs`<Competence::Grid::CellI18n @skill={{this.skill}}/>`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <Competence::Grid::CellI18n>
-        template block text
-      </Competence::Grid::CellI18n>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    // then
+    assert.equal(this.element.querySelectorAll('.flag').length, 3);
   });
 });
