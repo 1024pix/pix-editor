@@ -5,7 +5,7 @@ export default class CompetenceGridCellI18nComponent extends Component {
   get skillFlagsAndLanguages() {
     const languages = this._skillLanguages.sort();
     return languages.map(language => {
-      return {language, flag: this._flagByLanguage(language)}
+      return {language, flag: this._convertLanguageAsFlag(language)}
     });
   }
 
@@ -23,20 +23,20 @@ export default class CompetenceGridCellI18nComponent extends Component {
     }, []);
   }
 
-  _flagByLanguage(language) {
-    switch (language) {
-      case "Francophone" :
-        return "fr";
-      case "Franco Français":
-        return "fr fr-fr";
-      case "Anglais":
-        return "gb uk";
-      case "Espagnol":
-        return "es";
-      case "Italie":
-        return "it";
-      case "Allemand":
-        return "de";
-    }
-  }
+   _convertLanguageAsFlag(language) {
+     switch (language) {
+       case "Francophone" :
+         return "fr";
+       case "Franco Français":
+         return "fr fr-fr";
+       case "Anglais":
+         return "gb uk";
+       case "Espagnol":
+         return "es";
+       case "Italie":
+         return "it";
+       case "Allemand":
+         return "de";
+     }
+   }
 }

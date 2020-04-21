@@ -3,16 +3,17 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Helper | flagByLanguage', function(hooks) {
+module('Integration | Helper | convert-language-as-flag', function(hooks) {
   setupRenderingTest(hooks);
 
+  // Replace this with your real tests.
   test('it should return `fr` if language is `Francophone`', async function(assert) {
     // given
     this.set('language', 'Francophone');
 
     // when
 
-    await render(hbs`{{flag-by-language language}}`);
+    await render(hbs`{{convert-language-as-flag language}}`);
 
     // then
 
@@ -25,7 +26,7 @@ module('Integration | Helper | flagByLanguage', function(hooks) {
 
     // when
 
-    await render(hbs`{{flag-by-language language}}`);
+    await render(hbs`{{convert-language-as-flag language}}`);
 
     // then
 
