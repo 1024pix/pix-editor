@@ -3,8 +3,8 @@
     {{@skill.name}}
   </div>
   <div class="flags">
-    {{#each this.skillFlagsAndLanguages as |flagAndLanguage| }}
-      <i class="{{flagAndLanguage.flag}} flag" title="{{flagAndLanguage.language}}"></i>
+    {{#each this.languagesAndFlags as |languageAndFlag| }}
+      <i class="{{languageAndFlag.flag}} flag" title="{{languageAndFlag.language}}"></i>
     {{/each}}
   </div>
 </LinkTo>
