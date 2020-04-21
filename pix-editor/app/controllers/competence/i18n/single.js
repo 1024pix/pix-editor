@@ -9,7 +9,7 @@ export default class CompetenceI18nSingleController extends Controller {
   parentController;
 
   @alias('parentController.leftMaximized')
-  maximized;
+  isMaximized;
 
   @alias('model')
   skill;
