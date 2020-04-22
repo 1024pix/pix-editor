@@ -1,11 +1,13 @@
 import Component from '@glimmer/component';
+import { convertLanguageAsFlag }  from '../../../helpers/convert-language-as-flag';
+
 
 export default class CompetenceGridCellI18nComponent extends Component {
 
   get languagesAndFlags() {
     const languages = this._skillLanguages.sort();
     return languages.map(language => {
-      return {language, flag: this._convertLanguageAsFlag(language)}
+      return {language, flag: convertLanguageAsFlag([language])}
     });
   }
 
@@ -22,21 +24,4 @@ export default class CompetenceGridCellI18nComponent extends Component {
       return languages;
     }, []);
   }
-
-   _convertLanguageAsFlag(language) {
-     switch (language) {
-       case "Francophone" :
-         return "fr";
-       case "Franco Français":
-         return "fr fr-fr";
-       case "Anglais":
-         return "gb uk";
-       case "Espagnol":
-         return "es";
-       case "Italie":
-         return "it";
-       case "Allemand":
-         return "de";
-     }
-   }
 }
