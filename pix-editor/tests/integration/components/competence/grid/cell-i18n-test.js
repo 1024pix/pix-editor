@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
+module.only('Integration | Component | competence/grid/cell-i18n', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it should display one flag by uniq language', async function(assert) {
@@ -23,7 +23,7 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     };
     const skill = {
       id: 'rec123456',
-      name: 'skill1',
+      name: 'skillName',
       productionTemplates: [challenge1,challenge2,challenge3]
     };
     this.set('section', section);
@@ -31,8 +31,9 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
 
     // when
     await render(hbs`<Competence::Grid::CellI18n @skill={{this.skill}}/>`);
-
     // then
+    assert.equal(this.element.querySelector('.skill-i18n-name').innerText.trim(), 'skillName')
+
     assert.equal(this.element.querySelectorAll('.flag').length, 3);
   });
 });

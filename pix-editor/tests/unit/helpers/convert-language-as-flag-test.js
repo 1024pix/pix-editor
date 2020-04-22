@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { convertLanguageAsFlag } from '../../../helpers/convert-language-as-flag';
 
-module.only('Unit | Helpers | convert language as flag', function () {
+module('Unit | Helpers | convert language as flag', function () {
   [
     {expected: 'fr', language: 'Francophone'},
     {expected: 'fr fr-fr', language: 'Franco Français'}
