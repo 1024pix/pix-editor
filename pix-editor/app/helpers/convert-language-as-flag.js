@@ -1,6 +1,6 @@
 import { helper } from '@ember/component/helper';
 
-export default helper(function convertLanguageAsFlag([language]) {
+export function convertLanguageAsFlag([language]) {
   switch (language) {
     case "Francophone" :
       return "fr";
@@ -15,4 +15,6 @@ export default helper(function convertLanguageAsFlag([language]) {
     case "Allemand":
       return "de";
   }
-});
+}
+
+export default helper(convertLanguageAsFlag);
