@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module.only('Integration | Component | competence/grid/cell-i18n', function(hooks) {
+module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it should display one flag by uniq language', async function(assert) {
