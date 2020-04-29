@@ -10,21 +10,13 @@
 }
 
 .i18n.single {
-  .instruction-preview  {
-    >*{
-      margin:0;
-      padding:0;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    :not(*:first-child){
-      display: none;
-    }
+  .et-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .language{
-    margin-right:.8em;
+  .language {
+    margin-right: .8em;
   }
 }
