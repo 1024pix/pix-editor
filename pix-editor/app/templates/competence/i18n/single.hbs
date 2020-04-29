@@ -14,30 +14,5 @@
   </div>
 </div>
 <div class="single i18n">
-  <table class="ui fixed table">
-    <thead>
-    <tr>
-      <th>Consigne</th>
-      <th>Langues</th>
-      <th>Déclinaisons</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#each this.skill.productionTemplates as |template| }}
-      <tr>
-        <td>
-          <div class="instruction-preview">
-            {{simple-mde-preview template.instructions}}
-          </div>
-        </td>
-        <td>
-          {{#each template.languages as |language| }}
-            <span class="language"><i class="{{convert-language-as-flag language}} flag"></i>{{language}}</span>
-          {{/each}}
-        </td>
-        <td>{{template.alternatives.length}}</td>
-      </tr>
-    {{/each}}
-    </tbody>
-  </table>
+  <List::I18n @list={{this.skill.productionTemplates}} />
 </div>

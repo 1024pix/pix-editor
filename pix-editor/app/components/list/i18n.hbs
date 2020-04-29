@@ -1,0 +1,28 @@
+<EmberTable as |t|>
+  <t.head
+          @columns={{this.headers}}
+          @widthConstraint={{'eq-container'}}
+          @resizeMode={{'fluid'}}
+          @onUpdateSorts={{this.sortBy}}
+          @sortFunction={{this.sort}}
+          @sorts={{this.sorts}}/>
+  <t.body
+          @rows={{@list}}
+          @rowSelectionMode={{'single'}}
+          @checkboxSelectionMode={{'none'}}
+          @onSelect={{this.selectRow}} as |b|>
+    <b.row as |r|>
+      <r.cell as |value|>
+        {{#if r.columnValue.languages}}
+          {{#each r.rowValue.languages as |language| }}
+            <span class="language"><i class="{{convert-language-as-flag language}} flag"></i>{{language}}</span>
+          {{/each}}
+        {{else if r.columnValue.alternatives}}
+          {{r.rowValue.alternatives.length}}
+        {{else}}
+          {{value}}
+        {{/if}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</EmberTable>
