@@ -16,5 +16,4 @@ export default class I18n extends SortedList {
     maxWidth:150,
     alternatives:true
   }];
-
 }

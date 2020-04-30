@@ -73,5 +73,4 @@ export default class SingleController extends TemplateController {
     this.parentController.maximizeRight(false);
   }
 
-
 }
