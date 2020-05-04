@@ -1,0 +1,22 @@
+.i18n-header {
+  @extend .challenge-header;
+
+  background-color: #684AB6 !important;
+  color: #ffffff !important;
+
+  .ui.button {
+    color: #ffffff !important;
+  }
+}
+
+.i18n.single {
+  .et-cell-content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .language {
+    margin-right: .8em;
+  }
+}

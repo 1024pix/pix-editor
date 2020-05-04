@@ -86,5 +86,4 @@ export default class StatisticsProductionComponent extends Component {
     return this._productionChallengeTotal;
   }
 
-
 }

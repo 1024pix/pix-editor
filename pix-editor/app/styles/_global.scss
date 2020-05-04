@@ -213,11 +213,14 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     background-color:#7C0E6A;
   }
 
-}
-.ui.inverted.menu .item {
-  color:#ffffff;
-}
+  &.main-menu{
+    margin-bottom: 0;
+  }
 
+  .item {
+    color:#ffffff;
+  }
+}
 
 .ui.disabled.dropdown {
   opacity:1;

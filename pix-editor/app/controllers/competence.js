@@ -43,7 +43,7 @@ export default class CompetenceController extends Controller {
   }
 
   get displayGrid() {
-    return this.section != 'challenges' || this.view != 'workbench-list';
+    return this.section !== 'challenges' || this.view !== 'workbench-list';
   }
 
   get size() {
@@ -52,6 +52,7 @@ export default class CompetenceController extends Controller {
       case 'competence.skills.index':
       case 'competence.templates.index':
       case 'competence.quality.index':
+      case 'competence.i18n.index':
               return 'full';
       default:
         return 'half';
@@ -163,6 +164,9 @@ export default class CompetenceController extends Controller {
         break;
       case 'quality':
         this.transitionToRoute('competence.quality', this.competence);
+        break;
+      case 'i18n':
+        this.transitionToRoute('competence.i18n', this.competence);
         break;
     }
   }

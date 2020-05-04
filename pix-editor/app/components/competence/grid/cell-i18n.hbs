@@ -1,0 +1,10 @@
+<LinkTo @route="competence.i18n.single" @model={{@skill}} @tagName="td" class="skill skill-cell link i18n">
+  <div class="skill-i18n-name">
+    {{@skill.name}}
+  </div>
+  <div class="flags">
+    {{#each this.languagesAndFlags as |languageAndFlag| }}
+      <i class="{{languageAndFlag.flag}} flag" title="{{languageAndFlag.language}}"></i>
+    {{/each}}
+  </div>
+</LinkTo>

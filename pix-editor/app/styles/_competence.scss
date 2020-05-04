@@ -66,6 +66,26 @@
           }
         }
 
+        &.i18n {
+          height: 45px;
+          background-color: #6223b6;
+
+          &.active {
+            background-color: #8e2dff !important;
+          }
+          .skill-i18n-name{
+            color:white;
+          }
+          .flags{
+            background: rgba(255,255,255,.7);
+            margin:5px;
+
+            >i.flag{
+              box-shadow: grey 0 0 2px;
+            }
+          }
+        }
+
         .skill-name {
           margin: -5px -5px 0 -5px;
           padding: 5px 5px 0 5px;
@@ -248,3 +268,17 @@
   max-width: 350px;
 }
 
+.flag.fr-fr{
+  position: relative;
+
+  &::after{
+    content:".fr";
+    position: absolute;
+    font-size:10px;
+    font-style:normal;
+    font-weight: bold;
+    top:0;
+    left:3px;
+    color:black;
+  }
+}

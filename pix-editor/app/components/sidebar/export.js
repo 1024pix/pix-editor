@@ -62,5 +62,4 @@ export default class SidebarExportComponent extends Component {
     return ' '
   }
 
-
 }

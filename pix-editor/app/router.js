@@ -15,7 +15,7 @@ Router.map(function() {
           this.route('new');
           this.route('single', {path:'/:alternative_id'});
         });
-      })
+      });
       this.route('list', {path:'/list/:skill_id'});
     });
     this.route('tubes', function() {
@@ -27,6 +27,9 @@ Router.map(function() {
       this.route('new', {path:'/new/:tube_id/:level'});
     });
     this.route('quality', function() {
+      this.route('single', {path:'/:skill_id'});
+    });
+    this.route('i18n', function() {
       this.route('single', {path:'/:skill_id'});
     });
   });

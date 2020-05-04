@@ -51,5 +51,4 @@ export default class CurrentDataService extends Service {
     return this._template;
   }
 
-
 }
