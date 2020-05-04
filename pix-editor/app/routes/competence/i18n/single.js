@@ -6,7 +6,7 @@ export default class CompetenceI18nSingleRoute extends Route {
     return this.store.findRecord('skill', params.skill_id);
   }
 
-  setupController(controller) {
+  setupController() {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('i18n');
