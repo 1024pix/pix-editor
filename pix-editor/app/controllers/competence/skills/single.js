@@ -26,6 +26,7 @@ export default class SingleController extends Controller {
 
   @service config;
   @service access;
+  @service notify;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -93,7 +94,7 @@ export default class SingleController extends Controller {
     if (!this.wasMaximized) {
       this.minimize();
     }
-    this.application.send('showMessage', 'Modification annulée', true);
+    this.notify.message('Modification annulée');
   }
 
   @action
@@ -113,12 +114,12 @@ export default class SingleController extends Controller {
     .then(() => {
       this.edition = false;
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Acquis mis à jour', true);
+      this.notify.message('Acquis mis à jour');
     })
     .catch((error) => {
       console.error(error);
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
+      this.notify.error('Erreur lors de la mise à jour de l\'acquis');
     });
   }
 
@@ -137,13 +138,13 @@ export default class SingleController extends Controller {
     return skill.save()
       .then(() => {
         this.application.send('finishedLoading');
-        this.application.send('showMessage', 'Acquis mis à jour', true);
+        this.notify.message('Acquis mis à jour');
         this.transitionToRoute('competence.skills.single', competence, skill);
       })
       .catch((error) => {
         console.error(error);
         this.application.send('finishedLoading');
-        this.application.send('showMessage', 'Erreur lors de la mise à jour de l\'acquis', true);
+        this.notify.error('Erreur lors de la mise à jour de l\'acquis');
       });
   }
 

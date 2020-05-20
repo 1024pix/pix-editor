@@ -16,6 +16,7 @@ export default class TargetProfileController extends Controller {
 
   @service('file-saver') fileSaver;
   @service currentData;
+  @service notify;
 
   @controller application;
 
@@ -161,7 +162,6 @@ export default class TargetProfileController extends Controller {
       const file = event.target.files[0];
       const reader = new FileReader();
       const areas = this.model;
-      const application = this.application;
       const that = this;
       reader.onload = (event) => {
         const data = event.target.result;
@@ -196,13 +196,13 @@ export default class TargetProfileController extends Controller {
           })
         });
         that.selectedSources = sources;
-        application.send('showMessage', 'Fichier correctement chargé', true);
+        this.notify.message('Fichier correctement chargé');
         //TODO: find a better way to be able to reload same file
         document.getElementById('target-profile__open-file').value = '';
       };
       reader.readAsText(file);
     } catch (error) {
-      this.application.send('showMessage', 'Erreur lors de l\'ouverture du fichier', false);
+      this.notify.error('Erreur lors de l\'ouverture du fichier');
     }
   }
 

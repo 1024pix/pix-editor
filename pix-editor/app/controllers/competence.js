@@ -16,6 +16,7 @@ export default class CompetenceController extends Controller {
   @service config;
   @service access;
   @service('file-saver') fileSaver;
+  @service notify;
 
   @controller application;
   @controller('competence.templates.single') challengeController;
@@ -143,7 +144,7 @@ export default class CompetenceController extends Controller {
     }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(contentCSV, fileName);
-    this.application.send('showMessage', 'acquis exportés', true);
+    this.notify.message('acquis exportés');
     this.application.send('finishedLoading');
   }
 

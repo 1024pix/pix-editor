@@ -28,6 +28,7 @@ export default class SingleController extends Controller {
 
   @service access;
   @service config;
+  @service notify;
 
   get mayAccessAirtable() {
     return this.access.mayAccessAirtable();
@@ -81,7 +82,7 @@ export default class SingleController extends Controller {
     if (!previousState) {
       this.send('minimize');
     }
-    this.application.send('showMessage', 'Modification annulée', true);
+    this.notify.message('Modification annulée');
   }
 
   @action
@@ -92,13 +93,13 @@ export default class SingleController extends Controller {
     .then(()=> {
       this.edition = false;
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Tube mis à jour', true);
+      this.notify.message('Tube mis à jour');
       return tube.hasMany('rawSkills').reload();
     })
     .catch((error) => {
       console.error(error);
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la mise à jour du tube', true);
+      this.notify.error('Erreur lors de la mise à jour du tube');
     });
   }
 
@@ -125,13 +126,13 @@ export default class SingleController extends Controller {
     return tube.save()
     .then(() => {
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Tube mis à jour', true);
+      this.notify.message('Tube mis à jour');
       this.transitionToRoute('competence.tubes.single', newCompetence, tube);
     })
     .catch((error) => {
       console.error(error);
       this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la mise à jour du tube', true);
+      this.notify.error('Erreur lors de la mise à jour du tube');
     });
   }
 }

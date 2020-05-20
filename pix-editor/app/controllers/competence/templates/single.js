@@ -34,6 +34,7 @@ export default class SingleController extends Controller {
   @service pixConnector
   @service filePath;
   @service currentData;
+  @service notify;
 
   @alias('parentController.leftMaximized')
   maximized;
@@ -541,7 +542,7 @@ export default class SingleController extends Controller {
   }
 
   _message(text) {
-    this.application.send('showMessage', text, true);
+    this.notify.message(text);
   }
 
   _loadingMessage(text) {
@@ -549,7 +550,7 @@ export default class SingleController extends Controller {
   }
 
   _errorMessage(text) {
-    this.application.send('showMessage', text, false);
+    this.notify.error(text);
   }
 
   _error(text) {

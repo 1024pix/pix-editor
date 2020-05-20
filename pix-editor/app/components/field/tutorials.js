@@ -12,6 +12,7 @@ export default class Tutorials extends Component {
   @service store;
 
   @service idGenerator;
+  @service notify;
 
   _searchTutorial(query, tagSearch) {
     return this.store.query('tutorial', {
@@ -75,13 +76,13 @@ export default class Tutorials extends Component {
     this.newTutorial.save()
       .then((tutorial) => {
         this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Tutoriel créé', true);
+        this.notify.message('Tutoriel créé');
         this.args.addTutorial(tutorial);
       })
       .catch((error) => {
         console.error(error);
         this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Erreur lors de la création du tutoriel', true);
+        this.notify.error('Erreur lors de la création du tutoriel');
       })
 
   }
