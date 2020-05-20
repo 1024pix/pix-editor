@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import {inject as controller} from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 export default class TargetProfileController extends Controller {
 
@@ -17,8 +16,6 @@ export default class TargetProfileController extends Controller {
   @service('file-saver') fileSaver;
   @service currentData;
   @service notify;
-
-  @controller application;
 
   get selectedTubeCount() {
     return this.areas.reduce((count, area) => {

@@ -22,8 +22,6 @@ export default class SingleController extends Controller {
   @alias('model')
   skill;
 
-  @controller application;
-
   @service config;
   @service access;
   @service notify;

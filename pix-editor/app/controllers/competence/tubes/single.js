@@ -17,9 +17,6 @@ export default class SingleController extends Controller {
   @alias('model')
   tube;
 
-  @controller
-  application;
-
   @controller('competence')
   parentController;
 

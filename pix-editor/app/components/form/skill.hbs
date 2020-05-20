@@ -13,8 +13,7 @@
     @searchClass="solution"
     @edition={{@edition}}
     @addTutorial={{fn this.addTutorial @skill.tutoSolution}}
-    @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}
-    @application={{@application}}/>
+    @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}/>
   <Field::Tutorials
     @title="Pour en savoir plus"
     @skill={{@skill}}
@@ -22,8 +21,7 @@
     @edition={{@edition}}
     @searchClass="more"
     @addTutorial={{fn this.addTutorial @skill.tutoMore}}
-    @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}
-    @application={{@application}}/>
+    @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
   <Field::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
   {{#if (not @edition)}}
     <Field::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />

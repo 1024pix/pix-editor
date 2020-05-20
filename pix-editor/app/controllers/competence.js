@@ -19,7 +19,6 @@ export default class CompetenceController extends Controller {
   @service notify;
   @service loader;
 
-  @controller application;
   @controller('competence.templates.single') challengeController;
   @controller('competence.skills.single') skillController;
 
