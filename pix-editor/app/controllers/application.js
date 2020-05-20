@@ -22,8 +22,14 @@ export default class ApplicationController extends Controller {
 
   @service config;
   @service router;
+  @service notify;
 
   messages = A([]);
+
+  constructor() {
+    super(...arguments);
+    this.notify.setTarget(this);
+  }
 
   get menuOpen() {
     if (this.router.currentRouteName === 'index' || this.lockedMenu) {
@@ -41,7 +47,6 @@ export default class ApplicationController extends Controller {
     return (this.router.currentRouteName === 'index');
   }
 
-  @action
   showMessage(content, positive) {
     const messages = this.messages;
     const id = 'message_'+Date.now();
