@@ -36,6 +36,7 @@ export default class SingleController extends Controller {
   @service currentData;
   @service notify;
   @service loader;
+  @service confirm;
 
   @alias('parentController.leftMaximized')
   maximized;
@@ -45,9 +46,6 @@ export default class SingleController extends Controller {
 
   @alias('model')
   challenge;
-
-  @controller
-  application;
 
   @controller('competence')
   parentController
@@ -196,7 +194,7 @@ export default class SingleController extends Controller {
 
   @action
   validate() {
-    return this._confirm('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
+    return this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
       .then(() => {
         let defaultLogMessage;
         if (this.challenge.isTemplate) {
@@ -228,7 +226,7 @@ export default class SingleController extends Controller {
 
   @action
   archive() {
-    return this._confirm('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
+    return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
       .then(() => {
         this._getChangelog('Archivage de l\'épreuve', (changelog) => {
           this.loader.start();
@@ -244,7 +242,7 @@ export default class SingleController extends Controller {
             .finally(() => this.loader.stop());
         });
       })
-      .catch(() => this._message('Archivage abandonné'))
+      .catch(() => this._message('Archivage abandonné'));
   }
 
   @action
@@ -368,7 +366,7 @@ export default class SingleController extends Controller {
     if (template == null) {
       return Promise.resolve(challenge);
     }
-    return this._confirm('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?')
+    return this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?')
       .then(() => template.archive())
       .then(() => this._archiveAlternatives(template))
       .then(() => challenge);
@@ -384,7 +382,7 @@ export default class SingleController extends Controller {
     if (alternatives.length === 0) {
       return Promise.resolve(challenge);
     }
-    return this._confirm('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
+    return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
         let alternativesPublication = alternatives.reduce((current, alternative) => {
           current.push(alternative.validate()
@@ -528,18 +526,6 @@ export default class SingleController extends Controller {
     } else {
       return Promise.resolve(challenge);
     }
-  }
-
-  _confirm(title, text, parameter) {
-    return new Promise((resolve, reject) => {
-      this.application.send('confirm', title, text, (result) => {
-        if (result) {
-          resolve(parameter);
-        } else {
-          reject();
-        }
-      })
-    });
   }
 
   _message(text) {
