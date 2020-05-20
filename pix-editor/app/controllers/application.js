@@ -23,12 +23,14 @@ export default class ApplicationController extends Controller {
   @service config;
   @service router;
   @service notify;
+  @service loader;
 
   messages = A([]);
 
   constructor() {
     super(...arguments);
     this.notify.setTarget(this);
+    this.loader.setTarget(this);
   }
 
   get menuOpen() {
