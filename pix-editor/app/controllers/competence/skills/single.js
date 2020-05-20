@@ -43,6 +43,10 @@ export default class SingleController extends Controller {
     return this.access.mayMoveSkill(this.skill);
   }
 
+  get mayArchive() {
+    return this.access.mayArchiveSkill(this.skill);
+  }
+
   _scrollToTop() {
     document.querySelector('.skill-data').scrollTop = 0;
   }
@@ -150,5 +154,26 @@ export default class SingleController extends Controller {
   @action
   closeSelectLocation() {
     this.displaySelectLocation = false;
+  }
+
+  @action
+  archiveSkill() {
+    if (this.skill.productionTemplate) {
+      this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
+      return;
+    }
+    this.loader.start('Archivage de l\'acquis');
+    return this.skill.archive()
+    .then(() => {
+      this.close();
+      this.notify.message('Acquis archivé');
+    })
+    .catch(error =>{
+      console.error(error);
+      this.notify.error('Erreur lors de l\'archivage de l\'acquis');
+    })
+    .finally(() => {
+      this.loader.stop();
+    })
   }
 }
