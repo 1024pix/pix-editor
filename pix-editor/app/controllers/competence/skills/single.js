@@ -27,6 +27,7 @@ export default class SingleController extends Controller {
   @service config;
   @service access;
   @service notify;
+  @service loader;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -99,7 +100,7 @@ export default class SingleController extends Controller {
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let skill = this.skill;
     const template = this.skill.productionTemplate;
     let operation;
@@ -113,12 +114,12 @@ export default class SingleController extends Controller {
     })
     .then(() => {
       this.edition = false;
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.message('Acquis mis à jour');
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.error('Erreur lors de la mise à jour de l\'acquis');
     });
   }
@@ -131,19 +132,19 @@ export default class SingleController extends Controller {
   @action
   setLocation(competence, newTube, level) {
     let skill = this.skill;
-    this.application.send('isLoading');
+    this.loader.start();
     skill.tube = newTube;
     skill.level = level;
     skill.competence = [competence.get('id')];
     return skill.save()
       .then(() => {
-        this.application.send('finishedLoading');
+        this.loader.stop();
         this.notify.message('Acquis mis à jour');
         this.transitionToRoute('competence.skills.single', competence, skill);
       })
       .catch((error) => {
         console.error(error);
-        this.application.send('finishedLoading');
+        this.loader.stop();
         this.notify.error('Erreur lors de la mise à jour de l\'acquis');
       });
   }

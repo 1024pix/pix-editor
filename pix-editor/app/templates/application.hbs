@@ -2,7 +2,7 @@
   <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
     <div class="ui text loader">{{this.loadingMessage}}</div>
   </div>
-  <Sidebar::Main @openConfiguration={{this.openConfiguration}} @isLoading={{this.isLoading}} @finishedLoading={{this.finishedLoading}} @open={{this.menuOpen}} @close={{this.closeMenu}}/>
+  <Sidebar::Main @openConfiguration={{this.openConfiguration}} @open={{this.menuOpen}} @close={{this.closeMenu}}/>
   <div class="pusher">
     <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
       {{!-- template-lint-disable --}}

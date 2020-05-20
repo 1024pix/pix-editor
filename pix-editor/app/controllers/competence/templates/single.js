@@ -35,6 +35,7 @@ export default class SingleController extends Controller {
   @service filePath;
   @service currentData;
   @service notify;
+  @service loader;
 
   @alias('parentController.leftMaximized')
   maximized;
@@ -165,7 +166,7 @@ export default class SingleController extends Controller {
   @action
   save() {
     this._getChangelog(this.defaultSaveChangelog, (changelog) => {
-      this.application.send('isLoading');
+      this.loader.start();
       return this._handleIllustration(this.challenge)
         .then(challenge => this._handleAttachments(challenge))
         .then(challenge => this._saveChallenge(challenge))
@@ -179,7 +180,7 @@ export default class SingleController extends Controller {
           this._message('Épreuve mise à jour');
         })
         .catch(() => this._errorMessage('Erreur lors de la mise à jour'))
-        .finally(() => this.application.send('finishedLoading'));
+        .finally(() => this.loader.stop());
     });
   }
 
@@ -204,7 +205,7 @@ export default class SingleController extends Controller {
           defaultLogMessage = 'Mise en production de la déclinaison';
         }
         this._getChangelog(defaultLogMessage, (changelog) => {
-          this.application.send('isLoading');
+          this.loader.start();
           return this._validationChecks(this.challenge)
             .then(challenge => this._archivePreviousTemplate(challenge))
             .then(challenge => challenge.validate())
@@ -219,7 +220,7 @@ export default class SingleController extends Controller {
               console.error(error);
               this._errorMessage('Erreur lors de la mise en production');
             })
-            .finally(() => this.application.send('finishedLoading'))
+            .finally(() => this.loader.stop())
         });
       })
       .catch(() => this._message('Mise en production abandonnée'));
@@ -230,7 +231,7 @@ export default class SingleController extends Controller {
     return this._confirm('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
       .then(() => {
         this._getChangelog('Archivage de l\'épreuve', (changelog) => {
-          this.application.send('isLoading');
+          this.loader.start();
           return this.challenge.archive()
             .then(challenge => this._archiveAlternatives(challenge))
             .then(challenge => this._handleChangelog(challenge, changelog))
@@ -240,7 +241,7 @@ export default class SingleController extends Controller {
               this.send('close');
             })
             .catch(() => this._errorMessage('Erreur lors de l\'archivage'))
-            .finally(() => this.application.send('finishedLoading'));
+            .finally(() => this.loader.stop());
         });
       })
       .catch(() => this._message('Archivage abandonné'))
@@ -294,7 +295,7 @@ export default class SingleController extends Controller {
       return;
     }
     this._getChangelog('Changement d\'acquis de l\'épreuve', (changelog) => {
-      this.application.send('isLoading');
+      this.loader.start();
       let template = this.challenge;
       const templateVersion = this._getNextTemplateVersion(skills);
       const challenges = this.challenge.alternatives;
@@ -315,7 +316,7 @@ export default class SingleController extends Controller {
       }, []);
       return Promise.all(updateChallenges)
         .then(() => this._handleChangelog(template, changelog))
-        .finally(() => this.application.send('finishedLoading'));
+        .finally(() => this.loader.stop());
     });
   }
 
@@ -546,7 +547,7 @@ export default class SingleController extends Controller {
   }
 
   _loadingMessage(text) {
-    this.application.send('isLoading', text);
+    this.loader.start(text);
   }
 
   _errorMessage(text) {

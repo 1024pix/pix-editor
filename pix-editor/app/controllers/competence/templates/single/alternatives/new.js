@@ -8,6 +8,7 @@ export default class NewController extends Alternative {
   queryParams = ['from'];
   @tracked from = '';
   @service currentData;
+  @service loader;
 
   defaultSaveChangelog = 'Création de la déclinaison';
 
@@ -21,7 +22,7 @@ export default class NewController extends Alternative {
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     return this._handleIllustration(this.challenge)
     .then(challenge => this._handleAttachments(challenge))
     .then(challenge => this._saveChallenge(challenge))
@@ -37,9 +38,7 @@ export default class NewController extends Alternative {
       this._errorMessage('Erreur lors de la création');
       console.error(error);
     })
-    .finally(() => {
-      this.application.send('finishedLoading');
-    })
+    .finally(() => this.loader.stop());
   }
 
   _setAlternativeVersion(challenge) {

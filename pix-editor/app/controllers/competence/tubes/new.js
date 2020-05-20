@@ -7,17 +7,18 @@ export default class NewController extends Tube {
 
   @service currentData;
   @service notify;
+  @service loader;
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let tube = this.tube;
     const competence = this.currentData.getCompetence();
     tube.competence = competence;
     return tube.save()
     .then(() => {
       this.edition = false;
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.message('Tube créé');
     })
     .then(() => {
@@ -25,7 +26,7 @@ export default class NewController extends Tube {
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.error('Erreur lors de la création du tube');
     });
   }

@@ -6,10 +6,11 @@ export default class SidebarExportComponent extends Component {
 
   @service('file-saver') fileSaver;
   @service notify;
+  @service loader;
 
   @action
   shareAreas() {
-    this.args.isLoading('Récupération des sujets');
+    this.loader.start('Récupération des sujets');
     const areas = this.args.areas;
     const getCompetences = areas.map(area => area.competences);
     return Promise.all(getCompetences)
@@ -52,7 +53,7 @@ export default class SidebarExportComponent extends Component {
         this.notify.message('Sujets exportés');
       })
       .finally(() => {
-        this.args.finishedLoading();
+        this.loader.stop();
       });
   }
 

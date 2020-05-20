@@ -14,6 +14,7 @@ export default class NewController extends Skill {
   tube;
 
   @service notify;
+  @service loader;
 
   @action
   cancelEdit() {
@@ -25,7 +26,7 @@ export default class NewController extends Skill {
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let skill = this.skill;
     let tube = this.tube;
     return tube.competence
@@ -36,12 +37,12 @@ export default class NewController extends Skill {
     })
     .then(() => {
       this.edition = false;
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.message('Acquis créé');
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
+      this.loader.stop();
       this.notify.error('Erreur lors de la création de l\'acquis');
     });
   }
