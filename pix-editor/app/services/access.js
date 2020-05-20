@@ -47,6 +47,15 @@ export default class AccessService extends Service {
     }
   }
 
+  mayArchiveSkill(skill) {
+    let level = this.config.access;
+    if (skill.productionTemplate) {
+      return level === ADMIN;
+    } else {
+      return level >= EDITOR;
+    }
+  }
+
   mayCreateAlternative() {
     return this.isReplicator();
   }
