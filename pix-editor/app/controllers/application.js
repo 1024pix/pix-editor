@@ -24,6 +24,7 @@ export default class ApplicationController extends Controller {
   @service router;
   @service notify;
   @service loader;
+  @service confirm;
 
   messages = A([]);
 
@@ -31,6 +32,7 @@ export default class ApplicationController extends Controller {
     super(...arguments);
     this.notify.setTarget(this);
     this.loader.setTarget(this);
+    this.confirm.setTarget(this);
   }
 
   get menuOpen() {
@@ -65,13 +67,11 @@ export default class ApplicationController extends Controller {
     }, 3000);
   }
 
-  @action
   isLoading(message) {
     this.loading = true;
     this.loadingMessage = message;
   }
 
-  @action
   finishedLoading() {
     this.loading = false;
     this.loadingMessage = '';
@@ -92,8 +92,7 @@ export default class ApplicationController extends Controller {
     window.location.reload(true);
   }
 
-  @action
-  confirm(title, message, callback) {
+  confirmAsk(title, message, callback) {
     this.confirmCallback = callback;
     this.confirmTitle = title;
     this.confirmContent = message;
