@@ -26,6 +26,7 @@ export default class SingleController extends Controller {
   @service access;
   @service notify;
   @service loader;
+  @service confirm;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -41,6 +42,10 @@ export default class SingleController extends Controller {
 
   get mayMove() {
     return this.access.mayMoveSkill(this.skill);
+  }
+
+  get mayArchive() {
+    return this.access.mayArchiveSkill(this.skill);
   }
 
   _scrollToTop() {
@@ -150,5 +155,30 @@ export default class SingleController extends Controller {
   @action
   closeSelectLocation() {
     this.displaySelectLocation = false;
+  }
+
+  @action
+  archiveSkill() {
+    if (this.skill.productionTemplate) {
+      this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
+      return;
+    }
+    return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
+    .then(() => {
+      this.loader.start('Archivage de l\'acquis');
+      return this.skill.archive()
+      .then(() => {
+        this.close();
+        this.notify.message('Acquis archivé');
+      })
+      .catch(error =>{
+        console.error(error);
+        this.notify.error('Erreur lors de l\'archivage de l\'acquis');
+      })
+      .finally(() => {
+        this.loader.stop();
+      })
+    })
+    .catch(() => this.notify.message('Archivage abandonné'));
   }
 }

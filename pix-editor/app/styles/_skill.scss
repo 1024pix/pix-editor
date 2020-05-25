@@ -32,6 +32,11 @@
     .ui.button {
       color: #ffffff !important;
     }
+
+    .ember-basic-dropdown-content .ui.button {
+      color:#000000 !important;
+      margin:0;
+    }
   }
 }
 

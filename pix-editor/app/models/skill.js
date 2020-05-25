@@ -145,6 +145,11 @@ export default class SkillModel extends Model {
       });
   }
 
+  archive() {
+    this.status = 'périmé';
+    return this.save();
+  }
+
   _getCSSFromStatus(status) {
     switch (status) {
       case 'pré-validé':
