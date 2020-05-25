@@ -12,6 +12,8 @@ export default class Tutorials extends Component {
   @service store;
 
   @service idGenerator;
+  @service notify;
+  @service loader;
 
   _searchTutorial(query, tagSearch) {
     return this.store.query('tutorial', {
@@ -71,17 +73,17 @@ export default class Tutorials extends Component {
   @action
   saveTutorial() {
     this.displayTutorialPopin = false;
-    this.args.application.send('isLoading');
+    this.loader.start();
     this.newTutorial.save()
       .then((tutorial) => {
-        this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Tutoriel créé', true);
+        this.loader.stop();
+        this.notify.message('Tutoriel créé');
         this.args.addTutorial(tutorial);
       })
       .catch((error) => {
         console.error(error);
-        this.args.application.send('finishedLoading');
-        this.args.application.send('showMessage', 'Erreur lors de la création du tutoriel', true);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la création du tutoriel');
       })
 
   }

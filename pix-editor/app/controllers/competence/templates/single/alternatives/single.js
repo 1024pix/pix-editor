@@ -2,6 +2,7 @@ import TemplateController from '../../single';
 import {action} from '@ember/object';
 import {scheduleOnce} from '@ember/runloop';
 import {inject as controller} from '@ember/controller';
+import {inject as service} from '@ember/service';
 import {alias} from '@ember/object/computed';
 
 export default class SingleController extends TemplateController {
@@ -18,6 +19,8 @@ export default class SingleController extends TemplateController {
 
   @alias('parentController.rightMaximized')
   maximized;
+
+  @service notify;
 
   defaultSaveChangelog = 'Mise à jour de la déclinaison';
 
@@ -36,12 +39,12 @@ export default class SingleController extends TemplateController {
     try {
       var successful = document.execCommand('copy');
       if (!successful) {
-        this.get('application').send('showMessage', 'Erreur lors de la copie', false);
+        this.notify.error('Erreur lors de la copie');
       } else {
-        this.get('application').send('showMessage', 'lien copié', true);
+        this.notify.message('lien copié');
       }
     } catch (err) {
-      this.get('application').send('showMessage', 'Erreur lors de la copie', false);
+      this.notify.error('Erreur lors de la copie');
     }
     this.set('copyOperation', false);
   }

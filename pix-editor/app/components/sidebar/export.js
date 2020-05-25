@@ -5,10 +5,12 @@ import { inject as service } from '@ember/service';
 export default class SidebarExportComponent extends Component {
 
   @service('file-saver') fileSaver;
+  @service notify;
+  @service loader;
 
   @action
   shareAreas() {
-    this.args.isLoading('Récupération des sujets');
+    this.loader.start('Récupération des sujets');
     const areas = this.args.areas;
     const getCompetences = areas.map(area => area.competences);
     return Promise.all(getCompetences)
@@ -48,10 +50,10 @@ export default class SidebarExportComponent extends Component {
         }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
         const fileName = `Export_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
         this.fileSaver.saveAs(csvContent, fileName);
-        this.args.showMessage('Sujets exportés', true);
+        this.notify.message('Sujets exportés');
       })
       .finally(() => {
-        this.args.finishedLoading();
+        this.loader.stop();
       });
   }
 

@@ -6,26 +6,28 @@ export default class NewController extends Tube {
   creation = true;
 
   @service currentData;
+  @service notify;
+  @service loader;
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let tube = this.tube;
     const competence = this.currentData.getCompetence();
     tube.competence = competence;
     return tube.save()
     .then(() => {
       this.edition = false;
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Tube créé', true);
+      this.loader.stop();
+      this.notify.message('Tube créé');
     })
     .then(() => {
       this.transitionToRoute('competence.tubes.single', competence, tube);
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la création du tube', true);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la création du tube');
     });
   }
 
@@ -33,7 +35,7 @@ export default class NewController extends Tube {
   cancelEdit() {
     this.store.deleteRecord(this.tube);
     this.edition = false;
-    this.application.send('showMessage', 'Création annulée', true);
+    this.notify.message('Création annulée')
     this.parentController.send('closeChildComponent');
   }
 }

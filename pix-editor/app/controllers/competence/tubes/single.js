@@ -17,9 +17,6 @@ export default class SingleController extends Controller {
   @alias('model')
   tube;
 
-  @controller
-  application;
-
   @controller('competence')
   parentController;
 
@@ -28,6 +25,8 @@ export default class SingleController extends Controller {
 
   @service access;
   @service config;
+  @service notify;
+  @service loader;
 
   get mayAccessAirtable() {
     return this.access.mayAccessAirtable();
@@ -81,24 +80,24 @@ export default class SingleController extends Controller {
     if (!previousState) {
       this.send('minimize');
     }
-    this.application.send('showMessage', 'Modification annulée', true);
+    this.notify.message('Modification annulée');
   }
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let tube = this.tube;
     return tube.save()
     .then(()=> {
       this.edition = false;
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Tube mis à jour', true);
+      this.loader.stop();
+      this.notify.message('Tube mis à jour');
       return tube.hasMany('rawSkills').reload();
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la mise à jour du tube', true);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la mise à jour du tube');
     });
   }
 
@@ -120,18 +119,18 @@ export default class SingleController extends Controller {
   @action
   setCompetence(newCompetence) {
     let tube = this.tube;
-    this.application.send('isLoading');
+    this.loader.start();
     tube.competence = newCompetence;
     return tube.save()
     .then(() => {
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Tube mis à jour', true);
+      this.loader.stop();
+      this.notify.message('Tube mis à jour');
       this.transitionToRoute('competence.tubes.single', newCompetence, tube);
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la mise à jour du tube', true);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la mise à jour du tube');
     });
   }
 }

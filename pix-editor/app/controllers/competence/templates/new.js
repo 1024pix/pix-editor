@@ -9,6 +9,7 @@ export default class NewController extends Template {
   queryParams = ['from', 'fromSkill'];
   @tracked from = '';
   @service currentData;
+  @service loader;
 
   defaultSaveChangelog = 'Création du prototype';
 
@@ -22,7 +23,7 @@ export default class NewController extends Template {
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     return this._handleIllustration(this.challenge)
     .then(challenge => this._handleAttachments(challenge))
     .then(challenge => this._saveChallenge(challenge))
@@ -38,7 +39,7 @@ export default class NewController extends Template {
       this._errorMessage('Erreur lors de la création');
     })
     .finally(() => {
-      this.application.send('finishedLoading');
+      this.loader.stop();
     })
   }
 

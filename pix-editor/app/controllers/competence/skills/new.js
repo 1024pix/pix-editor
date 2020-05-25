@@ -1,6 +1,7 @@
 import Skill from './single';
 import {action} from '@ember/object';
 import {alias} from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 
 export default class NewController extends Skill {
   competence = null;
@@ -12,17 +13,20 @@ export default class NewController extends Skill {
   @alias('model.tube')
   tube;
 
+  @service notify;
+  @service loader;
+
   @action
   cancelEdit() {
     this.store.deleteRecord(this.skill);
     this.edition = false;
-    this.application.send('showMessage', 'Création annulée', true);
+    this.notify.message('Création annulée');
     this.parentController.send('closeChildComponent');
   }
 
   @action
   save() {
-    this.application.send('isLoading');
+    this.loader.start();
     let skill = this.skill;
     let tube = this.tube;
     return tube.competence
@@ -33,13 +37,13 @@ export default class NewController extends Skill {
     })
     .then(() => {
       this.edition = false;
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Acquis créé', true);
+      this.loader.stop();
+      this.notify.message('Acquis créé');
     })
     .catch((error) => {
       console.error(error);
-      this.application.send('finishedLoading');
-      this.application.send('showMessage', 'Erreur lors de la création de l\'acquis', true);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la création de l\'acquis');
     });
   }
 }

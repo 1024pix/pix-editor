@@ -20,7 +20,6 @@ export default class AlternativesController extends Controller {
   @service access;
   @service currentData;
 
-  @controller application;
   @controller('competence') competenceController;
 
   get mayCreateAlternative() {

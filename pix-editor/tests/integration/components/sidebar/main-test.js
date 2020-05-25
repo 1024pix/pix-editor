@@ -38,8 +38,6 @@ module('Integration | Component | main-sidebar', function(hooks) {
     });
 
     await render(hbs`{{sidebar/main openConfiguration=(action openAction)
-    isLoading=(action loadingAction)
-    finishedLoading=(action finishedAction)
     showMessage=(action messageAction)
     burger=burger
     }}`);
