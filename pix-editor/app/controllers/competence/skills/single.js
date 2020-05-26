@@ -163,6 +163,7 @@ export default class SingleController extends Controller {
       this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
       return;
     }
+    const challenges = this.skill.challenges;
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
     .then(() => {
       this.loader.start('Archivage de l\'acquis');
@@ -170,6 +171,19 @@ export default class SingleController extends Controller {
       .then(() => {
         this.close();
         this.notify.message('Acquis archivé');
+      })
+      .then(() => {
+        const updateChallenges = challenges.filter(challenge => !challenge.isArchived).map(challenge => {
+          return challenge.archive()
+          .then(() => {
+            if (challenge.isTemplate) {
+              this.notify.message('Prototype archivé');
+            } else {
+              this.notify.message(`Déclinaison n°${challenge.alternativeVersion} archivée`);
+            }
+          });
+        })
+        return Promise.all(updateChallenges);
       })
       .catch(error =>{
         console.error(error);
