@@ -99,10 +99,6 @@ export default class AccessService extends Service {
     return this.isAdmin() && challenge.isTemplate && challenge.isSuggested;
   }
 
-  mayInvalidate(challenge) {
-    return this.mayEdit(challenge) && challenge.isValidated;
-  }
-
   isReplicator() {
     let level = this.config.access;
     return (level >= REPLICATOR);

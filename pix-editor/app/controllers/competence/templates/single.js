@@ -89,10 +89,6 @@ export default class SingleController extends Controller {
     return this.access.mayMove(this.challenge);
   }
 
-  get mayInvalidate() {
-    return this.access.mayInvalidate(this.challenge);
-  }
-
   get level() {
     const challenge = this.challenge;
     if (challenge.skillLevels[0]){
@@ -248,31 +244,6 @@ export default class SingleController extends Controller {
         });
       })
       .catch(() => this._message('Archivage abandonné'));
-  }
-
-  @action
-  invalidate() {
-    return this.confirm.ask('Dépublication', 'Êtes-vous sûr de vouloir dépublier l\'épreuve ?')
-      .then(() => {
-        this._getChangelog('Dépublication de l\'épreuve', (changelog) => {
-          this.loader.start();
-          return this.challenge.invalidate()
-            .then(challenge => this._invalidateAlternatives(challenge))
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(challenge => {
-              this._message('Épreuve dépubliée');
-              if (challenge.isTemplate) {
-                return this.transitionToRoute('competence.templates.list', this.currentData.getCompetence(), challenge.firstSkill);
-              } else {
-                this.close();
-              }
-            })
-            .catch(() => this._errorMessage('Erreur lors de la dépublication'))
-            .finally(() => this.loader.stop());
-        });
-      })
-      .catch(() => this._message('Dépublication abandonnée'));
   }
 
   @action
@@ -441,24 +412,6 @@ export default class SingleController extends Controller {
       return current;
     }, []);
     return Promise.all(alternativesArchive)
-      .then(() => challenge);
-  }
-
-  _invalidateAlternatives(challenge) {
-    if (!challenge.isTemplate) {
-      return Promise.resolve(challenge);
-    }
-    const toInvalidate = challenge.alternatives.filter(alternative => alternative.isValidated);
-    if (toInvalidate.length === 0) {
-      return Promise.resolve(challenge);
-    }
-    let alternativesInvalidation = toInvalidate.reduce((current, alternative) => {
-      current.push(alternative.invalidate()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} dépubliée`))
-      );
-      return current;
-    }, []);
-    return Promise.all(alternativesInvalidation)
       .then(() => challenge);
   }
 

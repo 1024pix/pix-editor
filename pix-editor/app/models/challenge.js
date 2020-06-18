@@ -196,11 +196,6 @@ export default class ChallengeModel extends Model {
     return this.save();
   }
 
-  invalidate() {
-    this.status = 'proposé';
-    return this.save();
-  }
-
   clone() {
     let ignoredFields = ['skills', 'author'];
     if (this.isTemplate) {
