@@ -89,6 +89,7 @@ export default class ChallengeModel extends Model {
     const status = this.status;
     return (status === 'archive');
   }
+
   get alternatives() {
     if (!this.isTemplate || this.isWorkbench) {
       return [];
@@ -128,6 +129,10 @@ export default class ChallengeModel extends Model {
 
   get draftAlternatives() {
     return this.alternatives.filter(alternative => !alternative.isValidated);
+  }
+
+  get draftAlternativesWithoutArchives(){
+    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived)
   }
 
   get isTextBased() {
