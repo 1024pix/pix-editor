@@ -18,12 +18,6 @@
                   Valider
                 </button>
               {{/if}}
-              {{#if this.mayInvalidate}}
-                <button class="ui button archive item"  {{on "click" this.invalidate}} type="button">
-                  <i class="undo icon"></i>
-                  Dépublier
-                </button>
-              {{/if}}
               {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" this.archive}} type="button">
                   <i class="trash alternate icon"></i>
