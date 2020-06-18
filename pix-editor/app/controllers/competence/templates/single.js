@@ -415,24 +415,6 @@ export default class SingleController extends Controller {
       .then(() => challenge);
   }
 
-  _invalidateAlternatives(challenge) {
-    if (!challenge.isTemplate) {
-      return Promise.resolve(challenge);
-    }
-    const toInvalidate = challenge.alternatives.filter(alternative => alternative.isValidated);
-    if (toInvalidate.length === 0) {
-      return Promise.resolve(challenge);
-    }
-    let alternativesInvalidation = toInvalidate.reduce((current, alternative) => {
-      current.push(alternative.invalidate()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} dépubliée`))
-      );
-      return current;
-    }, []);
-    return Promise.all(alternativesInvalidation)
-      .then(() => challenge);
-  }
-
   _checkSkillsValidation(challenge) {
     const skills = challenge.skills;
     if (skills.length === 0) {
