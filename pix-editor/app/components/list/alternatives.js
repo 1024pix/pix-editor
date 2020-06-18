@@ -9,18 +9,24 @@ export default class AlternativesList extends SortedList {
   headers = [{
     name:'Indice',
     valuePath:'alternativeVersion',
-    maxWidth:150,
+    maxWidth:50,
   },{
     name:'Consigne',
     valuePath:'instructions',
   },{
+    name:'Langue(s)',
+    valuePath:'languages',
+    maxWidth:80,
+    minWidth:75,
+    languages:true
+  },{
     name:'Auteur',
     valuePath:'author',
-    maxWidth:150,
+    maxWidth:80,
   },{
     name:'Statut',
     valuePath:'status',
-    maxWidth:150,
+    maxWidth:130,
     style:true
   }];
 
