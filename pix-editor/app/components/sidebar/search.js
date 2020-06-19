@@ -27,7 +27,7 @@ export default class SidebarSearchComponent extends Component {
     } else if (query.substr(0, 3) === 'rec') {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
-        filterByFormula: `AND(FIND('${query}', {id persistant}) , Statut != 'archive')`,
+        filterByFormula: `AND(FIND('${query}', {id persistant}))`,
         maxRecords: 20
       })
         .then(challenges => {

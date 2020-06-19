@@ -2,7 +2,7 @@ import Route from '@ember/routing/route';
 
 export default class ChallengeRoute extends Route {
   model(params) {
-    return this.store.query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()) , Statut != 'archive')`, maxRecords:1})
+    return this.store.query('challenge', {filterByFormula:`AND(FIND('${params.challenge_id}', RECORD_ID()))`, maxRecords:1})
     .then(challenges => {
       return challenges.firstObject;
     });
