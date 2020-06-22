@@ -11,20 +11,21 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     const section = "i18n";
     const challenge1 = {
       id: 'rec456789',
-      languages: ['Francophone','Franco Français']
+      languages: ['Francophone','Franco Français'],
     };
     const challenge2 = {
       id: 'rec987654',
-      languages: ['Anglais']
+      languages: ['Anglais'],
+
     };
     const challenge3 = {
       id: 'rec147258',
-      languages: ['Francophone']
+      languages: ['Francophone'],
     };
     const skill = {
       id: 'rec123456',
       name: 'skillName',
-      productionTemplates: [challenge1,challenge2,challenge3]
+      productionChallenges: [challenge1,challenge2,challenge3]
     };
     this.set('section', section);
     this.set('skill', skill);
