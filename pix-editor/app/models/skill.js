@@ -94,6 +94,10 @@ export default class SkillModel extends Model {
     return this.challenges.filter(challenge => !challenge.isTemplate);
   }
 
+  get productionChallenges() {
+    return this.challenges.filter(challenge => challenge.isValidated);
+  }
+
   get isActive() {
     return this.status === 'actif';
   }

@@ -12,10 +12,10 @@ export default class CompetenceGridCellI18nComponent extends Component {
   }
 
   get _skillLanguages() {
-    const templates = this.args.skill.productionTemplates;
-    return templates.reduce((languages, template) => {
-      if (template.languages && template.languages.length !== 0) {
-        template.languages.forEach(language => {
+    const challenges = this.args.skill.productionChallenges;
+    return challenges.reduce((languages, challenge) => {
+      if (challenge.languages && challenge.languages.length !== 0) {
+        challenge.languages.forEach(language => {
           if (!languages.includes(language)) {
             languages.push(language);
           }
