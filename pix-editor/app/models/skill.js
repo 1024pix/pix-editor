@@ -146,7 +146,7 @@ export default class SkillModel extends Model {
   }
 
   archive() {
-    this.status = 'archivé';
+    this.status = 'périmé';
     return this.save();
   }
 
