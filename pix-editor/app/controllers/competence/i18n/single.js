@@ -16,43 +16,32 @@ export default class CompetenceI18nSingleController extends Controller {
 
   get challengesByLanguages() {
     const challenges = this.skill.productionChallenges;
-    let languages = [];
-    return challenges.reduce((acc, challenge) => {
-      for (let i = 0; i < languages.length; i++) {
-        if (!challenge.languages || this._equalArray(languages[i], challenge.languages)) {
-          return acc
-        }
+    const languages = this._skillLanguages(challenges);
+    return languages.reduce((acc,language)=>{
+      const challenge = this._findChallengeByLanguage(language,challenges)
+      acc.push({language,challenge});
+      return acc
+    },[])
+  }
+  _findChallengeByLanguage(language, challenges){
+    for (let i = 0; i < challenges.length; i++) {
+     if(challenges[i].languages.includes(language)){
+       return challenges[i]
+     }
+    }
+  }
+
+   _skillLanguages(challenges) {
+    return challenges.reduce((languages, challenge) => {
+      if (challenge.languages && challenge.languages.length !== 0) {
+        challenge.languages.forEach(language => {
+          if (!languages.includes(language)) {
+            languages.push(language);
+          }
+        });
       }
-      languages.push(challenge.languages);
-      acc.push(challenge);
-      return acc;
+      return languages;
     }, []);
-  }
-
-  _getAlternativeCountByLanguages(languages){
-    let count = 0;
-    const challenges = this.skill.productionChallenges;
-    challenges.forEach(challenge=>{
-      if(challenge.languages && this._equalArray(languages, challenge.languages)){
-        count ++
-      }
-    });
-    return count;
-  }
-
-  _equalArray(array, compare) {
-    if(!array){
-      return false;
-    }
-    if (array.length !== compare.length) {
-      return false
-    }
-    for (let i = 0; i < compare.length; i++) {
-      if (!array.includes(compare[i])) {
-        return false
-      }
-    }
-    return true
   }
 
   @action
