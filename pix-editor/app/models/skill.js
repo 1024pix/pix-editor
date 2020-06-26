@@ -146,26 +146,20 @@ export default class SkillModel extends Model {
   }
 
   archive() {
-    this.status = 'périmé';
+    this.status = 'archivé';
     return this.save();
   }
 
   _getCSSFromStatus(status) {
     switch (status) {
-      case 'pré-validé':
-        return 'prevalidated';
-      case 'Validé':
-        return 'validated';
-      case 'à soumettre':
-        return 'to-be-submitted';
-      case 'à retravailler':
-        return 'need-work';
-      case 'Proposé':
-        return 'suggested';
-      case 'archivé':
-        return 'archived';
-      case 'inapplicable':
-        return 'na';
+      case 'en contruction':
+        return 'building';
+        case 'actif':
+          return 'active';
+        case 'périmé':
+          return 'out-of-date';
+        case 'archivé':
+          return 'archived';
     }
     return 'suggested';
   }

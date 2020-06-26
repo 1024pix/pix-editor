@@ -17,7 +17,7 @@ export default class TubeModel extends Model {
   @tracked selectedLevel = false;
 
   get skills() {
-    return this.rawSkills.filter(skill => skill.status !== 'périmé');
+    return this.rawSkills.filter(skill => skill.status !== 'archivé');
   }
 
   get skillCount() {
