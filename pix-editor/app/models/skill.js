@@ -39,12 +39,12 @@ export default class SkillModel extends Model {
     }
   }
 
-  get clueCSS () {
+  get clueCSS() {
     const status = this.clueStatus;
     if (!status) {
       return 'suggested';
     } else {
-      return this._getCSSFromStatus(status);
+      return this._getCSSFromClueStatus(status);
     }
   }
 
@@ -121,12 +121,12 @@ export default class SkillModel extends Model {
   pinRelationships() {
     const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)
-    .then(tutorials => {
-      this._pinnedRelationships = {
-          tutoSolution:tutorials[0].toArray(),
-          tutoMore:tutorials[1].toArray()
-      };
-    })
+      .then(tutorials => {
+        this._pinnedRelationships = {
+          tutoSolution: tutorials[0].toArray(),
+          tutoMore: tutorials[1].toArray()
+        };
+      })
   }
 
   rollbackAttributes() {
@@ -154,12 +154,32 @@ export default class SkillModel extends Model {
     switch (status) {
       case 'en contruction':
         return 'building';
-        case 'actif':
-          return 'active';
-        case 'périmé':
-          return 'out-of-date';
-        case 'archivé':
-          return 'archived';
+      case 'actif':
+        return 'active';
+      case 'périmé':
+        return 'out-of-date';
+      case 'archivé':
+        return 'archived';
+    }
+    return 'suggested';
+  }
+
+  _getCSSFromClueStatus(status) {
+    switch (status) {
+      case 'pré-validé':
+        return 'prevalidated';
+      case 'Validé':
+        return 'validated';
+      case 'à soumettre':
+        return 'to-be-submitted';
+      case 'à retravailler':
+        return 'need-work';
+      case 'Proposé':
+        return 'suggested';
+      case 'archivé':
+        return 'archived';
+      case 'inapplicable':
+        return 'na';
     }
     return 'suggested';
   }
