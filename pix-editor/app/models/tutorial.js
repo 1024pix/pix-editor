@@ -11,6 +11,7 @@ export default class TutorialModel extends Model {
   @attr date;
   @attr crush;
   @attr pixId;
+  @attr language;
 
   @hasMany('tag') tags;
 
