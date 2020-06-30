@@ -4,15 +4,15 @@
   </label>
   {{#if @edition}}
     <PowerSelect
-      @searchEnabled={{true}}
-      @search={{this.getSearchTutorialResults}}
-      @placeholder="commencer la recherche par > pour rechercher par Tag"
-      @onChange={{this.addTutorial}}
-      @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}}
-      @triggerComponent="power-select/custom-trigger"
-      @searchMessage=""
-      @searchPlaceholder="Rechercher..."
-      @loadingMessage="Recherche en cours..." as |result|>
+            @searchEnabled={{true}}
+            @search={{this.getSearchTutorialResults}}
+            @placeholder="commencer la recherche par > pour rechercher par Tag"
+            @onChange={{this.addTutorial}}
+            @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}}
+            @triggerComponent="power-select/custom-trigger"
+            @searchMessage=""
+            @searchPlaceholder="Rechercher..."
+            @loadingMessage="Recherche en cours..." as |result|>
       <div class="search-title">
         {{#if (eq this.repo.id "create")}}
           {{result.title}} <i class="add icon"></i>
@@ -53,11 +53,12 @@
               <div>Format : {{tutorial.format}}</div>
               <div>Durée : {{tutorial.duration}}</div>
               <div>Source : {{tutorial.source}}
-                {{#if tutorial.crush}}
-                  <div class="ui right floated">
+                <div class="ui right floated">
+                  <i class="{{convert-language-as-flag tutorial.language}} flag" title="{{tutorial.language}}"></i>
+                  {{#if tutorial.crush}}
                     <i class="red heart icon"></i>
-                  </div>
-                {{/if}}
+                  {{/if}}
+                </div>
               </div>
             </div>
           </div>
@@ -73,5 +74,6 @@
   {{/if}}
 </div>
 {{#if this.displayTutorialPopin}}
-  <PopIn::Tutorial @tutorial={{this.newTutorial}} @close={{this.closeTutorialPopin}} @saveTutorial={{this.saveTutorial}}/>
+  <PopIn::Tutorial @tutorial={{this.newTutorial}} @close={{this.closeTutorialPopin}}
+                   @saveTutorial={{this.saveTutorial}}/>
 {{/if}}
