@@ -11,10 +11,10 @@
       <div class="ui deny button" {{on "click" @close}}>
         Annuler
       </div>
-      <div {{on "click" @saveTutorial}} class="ui positive right labeled icon button">
+      <button type="button" {{on "click" @saveTutorial}} class="ui positive right labeled icon button" disabled={{this.haveEmptyMandatoryField}}>
         Enregistrer
         <i class="save icon"></i>
-      </div>
+      </button>
     </div>
   </div>
 </ModalDialog>
