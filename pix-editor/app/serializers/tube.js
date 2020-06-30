@@ -8,7 +8,11 @@ export default class TubeSerializer extends ApplicationSerializer {
     title: 'Titre',
     description: 'Description',
     practicalTitle: 'Titre pratique',
+    practicalTitleFr: 'Titre pratique fr-fr',
+    practicalTitleEn: 'Titre pratique en-us',
     practicalDescription: 'Description pratique',
+    practicalDescriptionFr: 'Description pratique fr-fr',
+    practicalDescriptionEn: 'Description pratique en-us',
     competence: 'Competences',
     rawSkills: 'Acquis',
     pixId: 'id persistant'
