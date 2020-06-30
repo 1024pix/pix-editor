@@ -15,7 +15,19 @@
     </div>
     <div class="field">
       <label>Source *</label>
-      <Input @type="text" @value={{@tutorial.source}} placeholder="Source" />
+      <PowerSelect
+              @searchEnabled={{true}}
+              @selected={{@tutorial.source}}
+              @search={{this.getSearchSourceResults}}
+              @placeholder="Source"
+              @onChange={{fn (mut @tutorial.source)}}
+              @dropdownClass="search-result tutorial-search"
+              @triggerComponent="power-select/custom-trigger"
+              @searchMessage=""
+              @searchPlaceholder="Rechercher..."
+              @loadingMessage="Recherche en cours..." as |result|>
+            {{result}}
+      </PowerSelect>
     </div>
     <Field::Select @title="Licence" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
   </div>
