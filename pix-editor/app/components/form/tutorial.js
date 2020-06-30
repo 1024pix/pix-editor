@@ -8,6 +8,7 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options =  {
+    'language': ['fr-fr', 'en-us'],
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
     'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     'license': ['CC-BY-SA', '(c)', 'Youtube']

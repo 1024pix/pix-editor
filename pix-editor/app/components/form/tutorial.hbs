@@ -1,7 +1,12 @@
 <form class="ui form">
-  <div class="field">
-    <label>Titre</label>
-    <Input @type="text" @value={{@tutorial.title}} placeholder="Titre" />
+  <div class="fields">
+    <div class="twelve wide field">
+      <label>Titre</label>
+      <Input @type="text" @value={{@tutorial.title}} placeholder="Titre" />
+    </div>
+    <div class="four wide field">
+      <Field::Select @title="Langue" @defaultText="Langue" @value={{@tutorial.language}} @options={{this.options.language}} @edition={{true}} @setValue={{fn (mut @tutorial.language)}}/>
+    </div>
   </div>
   <div class="three fields">
     <div class="field">
@@ -12,7 +17,7 @@
       <label>Source</label>
       <Input @type="text" @value={{@tutorial.source}} placeholder="Source" />
     </div>
-    <Field::Select @title="License" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
+    <Field::Select @title="Licence" @defaultText="Licence" @value={{@tutorial.license}} @options={{this.options.license}} @edition={{true}} @setValue={{fn (mut @tutorial.license)}}/>
   </div>
   <div class="three fields">
     <Field::Select @title="Format" @defaultText="Format" @value={{@tutorial.format}} @options={{this.options.format}} @edition={{true}} @setValue={{fn (mut @tutorial.format)}}/>
