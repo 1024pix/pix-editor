@@ -21,7 +21,7 @@ module('Unit | Helpers | get alternative count by language', function () {
       const skill = {
         id: 'rec123456',
         name: 'skillName',
-        productionChallenges: [challenge1,challenge2,challenge3]
+        validatedChallenges: [challenge1,challenge2,challenge3]
       };
       const language = 'Anglais'
 

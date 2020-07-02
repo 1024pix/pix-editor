@@ -15,7 +15,7 @@ export default class CompetenceI18nSingleController extends Controller {
   skill;
 
   get challengesByLanguages() {
-    const challenges = this.skill.productionChallenges;
+    const challenges = this.skill.validatedChallenges;
     const languages = this._skillLanguages(challenges);
     return languages.reduce((acc,language)=>{
       const challenge = this._findChallengeByLanguage(language,challenges)

@@ -25,7 +25,7 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     const skill = {
       id: 'rec123456',
       name: 'skillName',
-      productionChallenges: [challenge1,challenge2,challenge3]
+      validatedChallenges: [challenge1,challenge2,challenge3]
     };
     this.set('section', section);
     this.set('skill', skill);

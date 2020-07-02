@@ -2,7 +2,7 @@ import { helper } from '@ember/component/helper';
 
 export function getAlternativeCountByLanguages([skill, language]) {
   let count = 0;
-  const challenges = skill.productionChallenges;
+  const challenges = skill.validatedChallenges;
   challenges.forEach(challenge=>{
     if(challenge.languages && challenge.languages.includes(language)){
       count ++;

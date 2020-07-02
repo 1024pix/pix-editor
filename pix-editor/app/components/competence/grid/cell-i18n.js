@@ -12,7 +12,7 @@ export default class CompetenceGridCellI18nComponent extends Component {
   }
 
   get _skillLanguages() {
-    const challenges = this.args.skill.productionChallenges;
+    const challenges = this.args.skill.validatedChallenges;
     return challenges.reduce((languages, challenge) => {
       return this._extractLanguagesFromChallenge(challenge.languages,languages);
     }, []);

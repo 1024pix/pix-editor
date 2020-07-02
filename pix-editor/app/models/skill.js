@@ -94,7 +94,7 @@ export default class SkillModel extends Model {
     return this.challenges.filter(challenge => !challenge.isTemplate);
   }
 
-  get productionChallenges() {
+  get validatedChallenges() {
     return this.challenges.filter(challenge => challenge.isValidated);
   }
 

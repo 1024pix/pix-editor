@@ -18,7 +18,7 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
       id: 'rec123456',
       name: 'skill1',
       productionTemplates: [challenge],
-      productionChallenges: [challenge]
+      validatedChallenges: [challenge]
     };
     this.set('section', section);
     this.set('skill', skill);

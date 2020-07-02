@@ -28,7 +28,7 @@ module('Integration | Component | list/i18n', function(hooks) {
     const skill = {
       id: 'rec123456',
       name: 'skillName',
-      productionChallenges: [challenge2,challenge1,challenge3, challenge4]
+      validatedChallenges: [challenge2,challenge1,challenge3, challenge4]
     };
     const challengesByLanguages = [
       {language: 'Francophone',challenge: challenge1},
