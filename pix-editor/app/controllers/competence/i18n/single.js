@@ -23,6 +23,7 @@ export default class CompetenceI18nSingleController extends Controller {
       return acc
     },[])
   }
+
   _findChallengeByLanguage(language, challenges){
     for (let i = 0; i < challenges.length; i++) {
      if(challenges[i].languages.includes(language)){
@@ -33,15 +34,19 @@ export default class CompetenceI18nSingleController extends Controller {
 
    _skillLanguages(challenges) {
     return challenges.reduce((languages, challenge) => {
-      if (challenge.languages && challenge.languages.length !== 0) {
-        challenge.languages.forEach(language => {
-          if (!languages.includes(language)) {
-            languages.push(language);
-          }
-        });
-      }
-      return languages;
+      return this._extractLanguagesFromChallenge(challenge.languages,languages);
     }, []);
+  }
+
+  _extractLanguagesFromChallenge(challengeLanguages, extractedLanguages){
+    if (challengeLanguages && challengeLanguages.length !== 0) {
+      challengeLanguages.forEach(language => {
+        if (!extractedLanguages.includes(language)) {
+          extractedLanguages.push(language);
+        }
+      });
+    }
+    return extractedLanguages;
   }
 
   @action
