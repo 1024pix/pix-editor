@@ -44,6 +44,6 @@ module('Integration | Component | list/i18n', function(hooks) {
 
     // then
     assert.equal(this.element.querySelectorAll('.challenge-template').length, 3);
-    assert.equal(this.element.querySelectorAll('.challenge-template .alternatives')[1].textContent.trim(), "2");
+    assert.equal(this.element.querySelectorAll('.challenge-template .alternatives-count')[1].textContent.trim(), "2");
   });
 });
