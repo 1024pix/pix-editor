@@ -11,7 +11,7 @@
       <div class="ui deny button" {{on "click" @close}}>
         Annuler
       </div>
-      <button type="button" {{on "click" @saveTutorial}} class="ui positive right labeled icon button" disabled={{this.haveEmptyMandatoryField}}>
+      <button type="button" {{on "click" @saveTutorial}} class="ui positive right labeled icon button" disabled={{this.hasEmptyMandatoryField}}>
         Enregistrer
         <i class="save icon"></i>
       </button>

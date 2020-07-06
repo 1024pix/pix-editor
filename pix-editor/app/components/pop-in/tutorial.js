@@ -2,7 +2,7 @@ import Component from '@glimmer/component';
 
 export default class PopInTutorialComponent extends Component {
 
-  get haveEmptyMandatoryField() {
+  get hasEmptyMandatoryField() {
     const tutorial = this.args.tutorial
     return this._fieldIsEmpty(tutorial.language)
       || this._fieldIsEmpty(tutorial.title)
