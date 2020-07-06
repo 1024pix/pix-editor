@@ -14,7 +14,7 @@ export default class ApplicationSerializer extends DS.RESTSerializer {
   normalizeResponse(store, type, payload) {
     const modelNamePlural = pluralize(type.modelName);
 
-    if(payload.records) {
+    if (payload.records) {
       payload[modelNamePlural] = payload.records;
       delete payload.records;
 
@@ -45,7 +45,7 @@ export default class ApplicationSerializer extends DS.RESTSerializer {
   }
 
   serialize(snapshot, options) {
-    let json = super.serialize(snapshot, options);
+    const json = super.serialize(snapshot, options);
 
     delete json.created;
 
@@ -70,8 +70,8 @@ export default class ApplicationSerializer extends DS.RESTSerializer {
     if (relationship.options && relationship.options.readOnly) {
       return;
     }
-    let key = relationship.key;
-    let belongsToId = snapshot.belongsTo(key, { id: true });
+    const key = relationship.key;
+    const belongsToId = snapshot.belongsTo(key, { id: true });
 
     // if provided, use the mapping provided by `attrs` in
     // the serializer

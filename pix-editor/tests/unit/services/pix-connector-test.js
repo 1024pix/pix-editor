@@ -6,7 +6,7 @@ module('Unit | Service | pixConnector', function(hooks) {
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let service = this.owner.lookup('service:pix-connector');
+    const service = this.owner.lookup('service:pix-connector');
     assert.ok(service);
   });
 });

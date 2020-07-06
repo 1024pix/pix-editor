@@ -6,7 +6,7 @@ module('Unit | Adapter | changelog entry', function(hooks) {
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let adapter = this.owner.lookup('adapter:changelog-entry');
+    const adapter = this.owner.lookup('adapter:changelog-entry');
     assert.ok(adapter);
   });
 });

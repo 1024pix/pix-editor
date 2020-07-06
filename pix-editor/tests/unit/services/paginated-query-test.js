@@ -6,7 +6,7 @@ module('Unit | Service | paginatedQuery', function(hooks) {
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let service = this.owner.lookup('service:paginated-query');
+    const service = this.owner.lookup('service:paginated-query');
     assert.ok(service);
   });
 });

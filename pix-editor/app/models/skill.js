@@ -5,7 +5,7 @@ export default class SkillModel extends Model {
 
   _pinnedRelationships = {};
 
-  @attr('string', {readOnly: true}) name;
+  @attr('string', { readOnly: true }) name;
   @attr competence;
   @attr clue;
   @attr clueEn;
@@ -112,15 +112,15 @@ export default class SkillModel extends Model {
 
   get languages () {
     const skillLanguagesMap = this.languagesAndAlternativesCount;
-    if(skillLanguagesMap){
-     return [...skillLanguagesMap.keys()];
+    if (skillLanguagesMap) {
+      return [...skillLanguagesMap.keys()];
     }
     return [];
   }
 
   getNextVersion() {
     return this.templates.reduce((current, template) => {
-      let version = template.version;
+      const version = template.version;
       if (version > current) {
         return version;
       }
@@ -146,7 +146,7 @@ export default class SkillModel extends Model {
           tutoSolution: tutorials[0].toArray(),
           tutoMore: tutorials[1].toArray()
         };
-      })
+      });
   }
 
   rollbackAttributes() {
@@ -204,13 +204,13 @@ export default class SkillModel extends Model {
     return 'suggested';
   }
 
-  _extractLanguagesAndAlternativesCountFromChallenges(extractedLanguages, challengeLanguages){
-    if(challengeLanguages){
+  _extractLanguagesAndAlternativesCountFromChallenges(extractedLanguages, challengeLanguages) {
+    if (challengeLanguages) {
       challengeLanguages.forEach(language => {
         if (!extractedLanguages.has(language)) {
           extractedLanguages.set(language, 1);
         } else {
-          extractedLanguages.set(language, extractedLanguages.get(language)+1);
+          extractedLanguages.set(language, extractedLanguages.get(language) + 1);
         }
       });
     }

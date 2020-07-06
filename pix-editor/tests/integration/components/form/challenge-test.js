@@ -11,7 +11,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Handle any actions with this.set('myAction', function(val) { ... });
 
     this.set('showIllustrationAction', function() {});
-    this.set('challengeData', {t1:false, t2:false, t3:false})
+    this.set('challengeData', { t1:false, t2:false, t3:false });
 
     await render(hbs`{{form/challenge showIllustration=(action showIllustrationAction) challenge=challengeData}}`);
 

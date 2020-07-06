@@ -27,7 +27,7 @@ export default class ChallengeForm extends Component {
 
   get helpSuggestions() {
     const type = this.args.challenge.type;
-    switch(type) {
+    switch (type) {
       case 'QCU':
         return '- réponse 1<br>- réponse 2<br>- ...';
       case 'QCM':
@@ -47,7 +47,7 @@ export default class ChallengeForm extends Component {
 
   get helpAnswers() {
     const type = this.args.challenge.type;
-    switch(type) {
+    switch (type) {
       case 'QCU':
         return 'n<br><br><i>n = numéro de la bonne réponse</i>';
       case 'QCM':
@@ -65,7 +65,7 @@ export default class ChallengeForm extends Component {
 
   get typeIsQROC() {
     const type = this.args.challenge.type;
-    switch(type){
+    switch (type) {
       case 'QROC':
       case 'QROCM-ind':
       case 'QROCM-dep':

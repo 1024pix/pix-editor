@@ -5,7 +5,7 @@ module('Unit | Route | target-profile', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:target-profile');
+    const route = this.owner.lookup('route:target-profile');
     assert.ok(route);
   });
 });

@@ -76,7 +76,7 @@ export default class StatisticsI18nComponent extends Component {
                   if (!current.has(area)) {
                     current.set(area, [0,0]);
                   }
-                  let value = current.get(area);
+                  const value = current.get(area);
                   if (challenge.isValidated) {
                     value[0]++;
                     current.set(area, value);
@@ -94,12 +94,12 @@ export default class StatisticsI18nComponent extends Component {
           const countries = current.countries;
           const areaCounts = [[0,0],[0,0],[0,0],[0,0]];
 
-          for (let [country, values] of competenceCountries) {
+          for (const [country, values] of competenceCountries) {
             if (!countries.has(country)) {
               countries.set(country, values);
             } else {
               const counts = countries.get(country);
-              countries.set(country, [counts[0]+values[0], counts[1]+values[1]]);
+              countries.set(country, [counts[0] + values[0], counts[1] + values[1]]);
             }
             if (this._i18nAreas.has(country)) {
               const index = this._i18nAreas.get(country);
@@ -110,7 +110,7 @@ export default class StatisticsI18nComponent extends Component {
           current.areas[competence.code] = areaCounts;
           return current;
         }, current);
-      }, {areas:{}, countries:new Map()});
+      }, { areas:{}, countries:new Map() });
     }
     return this._i18nCountryCounts;
   }
@@ -136,10 +136,10 @@ export default class StatisticsI18nComponent extends Component {
   get i18nNeutralTotal() {
     if (!this._i18nNeutralTotal) {
       this._i18nNeutralTotal = Object.values(this.i18nData).reduce((current, value) => {
-        current.validated+=value.neutralValidated;
-        current.suggested+=value.neutralSuggested;
+        current.validated += value.neutralValidated;
+        current.suggested += value.neutralSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nNeutralTotal;
   }
@@ -147,10 +147,10 @@ export default class StatisticsI18nComponent extends Component {
   get i18nAfricaTotal() {
     if (!this._i18nAfricaTotal) {
       this._i18nAfricaTotal = Object.values(this.i18nData).reduce((current, value) => {
-        current.validated+=value.africaValidated;
-        current.suggested+=value.africaSuggested;
+        current.validated += value.africaValidated;
+        current.suggested += value.africaSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nAfricaTotal;
   }
@@ -158,10 +158,10 @@ export default class StatisticsI18nComponent extends Component {
   get i18nOccidentTotal() {
     if (!this._i18nOccidentTotal) {
       this._i18nOccidentTotal = Object.values(this.i18nData).reduce((current, value) => {
-        current.validated+=value.occidentValidated;
-        current.suggested+=value.occidentSuggested;
+        current.validated += value.occidentValidated;
+        current.suggested += value.occidentSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nOccidentTotal;
   }
@@ -169,10 +169,10 @@ export default class StatisticsI18nComponent extends Component {
   get i18nUnescoTotal() {
     if (!this._i18nUnescoTotal) {
       this._i18nUnescoTotal = Object.values(this.i18nData).reduce((current, value) => {
-        current.validated+=value.unescoValidated;
-        current.suggested+=value.unescoSuggested;
+        current.validated += value.unescoValidated;
+        current.suggested += value.unescoSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nUnescoTotal;
   }
@@ -237,7 +237,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 1);
       this._i18nOccidentCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }
@@ -250,7 +250,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 2);
       this._i18nAfricanCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }
@@ -263,7 +263,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 3);
       this._i18nUnescoCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }

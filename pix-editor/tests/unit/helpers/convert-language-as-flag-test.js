@@ -3,8 +3,8 @@ import { convertLanguageAsFlag } from '../../../helpers/convert-language-as-flag
 
 module('Unit | Helpers | convert language as flag', function () {
   [
-    {expected: 'fr', language: 'Francophone'},
-    {expected: 'fr fr-fr', language: 'Franco Français'}
+    { expected: 'fr', language: 'Francophone' },
+    { expected: 'fr fr-fr', language: 'Franco Français' }
   ].forEach(item => {
     test(`it should return ${item.expected} if language is ${item.language}`, function (assert) {
       // when

@@ -8,7 +8,7 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
 
   test('it should display one flag by uniq language', async function(assert) {
     // given
-    const section = "i18n";
+    const section = 'i18n';
 
     const skill = {
       id: 'rec123456',
@@ -21,7 +21,7 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     // when
     await render(hbs`<Competence::Grid::CellI18n @skill={{this.skill}}/>`);
     // then
-    assert.equal(this.element.querySelector('.skill-i18n-name').innerText.trim(), 'skillName')
+    assert.equal(this.element.querySelector('.skill-i18n-name').innerText.trim(), 'skillName');
 
     assert.equal(this.element.querySelectorAll('.flag').length, 3);
   });

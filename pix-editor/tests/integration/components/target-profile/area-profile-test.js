@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -14,17 +14,17 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     const competence_1 = EmberObject.create({
       name: 'competence_1',
       selectedProductionTubeCount: 2,
-      productionTubes: [{selectedLevel: 5}, {selectedLevel: 5}]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
     });
     const competence_2 = EmberObject.create({
       name: 'competence_2',
       selectedProductionTubeCount: 0,
-      productionTubes: [{selectedLevel: false}, {selectedLevel: false}]
+      productionTubes: [{ selectedLevel: false }, { selectedLevel: false }]
     });
     const competence_3 = EmberObject.create({
       name: 'competence_1',
       selectedProductionTubeCount: 2,
-      productionTubes: [{selectedLevel: 5}, {selectedLevel: 5}]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
     });
 
 
@@ -45,6 +45,6 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     //then
 
-    assert.equal(this.element.querySelectorAll('.competence-profile').length, 2)
+    assert.equal(this.element.querySelectorAll('.competence-profile').length, 2);
   });
 });

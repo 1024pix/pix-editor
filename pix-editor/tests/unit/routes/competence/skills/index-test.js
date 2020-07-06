@@ -5,7 +5,7 @@ module('Unit | Route | competence/skills/index', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/skills/index');
+    const route = this.owner.lookup('route:competence/skills/index');
     assert.ok(route);
   });
 });

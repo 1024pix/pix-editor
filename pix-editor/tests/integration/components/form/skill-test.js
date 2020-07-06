@@ -10,7 +10,7 @@ module('Integration | Component | skill-form', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    this.set('skill', {i18n:false});
+    this.set('skill', { i18n:false });
 
 
     await render(hbs`{{form/skill skill=skill}}`);

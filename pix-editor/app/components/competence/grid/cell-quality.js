@@ -46,14 +46,14 @@ export default class CellQuality extends Component {
     const blind = this._isNonTested(productionTemplate.accessibility1);
     const colorblind = this._isNonTested(productionTemplate.accessibility2);
     const skillClue = this.args.skill.clueStatus;
-    const clue = skillClue?skillClue:'Pas d\'indice';
+    const clue = skillClue ? skillClue : 'Pas d\'indice';
     const skillTimer = productionTemplate.timer;
-    const timer = skillTimer?`<tr><td>Timer</td><td>${skillTimer} s</td></tr>`:'';
+    const timer = skillTimer ? `<tr><td>Timer</td><td>${skillTimer} s</td></tr>` : '';
     const classTuto = this.classTutorial;
     const tutoSolutionCount = this.args.skill.tutoSolutionCount;
     const tutoMoreCount = this.args.skill.tutoMoreCount;
-    const haveTuto = classTuto?`<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
-                                <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>`:'';
+    const haveTuto = classTuto ? `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
+                                <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>` : '';
     return htmlSafe(`<tr><td>Spoil </td><td> ${spoil} </td></tr>
             <tr><td>Responsive </td><td> ${responsive} </td></tr>
             <tr><td>Non/Mal voyant </td><td> ${blind} </td></tr>

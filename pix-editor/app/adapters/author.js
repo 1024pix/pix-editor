@@ -5,7 +5,7 @@ export default class AuthorAdapter extends ApplicationAdapter {
   @service config;
 
   get namespace() {
-    return 'v0/'+this.config.airtableEditorBase;
+    return 'v0/' + this.config.airtableEditorBase;
   }
 
   pathForType() {

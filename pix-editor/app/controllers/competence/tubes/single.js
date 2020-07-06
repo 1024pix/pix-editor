@@ -3,8 +3,8 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
 import { inject as controller } from '@ember/controller';
-import {scheduleOnce} from '@ember/runloop';
-import {tracked} from '@glimmer/tracking';
+import { scheduleOnce } from '@ember/runloop';
+import { tracked } from '@glimmer/tracking';
 
 export default class SingleController extends Controller {
 
@@ -42,7 +42,7 @@ export default class SingleController extends Controller {
 
   _scrollToTop() {
     const tubeData = document.querySelector('.tube-data');
-    if(tubeData){
+    if (tubeData) {
       tubeData.scrollTop = 0;
     }
   }
@@ -74,9 +74,9 @@ export default class SingleController extends Controller {
   @action
   cancelEdit() {
     this.edition = false;
-    let tube = this.tube;
+    const tube = this.tube;
     tube.rollbackAttributes();
-    let previousState = this.wasMaximized;
+    const previousState = this.wasMaximized;
     if (!previousState) {
       this.send('minimize');
     }
@@ -86,19 +86,19 @@ export default class SingleController extends Controller {
   @action
   save() {
     this.loader.start();
-    let tube = this.tube;
+    const tube = this.tube;
     return tube.save()
-    .then(()=> {
-      this.edition = false;
-      this.loader.stop();
-      this.notify.message('Tube mis à jour');
-      return tube.hasMany('rawSkills').reload();
-    })
-    .catch((error) => {
-      console.error(error);
-      this.loader.stop();
-      this.notify.error('Erreur lors de la mise à jour du tube');
-    });
+      .then(()=> {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message('Tube mis à jour');
+        return tube.hasMany('rawSkills').reload();
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la mise à jour du tube');
+      });
   }
 
   @action
@@ -108,7 +108,7 @@ export default class SingleController extends Controller {
 
   @action
   selectCompetence() {
-   this.displaySelectLocation = true;
+    this.displaySelectLocation = true;
   }
 
   @action
@@ -118,19 +118,19 @@ export default class SingleController extends Controller {
 
   @action
   setCompetence(newCompetence) {
-    let tube = this.tube;
+    const tube = this.tube;
     this.loader.start();
     tube.competence = newCompetence;
     return tube.save()
-    .then(() => {
-      this.loader.stop();
-      this.notify.message('Tube mis à jour');
-      this.transitionToRoute('competence.tubes.single', newCompetence, tube);
-    })
-    .catch((error) => {
-      console.error(error);
-      this.loader.stop();
-      this.notify.error('Erreur lors de la mise à jour du tube');
-    });
+      .then(() => {
+        this.loader.stop();
+        this.notify.message('Tube mis à jour');
+        this.transitionToRoute('competence.tubes.single', newCompetence, tube);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la mise à jour du tube');
+      });
   }
 }

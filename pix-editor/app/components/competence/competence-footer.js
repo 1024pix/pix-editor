@@ -6,7 +6,7 @@ export default class CompetenceFooter extends Component {
   @service access;
 
   get skillClass() {
-    return this.args.section === 'skills'?' skill-mode ':'';
+    return this.args.section === 'skills' ? ' skill-mode ' : '';
   }
 
   get displayWorkbenchViews() {

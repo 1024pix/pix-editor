@@ -53,11 +53,11 @@ export default class ApplicationController extends Controller {
 
   showMessage(content, positive) {
     const messages = this.messages;
-    const id = 'message_'+Date.now();
-    messages.pushObject({text:content, positive:positive?true:false, id:id});
+    const id = 'message_' + Date.now();
+    messages.pushObject({ text:content, positive:positive ? true : false, id:id });
     window.setTimeout(()=> {
       const nodeMessage = document.getElementById(id);
-      if(nodeMessage){
+      if (nodeMessage) {
         nodeMessage.addEventListener('transitionend', ()=>{
           messages.removeAt(0);
         });

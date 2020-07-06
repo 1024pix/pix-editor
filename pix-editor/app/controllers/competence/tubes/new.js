@@ -12,30 +12,30 @@ export default class NewController extends Tube {
   @action
   save() {
     this.loader.start();
-    let tube = this.tube;
+    const tube = this.tube;
     const competence = this.currentData.getCompetence();
     tube.competence = competence;
     return tube.save()
-    .then(() => {
-      this.edition = false;
-      this.loader.stop();
-      this.notify.message('Tube créé');
-    })
-    .then(() => {
-      this.transitionToRoute('competence.tubes.single', competence, tube);
-    })
-    .catch((error) => {
-      console.error(error);
-      this.loader.stop();
-      this.notify.error('Erreur lors de la création du tube');
-    });
+      .then(() => {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message('Tube créé');
+      })
+      .then(() => {
+        this.transitionToRoute('competence.tubes.single', competence, tube);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la création du tube');
+      });
   }
 
   @action
   cancelEdit() {
     this.store.deleteRecord(this.tube);
     this.edition = false;
-    this.notify.message('Création annulée')
+    this.notify.message('Création annulée');
     this.parentController.send('closeChildComponent');
   }
 }

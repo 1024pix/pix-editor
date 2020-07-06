@@ -7,7 +7,7 @@ export default class NewRoute extends Tube {
   @service idGenerator;
 
   model() {
-    return this.store.createRecord('tube', {pixId:this.idGenerator.newId()});
+    return this.store.createRecord('tube', { pixId:this.idGenerator.newId() });
   }
 
   setupController(controller) {

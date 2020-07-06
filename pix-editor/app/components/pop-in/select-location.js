@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
+import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
 import { inject as service } from '@ember/service';
@@ -76,7 +76,7 @@ export default class PopinSelectLocation extends Component {
       return this.tubes.map(tube => ({
         label:tube.name,
         data:tube
-      }))
+      }));
     }
   }
 
@@ -84,10 +84,10 @@ export default class PopinSelectLocation extends Component {
     if (this.selectedCompetence) {
       const competence = this.selectedCompetence.data;
       competence.get('rawTubes')
-      .then(() => {
-        this._tubes = competence.get('sortedTubes');
-        this.tubesLoaded = true;
-      });
+        .then(() => {
+          this._tubes = competence.get('sortedTubes');
+          this.tubesLoaded = true;
+        });
     }
   }
 
@@ -107,21 +107,21 @@ export default class PopinSelectLocation extends Component {
     if (!this.levelsLoaded && this.tubesLoaded && this.selectedTube) {
       const selectedTube = this.selectedTube.data;
       return selectedTube.rawSkills
-      .then(() => {
-        const skills = selectedTube.filledSkills;
-        const selectEmptyLevels = this.args.selectEmptyLevels;
-        this._levels = skills.reduce((table, skill, index) => {
-          if (skill === false) {
-            if (selectEmptyLevels) {
+        .then(() => {
+          const skills = selectedTube.filledSkills;
+          const selectEmptyLevels = this.args.selectEmptyLevels;
+          this._levels = skills.reduce((table, skill, index) => {
+            if (skill === false) {
+              if (selectEmptyLevels) {
+                table.push(index + 1);
+              }
+            } else if (!selectEmptyLevels) {
               table.push(index + 1);
             }
-          } else if (!selectEmptyLevels) {
-            table.push(index + 1);
-          }
-          return table;
-        }, []);
-        this.levelsLoaded = true;
-      })
+            return table;
+          }, []);
+          this.levelsLoaded = true;
+        });
     }
     return this._levels;
   }
@@ -168,8 +168,8 @@ export default class PopinSelectLocation extends Component {
         }
         const tubeSkills = this.selectedTube.data.filledSkills;
         const selectedSkills = levels.map(level => {
-          return tubeSkills[level-1];
-        })
+          return tubeSkills[level - 1];
+        });
         this.args.onChange(selectedSkills);
       }
     } else {

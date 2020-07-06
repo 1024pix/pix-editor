@@ -22,7 +22,7 @@ export default class PopinChallengeLog extends Component {
 
   get notes() {
     if (!this.notesLoaded) {
-      return this._loadNotes()
+      return this._loadNotes();
     }
     return this._notes;
   }
@@ -44,13 +44,13 @@ export default class PopinChallengeLog extends Component {
       const challenge = this.args.challenge;
       if (challenge) {
         const pq = this.paginatedQuery;
-        const production = (challenge.workbench?'non':'oui');
-        return pq.query('changelogEntry', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{field: 'Date', direction: 'desc'}]})
-        .then(entries => {
-          this._entries = entries;
-          this.changelogLoaded = true;
-          return entries;
-        })
+        const production = (challenge.workbench ? 'non' : 'oui');
+        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+          .then(entries => {
+            this._entries = entries;
+            this.changelogLoaded = true;
+            return entries;
+          });
       }
     }
     return this._entries;
@@ -80,7 +80,7 @@ export default class PopinChallengeLog extends Component {
   @action
   addNote() {
     const competence = this.args.challenge.firstSkill.tube.get('competence');
-    let newNote = this.store.createRecord('note', {
+    const newNote = this.store.createRecord('note', {
       challengeId:this.args.challenge.pixId,
       author:this.config.author,
       competence:competence.get('code'),
@@ -99,11 +99,11 @@ export default class PopinChallengeLog extends Component {
       entry.createdAt = (new Date()).toISOString();
     }
     entry.save()
-    .then(() => {
-      this.list = true;
-      this.changelogLoaded = false;
-      this.notesLoaded = false;
-    });
+      .then(() => {
+        this.list = true;
+        this.changelogLoaded = false;
+        this.notesLoaded = false;
+      });
   }
 
   @action
@@ -152,14 +152,14 @@ export default class PopinChallengeLog extends Component {
   _loadNotes() {
     const challenge = this.args.challenge;
     if (challenge) {
-      const production = (challenge.workbench?'non':'oui');
+      const production = (challenge.workbench ? 'non' : 'oui');
       const pq = this.paginatedQuery;
-      return pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
-      .then(notes => {
-        this._notes = notes;
-        this.notesLoaded = true;
-        return notes;
-      });
+      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        .then(notes => {
+          this._notes = notes;
+          this.notesLoaded = true;
+          return notes;
+        });
     }
   }
 

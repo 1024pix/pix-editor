@@ -3,7 +3,7 @@ import { action } from '@ember/object';
 
 export default class SingleRoute extends Route {
   model(params) {
-    return this.store.findRecord('challenge', params.alternative_id)
+    return this.store.findRecord('challenge', params.alternative_id);
   }
 
   setupController(controller) {

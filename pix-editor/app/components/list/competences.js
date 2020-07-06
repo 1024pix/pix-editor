@@ -36,7 +36,7 @@ export default class CompetencesList extends SortedList {
     this.router.transitionTo(this.args.link, this.args.competenceModel, row);
   }
 
-  get current(){
+  get current() {
     return this.currentData.getTemplate();
   }
 

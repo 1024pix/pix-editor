@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 
@@ -9,7 +9,7 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
 
   test('it renders', async function (assert) {
     // given
-    const section = "i18n";
+    const section = 'i18n';
     const challenge = {
       id: 'rec456789',
       languages: ['Francophone'],

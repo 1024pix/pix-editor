@@ -45,7 +45,7 @@ export default class ChallengeSerializer extends ApplicationSerializer {
   }
 
   extractAttributes() {
-    let attributes = super.extractAttributes(...arguments);
+    const attributes = super.extractAttributes(...arguments);
     ['t1', 't2', 't3'].forEach((key) => {
       if (attributes[key]) {
         if (attributes[key] === 'Activé') {
@@ -63,16 +63,16 @@ export default class ChallengeSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (['t1', 't2', 't3'].includes(key)) {
-      let payloadKey =  this._getMappedKey(key, snapshot.type);
-      let value = snapshot.attr(key);
+      const payloadKey =  this._getMappedKey(key, snapshot.type);
+      const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'Activé';
       } else {
         json[payloadKey] = 'Désactivé';
       }
-    } else if (key === 'attachements'){
-      let payloadKey =  this._getMappedKey(key, snapshot.type);
-      let value = snapshot.attr(key);
+    } else if (key === 'attachements') {
+      const payloadKey =  this._getMappedKey(key, snapshot.type);
+      const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = value.reverse();
       }

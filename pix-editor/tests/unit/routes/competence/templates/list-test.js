@@ -5,7 +5,7 @@ module('Unit | Route | competence/templates/list', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/templates/list');
+    const route = this.owner.lookup('route:competence/templates/list');
     assert.ok(route);
   });
 });

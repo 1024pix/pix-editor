@@ -18,7 +18,7 @@ export default class NoteSerializer extends ApplicationSerializer {
   }
 
   extractAttributes() {
-    let attributes = super.extractAttributes(...arguments);
+    const attributes = super.extractAttributes(...arguments);
     ['changelog', 'production'].forEach((key) => {
       if (attributes[key]) {
         if (attributes[key] === 'oui') {
@@ -33,8 +33,8 @@ export default class NoteSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (['changelog', 'production'].includes(key)) {
-      let payloadKey =  this._getMappedKey(key, snapshot.type);
-      let value = snapshot.attr(key);
+      const payloadKey =  this._getMappedKey(key, snapshot.type);
+      const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'oui';
       } else {

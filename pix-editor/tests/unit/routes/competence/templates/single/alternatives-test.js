@@ -5,7 +5,7 @@ module('Unit | Route | competence/templates/single/alternatives', function(hooks
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/templates/single/alternatives');
+    const route = this.owner.lookup('route:competence/templates/single/alternatives');
     assert.ok(route);
   });
 });

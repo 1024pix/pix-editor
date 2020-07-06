@@ -5,7 +5,7 @@ module('Unit | Route | competence/tubes/new', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/tubes/new');
+    const route = this.owner.lookup('route:competence/tubes/new');
     assert.ok(route);
   });
 });

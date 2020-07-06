@@ -14,7 +14,7 @@ module('Integration | Component | competence-grid', function(hooks) {
 
     // then
 
-    assert.ok(true)
+    assert.ok(true);
 
   });
 });

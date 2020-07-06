@@ -34,7 +34,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     const pdf = new jsPDF('p', 'pt', 'a4');
     const areas = this.args.model;
     const footerSize = 8;
-    let y = marginY+titleMargin;
+    let y = marginY + titleMargin;
     const filteredArea = areas.find(area => (area.competences.find(competence=> competence.selectedProductionTubeCount > 0) !== undefined));
     const filter = filteredArea !== undefined;
     const versionText = `Version du ${(new Date()).toLocaleDateString('fr')}`;
@@ -44,7 +44,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.setFontSize(pSize);
     y += titleMargin;
     areas.forEach((area,index) => {
-      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0):area.sortedCompetences;
+      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
       competences.forEach(competence => {
         const tubeHead = [ [
           {
@@ -56,14 +56,14 @@ export default class TargetProfilePdfExportComponent extends Component {
               textColor:[255,255,255],
               fillColor:colors[index],
               fontSize:h1Size,
-              cellPadding:{left:extraMarginX, top:h1Padding,right:h1Padding, bottom:h1Padding}
+              cellPadding:{ left:extraMarginX, top:h1Padding,right:h1Padding, bottom:h1Padding }
             }
           }
         ]];
 
-        const tubes = filter?competence.productionTubes.filter(tube => tube.selectedLevel):competence.productionTubes;
+        const tubes = filter ? competence.productionTubes.filter(tube => tube.selectedLevel) : competence.productionTubes;
         const tubeValues = tubes.reduce((values,tube) => {
-          values.push([{content:tube.practicalTitle, styles:{cellWidth:200, fontStyle:'bold', fontSize:pSize}},tube.practicalDescription]);
+          values.push([{ content:tube.practicalTitle, styles:{ cellWidth:200, fontStyle:'bold', fontSize:pSize } },tube.practicalDescription]);
           return values;
         }, []);
         pdf.setTextColor('#000000');
@@ -76,18 +76,18 @@ export default class TargetProfilePdfExportComponent extends Component {
           theme:'striped',
           pageBreak: 'avoid',
           rowPageBreak: 'avoid',
-          margin:{top:marginY, left:marginX,right:marginX, bottom:marginY}
+          margin:{ top:marginY, left:marginX,right:marginX, bottom:marginY }
         });
-        y=pdf.autoTable.previous.finalY+marginY;
+        y = pdf.autoTable.previous.finalY + marginY;
       });
     });
     const pageCount = pdf.internal.getNumberOfPages();
-    for(let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i <= pageCount; i++) {
       pdf.setTextColor('#000000');
       pdf.setFontSize(footerSize);
       pdf.setPage(i);
-      pdf.text(marginX,842-30, 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre\nde la mise en œuvre de l\'accompagnement de leurs publics.');
-      pdf.text(this._getRightAlignedX(pdf, versionText)-marginX, 35, versionText);
+      pdf.text(marginX,842 - 30, 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre\nde la mise en œuvre de l\'accompagnement de leurs publics.');
+      pdf.text(this._getRightAlignedX(pdf, versionText) - marginX, 35, versionText);
       pdf.addImage(pixLogo, 'PNG', marginX, 15);
     }
     pdf.save(`${title}.pdf`);

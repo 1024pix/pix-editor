@@ -9,7 +9,7 @@ export default class Files extends Component {
   remove(index) {
     // clone instead of removeAt, so that rollbackAttributes
     // may work
-    let list = this.args.value.slice();
+    const list = this.args.value.slice();
     list.splice(index, 1);
     this.args.setValue(list);
   }
@@ -17,8 +17,8 @@ export default class Files extends Component {
   @action
   add(file) {
     const value = this.args.value;
-    let list = value?value.slice():[];
-    list.unshift({file:file, url:'', filename:file.name});
+    const list = value ? value.slice() : [];
+    list.unshift({ file:file, url:'', filename:file.name });
     this.args.setValue(list);
   }
 }

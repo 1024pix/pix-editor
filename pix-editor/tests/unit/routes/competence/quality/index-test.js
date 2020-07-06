@@ -5,7 +5,7 @@ module('Unit | Route | competence/quality/index', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/quality/index');
+    const route = this.owner.lookup('route:competence/quality/index');
     assert.ok(route);
   });
 });

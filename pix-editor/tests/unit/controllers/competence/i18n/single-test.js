@@ -4,13 +4,13 @@ import { setupTest } from 'ember-qunit';
 module('Unit | Controller | competence/i18n/single', function(hooks) {
   setupTest(hooks);
 
-  test('it should return an array of each language include in skill with a activatedChallenge associated', function(assert){
+  test('it should return an array of each language include in skill with a activatedChallenge associated', function(assert) {
     //given
     const controller = this.owner.lookup('controller:competence/i18n/single');
     const languagesAndAlternativesCount = new Map();
-    languagesAndAlternativesCount.set('Anglais',2)
-    languagesAndAlternativesCount.set('Franco Français',2)
-    languagesAndAlternativesCount.set('Francophone',1)
+    languagesAndAlternativesCount.set('Anglais',2);
+    languagesAndAlternativesCount.set('Franco Français',2);
+    languagesAndAlternativesCount.set('Francophone',1);
     const challenge1 = {
       id: 'rec654258',
       languages: ['Francophone','Franco Français'],
@@ -23,7 +23,7 @@ module('Unit | Controller | competence/i18n/single', function(hooks) {
       id: 'rec654259',
       languages: ['Anglais'],
     };
-    const challenge4= {
+    const challenge4 = {
       id: 'rec456789',
       languages: ['Franco Français'],
       alternatives:[]
@@ -35,9 +35,9 @@ module('Unit | Controller | competence/i18n/single', function(hooks) {
       languagesAndAlternativesCount
     };
     const expected = [
-      {language: 'Anglais',challenge: challenge2, alternativesCount:2},
-      {language: 'Franco Français',challenge: challenge1, alternativesCount:2},
-      {language: 'Francophone',challenge: challenge1,alternativesCount:1}
+      { language: 'Anglais',challenge: challenge2, alternativesCount:2 },
+      { language: 'Franco Français',challenge: challenge1, alternativesCount:2 },
+      { language: 'Francophone',challenge: challenge1,alternativesCount:1 }
     ];
     controller.set('skill', skill);
 

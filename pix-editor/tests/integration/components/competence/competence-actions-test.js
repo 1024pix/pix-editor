@@ -10,7 +10,7 @@ module('Integration | Component | competence/competence-actions', function(hooks
 
     // given
 
-    this.set('config', {lite:false});
+    this.set('config', { lite:false });
     this.set('externalAction', ()=>{});
 
     // when

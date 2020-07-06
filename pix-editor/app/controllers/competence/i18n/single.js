@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
-import {action} from '@ember/object';
-import {alias} from '@ember/object/computed';
-import {inject as controller} from '@ember/controller';
+import { action } from '@ember/object';
+import { alias } from '@ember/object/computed';
+import { inject as controller } from '@ember/controller';
 
 export default class CompetenceI18nSingleController extends Controller {
 
@@ -15,12 +15,12 @@ export default class CompetenceI18nSingleController extends Controller {
   skill;
 
   get challengesByLanguagesAndAlternativesCount() {
-    const challengeByLanguagesAndAlternativesCount = []
+    const challengeByLanguagesAndAlternativesCount = [];
     const challenges = this.skill.validatedChallenges;
     const languagesAndAlternativesCount = this.skill.languagesAndAlternativesCount;
-    for (let [language, alternativesCount] of languagesAndAlternativesCount) {
+    for (const [language, alternativesCount] of languagesAndAlternativesCount) {
       const challenge = challenges.find(challenge => challenge.languages && challenge.languages.includes(language));
-      challengeByLanguagesAndAlternativesCount.push({challenge, language, alternativesCount});
+      challengeByLanguagesAndAlternativesCount.push({ challenge, language, alternativesCount });
     }
     return challengeByLanguagesAndAlternativesCount;
   }

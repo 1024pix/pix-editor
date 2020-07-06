@@ -11,7 +11,7 @@ export default class NoteList extends SortedList {
   }
 
   get headers() {
-     let headers = [{
+    const headers = [{
       name:'Date',
       valuePath:'date',
       maxWidth:150,

@@ -6,11 +6,11 @@ export default class NewRoute extends Route {
   model(params) {
     if (params.from) {
       return this.store.findRecord('challenge',params.from)
-      .then(challenge => {
-        return challenge.clone();
-      })
+        .then(challenge => {
+          return challenge.clone();
+        });
     } else {
-      let template = this.modelFor('competence/templates/single');
+      const template = this.modelFor('competence/templates/single');
       return template.derive();
     }
   }

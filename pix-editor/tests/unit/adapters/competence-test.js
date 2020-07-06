@@ -6,7 +6,7 @@ module('Unit | Adapter | competence', function(hooks) {
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let adapter = this.owner.lookup('adapter:competence');
+    const adapter = this.owner.lookup('adapter:competence');
     assert.ok(adapter);
   });
 });

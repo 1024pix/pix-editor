@@ -19,7 +19,7 @@ export default class Tutorials extends Component {
     return this.store.query('tutorial', {
       filterByFormula: tagSearch ? `FIND('${query}', LOWER(Tags))` : `FIND('${query}', LOWER(Titre))`,
       maxRecords: 100,
-      sort: [{field: 'Titre', direction: 'asc'}]
+      sort: [{ field: 'Titre', direction: 'asc' }]
     })
       .then((tutorials) => {
         const tagsLoad = tutorials.map(tutorial => tutorial.tags);
@@ -33,36 +33,36 @@ export default class Tutorials extends Component {
             title: tutorial.title,
             description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
             id: tutorial.id
-          }
+          };
         });
-        results.push({title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create'});
-        return results
-      })
+        results.push({ title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create' });
+        return results;
+      });
   }
 
   @action
   addTutorial(item, options) {
     if (item.id === 'create') {
       const date = new Date();
-      this.newTutorial = this.store.createRecord('tutorial', {pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`});
+      this.newTutorial = this.store.createRecord('tutorial', { pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` });
       this.displayTutorialPopin = true;
     } else {
       return this.store.findRecord('tutorial', item.id)
         .then((tutorial) => {
           this.args.addTutorial(tutorial);
-        })
+        });
     }
   }
 
   @action
   getSearchTutorialResults(query) {
-    query=query.toLowerCase();
+    query = query.toLowerCase();
     let tagSearch = false;
     if (query[0] === '>') {
       query = query.substring(1);
-      tagSearch = true
+      tagSearch = true;
     }
-    return this._searchTutorial(query, tagSearch)
+    return this._searchTutorial(query, tagSearch);
   }
 
   @action
@@ -84,8 +84,7 @@ export default class Tutorials extends Component {
         console.error(error);
         this.loader.stop();
         this.notify.error('Erreur lors de la création du tutoriel');
-      })
-
+      });
   }
 
 }

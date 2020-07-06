@@ -16,7 +16,7 @@ export default class SidebarSearchComponent extends Component {
       return this.store.query('skill', {
         filterByFormula: `FIND('${query}', Nom)`,
         maxRecords: 20,
-        sort: [{field: 'Nom', direction: 'asc'}]
+        sort: [{ field: 'Nom', direction: 'asc' }]
       })
         .then(skills => {
           return skills.map(skill => ({
@@ -39,7 +39,7 @@ export default class SidebarSearchComponent extends Component {
     } else {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
-        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
+        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, '\\\'')}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
         maxRecords: 20
       })
         .then(challenges => {

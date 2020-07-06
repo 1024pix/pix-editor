@@ -1,5 +1,5 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
-import {tracked} from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 export default class TubeModel extends Model {
 
   selectedSkills = [];
@@ -40,9 +40,9 @@ export default class TubeModel extends Model {
 
   get filledSkills() {
     return this.sortedSkills.reduce((grid, skill) => {
-        grid[skill.level-1] = skill;
-        return grid;
-      },[false, false, false, false, false, false, false]);
+      grid[skill.level - 1] = skill;
+      return grid;
+    },[false, false, false, false, false, false, false]);
   }
 
   get hasProductionChallenge() {

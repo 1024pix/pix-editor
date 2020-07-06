@@ -1,5 +1,5 @@
 import SkillRoute from '../skills/single';
-import {action} from '@ember/object';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
 export default class SingleRoute extends SkillRoute {

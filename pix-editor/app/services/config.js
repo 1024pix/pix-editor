@@ -1,7 +1,7 @@
 import Service from '@ember/service';
-import {configPrivate} from '../config-private';
+import { configPrivate } from '../config-private';
 import CryptoJS from 'crypto-js';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 
@@ -89,9 +89,9 @@ export default class ConfigService extends Service {
   decrypt() {
     this.decrypted = false;
     try {
-      let key = this.configKey;
-      let value = CryptoJS.AES.decrypt(configPrivate.encrypted, key);
-      let encryptedConfig = JSON.parse(value.toString(CryptoJS.enc.Utf8));
+      const key = this.configKey;
+      const value = CryptoJS.AES.decrypt(configPrivate.encrypted, key);
+      const encryptedConfig = JSON.parse(value.toString(CryptoJS.enc.Utf8));
       Object.keys(encryptedConfig).forEach((key) => {
         this[key] = encryptedConfig[key];
       });
@@ -112,8 +112,8 @@ export default class ConfigService extends Service {
       return current;
     }, {});
     localConfig = this._localConfigKeysOptional.reduce((current, key) => {
-      let value = this[key];
-      if (value && typeof value !=='undefined' && (typeof value.length === 'undefined' || value.length>0)) {
+      const value = this[key];
+      if (value && typeof value !== 'undefined' && (typeof value.length === 'undefined' || value.length > 0)) {
         current[key] = value;
       }
       return current;
@@ -123,14 +123,14 @@ export default class ConfigService extends Service {
 
   loadAuthors() {
     try {
-      this.store.query('author', {sort:[{field: 'Nom', direction:'asc'}]})
-      .then(authors => {
-        this.authors = authors;
-        this.authorNames = authors.reduce((current, value) => {
-          current.push(value.name);
-          return current;
-        }, []);
-      });
+      this.store.query('author', { sort:[{ field: 'Nom', direction:'asc' }] })
+        .then(authors => {
+          this.authors = authors;
+          this.authorNames = authors.reduce((current, value) => {
+            current.push(value.name);
+            return current;
+          }, []);
+        });
     } catch (e) {
       this.authors = null;
       this.authorNames = null;

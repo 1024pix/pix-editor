@@ -8,9 +8,9 @@ export default class GridCell extends Component {
 
   get cellType() {
     const skill = this.args.skill;
-    switch(this.args.section) {
+    switch (this.args.section) {
       case 'challenges':
-        switch(this.args.view) {
+        switch (this.args.view) {
           case 'production':
             if (skill && skill.productionTemplate) {
               return 'production';

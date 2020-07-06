@@ -20,13 +20,13 @@ export default class TargetProfileController extends Controller {
   get selectedTubeCount() {
     return this.areas.reduce((count, area) => {
       return count + area.selectedProductionTubeCount;
-    }, 0)
+    }, 0);
   }
 
   get tubeCount() {
     return this.areas.reduce((count, area) => {
       return count + area.productionTubeCount;
-    }, 0)
+    }, 0);
   }
 
   get sources() {
@@ -100,29 +100,29 @@ export default class TargetProfileController extends Controller {
   @action
   generate() {
     const ids = this._getSelectedSkillsIds();
-    let fileName = 'profil_identifiants_' + (new Date()).toLocaleString('fr-FR') + '.txt';
+    const fileName = 'profil_identifiants_' + (new Date()).toLocaleString('fr-FR') + '.txt';
     this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
   @action
   save() {
-    let data = this.areas.reduce((areaValues, area) => {
-      let competences = area.competences;
+    const data = this.areas.reduce((areaValues, area) => {
+      const competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
-        let tubes = competence.tubes;
+        const tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
           if (tube.selectedLevel) {
             tubeValues.push({
               id: tube.pixId,
               level: tube.selectedLevel,
               skills: tube.selectedSkills
-            })
+            });
           }
           return tubeValues;
         }, competenceValues);
       }, areaValues);
     }, []);
-    let fileName = 'profil_' + (new Date()).toLocaleString('fr-FR') + '.json';
+    const fileName = 'profil_' + (new Date()).toLocaleString('fr-FR') + '.json';
     this.get('fileSaver').saveAs(JSON.stringify(data), fileName);
   }
 
@@ -140,16 +140,16 @@ export default class TargetProfileController extends Controller {
   generateSQL(profileId) {
     const ids = this._getSelectedSkillsIds();
     const sql = ids.reduce((content, id) => {
-      return content + `\n${profileId},${id}`
+      return content + `\n${profileId},${id}`;
     }, 'targetProfileId,skillId');
 
-    let fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+    const fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(sql, fileName);
   }
 
   @action
   load() {
-    let fileInput = document.getElementById('target-profile__open-file');
+    const fileInput = document.getElementById('target-profile__open-file');
     fileInput.click();
   }
 
@@ -190,7 +190,7 @@ export default class TargetProfileController extends Controller {
                 tube.selectedSkills = [];
               }
             });
-          })
+          });
         });
         that.selectedSources = sources;
         this.notify.message('Fichier correctement chargé');

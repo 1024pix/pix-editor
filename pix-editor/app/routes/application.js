@@ -37,18 +37,18 @@ export default class ApplicationRoute extends Route {
       this.currentData.setAreas(model);
       const getCompetences = model.map((area => area.competences));
       return Promise.all(getCompetences)
-      .then(competences => {
-        let sources = model.map(area => area.source);
-        this.currentData.setSources([...new Set(sources)]);
-        this.currentData.setSource('Pix');
-        return competences;
-      });
+        .then(competences => {
+          const sources = model.map(area => area.source);
+          this.currentData.setSources([...new Set(sources)]);
+          this.currentData.setSource('Pix');
+          return competences;
+        });
     }
   }
 
   @action
   loading(transition) {
-    let controller = this.controller;
+    const controller = this.controller;
     if (controller) {
       controller.loading = true;
       transition.promise.finally(function() {

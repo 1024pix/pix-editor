@@ -8,11 +8,11 @@ module('Integration | Component | quality', function(hooks) {
 
   test('it renders', async function(assert) {
 
-    this.set('challenge', {accessibility1:false, accessibility2:false, spoil:false, responsive:false});
+    this.set('challenge', { accessibility1:false, accessibility2:false, spoil:false, responsive:false });
 
     await render(hbs`{{field/quality title="form_title" challenge=challenge}}`);
 
-    assert.equal(this.element.getElementsByTagName("label")[0].textContent.trim(), 'form_title');
+    assert.equal(this.element.getElementsByTagName('label')[0].textContent.trim(), 'form_title');
 
   });
 });

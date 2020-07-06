@@ -1,9 +1,9 @@
 import TemplateController from '../../single';
-import {action} from '@ember/object';
-import {scheduleOnce} from '@ember/runloop';
-import {inject as controller} from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {alias} from '@ember/object/computed';
+import { action } from '@ember/object';
+import { scheduleOnce } from '@ember/runloop';
+import { inject as controller } from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default class SingleController extends TemplateController {
 
@@ -28,8 +28,8 @@ export default class SingleController extends TemplateController {
     if (this.creation) {
       return 'Nouvelle déclinaison';
     } else {
-      let index = this.challenge.alternativeVersion;
-      return 'Déclinaison n°'+index;
+      const index = this.challenge.alternativeVersion;
+      return 'Déclinaison n°' + index;
     }
   }
 
@@ -51,13 +51,13 @@ export default class SingleController extends TemplateController {
 
   @action
   preview() {
-    let challenge = this.challenge;
+    const challenge = this.challenge;
     window.open(challenge.preview, challenge.id);
   }
 
   @action
   openAirtable() {
-    window.open(this.config.airtableUrl+this.config.tableChallenges+'/'+this.challenge.id, 'airtable');
+    window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
   }
 
   @action

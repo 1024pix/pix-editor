@@ -6,7 +6,7 @@ module('Unit | Controller | competence/templates/single/alternatives/new', funct
 
   // Replace this with your real tests.
   test('it exists', function(assert) {
-    let controller = this.owner.lookup('controller:competence/templates/single/alternatives/new');
+    const controller = this.owner.lookup('controller:competence/templates/single/alternatives/new');
     assert.ok(controller);
   });
 });

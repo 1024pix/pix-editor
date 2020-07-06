@@ -9,6 +9,6 @@ export default class Illustration extends Component {
 
   @action
   add(file) {
-    this.args.setValue([{file:file}]);
+    this.args.setValue([{ file:file }]);
   }
 }
