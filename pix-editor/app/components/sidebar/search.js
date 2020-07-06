@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class SidebarSearchComponent extends Component {
 
@@ -16,7 +16,7 @@ export default class SidebarSearchComponent extends Component {
       return this.store.query('skill', {
         filterByFormula: `FIND('${query}', Nom)`,
         maxRecords: 20,
-        sort: [{field: 'Nom', direction: 'asc'}]
+        sort: [{ field: 'Nom', direction: 'asc' }]
       })
         .then(skills => {
           return skills.map(skill => ({

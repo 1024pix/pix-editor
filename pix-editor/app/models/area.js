@@ -1,5 +1,5 @@
-import Model, {attr, hasMany} from '@ember-data/model';
-import {sort} from '@ember/object/computed';
+import Model, { attr, hasMany } from '@ember-data/model';
+import { sort } from '@ember/object/computed';
 
 
 export default class AreaModel extends Model {

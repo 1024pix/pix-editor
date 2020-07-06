@@ -1,4 +1,4 @@
-import Model, {attr, hasMany} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class TutorialModel extends Model {
   @attr title;

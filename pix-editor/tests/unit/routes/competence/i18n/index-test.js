@@ -1,5 +1,5 @@
-import {module, test} from 'qunit';
-import {setupTest} from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
 module('Unit | Route | competence/i18n/index', function(hooks) {
   setupTest(hooks);

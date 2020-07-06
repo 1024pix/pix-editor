@@ -1,8 +1,8 @@
 import Service from '@ember/service';
-import {configPrivate} from '../config-private';
+import { configPrivate } from '../config-private';
 import CryptoJS from 'crypto-js';
-import {inject as service} from '@ember/service';
-import {tracked} from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 
 export default class ConfigService extends Service {
@@ -123,7 +123,7 @@ export default class ConfigService extends Service {
 
   loadAuthors() {
     try {
-      this.store.query('author', {sort:[{field: 'Nom', direction:'asc'}]})
+      this.store.query('author', { sort:[{ field: 'Nom', direction:'asc' }] })
         .then(authors => {
           this.authors = authors;
           this.authorNames = authors.reduce((current, value) => {

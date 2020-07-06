@@ -110,7 +110,7 @@ export default class StatisticsI18nComponent extends Component {
           current.areas[competence.code] = areaCounts;
           return current;
         }, current);
-      }, {areas:{}, countries:new Map()});
+      }, { areas:{}, countries:new Map() });
     }
     return this._i18nCountryCounts;
   }
@@ -139,7 +139,7 @@ export default class StatisticsI18nComponent extends Component {
         current.validated += value.neutralValidated;
         current.suggested += value.neutralSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nNeutralTotal;
   }
@@ -150,7 +150,7 @@ export default class StatisticsI18nComponent extends Component {
         current.validated += value.africaValidated;
         current.suggested += value.africaSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nAfricaTotal;
   }
@@ -161,7 +161,7 @@ export default class StatisticsI18nComponent extends Component {
         current.validated += value.occidentValidated;
         current.suggested += value.occidentSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nOccidentTotal;
   }
@@ -172,7 +172,7 @@ export default class StatisticsI18nComponent extends Component {
         current.validated += value.unescoValidated;
         current.suggested += value.unescoSuggested;
         return current;
-      }, {validated:0, suggested:0});
+      }, { validated:0, suggested:0 });
     }
     return this._i18nUnescoTotal;
   }
@@ -237,7 +237,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 1);
       this._i18nOccidentCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }
@@ -250,7 +250,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 2);
       this._i18nAfricanCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }
@@ -263,7 +263,7 @@ export default class StatisticsI18nComponent extends Component {
       const names = Array.from(countries.keys()).filter(name => this._i18nAreas.get(name) === 3);
       this._i18nUnescoCountries = names.reduce((current, name) => {
         const values = countries.get(name);
-        current.push({name:name, validated:values[0], suggested:values[1]});
+        current.push({ name:name, validated:values[0], suggested:values[1] });
         return current;
       }, []);
     }

@@ -1,7 +1,7 @@
 import Service from '@ember/service';
 import fetch from 'fetch';
-import {isNotFoundResponse} from 'ember-fetch/errors';
-import {inject as service} from '@ember/service';
+import { isNotFoundResponse } from 'ember-fetch/errors';
+import { inject as service } from '@ember/service';
 
 export default class PixConnectorService extends Service {
   @service config;

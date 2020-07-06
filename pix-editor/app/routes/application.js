@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
-import {scheduleOnce} from '@ember/runloop';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { scheduleOnce } from '@ember/runloop';
 
 export default class ApplicationRoute extends Route {
   configured = false;

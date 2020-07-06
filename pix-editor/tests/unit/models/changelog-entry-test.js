@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupTest} from 'ember-qunit';
-import {run} from '@ember/runloop';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 module('Unit | Model | changelog entry', function(hooks) {
   setupTest(hooks);

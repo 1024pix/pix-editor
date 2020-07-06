@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import {tracked} from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 
 export default class CurrentDataService extends Service {
   @tracked _areas = null;

@@ -1,9 +1,9 @@
 import TemplateController from '../../single';
-import {action} from '@ember/object';
-import {scheduleOnce} from '@ember/runloop';
-import {inject as controller} from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {alias} from '@ember/object/computed';
+import { action } from '@ember/object';
+import { scheduleOnce } from '@ember/runloop';
+import { inject as controller } from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 
 export default class SingleController extends TemplateController {
 

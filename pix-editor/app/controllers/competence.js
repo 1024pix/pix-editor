@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
-import {alias} from '@ember/object/computed';
-import {inject as controller} from '@ember/controller';
-import {tracked} from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
+import { inject as controller } from '@ember/controller';
+import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceController extends Controller {
   queryParams = ['leftMaximized', 'view'];
@@ -113,7 +113,7 @@ export default class CompetenceController extends Controller {
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.new', this.competence, {queryParams: {from: challenge.id}});
+    this.transitionToRoute('competence.templates.new', this.competence, { queryParams: { from: challenge.id } });
   }
 
   @action

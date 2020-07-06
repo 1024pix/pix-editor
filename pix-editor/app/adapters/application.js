@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class ApplicationAdapter extends DS.RESTAdapter {
 
@@ -45,7 +45,7 @@ export default class ApplicationAdapter extends DS.RESTAdapter {
     const id = snapshot.id;
     const url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
 
-    return this.ajax(url, 'PATCH', {data: data});
+    return this.ajax(url, 'PATCH', { data: data });
   }
 
   coalesceFindRequests = true;
@@ -61,7 +61,7 @@ export default class ApplicationAdapter extends DS.RESTAdapter {
   findMany (store, type, ids, snapshots) {
     const recordsText = 'OR(' + ids.map(id => `RECORD_ID() = '${id}'`).join(',') + ')';
     const url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
-    return this.ajax(url, 'GET', {data: {filterByFormula: recordsText}});
+    return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
   }
 
 }

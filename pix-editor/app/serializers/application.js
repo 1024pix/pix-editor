@@ -1,6 +1,6 @@
 import DS from 'ember-data';
-import {assign} from '@ember/polyfills';
-import {pluralize} from 'ember-inflector';
+import { assign } from '@ember/polyfills';
+import { pluralize } from 'ember-inflector';
 
 export default class ApplicationSerializer extends DS.RESTSerializer {
 
@@ -71,7 +71,7 @@ export default class ApplicationSerializer extends DS.RESTSerializer {
       return;
     }
     const key = relationship.key;
-    const belongsToId = snapshot.belongsTo(key, {id: true});
+    const belongsToId = snapshot.belongsTo(key, { id: true });
 
     // if provided, use the mapping provided by `attrs` in
     // the serializer

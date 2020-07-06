@@ -1,5 +1,5 @@
 import Tube from './single';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class NewRoute extends Tube {
 
@@ -7,7 +7,7 @@ export default class NewRoute extends Tube {
   @service idGenerator;
 
   model() {
-    return this.store.createRecord('tube', {pixId:this.idGenerator.newId()});
+    return this.store.createRecord('tube', { pixId:this.idGenerator.newId() });
   }
 
   setupController(controller) {

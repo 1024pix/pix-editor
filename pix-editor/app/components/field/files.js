@@ -1,5 +1,5 @@
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 
 export default class Files extends Component {
@@ -18,7 +18,7 @@ export default class Files extends Component {
   add(file) {
     const value = this.args.value;
     const list = value ? value.slice() : [];
-    list.unshift({file:file, url:'', filename:file.name});
+    list.unshift({ file:file, url:'', filename:file.name });
     this.args.setValue(list);
   }
 }

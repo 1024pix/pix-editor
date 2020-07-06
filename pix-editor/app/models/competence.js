@@ -1,10 +1,10 @@
-import Model, {attr, hasMany} from '@ember-data/model';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class CompetenceModel extends Model {
 
   needsRefresh = false;
 
-  @attr('string', {readOnly: true}) name;
+  @attr('string', { readOnly: true }) name;
   @attr title;
   @attr code;
   @attr description;

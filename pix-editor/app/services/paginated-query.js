@@ -1,6 +1,6 @@
 import Service from '@ember/service';
-import {inject as service} from '@ember/service';
-import {A} from '@ember/array';
+import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
 
 export default class PaginatedQueryService extends Service {
   @service store;

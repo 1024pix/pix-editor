@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | competence/competence-actions', function(hooks) {
@@ -10,7 +10,7 @@ module('Integration | Component | competence/competence-actions', function(hooks
 
     // given
 
-    this.set('config', {lite:false});
+    this.set('config', { lite:false });
     this.set('externalAction', ()=>{});
 
     // when

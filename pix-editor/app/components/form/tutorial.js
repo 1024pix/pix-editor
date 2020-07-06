@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class TutorialForm extends Component {
 
@@ -8,14 +8,14 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options = {
-    'language': [{value:'en-us',label:'Anglais'}, {value:'fr-fr',label:'Français'}],
+    'language': [{ value:'en-us',label:'Anglais' }, { value:'fr-fr',label:'Français' }],
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
     'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     'license': ['CC-BY-SA', '(c)', 'Youtube']
   };
 
   get hasSelectedTag() {
-    return this.selectedTags.length > 0
+    return this.selectedTags.length > 0;
   }
 
   get tutorialLanguage() {
@@ -28,11 +28,11 @@ export default class TutorialForm extends Component {
     return this.store.query('tag', {
       filterByFormula: `FIND('${queryLowerCase}', LOWER(Nom))`,
       maxRecords: 4,
-      sort: [{field: 'Nom', direction: 'asc'}]
+      sort: [{ field: 'Nom', direction: 'asc' }]
     })
       .then((tags) => {
-        const results = tags.map(tag => ({title: tag.get('title'), id: tag.get('id')}));
-        results.push({title: 'Ajouter', description: 'Créer un tag[note]', id: 'create'});
+        const results = tags.map(tag => ({ title: tag.get('title'), id: tag.get('id') }));
+        results.push({ title: 'Ajouter', description: 'Créer un tag[note]', id: 'create' });
         return results;
       });
   }
@@ -43,13 +43,13 @@ export default class TutorialForm extends Component {
     return this.store.query('tutorial', {
       filterByFormula: `FIND('${queryLowerCase}', LOWER(source))`,
       maxRecords: 4,
-      sort: [{field: 'Source', direction: 'asc'}]
+      sort: [{ field: 'Source', direction: 'asc' }]
     })
       .then((tutorials) => {
         const results = tutorials.map(tutorial => (tutorial.get('source')));
         results.push(query);
         return results.reduce((uniques, item) => {
-          return uniques.includes(item) ? uniques : [...uniques, item]
+          return uniques.includes(item) ? uniques : [...uniques, item];
         }, []);
       });
   }
@@ -106,7 +106,7 @@ export default class TutorialForm extends Component {
   }
 
   @action
-  setTutorialLanguage(language){
+  setTutorialLanguage(language) {
     this.args.tutorial.language = language.value;
   }
 }

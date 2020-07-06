@@ -1,7 +1,7 @@
 import Controller from '@ember/controller';
-import {inject as controller} from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {action} from '@ember/object';
+import { inject as controller } from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
 export default class ListController extends Controller {
 
@@ -26,9 +26,9 @@ export default class ListController extends Controller {
     const templates = this.model.sortedTemplates;
     if (templates.length > 0) {
       const template = templates.firstObject;
-      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), {queryParams: {from: template.id}});
+      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), { queryParams: { from: template.id } });
     } else {
-      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), {queryParams: {fromSkill: this.model.id}});
+      this.transitionToRoute('competence.templates.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.model.id } });
     }
   }
 }

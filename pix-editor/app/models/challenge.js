@@ -1,5 +1,5 @@
-import {inject as service} from '@ember/service';
-import Model, {attr, hasMany} from '@ember-data/model';
+import { inject as service } from '@ember/service';
+import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class ChallengeModel extends Model {
 
@@ -18,9 +18,9 @@ export default class ChallengeModel extends Model {
   @attr declinable;
   @attr('number') version;
   @attr genealogy;
-  @attr({readOnly:true}) skillNames;
+  @attr({ readOnly:true }) skillNames;
   @attr status;
-  @attr({readOnly:true}) preview;
+  @attr({ readOnly:true }) preview;
   @attr pixId;
   @attr scoring;
   @attr('number') timer;
@@ -35,7 +35,7 @@ export default class ChallengeModel extends Model {
   @attr alternativeText;
   @attr languages;
   @attr area;
-  @attr({readOnly:true}) _definedBaseName;
+  @attr({ readOnly:true }) _definedBaseName;
 
   @hasMany('skill') skills;
 
@@ -239,15 +239,15 @@ export default class ChallengeModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    const data = this.toJSON({includeId:false});
+    const data = this.toJSON({ includeId:false });
     delete data.pixId;
     if (data.illustration) {
       const illustration = data.illustration[0];
-      data.illustration = [{url:illustration.url, filename:illustration.filename}];
+      data.illustration = [{ url:illustration.url, filename:illustration.filename }];
     }
     if (data.attachments) {
       data.attachments = data.attachments.map(value => {
-        return {url:value.url, filename:value.filename};
+        return { url:value.url, filename:value.filename };
       });
     }
     if (fieldsToRemove) {

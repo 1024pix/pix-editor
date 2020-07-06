@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | note-form', function(hooks) {
@@ -12,7 +12,7 @@ module('Integration | Component | note-form', function(hooks) {
 
     this.set('closeAction', function() {});
     this.set('editAction', function() {});
-    this.set('entry', {status:false});
+    this.set('entry', { status:false });
 
     await render(hbs`{{form/note close=(action closeAction) edit=(action editAction) entry=entry}}`);
 

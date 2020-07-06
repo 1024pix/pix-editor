@@ -1,8 +1,8 @@
 import Component from '@glimmer/component';
-import {tracked} from '@glimmer/tracking';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
-import {A} from '@ember/array';
+import { tracked } from '@glimmer/tracking';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import { A } from '@ember/array';
 
 export default class PopinChallengeLog extends Component {
   @service store;
@@ -45,7 +45,7 @@ export default class PopinChallengeLog extends Component {
       if (challenge) {
         const pq = this.paginatedQuery;
         const production = (challenge.workbench ? 'non' : 'oui');
-        return pq.query('changelogEntry', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{field: 'Date', direction: 'desc'}]})
+        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
           .then(entries => {
             this._entries = entries;
             this.changelogLoaded = true;
@@ -154,7 +154,7 @@ export default class PopinChallengeLog extends Component {
     if (challenge) {
       const production = (challenge.workbench ? 'non' : 'oui');
       const pq = this.paginatedQuery;
-      return pq.query('note', {filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{field: 'Date', direction: 'desc'}]})
+      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(notes => {
           this._notes = notes;
           this.notesLoaded = true;

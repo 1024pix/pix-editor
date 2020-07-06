@@ -1,5 +1,5 @@
-import {module, test} from 'qunit';
-import {setupTest} from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
 module('Unit | Service | file-path', function(hooks) {
   setupTest(hooks);

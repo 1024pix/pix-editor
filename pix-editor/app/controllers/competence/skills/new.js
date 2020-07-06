@@ -1,7 +1,7 @@
 import Skill from './single';
-import {action} from '@ember/object';
-import {alias} from '@ember/object/computed';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { alias } from '@ember/object/computed';
+import { inject as service } from '@ember/service';
 
 export default class NewController extends Skill {
   competence = null;

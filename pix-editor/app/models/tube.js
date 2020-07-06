@@ -1,5 +1,5 @@
-import Model, {attr, hasMany, belongsTo} from '@ember-data/model';
-import {tracked} from '@glimmer/tracking';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 export default class TubeModel extends Model {
 
   selectedSkills = [];

@@ -1,5 +1,5 @@
 import SortedList from './sorted';
-import {action} from '@ember/object';
+import { action } from '@ember/object';
 
 export default class NoteList extends SortedList {
 

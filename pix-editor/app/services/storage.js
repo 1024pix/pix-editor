@@ -1,5 +1,5 @@
 import Service from '@ember/service';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 import fetch from 'fetch';
 
 export default class StorageService extends Service {
@@ -12,13 +12,13 @@ export default class StorageService extends Service {
     const that = this;
     return this.getStorageToken()
       .then(function(token) {
-        return file.uploadBinary(url, {method:'put', headers:{'X-Auth-Token': token}})
+        return file.uploadBinary(url, { method:'put', headers:{ 'X-Auth-Token': token } })
           .catch((error) => {
             if (error.response && error.response.status === 401) {
               // token expired: get a new one
               return that.getStorageToken(true)
                 .then(function(token) {
-                  return file.uploadBinary(url, {method:'PUT', headers:{'X-Auth-Token': token}});
+                  return file.uploadBinary(url, { method:'PUT', headers:{ 'X-Auth-Token': token } });
                 });
             } else {
               return Promise.reject(error);
@@ -26,7 +26,7 @@ export default class StorageService extends Service {
           });
       })
       .then(function() {
-        return {url:url, filename:fileName ? fileName : file.name};
+        return { url:url, filename:fileName ? fileName : file.name };
       });
   }
 
@@ -50,7 +50,7 @@ export default class StorageService extends Service {
             'password': {
               'user': {
                 'name': config.storageUser,
-                'domain': {'id': 'default'},
+                'domain': { 'id': 'default' },
                 'password': config.storagePassword
               }
             }
@@ -58,14 +58,14 @@ export default class StorageService extends Service {
           'scope': {
             'project': {
               'name': config.storageTenant,
-              'domain': {'id': 'default'}
+              'domain': { 'id': 'default' }
             }
           }
         }
       };
       return fetch(config.storageAuth, {
         method:'POST',
-        headers:{'Content-type': 'application/json'},
+        headers:{ 'Content-type': 'application/json' },
         body:JSON.stringify(data)
       })
         .then(response => response.ok ? response.json() : false)

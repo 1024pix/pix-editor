@@ -1,10 +1,10 @@
 import Controller from '@ember/controller';
-import {inject as controller} from '@ember/controller';
-import {inject as service} from '@ember/service';
-import {scheduleOnce} from '@ember/runloop';
-import {alias} from '@ember/object/computed';
-import {action} from '@ember/object';
-import {tracked} from '@glimmer/tracking';
+import { inject as controller } from '@ember/controller';
+import { inject as service } from '@ember/service';
+import { scheduleOnce } from '@ember/runloop';
+import { alias } from '@ember/object/computed';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
 
 export default class SingleController extends Controller {
 
@@ -452,7 +452,7 @@ export default class SingleController extends Controller {
       this._loadingMessage('Envoi de l\'illustration...');
       return this.storage.uploadFile(file)
         .then((newIllustration) => {
-          challenge.illustration = [{url: newIllustration.url, filename: newIllustration.filename}];
+          challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
           return challenge;
         });
     } else {
@@ -474,7 +474,7 @@ export default class SingleController extends Controller {
           return storage.uploadFile(value.file, fileName);
         } else {
           if (baseNameUpdated) {
-            const newValue = {url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename)};
+            const newValue = { url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename) };
             return Promise.resolve(newValue);
           } else {
             return Promise.resolve(value);

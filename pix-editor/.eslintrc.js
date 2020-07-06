@@ -21,7 +21,7 @@ module.exports = {
   rules: {
     'no-console':'off',
     'ember/no-jquery': 'error',
-    'indent': ['error', 2, {'SwitchCase': 1}],
+    'indent': ['error', 2, { 'SwitchCase': 1 }],
     'keyword-spacing': 'error',
     'quotes': ['error', 'single'],
     'space-in-parens':'error',
@@ -30,7 +30,7 @@ module.exports = {
     'semi':'error',
     'no-setter-return': 'off',
     'space-infix-ops':'error',
-    'object-curly-spacing':'error'
+    'object-curly-spacing':['error', 'always']
   },
   overrides: [
     // node files

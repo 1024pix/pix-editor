@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -11,7 +11,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
 
     // given
     const productionAlternatives = [1,2,3];
-    const skill = EmberObject.create({productionTemplate:{productionAlternatives}});
+    const skill = EmberObject.create({ productionTemplate:{ productionAlternatives } });
     this.set('skill', skill);
     // when
     await render(hbs`{{competence/grid/cell-production skill=skill}}`);

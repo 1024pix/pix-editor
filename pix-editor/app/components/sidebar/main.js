@@ -1,5 +1,5 @@
-import {inject as service} from '@ember/service';
-import {alias} from '@ember/object/computed';
+import { inject as service } from '@ember/service';
+import { alias } from '@ember/object/computed';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
 

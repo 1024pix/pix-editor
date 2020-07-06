@@ -1,5 +1,5 @@
 import SingleRoute from './single';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class NewRoute extends SingleRoute {
   templateName = 'competence/skills/single';
@@ -7,7 +7,7 @@ export default class NewRoute extends SingleRoute {
 
   model() {
     return {
-      skill:this.store.createRecord('skill', {status:'en construction', pixId:this.idGenerator.newId()})
+      skill:this.store.createRecord('skill', { status:'en construction', pixId:this.idGenerator.newId() })
     };
   }
 

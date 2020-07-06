@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupTest} from 'ember-qunit';
-import {run} from '@ember/runloop';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
+import { run } from '@ember/runloop';
 
 module('Unit | Model | skill', function(hooks) {
   setupTest(hooks);
@@ -22,18 +22,18 @@ module('Unit | Model | skill', function(hooks) {
     status:'validé'
 
   };
-  const challenge4= {
+  const challenge4 = {
     id: 'rec654261',
     languages: ['Franco Français'],
     status:'validé',
   };
-  hooks.beforeEach (function(){
-     store = this.owner.lookup('service:store');
+  hooks.beforeEach (function() {
+    store = this.owner.lookup('service:store');
   });
 
   test('it should return a map of unique language and alternatives', function(assert) {
     // given
-    const skill= run(() => store.createRecord('skill', {
+    const skill = run(() => store.createRecord('skill', {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
@@ -53,7 +53,7 @@ module('Unit | Model | skill', function(hooks) {
 
   test('it should return an array of unique language sorted', function(assert) {
     // given
-    const skill= run(() => store.createRecord('skill', {
+    const skill = run(() => store.createRecord('skill', {
       id: 'rec123456',
       name: 'skillName',
       challenges: [

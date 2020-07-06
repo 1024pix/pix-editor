@@ -1,6 +1,6 @@
-import {action} from '@ember/object';
+import { action } from '@ember/object';
 import SortedList from './sorted';
-import {inject as service} from '@ember/service';
+import { inject as service } from '@ember/service';
 
 export default class CompetencesList extends SortedList {
 

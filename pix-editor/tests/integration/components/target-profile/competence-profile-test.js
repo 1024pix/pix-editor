@@ -1,6 +1,6 @@
-import {module, test} from 'qunit';
-import {setupRenderingTest} from 'ember-qunit';
-import {render} from '@ember/test-helpers';
+import { module, test } from 'qunit';
+import { setupRenderingTest } from 'ember-qunit';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -11,7 +11,7 @@ module('Integration | Component | target-profile/competence-profile', function(h
 
     // given
 
-    const competence = EmberObject.create({description:'competence_description', title:'competence_title'});
+    const competence = EmberObject.create({ description:'competence_description', title:'competence_title' });
     this.set('competence', competence);
 
     // when

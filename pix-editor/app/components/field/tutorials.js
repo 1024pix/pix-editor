@@ -1,7 +1,7 @@
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
-import {tracked} from '@glimmer/tracking';
+import { tracked } from '@glimmer/tracking';
 
 export default class Tutorials extends Component {
 
@@ -19,7 +19,7 @@ export default class Tutorials extends Component {
     return this.store.query('tutorial', {
       filterByFormula: tagSearch ? `FIND('${query}', LOWER(Tags))` : `FIND('${query}', LOWER(Titre))`,
       maxRecords: 100,
-      sort: [{field: 'Titre', direction: 'asc'}]
+      sort: [{ field: 'Titre', direction: 'asc' }]
     })
       .then((tutorials) => {
         const tagsLoad = tutorials.map(tutorial => tutorial.tags);
@@ -35,7 +35,7 @@ export default class Tutorials extends Component {
             id: tutorial.id
           };
         });
-        results.push({title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create'});
+        results.push({ title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create' });
         return results;
       });
   }
@@ -44,7 +44,7 @@ export default class Tutorials extends Component {
   addTutorial(item, options) {
     if (item.id === 'create') {
       const date = new Date();
-      this.newTutorial = this.store.createRecord('tutorial', {pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`});
+      this.newTutorial = this.store.createRecord('tutorial', { pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` });
       this.displayTutorialPopin = true;
     } else {
       return this.store.findRecord('tutorial', item.id)

@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceRoute extends Route {
   @service paginatedQuery;
@@ -27,7 +27,7 @@ export default class CompetenceRoute extends Route {
           }, [])).flat();
           const uniqueChallenges = [...new Set(challenges)];
           const store = this.store;
-          const reloadChallenges = uniqueChallenges.map(challengeId => store.findRecord('challenge', challengeId, {reload: true}));
+          const reloadChallenges = uniqueChallenges.map(challengeId => store.findRecord('challenge', challengeId, { reload: true }));
           return Promise.all(reloadChallenges);
         })
         .then(() => {
