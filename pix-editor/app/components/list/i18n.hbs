@@ -15,8 +15,6 @@
       <r.cell class="{{if r.columnValue.alternatives "alternatives-count"}}" as |value|>
         {{#if r.columnValue.language}}
           <span class="language"><i class="{{convert-language-as-flag value}} flag"></i>{{value}}</span>
-        {{else if r.columnValue.alternatives}}
-          {{get-alternative-count-by-language @skill value}}
         {{else}}
           {{value}}
         {{/if}}

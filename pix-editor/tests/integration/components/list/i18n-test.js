@@ -11,39 +11,34 @@ module('Integration | Component | list/i18n', function(hooks) {
     const challenge1 = {
       id: 'rec654258',
       languages: ['Francophone','Franco Français'],
+      instructions: 'Some instructions 1'
     };
     const challenge2 = {
       id: 'rec654259',
       languages: ['Anglais'],
+      instructions: 'Some instructions 2'
+
     };
-    const challenge3 = {
-      id: 'rec654259',
-      languages: ['Anglais'],
-    };
-    const challenge4= {
+    const challenge3= {
       id: 'rec456789',
       languages: ['Franco Français'],
-      alternatives:[]
+      instructions: 'Some instructions 3'
     };
-    const skill = {
-      id: 'rec123456',
-      name: 'skillName',
-      validatedChallenges: [challenge2,challenge1,challenge3, challenge4]
-    };
+
     const challengesByLanguages = [
-      {language: 'Francophone',challenge: challenge1},
-      {language: 'Anglais',challenge: challenge2},
-      {language: 'Franco Français',challenge: challenge4}
+      {language: 'Francophone',challenge: challenge1,alternativesCount:'10'},
+      {language: 'Anglais',challenge: challenge2,alternativesCount:'5'},
+      {language: 'Franco Français',challenge: challenge3,alternativesCount:'8'}
       ];
 
     this.set('challengesByLanguages', challengesByLanguages)
-    this.set('skill', skill);
 
     // when
     await render(hbs`<List::I18n @list={{challengesByLanguages}} @skill={{skill}}/>`);
 
     // then
     assert.equal(this.element.querySelectorAll('.challenge-template').length, 3);
-    assert.equal(this.element.querySelectorAll('.challenge-template .alternatives-count')[1].textContent.trim(), "2");
+    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(1)')[0].textContent.trim(), 'Some instructions 1');
+    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(3)')[0].textContent.trim(), '10');
   });
 });

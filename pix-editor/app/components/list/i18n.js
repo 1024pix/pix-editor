@@ -16,7 +16,7 @@ export default class I18n extends SortedList {
     language:true
   },{
     name:'Déclinaisons',
-    valuePath:'language',
+    valuePath:'alternativesCount',
     maxWidth:150,
     alternatives:true
   }];
