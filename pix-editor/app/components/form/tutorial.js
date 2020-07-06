@@ -8,7 +8,7 @@ export default class TutorialForm extends Component {
   @service idGenerator;
 
   options = {
-    'language': ['fr-fr', 'en-us'],
+    'language': [{value:'en-us',label:'Anglais'}, {value:'fr-fr',label:'Français'}],
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
     'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     'license': ['CC-BY-SA', '(c)', 'Youtube']
@@ -16,6 +16,10 @@ export default class TutorialForm extends Component {
 
   get hasSelectedTag() {
     return this.selectedTags.length > 0
+  }
+
+  get tutorialLanguage() {
+    return this.options.language.find(language=>language.value === this.args.tutorial.language);
   }
 
   @action
@@ -99,5 +103,10 @@ export default class TutorialForm extends Component {
   @action
   toggleCrush() {
     this.args.tutorial.crush = !this.args.tutorial.crush;
+  }
+
+  @action
+  setTutorialLanguage(language){
+    this.args.tutorial.language = language.value;
   }
 }

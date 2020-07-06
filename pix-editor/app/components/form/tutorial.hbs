@@ -5,7 +5,7 @@
       <Input @type="text" @value={{@tutorial.title}} placeholder="Titre" />
     </div>
     <div class="four wide field">
-      <Field::Select @title="Langue *" @defaultText="Langue" @value={{@tutorial.language}} @options={{this.options.language}} @edition={{true}} @setValue={{fn (mut @tutorial.language)}}/>
+      <Field::Select @title="Langue *" @defaultText="Langue" @value={{this.tutorialLanguage}} @options={{this.options.language}} @edition={{true}} @setValue={{this.setTutorialLanguage}}/>
     </div>
   </div>
   <div class="three fields">
