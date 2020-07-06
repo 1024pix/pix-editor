@@ -18,19 +18,11 @@ export default class CompetenceI18nSingleController extends Controller {
     const challengeByLanguagesAndAlternativesCount = []
     const challenges = this.skill.validatedChallenges;
     const languagesAndAlternativesCount = this.skill.languagesAndAlternativesCount;
-    for ( let [language, alternativesCount] of languagesAndAlternativesCount ){
-      const challenge = this._findChallengeByLanguage(language,challenges)
-      challengeByLanguagesAndAlternativesCount.push({challenge,language,alternativesCount});
+    for (let [language, alternativesCount] of languagesAndAlternativesCount) {
+      const challenge = challenges.find(challenge => challenge.languages && challenge.languages.includes(language));
+      challengeByLanguagesAndAlternativesCount.push({challenge, language, alternativesCount});
     }
     return challengeByLanguagesAndAlternativesCount;
-  }
-
-  _findChallengeByLanguage(language, challenges){
-    for (let i = 0; i < challenges.length; i++) {
-     if(challenges[i].languages && challenges[i].languages.includes(language)){
-       return challenges[i]
-     }
-    }
   }
 
   @action
