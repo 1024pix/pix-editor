@@ -6,35 +6,39 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | list/i18n', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('should display a list of template', async function(assert) {
+  test('should display a list of challenge', async function(assert) {
     // given
-    const challengeAlternative1 = {
+    const challenge1 = {
       id: 'rec654258',
-    };
-    const challengeAlternative2 = {
-      id: 'rec654259',
-    };
-    const templateChallenge1 = {
-      id: 'rec456789',
       languages: ['Francophone','Franco Français'],
-      alternatives:[]
+      instructions: 'Some instructions 1'
     };
-    const templateChallenge2 = {
-      id: 'rec987654',
+    const challenge2 = {
+      id: 'rec654259',
       languages: ['Anglais'],
-      alternatives:[challengeAlternative1,challengeAlternative2]
+      instructions: 'Some instructions 2'
+
     };
-    const skill = {
-      id: 'rec123456',
-      name: 'skillName',
-      productionTemplates: [templateChallenge1,templateChallenge2]
+    const challenge3= {
+      id: 'rec456789',
+      languages: ['Franco Français'],
+      instructions: 'Some instructions 3'
     };
-    this.set('skill', skill);
+
+    const challengesByLanguages = [
+      {language: 'Francophone',challenge: challenge1,alternativesCount:'10'},
+      {language: 'Anglais',challenge: challenge2,alternativesCount:'5'},
+      {language: 'Franco Français',challenge: challenge3,alternativesCount:'8'}
+      ];
+
+    this.set('challengesByLanguages', challengesByLanguages)
 
     // when
-    await render(hbs`<List::I18n @list={{this.skill.productionTemplates}}/>`);
+    await render(hbs`<List::I18n @list={{challengesByLanguages}} @skill={{skill}}/>`);
 
     // then
-    assert.equal(this.element.querySelectorAll('.production-template').length, 2);
+    assert.equal(this.element.querySelectorAll('.challenge-template').length, 3);
+    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(1)')[0].textContent.trim(), 'Some instructions 1');
+    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(3)')[0].textContent.trim(), '10');
   });
 });

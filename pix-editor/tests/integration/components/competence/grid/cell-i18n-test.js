@@ -9,22 +9,11 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
   test('it should display one flag by uniq language', async function(assert) {
     // given
     const section = "i18n";
-    const challenge1 = {
-      id: 'rec456789',
-      languages: ['Francophone','Franco Français']
-    };
-    const challenge2 = {
-      id: 'rec987654',
-      languages: ['Anglais']
-    };
-    const challenge3 = {
-      id: 'rec147258',
-      languages: ['Francophone']
-    };
+
     const skill = {
       id: 'rec123456',
       name: 'skillName',
-      productionTemplates: [challenge1,challenge2,challenge3]
+      languages: ['Anglais','Franco Français','Francophone']
     };
     this.set('section', section);
     this.set('skill', skill);

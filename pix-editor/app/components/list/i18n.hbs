@@ -11,14 +11,10 @@
           @rowSelectionMode={{'single'}}
           @checkboxSelectionMode={{'none'}}
           @onSelect={{this.selectRow}} as |b|>
-    <b.row class="production-template" as |r|>
-      <r.cell as |value|>
-        {{#if r.columnValue.languages}}
-          {{#each r.rowValue.languages as |language| }}
-            <span class="language"><i class="{{convert-language-as-flag language}} flag"></i>{{language}}</span>
-          {{/each}}
-        {{else if r.columnValue.alternatives}}
-          {{r.rowValue.alternatives.length}}
+    <b.row class="challenge-template" as |r|>
+      <r.cell class="{{if r.columnValue.alternatives "alternatives-count"}}" as |value|>
+        {{#if r.columnValue.language}}
+          <span class="language"><i class="{{convert-language-as-flag value}} flag"></i>{{value}}</span>
         {{else}}
           {{value}}
         {{/if}}

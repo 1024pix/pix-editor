@@ -94,8 +94,27 @@ export default class SkillModel extends Model {
     return this.challenges.filter(challenge => !challenge.isTemplate);
   }
 
+  get validatedChallenges() {
+    return this.challenges.filter(challenge => challenge.isValidated);
+  }
+
   get isActive() {
     return this.status === 'actif';
+  }
+
+  get languagesAndAlternativesCount () {
+    const languagesAndAlternativesCount = this.validatedChallenges.reduce((acc, challenge) => {
+      return this._extractLanguagesAndAlternativesCountFromChallenges(acc,challenge.languages);
+    }, new Map());
+    return new Map([...languagesAndAlternativesCount.entries()].sort());
+  }
+
+  get languages () {
+    const skillLanguagesMap = this.languagesAndAlternativesCount;
+    if(skillLanguagesMap){
+     return [...skillLanguagesMap.keys()];
+    }
+    return [];
   }
 
   getNextVersion() {
@@ -182,6 +201,19 @@ export default class SkillModel extends Model {
         return 'na';
     }
     return 'suggested';
+  }
+
+  _extractLanguagesAndAlternativesCountFromChallenges(extractedLanguages, challengeLanguages){
+    if(challengeLanguages){
+      challengeLanguages.forEach(language => {
+        if (!extractedLanguages.has(language)) {
+          extractedLanguages.set(language, 1);
+        } else {
+          extractedLanguages.set(language, extractedLanguages.get(language)+1);
+        }
+      });
+    }
+    return extractedLanguages;
   }
 
 }
