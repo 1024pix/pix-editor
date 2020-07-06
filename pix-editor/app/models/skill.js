@@ -102,6 +102,21 @@ export default class SkillModel extends Model {
     return this.status === 'actif';
   }
 
+  get languagesAndAlternativesCount () {
+    const languagesAndAlternativesCount = this.validatedChallenges.reduce((acc, challenge) => {
+      return this._extractLanguagesAndAlternativesCountFromChallenges(acc,challenge.languages);
+    }, new Map());
+    return new Map([...languagesAndAlternativesCount.entries()].sort());
+  }
+
+  get languages () {
+    const skillLanguagesMap = this.languagesAndAlternativesCount;
+    if(skillLanguagesMap){
+     return [...skillLanguagesMap.keys()];
+    }
+    return [];
+  }
+
   getNextVersion() {
     return this.templates.reduce((current, template) => {
       let version = template.version;
@@ -186,6 +201,19 @@ export default class SkillModel extends Model {
         return 'na';
     }
     return 'suggested';
+  }
+
+  _extractLanguagesAndAlternativesCountFromChallenges(extractedLanguages, challengeLanguages){
+    if(challengeLanguages){
+      challengeLanguages.forEach(language => {
+        if (!extractedLanguages.has(language)) {
+          extractedLanguages.set(language, 1);
+        } else {
+          extractedLanguages.set(language, extractedLanguages.get(language)+1);
+        }
+      });
+    }
+    return extractedLanguages;
   }
 
 }
