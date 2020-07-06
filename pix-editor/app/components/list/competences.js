@@ -1,6 +1,6 @@
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 import SortedList from './sorted';
-import { inject as service } from '@ember/service';
+import {inject as service} from '@ember/service';
 
 export default class CompetencesList extends SortedList {
 
@@ -36,7 +36,7 @@ export default class CompetencesList extends SortedList {
     this.router.transitionTo(this.args.link, this.args.competenceModel, row);
   }
 
-  get current(){
+  get current() {
     return this.currentData.getTemplate();
   }
 

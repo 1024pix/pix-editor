@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import {module, test} from 'qunit';
+import {setupRenderingTest} from 'ember-qunit';
+import {render} from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | quality', function(hooks) {
@@ -12,7 +12,7 @@ module('Integration | Component | quality', function(hooks) {
 
     await render(hbs`{{field/quality title="form_title" challenge=challenge}}`);
 
-    assert.equal(this.element.getElementsByTagName("label")[0].textContent.trim(), 'form_title');
+    assert.equal(this.element.getElementsByTagName('label')[0].textContent.trim(), 'form_title');
 
   });
 });

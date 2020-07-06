@@ -1,5 +1,5 @@
 import DS from 'ember-data';
-import { inject as service } from '@ember/service';
+import {inject as service} from '@ember/service';
 
 export default class ApplicationAdapter extends DS.RESTAdapter {
 
@@ -11,13 +11,13 @@ export default class ApplicationAdapter extends DS.RESTAdapter {
     return {
       Accept: 'application/json',
       // API Token
-      Authorization: 'Bearer '+this.config.airtableKey
-    }
+      Authorization: 'Bearer ' + this.config.airtableKey
+    };
   }
 
   get namespace() {
   // API Version + Base ID
-  return 'v0/'+this.config.airtableBase;
+    return 'v0/' + this.config.airtableBase;
   }
 
   pathForType(type) {
@@ -37,31 +37,31 @@ export default class ApplicationAdapter extends DS.RESTAdapter {
 
   // from RESTAdpater, overriden to use PATCH instead of PUT
   updateRecord(store, type, snapshot) {
-    let data = {};
-    let serializer = store.serializerFor(type.modelName);
+    const data = {};
+    const serializer = store.serializerFor(type.modelName);
 
     serializer.serializeIntoHash(data, type, snapshot);
 
-    let id = snapshot.id;
-    let url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
+    const id = snapshot.id;
+    const url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
 
-    return this.ajax(url, 'PATCH', { data: data });
+    return this.ajax(url, 'PATCH', {data: data});
   }
 
   coalesceFindRequests = true;
 
   groupRecordsForFindMany (store, snapshots) {
-    let groups = [];
-    for (let i=0; i<snapshots.length; i+=100) {
-      groups.push(snapshots.slice(i,i+100));
+    const groups = [];
+    for (let i = 0; i < snapshots.length; i += 100) {
+      groups.push(snapshots.slice(i, i + 100));
     }
     return groups;
   }
 
   findMany (store, type, ids, snapshots) {
-    let recordsText = 'OR(' + ids.map(id => `RECORD_ID() = '${id}'`).join(',') + ')';
-    let url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
-    return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
+    const recordsText = 'OR(' + ids.map(id => `RECORD_ID() = '${id}'`).join(',') + ')';
+    const url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
+    return this.ajax(url, 'GET', {data: {filterByFormula: recordsText}});
   }
 
 }

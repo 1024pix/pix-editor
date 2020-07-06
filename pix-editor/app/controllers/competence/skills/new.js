@@ -1,7 +1,7 @@
 import Skill from './single';
 import {action} from '@ember/object';
 import {alias} from '@ember/object/computed';
-import { inject as service } from '@ember/service';
+import {inject as service} from '@ember/service';
 
 export default class NewController extends Skill {
   competence = null;
@@ -27,23 +27,23 @@ export default class NewController extends Skill {
   @action
   save() {
     this.loader.start();
-    let skill = this.skill;
-    let tube = this.tube;
+    const skill = this.skill;
+    const tube = this.tube;
     return tube.competence
-    .then(competence=> {
-      skill.tube = tube;
-      skill.competence = [competence.get('id')];
-      return skill.save()
-    })
-    .then(() => {
-      this.edition = false;
-      this.loader.stop();
-      this.notify.message('Acquis créé');
-    })
-    .catch((error) => {
-      console.error(error);
-      this.loader.stop();
-      this.notify.error('Erreur lors de la création de l\'acquis');
-    });
+      .then(competence=> {
+        skill.tube = tube;
+        skill.competence = [competence.get('id')];
+        return skill.save();
+      })
+      .then(() => {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message('Acquis créé');
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la création de l\'acquis');
+      });
   }
 }

@@ -15,7 +15,7 @@ export default class AlternativesRoute extends Route {
     this.render('competence/templates/single/alternatives', {
       into: 'competence',
       outlet: 'mainRight'
-    })
+    });
   }
 
   resetController(controller) {

@@ -89,7 +89,7 @@ export default class SingleController extends Controller {
   @action
   cancelEdit() {
     this.edition = false;
-    let skill = this.skill;
+    const skill = this.skill;
     skill.rollbackAttributes();
     const challenge = this.skill.productionTemplate;
     if (challenge) {
@@ -104,7 +104,7 @@ export default class SingleController extends Controller {
   @action
   save() {
     this.loader.start();
-    let skill = this.skill;
+    const skill = this.skill;
     const template = this.skill.productionTemplate;
     let operation;
     if (template) {
@@ -115,26 +115,26 @@ export default class SingleController extends Controller {
     return operation.then(()=>{
       return skill.save();
     })
-    .then(() => {
-      this.edition = false;
-      this.loader.stop();
-      this.notify.message('Acquis mis à jour');
-    })
-    .catch((error) => {
-      console.error(error);
-      this.loader.stop();
-      this.notify.error('Erreur lors de la mise à jour de l\'acquis');
-    });
+      .then(() => {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message('Acquis mis à jour');
+      })
+      .catch((error) => {
+        console.error(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la mise à jour de l\'acquis');
+      });
   }
 
   @action
   moveSkill() {
-   this.displaySelectLocation = true;
+    this.displaySelectLocation = true;
   }
 
   @action
   setLocation(competence, newTube, level) {
-    let skill = this.skill;
+    const skill = this.skill;
     this.loader.start();
     skill.tube = newTube;
     skill.level = level;
@@ -165,34 +165,34 @@ export default class SingleController extends Controller {
     }
     const challenges = this.skill.challenges;
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
-    .then(() => {
-      this.loader.start('Archivage de l\'acquis');
-      return this.skill.archive()
       .then(() => {
-        this.close();
-        this.notify.message('Acquis archivé');
-      })
-      .then(() => {
-        const updateChallenges = challenges.filter(challenge => !challenge.isArchived).map(challenge => {
-          return challenge.archive()
+        this.loader.start('Archivage de l\'acquis');
+        return this.skill.archive()
           .then(() => {
-            if (challenge.isTemplate) {
-              this.notify.message('Prototype archivé');
-            } else {
-              this.notify.message(`Déclinaison n°${challenge.alternativeVersion} archivée`);
-            }
+            this.close();
+            this.notify.message('Acquis archivé');
+          })
+          .then(() => {
+            const updateChallenges = challenges.filter(challenge => !challenge.isArchived).map(challenge => {
+              return challenge.archive()
+                .then(() => {
+                  if (challenge.isTemplate) {
+                    this.notify.message('Prototype archivé');
+                  } else {
+                    this.notify.message(`Déclinaison n°${challenge.alternativeVersion} archivée`);
+                  }
+                });
+            });
+            return Promise.all(updateChallenges);
+          })
+          .catch(error =>{
+            console.error(error);
+            this.notify.error('Erreur lors de l\'archivage de l\'acquis');
+          })
+          .finally(() => {
+            this.loader.stop();
           });
-        })
-        return Promise.all(updateChallenges);
       })
-      .catch(error =>{
-        console.error(error);
-        this.notify.error('Erreur lors de l\'archivage de l\'acquis');
-      })
-      .finally(() => {
-        this.loader.stop();
-      })
-    })
-    .catch(() => this.notify.message('Archivage abandonné'));
+      .catch(() => this.notify.message('Archivage abandonné'));
   }
 }

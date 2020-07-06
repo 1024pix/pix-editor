@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import {module, test} from 'qunit';
+import {setupRenderingTest} from 'ember-qunit';
+import {render} from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -20,6 +20,6 @@ module('Integration | Component | target-profile/competence-profile', function(h
 
     // then
 
-   assert.equal(this.element.querySelector('.competence-title').textContent.trim(), 'competence_title')
+    assert.equal(this.element.querySelector('.competence-title').textContent.trim(), 'competence_title');
   });
 });

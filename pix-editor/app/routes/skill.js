@@ -7,7 +7,7 @@ export default class SkillRoute extends Route {
 
   afterModel(model) {
     if (model.length > 0) {
-      let skill = model.firstObject;
+      const skill = model.firstObject;
       this.transitionTo('competence.skills.single', skill.competence[0], skill.id);
     } else {
       // redirect to home page

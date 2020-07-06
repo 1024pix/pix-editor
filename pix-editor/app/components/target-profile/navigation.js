@@ -1,15 +1,15 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 
 export default class TargetProfileNavigationComponent extends Component {
 
   calculatePosition(trigger) {
-    let { top, left, width } = trigger.getBoundingClientRect();
-    let style = {
+    const {top, left, width} = trigger.getBoundingClientRect();
+    const style = {
       left: left + width,
       top: top +  window.pageYOffset
     };
-    return { style };
+    return {style};
   }
 
   @action
@@ -25,7 +25,7 @@ export default class TargetProfileNavigationComponent extends Component {
   @action
   scrollTo(anchor) {
     const target = document.querySelector(`#${anchor}`);
-    document.querySelector('.target-profile').scrollTo({top: target.offsetTop - 154, left: 0, behavior: 'smooth'})
+    document.querySelector('.target-profile').scrollTo({top: target.offsetTop - 154, left: 0, behavior: 'smooth'});
   }
 
   @action

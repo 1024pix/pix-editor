@@ -1,11 +1,11 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 
 export default class CompetenceProfile extends Component {
 
   get filteredTubes() {
     const competence = this.args.competence;
-    if(this.args.filter){
+    if (this.args.filter) {
       return competence.productionTubes.filter(tube => tube.selectedLevel);
     }
     return competence.productionTubes;

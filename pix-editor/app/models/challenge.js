@@ -1,5 +1,5 @@
 import {inject as service} from '@ember/service';
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, {attr, hasMany} from '@ember-data/model';
 
 export default class ChallengeModel extends Model {
 
@@ -82,7 +82,7 @@ export default class ChallengeModel extends Model {
         return 'archived';
       default:
         return '';
-     }
+    }
   }
 
   get isArchived() {
@@ -94,14 +94,14 @@ export default class ChallengeModel extends Model {
     if (!this.isTemplate || this.isWorkbench) {
       return [];
     }
-    let currentVersion = this.version;
+    const currentVersion = this.version;
     const skill = this.firstSkill;
     if (skill) {
       return skill.alternatives.filter(alternative => {
-          return (alternative.version === currentVersion);
-        }).sort((a, b) => {
-          return a.alternativeVersion>b.alternativeVersion;
-        });
+        return (alternative.version === currentVersion);
+      }).sort((a, b) => {
+        return a.alternativeVersion > b.alternativeVersion;
+      });
     } else {
       return [];
     }
@@ -131,8 +131,8 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => !alternative.isValidated);
   }
 
-  get draftAlternativesWithoutArchives(){
-    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived)
+  get draftAlternativesWithoutArchives() {
+    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived);
   }
 
   get isTextBased() {
@@ -145,12 +145,12 @@ export default class ChallengeModel extends Model {
   }
 
   get timerOn() {
-    let timer = this.timer;
-    return (timer && timer>0)?true:false;
+    const timer = this.timer;
+    return (timer && timer > 0) ? true : false;
   }
 
   set timerOn(value) {
-  let timer = this.timer;
+    const timer = this.timer;
     if (value) {
       if (!timer || timer === 0) {
         this.timer = 1;
@@ -202,13 +202,13 @@ export default class ChallengeModel extends Model {
   }
 
   clone() {
-    let ignoredFields = ['skills', 'author'];
+    const ignoredFields = ['skills', 'author'];
     if (this.isTemplate) {
       ignoredFields.push('version');
     } else {
       ignoredFields.push('alternativeVersion');
     }
-    let data = this._getJSON(ignoredFields);
+    const data = this._getJSON(ignoredFields);
     data.status = 'proposé';
     data.author = [this.config.author];
     data.skills = this.skills;
@@ -231,7 +231,7 @@ export default class ChallengeModel extends Model {
       } else {
         return current;
       }
-    }, 0)+1;
+    }, 0) + 1;
   }
 
   baseNameUpdated() {
@@ -239,16 +239,16 @@ export default class ChallengeModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    let data = this.toJSON({includeId:false});
+    const data = this.toJSON({includeId:false});
     delete data.pixId;
     if (data.illustration) {
-      let illustration = data.illustration[0];
+      const illustration = data.illustration[0];
       data.illustration = [{url:illustration.url, filename:illustration.filename}];
     }
     if (data.attachments) {
       data.attachments = data.attachments.map(value => {
         return {url:value.url, filename:value.filename};
-      })
+      });
     }
     if (fieldsToRemove) {
       fieldsToRemove.forEach((current) => {

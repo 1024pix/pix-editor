@@ -28,8 +28,8 @@ export default class SingleController extends TemplateController {
     if (this.creation) {
       return 'Nouvelle déclinaison';
     } else {
-      let index = this.challenge.alternativeVersion;
-      return 'Déclinaison n°'+index;
+      const index = this.challenge.alternativeVersion;
+      return 'Déclinaison n°' + index;
     }
   }
 
@@ -51,13 +51,13 @@ export default class SingleController extends TemplateController {
 
   @action
   preview() {
-    let challenge = this.challenge;
+    const challenge = this.challenge;
     window.open(challenge.preview, challenge.id);
   }
 
   @action
   openAirtable() {
-    window.open(this.config.airtableUrl+this.config.tableChallenges+'/'+this.challenge.id, 'airtable');
+    window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
   }
 
   @action

@@ -24,7 +24,7 @@ export default class TutorialSerializer extends ApplicationSerializer {
   }
 
   extractAttributes() {
-    let attributes = super.extractAttributes(...arguments);
+    const attributes = super.extractAttributes(...arguments);
     if (attributes['crush']) {
       if (attributes['crush'] === 'YES') {
         attributes['crush'] = true;
@@ -37,8 +37,8 @@ export default class TutorialSerializer extends ApplicationSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (key === 'crush') {
-      let payloadKey =  this._getMappedKey(key, snapshot.type);
-      let value = snapshot.attr(key);
+      const payloadKey =  this._getMappedKey(key, snapshot.type);
+      const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'YES';
       } else {

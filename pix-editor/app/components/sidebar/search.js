@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
 
 export default class SidebarSearchComponent extends Component {
 
@@ -39,7 +39,7 @@ export default class SidebarSearchComponent extends Component {
     } else {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
-        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, "\\'")}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
+        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, '\\\'')}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
         maxRecords: 20
       })
         .then(challenges => {

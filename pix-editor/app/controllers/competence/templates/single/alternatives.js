@@ -3,7 +3,7 @@ import {action} from '@ember/object';
 import {inject as service} from '@ember/service';
 import {inject as controller} from '@ember/controller';
 import {tracked} from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
+import {alias} from '@ember/object/computed';
 
 export default class AlternativesController extends Controller {
 
@@ -53,7 +53,7 @@ export default class AlternativesController extends Controller {
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, { queryParams: {from: challenge.id}});
+    this.transitionToRoute('competence.templates.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, {queryParams: {from: challenge.id}});
   }
 
   @action

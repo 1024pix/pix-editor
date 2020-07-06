@@ -3,7 +3,7 @@
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
 
 module.exports = function(defaults) {
-  let app = new EmberApp(defaults, {
+  const app = new EmberApp(defaults, {
     autoImport: {
       webpack: {
         node : {
@@ -44,7 +44,7 @@ module.exports = function(defaults) {
     });
   });
 
-  app.import(`node_modules/semantic-ui-css/themes/default/assets/images/flags.png`, {
+  app.import('node_modules/semantic-ui-css/themes/default/assets/images/flags.png', {
     destDir: 'assets/themes/default/assets/images'
   });
   return app.toTree();

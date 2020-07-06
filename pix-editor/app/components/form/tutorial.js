@@ -33,8 +33,8 @@ export default class TutorialForm extends Component {
       .then((tags) => {
         const results = tags.map(tag => ({title: tag.get('title'), id: tag.get('id')}));
         results.push({title: 'Ajouter', description: 'Créer un tag[note]', id: 'create'});
-        return results
-      })
+        return results;
+      });
   }
 
   @action
@@ -58,7 +58,7 @@ export default class TutorialForm extends Component {
   selectTag(item) {
     const tutorial = this.args.tutorial;
     if (item.id === 'create') {
-      const value = document.querySelector(`.tutorial-search .ember-power-select-search-input`).value;
+      const value = document.querySelector('.tutorial-search .ember-power-select-search-input').value;
       if (value.indexOf('[') !== -1) {
         const pos = value.indexOf('[');
         const length = value.length;
@@ -95,7 +95,7 @@ export default class TutorialForm extends Component {
     const tutorial = this.args.tutorial;
     tutorial.tags.forEach((tag) => {
       if (tag.id === id) {
-        tutorial.tags.removeObject(tag)
+        tutorial.tags.removeObject(tag);
       }
     });
   }

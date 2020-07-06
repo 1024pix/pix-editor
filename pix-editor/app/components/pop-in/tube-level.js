@@ -1,5 +1,5 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 
 
 export default class PopinTubeLevel extends Component {
@@ -11,21 +11,21 @@ export default class PopinTubeLevel extends Component {
     return skills.reduce((orderedSkills, skill) => {
       const level = skill.level;
       skill._selected = selected.includes(skill.pixId);
-      orderedSkills[level-1] = skill;
+      orderedSkills[level - 1] = skill;
       return orderedSkills;
     }, [null, null, null, null, null, null, null, null]);
   }
 
   get mayUnset() {
-    let value = this.args.level;
+    const value = this.args.level;
     return value != false;
   }
 
   @action
   select(skill) {
-    let level = skill.level;
-    let skillIds = this.skills.reduce((ids, skill) => {
-      if (skill && (skill.level<=level)) {
+    const level = skill.level;
+    const skillIds = this.skills.reduce((ids, skill) => {
+      if (skill && (skill.level <= level)) {
         ids.push(skill.pixId);
       }
       return ids;

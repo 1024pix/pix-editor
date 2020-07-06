@@ -1,6 +1,6 @@
 import SortedList from './sorted';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
 
 export default class TemplatesList extends SortedList {
 

@@ -1,6 +1,6 @@
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import {tracked} from '@glimmer/tracking';
 
 export default class SortedList extends Component {
 
@@ -40,7 +40,7 @@ export default class SortedList extends Component {
     if (sortEmptyLast) {
       sortEmptyLast = isAscending;
     }
-    return isAscending?compare(valueA, valueB, sortEmptyLast):-compare(valueA, valueB, sortEmptyLast);
+    return isAscending ? compare(valueA, valueB, sortEmptyLast) : -compare(valueA, valueB, sortEmptyLast);
   }
 
   @action
@@ -58,7 +58,7 @@ export default class SortedList extends Component {
       this.sorts = [{
         valuePath:this.sortField,
         isAscending:this.ascending
-      }]
+      }];
     }
   }
 }

@@ -45,6 +45,6 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
 
     //then
 
-    assert.equal(this.element.querySelectorAll('.competence-profile').length, 2)
+    assert.equal(this.element.querySelectorAll('.competence-profile').length, 2);
   });
 });

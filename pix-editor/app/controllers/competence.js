@@ -1,9 +1,9 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
+import {alias} from '@ember/object/computed';
 import {inject as controller} from '@ember/controller';
-import { tracked } from '@glimmer/tracking';
+import {tracked} from '@glimmer/tracking';
 
 export default class CompetenceController extends Controller {
   queryParams = ['leftMaximized', 'view'];
@@ -48,13 +48,13 @@ export default class CompetenceController extends Controller {
   }
 
   get size() {
-    switch(this.router.currentRouteName) {
+    switch (this.router.currentRouteName) {
       case 'competence.index':
       case 'competence.skills.index':
       case 'competence.templates.index':
       case 'competence.quality.index':
       case 'competence.i18n.index':
-              return 'full';
+        return 'full';
       default:
         return 'half';
     }
@@ -73,7 +73,7 @@ export default class CompetenceController extends Controller {
   }
 
   get skillLink() {
-    let twoColumns = this.twoColumns;
+    const twoColumns = this.twoColumns;
     if (this.section === 'challenges' && this.view === 'production') {
       if (twoColumns) {
         return 'competence.templates.single.alternatives';
@@ -140,7 +140,7 @@ export default class CompetenceController extends Controller {
         }
       });
     const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
-      return content + `\n${data.map(item => item?`"${item}"`:" ").join(',')}`
+      return content + `\n${data.map(item => item ? `"${item}"` : ' ').join(',')}`;
     }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(contentCSV, fileName);
@@ -156,7 +156,7 @@ export default class CompetenceController extends Controller {
 
   @action
   selectSection(value) {
-    switch(value.id) {
+    switch (value.id) {
       case 'skills':
         this.transitionToRoute('competence.skills', this.competence);
         break;

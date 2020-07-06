@@ -1,4 +1,4 @@
-import { action } from '@ember/object';
+import {action} from '@ember/object';
 import Component from '@glimmer/component';
 
 export default class Illustration extends Component {

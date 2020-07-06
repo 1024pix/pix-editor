@@ -1,5 +1,5 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
-import { tracked } from '@glimmer/tracking';
+import Model, {attr, belongsTo, hasMany} from '@ember-data/model';
+import {tracked} from '@glimmer/tracking';
 
 export default class SkillModel extends Model {
 
@@ -120,7 +120,7 @@ export default class SkillModel extends Model {
 
   getNextVersion() {
     return this.templates.reduce((current, template) => {
-      let version = template.version;
+      const version = template.version;
       if (version > current) {
         return version;
       }
@@ -146,7 +146,7 @@ export default class SkillModel extends Model {
           tutoSolution: tutorials[0].toArray(),
           tutoMore: tutorials[1].toArray()
         };
-      })
+      });
   }
 
   rollbackAttributes() {

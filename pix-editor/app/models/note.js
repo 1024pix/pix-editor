@@ -1,4 +1,4 @@
-import Model, { attr } from '@ember-data/model';
+import Model, {attr} from '@ember-data/model';
 
 export default class NoteModel extends Model {
 
@@ -10,7 +10,7 @@ export default class NoteModel extends Model {
   @attr production;
   @attr createdAt;
   @attr status;
-  @attr('boolean', {defaultValue: false }) changelog;
+  @attr('boolean', {defaultValue: false}) changelog;
 
   get date() {
     const createdDate = this.createdAt;

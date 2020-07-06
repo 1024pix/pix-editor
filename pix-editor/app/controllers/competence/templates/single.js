@@ -91,7 +91,7 @@ export default class SingleController extends Controller {
 
   get level() {
     const challenge = this.challenge;
-    if (challenge.skillLevels[0]){
+    if (challenge.skillLevels[0]) {
       return challenge.skillLevels;
     } else {
       return false;
@@ -100,7 +100,7 @@ export default class SingleController extends Controller {
 
   @action
   showIllustration() {
-    let illustration = this.challenge.illustration[0];
+    const illustration = this.challenge.illustration[0];
     this.popinImageSrc = illustration.url;
     this.displayImage = true;
   }
@@ -219,7 +219,7 @@ export default class SingleController extends Controller {
               console.error(error);
               this._errorMessage('Erreur lors de la mise en production');
             })
-            .finally(() => this.loader.stop())
+            .finally(() => this.loader.stop());
         });
       })
       .catch(() => this._message('Mise en production abandonnée'));
@@ -295,11 +295,11 @@ export default class SingleController extends Controller {
     }
     this._getChangelog('Changement d\'acquis de l\'épreuve', (changelog) => {
       this.loader.start();
-      let template = this.challenge;
+      const template = this.challenge;
       const templateVersion = this._getNextTemplateVersion(skills);
       const challenges = this.challenge.alternatives;
       challenges.pushObject(template);
-      let updateChallenges = challenges.reduce((current, challenge) => {
+      const updateChallenges = challenges.reduce((current, challenge) => {
         challenge.skills = skills;
         challenge.version = templateVersion;
         current.push(challenge.save()
@@ -385,7 +385,7 @@ export default class SingleController extends Controller {
     }
     return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
-        let alternativesPublication = alternatives.reduce((current, alternative) => {
+        const alternativesPublication = alternatives.reduce((current, alternative) => {
           current.push(alternative.validate()
             .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`))
           );
@@ -405,7 +405,7 @@ export default class SingleController extends Controller {
     if (toArchive.length === 0) {
       return Promise.resolve(challenge);
     }
-    let alternativesArchive = toArchive.reduce((current, alternative) => {
+    const alternativesArchive = toArchive.reduce((current, alternative) => {
       current.push(alternative.archive()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`))
       );
@@ -420,7 +420,7 @@ export default class SingleController extends Controller {
     if (skills.length === 0) {
       return Promise.resolve(challenge);
     }
-    let skillChecks = skills.reduce((current, skill) => {
+    const skillChecks = skills.reduce((current, skill) => {
       const template = skill.productionTemplate;
       if (template) {
         if (!skill.isActive) {
@@ -446,15 +446,15 @@ export default class SingleController extends Controller {
 
   _handleIllustration(challenge) {
     // check for illustration upload
-    let illustration = challenge.illustration;
+    const illustration = challenge.illustration;
     if (illustration && illustration.length > 0 && illustration.firstObject.file) {
-      let file = illustration.firstObject.file;
+      const file = illustration.firstObject.file;
       this._loadingMessage('Envoi de l\'illustration...');
       return this.storage.uploadFile(file)
         .then((newIllustration) => {
           challenge.illustration = [{url: newIllustration.url, filename: newIllustration.filename}];
           return challenge;
-        })
+        });
     } else {
       return Promise.resolve(challenge);
     }
@@ -462,19 +462,19 @@ export default class SingleController extends Controller {
 
   _handleAttachments(challenge) {
     // check for attachments upload
-    let attachments = challenge.attachments;
+    const attachments = challenge.attachments;
     if (attachments) {
       const baseName = challenge.attachmentBaseName;
       const filePath = this.filePath;
       const baseNameUpdated = challenge.baseNameUpdated();
-      let storage = this.storage;
-      let uploadAttachments = attachments.map((value) => {
+      const storage = this.storage;
+      const uploadAttachments = attachments.map((value) => {
         if (value.file) {
           const fileName = baseName + '.' + filePath.getExtension(value.file.name);
           return storage.uploadFile(value.file, fileName);
         } else {
           if (baseNameUpdated) {
-            let newValue = {url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename)};
+            const newValue = {url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename)};
             return Promise.resolve(newValue);
           } else {
             return Promise.resolve(value);
@@ -486,7 +486,7 @@ export default class SingleController extends Controller {
         .then(newAttachments => {
           challenge.attachments = newAttachments;
           return challenge;
-        })
+        });
     }
     return Promise.resolve(challenge);
   }
@@ -506,14 +506,14 @@ export default class SingleController extends Controller {
         .catch(() => {
           this._errorMessage('Impossible de mettre à jour le cache');
           return challenge;
-        })
+        });
     }
     return Promise.resolve(challenge);
   }
 
   _handleChangelog(challenge, changelog) {
     if (changelog) {
-      let entry = this.store.createRecord('changelogEntry', {
+      const entry = this.store.createRecord('changelogEntry', {
         text: changelog,
         challengeId: challenge.id,
         author: this.config.author,

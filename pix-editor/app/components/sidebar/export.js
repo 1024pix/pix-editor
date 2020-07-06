@@ -1,6 +1,6 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
 
 export default class SidebarExportComponent extends Component {
 
@@ -45,8 +45,8 @@ export default class SidebarExportComponent extends Component {
               ];
               fields = fields.map(field => this._formatCSVString(field));
               return content + '\n' + fields.join(',');
-            }, content)
-          }, content)
+            }, content);
+          }, content);
         }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
         const fileName = `Export_Sujets_${(new Date()).toLocaleString('fr-FR')}.csv`;
         this.fileSaver.saveAs(csvContent, fileName);
@@ -61,7 +61,7 @@ export default class SidebarExportComponent extends Component {
     if (str) {
       return `"${str.replace(/"/g, '""')}"`;
     }
-    return ' '
+    return ' ';
   }
 
 }
