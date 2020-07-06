@@ -7,7 +7,6 @@ export default class SillSerializer extends ApplicationSerializer {
   attrs = {
     name:'Nom',
     clue:'Indice',
-    clueFr:'Indice fr-fr',
     clueEn:'Indice en-us',
     clueStatus:'Statut de l\'indice',
     challenges:'Epreuves',

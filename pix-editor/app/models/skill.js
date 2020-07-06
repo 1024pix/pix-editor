@@ -8,7 +8,6 @@ export default class SkillModel extends Model {
   @attr('string', {readOnly: true}) name;
   @attr competence;
   @attr clue;
-  @attr clueFr;
   @attr clueEn;
   @attr clueStatus;
   @attr description;
