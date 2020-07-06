@@ -1,20 +1,25 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
 
 export default class TutorialForm extends Component {
 
   @service store;
   @service idGenerator;
 
-  options =  {
+  options = {
+    'language': [{value:'en-us',label:'Anglais'}, {value:'fr-fr',label:'Français'}],
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
     'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     'license': ['CC-BY-SA', '(c)', 'Youtube']
   };
 
   get hasSelectedTag() {
-    return this.selectedTags.length>0
+    return this.selectedTags.length > 0
+  }
+
+  get tutorialLanguage() {
+    return this.options.language.find(language=>language.value === this.args.tutorial.language);
   }
 
   @action
@@ -28,8 +33,25 @@ export default class TutorialForm extends Component {
       .then((tags) => {
         const results = tags.map(tag => ({title: tag.get('title'), id: tag.get('id')}));
         results.push({title: 'Ajouter', description: 'Créer un tag[note]', id: 'create'});
-       return results
+        return results
       })
+  }
+
+  @action
+  getSearchSourceResults(query) {
+    const queryLowerCase = query.toLowerCase();
+    return this.store.query('tutorial', {
+      filterByFormula: `FIND('${queryLowerCase}', LOWER(source))`,
+      maxRecords: 4,
+      sort: [{field: 'Source', direction: 'asc'}]
+    })
+      .then((tutorials) => {
+        const results = tutorials.map(tutorial => (tutorial.get('source')));
+        results.push(query);
+        return results.reduce((uniques, item) => {
+          return uniques.includes(item) ? uniques : [...uniques, item]
+        }, []);
+      });
   }
 
   @action
@@ -43,9 +65,9 @@ export default class TutorialForm extends Component {
         const title = value.slice(0, pos);
         const notes = value.slice(pos + 1, length - 1);
         this.store.createRecord('tag', {
-          title:title,
-          notes:notes,
-          pixId:this.idGenerator.newId()
+          title: title,
+          notes: notes,
+          pixId: this.idGenerator.newId()
         }).save()
           .then((tag) => {
             tutorial.tags.pushObject(tag);
@@ -81,5 +103,10 @@ export default class TutorialForm extends Component {
   @action
   toggleCrush() {
     this.args.tutorial.crush = !this.args.tutorial.crush;
+  }
+
+  @action
+  setTutorialLanguage(language){
+    this.args.tutorial.language = language.value;
   }
 }

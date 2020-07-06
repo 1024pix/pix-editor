@@ -15,7 +15,8 @@ export default class TutorialSerializer extends ApplicationSerializer {
     level: 'niveau',
     date: 'Date maj',
     crush: 'CoupDeCoeur',
-    pixId: 'id persistant'
+    pixId: 'id persistant',
+    language: 'Langue'
   };
 
   payloadKeyFromModelName() {
