@@ -1,4 +1,4 @@
-<div class="ui checkbox">
+<div class="{{concat "ui checkbox" (if @toggle " toggle" "")}}">
   <Input id={{this.elementId}} @type="checkbox" @checked={{@checked}} @disabled={{@disabled}}/>
   <label for={{this.elementId}} >
     {{@label}}

@@ -63,7 +63,7 @@ export default class ChallengeForm extends Component {
     }
   }
 
-  get typeIsQROC() {
+  get typeIsQROCOrQROCM() {
     const type = this.args.challenge.type;
     switch (type) {
       case 'QROC':
@@ -73,5 +73,10 @@ export default class ChallengeForm extends Component {
       default:
         return false;
     }
+  }
+
+  get typeIsQROC() {
+    const type = this.args.challenge.type;
+    return type === 'QROC';
   }
 }

@@ -3,7 +3,7 @@
   {{#if (not @alternative)}}
     <Field::Select @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} @setValue={{fn (mut @challenge.type)}}/>
   {{/if}}
-  {{#if this.typeIsQROC}}
+  {{#if this.typeIsQROCOrQROCM}}
     <Field::Select @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
   {{/if}}
   <Field::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
@@ -35,6 +35,11 @@
   <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
   <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
+  {{#if this.typeIsQROC}}
+    <div class="field">
+      <Field::Checkbox @label="Réponse automatique" @checked={{@challenge.autoReply}} @toggle={{true}} @disabled={{not @edition}} />
+    </div>
+  {{/if}}
   {{#if (not @alternative)}}
     <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}

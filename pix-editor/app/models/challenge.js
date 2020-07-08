@@ -36,6 +36,7 @@ export default class ChallengeModel extends Model {
   @attr languages;
   @attr area;
   @attr({ readOnly:true }) _definedBaseName;
+  @attr autoReply;
 
   @hasMany('skill') skills;
 

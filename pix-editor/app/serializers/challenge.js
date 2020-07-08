@@ -37,7 +37,8 @@ export default class ChallengeSerializer extends ApplicationSerializer {
     responsive:'Responsive',
     alternativeText:'Texte alternatif illustration',
     languages:'Langues',
-    area:'Géographie'
+    area:'Géographie',
+    autoReply: 'Réponse automatique'
   };
 
   payloadKeyFromModelName() {
