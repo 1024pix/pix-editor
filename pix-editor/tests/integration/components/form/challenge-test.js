@@ -6,16 +6,26 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Component | challenge-form', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+  test('it should display autoReply checkbox if challenge type is `QROC`', async function(assert) {
+    // Given
+    this.set('challengeData', { type: 'QROC' });
 
-    this.set('showIllustrationAction', function() {});
-    this.set('challengeData', { t1:false, t2:false, t3:false });
+    // When
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
 
-    await render(hbs`{{form/challenge showIllustration=(action showIllustrationAction) challenge=challengeData}}`);
-
+    // Then
     assert.dom('.ui.form').exists();
+    assert.dom('#autoReplyField').exists();
+  });
 
+  test('it should not display autoReply checkbox if challenge type is not `QROC`', async function(assert) {
+    // Given
+    this.set('challengeData', { type: 'QCU' });
+
+    // When
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
+
+    // Then
+    assert.dom('#autoReplyField').doesNotExist();
   });
 });

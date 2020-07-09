@@ -36,7 +36,7 @@
   <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
   {{#if this.typeIsQROC}}
-    <div class="field">
+    <div id="autoReplyField" class="field">
       <Field::Checkbox @label="Réponse automatique" @checked={{@challenge.autoReply}} @toggle={{true}} @disabled={{not @edition}} />
     </div>
   {{/if}}
