@@ -80,6 +80,8 @@ export default class ChallengeModel extends Model {
         return 'suggested';
       case 'archivé':
         return 'archived';
+      case 'périmé':
+        return 'expired';
       default:
         return '';
     }
@@ -88,6 +90,11 @@ export default class ChallengeModel extends Model {
   get isArchived() {
     const status = this.status;
     return (status === 'archivé');
+  }
+
+  get isExpired() {
+    const status = this.status;
+    return (status === 'périmé');
   }
 
   get alternatives() {
@@ -193,6 +200,11 @@ export default class ChallengeModel extends Model {
 
   archive() {
     this.status = 'archivé';
+    return this.save();
+  }
+
+  expire() {
+    this.status = 'périmé';
     return this.save();
   }
 

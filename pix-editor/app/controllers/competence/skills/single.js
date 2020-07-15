@@ -195,4 +195,43 @@ export default class SingleController extends Controller {
       })
       .catch(() => this.notify.message('Archivage abandonné'));
   }
+
+  @action
+  expireSkill() {
+    if (this.skill.productionTemplate) {
+      this.notify.error('Vous ne pouvez pas Supprimer un acquis avec des épreuves publiées');
+      return;
+    }
+    const challenges = this.skill.challenges;
+    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
+      .then(() => {
+        this.loader.start('Suppression de l\'acquis');
+        return this.skill.expire()
+          .then(() => {
+            this.close();
+            this.notify.message('Acquis supprimer');
+          })
+          .then(() => {
+            const updateChallenges = challenges.filter(challenge => !challenge.isExpired).map(challenge => {
+              return challenge.expire()
+                .then(() => {
+                  if (challenge.isTemplate) {
+                    this.notify.message('Prototype Supprimé');
+                  } else {
+                    this.notify.message(`Déclinaison n°${challenge.alternativeVersion} Supprimée`);
+                  }
+                });
+            });
+            return Promise.all(updateChallenges);
+          })
+          .catch(error =>{
+            console.error(error);
+            this.notify.error('Erreur lors de la suppression de l\'acquis');
+          })
+          .finally(() => {
+            this.loader.stop();
+          });
+      })
+      .catch(() => this.notify.message('Suppression abandonnée'));
+  }
 }

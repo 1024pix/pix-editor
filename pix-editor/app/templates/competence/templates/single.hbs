@@ -20,8 +20,12 @@
               {{/if}}
               {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" this.archive}} type="button">
-                  <i class="trash alternate icon"></i>
+                  <i class="archive icon"></i>
                   Archiver
+                </button>
+                <button class="ui button archive item"  {{on "click" this.expire}} type="button">
+                  <i class="trash alternate icon"></i>
+                  Supprimer
                 </button>
               {{/if}}
           </dd.Content>

@@ -247,6 +247,27 @@ export default class SingleController extends Controller {
   }
 
   @action
+  expire() {
+    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
+      .then(() => {
+        this._getChangelog('Suppression de l\'épreuve', (changelog) => {
+          this.loader.start();
+          return this.challenge.expire()
+            .then(challenge => this._expireAlternatives(challenge))
+            .then(challenge => this._handleChangelog(challenge, changelog))
+            .then(challenge => this._checkSkillsValidation(challenge))
+            .then(() => {
+              this._message('Épreuve supprimer');
+              this.send('close');
+            })
+            .catch(() => this._errorMessage('Erreur lors de la suppression'))
+            .finally(() => this.loader.stop());
+        });
+      })
+      .catch(() => this._message('Suppression abandonnée'));
+  }
+
+  @action
   challengeLog() {
     this.displayChallengeLog = true;
   }
@@ -408,6 +429,24 @@ export default class SingleController extends Controller {
     const alternativesArchive = toArchive.reduce((current, alternative) => {
       current.push(alternative.archive()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`))
+      );
+      return current;
+    }, []);
+    return Promise.all(alternativesArchive)
+      .then(() => challenge);
+  }
+
+  _expireAlternatives(challenge) {
+    if (!challenge.isTemplate) {
+      return Promise.resolve(challenge);
+    }
+    const toExpire = challenge.alternatives.filter(alternative => !alternative.isExpired);
+    if (toExpire.length === 0) {
+      return Promise.resolve(challenge);
+    }
+    const alternativesArchive = toExpire.reduce((current, alternative) => {
+      current.push(alternative.expire()
+        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`))
       );
       return current;
     }, []);
