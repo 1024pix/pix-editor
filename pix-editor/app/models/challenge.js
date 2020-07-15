@@ -78,7 +78,7 @@ export default class ChallengeModel extends Model {
         return 'validated';
       case 'proposé':
         return 'suggested';
-      case 'archive':
+      case 'archivé':
         return 'archived';
       default:
         return '';
@@ -87,7 +87,7 @@ export default class ChallengeModel extends Model {
 
   get isArchived() {
     const status = this.status;
-    return (status === 'archive');
+    return (status === 'archivé');
   }
 
   get alternatives() {
@@ -192,7 +192,7 @@ export default class ChallengeModel extends Model {
   }
 
   archive() {
-    this.status = 'archive';
+    this.status = 'archivé';
     return this.save();
   }
 
