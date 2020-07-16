@@ -81,8 +81,8 @@ export default class SingleController extends Controller {
     return this.access.mayValidate(this.challenge);
   }
 
-  get mayArchive() {
-    return this.access.mayArchive(this.challenge);
+  get mayArchiveOrExpire() {
+    return this.access.mayArchiveOrExpire(this.challenge);
   }
 
   get mayMove() {

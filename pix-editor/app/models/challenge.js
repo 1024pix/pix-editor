@@ -138,8 +138,8 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => !alternative.isValidated);
   }
 
-  get draftAlternativesWithoutArchives() {
-    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived);
+  get draftAlternativesWithoutArchivesAndExpires() {
+    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived && !alternative.isExpired);
   }
 
   get isTextBased() {
