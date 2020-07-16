@@ -1,5 +1,6 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+
 export default class TubeModel extends Model {
 
   selectedSkills = [];
@@ -18,12 +19,12 @@ export default class TubeModel extends Model {
 
   @tracked selectedLevel = false;
 
-  get skills() {
-    return this.rawSkills.filter(skill => skill.status !== 'périmé');
+  get liveSkills() {
+    return this.rawSkills.filter(skill => !(skill.isArchived || skill.isExpired));
   }
 
   get skillCount() {
-    return this.skills.length;
+    return this.liveSkills.length;
   }
 
   get productionSkills() {
@@ -31,11 +32,11 @@ export default class TubeModel extends Model {
   }
 
   get productionSkillCount() {
-    return this.skills.map(skill => skill.productionTemplate).filter(challenge => challenge != null).length;
+    return this.liveSkills.map(skill => skill.productionTemplate).filter(challenge => challenge != null).length;
   }
 
   get sortedSkills() {
-    return this.skills.sortBy('level');
+    return this.liveSkills.sortBy('level');
   }
 
   get filledSkills() {

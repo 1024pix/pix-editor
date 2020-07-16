@@ -103,6 +103,14 @@ export default class SkillModel extends Model {
     return this.status === 'actif';
   }
 
+  get isArchived() {
+    return this.status === 'archivé';
+  }
+
+  get isExpired() {
+    return this.status === 'périmé';
+  }
+
   get languagesAndAlternativesCount () {
     const languagesAndAlternativesCount = this.validatedChallenges.reduce((acc, challenge) => {
       return this._extractLanguagesAndAlternativesCountFromChallenges(acc,challenge.languages);
@@ -140,6 +148,11 @@ export default class SkillModel extends Model {
 
   archive() {
     this.status = 'archivé';
+    return this.save();
+  }
+
+  expire() {
+    this.status = 'périmé';
     return this.save();
   }
 
