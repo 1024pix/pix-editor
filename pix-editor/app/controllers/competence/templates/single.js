@@ -408,12 +408,10 @@ export default class SingleController extends Controller {
     }
     return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
-        const alternativesPublication = alternatives.reduce((current, alternative) => {
-          current.push(alternative.validate()
+        const alternativesPublication = alternatives.map(alternative=>{
+          return alternative.validate()
             .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`))
-          );
-          return current;
-        }, []);
+        });
         return Promise.all(alternativesPublication);
       })
       .catch(() => Promise.resolve())
@@ -429,13 +427,12 @@ export default class SingleController extends Controller {
     if (toArchive.length === 0 && toDelete.length) {
       return Promise.resolve(challenge);
     }
-
     const alternativesArchive = toArchive.map(alternative=>{
-      alternative.archive()
+      return alternative.archive()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`));
     });
     const alternativesDelete = toDelete.map(alternative=>{
-      alternative.delete()
+      return alternative.delete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
     const alternativesArchiveAndDelete = [...alternativesArchive, ...alternativesDelete];
@@ -452,7 +449,7 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     }
     const alternativesDelete = toDelete.map(alternative=>{
-      alternative.delete()
+      return alternative.delete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
     return Promise.all(alternativesDelete)
