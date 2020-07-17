@@ -81,8 +81,8 @@ export default class SingleController extends Controller {
     return this.access.mayValidate(this.challenge);
   }
 
-  get mayArchiveOrExpire() {
-    return this.access.mayArchiveOrExpire(this.challenge);
+  get mayArchiveOrDelete() {
+    return this.access.mayArchiveOrDelete(this.challenge);
   }
 
   get mayMove() {
@@ -247,17 +247,17 @@ export default class SingleController extends Controller {
   }
 
   @action
-  expire() {
+  delete() {
     return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
       .then(() => {
         this._getChangelog('Suppression de l\'épreuve', (changelog) => {
           this.loader.start();
-          return this.challenge.expire()
-            .then(challenge => this._expireAlternatives(challenge))
+          return this.challenge.delete()
+            .then(challenge => this._deleteAlternatives(challenge))
             .then(challenge => this._handleChangelog(challenge, changelog))
             .then(challenge => this._checkSkillsValidation(challenge))
             .then(() => {
-              this._message('Épreuve supprimer');
+              this._message('Épreuve supprimée');
               this.send('close');
             })
             .catch(() => this._errorMessage('Erreur lors de la suppression'))
@@ -436,16 +436,16 @@ export default class SingleController extends Controller {
       .then(() => challenge);
   }
 
-  _expireAlternatives(challenge) {
+  _deleteAlternatives(challenge) {
     if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const toExpire = challenge.alternatives.filter(alternative => !alternative.isExpired);
-    if (toExpire.length === 0) {
+    const toDelete = challenge.alternatives.filter(alternative => !alternative.isDeleted);
+    if (toDelete.length === 0) {
       return Promise.resolve(challenge);
     }
-    const alternativesArchive = toExpire.reduce((current, alternative) => {
-      current.push(alternative.expire()
+    const alternativesArchive = toDelete.reduce((current, alternative) => {
+      current.push(alternative.delete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`))
       );
       return current;

@@ -81,7 +81,7 @@ export default class ChallengeModel extends Model {
       case 'archivé':
         return 'archived';
       case 'périmé':
-        return 'expired';
+        return 'deleted';
       default:
         return '';
     }
@@ -92,7 +92,7 @@ export default class ChallengeModel extends Model {
     return (status === 'archivé');
   }
 
-  get isExpired() {
+  get isDeleted() {
     const status = this.status;
     return (status === 'périmé');
   }
@@ -138,8 +138,8 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => !alternative.isValidated);
   }
 
-  get draftAlternativesWithoutArchivesAndExpires() {
-    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived && !alternative.isExpired);
+  get draftAlternativesWithoutArchivesAndDeletes() {
+    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived && !alternative.isDeleted);
   }
 
   get isTextBased() {
@@ -203,7 +203,7 @@ export default class ChallengeModel extends Model {
     return this.save();
   }
 
-  expire() {
+  delete() {
     this.status = 'périmé';
     return this.save();
   }

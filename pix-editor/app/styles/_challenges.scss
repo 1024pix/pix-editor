@@ -156,9 +156,9 @@ img.clickable {
     color: $archived-color;
   }
 
-  &.expired {
-    background-color: $expired-background-color !important;
-    color: $expired-color;
+  &.deleted {
+    background-color: $deleted-background-color !important;
+    color: $deleted-color;
   }
 
   &.to-be-submitted {

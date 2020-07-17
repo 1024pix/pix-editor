@@ -2,8 +2,8 @@
   {{@skill.name}}
   <div class="alternative">
     <span class="production">{{@skill.productionTemplate.productionAlternatives.length}}</span>
-    {{#if @skill.productionTemplate.draftAlternativesWithoutArchivesAndExpires.length}}
-      <span class="draft">({{@skill.productionTemplate.draftAlternativesWithoutArchivesAndExpires.length}})</span>
+    {{#if @skill.productionTemplate.draftAlternativesWithoutArchivesAndDeletes.length}}
+      <span class="draft">({{@skill.productionTemplate.draftAlternativesWithoutArchivesAndDeletes.length}})</span>
     {{/if}}
     {{#if @skill.template.notDeclinable}}
       <span class="not-declinable">NR</span>

@@ -107,7 +107,7 @@ export default class SkillModel extends Model {
     return this.status === 'archivé';
   }
 
-  get isExpired() {
+  get isDeleted() {
     return this.status === 'périmé';
   }
 
@@ -151,7 +151,7 @@ export default class SkillModel extends Model {
     return this.save();
   }
 
-  expire() {
+  delete() {
     this.status = 'périmé';
     return this.save();
   }

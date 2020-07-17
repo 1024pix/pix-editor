@@ -197,23 +197,23 @@ export default class SingleController extends Controller {
   }
 
   @action
-  expireSkill() {
+  deleteSkill() {
     if (this.skill.productionTemplate) {
       this.notify.error('Vous ne pouvez pas Supprimer un acquis avec des épreuves publiées');
       return;
     }
     const challenges = this.skill.challenges;
-    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
+    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'acquis ?')
       .then(() => {
         this.loader.start('Suppression de l\'acquis');
-        return this.skill.expire()
+        return this.skill.delete()
           .then(() => {
             this.close();
-            this.notify.message('Acquis supprimer');
+            this.notify.message('Acquis supprimé');
           })
           .then(() => {
-            const updateChallenges = challenges.filter(challenge => !challenge.isExpired).map(challenge => {
-              return challenge.expire()
+            const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
+              return challenge.delete()
                 .then(() => {
                   if (challenge.isTemplate) {
                     this.notify.message('Prototype Supprimé');
