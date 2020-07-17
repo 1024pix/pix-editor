@@ -1,4 +1,4 @@
-import { module, test, only } from 'qunit';
+import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
@@ -23,7 +23,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     });
   });
 
-  only('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
+  test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
     // Given
     this.set('challengeData', { autoReply: true, isTextBased: true });
 
