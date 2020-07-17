@@ -1,15 +1,17 @@
 <form action="" class="ui form">
   <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
   {{#if (not @alternative)}}
-    <Field::Select @title="Type" @value={{@challenge.type}} @options={{this.options.types}} @edition={{@edition}} @setValue={{fn (mut @challenge.type)}}/>
+    <Field::Select @title="Type" @value={{this.challengeTypeValue}} @options={{this.options.types}} @edition={{@edition}} @setValue={{this.setChallengeType}}/>
   {{/if}}
-  {{#if this.typeIsQROC}}
+  {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
     <Field::Select @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
   {{/if}}
+  {{#if (not this.isAutoReply)}}
   <Field::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
+  {{/if}}
   <Field::Textarea @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
-  {{#if @challenge.isTextBased}}
-      <div class={{concat "field" (if @edition "" " disabled")}}>
+  {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
+      <div id="toleranceField" class={{concat "field" (if @edition "" " disabled")}}>
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">

@@ -170,7 +170,8 @@ export default class SingleController extends Controller {
   save() {
     this._getChangelog(this.defaultSaveChangelog, (changelog) => {
       this.loader.start();
-      return this._handleIllustration(this.challenge)
+      return this._saveCheck(this.challenge)
+        .then(challenge => this._handleIllustration(challenge))
         .then(challenge => this._handleAttachments(challenge))
         .then(challenge => this._saveChallenge(challenge))
         .then(challenge => this._handleCache(challenge))
@@ -362,6 +363,13 @@ export default class SingleController extends Controller {
 
   _scrollToTop() {
     document.querySelector(`.${this.elementClass}.challenge-data`).scrollTop = 0;
+  }
+
+  _saveCheck(challenge) {
+    if (challenge.autoReply && !challenge.embedURL) {
+      return this._error('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
+    }
+    return Promise.resolve(challenge);
   }
 
   _validationChecks(challenge) {
