@@ -60,7 +60,7 @@ export default class ChallengeModel extends Model {
     return ['validé', 'validé sans test', 'pré-validé'].includes(status);
   }
 
-  get isSuggested() {
+  get isDraft() {
     return this.status === 'proposé';
   }
 
@@ -78,8 +78,10 @@ export default class ChallengeModel extends Model {
         return 'validated';
       case 'proposé':
         return 'suggested';
-      case 'archive':
+      case 'archivé':
         return 'archived';
+      case 'périmé':
+        return 'deleted';
       default:
         return '';
     }
@@ -87,7 +89,12 @@ export default class ChallengeModel extends Model {
 
   get isArchived() {
     const status = this.status;
-    return (status === 'archive');
+    return (status === 'archivé');
+  }
+
+  get isDeleted() {
+    const status = this.status;
+    return (status === 'périmé');
   }
 
   get alternatives() {
@@ -127,12 +134,12 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => alternative.isValidated);
   }
 
-  get draftAlternatives() {
-    return this.alternatives.filter(alternative => !alternative.isValidated);
+  get archivedAlternatives() {
+    return this.alternatives.filter(alternative => alternative.isArchived);
   }
 
-  get draftAlternativesWithoutArchives() {
-    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived);
+  get draftAlternatives() {
+    return this.alternatives.filter(alternative => alternative.isDraft);
   }
 
   get isTextBased() {
@@ -192,7 +199,12 @@ export default class ChallengeModel extends Model {
   }
 
   archive() {
-    this.status = 'archive';
+    this.status = 'archivé';
+    return this.save();
+  }
+
+  delete() {
+    this.status = 'périmé';
     return this.save();
   }
 

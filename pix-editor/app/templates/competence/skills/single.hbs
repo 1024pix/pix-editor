@@ -10,8 +10,12 @@
             <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
             <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
                 <button class="ui button archive item"  {{on "click" this.archiveSkill}} type="button">
-                  <i class="trash alternate icon"></i>
+                  <i class="archive icon"></i>
                   Archiver
+                </button>
+              <button class="ui button delete item"  {{on "click" this.deleteSkill}} type="button">
+                  <i class="trash alternate icon"></i>
+                  Supprimer
                 </button>
             </dd.Content>
           </BasicDropdown>

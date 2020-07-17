@@ -80,7 +80,7 @@ export default class StatisticsI18nComponent extends Component {
                   if (challenge.isValidated) {
                     value[0]++;
                     current.set(area, value);
-                  } else if (challenge.isSuggested) {
+                  } else if (challenge.isDraft) {
                     value[1]++;
                     current.set(area, value);
                   }

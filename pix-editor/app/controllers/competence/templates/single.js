@@ -85,6 +85,10 @@ export default class SingleController extends Controller {
     return this.access.mayArchive(this.challenge);
   }
 
+  get mayDelete() {
+    return this.access.mayDelete(this.challenge);
+  }
+
   get mayMove() {
     return this.access.mayMove(this.challenge);
   }
@@ -247,6 +251,27 @@ export default class SingleController extends Controller {
   }
 
   @action
+  delete() {
+    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
+      .then(() => {
+        this._getChangelog('Suppression de l\'épreuve', (changelog) => {
+          this.loader.start();
+          return this.challenge.delete()
+            .then(challenge => this._deleteAlternatives(challenge))
+            .then(challenge => this._handleChangelog(challenge, changelog))
+            .then(challenge => this._checkSkillsValidation(challenge))
+            .then(() => {
+              this._message('Épreuve supprimée');
+              this.send('close');
+            })
+            .catch(() => this._errorMessage('Erreur lors de la suppression'))
+            .finally(() => this.loader.stop());
+        });
+      })
+      .catch(() => this._message('Suppression abandonnée'));
+  }
+
+  @action
   challengeLog() {
     this.displayChallengeLog = true;
   }
@@ -377,20 +402,16 @@ export default class SingleController extends Controller {
     if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const alternatives = challenge.draftAlternatives.filter(alternative => {
-      return !alternative.isArchived;
-    });
+    const alternatives = challenge.draftAlternatives;
     if (alternatives.length === 0) {
       return Promise.resolve(challenge);
     }
     return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
-        const alternativesPublication = alternatives.reduce((current, alternative) => {
-          current.push(alternative.validate()
+        const alternativesPublication = alternatives.map(alternative=>{
+          return alternative.validate()
             .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`))
-          );
-          return current;
-        }, []);
+        });
         return Promise.all(alternativesPublication);
       })
       .catch(() => Promise.resolve())
@@ -401,17 +422,37 @@ export default class SingleController extends Controller {
     if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const toArchive = challenge.alternatives.filter(alternative => !alternative.isArchived);
-    if (toArchive.length === 0) {
+    const toArchive = challenge.productionAlternatives;
+    const toDelete = challenge.draftAlternatives;
+    if (toArchive.length === 0 && toDelete.length) {
       return Promise.resolve(challenge);
     }
-    const alternativesArchive = toArchive.reduce((current, alternative) => {
-      current.push(alternative.archive()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`))
-      );
-      return current;
-    }, []);
-    return Promise.all(alternativesArchive)
+    const alternativesArchive = toArchive.map(alternative=>{
+      return alternative.archive()
+        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`));
+    });
+    const alternativesDelete = toDelete.map(alternative=>{
+      return alternative.delete()
+        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
+    });
+    const alternativesArchiveAndDelete = [...alternativesArchive, ...alternativesDelete];
+    return Promise.all(alternativesArchiveAndDelete)
+      .then(() => challenge);
+  }
+
+  _deleteAlternatives(challenge) {
+    if (!challenge.isTemplate) {
+      return Promise.resolve(challenge);
+    }
+    const toDelete = challenge.alternatives.filter(alternative => !alternative.isDeleted);
+    if (toDelete.length === 0) {
+      return Promise.resolve(challenge);
+    }
+    const alternativesDelete = toDelete.map(alternative=>{
+      return alternative.delete()
+        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
+    });
+    return Promise.all(alternativesDelete)
       .then(() => challenge);
   }
 

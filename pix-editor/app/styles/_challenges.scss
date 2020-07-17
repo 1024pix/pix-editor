@@ -156,6 +156,11 @@ img.clickable {
     color: $archived-color;
   }
 
+  &.deleted {
+    background-color: $deleted-background-color !important;
+    color: $deleted-color;
+  }
+
   &.to-be-submitted {
     background-color: $to-be-submitted-background-color !important;
     color: $to-be-submitted-color;

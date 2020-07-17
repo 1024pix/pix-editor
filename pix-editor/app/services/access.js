@@ -64,8 +64,9 @@ export default class AccessService extends Service {
     const level = this.config.access;
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
+    const deleted = challenge.isDeleted;
     const template = challenge.isTemplate;
-    return !archived && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !template))));
+    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !template))));
   }
 
   mayDuplicate(challenge) {
@@ -87,16 +88,21 @@ export default class AccessService extends Service {
   mayValidate(challenge) {
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
+    const deleted = challenge.isDeleted;
     const workbench = challenge.isWorkbench;
-    return this.isAdmin() && !production && !archived && !workbench;
+    return this.isAdmin() && !production && !archived && !workbench && !deleted;
   }
 
   mayArchive(challenge) {
     return this.mayEdit(challenge);
   }
 
+  mayDelete(challenge) {
+    return this.mayEdit(challenge);
+  }
+
   mayMove(challenge) {
-    return this.isAdmin() && challenge.isTemplate && challenge.isSuggested;
+    return this.isAdmin() && challenge.isTemplate && challenge.isDraft;
   }
 
   isReplicator() {

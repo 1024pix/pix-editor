@@ -87,10 +87,6 @@ export default class SkillModel extends Model {
     return this.templates.filter(template => template.isValidated);
   }
 
-  get draftTemplates() {
-    return this.templates.filter(template => !template.isValidated);
-  }
-
   get alternatives() {
     return this.challenges.filter(challenge => !challenge.isTemplate);
   }
@@ -101,6 +97,14 @@ export default class SkillModel extends Model {
 
   get isActive() {
     return this.status === 'actif';
+  }
+
+  get isArchived() {
+    return this.status === 'archivé';
+  }
+
+  get isDeleted() {
+    return this.status === 'périmé';
   }
 
   get languagesAndAlternativesCount () {
@@ -138,6 +142,16 @@ export default class SkillModel extends Model {
     return this.save();
   }
 
+  archive() {
+    this.status = 'archivé';
+    return this.save();
+  }
+
+  delete() {
+    this.status = 'périmé';
+    return this.save();
+  }
+
   pinRelationships() {
     const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)
@@ -163,11 +177,6 @@ export default class SkillModel extends Model {
         this.pinRelationships();
         return result;
       });
-  }
-
-  archive() {
-    this.status = 'périmé';
-    return this.save();
   }
 
   _getCSSFromStatus(status) {
