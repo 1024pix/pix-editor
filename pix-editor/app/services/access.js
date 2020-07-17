@@ -93,7 +93,11 @@ export default class AccessService extends Service {
     return this.isAdmin() && !production && !archived && !workbench && !deleted;
   }
 
-  mayArchiveOrDelete(challenge) {
+  mayArchive(challenge) {
+    return this.mayEdit(challenge);
+  }
+
+  mayDelete(challenge) {
     return this.mayEdit(challenge);
   }
 
