@@ -367,7 +367,7 @@ export default class SingleController extends Controller {
 
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
-      return this._error('Le mode "Réponse automatique" à été activé alors que l\'épreuve n\'est pas lié à un embed');
+      return this._error('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
     }
     return Promise.resolve(challenge);
   }

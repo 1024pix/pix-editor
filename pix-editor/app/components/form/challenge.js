@@ -89,12 +89,8 @@ export default class ChallengeForm extends Component {
   }
 
   get challengeTypeValue() {
-    return this.options.types.find(type=>{
-      if (this.args.challenge.autoReply) {
-        return type.value === 'autoReply';
-      }
-      return type.value === this.args.challenge.type;
-    });
+    const actualType = this.args.challenge.autoReply ? 'autoReply' : this.args.challenge.type;
+    return this.options.types.find(type=> type.value === actualType);
   }
 
   @action
