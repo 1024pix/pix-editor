@@ -410,7 +410,7 @@ export default class SingleController extends Controller {
       .then(() => {
         const alternativesPublication = alternatives.map(alternative=>{
           return alternative.validate()
-            .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`))
+            .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`));
         });
         return Promise.all(alternativesPublication);
       })
