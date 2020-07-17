@@ -102,7 +102,7 @@ export default class AccessService extends Service {
   }
 
   mayMove(challenge) {
-    return this.isAdmin() && challenge.isTemplate && challenge.isSuggested;
+    return this.isAdmin() && challenge.isTemplate && challenge.isDraft;
   }
 
   isReplicator() {

@@ -32,7 +32,7 @@ export default class TubeModel extends Model {
   }
 
   get productionSkillCount() {
-    return this.liveSkills.map(skill => skill.productionTemplate).filter(challenge => challenge != null).length;
+    return this.productionSkills.length;
   }
 
   get sortedSkills() {

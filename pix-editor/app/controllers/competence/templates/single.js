@@ -402,9 +402,7 @@ export default class SingleController extends Controller {
     if (!challenge.isTemplate) {
       return Promise.resolve(challenge);
     }
-    const alternatives = challenge.draftAlternatives.filter(alternative => {
-      return !alternative.isArchived;
-    });
+    const alternatives = challenge.draftAlternatives;
     if (alternatives.length === 0) {
       return Promise.resolve(challenge);
     }

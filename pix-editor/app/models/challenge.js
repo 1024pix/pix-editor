@@ -60,7 +60,7 @@ export default class ChallengeModel extends Model {
     return ['validé', 'validé sans test', 'pré-validé'].includes(status);
   }
 
-  get isSuggested() {
+  get isDraft() {
     return this.status === 'proposé';
   }
 
@@ -134,12 +134,12 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => alternative.isValidated);
   }
 
-  get draftAlternatives() {
-    return this.alternatives.filter(alternative => !alternative.isValidated);
+  get archivedAlternatives() {
+    return this.alternatives.filter(alternative => alternative.isArchived);
   }
 
-  get draftAlternativesWithoutArchivesAndDeletes() {
-    return this.alternatives.filter(alternative => !alternative.isValidated && !alternative.isArchived && !alternative.isDeleted);
+  get draftAlternatives() {
+    return this.alternatives.filter(alternative => alternative.isDraft);
   }
 
   get isTextBased() {

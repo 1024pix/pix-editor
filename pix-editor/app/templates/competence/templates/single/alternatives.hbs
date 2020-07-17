@@ -12,7 +12,7 @@
     <List::Alternatives @list={{this.challenge.alternatives}} />
   </div>
   <div class="ui borderless bottom attached labelled icon menu">
-    <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
+    <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.archivedAlternatives.length}}</span></div></div>
     {{#if this.mayCreateAlternative}}
       <button class="ui button right item" {{on "click" this.newAlternative}} type="button">
         <i class="plus square outline icon"></i> Nouvelle déclinaison

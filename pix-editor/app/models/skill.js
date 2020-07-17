@@ -87,10 +87,6 @@ export default class SkillModel extends Model {
     return this.templates.filter(template => template.isValidated);
   }
 
-  get draftTemplates() {
-    return this.templates.filter(template => !template.isValidated);
-  }
-
   get alternatives() {
     return this.challenges.filter(challenge => !challenge.isTemplate);
   }
