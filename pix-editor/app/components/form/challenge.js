@@ -1,11 +1,20 @@
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 import Component from '@glimmer/component';
 
 export default class ChallengeForm extends Component {
   @service config;
 
   options = {
-    'types': ['QCU', 'QCM', 'QROC', 'QROCM-ind', 'QROCM-dep', 'QRU'],
+    'types': [
+      { value:'QCU', label:'QCU' },
+      { value:'QCM', label:'QCM' },
+      { value:'QROC', label:'QROC' },
+      { value:'QROCM-ind', label:'QROCM-ind' },
+      { value:'QROCM-dep', label:'QROCM-dep' },
+      { value:'QRU', label:'QRU' },
+      { value:'autoReply', label:'Embed-auto' }
+    ],
     'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
     'declinable':['', 'facilement', 'difficilement', 'permutation', 'non'],
     'format':['petit', 'mots', 'phrase', 'paragraphe'],
@@ -63,7 +72,7 @@ export default class ChallengeForm extends Component {
     }
   }
 
-  get typeIsQROCOrQROCM() {
+  get typeIsQROCOrQROCMInd() {
     const type = this.args.challenge.type;
     switch (type) {
       case 'QROC':
@@ -75,8 +84,33 @@ export default class ChallengeForm extends Component {
     }
   }
 
-  get typeIsQROC() {
-    const type = this.args.challenge.type;
-    return type === 'QROC';
+  get isAutoReply() {
+    return this.args.challenge.autoReply;
+  }
+
+  get challengeTypeValue() {
+    return this.options.types.find(type=>{
+      if (this.args.challenge.autoReply) {
+        return type.value === 'autoReply';
+      }
+      return type.value === this.args.challenge.type;
+    });
+  }
+
+  @action
+  setChallengeType({ value }) {
+    if (value === 'autoReply') {
+      this.args.challenge.type = 'QROC';
+      this.args.challenge.autoReply = true;
+      this.args.challenge.format = 'mots';
+      this.args.challenge.suggestion = null;
+      this.args.challenge.t1 = null;
+      this.args.challenge.t2 = null;
+      this.args.challenge.t3 = null;
+    } else {
+      this.args.challenge.type = value;
+      this.args.challenge.autoReply = false;
+      this.args.challenge.format = null;
+    }
   }
 }
