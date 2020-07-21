@@ -1,13 +1,18 @@
 <div class="ui top attached borderless labelled icon menu{{this.skillClass}}">
   {{#unless this.config.lite}}
     {{#if (eq @section "skills")}}
+      {{log @skillView}}
+      <div class="ui top attached tabular menu">
+        <div class="item production {{if (eq @skillView "production") "active" ""}}" {{on "click" (fn @selectSkillView "production")}}>En production</div>
+        <div class="item workbench {{if (eq @skillView "historical") "active" ""}}"  {{on "click" (fn @selectSkillView "historical")}}>Historique</div>
+      </div>
       <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
         <i class="share square icon"></i> Exporter
       </button>
     {{else if (eq @section "challenges")}}
       <div class="ui top attached tabular menu">
         <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
-        <div class="item workbench {{if (eq @view "production") "" "active"}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
+        <div class="item workbench {{if (eq @view "workbench") "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
       </div>
     {{/if}}
   {{/unless}}

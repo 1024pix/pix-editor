@@ -9,6 +9,7 @@ export default class CompetenceController extends Controller {
   queryParams = ['leftMaximized', 'view'];
 
   @tracked view = 'production';
+  @tracked skillView = 'production';
   @tracked section = 'challenges';
   @tracked leftMaximized = false;
 
@@ -34,6 +35,12 @@ export default class CompetenceController extends Controller {
   setView(value) {
     if (this.view !== value) {
       this.view = value;
+    }
+  }
+
+  setSkillView(value) {
+    if (this.skillView !== value) {
+      this.skillView = value;
     }
   }
 
@@ -151,6 +158,12 @@ export default class CompetenceController extends Controller {
   @action
   selectView(value) {
     this.setView(value);
+    this.closeChildComponent();
+  }
+
+  @action
+  selectSkillView(value) {
+    this.setSkillView(value);
     this.closeChildComponent();
   }
 
