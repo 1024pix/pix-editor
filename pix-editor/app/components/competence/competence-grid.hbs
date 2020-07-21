@@ -5,7 +5,7 @@
       {{#if (or this.displayAllTubes tube.hasProductionChallenge) }}
         <tr>
           <td>
-            {{#if (eq @section "skills")}}
+            {{#if (and (eq @skillView "production") (eq @section "skills"))}}
               <LinkTo @route="competence.tubes.single" @model={{tube}}>{{tube.name}}</LinkTo>
             {{else}}
               {{tube.name}}
