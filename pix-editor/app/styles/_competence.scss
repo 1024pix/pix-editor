@@ -176,6 +176,14 @@
         color: #08cf08;
       }
     }
+    &.historical {
+      background: #444488;
+      color:$suggested-background-color;
+      .deleted-skill {
+        color: indianred;
+      }
+    }
+
     &.quality-skill-link{
       padding:0;
 

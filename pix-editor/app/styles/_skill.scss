@@ -34,8 +34,8 @@
     }
 
     .ember-basic-dropdown-content .ui.button {
-      color:#000000 !important;
-      margin:0;
+      color: #000000 !important;
+      margin: 0;
     }
   }
 }
@@ -52,30 +52,35 @@
   @extend .challenge;
 
 }
-.search-result{
+
+.search-result {
   border-radius: 5px;
-  li{
-    padding:.8em 1.14em;
-    border-bottom: solid 1px rgba(34,36,38,.1);
-    &.ember-power-select-option[aria-current=true] .search-description{
-      color:lightgrey;
+
+  li {
+    padding: .8em 1.14em;
+    border-bottom: solid 1px rgba(34, 36, 38, .1);
+
+    &.ember-power-select-option[aria-current=true] .search-description {
+      color: lightgrey;
     }
-    .search-title{
+
+    .search-title {
       font-weight: bold;
     }
-    .search-description{
-      color:grey;
+
+    .search-description {
+      color: grey;
     }
   }
 }
 
-
-.serch-tuto-more,.search-tuto-solution{
-  .results{
+.serch-tuto-more, .search-tuto-solution {
+  .results {
     max-height: 350px;
     overflow-y: scroll;
   }
 }
+
 .popin-create-tuto {
   .btn-selected-tag {
     margin-bottom: 5px;
