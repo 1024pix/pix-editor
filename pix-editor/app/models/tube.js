@@ -46,6 +46,17 @@ export default class TubeModel extends Model {
     },[false, false, false, false, false, false, false]);
   }
 
+  get filledRawSkills() {
+    return this.rawSkills.reduce((grid, skill) => {
+      if (grid[skill.level - 1]) {
+        grid[skill.level - 1].push(skill);
+      } else {
+        grid[skill.level - 1] = [skill];
+      }
+      return grid;
+    },[false, false, false, false, false, false, false]);
+  }
+
   get hasProductionChallenge() {
     return this.productionSkillCount > 0;
   }

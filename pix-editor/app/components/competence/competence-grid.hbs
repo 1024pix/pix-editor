@@ -11,9 +11,28 @@
               {{tube.name}}
             {{/if}}
           </td>
-          {{#each tube.filledSkills as |skill index|}}
-          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.id}} @index={{index}} />
-          {{/each}}
+          {{#if (and (eq @skillView "historical") (eq @section "skills"))}}
+            {{#each tube.filledRawSkills as |skills index|}}
+              <Competence::Grid::GridCell @section={{@section}}
+                                          @view={{@view}}
+                                          @skillView={{@skillView}}
+                                          @skill={{skills}}
+                                          @link={{@link}}
+                                          @tubeId={{tube.id}}
+                                          @index={{index}} />
+            {{/each}}
+          {{else}}
+            {{#each tube.filledSkills as |skill index|}}
+              <Competence::Grid::GridCell @section={{@section}}
+                                          @view={{@view}}
+                                          @skillView={{@skillView}}
+                                          @skill={{skill}}
+                                          @link={{@link}}
+                                          @tubeId={{tube.id}}
+                                          @index={{index}} />
+            {{/each}}
+          {{/if}}
+
         </tr>
       {{/if}}
     {{/each}}

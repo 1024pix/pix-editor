@@ -2,6 +2,8 @@
   <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} />
 {{else if (eq this.cellType "workbench")}}
   <Competence::Grid::CellWorkbench @skill={{@skill}} />
+{{else if (eq this.cellType "historicalSkill")}}
+  <Competence::Grid::CellHistorical @skills={{@skill}} />
 {{else if (eq this.cellType "skill")}}
   <Competence::Grid::CellSkill @skill={{@skill}} />
 {{else if (eq this.cellType "add-skill")}}

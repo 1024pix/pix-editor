@@ -24,11 +24,21 @@ export default class GridCell extends Component {
         }
         break;
       case 'skills':
-        if (skill) {
-          return 'skill';
-        } else if (this.access.mayEditSkills()) {
-          return 'add-skill';
+        switch (this.args.skillView) {
+          case 'production':
+            if (skill) {
+              return 'skill';
+            } else if (this.access.mayEditSkills()) {
+              return 'add-skill';
+            }
+            break;
+          case 'historical' :
+            if (skill) {
+              return 'historicalSkill';
+            }
+            break;
         }
+
         break;
       case 'quality':
         if (skill && skill.productionTemplate) {
