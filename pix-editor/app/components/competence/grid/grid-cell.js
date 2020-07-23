@@ -8,6 +8,7 @@ export default class GridCell extends Component {
 
   get cellType() {
     const skill = this.args.skill;
+    const skills = this.args.skills;
     switch (this.args.section) {
       case 'challenges':
         switch (this.args.view) {
@@ -32,9 +33,9 @@ export default class GridCell extends Component {
               return 'add-skill';
             }
             break;
-          case 'historical' :
-            if (skill) {
-              return 'historicalSkill';
+          case 'history' :
+            if (skills) {
+              return 'historySkill';
             }
             break;
         }

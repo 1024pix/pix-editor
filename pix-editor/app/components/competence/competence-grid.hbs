@@ -11,12 +11,12 @@
               {{tube.name}}
             {{/if}}
           </td>
-          {{#if (and (eq @skillView "historical") (eq @section "skills"))}}
+          {{#if (and (eq @skillView "history") (eq @section "skills"))}}
             {{#each tube.filledRawSkills as |skills index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
                                           @skillView={{@skillView}}
-                                          @skill={{skills}}
+                                          @skills={{skills}}
                                           @link={{@link}}
                                           @tubeId={{tube.id}}
                                           @index={{index}} />

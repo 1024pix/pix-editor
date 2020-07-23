@@ -1,7 +1,7 @@
 import Component from '@glimmer/component';
 
 
-export default class CompetenceGridCellHistoricalComponent extends Component {
+export default class CompetenceGridCellHistoryComponent extends Component {
 
   get firstSkill() {
     const skills = this.args.skills;
