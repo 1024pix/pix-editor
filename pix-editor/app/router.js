@@ -29,6 +29,7 @@ Router.map(function() {
     this.route('quality', function() {
       this.route('single', { path:'/:skill_id' });
     });
+    this.route('history.single', {path: 'history/:tube_id/:level'});
     this.route('i18n', function() {
       this.route('single', { path:'/:skill_id' });
     });
