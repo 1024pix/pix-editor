@@ -6,7 +6,7 @@ import { inject as controller } from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceController extends Controller {
-  queryParams = ['leftMaximized', 'view', 'skillView'];
+  queryParams = ['leftMaximized', 'view'];
 
   @tracked view = 'production';
   @tracked skillView = 'production';

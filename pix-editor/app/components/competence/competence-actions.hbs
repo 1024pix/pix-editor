@@ -1,7 +1,6 @@
 <div class="ui top attached borderless labelled icon menu{{this.skillClass}}">
   {{#unless this.config.lite}}
     {{#if (eq @section "skills")}}
-      {{log @skillView}}
       <div class="ui top attached tabular menu">
         <div class="item production {{if (eq @skillView "production") "active" ""}}" {{on "click" (fn @selectSkillView "production")}}>En production</div>
         <div class="item workbench {{if (eq @skillView "history") "active" ""}}"  {{on "click" (fn @selectSkillView "history")}}>Historique</div>
