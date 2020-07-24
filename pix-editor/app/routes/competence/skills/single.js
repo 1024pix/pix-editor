@@ -21,6 +21,7 @@ export default class SingleRoute extends Route {
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
     competenceController.setView(null);
+    competenceController.setSkillView('production');
   }
 
   @action
