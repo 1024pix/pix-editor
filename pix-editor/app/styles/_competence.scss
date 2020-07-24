@@ -177,10 +177,16 @@
       }
     }
     &.history {
-      background: #444488;
-      color:$suggested-background-color;
+      background: #564fa5;
+      color:white;
+
       .deleted-skill {
         color: indianred;
+      }
+
+      &.active {
+        color: white !important;
+        background: #5f58ad !important;
       }
     }
 

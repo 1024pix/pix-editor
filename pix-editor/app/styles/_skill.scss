@@ -19,6 +19,11 @@
 .skill-header {
   @extend .challenge-header;
 
+  &.history {
+    background: #564fa5;
+    color: #ffffff !important;
+  }
+
   &.suggested,
   &.prevalidated,
   &.validated_no_test,
