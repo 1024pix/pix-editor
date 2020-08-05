@@ -3,12 +3,12 @@
 {{else if (eq this.cellType "workbench")}}
   <Competence::Grid::CellWorkbench @skill={{@skill}} />
 {{else if (eq this.cellType "historySkill")}}
-  <Competence::Grid::CellHistory @tubeId={{@tubeId}} @skills={{@skills}} />
+  <Competence::Grid::CellHistory @tube={{@tube}} @skill={{@skill}} @level={{@index}} />
 {{else if (eq this.cellType "skill")}}
   <Competence::Grid::CellSkill @skill={{@skill}} />
 {{else if (eq this.cellType "add-skill")}}
   <td>
-    <LinkTo @route="competence.skills.new" @models={{array @tubeId @index}} class="add-skill">
+    <LinkTo @route="competence.skills.new" @models={{array @tube.id @index}} class="add-skill">
     <i class="icon plus circle"></i></LinkTo>
   </td>
 {{else if (eq this.cellType "quality")}}

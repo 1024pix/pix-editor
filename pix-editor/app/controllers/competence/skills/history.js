@@ -15,7 +15,7 @@ export default class CompetenceHistorySingleController extends Controller {
     return this.model.find(skill=>skill);
   }
 
-  get historicalSkills(){
+  get historicalSkills() {
     return this.model.filter(skill=> skill.isArchived || skill.isDeleted);
   }
 

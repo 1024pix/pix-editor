@@ -92,10 +92,27 @@ export default class CompetenceController extends Controller {
     return ' ';
   }
 
+  _transitionToSection(section) {
+    switch (section) {
+      case 'skills':
+        this.transitionToRoute('competence.skills', this.competence);
+        break;
+      case 'challenges':
+        this.transitionToRoute('competence.templates', this.competence);
+        break;
+      case 'quality':
+        this.transitionToRoute('competence.quality', this.competence);
+        break;
+      case 'i18n':
+        this.transitionToRoute('competence.i18n', this.competence);
+        break;
+    }
+  }
+
   @action
   closeChildComponent() {
     this.maximizeLeft(false);
-    this.transitionToRoute('competence', this.competence);
+    this._transitionToSection(this.section);
   }
 
   @action
@@ -156,19 +173,6 @@ export default class CompetenceController extends Controller {
 
   @action
   selectSection(value) {
-    switch (value.id) {
-      case 'skills':
-        this.transitionToRoute('competence.skills', this.competence);
-        break;
-      case 'challenges':
-        this.transitionToRoute('competence.templates', this.competence);
-        break;
-      case 'quality':
-        this.transitionToRoute('competence.quality', this.competence);
-        break;
-      case 'i18n':
-        this.transitionToRoute('competence.i18n', this.competence);
-        break;
-    }
+    this._transitionToSection(value.id);
   }
 }
