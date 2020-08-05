@@ -7,8 +7,8 @@ export default class SkillHistory extends SortedList {
   @service router;
 
   headers = [{
-    name:'Nom',
-    valuePath:'name',
+    name:'Identifiant',
+    valuePath:'id',
   },{
     name:'Statut',
     valuePath:'status',
@@ -17,6 +17,6 @@ export default class SkillHistory extends SortedList {
 
   @action
   selectRow(skill) {
-     this.router.transitionTo('competence.skills.single', skill);
+    this.router.transitionTo('competence.skills.single', skill);
   }
 }
