@@ -39,7 +39,6 @@ export default class CompetenceController extends Controller {
   }
 
   setView(value) {
-    console.log('set view');
     if (this.view !== value) {
       this.view = value;
     }
