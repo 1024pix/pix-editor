@@ -6,7 +6,6 @@ export default class CompetenceI18nIndexRoute extends Route {
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('i18n');
     competenceController.setView(null);
-    competenceController.setSkillView(null);
     competenceController.maximizeLeft(false);
   }
 }

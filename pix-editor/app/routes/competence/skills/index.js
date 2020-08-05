@@ -5,8 +5,7 @@ export default class IndexRoute extends Route {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView(null);
-    competenceController.setSkillView('production');
+    competenceController.setView('production');
     competenceController.maximizeLeft(false);
   }
 }
