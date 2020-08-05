@@ -15,9 +15,9 @@
             {{#each tube.filledRawSkills as |skills index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
-                                          @skills={{skills}}
+                                          @skill={{get skills 0}}
                                           @link={{@link}}
-                                          @tubeId={{tube.id}}
+                                          @tube={{tube}}
                                           @index={{index}} />
             {{/each}}
           {{else}}
@@ -26,7 +26,7 @@
                                           @view={{@view}}
                                           @skill={{skill}}
                                           @link={{@link}}
-                                          @tubeId={{tube.id}}
+                                          @tube={{tube}}
                                           @index={{index}} />
             {{/each}}
           {{/if}}

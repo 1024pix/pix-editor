@@ -11,7 +11,7 @@
     {{else if (eq @section "challenges")}}
       <div class="ui top attached tabular menu">
         <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
-        <div class="item workbench {{if (eq @view "workbench") "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
+        <div class="item workbench {{if (or (eq @view "workbench") (eq @view "workbench-list")) "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
       </div>
     {{/if}}
   {{/unless}}
