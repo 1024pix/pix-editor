@@ -12,11 +12,7 @@ export default class CompetenceHistorySingleController extends Controller {
   isMaximized;
 
   get firstSkill() {
-    return this.model.find(skill=>skill);
-  }
-
-  get historicalSkills() {
-    return this.model.filter(skill=> skill.isArchived || skill.isDeleted);
+    return this.model[0];
   }
 
   @action

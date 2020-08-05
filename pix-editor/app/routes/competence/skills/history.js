@@ -3,7 +3,10 @@ import Route from '@ember/routing/route';
 export default class SingleRoute extends Route {
 
   model(params) {
-    return this.store.query('skill', { filterByFormula:`FIND('${params.skill_name}', {Nom})` });
+    return this.store.findRecord('tube', params.tube_id)
+      .then(tube => {
+        return tube.filledDeadSkills[params.level];
+      });
   }
 
   setupController() {

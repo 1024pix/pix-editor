@@ -15,12 +15,16 @@ export default class SingleRoute extends Route {
     return model.pinRelationships();
   }
 
-  setupController(controller) {
+  setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView('production');
+    if (model.isLive) {
+      competenceController.setView('production');
+    } else {
+      competenceController.setView('history');
+    }
   }
 
   @action
