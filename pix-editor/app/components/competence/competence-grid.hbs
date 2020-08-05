@@ -12,7 +12,7 @@
             {{/if}}
           </td>
           {{#if (and (eq @view "history") (eq @section "skills"))}}
-            {{#each tube.filledRawSkills as |skills index|}}
+            {{#each tube.filledDeadSkills as |skills index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
                                           @skill={{get skills 0}}
