@@ -2,8 +2,8 @@
   {{#unless this.config.lite}}
     {{#if (eq @section "skills")}}
       <div class="ui top attached tabular menu">
-        <div class="item production {{if (eq @skillView "production") "active" ""}}" {{on "click" (fn @selectSkillView "production")}}>En production</div>
-        <div class="item workbench {{if (eq @skillView "history") "active" ""}}"  {{on "click" (fn @selectSkillView "history")}}>Historique</div>
+        <div class="item production {{if (eq @view "production") "active" ""}}" {{on "click" (fn @selectView "production")}}>En production</div>
+        <div class="item workbench {{if (eq @view "history") "active" ""}}"  {{on "click" (fn @selectView "history")}}>Historique</div>
       </div>
       <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
         <i class="share square icon"></i> Exporter

@@ -7,10 +7,8 @@
     <Competence::CompetenceActions
       @section={{this.section}}
       @view={{this.view}}
-      @skillView={{this.skillView}}
       @refresh={{this.refresh}}
       @selectView={{this.selectView}}
-      @selectSkillView={{this.selectSkillView}}
       @shareSkills={{this.exportSkills}} />
     <div class="ui attached segment competence {{this.size}}">
       {{#if this.displayGrid}}
@@ -18,7 +16,6 @@
           @tubes={{this.competence.sortedTubes}}
           @section={{this.section}}
           @view={{this.view}}
-          @skillView={{this.skillView}}
           @link={{this.skillLink}} />
       {{else}}
         <List::Competences

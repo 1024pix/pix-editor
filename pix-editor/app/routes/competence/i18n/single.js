@@ -10,7 +10,6 @@ export default class CompetenceI18nSingleRoute extends Route {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('i18n');
-    competenceController.setSkillView(null);
     competenceController.setView(null);
   }
 

@@ -25,7 +25,7 @@ export default class GridCell extends Component {
         }
         break;
       case 'skills':
-        switch (this.args.skillView) {
+        switch (this.args.view) {
           case 'production':
             if (skill) {
               return 'skill';
