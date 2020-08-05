@@ -6,7 +6,14 @@ import { inject as controller } from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceController extends Controller {
-  queryParams = ['leftMaximized', 'view'];
+  queryParams = [{
+    'leftMaximized': {
+      scope:'controller'
+    },
+    'view': {
+      scope: 'controller'
+    }
+  }];
 
   @tracked view = 'production';
   @tracked section = 'challenges';
@@ -32,6 +39,7 @@ export default class CompetenceController extends Controller {
   }
 
   setView(value) {
+    console.log('set view');
     if (this.view !== value) {
       this.view = value;
     }
