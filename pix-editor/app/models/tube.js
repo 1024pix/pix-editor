@@ -20,11 +20,11 @@ export default class TubeModel extends Model {
   @tracked selectedLevel = false;
 
   get liveSkills() {
-    return this.rawSkills.filter(skill => !(skill.isArchived || skill.isDeleted));
+    return this.rawSkills.filter(skill => skill.isLive);
   }
 
   get deadSkills() {
-    return this.rawSkills.filter(skill => (skill.isArchived || skill.isDeleted));
+    return this.rawSkills.filter(skill => !skill.isLive);
   }
 
   get skillCount() {
