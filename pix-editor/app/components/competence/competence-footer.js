@@ -19,7 +19,9 @@ export default class CompetenceFooter extends Component {
   }
 
   get mayCreateTube() {
-    return this.args.section === 'skills' && this.access.mayCreateTube();
+    const section = this.args.section;
+    const view = this.args.view;
+    return section === 'skills' && view === 'production' && this.access.mayCreateTube();
   }
 
   get mayCreateTemplate() {
