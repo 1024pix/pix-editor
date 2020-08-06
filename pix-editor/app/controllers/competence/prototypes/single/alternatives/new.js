@@ -32,7 +32,7 @@ export default class NewController extends Alternative {
         this.edition = false;
         this.send('minimize');
         this._message(`Déclinaison numéro ${challenge.alternativeVersion} enregistrée`);
-        this.transitionToRoute('competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.relatedPrototype, challenge);
+        this.transitionToRoute('competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), challenge);
       })
       .catch((error) => {
         this._errorMessage('Erreur lors de la création');
@@ -44,7 +44,7 @@ export default class NewController extends Alternative {
   _setAlternativeVersion(challenge) {
     const skill = challenge.firstSkill;
     return skill.reload()
-      .then(() => this.relatedPrototype.getNextAlternativeVersion())
+      .then(() => this.currentData.getPrototype().getNextAlternativeVersion())
       .then(version => {
         challenge.alternativeVersion = version;
         return challenge.save();
