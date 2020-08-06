@@ -244,4 +244,9 @@ export default class SingleController extends Controller {
       })
       .catch(() => this.notify.message('Suppression abandonnée'));
   }
+
+  @action
+  displayChallenges() {
+    this.transitionToRoute('competence.skills.single.archive');
+  }
 }

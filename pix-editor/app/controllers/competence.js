@@ -73,6 +73,8 @@ export default class CompetenceController extends Controller {
       case 'competence.prototypes.single.alternatives.index':
       case 'competence.prototypes.single.alternatives.single':
       case 'competence.prototypes.single.alternatives.new':
+      case 'competence.skills.single.archive.index':
+      case 'competence.skills.single.archive.single':
         return true;
       default:
         return false;

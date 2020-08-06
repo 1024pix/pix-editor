@@ -70,6 +70,12 @@
           Airtable
         </button>
       {{/if}}
+      {{#if (not this.skill.isLive)}}
+        <button class="ui button item" {{on "click" this.displayChallenges}} type="button">
+          <i class="archive icon"></i>
+          Épreuves &gt;&gt;
+        </button>
+      {{/if}}
     {{/if}}
   </div>
 </div>
