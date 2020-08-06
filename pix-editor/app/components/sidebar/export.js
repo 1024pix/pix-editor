@@ -36,8 +36,8 @@ export default class SidebarExportComponent extends Component {
                 tube.name,
                 tube.title,
                 tube.description,
-                tube.practicalTitle,
-                tube.practicalDescription,
+                tube.practicalTitleFr,
+                tube.practicalDescriptionFr,
                 tube.productionSkills.reduce((table, skill) => {
                   table[skill.level - 1] = skill.name;
                   return table;

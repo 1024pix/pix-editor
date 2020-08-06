@@ -63,7 +63,7 @@ export default class TargetProfilePdfExportComponent extends Component {
 
         const tubes = filter ? competence.productionTubes.filter(tube => tube.selectedLevel) : competence.productionTubes;
         const tubeValues = tubes.reduce((values,tube) => {
-          values.push([{ content:tube.practicalTitle, styles:{ cellWidth:200, fontStyle:'bold', fontSize:pSize } },tube.practicalDescription]);
+          values.push([{ content:tube.practicalTitleFr, styles:{ cellWidth:200, fontStyle:'bold', fontSize:pSize } },tube.practicalDescription]);
           return values;
         }, []);
         pdf.setTextColor('#000000');
