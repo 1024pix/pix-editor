@@ -33,7 +33,7 @@ export default class SingleController extends Controller {
   }
 
   get mayEdit() {
-    return this.access.mayEditSkills();
+    return this.access.mayEditSkill(this.skill);
   }
 
   get mayAccessAirtable() {
@@ -46,6 +46,10 @@ export default class SingleController extends Controller {
 
   get mayArchive() {
     return this.access.mayArchiveSkill(this.skill);
+  }
+
+  get mayDelete() {
+    return this.access.mayDeleteSkill(this.skill);
   }
 
   _scrollToTop() {

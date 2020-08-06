@@ -29,6 +29,10 @@ export default class AccessService extends Service {
     return this.isEditor();
   }
 
+  mayEditSkill(skill) {
+    return this.mayEditSkills() && skill.isLive;
+  }
+
   mayMoveTube(tube) {
     const level = this.config.access;
     if (tube.hasProductionChallenge) {
@@ -39,6 +43,9 @@ export default class AccessService extends Service {
   }
 
   mayMoveSkill(skill) {
+    if (!skill.isLive) {
+      return false;
+    }
     const level = this.config.access;
     if (skill.productionTemplate) {
       return level === ADMIN;
@@ -48,6 +55,21 @@ export default class AccessService extends Service {
   }
 
   mayArchiveSkill(skill) {
+    if (!skill.isLive) {
+      return false;
+    }
+    const level = this.config.access;
+    if (skill.productionTemplate) {
+      return level === ADMIN;
+    } else {
+      return level >= EDITOR;
+    }
+  }
+
+  mayDeleteSkill(skill) {
+    if (skill.isDeleted) {
+      return false;
+    }
     const level = this.config.access;
     if (skill.productionTemplate) {
       return level === ADMIN;

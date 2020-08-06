@@ -1,22 +1,26 @@
-<div class="skill-header {{this.skill.descriptionCSS}}">
+<div class="skill-header {{this.skill.statusCSS}}">
   <div class="ui menu">
     <div class="ui left menu">
       {{#if (not this.edition)}}
         {{#if this.mayMove}}
           <button class="ui icon button" {{on "click" this.moveSkill}} type="button"><i class="icon random"></i></button>
         {{/if}}
-        {{#if this.mayArchive}}
+        {{#if (or this.mayArchive this.mayDelete)}}
           <BasicDropdown @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
             <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
             <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
+              {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" this.archiveSkill}} type="button">
                   <i class="archive icon"></i>
                   Archiver
                 </button>
-              <button class="ui button delete item"  {{on "click" this.deleteSkill}} type="button">
+              {{/if}}
+              {{#if this.mayDelete}}
+                <button class="ui button delete item"  {{on "click" this.deleteSkill}} type="button">
                   <i class="trash alternate icon"></i>
                   Supprimer
                 </button>
+              {{/if}}
             </dd.Content>
           </BasicDropdown>
         {{/if}}

@@ -28,22 +28,35 @@
   &.prevalidated,
   &.validated_no_test,
   &.validated,
-  &.archived,
   &.need-work,
   &.to-be-submitted {
     background-color: #444488 !important;
     color: #ffffff !important;
-
-    .ui.button {
-      color: #ffffff !important;
-    }
-
-    .ember-basic-dropdown-content .ui.button {
-      color: #000000 !important;
-      margin: 0;
-    }
   }
+
+  &.archived {
+    background-color: $archived-background-color !important;
+    color: #ffffff !important;
+  }
+
+  &.deleted {
+    background-color: $deleted-background-color !important;
+    color: #ffffff !important;
+  }
+
+  .ui.button {
+    color: #ffffff !important;
+  }
+
+  .ember-basic-dropdown-content .ui.button {
+    color: #000000 !important;
+    margin: 0;
+  }
+
+
+
 }
+
 
 .skill-data {
   @extend .challenge-data;
