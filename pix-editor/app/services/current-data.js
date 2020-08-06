@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 export default class CurrentDataService extends Service {
   @tracked _areas = null;
   @tracked _competence = null;
-  @tracked _template = null;
+  @tracked _prototype = null;
   @tracked _sources = null;
   @tracked _source = null;
 
@@ -16,8 +16,8 @@ export default class CurrentDataService extends Service {
     this._competence = competence;
   }
 
-  setTemplate(template) {
-    this._template = template;
+  setPrototype(prototype) {
+    this._prototype = prototype;
   }
 
   setSources(sources) {
@@ -47,8 +47,8 @@ export default class CurrentDataService extends Service {
     return this._competence;
   }
 
-  getTemplate() {
-    return this._template;
+  getPrototype() {
+    return this._prototype;
   }
 
 }

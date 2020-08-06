@@ -37,7 +37,7 @@ export default class CompetencesList extends SortedList {
   }
 
   get current() {
-    return this.currentData.getTemplate();
+    return this.currentData.getPrototype();
   }
 
 }

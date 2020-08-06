@@ -1,8 +1,8 @@
-<LinkTo @route="competence.templates.list" @model={{@skill}} @tagName="td" class="skill skill-cell link workbench">
+<LinkTo @route="competence.prototypes.list" @model={{@skill}} @tagName="td" class="skill skill-cell link workbench">
   {{@skill.name}}
   <div class="alternative">
-    <span class="alternative-count">{{@skill.templates.length}}</span>
-    {{#if @skill.template.notDeclinable}}
+    <span class="alternative-count">{{@skill.prototypes.length}}</span>
+    {{#if @skill.productionPrototype.notDeclinable}}
       <span class="not-declinable">NR</span>
     {{/if}}
   </div>

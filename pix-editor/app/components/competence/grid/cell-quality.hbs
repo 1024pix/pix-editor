@@ -14,10 +14,10 @@
     {{#if this.classTutorial}}
       <i class="lab icon {{this.classTutorial}}"></i>
     {{/if}}
-    {{#if @skill.productionTemplate.timer }}
+    {{#if @skill.productionPrototype.timer }}
       <i class="time icon"></i>
     {{/if}}
-    {{#if (and (not this.classTutorial) (not @skill.productionTemplate.timer))}}
+    {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
       <br>
     {{/if}}
   </div>

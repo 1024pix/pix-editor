@@ -20,7 +20,7 @@ module('Integration | Component | competence/competence-footer', function(hooks)
     mayCreateTube=mayCreateTube
     selectView=(action externalAction)
     newTube=(action externalAction)
-    newTemplate=(action externalAction)
+    newPrototype=(action externalAction)
      }}`);
 
     // then

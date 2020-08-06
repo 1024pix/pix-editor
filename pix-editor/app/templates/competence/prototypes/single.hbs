@@ -1,0 +1,139 @@
+<div class={{concat "challenge-header " this.challenge.statusCSS}}>
+  <div class="ui menu">
+      <div class="ui left menu">
+    {{#if this.mayAccessLog}}
+        <button class="ui button icon item" {{on "click" this.challengeLog}} type="button"><i class="icon window chat"></i></button>
+    {{/if}}
+    {{#if (not this.edition)}}
+      {{#if (and this.challenge.isPrototype (not this.challenge.isWorkbench))}}
+          <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
+      {{/if}}
+      {{#if (or this.mayValidate this.mayArchive this.mayDelete)}}
+        <BasicDropdown @id="testdd" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
+          <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
+          <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
+              {{#if this.mayValidate}}
+                <button class="ui button validate item"  {{on "click" this.validate}} type="button">
+                  <i class="checkmark icon"></i>
+                  Valider
+                </button>
+              {{/if}}
+              {{#if this.mayArchive}}
+                <button class="ui button archive item"  {{on "click" this.archive}} type="button">
+                  <i class="archive icon"></i>
+                  Archiver
+                </button>
+              {{/if}}
+              {{#if this.mayDelete}}
+              <button class="ui button archive item"  {{on "click" this.delete}} type="button">
+                  <i class="trash alternate icon"></i>
+                  Supprimer
+                </button>
+              {{/if}}
+          </dd.Content>
+        </BasicDropdown>
+      {{/if}}
+      {{#if this.mayMove}}
+        <button class="ui icon button item" {{on "click" this.movePrototype}} type="button"><i class="icon random"></i></button>
+      {{/if}}
+    {{/if}}
+      </div>
+    <div class={{concat "item header" (if this.creation " creation" "")}}>
+      {{this.challengeTitle}}
+    </div>
+    <div class="ui right menu">
+      {{#if this.maximized}}
+        <button class="ui icon button item" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
+      {{else}}
+        <button class="ui icon button item" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
+      {{/if}}
+      <button class="ui icon button item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+    </div>
+  </div>
+</div>
+<div class="challenge">
+  <div class="challenge-data {{this.elementClass}}">
+    <Form::Challenge @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}} @alternative={{this.alternative}} />
+    {{#if this.copyOperation}}
+      <Textarea @value={{this.challenge.preview}} @id={{this.copyZoneId}} />    {{/if}}  </div>
+<div class="ui vertical compact labeled icon menu challenge-menu">
+  {{#if this.edition}}
+    <button class="ui button item important-action" {{on "click" this.save}} type="button">
+      <i class="save icon"></i>
+      Enregistrer
+    </button>
+    {{#if this.mayUpdateCache}}
+      <div class="item">
+        <Field::Checkbox @label="mise à jour cache" @checked={{this.updateCache}} />
+      </div>
+    {{/if}}
+    <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
+      <i class="ban icon"></i>
+      Annuler
+    </button>
+  {{else}}
+    <button class="ui button item" {{on "click" this.previewPrototype}} type="button">
+      <i class="eye icon"></i>
+      Prévisualiser
+    </button>
+    {{#if this.mayEdit}}
+      <button class="ui button item" {{on "click" this.edit}} type="button">
+        <i class="edit icon"></i>
+        Modifier
+      </button>
+    {{/if}}
+    {{#if this.mayDuplicate}}
+      <button class="ui button item" {{on "click" this.duplicate}} type="button">
+        <i class="copy icon"></i>
+        Dupliquer
+      </button>
+    {{/if}}
+    {{#if this.mayAccessAirtable}}
+      <button class="ui button item" {{on "click" this.openAirtable}} type="button">
+        <i class="table icon"></i>
+        Airtable
+      </button>
+    {{/if}}
+    <button class="ui button item" {{on "click" this.copyLink}} type="button">
+      <i class="linkify icon"></i>
+      Copier lien
+    </button>
+    {{#if (and (not this.alternative) (not this.challenge.isWorkbench))}}
+      <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
+        <i class="cubes icon"></i>
+        Déclinaisons &gt;&gt;
+      </button>
+    {{/if}}
+  {{/if}}
+</div>
+</div>
+{{#if this.displayChallengeLog}}
+  <PopIn::ChallengeLog
+    @challenge={{this.challenge}}
+    @class={{this.popinLogClass}}
+    @close={{this.closeChallengeLog}} />
+{{/if}}
+{{#if this.displayImage}}
+<PopIn::Image
+  @src={{this.popinImageSrc}}
+  @close={{this.closeIllustration}}/>
+{{/if}}
+{{#if this.displayChangeLog}}
+<PopIn::Changelog
+  @onApprove={{this.changelogApprove}}
+  @onDeny={{this.changelogDeny}}
+  @defaultValue={{this.changelogDefault}} />
+{{/if}}
+{{#if this.mayMove}}
+  {{#if this.displaySelectLocation}}
+    <PopIn::SelectLocation
+      @onChange={{this.setSkills}}
+      @title="Acquis du prototype"
+      @selectTubeLevel={{true}}
+      @tube={{this.challenge.firstSkill.tube}}
+      @level={{this.level}}
+      @multipleLevel={{true}}
+      @close={{this.closeMovePrototype}} />
+  {{/if}}
+{{/if}}
+{{outlet}}

@@ -37,8 +37,8 @@ module('Integration | Component | list/i18n', function(hooks) {
     await render(hbs`<List::I18n @list={{challengesByLanguages}} @skill={{skill}}/>`);
 
     // then
-    assert.equal(this.element.querySelectorAll('.challenge-template').length, 3);
-    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(1)')[0].textContent.trim(), 'Some instructions 1');
-    assert.equal(this.element.querySelectorAll('.challenge-template td:nth-child(3)')[0].textContent.trim(), '10');
+    assert.equal(this.element.querySelectorAll('.challenge-prototype').length, 3);
+    assert.equal(this.element.querySelectorAll('.challenge-prototype td:nth-child(1)')[0].textContent.trim(), 'Some instructions 1');
+    assert.equal(this.element.querySelectorAll('.challenge-prototype td:nth-child(3)')[0].textContent.trim(), '10');
   });
 });

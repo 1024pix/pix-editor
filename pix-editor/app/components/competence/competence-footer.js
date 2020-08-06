@@ -24,9 +24,9 @@ export default class CompetenceFooter extends Component {
     return section === 'skills' && view === 'production' && this.access.mayCreateTube();
   }
 
-  get mayCreateTemplate() {
+  get mayCreatePrototype() {
     const section = this.args.section;
     const view = this.args.view;
-    return section === 'challenges' && (view === 'workbench' || view === 'workbench-list') && this.access.mayCreateTemplate();
+    return section === 'challenges' && (view === 'workbench' || view === 'workbench-list') && this.access.mayCreatePrototype();
   }
 }

@@ -12,7 +12,7 @@ export default class GridCell extends Component {
       case 'challenges':
         switch (this.args.view) {
           case 'production':
-            if (skill && skill.productionTemplate) {
+            if (skill && skill.productionPrototype) {
               return 'production';
             }
             break;
@@ -41,12 +41,12 @@ export default class GridCell extends Component {
 
         break;
       case 'quality':
-        if (skill && skill.productionTemplate) {
+        if (skill && skill.productionPrototype) {
           return 'quality';
         }
         break;
       case 'i18n' :
-        if (skill  && skill.productionTemplates.length > 0) {
+        if (skill  && skill.productionPrototypes.length > 0) {
           return 'i18n';
         }
         break;

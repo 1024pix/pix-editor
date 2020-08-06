@@ -26,7 +26,7 @@ export default class CompetenceController extends Controller {
   @service notify;
   @service loader;
 
-  @controller('competence.templates.single') challengeController;
+  @controller('competence.prototypes.single') challengeController;
   @controller('competence.skills.single') skillController;
 
   @alias('model')
@@ -58,7 +58,7 @@ export default class CompetenceController extends Controller {
     switch (this.router.currentRouteName) {
       case 'competence.index':
       case 'competence.skills.index':
-      case 'competence.templates.index':
+      case 'competence.prototypes.index':
       case 'competence.quality.index':
       case 'competence.i18n.index':
         return 'full';
@@ -69,10 +69,10 @@ export default class CompetenceController extends Controller {
 
   get twoColumns() {
     switch (this.router.currentRouteName) {
-      case 'competence.templates.single.alternatives':
-      case 'competence.templates.single.alternatives.index':
-      case 'competence.templates.single.alternatives.single':
-      case 'competence.templates.single.alternatives.new':
+      case 'competence.prototypes.single.alternatives':
+      case 'competence.prototypes.single.alternatives.index':
+      case 'competence.prototypes.single.alternatives.single':
+      case 'competence.prototypes.single.alternatives.new':
         return true;
       default:
         return false;
@@ -83,12 +83,12 @@ export default class CompetenceController extends Controller {
     const twoColumns = this.twoColumns;
     if (this.section === 'challenges' && this.view === 'production') {
       if (twoColumns) {
-        return 'competence.templates.single.alternatives';
+        return 'competence.prototypes.single.alternatives';
       } else {
-        return 'competence.templates.single';
+        return 'competence.prototypes.single';
       }
     } else {
-      return 'competence.templates.single';
+      return 'competence.prototypes.single';
     }
   }
 
@@ -105,7 +105,7 @@ export default class CompetenceController extends Controller {
         this.transitionToRoute('competence.skills', this.competence);
         break;
       case 'challenges':
-        this.transitionToRoute('competence.templates', this.competence);
+        this.transitionToRoute('competence.prototypes', this.competence);
         break;
       case 'quality':
         this.transitionToRoute('competence.quality', this.competence);
@@ -131,13 +131,13 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  newTemplate() {
-    this.transitionToRoute('competence.templates.new', this.competence);
+  newPrototype() {
+    this.transitionToRoute('competence.prototypes.new', this.competence);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.templates.new', this.competence, { queryParams: { from: challenge.id } });
+    this.transitionToRoute('competence.prototypes.new', this.competence, { queryParams: { from: challenge.id } });
   }
 
   @action
@@ -154,8 +154,8 @@ export default class CompetenceController extends Controller {
     const skillData = filledSkills.flat()
       .filter(filledSkill => filledSkill !== false)
       .map(filledSkill => {
-        const productionTemplate = filledSkill.productionTemplate;
-        if (productionTemplate) {
+        const productionPrototype = filledSkill.productionPrototype;
+        if (productionPrototype) {
           const tube = filledSkill.tube;
           const description = this._formatCSVString(filledSkill.description);
           return [competence.name, tube.get('name'), filledSkill.name, description];

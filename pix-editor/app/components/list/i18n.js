@@ -23,7 +23,7 @@ export default class I18n extends SortedList {
 
   @action
   selectRow() {
-    const productionTemplate = this.args.skill.productionTemplate;
-    this.router.transitionTo('competence.templates.single.alternatives', productionTemplate);
+    const productionPrototype = this.args.skill.productionPrototype;
+    this.router.transitionTo('competence.prototypes.single.alternatives', productionPrototype);
   }
 }

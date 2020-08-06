@@ -17,7 +17,7 @@ export default class AccessService extends Service {
     return (level === READ_ONLY);
   }
 
-  mayCreateTemplate() {
+  mayCreatePrototype() {
     return this.isEditor();
   }
 
@@ -47,7 +47,7 @@ export default class AccessService extends Service {
       return false;
     }
     const level = this.config.access;
-    if (skill.productionTemplate) {
+    if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -59,7 +59,7 @@ export default class AccessService extends Service {
       return false;
     }
     const level = this.config.access;
-    if (skill.productionTemplate) {
+    if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -71,7 +71,7 @@ export default class AccessService extends Service {
       return false;
     }
     const level = this.config.access;
-    if (skill.productionTemplate) {
+    if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -87,20 +87,20 @@ export default class AccessService extends Service {
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
     const deleted = challenge.isDeleted;
-    const template = challenge.isTemplate;
-    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !template))));
+    const prototype = challenge.isPrototype;
+    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !prototype))));
   }
 
   mayDuplicate(challenge) {
     const level = this.config.access;
-    const template = challenge.isTemplate;
-    return level >= EDITOR || (!template && level === REPLICATOR);
+    const prototype = challenge.isPrototype;
+    return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
   mayAccessLog(challenge) {
     const level = this.config.access;
-    const template = challenge.isTemplate;
-    return level >= EDITOR || (!template && level === REPLICATOR);
+    const prototype = challenge.isPrototype;
+    return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
   mayAccessAirtable() {
@@ -124,7 +124,7 @@ export default class AccessService extends Service {
   }
 
   mayMove(challenge) {
-    return this.isAdmin() && challenge.isTemplate && challenge.isDraft;
+    return this.isAdmin() && challenge.isPrototype && challenge.isDraft;
   }
 
   isReplicator() {

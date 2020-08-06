@@ -32,7 +32,7 @@ export default class TubeModel extends Model {
   }
 
   get productionSkills() {
-    return this.sortedSkills.filter(skill => skill.productionTemplate != null);
+    return this.sortedSkills.filter(skill => skill.productionPrototype != null);
   }
 
   get productionSkillCount() {

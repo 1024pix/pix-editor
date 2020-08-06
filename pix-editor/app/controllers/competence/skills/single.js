@@ -57,9 +57,9 @@ export default class SingleController extends Controller {
   }
 
   @action
-  previewTemplate() {
-    const template = this.skill.productionTemplate;
-    window.open(template.preview, template.id);
+  previewPrototype() {
+    const prototype = this.skill.productionPrototype;
+    window.open(prototype.preview, prototype.id);
   }
 
   @action
@@ -95,7 +95,7 @@ export default class SingleController extends Controller {
     this.edition = false;
     const skill = this.skill;
     skill.rollbackAttributes();
-    const challenge = this.skill.productionTemplate;
+    const challenge = this.skill.productionPrototype;
     if (challenge) {
       challenge.rollbackAttributes();
     }
@@ -109,10 +109,10 @@ export default class SingleController extends Controller {
   save() {
     this.loader.start();
     const skill = this.skill;
-    const template = this.skill.productionTemplate;
+    const prototype = this.skill.productionPrototype;
     let operation;
-    if (template) {
-      operation = template.save();
+    if (prototype) {
+      operation = prototype.save();
     } else {
       operation = Promise.resolve();
     }
@@ -163,7 +163,7 @@ export default class SingleController extends Controller {
 
   @action
   archiveSkill() {
-    if (this.skill.productionTemplate) {
+    if (this.skill.productionPrototype) {
       this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
       return;
     }
@@ -180,7 +180,7 @@ export default class SingleController extends Controller {
             const updateChallenges = challenges.filter(challenge => !challenge.isArchived).map(challenge => {
               return challenge.archive()
                 .then(() => {
-                  if (challenge.isTemplate) {
+                  if (challenge.isPrototype) {
                     this.notify.message('Prototype archivé');
                   } else {
                     this.notify.message(`Déclinaison n°${challenge.alternativeVersion} archivée`);
@@ -202,7 +202,7 @@ export default class SingleController extends Controller {
 
   @action
   deleteSkill() {
-    if (this.skill.productionTemplate) {
+    if (this.skill.productioPrototype) {
       this.notify.error('Vous ne pouvez pas Supprimer un acquis avec des épreuves publiées');
       return;
     }
@@ -219,7 +219,7 @@ export default class SingleController extends Controller {
             const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
               return challenge.delete()
                 .then(() => {
-                  if (challenge.isTemplate) {
+                  if (challenge.isPrototype) {
                     this.notify.message('Prototype Supprimé');
                   } else {
                     this.notify.message(`Déclinaison n°${challenge.alternativeVersion} Supprimée`);

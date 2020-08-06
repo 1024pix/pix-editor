@@ -44,7 +44,7 @@ export default class ChallengeModel extends Model {
   @service config;
   @service idGenerator;
 
-  get isTemplate() {
+  get isPrototype() {
     return (this.genealogy === 'Prototype 1');
   }
 
@@ -99,7 +99,7 @@ export default class ChallengeModel extends Model {
   }
 
   get alternatives() {
-    if (!this.isTemplate || this.isWorkbench) {
+    if (!this.isPrototype || this.isWorkbench) {
       return [];
     }
     const currentVersion = this.version;
@@ -119,14 +119,14 @@ export default class ChallengeModel extends Model {
     return this.skills.firstObject;
   }
 
-  get template() {
-    if (this.isTemplate) {
+  get relatedPrototype() {
+    if (this.isPrototype) {
       return null;
     }
     const currentVersion = this.version;
     const skill = this.firstSkill;
     if (skill) {
-      return skill.templates.find(template => (template.version === currentVersion));
+      return skill.prototypes.find(prototype => (prototype.version === currentVersion));
     }
     return null;
   }
@@ -216,7 +216,7 @@ export default class ChallengeModel extends Model {
 
   clone() {
     const ignoredFields = ['skills', 'author'];
-    if (this.isTemplate) {
+    if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
       ignoredFields.push('alternativeVersion');

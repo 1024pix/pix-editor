@@ -11,7 +11,7 @@ export default class SingleRoute extends Route {
   }
 
   afterModel(model) {
-    this.currentData.setTemplate(model);
+    this.currentData.setPrototype(model);
   }
 
   setupController(controller) {

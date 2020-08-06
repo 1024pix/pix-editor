@@ -13,15 +13,15 @@ export default class ChallengeRoute extends Route {
       return model.skills
         .then(() => {
           const firstSkill = model.firstSkill;
-          return firstSkill.challenges // in order to load model.template later on
+          return firstSkill.challenges // in order to load model.relatedPrototype later on
             .then(() => firstSkill.tube);
         })
         .then(tube => tube.competence)
         .then(competence => {
-          if (model.isTemplate) {
-            return this.transitionTo('competence.templates.single', competence, model);
+          if (model.isPrototype) {
+            return this.transitionTo('competence.prototypes.single', competence, model);
           } else {
-            return this.transitionTo('competence.templates.single.alternatives.single', competence, model.template, model);
+            return this.transitionTo('competence.prototypes.single.alternatives.single', competence, model.relatedPrototype, model);
           }
         })
         .catch(() => this.transitionTo('index'));
