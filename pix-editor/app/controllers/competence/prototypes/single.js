@@ -199,7 +199,10 @@ export default class SingleController extends Controller {
   }
 
   @action
-  validate() {
+  validate(dropdown) {
+    if (dropdown) {
+      dropdown.actions.close();
+    }
     return this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
       .then(() => {
         let defaultLogMessage;
@@ -231,7 +234,10 @@ export default class SingleController extends Controller {
   }
 
   @action
-  archive() {
+  archive(dropdown) {
+    if (dropdown) {
+      dropdown.actions.close();
+    }
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
       .then(() => {
         this._getChangelog('Archivage de l\'épreuve', (changelog) => {
@@ -252,7 +258,10 @@ export default class SingleController extends Controller {
   }
 
   @action
-  delete() {
+  delete(dropdown) {
+    if (dropdown) {
+      dropdown.actions.close();
+    }
     return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
       .then(() => {
         this._getChangelog('Suppression de l\'épreuve', (changelog) => {

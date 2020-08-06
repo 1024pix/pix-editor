@@ -162,10 +162,13 @@ export default class SingleController extends Controller {
   }
 
   @action
-  archiveSkill() {
+  archiveSkill(dropdown) {
     if (this.skill.productionPrototype) {
       this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
       return;
+    }
+    if (dropdown) {
+      dropdown.actions.close();
     }
     const challenges = this.skill.challenges;
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
@@ -201,10 +204,13 @@ export default class SingleController extends Controller {
   }
 
   @action
-  deleteSkill() {
+  deleteSkill(dropdown) {
     if (this.skill.productioPrototype) {
       this.notify.error('Vous ne pouvez pas Supprimer un acquis avec des épreuves publiées');
       return;
+    }
+    if (dropdown) {
+      dropdown.actions.close();
     }
     const challenges = this.skill.challenges;
     return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'acquis ?')
