@@ -49,6 +49,22 @@ export default class SkillModel extends Model {
     }
   }
 
+  get statusCSS() {
+    const status = this.status;
+    switch (status) {
+      case 'en construction':
+        return 'suggested';
+      case 'actif':
+        return 'validated';
+      case 'archivé':
+        return 'archived';
+      case 'périmé':
+        return 'deleted';
+      default:
+        return '';
+    }
+  }
+
   get clueNA() {
     return (this.clueStatus === 'inapplicable');
   }

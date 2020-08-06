@@ -1,7 +1,7 @@
 <LinkTo @route="competence.templates.list" @model={{@skill}} @tagName="td" class="skill skill-cell link workbench">
   {{@skill.name}}
   <div class="alternative">
-    <span class="draft">{{@skill.templates.length}}</span>
+    <span class="alternative-count">{{@skill.templates.length}}</span>
     {{#if @skill.template.notDeclinable}}
       <span class="not-declinable">NR</span>
     {{/if}}

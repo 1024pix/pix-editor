@@ -13,6 +13,7 @@ export default class SkillHistory extends SortedList {
     name:'Statut',
     valuePath:'status',
     maxWidth:200,
+    style:true
   }];
 
   @action

@@ -12,7 +12,7 @@
           @checkboxSelectionMode={{'none'}}
           @onSelect={{this.selectRow}} as |b|>
     <b.row class="challenge-template" as |r|>
-      <r.cell as |value|>
+      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
           {{value}}
       </r.cell>
     </b.row>
