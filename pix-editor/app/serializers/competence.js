@@ -5,7 +5,7 @@ export default class CompetenceSerializer extends ApplicationSerializer {
 
   attrs = {
     name:'Référence',
-    title:'Titre',
+    title:'Titre fr-fr',
     code:'Sous-domaine',
     rawTubes:'Tubes',
     description:'Description',
