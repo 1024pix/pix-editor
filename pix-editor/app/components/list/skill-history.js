@@ -10,6 +10,10 @@ export default class SkillHistory extends SortedList {
     name:'Identifiant',
     valuePath:'id',
   },{
+    name:'Epreuves',
+    valuePath:'challenges.length',
+    maxWidth:200
+  },{
     name:'Statut',
     valuePath:'status',
     maxWidth:200,
