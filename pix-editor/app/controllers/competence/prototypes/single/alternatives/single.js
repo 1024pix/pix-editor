@@ -1,6 +1,5 @@
 import PrototypeController from '../../single';
 import { action } from '@ember/object';
-import { scheduleOnce } from '@ember/runloop';
 import { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { alias } from '@ember/object/computed';
@@ -11,7 +10,6 @@ export default class SingleController extends PrototypeController {
   popinImageClass = 'alternative-popin-image';
   popinLogClass = 'popin-alternative-log';
   popinChangelogClass = 'popin-alternative-changelog';
-  copyZoneId = 'copyZoneDraft';
   elementClass = 'alternative-challenge';
 
   @controller('competence.prototypes.single.alternatives')
@@ -31,28 +29,6 @@ export default class SingleController extends PrototypeController {
       const index = this.challenge.alternativeVersion;
       return 'Déclinaison n°' + index;
     }
-  }
-
-  _executeCopy() {
-    const element = document.getElementById(this.copyZoneId);
-    element.select();
-    try {
-      var successful = document.execCommand('copy');
-      if (!successful) {
-        this.notify.error('Erreur lors de la copie');
-      } else {
-        this.notify.message('lien copié');
-      }
-    } catch (err) {
-      this.notify.error('Erreur lors de la copie');
-    }
-    this.set('copyOperation', false);
-  }
-
-  @action
-  copyLink() {
-    this.copyOperation = true;
-    scheduleOnce('afterRender', this, this._executeCopy);
   }
 
   @action

@@ -55,7 +55,9 @@
   <div class="challenge-data {{this.elementClass}}">
     <Form::Challenge @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}} @alternative={{this.alternative}} />
     {{#if this.copyOperation}}
-      <Textarea @value={{this.challenge.preview}} @id={{this.copyZoneId}} />    {{/if}}  </div>
+      <Field::Copy @value={{this.challenge.preview}} @onCopied={{this.linkCopied}}/>
+    {{/if}}
+  </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
   {{#if this.edition}}
     <button class="ui button item important-action" {{on "click" this.save}} type="button">
@@ -72,7 +74,7 @@
       Annuler
     </button>
   {{else}}
-    <button class="ui button item" {{on "click" this.previewPrototype}} type="button">
+    <button class="ui button item" {{on "click" this.preview}} type="button">
       <i class="eye icon"></i>
       Prévisualiser
     </button>

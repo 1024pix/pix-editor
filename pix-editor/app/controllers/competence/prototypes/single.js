@@ -13,7 +13,6 @@ export default class SingleController extends Controller {
   alternative = false;
   changelogCallback = null;
   defaultSaveChangelog = 'Mise à jour du prototype';
-  copyZoneId = 'copyZone';
   elementClass = 'prototype-challenge';
   popinImageClass = 'prototype-popin-image';
   popinLogClass = 'popin-prototype-log';
@@ -143,7 +142,16 @@ export default class SingleController extends Controller {
   @action
   copyLink() {
     this.copyOperation = true;
-    scheduleOnce('afterRender', this, this._executeCopy);
+  }
+
+  @action
+  linkCopied(result) {
+    this.copyOperation = false;
+    if (result) {
+      this._message('lien copié');
+    } else {
+      this._errorMessage('Erreur lors de la copie');
+    }
   }
 
   @action
@@ -350,22 +358,6 @@ export default class SingleController extends Controller {
         .then(() => this._handleChangelog(prototype, changelog))
         .finally(() => this.loader.stop());
     });
-  }
-
-  _executeCopy() {
-    const element = document.getElementById(this.copyZoneId);
-    element.select();
-    try {
-      var successful = document.execCommand('copy');
-      if (!successful) {
-        this._errorMessage('Erreur lors de la copie');
-      } else {
-        this._message('lien copié');
-      }
-    } catch (err) {
-      this._errorMessage('Erreur lors de la copie');
-    }
-    this.copyOperation = false;
   }
 
   _scrollToTop() {
