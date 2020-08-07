@@ -11,6 +11,7 @@ export default class SingleRoute extends SkillRoute {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('quality');
+    competenceController.setView(null);
   }
 
   @action
@@ -20,11 +21,11 @@ export default class SingleRoute extends SkillRoute {
       transition.abort();
     } else {
       this.controller.model.rollbackAttributes();
-      if (transition.targetName === 'competence.templates.index') {
+      if (transition.targetName === 'competence.prototypes.index') {
         const skill = this.controller.skill;
-        const template = skill.productionTemplate;
-        if (template) {
-          return this.transitionTo('competence.templates.single', this.currentData.getCompetence(), template);
+        const prototype = skill.productionPrototype;
+        if (prototype) {
+          return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         }
       } else if (transition.targetName === 'competence.skills.index') {
         return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controller.model);

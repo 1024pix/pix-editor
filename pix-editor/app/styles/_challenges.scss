@@ -13,6 +13,10 @@
   .not-declinable {
     font-weight: bold;
   }
+
+  .alternative-count {
+    color: $alternative-count-color;
+  }
 }
 
 
@@ -154,6 +158,11 @@ img.clickable {
   &.archived {
     background-color: $archived-background-color !important;
     color: $archived-color;
+
+    .ui.menu .ember-basic-dropdown-content .ui.button {
+      color:$archived-background-color;
+    }
+
   }
 
   &.deleted {

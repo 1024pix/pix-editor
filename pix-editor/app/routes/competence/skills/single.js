@@ -15,12 +15,16 @@ export default class SingleRoute extends Route {
     return model.pinRelationships();
   }
 
-  setupController(controller) {
+  setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView(null);
+    if (model.isLive) {
+      competenceController.setView('production');
+    } else {
+      competenceController.setView('history');
+    }
   }
 
   @action
@@ -33,15 +37,15 @@ export default class SingleRoute extends Route {
         // may not exist if it was a new skill
         this.controller.model.rollbackAttributes();
       }
-      if (transition.targetName === 'competence.templates.index') {
+      if (transition.targetName === 'competence.prototypes.index') {
         const skill = this.controller.skill;
-        const template = skill.productionTemplate;
-        if (template) {
-          return this.transitionTo('competence.templates.single', this.currentData.getCompetence(), template);
+        const prototype = skill.productionPrototype;
+        if (prototype) {
+          return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         } else {
-          return this.transitionTo('competence.templates.list', this.currentData.getCompetence(), skill);
+          return this.transitionTo('competence.prototypes.list', this.currentData.getCompetence(), skill);
         }
-      } else if (transition.targetName === 'competence.quality.index' && this.controller.skill.productionTemplate) {
+      } else if (transition.targetName === 'competence.quality.index' && this.controller.skill.productionPrototype) {
         return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controller.skill);
       }
 

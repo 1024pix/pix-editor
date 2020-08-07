@@ -17,7 +17,7 @@ export default class AccessService extends Service {
     return (level === READ_ONLY);
   }
 
-  mayCreateTemplate() {
+  mayCreatePrototype() {
     return this.isEditor();
   }
 
@@ -27,6 +27,10 @@ export default class AccessService extends Service {
 
   mayEditSkills() {
     return this.isEditor();
+  }
+
+  mayEditSkill(skill) {
+    return this.mayEditSkills() && skill.isLive;
   }
 
   mayMoveTube(tube) {
@@ -39,8 +43,11 @@ export default class AccessService extends Service {
   }
 
   mayMoveSkill(skill) {
+    if (!skill.isLive) {
+      return false;
+    }
     const level = this.config.access;
-    if (skill.productionTemplate) {
+    if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -48,8 +55,23 @@ export default class AccessService extends Service {
   }
 
   mayArchiveSkill(skill) {
+    if (!skill.isLive) {
+      return false;
+    }
     const level = this.config.access;
-    if (skill.productionTemplate) {
+    if (skill.productionPrototype) {
+      return level === ADMIN;
+    } else {
+      return level >= EDITOR;
+    }
+  }
+
+  mayDeleteSkill(skill) {
+    if (skill.isDeleted) {
+      return false;
+    }
+    const level = this.config.access;
+    if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
@@ -65,20 +87,20 @@ export default class AccessService extends Service {
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
     const deleted = challenge.isDeleted;
-    const template = challenge.isTemplate;
-    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !template))));
+    const prototype = challenge.isPrototype;
+    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !prototype))));
   }
 
   mayDuplicate(challenge) {
     const level = this.config.access;
-    const template = challenge.isTemplate;
-    return level >= EDITOR || (!template && level === REPLICATOR);
+    const prototype = challenge.isPrototype;
+    return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
   mayAccessLog(challenge) {
     const level = this.config.access;
-    const template = challenge.isTemplate;
-    return level >= EDITOR || (!template && level === REPLICATOR);
+    const prototype = challenge.isPrototype;
+    return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
   mayAccessAirtable() {
@@ -86,23 +108,43 @@ export default class AccessService extends Service {
   }
 
   mayValidate(challenge) {
-    const production = challenge.isValidated;
-    const archived = challenge.isArchived;
-    const deleted = challenge.isDeleted;
-    const workbench = challenge.isWorkbench;
-    return this.isAdmin() && !production && !archived && !workbench && !deleted;
+    return this.isAdmin() && challenge.isDraft && !challenge.isWorkbench;
   }
 
   mayArchive(challenge) {
-    return this.mayEdit(challenge);
+    if (!challenge.isLive) {
+      return false;
+    }
+    const level = this.config.access;
+    if (challenge.isValidated) {
+      return level === ADMIN;
+    } else {
+      if (challenge.isPrototype) {
+        return level >= EDITOR;
+      } else {
+        return level >= REPLICATOR;
+      }
+    }
   }
 
   mayDelete(challenge) {
-    return this.mayEdit(challenge);
+    if (challenge.isDeleted) {
+      return false;
+    }
+    const level = this.config.access;
+    if (challenge.isValidated) {
+      return level === ADMIN;
+    } else {
+      if (challenge.isPrototype) {
+        return level >= EDITOR;
+      } else {
+        return level >= REPLICATOR;
+      }
+    }
   }
 
   mayMove(challenge) {
-    return this.isAdmin() && challenge.isTemplate && challenge.isDraft;
+    return this.isAdmin() && challenge.isPrototype && challenge.isDraft;
   }
 
   isReplicator() {

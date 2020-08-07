@@ -59,10 +59,10 @@ export default class CompetenceModel extends Model {
     return null;
   }
 
-  get workbenchTemplates() {
+  get workbenchPrototypes() {
     const workbenchSkill = this.workbenchSkill;
     if (workbenchSkill) {
-      return workbenchSkill.templates.filter(template => !template.get('isArchived'));
+      return workbenchSkill.prototypes.filter(prototype => !prototype.get('isArchived'));
     }
     return [];
   }

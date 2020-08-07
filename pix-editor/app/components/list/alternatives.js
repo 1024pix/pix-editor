@@ -32,7 +32,7 @@ export default class AlternativesList extends SortedList {
 
   @action
   selectRow(row) {
-    this.router.transitionTo('competence.templates.single.alternatives.single', row);
+    this.router.transitionTo('competence.prototypes.single.alternatives.single', row);
   }
 
 }

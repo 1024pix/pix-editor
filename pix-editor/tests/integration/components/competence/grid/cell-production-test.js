@@ -11,7 +11,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
 
     // given
     const productionAlternatives = [1,2,3];
-    const skill = EmberObject.create({ productionTemplate:{ productionAlternatives } });
+    const skill = EmberObject.create({ productionPrototype:{ productionAlternatives } });
     this.set('skill', skill);
     // when
     await render(hbs`{{competence/grid/cell-production skill=skill}}`);

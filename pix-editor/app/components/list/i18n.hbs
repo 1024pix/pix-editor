@@ -11,7 +11,7 @@
           @rowSelectionMode={{'single'}}
           @checkboxSelectionMode={{'none'}}
           @onSelect={{this.selectRow}} as |b|>
-    <b.row class="challenge-template" as |r|>
+    <b.row class="challenge-prototype" as |r|>
       <r.cell class="{{if r.columnValue.alternatives "alternatives-count"}}" as |value|>
         {{#if r.columnValue.language}}
           <span class="language"><i class="{{convert-language-as-flag value}} flag"></i>{{value}}</span>

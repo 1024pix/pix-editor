@@ -1,0 +1,9 @@
+
+<LinkTo @route="competence.skills.history" @models={{array @tube.id @level}} class="skill skill-cell link history" @tagName="td">
+  <div class="skill-name ">
+    {{@skill.name}}
+  </div>
+  <div class="history-count">
+    {{this.archivedCount}} - <span class="deleted-skill">{{this.deletedCount}}</span>
+  </div>
+</LinkTo>

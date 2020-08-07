@@ -19,12 +19,14 @@ export default class CompetenceFooter extends Component {
   }
 
   get mayCreateTube() {
-    return this.args.section === 'skills' && this.access.mayCreateTube();
-  }
-
-  get mayCreateTemplate() {
     const section = this.args.section;
     const view = this.args.view;
-    return section === 'challenges' && (view === 'workbench' || view === 'workbench-list') && this.access.mayCreateTemplate();
+    return section === 'skills' && view === 'production' && this.access.mayCreateTube();
+  }
+
+  get mayCreatePrototype() {
+    const section = this.args.section;
+    const view = this.args.view;
+    return section === 'challenges' && (view === 'workbench' || view === 'workbench-list') && this.access.mayCreatePrototype();
   }
 }

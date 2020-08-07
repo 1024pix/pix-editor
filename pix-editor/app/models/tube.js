@@ -20,7 +20,11 @@ export default class TubeModel extends Model {
   @tracked selectedLevel = false;
 
   get liveSkills() {
-    return this.rawSkills.filter(skill => !(skill.isArchived || skill.isDeleted));
+    return this.rawSkills.filter(skill => skill.isLive);
+  }
+
+  get deadSkills() {
+    return this.rawSkills.filter(skill => !skill.isLive);
   }
 
   get skillCount() {
@@ -28,7 +32,7 @@ export default class TubeModel extends Model {
   }
 
   get productionSkills() {
-    return this.sortedSkills.filter(skill => skill.productionTemplate != null);
+    return this.sortedSkills.filter(skill => skill.productionPrototype != null);
   }
 
   get productionSkillCount() {
@@ -42,6 +46,17 @@ export default class TubeModel extends Model {
   get filledSkills() {
     return this.sortedSkills.reduce((grid, skill) => {
       grid[skill.level - 1] = skill;
+      return grid;
+    },[false, false, false, false, false, false, false]);
+  }
+
+  get filledDeadSkills() {
+    return this.deadSkills.reduce((grid, skill) => {
+      if (grid[skill.level - 1]) {
+        grid[skill.level - 1].push(skill);
+      } else {
+        grid[skill.level - 1] = [skill];
+      }
       return grid;
     },[false, false, false, false, false, false, false]);
   }

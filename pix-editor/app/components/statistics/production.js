@@ -41,7 +41,7 @@ export default class StatisticsProductionComponent extends Component {
       this._productionChallengeCounts = this.args.areas.reduce((current, area) => {
         return area.competences.reduce((current, competence) => {
           current[competence.code] = competence.tubes.reduce((current, tube) => {
-            return current + tube.skills.reduce((current, skill) => {
+            return current + tube.liveSkills.reduce((current, skill) => {
               return current + skill.challenges.filter(challenge => challenge.isValidated).length;
             },0);
           },0);

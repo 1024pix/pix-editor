@@ -49,6 +49,22 @@ export default class SkillModel extends Model {
     }
   }
 
+  get statusCSS() {
+    const status = this.status;
+    switch (status) {
+      case 'en construction':
+        return 'suggested';
+      case 'actif':
+        return 'validated';
+      case 'archivé':
+        return 'archived';
+      case 'périmé':
+        return 'deleted';
+      default:
+        return '';
+    }
+  }
+
   get clueNA() {
     return (this.clueStatus === 'inapplicable');
   }
@@ -71,24 +87,24 @@ export default class SkillModel extends Model {
     }
   }
 
-  get templates() {
-    return this.challenges.filter(challenge => challenge.isTemplate);
+  get prototypes() {
+    return this.challenges.filter(challenge => challenge.isPrototype);
   }
 
-  get sortedTemplates() {
-    return this.templates.sort((a, b) => a.version < b.version);
+  get sortedPrototypes() {
+    return this.prototypes.sort((a, b) => a.version < b.version);
   }
 
-  get productionTemplate() {
-    return this.templates.find(template => template.isValidated);
+  get productionPrototype() {
+    return this.prototypes.find(prototype => prototype.isValidated);
   }
 
-  get productionTemplates() {
-    return this.templates.filter(template => template.isValidated);
+  get productionPrototypes() {
+    return this.prototypes.filter(prototype => prototype.isValidated);
   }
 
   get alternatives() {
-    return this.challenges.filter(challenge => !challenge.isTemplate);
+    return this.challenges.filter(challenge => !challenge.isPrototype);
   }
 
   get validatedChallenges() {
@@ -101,6 +117,10 @@ export default class SkillModel extends Model {
 
   get isArchived() {
     return this.status === 'archivé';
+  }
+
+  get isLive() {
+    return this.status === 'actif' || this.status === 'en construction';
   }
 
   get isDeleted() {
@@ -123,8 +143,8 @@ export default class SkillModel extends Model {
   }
 
   getNextVersion() {
-    return this.templates.reduce((current, template) => {
-      const version = template.version;
+    return this.prototypes.reduce((current, prototype) => {
+      const version = prototype.version;
       if (version > current) {
         return version;
       }

@@ -1,11 +1,11 @@
-<LinkTo @route={{@link}} @model={{@skill.productionTemplate}} @tagName="td" class="skill skill-cell link production">
+<LinkTo @route={{@link}} @model={{@skill.productionPrototype}} @tagName="td" class="skill skill-cell link production">
   {{@skill.name}}
   <div class="alternative">
-    <span class="production">{{@skill.productionTemplate.productionAlternatives.length}}</span>
-    {{#if @skill.productionTemplate.draftAlternatives.length}}
-      <span class="draft">({{@skill.productionTemplate.draftAlternatives.length}})</span>
+    <span class="production">{{@skill.productionPrototype.productionAlternatives.length}}</span>
+    {{#if @skill.productionPrototype.draftAlternatives.length}}
+      <span class="draft">({{@skill.productionPrototype.draftAlternatives.length}})</span>
     {{/if}}
-    {{#if @skill.template.notDeclinable}}
+    {{#if @skill.productionPrototype.notDeclinable}}
       <span class="not-declinable">NR</span>
     {{/if}}
   </div>

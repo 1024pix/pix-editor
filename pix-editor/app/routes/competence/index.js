@@ -6,7 +6,7 @@ export default class CompetenceIndexRoute extends Route {
 
   afterModel() {
     super.afterModel(...arguments);
-    this.currentData.setTemplate(null);
+    this.currentData.setPrototype(null);
   }
 
 }

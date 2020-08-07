@@ -4,12 +4,12 @@ import { htmlSafe } from '@ember/template';
 export default class CellQuality extends Component {
 
   get qualityIndication() {
-    const productionTemplate = this.args.skill.productionTemplate;
+    const productionPrototype = this.args.skill.productionPrototype;
     const allWeight = 19;
-    const spoil = this._spoilWeight(productionTemplate.spoil);
-    const responsive = this._responsiveWeight(productionTemplate.responsive);
-    const colorblind = this._colorblindWeight(productionTemplate.accessibility2);
-    const a11Y = this._a11YWeight(productionTemplate.accessibility1);
+    const spoil = this._spoilWeight(productionPrototype.spoil);
+    const responsive = this._responsiveWeight(productionPrototype.responsive);
+    const colorblind = this._colorblindWeight(productionPrototype.accessibility2);
+    const a11Y = this._a11YWeight(productionPrototype.accessibility1);
     const clue = this._clueWeight(this.args.skill.clueStatus);
 
     const result = (spoil + responsive + colorblind + a11Y + clue) / allWeight;
@@ -40,14 +40,14 @@ export default class CellQuality extends Component {
   }
 
   get popupBuild() {
-    const productionTemplate = this.args.skill.productionTemplate;
-    const spoil = this._isNonTested(productionTemplate.spoil);
-    const responsive = this._isNonTested(productionTemplate.responsive);
-    const blind = this._isNonTested(productionTemplate.accessibility1);
-    const colorblind = this._isNonTested(productionTemplate.accessibility2);
+    const productionPrototype = this.args.skill.productionPrototype;
+    const spoil = this._isNonTested(productionPrototype.spoil);
+    const responsive = this._isNonTested(productionPrototype.responsive);
+    const blind = this._isNonTested(productionPrototype.accessibility1);
+    const colorblind = this._isNonTested(productionPrototype.accessibility2);
     const skillClue = this.args.skill.clueStatus;
     const clue = skillClue ? skillClue : 'Pas d\'indice';
-    const skillTimer = productionTemplate.timer;
+    const skillTimer = productionPrototype.timer;
     const timer = skillTimer ? `<tr><td>Timer</td><td>${skillTimer} s</td></tr>` : '';
     const classTuto = this.classTutorial;
     const tutoSolutionCount = this.args.skill.tutoSolutionCount;

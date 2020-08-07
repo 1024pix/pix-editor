@@ -1,6 +1,6 @@
 <form action="" class="ui form">
   <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
-  {{#if (not @alternative)}}
+  {{#if @challenge.isPrototype}}
     <Field::Select @title="Type" @value={{this.challengeTypeValue}} @options={{this.options.types}} @edition={{@edition}} @setValue={{this.setChallengeType}}/>
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
@@ -37,13 +37,13 @@
   <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
   <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
-  {{#if (not @alternative)}}
+  {{#if @challenge.isPrototype}}
     <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}
   {{#if this.authors.isFulfilled}}
     <Field::Select @title="Auteur" @value={{@challenge.author}} @options={{this.authors}} @edition={{@edition}} @multiple={{true}} @setValue={{fn (mut @challenge.author)}}/>
   {{/if}}
-  {{#if (not @alternative)}}
+  {{#if  @challenge.isPrototype}}
     <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>

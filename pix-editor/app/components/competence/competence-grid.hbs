@@ -5,15 +5,32 @@
       {{#if (or this.displayAllTubes tube.hasProductionChallenge) }}
         <tr>
           <td>
-            {{#if (eq @section "skills")}}
+            {{#if (and (eq @view "production") (eq @section "skills"))}}
               <LinkTo @route="competence.tubes.single" @model={{tube}}>{{tube.name}}</LinkTo>
             {{else}}
               {{tube.name}}
             {{/if}}
           </td>
-          {{#each tube.filledSkills as |skill index|}}
-          <Competence::Grid::GridCell @section={{@section}} @view={{@view}} @skill={{skill}} @link={{@link}} @tubeId={{tube.id}} @index={{index}} />
-          {{/each}}
+          {{#if (and (eq @view "history") (eq @section "skills"))}}
+            {{#each tube.filledDeadSkills as |skills index|}}
+              <Competence::Grid::GridCell @section={{@section}}
+                                          @view={{@view}}
+                                          @skill={{get skills 0}}
+                                          @link={{@link}}
+                                          @tube={{tube}}
+                                          @index={{index}} />
+            {{/each}}
+          {{else}}
+            {{#each tube.filledSkills as |skill index|}}
+              <Competence::Grid::GridCell @section={{@section}}
+                                          @view={{@view}}
+                                          @skill={{skill}}
+                                          @link={{@link}}
+                                          @tube={{tube}}
+                                          @index={{index}} />
+            {{/each}}
+          {{/if}}
+
         </tr>
       {{/if}}
     {{/each}}

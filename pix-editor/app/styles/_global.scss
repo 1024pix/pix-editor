@@ -21,7 +21,8 @@ $need-work-color:#000000;
 $na-background-color:#eceaea;
 $na-color:#3e7726;
 $production-alternative-color:#085508;/*#0000ff;*/
-$draft-alternative-color:#c48807;
+$draft-alternative-color:#1083ce;
+$alternative-count-color:#c48807;
 
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
   height:100%;
@@ -74,6 +75,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   display:none !important;
 }
 
+.no-visibility {
+  visibility:hidden;
+}
+
 .CodeMirror {
   min-height:100px;
   height:100px;
@@ -105,11 +110,21 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
             color:#08cf08;
 
           }
-          &.draft {
+          &.workbench {
             color:#f8d71b;
           }
         }
       }
+    }
+  }
+
+  .menu.skill-mode .ui[class*="top attached"].menu.tabular .item.active {
+    &.production {
+      color:#444488;
+
+    }
+    &.workbench {
+      color:#828188;
     }
   }
 

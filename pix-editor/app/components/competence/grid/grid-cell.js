@@ -12,7 +12,7 @@ export default class GridCell extends Component {
       case 'challenges':
         switch (this.args.view) {
           case 'production':
-            if (skill && skill.productionTemplate) {
+            if (skill && skill.productionPrototype) {
               return 'production';
             }
             break;
@@ -24,19 +24,29 @@ export default class GridCell extends Component {
         }
         break;
       case 'skills':
-        if (skill) {
-          return 'skill';
-        } else if (this.access.mayEditSkills()) {
-          return 'add-skill';
+        switch (this.args.view) {
+          case 'production':
+            if (skill) {
+              return 'skill';
+            } else if (this.access.mayEditSkills()) {
+              return 'add-skill';
+            }
+            break;
+          case 'history' :
+            if (skill) {
+              return 'historySkill';
+            }
+            break;
         }
+
         break;
       case 'quality':
-        if (skill && skill.productionTemplate) {
+        if (skill && skill.productionPrototype) {
           return 'quality';
         }
         break;
       case 'i18n' :
-        if (skill  && skill.productionTemplates.length > 0) {
+        if (skill  && skill.productionPrototypes.length > 0) {
           return 'i18n';
         }
         break;

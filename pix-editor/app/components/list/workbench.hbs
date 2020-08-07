@@ -1,0 +1,21 @@
+<EmberTable as |t|>
+  <t.head
+    @columns={{this.headers}}
+    @widthConstraint={{'eq-container'}}
+    @resizeMode={{'fluid'}}
+    @onUpdateSorts={{this.sortBy}}
+    @sorts={{this.sorts}}
+    @sortFunction={{this.sort}}/>
+  <t.body
+    @rows={{@list}}
+    @rowSelectionMode={{'single'}}
+    @checkboxSelectionMode={{'none'}}
+    @onSelect={{this.selectRow}}
+    @selection={{this.current}} as |b|>
+    <b.row as |r|>
+      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+        {{value}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</EmberTable>

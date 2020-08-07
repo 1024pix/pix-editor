@@ -8,9 +8,9 @@ export default class Router extends EmberRouter {
 
 Router.map(function() {
   this.route('competence', { path:'/competence/:competence_id' }, function() {
-    this.route('templates', function() {
+    this.route('prototypes', function() {
       this.route('new');
-      this.route('single', { path:'/:template_id' }, function() {
+      this.route('single', { path:'/:prototype_id' }, function() {
         this.route('alternatives', function() {
           this.route('new');
           this.route('single', { path:'/:alternative_id' });
@@ -23,7 +23,12 @@ Router.map(function() {
       this.route('new');
     });
     this.route('skills', function() {
-      this.route('single', { path:'/:skill_id' });
+      this.route('history', { path: '/history/:tube_id/:level' });
+      this.route('single', { path:'/:skill_id' }, function() {
+        this.route('archive', function() {
+          this.route('single', { path:'/:challenge_id' });
+        });
+      });
       this.route('new', { path:'/new/:tube_id/:level' });
     });
     this.route('quality', function() {

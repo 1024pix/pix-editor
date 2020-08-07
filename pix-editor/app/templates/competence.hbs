@@ -18,8 +18,8 @@
           @view={{this.view}}
           @link={{this.skillLink}} />
       {{else}}
-        <List::Competences
-          @list={{this.competence.workbenchTemplates}}
+        <List::Workbench
+          @list={{this.competence.workbenchPrototypes}}
           @competenceModel={{this.model}}
           @link={{this.skillLink}} />
       {{/if}}
@@ -30,7 +30,7 @@
       @view={{this.view}}
       @selectView={{this.selectView}}
       @newTube={{this.newTube}}
-      @newTemplate={{this.newTemplate}} />
+      @newPrototype={{this.newPrototype}} />
   {{/if}}
   {{outlet}}
 </div>
