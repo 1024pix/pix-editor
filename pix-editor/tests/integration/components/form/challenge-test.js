@@ -11,7 +11,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     this.set('challengeData', { type: 'QROC' , isTextBased: true });
 
     // When
-    await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @alternative={{this.alternative}}/>`);
+    await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
     const labels = this.element.querySelectorAll('label');
     const textLabels = [...labels].map(labelNode=>labelNode.textContent.trim());
     const expectedLabels = ['Consigne', 'Type', 'Format QROC', 'Propositions', 'Réponses', 'Tolérance', 'T1 (espaces/casse/accents)', 'T2 (ponctuation)', 'T3 (distance d\'édition)', 'Embed', 'Type pédagogie', 'Déclinable', 'Timer', 'Internationalisation', 'Langue(s)', 'Géographie', 'Id'];
