@@ -10,17 +10,11 @@ module('Integration | Component | field/copy', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`<Field::Copy />`);
+    this.set('value', 'to be copied');
+    this.set('onCopied', function() {});
 
-    assert.equal(this.element.textContent.trim(), '');
+    await render(hbs`<Field::Copy @value={{this.value}} @onCopied={{this.onCopied}}/>`);
 
-    // Template block usage:
-    await render(hbs`
-      <Field::Copy>
-        template block text
-      </Field::Copy>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.equal(this.element.querySelector('textarea').value.trim(), 'to be copied');
   });
 });

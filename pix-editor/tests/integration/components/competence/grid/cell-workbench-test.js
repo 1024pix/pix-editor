@@ -11,13 +11,13 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
   test('it renders', async function(assert) {
 
     // given
-    const templates = ['template_1', 'template_2', 'template_3'];
-    const skill = EmberObject.create({ templates });
+    const prototypes = ['template_1', 'template_2', 'template_3'];
+    const skill = EmberObject.create({ prototypes });
     this.set('skill', skill);
     // when
     await render(hbs`{{competence/grid/cell-workbench skill=skill}}`);
     // then
-    assert.equal(this.element.querySelector('.draft').textContent.trim(), templates.length);
+    assert.equal(this.element.querySelector('.alternative-count').textContent.trim(), prototypes.length);
 
 
   });

@@ -8,7 +8,7 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should display expected fields if challenge type is `QROC`', async function(assert) {
     // Given
-    this.set('challengeData', { type: 'QROC' , isTextBased: true });
+    this.set('challengeData', { type: 'QROC' , isTextBased: true, isPrototype: true });
 
     // When
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
@@ -25,7 +25,7 @@ module('Integration | Component | challenge-form', function(hooks) {
 
   test('it should hide useless fields if challenge autoReply is `true`', async function(assert) {
     // Given
-    this.set('challengeData', { autoReply: true, isTextBased: true });
+    this.set('challengeData', { autoReply: true, isTextBased: true, isPrototype: true });
 
     // When
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);

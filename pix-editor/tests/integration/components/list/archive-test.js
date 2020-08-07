@@ -12,15 +12,6 @@ module('Integration | Component | list/archive', function(hooks) {
 
     await render(hbs`<List::Archive />`);
 
-    assert.equal(this.element.textContent.trim(), '');
-
-    // Template block usage:
-    await render(hbs`
-      <List::Archive>
-        template block text
-      </List::Archive>
-    `);
-
-    assert.equal(this.element.textContent.trim(), 'template block text');
+    assert.dom('.ember-table').exists();
   });
 });

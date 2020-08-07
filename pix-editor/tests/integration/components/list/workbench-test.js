@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
-module('Integration | Component | competences-list', function(hooks) {
+module('Integration | Component | workbench-list', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
@@ -12,7 +12,7 @@ module('Integration | Component | competences-list', function(hooks) {
 
 
     // when
-    await render(hbs`{{list/competences}}`);
+    await render(hbs`{{list/workbench}}`);
 
 
     // then
