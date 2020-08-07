@@ -10,7 +10,6 @@ export default class SingleController extends Controller {
 
   wasMaximized = false;
   updateCache = true;
-  alternative = false;
   changelogCallback = null;
   defaultSaveChangelog = 'Mise à jour du prototype';
   elementClass = 'prototype-challenge';
@@ -90,6 +89,10 @@ export default class SingleController extends Controller {
 
   get mayMove() {
     return this.access.mayMove(this.challenge);
+  }
+
+  get mayAccessAlternatives() {
+    return this.challenge.isPrototype && !this.challenge.isWorkbench;
   }
 
   get level() {

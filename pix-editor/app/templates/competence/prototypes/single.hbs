@@ -100,7 +100,7 @@
       <i class="linkify icon"></i>
       Copier lien
     </button>
-    {{#if (and (not this.alternative) (not this.challenge.isWorkbench))}}
+    {{#if this.mayAccessAlternatives}}
       <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;

@@ -6,7 +6,6 @@ import { alias } from '@ember/object/computed';
 
 export default class SingleController extends PrototypeController {
 
-  alternative = true;
   popinImageClass = 'alternative-popin-image';
   popinLogClass = 'popin-alternative-log';
   popinChangelogClass = 'popin-alternative-changelog';
