@@ -137,9 +137,7 @@ export default class SingleController extends Controller {
 
   @action
   openAirtable() {
-    const challenge = this.challenge;
-    const config = this.config;
-    window.open(config.airtableUrl + config.tableChallenges + '/' + challenge.id, 'airtable');
+    window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
   }
 
   @action

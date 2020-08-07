@@ -50,11 +50,6 @@ export default class SingleController extends PrototypeController {
   }
 
   @action
-  openAirtable() {
-    window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
-  }
-
-  @action
   copyLink() {
     this.copyOperation = true;
     scheduleOnce('afterRender', this, this._executeCopy);
