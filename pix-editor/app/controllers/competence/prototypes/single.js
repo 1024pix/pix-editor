@@ -130,7 +130,7 @@ export default class SingleController extends Controller {
   }
 
   @action
-  previewPrototype() {
+  preview() {
     const challenge = this.challenge;
     window.open(challenge.preview, challenge.id);
   }

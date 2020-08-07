@@ -50,12 +50,6 @@ export default class SingleController extends PrototypeController {
   }
 
   @action
-  preview() {
-    const challenge = this.challenge;
-    window.open(challenge.preview, challenge.id);
-  }
-
-  @action
   openAirtable() {
     window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
   }
