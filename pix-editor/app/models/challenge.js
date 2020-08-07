@@ -98,6 +98,10 @@ export default class ChallengeModel extends Model {
     return (status === 'périmé');
   }
 
+  get isLive() {
+    return this.isDraft || this.isValidated;
+  }
+
   get alternatives() {
     if (!this.isPrototype || this.isWorkbench) {
       return [];

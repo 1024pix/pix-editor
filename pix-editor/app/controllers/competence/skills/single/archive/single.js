@@ -13,6 +13,12 @@ export default class SingleController extends PrototypeController {
   @alias('parentController.rightMaximized')
   maximized;
 
+  mayValidate = false;
+  mayMove = false;
+  mayEdit = false;
+  mayDuplicate = false;
+  mayAccessAlternatives = false;
+
   get challengeTitle() {
     if (this.challenge.isPrototype) {
       return 'Prototype n°' + this.challenge.version;

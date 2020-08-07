@@ -108,19 +108,39 @@ export default class AccessService extends Service {
   }
 
   mayValidate(challenge) {
-    const production = challenge.isValidated;
-    const archived = challenge.isArchived;
-    const deleted = challenge.isDeleted;
-    const workbench = challenge.isWorkbench;
-    return this.isAdmin() && !production && !archived && !workbench && !deleted;
+    return this.isAdmin() && challenge.isDraft && !challenge.isWorkbench;
   }
 
   mayArchive(challenge) {
-    return this.mayEdit(challenge);
+    if (!challenge.isLive) {
+      return false;
+    }
+    const level = this.config.access;
+    if (challenge.isValidated) {
+      return level === ADMIN;
+    } else {
+      if (challenge.isPrototype) {
+        return level >= EDITOR;
+      } else {
+        return level >= REPLICATOR;
+      }
+    }
   }
 
   mayDelete(challenge) {
-    return this.mayEdit(challenge);
+    if (challenge.isDeleted) {
+      return false;
+    }
+    const level = this.config.access;
+    if (challenge.isValidated) {
+      return level === ADMIN;
+    } else {
+      if (challenge.isPrototype) {
+        return level >= EDITOR;
+      } else {
+        return level >= REPLICATOR;
+      }
+    }
   }
 
   mayMove(challenge) {
