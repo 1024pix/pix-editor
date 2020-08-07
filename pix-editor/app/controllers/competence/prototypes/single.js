@@ -13,9 +13,6 @@ export default class SingleController extends Controller {
   changelogCallback = null;
   defaultSaveChangelog = 'Mise à jour du prototype';
   elementClass = 'prototype-challenge';
-  popinImageClass = 'prototype-popin-image';
-  popinLogClass = 'popin-prototype-log';
-  popinChangelogClass ='popin-changelog';
 
   @tracked edition = false;
   @tracked creation = false;
