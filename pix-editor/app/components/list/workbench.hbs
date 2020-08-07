@@ -11,5 +11,11 @@
     @rowSelectionMode={{'single'}}
     @checkboxSelectionMode={{'none'}}
     @onSelect={{this.selectRow}}
-    @selection={{this.current}}/>
+    @selection={{this.current}} as |b|>
+    <b.row as |r|>
+      <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
+        {{value}}
+      </r.cell>
+    </b.row>
+  </t.body>
 </EmberTable>

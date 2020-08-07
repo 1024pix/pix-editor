@@ -21,7 +21,8 @@ export default class CompetencesList extends SortedList {
   },{
     name:'Statut',
     valuePath:'status',
-    maxWidth:150
+    maxWidth:150,
+    style:true
   }];
 
   sortTypes = {
