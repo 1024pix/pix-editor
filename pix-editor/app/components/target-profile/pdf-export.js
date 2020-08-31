@@ -25,13 +25,12 @@ const firstPagePSize = 12;
 const firstPageLegalSize = 9;
 const areaTitleSize = 18;
 const competenceTitleSize = 14;
-const competenceTitleCellPadding = 10;
+const competenceTitleCellPadding = 8;
 const pSize = 6;
 const footerSize = 4;
-const marginX = 15;
-const extraMarginX = 20;
-const marginY = 20;
+const margin = 15;
 const areaTitleHeight = 69;
+const fontColor = [65,70,87];
 const lightGrey = [250,250,250];
 const colors = [[241,161,65],[87,200,132],[18,163,255],[255,63,148],[87,77,166]];
 const gradientBanner = [area1Gradient,area2Gradient,area3Gradient,area4Gradient,area5Gradient];
@@ -56,21 +55,21 @@ export default class TargetProfilePdfExportComponent extends Component {
     const areas = this.args.model;
     const versionText = `Version du ${(new Date()).toLocaleDateString('fr')}`;
     const pdf = new jsPDF('p', 'px', 'a4');
-    pdf.addFileToVFS("AmpleSoft.ttf", ampleSofNormal);
-    pdf.addFont("AmpleSoft.ttf", "AmpleSoft", "normal");
-    pdf.addFileToVFS("AmpleSoftBold.ttf", ampleSoftBold);
-    pdf.addFont("AmpleSoftBold.ttf", "AmpleSoft", "bold");
-    pdf.addFileToVFS("roboto.ttf", robotoNormal);
-    pdf.addFont("roboto.ttf", "Roboto", "normal");
-    pdf.addFileToVFS("robotoCondensed.ttf", robotoCondensedNormal);
-    pdf.addFont("robotoCondensed.ttf", "RobotoCondensed", "normal");
-    pdf.addFileToVFS("robotoCondensedBold.ttf", robotoCondensedBold);
-    pdf.addFont("robotoCondensedBold.ttf", "RobotoCondensed", "bold");
-    pdf.addFileToVFS("robotoCondensedLight.ttf", robotoCondensedLight);
-    pdf.addFont("robotoCondensedLight.ttf", "RobotoCondensed", "light");
+    pdf.addFileToVFS('AmpleSoft.ttf', ampleSofNormal);
+    pdf.addFont('AmpleSoft.ttf', 'AmpleSoft', 'normal');
+    pdf.addFileToVFS('AmpleSoftBold.ttf', ampleSoftBold);
+    pdf.addFont('AmpleSoftBold.ttf', 'AmpleSoft', 'bold');
+    pdf.addFileToVFS('roboto.ttf', robotoNormal);
+    pdf.addFont('roboto.ttf', 'Roboto', 'normal');
+    pdf.addFileToVFS('robotoCondensed.ttf', robotoCondensedNormal);
+    pdf.addFont('robotoCondensed.ttf', 'RobotoCondensed', 'normal');
+    pdf.addFileToVFS('robotoCondensedBold.ttf', robotoCondensedBold);
+    pdf.addFont('robotoCondensedBold.ttf', 'RobotoCondensed', 'bold');
+    pdf.addFileToVFS('robotoCondensedLight.ttf', robotoCondensedLight);
+    pdf.addFont('robotoCondensedLight.ttf', 'RobotoCondensed', 'light');
     const pdfWidth = pdf.internal.pageSize.width;
     const pdfHeight = pdf.internal.pageSize.height;
-    const pageWidth = pdfWidth - marginX * 2;
+    const pageWidth = pdfWidth - margin * 2;
     const filteredArea = areas.find(area => (area.competences.find(competence=> competence.selectedProductionTubeCount > 0) !== undefined));
     const filter = filteredArea !== undefined;
     pdf.addImage(firstPageBackground, 'JPG', 0, 0, pdfWidth, 631);
@@ -89,7 +88,13 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.addPage();
 
     areas.forEach((area,index) => {
+      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
       y = areaTitleHeight;
+
+      if (competences.length === 0) {
+        return;
+      }
+
       const areaName = area.name.slice(3,area.name.length);
       pdf.addImage(gradientBanner[index],'JPG', 0, 0, pdfWidth, areaTitleHeight);
       pdf.setFont('AmpleSoft', 'normal');
@@ -97,7 +102,6 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.setTextColor('#fff');
       pdf.text(this._getCenteredX(pdf, areaName.toUpperCase()), areaTitleHeight / 2 + 4 , areaName.toUpperCase());
 
-      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
       competences.forEach(competence => {
         const tubeHead = [[
           {
@@ -105,13 +109,13 @@ export default class TargetProfilePdfExportComponent extends Component {
             colSpan: 3,
             rowSpan:1,
             styles:{
-              valign:'middle',
-              textColor:[0,0,0],
+              cellPadding:{ left:margin, top:competenceTitleCellPadding,right:margin, bottom:competenceTitleCellPadding },
               fillColor:lightGrey,
               font:'RobotoCondensed',
               fontStyle:'bold',
               fontSize:competenceTitleSize,
-              cellPadding:{ left:extraMarginX, top:competenceTitleCellPadding,right:competenceTitleCellPadding, bottom:competenceTitleCellPadding + 2 }
+              textColor: fontColor,
+              valign:'middle'
             }
           }
         ]];
@@ -125,7 +129,8 @@ export default class TargetProfilePdfExportComponent extends Component {
                 cellWidth: 100,
                 font:'RobotoCondensed',
                 fontStyle:'normal',
-                fontSize:pSize
+                fontSize:pSize,
+                textColor: fontColor
               } },
             { content: tube.practicalDescriptionFr,
               styles: {
@@ -133,13 +138,14 @@ export default class TargetProfilePdfExportComponent extends Component {
                 fontSize:pSize,
                 font:'RobotoCondensed',
                 fontStyle:'light',
-                textColor: [100,100,100]
+                textColor: fontColor
               } }];
-          if (i === 0) {
-            cells.forEach((value)=>value.styles.cellPadding.top = marginX / 2);
-          }
-          values.push(cells);
 
+          if (i === 0) {
+            cells.forEach((value)=>value.styles.cellPadding.top = margin / 2);
+          }
+
+          values.push(cells);
           return values;
         }, []);
 
@@ -148,16 +154,16 @@ export default class TargetProfilePdfExportComponent extends Component {
             content: 'theme',
             rowSpan: tubeValues.length,
             styles: {
-              cellPadding: { top: 0, right: 0, bottom: 0, left: marginX },
+              cellPadding: { top: 0, right: 0, bottom: 0, left: margin },
               cellWidth: 100,
               valign: 'middle',
               font:'RobotoCondensed',
               fontStyle:'bold',
-              fontSize: pSize + 4 } });
+              fontSize: pSize + 4,
+              textColor: fontColor
+            } });
         }
-        pdf.setTextColor('#4146657');
-        pdf.setFontSize(pSize);
-        pdf.setDrawColor('#000000');
+
         pdf.autoTable({
           startY:y,
           head: tubeHead,
@@ -166,18 +172,22 @@ export default class TargetProfilePdfExportComponent extends Component {
           theme:'plain',
           pageBreak: 'avoid',
           rowPageBreak: 'avoid',
-          margin:{ top:marginY, left:marginX,right:marginX, bottom:marginY },
+          margin:{ top:margin, left:margin,right:margin, bottom:0 },
         });
+
         const newY = pdf.autoTable.previous.finalY;
+
         // Test if is a page break
         if (newY < y) {
-          y = marginY;
+          y = margin;
         }
+
         // Draw rounded corner
         pdf.setFillColor(...colors[index]);
-        pdf.roundedRect(marginX, y - 5, pageWidth, 10, 5, 5, 'F');
+        pdf.roundedRect(margin, y - 5, pageWidth, 10, 5, 5, 'F');
         pdf.setFillColor(...lightGrey);
-        pdf.roundedRect(marginX, newY - 5, pageWidth, 10, 5, 5, 'F');
+        pdf.roundedRect(margin, newY - 5, pageWidth, 10, 5, 5, 'F');
+
         // Reprint table to prevent text hide by roundedRect
         pdf.autoTable({
           startY:y,
@@ -187,14 +197,14 @@ export default class TargetProfilePdfExportComponent extends Component {
           theme:'plain',
           pageBreak: 'avoid',
           rowPageBreak: 'avoid',
-          margin:{ top:marginY, left:marginX,right:marginX, bottom:marginY },
+          margin:{ top:margin, left:margin,right:margin, bottom:0 },
         });
+
         // Draw separation between header and body
         const positionHead = pdf.autoTable.previous.head[0].height;
         pdf.setDrawColor(255, 255, 255);
         pdf.setLineWidth(2);
         pdf.line(0, y + positionHead, pdfWidth, y + positionHead);
-
         y = 15 + pdf.autoTable.previous.finalY;
       });
       pdf.addPage();
@@ -203,10 +213,11 @@ export default class TargetProfilePdfExportComponent extends Component {
     for (let i = 2; i <= pageCount; i++) {
       pdf.setTextColor(100,100,100);
       pdf.setFontSize(footerSize);
-      pdf.setFont('Roboto', 'normal')
+      pdf.setFont('Roboto', 'normal');
       pdf.setPage(i);
-      pdf.text(marginX,pdfHeight - 10, `${legalMention} - ${versionText}`);
+      pdf.text(margin,pdfHeight - 10, `${legalMention} - ${versionText}`);
     }
+
     // Remove last empty page
     pdf.deletePage(pageCount);
     pdf.save(`${title}.pdf`);
