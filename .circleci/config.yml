@@ -101,7 +101,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
+                - dev
                 - gh-pages
       - api_build_and_test:
           requires:
@@ -109,17 +109,17 @@ workflows:
       - pix-editor-build:
           filters:
             branches:
-              only: master
+              only: dev
       - pix-editor-test:
           requires:
             - pix-editor-build
           filters:
             branches:
-              only: master
+              only: dev
       - deploy_to_ghpages:
           requires:
             - pix-editor-build
             - pix-editor-test
           filters:
             branches:
-              only: master
+              only: dev
