@@ -1,0 +1,20 @@
+{
+  "name": "pix-lcms",
+  "version": "3.10.0",
+  "description": "Pix Learning Content Management System",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1024pix/pix-editor.git"
+  },
+  "author": "GIP PIX",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/1024pix/pix-editor/issues"
+  },
+  "homepage": "https://github.com/1024pix/pix-editor#readme"
+}
