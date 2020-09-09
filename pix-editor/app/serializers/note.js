@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class NoteSerializer extends ApplicationSerializer {
+export default class NoteSerializer extends AirtableSerializer {
   attrs = {
     text:'Texte',
     challengeId:'Record_Id',

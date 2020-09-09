@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class ChallengeSerializer extends ApplicationSerializer {
+export default class ChallengeSerializer extends AirtableSerializer {
 
   primaryKey = 'Record ID';
 

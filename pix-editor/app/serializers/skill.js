@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class SillSerializer extends ApplicationSerializer {
+export default class SillSerializer extends AirtableSerializer {
 
   primaryKey = 'Record Id';
 
