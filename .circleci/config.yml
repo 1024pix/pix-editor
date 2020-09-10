@@ -59,7 +59,7 @@ jobs:
           cd deploy
           echo "editor.pix.fr" > CNAME
           git add .
-          git commit --allow-empty -m "Deploy to gh-pages [skip ci]"
+          git commit --allow-empty -m "Deploy to gh-pages"
           git push origin gh-pages
 
   checkout:
@@ -100,26 +100,30 @@ workflows:
       - checkout:
           filters:
             branches:
-              ignore:
-                - dev
-                - gh-pages
+              ignore: gh-pages
       - api_build_and_test:
           requires:
             - checkout
       - pix-editor-build:
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only: dev
+              ignore: gh-pages
       - pix-editor-test:
           requires:
             - pix-editor-build
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only: dev
+              ignore: gh-pages
       - deploy_to_ghpages:
           requires:
             - pix-editor-build
             - pix-editor-test
           filters:
+            tags:
+              only: /^v.*/
             branches:
-              only: dev
+              ignore: /.*/
