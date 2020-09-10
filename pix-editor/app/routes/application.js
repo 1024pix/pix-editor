@@ -51,7 +51,7 @@ export default class ApplicationRoute extends Route {
     const controller = this.controller;
     if (controller) {
       controller.loading = true;
-      transition.promise.finally(function() {
+      transition.promise.finally(function () {
         controller.loading = false;
       });
       return false;
