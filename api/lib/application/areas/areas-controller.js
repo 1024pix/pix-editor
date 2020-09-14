@@ -2,7 +2,7 @@ const usecases = require('../../domain/usecases');
 
 module.exports = {
 
-  async get(request, h) {
-    return h.response({});
+  async get() {
+    return usecases.getAreas();
   },
 };
