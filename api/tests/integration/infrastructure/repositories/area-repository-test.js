@@ -7,7 +7,7 @@ describe('Integration | Repository | area-repository', function() {
     return airtableBuilder.cleanAll();
   });
 
-  it('should return Areas (Domaines)', async function() {
+  it('should return Areas (Domaines) sorted by code', async function() {
     // Given
     const area0 = {
       id: 'recArea0',
@@ -23,8 +23,8 @@ describe('Integration | Repository | area-repository', function() {
     };
     airtableBuilder.mockList({ tableName: 'Domaines' })
       .returns([
-        airtableBuilder.factory.buildArea(area0),
         airtableBuilder.factory.buildArea(area1),
+        airtableBuilder.factory.buildArea(area0),
       ])
       .activate();
 
