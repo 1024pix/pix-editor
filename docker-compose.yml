@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.3-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: pix-lcms
+      POSTGRES_HOST_AUTH_METHOD: trust
