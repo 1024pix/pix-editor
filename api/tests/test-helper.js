@@ -9,10 +9,18 @@ chai.use(require('chai-sorted'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 
-afterEach(() => {
+afterEach(async () => {
   airtableBuilder.cleanAll();
+  await databaseBuilder.clean();
   return sinon.restore();
 });
+
+// Knex
+const { knex } = require('../db/knex-database-connection');
+
+// DatabaseBuilder
+const DatabaseBuilder = require('./tooling/database-builder/database-builder');
+const databaseBuilder = new DatabaseBuilder({ knex });
 
 // Hapi
 const hFake = {
@@ -80,8 +88,10 @@ const airtableBuilder = new AirtableBuilder({ nock });
 module.exports = {
   airtableBuilder,
   domainBuilder: require('./tooling/domain-builder/factory'),
+  databaseBuilder,
   expect,
   hFake,
+  knex,
   sinon,
   catchErr,
   testErr: new Error('Fake Error'),
