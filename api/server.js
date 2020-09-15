@@ -8,6 +8,7 @@ const preResponseUtils = require('./lib/infrastructure/utils/pre-response-utils'
 const routes = require('./lib/routes');
 const plugins = require('./lib/plugins');
 const config = require('./lib/config');
+const security = require('./lib/infrastructure/security');
 
 const createServer = async () => {
 
@@ -29,6 +30,10 @@ const createServer = async () => {
   });
 
   server.ext('onPreResponse', preResponseUtils.catchDomainAndInfrastructureErrors);
+
+  server.auth.scheme('api-token', security.scheme);
+  server.auth.strategy('default', 'api-token');
+  server.auth.default('default');
 
   const configuration = [].concat(plugins, routes);
 

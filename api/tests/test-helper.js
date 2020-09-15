@@ -85,15 +85,20 @@ nock.disableNetConnect();
 const AirtableBuilder = require('./tooling/airtable-builder/airtable-builder');
 const airtableBuilder = new AirtableBuilder({ nock });
 
+function generateAuthorizationHeader(user) {
+  return { authorization: `Bearer ${user.apiKey}` };
+}
+
 module.exports = {
   airtableBuilder,
-  domainBuilder: require('./tooling/domain-builder/factory'),
+  catchErr,
   databaseBuilder,
+  domainBuilder: require('./tooling/domain-builder/factory'),
   expect,
+  generateAuthorizationHeader,
   hFake,
   knex,
   sinon,
-  catchErr,
   testErr: new Error('Fake Error'),
   testInfraNotFoundErr: new infraErrors.NotFoundError('Fake infra NotFoundError'),
 };

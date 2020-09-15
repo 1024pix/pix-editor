@@ -3,6 +3,9 @@ exports.register = async function(server) {
     {
       method: 'GET',
       path: '/{param*}',
+      options: {
+        auth: false,
+      },
       handler: {
         directory: {
           path: 'public/pix-editor',

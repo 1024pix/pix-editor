@@ -6,7 +6,6 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/areas',
       config: {
-        auth: false,
         handler: areasController.get,
       }
     },
