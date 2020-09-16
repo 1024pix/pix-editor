@@ -6,7 +6,9 @@
   "directories": {
     "doc": "docs"
   },
-  "scripts": {},
+  "scripts": {
+    "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/1024pix/pix-editor.git"
