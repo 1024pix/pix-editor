@@ -7,6 +7,7 @@
     "doc": "docs"
   },
   "scripts": {
+    "start": "cd api && npm start",
     "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor"
   },
   "repository": {
