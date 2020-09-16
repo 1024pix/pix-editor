@@ -12,6 +12,7 @@
 **/node_modules
 
 # misc
+pix-editor/tests/test-env.js
 api/.env*
 /.pnp*
 /.sass-cache
