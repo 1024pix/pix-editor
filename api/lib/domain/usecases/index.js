@@ -18,6 +18,5 @@ function injectDependencies(usecases) {
 }
 
 module.exports = injectDependencies({
-  createRelease: require('./create-release'),
-  getAreas: require('./get-areas')
+  getAreas: require('./get-areas'),
 });
