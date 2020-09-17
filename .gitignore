@@ -21,6 +21,8 @@ npm-debug.log*
 yarn-error.log
 testem.log
 
+api/public/pix-editor/**
+
 # ember-try
 **/.node_modules.ember-try/
 **/bower.json.ember-try
