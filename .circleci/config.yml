@@ -44,6 +44,10 @@ jobs:
   api_build_and_test:
     docker:
       - image: circleci/node:12.14.0
+      - image: postgres:12.3-alpine
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_HOST_AUTH_METHOD: trust
     working_directory: ~/pix-editor/api
     steps:
       - attach_workspace:
@@ -61,6 +65,8 @@ jobs:
           command: |
             npm run lint
             npm test
+          environment:
+            TEST_DATABASE_URL: postgres://circleci@localhost:5432/circleci
 
 workflows:
   version: 2
