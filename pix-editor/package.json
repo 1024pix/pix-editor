@@ -57,6 +57,7 @@
     "ember-simplemde": "^1.2.0",
     "ember-source": "~3.16.0",
     "ember-table": "^2.2.3",
+    "ember-test-selectors": "5.0.0",
     "ember-tooltips": "^3.4.1",
     "ember-truth-helpers": "^2.1.0",
     "ember-welcome-page": "^4.0.0",
@@ -66,7 +67,8 @@
     "liquid-fire": "^0.31.0",
     "loader.js": "^4.7.0",
     "qunit-dom": "^1.0.0",
-    "sass": "^1.15.2"
+    "sass": "^1.15.2",
+    "sinon": "9.0.3"
   },
   "engines": {
     "node": "10.* || >= 12"
