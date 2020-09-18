@@ -1,14 +1,15 @@
-import AirtableAdapter from './airtable';
-import { inject as service } from '@ember/service';
+import ApplicationAdapter from './application';
 
-export default class AuthorAdapter extends AirtableAdapter {
-  @service config;
-
-  get namespace() {
-    return 'v0/' + this.config.airtableEditorBase;
-  }
+export default class AuthorAdapter extends ApplicationAdapter {
 
   pathForType() {
-    return 'Auteurs';
+    return 'users';
+  }
+  urlForQueryRecord(query) {
+    if (query.me) {
+      delete query.me;
+      return `${super.urlForQueryRecord(...arguments)}/me`;
+    }
+    return super.urlForQueryRecord(...arguments);
   }
 }

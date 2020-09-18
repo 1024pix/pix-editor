@@ -1,13 +1,7 @@
-import AirtableSerializer from './airtable';
+import ApplicationSerializer from './application';
 
-export default class AuthorSerializer extends AirtableSerializer {
-
-  attrs = {
-    name:'Nom',
-    access:'Accès'
-  };
-
-  payloadKeyFromModelName() {
-    return 'Auteurs';
+export default class AuthorSerializer extends ApplicationSerializer {
+  modelNameFromPayloadKey() {
+    return 'author';
   }
 }
