@@ -1,0 +1,30 @@
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+<div class="ui standard modal visible active">
+  <div class="header">
+    Connexion
+  </div>
+  <div class="content">
+    <div class="description">
+      <form class="ui form">
+        <div class="field">
+          <label>Pour vous identifier, merci de saisir votre clé personnelle.</label>
+          <div class="ui input">
+            <Input @id="login-api-key" @value={{this.apiKey}} />
+          </div>
+          {{#if this.isErrorMessagePresent}}
+            <div class="ui negative message" id="login-form-error-message">
+              {{this.errorMessage}}
+            </div>
+          {{/if}}
+        </div>
+        <button data-test-login-button
+                class="ui right button primary"
+                type="submit"
+                {{on "click" this.validateApiKey}}>
+          Me connecter
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+</ModalDialog>
