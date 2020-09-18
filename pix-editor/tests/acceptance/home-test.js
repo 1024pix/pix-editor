@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { visit, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
-import setupApplicationConfig from '../setup-application-config';
 
 const competenceIds = [
   'recsvLz0W2ShyfD63', 'recNv8qhaY887jQb2', 'recIkYm646lrGvLNT',
@@ -13,19 +12,25 @@ const competenceIds = [
 ];
 
 module('Acceptance | Home', function(hooks) {
-  setupApplicationConfig();
   setupApplicationTest(hooks);
   setupMirage(hooks);
+  let apiKey;
 
-  test('visiting /', async function(assert) {
-    // given
+  hooks.beforeEach(function() {
+    this.server.create('config', 'default');
+    apiKey = 'valid-api-key';
+    localStorage.setItem('pix-api-key', apiKey);
+    this.server.create('author', { apiKey, trigram: 'ABC' });
+
     competenceIds.map((competenceId) => this.server.create('competence', { id: competenceId, pixId: `pixId ${competenceId}` }));
     this.server.create('area', { id: 'recvoGdo7z2z7pXWa', name: '1. Information et données', code: '1', competenceIds: ['recsvLz0W2ShyfD63', 'recNv8qhaY887jQb2', 'recIkYm646lrGvLNT'] });
     this.server.create('area', { id: 'recoB4JYOBS1PCxhh', name: '2. Communication et collaboration', code: '2', competenceIds: ['recDH19F7kKrfL3Ii', 'recgxqQfz3BqEbtzh', 'recMiZPNl7V1hyE1d', 'recFpYXCKcyhLI3Nu'] });
     this.server.create('area', { id: 'recs7Gpf90ln8NCv7', name: '3. Création de contenu', code: '3', competenceIds: ['recbDTF8KwupqkeZ6', 'recHmIWG6D0huq6Kx', 'rece6jYwH4WEw549z', 'recOdC9UDVJbAXHAm'] });
     this.server.create('area', { id: 'recUcSnS2lsOhFIeE', name: '4. Protection et sécurité', code: '4', competenceIds: ['rec6rHqas39zvLZep', 'recofJCxg0NqTqTdP', 'recfr0ax8XrfvJ3ER'] });
     this.server.create('area', { id: 'recnrCmBiPXGbgIyQ', name: '5. Environnement numérique', code: '5', competenceIds: ['recIhdrmCuEmCDAzj', 'recudHE5Omrr10qrx'] });
+  });
 
+  test('visiting /', async function(assert) {
     // when
     await visit('/');
 
