@@ -13,7 +13,7 @@ export default class AccessService extends Service {
   readOnly = READ_ONLY;
 
   isReadonly() {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     return (level === READ_ONLY);
   }
 
@@ -34,7 +34,7 @@ export default class AccessService extends Service {
   }
 
   mayMoveTube(tube) {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (tube.hasProductionChallenge) {
       return level === ADMIN;
     } else {
@@ -46,7 +46,7 @@ export default class AccessService extends Service {
     if (!skill.isLive) {
       return false;
     }
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
@@ -58,7 +58,7 @@ export default class AccessService extends Service {
     if (!skill.isLive) {
       return false;
     }
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
@@ -70,7 +70,7 @@ export default class AccessService extends Service {
     if (skill.isDeleted) {
       return false;
     }
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (skill.productionPrototype) {
       return level === ADMIN;
     } else {
@@ -83,7 +83,7 @@ export default class AccessService extends Service {
   }
 
   mayEdit(challenge) {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
     const deleted = challenge.isDeleted;
@@ -92,13 +92,13 @@ export default class AccessService extends Service {
   }
 
   mayDuplicate(challenge) {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     const prototype = challenge.isPrototype;
     return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
 
   mayAccessLog(challenge) {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     const prototype = challenge.isPrototype;
     return level >= EDITOR || (!prototype && level === REPLICATOR);
   }
@@ -115,7 +115,7 @@ export default class AccessService extends Service {
     if (!challenge.isLive) {
       return false;
     }
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (challenge.isValidated) {
       return level === ADMIN;
     } else {
@@ -131,7 +131,7 @@ export default class AccessService extends Service {
     if (challenge.isDeleted) {
       return false;
     }
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     if (challenge.isValidated) {
       return level === ADMIN;
     } else {
@@ -148,27 +148,27 @@ export default class AccessService extends Service {
   }
 
   isReplicator() {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     return (level >= REPLICATOR);
   }
 
   isEditor() {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     return (level >= EDITOR);
   }
 
   isAdmin() {
-    const level = this.config.access;
+    const level = this.config.accessLevel;
     return (level === ADMIN);
   }
 
   getLevel(accessString) {
     switch (accessString) {
-      case 'lecture':
+      case 'readonly':
         return READ_ONLY;
-      case 'réplication':
+      case 'replicator':
         return REPLICATOR;
-      case 'rédaction':
+      case 'editor':
         return EDITOR;
       case 'admin':
         return ADMIN;
