@@ -8,11 +8,6 @@ module('Integration | Component | main-sidebar', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders main-sideBar', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-    //
-    // this.set('executeAction', function() {});
-    // this.set('openConfigurationAction', function() {});
     this.set('openAction', function() {});
     this.set('loadingAction', function() {});
     this.set('finishedAction', function() {});
@@ -37,7 +32,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
       }
     });
 
-    await render(hbs`{{sidebar/main openConfiguration=(action openAction)
+    await render(hbs`{{sidebar/main openLoginForm=(action openAction)
     showMessage=(action messageAction)
     burger=burger
     }}`);

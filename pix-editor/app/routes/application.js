@@ -10,16 +10,20 @@ export default class ApplicationRoute extends Route {
   @service pixConnector;
   @service currentData;
 
-  _openConfiguration() {
-    this.controller.send('openConfiguration');
+  _openLoginForm() {
+    this.controller.send('openLoginForm');
   }
 
-  beforeModel() {
-    if (this.config.check) {
+  async beforeModel() {
+    try {
+      await this.config.load();
       this.configured = true;
-    } else {
+    } catch (error) {
       this.configured = false;
-      scheduleOnce('afterRender', this, this._openConfiguration);
+    }
+
+    if (!this.configured) {
+      scheduleOnce('afterRender', this, this._openLoginForm);
     }
   }
 
