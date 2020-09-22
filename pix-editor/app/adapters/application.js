@@ -1,67 +1,7 @@
-import DS from 'ember-data';
-import { inject as service } from '@ember/service';
+import JSONAPIAdapter from '@ember-data/adapter/json-api';
 
-export default class ApplicationAdapter extends DS.RESTAdapter {
+export default class ApplicationAdapter extends JSONAPIAdapter {
 
-  host = 'https://api.airtable.com';
-
-  @service config;
-
-  get headers() {
-    return {
-      Accept: 'application/json',
-      // API Token
-      Authorization: 'Bearer ' + this.config.airtableKey
-    };
-  }
-
-  get namespace() {
-  // API Version + Base ID
-    return 'v0/' + this.config.airtableBase;
-  }
-
-  pathForType(type) {
-    switch (type) {
-      case 'challenge':
-        return 'Epreuves';
-      case 'skill':
-        return 'Acquis';
-      case 'tutorial':
-        return 'Tutoriels';
-      case 'tube':
-        return 'Tubes';
-      default:
-        return super.pathForType(type);
-    }
-  }
-
-  // from RESTAdpater, overriden to use PATCH instead of PUT
-  updateRecord(store, type, snapshot) {
-    const data = {};
-    const serializer = store.serializerFor(type.modelName);
-
-    serializer.serializeIntoHash(data, type, snapshot);
-
-    const id = snapshot.id;
-    const url = this.buildURL(type.modelName, id, snapshot, 'updateRecord');
-
-    return this.ajax(url, 'PATCH', { data: data });
-  }
-
-  coalesceFindRequests = true;
-
-  groupRecordsForFindMany (store, snapshots) {
-    const groups = [];
-    for (let i = 0; i < snapshots.length; i += 100) {
-      groups.push(snapshots.slice(i, i + 100));
-    }
-    return groups;
-  }
-
-  findMany (store, type, ids, snapshots) {
-    const recordsText = 'OR(' + ids.map(id => `RECORD_ID() = '${id}'`).join(',') + ')';
-    const url = this.buildURL(type.modelName, ids, snapshots, 'findMany');
-    return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
-  }
+  namespace = 'api';
 
 }

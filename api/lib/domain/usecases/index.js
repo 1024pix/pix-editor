@@ -4,6 +4,7 @@ const airtableDatasource = require('../../infrastructure/datasources/airtable');
 
 const dependencies = {
   areaDatasource: airtableDatasource.AreaDatasource,
+  areaRepository: require('../../infrastructure/repositories/area-repository'),
   challengeDatasource: airtableDatasource.ChallengeDatasource,
   competenceDatasource: airtableDatasource.CompetenceDatasource,
   courseDatasource: airtableDatasource.CourseDatasource,
@@ -17,5 +18,5 @@ function injectDependencies(usecases) {
 }
 
 module.exports = injectDependencies({
-  createRelease: require('./create-release'),
+  getAreas: require('./get-areas'),
 });

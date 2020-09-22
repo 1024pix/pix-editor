@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class CompetenceSerializer extends ApplicationSerializer {
+export default class CompetenceSerializer extends AirtableSerializer {
   primaryKey = 'Record ID';
 
   attrs = {

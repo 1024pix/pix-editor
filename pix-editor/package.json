@@ -15,7 +15,7 @@
     "build:production": "ember build -prod",
     "lint:hbs": "ember-template-lint .",
     "lint:js": "eslint --fix .",
-    "start": "ember serve",
+    "start": "ember serve --proxy http://localhost:3002",
     "test": "ember test"
   },
   "devDependencies": {
@@ -36,6 +36,7 @@
     "ember-cli-eslint": "^5.1.0",
     "ember-cli-htmlbars": "^4.2.2",
     "ember-cli-inject-live-reload": "^2.0.2",
+    "ember-cli-mirage": "1.1.8",
     "ember-cli-sass": "^10.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-template-lint": "^1.0.0-beta.3",

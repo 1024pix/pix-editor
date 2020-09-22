@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class AuthorSerializer extends ApplicationSerializer {
+export default class AuthorSerializer extends AirtableSerializer {
 
   attrs = {
     name:'Nom',

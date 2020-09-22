@@ -1,6 +1,6 @@
-import ApplicationSerializer from './application';
+import AirtableSerializer from './airtable';
 
-export default class TagSerializer extends ApplicationSerializer {
+export default class TagSerializer extends AirtableSerializer {
 
   primaryKey = 'Record ID';
 
