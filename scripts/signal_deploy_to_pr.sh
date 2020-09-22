@@ -27,7 +27,7 @@ RA_API_URL="https://pix-lcms-review-pr$PR_NUMBER.osc-fr1.scalingo.io/api/"
 MESSAGE_PREFIX="I'm deploying this PR to these urls:"
 
 existing_comments=$(curl -Ssf -u $GITHUB_USER:$GITHUB_USER_TOKEN \
-	"https://api.github.com/repos/1024pix/pix/issues/${PR_NUMBER}/comments")
+	"https://api.github.com/repos/1024pix/pix-editor/issues/${PR_NUMBER}/comments")
 
 if [[ $existing_comments == *"${MESSAGE_PREFIX}"* ]]; then
 	echo 'INFO: found a matching comment on the PR, not posting another one.'
