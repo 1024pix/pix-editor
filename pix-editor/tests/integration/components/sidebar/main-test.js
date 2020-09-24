@@ -32,7 +32,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
       }
     });
 
-    await render(hbs`{{sidebar/main openLoginForm=(action openAction)
+    await render(hbs`{{sidebar/main openLogout=(action openAction)
     showMessage=(action messageAction)
     burger=burger
     }}`);

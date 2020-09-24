@@ -2,7 +2,7 @@
   <div class={{concat "ui page dimmer inverted" (if this.loading " active" "")}}>
     <div class="ui text loader">{{this.loadingMessage}}</div>
   </div>
-  <Sidebar::Main @openLoginForm={{this.openLoginForm}} @open={{this.menuOpen}} @close={{this.closeMenu}}/>
+  <Sidebar::Main @openLogout={{this.openLogout}} @open={{this.menuOpen}} @close={{this.closeMenu}}/>
   <div class="pusher">
     <div class="ui vertical inverted icon menu main-menu {{if this.config.lite "lite" ""}}">
       {{!-- template-lint-disable --}}
@@ -37,6 +37,9 @@
   </div>
   {{#if this.displayLoginForm}}
     <PopIn::LoginForm @update={{this.configUpdated}} @class="popin-login-form" @close={{this.closeLoginForm}}/>
+  {{/if}}
+  {{#if this.displayLogout}}
+    <PopIn::Logout @onDeny={{this.closeLogout}} @class="popin-logout"/>
   {{/if}}
   {{#if this.displayConfirm}}
     <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} />
