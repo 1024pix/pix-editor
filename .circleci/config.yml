@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run: |
           cd pix-editor
-          npm install
+          npm ci
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - save_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
@@ -26,7 +26,7 @@ jobs:
       - restore_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
       - run: |
-          echo "export default { CONFIG_KEY: '$CONFIG_KEY', AIRTABLE_KEY: '$AIRTABLE_KEY' };" > pix-editor/tests/test-env.js
+          echo "export default { airtableBase: '$AIRTABLE_BASE', airtableApiKey: '$AIRTABLE_API_KEY' };" > pix-editor/tests/test-env.js
       - run: |
           cd pix-editor
           JOBS=2 npm test
