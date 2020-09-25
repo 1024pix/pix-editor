@@ -5,9 +5,6 @@ export default class NoteModel extends Model {
   @attr text;
   @attr challengeId;
   @attr author;
-  @attr competence;
-  @attr skills;
-  @attr production;
   @attr createdAt;
   @attr status;
   @attr('boolean', { defaultValue: false }) changelog;

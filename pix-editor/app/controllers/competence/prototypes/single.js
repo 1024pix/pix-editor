@@ -565,10 +565,7 @@ export default class SingleController extends Controller {
         text: changelog,
         challengeId: challenge.pixId,
         author: this.config.author,
-        competence: this.currentData.getCompetence().code,
-        skills: challenge.joinedSkills,
         createdAt: (new Date()).toISOString(),
-        production: !challenge.workbench
       });
       return entry.save()
         .then(() => challenge);
