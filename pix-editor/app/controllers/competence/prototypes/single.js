@@ -563,7 +563,7 @@ export default class SingleController extends Controller {
     if (changelog) {
       const entry = this.store.createRecord('changelogEntry', {
         text: changelog,
-        challengeId: challenge.id,
+        challengeId: challenge.pixId,
         author: this.config.author,
         competence: this.currentData.getCompetence().code,
         skills: challenge.joinedSkills,

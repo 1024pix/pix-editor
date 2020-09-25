@@ -44,8 +44,7 @@ export default class PopinChallengeLog extends Component {
       const challenge = this.args.challenge;
       if (challenge) {
         const pq = this.paginatedQuery;
-        const production = (challenge.workbench ? 'non' : 'oui');
-        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
           .then(entries => {
             this._entries = entries;
             this.changelogLoaded = true;
@@ -152,9 +151,8 @@ export default class PopinChallengeLog extends Component {
   _loadNotes() {
     const challenge = this.args.challenge;
     if (challenge) {
-      const production = (challenge.workbench ? 'non' : 'oui');
       const pq = this.paginatedQuery;
-      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
+      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(notes => {
           this._notes = notes;
           this.notesLoaded = true;
