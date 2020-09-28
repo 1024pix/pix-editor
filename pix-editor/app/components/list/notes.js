@@ -21,6 +21,7 @@ export default class NoteList extends SortedList {
         name:'Auteur',
         valuePath:'author',
         maxWidth:150,
+        style: 'author-note'
       });
     }
     headers.push({
@@ -32,6 +33,8 @@ export default class NoteList extends SortedList {
         name:'Statut',
         valuePath:'status',
         maxWidth:150,
+        style: 'status-note'
+
       });
     }
     return headers;
