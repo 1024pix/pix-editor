@@ -81,6 +81,7 @@
     "js-crypto-random": "^0.4.3",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.13",
-    "semantic-ui-css": "^2.4.1"
+    "semantic-ui-css": "^2.4.1",
+    "sinon": "^9.0.3"
   }
 }
