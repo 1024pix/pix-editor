@@ -71,7 +71,8 @@
     "sinon": "9.0.3"
   },
   "engines": {
-    "node": "10.* || >= 12"
+    "node": "12.18.x",
+    "npm": "6.14.x"
   },
   "ember": {
     "edition": "octane"
