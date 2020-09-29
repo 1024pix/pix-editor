@@ -311,14 +311,6 @@ export default class SingleController extends Controller {
   }
 
   @action
-  changelogDeny() {
-    if (this.changelogCallback) {
-      this.changelogCallback(false);
-    }
-    this.displayChangeLog = false;
-  }
-
-  @action
   movePrototype() {
     this.displaySelectLocation = true;
   }
