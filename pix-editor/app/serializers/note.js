@@ -5,9 +5,6 @@ export default class NoteSerializer extends AirtableSerializer {
     text:'Texte',
     challengeId:'Record_Id',
     author:'Auteur',
-    competence:'Compétence',
-    skills:'Acquis',
-    production:'Production',
     changelog:'Changelog',
     createdAt:'Date',
     status:'Statut'
@@ -19,7 +16,7 @@ export default class NoteSerializer extends AirtableSerializer {
 
   extractAttributes() {
     const attributes = super.extractAttributes(...arguments);
-    ['changelog', 'production'].forEach((key) => {
+    ['changelog'].forEach((key) => {
       if (attributes[key]) {
         if (attributes[key] === 'oui') {
           attributes[key] = true;
@@ -32,7 +29,7 @@ export default class NoteSerializer extends AirtableSerializer {
   }
 
   serializeAttribute(snapshot, json, key) {
-    if (['changelog', 'production'].includes(key)) {
+    if (['changelog'].includes(key)) {
       const payloadKey =  this._getMappedKey(key, snapshot.type);
       const value = snapshot.attr(key);
       if (value) {

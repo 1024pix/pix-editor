@@ -35,7 +35,7 @@ export default class PopinChallengeLog extends Component {
     } else {
       const notes = this.notes;
       const author = this.config.author;
-      return notes.filter(note => note.author == author);
+      return notes.filter(note => note.author === author);
     }
   }
 
@@ -44,8 +44,7 @@ export default class PopinChallengeLog extends Component {
       const challenge = this.args.challenge;
       if (challenge) {
         const pq = this.paginatedQuery;
-        const production = (challenge.workbench ? 'non' : 'oui');
-        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
           .then(entries => {
             this._entries = entries;
             this.changelogLoaded = true;
@@ -79,13 +78,9 @@ export default class PopinChallengeLog extends Component {
 
   @action
   addNote() {
-    const competence = this.args.challenge.firstSkill.tube.get('competence');
     const newNote = this.store.createRecord('note', {
       challengeId:this.args.challenge.pixId,
       author:this.config.author,
-      competence:competence.get('code'),
-      skills:this.args.challenge.joinedSkills,
-      production:!this.args.challenge.workbench
     });
     this.logEntry = newNote;
     this.list = false;
@@ -123,7 +118,7 @@ export default class PopinChallengeLog extends Component {
   showNote(note) {
     this.logEntryEdition = false;
     this.logEntry = note;
-    this.mayEditEntry = (note.author == this.config.author);
+    this.mayEditEntry = (note.author === this.config.author);
     this.list = false;
   }
 
@@ -152,9 +147,8 @@ export default class PopinChallengeLog extends Component {
   _loadNotes() {
     const challenge = this.args.challenge;
     if (challenge) {
-      const production = (challenge.workbench ? 'non' : 'oui');
       const pq = this.paginatedQuery;
-      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Production = '${production}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
+      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(notes => {
           this._notes = notes;
           this.notesLoaded = true;
