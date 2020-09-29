@@ -1,19 +1,21 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import Sinon from 'sinon';
 
 module('Integration | Component | popin-changelog', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-    this.set('closeAction', function() {});
-    this.set('denyAction', function() {});
+    //given
+    this.approve = Sinon.stub();
 
-    await render(hbs`{{pop-in/changelog deny=(action denyAction) close=(action closeAction)}}`);
+    //when
+    await render(hbs`<PopIn::Changelog  @onApprove={{this.approve}}/>`);
+    await click('[data-test-save-changelog-button]');
 
-    assert.dom('.ember-modal-dialog').exists();
+    //then
+    assert.equal(this.approve.called, true);
   });
 });
