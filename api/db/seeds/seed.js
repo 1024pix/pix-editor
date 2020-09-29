@@ -7,8 +7,11 @@ exports.seed = (knex) => {
     trigram: 'DEV',
     name: 'Utilisateur pour le développement',
     access: 'admin',
-    apiKey: '8566d79c-e2b1-43c8-b303-00e6c85feee0',
+    apiKey: process.env.REVIEW_APP_USER_API_KEY || defaultUserApiKey,
   });
 
   return databaseBuilder.commit();
 };
+
+const defaultUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
+
