@@ -5,7 +5,7 @@ import { click, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import sinon from 'sinon';
 
-module.only('Integration | Component | popin-challenge-log', function(hooks) {
+module('Integration | Component | popin-challenge-log', function(hooks) {
   setupRenderingTest(hooks);
 
   let paginatedQueryService, paginatedQueryLoadNotesStub;
