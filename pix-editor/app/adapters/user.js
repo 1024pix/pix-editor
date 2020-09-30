@@ -1,10 +1,7 @@
 import ApplicationAdapter from './application';
 
-export default class AuthorAdapter extends ApplicationAdapter {
+export default class UserAdapter extends ApplicationAdapter {
 
-  pathForType() {
-    return 'users';
-  }
   urlForQueryRecord(query) {
     if (query.me) {
       delete query.me;

@@ -14,7 +14,7 @@ module('Acceptance | Login', function(hooks) {
     localStorage.removeItem('pix-api-key');
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
-    this.server.create('author', { apiKey, trigram: 'ABC' });
+    this.server.create('user', { apiKey, trigram: 'ABC' });
   });
 
   test('visiting / when not connected', async function(assert) {

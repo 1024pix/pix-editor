@@ -20,7 +20,7 @@ module('Acceptance | Home', function(hooks) {
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
     localStorage.setItem('pix-api-key', apiKey);
-    this.server.create('author', { apiKey, trigram: 'ABC' });
+    this.server.create('user', { apiKey, trigram: 'ABC' });
 
     competenceIds.map((competenceId) => this.server.create('competence', { id: competenceId, pixId: `pixId ${competenceId}` }));
     this.server.create('area', { id: 'recvoGdo7z2z7pXWa', name: '1. Information et données', code: '1', competenceIds: ['recsvLz0W2ShyfD63', 'recNv8qhaY887jQb2', 'recIkYm646lrGvLNT'] });

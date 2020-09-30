@@ -5,7 +5,7 @@ export default function () {
   this.namespace = 'api';
 
   this.get('/areas', ({ areas }, request) => _response(request, areas.all()));
-  this.get('/users/me', ({ authors }, request) => _response(request, authors.first()));
+  this.get('/users/me', ({ users }, request) => _response(request, users.first()));
   this.get('/config', ({ configs }, request) => _response(request, configs.first()));
   this.passthrough('https://api.airtable.com/v0/**');
 
