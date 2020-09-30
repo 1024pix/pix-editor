@@ -31,39 +31,6 @@ jobs:
           cd pix-editor
           JOBS=2 npm test
 
-  deploy_to_ghpages:
-    docker:
-      - image: circleci/node:latest
-    steps:
-      - run: echo $CIRCLE_SHA1 > .circle-sha
-      - restore_cache:
-          key: v2-pix-editor-{{ checksum ".circle-sha" }}
-      - add_ssh_keys:
-          fingerprints:
-            - "ee:d4:4c:1e:b4:d2:77:17:71:af:a4:86:2d:65:39:4b"
-      - run: ssh-keyscan github.com > ~/.ssh/known_hosts
-      - run: |
-          cd pix-editor
-          git config user.email "$GITHUB_EMAIL"
-          git config user.name "$GITHUB_NAME"
-          git config push.default upstream
-          git fetch origin gh-pages:gh-pages --force
-          rm -Rf deploy
-          git worktree prune
-          git worktree add deploy gh-pages
-          rm -Rf deploy/*
-      - run: |
-          cd pix-editor
-          npm run build:production
-      - run: |
-          cd pix-editor
-          cp -r dist/* deploy
-          cd deploy
-          echo "editor.pix.fr" > CNAME
-          git add .
-          git commit --allow-empty -m "Deploy to gh-pages"
-          git push origin gh-pages
-
   checkout:
     docker:
       - image: circleci/node:12.14.0
@@ -97,35 +64,13 @@ jobs:
 
 workflows:
   version: 2
-  build_test_and_deploy:
+  build_and_test:
     jobs:
-      - checkout:
-          filters:
-            branches:
-              ignore: gh-pages
+      - checkout
       - api_build_and_test:
           requires:
             - checkout
-      - pix-editor-build:
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: gh-pages
+      - pix-editor-build
       - pix-editor-test:
           requires:
             - pix-editor-build
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: gh-pages
-      - deploy_to_ghpages:
-          requires:
-            - pix-editor-build
-            - pix-editor-test
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
