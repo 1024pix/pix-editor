@@ -1,5 +1,8 @@
 
 
+## v3.11.1 (30/09/2020)
+
+
 ## v3.11.0 (30/09/2020)
 
 - [#40](https://github.com/1024pix/pix-editor/pull/40) [FEATURE] Récupération des domaines de compétences depuis l'API LCMS.
