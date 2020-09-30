@@ -81,6 +81,7 @@ export default class PopinChallengeLog extends Component {
     const newNote = this.store.createRecord('note', {
       challengeId:this.args.challenge.pixId,
       author:this.config.author,
+      elementType: 'épreuve'
     });
     this.logEntry = newNote;
     this.list = false;

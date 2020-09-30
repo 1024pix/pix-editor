@@ -558,6 +558,7 @@ export default class SingleController extends Controller {
         challengeId: challenge.pixId,
         author: this.config.author,
         createdAt: (new Date()).toISOString(),
+        elementType: 'épreuve'
       });
       return entry.save()
         .then(() => challenge);
