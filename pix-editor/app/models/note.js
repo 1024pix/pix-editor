@@ -7,6 +7,7 @@ export default class NoteModel extends Model {
   @attr author;
   @attr createdAt;
   @attr status;
+  @attr elementType;
   @attr('boolean', { defaultValue: false }) changelog;
 
   get date() {

@@ -7,7 +7,8 @@ export default class NoteSerializer extends AirtableSerializer {
     author:'Auteur',
     changelog:'Changelog',
     createdAt:'Date',
-    status:'Statut'
+    status:'Statut',
+    elementType: 'Type d\'élément'
   };
 
   payloadKeyFromModelName() {
