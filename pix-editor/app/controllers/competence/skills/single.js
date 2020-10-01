@@ -198,7 +198,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter(challenge => challenge.isDraft).map(challenge => {
                 return challenge.archive()
-                  .then(()=>{this._handleChallengeChangelog(challenge, `Archivage de l\'épreuve suite à la suppression de l\'acquis ${this.skill.name}`);})
+                  .then(()=>{this._handleChallengeChangelog(challenge, `Archivage de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`);})
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype archivé');
@@ -244,7 +244,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
                 return challenge.delete()
-                  .then(()=>{this._handleChallengeChangelog(challenge, `Suppression de l\'épreuve suite à la suppression de l\'acquis ${this.skill.name}`);})
+                  .then(()=>{this._handleChallengeChangelog(challenge, `Suppression de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`);})
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype Supprimé');
@@ -289,7 +289,7 @@ export default class SingleController extends Controller {
   _handleSkillChangelog(skill, changelogValue) {
     const entry = this.store.createRecord('changelogEntry', {
       text: changelogValue,
-      challengeId: skill.pixId,
+      recordId: skill.pixId,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
       elementType: 'acquis'
@@ -301,7 +301,7 @@ export default class SingleController extends Controller {
   _handleChallengeChangelog(challenge, changelogValue) {
     const entry = this.store.createRecord('changelogEntry', {
       text: changelogValue,
-      challengeId: challenge.pixId,
+      recordId: challenge.pixId,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
       elementType: 'épreuve'

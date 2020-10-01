@@ -555,7 +555,7 @@ export default class SingleController extends Controller {
     if (changelog) {
       const entry = this.store.createRecord('changelogEntry', {
         text: changelog,
-        challengeId: challenge.pixId,
+        recordId: challenge.pixId,
         author: this.config.author,
         createdAt: (new Date()).toISOString(),
         elementType: 'épreuve'
