@@ -1,5 +1,8 @@
 
 
+## v3.12.1 (01/10/2020)
+
+
 ## v3.12.0 (01/10/2020)
 
 - [#44](https://github.com/1024pix/pix-editor/pull/44) [FEATURE] Ajout d'un bouton de déconnexion.
