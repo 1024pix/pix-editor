@@ -79,7 +79,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
     test('it should display an invalid credentials message if authentication with api key failed', async function(assert) {
       // then
       assert.dom('#login-form-error-message').exists();
-      assert.dom('#login-form-error-message').hasText('L\'api key n\'est pas valide. Vérifiez votre saisie.');
+      assert.dom('#login-form-error-message').hasText('La clé saisie n\'est pas valide. Vérifiez votre saisie.');
     });
 
     test('it should not store api key in localStorage', async function(assert) {
@@ -104,7 +104,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
     test('it should display an error message', async function(assert) {
       // then
       assert.dom('#login-form-error-message').exists();
-      assert.dom('#login-form-error-message').hasText('L\'api key n\'a pas pu être validée. Vérifiez votre connexion ou contactez l\'équipe de développement.');
+      assert.dom('#login-form-error-message').hasText('La clé saisie n\'a pas pu être validée. Vérifiez votre connexion ou contactez l\'équipe de développement.');
     });
 
     test('it should store api key in localStorage', async function(assert) {
