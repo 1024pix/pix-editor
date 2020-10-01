@@ -19,6 +19,7 @@ export default class ApplicationController extends Controller {
   @tracked loadingMessage = '';
   @tracked _menuOpen = false;
   @tracked displayLoginForm = false;
+  @tracked displayLogout = false;
 
   @service config;
   @service router;
@@ -87,6 +88,16 @@ export default class ApplicationController extends Controller {
   @action
   closeLoginForm() {
     this.displayLoginForm = false;
+  }
+
+  @action
+  openLogout() {
+    this.displayLogout = true;
+  }
+
+  @action
+  closeLogout() {
+    this.displayLogout = false;
   }
 
   @action

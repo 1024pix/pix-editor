@@ -26,10 +26,10 @@ export default class PopinLoginForm extends Component {
     }
     catch (error) {
       this.isErrorMessagePresent = true;
-      this.errorMessage = 'L\'api key n\'a pas pu être validée. Vérifiez votre connexion ou contactez l\'équipe de développement.';
+      this.errorMessage = 'La clé saisie n\'a pas pu être validée. Vérifiez votre connexion ou contactez l\'équipe de développement.';
       if (this._isUnauthorizedError(error)) {
         localStorage.removeItem('pix-api-key');
-        this.errorMessage = 'L\'api key n\'est pas valide. Vérifiez votre saisie.';
+        this.errorMessage = 'La clé saisie n\'est pas valide. Vérifiez votre saisie.';
       }
     }
   }
