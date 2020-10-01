@@ -9,10 +9,18 @@ chai.use(require('chai-sorted'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 
-afterEach(() => {
+afterEach(async () => {
   airtableBuilder.cleanAll();
+  await databaseBuilder.clean();
   return sinon.restore();
 });
+
+// Knex
+const { knex } = require('../db/knex-database-connection');
+
+// DatabaseBuilder
+const DatabaseBuilder = require('./tooling/database-builder/database-builder');
+const databaseBuilder = new DatabaseBuilder({ knex });
 
 // Hapi
 const hFake = {
@@ -77,13 +85,20 @@ nock.disableNetConnect();
 const AirtableBuilder = require('./tooling/airtable-builder/airtable-builder');
 const airtableBuilder = new AirtableBuilder({ nock });
 
+function generateAuthorizationHeader(user) {
+  return { authorization: `Bearer ${user.apiKey}` };
+}
+
 module.exports = {
   airtableBuilder,
+  catchErr,
+  databaseBuilder,
   domainBuilder: require('./tooling/domain-builder/factory'),
   expect,
+  generateAuthorizationHeader,
   hFake,
+  knex,
   sinon,
-  catchErr,
   testErr: new Error('Fake Error'),
   testInfraNotFoundErr: new infraErrors.NotFoundError('Fake infra NotFoundError'),
 };

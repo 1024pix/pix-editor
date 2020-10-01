@@ -3,8 +3,8 @@
   "version": "3.11.1",
   "description": "API permettant d'intéragir avec le référentiel de contenu Pix",
   "engines": {
-    "node": "12.14.1",
-    "npm": "6.13.4"
+    "node": "12.18.x",
+    "npm": "6.14.x"
   },
   "directories": {
     "doc": "docs",
@@ -13,16 +13,26 @@
   "scripts": {
     "clean": "rm -rf node_modules",
     "coverage": "NODE_ENV=test nyc --silent _mocha --recursive --exit --reporter dot tests && nyc report --reporter=lcov --report-dir=./coverage",
+    "db:new-migration": "npx knex --knexfile db/knexfile.js migrate:make $migrationname",
+    "db:create": "node scripts/database/create-database",
+    "db:delete": "node scripts/database/drop-database",
+    "db:empty": "node scripts/database/empty-database",
+    "db:migrate": "knex --knexfile db/knexfile.js migrate:latest",
+    "db:prepare": "npm run db:delete && npm run db:create && npm run db:migrate",
+    "db:seed": "knex --knexfile db/knexfile.js seed:run",
+    "db:reset": "npm run db:prepare && npm run db:seed",
     "lint": "eslint lib tests",
     "lint:fix": "eslint lib tests --fix",
     "start": "node bin/www",
     "start:watch": "nodemon --signal SIGTERM bin/www",
-    "test": "NODE_ENV=test npm run && npm run test:api",
+    "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
     "test:api": "NODE_ENV=test mocha --recursive --exit --reporter dot tests",
     "test:api:unit": "env NODE_ENV=test mocha --recursive --exit --reporter dot tests/unit",
     "test:api:debug": "NODE_ENV=test mocha --inspect-brk=9229 --recursive --exit --reporter dot tests",
     "test:api:watch": "NODE_ENV=test mocha --recursive tests --watch --reporter dot",
-    "test:lint": "npm test && npm run lint"
+    "test:lint": "npm test && npm run lint",
+    "postdeploy": "npm run db:migrate",
+    "scalingo-post-ra-creation": "npm run postdeploy && npm run db:seed"
   },
   "author": "GIP Pix",
   "license": "ISC",
@@ -36,7 +46,9 @@
     "dotenv": "^8.2.0",
     "faker": "5.1.0",
     "jsonapi-serializer": "^3.6.6",
+    "knex": "^0.21.5",
     "lodash": "^4.17.20",
+    "pg": "^8.3.3",
     "prom-client": "^12.0.0"
   },
   "devDependencies": {

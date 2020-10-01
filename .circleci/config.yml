@@ -4,12 +4,12 @@ version: 2.0
 jobs:
   pix-editor-build:
     docker:
-      - image: circleci/node:latest
+      - image: circleci/node:12.18
     steps:
       - checkout
       - run: |
           cd pix-editor
-          npm install
+          npm ci
       - run: echo $CIRCLE_SHA1 > .circle-sha
       - save_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
@@ -18,7 +18,7 @@ jobs:
 
   pix-editor-test:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: circleci/node:12.18-browsers
         environment:
           CHROME_BIN: "/usr/bin/google-chrome"
     steps:
@@ -26,14 +26,14 @@ jobs:
       - restore_cache:
           key: v2-pix-editor-{{ checksum ".circle-sha" }}
       - run: |
-          echo "export default { CONFIG_KEY: '$CONFIG_KEY', AIRTABLE_KEY: '$AIRTABLE_KEY' };" > pix-editor/tests/test-env.js
+          echo "export default { airtableBase: '$AIRTABLE_BASE', airtableApiKey: '$AIRTABLE_API_KEY' };" > pix-editor/tests/test-env.js
       - run: |
           cd pix-editor
           JOBS=2 npm test
 
   checkout:
     docker:
-      - image: circleci/node:12.14.0
+      - image: circleci/node:12.18
     working_directory: ~/pix-editor
     steps:
       - checkout
@@ -43,7 +43,11 @@ jobs:
             - .
   api_build_and_test:
     docker:
-      - image: circleci/node:12.14.0
+      - image: circleci/node:12.18
+      - image: postgres:12.3-alpine
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_HOST_AUTH_METHOD: trust
     working_directory: ~/pix-editor/api
     steps:
       - attach_workspace:
@@ -61,6 +65,8 @@ jobs:
           command: |
             npm run lint
             npm test
+          environment:
+            TEST_DATABASE_URL: postgres://circleci@localhost:5432/circleci
 
 workflows:
   version: 2

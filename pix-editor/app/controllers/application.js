@@ -18,13 +18,15 @@ export default class ApplicationController extends Controller {
   @tracked loading = false;
   @tracked loadingMessage = '';
   @tracked _menuOpen = false;
-  @tracked displayConfiguration = false;
+  @tracked displayLoginForm = false;
 
   @service config;
   @service router;
   @service notify;
   @service loader;
   @service confirm;
+  @service store;
+  @service window;
 
   messages = A([]);
 
@@ -44,7 +46,7 @@ export default class ApplicationController extends Controller {
   }
 
   get lockedMenu() {
-    return this.displayConfiguration;
+    return this.displayLoginForm;
   }
 
   get isIndex() {
@@ -78,18 +80,18 @@ export default class ApplicationController extends Controller {
   }
 
   @action
-  openConfiguration() {
-    this.displayConfiguration = true;
+  openLoginForm() {
+    this.displayLoginForm = true;
   }
 
   @action
-  closeConfiguration() {
-    this.displayConfiguration = false;
+  closeLoginForm() {
+    this.displayLoginForm = false;
   }
 
   @action
   configUpdated() {
-    window.location.reload(true);
+    this.window.reload();
   }
 
   confirmAsk(title, message, callback) {

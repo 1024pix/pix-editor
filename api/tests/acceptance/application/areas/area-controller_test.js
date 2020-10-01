@@ -1,4 +1,4 @@
-const { expect, airtableBuilder } = require('../../../test-helper');
+const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const { buildArea } = airtableBuilder.factory;
 
@@ -6,8 +6,10 @@ describe('Acceptance | Controller | area-controller', () => {
 
   describe('GET /areas - retrieve "Domaines" (Areas) from airtable', () => {
     context('nominal case', () => {
-
-      beforeEach(function() {
+      let user;
+      beforeEach(async function() {
+        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey:'11b2cab8-050e-4165-8064-29a1e58d8997' });
+        await databaseBuilder.commit();
         airtableBuilder
           .mockList({ tableName: 'Domaines' })
           .returns([
@@ -26,7 +28,8 @@ describe('Acceptance | Controller | area-controller', () => {
         const server = await createServer();
         const getAreasOptions = {
           method: 'GET',
-          url: '/api/areas'
+          url: '/api/areas',
+          headers: generateAuthorizationHeader(user)
         };
 
         // When
@@ -74,7 +77,8 @@ describe('Acceptance | Controller | area-controller', () => {
         const server = await createServer();
         const getAreasOptions = {
           method: 'GET',
-          url: '/api/areas'
+          url: '/api/areas',
+          headers: generateAuthorizationHeader(user)
         };
 
         // When
@@ -82,6 +86,23 @@ describe('Acceptance | Controller | area-controller', () => {
 
         // Then
         expect(response.result).to.deep.equal(expectedAreas);
+      });
+    });
+
+    context('errors', () => {
+      it('should return 401 unauthorized when there is no authorization header', async() => {
+        // Given
+        const server = await createServer();
+        const getAreasOptions = {
+          method: 'GET',
+          url: '/api/areas'
+        };
+
+        // When
+        const response = await server.inject(getAreasOptions);
+
+        // Then
+        expect(response.statusCode).to.equal(401);
       });
     });
   });

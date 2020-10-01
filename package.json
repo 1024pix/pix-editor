@@ -14,7 +14,9 @@
     "install": "cd pix-editor && npm ci && cd ../api && npm ci",
     "start": "cd api && npm start",
     "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor && cd .. && npm run signal-github",
-    "signal-github": "./scripts/signal_deploy_to_pr.sh"
+    "signal-github": "./scripts/signal_deploy_to_pr.sh",
+    "scalingo-post-ra-creation": "cd api && npm run scalingo-post-ra-creation",
+    "postdeploy": "cd api && npm run postdeploy"
   },
   "repository": {
     "type": "git",

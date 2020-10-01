@@ -22,6 +22,7 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 * [Git](http://git-scm.com/) (2.6.4)
 * [Node.js](http://nodejs.org/) (v12.14.1) et NPM (6.13.4)
 * [Ember CLI](http://ember-cli.com/) (3.15.2)
+* [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
 
 ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
 
@@ -35,21 +36,35 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 $ git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
 ```
 
-**2/ Installer les dépendances**
+**2/ Creer un un fichier .env**
+
+Copier le sample.env situer à la racine et le renommer en .env:
+```bash
+cp api/sample.env api/.env
+```
+Remplire les valeurs des variables dans le fichier `.env`.
+
+**3/ Installer les dépendances**
 
 Sur api:
 ```bash
 cd api
-$ npm install
+$ npm ci
 ```
 
 Sur pix-editor:
 ```bash
 cd pix-editor
-$ npm install
+$ npm ci
 ```
 
-**3/ Lancer l'application**
+**4/ Lancer la base de données**
+
+```bash
+docker-compose up -d
+```
+
+**5/ Lancer l'application**
 
 Sur api:
 ```bash
@@ -63,7 +78,7 @@ cd pix-editor
 $ npm start
 ```
 
-**5/ Accéder à l'application**
+**6/ Accéder à l'application**
 
 [l'API](http://localhost:3002) tourne en local sur le port 3002.
 [l'application Pix-Editor](http://localhost:4200) sur le port 4200.

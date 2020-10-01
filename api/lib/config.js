@@ -28,6 +28,24 @@ module.exports = (function() {
       logLevel: (process.env.LOG_LEVEL || 'info'),
     },
 
+    pixEditor: {
+      airtableBase: process.env.AIRTABLE_BASE ,
+      airtableEditorBase: process.env.AIRTABLE_EDITOR_BASE,
+      airtableUrl: process.env.AIRTABLE_URL,
+      tableChallenges: process.env.TABLE_CHALLENGES,
+      tableSkills: process.env.TABLE_SKILLS,
+      tableTubes: process.env.TABLE_TUBES,
+      storagePost: process.env.STORAGE_POST,
+      storageTenant: process.env.STORAGE_TENANT,
+      storageUser: process.env.STORAGE_USER,
+      storagePassword: process.env.STORAGE_PASSWORD,
+      storageKey: process.env.STORAGE_KEY,
+      storageAuth: process.env.STORAGE_AUTH,
+      pixStaging: process.env.PIX_STAGING,
+      airtableApiKey: process.env.AIRTABLE_API_KEY,
+      pixAdminUserEmail: process.env.PIX_ADMIN_USER_EMAIL,
+      pixAdminUserPassword: process.env.PIX_ADMIN_USER_PASSWORD,
+    }
   };
 
   if (process.env.NODE_ENV === 'test') {
@@ -37,6 +55,25 @@ module.exports = (function() {
     config.airtable.base = 'test-base';
 
     config.logging.enabled = false;
+
+    config.pixEditor = {
+      airtableBase: 'airtableBaseValue',
+      airtableEditorBase: 'airtableEditorBaseValue',
+      airtableUrl: 'airtableUrlValue',
+      tableChallenges: 'tableChallengesValue',
+      tableSkills: 'tableSkillsValue',
+      tableTubes: 'tableTubesValue',
+      storagePost: 'storagePostValue',
+      storageTenant: 'storageTenantValue',
+      storageUser: 'storageUserValue',
+      storagePassword: 'storagePasswordValue',
+      storageKey: 'storageKeyValue',
+      storageAuth: 'storageAuthValue',
+      pixStaging: 'pixStagingValue',
+      airtableApiKey: 'airtableApiKeyValue',
+      pixAdminUserEmail: 'pixAdminUserEmailValue',
+      pixAdminUserPassword: 'pixAdminUserPasswordValue',
+    };
   }
 
   return config;
