@@ -128,7 +128,7 @@ export default class SingleController extends Controller {
       return operation.then(()=>{
         return skill.save();
       })
-        .then(()=>{this._handleChangelog(skill, changelogValue);})
+        .then(()=>{this._handleSkillChangelog(skill, changelogValue);})
         .then(() => {
           this.edition = false;
           this.loader.stop();
@@ -157,7 +157,7 @@ export default class SingleController extends Controller {
         skill.level = level;
         skill.competence = [competence.get('id')];
         return skill.save()
-          .then(()=>{this._handleChangelog(skill,changelogValue);})
+          .then(()=>{this._handleSkillChangelog(skill,changelogValue);})
           .then(() => {
             this.notify.message('Acquis mis à jour');
             this.transitionToRoute('competence.skills.single', competence, skill);
@@ -168,7 +168,6 @@ export default class SingleController extends Controller {
           })
           .finally(()=>{this.loader.stop();});
       });
-
   }
 
   @action
@@ -191,14 +190,15 @@ export default class SingleController extends Controller {
         this._getChangelog(this.defaultArchiveChangelog,(changelogValue)=>{
           this.loader.start('Archivage de l\'acquis');
           return this.skill.archive()
-            .then(()=>{this._handleChangelog(this.skill, changelogValue);})
+            .then(()=>{this._handleSkillChangelog(this.skill, changelogValue);})
             .then(() => {
               this.close();
               this.notify.message('Acquis archivé');
             })
             .then(() => {
-              const updateChallenges = challenges.filter(challenge => !challenge.isArchived).map(challenge => {
+              const updateChallenges = challenges.filter(challenge => challenge.isDraft).map(challenge => {
                 return challenge.archive()
+                  .then(()=>{this._handleChallengeChangelog(challenge, `Archivage de l\'épreuve suite à la suppression de l\'acquis ${this.skill.name}`);})
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype archivé');
@@ -236,7 +236,7 @@ export default class SingleController extends Controller {
         this._getChangelog(this.defaultDeleteChangelog,(changelogValue)=>{
           this.loader.start('Suppression de l\'acquis');
           return this.skill.delete()
-            .then(()=>{this._handleChangelog(this.skill, changelogValue);})
+            .then(()=>{this._handleSkillChangelog(this.skill, changelogValue);})
             .then(() => {
               this.close();
               this.notify.message('Acquis supprimé');
@@ -244,6 +244,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
                 return challenge.delete()
+                  .then(()=>{this._handleChallengeChangelog(challenge, `Suppression de l\'épreuve suite à la suppression de l\'acquis ${this.skill.name}`);})
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype Supprimé');
@@ -285,19 +286,27 @@ export default class SingleController extends Controller {
     this.displayChangeLog = true;
   }
 
-  _handleChangelog(skill, changelog) {
-    if (changelog) {
-      const entry = this.store.createRecord('changelogEntry', {
-        text: changelog,
-        challengeId: skill.pixId,
-        author: this.config.author,
-        createdAt: (new Date()).toISOString(),
-        elementType: 'acquis'
-      });
-      return entry.save()
-        .then(() => skill);
-    } else {
-      return Promise.resolve(skill);
-    }
+  _handleSkillChangelog(skill, changelogValue) {
+    const entry = this.store.createRecord('changelogEntry', {
+      text: changelogValue,
+      challengeId: skill.pixId,
+      author: this.config.author,
+      createdAt: (new Date()).toISOString(),
+      elementType: 'acquis'
+    });
+    return entry.save()
+      .then(() => skill);
+  }
+
+  _handleChallengeChangelog(challenge, changelogValue) {
+    const entry = this.store.createRecord('changelogEntry', {
+      text: changelogValue,
+      challengeId: challenge.pixId,
+      author: this.config.author,
+      createdAt: (new Date()).toISOString(),
+      elementType: 'épreuve'
+    });
+    return entry.save()
+      .then(() => challenge);
   }
 }
