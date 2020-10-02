@@ -36,8 +36,8 @@ export default class ConfigService extends Service {
     this.author = currentUser.trigram;
     this.airtableKey = config.airtableApiKey;
     this.accessLevel = this.access.getLevel(currentUser.access);
-    this.pixUser = config.pixUser;
-    this.pixPassword = config.pixPassword;
+    this.pixUser = config.pixAdminUserEmail;
+    this.pixPassword = config.pixAdminUserPassword;
     this.airtableBase = config.airtableBase;
     this.airtableEditorBase = config.airtableEditorBase;
     this.airtableUrl = config.airtableUrl;
