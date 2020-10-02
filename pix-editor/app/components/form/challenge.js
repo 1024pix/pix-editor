@@ -30,10 +30,6 @@ export default class ChallengeForm extends Component {
 
   helpScoring = 'n1: @acquis1<br>n2: @acquis2<br>n3: @acquis3<br><br>n1, n2, n3 : nombre de bonnes réponses';
 
-  get authors() {
-    return this.config.authorNames;
-  }
-
   get helpSuggestions() {
     const type = this.args.challenge.type;
     switch (type) {

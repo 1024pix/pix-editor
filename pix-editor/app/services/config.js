@@ -26,8 +26,6 @@ export default class ConfigService extends Service {
   @tracked storageKey;
   @tracked storageAuth;
   @tracked pixStaging;
-  @tracked authors;
-  @tracked authorNames;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
