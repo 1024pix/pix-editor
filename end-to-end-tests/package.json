@@ -1,0 +1,14 @@
+{
+  "name": "pix-editor-end-to-end-tests",
+  "version": "1.0.0",
+  "description": "End to end for LCMS API and Pix editor front",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "cypress open"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "5.3.0"
+  }
+}
