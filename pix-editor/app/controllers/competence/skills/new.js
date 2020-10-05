@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 export default class NewController extends Skill {
   competence = null;
   tubeId = null;
+  defaultSaveSkillChangelog = 'Création de l\'acquis';
 
   @alias('model.skill')
   skill;
@@ -35,6 +36,7 @@ export default class NewController extends Skill {
         skill.competence = [competence.get('id')];
         return skill.save();
       })
+      .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog))
       .then(() => {
         this.edition = false;
         this.loader.stop();
