@@ -1,5 +1,9 @@
 
 
+## v3.12.2 (05/10/2020)
+
+- [#52](https://github.com/1024pix/pix-editor/pull/52) [BUGFIX] Réparation de la mise à jour du cache lors de l'enregistrement d'une épreuve.
+
 ## v3.12.1 (01/10/2020)
 
 
