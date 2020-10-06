@@ -11,7 +11,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey:'11b2cab8-050e-4165-8064-29a1e58d8997' });
         await databaseBuilder.commit();
         nock('https://api.airtable.com')
-          .get('/v0/test-base/Competences?key=value')
+          .get('/v0/airtableBaseValue/Competences?key=value')
           .reply(200, 'ok');
       });
 

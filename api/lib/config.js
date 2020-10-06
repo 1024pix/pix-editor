@@ -51,8 +51,8 @@ module.exports = (function() {
   if (process.env.NODE_ENV === 'test') {
     config.port = 0;
 
-    config.airtable.apiKey = 'test-api-key';
-    config.airtable.base = 'test-base';
+    config.airtable.apiKey = 'airtableApiKeyValue';
+    config.airtable.base = 'airtableBaseValue';
 
     config.logging.enabled = false;
 
