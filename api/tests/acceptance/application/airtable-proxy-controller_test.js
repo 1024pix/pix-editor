@@ -12,6 +12,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         await databaseBuilder.commit();
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Competences?key=value')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, 'ok');
       });
 
@@ -33,6 +34,50 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         // Then
         expect(response.statusCode).to.equal(200);
         expect(response.result).to.equal('ok');
+      });
+
+      it('should proxy post request to airtable', async () => {
+        //Given
+        nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Epreuves?key=value', { param: 'value' })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .matchHeader('content-type', 'application/json')
+          .reply(200, 'ok');
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/airtable/content/Epreuves?key=value',
+          headers: generateAuthorizationHeader(user),
+          payload: { param: 'value' }
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.equal('ok');
+      });
+
+      it('should return airtable error status code', async () => {
+        //Given
+        nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Epreuves?key=value', { param: 'value' })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .matchHeader('content-type', 'application/json')
+          .reply(401, 'Unauthorized');
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/airtable/content/Epreuves?key=value',
+          headers: generateAuthorizationHeader(user),
+          payload: { param: 'value' }
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(401);
+        expect(response.result).to.equal('Unauthorized');
       });
 
     });
