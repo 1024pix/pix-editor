@@ -42,4 +42,5 @@ Router.map(function() {
   this.route('challenge', { path:'/challenge/:challenge_id' });
   this.route('target-profile');
   this.route('statistics');
+  this.route('events-log');
 });

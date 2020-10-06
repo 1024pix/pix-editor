@@ -10,6 +10,9 @@
     <LinkTo @route="statistics"  @invokeAction={{@close}}>
       <i class="chart bar icon"></i> Statistiques
     </LinkTo>
+    <div class="secondary-links">
+      {{#link-to "events-log"}}<i class="book icon"></i> Journal{{/link-to}}
+    </div>
   </div>
   <div class="ui labelled icon menu">
     <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion</button>
