@@ -18,7 +18,7 @@ export default class SingleController extends Controller {
   @tracked edition = false;
   @tracked displaySelectLocation = false;
   @tracked displayChangeLog = false;
-  @tracked changelogDefault = '';
+  @tracked changelogText = '';
 
 
   @controller('competence')
@@ -115,20 +115,15 @@ export default class SingleController extends Controller {
 
   @action
   save() {
-    this._getChangelog(this.defaultSaveChangelog, (changelogValue)=>{
+    this._displayChangelogPopIn(this.defaultSaveChangelog, (changelogValue)=>{
       this.loader.start();
       const skill = this.skill;
       const prototype = this.skill.productionPrototype;
-      let operation;
-      if (prototype) {
-        operation = prototype.save();
-      } else {
-        operation = Promise.resolve();
-      }
+      const operation = prototype ? prototype.save() : Promise.resolve();
       return operation.then(()=>{
         return skill.save();
       })
-        .then(()=>{this._handleSkillChangelog(skill, changelogValue);})
+        .then(()=>this._handleSkillChangelog(skill, changelogValue))
         .then(() => {
           this.edition = false;
           this.loader.stop();
@@ -149,7 +144,7 @@ export default class SingleController extends Controller {
 
   @action
   setLocation(competence, newTube, level) {
-    this._getChangelog(`Déplacement de l'acquis vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+    this._displayChangelogPopIn(`Déplacement de l'acquis vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
       (changelogValue)=>{
         const skill = this.skill;
         this.loader.start();
@@ -157,7 +152,7 @@ export default class SingleController extends Controller {
         skill.level = level;
         skill.competence = [competence.get('id')];
         return skill.save()
-          .then(()=>{this._handleSkillChangelog(skill,changelogValue);})
+          .then(()=>this._handleSkillChangelog(skill,changelogValue))
           .then(() => {
             this.notify.message('Acquis mis à jour');
             this.transitionToRoute('competence.skills.single', competence, skill);
@@ -187,10 +182,10 @@ export default class SingleController extends Controller {
     const challenges = this.skill.challenges;
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
       .then(() => {
-        this._getChangelog(this.defaultArchiveChangelog,(changelogValue)=>{
+        this._displayChangelogPopIn(this.defaultArchiveChangelog,(changelogValue)=>{
           this.loader.start('Archivage de l\'acquis');
           return this.skill.archive()
-            .then(()=>{this._handleSkillChangelog(this.skill, changelogValue);})
+            .then(()=>this._handleSkillChangelog(this.skill, changelogValue))
             .then(() => {
               this.close();
               this.notify.message('Acquis archivé');
@@ -198,7 +193,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter(challenge => challenge.isDraft).map(challenge => {
                 return challenge.archive()
-                  .then(()=>{this._handleChallengeChangelog(challenge, `Archivage de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`);})
+                  .then(()=>this._handleChallengeChangelog(challenge, `Archivage de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`))
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype archivé');
@@ -233,10 +228,10 @@ export default class SingleController extends Controller {
     const challenges = this.skill.challenges;
     return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'acquis ?')
       .then(() => {
-        this._getChangelog(this.defaultDeleteChangelog,(changelogValue)=>{
+        this._displayChangelogPopIn(this.defaultDeleteChangelog,(changelogValue)=>{
           this.loader.start('Suppression de l\'acquis');
           return this.skill.delete()
-            .then(()=>{this._handleSkillChangelog(this.skill, changelogValue);})
+            .then(()=>this._handleSkillChangelog(this.skill, changelogValue))
             .then(() => {
               this.close();
               this.notify.message('Acquis supprimé');
@@ -244,7 +239,7 @@ export default class SingleController extends Controller {
             .then(() => {
               const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
                 return challenge.delete()
-                  .then(()=>{this._handleChallengeChangelog(challenge, `Suppression de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`);})
+                  .then(()=>this._handleChallengeChangelog(challenge, `Suppression de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`))
                   .then(() => {
                     if (challenge.isPrototype) {
                       this.notify.message('Prototype Supprimé');
@@ -273,16 +268,16 @@ export default class SingleController extends Controller {
   }
 
   @action
-  changelogApprove(value) {
+  approveChangelog(value) {
     if (this.changelogCallback) {
       this.changelogCallback(value);
     }
     this.displayChangeLog = false;
   }
 
-  _getChangelog(defaultMessage, callback) {
+  _displayChangelogPopIn(defaultMessage, callback) {
     this.changelogCallback = callback;
-    this.changelogDefault = defaultMessage;
+    this.changelogText = defaultMessage;
     this.displayChangeLog = true;
   }
 
