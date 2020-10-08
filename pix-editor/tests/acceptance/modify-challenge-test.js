@@ -28,14 +28,14 @@ module('Acceptance | Modify-Challenge', function(hooks) {
   test('visiting /', async function(assert) {
     // when
     await visit('/');
-    await click(findAll('.title.AccordionToggle')[0]);
-    await click(findAll('.item')[0]);
-    await click(findAll('.skill-cell')[0]);
-    await click(findAll('.challenge-menu > .button')[1]);
-    await click(findAll('.challenge-menu > .button')[0]);
-    await click(find('.positive.button'));
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell]')[0]);
+    await click(find('[data-test-modify-challenge-button]'));
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-save-changelog-button]'));
     // then
-    assert.equal(find('.message.positive').textContent.trim(), 'Épreuve mise à jour');
+    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
   });
 });
 
