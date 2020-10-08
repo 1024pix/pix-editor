@@ -9,12 +9,9 @@ export default class ConfigService extends Service {
   @service access;
 
   @tracked author;
-  @tracked airtableKey;
   @tracked accessLevel;
   @tracked pixUser;
   @tracked pixPassword;
-  @tracked airtableBase;
-  @tracked airtableEditorBase;
   @tracked airtableUrl;
   @tracked tableChallenges;
   @tracked tableSkills;
@@ -32,12 +29,9 @@ export default class ConfigService extends Service {
     const config = await this.store.findRecord('config', 'pix-editor-global-config');
 
     this.author = currentUser.trigram;
-    this.airtableKey = config.airtableApiKey;
     this.accessLevel = this.access.getLevel(currentUser.access);
     this.pixUser = config.pixAdminUserEmail;
     this.pixPassword = config.pixAdminUserPassword;
-    this.airtableBase = config.airtableBase;
-    this.airtableEditorBase = config.airtableEditorBase;
     this.airtableUrl = config.airtableUrl;
     this.tableChallenges = config.tableChallenges;
     this.tableSkills = config.tableSkills;

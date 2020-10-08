@@ -30,8 +30,6 @@ module.exports = (function() {
     },
 
     pixEditor: {
-      airtableBase: process.env.AIRTABLE_BASE ,
-      airtableEditorBase: process.env.AIRTABLE_EDITOR_BASE,
       airtableUrl: process.env.AIRTABLE_URL,
       tableChallenges: process.env.TABLE_CHALLENGES,
       tableSkills: process.env.TABLE_SKILLS,
@@ -43,7 +41,6 @@ module.exports = (function() {
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
       pixStaging: process.env.PIX_STAGING,
-      airtableApiKey: process.env.AIRTABLE_API_KEY,
       pixAdminUserEmail: process.env.PIX_ADMIN_USER_EMAIL,
       pixAdminUserPassword: process.env.PIX_ADMIN_USER_PASSWORD,
     }
@@ -59,8 +56,6 @@ module.exports = (function() {
     config.logging.enabled = false;
 
     config.pixEditor = {
-      airtableBase: 'airtableBaseValue',
-      airtableEditorBase: 'airtableEditorBaseValue',
       airtableUrl: 'airtableUrlValue',
       tableChallenges: 'tableChallengesValue',
       tableSkills: 'tableSkillsValue',
@@ -72,7 +67,6 @@ module.exports = (function() {
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
       pixStaging: 'pixStagingValue',
-      airtableApiKey: 'airtableApiKeyValue',
       pixAdminUserEmail: 'pixAdminUserEmailValue',
       pixAdminUserPassword: 'pixAdminUserPasswordValue',
     };

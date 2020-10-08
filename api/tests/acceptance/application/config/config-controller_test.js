@@ -33,8 +33,6 @@ describe('Acceptance | Controller | config', () => {
           data: {
             type: 'configs',
             attributes: {
-              'airtable-base': 'airtableBaseValue',
-              'airtable-editor-base': 'airtableEditorBaseValue',
               'airtable-url': 'airtableUrlValue',
               'table-challenges': 'tableChallengesValue',
               'table-skills': 'tableSkillsValue',
@@ -46,7 +44,6 @@ describe('Acceptance | Controller | config', () => {
               'storage-key': 'storageKeyValue',
               'storage-auth': 'storageAuthValue',
               'pix-staging': 'pixStagingValue',
-              'airtable-api-key': 'airtableApiKeyValue',
               'pix-admin-user-email': 'pixAdminUserEmailValue',
               'pix-admin-user-password': 'pixAdminUserPasswordValue',
             },
