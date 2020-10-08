@@ -7,7 +7,24 @@ export default function () {
   this.get('/areas', ({ areas }, request) => _response(request, areas.all()));
   this.get('/users/me', ({ users }, request) => _response(request, users.first()));
   this.get('/config', ({ configs }, request) => _response(request, configs.first()));
-  this.passthrough('https://api.airtable.com/v0/**');
+  this.get('/airtable/content/Competences', (schema, request) => {
+    const records = schema.competences.all().models.map((competence) => {
+      return {
+        id: competence.id,
+        fields : {
+          'Record ID': competence.id,
+          'id persistant': competence.pixId,
+          'Référence': competence.name,
+          'Titre fr-fr': competence.title,
+          'Sous-domaine': competence.code,
+          'Tubes': competence.tubeIds,
+          'Description': competence.description,
+          'Origine': competence.source,
+        }
+      };
+    });
+    return _response(request, { records });
+  });
 
 }
 
@@ -16,7 +33,8 @@ function _response(request, responseData) {
 }
 
 function _isRequestAuthorized(request) {
-  return request.requestHeaders && request.requestHeaders['Authorization'];
+  const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
+  return apiKey === 'Bearer valid-api-key';
 }
 
 const unauthorizedErrorResponse = new Mirage.Response(401);

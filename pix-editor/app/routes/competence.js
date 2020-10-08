@@ -7,7 +7,7 @@ export default class CompetenceRoute extends Route {
   @service currentData;
 
   model(params) {
-    return this.store.findRecord('competence', params.competence_id);
+    return this.store.peekRecord('competence', params.competence_id);
   }
 
   afterModel(model) {
