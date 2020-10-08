@@ -33,6 +33,7 @@ export default class SingleController extends Controller {
   @service notify;
   @service loader;
   @service confirm;
+  @service changelogEntry;
 
   @alias('parentController.leftMaximized')
   maximized;
@@ -558,7 +559,7 @@ export default class SingleController extends Controller {
         recordId: challenge.pixId,
         author: this.config.author,
         createdAt: (new Date()).toISOString(),
-        elementType: 'épreuve'
+        elementType: this.changelogEntry.challenge
       });
       return entry.save()
         .then(() => challenge);

@@ -8,6 +8,7 @@ export default class PopinChallengeLog extends Component {
   @service store;
   @service paginatedQuery;
   @service config;
+  @service changelogEntry;
 
   @tracked notesLoaded = false;
   @tracked changelogLoaded = false;
@@ -81,7 +82,7 @@ export default class PopinChallengeLog extends Component {
     const newNote = this.store.createRecord('note', {
       recordId:this.args.challenge.pixId,
       author:this.config.author,
-      elementType: 'épreuve'
+      elementType:this.changelogEntry.challenge
     });
     this.logEntry = newNote;
     this.list = false;
@@ -157,5 +158,4 @@ export default class PopinChallengeLog extends Component {
         });
     }
   }
-
 }

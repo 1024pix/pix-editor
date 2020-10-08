@@ -35,6 +35,7 @@ export default class SingleController extends Controller {
   @service notify;
   @service loader;
   @service confirm;
+  @service changelogEntry;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -287,7 +288,7 @@ export default class SingleController extends Controller {
       recordId: skill.pixId,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
-      elementType: 'acquis'
+      elementType: this.changelogEntry.skill
     });
     return entry.save()
       .then(() => skill);
@@ -299,7 +300,7 @@ export default class SingleController extends Controller {
       recordId: challenge.pixId,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
-      elementType: 'épreuve'
+      elementType: this.changelogEntry.challenge
     });
     return entry.save()
       .then(() => challenge);

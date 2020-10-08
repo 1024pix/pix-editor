@@ -1,14 +1,17 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import Service from '@ember/service';
 import Sinon from 'sinon';
 
 module('Unit | Controller | competence/skills/single', function (hooks) {
   setupTest(hooks);
 
-  let storeStub, controller;
+  let storeStub, controller, changelogEntry;
 
   hooks.beforeEach(function() {
     controller = this.owner.lookup('controller:competence/skills/single');
+    changelogEntry = Service.extend({});
+    this.owner.register('service:ChangelogEntry', changelogEntry);
 
     const note = { save: Sinon.stub().resolves() };
     storeStub = { createRecord: Sinon.stub().returns(note) };
@@ -28,7 +31,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       text: changelogValue,
       recordId: skill.pixId,
       createdAt: Sinon.match.any,
-      elementType: 'acquis'
+      elementType: changelogEntry.skill
     };
 
     //when
@@ -52,7 +55,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       text: changelogValue,
       recordId: challenge.pixId,
       createdAt: Sinon.match.any,
-      elementType: 'épreuve'
+      elementType: changelogEntry.challenge
     };
 
     //when
