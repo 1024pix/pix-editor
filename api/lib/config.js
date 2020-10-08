@@ -20,6 +20,7 @@ module.exports = (function() {
     airtable: {
       apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
       base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
+      editorBase: process.env.AIRTABLE_EDITOR_BASE,
     },
 
     logging: {
@@ -53,6 +54,7 @@ module.exports = (function() {
 
     config.airtable.apiKey = 'airtableApiKeyValue';
     config.airtable.base = 'airtableBaseValue';
+    config.airtable.editorBase = 'airtableEditorBaseValue',
 
     config.logging.enabled = false;
 
