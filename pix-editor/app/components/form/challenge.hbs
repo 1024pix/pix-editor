@@ -40,9 +40,6 @@
   {{#if @challenge.isPrototype}}
     <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}
-  {{#if this.authors.isFulfilled}}
-    <Field::Select @title="Auteur" @value={{@challenge.author}} @options={{this.authors}} @edition={{@edition}} @multiple={{true}} @setValue={{fn (mut @challenge.author)}}/>
-  {{/if}}
   {{#if  @challenge.isPrototype}}
     <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
