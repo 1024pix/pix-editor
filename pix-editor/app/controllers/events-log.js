@@ -1,11 +1,13 @@
-import Route from '@ember/routing/route';
+import Controller from '@ember/controller';
 import { inject as service } from '@ember/service';
+import { action } from '@ember/object';
 
-export default class EventsLogRoute extends Route {
+export default class EventsLogController extends Controller {
 
   @service paginatedQuery;
 
-  model() {
+  @action
+  queryMoreLogs() {
     const pq = this.paginatedQuery;
     return pq.queryByStep('note', {
       filterByFormula: 'AND({Type d\'élément} = \'acquis\', Changelog = \'oui\')',
