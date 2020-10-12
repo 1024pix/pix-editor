@@ -1,5 +1,4 @@
 import SortedList from './sorted';
-import { action } from '@ember/object';
 
 export default class EventsLogList extends SortedList {
 
@@ -20,9 +19,4 @@ export default class EventsLogList extends SortedList {
     valuePath: 'date',
     maxWidth: 150,
   }];
-
-  @action
-  selectRow(item) {
-    console.log(item);
-  }
 }

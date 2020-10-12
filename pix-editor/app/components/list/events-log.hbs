@@ -10,10 +10,14 @@
           @rows={{@list}}
           @rowSelectionMode={{'single'}}
           @checkboxSelectionMode={{'none'}}
-          @onSelect={{this.selectRow}} as |b|>
+           as |b|>
     <b.row data-test-skillLog as |r|>
       <r.cell as |value|>
+        {{#if r.columnValue.skill}}
+          <EventsLog::CellSkillLog @skillId={{value}}/>
+        {{else}}
           {{value}}
+        {{/if}}
       </r.cell>
     </b.row>
   </t.body>
