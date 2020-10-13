@@ -6,6 +6,7 @@ export default class AirtableAdapter extends DS.RESTAdapter {
   namespace = '/api/airtable/content';
 
   @service config;
+  @service ajaxQueue;
 
   get headers() {
     const headers = {};
@@ -45,4 +46,7 @@ export default class AirtableAdapter extends DS.RESTAdapter {
     return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
   }
 
+  ajax() {
+    return this.ajaxQueue.add(() => super.ajax(...arguments));
+  }
 }
