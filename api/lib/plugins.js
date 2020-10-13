@@ -43,6 +43,14 @@ const plugins = [
   Inert,
   Vision,
   Blipp,
+  {
+    plugin: require('good'),
+    options: {
+      reporters: {
+        console: consoleReporters,
+      },
+    },
+  },
 ];
 
 module.exports = plugins;
