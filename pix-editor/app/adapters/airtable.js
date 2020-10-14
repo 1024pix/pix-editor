@@ -3,21 +3,18 @@ import { inject as service } from '@ember/service';
 
 export default class AirtableAdapter extends DS.RESTAdapter {
 
-  host = 'https://api.airtable.com';
+  namespace = '/api/airtable/content';
 
   @service config;
+  @service ajaxQueue;
 
   get headers() {
-    return {
-      Accept: 'application/json',
-      // API Token
-      Authorization: 'Bearer ' + this.config.airtableKey
-    };
-  }
-
-  get namespace() {
-    // API Version + Base ID
-    return 'v0/' + this.config.airtableBase;
+    const headers = {};
+    const apiKey = localStorage.getItem('pix-api-key');
+    if (apiKey) {
+      headers['Authorization'] = `Bearer ${apiKey}`;
+    }
+    return headers;
   }
 
   // from RESTAdpater, overriden to use PATCH instead of PUT
@@ -49,4 +46,7 @@ export default class AirtableAdapter extends DS.RESTAdapter {
     return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
   }
 
+  ajax() {
+    return this.ajaxQueue.add(() => super.ajax(...arguments));
+  }
 }

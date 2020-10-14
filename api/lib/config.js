@@ -20,6 +20,7 @@ module.exports = (function() {
     airtable: {
       apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
       base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
+      editorBase: process.env.AIRTABLE_EDITOR_BASE,
     },
 
     logging: {
@@ -29,8 +30,6 @@ module.exports = (function() {
     },
 
     pixEditor: {
-      airtableBase: process.env.AIRTABLE_BASE ,
-      airtableEditorBase: process.env.AIRTABLE_EDITOR_BASE,
       airtableUrl: process.env.AIRTABLE_URL,
       tableChallenges: process.env.TABLE_CHALLENGES,
       tableSkills: process.env.TABLE_SKILLS,
@@ -42,7 +41,6 @@ module.exports = (function() {
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
       pixStaging: process.env.PIX_STAGING,
-      airtableApiKey: process.env.AIRTABLE_API_KEY,
       pixAdminUserEmail: process.env.PIX_ADMIN_USER_EMAIL,
       pixAdminUserPassword: process.env.PIX_ADMIN_USER_PASSWORD,
     }
@@ -51,14 +49,13 @@ module.exports = (function() {
   if (process.env.NODE_ENV === 'test') {
     config.port = 0;
 
-    config.airtable.apiKey = 'test-api-key';
-    config.airtable.base = 'test-base';
+    config.airtable.apiKey = 'airtableApiKeyValue';
+    config.airtable.base = 'airtableBaseValue';
+    config.airtable.editorBase = 'airtableEditorBaseValue',
 
     config.logging.enabled = false;
 
     config.pixEditor = {
-      airtableBase: 'airtableBaseValue',
-      airtableEditorBase: 'airtableEditorBaseValue',
       airtableUrl: 'airtableUrlValue',
       tableChallenges: 'tableChallengesValue',
       tableSkills: 'tableSkillsValue',
@@ -70,7 +67,6 @@ module.exports = (function() {
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
       pixStaging: 'pixStagingValue',
-      airtableApiKey: 'airtableApiKeyValue',
       pixAdminUserEmail: 'pixAdminUserEmailValue',
       pixAdminUserPassword: 'pixAdminUserPasswordValue',
     };

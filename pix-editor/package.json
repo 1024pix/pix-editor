@@ -84,6 +84,7 @@
     "js-crypto-random": "^0.4.3",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.13",
+    "p-queue": "6.6.2",
     "semantic-ui-css": "^2.4.1"
   }
 }

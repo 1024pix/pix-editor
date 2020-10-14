@@ -4,4 +4,5 @@ module.exports = [
   require('./application/areas'),
   require('./application/users'),
   require('./application/config'),
+  require('./application/airtable-proxy'),
 ];

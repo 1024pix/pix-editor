@@ -60,7 +60,7 @@
   </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
   {{#if this.edition}}
-    <button class="ui button item important-action" {{on "click" this.save}} type="button">
+    <button data-test-save-challenge-button class="ui button item important-action" {{on "click" this.save}} type="button">
       <i class="save icon"></i>
       Enregistrer
     </button>
@@ -79,7 +79,7 @@
       Prévisualiser
     </button>
     {{#if this.mayEdit}}
-      <button class="ui button item" {{on "click" this.edit}} type="button">
+      <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>
         Modifier
       </button>

@@ -7,6 +7,6 @@ export default Factory.extend({
   code: 'Code',
   description: 'Description',
   pixId: '',
-  source: 'Source',
+  source: 'Pix',
 });
 

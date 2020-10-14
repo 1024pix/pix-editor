@@ -19,7 +19,7 @@
       {{#if this.messages.length}}
         <div class="messages">
           {{#each this.messages as |message|}}
-            <div class={{concat "ui floating message " (if message.positive "positive" "warning")}}
+            <div data-test-main-message class={{concat "ui floating message " (if message.positive "positive" "warning")}}
                   id={{message.id}}>
               <p>
                 {{#if message.positive}}

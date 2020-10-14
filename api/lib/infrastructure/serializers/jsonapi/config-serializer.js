@@ -4,8 +4,6 @@ module.exports = {
   serialize(config) {
     return new Serializer('config', {
       attributes: [
-        'airtableBase',
-        'airtableEditorBase',
         'airtableUrl',
         'tableChallenges',
         'tableSkills',
@@ -17,7 +15,6 @@ module.exports = {
         'storageKey',
         'storageAuth',
         'pixStaging',
-        'airtableApiKey',
         'pixAdminUserEmail',
         'pixAdminUserPassword',
       ],

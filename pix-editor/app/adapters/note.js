@@ -5,10 +5,8 @@ export default class NoteAdapter extends AirtableAdapter {
 
   @service config;
 
-  get namespace() {
-    return 'v0/' + this.config.airtableEditorBase;
-  }
-
+  namespace = '/api/airtable/changelog';
+  
   pathForType() {
     return 'Notes';
   }
