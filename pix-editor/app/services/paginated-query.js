@@ -6,12 +6,11 @@ import { A } from '@ember/array';
 export default class PaginatedQueryService extends Service {
   @service store;
 
-  @tracked resultMetaOffset = {};
-  @tracked currentResult = {};
-  @tracked endResult = {};
+  @tracked offset = null;
 
   query(model, parameters) {
     const store = this.store;
+
     function queryPage(model, parameters, current) {
       if (!current) {
         current = A();
@@ -27,29 +26,34 @@ export default class PaginatedQueryService extends Service {
           }
         });
     }
+
     return queryPage(model, parameters);
   }
 
-  queryByStep(model,parameters,scope) {
+  queryByStep(model, parameters, currentModel, offset) {
     const store = this.store;
-    if (this.endResult[scope]) {
-      return;
+    if (offset === false) {
+      return currentModel;
     }
-    if (!this.currentResult[scope]) {
-      this.currentResult[scope] = A();
+    if (!currentModel) {
+      currentModel = A();
     }
-    if (this.resultMetaOffset[scope]) {
-      parameters.offset = this.resultMetaOffset[scope];
+    if (offset !== undefined) {
+      parameters.offset = offset;
     }
     return store.query(model, parameters)
-      .then(result=>{
-        this.currentResult[scope].pushObjects(result.toArray());
+      .then(result => {
+        currentModel.pushObjects(result.toArray());
         if (result.meta && result.meta.offset) {
-          this.resultMetaOffset[scope] =  result.meta.offset;
+          this.offset = result.meta.offset;
         } else {
-          this.endResult[scope] = true;
+          this.offset = false;
         }
-        return this.currentResult[scope];
+        return currentModel;
       });
+  }
+
+  getLastOffset() {
+    return this.offset;
   }
 }

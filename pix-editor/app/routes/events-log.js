@@ -10,6 +10,12 @@ export default class EventsLogRoute extends Route {
     return pq.queryByStep('note', {
       filterByFormula: 'AND({Type d\'élément} = \'acquis\', Changelog = \'oui\')',
       sort: [{ field: 'Date', direction: 'desc' }]
-    },'eventLog');
+    });
+  }
+
+  setupController(controller) {
+    super.setupController(...arguments);
+    const pq = this.paginatedQuery;
+    controller.offset = pq.getLastOffset();
   }
 }
