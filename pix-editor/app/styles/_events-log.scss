@@ -1,0 +1,32 @@
+.list-log {
+  .create-log {
+    td:first-child {
+      border-left: #0AC963 solid 5px;
+    }
+  }
+
+  .delete-log {
+    td:first-child {
+      border-left: #D41B0B solid 5px;
+    }
+  }
+
+  .archive-log {
+    td:first-child {
+      border-left: #CC8506 solid 5px;
+    }
+  }
+
+  .modify-log {
+    td:first-child {
+      border-left: #0F69D6 solid 5px;
+    }
+  }
+
+  .move-log {
+    td:first-child {
+      border-left: #7C12BD solid 5px;
+    }
+  }
+
+}
