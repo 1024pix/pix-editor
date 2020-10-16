@@ -16,6 +16,7 @@ export default class NewController extends Skill {
 
   @service notify;
   @service loader;
+  @service changelogEntry;
 
   @action
   cancelEdit() {
@@ -36,7 +37,7 @@ export default class NewController extends Skill {
         skill.competence = [competence.get('id')];
         return skill.save();
       })
-      .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog))
+      .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction))
       .then(() => {
         this.edition = false;
         this.loader.stop();

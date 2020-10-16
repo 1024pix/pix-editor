@@ -8,7 +8,9 @@ export default class NoteSerializer extends AirtableSerializer {
     changelog:'Changelog',
     createdAt:'Date',
     status:'Statut',
-    elementType: 'Type d\'élément'
+    elementType: 'Type d\'élément',
+    skillName: 'Nom de l\'acquis',
+    action: 'Action'
   };
 
   payloadKeyFromModelName() {

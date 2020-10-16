@@ -8,6 +8,8 @@ export default class NoteModel extends Model {
   @attr createdAt;
   @attr status;
   @attr elementType;
+  @attr skillName;
+  @attr action;
   @attr('boolean', { defaultValue: false }) changelog;
 
   get date() {

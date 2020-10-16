@@ -124,7 +124,7 @@ export default class SingleController extends Controller {
       return operation.then(()=>{
         return skill.save();
       })
-        .then(()=>this._handleSkillChangelog(skill, changelogValue))
+        .then(()=>this._handleSkillChangelog(skill, changelogValue, this.changelogEntry.modifyAction))
         .then(() => {
           this.edition = false;
           this.loader.stop();
@@ -153,7 +153,7 @@ export default class SingleController extends Controller {
         skill.level = level;
         skill.competence = [competence.get('id')];
         return skill.save()
-          .then(()=>this._handleSkillChangelog(skill,changelogValue))
+          .then(()=>this._handleSkillChangelog(skill,changelogValue, this.changelogEntry.moveAction))
           .then(() => {
             this.notify.message('Acquis mis à jour');
             this.transitionToRoute('competence.skills.single', competence, skill);
@@ -186,7 +186,7 @@ export default class SingleController extends Controller {
         this._displayChangelogPopIn(this.defaultArchiveChangelog,(changelogValue)=>{
           this.loader.start('Archivage de l\'acquis');
           return this.skill.archive()
-            .then(()=>this._handleSkillChangelog(this.skill, changelogValue))
+            .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
             .then(() => {
               this.close();
               this.notify.message('Acquis archivé');
@@ -232,7 +232,7 @@ export default class SingleController extends Controller {
         this._displayChangelogPopIn(this.defaultDeleteChangelog,(changelogValue)=>{
           this.loader.start('Suppression de l\'acquis');
           return this.skill.delete()
-            .then(()=>this._handleSkillChangelog(this.skill, changelogValue))
+            .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
               this.notify.message('Acquis supprimé');
@@ -282,13 +282,15 @@ export default class SingleController extends Controller {
     this.displayChangeLog = true;
   }
 
-  _handleSkillChangelog(skill, changelogValue) {
+  _handleSkillChangelog(skill, changelogValue, action) {
     const entry = this.store.createRecord('changelogEntry', {
       text: changelogValue,
       recordId: skill.pixId,
+      skillName: skill.name,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
-      elementType: this.changelogEntry.skill
+      elementType: this.changelogEntry.skill,
+      action
     });
     return entry.save()
       .then(() => skill);

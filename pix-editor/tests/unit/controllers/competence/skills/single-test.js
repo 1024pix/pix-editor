@@ -1,20 +1,24 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
-import Sinon from 'sinon';
+import sinon from 'sinon';
 
 module('Unit | Controller | competence/skills/single', function (hooks) {
   setupTest(hooks);
 
-  let storeStub, controller, changelogEntry;
+  let storeStub, controller, changelogEntryService,configService;
+  const date = '14/07/1986';
+  const author = 'DEV';
 
   hooks.beforeEach(function() {
     controller = this.owner.lookup('controller:competence/skills/single');
-    changelogEntry = Service.extend({});
-    this.owner.register('service:ChangelogEntry', changelogEntry);
+    changelogEntryService = this.owner.lookup('service:ChangelogEntry');
+    configService = Service.extend({ author });
+    this.owner.unregister('service:Config');
+    this.owner.register('service:Config',configService);
 
-    const note = { save: Sinon.stub().resolves() };
-    storeStub = { createRecord: Sinon.stub().returns(note) };
+    const note = { save: sinon.stub().resolves() };
+    storeStub = { createRecord: sinon.stub().returns(note) };
     controller.store = storeStub;
   });
 
@@ -25,21 +29,26 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       pixId: 'rec123456',
       name: 'skillName',
     };
+    const action = changelogEntryService.createAction;
 
     const expectedChangelog = {
-      author: Sinon.match.any,
+      author,
       text: changelogValue,
       recordId: skill.pixId,
-      createdAt: Sinon.match.any,
-      elementType: changelogEntry.skill
+      skillName: skill.name,
+      elementType: changelogEntryService.skill,
+      createdAt: date,
+      action
     };
 
     //when
-    await controller._handleSkillChangelog(skill, changelogValue);
+    await controller._handleSkillChangelog(skill, changelogValue, action);
 
     //then
-    Sinon.assert.calledWithMatch(storeStub.createRecord, 'changelogEntry', expectedChangelog);
-    assert.expect(0);
+    const storeResult = storeStub.createRecord.getCall(0).args;
+    //stub createdAt
+    storeResult[1].createdAt = date;
+    assert.deepEqual(storeStub.createRecord.getCall(0).args,['changelogEntry', expectedChangelog]);
   });
 
   test('it should create a challenge changelogEntry', async function (assert) {
@@ -51,18 +60,20 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     };
 
     const expectedChangelog = {
-      author: Sinon.match.any,
+      author,
       text: changelogValue,
       recordId: challenge.pixId,
-      createdAt: Sinon.match.any,
-      elementType: changelogEntry.challenge
+      createdAt: date,
+      elementType: changelogEntryService.challenge,
     };
 
     //when
     await controller._handleChallengeChangelog(challenge, changelogValue);
 
     //then
-    Sinon.assert.calledWithMatch(storeStub.createRecord, 'changelogEntry', expectedChangelog);
-    assert.expect(0);
+    const storeResult = storeStub.createRecord.getCall(0).args;
+    //stub createdAt
+    storeResult[1].createdAt = date;
+    assert.deepEqual(storeStub.createRecord.getCall(0).args,['changelogEntry', expectedChangelog]);
   });
 });
