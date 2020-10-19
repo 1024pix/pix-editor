@@ -19,12 +19,6 @@ export default class PopinChangelog extends Component {
   }
 
   @action
-  deny() {
-    this.value = null;
-    this.args.onDeny();
-  }
-
-  @action
   approve() {
     this.args.onApprove(this.value);
     this.value = null;
