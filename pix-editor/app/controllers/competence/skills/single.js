@@ -145,7 +145,7 @@ export default class SingleController extends Controller {
 
   @action
   setLocation(competence, newTube, level) {
-    this._displayChangelogPopIn(`Déplacement de l'acquis vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+    this._displayChangelogPopIn(`Déplacement de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
       (changelogValue)=>{
         const skill = this.skill;
         this.loader.start();
