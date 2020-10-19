@@ -17,7 +17,7 @@ export default class ChallengeForm extends Component {
     ],
     'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
     'declinable':['', 'facilement', 'difficilement', 'permutation', 'non'],
-    'format':['petit', 'mots', 'phrase', 'paragraphe'],
+    'format':['petit', 'mots', 'phrase', 'paragraphe', 'nombre'],
     'accessibility1':['RAS','OK', 'Acquis Non Pertinent', 'KO', 'A tester'],
     'accessibility2':['RAS','OK','KO'],
     'responsive':['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
