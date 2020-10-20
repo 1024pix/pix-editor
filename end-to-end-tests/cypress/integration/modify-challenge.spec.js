@@ -8,7 +8,7 @@ context('Modifying challenge', () => {
     cy.visit('http://localhost:4200');
     cy.get('#login-api-key')
       .type('8d03a893-3967-4501-9dc4-e0aa6c6dc442{enter}');
-    cy.contains('1', {timeout: 3000}).click();
+    cy.contains('1. Information', {timeout: 30000}).click();
     cy.contains('1.1').click()
     cy.contains('@eval2', {timeout: 6000}).click();
     cy.contains('Modifier').click();
