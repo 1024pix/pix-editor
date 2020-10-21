@@ -4,7 +4,13 @@
   "description": "End to end for LCMS API and Pix editor front",
   "main": "index.js",
   "scripts": {
-    "cy:open": "cypress open"
+    "cy:open": "npm run db:initialize && cypress open",
+    "cy:open:local": "DATABASE_URL=postgresql://postgres@localhost:5433/pix_lcms_test npm run cy:open",
+    "cy:run": "npm run db:initialize && cypress run --browser=chrome && exit",
+    "cy:run:local": "DATABASE_URL=postgresql://postgres@localhost:5433/pix_lcms_test npm run cy:run",
+    "cy:run:ci": "npm run db:initialize && cypress run && exit",
+    "db:empty": "cd ../api && npm run db:empty && npm run db:seed",
+    "db:initialize": "cd ../api && npm run db:prepare"
   },
   "author": "",
   "license": "ISC",

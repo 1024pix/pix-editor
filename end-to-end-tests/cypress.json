@@ -1,1 +1,5 @@
-{}
+{
+  "video": false,
+  "numTestsKeptInMemory": 0,
+  "viewportWidth": 1500
+}
