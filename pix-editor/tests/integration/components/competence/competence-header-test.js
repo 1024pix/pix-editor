@@ -21,6 +21,6 @@ module('Integration | Component | competence/competence-header', function(hooks)
 
     //  then
     assert.dom('h1').exists();
-    assert.equal(this.element.querySelector('h1').textContent.trim(), 'competence_name');
+    assert.dom(this.element.querySelector('h1')).hasText('competence_name');
   });
 });

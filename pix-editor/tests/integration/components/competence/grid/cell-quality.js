@@ -12,7 +12,7 @@ module('Integration | Component | quality-view', function(hooks) {
 
     await render(hbs`{{quality-view}}`);
 
-    assert.equal(this.element.textContent.trim(), '0');
+    assert.dom(this.element).hasText('0');
 
 
   });

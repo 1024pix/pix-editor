@@ -12,7 +12,7 @@ module('Integration | Component | sorted-list', function(hooks) {
 
     await render(hbs`{{list/sorted}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
   });
 });

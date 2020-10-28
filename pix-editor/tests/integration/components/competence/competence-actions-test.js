@@ -23,7 +23,7 @@ module('Integration | Component | competence/competence-actions', function(hooks
 
     // then
 
-    assert.equal(this.element.querySelector('.production').textContent.trim(), 'En production');
+    assert.dom(this.element.querySelector('.production')).hasText('En production');
 
   });
 });

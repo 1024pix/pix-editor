@@ -29,9 +29,9 @@ module('Acceptance | Home', function(hooks) {
     await visit('/');
 
     // then
-    assert.equal(findAll('.title.AccordionToggle')[0].textContent.trim(), '1. Information et données');
-    assert.equal(findAll('.title.AccordionToggle')[1].textContent.trim(), '2. Communication et collaboration');
-    assert.equal(findAll('.title.AccordionToggle').length, 2);
+    assert.dom(findAll('.title.AccordionToggle')[0]).hasText('1. Information et données');
+    assert.dom(findAll('.title.AccordionToggle')[1]).hasText('2. Communication et collaboration');
+    assert.dom('.title.AccordionToggle').exists({ count: 2 });
   });
 });
 

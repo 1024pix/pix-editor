@@ -123,7 +123,7 @@ export default class TargetProfileController extends Controller {
       }, areaValues);
     }, []);
     const fileName = 'profil_' + (new Date()).toLocaleString('fr-FR') + '.json';
-    this.get('fileSaver').saveAs(JSON.stringify(data), fileName);
+    this.fileSaver.saveAs(JSON.stringify(data), fileName);
   }
 
   @action

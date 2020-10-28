@@ -19,7 +19,7 @@ module('Integration | Component | competence/grid/cell-history', function(hooks)
 
     await render(hbs`<Competence::Grid::CellHistory @tube={{this.tube}} @skill={{this.skill}} @level={{this.level}}/>`);
 
-    assert.equal(this.element.querySelector('.skill-name').textContent.trim(), '@skill1');
-    assert.equal(this.element.querySelector('.history-count').textContent.trim(), '0 - 0');
+    assert.dom(this.element.querySelector('.skill-name')).hasText('@skill1');
+    assert.dom(this.element.querySelector('.history-count')).hasText('0 - 0');
   });
 });

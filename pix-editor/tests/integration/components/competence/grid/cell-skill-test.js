@@ -15,7 +15,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
     // when
     await render(hbs`{{competence/grid/cell-skill skill=skill}}`);
     // then
-    assert.equal(this.element.querySelector('.skill_CSS').textContent.trim(), 'skill_name');
+    assert.dom(this.element.querySelector('.skill_CSS')).hasText('skill_name');
 
   });
 });
