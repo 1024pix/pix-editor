@@ -1,5 +1,9 @@
 
 
+## v3.14.0 (28/10/2020)
+
+- [#58](https://github.com/1024pix/pix-editor/pull/58) [TECH] Ajout d'une route préfixée `v0` pour les appels proxifiés vers Airtable.
+
 ## v3.13.0 (26/10/2020)
 
 - [#56](https://github.com/1024pix/pix-editor/pull/56) [FEATURE] Ajout du format "Nombre" pour les challenges QROC
