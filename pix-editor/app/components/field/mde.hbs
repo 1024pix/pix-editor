@@ -14,10 +14,10 @@
     {{@title}}
   </label>
   {{#if @edition}}
-    <SimpleMde @value={{@value}} @change={{@setValue}} @options={{this.simpleMDEOptions}} />
+    <TuiEditor @value={{@value}} @onChange={{@setValue}} />
   {{else}}
     <div class="mde-preview">
-      {{simple-mde-preview @value}}
+      {{this.previewContent}}
     </div>
   {{/if}}
 </div>
