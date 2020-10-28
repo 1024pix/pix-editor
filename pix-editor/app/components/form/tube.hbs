@@ -12,7 +12,7 @@
     <Field::Input @value={{@tube.practicalTitleEn}} @edition={{@edition}} @label="Titre pratique (en)"/>
     <Field::Textarea @title="Description pratique (en) :" @value={{@tube.practicalDescriptionEn}} @edition={{@edition}} />
   </div>
-  {{#if (not @edition)}}
+  {{#unless @edition}}
     <Field::Input @value={{@tube.pixId}} @title="Id" @edition={{false}} />
-  {{/if}}
+  {{/unless}}
 </form>

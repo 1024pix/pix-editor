@@ -6,9 +6,9 @@
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
     <Field::Select @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
   {{/if}}
-  {{#if (not this.isAutoReply)}}
-  <Field::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
-  {{/if}}
+  {{#unless this.isAutoReply}}
+    <Field::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
+  {{/unless}}
   <Field::Textarea @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
   {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
       <div id="toleranceField" class={{concat "field" (if @edition "" " disabled")}}>
@@ -40,7 +40,7 @@
   {{#if @challenge.isPrototype}}
     <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}
-  {{#if  @challenge.isPrototype}}
+  {{#if @challenge.isPrototype}}
     <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>
@@ -79,7 +79,7 @@
           </div>
       </div>
   </div>
-  {{#if (not @edition)}}
+  {{#unless @edition}}
     <Field::Input @value={{@challenge.pixId}} @title="Id" @edition={{false}} />
-  {{/if}}
+  {{/unless}}
 </form>
