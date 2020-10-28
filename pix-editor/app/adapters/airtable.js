@@ -1,7 +1,7 @@
-import DS from 'ember-data';
+import RESTAdapter from '@ember-data/adapter/rest';
 import { inject as service } from '@ember/service';
 
-export default class AirtableAdapter extends DS.RESTAdapter {
+export default class AirtableAdapter extends RESTAdapter {
 
   namespace = '/api/airtable/content';
 

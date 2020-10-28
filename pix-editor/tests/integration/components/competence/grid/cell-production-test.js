@@ -16,7 +16,7 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     // when
     await render(hbs`{{competence/grid/cell-production skill=skill}}`);
     // then
-    assert.dom(this.element.querySelector('.production')).hasText(productionAlternatives.length);
+    assert.dom(this.element.querySelector('.production')).hasText(`${productionAlternatives.length}`);
 
   });
 });

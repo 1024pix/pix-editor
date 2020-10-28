@@ -17,8 +17,6 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
     // when
     await render(hbs`{{competence/grid/cell-workbench skill=skill}}`);
     // then
-    assert.dom(this.element.querySelector('.alternative-count')).hasText(prototypes.length);
-
-
+    assert.dom(this.element.querySelector('.alternative-count')).hasText(`${prototypes.length}`);
   });
 });
