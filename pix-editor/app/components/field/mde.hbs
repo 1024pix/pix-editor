@@ -17,7 +17,7 @@
     <TuiEditor @value={{@value}} @onChange={{@setValue}} />
   {{else}}
     <div class="mde-preview">
-      {{this.previewContent}}
+      <MarkdownToHtml @markdown={{@value}} />
     </div>
   {{/if}}
 </div>
