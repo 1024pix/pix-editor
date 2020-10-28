@@ -35,6 +35,26 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
       expect(response.result).to.equal('ok');
     });
 
+    it('should proxy versionned request to airtable', async () => {
+      // Given
+      nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Competences?key=value')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, 'ok');
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/airtable/v0/content/Competences?key=value',
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.equal('ok');
+    });
+
     it('should proxy post request to airtable', async () => {
       //Given
       nock('https://api.airtable.com')
