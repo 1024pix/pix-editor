@@ -82,7 +82,7 @@
   },
   "dependencies": {
     "@samwen/base62-util": "^1.0.2",
-    "file-saver": "^2.0.0",
+    "file-saver": "2.0.2",
     "js-crypto-random": "^0.4.3",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.13",
