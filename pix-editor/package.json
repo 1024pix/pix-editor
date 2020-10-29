@@ -58,7 +58,7 @@
     "ember-table": "^2.2.3",
     "ember-template-lint": "^2.14.0",
     "ember-test-selectors": "5.0.0",
-    "ember-tooltips": "^3.4.1",
+    "ember-tooltips": "3.4.5",
     "ember-truth-helpers": "^2.1.0",
     "ember-tui-editor": "1.1.0",
     "ember-welcome-page": "^4.0.0",
