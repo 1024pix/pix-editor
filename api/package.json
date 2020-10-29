@@ -41,7 +41,7 @@
     "@hapi/inert": "6.0.3",
     "@hapi/vision": "^6.0.1",
     "airtable": "0.10.0",
-    "axios": "^0.20.0",
+    "axios": "0.21.0",
     "blipp": "^4.0.1",
     "bunyan": "^1.8.14",
     "dotenv": "^8.2.0",
