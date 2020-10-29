@@ -29,24 +29,24 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controller.edition &&
+    if (this.controllerFor('competence.skills.single').edition &&
         !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      if (this.controller.model.rollbackAttributes) {
+      if (this.controllerFor('competence.skills.single').model.rollbackAttributes) {
         // may not exist if it was a new skill
-        this.controller.model.rollbackAttributes();
+        this.controllerFor('competence.skills.single').model.rollbackAttributes();
       }
       if (transition.targetName === 'competence.prototypes.index') {
-        const skill = this.controller.skill;
+        const skill = this.controllerFor('competence.skills.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
           return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         } else {
           return this.transitionTo('competence.prototypes.list', this.currentData.getCompetence(), skill);
         }
-      } else if (transition.targetName === 'competence.quality.index' && this.controller.skill.productionPrototype) {
-        return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controller.skill);
+      } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.skills.single').skill.productionPrototype) {
+        return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controllerFor('competence.skills.single').skill);
       }
 
       return true;

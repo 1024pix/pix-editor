@@ -13,9 +13,9 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controller.edition) {
+    if (this.controllerFor('competence.prototypes.single.alternatives.single').edition) {
       if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
-        this.controller.send('cancelEdit');
+        this.controllerFor('competence.prototypes.single.alternatives.single').send('cancelEdit');
         return true;
       } else {
         transition.abort();

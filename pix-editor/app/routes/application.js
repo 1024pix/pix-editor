@@ -11,7 +11,7 @@ export default class ApplicationRoute extends Route {
   @service currentData;
 
   _openLoginForm() {
-    this.controller.send('openLoginForm');
+    this.controllerFor('application').send('openLoginForm');
   }
 
   async beforeModel() {
@@ -32,7 +32,6 @@ export default class ApplicationRoute extends Route {
       return this.store.findAll('area');
     }
   }
-
   afterModel(model) {
     if (this.configured) {
       this.pixConnector.connect();
@@ -52,7 +51,7 @@ export default class ApplicationRoute extends Route {
 
   @action
   loading(transition) {
-    const controller = this.controller;
+    const controller = this.controllerFor('application');
     if (controller) {
       controller.loading = true;
       transition.promise.finally(function () {

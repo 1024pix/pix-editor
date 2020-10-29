@@ -32,7 +32,8 @@ module.exports = {
     'semi':'error',
     'no-setter-return': 'off',
     'space-infix-ops':'error',
-    'object-curly-spacing':['error', 'always']
+    'object-curly-spacing':['error', 'always'],
+    'ember/no-controller-access-in-routes': ['error', { 'allowControllerFor': true }],
   },
   overrides: [
     // node files
