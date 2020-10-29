@@ -28,7 +28,7 @@
     "babel-eslint": "^10.1.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-accordion": "^0.7.0",
-    "ember-aria-tabs": "^2.1.2",
+    "ember-aria-tabs": "3.0.0",
     "ember-auto-import": "^1.6.0",
     "ember-classic-decorator": "^1.0.6",
     "ember-cli": "~3.22.0",
