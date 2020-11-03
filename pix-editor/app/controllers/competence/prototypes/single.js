@@ -175,7 +175,7 @@ export default class SingleController extends Controller {
 
   @action
   save() {
-    this._getChangelog(this.defaultSaveChangelog, (changelog) => {
+    this._displayChangelogPopIn(this.defaultSaveChangelog, (changelog) => {
       this.loader.start();
       return this._saveCheck(this.challenge)
         .then(challenge => this._handleIllustration(challenge))
@@ -218,7 +218,7 @@ export default class SingleController extends Controller {
         } else {
           defaultLogMessage = 'Mise en production de la déclinaison';
         }
-        this._getChangelog(defaultLogMessage, (changelog) => {
+        this._displayChangelogPopIn(defaultLogMessage, (changelog) => {
           this.loader.start();
           return this._validationChecks(this.challenge)
             .then(challenge => this._archivePreviousPrototype(challenge))
@@ -247,7 +247,7 @@ export default class SingleController extends Controller {
     }
     return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
       .then(() => {
-        this._getChangelog('Archivage de l\'épreuve', (changelog) => {
+        this._displayChangelogPopIn('Archivage de l\'épreuve', (changelog) => {
           this.loader.start();
           return this.challenge.archive()
             .then(challenge => this._archiveAlternatives(challenge))
@@ -271,7 +271,7 @@ export default class SingleController extends Controller {
     }
     return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
       .then(() => {
-        this._getChangelog('Suppression de l\'épreuve', (changelog) => {
+        this._displayChangelogPopIn('Suppression de l\'épreuve', (changelog) => {
           this.loader.start();
           return this.challenge.delete()
             .then(challenge => this._deleteAlternatives(challenge))
@@ -327,7 +327,7 @@ export default class SingleController extends Controller {
       this._errorMessage('Aucun acquis sélectionné');
       return;
     }
-    this._getChangelog('Changement d\'acquis de l\'épreuve', (changelog) => {
+    this._displayChangelogPopIn('Changement d\'acquis de l\'épreuve', (changelog) => {
       this.loader.start();
       const prototype = this.challenge;
       const prototypeVersion = this._getNextPrototypeVersion(skills);
@@ -585,7 +585,7 @@ export default class SingleController extends Controller {
     return Promise.reject();
   }
 
-  _getChangelog(defaultMessage, callback) {
+  _displayChangelogPopIn(defaultMessage, callback) {
     this.changelogCallback = callback;
     this.changelogDefault = defaultMessage;
     this.displayChangeLog = true;
