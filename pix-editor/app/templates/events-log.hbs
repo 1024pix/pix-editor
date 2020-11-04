@@ -1,0 +1,9 @@
+<div class="main-left">
+  <div class="ui main-title">
+    <h1 class="ui left floated header">Journal</h1>
+    <div class="ui right floated header">
+      <button {{on "click" this.queryMoreLogs}} type="button" class="ui inverted basic button" disabled={{this.queryStatus}}><i class="icon plus"></i> Voir plus</button>
+    </div>
+  </div>
+  <List::EventsLog @list={{this.model}} />
+</div>

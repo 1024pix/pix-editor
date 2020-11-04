@@ -1,0 +1,20 @@
+<EmberTable class="list-log" as |t|>
+  <t.head
+          @columns={{this.headers}}
+          @widthConstraint={{'eq-container'}}
+          @resizeMode={{'fluid'}}
+          @onUpdateSorts={{this.sortBy}}
+          @sortFunction={{this.sort}}
+          @sorts={{this.sorts}}/>
+  <t.body
+          @rows={{@list}}
+          @rowSelectionMode={{'single'}}
+          @checkboxSelectionMode={{'none'}}
+           as |b|>
+    <b.row class={{b.rowValue.actionCSS}} data-test-skillLog as |r|>
+      <r.cell as |value|>
+          {{value}}
+      </r.cell>
+    </b.row>
+  </t.body>
+</EmberTable>
