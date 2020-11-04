@@ -13,12 +13,13 @@ export default class EventsLogController extends Controller {
   }
 
   @action
-  queryMoreLogs() {
+  async queryMoreLogs() {
     const pq = this.paginatedQuery;
-
-    return pq.queryByStep('note', {
+    const resultQuery =  await pq.queryByStep('note', {
       filterByFormula: 'AND({Type d\'élément} = \'acquis\', Changelog = \'oui\')',
       sort: [{ field: 'Date', direction: 'desc' }]
     },this.model, this.offset);
+    this.offset = pq.getLastOffset();
+    return resultQuery;
   }
 }
