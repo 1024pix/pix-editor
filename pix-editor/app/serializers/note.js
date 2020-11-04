@@ -3,11 +3,14 @@ import AirtableSerializer from './airtable';
 export default class NoteSerializer extends AirtableSerializer {
   attrs = {
     text:'Texte',
-    challengeId:'Record_Id',
+    recordId:'Record_Id',
     author:'Auteur',
     changelog:'Changelog',
     createdAt:'Date',
-    status:'Statut'
+    status:'Statut',
+    elementType: 'Type d\'élément',
+    skillName: 'Nom de l\'acquis',
+    action: 'Action'
   };
 
   payloadKeyFromModelName() {

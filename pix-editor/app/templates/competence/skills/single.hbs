@@ -90,3 +90,8 @@
   @close={{this.closeSelectLocation}}
   />
 {{/if}}
+{{#if this.displayChangeLog}}
+<PopIn::Changelog
+        @onApprove={{this.approveChangelog}}
+        @defaultValue={{this.changelogText}} />
+{{/if}}
