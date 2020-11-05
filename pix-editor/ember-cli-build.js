@@ -47,5 +47,11 @@ module.exports = function(defaults) {
   app.import('node_modules/semantic-ui-css/themes/default/assets/images/flags.png', {
     destDir: 'assets/themes/default/assets/images'
   });
+
+  app.import('vendor/AmpleSoft-normal.js', {
+    using: [
+      { transformation: 'es6', as: 'AmpleSoft-normal.js' }
+    ]
+  });
   return app.toTree();
 };
