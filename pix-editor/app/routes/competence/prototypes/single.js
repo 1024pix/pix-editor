@@ -33,16 +33,16 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controller.edition) {
+    if (this.controllerFor('competence.prototypes.single').edition) {
       if (confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
-        this.controller.send('cancelEdit');
+        this.controllerFor('competence.prototypes.single').send('cancelEdit');
         return true;
       } else {
         transition.abort();
       }
     } else {
       if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
-        const challenge = this.controller.model;
+        const challenge = this.controllerFor('competence.prototypes.single').model;
         if (!challenge.isWorkbench) {
           const skills = challenge.skills;
           const skill = skills.firstObject;
@@ -55,7 +55,7 @@ export default class SingleRoute extends Route {
           }
         }
       }
-      this.controller.edition = false;
+      this.controllerFor('competence.prototypes.single').edition = false;
       return true;
     }
   }

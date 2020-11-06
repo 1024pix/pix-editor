@@ -1,7 +1,7 @@
 <div class="skill-header {{this.skill.statusCSS}}">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if (not this.edition)}}
+      {{#unless this.edition}}
         {{#if this.mayMove}}
           <button class="ui icon button" {{on "click" this.moveSkill}} type="button"><i class="icon random"></i></button>
         {{/if}}
@@ -24,7 +24,7 @@
             </dd.Content>
           </BasicDropdown>
         {{/if}}
-      {{/if}}
+      {{/unless}}
     </div>
     <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
@@ -70,12 +70,12 @@
           Airtable
         </button>
       {{/if}}
-      {{#if (not this.skill.isLive)}}
+      {{#unless this.skill.isLive}}
         <button class="ui button item" {{on "click" this.displayChallenges}} type="button">
           <i class="archive icon"></i>
           Épreuves &gt;&gt;
         </button>
-      {{/if}}
+      {{/unless}}
     {{/if}}
   </div>
 </div>

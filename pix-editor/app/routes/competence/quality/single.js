@@ -16,19 +16,19 @@ export default class SingleRoute extends SkillRoute {
 
   @action
   willTransition(transition) {
-    if (this.controller.edition &&
+    if (this.controllerFor('competence.quality.single').edition &&
         !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      this.controller.model.rollbackAttributes();
+      this.controllerFor('competence.quality.single').model.rollbackAttributes();
       if (transition.targetName === 'competence.prototypes.index') {
-        const skill = this.controller.skill;
+        const skill = this.controllerFor('competence.quality.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
           return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         }
       } else if (transition.targetName === 'competence.skills.index') {
-        return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controller.model);
+        return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controllerFor('competence.quality.single').model);
       }
       return true;
     }

@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { visit, findAll, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
+import { later } from '@ember/runloop';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
 
 module('Acceptance | Modify-Challenge', function(hooks) {
@@ -32,8 +33,13 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     await click(findAll('[data-test-competence-item]')[0]);
     await click(findAll('[data-test-skill-cell]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
+    // Ugly hack to wait for ToastUI to be ready
+    // otherwise test is flacky and fails with error message
+    // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
+    await later(this, async () => {}, 100);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-save-changelog-button]'));
+
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
   });

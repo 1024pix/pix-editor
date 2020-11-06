@@ -7,7 +7,7 @@
 
   </h1>
 </div>
-{{#if (not this.rightMaximized)}}
+{{#unless this.rightMaximized}}
   <div class="ui attached segment competence {{this.size}}">
     <List::Alternatives @list={{this.challenge.alternatives}} />
   </div>
@@ -19,5 +19,5 @@
       </button>
     {{/if}}
   </div>
-{{/if}}
+{{/unless}}
 {{outlet}}

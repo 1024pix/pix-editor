@@ -15,7 +15,7 @@
             </at.tabList>
           </div>
           <at.tabPanel>
-            <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="own">
+            <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="own">
               <List::Notes @list={{this.ownNotes}} @displayAuthor={{false}} @show={{this.showOwnNote}} />
               <div class="ui text menu note-menu">
                 <button class="ui button item" {{on "click" this.addNote}} type="button"><i class="plus icon"></i>Nouvelle note</button>
@@ -23,12 +23,12 @@
             </div>
           </at.tabPanel>
           <at.tabPanel>
-            <div class="ui bottom attached tab segment active {{if (not this.notesLoaded) "loading"}}" data-tab="notes">
+            <div class="ui bottom attached tab segment active {{unless this.notesLoaded "loading"}}" data-tab="notes">
               <List::Notes @list={{this.notes}} @show={{this.showNote}} />
             </div>
           </at.tabPanel>
           <at.tabPanel>
-            <div class="ui bottom attached tab segment active {{if (not this.changelogLoaded) "loading"}}" data-tab="notes">
+            <div class="ui bottom attached tab segment active {{unless this.changelogLoaded "loading"}}" data-tab="notes">
               <List::Notes @list={{this.changelogEntries}} @displayStatus={{false}} @show={{this.showChangelogEntry}} />
             </div>
           </at.tabPanel>

@@ -3,7 +3,7 @@
     @competence={{this.competence}}
     @section={{this.section}}
     @selectSection={{this.selectSection}} />
-  {{#if (not this.leftMaximized)}}
+  {{#unless this.leftMaximized}}
     <Competence::CompetenceActions
       @section={{this.section}}
       @view={{this.view}}
@@ -31,7 +31,7 @@
       @selectView={{this.selectView}}
       @newTube={{this.newTube}}
       @newPrototype={{this.newPrototype}} />
-  {{/if}}
+  {{/unless}}
   {{outlet}}
 </div>
 {{#if this.twoColumns}}

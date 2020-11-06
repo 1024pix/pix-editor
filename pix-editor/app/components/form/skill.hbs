@@ -24,7 +24,7 @@
     @addTutorial={{fn this.addTutorial @skill.tutoMore}}
     @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
   <Field::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
-  {{#if (not @edition)}}
+  {{#unless @edition}}
     <Field::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
-  {{/if}}
+  {{/unless}}
 </form>

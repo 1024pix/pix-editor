@@ -20,6 +20,6 @@ module('Integration | Component | target-profile/competence-profile', function(h
 
     // then
 
-    assert.equal(this.element.querySelector('.competence-title').textContent.trim(), 'competence_title');
+    assert.dom(this.element.querySelector('.competence-title')).hasText('competence_title');
   });
 });

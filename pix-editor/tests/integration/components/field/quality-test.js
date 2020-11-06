@@ -12,7 +12,7 @@ module('Integration | Component | quality', function(hooks) {
 
     await render(hbs`{{field/quality title="form_title" challenge=challenge}}`);
 
-    assert.equal(this.element.getElementsByTagName('label')[0].textContent.trim(), 'form_title');
+    assert.dom(this.element.getElementsByTagName('label')[0]).hasText('form_title');
 
   });
 });

@@ -12,7 +12,7 @@ module('Integration | Component | power-select-custom-trigger', function(hooks) 
 
     await render(hbs`{{power-select/custom-trigger}}`);
 
-    assert.equal(this.element.textContent.trim(), '');
+    assert.dom(this.element).hasText('');
 
     assert.dom('.search.icon.custom-trigger').exists();
 

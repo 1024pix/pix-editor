@@ -1,8 +1,8 @@
-import DS from 'ember-data';
+import RESTSerializer from '@ember-data/serializer/rest';
 import { assign } from '@ember/polyfills';
 import { pluralize } from 'ember-inflector';
 
-export default class AirtableSerializer extends DS.RESTSerializer {
+export default class AirtableSerializer extends RESTSerializer {
 
   payloadKeyFromModelName(modelName) {
     return super.payloadKeyFromModelName(modelName);

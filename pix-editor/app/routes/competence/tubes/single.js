@@ -24,7 +24,7 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controller.edition &&
+    if (this.controllerFor('competence.tubes.single').edition &&
       !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {

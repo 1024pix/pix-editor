@@ -38,7 +38,7 @@ module('Integration | Component | list/i18n', function(hooks) {
 
     // then
     assert.equal(this.element.querySelectorAll('.challenge-prototype').length, 3);
-    assert.equal(this.element.querySelectorAll('.challenge-prototype td:nth-child(1)')[0].textContent.trim(), 'Some instructions 1');
-    assert.equal(this.element.querySelectorAll('.challenge-prototype td:nth-child(3)')[0].textContent.trim(), '10');
+    assert.dom(this.element.querySelectorAll('.challenge-prototype td:nth-child(1)')[0]).hasText('Some instructions 1');
+    assert.dom(this.element.querySelectorAll('.challenge-prototype td:nth-child(3)')[0]).hasText('10');
   });
 });

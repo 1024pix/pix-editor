@@ -6,12 +6,12 @@
       Anciennes épreuves de {{this.skill.name}} ({{this.skill.id}})
   </h1>
 </div>
-{{#if (not this.rightMaximized)}}
+{{#unless this.rightMaximized}}
   <div class="ui attached segment competence {{this.size}}">
     <List::Archive @list={{this.challengeList}} />
   </div>
   <div class="ui borderless bottom attached labelled icon menu">
     <div class="item competence-info"><div>Prototypes : {{this.prototypesCount}}</div><div>Déclinaisons : {{this.alternativesCount}}</div></div>
   </div>
-{{/if}}
+{{/unless}}
 {{outlet}}
