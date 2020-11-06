@@ -53,5 +53,42 @@ module.exports = function(defaults) {
       { transformation: 'es6', as: 'AmpleSoft-normal.js' }
     ]
   });
+
+  app.import('vendor/AmpleSoft-bold.js', {
+    using: [
+      { transformation: 'es6', as: 'AmpleSoft-bold.js' }
+    ]
+  });
+
+  app.import('vendor/Roboto-normal.js', {
+    using: [
+      { transformation: 'es6', as: 'Roboto-normal.js' }
+    ]
+  });
+
+  app.import('vendor/Roboto-condensed.js', {
+    using: [
+      { transformation: 'es6', as: 'Roboto-condensed.js' }
+    ]
+  });
+
+  app.import('vendor/Roboto-condensedBold.js', {
+    using: [
+      { transformation: 'es6', as: 'Roboto-condensedBold.js' }
+    ]
+  });
+
+  app.import('vendor/Roboto-condensedLight.js', {
+    using: [
+      { transformation: 'es6', as: 'Roboto-condensedLight.js' }
+    ]
+  });
+
+  app.import('vendor/pdf-assets.js', {
+    using: [
+      { transformation: 'es6', as: 'pdf-assets.js' }
+    ]
+  });
+
   return app.toTree();
 };
