@@ -25,6 +25,9 @@
       <i class="save icon"></i> Enregistrer
     </button>
     <div class="right menu">
+      <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
+        <i class="calculator icon"></i> Paliers indicatifs
+      </button>
       <button class="ui button item" {{on "click" this.generate}} type="button">
         <i class="download icon"></i> Identifiants
       </button>
@@ -60,4 +63,7 @@
 {{/if}}
 {{#if this.displaySingleEntry}}
   <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
+{{/if}}
+{{#if this.displayThresholdCalculation}}
+  <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}} @model={{this.areas}}/>
 {{/if}}

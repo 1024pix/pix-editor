@@ -1,0 +1,15 @@
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+  <div class="ui modal visible active">
+    <i class="close icon" {{on "click" this.closeModal}}></i>
+    <div class="header">
+      {{@title}}
+    </div>
+    <div class="content">
+    </div>
+    <div class="actions">
+      <div class="ui deny button" {{on "click" this.closeModal}}>
+        Annuler
+      </div>
+    </div>
+  </div>
+</ModalDialog>

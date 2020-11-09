@@ -11,6 +11,7 @@ export default class TargetProfileController extends Controller {
   @tracked filter = false;
   @tracked displayTubeLevel = false;
   @tracked displaySingleEntry = false;
+  @tracked displayThresholdCalculation = false;
   @tracked _selectedSources = null;
 
   @service('file-saver') fileSaver;
@@ -211,6 +212,16 @@ export default class TargetProfileController extends Controller {
   @action
   hideTubeName(competence) {
     competence._tubeName = null;
+  }
+
+  @action
+  showThresholdCalculation() {
+    this.displayThresholdCalculation = true;
+  }
+
+  @action
+  closeThresholdCalculation() {
+    this.displayThresholdCalculation = false;
   }
 
   _getTubeSkillsAndMaxLevel(tube) {
