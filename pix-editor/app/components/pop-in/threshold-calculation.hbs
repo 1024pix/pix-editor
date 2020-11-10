@@ -5,6 +5,58 @@
       {{@title}}
     </div>
     <div class="content">
+      <p>Nombre total d'acquis : {{selectedSkillsCount}}</p>
+      <table class="ui very basic collapsing celled table">
+        <thead>
+        <tr>
+          <th>Niveau</th>
+          <th>Nombre d'acquis</th>
+          <th>Palier</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td> 1 </td>
+          <td> {{this.selectedSkillsLevel1Count}} </td>
+          <td> {{this.thresholdLevel1}} </td>
+        </tr>
+        <tr>
+          <td> 2 </td>
+          <td> {{this.selectedSkillsLevel2Count}} </td>
+          <td> {{this.thresholdLevel2}} </td>
+        </tr>
+        <tr>
+          <td> 3 </td>
+          <td> {{this.selectedSkillsLevel3Count}} </td>
+          <td> {{this.thresholdLevel3}} </td>
+        </tr>
+        <tr>
+          <td> 4 </td>
+          <td> {{this.selectedSkillsLevel4Count}} </td>
+          <td> {{this.thresholdLevel4}} </td>
+        </tr>
+        <tr>
+          <td> 5 </td>
+          <td> {{this.selectedSkillsLevel5Count}} </td>
+          <td> {{this.thresholdLevel5}} </td>
+        </tr>
+        <tr>
+          <td> 6 </td>
+          <td> {{this.selectedSkillsLevel6Count}} </td>
+          <td> {{this.thresholdLevel6}} </td>
+        </tr>
+        <tr>
+          <td> 7 </td>
+          <td> {{this.selectedSkillsLevel7Count}} </td>
+          <td> {{this.thresholdLevel7}} </td>
+        </tr>
+        <tr>
+          <td> 8 </td>
+          <td> {{this.selectedSkillsLevel8Count}} </td>
+          <td> {{this.thresholdLevel8}} </td>
+        </tr>
+        </tbody>
+      </table>
     </div>
     <div class="actions">
       <div class="ui deny button" {{on "click" this.closeModal}}>
