@@ -6,6 +6,13 @@ export default class PopinSingleEntry extends Component {
 
   @tracked value = '';
 
+  constructor() {
+    super(...arguments);
+    if (this.args.labelValue) {
+      this.value = this.args.labelValue;
+    }
+  }
+
   @action
   validate() {
     this.args.setValue(this.value);
