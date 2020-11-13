@@ -12,8 +12,6 @@ import 'Roboto-condensed.js';
 import 'Roboto-condensedBold.js';
 import 'Roboto-condensedLight.js';
 
-const descriptionTitleFirstLine = 'Liste des thèmes et des sujets';
-const descriptionTitleSecondtLine = 'abordés dans Pix';
 const legalMention = 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.';
 const firstPageTitleSize = 30;
 const firstPagePSize = 12;
@@ -64,6 +62,7 @@ export default class TargetProfilePdfExportComponent extends Component {
   @action
   async generatePDF(title) {
     let y;
+    const pdfName = this._generatePdfName(title);
     const areas = this.args.model;
     const versionText = `Version du ${(new Date()).toLocaleDateString('fr')}`;
     const pdf = new jsPDF('p', 'px', 'a4');
@@ -94,8 +93,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.setFont('AmpleSoft', 'bold');
     pdf.setFontSize(firstPageTitleSize);
     pdf.setTextColor('#fff');
-    pdf.text(descriptionTitleFirstLine, this._getCenteredX(pdf, descriptionTitleFirstLine), 300);
-    pdf.text(descriptionTitleSecondtLine, this._getCenteredX(pdf, descriptionTitleSecondtLine), 335);
+    this._generateCenteredLongText(pdf, title, 350, 35, 300);
     pdf.setFontSize(firstPagePSize);
     pdf.setFont('AmpleSoft', 'normal');
     pdf.text(versionText, this._getCenteredX(pdf, versionText), 560);
@@ -249,7 +247,7 @@ export default class TargetProfilePdfExportComponent extends Component {
 
     // Remove last empty page
     pdf.deletePage(pageCount);
-    pdf.save(`${title}.pdf`);
+    pdf.save(`${pdfName}.pdf`);
   }
 
   _getCenteredX(pdf, text) {
@@ -270,5 +268,19 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.setDrawColor(255, 255, 255);
     pdf.setLineWidth(strokeWidth);
     pdf.roundedRect(x + strokeWidth / 2, y + strokeWidth / 2, width - strokeWidth, height + strokeWidth, radius, radius, 'S');
+  }
+
+  _generatePdfName(title) {
+    const id = `${Date.now()}`.slice(5,9);
+    const generateDate = `${(new Date()).toLocaleDateString('fr')}_${id}`;
+    return `${title}-${generateDate}`;
+  }
+
+  _generateCenteredLongText(pdf, text, breakX, breakY, positionY) {
+    const lines = pdf.splitTextToSize(text, breakX);
+    lines.forEach(line=>{
+      pdf.text(line, this._getCenteredX(pdf, line), positionY);
+      positionY += breakY;
+    });
   }
 }
