@@ -2,5 +2,5 @@
   <i class="pdf file icon"></i> PDF
 </button>
 {{#if this.displayTitleInput}}
-  <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Titre de l'export" @label="Titre" @setValue={{this.generatePDF}} @close={{this.closeTitleInput}} />
+  <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Titre de l'export" @label="Titre" @labelValue="Liste des thèmes et des sujets abordés dans Pix" @setValue={{this.generatePDF}} @close={{this.closeTitleInput}} />
 {{/if}}
