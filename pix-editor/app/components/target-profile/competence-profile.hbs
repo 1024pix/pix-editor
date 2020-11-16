@@ -22,21 +22,17 @@
     <div class="twelve wide column">
       {{#each this.filteredTubes as |tube|}}
         {{#if @isThematicResultMode}}
-          <TargetProfile::TubeThematicResult @tube={{tube}} @showTubeDetails={{@showTubeDetails}}/>
+          <TargetProfile::TubeProfile class="tube-profile thematicResult"
+                                      @tube={{tube}}
+                                      @clickAction={{this.clickOnThematicResultTube}}
+                                      @selectedSkillLevel={{tube.selectedThematicResultLevel}}
+                                      @showTubeDetails={{@showTubeDetails}}/>
         {{else}}
-          <div class="tube-profile" {{on "click" (fn this.clickOnTube tube)}}>
-            <div class={{if tube.selectedLevel "active"}}>
-              <i class="square icon {{if tube.selectedLevel "active check" "outline"}}">
-              </i>
-              {{#if @showTubeDetails}}
-                <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel ""}}</p></div>
-              {{/if}}
-              <div class="practicalTitle-profile {{if tube.selectedLevel " active"}}">
-                <p>{{if @showTubeDetails tube.name tube.practicalTitleFr }}</p></div>
-            </div>
-            <p class="practicalDescription-profile {{if tube.selectedLevel
-                                                        " active"}}">{{tube.practicalDescriptionFr}}</p>
-          </div>
+          <TargetProfile::TubeProfile class="tube-profile"
+                                      @tube={{tube}}
+                                      @clickAction={{this.clickOnTube}}
+                                      @selectedSkillLevel={{tube.selectedLevel}}
+                                      @showTubeDetails={{@showTubeDetails}}/>
         {{/if}}
       {{/each}}
     </div>
