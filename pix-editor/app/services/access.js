@@ -88,7 +88,10 @@ export default class AccessService extends Service {
     const archived = challenge.isArchived;
     const deleted = challenge.isDeleted;
     const prototype = challenge.isPrototype;
-    return !(archived || deleted) && (level === ADMIN || (!production && (level === EDITOR || (level === REPLICATOR && !prototype))));
+    if (archived || deleted) {
+      return false;
+    }
+    return level >= EDITOR || (!production && !prototype && level === REPLICATOR);
   }
 
   mayDuplicate(challenge) {
