@@ -1,3 +1,12 @@
 {{#each this.filteredCompetences as |competence|}}
-  <TargetProfile::CompetenceProfile @competence={{competence}} @areaCode={{@area.code}} @displayTube={{@displayTube}} @level={{@level}} @selectedSkills={{@selectedSkills}} @showTubeDetails={{@showTubeDetails}} @clearTube={{@clearTube}} @setTubeLevel={{@setTubeLevel}} @filter={{@filter}} />
+  <TargetProfile::CompetenceProfile @competence={{competence}}
+                                    @areaCode={{@area.code}}
+                                    @displayTube={{@displayTube}}
+                                    @level={{@level}}
+                                    @selectedSkills={{@selectedSkills}}
+                                    @showTubeDetails={{@showTubeDetails}}
+                                    @clearTube={{@clearTube}}
+                                    @setTubeLevel={{@setTubeLevel}}
+                                    @filter={{@filter}}
+                                    @isThematicResultMode={{@isThematicResultMode}}/>
 {{/each}}

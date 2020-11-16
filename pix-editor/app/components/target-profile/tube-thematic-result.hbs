@@ -1,0 +1,12 @@
+<div class="tube-profile" {{on "click" (fn this.clickOnTube @tube)}}>
+  <div class={{if tube.selectedThematicResultLevel "active"}}>
+    <i class="square icon {{if tube.selectedThematicResultLevel "active check" "outline"}}">
+    </i>
+    {{#if @showTubeDetails}}
+      <div class="max-skill-level"><p>{{if @tube.selectedThematicResultLevel @tube.selectedThematicResultLevel ""}}</p></div>
+    {{/if}}
+    <div class="practicalTitle-profile {{if @tube.selectedThematicResultLevel " active"}}">
+      <p>{{if @showTubeDetails @tube.name @tube.practicalTitleFr }}</p></div>
+  </div>
+  <p class="practicalDescription-profile {{if @tube.selectedThematicResultLevel " active"}}">{{@tube.practicalDescriptionFr}}</p>
+</div>

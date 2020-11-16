@@ -18,6 +18,7 @@ export default class TubeModel extends Model {
   @hasMany('skill') rawSkills;
 
   @tracked selectedLevel = false;
+  @tracked selectedThematicResultLevel = false;
 
   get liveSkills() {
     return this.rawSkills.filter(skill => skill.isLive);
