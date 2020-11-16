@@ -8,6 +8,7 @@ export default class TargetProfileController extends Controller {
   @tracked selectedTube = null;
   @tracked selectedTubeLevel = false;
   @tracked showTubeDetails = false;
+  @tracked isThematicResultMode = false;
   @tracked filter = false;
   @tracked displayTubeLevel = false;
   @tracked displaySingleEntry = false;
@@ -212,6 +213,13 @@ export default class TargetProfileController extends Controller {
   @action
   hideTubeName(competence) {
     competence._tubeName = null;
+  }
+
+  @action
+  toggleThematicResult(e) {
+    if (e.target.checked) {
+      this.filter = true;
+    }
   }
 
   @action

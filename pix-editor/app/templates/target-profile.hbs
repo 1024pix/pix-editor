@@ -1,6 +1,13 @@
 <div class="main-left">
   <div class="main-title">
     <h1 class="ui header">Générateur de profil cible
+      <div class="target-profile-filter {{if this.isThematicResultMode "active"}}">
+        Résultat thématique
+        <div class="ui toggle checkbox ">
+          <Input @type="checkbox" @checked={{this.isThematicResultMode}} {{on 'change' this.toggleThematicResult}} class="toggle" />
+          <label class="checkbox-label"></label>
+        </div>
+      </div>
       <div class="target-profile-filter {{if this.showTubeDetails "active"}}">
         Détails des sujets
         <div class="ui toggle checkbox ">
@@ -11,7 +18,7 @@
       <div class="target-profile-filter {{if this.filter "active"}}">
         Filtrer les sujets sélectionnés
         <div class="ui toggle checkbox ">
-          <Input @type="checkbox" @checked={{this.filter}} class="toggle" />
+          <Input @type="checkbox" @checked={{this.filter}} disabled={{this.isThematicResultMode}} class="toggle" />
           <label class="checkbox-label"></label>
         </div>
       </div>
@@ -53,7 +60,7 @@
   </h2>
   <div class="ui attached target-profile">
     {{#each this.areas as |area|}}
-      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
+      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} @isThematicResultMode={{this.isThematicResultMode}}/>
     {{/each}}
     <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
   </div>
