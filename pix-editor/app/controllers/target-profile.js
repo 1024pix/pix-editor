@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 export default class TargetProfileController extends Controller {
 
   @tracked selectedTubeSkills = [];
@@ -11,6 +12,7 @@ export default class TargetProfileController extends Controller {
   @tracked isThematicResultMode = false;
   @tracked filter = false;
   @tracked displayTubeLevel = false;
+  @tracked displayThematicResultTubeLevel = false;
   @tracked displaySingleEntry = false;
   @tracked displayThresholdCalculation = false;
   @tracked _selectedSources = null;
@@ -22,6 +24,12 @@ export default class TargetProfileController extends Controller {
   get selectedTubeCount() {
     return this.areas.reduce((count, area) => {
       return count + area.selectedProductionTubeCount;
+    }, 0);
+  }
+
+  get selectedThematicResultTubeCount() {
+    return this.areas.reduce((count, area) => {
+      return count + area.selectedThematicResultTubeCount;
     }, 0);
   }
 
@@ -97,6 +105,17 @@ export default class TargetProfileController extends Controller {
   unsetProfileTube(tube) {
     tube.selectedLevel = false;
     tube.selectedSkills = [];
+  }
+
+  @action
+  displayThematicResultTube(tube) {
+    this.displayThematicResultTubeLevel = true;
+    this.selectedTube = tube;
+  }
+
+  @action
+  closeThematicResultTube() {
+    this.displayThematicResultTubeLevel = false;
   }
 
   @action
@@ -207,7 +226,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   showTubeName(name, competence) {
-    competence._tubeName =  name;
+    competence._tubeName = name;
   }
 
   @action

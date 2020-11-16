@@ -27,12 +27,12 @@
   }
 
   .ember-power-select-trigger {
-    font-size:14px;
-    padding:0.1em 16px 0.1em 0.3em;
+    font-size: 14px;
+    padding: 0.1em 16px 0.1em 0.3em;
   }
 
   .ember-power-select-multiple-option {
-    background-color:#ffffff;
+    background-color: #ffffff;
   }
 }
 
@@ -52,7 +52,7 @@
   .competence-profile {
     color: white;
     margin-bottom: 0;
-    background-color:#000044;
+    background-color: #000044;
 
     &.area-profile-1 {
       background: #F1A141;
@@ -160,7 +160,7 @@
           align-items: center;
 
           &.active {
-            background-color: rgba(87, 200, 130, .3)
+            background-color: rgba(87, 200, 130, .3);
           }
         }
       }
@@ -170,10 +170,28 @@
         padding: 10px 50px 10px 5px;
 
         &.active {
-          background-color: rgba(87, 200, 130, .3)
+          background-color: rgba(87, 200, 130, .3);
         }
       }
 
+      &.thematicResult {
+        .icon.active {
+          color: #3f7bc4;
+        }
+
+        .practicalTitle-profile {
+
+          &.active {
+            background-color: rgba(63, 123, 196, .3);
+          }
+        }
+
+        .practicalDescription-profile {
+          &.active {
+            background-color: rgba(63, 123, 196, .3);
+          }
+        }
+      }
     }
   }
 }
@@ -209,6 +227,15 @@
       &.disabled {
         background-color: #dddddd;
         cursor: default;
+      }
+    }
+  }
+  &.thematicResult {
+    .levels {
+      .level {
+        &.selected {
+          background-color: rgba(63, 123, 196, .3);
+        }
       }
     }
   }

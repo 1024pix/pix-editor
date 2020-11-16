@@ -39,7 +39,13 @@
   </div>
   <div class="row">
     <div class="fifteen wide column"></div>
-    <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}
-      /{{@competence.productionTubeCount}}</div>
+    {{#if @isThematicResultMode}}
+      <div class="column selected-tube-count">{{@competence.selectedThematicResultTubeCount}}
+        /{{@competence.selectedProductionTubeCount}}</div>
+    {{else}}
+      <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}
+        /{{@competence.productionTubeCount}}</div>
+    {{/if}}
+
   </div>
 </div>

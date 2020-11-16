@@ -13,15 +13,20 @@ export default class AreaModel extends Model {
   @sort('competences','competencesSorting')
   sortedCompetences;
 
+  get productionTubeCount() {
+    return this.competences.reduce((count, competence) => {
+      return count + competence.productionTubeCount;
+    }, 0);
+  }
+
   get selectedProductionTubeCount() {
     return this.competences.reduce((count, competence) => {
       return count + competence.selectedProductionTubeCount;
     }, 0);
   }
-
-  get productionTubeCount() {
+  get selectedThematicResultTubeCount() {
     return this.competences.reduce((count, competence) => {
-      return count + competence.productionTubeCount;
+      return count + competence.selectedThematicResultTubeCount;
     }, 0);
   }
 

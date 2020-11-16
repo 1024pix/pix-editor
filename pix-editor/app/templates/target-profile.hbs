@@ -55,12 +55,16 @@
           <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}} @setValue={{this.selectSources}} @edition={{true}} />
       </div>
       <div class="six wide center aligned column"></div>
-      <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
+      {{#if this.isThematicResultMode}}
+        <div class="four wide right aligned column">{{this.selectedThematicResultTubeCount}}/{{this.selectedTubeCount}}</div>
+      {{else}}
+        <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
+      {{/if}}
     </div>
   </h2>
   <div class="ui attached target-profile">
     {{#each this.areas as |area|}}
-      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} @isThematicResultMode={{this.isThematicResultMode}}/>
+      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @displayThematicResultTube={{this.displayThematicResultTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} @isThematicResultMode={{this.isThematicResultMode}}/>
     {{/each}}
     <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
   </div>
@@ -68,8 +72,11 @@
 {{#if this.displayTubeLevel}}
   <PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @close={{this.closeTubeLevel}}/>
 {{/if}}
+{{#if this.displayThematicResultTubeLevel}}
+  <PopIn::TubeThematicResultLevel @tube={{this.selectedTube}} @close={{this.closeThematicResultTube}}/>
+{{/if}}
 {{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
+  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeThematicResultTube}} />
 {{/if}}
 {{#if this.displayThresholdCalculation}}
   <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}} @model={{this.areas}}/>
