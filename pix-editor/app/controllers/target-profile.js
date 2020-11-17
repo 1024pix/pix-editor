@@ -169,6 +169,13 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
+  generateThematicResultTxt() {
+    const ids = this._getSelectedThematicSkillsIds();
+    const fileName = 'Résultats_thématiques_' + (new Date()).toLocaleString('fr-FR') + '.txt';
+    this.fileSaver.saveAs(ids.join(','), fileName);
+  }
+
+  @action
   load() {
     const fileInput = document.getElementById('target-profile__open-file');
     fileInput.click();
@@ -262,5 +269,26 @@ export default class TargetProfileController extends Controller {
       return ids;
     }, []);
     return [skills, level];
+  }
+
+  _getSelectedThematicSkillsIds() {
+    return this.areas.reduce((areaValues, area) => {
+      const competences = area.competences;
+      return competences.reduce((competenceValues, competence) => {
+        const tubes = competence.tubes;
+        return tubes.reduce((tubeValues, tube) => {
+          if (tube.selectedThematicResultLevel) {
+            tubeValues = tubeValues.concat(this._filterThematicSkillsIds(tube));
+          }
+          return tubeValues;
+        }, competenceValues);
+      }, areaValues);
+    }, []);
+  }
+
+  _filterThematicSkillsIds(tube) {
+    const skills = tube.productionSkills;
+    return skills.filter(skill=>skill.level <= tube.selectedThematicResultLevel)
+      .map(skill=>skill.id);
   }
 }

@@ -1,6 +1,6 @@
 <div class="main-left">
   <div class="main-title">
-    <h1 class="ui header">Générateur de profil cible
+    <h1 class="ui header">{{if this.isThematicResultMode "Résultats thématiques" "Générateur de profil cible"}}
       <div class="target-profile-filter {{if this.isThematicResultMode "active"}}">
         Résultat thématique
         <div class="ui toggle checkbox ">
@@ -25,39 +25,48 @@
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
-    <button class="ui button first left item" {{on "click" this.load}} type="button">
-      <i class="folder open icon"></i> Ouvrir
+{{#if this.isThematicResultMode}}
+  <button class="ui button" {{on "click" this.generateThematicResultTxt}} type="button">
+    <i class="download icon"></i>
+    Identifiants
+  </button>
+{{else}}
+  <button class="ui button first left" {{on "click" this.load}} type="button">
+    <i class="folder open icon"></i> Ouvrir
+  </button>
+  <button class="ui button left" {{on "click" this.save}} type="button">
+    <i class="save icon"></i> Enregistrer
+  </button>
+  <div class="right menu">
+    <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
+      <i class="calculator icon"></i> Paliers indicatifs
     </button>
-    <button class="ui button left item" {{on "click" this.save}} type="button">
-      <i class="save icon"></i> Enregistrer
+    <button class="ui button" {{on "click" this.generate}} type="button">
+      <i class="download icon"></i> Identifiants
     </button>
-    <div class="right menu">
-      <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
-        <i class="calculator icon"></i> Paliers indicatifs
-      </button>
-      <button class="ui button item" {{on "click" this.generate}} type="button">
-        <i class="download icon"></i> Identifiants
-      </button>
-      <button class="ui button item" {{on "click" this.getProfileId}} type="button">
-        <i class="code icon"></i> CSV
-      </button>
-      <TargetProfile::PdfExport @model={{this.areas}}/>
-    </div>
+    <button class="ui button" {{on "click" this.getProfileId}} type="button">
+      <i class="code icon"></i> CSV
+    </button>
+    <TargetProfile::PdfExport @model={{this.areas}}/>
+  </div>
+{{/if}}
   </div>
   <h2 class="ui top attached padded grid target-profile-title">
     <div class="row">
       <div class="right aligned column">
         <TargetProfile::Navigation @areas={{this.areas}} />
       </div>
-      <div class="two wide column">Référentiel :
-      </div>
-      <div class="three wide column">
-          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}} @setValue={{this.selectSources}} @edition={{true}} />
-      </div>
-      <div class="six wide center aligned column"></div>
+
       {{#if this.isThematicResultMode}}
+        <div class="eleven wide center aligned column"></div>
         <div class="four wide right aligned column">{{this.selectedThematicResultTubeCount}}/{{this.selectedTubeCount}}</div>
       {{else}}
+        <div class="two wide column">Référentiel :
+        </div>
+        <div class="three wide column">
+          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}} @setValue={{this.selectSources}} @edition={{true}} />
+        </div>
+        <div class="six wide center aligned column"></div>
         <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
       {{/if}}
     </div>
@@ -76,7 +85,7 @@
   <PopIn::TubeThematicResultLevel @tube={{this.selectedTube}} @close={{this.closeThematicResultTube}}/>
 {{/if}}
 {{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeThematicResultTube}} />
+  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
 {{/if}}
 {{#if this.displayThresholdCalculation}}
   <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}} @model={{this.areas}}/>
