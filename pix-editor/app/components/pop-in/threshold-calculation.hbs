@@ -15,7 +15,7 @@
           </thead>
           <tbody>
           {{#each this.selectedSkillsLevels as |value|}}
-            <TargetProfile::ThresholdRow @level={{value}} @selectedSkills={{this.skillsSelected}}/>
+            <TargetProfile::ThresholdRow @level={{value}} @selectedSkills={{this.selectedSkills}}/>
           {{/each}}
           </tbody>
           <tfoot>
