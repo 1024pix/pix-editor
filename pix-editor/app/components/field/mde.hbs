@@ -1,6 +1,7 @@
-<div class="field">
+<div class={{concat "field textArea mde" (if this.maximized " maximized" "")}}>
   <label>
     {{#if @edition}}
+      <button {{on "click" this.toggleMaximized}} class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}} type="button"><i class={{concat (if this.maximized "compress " "expand ")  "icon"}}></i></button>
       {{#if @helpContent}}
         <div class="ui compact icon right floated button basic">
           <i class="help icon">
