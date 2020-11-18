@@ -1,0 +1,36 @@
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
+  <div class="ui modal visible active">
+    <i class="close icon" {{on "click" this.closeModal}}></i>
+    <div class="header">
+      {{@title}}
+    </div>
+    <div class="content">
+      <div class="ui column centered grid">
+        <table class="ui very basic collapsing celled table">
+          <thead>
+          <tr>
+            <th colspan="2"></th>
+            <th>Nombre d'acquis</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#each this.selectedSkillsLevels as |value|}}
+            <TargetProfile::ThresholdRow @level={{value}} @selectedSkills={{this.selectedSkills}}/>
+          {{/each}}
+          </tbody>
+          <tfoot>
+          <tr>
+            <th colspan="2">Nombre total d'acquis :</th>
+            <th data-test-selectedSkillsCount >{{this.selectedSkillsCount}}</th>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="ui deny button" {{on "click" this.closeModal}}>
+        Fermer
+      </div>
+    </div>
+  </div>
+</ModalDialog>
