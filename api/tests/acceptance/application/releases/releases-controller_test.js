@@ -6,7 +6,8 @@ const {
   buildTube,
   buildSkill,
   buildChallenge,
-  buildTutorial
+  buildTutorial,
+  buildCourse,
 } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
@@ -104,6 +105,14 @@ describe('Acceptance | Controller | release-controller', () => {
             title: 'Titre du Tutoriel',
             locale: 'Langue du Tutoriel',
           }],
+          courses: [{
+            id: 'recCourse0',
+            name: 'Nom du Course',
+            description: 'Description du Course',
+            competences: ['recCompetence0'],
+            challenges: ['recChallenge0'],
+            imageUrl: 'Image du Course',
+          }],
         };
         airtableBuilder.mockLists({
           areas: [buildArea(expectedCreatedRelease.areas[0])],
@@ -112,6 +121,7 @@ describe('Acceptance | Controller | release-controller', () => {
           skills: [buildSkill(expectedCreatedRelease.skills[0])],
           challenges: [buildChallenge(expectedCreatedRelease.challenges[0])],
           tutorials: [buildTutorial(expectedCreatedRelease.tutorials[0])],
+          courses: [buildCourse(expectedCreatedRelease.courses[0])],
         });
 
         const server = await createServer();

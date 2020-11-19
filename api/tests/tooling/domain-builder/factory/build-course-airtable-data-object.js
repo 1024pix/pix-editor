@@ -2,7 +2,6 @@ module.exports = function buildCourse(
   {
     id = 'recPBOj7JzBcgXEtO',
     // attributes
-    adaptive =  true,
     description = 'Programmer niveau 1 et 2',
     imageUrl = 'https://dl.airtable.com/otNiedKYSTBmoAPdyIk2_woman-163426_1920.jpg',
     name = '3.4 niveau 1 et 2',
@@ -22,7 +21,6 @@ module.exports = function buildCourse(
   return {
     id,
     // attributes
-    adaptive,
     description,
     imageUrl,
     name,
