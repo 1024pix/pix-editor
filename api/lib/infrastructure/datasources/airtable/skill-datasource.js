@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const datasource = require('./datasource');
 
 module.exports = datasource.extend({
@@ -10,31 +11,31 @@ module.exports = datasource.extend({
     'id persistant',
     'Nom',
     'Indice',
+    'Indice fr-fr',
+    'Indice en-us',
     'Statut de l\'indice',
     'Comprendre (id persistant)',
     'En savoir plus (id persistant)',
     'PixValue',
     'Compétence (via Tube) (id persistant)',
     'Status',
+    'Tube (id persistant)',
   ],
 
   fromAirTableObject(airtableRecord) {
 
-    let competenceId;
-    if (airtableRecord.get('Compétence (via Tube) (id persistant)')) {
-      competenceId = airtableRecord.get('Compétence (via Tube) (id persistant)')[0];
-    }
-
     return {
       id: airtableRecord.get('id persistant'),
       name: airtableRecord.get('Nom'),
-      hint: airtableRecord.get('Indice'),
+      hintFrFr: airtableRecord.get('Indice fr-fr'),
+      hintEnUs: airtableRecord.get('Indice en-us'),
       hintStatus: airtableRecord.get('Statut de l\'indice') || 'no status',
       tutorialIds: airtableRecord.get('Comprendre (id persistant)') || [],
       learningMoreTutorialIds: airtableRecord.get('En savoir plus (id persistant)') || [],
       pixValue: airtableRecord.get('PixValue'),
-      competenceId,
+      competenceId: _.head(airtableRecord.get('Compétence (via Tube) (id persistant)')),
       status: airtableRecord.get('Status'),
+      tubeId: _.head(airtableRecord.get('Tube (id persistant)')),
     };
   },
 });

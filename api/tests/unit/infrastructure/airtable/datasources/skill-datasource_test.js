@@ -1,7 +1,7 @@
 const { expect } = require('../../../../test-helper');
 const skillDatasource = require('../../../../../lib/infrastructure/datasources/airtable/skill-datasource');
 const skillAirtableDataObjectFixture = require('../../../../tooling/fixtures/infrastructure/skillAirtableDataObjectFixture');
-const skillRawAirTableFixture = require('../../../../tooling/fixtures/infrastructure/skillRawAirTableFixture');
+const { skillRawAirTableFixture } = require('../../../../tooling/fixtures/infrastructure/skillRawAirTableFixture');
 
 describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () => {
 
