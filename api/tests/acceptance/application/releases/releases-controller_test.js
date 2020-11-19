@@ -1,6 +1,6 @@
 const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
-const { buildArea, buildCompetence, buildTube, buildSkill } = airtableBuilder.factory;
+const { buildArea, buildCompetence, buildTube, buildSkill, buildChallenge } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
 
@@ -61,13 +61,40 @@ describe('Acceptance | Controller | release-controller', () => {
             competenceId: 'recCompetence0',
             status: 'validé',
             tubeId: 'recTube0',
-          }]
+          }],
+          challenges: [{
+            id: 'recChallenge0',
+            instruction: 'Consigne du Challenge',
+            proposals: 'Propositions du Challenge',
+            type: 'Type d\'épreuve',
+            solution: 'Bonnes réponses du Challenge',
+            t1Status: 'T1 - Espaces, casse & accents',
+            t2Status: 'T2 - Ponctuation',
+            t3Status: 'T3 - Distance d\'édition',
+            scoring: 'Scoring du Challenge',
+            status: 'Statut du Challenge',
+            skillIds: ['recSkill0'],
+            skills: ['recSkill0'],
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: 'Embed height',
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration',
+            format: 'mots',
+            autoReply: false,
+            locales: ['fr-fr'],
+            alternativeInstruction: 'Consigne alternative',
+          }],
         };
         airtableBuilder.mockLists({
           areas: [buildArea(expectedCreatedRelease.areas[0])],
           competences: [buildCompetence(expectedCreatedRelease.competences[0])],
           tubes: [buildTube(expectedCreatedRelease.tubes[0])],
           skills: [buildSkill(expectedCreatedRelease.skills[0])],
+          challenges: [buildChallenge(expectedCreatedRelease.challenges[0])],
         });
 
         const server = await createServer();
