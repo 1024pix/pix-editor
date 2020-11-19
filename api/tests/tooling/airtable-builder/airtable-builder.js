@@ -27,4 +27,36 @@ module.exports = class AirtableBuilder {
     this.nock.cleanAll();
   }
 
+  mockLists({
+    areas,
+    competences,
+    tubes,
+    skills,
+    challenges,
+    courses,
+    tutorials,
+  }) {
+    this.mockList({ tableName: 'Domaines' })
+      .returns(areas)
+      .activate();
+    this.mockList({ tableName: 'Competences' })
+      .returns(competences)
+      .activate();
+    this.mockList({ tableName: 'Tubes' })
+      .returns(tubes)
+      .activate();
+    this.mockList({ tableName: 'Acquis' })
+      .returns(skills)
+      .activate();
+    this.mockList({ tableName: 'Epreuves' })
+      .returns(challenges)
+      .activate();
+    this.mockList({ tableName: 'Tests' })
+      .returns(courses)
+      .activate();
+    this.mockList({ tableName: 'Tutoriels' })
+      .returns(tutorials)
+      .activate();
+  }
+
 };
