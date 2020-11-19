@@ -1,6 +1,6 @@
 const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
-const { buildArea, buildCompetence } = airtableBuilder.factory;
+const { buildArea, buildCompetence, buildTube } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
 
@@ -37,11 +37,23 @@ describe('Acceptance | Controller | release-controller', () => {
             description: 'Description de la compétence',
             descriptionFrFr: 'Description de la compétence - fr',
             descriptionEnUs: 'Description de la compétence - en',
+          }],
+          tubes: [{
+            id: 'recTube0',
+            name: 'Nom du Tube',
+            title: 'Titre du Tube',
+            description: 'Description du Tube',
+            practicalTitleFrFr: 'Titre pratique du Tube - fr',
+            practicalTitleEnUs: 'Titre pratique du Tube - en',
+            practicalDescriptionFrFr: 'Description pratique du Tube - fr',
+            practicalDescriptionEnUs: 'Description pratique du Tube - en',
+            competenceId: 'recCompetence0',
           }]
         };
         airtableBuilder.mockLists({
           areas: [buildArea(expectedCreatedRelease.areas[0])],
-          competences: [buildCompetence(expectedCreatedRelease.competences[0])]
+          competences: [buildCompetence(expectedCreatedRelease.competences[0])],
+          tubes: [buildTube(expectedCreatedRelease.tubes[0])],
         });
 
         const server = await createServer();
