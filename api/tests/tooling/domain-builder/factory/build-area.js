@@ -5,12 +5,14 @@ module.exports = function buildArea({
   code,
   name,
   competenceIds,
+  competenceAirtableIds,
 } = {}) {
   return new Area({
     id,
     name,
     code,
     competenceIds,
+    competenceAirtableIds,
   });
 };
 

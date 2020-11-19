@@ -9,6 +9,7 @@ async function get() {
       code: areaDataObject.code,
       name: areaDataObject.name,
       competenceIds: areaDataObject.competenceIds,
+      competenceAirtableIds: areaDataObject.competenceAirtableIds,
     });
   });
   return areas.sort((leftArea, rightArea) => parseInt(leftArea.code, 10) - parseInt(rightArea.code, 10));

@@ -8,6 +8,7 @@ class Area {
     // includes
     // references
     competenceIds,
+    competenceAirtableIds,
   } = {}) {
     this.id = id;
     // attributes
@@ -16,6 +17,7 @@ class Area {
     // includes
     // references
     this.competenceIds = competenceIds;
+    this.competenceAirtableIds = competenceAirtableIds;
   }
 }
 
