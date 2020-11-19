@@ -3,6 +3,7 @@ const competenceDatasource = require('../datasources/airtable/competence-datasou
 const tubeDatasource = require('../datasources/airtable/tube-datasource');
 const skillDatasource = require('../datasources/airtable/skill-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
+const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 
 module.exports = {
   async getLatest() {
@@ -12,6 +13,7 @@ module.exports = {
       tubes: await tubeDatasource.list(),
       skills: await skillDatasource.list(),
       challenges: await challengeDatasource.list(),
+      tutorials: await tutorialDatasource.list(),
     };
   }
 };

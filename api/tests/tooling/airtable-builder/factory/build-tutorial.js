@@ -1,23 +1,23 @@
 module.exports = function buildTutorial({
-  id = 'receomyzL0AmpMFGw',
-  titre = 'Communiquer',
-  format = 'vidéo',
-  duree = '00:03:31',
-  source = 'Source Example, Example',
-  lien = 'http://www.example.com/this-is-an-example.html',
-  createdTime = '2018-03-15T14:38:03.000Z',
+  id,
+  title,
+  format,
+  duration,
+  source,
+  link,
+  locale,
 } = {}) {
 
   return {
     id,
     'fields': {
       'id persistant': id,
-      'Titre': titre,
+      'Titre': title,
       'Format': format,
-      'Durée': duree,
+      'Durée': duration,
       'Source': source,
-      'Lien': lien,
+      'Lien': link,
+      'Langue': locale,
     },
-    'createdTime': createdTime,
   };
 };

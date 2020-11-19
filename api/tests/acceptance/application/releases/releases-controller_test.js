@@ -1,6 +1,13 @@
 const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
-const { buildArea, buildCompetence, buildTube, buildSkill, buildChallenge } = airtableBuilder.factory;
+const {
+  buildArea,
+  buildCompetence,
+  buildTube,
+  buildSkill,
+  buildChallenge,
+  buildTutorial
+} = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
 
@@ -88,6 +95,15 @@ describe('Acceptance | Controller | release-controller', () => {
             locales: ['fr-fr'],
             alternativeInstruction: 'Consigne alternative',
           }],
+          tutorials: [{
+            id: 'recTutorial0',
+            duration: 'Durée du Tutoriel',
+            format: 'Format du Tutoriel',
+            link: 'Lien du Tutoriel',
+            source: 'Source du Tutoriel',
+            title: 'Titre du Tutoriel',
+            locale: 'Langue du Tutoriel',
+          }],
         };
         airtableBuilder.mockLists({
           areas: [buildArea(expectedCreatedRelease.areas[0])],
@@ -95,6 +111,7 @@ describe('Acceptance | Controller | release-controller', () => {
           tubes: [buildTube(expectedCreatedRelease.tubes[0])],
           skills: [buildSkill(expectedCreatedRelease.skills[0])],
           challenges: [buildChallenge(expectedCreatedRelease.challenges[0])],
+          tutorials: [buildTutorial(expectedCreatedRelease.tutorials[0])],
         });
 
         const server = await createServer();
