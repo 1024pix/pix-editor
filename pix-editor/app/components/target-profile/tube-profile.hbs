@@ -1,5 +1,5 @@
 <div {{on "click" (fn @clickAction @tube)}} ...attributes>
-  <div class={{if @selectedSkillLevel "active" ""}}>
+  <div data-test-tube-profile class={{if @selectedSkillLevel "active" ""}}>
     <i class="square icon {{if @selectedSkillLevel "active check" "outline"}}">
     </i>
     {{#if @showTubeDetails}}
