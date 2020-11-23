@@ -32,20 +32,20 @@
   </button>
 {{else}}
   <button class="ui button first left" {{on "click" this.load}} type="button">
-    <i class="folder open icon"></i> Ouvrir
+    <i class="folder open icon"></i>Ouvrir
   </button>
   <button class="ui button left" {{on "click" this.getSaveTitle}} type="button">
-    <i class="save icon"></i> Enregistrer
+    <i class="save icon"></i>Enregistrer
   </button>
   <div class="right menu">
-    <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
-      <i class="calculator icon"></i> Paliers indicatifs
+    <button class="ui button" {{on "click" this.showThresholdCalculation}} type="button">
+      <i class="calculator icon"></i>Paliers indicatifs
     </button>
     <button class="ui button" {{on "click" this.getGenerateTitle}} type="button">
-      <i class="download icon"></i> Identifiants
+      <i class="download icon"></i>Identifiants
     </button>
     <button class="ui button" {{on "click" this.getProfileId}} type="button">
-      <i class="code icon"></i> CSV
+      <i class="code icon"></i>CSV
     </button>
     <TargetProfile::PdfExport @model={{this.areas}}/>
   </div>
