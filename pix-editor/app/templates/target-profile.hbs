@@ -26,7 +26,7 @@
   </div>
   <div class="ui top attached borderless labelled icon menu">
 {{#if this.isThematicResultMode}}
-  <button class="ui button" {{on "click" this.generateThematicResultTxt}} type="button">
+  <button class="ui button" {{on "click" this.getGenerateThematicResultTitle}} type="button">
     <i class="download icon"></i>
     Identifiants
   </button>
@@ -34,14 +34,14 @@
   <button class="ui button first left" {{on "click" this.load}} type="button">
     <i class="folder open icon"></i> Ouvrir
   </button>
-  <button class="ui button left" {{on "click" this.save}} type="button">
+  <button class="ui button left" {{on "click" this.getSaveTitle}} type="button">
     <i class="save icon"></i> Enregistrer
   </button>
   <div class="right menu">
     <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
       <i class="calculator icon"></i> Paliers indicatifs
     </button>
-    <button class="ui button" {{on "click" this.generate}} type="button">
+    <button class="ui button" {{on "click" this.getGenerateTitle}} type="button">
       <i class="download icon"></i> Identifiants
     </button>
     <button class="ui button" {{on "click" this.getProfileId}} type="button">
@@ -56,7 +56,6 @@
       <div class="right aligned column">
         <TargetProfile::Navigation @areas={{this.areas}} />
       </div>
-
       {{#if this.isThematicResultMode}}
         <div class="eleven wide center aligned column"></div>
         <div class="four wide right aligned column">{{this.selectedThematicResultTubeCount}}/{{this.selectedTubeCount}}</div>
@@ -85,7 +84,7 @@
   <PopIn::TubeThematicResultLevel @tube={{this.selectedTube}} @close={{this.closeThematicResultTube}}/>
 {{/if}}
 {{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
+  <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}} @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
 {{/if}}
 {{#if this.displayThresholdCalculation}}
   <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}} @model={{this.areas}}/>
