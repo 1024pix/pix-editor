@@ -278,6 +278,7 @@ export default class TargetProfileController extends Controller {
   toggleThematicResult(e) {
     if (e.target.checked) {
       this.filter = true;
+      this.showTubeDetails = true;
     }
   }
 
