@@ -1,0 +1,20 @@
+<div class="skill-header validated">
+  <div class="ui menu">
+    {{log this}}
+
+    <div class="item header">{{this.model.name}}</div>
+    <div class="ui right menu">
+      {{#if this.isMaximized}}
+        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>
+        </button>
+      {{else}}
+        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i
+                class="window maximize outline icon"></i></button>
+      {{/if}}
+      <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+    </div>
+  </div>
+</div>
+<div class="single i18n">
+<!--  <List::SkillHistory @list={{!this.model}}/>-->
+</div>
