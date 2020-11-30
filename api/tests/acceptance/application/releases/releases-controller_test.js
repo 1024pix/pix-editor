@@ -135,7 +135,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject(latestReleaseOptions);
 
         // Then
-        expect(response.result).to.deep.equal(expectedCreatedRelease);
+        expect(JSON.parse(response.result)).to.deep.equal(expectedCreatedRelease);
       });
     });
   });

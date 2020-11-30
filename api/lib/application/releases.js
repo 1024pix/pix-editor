@@ -1,4 +1,5 @@
 const releaseRepository = require('../infrastructure/repositories/release-repository');
+const { PassThrough } = require('stream');
 
 exports.register = async function(server) {
   server.route([
@@ -7,7 +8,15 @@ exports.register = async function(server) {
       path: '/api/releases/latest',
       config: {
         handler: function() {
-          return releaseRepository.getLatest();
+          const writableStream = new PassThrough();
+          writableStream.headers = {
+            'content-type': 'application/json',
+      
+            // WHY: to avoid compression because when compressing, the server buffers
+            // for too long causing a response timeout.
+            'content-encoding': 'identity',
+          };
+          return releaseRepository.getLatestAsStream(writableStream);
         },
       }
     },

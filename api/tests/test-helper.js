@@ -77,6 +77,19 @@ function catchErr(promiseFn, ctx) {
   };
 }
 
+function streamToPromise(stream) {
+  return new Promise((resolve, reject) => {
+    let totalData = '';
+    stream.on('data', (data) => {
+      totalData += data;
+    });
+    stream.on('end', () => {
+      resolve(totalData);
+    });
+    stream.on('error', reject);
+  });
+}
+
 // Nock
 const nock = require('nock');
 nock.disableNetConnect();
@@ -99,6 +112,7 @@ module.exports = {
   hFake,
   knex,
   sinon,
+  streamToPromise,
   testErr: new Error('Fake Error'),
   testInfraNotFoundErr: new infraErrors.NotFoundError('Fake infra NotFoundError'),
 };
