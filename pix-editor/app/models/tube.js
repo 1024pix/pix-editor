@@ -47,6 +47,9 @@ export default class TubeModel extends Model {
 
   get filledSkills() {
     return this.sortedSkills.reduce((grid, skill) => {
+      if(grid[skill.level - 1] && skill.isDraft()){
+        return grid;
+      }
       grid[skill.level - 1] = skill;
       return grid;
     },[false, false, false, false, false, false, false]);

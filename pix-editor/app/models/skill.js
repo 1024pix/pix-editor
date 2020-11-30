@@ -119,6 +119,10 @@ export default class SkillModel extends Model {
     return this.status === 'archivé';
   }
 
+  get isDraft() {
+    return this.status === 'en construction';
+  }
+
   get isLive() {
     return this.status === 'actif' || this.status === 'en construction';
   }
