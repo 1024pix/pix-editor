@@ -19,7 +19,8 @@ module.exports = {
       }
     ).catch((err) => {
       clearInterval(timer);
-      writableStream.emit('error', err);
+      writableStream.write('error');
+      writableStream.end();
     });
     return writableStream;
   },

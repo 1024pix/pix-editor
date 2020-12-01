@@ -1,5 +1,5 @@
 const { PassThrough } = require('stream');
-const { expect, streamToPromise, sinon, catchErr } = require('../../test-helper');
+const { expect, streamToPromise, sinon } = require('../../test-helper');
 const areaDatasource = require('../../../lib/infrastructure/datasources/airtable/area-datasource');
 const competenceDatasource = require('../../../lib/infrastructure/datasources/airtable/competence-datasource');
 const tubeDatasource = require('../../../lib/infrastructure/datasources/airtable/tube-datasource');
@@ -46,7 +46,7 @@ describe('Unit | Controller | release-repository', () => {
       //Then
       expect(JSON.parse(latestRelease)).to.deep.equal(expectedLatestRelease);
     });
-    it('should throw an error when an error occured', async () => {
+    it('should end the stream with an error when an error occured', async () => {
       //Given
       sinon.stub(areaDatasource, 'list').resolves([]);
       sinon.stub(competenceDatasource, 'list').resolves([]);
@@ -60,7 +60,7 @@ describe('Unit | Controller | release-repository', () => {
       releaseRepository.getLatestAsStream(writableStream);
       
       //Then
-      expect(releasePromise).to.be.rejectedWith(Error);
+      expect(await releasePromise).to.match(/error$/);
     });
   });
 });

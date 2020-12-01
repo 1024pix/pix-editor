@@ -23,7 +23,7 @@ class AirtableMockRoute {
     return this;
   }
 
-  activate() {
+  activate(statusCode = 200) {
     const { url, query } = generateUrlForRouteType({
       returnBody: this.returnBody,
       routeType: this.routeType,
@@ -38,7 +38,7 @@ class AirtableMockRoute {
     this.nockScope
       .get(url)
       .query(query ? query : this.query)
-      .reply(200, body);
+      .reply(statusCode, body);
   }
 }
 

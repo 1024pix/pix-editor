@@ -1,4 +1,4 @@
-const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
+const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, catchErr } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const {
   buildArea,
@@ -12,7 +12,7 @@ const {
 
 describe('Acceptance | Controller | release-controller', () => {
 
-  describe('POST /releases - Create a release from current Airtable data', () => {
+  describe('GET /releases/latest - Returns release from current Airtable data', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
@@ -136,6 +136,30 @@ describe('Acceptance | Controller | release-controller', () => {
 
         // Then
         expect(JSON.parse(response.result)).to.deep.equal(expectedCreatedRelease);
+      });
+      
+      it('should handle error', async () => {
+        // Given
+        airtableBuilder.mockList({ tableName: 'Domaines' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Competences' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Tubes' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Acquis' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Epreuves' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Tests' }).returns().activate(500);
+        airtableBuilder.mockList({ tableName: 'Tutoriels' }).returns().activate(500);
+        
+        const server = await createServer();
+        const latestReleaseOptions = {
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers: generateAuthorizationHeader(user),
+        };
+        
+        // When
+        const response = await server.inject(latestReleaseOptions);
+        
+        // Then
+        expect(() => JSON.parse(response.result)).to.throw(Error);
       });
     });
   });

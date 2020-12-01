@@ -7,6 +7,7 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
+        auth:false,
         handler: function() {
           const writableStream = new PassThrough();
           writableStream.headers = {
@@ -18,7 +19,7 @@ exports.register = async function(server) {
           };
           return releaseRepository.getLatestAsStream(writableStream);
         },
-      }
+      },
     },
   ]);
 };
