@@ -1,4 +1,4 @@
-const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, catchErr } = require('../../../test-helper');
+const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const {
   buildArea,
@@ -12,7 +12,7 @@ const {
 
 describe('Acceptance | Controller | release-controller', () => {
 
-  describe('GET /releases/latest - Returns release from current Airtable data', () => {
+  describe('GET /current-content - Returns release from current Airtable data', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
@@ -20,9 +20,9 @@ describe('Acceptance | Controller | release-controller', () => {
         await databaseBuilder.commit();
       });
 
-      it('should return latest learning content release', async () => {
+      it('should return current learning content', async () => {
         // Given
-        const expectedCreatedRelease = {
+        const expectedCurrentContent = {
           areas: [{
             id: 'recArea0',
             name: 'Nom du Domaine',
@@ -115,27 +115,27 @@ describe('Acceptance | Controller | release-controller', () => {
           }],
         };
         airtableBuilder.mockLists({
-          areas: [buildArea(expectedCreatedRelease.areas[0])],
-          competences: [buildCompetence(expectedCreatedRelease.competences[0])],
-          tubes: [buildTube(expectedCreatedRelease.tubes[0])],
-          skills: [buildSkill(expectedCreatedRelease.skills[0])],
-          challenges: [buildChallenge(expectedCreatedRelease.challenges[0])],
-          tutorials: [buildTutorial(expectedCreatedRelease.tutorials[0])],
-          courses: [buildCourse(expectedCreatedRelease.courses[0])],
+          areas: [buildArea(expectedCurrentContent.areas[0])],
+          competences: [buildCompetence(expectedCurrentContent.competences[0])],
+          tubes: [buildTube(expectedCurrentContent.tubes[0])],
+          skills: [buildSkill(expectedCurrentContent.skills[0])],
+          challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
+          tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
+          courses: [buildCourse(expectedCurrentContent.courses[0])],
         });
 
         const server = await createServer();
-        const latestReleaseOptions = {
+        const currentContentOptions = {
           method: 'GET',
-          url: '/api/releases/latest',
+          url: '/api/current-content',
           headers: generateAuthorizationHeader(user),
         };
 
         // When
-        const response = await server.inject(latestReleaseOptions);
+        const response = await server.inject(currentContentOptions);
 
         // Then
-        expect(JSON.parse(response.result)).to.deep.equal(expectedCreatedRelease);
+        expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
       });
       
       it('should handle error', async () => {
@@ -149,14 +149,14 @@ describe('Acceptance | Controller | release-controller', () => {
         airtableBuilder.mockList({ tableName: 'Tutoriels' }).returns().activate(500);
         
         const server = await createServer();
-        const latestReleaseOptions = {
+        const currentContentOptions = {
           method: 'GET',
-          url: '/api/releases/latest',
+          url: '/api/current-content',
           headers: generateAuthorizationHeader(user),
         };
         
         // When
-        const response = await server.inject(latestReleaseOptions);
+        const response = await server.inject(currentContentOptions);
         
         // Then
         expect(() => JSON.parse(response.result)).to.throw(Error);

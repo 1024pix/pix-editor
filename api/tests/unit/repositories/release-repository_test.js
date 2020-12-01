@@ -11,7 +11,7 @@ const releaseRepository = require('../../../lib/infrastructure/repositories/rele
 
 describe('Unit | Controller | release-repository', () => {
 
-  describe('#getLatestReleaseAsStream', () => {
+  describe('#getCurrentContentAsStream', () => {
     let writableStream;
     let releasePromise;
   
@@ -19,7 +19,7 @@ describe('Unit | Controller | release-repository', () => {
       writableStream = new PassThrough();
       releasePromise = streamToPromise(writableStream);
     });
-    it('should return latest releases as a stream', async () => {
+    it('should return current content as a stream', async () => {
       //Given
       sinon.stub(areaDatasource, 'list').resolves([]);
       sinon.stub(competenceDatasource, 'list').resolves([]);
@@ -29,7 +29,7 @@ describe('Unit | Controller | release-repository', () => {
       sinon.stub(tutorialDatasource, 'list').resolves([]);
       sinon.stub(courseDatasource, 'list').resolves([]);
       
-      const expectedLatestRelease = {
+      const expectedCurrentContent = {
         areas: [],
         competences: [],
         tubes: [],
@@ -40,11 +40,11 @@ describe('Unit | Controller | release-repository', () => {
       };
       
       //When
-      releaseRepository.getLatestAsStream(writableStream);
-      const latestRelease = await releasePromise;
+      releaseRepository.getCurrentContentAsStream(writableStream);
+      const currentContent = await releasePromise;
       
       //Then
-      expect(JSON.parse(latestRelease)).to.deep.equal(expectedLatestRelease);
+      expect(JSON.parse(currentContent)).to.deep.equal(expectedCurrentContent);
     });
     it('should end the stream with an error when an error occured', async () => {
       //Given
@@ -57,7 +57,7 @@ describe('Unit | Controller | release-repository', () => {
       courseDatasource.list = async() => { throw new Error(); };
       
       //When
-      releaseRepository.getLatestAsStream(writableStream);
+      releaseRepository.getCurrentContentAsStream(writableStream);
       
       //Then
       expect(await releasePromise).to.match(/error$/);

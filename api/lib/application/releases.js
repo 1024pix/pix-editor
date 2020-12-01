@@ -5,7 +5,7 @@ exports.register = async function(server) {
   server.route([
     {
       method: 'GET',
-      path: '/api/releases/latest',
+      path: '/api/current-content',
       config: {
         auth:false,
         handler: function() {
@@ -17,7 +17,7 @@ exports.register = async function(server) {
             // for too long causing a response timeout.
             'content-encoding': 'identity',
           };
-          return releaseRepository.getLatestAsStream(writableStream);
+          return releaseRepository.getCurrentContentAsStream(writableStream);
         },
       },
     },

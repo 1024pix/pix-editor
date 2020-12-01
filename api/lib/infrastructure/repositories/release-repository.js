@@ -7,17 +7,17 @@ const tutorialDatasource = require('../datasources/airtable/tutorial-datasource'
 const courseDatasource = require('../datasources/airtable/course-datasource');
 
 module.exports = {
-  getLatestAsStream(writableStream) {
+  getCurrentContentAsStream(writableStream) {
     const timer = setInterval(() => {
       writableStream.write('\n');
     }, 1000);
-    _getLatest().then(
+    _getCurrentContent().then(
       (data) => {
         writableStream.write(JSON.stringify(data));
         clearInterval(timer);
         writableStream.end();
       }
-    ).catch((err) => {
+    ).catch(() => {
       clearInterval(timer);
       writableStream.write('error');
       writableStream.end();
@@ -26,7 +26,7 @@ module.exports = {
   },
 };
 
-async function _getLatest() {
+async function _getCurrentContent() {
   const [
     areas,
     competences,
