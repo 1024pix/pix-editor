@@ -5,9 +5,12 @@ export default class CompetenceSkillsListRoute extends Route {
   model(params) {
     return this.store.findRecord('tube', params.tube_id)
       .then(tube => {
-        let liveSkills = tube.liveSkills;
-        liveSkills = liveSkills.filter(skill =>  skill.level === parseInt(params.level));
-        return liveSkills.sort((a,b) => new Date(b.date) - new Date(a.date));
+        return { tube, liveSkills: tube.liveSkills };
+      })
+      .then(({ tube,liveSkills }) => {
+        const liveSkillsFiltered = liveSkills.filter(skill => skill.level === parseInt(params.level));
+        const sortedSkills = liveSkillsFiltered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return { tube, sortedSkills };
       });
   }
 
