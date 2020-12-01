@@ -1,19 +1,12 @@
-<div class="skill-header validated">
-  <div class="ui menu">
-    <div class="item header">{{this.firstSkill.name}}</div>
-    <div class="ui right menu">
-      {{#if this.isMaximized}}
-        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>
-        </button>
-      {{else}}
-        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i
-                class="window maximize outline icon"></i></button>
-      {{/if}}
-      <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+<div class="main-title skill-header">
+  <h1 class="ui header">
+    <div class="ui right floated menu">
+      <button class="ui button icon item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
-  </div>
+    Versions de {{this.firstSkill.name}}
+  </h1>
 </div>
-<div class="single i18n">
+<div class="ui attached segment competence">
   <List::LiveSkill @list={{this.model.sortedSkills}}/>
 </div>
 <div class="ui borderless bottom attached labelled icon menu">

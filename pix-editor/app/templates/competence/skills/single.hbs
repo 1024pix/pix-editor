@@ -3,14 +3,20 @@
     <div class="ui left menu">
       {{#unless this.edition}}
         {{#if this.mayMove}}
-          <button class="ui icon button" {{on "click" this.moveSkill}} type="button"><i class="icon random"></i></button>
+          <button class="ui icon button" {{on "click" this.moveSkill}} type="button" title="Déplacer"><i
+                  class="icon random"></i></button>
         {{/if}}
-        <LinkTo @route="competence.skills.list" @models={{array this.skill.tube.id this.skill.level}} class="ui button icon item">
-          <i class="icon clone"></i>
+        <LinkTo class="ui button icon item"
+                title="Liste des versions"
+                @route="competence.skills.list"
+                @models={{array this.skill.tube.id this.skill.level}}>
+          <i class="icon align justify"></i>
         </LinkTo>
         {{#if (or this.mayArchive this.mayDelete)}}
-          <BasicDropdown @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
-            <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
+          <BasicDropdown title="Actions" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
+            <dd.Trigger>
+              <button class="ui icon button item" type="button"><i class="bolt icon"></i></button>
+            </dd.Trigger>
             <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
               {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" (fn this.archiveSkill dd)}} type="button">
@@ -32,9 +38,11 @@
     <div class="item header">{{this.skill.name}}</div>
     <div class="ui right menu">
       {{#if this.maximized}}
-        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
+        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>
+        </button>
       {{else}}
-        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
+        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i
+                class="window maximize outline icon"></i></button>
       {{/if}}
       <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
     </div>
@@ -83,18 +91,18 @@
   </div>
 </div>
 {{#if this.displaySelectLocation}}
-<PopIn::SelectLocation
-  @onChange={{this.setLocation}}
-  @name={{this.skillName}}
-  @selectTubeLevel={{true}}
-  @tube={{this.skill.tube}}
-  @level={{this.skill.level}}
-  @selectEmptyLevels={{true}}
-  @close={{this.closeSelectLocation}}
+  <PopIn::SelectLocation
+          @onChange={{this.setLocation}}
+          @name={{this.skillName}}
+          @selectTubeLevel={{true}}
+          @tube={{this.skill.tube}}
+          @level={{this.skill.level}}
+          @selectEmptyLevels={{true}}
+          @close={{this.closeSelectLocation}}
   />
 {{/if}}
 {{#if this.displayChangeLog}}
-<PopIn::Changelog
-        @onApprove={{this.approveChangelog}}
-        @defaultValue={{this.changelogText}} />
+  <PopIn::Changelog
+          @onApprove={{this.approveChangelog}}
+          @defaultValue={{this.changelogText}} />
 {{/if}}
