@@ -10,6 +10,7 @@ export default class SillSerializer extends AirtableSerializer {
     clueEn:'Indice en-us',
     clueStatus:'Statut de l\'indice',
     challenges:'Epreuves',
+    createdAt:'Date',
     description:'Description',
     descriptionStatus:'Statut de la description',
     tutoSolution: 'Comprendre',
