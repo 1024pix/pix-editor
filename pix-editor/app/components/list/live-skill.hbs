@@ -11,7 +11,7 @@
           @rowSelectionMode={{'single'}}
           @checkboxSelectionMode={{'none'}}
           @onSelect={{this.selectRow}} as |b|>
-    <b.row class="challenge-prototype" as |r|>
+    <b.row data-test-live-skill-row class="challenge-prototype" as |r|>
       <r.cell class="{{if r.columnValue.style r.rowValue.statusCSS}}" as |value|>
         {{value}}
       </r.cell>
