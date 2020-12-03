@@ -7,7 +7,6 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/current-content',
       config: {
-        auth:false,
         handler: function() {
           const writableStream = new PassThrough();
           writableStream.headers = {
