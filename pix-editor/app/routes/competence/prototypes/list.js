@@ -4,7 +4,20 @@ import { action } from '@ember/object';
 export default class ListRoute extends Route {
 
   model(params) {
-    return this.store.findRecord('skill', params.skill_id);
+    return this.store.findRecord('tube', params.tube_id)
+      .then(tube => {
+        return tube.liveSkills;
+      })
+      .then(liveSkills => {
+        const liveSkillsFiltered = liveSkills.filter(skill => skill.level === parseInt(params.level));
+        const activeSkill = liveSkillsFiltered.find(skill=>skill.isActive);
+        const draftSkills = liveSkillsFiltered.filter(skill=>!skill.isActive);
+
+        return {
+          activeSkill,
+          draftSkills: draftSkills.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        };
+      });
   }
 
   setupController() {
