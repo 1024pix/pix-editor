@@ -13,8 +13,8 @@ describe('Acceptance | Controller | area-controller', () => {
         airtableBuilder
           .mockList({ tableName: 'Domaines' })
           .returns([
-            buildArea({ id: '1', nom: 'Nom du domaine 1', code: '1', competenceIds: ['recCompetence1', 'recCompetence2'] }),
-            buildArea({ id: '2', nom: 'Nom du domaine 2', code: '2', competenceIds: ['recCompetence3', 'recCompetence4'] })
+            buildArea({ id: '1', name: 'Nom du domaine 1', code: '1', competenceAirtableIds: ['recCompetence1', 'recCompetence2'] }),
+            buildArea({ id: '2', name: 'Nom du domaine 2', code: '2', competenceAirtableIds: ['recCompetence3', 'recCompetence4'] })
           ])
           .activate();
       });

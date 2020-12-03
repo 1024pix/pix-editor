@@ -16,13 +16,16 @@ module.exports = function ChallengeAirtableDataObjectFixture({
   illustrationAlt = 'Texte alternatif de l’illustration',
   attachments = [
     'https://dl.airtable.com/nHWKNZZ7SQeOKsOvVykV_navigationdiaporama5.pptx',
-    'https://dl.airtable.com/rsXNJrSPuepuJQDByFVA_navigationdiaporama5.odp'
+    'https://dl.airtable.com/rsXNJrSPuepuJQDByFVA_navigationdiaporama5.odp',
   ],
   competenceId = 'recsvLz0W2ShyfD63',
   embedUrl = 'https://github.io/page/epreuve.html',
   embedTitle = 'Epreuve de selection de dossier',
   embedHeight = 500,
   format = 'petit',
+  locales = ['fr'],
+  autoReply = false,
+  alternativeInstruction = '',
 } = {}) {
   return {
     id,
@@ -46,5 +49,8 @@ module.exports = function ChallengeAirtableDataObjectFixture({
     embedTitle,
     embedHeight,
     format,
+    locales,
+    autoReply,
+    alternativeInstruction,
   };
 };

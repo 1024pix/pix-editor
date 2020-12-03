@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const datasource = require('./datasource');
 
 module.exports = datasource.extend({
@@ -11,8 +12,11 @@ module.exports = datasource.extend({
     'Nom',
     'Titre',
     'Description',
-    'Titre pratique',
-    'Description pratique',
+    'Titre pratique fr-fr',
+    'Titre pratique en-us',
+    'Description pratique fr-fr',
+    'Description pratique en-us',
+    'Competences (id persistant)',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -21,8 +25,11 @@ module.exports = datasource.extend({
       name: airtableRecord.get('Nom'),
       title: airtableRecord.get('Titre'),
       description: airtableRecord.get('Description'),
-      practicalTitle: airtableRecord.get('Titre pratique'),
-      practicalDescription: airtableRecord.get('Description pratique'),
+      practicalTitleFrFr: airtableRecord.get('Titre pratique fr-fr'),
+      practicalTitleEnUs: airtableRecord.get('Titre pratique en-us'),
+      practicalDescriptionFrFr: airtableRecord.get('Description pratique fr-fr'),
+      practicalDescriptionEnUs: airtableRecord.get('Description pratique en-us'),
+      competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
     };
   },
 });

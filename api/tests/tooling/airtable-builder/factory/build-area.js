@@ -1,20 +1,24 @@
 const buildArea = function buildArea({
-  id = 'recvoGdo7z2z7pXWa',
-  competenceIds = [
-    'recsvLz0W2ShyfD63',
-    'recNv8qhaY887jQb2',
-    'recIkYm646lrGvLNT',
-  ],
-  code = '1',
-  nom = '1. Information et données',
+  id,
+  competenceIds,
+  competenceAirtableIds,
+  titleFrFr,
+  titleEnUs,
+  code,
+  name,
+  color,
 } = {}) {
   return {
     id,
     'fields': {
       'id persistant': id,
-      'Competences (identifiants)': competenceIds,
+      'Competences (identifiants) (id persistant)': competenceIds,
+      'Competences (identifiants)': competenceAirtableIds,
+      'Titre fr-fr': titleFrFr,
+      'Titre en-us': titleEnUs,
       'Code': code,
-      'Nom': nom,
+      'Nom': name,
+      'Couleur': color
     },
   };
 };

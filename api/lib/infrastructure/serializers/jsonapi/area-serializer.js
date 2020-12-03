@@ -5,7 +5,7 @@ module.exports = {
     return new Serializer('area', {
       transform(current) {
         const area = Object.assign({}, current);
-        area.competences = area.competenceIds.map((competenceId) => ({ id: competenceId }));
+        area.competences = area.competenceAirtableIds.map((competenceId) => ({ id: competenceId }));
         return area;
       },
       attributes: ['code', 'name', 'competences'],

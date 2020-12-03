@@ -1,4 +1,5 @@
 const datasource = require('./datasource');
+const { ENGLISH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN } = require('../../../domain/constants').LOCALE;
 
 module.exports = datasource.extend({
 
@@ -74,7 +75,26 @@ module.exports = datasource.extend({
       competenceId,
       illustrationAlt: airtableRecord.get('Texte alternatif illustration'),
       format: airtableRecord.get('Format') || 'mots',
+      autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
+      locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
+      alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
     };
   },
 });
 
+function _convertLanguagesToLocales(languages) {
+  return languages.map((language) => _convertLanguageToLocale(language));
+}
+
+function _convertLanguageToLocale(language) {
+  switch (language) {
+    case 'Anglais':
+      return ENGLISH_SPOKEN;
+    case 'Francophone':
+      return FRENCH_SPOKEN;
+    case 'Franco Français':
+      return FRENCH_FRANCE;
+    default:
+      return FRENCH_SPOKEN;
+  }
+}
