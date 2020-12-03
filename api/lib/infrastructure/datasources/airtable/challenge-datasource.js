@@ -29,6 +29,7 @@ module.exports = datasource.extend({
     'Embed height',
     'Texte alternatif illustration',
     'Format',
+    'Langues',
   ],
 
   fromAirTableObject(airtableRecord) {
