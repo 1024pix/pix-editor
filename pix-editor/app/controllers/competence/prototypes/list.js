@@ -19,7 +19,7 @@ export default class ListController extends Controller {
     return this.access.mayCreatePrototype();
   }
 
-  get selectedSkillOrFirstSkill() {
+  get selectedSkill() {
     return this._getSkill(this.selectedSkillId);
   }
 
@@ -39,12 +39,12 @@ export default class ListController extends Controller {
 
   @action
   newVersion() {
-    const prototypes = this.selectedSkillOrFirstSkill.sortedPrototypes;
+    const prototypes = this.selectedSkill.sortedPrototypes;
     if (prototypes.length > 0) {
       const prototype = prototypes.firstObject;
       this.transitionToRoute('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { from: prototype.id } });
     } else {
-      this.transitionToRoute('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.selectedSkillOrFirstSkill.id } });
+      this.transitionToRoute('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.selectedSkill.id } });
     }
   }
 }

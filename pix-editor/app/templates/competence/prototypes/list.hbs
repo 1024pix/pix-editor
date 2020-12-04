@@ -4,7 +4,7 @@
       <button class="ui button icon item" {{on "click" this.close}} type="button"><i class="icon window close"></i>
       </button>
     </div>
-    Prototypes de {{this.firstSkill.name}} ({{this.selectedSkillOrFirstSkill.date}})
+    Prototypes de {{this.model.skill.name}} ({{this.selectedSkill.date}})
   </h1>
 </div>
 <div class="ui top attached borderless labelled icon menu">
@@ -18,7 +18,7 @@
   </div>
 </div>
 <div class="ui attached segment competence {{this.size}}">
-  <List::Prototypes @list={{this.selectedSkillOrFirstSkill.sortedPrototypes}} />
+  <List::Prototypes @list={{this.selectedSkill.sortedPrototypes}} />
 </div>
 <div class="ui borderless bottom attached labelled icon menu">
   {{#if this.mayCreatePrototype}}
