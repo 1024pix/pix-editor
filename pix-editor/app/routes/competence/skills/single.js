@@ -30,7 +30,7 @@ export default class SingleRoute extends Route {
   @action
   willTransition(transition) {
     if (this.controllerFor('competence.skills.single').edition &&
-        !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
+      !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
       if (this.controllerFor('competence.skills.single').model.rollbackAttributes) {
@@ -38,12 +38,18 @@ export default class SingleRoute extends Route {
         this.controllerFor('competence.skills.single').model.rollbackAttributes();
       }
       if (transition.targetName === 'competence.prototypes.index') {
+        if (this.controllerFor('competence').view === 'history') {
+          return true;
+        }
         const skill = this.controllerFor('competence.skills.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
           return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         } else {
-          return this.transitionTo('competence.prototypes.list', this.currentData.getCompetence(), skill);
+          return skill.tube
+            .then(tube =>{
+              return this.transitionTo('competence.prototypes.list', this.currentData.getCompetence(), tube.id, skill.id);
+            });
         }
       } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.skills.single').skill.productionPrototype) {
         return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controllerFor('competence.skills.single').skill);
