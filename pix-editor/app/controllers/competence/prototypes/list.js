@@ -13,19 +13,14 @@ export default class ListController extends Controller {
   @service config;
   @service currentData;
 
-  @tracked selectedSkillId = null;
+  @tracked selectedSkillId;
 
   get mayCreatePrototype() {
     return this.access.mayCreatePrototype();
   }
 
-  get firstSkill() {
-    this.selectedSkillId = this.model.skill.id;
-    return this.model.skill;
-  }
-
   get selectedSkillOrFirstSkill() {
-    return this._getSkill(this.selectedSkillId) || this.firstSkill();
+    return this._getSkill(this.selectedSkillId);
   }
 
   _getSkill(value) {

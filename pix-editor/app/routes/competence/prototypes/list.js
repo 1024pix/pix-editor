@@ -17,6 +17,11 @@ export default class ListRoute extends Route {
       });
   }
 
+  afterModel(model){
+    const controllerList = this.controllerFor('competence.prototypes.list')
+    controllerList.selectedSkillId = model.skill.id;
+  }
+
   setupController() {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
