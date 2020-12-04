@@ -13,35 +13,23 @@ export default class ListController extends Controller {
   @service config;
   @service currentData;
 
-  @tracked selectedSkillIndex = null;
-
+  @tracked selectedSkillId = null;
 
   get mayCreatePrototype() {
     return this.access.mayCreatePrototype();
   }
 
   get firstSkill() {
-    if (this.model.activeSkill) {
-      this.selectedSkillIndex = -1;
-    } else {
-      this.selectedSkillIndex = 0;
-    }
-    return this.model.activeSkill || this.model.draftSkills[0];
+    this.selectedSkillId = this.model.skill.id;
+    return this.model.skill;
   }
 
   get selectedSkillOrFirstSkill() {
-    return this._getSkill(this.selectedSkillIndex) || this.firstSkill;
+    return this._getSkill(this.selectedSkillId) || this.firstSkill();
   }
 
   _getSkill(value) {
-    switch (value) {
-      case null :
-        return false;
-      case -1 :
-        return this.model.activeSkill;
-      default :
-        return this.model.draftSkills[value];
-    }
+    return this.model.skills.find(skill=>skill.id === value);
   }
 
   @action
@@ -51,7 +39,7 @@ export default class ListController extends Controller {
 
   @action
   setSelectedSkill(value) {
-    this.selectedSkillIndex = value;
+    this.selectedSkillId = value;
   }
 
   @action

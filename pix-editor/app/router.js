@@ -16,7 +16,7 @@ Router.map(function() {
           this.route('single', { path:'/:alternative_id' });
         });
       });
-      this.route('list', { path:'/list/:tube_id/:level' });
+      this.route('list', { path:'/list/:tube_id/:skill_id' });
     });
     this.route('tubes', function() {
       this.route('single', { path:'/:tube_id' });

@@ -9,11 +9,8 @@
 </div>
 <div class="ui top attached borderless labelled icon menu">
   <div class="ui top attached tabular menu">
-    {{#if this.model.activeSkill}}
-      <div class="item {{if (eq selectedSkillIndex -1) "active" ""}}" {{on "click" (fn this.setSelectedSkill -1)}}>En production</div>
-    {{/if}}
-    {{#each this.model.draftSkills as |skill index|}}
-      <div class="item {{if (eq selectedSkillIndex index) "active" ""}}" {{on "click" (fn this.setSelectedSkill index)}}>En construction</div>
+    {{#each this.model.skills as |skill|}}
+      <div class="item {{if (eq selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>{{skill.id}}</div>
     {{/each}}
   </div>
 </div>

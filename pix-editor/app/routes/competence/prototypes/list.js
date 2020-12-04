@@ -6,17 +6,14 @@ export default class ListRoute extends Route {
   model(params) {
     return this.store.findRecord('tube', params.tube_id)
       .then(tube => {
-        return tube.liveSkills;
+        return  this.store.findRecord('skill', params.skill_id).then(skill=>{
+          return { liveSkills: tube.liveSkills, skill };
+        });
       })
-      .then(liveSkills => {
-        const liveSkillsFiltered = liveSkills.filter(skill => skill.level === parseInt(params.level));
-        const activeSkill = liveSkillsFiltered.find(skill=>skill.isActive);
-        const draftSkills = liveSkillsFiltered.filter(skill=>!skill.isActive);
-
-        return {
-          activeSkill,
-          draftSkills: draftSkills.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        };
+      .then(({ liveSkills, skill }) => {
+        const liveSkillsFilteredByLevel = liveSkills.filter(liveSkill => liveSkill.level === parseInt(skill.level));
+        const skills = liveSkillsFilteredByLevel.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return { skills, skill };
       });
   }
 
