@@ -10,7 +10,10 @@
 <div class="ui top attached borderless labelled icon menu">
   <div class="ui top attached tabular menu">
     {{#each this.model.skills as |skill|}}
-      <div class="item {{if (eq selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>{{skill.id}}</div>
+      <div class="item skill-tab {{if (eq selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>
+        {{skill.id}}
+        <span class="skill-tab__status {{if skill.isDraft "draft" "active"}}" title={{skill.status}}></span>
+      </div>
     {{/each}}
   </div>
 </div>

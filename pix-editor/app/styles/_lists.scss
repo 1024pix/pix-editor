@@ -1,13 +1,31 @@
+.skill-tab {
+  &__status {
+    display: inline-block;
+    margin-left: .5em;
+    width: 1em;
+    height: 1em;
+    border-radius: 50%;
+
+    &.active {
+      background: #444488;
+    }
+
+    &.draft {
+      background: #838be5;
+    }
+  }
+}
+
 .ember-table {
-  height:100%;
+  height: 100%;
 
   table {
     th {
-      background-color:#F9FAFB;
-      border-left:1px solid rgba(34,36,38,.1);
-      border-bottom:1px solid rgba(34,36,38,.1);
-      padding:10px;
-      text-align:left;
+      background-color: #F9FAFB;
+      border-left: 1px solid rgba(34, 36, 38, .1);
+      border-bottom: 1px solid rgba(34, 36, 38, .1);
+      padding: 10px;
+      text-align: left;
 
       .et-sort-indicator {
 
@@ -16,7 +34,7 @@
           display: inline-block;
           border: none;
           line-height: 1;
-          color:#b9b9b9;
+          color: #b9b9b9;
           content: '\f0d7';
         }
 
@@ -24,18 +42,16 @@
           content: '\f0d8';
         }
       }
-
-
     }
-    td {
-      border-left:1px solid rgba(34,36,38,.1);
-      border-bottom:1px solid rgba(34,36,38,.1);
-      padding:10px;
-      overflow:hidden;
-      white-space:nowrap;
-      text-overflow: ellipsis;
-      cursor:pointer;
 
+    td {
+      border-left: 1px solid rgba(34, 36, 38, .1);
+      border-bottom: 1px solid rgba(34, 36, 38, .1);
+      padding: 10px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      cursor: pointer;
 
       &.suggested {
         background-color: $suggested-background-color !important;
@@ -56,11 +72,10 @@
         background-color: $deleted-background-color !important;
         color: $deleted-color;
       }
-
     }
 
     tr.is-selected td {
-      background-color:#ffc;
+      background-color: #ffc;
     }
   }
 }
