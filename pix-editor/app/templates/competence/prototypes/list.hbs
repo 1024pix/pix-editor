@@ -10,19 +10,19 @@
 <div class="ui top attached borderless labelled icon menu">
   <div class="ui top attached tabular menu">
     {{#each this.model.skills as |skill|}}
-      <div class="item skill-tab {{if (eq selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>
+      <div data-test-skill-tab class="item skill-tab {{if (eq this.selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>
         {{skill.id}}
         <span class="skill-tab__status {{if skill.isDraft "draft" "active"}}" title={{skill.status}}></span>
       </div>
     {{/each}}
   </div>
 </div>
-<div class="ui attached segment competence {{this.size}}">
+<div data-test-prototype-list class="ui attached segment competence {{this.size}}">
   <List::Prototypes @list={{this.selectedSkill.sortedPrototypes}} />
 </div>
 <div class="ui borderless bottom attached labelled icon menu">
   {{#if this.mayCreatePrototype}}
-    <button class="ui button right item" {{on "click" this.newVersion}} type="button">
+    <button data-test-new-prototype-action class="ui button right item" {{on "click" this.newVersion}} type="button">
       <i class="plus square outline icon"></i> Nouvelle version
     </button>
   {{/if}}
