@@ -9,8 +9,12 @@ module.exports = datasource.extend({
   usedFields: [
     'id persistant',
     'Titre',
+    'Titre fr-fr',
+    'Titre en-us',
     'Sous-domaine',
     'Description',
+    'Description fr-fr',
+    'Description en-us',
     'Domaine (id persistant)',
     'Acquis (via Tubes) (id persistant)',
     'Origine',
