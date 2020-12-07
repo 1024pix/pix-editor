@@ -11,7 +11,7 @@ export default function () {
     const records = schema.competences.all().models.map((competence) => {
       return {
         id: competence.id,
-        fields : {
+        fields: {
           'Record ID': competence.id,
           'id persistant': competence.pixId,
           'Référence': competence.name,
@@ -67,13 +67,49 @@ export default function () {
         'Status': skill.status,
         'Internationalisation': skill.i18n,
         'id persistant': skill.pixId,
+        'Date': skill.createdAt,
       }
     };
+  });
+
+  this.get('/airtable/content/Acquis', (schema, request) => {
+    const records = schema.skills.all().models.map((skill) => {
+      return {
+        id: skill.id,
+        fields: {
+          'Record Id': skill.id,
+          'Nom': skill.name,
+          'Indice fr-fr': skill.clue,
+          'Indice en-us': skill.clueEn,
+          'Statut de l\'indice': skill.clueStatus,
+          'Epreuves': skill.challengeIds,
+          'Description': skill.description,
+          'Statut de la description': skill.descriptionStatus,
+          'Comprendre': undefined,
+          'En savoir plus': undefined,
+          'Compétence': skill.competence,
+          'Tube': skill.tubeId,
+          'Level': skill.level,
+          'Status': skill.status,
+          'Internationalisation': skill.i18n,
+          'id persistant': skill.pixId,
+          'Date': skill.createdAt,
+        }
+      };
+    });
+    return _response(request, { records });
   });
 
   this.get('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
     return _serializeChalllenge(challenge);
+  });
+
+  this.get('/airtable/content/Epreuves', (schema, request) => {
+    const records = schema.challenges.all().models.map(challenge => {
+      return _serializeChalllenge(challenge);
+    });
+    return _response(request, { records });
   });
 
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
