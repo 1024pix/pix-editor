@@ -9,14 +9,17 @@ export default class PopinSelectLocation extends Component {
   @tracked _selectedCompetence = null;
   @tracked _selectedTube = null;
   @tracked _selectedSource = null;
+  @tracked _selectedSkill = null;
   @tracked tubesLoaded = false;
   @tracked levelsLoaded = false;
+  @tracked skillsLoaded = false;
   @tracked selectedLevels = null;
 
   @service currentData;
 
   _tubes = A([]);
-  _levels = [];
+  _skills = A([]);
+  _levels = A([]);
 
   get sources() {
     return this.currentData.getSources();
@@ -48,7 +51,7 @@ export default class PopinSelectLocation extends Component {
 
   get competences() {
     const areas = this.currentData.getAreas(false);
-    const areaCompetences = areas.filter(area=> area.source === this.selectedSource).map(area => area.sortedCompetences);
+    const areaCompetences = areas.filter(area => area.source === this.selectedSource).map(area => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
@@ -56,8 +59,8 @@ export default class PopinSelectLocation extends Component {
 
   get competenceList() {
     return this.competences.map(competence => ({
-      label:competence.get('name'),
-      data:competence
+      label: competence.name,
+      data: competence
     }));
   }
 
@@ -74,8 +77,8 @@ export default class PopinSelectLocation extends Component {
       return A([]);
     } else {
       return this.tubes.map(tube => ({
-        label:tube.name,
-        data:tube
+        label: tube.name,
+        data: tube
       }));
     }
   }
@@ -83,9 +86,9 @@ export default class PopinSelectLocation extends Component {
   _loadTubes() {
     if (this.selectedCompetence) {
       const competence = this.selectedCompetence.data;
-      competence.get('rawTubes')
+      competence.rawTubes
         .then(() => {
-          this._tubes = competence.get('sortedTubes');
+          this._tubes = competence.sortedTubes;
           this.tubesLoaded = true;
         });
     }
@@ -126,6 +129,39 @@ export default class PopinSelectLocation extends Component {
     return this._levels;
   }
 
+  get skills() {
+    if (!this.skillsLoaded) {
+      this._loadSkills();
+    }
+    return this._skills;
+  }
+
+  get skillsGroupByLevelList() {
+    if (!this.skillsLoaded) {
+      this._loadSkills();
+      return A([]);
+    }
+    return this.skills.map(skills=>this._buildGroupOption(skills[0].level, skills));
+  }
+
+  _loadSkills() {
+    if (this.selectedTube) {
+      const selectedTube = this.selectedTube.data;
+      return selectedTube.rawSkills
+        .then(()=>{
+          this._skills = selectedTube.filledLiveSkills.filter(liveSkill=>{return liveSkill;});
+          this.skillsLoaded = true;
+        });
+    }
+  }
+
+  _buildGroupOption(level, skills) {
+    return {
+      groupName: `Niveau ${level}`,
+      options: skills
+    };
+  }
+
   @action
   selectSource(source) {
     this.selectedSource = source;
@@ -144,6 +180,7 @@ export default class PopinSelectLocation extends Component {
     this.selectedTube = item;
     this.selectLevels(null);
     this.levelsLoaded = false;
+    this.skillsLoaded = false;
   }
 
   @action
@@ -151,30 +188,42 @@ export default class PopinSelectLocation extends Component {
     this.selectedLevels = levels;
   }
 
+  get selectedSKill() {
+    if (this._selectedSkill) {
+      return this._selectedSkill;
+    }
+    let result = false;
+    this.skillsGroupByLevelList.find(groupOptions=>{
+      if (groupOptions) {
+        result = groupOptions.options.find(skill=> {
+          return skill.id === this.args.skill.id;
+        });
+        return !!result;
+      }
+    });
+    return result;
+  }
+
+  @action
+  selectSkill(value) {
+    this._selectedSkill = value;
+    return value;
+  }
+
   @action
   setLocation() {
-    this.args.close();
     const competence = this.selectedCompetence.data;
-    if (this.args.selectTubeLevel) {
-      const tube = this.selectedTube.data;
-      if (this.args.selectEmptyLevels) {
-        this.args.onChange(competence, tube, this.selectedLevels);
-      } else {
-        let levels;
-        if (this.args.multipleLevel) {
-          levels = this.selectedLevels;
-        } else {
-          levels = [this.selectedLevels];
-        }
-        const tubeSkills = this.selectedTube.data.filledSkills;
-        const selectedSkills = levels.map(level => {
-          return tubeSkills[level - 1];
-        });
-        this.args.onChange(selectedSkills);
-      }
-    } else {
+    const tube = this.selectedTube.data;
+    if (!this.args.selectTubeLevel) {
       this.args.onChange(competence);
     }
+    if (this.args.isPrototypeLocation) {
+      this.args.onChange([this._selectedSkill]);
+    }
+    if (this.args.isSkillLocation) {
+      this.args.onChange(competence, tube, this.selectedLevels);
+    }
+    this.args.close();
     this._reset();
   }
 
@@ -187,10 +236,13 @@ export default class PopinSelectLocation extends Component {
   _reset() {
     this._selectedCompetence = null;
     this._selectedTube = null;
+    this._selectedSkill = null;
     this.selectedLevels = null;
     this.tubesLoaded = false;
     this.levelsLoaded = false;
+    this.skillsLoaded = false;
     this._tubes = A([]);
     this._levels = A([]);
+    this._skills = A([]);
   }
 }
