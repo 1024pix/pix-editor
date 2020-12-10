@@ -6,10 +6,10 @@
     </div>
     <div class="content">
       <div class="levels">
-        {{#each this.skills as |skill|}}
-          {{#if skill}}
-            <div class="level {{if skill._isThematicResult "selected"}}" {{on "click" (fn this.select skill)}} >
-              {{skill.level}}
+        {{#each this.skillsAndThematicResult as |skillAndThematicResult|}}
+          {{#if skillAndThematicResult.skill}}
+            <div class="level {{if skillAndThematicResult.isThematicResult "selected"}}" {{on "click" (fn this.select skillAndThematicResult.skill)}} >
+              {{skillAndThematicResult.skill.level}}
             </div>
           {{else}}
             <div class="level disabled"></div>
