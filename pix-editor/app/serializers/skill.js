@@ -26,4 +26,12 @@ export default class SillSerializer extends AirtableSerializer {
   payloadKeyFromModelName() {
     return 'Acquis';
   }
+
+  serializeAttribute(snapshot, json, key) {
+    if (key === 'createdAt') {
+      return undefined;
+    } else {
+      return super.serializeAttribute(...arguments);
+    }
+  }
 }
