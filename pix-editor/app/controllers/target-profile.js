@@ -165,7 +165,7 @@ export default class TargetProfileController extends Controller {
       }, areaValues);
     }, []);
     const fileTitle = title ? title : 'profil';
-    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.jason`;
+    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.json`;
     this.fileSaver.saveAs(JSON.stringify(data), fileName);
   }
 
