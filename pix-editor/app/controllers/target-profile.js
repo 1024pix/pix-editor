@@ -123,11 +123,34 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
-  getGenerateTitle() {
+  getGenerateTitleOrThematicResultTitle() {
+    if (this.isThematicResultMode) {
+      this._getGenerateThematicResultTitle();
+    } else {
+      this._getGenerateTitle();
+    }
+  }
+
+  _getGenerateThematicResultTitle() {
+    this.singleEntryPopInTitle = 'Enregistrer le résultat thématique';
+    this.singleEntryPopInLabel = 'Nom du fichier';
+    this.singleEntryPopInAction = this.generateThematicResult;
+    this.displaySingleEntry = true;
+  }
+
+  _getGenerateTitle() {
     this.singleEntryPopInTitle = 'Enregistrer les identifiants du profil cible';
     this.singleEntryPopInLabel = 'Nom du fichier';
     this.singleEntryPopInAction = this.generate;
     this.displaySingleEntry = true;
+  }
+
+  @action
+  generateThematicResult(title) {
+    const ids = this._getSelectedThematicSkillsIds();
+    const fileTitle = title ? `${title}-RT` : 'Résultat_thématique';
+    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
+    this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
   @action
@@ -190,22 +213,6 @@ export default class TargetProfileController extends Controller {
     }, 'targetProfileId,skillId');
     const fileName = `${profileId}_generate_profile_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(sql, fileName);
-  }
-
-  @action
-  getGenerateThematicResultTitle() {
-    this.singleEntryPopInTitle = 'Enregistrer le résultat thématique';
-    this.singleEntryPopInLabel = 'Nom du fichier';
-    this.singleEntryPopInAction = this.generateThematicResult;
-    this.displaySingleEntry = true;
-  }
-
-  @action
-  generateThematicResult(title) {
-    const ids = this._getSelectedThematicSkillsIds();
-    const fileTitle = title ? `${title}-RT` : 'Résultat_thématique';
-    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
-    this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
   @action
