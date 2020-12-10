@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class TargetProfileController extends Controller {
 
   @tracked selectedTubeSkills = [];
+  @tracked tubeSkills = [];
   @tracked selectedTube = null;
   @tracked selectedTubeLevel = false;
   @tracked showTubeDetails = false;
@@ -19,6 +20,8 @@ export default class TargetProfileController extends Controller {
   @tracked singleEntryPopInTitle = null;
   @tracked singleEntryPopInLabel = null;
   @tracked singleEntryPopInAction = null;
+  @tracked clearTubeAction = null;
+  @tracked setTubeAction = null;
 
 
   @service('file-saver') fileSaver;
@@ -86,9 +89,30 @@ export default class TargetProfileController extends Controller {
   @action
   displayTube(tube) {
     this.selectedTube = tube;
+    this.tubeSkills = tube.productionSkills;
     this.selectedTubeLevel = tube.selectedLevel;
     this.selectedTubeSkills = tube.selectedSkills;
+    this.setTubeAction = this.setProfileTube;
+    this.clearTubeAction = this.unsetProfileTube;
     this.displayTubeLevel = true;
+  }
+
+  @action
+  displayThematicResultTube(tube) {
+    this.selectedTube = tube;
+    this.tubeSkills = this._getThematicTubeSkills(tube);
+    this.selectedTubeLevel = tube.selectedThematicResultLevel;
+    this.selectedTubeSkills = tube.selectedThematicResultSkills;
+    this.setTubeAction = this.setThematicResultTube;
+    this.clearTubeAction = this.unsetThematicResultTube;
+    this.displayTubeLevel = true;
+  }
+
+  _getThematicTubeSkills(tube) {
+    const productionSkill = tube.productionSkills;
+    return productionSkill.filter(skill=>{
+      return tube.selectedSkills.includes(skill.id);
+    });
   }
 
   @action
@@ -106,20 +130,21 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
+  setThematicResultTube(tube, level, skills) {
+    tube.selectedThematicResultLevel = level;
+    tube.selectedThematicResultSkills = skills;
+  }
+
+  @action
   unsetProfileTube(tube) {
     tube.selectedLevel = false;
     tube.selectedSkills = [];
   }
 
   @action
-  displayThematicResultTube(tube) {
-    this.displayThematicResultTubeLevel = true;
-    this.selectedTube = tube;
-  }
-
-  @action
-  closeThematicResultTube() {
-    this.displayThematicResultTubeLevel = false;
+  unsetThematicResultTube(tube) {
+    tube.selectedThematicResultLevel = false;
+    tube.selectedThematicResultSkills = [];
   }
 
   @action
@@ -304,7 +329,6 @@ export default class TargetProfileController extends Controller {
     const level = productionSkill[productionSkill.length - 1].level;
     const skills = productionSkill.reduce((ids, skill) => {
       if (skill) {
-        skill._selected = true;
         ids.push(skill.pixId);
       }
       return ids;
@@ -329,7 +353,7 @@ export default class TargetProfileController extends Controller {
 
   _filterThematicSkillsIds(tube) {
     const skills = tube.productionSkills;
-    return skills.filter(skill=>skill.level <= tube.selectedThematicResultLevel)
-      .map(skill=>skill.id);
+    return skills.filter(skill => skill.level <= tube.selectedThematicResultLevel)
+      .map(skill => skill.id);
   }
 }

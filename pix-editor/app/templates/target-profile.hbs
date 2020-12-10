@@ -89,12 +89,14 @@
   </div>
 </div>
 {{#if this.displayTubeLevel}}
-  <PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}}
-                    @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}}
-                    @tube={{this.selectedTube}} @close={{this.closeTubeLevel}}/>
-{{/if}}
-{{#if this.displayThematicResultTubeLevel}}
-  <PopIn::TubeThematicResultLevel @tube={{this.selectedTube}} @close={{this.closeThematicResultTube}}/>
+  <PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
+                    @clearTube={{this.clearTubeAction}}
+                    @skills= {{this.tubeSkills}}
+                    @level={{this.selectedTubeLevel}}
+                    @selectedSkills={{this.selectedTubeSkills}}
+                    @tube={{this.selectedTube}}
+                    @isThematicResultMode={{this.isThematicResultMode}}
+                    @close={{this.closeTubeLevel}}/>
 {{/if}}
 {{#if this.displaySingleEntry}}
   <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}

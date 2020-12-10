@@ -4,14 +4,13 @@ import { action } from '@ember/object';
 
 export default class PopinTubeLevel extends Component {
 
-  get skills() {
-    const tube = this.args.tube;
-    const skills = tube.get('productionSkills');
+  get skillsAndSelectedStatus() {
+    const skills = this.args.skills;
     const selected = this.args.selectedSkills;
     return skills.reduce((orderedSkills, skill) => {
       const level = skill.level;
-      skill._selected = selected.includes(skill.pixId);
-      orderedSkills[level - 1] = skill;
+      const isSelected = selected.includes(skill.pixId);
+      orderedSkills[level - 1] = { skill, isSelected };
       return orderedSkills;
     }, [null, null, null, null, null, null, null, null]);
   }
@@ -24,9 +23,9 @@ export default class PopinTubeLevel extends Component {
   @action
   select(skill) {
     const level = skill.level;
-    const skillIds = this.skills.reduce((ids, skill) => {
-      if (skill && (skill.level <= level)) {
-        ids.push(skill.pixId);
+    const skillIds = this.skillsAndSelectedStatus.reduce((ids, skillAndSelectedStatus) => {
+      if (skillAndSelectedStatus && (skillAndSelectedStatus.skill.level <= level)) {
+        ids.push(skillAndSelectedStatus.skill.pixId);
       }
       return ids;
     }, []);

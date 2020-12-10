@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 export default class TubeModel extends Model {
 
   selectedSkills = [];
+  selectedThematicResultSkills = [];
 
   @attr name;
   @attr title;

@@ -1,15 +1,15 @@
 <ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-  <div class="ui modal visible active popin-tube-level">
+  <div class="ui modal visible active popin-tube-level {{if @isThematicResultMode " thematicResult" ""}}">
     <i class="close icon" {{on "click" this.closeModal}}></i>
     <div class="header">
       {{@tube.name}}
     </div>
     <div class="content">
       <div class="levels">
-        {{#each this.skills as |skill|}}
-          {{#if skill}}
-            <div class="level {{if skill._selected "selected"}}" {{on "click" (fn this.select skill)}} >
-              {{skill.level}}
+        {{#each this.skillsAndSelectedStatus as |skillAndSelectedStatus|}}
+          {{#if skillAndSelectedStatus}}
+            <div class="level {{if skillAndSelectedStatus.isSelected "selected"}}" {{on "click" (fn this.select skillAndSelectedStatus.skill)}} >
+              {{skillAndSelectedStatus.skill.level}}
             </div>
           {{else}}
             <div class="level disabled"></div>
@@ -18,11 +18,11 @@
       </div>
     </div>
     <div class="actions">
-      <div class="ui deny button" {{on "click" this.closeModal}}>
+      <div data-test-cancel-button class="ui deny button" {{on "click" this.closeModal}}>
         Annuler
       </div>
       {{#if this.mayUnset}}
-        <div class="ui black right button" {{on "click" this.clear}}>
+        <div data-test-erase-button class="ui black right button" {{on "click" this.clear}}>
           Effacer
         </div>
       {{/if}}
