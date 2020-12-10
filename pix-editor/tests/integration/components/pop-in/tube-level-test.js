@@ -100,7 +100,6 @@ module('Integration | Component | popin-tube-level', function (hooks) {
     await click(findAll('.levels .level')[4]);
 
     // then
-    console.log(this.setTubeAction.getCall(0).args);
     assert.deepEqual(this.setTubeAction.getCall(0).args, expectedResult);
   });
 });

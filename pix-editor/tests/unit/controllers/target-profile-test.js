@@ -1,9 +1,10 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import sinon from 'sinon';
 
 module('Unit | Controller | target-profile', function (hooks) {
   setupTest(hooks);
-  let tube, skill1, skill2, skill5, skill6, controller;
+  let tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, controller;
   hooks.beforeEach(function () {
     // given
     skill1 = {
@@ -30,7 +31,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       name: 'skill6',
       level: 6
     };
-    tube = {
+    tube1 = {
       id: 'rec123456',
       name: 'tube1',
       selectedLevel: 5,
@@ -39,18 +40,65 @@ module('Unit | Controller | target-profile', function (hooks) {
       selectedThematicResultSkills: [skill1.id, skill2.id],
       productionSkills: [skill1, skill2, skill5, skill6]
     };
+    skill7 = {
+      id: 'recSkill2_1_1',
+      pixId: 'recSkill2_1_1',
+      name: 'skill2_1_1',
+      level: 1
+    };
+    skill8 = {
+      id: 'recSkill2_1_2',
+      pixId: 'recSkill2_1_2',
+      name: 'skill2_1_2',
+      level: 2
+    };
+    skill9 = {
+      id: 'recSkill2_1_4',
+      pixId: 'recSkill2_1_4',
+      name: 'skill2_1_4',
+      level: 4
+    };
+    tube2 =  {
+      id: 'rec123456',
+      name: 'tube1',
+      selectedLevel: 4,
+      selectedSkills: [skill7.id, skill8.id, skill9.id],
+      selectedThematicResultLevel: 1,
+      selectedThematicResultSkills: [skill7.id],
+      productionSkills: [skill7, skill8, skill9]
+    };
+
+    areas = [
+      {
+        id: 'recArea1',
+        competences: [
+          {
+            id: 'recCompetence1_1',
+            tubes: [tube1]
+          }
+        ]
+      }, {
+        id: 'recArea2',
+        competences: [
+          {
+            id: 'recCompetence2_1',
+            tubes: [tube2]
+          }
+        ]
+      },
+    ];
     controller = this.owner.lookup('controller:target-profile');
   });
 
   test('it should set tube-level arguments for production tube', function (assert) {
     // when
-    controller.displayTube(tube);
+    controller.displayTube(tube1);
 
     const expectedResult = [
-      tube,
-      tube.productionSkills,
-      tube.selectedLevel,
-      tube.selectedSkills,
+      tube1,
+      tube1.productionSkills,
+      tube1.selectedLevel,
+      tube1.selectedSkills,
       controller.setProfileTube,
       controller.unsetProfileTube,
       true
@@ -71,36 +119,36 @@ module('Unit | Controller | target-profile', function (hooks) {
   });
   test('it should set a profile tube, with a level and a list of production skill id under this level ', function (assert) {
     // when
-    controller.setProfileTube(tube, 2, [skill1.id, skill2.id]);
+    controller.setProfileTube(tube1, 2, [skill1.id, skill2.id]);
 
     // then
-    assert.deepEqual([tube.selectedLevel, tube.selectedSkills], [2, [skill1.id, skill2.id]]);
+    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [2, [skill1.id, skill2.id]]);
   });
 
   test('it should set a profile tube, with a levelMax if have no level parameter', function (assert) {
     // when
-    controller.setProfileTube(tube);
+    controller.setProfileTube(tube1);
 
     // then
-    assert.deepEqual([tube.selectedLevel, tube.selectedSkills], [6, [skill1.id, skill2.id, skill5.id, skill6.id]]);
+    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [6, [skill1.id, skill2.id, skill5.id, skill6.id]]);
   });
 
   test('it should reset a profile tube', function (assert) {
     // when
-    controller.unsetProfileTube(tube);
+    controller.unsetProfileTube(tube1);
 
     // then
-    assert.deepEqual([tube.selectedLevel, tube.selectedSkills], [false, []]);
+    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [false, []]);
   });
   test('it should set tube-level arguments for thematic result tube', function (assert) {
     // when
-    controller.displayThematicResultTube(tube);
+    controller.displayThematicResultTube(tube1);
 
     const expectedResult = [
-      tube,
+      tube1,
       [skill1, skill2, skill5],
-      tube.selectedThematicResultLevel,
-      tube.selectedThematicResultSkills,
+      tube1.selectedThematicResultLevel,
+      tube1.selectedThematicResultSkills,
       controller.setThematicResultTube,
       controller.unsetThematicResultTube,
       true
@@ -121,17 +169,50 @@ module('Unit | Controller | target-profile', function (hooks) {
   });
   test('it should set a thematic result tube, with a level and a list of production skill id under this level ', function (assert) {
     // when
-    controller.setThematicResultTube(tube, 1, [skill1.id]);
+    controller.setThematicResultTube(tube1, 1, [skill1.id]);
 
     // then
-    assert.deepEqual([tube.selectedThematicResultLevel, tube.selectedThematicResultSkills], [1, [skill1.id]]);
+    assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [1, [skill1.id]]);
   });
 
   test('it should reset a thematic result tube', function (assert) {
     // when
-    controller.unsetThematicResultTube(tube);
+    controller.unsetThematicResultTube(tube1);
 
     // then
-    assert.deepEqual([tube.selectedThematicResultLevel, tube.selectedThematicResultSkills], [false, []]);
+    assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [false, []]);
   });
+
+  test('it generate a file with a list of profile skills ids', function (assert) {
+    // given
+    const fileSaverStub = sinon.stub();
+    controller.fileSaver.saveAs = fileSaverStub;
+
+    controller.model = [{ ...areas[0], source: areas[0] }, { ...areas[1], source: areas[1] }];
+    controller._selectedSources = areas;
+
+    // when
+    controller.generate('title');
+    const expectedResult = `${skill1.id},${skill2.id},${skill5.id},${skill7.id},${skill8.id},${skill9.id}`;
+
+    // then
+    assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
+  });
+
+  test('it generate a file with a list of thematic result skills ids', function (assert) {
+    // given
+    const fileSaverStub = sinon.stub();
+    controller.fileSaver.saveAs = fileSaverStub;
+
+    controller.model = [{ ...areas[0], source: areas[0] }, { ...areas[1], source: areas[1] }];
+    controller._selectedSources = areas;
+
+    // when
+    controller.generateThematicResult('title');
+    const expectedResult = `${skill1.id},${skill2.id},${skill7.id}`;
+
+    // then
+    assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
+  });
+
 });

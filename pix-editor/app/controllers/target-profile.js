@@ -71,21 +71,6 @@ export default class TargetProfileController extends Controller {
     this.selectedSources = values;
   }
 
-  _getSelectedSkillsIds() {
-    return this.areas.reduce((areaValues, area) => {
-      const competences = area.competences;
-      return competences.reduce((competenceValues, competence) => {
-        const tubes = competence.tubes;
-        return tubes.reduce((tubeValues, tube) => {
-          if (tube.selectedLevel) {
-            tubeValues = tubeValues.concat(tube.selectedSkills);
-          }
-          return tubeValues;
-        }, competenceValues);
-      }, areaValues);
-    }, []);
-  }
-
   @action
   displayTube(tube) {
     this.selectedTube = tube;
@@ -172,7 +157,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   generateThematicResult(title) {
-    const ids = this._getSelectedThematicSkillsIds();
+    const ids = this._getSelectedSkillsIds();
     const fileTitle = title ? `${title}-RT` : 'Résultat_thématique';
     const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
     this.fileSaver.saveAs(ids.join(','), fileName);
@@ -180,7 +165,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   generate(title) {
-    const ids = this._getSelectedSkillsIds();
+    const ids = this._getSelectedSkillsIds(true);
     const fileTitle = title ? title : 'profil_identifiants';
     const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
     this.fileSaver.saveAs(ids.join(','), fileName);
@@ -232,7 +217,7 @@ export default class TargetProfileController extends Controller {
 
   @action
   generateSQL(profileId) {
-    const ids = this._getSelectedSkillsIds();
+    const ids = this._getSelectedSkillsIds(true);
     const sql = ids.reduce((content, id) => {
       return content + `\n${profileId},${id}`;
     }, 'targetProfileId,skillId');
@@ -336,24 +321,21 @@ export default class TargetProfileController extends Controller {
     return [skills, level];
   }
 
-  _getSelectedThematicSkillsIds() {
+  _getSelectedSkillsIds(fromProfileAction) {
     return this.areas.reduce((areaValues, area) => {
       const competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
         const tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
-          if (tube.selectedThematicResultLevel) {
-            tubeValues = tubeValues.concat(this._filterThematicSkillsIds(tube));
+          if (fromProfileAction && tube.selectedLevel) {
+            tubeValues = tubeValues.concat(tube.selectedSkills);
+          }
+          if (!fromProfileAction && tube.selectedThematicResultLevel) {
+            tubeValues = tubeValues.concat(tube.selectedThematicResultSkills);
           }
           return tubeValues;
         }, competenceValues);
       }, areaValues);
     }, []);
-  }
-
-  _filterThematicSkillsIds(tube) {
-    const skills = tube.productionSkills;
-    return skills.filter(skill => skill.level <= tube.selectedThematicResultLevel)
-      .map(skill => skill.id);
   }
 }
