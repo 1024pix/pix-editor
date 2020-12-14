@@ -96,7 +96,7 @@ export default class TargetProfileController extends Controller {
   _getThematicTubeSkills(tube) {
     const productionSkill = tube.productionSkills;
     return productionSkill.filter(skill=>{
-      return tube.selectedSkills.includes(skill.id);
+      return tube.selectedSkills.includes(skill.pixId);
     });
   }
 
