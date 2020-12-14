@@ -9,25 +9,25 @@ module('Unit | Controller | target-profile', function (hooks) {
     // given
     skill1 = {
       id: 'rec321654',
-      pixId: 'rec321654',
+      pixId: 'pix321654',
       name: 'skill1',
       level: 1
     };
     skill2 = {
       id: 'rec321655',
-      pixId: 'rec321655',
+      pixId: 'pix321655',
       name: 'skill2',
       level: 2
     };
     skill5 = {
       id: 'rec321656',
-      pixId: 'rec321656',
+      pixId: 'pix321656',
       name: 'skill5',
       level: 5
     };
     skill6 = {
       id: 'rec321657',
-      pixId: 'rec321657',
+      pixId: 'pix321657',
       name: 'skill6',
       level: 6
     };
@@ -35,26 +35,26 @@ module('Unit | Controller | target-profile', function (hooks) {
       id: 'rec123456',
       name: 'tube1',
       selectedLevel: 5,
-      selectedSkills: [skill1.id, skill2.id, skill5.id],
+      selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId],
       selectedThematicResultLevel: 2,
-      selectedThematicResultSkills: [skill1.id, skill2.id],
+      selectedThematicResultSkills: [skill1.pixId, skill2.pixId],
       productionSkills: [skill1, skill2, skill5, skill6]
     };
     skill7 = {
       id: 'recSkill2_1_1',
-      pixId: 'recSkill2_1_1',
+      pixId: 'pixSkill2_1_1',
       name: 'skill2_1_1',
       level: 1
     };
     skill8 = {
       id: 'recSkill2_1_2',
-      pixId: 'recSkill2_1_2',
+      pixId: 'pixSkill2_1_2',
       name: 'skill2_1_2',
       level: 2
     };
     skill9 = {
       id: 'recSkill2_1_4',
-      pixId: 'recSkill2_1_4',
+      pixId: 'pixSkill2_1_4',
       name: 'skill2_1_4',
       level: 4
     };
@@ -62,9 +62,9 @@ module('Unit | Controller | target-profile', function (hooks) {
       id: 'rec123456',
       name: 'tube1',
       selectedLevel: 4,
-      selectedSkills: [skill7.id, skill8.id, skill9.id],
+      selectedSkills: [skill7.pixId, skill8.pixId, skill9.pixId],
       selectedThematicResultLevel: 1,
-      selectedThematicResultSkills: [skill7.id],
+      selectedThematicResultSkills: [skill7.pixId],
       productionSkills: [skill7, skill8, skill9]
     };
 
@@ -119,10 +119,10 @@ module('Unit | Controller | target-profile', function (hooks) {
   });
   test('it should set a profile tube, with a level and a list of production skill id under this level ', function (assert) {
     // when
-    controller.setProfileTube(tube1, 2, [skill1.id, skill2.id]);
+    controller.setProfileTube(tube1, 2, [skill1.pixId, skill2.pixId]);
 
     // then
-    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [2, [skill1.id, skill2.id]]);
+    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [2, [skill1.pixId, skill2.pixId]]);
   });
 
   test('it should set a profile tube, with a levelMax if have no level parameter', function (assert) {
@@ -130,7 +130,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     controller.setProfileTube(tube1);
 
     // then
-    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [6, [skill1.id, skill2.id, skill5.id, skill6.id]]);
+    assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [6, [skill1.pixId, skill2.pixId, skill5.pixId, skill6.pixId]]);
   });
 
   test('it should reset a profile tube', function (assert) {
@@ -169,10 +169,10 @@ module('Unit | Controller | target-profile', function (hooks) {
   });
   test('it should set a thematic result tube, with a level and a list of production skill id under this level ', function (assert) {
     // when
-    controller.setThematicResultTube(tube1, 1, [skill1.id]);
+    controller.setThematicResultTube(tube1, 1, [skill1.pixId]);
 
     // then
-    assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [1, [skill1.id]]);
+    assert.deepEqual([tube1.selectedThematicResultLevel, tube1.selectedThematicResultSkills], [1, [skill1.pixId]]);
   });
 
   test('it should reset a thematic result tube', function (assert) {
@@ -193,7 +193,7 @@ module('Unit | Controller | target-profile', function (hooks) {
 
     // when
     controller.generate('title');
-    const expectedResult = `${skill1.id},${skill2.id},${skill5.id},${skill7.id},${skill8.id},${skill9.id}`;
+    const expectedResult = `${skill1.pixId},${skill2.pixId},${skill5.pixId},${skill7.pixId},${skill8.pixId},${skill9.pixId}`;
 
     // then
     assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
@@ -209,7 +209,7 @@ module('Unit | Controller | target-profile', function (hooks) {
 
     // when
     controller.generateThematicResult('title');
-    const expectedResult = `${skill1.id},${skill2.id},${skill7.id}`;
+    const expectedResult = `${skill1.pixId},${skill2.pixId},${skill7.pixId}`;
 
     // then
     assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
