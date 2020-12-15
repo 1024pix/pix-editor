@@ -162,6 +162,16 @@ export default class PopinSelectLocation extends Component {
     };
   }
 
+  get unableMoveActionButton() {
+    if (this.args.isPrototypeLocation) {
+      return (this.skillsLoaded && !!this._selectedSkill);
+    }
+    if (this.args.isSkillLocation) {
+      return (this.levelsLoaded && !!this.selectedLevels);
+    }
+    return true;
+  }
+
   @action
   selectSource(source) {
     this.selectedSource = source;
@@ -180,7 +190,9 @@ export default class PopinSelectLocation extends Component {
     this.selectedTube = item;
     this.selectLevels(null);
     this.levelsLoaded = false;
+    this.selectedLevels = null;
     this.skillsLoaded = false;
+    this._selectedSkill = null;
   }
 
   @action
