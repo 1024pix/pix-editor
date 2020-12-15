@@ -33,7 +33,7 @@
       <div class="ui deny button" {{on "click" this.closeModal}}>
         Annuler
       </div>
-      <div data-test-move-action class="ui green button {{if (not this.unableMoveActionButton) " disabled"}}" {{on "click" this.setLocation}}>
+      <div data-test-move-action class="ui green button {{unless this.unableMoveActionButton " disabled"}}" {{on "click" this.setLocation}}>
         <i class="checkmark icon"></i>
         Déplacer
       </div>
