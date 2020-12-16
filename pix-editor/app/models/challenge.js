@@ -65,6 +65,15 @@ export default class ChallengeModel extends Model {
     return this.status === 'proposé';
   }
 
+  get isArchived() {
+    return this.status === 'archivé';
+  }
+
+  get isDeleted() {
+    return this.status === 'périmé';
+  }
+
+
   get notDeclinable() {
     const declinable = this.declinable;
     return (declinable && declinable === 'non');
@@ -86,16 +95,6 @@ export default class ChallengeModel extends Model {
       default:
         return '';
     }
-  }
-
-  get isArchived() {
-    const status = this.status;
-    return (status === 'archivé');
-  }
-
-  get isDeleted() {
-    const status = this.status;
-    return (status === 'périmé');
   }
 
   get isLive() {

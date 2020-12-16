@@ -34,12 +34,12 @@ export default class SkillModel extends Model {
 
   get date() {
     const createdDate = this.createdAt;
-    return (new Date(createdDate)).toLocaleDateString('fr',{
+    return (new Date(createdDate)).toLocaleDateString('fr', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
-      minute:'2-digit'
+      minute: '2-digit'
     });
   }
 
@@ -99,6 +99,15 @@ export default class SkillModel extends Model {
     }
   }
 
+  get skillVersions() {
+    return this.tube
+      .then(tube=>{
+        const level = this.level;
+        const liveSkills = tube.liveSkills;
+        return liveSkills.filter(skill => skill.level === level);
+      });
+  }
+
   get prototypes() {
     return this.challenges.filter(challenge => challenge.isPrototype);
   }
@@ -143,14 +152,14 @@ export default class SkillModel extends Model {
     return this.status === 'périmé';
   }
 
-  get languagesAndAlternativesCount () {
+  get languagesAndAlternativesCount() {
     const languagesAndAlternativesCount = this.validatedChallenges.reduce((acc, challenge) => {
-      return this._extractLanguagesAndAlternativesCountFromChallenges(acc,challenge.languages);
+      return this._extractLanguagesAndAlternativesCountFromChallenges(acc, challenge.languages);
     }, new Map());
     return new Map([...languagesAndAlternativesCount.entries()].sort());
   }
 
-  get languages () {
+  get languages() {
     const skillLanguagesMap = this.languagesAndAlternativesCount;
     if (skillLanguagesMap) {
       return [...skillLanguagesMap.keys()];
