@@ -19,7 +19,7 @@
                <div data-test-skill-list class="field">
                  <label>Acquis</label>
                  <PowerSelect  @options={{this.skillsGroupByLevelList}} @searchEnabled={{false}} @selected={{this.selectedSKill}} @onChange={{this.selectSkill}} as |skill|>
-                   <span class="skill-list">{{skill.id}} <span class="skill-list__status {{if (eq skill.status "actif") "active" "draft"}}" title={{skill.status}}></span></span>
+                   <span class="skill-list">{{skill.pixId}} <span class="skill-list__status {{if (eq skill.status "actif") "active" "draft"}}" title={{skill.status}}></span></span>
                  </PowerSelect>
                </div>
              {{else}}
