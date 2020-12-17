@@ -11,8 +11,7 @@ module('Integration | Component | target-profile/pdf-export', function(hooks) {
     // Handle any actions with this.set('myAction', function(val) { ... });
 
     await render(hbs`<TargetProfile::PdfExport />`);
-
-    assert.dom('.ui.button.item').exists();
+    assert.dom('.ui.button i.pdf').exists();
 
   });
 });

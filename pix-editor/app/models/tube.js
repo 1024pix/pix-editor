@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 export default class TubeModel extends Model {
 
   selectedSkills = [];
+  selectedThematicResultSkills = [];
 
   @attr name;
   @attr title;
@@ -18,6 +19,7 @@ export default class TubeModel extends Model {
   @hasMany('skill') rawSkills;
 
   @tracked selectedLevel = false;
+  @tracked selectedThematicResultLevel = false;
 
   get liveSkills() {
     return this.rawSkills.filter(skill => skill.isLive);

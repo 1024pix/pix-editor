@@ -7,7 +7,7 @@
       <div class="competence-title">{{@competence.title}}</div>
     </div>
     <div class="column center competence-info">
-      <div class="ui compact icon button basic"  >
+      <div class="ui compact icon button basic">
         <EmberTooltip @tooltipClass="custom-tooltip large" @side="right-start">
           {{@competence.description}}
         </EmberTooltip>
@@ -21,23 +21,31 @@
     </div>
     <div class="twelve wide column">
       {{#each this.filteredTubes as |tube|}}
-        <div class="tube-profile" {{on "click" (fn this.clickOnTube tube)}}>
-          <div class={{if tube.selectedLevel "active"}}>
-            <i class="square icon {{if tube.selectedLevel "active check" "outline"}}">
-            </i>
-            {{#if @showTubeDetails}}
-              <div class="max-skill-level"><p>{{if tube.selectedLevel tube.selectedLevel ""}}</p></div>
-            {{/if}}
-            <div class="practicalTitle-profile {{if tube.selectedLevel " active"}}">
-              <p>{{if @showTubeDetails tube.name tube.practicalTitleFr }}</p></div>
-          </div>
-          <p class="practicalDescription-profile {{if tube.selectedLevel " active"}}">{{tube.practicalDescriptionFr}}</p>
-        </div>
+        {{#if @isThematicResultMode}}
+          <TargetProfile::TubeProfile class="tube-profile thematicResult"
+                                      @tube={{tube}}
+                                      @clickAction={{this.clickOnThematicResultTube}}
+                                      @selectedSkillLevel={{tube.selectedThematicResultLevel}}
+                                      @showTubeDetails={{@showTubeDetails}}/>
+        {{else}}
+          <TargetProfile::TubeProfile class="tube-profile"
+                                      @tube={{tube}}
+                                      @clickAction={{this.clickOnTube}}
+                                      @selectedSkillLevel={{tube.selectedLevel}}
+                                      @showTubeDetails={{@showTubeDetails}}/>
+        {{/if}}
       {{/each}}
     </div>
   </div>
   <div class="row">
     <div class="fifteen wide column"></div>
-    <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}/{{@competence.productionTubeCount}}</div>
+    {{#if @isThematicResultMode}}
+      <div class="column selected-tube-count">{{@competence.selectedThematicResultTubeCount}}
+        /{{@competence.selectedProductionTubeCount}}</div>
+    {{else}}
+      <div class="column selected-tube-count">{{@competence.selectedProductionTubeCount}}
+        /{{@competence.productionTubeCount}}</div>
+    {{/if}}
+
   </div>
 </div>

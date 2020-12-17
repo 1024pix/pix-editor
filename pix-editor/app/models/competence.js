@@ -39,6 +39,10 @@ export default class CompetenceModel extends Model {
     return this.productionTubes.filter(tube => tube.selectedLevel).length;
   }
 
+  get selectedThematicResultTubeCount() {
+    return this.productionTubes.filter(tube => tube.selectedThematicResultLevel).length;
+  }
+
   get skillCount() {
     return this.tubes.map(tube => tube.skillCount).reduce((count, value)=> {
       return count + value;

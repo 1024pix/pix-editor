@@ -2,17 +2,27 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 export default class TargetProfileController extends Controller {
 
   @tracked selectedTubeSkills = [];
+  @tracked tubeSkills = [];
   @tracked selectedTube = null;
   @tracked selectedTubeLevel = false;
   @tracked showTubeDetails = false;
+  @tracked isThematicResultMode = false;
   @tracked filter = false;
   @tracked displayTubeLevel = false;
+  @tracked displayThematicResultTubeLevel = false;
   @tracked displaySingleEntry = false;
   @tracked displayThresholdCalculation = false;
   @tracked _selectedSources = null;
+  @tracked singleEntryPopInTitle = null;
+  @tracked singleEntryPopInLabel = null;
+  @tracked singleEntryPopInAction = null;
+  @tracked clearTubeAction = null;
+  @tracked setTubeAction = null;
+
 
   @service('file-saver') fileSaver;
   @service currentData;
@@ -21,6 +31,12 @@ export default class TargetProfileController extends Controller {
   get selectedTubeCount() {
     return this.areas.reduce((count, area) => {
       return count + area.selectedProductionTubeCount;
+    }, 0);
+  }
+
+  get selectedThematicResultTubeCount() {
+    return this.areas.reduce((count, area) => {
+      return count + area.selectedThematicResultTubeCount;
     }, 0);
   }
 
@@ -55,27 +71,33 @@ export default class TargetProfileController extends Controller {
     this.selectedSources = values;
   }
 
-  _getSelectedSkillsIds() {
-    return this.areas.reduce((areaValues, area) => {
-      const competences = area.competences;
-      return competences.reduce((competenceValues, competence) => {
-        const tubes = competence.tubes;
-        return tubes.reduce((tubeValues, tube) => {
-          if (tube.selectedLevel) {
-            tubeValues = tubeValues.concat(tube.selectedSkills);
-          }
-          return tubeValues;
-        }, competenceValues);
-      }, areaValues);
-    }, []);
-  }
-
   @action
   displayTube(tube) {
     this.selectedTube = tube;
+    this.tubeSkills = tube.productionSkills;
     this.selectedTubeLevel = tube.selectedLevel;
     this.selectedTubeSkills = tube.selectedSkills;
+    this.setTubeAction = this.setProfileTube;
+    this.clearTubeAction = this.unsetProfileTube;
     this.displayTubeLevel = true;
+  }
+
+  @action
+  displayThematicResultTube(tube) {
+    this.selectedTube = tube;
+    this.tubeSkills = this._getThematicTubeSkills(tube);
+    this.selectedTubeLevel = tube.selectedThematicResultLevel;
+    this.selectedTubeSkills = tube.selectedThematicResultSkills;
+    this.setTubeAction = this.setThematicResultTube;
+    this.clearTubeAction = this.unsetThematicResultTube;
+    this.displayTubeLevel = true;
+  }
+
+  _getThematicTubeSkills(tube) {
+    const productionSkill = tube.productionSkills;
+    return productionSkill.filter(skill=>{
+      return tube.selectedSkills.includes(skill.pixId);
+    });
   }
 
   @action
@@ -93,20 +115,72 @@ export default class TargetProfileController extends Controller {
   }
 
   @action
+  setThematicResultTube(tube, level, skills) {
+    tube.selectedThematicResultLevel = level;
+    tube.selectedThematicResultSkills = skills;
+  }
+
+  @action
   unsetProfileTube(tube) {
     tube.selectedLevel = false;
     tube.selectedSkills = [];
   }
 
   @action
-  generate() {
+  unsetThematicResultTube(tube) {
+    tube.selectedThematicResultLevel = false;
+    tube.selectedThematicResultSkills = [];
+  }
+
+  @action
+  getGenerateTitleOrThematicResultTitle() {
+    if (this.isThematicResultMode) {
+      this._getGenerateThematicResultTitle();
+    } else {
+      this._getGenerateTitle();
+    }
+  }
+
+  _getGenerateThematicResultTitle() {
+    this.singleEntryPopInTitle = 'Enregistrer le résultat thématique';
+    this.singleEntryPopInLabel = 'Nom du fichier';
+    this.singleEntryPopInAction = this.generateThematicResult;
+    this.displaySingleEntry = true;
+  }
+
+  _getGenerateTitle() {
+    this.singleEntryPopInTitle = 'Enregistrer les identifiants du profil cible';
+    this.singleEntryPopInLabel = 'Nom du fichier';
+    this.singleEntryPopInAction = this.generate;
+    this.displaySingleEntry = true;
+  }
+
+  @action
+  generateThematicResult(title) {
     const ids = this._getSelectedSkillsIds();
-    const fileName = 'profil_identifiants_' + (new Date()).toLocaleString('fr-FR') + '.txt';
+    const fileTitle = title ? `${title}-RT` : 'Résultat_thématique';
+    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
     this.fileSaver.saveAs(ids.join(','), fileName);
   }
 
   @action
-  save() {
+  generate(title) {
+    const ids = this._getSelectedSkillsIds(true);
+    const fileTitle = title ? title : 'profil_identifiants';
+    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.txt`;
+    this.fileSaver.saveAs(ids.join(','), fileName);
+  }
+
+  @action
+  getSaveTitle() {
+    this.singleEntryPopInTitle = 'Enregistrer le profil cible';
+    this.singleEntryPopInLabel = 'Nom du fichier';
+    this.singleEntryPopInAction = this.save;
+    this.displaySingleEntry = true;
+  }
+
+  @action
+  save(title) {
     const data = this.areas.reduce((areaValues, area) => {
       const competences = area.competences;
       return competences.reduce((competenceValues, competence) => {
@@ -123,12 +197,16 @@ export default class TargetProfileController extends Controller {
         }, competenceValues);
       }, areaValues);
     }, []);
-    const fileName = 'profil_' + (new Date()).toLocaleString('fr-FR') + '.json';
+    const fileTitle = title ? title : 'profil';
+    const fileName = `${fileTitle}_${(new Date()).toLocaleString('fr-FR')}.json`;
     this.fileSaver.saveAs(JSON.stringify(data), fileName);
   }
 
   @action
   getProfileId() {
+    this.singleEntryPopInTitle = 'Identifiant du profil cible';
+    this.singleEntryPopInLabel = 'Identifiant';
+    this.singleEntryPopInAction = this.generateSQL;
     this.displaySingleEntry = true;
   }
 
@@ -139,12 +217,11 @@ export default class TargetProfileController extends Controller {
 
   @action
   generateSQL(profileId) {
-    const ids = this._getSelectedSkillsIds();
+    const ids = this._getSelectedSkillsIds(true);
     const sql = ids.reduce((content, id) => {
       return content + `\n${profileId},${id}`;
     }, 'targetProfileId,skillId');
-
-    const fileName = `generate_profile_${profileId}_${(new Date()).toLocaleString('fr-FR')}.csv`;
+    const fileName = `${profileId}_generate_profile_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(sql, fileName);
   }
 
@@ -206,12 +283,20 @@ export default class TargetProfileController extends Controller {
 
   @action
   showTubeName(name, competence) {
-    competence._tubeName =  name;
+    competence._tubeName = name;
   }
 
   @action
   hideTubeName(competence) {
     competence._tubeName = null;
+  }
+
+  @action
+  toggleThematicResult(e) {
+    if (e.target.checked) {
+      this.filter = true;
+      this.showTubeDetails = true;
+    }
   }
 
   @action
@@ -229,11 +314,28 @@ export default class TargetProfileController extends Controller {
     const level = productionSkill[productionSkill.length - 1].level;
     const skills = productionSkill.reduce((ids, skill) => {
       if (skill) {
-        skill._selected = true;
         ids.push(skill.pixId);
       }
       return ids;
     }, []);
     return [skills, level];
+  }
+
+  _getSelectedSkillsIds(fromProfileAction) {
+    return this.areas.reduce((areaValues, area) => {
+      const competences = area.competences;
+      return competences.reduce((competenceValues, competence) => {
+        const tubes = competence.tubes;
+        return tubes.reduce((tubeValues, tube) => {
+          if (fromProfileAction && tube.selectedLevel) {
+            tubeValues = tubeValues.concat(tube.selectedSkills);
+          }
+          if (!fromProfileAction && tube.selectedThematicResultLevel) {
+            tubeValues = tubeValues.concat(tube.selectedThematicResultSkills);
+          }
+          return tubeValues;
+        }, competenceValues);
+      }, areaValues);
+    }, []);
   }
 }

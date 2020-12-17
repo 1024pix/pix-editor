@@ -1,40 +1,58 @@
 <div class="main-left">
   <div class="main-title">
-    <h1 class="ui header">Générateur de profil cible
-      <div class="target-profile-filter {{if this.showTubeDetails "active"}}">
-        Détails des sujets
+    <h1 class="ui header">{{if this.isThematicResultMode "Générateur de résultat thématique"
+                               "Générateur de profil cible"}}
+      <div class="target-profile-filter {{if this.isThematicResultMode "active"}}">
+        Résultat thématique
         <div class="ui toggle checkbox ">
-          <Input @type="checkbox" @checked={{this.showTubeDetails}} class="toggle" />
+          <Input @type="checkbox" @checked={{this.isThematicResultMode}} {{on 'change' this.toggleThematicResult}}
+                 class="toggle"/>
           <label class="checkbox-label"></label>
         </div>
       </div>
-      <div class="target-profile-filter {{if this.filter "active"}}">
-        Filtrer les sujets sélectionnés
-        <div class="ui toggle checkbox ">
-          <Input @type="checkbox" @checked={{this.filter}} class="toggle" />
-          <label class="checkbox-label"></label>
+      {{#unless this.isThematicResultMode}}
+        <div class="target-profile-filter {{if this.showTubeDetails "active"}}">
+          Détails des sujets
+          <div class="ui toggle checkbox ">
+            <Input @type="checkbox" @checked={{this.showTubeDetails}} class="toggle"/>
+            <label class="checkbox-label"></label>
+          </div>
         </div>
-      </div>
+        <div class="target-profile-filter {{if this.filter "active"}}">
+          Filtrer les sujets sélectionnés
+          <div class="ui toggle checkbox ">
+            <Input @type="checkbox" @checked={{this.filter}} class="toggle"/>
+            <label class="checkbox-label"></label>
+          </div>
+        </div>
+      {{/unless}}
     </h1>
   </div>
   <div class="ui top attached borderless labelled icon menu">
-    <button class="ui button first left item" {{on "click" this.load}} type="button">
-      <i class="folder open icon"></i> Ouvrir
-    </button>
-    <button class="ui button left item" {{on "click" this.save}} type="button">
-      <i class="save icon"></i> Enregistrer
-    </button>
+    {{#unless this.isThematicResultMode}}
+      <button class="ui button first left" {{on "click" this.load}} type="button">
+        <i class="folder open icon"></i>Ouvrir
+      </button>
+      <button class="ui button left" {{on "click" this.getSaveTitle}} type="button">
+        <i class="save icon"></i>Enregistrer
+      </button>
+    {{/unless}}
     <div class="right menu">
-      <button class="ui button item" {{on "click" this.showThresholdCalculation}} type="button">
-        <i class="calculator icon"></i> Paliers indicatifs
+      {{#unless this.isThematicResultMode}}
+        <button class="ui button" {{on "click" this.showThresholdCalculation}} type="button">
+          <i class="calculator icon"></i>Paliers indicatifs
+        </button>
+      {{/unless}}
+      <button class="ui button" {{on "click" this.getGenerateTitleOrThematicResultTitle}} type="button">
+        <i class="download icon"></i>Identifiants
       </button>
-      <button class="ui button item" {{on "click" this.generate}} type="button">
-        <i class="download icon"></i> Identifiants
-      </button>
-      <button class="ui button item" {{on "click" this.getProfileId}} type="button">
-        <i class="code icon"></i> CSV
-      </button>
-      <TargetProfile::PdfExport @model={{this.areas}}/>
+      {{#unless this.isThematicResultMode}}
+        <button class="ui button" {{on "click" this.getProfileId}} type="button">
+          <i class="code icon"></i>CSV
+        </button>
+        <TargetProfile::PdfExport @model={{this.areas}}/>
+      {{/unless}}
+
     </div>
   </div>
   <h2 class="ui top attached padded grid target-profile-title">
@@ -42,28 +60,49 @@
       <div class="right aligned column">
         <TargetProfile::Navigation @areas={{this.areas}} />
       </div>
-      <div class="two wide column">Référentiel :
-      </div>
-      <div class="three wide column">
-          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}} @setValue={{this.selectSources}} @edition={{true}} />
-      </div>
-      <div class="six wide center aligned column"></div>
-      <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
+      {{#if this.isThematicResultMode}}
+        <div class="eleven wide center aligned column"></div>
+        <div class="four wide right aligned column">{{this.selectedThematicResultTubeCount}}
+          /{{this.selectedTubeCount}}</div>
+      {{else}}
+        <div class="two wide column">Référentiel :
+        </div>
+        <div class="three wide column">
+          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}}
+                         @setValue={{this.selectSources}} @edition={{true}} />
+        </div>
+        <div class="six wide center aligned column"></div>
+        <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
+      {{/if}}
     </div>
   </h2>
   <div class="ui attached target-profile">
     {{#each this.areas as |area|}}
-      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}} @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}} />
+      <TargetProfile::AreaProfile @area={{area}} @displayTube={{this.displayTube}}
+                                  @displayThematicResultTube={{this.displayThematicResultTube}}
+                                  @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}}
+                                  @showTubeDetails={{this.showTubeDetails}} @clearTube={{this.unsetProfileTube}}
+                                  @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}}
+                                  @isThematicResultMode={{this.isThematicResultMode}}/>
     {{/each}}
     <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
   </div>
 </div>
 {{#if this.displayTubeLevel}}
-  <PopIn::TubeLevel @setTubeLevel={{this.setProfileTube}} @clearTube={{this.unsetProfileTube}} @level={{this.selectedTubeLevel}} @selectedSkills={{this.selectedTubeSkills}} @tube={{this.selectedTube}} @close={{this.closeTubeLevel}}/>
+  <PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
+                    @clearTube={{this.clearTubeAction}}
+                    @skills= {{this.tubeSkills}}
+                    @level={{this.selectedTubeLevel}}
+                    @selectedSkills={{this.selectedTubeSkills}}
+                    @tube={{this.selectedTube}}
+                    @isThematicResultMode={{this.isThematicResultMode}}
+                    @close={{this.closeTubeLevel}}/>
 {{/if}}
 {{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title="Identifiant du profil cible" @label="Identifiant" @setValue={{this.generateSQL}} @close={{this.closeSingleEntry}} />
+  <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}
+                      @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
 {{/if}}
 {{#if this.displayThresholdCalculation}}
-  <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}} @model={{this.areas}}/>
+  <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}}
+                               @model={{this.areas}}/>
 {{/if}}

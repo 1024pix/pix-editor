@@ -296,3 +296,7 @@
     color:black;
   }
 }
+
+.ui.icon.menu .item > .icon:not(.dropdown){
+  margin-right: .5em;
+}

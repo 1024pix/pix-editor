@@ -1,5 +1,5 @@
-<button class="ui button item" {{on "click" this.export}} type="button">
-  <i class="pdf file icon"></i> PDF
+<button class="ui button" {{on "click" this.export}} type="button">
+  <i class="pdf file icon"></i>PDF
 </button>
 {{#if this.displayTitleInput}}
   <PopIn::SingleEntry @class="popin-enter-profile-id" @title="Titre de l'export" @label="Titre" @labelValue="Liste des thèmes et des sujets abordés dans Pix" @setValue={{this.generatePDF}} @close={{this.closeTitleInput}} />

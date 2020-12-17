@@ -21,4 +21,15 @@ export default class CompetenceProfile extends Component {
       this.args.setTubeLevel(tube);
     }
   }
+
+  @action
+  clickOnThematicResultTube(tube) {
+    if (this.args.showTubeDetails) {
+      this.args.displayThematicResultTube(tube);
+    } else if (tube.selectedThematicResultLevel) {
+      tube.selectedThematicResultLevel = false;
+    } else {
+      tube.selectedThematicResultLevel = tube.selectedLevel;
+    }
+  }
 }
