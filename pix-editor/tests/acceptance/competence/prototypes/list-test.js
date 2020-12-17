@@ -8,11 +8,13 @@ const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';
 const skillId1 = 'recSkill1';
 const skillId2 = 'recSkill2';
+const skillPixId1 = 'pixSkill1';
+const skillPixId2 = 'pixSkill2';
 const deadSkillId = 'recDeadSkill';
 const challengeId2 = 'recChallenge2';
 
-module('Acceptance | competence/prototypes/list', function (hooks) {
-  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', async function () {
+module('Acceptance | competence/prototypes/list', function () {
+  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', async function (hooks) {
 
     setupApplicationTest(hooks);
     setupMirage(hooks);
@@ -28,9 +30,9 @@ module('Acceptance | competence/prototypes/list', function (hooks) {
       this.server.create('challenge', { id: 'recChallenge1', instructions: 'instructionsChallenge1' });
       this.server.create('challenge', { id: challengeId2, instructions: 'instructionsChallenge2' });
       this.server.create('challenge', { id: 'recChallenge3' });
-      this.server.create('skill', { id: skillId1, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
+      this.server.create('skill', { id: skillId1, pixId: skillPixId1, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
       this.server.create('skill', { id: deadSkillId, status: 'périmé', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: skillId2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
+      this.server.create('skill', { id: skillId2, pixId: skillPixId2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
       this.server.create('skill', { id: 'recSkill3', challengeIds: ['recChallenge3'] });
       this.server.create('tube', { id: tubeId1, rawSkillIds: [skillId1, skillId2, deadSkillId] });
       this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill3'] });
@@ -45,15 +47,14 @@ module('Acceptance | competence/prototypes/list', function (hooks) {
 
     test('it should display a list of prototype of `skill1`', function (assert) {
       // then
-
-      assert.dom('[data-test-skill-tab].active').hasText(skillId1);
+      assert.dom('[data-test-skill-tab].active').hasText(skillPixId1);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
     test('it should display a list of live skill tab sorted by date', function (assert) {
       //given
-      const expectedResult = [skillId1, skillId2];
+      const expectedResult = [skillPixId1, skillPixId2];
 
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
@@ -68,7 +69,7 @@ module('Acceptance | competence/prototypes/list', function (hooks) {
       await click(findAll('[data-test-skill-tab]')[1]);
 
       // then
-      assert.dom('[data-test-skill-tab].active').hasText(skillId2);
+      assert.dom('[data-test-skill-tab].active').hasText(skillPixId2);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge2');
     });

@@ -11,7 +11,7 @@
   <div class="ui top attached tabular menu">
     {{#each this.model.skills as |skill|}}
       <div data-test-skill-tab class="item skill-tab {{if (eq this.selectedSkillId skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill.id)}}>
-        {{skill.id}}
+        {{skill.pixId}}
         <span class="skill-tab__status {{if skill.isDraft "draft" "active"}}" title={{skill.status}}></span>
       </div>
     {{/each}}
