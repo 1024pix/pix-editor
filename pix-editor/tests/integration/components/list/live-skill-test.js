@@ -19,6 +19,7 @@ module('Integration | Component | list/live-skill', function(hooks) {
     };
     const skill1 = {
       id: 'recSkill1',
+      pixId: 'pixSkill1',
       date: '14/07/1986 à 11:20',
       challenges: [challenge1, challenge2],
       status: 'en construction',
@@ -26,6 +27,7 @@ module('Integration | Component | list/live-skill', function(hooks) {
     };
     const skill2 = {
       id: 'recSkill2',
+      pixId: 'pixSkill2',
       date: '11/01/2020 à 11:20',
       challenges: [challenge3],
       status: 'actif',
@@ -35,7 +37,6 @@ module('Integration | Component | list/live-skill', function(hooks) {
 
     // when
     await render(hbs`<List::LiveSkill @list={{this.skills}}/>`);
-
     // then
     assert.equal(this.element.querySelectorAll('[data-test-live-skill-row]').length, this.skills.length);
 

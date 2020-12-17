@@ -8,7 +8,7 @@ export default class ListLiveSkillComponent extends SortedList {
 
   headers = [{
     name:'Identifiant',
-    valuePath:'id',
+    valuePath:'pixId',
   },{
     name:'Date de création',
     valuePath:'date'
