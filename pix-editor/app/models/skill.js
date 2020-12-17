@@ -10,7 +10,7 @@ export default class SkillModel extends Model {
   @attr clue;
   @attr clueEn;
   @attr clueStatus;
-  @attr createdAt;
+  @attr ({ readOnly: true }) createdAt;
   @attr description;
   @attr descriptionStatus;
   @attr level;
