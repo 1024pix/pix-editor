@@ -10,6 +10,7 @@ module.exports = datasource.extend({
     'id persistant',
     'Code',
     'Nom',
+    'Titre',
     'Titre fr-fr',
     'Titre en-us',
     'Competences (identifiants) (id persistant)',
