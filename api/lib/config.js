@@ -31,8 +31,8 @@ module.exports = (function() {
 
     pixApi: {
       baseUrl: process.env.PIX_API_BASEURL,
-      user: process.env.PIX_ADMIN_USER_EMAIL,
-      password: process.env.PIX_ADMIN_USER_PASSWORD,
+      user: process.env.PIX_API_USER_EMAIL,
+      password: process.env.PIX_API_USER_PASSWORD,
     },
 
     pixEditor: {
