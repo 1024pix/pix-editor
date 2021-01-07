@@ -46,9 +46,6 @@ module.exports = (function() {
       storagePassword: process.env.STORAGE_PASSWORD,
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
-      pixStaging: process.env.PIX_STAGING,
-      pixAdminUserEmail: process.env.PIX_ADMIN_USER_EMAIL,
-      pixAdminUserPassword: process.env.PIX_ADMIN_USER_PASSWORD,
     }
   };
 
@@ -78,9 +75,6 @@ module.exports = (function() {
       storagePassword: 'storagePasswordValue',
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
-      pixStaging: 'pixStagingValue',
-      pixAdminUserEmail: 'pixAdminUserEmailValue',
-      pixAdminUserPassword: 'pixAdminUserPasswordValue',
     };
   }
 

@@ -10,8 +10,6 @@ export default class ConfigService extends Service {
 
   @tracked author;
   @tracked accessLevel;
-  @tracked pixUser;
-  @tracked pixPassword;
   @tracked airtableUrl;
   @tracked tableChallenges;
   @tracked tableSkills;
@@ -22,7 +20,6 @@ export default class ConfigService extends Service {
   @tracked storagePassword;
   @tracked storageKey;
   @tracked storageAuth;
-  @tracked pixStaging;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
@@ -30,8 +27,6 @@ export default class ConfigService extends Service {
 
     this.author = currentUser.trigram;
     this.accessLevel = this.access.getLevel(currentUser.access);
-    this.pixUser = config.pixAdminUserEmail;
-    this.pixPassword = config.pixAdminUserPassword;
     this.airtableUrl = config.airtableUrl;
     this.tableChallenges = config.tableChallenges;
     this.tableSkills = config.tableSkills;
@@ -42,6 +37,5 @@ export default class ConfigService extends Service {
     this.storagePassword = config.storagePassword;
     this.storageKey = config.storageKey;
     this.storageAuth = config.storageAuth;
-    this.pixStaging = config.pixStaging;
   }
 }

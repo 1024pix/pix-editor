@@ -14,9 +14,6 @@ module.exports = {
         'storagePassword',
         'storageKey',
         'storageAuth',
-        'pixStaging',
-        'pixAdminUserEmail',
-        'pixAdminUserPassword',
       ],
     }).serialize(config);
   }
