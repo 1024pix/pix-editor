@@ -11,7 +11,4 @@ export default class ConfigModel extends Model {
   @attr storagePassword;
   @attr storageKey;
   @attr storageAuth;
-  @attr pixStaging;
-  @attr pixAdminUserEmail;
-  @attr pixAdminUserPassword;
 }

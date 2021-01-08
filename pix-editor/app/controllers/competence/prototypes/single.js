@@ -9,7 +9,6 @@ import { tracked } from '@glimmer/tracking';
 export default class SingleController extends Controller {
 
   wasMaximized = false;
-  updateCache = true;
   changelogCallback = null;
   defaultSaveChangelog = 'Mise à jour du prototype';
   elementClass = 'prototype-challenge';
@@ -27,7 +26,6 @@ export default class SingleController extends Controller {
   @service config;
   @service access;
   @service storage
-  @service pixConnector
   @service filePath;
   @service currentData;
   @service notify;
@@ -37,9 +35,6 @@ export default class SingleController extends Controller {
 
   @alias('parentController.leftMaximized')
   maximized;
-
-  @alias('pixConnector.connected')
-  mayUpdateCache;
 
   @alias('model')
   challenge;
@@ -181,7 +176,6 @@ export default class SingleController extends Controller {
         .then(challenge => this._handleIllustration(challenge))
         .then(challenge => this._handleAttachments(challenge))
         .then(challenge => this._saveChallenge(challenge))
-        .then(challenge => this._handleCache(challenge))
         .then(challenge => this._handleChangelog(challenge, changelog))
         .then(() => {
           this.edition = false;
@@ -535,21 +529,6 @@ export default class SingleController extends Controller {
   _saveChallenge(challenge) {
     this._loadingMessage('Enregistrement...');
     return challenge.save();
-  }
-
-  _handleCache(challenge) {
-    if (this.mayUpdateCache && this.updateCache) {
-      this._loadingMessage('Mise à jour du cache...');
-      return this.pixConnector.updateCache(challenge)
-        .then(() => {
-          return challenge;
-        })
-        .catch(() => {
-          this._errorMessage('Impossible de mettre à jour le cache');
-          return challenge;
-        });
-    }
-    return Promise.resolve(challenge);
   }
 
   _handleChangelog(challenge, changelog) {

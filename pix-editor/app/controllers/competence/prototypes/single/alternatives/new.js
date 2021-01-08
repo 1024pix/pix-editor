@@ -27,7 +27,6 @@ export default class NewController extends Alternative {
       .then(challenge => this._handleAttachments(challenge))
       .then(challenge => this._saveChallenge(challenge))
       .then(challenge => this._setAlternativeVersion(challenge))
-      .then(challenge => this._handleCache(challenge))
       .then(challenge => {
         this.edition = false;
         this.send('minimize');

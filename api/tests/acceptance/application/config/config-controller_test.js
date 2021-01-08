@@ -43,9 +43,6 @@ describe('Acceptance | Controller | config', () => {
               'storage-password': 'storagePasswordValue',
               'storage-key': 'storageKeyValue',
               'storage-auth': 'storageAuthValue',
-              'pix-staging': 'pixStagingValue',
-              'pix-admin-user-email': 'pixAdminUserEmailValue',
-              'pix-admin-user-password': 'pixAdminUserPasswordValue',
             },
           }
         };

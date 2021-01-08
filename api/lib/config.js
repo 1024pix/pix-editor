@@ -29,6 +29,12 @@ module.exports = (function() {
       logLevel: (process.env.LOG_LEVEL || 'info'),
     },
 
+    pixApi: {
+      baseUrl: process.env.PIX_API_BASEURL,
+      user: process.env.PIX_API_USER_EMAIL,
+      password: process.env.PIX_API_USER_PASSWORD,
+    },
+
     pixEditor: {
       airtableUrl: process.env.AIRTABLE_URL,
       tableChallenges: process.env.TABLE_CHALLENGES,
@@ -40,9 +46,6 @@ module.exports = (function() {
       storagePassword: process.env.STORAGE_PASSWORD,
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
-      pixStaging: process.env.PIX_STAGING,
-      pixAdminUserEmail: process.env.PIX_ADMIN_USER_EMAIL,
-      pixAdminUserPassword: process.env.PIX_ADMIN_USER_PASSWORD,
     }
   };
 
@@ -51,9 +54,15 @@ module.exports = (function() {
 
     config.airtable.apiKey = 'airtableApiKeyValue';
     config.airtable.base = 'airtableBaseValue';
-    config.airtable.editorBase = 'airtableEditorBaseValue',
+    config.airtable.editorBase = 'airtableEditorBaseValue';
 
     config.logging.enabled = false;
+
+    config.pixApi = {
+      baseUrl: 'https://api.test.pix.fr',
+      user: 'adminUser',
+      password: '123',
+    };
 
     config.pixEditor = {
       airtableUrl: 'airtableUrlValue',
@@ -66,9 +75,6 @@ module.exports = (function() {
       storagePassword: 'storagePasswordValue',
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
-      pixStaging: 'pixStagingValue',
-      pixAdminUserEmail: 'pixAdminUserEmailValue',
-      pixAdminUserPassword: 'pixAdminUserPasswordValue',
     };
   }
 

@@ -7,7 +7,6 @@ export default class ApplicationRoute extends Route {
   configured = false;
 
   @service config;
-  @service pixConnector;
   @service currentData;
 
   _openLoginForm() {
@@ -33,9 +32,6 @@ export default class ApplicationRoute extends Route {
     }
   }
   afterModel(model) {
-    if (this.configured) {
-      this.pixConnector.connect();
-    }
     if (model) {
       this.currentData.setAreas(model);
       const getCompetences = model.map((area => area.competences));

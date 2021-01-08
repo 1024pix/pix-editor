@@ -64,11 +64,6 @@
       <i class="save icon"></i>
       Enregistrer
     </button>
-    {{#if this.mayUpdateCache}}
-      <div class="item">
-        <Field::Checkbox @label="mise à jour cache" @checked={{this.updateCache}} />
-      </div>
-    {{/if}}
     <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
       <i class="ban icon"></i>
       Annuler
