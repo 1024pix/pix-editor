@@ -10,6 +10,7 @@ export default class SkillModel extends Model {
   @attr clue;
   @attr clueEn;
   @attr clueStatus;
+  @attr ({ readOnly: true }) createdAt;
   @attr description;
   @attr descriptionStatus;
   @attr level;
@@ -30,6 +31,17 @@ export default class SkillModel extends Model {
   tutoMore;
 
   @tracked _selected = false;
+
+  get date() {
+    const createdDate = this.createdAt;
+    return (new Date(createdDate)).toLocaleDateString('fr',{
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute:'2-digit'
+    });
+  }
 
   get descriptionCSS() {
     const status = this.descriptionStatus;
@@ -117,6 +129,10 @@ export default class SkillModel extends Model {
 
   get isArchived() {
     return this.status === 'archivé';
+  }
+
+  get isDraft() {
+    return this.status === 'en construction';
   }
 
   get isLive() {

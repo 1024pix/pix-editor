@@ -30,6 +30,7 @@ Router.map(function() {
         });
       });
       this.route('new', { path:'/new/:tube_id/:level' });
+      this.route('list', { path: '/list/:tube_id/:level' });
     });
     this.route('quality', function() {
       this.route('single', { path:'/:skill_id' });
