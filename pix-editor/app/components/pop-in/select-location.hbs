@@ -23,7 +23,7 @@
                  </PowerSelect>
                </div>
              {{else}}
-               <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}}/>
+               <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.selectLevelsOptions}} @edition={{true}} @setValue={{this.selectLevel}}/>
              {{/if}}
           {{/if}}
         {{/if}}
@@ -35,7 +35,7 @@
       </div>
       <div data-test-move-action class="ui green button {{unless this.enableMoveActionButton " disabled"}}" {{on "click" this.setLocation}}>
         <i class="checkmark icon"></i>
-        Déplacer
+          {{this.titleButtonAction}}
       </div>
     </div>
   </div>
