@@ -49,8 +49,8 @@ export default class SingleController extends Controller {
     return this.access.mayAccessAirtable();
   }
 
-  get mayMove() {
-    return this.access.mayMoveSkill(this.skill);
+  get mayCopy() {
+    return this.access.mayCopySkill(this.skill);
   }
 
   get mayArchive() {
@@ -139,7 +139,7 @@ export default class SingleController extends Controller {
   }
 
   @action
-  moveSkill() {
+  copySkill() {
     this.displaySelectLocation = true;
   }
 
