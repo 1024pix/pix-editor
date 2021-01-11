@@ -144,25 +144,45 @@ export default class SingleController extends Controller {
   }
 
   @action
-  setLocation(competence, newTube, level) {
-    this._displayChangelogPopIn(`Déplacement de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
-      (changelogValue)=>{
-        const skill = this.skill;
-        this.loader.start();
-        skill.tube = newTube;
-        skill.level = level;
-        skill.competence = [competence.get('id')];
-        return skill.save()
-          .then(()=>this._handleSkillChangelog(skill,changelogValue, this.changelogEntry.moveAction))
-          .then(() => {
-            this.notify.message('Acquis mis à jour');
-            this.transitionToRoute('competence.skills.single', competence, skill);
-          })
-          .catch((error) => {
-            console.error(error);
-            this.notify.error('Erreur lors de la mise à jour de l\'acquis');
-          })
-          .finally(()=>{this.loader.stop();});
+  copyToNewLocation(competence, newTube, level) {
+    this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+      (changelogValue) => {
+        const currentSkill = this.skill;
+        return currentSkill.clone()
+          .then(newSkill=>{
+            this.loader.start();
+            newSkill.tube = newTube;
+            newSkill.level = level;
+            newSkill.competence = [competence.get('id')];
+            return this._duplicateValidatedChallenge()
+              .then((newChallenges) => {
+                newSkill.challenges = newChallenges;
+                return newSkill.save()
+                  .then(() => this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction))
+                  .then(() => {
+                    this.notify.message('Acquis et épreuves associées dupliqués');
+                    this.transitionToRoute('competence.skills.single', competence, newSkill);
+                  })
+                  .catch((error) => {
+                    console.error(error);
+                    this.notify.error('Erreur lors de la duplication de l\'acquis');
+                  })
+                  .finally(() => {this.loader.stop();});
+              });
+          });
+      });
+  }
+
+  _duplicateValidatedChallenge() {
+    const skill = this.skill;
+    return skill.challenges
+      .then(challenges => {
+        const validateChallenges = challenges.filter(challenge => challenge.isValidated);
+        const newChallenges =  validateChallenges.map(challenge => {
+          const newChallenge = challenge.cloneToDuplicate();
+          return newChallenge.save();
+        });
+        return Promise.all(newChallenges);
       });
   }
 

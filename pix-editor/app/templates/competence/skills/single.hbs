@@ -92,7 +92,7 @@
 </div>
 {{#if this.displaySelectLocation}}
   <PopIn::SelectLocation
-          @onChange={{this.setLocation}}
+          @onChange={{this.copyToNewLocation}}
           @title={{concat "Destination de la copie de " this.skillName}}
           @selectTubeLevel={{true}}
           @tube={{this.skill.tube}}
