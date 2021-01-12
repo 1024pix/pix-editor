@@ -1,8 +1,11 @@
 import { module, test } from 'qunit';
+import sinon from 'sinon';
 import { visit, findAll, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { later } from '@ember/runloop';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { selectFiles } from 'ember-file-upload/test-support';
+import Service from '@ember/service';
 
 module('Acceptance | Modify-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -42,6 +45,39 @@ module('Acceptance | Modify-Challenge', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+  });
+
+  test('adding illustration', async function(assert) {
+    // given
+    class StorageServiceStub extends Service {
+      uploadFile() {}
+    }
+
+    this.owner.register('service:storage', StorageServiceStub);
+    const storageServiceStub = this.owner.lookup('service:storage');
+    sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
+
+    // when
+    await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell]')[0]);
+    await click(find('[data-test-modify-challenge-button]'));
+
+    const file = new File([], 'challenge-illustration.png');
+    await selectFiles('[data-test-file-input-illustration] input', file);
+
+    await later(this, async () => {}, 100);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-save-changelog-button]'));
+
+    const store = this.owner.lookup('service:store');
+    const attachments = await store.peekAll('attachment');
+
+    // then
+    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.ok(storageServiceStub.uploadFile.calledOnce);
+    assert.ok(attachments.every(record => !record.isNew));
   });
 });
 
