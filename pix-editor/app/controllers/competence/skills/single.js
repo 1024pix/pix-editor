@@ -146,31 +146,34 @@ export default class SingleController extends Controller {
   @action
   copyToNewLocation(competence, newTube, level) {
     this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
-      (changelogValue) => {
-        const currentSkill = this.skill;
-        return currentSkill.clone()
-          .then(newSkill=>{
-            this.loader.start();
-            newSkill.tube = newTube;
-            newSkill.level = level;
-            newSkill.competence = [competence.get('id')];
-            return this._duplicateValidatedChallenge()
-              .then((newChallenges) => {
-                newSkill.challenges = newChallenges;
-                return newSkill.save()
-                  .then(() => this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction))
-                  .then(() => {
-                    this.notify.message('Acquis et épreuves associées dupliqués');
-                    this.transitionToRoute('competence.skills.single', competence, newSkill);
-                  })
-                  .catch((error) => {
-                    console.error(error);
-                    this.notify.error('Erreur lors de la duplication de l\'acquis');
-                  })
-                  .finally(() => {this.loader.stop();});
-              });
+      (changelogValue) => this._copyToNewLocationCallback(changelogValue, competence, newTube, level));
+  }
+
+  _copyToNewLocationCallback(changelogValue, competence, newTube, level) {
+    const currentSkill = this.skill;
+    return currentSkill.clone()
+      .then(newSkill=>{
+        this.loader.start();
+        newSkill.tube = newTube;
+        newSkill.level = level;
+        newSkill.competence = [competence.get('id')];
+        return this._duplicateValidatedChallenge()
+          .then((newChallenges) => {
+            newSkill.challenges = newChallenges;
+            return newSkill.save()
+              .then(() => this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction))
+              .then(() => {
+                this.notify.message('Acquis et épreuves associées dupliqués');
+                this.transitionToRoute('competence.skills.single', competence, newSkill);
+              })
+              .catch((error) => {
+                console.error(error);
+                this.notify.error('Erreur lors de la duplication de l\'acquis');
+              })
+              .finally(() => {this.loader.stop();});
           });
       });
+
   }
 
   _duplicateValidatedChallenge() {
