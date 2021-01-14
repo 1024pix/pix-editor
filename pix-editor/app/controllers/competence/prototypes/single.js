@@ -24,6 +24,7 @@ export default class SingleController extends Controller {
   @tracked changelogDefault = '';
 
   @service config;
+  @service store;
   @service access;
   @service storage
   @service filePath;
@@ -515,7 +516,6 @@ export default class SingleController extends Controller {
   }
 
   _handleIllustration(challenge) {
-    // check for illustration upload
     const illustration = challenge.illustration;
     if (illustration && illustration.length > 0 && illustration.firstObject.file) {
       const file = illustration.firstObject.file;
@@ -535,8 +535,7 @@ export default class SingleController extends Controller {
             type: 'illustration',
             challenge
           };
-          const attachmentRecord = this.store.createRecord('attachment', attachment);
-          await attachmentRecord.save();
+          this.store.createRecord('attachment', attachment);
           return challenge;
         });
     } else {
@@ -545,7 +544,6 @@ export default class SingleController extends Controller {
   }
 
   _handleAttachments(challenge) {
-    // check for attachments upload
     const attachments = challenge.attachments;
     if (attachments) {
       const baseName = challenge.attachmentBaseName;

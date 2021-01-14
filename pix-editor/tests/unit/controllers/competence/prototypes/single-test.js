@@ -130,24 +130,42 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('_handleIllustration', function() {
+  module('_handleIllustration', function(hooks) {
+    let challenge;
+    let storageServiceStub;
+    let storeServiceStub;
+    let loaderServiceStub;
+    let controller;
+    let expectedIllustration;
 
-    test('it uploads file', async function(assert) {
-      // given
-      const challenge = EmberObject.create({
-        illustration: [{ file: 'some file' }]
+    hooks.beforeEach(function() {
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        illustration: [{
+          file: {
+            name: 'attachment-name',
+            size: 123,
+            type: 'image/png'
+          }
+        }]
       });
-      const expectedIllustration = { url: 'data:,', filename: 'attachment-name' };
-      const storageServiceStub = {
+      expectedIllustration = { url: 'data:,', filename: 'attachment-name' };
+
+      storageServiceStub = {
         uploadFile: sinon.stub().resolves(expectedIllustration)
       };
 
-      const loaderServiceStub = { start: sinon.stub() };
+      storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
 
-      const controller = this.owner.lookup('controller:competence/prototypes/single');
+      loaderServiceStub = { start: sinon.stub() };
+
+      controller = this.owner.lookup('controller:competence/prototypes/single');
       controller.storage = storageServiceStub;
       controller.loader = loaderServiceStub;
+      controller.store = storeServiceStub;
+    });
 
+    test('it uploads file', async function(assert) {
       // when
       await controller._handleIllustration(challenge);
 
@@ -175,7 +193,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedAttachement));
-      assert.ok(record.save.calledOnce);
+      assert.ok(record.save.notCalled);
     });
 
   });
