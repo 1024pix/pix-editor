@@ -197,4 +197,31 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
 
   });
+
+  module('_saveAttachments', function(hooks) {
+    let challenge;
+    let storeServiceStub;
+    let controller;
+
+    hooks.beforeEach(function() {
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        files: [
+          { save: sinon.stub().resolves() }
+        ]
+      });
+
+      controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller.store = storeServiceStub;
+    });
+
+    test('it saves attachments', async function(assert) {
+      // when
+      await controller._saveAttachments(challenge);
+
+      // then
+      assert.ok(challenge.files[0].save.calledWith());
+    });
+
+  });
 });

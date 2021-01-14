@@ -177,6 +177,7 @@ export default class SingleController extends Controller {
         .then(challenge => this._handleIllustration(challenge))
         .then(challenge => this._handleAttachments(challenge))
         .then(challenge => this._saveChallenge(challenge))
+        .then(challenge => this._saveAttachments(challenge))
         .then(challenge => this._handleChangelog(challenge, changelog))
         .then(() => {
           this.edition = false;
@@ -576,6 +577,10 @@ export default class SingleController extends Controller {
   _saveChallenge(challenge) {
     this._loadingMessage('Enregistrement...');
     return challenge.save();
+  }
+
+  _saveAttachments(challenge) {
+    return Promise.all(challenge.files.map(file => file.save()));
   }
 
   _handleChangelog(challenge, changelog) {

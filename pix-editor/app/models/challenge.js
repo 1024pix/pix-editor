@@ -39,6 +39,7 @@ export default class ChallengeModel extends Model {
   @attr autoReply;
 
   @hasMany('skill') skills;
+  @hasMany('attachment') files;
 
   @service('store') myStore;
   @service config;
