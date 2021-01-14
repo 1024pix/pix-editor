@@ -516,32 +516,37 @@ export default class SingleController extends Controller {
     return Promise.all(skillChecks).then(() => challenge);
   }
 
-  _handleIllustration(challenge) {
+  async _handleIllustration(challenge) {
     const illustration = challenge.illustration;
     if (illustration && illustration.length > 0 && illustration.firstObject.file) {
-      const file = illustration.firstObject.file;
       this._loadingMessage('Envoi de l\'illustration...');
-      return this.storage.uploadFile(file)
-        .then((newIllustration) => {
-          challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
-          return challenge;
-        })
-        .then(async (challenge) => {
-          const illustration = challenge.illustration.firstObject;
-          const attachment = {
-            filename: file.name,
-            url: illustration.url,
-            size: file.size,
-            mimeType: file.type,
-            type: 'illustration',
-            challenge
-          };
-          this.store.createRecord('attachment', attachment);
-          return challenge;
-        });
-    } else {
-      return Promise.resolve(challenge);
+      const file = illustration.firstObject.file;
+      const newIllustration = await this.storage.uploadFile(file);
+      this._createOrUpdateIllustration(challenge, newIllustration);
+      challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
     }
+    return challenge;
+  }
+
+  _createOrUpdateIllustration(challenge, newIllustration) {
+    const previousIllustration = challenge.files.find(file => file.type === 'illustration');
+
+    if (previousIllustration) {
+      previousIllustration.filename = newIllustration.filename;
+      previousIllustration.url = newIllustration.url;
+      previousIllustration.size = newIllustration.size;
+      previousIllustration.mimeType = newIllustration.type;
+      return;
+    }
+    const attachment = {
+      filename: newIllustration.filename,
+      url: newIllustration.url,
+      size: newIllustration.size,
+      mimeType: newIllustration.type,
+      type: 'illustration',
+      challenge
+    };
+    this.store.createRecord('attachment', attachment);
   }
 
   _handleAttachments(challenge) {

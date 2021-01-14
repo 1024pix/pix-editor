@@ -26,7 +26,12 @@ export default class StorageService extends Service {
           });
       })
       .then(function() {
-        return { url:url, filename:fileName ? fileName : file.name };
+        return {
+          url,
+          filename: fileName || file.name,
+          size: file.size,
+          type: file.type
+        };
       });
   }
 

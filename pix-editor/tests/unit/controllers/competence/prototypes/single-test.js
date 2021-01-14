@@ -136,7 +136,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     let storeServiceStub;
     let loaderServiceStub;
     let controller;
-    let expectedIllustration;
 
     hooks.beforeEach(function() {
       challenge = EmberObject.create({
@@ -147,12 +146,17 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
             size: 123,
             type: 'image/png'
           }
-        }]
+        }],
+        files:[]
       });
-      expectedIllustration = { url: 'data:,', filename: 'attachment-name' };
 
       storageServiceStub = {
-        uploadFile: sinon.stub().resolves(expectedIllustration)
+        uploadFile: sinon.stub().resolves({
+          url: 'data:,',
+          filename: 'attachment-name',
+          size: 123,
+          type: 'image/png'
+        })
       };
 
       storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
@@ -166,6 +170,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
 
     test('it uploads file', async function(assert) {
+      // given
+      const expectedIllustration = {
+        url: 'data:,',
+        filename: 'attachment-name'
+      };
+
       // when
       await controller._handleIllustration(challenge);
 
@@ -194,6 +204,41 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       // then
       assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedAttachement));
       assert.ok(record.save.notCalled);
+    });
+
+    test('it should update the attachment', async function (assert) {
+      // given
+      challenge.files = [{
+        id: 'rec_123',
+        filename: 'old-attachment-name',
+        url: 'data:,',
+        size: 654,
+        mimeType: 'image/jpeg',
+        type: 'illustration',
+      },{
+        id: 'rec_456',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'attachment',
+      }];
+
+      const expectedNewFile = {
+        id: 'rec_123',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+      };
+
+      // when
+      await controller._handleIllustration(challenge);
+
+      // then
+      assert.deepEqual(challenge.files[0], expectedNewFile);
+
     });
 
   });
