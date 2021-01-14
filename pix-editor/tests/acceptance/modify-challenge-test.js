@@ -64,7 +64,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     await click(findAll('[data-test-skill-cell]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
 
-    const file = new File([], 'challenge-illustration.png');
+    const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
     await later(this, async () => {}, 100);

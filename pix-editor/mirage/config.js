@@ -7,6 +7,24 @@ export default function () {
   this.get('/areas', ({ areas }, request) => _response(request, areas.all()));
   this.get('/users/me', ({ users }, request) => _response(request, users.first()));
   this.get('/config', ({ configs }, request) => _response(request, configs.first()));
+
+  this.post('/airtable/content/Attachments', (schema, request) => {
+    const payload = JSON.parse(request.requestBody);
+    const { id, fields: { filename, url, mimeType, size, type, challengeId } } = schema.attachments.create(payload);
+    const attachmentResponse = {
+      id,
+      fields: {
+        filename,
+        url,
+        mimeType,
+        size,
+        type,
+        challengeId
+      }
+    };
+    return _response(request, attachmentResponse);
+  });
+
   this.get('/airtable/content/Competences', (schema, request) => {
     const records = schema.competences.all().models.map((competence) => {
       return {
