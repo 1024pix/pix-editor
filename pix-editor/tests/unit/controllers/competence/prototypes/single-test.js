@@ -1,8 +1,8 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { module, test, setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import EmberObject from '@ember/object';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupTest(hooks);
@@ -117,6 +117,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       //then
       assert.equal(skill1.status, 'actif');
     });
+
     test('it should validate alternatives', async function (assert) {
       //given
       prototype1_1.validate();
@@ -127,5 +128,55 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       //then
       assert.equal(challenge1_1.status, 'validé');
     });
+  });
+
+  module('_handleIllustration', function() {
+
+    test('it uploads file', async function(assert) {
+      // given
+      const challenge = EmberObject.create({
+        illustration: [{ file: 'some file' }]
+      });
+      const expectedIllustration = { url: 'data:,', filename: 'attachment-name' };
+      const storageServiceStub = {
+        uploadFile: sinon.stub().resolves(expectedIllustration)
+      };
+
+      const loaderServiceStub = { start: sinon.stub() };
+
+      const controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller.storage = storageServiceStub;
+      controller.loader = loaderServiceStub;
+
+      // when
+      await controller._handleIllustration(challenge);
+
+      // then
+      assert.ok(storageServiceStub.uploadFile.calledOnce);
+      assert.ok(loaderServiceStub.start.calledWith('Envoi de l\'illustration...'));
+      assert.deepEqual(challenge.illustration, [expectedIllustration]);
+    });
+
+    test('it creates attachment', async function(assert) {
+      // given
+      const expectedAttachement = {
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        challenge
+      };
+      const record = { save: sinon.stub().resolves() };
+      storeServiceStub.createRecord.returns(record);
+
+      // when
+      await controller._handleIllustration(challenge);
+
+      // then
+      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedAttachement));
+      assert.ok(record.save.calledOnce);
+    });
+
   });
 });

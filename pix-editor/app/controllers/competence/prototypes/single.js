@@ -524,6 +524,20 @@ export default class SingleController extends Controller {
         .then((newIllustration) => {
           challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
           return challenge;
+        })
+        .then(async (challenge) => {
+          const illustration = challenge.illustration.firstObject;
+          const attachment = {
+            filename: file.name,
+            url: illustration.url,
+            size: file.size,
+            mimeType: file.type,
+            type: 'illustration',
+            challenge
+          };
+          const attachmentRecord = this.store.createRecord('attachment', attachment);
+          await attachmentRecord.save();
+          return challenge;
         });
     } else {
       return Promise.resolve(challenge);
