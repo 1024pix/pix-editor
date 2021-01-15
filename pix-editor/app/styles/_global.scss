@@ -252,6 +252,14 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   background: url("/assets/images/elephant_v2.png") center center no-repeat;
   background-size: contain;
 }
+footer.ui.attached.header {
+  background: rgb(52, 152, 219) !important;
+  color: white;
+  p {
+    position: relative;
+    left: -198px;
+  }
+}
 
 .ui.button {
   font-weight: normal;
