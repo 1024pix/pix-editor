@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, find, findAll, click } from '@ember/test-helpers';
+import { visit, currentURL, find, findAll, click, waitUntil } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { later } from '@ember/runloop';
 import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
@@ -67,6 +67,9 @@ module('Acceptance | competence/prototypes/list', function () {
     test('it should display a list of prototype of selected skill', async function (assert) {
       //when
       await click(findAll('[data-test-skill-tab]')[1]);
+      await waitUntil(function() {
+        return find('[data-test-prototype-list]').textContent.includes('instructionsChallenge2');
+      }, { timeout: 1000 });
 
       // then
       assert.dom('[data-test-skill-tab].active').hasText(skillPixId2);
