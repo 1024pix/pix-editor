@@ -13,18 +13,10 @@ export default class ListController extends Controller {
   @service config;
   @service currentData;
 
-  @tracked selectedSkillId;
+  @tracked selectedSkill;
 
   get mayCreatePrototype() {
     return this.access.mayCreatePrototype();
-  }
-
-  get selectedSkill() {
-    return this._getSkill(this.selectedSkillId);
-  }
-
-  _getSkill(value) {
-    return this.model.skills.find(skill=>skill.id === value);
   }
 
   @action
@@ -34,7 +26,7 @@ export default class ListController extends Controller {
 
   @action
   setSelectedSkill(value) {
-    this.selectedSkillId = value;
+    this.selectedSkill = value;
   }
 
   @action
