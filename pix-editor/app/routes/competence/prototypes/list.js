@@ -7,13 +7,8 @@ export default class ListRoute extends Route {
     return this.store.findRecord('tube', params.tube_id)
       .then(tube => {
         return  this.store.findRecord('skill', params.skill_id).then(skill=>{
-          return { liveSkills: tube.liveSkills, skill };
+          return { skills: tube.filledLiveSkills[skill.level - 1], skill };
         });
-      })
-      .then(({ liveSkills, skill }) => {
-        const liveSkillsFilteredByLevel = liveSkills.filter(liveSkill => liveSkill.level === parseInt(skill.level));
-        const skills = liveSkillsFilteredByLevel.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        return { skills, skill };
       });
   }
 

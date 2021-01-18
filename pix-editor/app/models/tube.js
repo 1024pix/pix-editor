@@ -55,8 +55,22 @@ export default class TubeModel extends Model {
     },[false, false, false, false, false, false, false]);
   }
 
+  get filledLiveSkills() {
+    const filledSkills =  this._filledAllVersionSkills(this.liveSkills);
+    return filledSkills.map(filledSkill => {
+      if (filledSkill && filledSkill.length > 1) {
+        return filledSkill.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+      return filledSkill;
+    });
+  }
+
   get filledDeadSkills() {
-    return this.deadSkills.reduce((grid, skill) => {
+    return this._filledAllVersionSkills(this.deadSkills);
+  }
+
+  _filledAllVersionSkills(skills) {
+    return skills.reduce((grid, skill) => {
       if (grid[skill.level - 1]) {
         grid[skill.level - 1].push(skill);
       } else {
