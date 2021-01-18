@@ -36,7 +36,7 @@ module('Integration | Component | list/live-skill', function(hooks) {
     this.skills = [skill2, skill1];
 
     // when
-    await render(hbs`<List::LiveSkill @list={{this.skills}}/>`);
+    await render(hbs`<List::LiveSkills @list={{this.skills}}/>`);
     // then
     assert.equal(this.element.querySelectorAll('[data-test-live-skill-row]').length, this.skills.length);
 
