@@ -14,7 +14,7 @@ export default class SidebarSearchComponent extends Component {
     if (query.substr(0, 1) === '@') {
       this.routeModel = 'skill';
       return this.store.query('skill', {
-        filterByFormula: `FIND('${query}', Nom)`,
+        filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
         maxRecords: 20,
         sort: [{ field: 'Nom', direction: 'asc' }]
       })
