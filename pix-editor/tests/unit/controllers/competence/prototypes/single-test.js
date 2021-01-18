@@ -269,4 +269,133 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
 
   });
+  
+  module('_handleAttachments', function(hooks) {
+    let challenge;
+    let storageServiceStub;
+    let storeServiceStub;
+    let loaderServiceStub;
+    let controller;
+    
+    hooks.beforeEach(function() {
+  
+      storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
+  
+      loaderServiceStub = { start: sinon.stub() };
+  
+      controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller.loader = loaderServiceStub;
+      controller.store = storeServiceStub;
+    
+    });
+    
+    test('it should upload one file', async function(assert) {
+      // given
+      const attachmentBaseName = 'attachment-base-name';
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        attachmentBaseName,
+        baseNameUpdated: sinon.stub().returns(true),
+        attachments: [{
+          file: {
+            name: attachmentBaseName + '.pdf',
+            filePath: '',
+            baseNameUpdated: true,
+            size: 123,
+            type: 'application/pdf'
+          },
+        },
+        ],
+        files:[]
+      });
+      
+      storageServiceStub = {
+        uploadFile: sinon.stub().resolves(
+          {
+            url: 'data:,',
+            filename: challenge.attachmentBaseName + '.pdf',
+          }
+        )
+      };
+      controller.storage = storageServiceStub;
+      
+      const expectedAttachement = [
+        {
+          url: 'data:,',
+          filename: 'attachment-base-name.pdf',
+        }
+      ];
+
+      // when
+      await controller._handleAttachments(challenge);
+
+      // then
+      assert.ok(storageServiceStub.uploadFile.calledOnce);
+      assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
+      assert.deepEqual(challenge.attachments, expectedAttachement);
+    });
+    test('it should upload two files', async function(assert) {
+      // given
+      const attachmentBaseName = 'attachment-base-name';
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        attachmentBaseName,
+        baseNameUpdated: sinon.stub().returns(true),
+        attachments: [{
+          file: {
+            name: attachmentBaseName + '.doc',
+            filePath: '',
+            baseNameUpdated: true,
+            size: 123,
+            type: 'application/msword',
+          },
+        },
+        {
+          file: {
+            name: attachmentBaseName + '.pdf',
+            filePath: '',
+            baseNameUpdated: true,
+            size: 123,
+            type: 'application/pdf',
+          },
+        },
+        ],
+        files:[]
+      });
+
+      const uploadFileStub = sinon.stub();
+      uploadFileStub.onFirstCall().resolves({
+        url: 'data:,',
+        filename: challenge.attachmentBaseName + '.doc',
+      });
+      uploadFileStub.onSecondCall().resolves({
+        url: 'data:,',
+        filename: challenge.attachmentBaseName + '.pdf',
+      });
+      storageServiceStub = {
+        uploadFile: uploadFileStub
+      };
+      controller.storage = storageServiceStub;
+
+      const expectedAttachements = [
+        {
+          url: 'data:,',
+          filename: 'attachment-base-name.doc',
+        },
+        {
+          url: 'data:,',
+          filename: 'attachment-base-name.pdf',
+        },
+      ];
+
+      // when
+      const newChallenge = await controller._handleAttachments(challenge);
+      
+
+      // then
+      assert.ok(storageServiceStub.uploadFile.calledTwice);
+      assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
+      assert.deepEqual(newChallenge.attachments, expectedAttachements);
+    });
+  });
 });
