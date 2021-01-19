@@ -24,9 +24,9 @@ export default class ListRoute extends Route {
   @action
   willTransition(transition) {
     if (transition.targetName === 'competence.skills.index') {
-      return this.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').model.skill);
-    } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.prototypes.list').model.productionPrototype) {
-      return this.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').model.skill);
+      return this.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
+    } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.prototypes.list').selectedSkill.productionPrototype) {
+      return this.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
     }
     return true;
   }
