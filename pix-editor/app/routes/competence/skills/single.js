@@ -44,13 +44,13 @@ export default class SingleRoute extends Route {
         const skill = this.controllerFor('competence.skills.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
-          return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
+          return this.transitionTo('competence.prototypes.single', prototype);
         } else {
           const tube = skill.tube;
-          return this.transitionTo('competence.prototypes.list', this.currentData.getCompetence(), tube.get('id'), skill.id);
+          return this.transitionTo('competence.prototypes.list', tube.get('id'), skill.id);
         }
       } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.skills.single').skill.productionPrototype) {
-        return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), this.controllerFor('competence.skills.single').skill);
+        return this.transitionTo('competence.quality.single', this.controllerFor('competence.skills.single').skill);
       }
 
       return true;
