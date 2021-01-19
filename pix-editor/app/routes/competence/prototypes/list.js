@@ -12,13 +12,9 @@ export default class ListRoute extends Route {
       });
   }
 
-  afterModel(model) {
-    const controllerList = this.controllerFor('competence.prototypes.list');
-    controllerList.selectedSkill = model.skill;
-  }
-
-  setupController() {
+  setupController(controller, model) {
     super.setupController(...arguments);
+    controller.selectedSkill = model.skill;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('challenges');
     competenceController.setView('workbench');
