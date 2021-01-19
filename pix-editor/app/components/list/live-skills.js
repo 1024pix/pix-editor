@@ -2,7 +2,7 @@ import SortedList from './sorted';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class ListLiveSkillComponent extends SortedList {
+export default class ListLiveSkillsComponent extends SortedList {
 
   @service router;
 

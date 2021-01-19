@@ -4,11 +4,17 @@ import { action } from '@ember/object';
 export default class ListRoute extends Route {
 
   model(params) {
-    return this.store.findRecord('skill', params.skill_id);
+    return this.store.findRecord('tube', params.tube_id)
+      .then(tube => {
+        return  this.store.findRecord('skill', params.skill_id).then(skill=>{
+          return { skills: tube.filledLiveSkills[skill.level - 1], skill };
+        });
+      });
   }
 
-  setupController() {
+  setupController(controller, model) {
     super.setupController(...arguments);
+    controller.selectedSkill = model.skill;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('challenges');
     competenceController.setView('workbench');
@@ -18,9 +24,9 @@ export default class ListRoute extends Route {
   @action
   willTransition(transition) {
     if (transition.targetName === 'competence.skills.index') {
-      return this.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').model);
-    } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.prototypes.list').model.productionPrototype) {
-      return this.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').model);
+      return this.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
+    } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.prototypes.list').selectedSkill.productionPrototype) {
+      return this.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
     }
     return true;
   }

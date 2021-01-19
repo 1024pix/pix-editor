@@ -293,8 +293,10 @@ export default class SingleController extends Controller {
   }
 
   @action
-  showVersions() {
-    this.transitionToRoute('competence.prototypes.list', this.challenge.firstSkill);
+  async showVersions() {
+    const skill = await this.challenge.firstSkill;
+    const tube = await skill.get('tube');
+    this.transitionToRoute('competence.prototypes.list', tube.id, skill.id);
   }
 
   @action

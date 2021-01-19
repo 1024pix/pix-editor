@@ -13,5 +13,6 @@ export default Factory.extend({
   status: 'actif',
   pixId: 'pixId',
   i18n: 'Monde',
+  createdAt: '2018-12-11T13:38:35.000Z',
 });
 
