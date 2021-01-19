@@ -147,7 +147,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
             type: 'image/png'
           }
         }],
-        files:[]
+        files: []
       });
 
       storageServiceStub = {
@@ -334,6 +334,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
       assert.deepEqual(challenge.attachments, expectedAttachement);
     });
+
     test('it should upload two files', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
@@ -344,8 +345,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         attachments: [{
           file: {
             name: attachmentBaseName + '.doc',
-            filePath: '',
-            baseNameUpdated: true,
             size: 123,
             type: 'application/msword',
           },
@@ -353,8 +352,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         {
           file: {
             name: attachmentBaseName + '.pdf',
-            filePath: '',
-            baseNameUpdated: true,
             size: 123,
             type: 'application/pdf',
           },
@@ -367,10 +364,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       uploadFileStub.onFirstCall().resolves({
         url: 'data:,',
         filename: challenge.attachmentBaseName + '.doc',
+        size: 123,
+        type: 'application/msdoc'
       });
       uploadFileStub.onSecondCall().resolves({
         url: 'data:,',
         filename: challenge.attachmentBaseName + '.pdf',
+        size: 456,
+        type: 'application/pdf'
       });
       storageServiceStub = {
         uploadFile: uploadFileStub
@@ -396,6 +397,77 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(storageServiceStub.uploadFile.calledTwice);
       assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
       assert.deepEqual(newChallenge.attachments, expectedAttachements);
+    });
+
+    test('it creates attachments', async function (assert) {
+      const attachmentBaseName = 'attachment-base-name';
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        attachmentBaseName,
+        baseNameUpdated: () => false,
+        attachments: [{
+          file: {
+            name: attachmentBaseName + '.pdf',
+            size: 123,
+            type: 'application/pdf',
+          },
+        },
+        {
+          file: {
+            name: attachmentBaseName + '.doc',
+            size: 456,
+            type: 'application/msdoc',
+          },
+        },
+        ],
+        files: []
+      });
+
+      const uploadFileStub = sinon.stub();
+      uploadFileStub.onFirstCall().resolves({
+        filename: challenge.attachmentBaseName + '.pdf',
+        url: 'data:,',
+        size: 123,
+        type: 'application/pdf'
+      });
+      uploadFileStub.onSecondCall().resolves({
+        filename: challenge.attachmentBaseName + '.doc',
+        url: 'data:,',
+        size: 456,
+        type: 'application/msdoc'
+      });
+
+      storageServiceStub = {
+        uploadFile: uploadFileStub
+      };
+      controller.storage = storageServiceStub;
+
+      const expectedPdfAttachement = {
+        filename: 'attachment-base-name.pdf',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'application/pdf',
+        type: 'attachment',
+        challenge
+      };
+      const expectedDocAttachement = {
+        filename: 'attachment-base-name.doc',
+        url: 'data:,',
+        size: 456,
+        mimeType: 'application/msdoc',
+        type: 'attachment',
+        challenge
+      };
+
+      const record = { save: sinon.stub().resolves() };
+      storeServiceStub.createRecord.returns(record);
+
+      // when
+      await controller._handleAttachments(challenge);
+
+      // then
+      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedPdfAttachement));
+      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedDocAttachement));
     });
   });
 });

@@ -556,10 +556,20 @@ export default class SingleController extends Controller {
       const filePath = this.filePath;
       const baseNameUpdated = challenge.baseNameUpdated();
       const storage = this.storage;
-      const uploadAttachments = attachments.map((value) => {
+      const uploadAttachments = attachments.map(async (value) => {
         if (value.file) {
-          const fileName = baseName + '.' + filePath.getExtension(value.file.name);
-          return storage.uploadFile(value.file, fileName);
+          const filename = baseName + '.' + filePath.getExtension(value.file.name);
+          const newAttachment = await storage.uploadFile(value.file, filename);
+          const attachment = {
+            filename,
+            url: newAttachment.url,
+            size: newAttachment.size,
+            mimeType: newAttachment.type,
+            type: 'attachment',
+            challenge
+          };
+          this.store.createRecord('attachment', attachment);
+          return newAttachment;  
         } else {
           if (baseNameUpdated) {
             const newValue = { url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename) };
@@ -572,7 +582,9 @@ export default class SingleController extends Controller {
       this._loadingMessage('Gestion des pièces jointes...');
       return Promise.all(uploadAttachments)
         .then(newAttachments => {
-          challenge.attachments = newAttachments;
+          challenge.attachments = newAttachments.map(attachment => {
+            return { url: attachment.url, filename: attachment.filename };
+          });
           return challenge;
         });
     }
