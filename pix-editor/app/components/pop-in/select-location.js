@@ -6,6 +6,7 @@ import { inject as service } from '@ember/service';
 
 export default class PopinSelectLocation extends Component {
 
+  //todo refacto element loading
   @tracked _selectedCompetence = null;
   @tracked _selectedTube = null;
   @tracked _selectedSource = null;
@@ -66,7 +67,7 @@ export default class PopinSelectLocation extends Component {
 
   get tubes() {
     if (!this.tubesLoaded) {
-      this._loadTubes();
+      this._loadTubes().then(() => this._tubes);
     }
     return this._tubes;
   }
@@ -131,7 +132,7 @@ export default class PopinSelectLocation extends Component {
 
   get skills() {
     if (!this.skillsLoaded) {
-      this._loadSkills();
+      this._loadSkills().then(() => this._skills);
     }
     return this._skills;
   }
@@ -162,7 +163,7 @@ export default class PopinSelectLocation extends Component {
     };
   }
 
-  get unableMoveActionButton() {
+  get enableMoveActionButton() {
     if (this.args.isPrototypeLocation) {
       return (this.skillsLoaded && !!this._selectedSkill);
     }
