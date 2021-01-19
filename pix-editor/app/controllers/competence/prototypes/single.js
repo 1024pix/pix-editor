@@ -467,7 +467,7 @@ export default class SingleController extends Controller {
         if (!activeSkill) {
           return Promise.resolve(challenge);
         }
-        return this.confirm.ask('Suppresison de la version de l\'acquis active', `Le prototype est lié à un acquis en cours de construction (${currentSkill.pixId}). La mise en production du prototype nécessite de remplacer l'acquis actif (${activeSkill.pixId}) par l'acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir supprimer l'acquis ${activeSkill.pixId} et ses épreuves correspondantes?`)
+        return this.confirm.ask('Suppression de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir supprimer l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
           .then(() => activeSkill.delete())
           .then(() => {
             const challengesToDelete = activeSkill.challenges.map(challenge => {
