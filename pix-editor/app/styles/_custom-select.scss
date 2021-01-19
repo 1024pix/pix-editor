@@ -8,12 +8,12 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 }
 
 .ember-power-select-multiple-options .ember-power-select-multiple-option {
-    background: none;
-    border-color:#ddd;
+  background: none;
+  border-color: #ddd;
 }
 
 .ember-power-select-trigger {
-  height:37px;
+  height: 37px;
 }
 
 @keyframes drop-effect {
@@ -88,4 +88,28 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   right: 2px;
   top: 4px;
   color: grey;
+}
+
+.ember-power-select-option, .ember-power-select-selected-item {
+  .skill-list {
+    display: inline-flex;
+    align-items: center;
+
+    &__status {
+      display: inline-block;
+      margin-left: .5em;
+      width: 1em;
+      height: 1em;
+      border-radius: 50%;
+
+      &.active {
+        background: #444488;
+      }
+
+      &.draft {
+        background: #838be5;
+      }
+    }
+  }
+
 }

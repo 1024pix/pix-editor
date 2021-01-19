@@ -15,7 +15,16 @@
         {{#if @selectTubeLevel}}
           <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
           {{#if this.selectedTube}}
-            <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}} />
+             {{#if @isPrototypeLocation}}
+               <div data-test-skill-list class="field">
+                 <label>Acquis</label>
+                 <PowerSelect  @options={{this.skillsGroupByLevelList}} @searchEnabled={{false}} @selected={{this.selectedSKill}} @onChange={{this.selectSkill}} as |skill|>
+                   <span class="skill-list">{{skill.pixId}} <span class="skill-list__status {{if (eq skill.status "actif") "active" "draft"}}" title={{skill.status}}></span></span>
+                 </PowerSelect>
+               </div>
+             {{else}}
+               <Field::Select @title="Niveau" @value={{this.selectedLevels}} @options={{this.levels}} @edition={{true}} @multiple={{@multipleLevel}} @setValue={{this.selectLevels}}/>
+             {{/if}}
           {{/if}}
         {{/if}}
       </form>
@@ -24,7 +33,7 @@
       <div class="ui deny button" {{on "click" this.closeModal}}>
         Annuler
       </div>
-      <div class="ui green button" {{on "click" this.setLocation}}>
+      <div data-test-move-action class="ui green button {{unless this.enableMoveActionButton " disabled"}}" {{on "click" this.setLocation}}>
         <i class="checkmark icon"></i>
         Déplacer
       </div>
