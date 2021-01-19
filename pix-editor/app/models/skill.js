@@ -99,15 +99,6 @@ export default class SkillModel extends Model {
     }
   }
 
-  get skillVersions() {
-    return this.tube
-      .then(tube=>{
-        const level = this.level;
-        const liveSkills = tube.liveSkills;
-        return liveSkills.filter(skill => skill.level === level);
-      });
-  }
-
   get prototypes() {
     return this.challenges.filter(challenge => challenge.isPrototype);
   }

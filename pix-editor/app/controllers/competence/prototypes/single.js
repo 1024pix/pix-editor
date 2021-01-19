@@ -461,8 +461,9 @@ export default class SingleController extends Controller {
     if (currentSkill.isActive) {
       return Promise.resolve(challenge);
     }
-    return currentSkill.skillVersions
-      .then(skillVersions => {
+    return currentSkill.tube
+      .then(tube => {
+        const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
         const activeSkill = skillVersions.find(skill => skill.isActive);
         if (!activeSkill) {
           return Promise.resolve(challenge);
