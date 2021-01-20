@@ -90,7 +90,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const transitionToRouteStub = sinon.stub(controller, 'transitionToRoute');
 
     sinon.stub(controller, '_handleSkillChangelog').resolves();
-    sinon.stub(controller, '_duplicateValidatedChallenge').resolves([]);
+    sinon.stub(controller, '_duplicateLiveChallenge').resolves([]);
     controller.loader = {
       start: sinon.stub(),
       stop:  sinon.stub()
@@ -126,7 +126,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     assert.equal(copyToNewLocationArgs.tube, 'newTube');
   });
 
-  test('it should clone only validated challenges', async function (assert) {
+  test('it should clone only validated and draft challenges', async function (assert) {
     // given
     const store = this.owner.lookup('service:store');
 
@@ -145,8 +145,10 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       pixId: 'pix_1_2',
       status: 'proposé',
       name: 'draftChallenge',
-      cloneToDuplicate: cloneToDuplicateStub
     });
+    draftChallenge.cloneToDuplicate = sinon.stub().returns({ save:sinon.stub().resolves(draftChallenge) });
+
+
     const archiveChallenge = store.createRecord('challenge',{
       id: 'rec_1_3',
       pixId: 'pix_1_3',
@@ -169,10 +171,11 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     controller.skill = skill;
 
     // when
-    const result = await controller._duplicateValidatedChallenge();
+    const result = await controller._duplicateLiveChallenge();
 
     // then
-    assert.equal(result.length, 1);
+    assert.equal(result.length, 2);
     assert.equal(result[0].name, 'validatedChallenge');
+    assert.equal(result[1].name, 'draftChallenge');
   });
 });

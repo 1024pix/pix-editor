@@ -157,7 +157,7 @@ export default class SingleController extends Controller {
         newSkill.tube = newTube;
         newSkill.level = level;
         newSkill.competence = [competence.get('id')];
-        return this._duplicateValidatedChallenge()
+        return this._duplicateLiveChallenge()
           .then((newChallenges) => {
             newSkill.challenges = newChallenges;
             return newSkill.save()
@@ -176,11 +176,11 @@ export default class SingleController extends Controller {
 
   }
 
-  _duplicateValidatedChallenge() {
+  _duplicateLiveChallenge() {
     const skill = this.skill;
     return skill.challenges
       .then(challenges => {
-        const validateChallenges = challenges.filter(challenge => challenge.isValidated);
+        const validateChallenges = challenges.filter(challenge => challenge.isLive);
         const newChallenges =  validateChallenges.map(challenge => {
           const newChallenge = challenge.cloneToDuplicate();
           return newChallenge.save();
