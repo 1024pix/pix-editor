@@ -130,6 +130,31 @@ export default function () {
     return _response(request, { records });
   });
 
+  this.get('/airtable/content/Attachments/:id', (schema, request) => {
+    const attachment = schema.attachments.find(request.params.id);
+    return {
+      id: attachment.id,
+      fields: {
+        'Record ID': attachment.id,
+        'challengeId': [attachment.challengeId],
+        'type': attachment.type,
+        'filename': attachment.filename,
+        'url': attachment.url,
+        'mimeType': attachment.mimeType,
+        'size': attachment.size,
+      }
+    };
+  });
+
+  this.delete('/airtable/content/Attachments/:id', (schema, request) => {
+    const attachment = schema.attachments.find(request.params.id);
+    attachment.destroy();
+    return {
+      deleted: true,
+      id: request.params.id,
+    };
+  });
+
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
     return _serializeChalllenge(challenge);
@@ -192,6 +217,7 @@ function _serializeChalllenge(challenge) {
       'Langues': challenge.languages,
       'Géographie': challenge.area,
       'Réponse automatique': challenge.autoReply,
+      'files': challenge.filesIds,
     }
   };
 }

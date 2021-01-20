@@ -23,7 +23,7 @@ module('Unit | Serializer | attachment', function(hooks) {
       mimeType: 'mimeType',
       size: 'size',
       type: 'type',
-      challengeId: 'challengeId',
+      challengeId: ['challengeId'],
     };
 
     const serializedAttachment = attachment.serialize();

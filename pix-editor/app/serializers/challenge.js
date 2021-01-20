@@ -38,7 +38,8 @@ export default class ChallengeSerializer extends AirtableSerializer {
     alternativeText:'Texte alternatif illustration',
     languages:'Langues',
     area:'Géographie',
-    autoReply: 'Réponse automatique'
+    autoReply: 'Réponse automatique',
+    files: 'files',
   };
 
   payloadKeyFromModelName() {

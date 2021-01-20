@@ -36,5 +36,6 @@ export default Factory.extend({
   area: 'area',
   _definedBaseName: '_definedBaseName',
   autoReply: 'autoReply',
+  files: null,
 });
 
