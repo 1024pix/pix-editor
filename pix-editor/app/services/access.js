@@ -42,7 +42,7 @@ export default class AccessService extends Service {
     }
   }
 
-  mayCopySkill(skill) {
+  mayDuplicateSkill(skill) {
     if (!skill.isLive) {
       return false;
     }

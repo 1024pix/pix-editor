@@ -90,7 +90,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const transitionToRouteStub = sinon.stub(controller, 'transitionToRoute');
 
     sinon.stub(controller, '_handleSkillChangelog').resolves();
-    sinon.stub(controller, '_duplicateLiveChallenge').resolves([]);
+    sinon.stub(controller, '_duplicateLiveChallenges').resolves([]);
     controller.loader = {
       start: sinon.stub(),
       stop:  sinon.stub()
@@ -118,12 +118,12 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     controller.skill = currentSkill;
 
     // when
-    await controller._copyToNewLocationCallback('changelogValue', competence, 'newTube', 'level');
+    await controller._duplicateToLocationCallback('changelogValue', competence, 'newTube', 'level');
 
     // then
-    const copyToNewLocationArgs = transitionToRouteStub.getCall(0).args[2];
-    assert.equal(copyToNewLocationArgs.level, 'level');
-    assert.equal(copyToNewLocationArgs.tube, 'newTube');
+    const duplicateToLocationArgs = transitionToRouteStub.getCall(0).args[2];
+    assert.equal(duplicateToLocationArgs.level, 'level');
+    assert.equal(duplicateToLocationArgs.tube, 'newTube');
   });
 
   test('it should clone only validated and draft challenges', async function (assert) {
@@ -171,7 +171,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     controller.skill = skill;
 
     // when
-    const result = await controller._duplicateLiveChallenge();
+    const result = await controller._duplicateLiveChallenges();
 
     // then
     assert.equal(result.length, 2);

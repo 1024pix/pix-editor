@@ -49,8 +49,8 @@ export default class SingleController extends Controller {
     return this.access.mayAccessAirtable();
   }
 
-  get mayCopy() {
-    return this.access.mayCopySkill(this.skill);
+  get mayDuplicate() {
+    return this.access.mayDuplicateSkill(this.skill);
   }
 
   get mayArchive() {
@@ -139,17 +139,17 @@ export default class SingleController extends Controller {
   }
 
   @action
-  copySkill() {
+  duplicateSkill() {
     this.displaySelectLocation = true;
   }
 
   @action
-  copyToNewLocation(competence, newTube, level) {
+  duplicateToLocation(competence, newTube, level) {
     this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
-      (changelogValue) => this._copyToNewLocationCallback(changelogValue, competence, newTube, level));
+      (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
   }
 
-  _copyToNewLocationCallback(changelogValue, competence, newTube, level) {
+  _duplicateToLocationCallback(changelogValue, competence, newTube, level) {
     const currentSkill = this.skill;
     return currentSkill.clone()
       .then(newSkill=>{
@@ -157,7 +157,7 @@ export default class SingleController extends Controller {
         newSkill.tube = newTube;
         newSkill.level = level;
         newSkill.competence = [competence.get('id')];
-        return this._duplicateLiveChallenge()
+        return this._duplicateLiveChallenges()
           .then((newChallenges) => {
             newSkill.challenges = newChallenges;
             return newSkill.save()
@@ -176,12 +176,12 @@ export default class SingleController extends Controller {
 
   }
 
-  _duplicateLiveChallenge() {
+  _duplicateLiveChallenges() {
     const skill = this.skill;
     return skill.challenges
       .then(challenges => {
-        const validateChallenges = challenges.filter(challenge => challenge.isLive);
-        const newChallenges =  validateChallenges.map(challenge => {
+        const liveChallenges = challenges.filter(challenge => challenge.isLive);
+        const newChallenges =  liveChallenges.map(challenge => {
           const newChallenge = challenge.cloneToDuplicate();
           return newChallenge.save();
         });
