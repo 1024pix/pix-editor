@@ -26,7 +26,7 @@ export default class AirtableSerializer extends RESTSerializer {
         record.created = record.createdTime;
         delete record.createdTime;
       });
-    } else {
+    } else if (payload.fields) {
       payload[type.modelName] = payload.fields;
       payload[type.modelName].created = payload.createdTime;
       delete payload.id;
