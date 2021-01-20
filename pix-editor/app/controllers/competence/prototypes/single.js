@@ -216,6 +216,7 @@ export default class SingleController extends Controller {
           this.loader.start();
           return this._validationChecks(this.challenge)
             .then(challenge => this._archivePreviousPrototype(challenge))
+            .then(challenge => this._deleteOtherActiveSkillVersion(challenge))
             .then(challenge => challenge.validate())
             .then(challenge => this._handleChangelog(challenge, changelog))
             .then(challenge => this._checkSkillsValidation(challenge))
@@ -404,7 +405,7 @@ export default class SingleController extends Controller {
     }
     return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
-        const alternativesPublication = alternatives.map(alternative=>{
+        const alternativesPublication = alternatives.map(alternative => {
           return alternative.validate()
             .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`));
         });
@@ -423,11 +424,11 @@ export default class SingleController extends Controller {
     if (toArchive.length === 0 && toDelete.length) {
       return Promise.resolve(challenge);
     }
-    const alternativesArchive = toArchive.map(alternative=>{
+    const alternativesArchive = toArchive.map(alternative => {
       return alternative.archive()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`));
     });
-    const alternativesDelete = toDelete.map(alternative=>{
+    const alternativesDelete = toDelete.map(alternative => {
       return alternative.delete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
@@ -444,12 +445,41 @@ export default class SingleController extends Controller {
     if (toDelete.length === 0) {
       return Promise.resolve(challenge);
     }
-    const alternativesDelete = toDelete.map(alternative=>{
+    const alternativesDelete = toDelete.map(alternative => {
       return alternative.delete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
     return Promise.all(alternativesDelete)
       .then(() => challenge);
+  }
+
+  _deleteOtherActiveSkillVersion(challenge) {
+    if (!challenge.isPrototype) {
+      return Promise.resolve(challenge);
+    }
+    const currentSkill = challenge.firstSkill;
+    if (currentSkill.isActive) {
+      return Promise.resolve(challenge);
+    }
+    return currentSkill.tube
+      .then(tube => {
+        const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
+        const activeSkill = skillVersions.find(skill => skill.isActive);
+        if (!activeSkill) {
+          return Promise.resolve(challenge);
+        }
+        return this.confirm.ask('Suppression de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir supprimer l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
+          .then(() => activeSkill.delete())
+          .then(() => {
+            const challengesToDelete = activeSkill.challenges.map(challenge => {
+              if (!challenge.isDeleted) {
+                return challenge.delete();
+              }
+            });
+            return Promise.all(challengesToDelete)
+              .then(() => challenge);
+          });
+      });
   }
 
   _checkSkillsValidation(challenge) {
