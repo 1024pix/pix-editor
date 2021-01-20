@@ -2,9 +2,9 @@
   <div class="ui menu">
     <div class="ui left menu">
       {{#unless this.edition}}
-        {{#if this.mayMove}}
-          <button class="ui icon button" {{on "click" this.moveSkill}} type="button" title="Déplacer"><i
-                  class="icon random"></i></button>
+        {{#if this.mayDuplicate}}
+          <button class="ui icon button" {{on "click" this.duplicateSkill}} type="button" title="Dupliquer vers"><i
+                  class="icon copy"></i></button>
         {{/if}}
         <LinkTo class="ui button icon item"
                 title="Liste des versions"
@@ -92,8 +92,8 @@
 </div>
 {{#if this.displaySelectLocation}}
   <PopIn::SelectLocation
-          @onChange={{this.setLocation}}
-          @name={{this.skillName}}
+          @onChange={{this.duplicateToLocation}}
+          @title={{concat "Destination de la copie de " this.skillName}}
           @selectTubeLevel={{true}}
           @tube={{this.skill.tube}}
           @level={{this.skill.level}}

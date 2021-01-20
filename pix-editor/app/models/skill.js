@@ -1,4 +1,5 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 
 export default class SkillModel extends Model {
@@ -29,6 +30,9 @@ export default class SkillModel extends Model {
 
   @hasMany('tutorial')
   tutoMore;
+
+  @service('store') myStore;
+  @service idGenerator;
 
   @tracked _selected = false;
 
@@ -213,6 +217,31 @@ export default class SkillModel extends Model {
         this.pinRelationships();
         return result;
       });
+  }
+
+  clone() {
+    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore'];
+    const data = this._getJSON(ignoredFields);
+    data.status = 'en construction';
+    data.pixId = this.idGenerator.newId();
+    const newSkill = this.myStore.createRecord(this.constructor.modelName, data);
+    const requests = [this.tutoSolution, this.tutoMore];
+    return Promise.all(requests)
+      .then(tutorials => {
+        newSkill.tutoSolution = tutorials[0];
+        newSkill.tutoMore = tutorials[1];
+        return newSkill;
+      });
+  }
+
+  _getJSON(fieldsToRemove) {
+    const data = this.toJSON({ includeId: false });
+    fieldsToRemove.forEach((current) => {
+      if (data[current]) {
+        delete data[current];
+      }
+    });
+    return data;
   }
 
   _getCSSFromStatus(status) {

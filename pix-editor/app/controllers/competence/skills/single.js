@@ -49,8 +49,8 @@ export default class SingleController extends Controller {
     return this.access.mayAccessAirtable();
   }
 
-  get mayMove() {
-    return this.access.mayMoveSkill(this.skill);
+  get mayDuplicate() {
+    return this.access.mayDuplicateSkill(this.skill);
   }
 
   get mayArchive() {
@@ -139,30 +139,53 @@ export default class SingleController extends Controller {
   }
 
   @action
-  moveSkill() {
+  duplicateSkill() {
     this.displaySelectLocation = true;
   }
 
   @action
-  setLocation(competence, newTube, level) {
-    this._displayChangelogPopIn(`Déplacement de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
-      (changelogValue)=>{
-        const skill = this.skill;
+  duplicateToLocation(competence, newTube, level) {
+    this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+      (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
+  }
+
+  _duplicateToLocationCallback(changelogValue, competence, newTube, level) {
+    const currentSkill = this.skill;
+    return currentSkill.clone()
+      .then(newSkill=>{
         this.loader.start();
-        skill.tube = newTube;
-        skill.level = level;
-        skill.competence = [competence.get('id')];
-        return skill.save()
-          .then(()=>this._handleSkillChangelog(skill,changelogValue, this.changelogEntry.moveAction))
-          .then(() => {
-            this.notify.message('Acquis mis à jour');
-            this.transitionToRoute('competence.skills.single', competence, skill);
-          })
-          .catch((error) => {
-            console.error(error);
-            this.notify.error('Erreur lors de la mise à jour de l\'acquis');
-          })
-          .finally(()=>{this.loader.stop();});
+        newSkill.tube = newTube;
+        newSkill.level = level;
+        newSkill.competence = [competence.get('id')];
+        return this._duplicateLiveChallenges()
+          .then((newChallenges) => {
+            newSkill.challenges = newChallenges;
+            return newSkill.save()
+              .then(() => this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction))
+              .then(() => {
+                this.notify.message('Acquis et épreuves associées dupliqués');
+                this.transitionToRoute('competence.skills.single', competence, newSkill);
+              })
+              .catch((error) => {
+                console.error(error);
+                this.notify.error('Erreur lors de la duplication de l\'acquis');
+              })
+              .finally(() => {this.loader.stop();});
+          });
+      });
+
+  }
+
+  _duplicateLiveChallenges() {
+    const skill = this.skill;
+    return skill.challenges
+      .then(challenges => {
+        const liveChallenges = challenges.filter(challenge => challenge.isLive);
+        const newChallenges =  liveChallenges.map(challenge => {
+          const newChallenge = challenge.cloneToDuplicate();
+          return newChallenge.save();
+        });
+        return Promise.all(newChallenges);
       });
   }
 

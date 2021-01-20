@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
+import sinon from 'sinon';
 
 module('Unit | Model | skill', function(hooks) {
   setupTest(hooks);
@@ -72,4 +73,42 @@ module('Unit | Model | skill', function(hooks) {
     assert.deepEqual(languages,expected);
   });
 
+  test('it should duplicate skill without location and with a draft status',async function (assert) {
+    // given
+    const idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
+
+    const tutorial1 = store.createRecord('tutorial', { title: 'tutoMore' });
+    const tutorial2 = store.createRecord('tutorial', { title: 'tutoSolution1' });
+    const tutorial3 = store.createRecord('tutorial', { title: 'tutoSolution2' });
+    const tube = store.createRecord('tube', { title: 'tube' });
+    const skill = run(() => store.createRecord('skill', {
+      id: 'rec_1',
+      pixId: 'pix_1',
+      status: 'actif',
+      competence: ['competenceId'],
+      tube: tube,
+      challenges: [store.createRecord('challenge',challenge1)],
+      tutoSolution: [tutorial1],
+      tutoMore: [tutorial2, tutorial3]
+    }));
+
+    skill.idGenerator = idGeneratorStub;
+    // const ignoredFields = ['competence', 'level', 'tube', 'challenges'];
+
+    // when
+    const clonedSkill = await skill.clone();
+    const tubeField = await clonedSkill.get('tube');
+
+    // then
+    assert.equal(clonedSkill.level, null);
+    assert.equal(clonedSkill.competence, null);
+    assert.equal(tubeField, null);
+
+    assert.equal(clonedSkill.challenges.length, 0);
+    assert.equal(clonedSkill.status, 'en construction');
+    assert.equal(clonedSkill.pixId, 'generatedId');
+
+    assert.equal(clonedSkill.tutoSolution.length, 1);
+    assert.equal(clonedSkill.tutoMore.length, 2);
+  });
 });

@@ -232,6 +232,14 @@ export default class ChallengeModel extends Model {
     return this.myStore.createRecord(this.constructor.modelName, data);
   }
 
+  cloneToDuplicate() {
+    const ignoredFields = ['skills'];
+    const data = this._getJSON(ignoredFields);
+    data.status = 'proposé';
+    data.pixId = this.idGenerator.newId();
+    return this.myStore.createRecord(this.constructor.modelName, data);
+  }
+
   derive() {
     const alternative = this.clone();
     alternative.version = this.version;

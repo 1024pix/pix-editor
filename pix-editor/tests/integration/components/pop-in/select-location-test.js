@@ -250,4 +250,39 @@ module('Integration | Component | popin-select-location', function (hooks) {
       }]);
     });
   });
+  module('if `isSkillLocation`', async function (hooks) {
+    hooks.beforeEach(async function () {
+      // when
+      this.copyToNewLocation = sinon.stub();
+      this.closeSelectLocation = () => {
+      };
+      tube1_2_1_1.content = tube1_2_1_1;
+      this.tube = tube1_2_1_1;
+      this.skill = skill1_2_1_1_2;
+
+      await render(hbs`<PopIn::SelectLocation
+                        @onChange={{this.copyToNewLocation}}
+                        @title="title"
+                        @selectTubeLevel={{true}}
+                        @tube={{this.tube}}
+                        @level={{this.skill.level}}
+                        @selectEmptyLevels={{true}}
+                        @isSkillLocation={{true}}
+                        @close={{this.closeSelectLocation}} />`);
+    });
+    test('it should display a list of all skill levels', async function (assert) {
+      // given
+      const expectedOptionsResult = [1,2,3,4,5,6,7,8];
+
+      // when
+      await click(findAll('.ember-basic-dropdown-trigger')[3]);
+      const options = findAll('.ember-power-select-options li');
+
+      // then
+      assert.equal(options.length, 8);
+      options.forEach((option, i) => {
+        assert.equal(option.textContent.trim(),expectedOptionsResult[i]);
+      });
+    });
+  });
 });
