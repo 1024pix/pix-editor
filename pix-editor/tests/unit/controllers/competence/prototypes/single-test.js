@@ -86,6 +86,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       skill.tube = tube;
     });
   });
+
   module('on prototype validation', function () {
     test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
       //when
@@ -238,7 +239,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.deepEqual(challenge.files[0], expectedNewFile);
-
     });
 
   });
@@ -269,26 +269,26 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
 
   });
-  
+
   module('_handleAttachments', function(hooks) {
     let challenge;
     let storageServiceStub;
     let storeServiceStub;
     let loaderServiceStub;
     let controller;
-    
+
     hooks.beforeEach(function() {
-  
+
       storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
-  
+
       loaderServiceStub = { start: sinon.stub() };
-  
+
       controller = this.owner.lookup('controller:competence/prototypes/single');
       controller.loader = loaderServiceStub;
       controller.store = storeServiceStub;
-    
+
     });
-    
+
     test('it should upload one file', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
@@ -308,7 +308,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         ],
         files:[]
       });
-      
+
       storageServiceStub = {
         uploadFile: sinon.stub().resolves(
           {
@@ -318,7 +318,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         )
       };
       controller.storage = storageServiceStub;
-      
+
       const expectedAttachement = [
         {
           url: 'data:,',
@@ -391,7 +391,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // when
       const newChallenge = await controller._handleAttachments(challenge);
-      
+
 
       // then
       assert.ok(storageServiceStub.uploadFile.calledTwice);

@@ -569,7 +569,7 @@ export default class SingleController extends Controller {
             challenge
           };
           this.store.createRecord('attachment', attachment);
-          return newAttachment;  
+          return newAttachment;
         } else {
           if (baseNameUpdated) {
             const newValue = { url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename) };
