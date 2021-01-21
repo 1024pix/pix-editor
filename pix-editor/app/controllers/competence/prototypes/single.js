@@ -160,9 +160,11 @@ export default class SingleController extends Controller {
   }
 
   @action
-  cancelEdit() {
+  async cancelEdit() {
     this.edition = false;
     this.challenge.rollbackAttributes();
+    await this.challenge.files;
+    this.challenge.files.forEach((file) => file.rollbackAttributes());
     if (!this.wasMaximized) {
       this.minimize();
     }
@@ -529,7 +531,7 @@ export default class SingleController extends Controller {
   }
 
   _createOrUpdateIllustration(challenge, newIllustration) {
-    const previousIllustration = challenge.files.find(file => file.type === 'illustration');
+    const previousIllustration = challenge.files.findBy('type', 'illustration');
 
     if (previousIllustration) {
       previousIllustration.filename = newIllustration.filename;

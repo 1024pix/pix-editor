@@ -207,7 +207,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(record.save.notCalled);
     });
 
-    test('it should update the attachment', async function (assert) {
+    test('it updates the attachment', async function (assert) {
       // given
       challenge.files = [{
         id: 'rec_123',
@@ -289,7 +289,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
     });
 
-    test('it should upload one file', async function(assert) {
+    test('it uploads one file', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
@@ -310,21 +310,17 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
 
       storageServiceStub = {
-        uploadFile: sinon.stub().resolves(
-          {
-            url: 'data:,',
-            filename: challenge.attachmentBaseName + '.pdf',
-          }
-        )
+        uploadFile: sinon.stub().resolves({
+          url: 'data:,',
+          filename: challenge.attachmentBaseName + '.pdf',
+        })
       };
       controller.storage = storageServiceStub;
 
-      const expectedAttachement = [
-        {
-          url: 'data:,',
-          filename: 'attachment-base-name.pdf',
-        }
-      ];
+      const expectedAttachement = [{
+        url: 'data:,',
+        filename: 'attachment-base-name.pdf',
+      }];
 
       // when
       await controller._handleAttachments(challenge);
@@ -335,7 +331,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(challenge.attachments, expectedAttachement);
     });
 
-    test('it should upload two files', async function(assert) {
+    test('it uploads two files', async function(assert) {
       // given
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
@@ -348,15 +344,13 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
             size: 123,
             type: 'application/msword',
           },
-        },
-        {
+        }, {
           file: {
             name: attachmentBaseName + '.pdf',
             size: 123,
             type: 'application/pdf',
           },
-        },
-        ],
+        }],
         files:[]
       });
 
@@ -378,20 +372,16 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       };
       controller.storage = storageServiceStub;
 
-      const expectedAttachements = [
-        {
-          url: 'data:,',
-          filename: 'attachment-base-name.doc',
-        },
-        {
-          url: 'data:,',
-          filename: 'attachment-base-name.pdf',
-        },
-      ];
+      const expectedAttachements = [{
+        url: 'data:,',
+        filename: 'attachment-base-name.doc',
+      }, {
+        url: 'data:,',
+        filename: 'attachment-base-name.pdf',
+      }];
 
       // when
       const newChallenge = await controller._handleAttachments(challenge);
-
 
       // then
       assert.ok(storageServiceStub.uploadFile.calledTwice);
@@ -411,15 +401,13 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
             size: 123,
             type: 'application/pdf',
           },
-        },
-        {
+        }, {
           file: {
             name: attachmentBaseName + '.doc',
             size: 456,
             type: 'application/msdoc',
           },
-        },
-        ],
+        }],
         files: []
       });
 
@@ -469,5 +457,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedPdfAttachement));
       assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedDocAttachement));
     });
+
   });
 });
