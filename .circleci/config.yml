@@ -4,7 +4,7 @@ version: 2.0
 jobs:
   pix-editor-build:
     docker:
-      - image: circleci/node:12.18
+      - image: circleci/node:14.15.4
     steps:
       - checkout
       - run: |
@@ -18,7 +18,7 @@ jobs:
 
   pix-editor-test:
     docker:
-      - image: circleci/node:12.18-browsers
+      - image: circleci/node:14.15.4-browsers
         environment:
           CHROME_BIN: "/usr/bin/google-chrome"
     steps:
@@ -33,7 +33,7 @@ jobs:
 
   checkout:
     docker:
-      - image: circleci/node:12.18
+      - image: circleci/node:14.15.4
     working_directory: ~/pix-editor
     steps:
       - checkout
@@ -43,7 +43,7 @@ jobs:
             - .
   api_build_and_test:
     docker:
-      - image: circleci/node:12.18
+      - image: circleci/node:14.15.4
       - image: postgres:12.3-alpine
         environment:
           POSTGRES_USER: circleci
@@ -70,7 +70,7 @@ jobs:
 
   e2e_test:
     docker:
-      - image: cypress/browsers:node12.18.0-chrome83-ff77
+      - image: cypress/browsers:node14.15.0-chrome86-ff82
       - image: postgres:12.4-alpine
         environment:
           POSTGRES_USER: circleci
