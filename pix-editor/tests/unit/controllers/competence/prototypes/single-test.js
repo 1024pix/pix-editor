@@ -458,5 +458,61 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedDocAttachement));
     });
 
+    test('it renames attachments', async function (assert) {
+      const attachmentBaseName = 'attachment-base-name';
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+        attachmentBaseName: 'updated-base-name',
+        baseNameUpdated: () => true,
+        attachments: [{
+          filename: attachmentBaseName + '.pdf',
+          size: 123,
+          type: 'application/pdf',
+        }, {
+          filename: attachmentBaseName + '.doc',
+          size: 456,
+          type: 'application/msdoc',
+        }],
+        files: [{
+          filename: attachmentBaseName + '.pdf',
+          url: 'data:,',
+          size: 123,
+          mimeType: 'application/pdf',
+          type: 'attachment',
+        }, {
+          filename: attachmentBaseName + '.doc',
+          url: 'data:,',
+          size: 456,
+          mimeType: 'application/msdoc',
+          type: 'attachment',
+        }]
+      });
+
+      challenge.files.forEach((file) => file.challenge = challenge);
+
+      const expectedPdfAttachement = {
+        filename: 'updated-base-name.pdf',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'application/pdf',
+        type: 'attachment',
+        challenge
+      };
+      const expectedDocAttachement = {
+        filename: 'updated-base-name.doc',
+        url: 'data:,',
+        size: 456,
+        mimeType: 'application/msdoc',
+        type: 'attachment',
+        challenge
+      };
+
+      // when
+      await controller._handleAttachments(challenge);
+
+      // then
+      assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedDocAttachement]);
+    });
+
   });
 });

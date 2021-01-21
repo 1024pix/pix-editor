@@ -588,7 +588,8 @@ export default class SingleController extends Controller {
             return { url: attachment.url, filename: attachment.filename };
           });
           return challenge;
-        });
+        })
+        .then(challenge => challenge.files.forEach((file) => file.filename = baseName + '.' + filePath.getExtension(file.filename)));
     }
     return Promise.resolve(challenge);
   }
