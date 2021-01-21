@@ -3,7 +3,7 @@
   "version": "3.17.0",
   "description": "API permettant d'intéragir avec le référentiel de contenu Pix",
   "engines": {
-    "node": "12.18.x",
+    "node": "14.15.x",
     "npm": "6.14.x"
   },
   "directories": {
@@ -23,6 +23,7 @@
     "db:reset": "npm run db:prepare && npm run db:seed",
     "lint": "eslint lib tests",
     "lint:fix": "eslint lib tests --fix",
+    "preinstall": "npx check-engine",
     "start": "node bin/www",
     "start:watch": "nodemon --signal SIGTERM bin/www",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
