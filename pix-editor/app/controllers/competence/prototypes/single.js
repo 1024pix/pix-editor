@@ -1,5 +1,4 @@
-import Controller from '@ember/controller';
-import { inject as controller } from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { alias } from '@ember/object/computed';
@@ -551,47 +550,47 @@ export default class SingleController extends Controller {
     this.store.createRecord('attachment', attachment);
   }
 
-  _handleAttachments(challenge) {
+  async _handleAttachments(challenge) {
     const attachments = challenge.attachments;
-    if (attachments) {
-      const baseName = challenge.attachmentBaseName;
-      const filePath = this.filePath;
-      const baseNameUpdated = challenge.baseNameUpdated();
-      const storage = this.storage;
-      const uploadAttachments = attachments.map(async (value) => {
-        if (value.file) {
-          const filename = baseName + '.' + filePath.getExtension(value.file.name);
-          const newAttachment = await storage.uploadFile(value.file, filename);
-          const attachment = {
-            filename,
-            url: newAttachment.url,
-            size: newAttachment.size,
-            mimeType: newAttachment.type,
-            type: 'attachment',
-            challenge
-          };
-          this.store.createRecord('attachment', attachment);
-          return newAttachment;
-        } else {
-          if (baseNameUpdated) {
-            const newValue = { url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename) };
-            return Promise.resolve(newValue);
-          } else {
-            return Promise.resolve(value);
-          }
-        }
-      });
-      this._loadingMessage('Gestion des pièces jointes...');
-      return Promise.all(uploadAttachments)
-        .then(newAttachments => {
-          challenge.attachments = newAttachments.map(attachment => {
-            return { url: attachment.url, filename: attachment.filename };
-          });
-          return challenge;
-        })
-        .then(challenge => challenge.files.forEach((file) => file.filename = baseName + '.' + filePath.getExtension(file.filename)));
+    if (!attachments) {
+      return challenge;
     }
-    return Promise.resolve(challenge);
+    this._loadingMessage('Gestion des pièces jointes...');
+    const newAttachments = await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
+    challenge.attachments = newAttachments.map(attachment => ({ url: attachment.url, filename: attachment.filename }));
+    await this._renameAttachmentFiles(challenge);
+
+    return challenge;
+  }
+
+  async _handleAttachment(inputAttachment, challenge) {
+    if (!inputAttachment.file) {
+      return challenge.baseNameUpdated() ? {
+        url: inputAttachment.url,
+        filename: this._getAttachmentFullFilename(challenge, inputAttachment.filename)
+      } : inputAttachment;
+    }
+    const filename = this._getAttachmentFullFilename(challenge, inputAttachment.file.name);
+    const newAttachment = await this.storage.uploadFile(inputAttachment.file, filename);
+    const attachmentRecord = {
+      filename,
+      url: newAttachment.url,
+      size: newAttachment.size,
+      mimeType: newAttachment.type,
+      type: 'attachment',
+      challenge
+    };
+    this.store.createRecord('attachment', attachmentRecord);
+    return newAttachment;
+  }
+
+  _getAttachmentFullFilename(challenge, filename) {
+    return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
+  }
+
+  _renameAttachmentFiles(challenge) {
+    const attachments = challenge.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+    attachments.forEach((file) => file.filename = this._getAttachmentFullFilename(challenge, file.filename));
   }
 
   _saveChallenge(challenge) {

@@ -484,7 +484,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           url: 'data:,',
           size: 456,
           mimeType: 'application/msdoc',
-          type: 'attachment',
+          type: 'illustration',
         }]
       });
 
@@ -498,12 +498,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         type: 'attachment',
         challenge
       };
-      const expectedDocAttachement = {
-        filename: 'updated-base-name.doc',
+      const expectedIllustration = {
+        filename: 'attachment-base-name.doc',
         url: 'data:,',
         size: 456,
         mimeType: 'application/msdoc',
-        type: 'attachment',
+        type: 'illustration',
         challenge
       };
 
@@ -511,7 +511,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._handleAttachments(challenge);
 
       // then
-      assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedDocAttachement]);
+      assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedIllustration]);
     });
 
   });
