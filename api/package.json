@@ -51,7 +51,7 @@
     "good-console": "8.0.0",
     "good-squeeze": "5.1.0",
     "jsonapi-serializer": "3.6.7",
-    "knex": "0.21.8",
+    "knex": "0.21.16",
     "lodash": "^4.17.20",
     "node-cache": "^5.1.2",
     "pg": "8.4.2",
