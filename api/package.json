@@ -38,7 +38,7 @@
   "author": "GIP Pix",
   "license": "ISC",
   "dependencies": {
-    "@hapi/hapi": "20.0.1",
+    "@hapi/hapi": "20.0.3",
     "@hapi/inert": "6.0.3",
     "@hapi/vision": "^6.0.1",
     "airtable": "0.10.0",
