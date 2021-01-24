@@ -43,7 +43,7 @@
     "@hapi/vision": "^6.0.1",
     "airtable": "0.10.1",
     "axios": "0.21.1",
-    "blipp": "^4.0.1",
+    "blipp": "4.0.2",
     "bunyan": "1.8.15",
     "dotenv": "^8.2.0",
     "faker": "5.1.0",
