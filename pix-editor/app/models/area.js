@@ -1,6 +1,4 @@
 import Model, { attr, hasMany } from '@ember-data/model';
-import { sort } from '@ember/object/computed';
-
 
 export default class AreaModel extends Model {
   @attr name;
@@ -8,10 +6,9 @@ export default class AreaModel extends Model {
 
   @hasMany('competence') competences;
 
-  competencesSorting = Object.freeze(['code']);
-
-  @sort('competences','competencesSorting')
-  sortedCompetences;
+  get sortedCompetences() {
+    return this.competences.sortBy('code');
+  }
 
   get productionTubeCount() {
     return this.competences.reduce((count, competence) => {

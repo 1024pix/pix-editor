@@ -1,5 +1,4 @@
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
 
@@ -9,8 +8,9 @@ export default class SidebarMain extends Component {
   @service config;
   @service currentData;
 
-  @alias('config.author')
-  author;
+  get author() {
+    return this.config.author;
+  }
 
   get areas() {
     return this.currentData.getAreas();

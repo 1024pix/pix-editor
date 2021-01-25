@@ -1,7 +1,6 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
 import { inject as controller } from '@ember/controller';
 import { scheduleOnce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
@@ -14,14 +13,16 @@ export default class SingleController extends Controller {
   creation = false;
   wasMaximized = false;
 
-  @alias('model')
-  tube;
+  get tube() {
+    return this.model;
+  }
 
   @controller('competence')
   parentController;
 
-  @alias('parentController.firstMaximized')
-  maximized;
+  get maximized() {
+    return this.parentController.firstMaximized;
+  }
 
   @service access;
   @service config;

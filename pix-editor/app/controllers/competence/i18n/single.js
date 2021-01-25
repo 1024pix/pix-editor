@@ -1,6 +1,5 @@
 import Controller from '@ember/controller';
 import { action } from '@ember/object';
-import { alias } from '@ember/object/computed';
 import { inject as controller } from '@ember/controller';
 
 export default class CompetenceI18nSingleController extends Controller {
@@ -8,11 +7,13 @@ export default class CompetenceI18nSingleController extends Controller {
   @controller('competence')
   parentController;
 
-  @alias('parentController.leftMaximized')
-  isMaximized;
+  get isMaximized() {
+    return this.parentController.leftMaximized;
+  }
 
-  @alias('model')
-  skill;
+  get skill() {
+    return this.model;
+  }
 
   get challengesByLanguagesAndAlternativesCount() {
     const challengeByLanguagesAndAlternativesCount = [];
