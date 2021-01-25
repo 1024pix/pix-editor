@@ -18,20 +18,17 @@ export default class PopinChallengeLog extends Component {
   @tracked list = true;
   @tracked mayEditEntry = false;
 
-  _notes = A([]);
-  _entries = A([]);
-
-  get notes() {
-    if (!this.notesLoaded) {
-      return this._loadNotes();
-    }
-    return this._notes;
+  notes = A([]);
+  changelogEntries = A([]);
+  
+  constructor() {
+    super (...arguments);
+    this._loadNotes();
+    this._loadChangelog();
   }
 
   get ownNotes() {
     if (!this.notesLoaded) {
-      this._loadNotes();
-      // wait for notes to be loaded
       return [];
     } else {
       const notes = this.notes;
@@ -41,40 +38,19 @@ export default class PopinChallengeLog extends Component {
   }
 
   get changelogEntries() {
-    if (!this.changelogLoaded) {
-      const challenge = this.args.challenge;
-      if (challenge) {
-        const pq = this.paginatedQuery;
-        return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
-          .then(entries => {
-            this._entries = entries;
-            this.changelogLoaded = true;
-            return entries;
-          });
-      }
-    }
-    return this._entries;
+    return this.changelogEntries;
   }
 
   get ownCount() {
-    if (this.notesLoaded) {
-      return this.ownNotes.length;
-    }
-    return 0;
+    return this.ownNotes.length;
   }
 
   get notesCount() {
-    if (this.notesLoaded) {
-      return this.notes.length;
-    }
-    return 0;
+    return this.notes.length;
   }
 
   get changelogEntriesCount() {
-    if (this.changelogLoaded) {
-      return this.changelogEntries.length;
-    }
-    return 0;
+    return this.changelogEntries.length;
   }
 
   @action
@@ -98,8 +74,8 @@ export default class PopinChallengeLog extends Component {
     entry.save()
       .then(() => {
         this.list = true;
-        this.changelogLoaded = false;
-        this.notesLoaded = false;
+        this._loadNotes();
+        this._loadChangelog();
       });
   }
 
@@ -141,20 +117,34 @@ export default class PopinChallengeLog extends Component {
   close() {
     this.notesLoaded = false;
     this.changelogLoaded = false;
-    this._notes = A([]);
-    this._entries = A([]);
+    this.notes = A([]);
+    this.changelogEntries = A([]);
     this.args.close();
   }
 
   _loadNotes() {
+    this.notesLoaded = false;
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
       return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(notes => {
-          this._notes = notes;
+          this.notes = notes;
           this.notesLoaded = true;
           return notes;
+        });
+    }
+  }
+  
+  _loadChangelog() {
+    this.changelogLoaded = false;
+    const challenge = this.args.challenge;
+    if (challenge) {
+      const pq = this.paginatedQuery;
+      return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        .then(entries => {
+          this.changelogEntries = entries;
+          this.changelogLoaded = true;
         });
     }
   }
