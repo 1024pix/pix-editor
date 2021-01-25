@@ -1,5 +1,4 @@
-import Service from '@ember/service';
-import { inject as service } from '@ember/service';
+import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 
 export default class StorageService extends Service {
