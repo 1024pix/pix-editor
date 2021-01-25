@@ -1,7 +1,6 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
-import sinon from 'sinon';
 
 module('Unit | Service | access', function(hooks) {
   setupTest(hooks);
@@ -9,15 +8,22 @@ module('Unit | Service | access', function(hooks) {
   const REPLICATOR = 2;
   const EDITOR = 3;
   const ADMIN = 4;
-  let accessService,
-    configService;
+  let accessService;
 
   hooks.beforeEach(function() {
-    configService = Service.extend({});
-    this.owner.unregister('service:config');
-    this.owner.register('service:config', configService);
     accessService = this.owner.lookup('service:access');
   });
+  
+  function _stubAccessLevel(accessLevel, owner) {
+    class ConfigService extends Service {
+      constructor() {
+        super(...arguments);
+        this.accessLevel = accessLevel;
+      }
+    }
+    owner.unregister('service:config');
+    owner.register('service:config', ConfigService);
+  }
 
   module('mayEdit', function() {
 
@@ -53,8 +59,8 @@ module('Unit | Service | access', function(hooks) {
       const roles = [ADMIN,EDITOR];
 
       //when
-      roles.forEach(role=>{
-        configService.prototype.accessLevel = sinon.fake.returns(role)();
+      roles.forEach(role => {
+        _stubAccessLevel(role, this.owner);
 
         //then
         assert.ok(accessService.mayEdit(challenge));
@@ -79,7 +85,7 @@ module('Unit | Service | access', function(hooks) {
       };
 
       //when
-      configService.prototype.accessLevel = sinon.fake.returns(REPLICATOR)();
+      _stubAccessLevel(REPLICATOR, this.owner);
 
       //then
       assert.notOk(accessService.mayEdit(validatedChallenge));
