@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | note-list', function (hooks) {
@@ -54,7 +54,7 @@ module('Integration | Component | note-list', function (hooks) {
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
     //then
-    const notesList = this.element.querySelectorAll('[data-test-note]');
+    const notesList = findAll('[data-test-note]');
     assert.equal(notesList.length, notes.length);
   });
 

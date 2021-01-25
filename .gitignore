@@ -23,6 +23,7 @@ yarn-error.log
 testem.log
 
 api/public/pix-editor/**
+**/.eslintcache
 
 # ember-try
 **/.node_modules.ember-try/

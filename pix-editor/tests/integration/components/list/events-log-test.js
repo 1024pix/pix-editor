@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, findAll } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | list/events-log', function(hooks) {
@@ -32,6 +32,6 @@ module('Integration | Component | list/events-log', function(hooks) {
     await render(hbs`<List::EventsLog @list={{this.skillLogs}}/>`);
 
     //then
-    assert.equal(this.element.querySelectorAll('[data-test-skillLog]').length, skillLogs.length);
+    assert.equal(findAll('[data-test-skillLog]').length, skillLogs.length);
   });
 });
