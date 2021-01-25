@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render, find, findAll } from '@ember/test-helpers';
+import { click, render, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import Service from '@ember/service';
 import sinon from 'sinon';
@@ -180,7 +180,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       // then
       const fields = findAll('.field .ember-power-select-selected-item');
       fields.forEach((field, i) => {
-        assert.equal(field.textContent.trim(), expectedResult[i]);
+        assert.dom(field).hasText(expectedResult[i]);
       });
     });
 
@@ -201,7 +201,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
 
       options.forEach((option, i)=>{
-        assert.equal(option.textContent.trim(), expectedOptionsResult[i]);
+        assert.dom(option).hasText(expectedOptionsResult[i]);
       });
     });
 
@@ -219,7 +219,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       // then
       const options = findAll('.ember-power-select-options ul>li');
       options.forEach((option, i)=>{
-        assert.equal(option.textContent.trim(), expectedOptionsResult[i]);
+        assert.dom(option).hasText(expectedOptionsResult[i]);
       });
     });
 
@@ -229,7 +229,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       await click(findAll('.ember-power-select-options li')[1]);
 
       // then
-      assert.ok(find('[data-test-move-action]').classList.contains('disabled'));
+      assert.dom('[data-test-move-action]').hasClass('disabled');
     });
 
     test('it should invoke `setSkills` on click with new skill location argument', async function (assert) {
@@ -281,7 +281,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       // then
       assert.equal(options.length, 8);
       options.forEach((option, i) => {
-        assert.equal(option.textContent.trim(),expectedOptionsResult[i]);
+        assert.dom(option).hasText(`${expectedOptionsResult[i]}`);
       });
     });
   });

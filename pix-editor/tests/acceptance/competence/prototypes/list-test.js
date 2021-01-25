@@ -60,7 +60,7 @@ module('Acceptance | competence/prototypes/list', function () {
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
       assert.equal(tabs.length, expectedResult.length);
       tabs.forEach((tab, index)=>{
-        assert.equal(tab.textContent.trim(), expectedResult[index]);
+        assert.dom(tab).hasText(expectedResult[index]);
       });
     });
 

@@ -50,9 +50,9 @@ module('Integration | Component | target-profile/competence-thematic-result', fu
                                                    @selectedSkillLevel={{this.selectedLevel}}
                                                    @showTubeDetails={{this.showTubeDetails}}/>`);
       //then
-      assert.ok(this.element.querySelector('[data-test-tube-profile]').classList.contains('active'));
-      assert.ok(this.element.querySelector('.square.icon').classList.contains('active'));
-      assert.ok(this.element.querySelector('.square.icon').classList.contains('check'));
+      assert.dom(this.element.querySelector('[data-test-tube-profile]')).hasClass('active');
+      assert.dom(this.element.querySelector('.square.icon')).hasClass('active');
+      assert.dom(this.element.querySelector('.square.icon')).hasClass('check');
     });
   });
   module('if `showTubeDetails` is true', function (hooks) {

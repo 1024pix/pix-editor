@@ -80,7 +80,7 @@ module('Integration | Component | target-profile/threshold-row', function(hooks)
     await render(hbs`<TargetProfile::ThresholdRow @level={{this.level}} @selectedSkills={{this.selectedSkills}}/>`);
 
     //then
-    assert.equal(this.element.querySelector('[data-test-skill-count]').textContent.trim(), expectedCountResult);
-    assert.equal(this.element.querySelector('[data-test-threshold]').textContent.trim(), expectedThresholdResult);
+    assert.dom(this.element.querySelector('[data-test-skill-count]')).hasText(expectedCountResult);
+    assert.dom(this.element.querySelector('[data-test-threshold]')).hasText(expectedThresholdResult);
   });
 });

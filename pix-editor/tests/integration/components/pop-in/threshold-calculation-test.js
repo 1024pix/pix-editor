@@ -128,7 +128,7 @@ module('Integration | Component | pop-in/threshold-calculation', function (hooks
 
     //then
     assert.equal(this.element.querySelectorAll('tr').length, 10);
-    assert.equal(this.element.querySelector('[data-test-selectedSkillsCount]').textContent.trim(), selectedSkillsCount);
+    assert.dom(this.element.querySelector('[data-test-selectedSkillsCount]')).hasText(`${selectedSkillsCount}`);
   });
 });
 
