@@ -13,7 +13,12 @@
     </div>
     <div class="main" {{on "click" this.closeMenu}}>
       {{#if this.isIndex}}
-        <div class="elephant"></div>
+        <div class="main-left">
+          <main class="elephant ui attached"></main>
+          <footer class="ui bottom attached block header centered">
+            <p>Tout contenu Pix Editor est strictement confidentiel - secret - ne pas divulguer</p>
+          </footer>
+        </div>
       {{/if}}
       {{outlet}}
       {{#if this.messages.length}}

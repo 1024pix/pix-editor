@@ -5,11 +5,18 @@
     z-index:99;
   }
 
-  .header {
+  h1.header {
     height: 50px;
     padding: 15px 5px;
+    margin: 0;
     font-size: 25px;
     color: #ffffff;
+  }
+
+  .legal-mention {
+    color: #00DBFF;
+    margin: 0;
+    padding: 0 5px 7px 5px;
   }
 
   .ember-power-select-trigger {
