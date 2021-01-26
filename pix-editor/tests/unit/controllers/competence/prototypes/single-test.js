@@ -96,14 +96,16 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.equal(challenge2_1.status, 'archivé');
       assert.equal(challenge2_2.status, 'périmé');
     });
-    test('it should delete the actual validated skill and is associated challenges if is an other version', async function (assert) {
+    test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
       //when
-      await controller._deleteOtherActiveSkillVersion(prototype1_1);
+      await controller._archiveOtherActiveSkillVersion(prototype1_1);
 
       //then
-      assert.equal(skill2.status, 'périmé');
-      assert.equal(prototype2_1.status, 'périmé');
-      assert.equal(challenge2_1.status, 'périmé');
+      assert.equal(skill2.status, 'archivé');
+      assert.equal(prototype2_1.status, 'archivé');
+      assert.equal(challenge2_1.status, 'archivé');
+      assert.equal(prototype2_2.status, 'périmé');
+      assert.equal(challenge2_2.status, 'périmé');
     });
     test('it should validate skill', async function (assert) {
       //given

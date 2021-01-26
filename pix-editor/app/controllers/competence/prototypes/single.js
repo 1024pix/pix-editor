@@ -216,7 +216,7 @@ export default class SingleController extends Controller {
           this.loader.start();
           return this._validationChecks(this.challenge)
             .then(challenge => this._archivePreviousPrototype(challenge))
-            .then(challenge => this._deleteOtherActiveSkillVersion(challenge))
+            .then(challenge => this._archiveOtherActiveSkillVersion(challenge))
             .then(challenge => challenge.validate())
             .then(challenge => this._handleChangelog(challenge, changelog))
             .then(challenge => this._checkSkillsValidation(challenge))
@@ -453,7 +453,7 @@ export default class SingleController extends Controller {
       .then(() => challenge);
   }
 
-  _deleteOtherActiveSkillVersion(challenge) {
+  _archiveOtherActiveSkillVersion(challenge) {
     if (!challenge.isPrototype) {
       return Promise.resolve(challenge);
     }
@@ -468,15 +468,18 @@ export default class SingleController extends Controller {
         if (!activeSkill) {
           return Promise.resolve(challenge);
         }
-        return this.confirm.ask('Suppression de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir supprimer l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
-          .then(() => activeSkill.delete())
+        return this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
+          .then(() => activeSkill.archive())
           .then(() => {
-            const challengesToDelete = activeSkill.challenges.map(challenge => {
-              if (!challenge.isDeleted) {
-                return challenge.delete();
+            const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
+              if (liveChallenge.isValidated) {
+                return liveChallenge.archive();
+              }
+              if (liveChallenge.isDraft) {
+                return liveChallenge.delete();
               }
             });
-            return Promise.all(challengesToDelete)
+            return Promise.all(challengesToArchiveOrDelete)
               .then(() => challenge);
           });
       });
