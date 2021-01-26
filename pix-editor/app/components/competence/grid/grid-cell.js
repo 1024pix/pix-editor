@@ -26,15 +26,15 @@ export default class GridCell extends Component {
       case 'skills':
         switch (this.args.view) {
           case 'production':
-            if (skill) {
+            if (skill && skill.productionPrototype) {
               return 'skill';
             } else if (this.access.mayEditSkills()) {
               return 'add-skill';
             }
             break;
-          case 'history' :
+          case 'skill-workbench' :
             if (skill) {
-              return 'historySkill';
+              return 'skill-workbench';
             }
             break;
         }

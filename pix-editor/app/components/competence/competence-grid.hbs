@@ -11,8 +11,8 @@
               {{tube.name}}
             {{/if}}
           </td>
-          {{#if (and (eq @view "history") (eq @section "skills"))}}
-            {{#each tube.filledDeadSkills as |skills index|}}
+          {{#if (and (eq @view "skill-workbench") (eq @section "skills"))}}
+            {{#each tube.filledSkills as |skills index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
                                           @skill={{get skills 0}}
@@ -21,7 +21,7 @@
                                           @index={{index}} />
             {{/each}}
           {{else}}
-            {{#each tube.filledSkills as |skill index|}}
+            {{#each tube.filledProductionOrDraftSkills as |skill index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
                                           @skill={{skill}}

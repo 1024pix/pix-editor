@@ -151,18 +151,13 @@ export default class CompetenceController extends Controller {
     this.loader.start('Export des acquis...');
     const competence = this.competence;
     const productionTubes = competence.productionTubes;
-    const filledSkills = productionTubes.map(productionTube => productionTube.filledSkills);
+    const filledSkills = productionTubes.map(productionTube => productionTube.filledProductionSkills);
     const skillData = filledSkills.flat()
       .filter(filledSkill => filledSkill !== false)
       .map(filledSkill => {
-        const productionPrototype = filledSkill.productionPrototype;
-        if (productionPrototype) {
-          const tube = filledSkill.tube;
-          const description = this._formatCSVString(filledSkill.description);
-          return [competence.name, tube.get('name'), filledSkill.name, description];
-        } else {
-          return false;
-        }
+        const tube = filledSkill.tube;
+        const description = this._formatCSVString(filledSkill.description);
+        return [competence.name, tube.get('name'), filledSkill.name, description];
       });
     const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
       return content + `\n${data.map(item => item ? `"${item}"` : ' ').join(',')}`;

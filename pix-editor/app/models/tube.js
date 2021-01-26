@@ -46,13 +46,17 @@ export default class TubeModel extends Model {
   }
 
   get filledSkills() {
-    return this.sortedSkills.reduce((grid, skill) => {
-      if (grid[skill.level - 1] && skill.isDraft) {
-        return grid;
+    const filledSkills =  this._filledAllVersionSkills(this.rawSkills);
+    return filledSkills.map(filledSkill => {
+      if (filledSkill && filledSkill.length > 1) {
+        return filledSkill.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       }
-      grid[skill.level - 1] = skill;
-      return grid;
-    },[false, false, false, false, false, false, false]);
+      return filledSkill;
+    });
+  }
+
+  get filledProductionSkills() {
+    return this._filledAllVersionSkills(this.productionSkills).flat();
   }
 
   get filledLiveSkills() {
@@ -63,6 +67,16 @@ export default class TubeModel extends Model {
       }
       return filledSkill;
     });
+  }
+
+  get filledProductionOrDraftSkills() {
+    return this.sortedSkills.reduce((grid, skill) => {
+      if (grid[skill.level - 1] && skill.isDraft) {
+        return grid;
+      }
+      grid[skill.level - 1] = skill;
+      return grid;
+    },[false, false, false, false, false, false, false]);
   }
 
   get filledDeadSkills() {
