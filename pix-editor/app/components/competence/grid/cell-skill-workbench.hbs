@@ -4,19 +4,19 @@
   </div>
   <div class="skill-workbench__status ">
     {{#if this.haveDraftSkill}}
-      <span data-test-draft-count class="workbench-status draft-skill">{{this.draftCount}}</span>
+      <span data-test-draft-count class="workbench-status draft-skill ui tiny label" title="En construction">{{this.draftCount}}</span>
     {{/if}}
 
     {{#if this.haveActiveSkill}}
-      <span data-test-active-count class="workbench-status active-skill">1</span>
+      <span data-test-active-count class="workbench-status active-skill ui tiny label" title="Validé">1</span>
     {{/if}}
 
     {{#if this.haveArchivedSkill}}
-      <span data-test-archived-count class="workbench-status archive-skill">{{this.archivedCount}}</span>
+      <span data-test-archived-count class="workbench-status archive-skill ui tiny label" title="Archivé">{{this.archivedCount}}</span>
     {{/if}}
 
     {{#if this.haveDeletedSkill}}
-      <span data-test-deleted-count class="workbench-status deleted-skill">{{this.deletedCount}}</span>
+      <span data-test-deleted-count class="workbench-status deleted-skill ui tiny label" title="Supprimé">{{this.deletedCount}}</span>
     {{/if}}
   </div>
 </LinkTo>

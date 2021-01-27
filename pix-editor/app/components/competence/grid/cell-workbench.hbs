@@ -2,10 +2,10 @@
   {{@skill.name}}
   <div class="workbench__status">
       {{#if this.haveDraftPrototypes}}
-        <span data-test-draft-prototype-count class="draft-prototype" title="Proposé">{{this.draftPrototypesCount}}</span>
+        <span data-test-draft-prototype-count class="draft-prototype ui tiny label" title="Proposé">{{this.draftPrototypesCount}}</span>
       {{/if}}
       {{#if this.validatedPrototype}}
-        <span data-test-validated-prototype-count class="validated-prototype" title="Validé">
+        <span data-test-validated-prototype-count class="validated-prototype ui tiny label" title="Validé">
           {{#if this.validatedPrototype.notDeclinable}}
             NR
           {{else}}
@@ -14,10 +14,10 @@
         </span>
       {{/if}}
       {{#if this.haveArchivedPrototypes}}
-        <span data-test-archived-prototype-count class="archived-prototype" title="Archivé">{{this.archivedPrototypesCount}}</span>
+        <span data-test-archived-prototype-count class="archived-prototype ui tiny label" title="Archivé">{{this.archivedPrototypesCount}}</span>
       {{/if}}
       {{#if this.haveDeletedPrototypes}}
-        <span data-test-deleted-prototype-count class="deleted-prototype" title="Supprimé"> {{this.deletedPrototypesCount}}</span>
+        <span data-test-deleted-prototype-count class="deleted-prototype ui tiny label" title="Supprimé"> {{this.deletedPrototypesCount}}</span>
       {{/if}}
   </div>
 </LinkTo>

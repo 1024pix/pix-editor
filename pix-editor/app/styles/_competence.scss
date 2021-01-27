@@ -181,15 +181,9 @@
     .workbench__status {
       display: flex;
       justify-content: center;
+      margin-top: 2px;
 
       span {
-        margin-left: .5em;
-        width: 1.6em;
-        height: 1.6em;
-        font-size: .8em;
-        border-radius: 50%;
-        color: black;
-
         &.draft-prototype {
           background: $suggested-background-color;
         }
@@ -221,35 +215,25 @@
       .skill-workbench__status {
         display: flex;
         justify-content: center;
-        color: white;
         margin-top: 2px;
 
         .workbench-status {
-          display: inline-block;
-          margin-left: .5em;
-          width: 1.5em;
-          height: 1.5em;
-          font-size: .8em;
-          border-radius: 50%;
-
           &.active-skill {
             background: $production-background-color;
-            color: black;
-
           }
 
           &.draft-skill {
             background: $suggested-background-color;
-            color: black;
-
           }
 
           &.archive-skill {
             background: $archived-background-color;
+            color: white;
           }
 
           &.deleted-skill {
             background: $deleted-background-color;
+            color: white;
           }
         }
       }
