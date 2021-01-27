@@ -7,6 +7,24 @@ export default function () {
   this.get('/areas', ({ areas }, request) => _response(request, areas.all()));
   this.get('/users/me', ({ users }, request) => _response(request, users.first()));
   this.get('/config', ({ configs }, request) => _response(request, configs.first()));
+
+  this.post('/airtable/content/Attachments', (schema, request) => {
+    const payload = JSON.parse(request.requestBody);
+    const { id, fields: { filename, url, mimeType, size, type, challengeId } } = schema.attachments.create(payload);
+    const attachmentResponse = {
+      id,
+      fields: {
+        filename,
+        url,
+        mimeType,
+        size,
+        type,
+        challengeId
+      }
+    };
+    return _response(request, attachmentResponse);
+  });
+
   this.get('/airtable/content/Competences', (schema, request) => {
     const records = schema.competences.all().models.map((competence) => {
       return {
@@ -112,6 +130,31 @@ export default function () {
     return _response(request, { records });
   });
 
+  this.get('/airtable/content/Attachments/:id', (schema, request) => {
+    const attachment = schema.attachments.find(request.params.id);
+    return {
+      id: attachment.id,
+      fields: {
+        'Record ID': attachment.id,
+        'challengeId': [attachment.challengeId],
+        'type': attachment.type,
+        'filename': attachment.filename,
+        'url': attachment.url,
+        'mimeType': attachment.mimeType,
+        'size': attachment.size,
+      }
+    };
+  });
+
+  this.delete('/airtable/content/Attachments/:id', (schema, request) => {
+    const attachment = schema.attachments.find(request.params.id);
+    attachment.destroy();
+    return {
+      deleted: true,
+      id: request.params.id,
+    };
+  });
+
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
     return _serializeChalllenge(challenge);
@@ -174,6 +217,7 @@ function _serializeChalllenge(challenge) {
       'Langues': challenge.languages,
       'Géographie': challenge.area,
       'Réponse automatique': challenge.autoReply,
+      'files': challenge.filesIds,
     }
   };
 }

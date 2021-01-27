@@ -105,4 +105,22 @@ export default class ChallengeForm extends Component {
       this.args.challenge.format = null;
     }
   }
+
+  @action
+  async removeIllustration() {
+    await this.args.challenge.files;
+    const removedFile = this.args.challenge.files.findBy('type', 'illustration');
+    if (removedFile) {
+      removedFile.deleteRecord();
+    }
+  }
+
+  @action
+  async removeAttachment(removedAttachment) {
+    await this.args.challenge.files;
+    const removedFile = this.args.challenge.files.findBy('filename', removedAttachment.filename);
+    if (removedFile) {
+      removedFile.deleteRecord();
+    }
+  }
 }

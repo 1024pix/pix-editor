@@ -7,8 +7,9 @@ export default function(server) {
 
 
   server.create('challenge', { id: 'recChallenge1' });
+  server.create('challenge', { id: 'recChallenge2' });
   server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-  server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
+  server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'] });
   server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
   server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
   server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawTubeIds: ['recTube1'] });

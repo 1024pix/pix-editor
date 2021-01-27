@@ -1,4 +1,4 @@
-<div class="field">
+<div class="field" ...attributes>
   {{#if (or @value.length @edition)}}
     <label>{{@title}}</label>
   {{/if}}
@@ -6,7 +6,7 @@
     {{#each @value as |file key|}}
       <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i class="file icon"></i> {{file.filename}}</a>
       {{#if @edition}}
-        <button {{on "click" (fn this.remove key)}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
+        <button {{on "click" (fn this.remove key)}} class="ui button file-remove" data-test-delete-attachment-button type="button"><i class="remove icon"></i></button>
       {{/if}}
     {{/each}}
   {{/if}}

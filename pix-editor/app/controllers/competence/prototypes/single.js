@@ -1,5 +1,4 @@
-import Controller from '@ember/controller';
-import { inject as controller } from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { alias } from '@ember/object/computed';
@@ -24,6 +23,7 @@ export default class SingleController extends Controller {
   @tracked changelogDefault = '';
 
   @service config;
+  @service store;
   @service access;
   @service storage
   @service filePath;
@@ -159,9 +159,11 @@ export default class SingleController extends Controller {
   }
 
   @action
-  cancelEdit() {
+  async cancelEdit() {
     this.edition = false;
     this.challenge.rollbackAttributes();
+    await this.challenge.files;
+    this.challenge.files.forEach((file) => file.rollbackAttributes());
     if (!this.wasMaximized) {
       this.minimize();
     }
@@ -176,6 +178,7 @@ export default class SingleController extends Controller {
         .then(challenge => this._handleIllustration(challenge))
         .then(challenge => this._handleAttachments(challenge))
         .then(challenge => this._saveChallenge(challenge))
+        .then(challenge => this._saveAttachments(challenge))
         .then(challenge => this._handleChangelog(challenge, changelog))
         .then(() => {
           this.edition = false;
@@ -514,56 +517,89 @@ export default class SingleController extends Controller {
     return Promise.all(skillChecks).then(() => challenge);
   }
 
-  _handleIllustration(challenge) {
-    // check for illustration upload
+  async _handleIllustration(challenge) {
     const illustration = challenge.illustration;
     if (illustration && illustration.length > 0 && illustration.firstObject.file) {
-      const file = illustration.firstObject.file;
       this._loadingMessage('Envoi de l\'illustration...');
-      return this.storage.uploadFile(file)
-        .then((newIllustration) => {
-          challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
-          return challenge;
-        });
-    } else {
-      return Promise.resolve(challenge);
+      const file = illustration.firstObject.file;
+      const newIllustration = await this.storage.uploadFile(file);
+      this._createOrUpdateIllustration(challenge, newIllustration);
+      challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
     }
+    return challenge;
   }
 
-  _handleAttachments(challenge) {
-    // check for attachments upload
-    const attachments = challenge.attachments;
-    if (attachments) {
-      const baseName = challenge.attachmentBaseName;
-      const filePath = this.filePath;
-      const baseNameUpdated = challenge.baseNameUpdated();
-      const storage = this.storage;
-      const uploadAttachments = attachments.map((value) => {
-        if (value.file) {
-          const fileName = baseName + '.' + filePath.getExtension(value.file.name);
-          return storage.uploadFile(value.file, fileName);
-        } else {
-          if (baseNameUpdated) {
-            const newValue = { url: value.url, filename: baseName + '.' + filePath.getExtension(value.filename) };
-            return Promise.resolve(newValue);
-          } else {
-            return Promise.resolve(value);
-          }
-        }
-      });
-      this._loadingMessage('Gestion des pièces jointes...');
-      return Promise.all(uploadAttachments)
-        .then(newAttachments => {
-          challenge.attachments = newAttachments;
-          return challenge;
-        });
+  _createOrUpdateIllustration(challenge, newIllustration) {
+    const previousIllustration = challenge.files.findBy('type', 'illustration');
+
+    if (previousIllustration) {
+      previousIllustration.filename = newIllustration.filename;
+      previousIllustration.url = newIllustration.url;
+      previousIllustration.size = newIllustration.size;
+      previousIllustration.mimeType = newIllustration.type;
+      return;
     }
-    return Promise.resolve(challenge);
+    const attachment = {
+      filename: newIllustration.filename,
+      url: newIllustration.url,
+      size: newIllustration.size,
+      mimeType: newIllustration.type,
+      type: 'illustration',
+      challenge
+    };
+    this.store.createRecord('attachment', attachment);
+  }
+
+  async _handleAttachments(challenge) {
+    const attachments = challenge.attachments;
+    if (!attachments) {
+      return challenge;
+    }
+    this._loadingMessage('Gestion des pièces jointes...');
+    const newAttachments = await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
+    challenge.attachments = newAttachments.map(attachment => ({ url: attachment.url, filename: attachment.filename }));
+    await this._renameAttachmentFiles(challenge);
+
+    return challenge;
+  }
+
+  async _handleAttachment(inputAttachment, challenge) {
+    if (!inputAttachment.file) {
+      return challenge.baseNameUpdated() ? {
+        url: inputAttachment.url,
+        filename: this._getAttachmentFullFilename(challenge, inputAttachment.filename)
+      } : inputAttachment;
+    }
+    const filename = this._getAttachmentFullFilename(challenge, inputAttachment.file.name);
+    const newAttachment = await this.storage.uploadFile(inputAttachment.file, filename);
+    const attachmentRecord = {
+      filename,
+      url: newAttachment.url,
+      size: newAttachment.size,
+      mimeType: newAttachment.type,
+      type: 'attachment',
+      challenge
+    };
+    this.store.createRecord('attachment', attachmentRecord);
+    return newAttachment;
+  }
+
+  _getAttachmentFullFilename(challenge, filename) {
+    return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
+  }
+
+  _renameAttachmentFiles(challenge) {
+    const attachments = challenge.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+    attachments.forEach((file) => file.filename = this._getAttachmentFullFilename(challenge, file.filename));
   }
 
   _saveChallenge(challenge) {
     this._loadingMessage('Enregistrement...');
     return challenge.save();
+  }
+
+  _saveAttachments(challenge) {
+    return Promise.all(challenge.files.map(file => file.save()));
   }
 
   _handleChangelog(challenge, changelog) {

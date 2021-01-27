@@ -1,4 +1,4 @@
-<div class="field">
+<div class="field" ...attributes>
   {{#if (or @value.length @edition)}}
     <label>{{@title}}</label>
   {{/if}}
@@ -9,7 +9,7 @@
       {{@value.0.file.name}} ({{@value.0.file.size}} octets)
     {{/if}}
     {{#if @edition}}
-      <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i class="remove icon"></i></button>
+      <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i class="remove icon" data-test-delete-illustration-button></i></button>
     {{/if}}
   {{/if}}
   {{#if @edition}}

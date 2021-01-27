@@ -29,11 +29,11 @@
   {{#if @challenge.supportsScoring}}
     <Field::Textarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
   {{/if}}
-  <Field::Illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @display={{@showIllustration}} />
+  <Field::Illustration data-test-file-input-illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @removeIllustration={{this.removeIllustration}} @display={{@showIllustration}} />
   {{#if @challenge.illustration}}
     <Field::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
   {{/if}}
-  <Field::Files @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @setValue={{fn (mut @challenge.attachments)}} @edition={{@edition}} />
+  <Field::Files data-test-file-input-attachment @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @setValue={{fn (mut @challenge.attachments)}} @edition={{@edition}} @removeAttachment={{this.removeAttachment}}/>
   <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
   <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
   <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />

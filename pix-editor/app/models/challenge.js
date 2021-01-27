@@ -39,6 +39,7 @@ export default class ChallengeModel extends Model {
   @attr autoReply;
 
   @hasMany('skill') skills;
+  @hasMany('attachment', { inverse: 'challenge' }) files;
 
   @service('store') myStore;
   @service config;
