@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { render, findAll, waitUntil } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | note-list', function (hooks) {
@@ -54,6 +54,10 @@ module('Integration | Component | note-list', function (hooks) {
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
     //then
+    await waitUntil(function() {
+      const renderedNotes = findAll('[data-test-note]');
+      return renderedNotes.length === notes.length;
+    }, { timeout: 2000 });
     assert.dom('[data-test-note]').exists({ count: notes.length });
   });
 
@@ -88,7 +92,6 @@ module('Integration | Component | note-list', function (hooks) {
 
     //then
     assert.dom('[data-test-note] .status-note').exists();
-
   });
 
   test('it should not display note status when displayStatus is `false`', async function (assert) {
@@ -100,6 +103,5 @@ module('Integration | Component | note-list', function (hooks) {
 
     //then
     assert.dom('[data-test-note] .status-note').doesNotExist();
-
   });
 });
