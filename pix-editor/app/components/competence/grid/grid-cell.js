@@ -28,13 +28,13 @@ export default class GridCell extends Component {
           case 'production':
             if (skill && skill.productionPrototype) {
               return 'skill';
-            } else if (this.access.mayEditSkills()) {
-              return 'add-skill';
             }
             break;
           case 'skill-workbench' :
             if (skill) {
               return 'skill-workbench';
+            } else if (this.access.mayEditSkills()) {
+              return 'add-skill';
             }
             break;
         }
