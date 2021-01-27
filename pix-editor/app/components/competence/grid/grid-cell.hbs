@@ -1,7 +1,7 @@
 {{#if (eq this.cellType "production")}}
   <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} />
 {{else if (eq this.cellType "workbench")}}
-  <Competence::Grid::CellWorkbench @tube={{@tube}} @skill={{@skill}} />
+  <Competence::Grid::CellWorkbench @tube={{@tube}} @skill={{@skill}} @skills={{@skills}}/>
 {{else if (eq this.cellType "skill-workbench")}}
   <Competence::Grid::CellSkillWorkbench @tube={{@tube}} @skill={{@skill}} @skills={{@skills}}/>
 {{else if (eq this.cellType "skill")}}

@@ -1,9 +1,23 @@
 <LinkTo @route="competence.prototypes.list" @models={{array @tube.id @skill.id}} @tagName="td" class="skill skill-cell link workbench">
   {{@skill.name}}
-  <div class="alternative">
-    <span class="alternative-count">{{@skill.prototypes.length}}</span>
-    {{#if @skill.productionPrototype.notDeclinable}}
-      <span class="not-declinable">NR</span>
-    {{/if}}
+  <div class="workbench__status">
+      {{#if this.haveDraftPrototypes}}
+        <span data-test-draft-prototype-count class="draft-prototype" title="Proposé">{{this.draftPrototypesCount}}</span>
+      {{/if}}
+      {{#if this.validatedPrototype}}
+        <span data-test-validated-prototype-count class="validated-prototype" title="Validé">
+          {{#if this.validatedPrototype.notDeclinable}}
+            NR
+          {{else}}
+            1
+          {{/if}}
+        </span>
+      {{/if}}
+      {{#if this.haveArchivedPrototypes}}
+        <span data-test-archived-prototype-count class="archived-prototype" title="Archivé">{{this.archivedPrototypesCount}}</span>
+      {{/if}}
+      {{#if this.haveDeletedPrototypes}}
+        <span data-test-deleted-prototype-count class="deleted-prototype" title="Supprimé"> {{this.deletedPrototypesCount}}</span>
+      {{/if}}
   </div>
 </LinkTo>
