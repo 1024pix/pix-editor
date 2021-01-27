@@ -7,7 +7,7 @@ export default class ListRoute extends Route {
     return this.store.findRecord('tube', params.tube_id)
       .then(tube => {
         return  this.store.findRecord('skill', params.skill_id).then(skill=>{
-          return { skills: tube.filledLiveSkills[skill.level - 1], skill };
+          return { skills: tube.filledSkills[skill.level - 1], skill };
         });
       });
   }
