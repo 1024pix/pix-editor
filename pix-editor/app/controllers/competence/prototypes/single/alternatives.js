@@ -1,16 +1,15 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { inject as controller } from '@ember/controller';
 import { tracked } from '@glimmer/tracking';
-import { alias } from '@ember/object/computed';
 
 export default class AlternativesController extends Controller {
 
   queryParams = ['rightMaximized'];
 
-  @alias('model')
-  challenge;
+  get challenge() {
+    return this.model;
+  }
 
   @tracked competence = null;
   @tracked rightMaximized = false;

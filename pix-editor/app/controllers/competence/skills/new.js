@@ -1,6 +1,5 @@
 import Skill from './single';
 import { action } from '@ember/object';
-import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 
 export default class NewController extends Skill {
@@ -8,11 +7,13 @@ export default class NewController extends Skill {
   tubeId = null;
   defaultSaveSkillChangelog = 'Création de l\'acquis';
 
-  @alias('model.skill')
-  skill;
+  get skill() {
+    return this.model.skill;
+  }
 
-  @alias('model.tube')
-  tube;
+  get tube() {
+    return this.model.tube; 
+  }
 
   @service notify;
   @service loader;

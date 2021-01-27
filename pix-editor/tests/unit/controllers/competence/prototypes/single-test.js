@@ -1,4 +1,5 @@
-import { module, test, setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
@@ -12,11 +13,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     controller = this.owner.lookup('controller:competence/prototypes/single');
     store = this.owner.lookup('service:store');
 
-    const confirmServiceStub = Service.extend({
-      ask: sinon.stub().resolves()
-    });
+    class ConfirmService extends Service {
+      ask = sinon.stub().resolves()
+    }
+
     this.owner.unregister('service:confirm');
-    this.owner.register('service:confirm', confirmServiceStub);
+    this.owner.register('service:confirm', ConfirmService);
     controller._message = sinon.stub();
 
     const saveStub = sinon.stub().resolves({});

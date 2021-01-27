@@ -1,7 +1,6 @@
 import PrototypeController from '../../../prototypes/single';
 import { action } from '@ember/object';
 import { inject as controller } from '@ember/controller';
-import { alias } from '@ember/object/computed';
 
 export default class SingleController extends PrototypeController {
 
@@ -10,8 +9,9 @@ export default class SingleController extends PrototypeController {
   @controller('competence.skills.single.archive')
   parentController;
 
-  @alias('parentController.rightMaximized')
-  maximized;
+  get maximized() {
+    return this.parentController.rightMaximized;
+  }
 
   mayValidate = false;
   mayMove = false;

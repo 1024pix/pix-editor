@@ -37,8 +37,8 @@ module('Integration | Component | list/live-skill', function(hooks) {
 
     // when
     await render(hbs`<List::LiveSkills @list={{this.skills}}/>`);
-    // then
-    assert.equal(this.element.querySelectorAll('[data-test-live-skill-row]').length, this.skills.length);
 
+    // then
+    assert.dom('[data-test-live-skill-row]').exists({ count: this.skills.length });
   });
 });

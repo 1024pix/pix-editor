@@ -1,12 +1,13 @@
 import Controller from '@ember/controller';
-import { alias } from '@ember/object/computed';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class CompetenceSkillsSingleArchiveController extends Controller {
-  @alias('model')
-  skill;
+  
+  get skill() {
+    return this.model;
+  }
 
   @service router;
 

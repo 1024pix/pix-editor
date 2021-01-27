@@ -11,9 +11,14 @@ module('Unit | Model | challenge', function(hooks) {
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
 
-    const configService = Service.extend({ author:'NEW' });
+    class ConfigService extends Service {
+      constructor() {
+        super(...arguments);
+        this.author = 'NEW';
+      }
+    }
     this.owner.unregister('service:config');
-    this.owner.register('service:config', configService);
+    this.owner.register('service:config', ConfigService);
 
     idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
 

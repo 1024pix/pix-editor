@@ -8,12 +8,14 @@ import sinon from 'sinon';
 module('Integration | Component | popin-login-form', function(hooks) {
   setupRenderingTest(hooks);
 
-  let configService;
+  const configLoadStub = sinon.stub();
 
   hooks.beforeEach(function() {
-    configService = Service.extend({});
+    class ConfigService extends Service {
+      load = configLoadStub;
+    }  
     this.owner.unregister('service:config');
-    this.owner.register('service:config', configService);
+    this.owner.register('service:config', ConfigService);
   });
 
   test('it should ask for apiKey', async function(assert) {
@@ -26,11 +28,10 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
 
   module('successful cases', function(hooks) {
-    const configLoadStub = sinon.stub().resolves();
 
     hooks.beforeEach(async function() {
       // given
-      configService.prototype.load = configLoadStub;
+      configLoadStub.resolves();
       this.update = () => {};
       this.close = () => {};
       await render(hbs`<PopIn::LoginForm @close={{this.close}} @update={{this.update}}/>`);
@@ -68,7 +69,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
         }]
       };
 
-      configService.prototype.load = sinon.stub().rejects(invalidCredentialsErrorMessage);
+      configLoadStub.rejects(invalidCredentialsErrorMessage);
       await render(hbs`<PopIn::LoginForm/>`);
       await fillIn('#login-api-key', 'invalid-api-key');
 
@@ -93,7 +94,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
     hooks.beforeEach(async function() {
       // given
-      configService.prototype.load = sinon.stub().rejects();
+      configLoadStub.rejects();
       await render(hbs`<PopIn::LoginForm/>`);
       await fillIn('#login-api-key', 'server-error');
 

@@ -7,19 +7,22 @@ import sinon from 'sinon';
 module('Unit | Controller | competence/skills/single', function (hooks) {
   setupTest(hooks);
 
-  let storeStub, controller, changelogEntryService,configService;
+  let storeStub, controller, changelogEntryService;
   const date = '14/07/1986';
   const author = 'DEV';
 
   hooks.beforeEach(function() {
     controller = this.owner.lookup('controller:competence/skills/single');
     changelogEntryService = this.owner.lookup('service:ChangelogEntry');
-    configService = Service.extend({
-      author,
-      ask: sinon.stub().resolves()
-    });
+    class ConfigService extends Service {
+      constructor() {
+        super(...arguments);
+        this.author = author;
+      }
+      ask = sinon.stub().resolves()
+    }
     this.owner.unregister('service:Config');
-    this.owner.register('service:Config',configService);
+    this.owner.register('service:Config',ConfigService);
   });
 
   test('it should create a skill changelogEntry', async function (assert) {
@@ -115,7 +118,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       save: sinon.stub().resolves({}),
     };
     currentSkill.clone = sinon.stub().resolves(clonedSkill);
-    controller.skill = currentSkill;
+    controller.model = currentSkill;
 
     // when
     await controller._duplicateToLocationCallback('changelogValue', competence, 'newTube', 'level');
@@ -168,7 +171,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       pixId: 'pix_1',
       challenges: [validatedChallenge, draftChallenge, archiveChallenge, deletedChallenge]
     });
-    controller.skill = skill;
+    controller.model = skill;
 
     // when
     const result = await controller._duplicateLiveChallenges();

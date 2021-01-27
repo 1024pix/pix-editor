@@ -1,8 +1,6 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { alias } from '@ember/object/computed';
-import { inject as controller } from '@ember/controller';
 import { scheduleOnce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 
@@ -24,11 +22,13 @@ export default class SingleController extends Controller {
   @controller('competence')
   parentController;
 
-  @alias('parentController.leftMaximized')
-  maximized;
+  get maximized() {
+    return this.parentController.leftMaximized;
+  }
 
-  @alias('model')
-  skill;
+  get skill() {
+    return this.model;
+  }
 
   @service config;
   @service access;

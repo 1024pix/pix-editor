@@ -2,88 +2,63 @@ import Component from '@glimmer/component';
 
 export default class StatisticsProductionComponent extends Component {
 
-  _productionChallengeCounts = null;
-  _productionSkillCounts = null;
-  _productionTubeCounts = null;
-  _productionData = null;
-  _productionTubeTotal = null;
-  _productionSkillTotal = null;
-  _productionChallengeTotal = null;
-
   get productionTubeCounts() {
-    if (!this._productionTubeCounts) {
-      this._productionTubeCounts = this.args.areas.reduce((current, area) => {
-        return area.competences.reduce((current, competence) => {
-          current[competence.code] = competence.productionTubeCount;
-          return current;
-        }, current);
-      }, {});
-    }
-    return this._productionTubeCounts;
+    return this.productionCounts((competence) => {
+      return competence.productionTubeCount;
+    });
   }
 
   get productionSkillCounts() {
-    if (!this._productionSkillCounts) {
-      this._productionSkillCounts = this.args.areas.reduce((current, area) => {
-        return area.competences.reduce((current, competence) => {
-          current[competence.code] = competence.tubes.reduce((current, tube) => {
-            return current + tube.productionSkillCount;
-          }, 0);
-          return current;
-        }, current);
-      }, {});
-    }
-    return this._productionSkillCounts;
+    return this.productionCounts((competence) => {
+      return competence.tubes.reduce((current, tube) => {
+        return current + tube.productionSkillCount;
+      }, 0);
+    });
   }
 
   get productionChallengeCounts() {
-    if (!this._productionChallengeCounts) {
-      this._productionChallengeCounts = this.args.areas.reduce((current, area) => {
-        return area.competences.reduce((current, competence) => {
-          current[competence.code] = competence.tubes.reduce((current, tube) => {
-            return current + tube.liveSkills.reduce((current, skill) => {
-              return current + skill.challenges.filter(challenge => challenge.isValidated).length;
-            },0);
-          },0);
-          return current;
-        }, current);
-      }, {});
-    }
-    return this._productionChallengeCounts;
+    return this.productionCounts((competence) => {
+      return competence.tubes.reduce((current, tube) => {
+        return current + tube.liveSkills.reduce((current, skill) => {
+          return current + skill.challenges.filter(challenge => challenge.isValidated).length;
+        },0);
+      },0);
+    });
+  }
+
+  productionCounts(callbackCount) {
+    return this.args.areas.reduce((current, area) => {
+      return area.competences.reduce((current, competence) => {
+        current[competence.code] = callbackCount(competence);
+        return current;
+      }, current);
+    }, {});
   }
 
   get productionData() {
-    if (!this._productionData) {
-      this._productionData = this.args.competenceCodes.map(code => ({
-        name:code,
-        tubes:this.productionTubeCounts[code],
-        skills:this.productionSkillCounts[code],
-        challenges:this.productionChallengeCounts[code],
-        rate:(this.productionChallengeCounts[code] * 100 / this.productionChallengeTotal).toFixed(1)
-      }));
-    }
-    return this._productionData;
+    return this.args.competenceCodes.map(code => ({
+      name:code,
+      tubes:this.productionTubeCounts[code],
+      skills:this.productionSkillCounts[code],
+      challenges:this.productionChallengeCounts[code],
+      rate:(this.productionChallengeCounts[code] * 100 / this.productionChallengeTotal).toFixed(1)
+    }));
   }
 
   get productionTubeTotal() {
-    if (!this._productionTubeTotal) {
-      this._productionTubeTotal = Object.values(this.productionTubeCounts).reduce((current, value) => current + value, 0);
-    }
-    return this._productionTubeTotal;
+    return this.productionTotal(this.productionTubeCounts);
   }
 
   get productionSkillTotal() {
-    if (!this._productionSkillTotal) {
-      this._productionSkillTotal = Object.values(this.productionSkillCounts).reduce((current, value) => current + value, 0);
-    }
-    return this._productionSkillTotal;
+    return this.productionTotal(this.productionSkillCounts);
   }
 
   get productionChallengeTotal() {
-    if (!this._productionChallengeTotal) {
-      this._productionChallengeTotal = Object.values(this.productionChallengeCounts).reduce((current, value) => current + value, 0);
-    }
-    return this._productionChallengeTotal;
+    return this.productionTotal(this.productionChallengeCounts);
+  }
+
+  productionTotal(productionCounts) {
+    return Object.values(productionCounts).reduce((current, value) => current + value, 0);
   }
 
 }

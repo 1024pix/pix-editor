@@ -39,7 +39,7 @@ module('Unit | Controller | competence/i18n/single', function(hooks) {
       { language: 'Franco Français',challenge: challenge1, alternativesCount:2 },
       { language: 'Francophone',challenge: challenge1,alternativesCount:1 }
     ];
-    controller.set('skill', skill);
+    controller.model = skill;
 
     //when
     const challengesByLanguages = controller.challengesByLanguagesAndAlternativesCount;
