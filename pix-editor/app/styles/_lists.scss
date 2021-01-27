@@ -7,11 +7,11 @@
     border-radius: 50%;
 
     &.active {
-      background: #444488;
+      background: $production-background-color;
     }
 
     &.draft {
-      background: #838be5;
+      background: $suggested-background-color;
     }
   }
 }

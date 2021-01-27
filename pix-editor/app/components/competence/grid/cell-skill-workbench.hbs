@@ -1,8 +1,22 @@
-<LinkTo @route="competence.skills.list" @models={{array @tube.id @level}} class="skill skill-cell link history" @tagName="td">
+<LinkTo @route="competence.skills.list" @models={{array @tube.id @skill.level}} class="skill skill-cell link skill-workbench" @tagName="td">
   <div class="skill-name ">
     {{@skill.name}}
   </div>
-  <div class="history-count">
-    {{this.archivedCount}} - <span class="deleted-skill">{{this.deletedCount}}</span>
+  <div class="skill-workbench__status ">
+    {{#if this.haveDraftSkill}}
+      <span data-test-draft-count class="workbench-status draft-skill">{{this.draftCount}}</span>
+    {{/if}}
+
+    {{#if this.haveActiveSkill}}
+      <span data-test-active-count class="workbench-status active-skill">1</span>
+    {{/if}}
+
+    {{#if this.haveArchivedSkill}}
+      <span data-test-archived-count class="workbench-status archive-skill">{{this.archivedCount}}</span>
+    {{/if}}
+
+    {{#if this.haveDeletedSkill}}
+      <span data-test-deleted-count class="workbench-status deleted-skill">{{this.deletedCount}}</span>
+    {{/if}}
   </div>
 </LinkTo>

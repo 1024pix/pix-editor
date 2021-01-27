@@ -173,17 +173,50 @@
         color: #08cf08;
       }
     }
-    &.history {
-      background: #828188;
-      color:white;
+    &.skill-workbench {
+      background: #D5E8FD;
 
-      .deleted-skill {
-        color: $deleted-background-color;
+      .skill-workbench__status {
+        display: flex;
+        justify-content: center;
+        color:white;
+        margin-top: 2px;
+
+        .workbench-status {
+        display: inline-block;
+        margin-left: .5em;
+        width: 1.5em;
+        height: 1.5em;
+        font-size: .8em;
+        border-radius: 50%;
+
+        &.active-skill {
+          background: $production-background-color;
+          color:black;
+
+        }
+
+        &.draft-skill {
+          background: $suggested-background-color;
+          color:black;
+
+        }
+
+        &.archive-skill {
+          background: $archived-background-color;
+        }
+
+        &.deleted-skill {
+          background: $deleted-background-color;
+        }
       }
 
+      }
+
+
       &.active {
-        color: white !important;
-        background: #918f99 !important;
+        color: #ffffff !important;
+        background: #aeb2e8 !important;
       }
     }
 
