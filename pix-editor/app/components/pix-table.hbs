@@ -1,0 +1,8 @@
+<table>
+  {{yield (hash
+    api=this.api
+    head=(component "ember-thead" api=this.api)
+    body=(component "pix-tbody" api=this.api)
+    foot=(component "ember-tfoot" api=this.api)
+  )}}
+</table>

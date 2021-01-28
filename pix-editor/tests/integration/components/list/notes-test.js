@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, findAll, waitUntil } from '@ember/test-helpers';
+import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | note-list', function (hooks) {
@@ -54,10 +54,6 @@ module('Integration | Component | note-list', function (hooks) {
     await render(hbs`<List::Notes @list={{this.notes}}/>`);
 
     //then
-    await waitUntil(function() {
-      const renderedNotes = findAll('[data-test-note]');
-      return renderedNotes.length === notes.length;
-    }, { timeout: 2000 });
     assert.dom('[data-test-note]').exists({ count: notes.length });
   });
 
