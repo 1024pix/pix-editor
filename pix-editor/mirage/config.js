@@ -46,22 +46,14 @@ export default function () {
 
   this.get('/airtable/content/Tubes/:id', (schema, request) => {
     const tube = schema.tubes.find(request.params.id);
-    return {
-      id: tube.id,
-      fields: {
-        'Record Id': tube.id,
-        'Nom': tube.name,
-        'Titre': tube.title,
-        'Description': tube.description,
-        'Titre pratique fr-fr': tube.practicalTitleFr,
-        'Titre pratique en-us': tube.practicalTitleEn,
-        'Description pratique fr-fr': tube.practicalDescriptionFr,
-        'Description pratique en-us': tube.practicalDescriptionEn,
-        'Competences': tube.competenceIds,
-        'Acquis': tube.rawSkillIds,
-        'id persistant': tube.pixId,
-      }
-    };
+    return _serializeTube(tube);
+  });
+
+  this.get('/airtable/content/Tubes', (schema, request) => {
+    const records = schema.tubes.all().models.map(tube => {
+      return _serializeTube(tube);
+    });
+    return _response(request, { records });
   });
 
   this.get('/airtable/content/Acquis/:id', (schema, request) => {
@@ -128,6 +120,12 @@ export default function () {
       return _serializeChalllenge(challenge);
     });
     return _response(request, { records });
+  });
+
+  this.post('/airtable/content/Epreuves', (schema, request) => {
+    const challenge = JSON.parse(request.requestBody);
+    schema.challenges.create(challenge);
+    return challenge;
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
@@ -218,6 +216,25 @@ function _serializeChalllenge(challenge) {
       'Géographie': challenge.area,
       'Réponse automatique': challenge.autoReply,
       'files': challenge.filesIds,
+    }
+  };
+}
+
+function _serializeTube(tube) {
+  return {
+    id: tube.id,
+    fields: {
+      'Record Id': tube.id,
+      'Nom': tube.name,
+      'Titre': tube.title,
+      'Description': tube.description,
+      'Titre pratique fr-fr': tube.practicalTitleFr,
+      'Titre pratique en-us': tube.practicalTitleEn,
+      'Description pratique fr-fr': tube.practicalDescriptionFr,
+      'Description pratique en-us': tube.practicalDescriptionEn,
+      'Competences': tube.competenceIds,
+      'Acquis': tube.rawSkillIds,
+      'id persistant': tube.pixId,
     }
   };
 }
