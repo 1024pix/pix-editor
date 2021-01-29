@@ -27,6 +27,7 @@ export default class NewController extends Alternative {
       .then(challenge => this._handleAttachments(challenge))
       .then(challenge => this._saveChallenge(challenge))
       .then(challenge => this._setAlternativeVersion(challenge))
+      .then(challenge => this._saveAttachments(challenge))
       .then(challenge => {
         this.edition = false;
         this.send('minimize');
@@ -46,6 +47,7 @@ export default class NewController extends Alternative {
       .then(() => this.currentData.getPrototype().getNextAlternativeVersion())
       .then(version => {
         challenge.alternativeVersion = version;
+        console.log(challenge.id);
         return challenge.save();
       });
   }

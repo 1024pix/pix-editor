@@ -15,7 +15,7 @@
     <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
     {{#if this.mayCreateAlternative}}
       <button class="ui button right item" {{on "click" this.newAlternative}} type="button">
-        <i class="plus square outline icon"></i> Nouvelle déclinaison
+        <i class="plus square outline icon" data-test-new-alternative-action></i> Nouvelle déclinaison
       </button>
     {{/if}}
   </div>

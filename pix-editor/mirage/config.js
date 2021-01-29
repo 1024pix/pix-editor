@@ -112,20 +112,26 @@ export default function () {
 
   this.get('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChalllenge(challenge);
+    return _serializeChallenge(challenge);
   });
 
   this.get('/airtable/content/Epreuves', (schema, request) => {
     const records = schema.challenges.all().models.map(challenge => {
-      return _serializeChalllenge(challenge);
+      return _serializeChallenge(challenge);
     });
     return _response(request, { records });
   });
 
   this.post('/airtable/content/Epreuves', (schema, request) => {
     const challenge = JSON.parse(request.requestBody);
-    schema.challenges.create(challenge);
-    return challenge;
+    const createdChallenge = schema.challenges.create(challenge);
+
+    challenge.fields['Acquix'].forEach(skillId => {
+      const skill = schema.skills.find(skillId);
+      skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
+      skill.save();
+    });
+    return _serializeChallenge(createdChallenge);
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
@@ -155,7 +161,7 @@ export default function () {
 
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChalllenge(challenge);
+    return _serializeChallenge(challenge);
   });
 
   this.post('/airtable/changelog/Notes', (schema, request) => {
@@ -176,7 +182,7 @@ function _isRequestAuthorized(request) {
 
 const unauthorizedErrorResponse = new Mirage.Response(401);
 
-function _serializeChalllenge(challenge) {
+function _serializeChallenge(challenge) {
   return {
     id: challenge.id,
     fields: {
