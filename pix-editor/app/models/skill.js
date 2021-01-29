@@ -225,7 +225,7 @@ export default class SkillModel extends Model {
   }
 
   clone() {
-    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore'];
+    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore', 'version'];
     const data = this._getJSON(ignoredFields);
     data.status = 'en construction';
     data.pixId = this.idGenerator.newId();

@@ -94,6 +94,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
 
     sinon.stub(controller, '_handleSkillChangelog').resolves();
     sinon.stub(controller, '_duplicateLiveChallenges').resolves([]);
+    sinon.stub(controller, '_setVersion');
     controller.loader = {
       start: sinon.stub(),
       stop:  sinon.stub()
@@ -127,6 +128,19 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const duplicateToLocationArgs = transitionToRouteStub.getCall(0).args[2];
     assert.equal(duplicateToLocationArgs.level, 'level');
     assert.equal(duplicateToLocationArgs.tube, 'newTube');
+  });
+
+  test('it should set a skill version', async function (assert) {
+    // given
+    const skill1 = { name: 'skill1', level: '1' };
+    const skill2 = { name: 'skill2', level: '1' };
+    const tube = { name: 'tube', filledSkills: [[skill1, skill2]] };
+
+    // when
+    await controller._setVersion(skill2, tube);
+
+    // then
+    assert.equal(skill2.version, 2);
   });
 
   test('it should clone only validated and draft challenges', async function (assert) {
