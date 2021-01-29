@@ -5,13 +5,7 @@
         <span data-test-draft-prototype-count class="draft-prototype ui tiny label" title="Proposé">{{this.draftPrototypesCount}}</span>
       {{/if}}
       {{#if this.validatedPrototype}}
-        <span data-test-validated-prototype-count class="validated-prototype ui tiny label" title="Validé">
-          {{#if this.validatedPrototype.notDeclinable}}
-            NR
-          {{else}}
-            1
-          {{/if}}
-        </span>
+        <span data-test-validated-prototype-count class="validated-prototype ui tiny label" title="Validé">1</span>
       {{/if}}
       {{#if this.haveArchivedPrototypes}}
         <span data-test-archived-prototype-count class="archived-prototype ui tiny label" title="Archivé">{{this.archivedPrototypesCount}}</span>

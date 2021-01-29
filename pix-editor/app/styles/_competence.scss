@@ -31,7 +31,6 @@
 .competence-grid {
   height: 100%;
   overflow: scroll;
-  /*flex: 1 1 0;*/
   min-height: 0;
 }
 
@@ -53,16 +52,115 @@
     &.skill {
       text-align: center;
 
-      &.active,
-      &.active .skill-name {
-        color: red !important;
-      }
-
       &.link {
         cursor: pointer;
 
+        &.production,
+        &.workbench {
+          background-color: $challenge-background-color !important;
+
+          &.active {
+            background-color: #EBEC5C !important;
+            color: red !important;
+          }
+          .workbench__status {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+
+            span {
+              &.draft-prototype {
+                background: $suggested-background-color;
+              }
+
+              &.validated-prototype {
+                background: $production-background-color;
+              }
+
+              &.archived-prototype {
+                background: $archived-background-color;
+                color: white;
+              }
+
+              &.deleted-prototype {
+                background: $deleted-background-color;
+                color: white;
+              }
+
+              &.not-declinable {
+                background: white;
+                color: black;
+              }
+            }
+          }
+        }
+
         &.skill-mode {
-          background-color: #444488 !important;
+          background-color: $skill-background-color !important;
+
+          .idea.icon {
+            text-shadow: 1px 1px 1px rgba(0,0,0,.8);
+
+            &.validated,
+            &.prevalidated {
+              color: $validated-background-color;
+            }
+            &.to-be-submitted {
+              color: $to-be-submitted-background-color;
+            }
+            &.need-work {
+              color: $need-work-background-color;
+            }
+            &.suggested {
+              color: $suggested-background-color;
+            }
+            &.archived {
+              color: $archived-background-color;
+              text-shadow: none;
+            }
+            &.na{
+              color: $na-color;
+              text-shadow: none;
+            }
+          }
+
+          .tuto-count {
+            font-size: 12px;
+          }
+        }
+
+        &.skill-workbench {
+          background: $skill-background-color;
+
+          .skill-workbench__status {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+
+            .workbench-status {
+              &.active-skill {
+                background: $production-background-color;
+              }
+
+              &.draft-skill {
+                background: $suggested-background-color;
+              }
+
+              &.archive-skill {
+                background: $archived-background-color;
+                color: white;
+              }
+
+              &.deleted-skill {
+                background: $deleted-background-color;
+                color: white;
+              }
+            }
+          }
+
+          &.active {
+            background: #9ecafc !important;
+          }
         }
 
         &.i18n {
@@ -87,197 +185,44 @@
           }
         }
 
-        .skill-name {
-          margin: -5px -5px 0 -5px;
-          padding: 5px 5px 0 5px;
-        }
+        &.quality-skill-link {
+          padding: 0;
 
-        .help {
-          margin: 0 -5px -5px -5px;
-          padding: 0 5px 5px 5px;
-          color: $suggested-background-color;
-        }
+          .quality {
+            padding: 5px;
+            height: 100%;
+            cursor: pointer;
 
-        .tuto-count {
-          font-size: 12px;
-        }
+            &.bad-quality {
+              background: #EA2700;
+              color: white;
+            }
 
-        &.production,
-        &.production.active,
-        .skill-name.production,
-        .help i.production {
-          background-color: $production-background-color !important;
-          color: $production-color;
-        }
+            &.medium-quality {
+              background: #F3AC0B;
+            }
 
-        &.workbench,
-        &.workbench.active,
-        .skill-name.draft,
-        .help i.draft {
-          background-color: $draft-background-color !important;
-          color: $draft-color;
-        }
+            &.good-quality {
+              background: #0DC600;
+            }
 
-        &.suggested,
-        &.suggested.active,
-        .skill-name.suggested,
-        .help i.suggested {
-          /*background-color:$suggested-background-color !important;*/
-          color: $suggested-background-color;
-        }
-
-        &.prevalidated,
-        &.prevalidated.active,
-        .skill-name.prevalidated,
-        .help i.prevalidated {
-          /*background-color:$prevalidated-background-color !important;*/
-          color: $prevalidated-background-color;
-        }
-
-        &.validated_no_test,
-        &.validated_no_test.active {
-          /*background-color:$validated-no-test-background-color !important;*/
-          color: $validated-no-test-background-color;
-        }
-
-        &.validated,
-        &.validated.active,
-        .skill-name.validated,
-        .help i.validated {
-          /*background-color:$validated-background-color !important;*/
-          color: $validated-background-color;
-        }
-
-        &.link.archived,
-        &.link.archived.active,
-        .skill-name.archived,
-        .help i.archived {
-          /*background-color:$archived-background-color !important;*/
-          color: $archived-background-color;
-        }
-
-        .skill-name.to-be-submitted,
-        .help i.to-be-submitted {
-          /*background-color:$to-be-submitted-background-color !important;*/
-          color: $to-be-submitted-background-color;
-        }
-
-        .skill-name.need-work,
-        .help i.need-work {
-          /*background-color:$need-work-background-color !important;*/
-          color: $need-work-background-color;
-        }
-
-        .help i.na {
-          color: $na-color;
-        }
-      }
-
-      .idea.icon.validated {
-        color: #08cf08;
-      }
-    }
-
-    .workbench__status {
-      display: flex;
-      justify-content: center;
-      margin-top: 2px;
-
-      span {
-        &.draft-prototype {
-          background: $suggested-background-color;
-        }
-
-        &.validated-prototype {
-          background: $production-background-color;
-        }
-
-        &.archived-prototype {
-          background: $archived-background-color;
-          color: white;
-        }
-
-        &.deleted-prototype {
-          background: $deleted-background-color;
-          color: white;
-        }
-
-        &.not-declinable {
-          background: white;
-          color: black;
-        }
-      }
-    }
-
-    &.skill-workbench {
-      background: #D5E8FD;
-
-      .skill-workbench__status {
-        display: flex;
-        justify-content: center;
-        margin-top: 2px;
-
-        .workbench-status {
-          &.active-skill {
-            background: $production-background-color;
+            .half-tutorial {
+              color: #aaa
+            }
           }
 
-          &.draft-skill {
-            background: $suggested-background-color;
+          &.active {
+            .quality {
+              box-shadow: #000 0 0 7px;
+              opacity: .8;
+            }
+
           }
-
-          &.archive-skill {
-            background: $archived-background-color;
-            color: white;
-          }
-
-          &.deleted-skill {
-            background: $deleted-background-color;
-            color: white;
-          }
-        }
-      }
-
-      &.active {
-        color: #ffffff !important;
-        background: #aeb2e8 !important;
-      }
-    }
-
-    &.quality-skill-link {
-      padding: 0;
-
-      .quality {
-        padding: 5px;
-        height: 100%;
-        cursor: pointer;
-
-        &.bad-quality {
-          background: #EA2700;
-          color: white;
-        }
-
-        &.medium-quality {
-          background: #F3AC0B;
-        }
-
-        &.good-quality {
-          background: #0DC600;
-        }
-
-        .half-tutorial {
-          color: #aaa
-        }
-      }
-
-      &.active {
-        .quality {
-          box-shadow: #000 0 0 7px;
-          opacity: .8;
         }
 
       }
     }
+
 
     .add-skill {
       display: block;

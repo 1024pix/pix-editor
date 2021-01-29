@@ -108,6 +108,26 @@ img.clickable {
     background: transparent;
     color: inherit;
 
+    .circular {
+      &.validated {
+        background: $validated-background-color !important;
+        color: #2f2f2f !important;
+      }
+
+      &.suggested {
+        background: $suggested-background-color !important;
+        color: #2f2f2f !important;
+      }
+
+      &.archived {
+        background: $archived-background-color !important;
+      }
+
+      &.deleted {
+        background: $deleted-background-color !important;
+      }
+    }
+
     .item {
       color: inherit;
 
@@ -132,52 +152,17 @@ img.clickable {
     .ember-basic-dropdown-content .ui.button {
       margin:0;
     }
-
   }
 
-  &.suggested {
-    background-color: $suggested-background-color !important;
-    color: $suggested-color;
-  }
-
-  &.prevalidated {
-    background-color: $prevalidated-background-color !important;
-    color: $prevalidated-color;
-  }
-
-  &.validated_no_test {
-    background-color: $validated-no-test-background-color !important;
-    color: $validated-no-test-color;
-  }
-
-  &.validated {
-    background-color: $validated-background-color !important;
-    color: $validated-color;
-  }
-
-  &.archived {
-    background-color: $archived-background-color !important;
-    color: $archived-color;
-
-    .ui.menu .ember-basic-dropdown-content .ui.button {
-      color:$archived-background-color;
-    }
-
-  }
-
-  &.deleted {
-    background-color: $deleted-background-color !important;
-    color: $deleted-color;
-  }
-
-  &.to-be-submitted {
-    background-color: $to-be-submitted-background-color !important;
-    color: $to-be-submitted-color;
-  }
-
+  &.prevalidated,
+  &.validated_no_test,
+  &.validated,
+  &.suggested,
+  &.archived,
+  &.deleted,
+  &.to-be-submitted,
   &.need-work {
-    background-color: $need-work-background-color !important;
-    color: $need-work-color;
+    background-color: $challenge-background-color !important;
   }
 }
 
