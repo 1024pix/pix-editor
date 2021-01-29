@@ -12,7 +12,7 @@ export default class NewController extends Skill {
   }
 
   get tube() {
-    return this.model.tube; 
+    return this.model.tube;
   }
 
   @service notify;
@@ -36,6 +36,7 @@ export default class NewController extends Skill {
       .then(competence=> {
         skill.tube = tube;
         skill.competence = [competence.get('id')];
+        this._setVersion(skill, tube);
         return skill.save();
       })
       .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction))
@@ -49,5 +50,11 @@ export default class NewController extends Skill {
         this.loader.stop();
         this.notify.error('Erreur lors de la création de l\'acquis');
       });
+  }
+
+  _setVersion(skill, tube) {
+    const intLevel = parseInt(skill.level);
+    const skills = tube.filledSkills[intLevel - 1];
+    skill.version = skills.length;
   }
 }
