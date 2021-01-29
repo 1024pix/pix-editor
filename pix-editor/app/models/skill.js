@@ -18,6 +18,7 @@ export default class SkillModel extends Model {
   @attr status;
   @attr pixId;
   @attr i18n;
+  @attr('number') version;
 
   @belongsTo('tube')
   tube;
