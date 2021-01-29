@@ -166,7 +166,7 @@ export default class SkillModel extends Model {
     return [];
   }
 
-  getNextVersion() {
+  getNextPrototypeVersion() {
     return this.prototypes.reduce((current, prototype) => {
       const version = prototype.version;
       if (version > current) {

@@ -654,7 +654,7 @@ export default class SingleController extends Controller {
   }
 
   _getNextPrototypeVersion(skills) {
-    return skills.map(skill => skill.getNextVersion()).reduce((current, version) => {
+    return skills.map(skill => skill.getNextPrototypeVersion()).reduce((current, version) => {
       return Math.max(version, current);
     }, 1);
   }
