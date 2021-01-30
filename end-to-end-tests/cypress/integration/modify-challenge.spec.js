@@ -13,14 +13,13 @@ context('Modifying challenge', () => {
     cy.contains('@eval2', {timeout: 12000}).click();
     cy.contains('Modifier').click();
     cy.contains('Enregistrer').click();
-    cy.server();
-    cy.route('POST', '/api/**').as('route');
+    cy.intercept('POST', '/api/**').as('route');
 
     // when
     cy.contains('Enregistrer', {timeout: 2000}).click();
 
     // then
-    cy.wait('@route').its('status').should('be.within', 200, 204);
+    cy.wait('@route').its('response.statusCode').should('be.within', 200, 204);
   });
 
 });
