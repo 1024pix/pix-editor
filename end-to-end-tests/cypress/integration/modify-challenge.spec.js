@@ -5,7 +5,7 @@ context('Modifying challenge', () => {
 
   it('Modifies a challenge', () => {
     // given
-    cy.visit('http://localhost:4200');
+    cy.visit('http://localhost:4300');
     cy.get('#login-api-key')
       .type('8d03a893-3967-4501-9dc4-e0aa6c6dc442{enter}');
     cy.contains('1. Information', {timeout: 30000}).click();

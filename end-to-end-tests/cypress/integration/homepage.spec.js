@@ -2,7 +2,7 @@
 
 context('Visiting homepage', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4200');
+    cy.visit('http://localhost:4300');
   })
 
   it('authenticates', () => {

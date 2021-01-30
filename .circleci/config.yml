@@ -131,7 +131,7 @@ jobs:
           environment:
             DATABASE_URL: 'postgres://circleci@localhost:5432/circleci'
           command: |
-            wget --retry-connrefused -T 60 -qO- http://localhost:4200
+            wget --retry-connrefused -T 60 -qO- http://localhost:4300
             wget --retry-connrefused -T 60 -qO- http://localhost:3002/api
             npm run cy:run:ci
 
