@@ -3,7 +3,7 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
-module('Integration | Component | list/live-skill', function(hooks) {
+module('Integration | Component | list/skill', function(hooks) {
   setupRenderingTest(hooks);
 
   test('should display a list of skills', async function(assert) {
@@ -20,6 +20,8 @@ module('Integration | Component | list/live-skill', function(hooks) {
     const skill1 = {
       id: 'recSkill1',
       pixId: 'pixSkill1',
+      version: '1',
+      description: 'description_1',
       date: '14/07/1986 à 11:20',
       challenges: [challenge1, challenge2],
       status: 'en construction',
@@ -28,6 +30,8 @@ module('Integration | Component | list/live-skill', function(hooks) {
     const skill2 = {
       id: 'recSkill2',
       pixId: 'pixSkill2',
+      version: '2',
+      description: 'description_2',
       date: '11/01/2020 à 11:20',
       challenges: [challenge3],
       status: 'actif',
@@ -36,9 +40,9 @@ module('Integration | Component | list/live-skill', function(hooks) {
     this.skills = [skill2, skill1];
 
     // when
-    await render(hbs`<List::LiveSkills @list={{this.skills}}/>`);
+    await render(hbs`<List::Skills @list={{this.skills}}/>`);
 
     // then
-    assert.dom('[data-test-live-skill-row]').exists({ count: this.skills.length });
+    assert.dom('[data-test-skill-row]').exists({ count: this.skills.length });
   });
 });
