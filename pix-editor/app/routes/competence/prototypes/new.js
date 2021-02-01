@@ -8,7 +8,6 @@ export default class NewRoute extends PrototypeRoute {
   @service idGenerator;
 
   model(params) {
-    //TODO: handle 'fromSkill' param
     if (params.from) {
       return this.store.findRecord('challenge',params.from)
         .then((prototype) => {

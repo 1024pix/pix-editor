@@ -13,7 +13,7 @@ export default Factory.extend({
   illustration: undefined,
   attachments: undefined,
   pedagogy: 'pedagogy',
-  author: 'author',
+  author() { return ['author']; },
   declinable: 'declinable',
   version: 'version',
   genealogy: 'Prototype 1',

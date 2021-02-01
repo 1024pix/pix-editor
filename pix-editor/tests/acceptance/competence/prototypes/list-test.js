@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, find, findAll, click, waitUntil } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { later } from '@ember/runloop';
-import setupMirage from 'ember-cli-mirage/test-support/setup-mirage';
+import { setupMirage } from 'ember-cli-mirage/test-support';
 
 const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';

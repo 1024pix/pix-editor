@@ -46,22 +46,14 @@ export default function () {
 
   this.get('/airtable/content/Tubes/:id', (schema, request) => {
     const tube = schema.tubes.find(request.params.id);
-    return {
-      id: tube.id,
-      fields: {
-        'Record Id': tube.id,
-        'Nom': tube.name,
-        'Titre': tube.title,
-        'Description': tube.description,
-        'Titre pratique fr-fr': tube.practicalTitleFr,
-        'Titre pratique en-us': tube.practicalTitleEn,
-        'Description pratique fr-fr': tube.practicalDescriptionFr,
-        'Description pratique en-us': tube.practicalDescriptionEn,
-        'Competences': tube.competenceIds,
-        'Acquis': tube.rawSkillIds,
-        'id persistant': tube.pixId,
-      }
-    };
+    return _serializeTube(tube);
+  });
+
+  this.get('/airtable/content/Tubes', (schema, request) => {
+    const records = schema.tubes.all().models.map(tube => {
+      return _serializeTube(tube);
+    });
+    return _response(request, { records });
   });
 
   this.get('/airtable/content/Acquis/:id', (schema, request) => {
@@ -120,14 +112,26 @@ export default function () {
 
   this.get('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChalllenge(challenge);
+    return _serializeChallenge(challenge);
   });
 
   this.get('/airtable/content/Epreuves', (schema, request) => {
     const records = schema.challenges.all().models.map(challenge => {
-      return _serializeChalllenge(challenge);
+      return _serializeChallenge(challenge);
     });
     return _response(request, { records });
+  });
+
+  this.post('/airtable/content/Epreuves', (schema, request) => {
+    const challenge = JSON.parse(request.requestBody);
+    const createdChallenge = schema.challenges.create(challenge);
+
+    challenge.fields['Acquix'].forEach(skillId => {
+      const skill = schema.skills.find(skillId);
+      skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
+      skill.save();
+    });
+    return _serializeChallenge(createdChallenge);
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
@@ -157,7 +161,7 @@ export default function () {
 
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChalllenge(challenge);
+    return _serializeChallenge(challenge);
   });
 
   this.post('/airtable/changelog/Notes', (schema, request) => {
@@ -178,7 +182,7 @@ function _isRequestAuthorized(request) {
 
 const unauthorizedErrorResponse = new Mirage.Response(401);
 
-function _serializeChalllenge(challenge) {
+function _serializeChallenge(challenge) {
   return {
     id: challenge.id,
     fields: {
@@ -218,6 +222,25 @@ function _serializeChalllenge(challenge) {
       'Géographie': challenge.area,
       'Réponse automatique': challenge.autoReply,
       'files': challenge.filesIds,
+    }
+  };
+}
+
+function _serializeTube(tube) {
+  return {
+    id: tube.id,
+    fields: {
+      'Record Id': tube.id,
+      'Nom': tube.name,
+      'Titre': tube.title,
+      'Description': tube.description,
+      'Titre pratique fr-fr': tube.practicalTitleFr,
+      'Titre pratique en-us': tube.practicalTitleEn,
+      'Description pratique fr-fr': tube.practicalDescriptionFr,
+      'Description pratique en-us': tube.practicalDescriptionEn,
+      'Competences': tube.competenceIds,
+      'Acquis': tube.rawSkillIds,
+      'id persistant': tube.pixId,
     }
   };
 }

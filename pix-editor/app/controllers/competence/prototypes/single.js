@@ -601,8 +601,9 @@ export default class SingleController extends Controller {
     return challenge.save();
   }
 
-  _saveAttachments(challenge) {
-    return Promise.all(challenge.files.map(file => file.save()));
+  async _saveAttachments(challenge) {
+    await Promise.all(challenge.files.map(file => file.save()));
+    return challenge;
   }
 
   _handleChangelog(challenge, changelog) {

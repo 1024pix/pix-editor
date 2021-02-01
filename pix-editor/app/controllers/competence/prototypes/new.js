@@ -27,6 +27,7 @@ export default class NewController extends Prototype {
     return this._handleIllustration(this.challenge)
       .then(challenge => this._handleAttachments(challenge))
       .then(challenge => this._saveChallenge(challenge))
+      .then(challenge => this._saveAttachments(challenge))
       .then(challenge => this._setVersion(challenge))
       .then(challenge => {
         this.edition = false;
