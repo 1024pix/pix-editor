@@ -78,6 +78,7 @@ export default function () {
         'Internationalisation': skill.i18n,
         'id persistant': skill.pixId,
         'Date': skill.createdAt,
+        'Version': skill.version,
       }
     };
   });
@@ -104,6 +105,7 @@ export default function () {
           'Internationalisation': skill.i18n,
           'id persistant': skill.pixId,
           'Date': skill.createdAt,
+          'Version': skill.version,
         }
       };
     });
