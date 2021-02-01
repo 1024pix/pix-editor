@@ -524,14 +524,15 @@ export default class SingleController extends Controller {
       this._loadingMessage('Envoi de l\'illustration...');
       const file = illustration.firstObject.file;
       const newIllustration = await this.storage.uploadFile(file);
-      this._createOrUpdateIllustration(challenge, newIllustration);
+      await this._createOrUpdateIllustration(challenge, newIllustration);
       challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
     }
     return challenge;
   }
 
-  _createOrUpdateIllustration(challenge, newIllustration) {
-    const previousIllustration = challenge.files.findBy('type', 'illustration');
+  async _createOrUpdateIllustration(challenge, newIllustration) {
+    const files = await challenge.files;
+    const previousIllustration = files.findBy('type', 'illustration');
 
     if (previousIllustration) {
       previousIllustration.filename = newIllustration.filename;
@@ -589,8 +590,9 @@ export default class SingleController extends Controller {
     return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
   }
 
-  _renameAttachmentFiles(challenge) {
-    const attachments = challenge.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+  async _renameAttachmentFiles(challenge) {
+    const files = await challenge.files;
+    const attachments = files.filter((file) => file.type === 'attachment' && !file.isDeleted);
     attachments.forEach((file) => file.filename = this._getAttachmentFullFilename(challenge, file.filename));
   }
 
