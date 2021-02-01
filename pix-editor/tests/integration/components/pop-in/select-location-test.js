@@ -25,6 +25,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_1_1_1_1',
       name: 'skill1_1_1_1_1',
       level: 2,
+      version: 1,
       status: 'actif'
     };
     skill1_1_1_1_2 = {
@@ -32,6 +33,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_1_1_1_2',
       name: 'skill1_1_1_1_2',
       level: 5,
+      version: 1,
       status: 'actif'
     };
     skill1_2_1_1_1 = {
@@ -39,6 +41,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_1_1_1',
       name: 'skill1_2_1_1_1',
       level: 1,
+      version: 1,
       status: 'actif'
     };
     skill1_2_1_1_2 = {
@@ -46,6 +49,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_1_1_2',
       name: 'skill1_2_1_1_2',
       level: 6,
+      version: 1,
       status: 'actif'
     };
     skill1_2_1_1_3 = {
@@ -53,6 +57,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_1_1_3',
       name: 'skill1_2_1_1_3',
       level: 6,
+      version: 2,
       status: 'en construction'
     };
     skill1_2_1_2_1 = {
@@ -60,6 +65,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_1_2_1',
       name: 'skill1_2_1_2_1',
       level: 3,
+      version: 1,
       status: 'actif'
     };
     skill1_2_1_2_2 = {
@@ -67,6 +73,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_1_2_2',
       name: 'skill1_2_1_2_2',
       level: 4,
+      version: 1,
       status: 'actif'
     };
     skill1_2_2_1_1 = {
@@ -74,6 +81,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_2_1_1',
       name: 'skill1_2_2_1_1',
       level: 2,
+      version: 1,
       status: 'actif'
     };
     skill1_2_2_1_2 = {
@@ -81,6 +89,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       pixId: 'pixIdSkill1_2_2_1_2',
       name: 'skill1_2_2_1_2',
       level: 3,
+      version: 1,
       status: 'actif'
     };
     tube1_1_1_1 = {
@@ -175,7 +184,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
 
     test('it should display location fields of challenge', function (assert) {
       // given
-      const expectedResult = ['pix', 'competence1_2_1', 'tube1_2_1_1', 'pixIdSkill1_2_1_1_2'];
+      const expectedResult = ['pix', 'competence1_2_1', 'tube1_2_1_1', 'skill1_2_1_1_2 (v.1)'];
 
       // then
       const fields = findAll('.field .ember-power-select-selected-item');
@@ -187,7 +196,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
     test('it should display a list of skills on click', async function (assert) {
       // given
       const expectedGroupResult = ['Niveau 1', 'Niveau 6'];
-      const expectedOptionsResult = [ 'pixIdSkill1_2_1_1_1', 'pixIdSkill1_2_1_1_2', 'pixIdSkill1_2_1_1_3'];
+      const expectedOptionsResult = [ 'skill1_2_1_1_1 (v.1)', 'skill1_2_1_1_2 (v.1)', 'skill1_2_1_1_3 (v.2)'];
 
       // when
       await click('[data-test-skill-list] .ember-basic-dropdown-trigger');
@@ -207,7 +216,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
 
     test('it should load a list of skill of selected location', async function (assert) {
       //given
-      const expectedOptionsResult = [ 'pixIdSkill1_1_1_1_1', 'pixIdSkill1_1_1_1_2'];
+      const expectedOptionsResult = [ 'skill1_1_1_1_1 (v.1)', 'skill1_1_1_1_2 (v.1)'];
 
       // when
       await click(findAll('.ember-basic-dropdown-trigger')[1]);
@@ -246,7 +255,8 @@ module('Integration | Component | popin-select-location', function (hooks) {
         pixId: 'pixIdSkill1_2_1_2_1',
         name: 'skill1_2_1_2_1',
         level: 3,
-        status: 'actif'
+        status: 'actif',
+        version: 1
       }]);
     });
   });
