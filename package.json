@@ -14,6 +14,8 @@
     "install": "cd pix-editor && npm ci && cd ../api && npm ci",
     "start": "cd api && npm start",
     "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor && cd .. && npm run signal-github",
+    "build-ext": "web-ext sign --source-dir pix-editor/ext/firefox --artifacts-dir pix-editor/ext/firefox/web-ext-artifacts --api-key=${MOZILLA_API_KEY} --api-secret=${MOZILLA_SECRET}",
+    "lint-ext": "web-ext --source-dir pix-editor/ext/firefox lint",
     "signal-github": "./scripts/signal_deploy_to_pr.sh",
     "scalingo-post-ra-creation": "cd api && npm run scalingo-post-ra-creation",
     "postdeploy": "cd api && npm run postdeploy"
@@ -27,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/1024pix/pix-editor/issues"
   },
-  "homepage": "https://github.com/1024pix/pix-editor#readme"
+  "homepage": "https://github.com/1024pix/pix-editor#readme",
+  "dependencies": {
+    "web-ext": "^5.5.0"
+  }
 }
