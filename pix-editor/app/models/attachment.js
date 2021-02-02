@@ -6,6 +6,7 @@ export default class Attachment extends Model {
   @attr size;
   @attr mimeType;
   @attr type;
+  @attr alt;
 
   @belongsTo('challenge') challenge;
 }

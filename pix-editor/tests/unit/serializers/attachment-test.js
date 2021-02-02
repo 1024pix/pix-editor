@@ -14,6 +14,7 @@ module('Unit | Serializer | attachment', function(hooks) {
       mimeType: 'mimeType',
       size: 'size',
       type: 'type',
+      alt: 'alt',
       challenge
     }));
 
@@ -23,6 +24,7 @@ module('Unit | Serializer | attachment', function(hooks) {
       mimeType: 'mimeType',
       size: 'size',
       type: 'type',
+      alt: 'alt',
       challengeId: ['challengeId'],
     };
 

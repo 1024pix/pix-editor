@@ -143,6 +143,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     hooks.beforeEach(function() {
       challenge = EmberObject.create({
         id: 'recChallenge',
+        alternativeText: 'alt-illustration',
         illustration: [{
           file: {
             name: 'attachment-name',
@@ -196,6 +197,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 123,
         mimeType: 'image/png',
         type: 'illustration',
+        alt: 'alt-illustration',
         challenge
       };
       const record = { save: sinon.stub().resolves() };
@@ -218,6 +220,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 654,
         mimeType: 'image/jpeg',
         type: 'illustration',
+        alt: 'former-alt-illustration',
       },{
         id: 'rec_456',
         filename: 'attachment-name',
@@ -225,6 +228,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 123,
         mimeType: 'image/png',
         type: 'attachment',
+        alt: 'alt-attachment',
       }];
 
       const expectedNewFile = {
@@ -234,6 +238,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 123,
         mimeType: 'image/png',
         type: 'illustration',
+        alt: 'alt-illustration',
       };
 
       // when

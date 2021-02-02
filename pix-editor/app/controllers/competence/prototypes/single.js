@@ -539,6 +539,7 @@ export default class SingleController extends Controller {
       previousIllustration.url = newIllustration.url;
       previousIllustration.size = newIllustration.size;
       previousIllustration.mimeType = newIllustration.type;
+      previousIllustration.alt = challenge.alternativeText;
       return;
     }
     const attachment = {
@@ -547,6 +548,7 @@ export default class SingleController extends Controller {
       size: newIllustration.size,
       mimeType: newIllustration.type,
       type: 'illustration',
+      alt: challenge.alternativeText,
       challenge
     };
     this.store.createRecord('attachment', attachment);
