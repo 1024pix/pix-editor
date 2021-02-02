@@ -526,6 +526,12 @@ export default class SingleController extends Controller {
       const newIllustration = await this.storage.uploadFile(file);
       await this._createOrUpdateIllustration(challenge, newIllustration);
       challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
+    } else if (challenge.alternativeText) {
+      const files = await challenge.files;
+      const previousIllustration = files.findBy('type', 'illustration');
+      if (previousIllustration && !previousIllustration.isDeleted) {
+        previousIllustration.alt = challenge.alternativeText;
+      }
     }
     return challenge;
   }
@@ -539,6 +545,7 @@ export default class SingleController extends Controller {
       previousIllustration.url = newIllustration.url;
       previousIllustration.size = newIllustration.size;
       previousIllustration.mimeType = newIllustration.type;
+      previousIllustration.alt = challenge.alternativeText;
       return;
     }
     const attachment = {
@@ -547,6 +554,7 @@ export default class SingleController extends Controller {
       size: newIllustration.size,
       mimeType: newIllustration.type,
       type: 'illustration',
+      alt: challenge.alternativeText,
       challenge
     };
     this.store.createRecord('attachment', attachment);
