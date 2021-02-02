@@ -211,7 +211,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(record.save.notCalled);
     });
 
-    test('it updates the attachment', async function (assert) {
+    test('it updates the attachment', async function(assert) {
       // given
       challenge.files = [{
         id: 'rec_123',
@@ -221,7 +221,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         mimeType: 'image/jpeg',
         type: 'illustration',
         alt: 'former-alt-illustration',
-      },{
+      }, {
         id: 'rec_456',
         filename: 'attachment-name',
         url: 'data:,',
@@ -239,6 +239,45 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         mimeType: 'image/png',
         type: 'illustration',
         alt: 'alt-illustration',
+      };
+
+      // when
+      await controller._handleIllustration(challenge);
+
+      // then
+      assert.deepEqual(challenge.files[0], expectedNewFile);
+    });
+
+    test('it updates the alternative text of illustration', async function(assert) {
+      // given
+      challenge.files = [{
+        id: 'rec_123',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: 'former-alt-illustration',
+      }, {
+        id: 'rec_456',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'attachment',
+        alt: 'alt-attachment',
+      }];
+      challenge.alternativeText = 'new-alt-illustration';
+      challenge.illustration = [];
+
+      const expectedNewFile = {
+        id: 'rec_123',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: 'new-alt-illustration',
       };
 
       // when

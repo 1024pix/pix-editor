@@ -526,6 +526,12 @@ export default class SingleController extends Controller {
       const newIllustration = await this.storage.uploadFile(file);
       await this._createOrUpdateIllustration(challenge, newIllustration);
       challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
+    } else if (challenge.alternativeText) {
+      const files = await challenge.files;
+      const previousIllustration = files.findBy('type', 'illustration');
+      if (previousIllustration && !previousIllustration.isDeleted) {
+        previousIllustration.alt = challenge.alternativeText;
+      }
     }
     return challenge;
   }
