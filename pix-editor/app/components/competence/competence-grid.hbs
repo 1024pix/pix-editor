@@ -11,7 +11,7 @@
               {{tube.name}}
             {{/if}}
           </td>
-          {{#if (or (eq @view "skill-workbench") (eq @view "workbench"))}}
+          {{#if (eq @view "workbench")}}
             {{#each tube.filledSkills as |skills index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}

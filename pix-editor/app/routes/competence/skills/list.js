@@ -14,6 +14,6 @@ export default class CompetenceSkillsListRoute extends Route {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView('skill-workbench');
+    competenceController.setView('workbench');
   }
 }
