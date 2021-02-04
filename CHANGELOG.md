@@ -1,5 +1,9 @@
 
 
+## v3.19.1 (04/02/2021)
+
+- [#96](https://github.com/1024pix/pix-editor/pull/96) [BUGFIX] Correction de l'affichage d'un sujet.
+
 ## v3.19.0 (03/02/2021)
 
 - [#94](https://github.com/1024pix/pix-editor/pull/94) [FEATURE] Ajout du texte alternatif des illustrations dans la table `Attachments` (PIX-2090).
