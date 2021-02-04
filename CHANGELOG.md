@@ -1,5 +1,8 @@
 
 
+## v3.20.0 (04/02/2021)
+
+
 ## v3.19.1 (04/02/2021)
 
 - [#96](https://github.com/1024pix/pix-editor/pull/96) [BUGFIX] Correction de l'affichage d'un sujet.
