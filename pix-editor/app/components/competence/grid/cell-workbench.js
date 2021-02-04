@@ -25,15 +25,15 @@ export default class CellWorkbench extends Component {
     return deletedPrototypes.length;
   }
 
-  get haveDraftPrototypes() {
+  get hasDraftPrototypes() {
     return this.draftPrototypesCount > 0;
   }
 
-  get haveArchivedPrototypes() {
+  get hasArchivedPrototypes() {
     return this.archivedPrototypesCount > 0;
   }
 
-  get haveDeletedPrototypes() {
+  get hasDeletedPrototypes() {
     return this.deletedPrototypesCount > 0;
   }
 }

@@ -18,20 +18,20 @@ export default class CompetenceGridCellSkillWorkbenchComponent extends Component
     return draftSkill.length;
   }
 
-  get haveActiveSkill() {
+  get hasActiveSkill() {
     const activeSkill = this.args.skills.filter(skill=> skill.isActive);
     return activeSkill.length > 0;
   }
 
-  get haveDraftSkill() {
+  get hasDraftSkill() {
     return this.draftCount > 0;
   }
 
-  get haveArchivedSkill() {
+  get hasArchivedSkill() {
     return this.archivedCount > 0;
   }
 
-  get haveDeletedSkill() {
+  get hasDeletedSkill() {
     return this.deletedCount > 0;
   }
 }
