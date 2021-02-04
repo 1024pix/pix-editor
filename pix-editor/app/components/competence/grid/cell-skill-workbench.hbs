@@ -1,0 +1,22 @@
+<LinkTo @route="competence.skills.list" @models={{array @tube.id @skill.level}} class="skill skill-cell link skill-workbench" @tagName="td">
+  <div class="skill-name ">
+    {{@skill.name}}
+  </div>
+  <div class="skill-workbench__status ">
+    {{#if this.hasDraftSkill}}
+      <span data-test-draft-count class="workbench-status draft-skill ui tiny label" title="En construction">{{this.draftCount}}</span>
+    {{/if}}
+
+    {{#if this.hasActiveSkill}}
+      <span data-test-active-count class="workbench-status active-skill ui tiny label" title="Validé">1</span>
+    {{/if}}
+
+    {{#if this.hasArchivedSkill}}
+      <span data-test-archived-count class="workbench-status archive-skill ui tiny label" title="Archivé">{{this.archivedCount}}</span>
+    {{/if}}
+
+    {{#if this.hasDeletedSkill}}
+      <span data-test-deleted-count class="workbench-status deleted-skill ui tiny label" title="Supprimé">{{this.deletedCount}}</span>
+    {{/if}}
+  </div>
+</LinkTo>

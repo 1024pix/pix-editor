@@ -6,7 +6,7 @@ export default class IndexRoute extends Route {
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
     const view = competenceController.view;
-    if (!['production', 'history'].includes(view)) {
+    if (!['production', 'workbench'].includes(view)) {
       competenceController.setView('production');
     }
     competenceController.maximizeLeft(false);

@@ -46,17 +46,23 @@ export default class TubeModel extends Model {
   }
 
   get filledSkills() {
-    return this.sortedSkills.reduce((grid, skill) => {
-      if (grid[skill.level - 1] && skill.isDraft) {
-        return grid;
-      }
-      grid[skill.level - 1] = skill;
-      return grid;
-    },[false, false, false, false, false, false, false]);
+    return this._getFilledOrderedVersions(this.rawSkills);
+  }
+
+  get filledProductionSkills() {
+    return this._getFilledOrderedVersions(this.productionSkills).flat();
   }
 
   get filledLiveSkills() {
-    const filledSkills =  this._filledAllVersionSkills(this.liveSkills);
+    return this._getFilledOrderedVersions(this.liveSkills);
+  }
+
+  get filledDeadSkills() {
+    return this._getFilledOrderedVersions(this.deadSkills);
+  }
+
+  _getFilledOrderedVersions(skills) {
+    const filledSkills = this._getFilledSkillGroupByLevel(skills);
     return filledSkills.map(filledSkill => {
       if (filledSkill && filledSkill.length > 1) {
         return filledSkill.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -65,11 +71,7 @@ export default class TubeModel extends Model {
     });
   }
 
-  get filledDeadSkills() {
-    return this._filledAllVersionSkills(this.deadSkills);
-  }
-
-  _filledAllVersionSkills(skills) {
+  _getFilledSkillGroupByLevel(skills) {
     return skills.reduce((grid, skill) => {
       if (grid[skill.level - 1]) {
         grid[skill.level - 1].push(skill);
@@ -77,7 +79,7 @@ export default class TubeModel extends Model {
         grid[skill.level - 1] = [skill];
       }
       return grid;
-    },[false, false, false, false, false, false, false]);
+    }, [false, false, false, false, false, false, false]);
   }
 
   get hasProductionChallenge() {

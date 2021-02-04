@@ -23,7 +23,6 @@ Router.map(function() {
       this.route('new');
     });
     this.route('skills', function() {
-      this.route('history', { path: '/history/:tube_id/:level' });
       this.route('single', { path:'/:skill_id' }, function() {
         this.route('archive', function() {
           this.route('single', { path:'/:challenge_id' });

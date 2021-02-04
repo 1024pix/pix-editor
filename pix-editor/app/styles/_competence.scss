@@ -1,12 +1,14 @@
-.select-section{
+.select-section {
   min-width: 150px;
 }
+
 .select-section-dropdown {
   li {
     padding-top: .5em;
     padding-bottom: .5em;
   }
 }
+
 .competence {
   flex: 1 1 0;
   overflow: hidden;
@@ -29,7 +31,6 @@
 .competence-grid {
   height: 100%;
   overflow: scroll;
-  /*flex: 1 1 0;*/
   min-height: 0;
 }
 
@@ -51,18 +52,114 @@
     &.skill {
       text-align: center;
 
-      &.active,
-      &.active .skill-name {
-        color: red !important;
-      }
-
       &.link {
         cursor: pointer;
 
+        &.production,
+        &.workbench {
+          background-color: $challenge-background-color !important;
+
+          &.active {
+            background-color: #EBEC5C !important;
+            color: red !important;
+          }
+          .workbench__status {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+
+            span {
+              &.draft-prototype {
+                background: $suggested-background-color;
+              }
+
+              &.validated-prototype {
+                background: $production-background-color;
+              }
+
+              &.archived-prototype {
+                background: $archived-background-color;
+                color: white;
+              }
+
+              &.deleted-prototype {
+                background: $deleted-background-color;
+                color: white;
+              }
+
+              &.not-declinable {
+                background: white;
+                color: black;
+              }
+            }
+          }
+        }
+
         &.skill-mode {
-          background-color: #444488 !important;
-          &.draft-skill{
-            background-color: #5f66bd !important;
+          background-color: $skill-background-color !important;
+
+          .idea.icon {
+            text-shadow: 1px 1px 1px rgba(0,0,0,.8);
+
+            &.validated,
+            &.prevalidated {
+              color: $validated-background-color;
+            }
+            &.to-be-submitted {
+              color: $to-be-submitted-background-color;
+            }
+            &.need-work {
+              color: $need-work-background-color;
+            }
+            &.suggested {
+              color: $suggested-background-color;
+            }
+            &.archived {
+              color: $archived-background-color;
+              text-shadow: none;
+            }
+            &.na{
+              color: $na-color;
+              text-shadow: none;
+            }
+          }
+
+          .tuto-count {
+            font-size: 12px;
+          }
+        }
+
+        &.skill-workbench {
+          background: $skill-background-color;
+
+          .skill-workbench__status {
+            display: flex;
+            justify-content: center;
+            margin-top: 2px;
+
+            .workbench-status {
+              &.active-skill {
+                background: $production-background-color;
+              }
+
+              &.draft-skill {
+                background: $suggested-background-color;
+              }
+
+              &.archive-skill {
+                background: $archived-background-color;
+                color: white;
+              }
+
+              &.deleted-skill {
+                background: $deleted-background-color;
+                color: white;
+              }
+            }
+          }
+
+          &.active {
+            background: #9ecafc !important;
           }
         }
 
@@ -73,157 +170,60 @@
           &.active {
             background-color: #8e2dff !important;
           }
-          .skill-i18n-name{
-            color:white;
-          }
-          .flags{
-            background: rgba(255,255,255,.7);
-            margin:5px;
 
-            >i.flag{
+          .skill-i18n-name {
+            color: white;
+          }
+
+          .flags {
+            background: rgba(255, 255, 255, .7);
+            margin: 5px;
+
+            > i.flag {
               box-shadow: grey 0 0 2px;
             }
           }
         }
 
-        .skill-name {
-          margin: -5px -5px 0 -5px;
-          padding: 5px 5px 0 5px;
-        }
+        &.quality-skill-link {
+          padding: 0;
 
-        .help {
-          margin: 0 -5px -5px -5px;
-          padding: 0 5px 5px 5px;
-          color: $suggested-background-color;
-        }
+          .quality {
+            padding: 5px;
+            height: 100%;
+            cursor: pointer;
 
-        .tuto-count {
-          font-size: 12px;
-        }
+            &.bad-quality {
+              background: #EA2700;
+              color: white;
+            }
 
-        &.production,
-        &.production.active,
-        .skill-name.production,
-        .help i.production {
-          background-color: $production-background-color !important;
-          color: $production-color;
-        }
+            &.medium-quality {
+              background: #F3AC0B;
+            }
 
-        &.workbench,
-        &.workbench.active,
-        .skill-name.draft,
-        .help i.draft {
-          background-color: $draft-background-color !important;
-          color: $draft-color;
-        }
+            &.good-quality {
+              background: #0DC600;
+            }
 
-        &.suggested,
-        &.suggested.active,
-        .skill-name.suggested,
-        .help i.suggested {
-          /*background-color:$suggested-background-color !important;*/
-          color: $suggested-background-color;
-        }
+            .half-tutorial {
+              color: #aaa
+            }
+          }
 
-        &.prevalidated,
-        &.prevalidated.active,
-        .skill-name.prevalidated,
-        .help i.prevalidated {
-          /*background-color:$prevalidated-background-color !important;*/
-          color: $prevalidated-background-color;
-        }
+          &.active {
+            .quality {
+              box-shadow: #000 0 0 7px;
+              opacity: .8;
+            }
 
-        &.validated_no_test,
-        &.validated_no_test.active {
-          /*background-color:$validated-no-test-background-color !important;*/
-          color: $validated-no-test-background-color;
-        }
-
-        &.validated,
-        &.validated.active,
-        .skill-name.validated,
-        .help i.validated {
-          /*background-color:$validated-background-color !important;*/
-          color: $validated-background-color;
-        }
-
-        &.link.archived,
-        &.link.archived.active,
-        .skill-name.archived,
-        .help i.archived {
-          /*background-color:$archived-background-color !important;*/
-          color: $archived-background-color;
-        }
-
-        .skill-name.to-be-submitted,
-        .help i.to-be-submitted {
-          /*background-color:$to-be-submitted-background-color !important;*/
-          color: $to-be-submitted-background-color;
-        }
-
-        .skill-name.need-work,
-        .help i.need-work {
-          /*background-color:$need-work-background-color !important;*/
-          color: $need-work-background-color;
-        }
-
-        .help i.na {
-          color: $na-color;
-        }
-      }
-
-      .idea.icon.validated {
-        color: #08cf08;
-      }
-    }
-    &.history {
-      background: #828188;
-      color:white;
-
-      .deleted-skill {
-        color: $deleted-background-color;
-      }
-
-      &.active {
-        color: white !important;
-        background: #918f99 !important;
-      }
-    }
-
-    &.quality-skill-link{
-      padding:0;
-
-      .quality {
-        padding:5px;
-        height: 100%;
-        cursor: pointer;
-
-        &.bad-quality {
-          background: #EA2700;
-          color: white;
-        }
-
-        &.medium-quality {
-          background: #F3AC0B;
-        }
-
-        &.good-quality {
-          background: #0DC600;
-        }
-
-        .half-tutorial {
-          color: #aaa
-        }
-      }
-      &.active{
-        .quality{
-
-        box-shadow: #000 0 0 7px;
-        opacity: .8;
+          }
         }
 
       }
     }
+
+
     .add-skill {
       display: block;
       width: 100%;
@@ -239,22 +239,21 @@
     }
 
 
-    .quality-indication{
-      display:flex;
+    .quality-indication {
+      display: flex;
       justify-content: space-between;
-      span:nth-child(2){
+
+      span:nth-child(2) {
         margin-left: 10px;
         font-weight: bold;
       }
     }
   }
-
-
 }
 
 .prototype-list,
 .alternative-list {
-  height:100%;
+  height: 100%;
 }
 
 .quality-indication-details {
@@ -263,40 +262,42 @@
       background: #FFA300;
       color: white;
     }
+
     &:nth-child(odd) {
       background: #FFCE4D;
     }
-    td{
-      padding:5px;
-      background:transparent !important;
-      color:inherit !important;
 
-      &:nth-child(2){
-        text-align : center;
+    td {
+      padding: 5px;
+      background: transparent !important;
+      color: inherit !important;
+
+      &:nth-child(2) {
+        text-align: center;
       }
     }
   }
 }
 
-.quality-tooltip{
+.quality-tooltip {
   max-width: 350px;
 }
 
-.flag.fr-fr{
+.flag.fr-fr {
   position: relative;
 
-  &::after{
-    content:".fr";
+  &::after {
+    content: ".fr";
     position: absolute;
-    font-size:10px;
-    font-style:normal;
+    font-size: 10px;
+    font-style: normal;
     font-weight: bold;
-    top:0;
-    left:3px;
-    color:black;
+    top: 0;
+    left: 3px;
+    color: black;
   }
 }
 
-.ui.icon.menu .item > .icon:not(.dropdown){
+.ui.icon.menu .item > .icon:not(.dropdown) {
   margin-right: .5em;
 }

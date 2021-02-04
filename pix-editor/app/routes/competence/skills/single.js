@@ -20,10 +20,10 @@ export default class SingleRoute extends Route {
     controller.edition = false;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    if (model.isLive) {
+    if (model.isActive) {
       competenceController.setView('production');
     } else {
-      competenceController.setView('history');
+      competenceController.setView('workbench');
     }
   }
 
@@ -38,7 +38,7 @@ export default class SingleRoute extends Route {
         this.controllerFor('competence.skills.single').model.rollbackAttributes();
       }
       if (transition.targetName === 'competence.prototypes.index') {
-        if (this.controllerFor('competence').view === 'history') {
+        if (this.controllerFor('competence').view === 'workbench') {
           return true;
         }
         const skill = this.controllerFor('competence.skills.single').skill;

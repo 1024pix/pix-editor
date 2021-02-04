@@ -1,6 +1,7 @@
+$challenge-background-color:#fcfd9f;
+$skill-background-color:#D5E8FD;
 $production-background-color:#00ff00;
 $production-color:#000000;
-$draft-background-color:#fcfd9f;
 $draft-color:#000000;
 $validated-background-color:#00ff00/*#08cf08*/;
 $validated-color:#000000;
@@ -106,12 +107,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         &.active {
           background-color:#F9FAFB;
 
-          &.production {
-            color:#08cf08;
-
-          }
+          &.production,
           &.workbench {
-            color:#f8d71b;
+            color: #dbbd17;
           }
         }
       }
@@ -119,12 +117,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .menu.skill-mode .ui[class*="top attached"].menu.tabular .item.active {
-    &.production {
+    &.production,
+    &.workbench {
       color:#444488;
 
-    }
-    &.workbench {
-      color:#828188;
     }
   }
 

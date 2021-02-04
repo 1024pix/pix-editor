@@ -1,9 +1,9 @@
 {{#if (eq this.cellType "production")}}
   <Competence::Grid::CellProduction @skill={{@skill}} @link={{@link}} />
 {{else if (eq this.cellType "workbench")}}
-  <Competence::Grid::CellWorkbench @tube={{@tube}} @skill={{@skill}} />
-{{else if (eq this.cellType "historySkill")}}
-  <Competence::Grid::CellHistory @tube={{@tube}} @skill={{@skill}} @level={{@index}} />
+  <Competence::Grid::CellWorkbench @tube={{@tube}} @skill={{@skill}} @skills={{@skills}}/>
+{{else if (eq this.cellType "skill-workbench")}}
+  <Competence::Grid::CellSkillWorkbench @tube={{@tube}} @skill={{@skill}} @skills={{@skills}}/>
 {{else if (eq this.cellType "skill")}}
   <Competence::Grid::CellSkill @skill={{@skill}} />
 {{else if (eq this.cellType "add-skill")}}

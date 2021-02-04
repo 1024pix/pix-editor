@@ -10,7 +10,7 @@
                 title="Liste des versions"
                 @route="competence.skills.list"
                 @models={{array this.skill.tube.id this.skill.level}}>
-          <i class="icon align justify"></i>
+          <i class="clone icon"></i>&nbsp;V
         </LinkTo>
         {{#if (or this.mayArchive this.mayDelete)}}
           <BasicDropdown title="Actions" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
@@ -35,7 +35,10 @@
         {{/if}}
       {{/unless}}
     </div>
-    <div class="item header">{{this.skill.name}}</div>
+    <div class="item header">
+      {{this.skill.name}}
+      <div class="ui circular label {{this.skill.statusCSS}}">{{this.skill.status}}</div>
+    </div>
     <div class="ui right menu">
       {{#if this.maximized}}
         <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>

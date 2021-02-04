@@ -11,6 +11,7 @@ const skillId2 = 'recSkill2';
 const skillPixId1 = 'pixSkill1';
 const skillPixId2 = 'pixSkill2';
 const deadSkillId = 'recDeadSkill';
+const deadSkillPixId = 'pixDeadSkill';
 const challengeId2 = 'recChallenge2';
 
 module('Acceptance | competence/prototypes/list', function () {
@@ -31,7 +32,7 @@ module('Acceptance | competence/prototypes/list', function () {
       this.server.create('challenge', { id: challengeId2, instructions: 'instructionsChallenge2' });
       this.server.create('challenge', { id: 'recChallenge3' });
       this.server.create('skill', { id: skillId1, pixId: skillPixId1, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: deadSkillId, status: 'périmé', challengeIds: ['recChallenge1'] });
+      this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, status: 'périmé', challengeIds: ['recChallenge1'] });
       this.server.create('skill', { id: skillId2, pixId: skillPixId2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
       this.server.create('skill', { id: 'recSkill3', challengeIds: ['recChallenge3'] });
       this.server.create('tube', { id: tubeId1, rawSkillIds: [skillId1, skillId2, deadSkillId] });
@@ -52,9 +53,9 @@ module('Acceptance | competence/prototypes/list', function () {
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
-    test('it should display a list of live skill tab sorted by date', function (assert) {
+    test('it should display a list of skill tab sorted by date', function (assert) {
       //given
-      const expectedResult = [skillPixId1, skillPixId2];
+      const expectedResult = [skillPixId1, skillPixId2, deadSkillPixId];
 
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');

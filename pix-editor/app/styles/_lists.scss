@@ -6,12 +6,20 @@
     height: 1em;
     border-radius: 50%;
 
-    &.active {
-      background: #444488;
+    &.validated {
+      background: $production-background-color;
     }
 
-    &.draft {
-      background: #838be5;
+    &.suggested {
+      background: $suggested-background-color;
+    }
+
+    &.archived {
+      background: $archived-background-color;
+    }
+
+    &.deleted {
+      background: $deleted-background-color;
     }
   }
 }

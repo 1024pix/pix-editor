@@ -6,7 +6,7 @@ export default class CompetenceSkillsListRoute extends Route {
     return this.store.findRecord('tube', params.tube_id)
       .then(tube => {
         const intLevel = parseInt(params.level);
-        return { tube, sortedSkills: tube.filledLiveSkills[intLevel - 1] };
+        return { tube, sortedSkills: tube.filledSkills[intLevel - 1] };
       });
   }
 
@@ -14,6 +14,6 @@ export default class CompetenceSkillsListRoute extends Route {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView('production');
+    competenceController.setView('workbench');
   }
 }

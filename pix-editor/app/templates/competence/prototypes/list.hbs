@@ -12,7 +12,7 @@
     {{#each this.model.skills as |skill|}}
       <div data-test-skill-tab class="item skill-tab {{if (eq this.selectedSkill.id skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill)}}>
         {{skill.pixId}}
-        <span class="skill-tab__status {{if skill.isDraft "draft" "active"}}" title={{skill.status}}></span>
+        <span class="skill-tab__status {{skill.statusCSS}}" title={{skill.status}}></span>
       </div>
     {{/each}}
   </div>
