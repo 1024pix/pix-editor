@@ -20,7 +20,7 @@ export default class SingleController extends Controller {
   parentController;
 
   get maximized() {
-    return this.parentController.firstMaximized;
+    return this.parentController.leftMaximized;
   }
 
   @service access;
@@ -49,17 +49,16 @@ export default class SingleController extends Controller {
 
   @action
   maximize() {
-    this.maximized = true;
+    this.parentController.maximizeLeft(true);
   }
 
   @action
   minimize() {
-    this.maximized = false;
+    this.parentController.maximizeLeft(false);
   }
 
   @action
   close() {
-    this.maximized = false;
     this.parentController.send('closeChildComponent');
   }
 

@@ -33,7 +33,7 @@ export default class SingleController extends Controller {
   @service changelogEntry;
 
   get maximized() {
-    return this.parentController.leftMaximize;
+    return this.parentController.leftMaximized;
   }
 
   get challenge() {
