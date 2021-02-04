@@ -105,18 +105,4 @@ module('Unit | Model | tube', function(hooks) {
     // then
     assert.deepEqual(filledSkills,expectedArray);
   });
-
-  test('it should return an array of productionSkill or draftSkill positioned by level', function(assert) {
-
-    // given
-    const expectedArray = [skillRecord1, false, skillRecord3, skillRecord4, skillRecord5, false, false];
-
-    // when
-    const filledSkills = tube.filledProductionOrDraftSkills;
-
-    // then
-    assert.deepEqual(filledSkills,expectedArray);
-  });
-
-
 });

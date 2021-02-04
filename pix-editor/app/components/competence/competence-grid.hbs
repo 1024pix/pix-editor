@@ -22,7 +22,7 @@
                                           @index={{index}} />
             {{/each}}
           {{else}}
-            {{#each tube.filledProductionOrDraftSkills as |skill index|}}
+            {{#each tube.filledProductionSkills as |skill index|}}
               <Competence::Grid::GridCell @section={{@section}}
                                           @view={{@view}}
                                           @skill={{skill}}
