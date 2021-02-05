@@ -11,6 +11,7 @@ export default class SidebarSearchComponent extends Component {
 
   @action
   getSearchResults(query) {
+    query = query.trim();
     if (query.substr(0, 1) === '@') {
       this.routeModel = 'skill';
       return this.store.query('skill', {
@@ -32,8 +33,8 @@ export default class SidebarSearchComponent extends Component {
       })
         .then(challenges => {
           return challenges.map(challenge => ({
-            title: challenge.id,
-            id: challenge.id
+            title: challenge.pixId,
+            id: challenge.pixId
           }));
         });
     } else {
