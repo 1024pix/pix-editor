@@ -105,4 +105,13 @@ module('Unit | Model | tube', function(hooks) {
     // then
     assert.deepEqual(filledSkills,expectedArray);
   });
+
+  test('it should get a next skill version', async function (assert) {
+
+    // when
+    const nextSkillVersion = tube.getNextSkillVersion(skillRecord2.level);
+
+    // then
+    assert.equal(nextSkillVersion, 2);
+  });
 });
