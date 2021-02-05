@@ -20,7 +20,8 @@ export default class SillSerializer extends AirtableSerializer {
     level:'Level',
     status:'Status',
     i18n:'Internationalisation',
-    pixId:'id persistant'
+    pixId:'id persistant',
+    version: 'Version'
   };
 
   payloadKeyFromModelName() {

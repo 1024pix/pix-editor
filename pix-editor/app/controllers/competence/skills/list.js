@@ -19,7 +19,7 @@ export default class CompetenceHistoryListController extends Controller {
   }
 
   @action
-  addSkill() {
+  newSkillVersion() {
     const tube = this.model.tube;
     const level = parseInt(this.firstSkill.level) - 1;
     this.transitionToRoute('competence.skills.new', this.currentData.getCompetence(), tube.id, level);

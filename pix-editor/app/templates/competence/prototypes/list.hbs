@@ -4,14 +4,14 @@
       <button class="ui button icon item" {{on "click" this.close}} type="button"><i class="icon window close"></i>
       </button>
     </div>
-    Prototypes de {{this.model.skill.name}} ({{this.selectedSkill.date}})
+    Prototypes de {{this.model.skill.name}} (v.{{this.selectedSkill.version}})
   </h1>
 </div>
 <div class="ui top attached borderless labelled icon menu">
   <div class="ui top attached tabular menu">
     {{#each this.model.skills as |skill|}}
       <div data-test-skill-tab class="item skill-tab {{if (eq this.selectedSkill.id skill.id) "active" ""}}" {{on "click" (fn this.setSelectedSkill skill)}}>
-        {{skill.pixId}}
+        {{skill.name}} v.{{skill.version}}
         <span class="skill-tab__status {{skill.statusCSS}}" title={{skill.status}}></span>
       </div>
     {{/each}}

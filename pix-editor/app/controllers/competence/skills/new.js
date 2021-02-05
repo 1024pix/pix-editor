@@ -12,7 +12,7 @@ export default class NewController extends Skill {
   }
 
   get tube() {
-    return this.model.tube; 
+    return this.model.tube;
   }
 
   @service notify;
@@ -36,6 +36,7 @@ export default class NewController extends Skill {
       .then(competence=> {
         skill.tube = tube;
         skill.competence = [competence.get('id')];
+        skill.version = tube.getNextSkillVersion(skill.level);
         return skill.save();
       })
       .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction))

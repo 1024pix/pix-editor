@@ -18,6 +18,7 @@ export default class SkillModel extends Model {
   @attr status;
   @attr pixId;
   @attr i18n;
+  @attr('number') version;
 
   @belongsTo('tube')
   tube;
@@ -166,7 +167,7 @@ export default class SkillModel extends Model {
     return [];
   }
 
-  getNextVersion() {
+  getNextPrototypeVersion() {
     return this.prototypes.reduce((current, prototype) => {
       const version = prototype.version;
       if (version > current) {
@@ -224,7 +225,7 @@ export default class SkillModel extends Model {
   }
 
   clone() {
-    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore'];
+    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore', 'version'];
     const data = this._getJSON(ignoredFields);
     data.status = 'en construction';
     data.pixId = this.idGenerator.newId();

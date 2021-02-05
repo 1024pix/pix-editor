@@ -6,9 +6,10 @@ import { setupMirage } from 'ember-cli-mirage/test-support';
 
 const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';
+const skillName = '@skill2';
 const skillId1 = 'recSkill1';
-const skillId2 = 'recSkill2';
 const skillPixId1 = 'pixSkill1';
+const skillId2 = 'recSkill2';
 const skillPixId2 = 'pixSkill2';
 const deadSkillId = 'recDeadSkill';
 const deadSkillPixId = 'pixDeadSkill';
@@ -31,9 +32,9 @@ module('Acceptance | competence/prototypes/list', function () {
       this.server.create('challenge', { id: 'recChallenge1', instructions: 'instructionsChallenge1' });
       this.server.create('challenge', { id: challengeId2, instructions: 'instructionsChallenge2' });
       this.server.create('challenge', { id: 'recChallenge3' });
-      this.server.create('skill', { id: skillId1, pixId: skillPixId1, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, status: 'périmé', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: skillId2, pixId: skillPixId2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
+      this.server.create('skill', { id: skillId1, pixId: skillPixId1, name: skillName, version: 3, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
+      this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1,status: 'périmé', challengeIds: ['recChallenge1'] });
+      this.server.create('skill', { id: skillId2, pixId: skillPixId2, name: skillName, version: 2,createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
       this.server.create('skill', { id: 'recSkill3', challengeIds: ['recChallenge3'] });
       this.server.create('tube', { id: tubeId1, rawSkillIds: [skillId1, skillId2, deadSkillId] });
       this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill3'] });
@@ -48,14 +49,14 @@ module('Acceptance | competence/prototypes/list', function () {
 
     test('it should display a list of prototype of `skill1`', function (assert) {
       // then
-      assert.dom('[data-test-skill-tab].active').hasText(skillPixId1);
+      assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.3`);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
     test('it should display a list of skill tab sorted by date', function (assert) {
       //given
-      const expectedResult = [skillPixId1, skillPixId2, deadSkillPixId];
+      const expectedResult = [`${skillName} v.3`, `${skillName} v.2`, `${skillName} v.1`];
 
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
@@ -73,7 +74,7 @@ module('Acceptance | competence/prototypes/list', function () {
       }, { timeout: 1000 });
 
       // then
-      assert.dom('[data-test-skill-tab].active').hasText(skillPixId2);
+      assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.2`);
       assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge2');
     });

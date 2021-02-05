@@ -7,12 +7,12 @@
   </h1>
 </div>
 <div class="ui attached segment competence">
-  <List::LiveSkills @list={{this.model.sortedSkills}}/>
+  <List::Skills @list={{this.model.sortedSkills}}/>
 </div>
 <div class="ui borderless bottom attached labelled icon menu">
   {{#if this.mayCreateSkill}}
-    <button class="ui button right item" {{on "click" this.addSkill}} type="button">
-      <i class="plus square outline icon"></i> Nouvel acquis
+    <button class="ui button right item" {{on "click" this.newSkillVersion}} type="button">
+      <i class="plus square outline icon"></i> Nouvelle Version
     </button>
   {{/if}}
 </div>

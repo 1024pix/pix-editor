@@ -117,16 +117,20 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       pixId: 'pix_2',
       save: sinon.stub().resolves({}),
     };
+    const newTube = {
+      getNextSkillVersion: sinon.stub()
+    };
+
     currentSkill.clone = sinon.stub().resolves(clonedSkill);
     controller.model = currentSkill;
 
     // when
-    await controller._duplicateToLocationCallback('changelogValue', competence, 'newTube', 'level');
+    await controller._duplicateToLocationCallback('changelogValue', competence, newTube, 'level');
 
     // then
     const duplicateToLocationArgs = transitionToRouteStub.getCall(0).args[2];
     assert.equal(duplicateToLocationArgs.level, 'level');
-    assert.equal(duplicateToLocationArgs.tube, 'newTube');
+    assert.equal(duplicateToLocationArgs.tube, newTube);
   });
 
   test('it should clone only validated and draft challenges', async function (assert) {

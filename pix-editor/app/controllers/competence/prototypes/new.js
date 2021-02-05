@@ -52,7 +52,7 @@ export default class NewController extends Prototype {
       if (!firstSkill) {
         operation = Promise.resolve(challenge);
       } else {
-        const version = firstSkill.getNextVersion();
+        const version = firstSkill.getNextPrototypeVersion();
         if (version > 0) {
           challenge.version = version;
           operation = challenge.save();
