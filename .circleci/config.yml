@@ -63,6 +63,26 @@ jobs:
           environment:
             TEST_DATABASE_URL: postgres://circleci@localhost:5432/circleci
 
+  scripts_test:
+    docker:
+      - image: circleci/node:14.15.4
+    working_directory: ~/pix-editor/scripts/migrate-attachments-from-airtable
+    steps:
+      - attach_workspace:
+          at: ~/pix-editor
+      - run: cat package*.json > cachekey
+      - restore_cache:
+          keys:
+            - v1-scripts-npm-{{ checksum "cachekey" }}
+      - run: npm ci
+      - save_cache:
+          key: v1-scripts-npm-{{ checksum "cachekey" }}
+          paths:
+            - ~/.npm
+      - run:
+          command: |
+            npm test
+
   e2e_test:
     docker:
       - image: cypress/browsers:node14.15.0-chrome86-ff82
@@ -145,5 +165,8 @@ workflows:
           requires:
             - checkout
       - e2e_test:
+          requires:
+            - checkout
+      - scripts_test:
           requires:
             - checkout
