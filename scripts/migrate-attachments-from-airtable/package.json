@@ -1,0 +1,17 @@
+{
+  "name": "migrate-attachments-from-airtable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "4.2.0",
+    "mocha": "8.2.1",
+    "sinon": "9.2.4",
+    "sinon-chai": "^3.5.0"
+  }
+}
