@@ -1,3 +1,4 @@
+const Pack = require('../package');
 const Metrics = require('./infrastructure/plugins/metrics');
 const settings = require('./config');
 const Blipp = require('blipp');
@@ -51,6 +52,26 @@ const plugins = [
       },
     },
   },
+  ...(settings.sentry.enabled ? [
+    {
+      plugin: require('hapi-sentry'),
+      options: {
+        client: {
+          dsn: settings.sentry.dsn,
+          environment: settings.sentry.environment,
+          release: `v${Pack.version}`,
+          maxBreadcrumbs: settings.sentry.maxBreadcrumbs,
+          debug: settings.sentry.debug,
+          maxValueLength: settings.sentry.maxValueLength,
+        },
+        scope: {
+          tags: [
+            { name: 'source', value: 'api' },
+          ],
+        },
+      },
+    },
+  ] : []),
 ];
 
 module.exports = plugins;
