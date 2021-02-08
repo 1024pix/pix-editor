@@ -118,9 +118,16 @@ export default function () {
   });
 
   this.get('/airtable/content/Epreuves', (schema, request) => {
-    const records = schema.challenges.all().models.map(challenge => {
-      return _serializeChallenge(challenge);
-    });
+    const findPersistentId = /AND\(FIND\('(.+)', \{id persistant\}\)\)/.exec(request.queryParams.filterByFormula);
+    let records = null;
+    if (findPersistentId && request.queryParams.maxRecords === '1') {
+      const challenge = schema.challenges.findBy({ pixId: findPersistentId[1] });
+      records = [_serializeChallenge(challenge)];
+    } else {
+      records = schema.challenges.all().models.map(challenge => {
+        return _serializeChallenge(challenge);
+      });
+    }
     return _response(request, { records });
   });
 
