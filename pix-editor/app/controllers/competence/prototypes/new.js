@@ -2,6 +2,7 @@ import Prototype from './single';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import Sentry from '@sentry/ember';
 
 export default class NewController extends Prototype {
 
@@ -35,7 +36,8 @@ export default class NewController extends Prototype {
         this._message('Prototype enregistré');
         this.transitionToRoute('competence.prototypes.single', this.currentData.getCompetence(), challenge);
       })
-      .catch(() => {
+      .catch((error) => {
+        Sentry.captureException(error);
         this._errorMessage('Erreur lors de la création');
       })
       .finally(() => {

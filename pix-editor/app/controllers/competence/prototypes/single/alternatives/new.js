@@ -2,6 +2,7 @@ import Alternative from './single';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import Sentry from '@sentry/ember';
 
 export default class NewController extends Alternative {
   creation = true;
@@ -35,8 +36,9 @@ export default class NewController extends Alternative {
         this.transitionToRoute('competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), challenge);
       })
       .catch((error) => {
-        this._errorMessage('Erreur lors de la création');
         console.error(error);
+        Sentry.captureException(error);
+        this._errorMessage('Erreur lors de la création');
       })
       .finally(() => this.loader.stop());
   }
