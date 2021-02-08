@@ -4,6 +4,11 @@ function isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
 }
 
+function _getNumber(numberAsString, defaultIntNumber) {
+  const number = parseInt(numberAsString, 10);
+  return isNaN(number) ? defaultIntNumber : number;
+}
+
 module.exports = (function() {
 
   const config = {
@@ -46,7 +51,16 @@ module.exports = (function() {
       storagePassword: process.env.STORAGE_PASSWORD,
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
-    }
+    },
+
+    sentry: {
+      enabled: isFeatureEnabled(process.env.SENTRY_ENABLED),
+      dsn: process.env.SENTRY_DSN,
+      environment: (process.env.SENTRY_ENVIRONMENT || 'development'),
+      maxBreadcrumbs: _getNumber(process.env.SENTRY_MAX_BREADCRUMBS, 100),
+      debug: isFeatureEnabled(process.env.SENTRY_DEBUG),
+      maxValueLength: 1000,
+    },
   };
 
   if (process.env.NODE_ENV === 'test') {

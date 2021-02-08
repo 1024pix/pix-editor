@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
 
@@ -188,7 +189,10 @@ export default class SingleController extends Controller {
           }
           this._message('Épreuve mise à jour');
         })
-        .catch(() => this._errorMessage('Erreur lors de la mise à jour'))
+        .catch((error) => {
+          Sentry.captureException(error);
+          this._errorMessage('Erreur lors de la mise à jour');
+        })
         .finally(() => this.loader.stop());
     });
   }
@@ -231,12 +235,16 @@ export default class SingleController extends Controller {
             })
             .catch((error) => {
               console.error(error);
+              Sentry.captureException(error);
               this._errorMessage('Erreur lors de la mise en production');
             })
             .finally(() => this.loader.stop());
         });
       })
-      .catch(() => this._message('Mise en production abandonnée'));
+      .catch((error) => {
+        Sentry.captureException(error);
+        this._message('Mise en production abandonnée');
+      });
   }
 
   @action
@@ -256,11 +264,17 @@ export default class SingleController extends Controller {
               this._message('Épreuve archivée');
               this.send('close');
             })
-            .catch(() => this._errorMessage('Erreur lors de l\'archivage'))
+            .catch((error) => {
+              Sentry.captureException(error);
+              this._errorMessage('Erreur lors de l\'archivage');
+            })
             .finally(() => this.loader.stop());
         });
       })
-      .catch(() => this._message('Archivage abandonné'));
+      .catch((error) => {
+        Sentry.captureException(error);
+        this._message('Archivage abandonné');
+      });
   }
 
   @action
@@ -280,11 +294,17 @@ export default class SingleController extends Controller {
               this._message('Épreuve supprimée');
               this.send('close');
             })
-            .catch(() => this._errorMessage('Erreur lors de la suppression'))
+            .catch((error) => {
+              Sentry.captureException(error);
+              this._errorMessage('Erreur lors de la suppression');
+            })
             .finally(() => this.loader.stop());
         });
       })
-      .catch(() => this._message('Suppression abandonnée'));
+      .catch((error) => {
+        Sentry.captureException(error);
+        this._message('Suppression abandonnée');
+      });
   }
 
   @action

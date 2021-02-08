@@ -3,6 +3,7 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
+import Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
 
@@ -132,6 +133,7 @@ export default class SingleController extends Controller {
         })
         .catch((error) => {
           console.error(error);
+          Sentry.captureException(error);
           this.loader.stop();
           this.notify.error('Erreur lors de la mise à jour de l\'acquis');
         });
@@ -169,6 +171,7 @@ export default class SingleController extends Controller {
               })
               .catch((error) => {
                 console.error(error);
+                Sentry.captureException(error);
                 this.notify.error('Erreur lors de la duplication de l\'acquis');
               })
               .finally(() => {this.loader.stop();});
@@ -228,8 +231,9 @@ export default class SingleController extends Controller {
               });
               return Promise.all(updateChallenges);
             })
-            .catch(error =>{
+            .catch(error => {
               console.error(error);
+              Sentry.captureException(error);
               this.notify.error('Erreur lors de l\'archivage de l\'acquis');
             })
             .finally(() => {
@@ -237,7 +241,10 @@ export default class SingleController extends Controller {
             });
         });
       })
-      .catch(() => this.notify.message('Archivage abandonné'));
+      .catch((error) => {
+        Sentry.captureException(error);
+        this.notify.message('Archivage abandonné');
+      });
   }
 
   @action
@@ -274,8 +281,9 @@ export default class SingleController extends Controller {
               });
               return Promise.all(updateChallenges);
             })
-            .catch(error =>{
+            .catch(error => {
               console.error(error);
+              Sentry.captureException(error);
               this.notify.error('Erreur lors de la suppression de l\'acquis');
             })
             .finally(() => {
@@ -283,7 +291,10 @@ export default class SingleController extends Controller {
             });
         });
       })
-      .catch(() => this.notify.message('Suppression abandonnée'));
+      .catch((error) => {
+        Sentry.captureException(error);
+        this.notify.message('Suppression abandonnée');
+      });
   }
 
   @action

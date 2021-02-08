@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
+import Sentry from '@sentry/ember';
 
 export default class StorageService extends Service {
 
@@ -84,6 +85,7 @@ export default class StorageService extends Service {
         })
         .catch((error) => {
           console.error(error);
+          Sentry.captureException(error);
         });
     }
   }
