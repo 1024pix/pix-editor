@@ -1,6 +1,5 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
@@ -157,7 +156,6 @@ export default class SingleController extends Controller {
     this.wasMaximized = this.maximized;
     this.maximize();
     this.edition = true;
-    scheduleOnce('afterRender', this, this._scrollToTop);
   }
 
   @action
@@ -372,10 +370,6 @@ export default class SingleController extends Controller {
         .then(() => this._handleChangelog(prototype, changelog))
         .finally(() => this.loader.stop());
     });
-  }
-
-  _scrollToTop() {
-    document.querySelector(`.${this.elementClass}.challenge-data`).scrollTop = 0;
   }
 
   _saveCheck(challenge) {
