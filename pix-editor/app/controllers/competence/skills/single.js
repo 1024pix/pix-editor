@@ -1,7 +1,6 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
 
@@ -62,10 +61,6 @@ export default class SingleController extends Controller {
     return this.access.mayDeleteSkill(this.skill);
   }
 
-  _scrollToTop() {
-    document.querySelector('.skill-data').scrollTop = 0;
-  }
-
   @action
   previewPrototype() {
     const prototype = this.skill.productionPrototype;
@@ -97,7 +92,6 @@ export default class SingleController extends Controller {
     this.wasMaximized = this.maximized;
     this.maximize();
     this.edition = true;
-    scheduleOnce('afterRender', this, this._scrollToTop);
   }
 
   @action
