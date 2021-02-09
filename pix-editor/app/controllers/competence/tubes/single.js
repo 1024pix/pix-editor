@@ -1,7 +1,6 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { scheduleOnce } from '@ember/runloop';
 import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
 
@@ -41,13 +40,6 @@ export default class SingleController extends Controller {
     return this.access.mayMoveTube(this.tube);
   }
 
-  _scrollToTop() {
-    const tubeData = document.querySelector('.tube-data');
-    if (tubeData) {
-      tubeData.scrollTop = 0;
-    }
-  }
-
   @action
   maximize() {
     this.parentController.maximizeLeft(true);
@@ -68,7 +60,6 @@ export default class SingleController extends Controller {
     this.wasMaximized = this.maximized;
     this.send('maximize');
     this.edition = true;
-    scheduleOnce('afterRender', this, this._scrollToTop);
   }
 
   @action
