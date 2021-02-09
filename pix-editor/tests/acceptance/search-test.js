@@ -14,7 +14,7 @@ module('Acceptance | Search', function(hooks) {
     localStorage.setItem('pix-api-key', apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', pixID: 'recPixChallenge1' });
+    this.server.create('challenge', { id: 'recChallenge1', pixId: 'REC_RECHERCHE' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkillWorkbench', name: '@workbench', challengeIds: ['recChallenge1'] });
@@ -27,7 +27,7 @@ module('Acceptance | Search', function(hooks) {
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
   });
 
-  test('create a challenge alternative', async function(assert) {
+  test('search a challenge by rec id', async function(assert) {
     // given
     const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1';
     // when
@@ -40,6 +40,22 @@ module('Acceptance | Search', function(hooks) {
     await click(find('[data-test-sidebar-search] li'));
 
     // then
-    assert.equal(currentURL().indexOf(expectedUrl), 0);
+    assert.equal(currentURL(), expectedUrl);
+  });
+
+  test('search a challenge by text', async function(assert) {
+    // given
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1';
+    // when
+    await visit('/');
+    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
+    await fillIn('[data-test-sidebar-search] input', 'test');
+    await waitUntil(function() {
+      return find('[data-test-sidebar-search] li');
+    }, { timeout: 1000 });
+    await click(find('[data-test-sidebar-search] li'));
+
+    // then
+    assert.equal(currentURL(), expectedUrl);
   });
 });

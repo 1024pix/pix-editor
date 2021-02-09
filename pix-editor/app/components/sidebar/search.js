@@ -46,7 +46,7 @@ export default class SidebarSearchComponent extends Component {
         .then(challenges => {
           return challenges.map(challenge => ({
             title: challenge.instructions.substr(0, 100),
-            id: challenge.id
+            id: challenge.pixId
           }));
         });
     }
