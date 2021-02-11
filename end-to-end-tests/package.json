@@ -1,6 +1,6 @@
 {
   "name": "pix-editor-end-to-end-tests",
-  "version": "1.9.0",
+  "version": "1.10.0",
   "description": "End to end for LCMS API and Pix editor front",
   "main": "index.js",
   "scripts": {
