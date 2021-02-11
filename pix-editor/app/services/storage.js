@@ -7,39 +7,56 @@ export default class StorageService extends Service {
   @service config;
   @service filePath;
 
-  uploadFile(file, fileName) {
-    const url = this.config.storagePost + Date.now() +  '.' + this.filePath.getExtension(file.name);
-    const that = this;
-    return this.getStorageToken()
-      .then(function(token) {
-        return file.uploadBinary(url, { method:'put', headers:{ 'X-Auth-Token': token } })
-          .catch((error) => {
-            if (error.response && error.response.status === 401) {
-              // token expired: get a new one
-              return that.getStorageToken(true)
-                .then(function(token) {
-                  return file.uploadBinary(url, { method:'PUT', headers:{ 'X-Auth-Token': token } });
-                });
-            } else {
-              return Promise.reject(error);
-            }
-          });
-      })
-      .then(function() {
-        return {
-          url,
-          filename: fileName || file.name,
-          size: file.size,
-          type: file.type
-        };
+  async uploadFile(file, fileName, date = Date) {
+    const url = this.config.storagePost + date.now() +  '.' + this.filePath.getExtension(file.name);
+    return this._callAPIWithRetry(async (token) => {
+      await file.uploadBinary(url, {
+        method: 'PUT',
+        headers: {
+          'X-Auth-Token': token,
+        },
       });
+
+      return {
+        url,
+        filename: fileName || file.name,
+        size: file.size,
+        type: file.type,
+      };
+    });
+  }
+
+  async cloneFile(url, date = Date, fetch = fetch) {
+    const filename = url.split('/').reverse()[0];
+    const cloneUrl = `${this.config.storagePost}${date.now()}.${this.filePath.getExtension(filename)}`;
+    return this._callAPIWithRetry(async (token) => {
+      await fetch(cloneUrl, {
+        method: 'PUT',
+        headers: {
+          'X-Auth-Token': token,
+          'X-Copy-From': `${this.config.storageBucket}/${filename}`,
+        },
+      });
+
+      return cloneUrl;
+    });
+  }
+
+  async _callAPIWithRetry(fn, renewToken = false) {
+    const token = await this.getStorageToken(renewToken);
+    try {
+      return await fn(token);
+    } catch (error) {
+      if (error.response.status === 401 && !renewToken) {
+        return this._callAPIWithRetry(fn, true);
+      } else {
+        throw error;
+      }
+    }
   }
 
   uploadFiles(files) {
-    var requests = [];
-    for (var i = 0; i < files.length;i++) {
-      requests.push(this.uploadFile(files[i]));
-    }
+    const requests = files.map(file => this.uploadFile(file));
     return Promise.all(requests);
   }
 
