@@ -51,6 +51,7 @@ module.exports = (function() {
       storagePassword: process.env.STORAGE_PASSWORD,
       storageKey: process.env.STORAGE_KEY,
       storageAuth: process.env.STORAGE_AUTH,
+      storageBucket: process.env.STORAGE_BUCKET,
     },
 
     sentry: {
@@ -89,6 +90,7 @@ module.exports = (function() {
       storagePassword: 'storagePasswordValue',
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
+      storageBucket: 'storageBucketValue',
     };
   }
 

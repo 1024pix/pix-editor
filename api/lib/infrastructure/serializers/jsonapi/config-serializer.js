@@ -14,6 +14,7 @@ module.exports = {
         'storagePassword',
         'storageKey',
         'storageAuth',
+        'storageBucket',
       ],
     }).serialize(config);
   }
