@@ -86,9 +86,9 @@ export default class StorageService extends Service {
         }
       };
       return fetch(config.storageAuth, {
-        method:'POST',
-        headers:{ 'Content-type': 'application/json' },
-        body:JSON.stringify(data)
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(data)
       })
         .then(response => response.ok ? response.json() : false)
         .then(response => {

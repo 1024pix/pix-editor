@@ -625,7 +625,12 @@ export default class SingleController extends Controller {
 
   async _saveAttachments(challenge) {
     await challenge.files;
-    await Promise.all(challenge.files.map(file => file.save()));
+    await Promise.all(challenge.files.map(async file => {
+      if (file.cloneBeforeSave) {
+        file.url = await this.storage.cloneFile(file.url);
+      }
+      return file.save();
+    }));
     return challenge;
   }
 

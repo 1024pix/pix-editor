@@ -30,12 +30,13 @@ export default class SingleController extends Controller {
     return this.model;
   }
 
-  @service config;
   @service access;
-  @service notify;
-  @service loader;
-  @service confirm;
   @service changelogEntry;
+  @service config;
+  @service confirm;
+  @service loader;
+  @service notify;
+  @service storage;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -173,17 +174,25 @@ export default class SingleController extends Controller {
       });
   }
 
-  _duplicateLiveChallenges() {
+  async _duplicateLiveChallenges() {
     const skill = this.skill;
-    return skill.challenges
-      .then(challenges => {
-        const liveChallenges = challenges.filter(challenge => challenge.isLive);
-        const newChallenges =  liveChallenges.map(challenge => {
-          const newChallenge = challenge.cloneToDuplicate();
-          return newChallenge.save();
-        });
-        return Promise.all(newChallenges);
-      });
+    const challenges = await skill.challenges;
+    const liveChallenges = challenges.filter(challenge => challenge.isLive);
+    const newChallenges = await Promise.all(liveChallenges.map(async (challenge) => {
+      const newChallenge = await challenge.copyForDifferentSkill();
+      await newChallenge.save();
+      await this._saveDuplicatedAttachments(newChallenge);
+      return newChallenge;
+    }));
+    return newChallenges;
+  }
+
+  async _saveDuplicatedAttachments(challenge) {
+    await challenge.files;
+    await Promise.all(challenge.files.map(async file => {
+      file.url = await this.storage.cloneFile(file.url);
+      return file.save();
+    }));
   }
 
   @action

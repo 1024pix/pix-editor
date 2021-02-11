@@ -107,7 +107,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
         return 'competenceId';
       }
     };
-    const currentSkill = store.createRecord('skill',{
+    const currentSkill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       name: 'currentSkill'
@@ -137,7 +137,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     // given
     const store = this.owner.lookup('service:store');
 
-    const cloneToDuplicateStub = sinon.stub().returns({ save:sinon.stub().resolves({}) });
+    const copyForDifferentSkillStub = sinon.stub().returns({ save:sinon.stub().resolves({}) });
 
     const validatedChallenge = store.createRecord('challenge',{
       id: 'rec_1_1',
@@ -145,30 +145,31 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       status: 'validé',
       name: 'validatedChallenge',
     });
-    validatedChallenge.cloneToDuplicate = sinon.stub().returns({ save:sinon.stub().resolves(validatedChallenge) });
+    sinon.stub(validatedChallenge, 'save').resolves(validatedChallenge);
+    validatedChallenge.copyForDifferentSkill = sinon.stub().returns(validatedChallenge);
 
-    const draftChallenge = store.createRecord('challenge',{
+    const draftChallenge = store.createRecord('challenge', {
       id: 'rec_1_2',
       pixId: 'pix_1_2',
       status: 'proposé',
       name: 'draftChallenge',
     });
-    draftChallenge.cloneToDuplicate = sinon.stub().returns({ save:sinon.stub().resolves(draftChallenge) });
+    sinon.stub(draftChallenge, 'save').resolves(draftChallenge);
+    draftChallenge.copyForDifferentSkill = sinon.stub().returns(draftChallenge);
 
-
-    const archiveChallenge = store.createRecord('challenge',{
+    const archiveChallenge = store.createRecord('challenge', {
       id: 'rec_1_3',
       pixId: 'pix_1_3',
       status: 'archivé',
       name: 'archiveChallenge',
-      cloneToDuplicate: cloneToDuplicateStub
+      copyForDifferentSkill: copyForDifferentSkillStub
     });
-    const deletedChallenge = store.createRecord('challenge',{
+    const deletedChallenge = store.createRecord('challenge', {
       id: 'rec_1_4',
       pixId: 'pix_1_4',
       status: 'périmé',
       name: 'deletedChallenge',
-      cloneToDuplicate: cloneToDuplicateStub
+      copyForDifferentSkill: copyForDifferentSkillStub
     });
     const skill =  store.createRecord('skill',{
       id: 'rec_1',
@@ -184,5 +185,50 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     assert.equal(result.length, 2);
     assert.equal(result[0].name, 'validatedChallenge');
     assert.equal(result[1].name, 'draftChallenge');
+  });
+
+  test('it should duplicate challenge and attachments', async function (assert) {
+    // given
+    const store = this.owner.lookup('service:store');
+
+    const attachment = store.createRecord('attachment', {
+      type: 'illustration',
+      size: 123,
+      mimeType: 'image/png',
+      filename: 'myfilename.png',
+      url: 'data:1,',
+    });
+    sinon.stub(attachment, 'save').resolves(attachment);
+
+    const challenge = store.createRecord('challenge',{
+      id: 'rec_1_1',
+      pixId: 'pix_1_1',
+      status: 'validé',
+      name: 'validatedChallenge',
+      files: [attachment],
+    });
+    sinon.stub(challenge, 'save').resolves(challenge);
+    challenge.copyForDifferentSkill = sinon.stub().returns(challenge);
+
+    const skill =  store.createRecord('skill',{
+      id: 'rec_1',
+      pixId: 'pix_1',
+      challenges: [challenge]
+    });
+    controller.model = skill;
+
+    const storageServiceStub = this.owner.lookup('service:storage');
+    sinon.stub(storageServiceStub, 'cloneFile').resolves('data:2,');
+
+    // when
+    const newChallenges = await controller._duplicateLiveChallenges();
+
+    // then
+    assert.equal(newChallenges.length, 1);
+    assert.equal(newChallenges[0].name, 'validatedChallenge');
+    assert.equal(newChallenges[0].files.length, 1);
+    assert.equal(newChallenges[0].files.firstObject.url, 'data:2,');
+    assert.ok(challenge.save.calledOnce);
+    assert.ok(attachment.save.calledOnce);
   });
 });

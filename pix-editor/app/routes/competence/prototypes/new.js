@@ -9,12 +9,21 @@ export default class NewRoute extends PrototypeRoute {
 
   model(params) {
     if (params.from) {
-      return this.store.findRecord('challenge',params.from)
+      return this.store.findRecord('challenge', params.from)
         .then((prototype) => {
-          return prototype.clone();
+          return prototype.duplicate();
         });
     } else {
-      const newChallenge = this.store.createRecord('challenge', { competence:[this.modelFor('competence').id], status:'proposé', t1:true, t2:true, t3:true, genealogy:'Prototype 1', author:[this.config.author], pixId:this.idGenerator.newId() });
+      const newChallenge = this.store.createRecord('challenge', {
+        competence: [this.modelFor('competence').id],
+        status: 'proposé',
+        t1: true,
+        t2: true,
+        t3: true,
+        genealogy: 'Prototype 1',
+        author: [this.config.author],
+        pixId: this.idGenerator.newId()
+      });
       if (params.fromSkill) {
         return this.store.findRecord('skill', params.fromSkill)
           .then((skill) => {
