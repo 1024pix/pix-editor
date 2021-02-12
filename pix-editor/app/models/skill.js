@@ -86,24 +86,6 @@ export default class SkillModel extends Model {
     return (this.clueStatus === 'inapplicable');
   }
 
-  get tutoSolutionCount() {
-    const ids = this.tutoSolution;
-    if (ids) {
-      return ids.length;
-    } else {
-      return 0;
-    }
-  }
-
-  get tutoMoreCount() {
-    const ids = this.tutoMore;
-    if (ids) {
-      return ids.length;
-    } else {
-      return 0;
-    }
-  }
-
   get prototypes() {
     return this.challenges.filter(challenge => challenge.isPrototype);
   }

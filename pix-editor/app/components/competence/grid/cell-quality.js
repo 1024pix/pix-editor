@@ -28,12 +28,12 @@ export default class CellQuality extends Component {
   }
 
   get classTutorial() {
-    const tutoSolution = this.args.skill.tutoSolutionCount;
-    const tutoMore = this.args.skill.tutoMoreCount;
-    if (tutoSolution > 0 && tutoMore > 0) {
+    const hasTutoSolution = this.args.skill.tutoSolution.length > 0;
+    const hasTutoMore = this.args.skill.tutoMore.length > 0;
+    if (hasTutoSolution && hasTutoMore) {
       return 'have-tutorial';
     }
-    if (tutoSolution > 0 || tutoMore > 0) {
+    if (hasTutoSolution || hasTutoMore) {
       return 'half-tutorial';
     }
     return false;
@@ -50,8 +50,8 @@ export default class CellQuality extends Component {
     const skillTimer = productionPrototype.timer;
     const timer = skillTimer ? `<tr><td>Timer</td><td>${skillTimer} s</td></tr>` : '';
     const classTuto = this.classTutorial;
-    const tutoSolutionCount = this.args.skill.tutoSolutionCount;
-    const tutoMoreCount = this.args.skill.tutoMoreCount;
+    const tutoSolutionCount = this.args.skill.tutoSolution.length;
+    const tutoMoreCount = this.args.skill.tutoMore.length;
     const haveTuto = classTuto ? `<tr><td>Tuto comprendre </td><td> ${tutoSolutionCount}</td></tr>
                                 <tr><td>Tuto en savoir + </td><td> ${tutoMoreCount}</td></tr>` : '';
     return htmlSafe(`<tr><td>Spoil </td><td> ${spoil} </td></tr>
