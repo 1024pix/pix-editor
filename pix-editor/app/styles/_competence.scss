@@ -1,8 +1,25 @@
-.select-section {
+.ui.small.floated.select-section {
   min-width: 150px;
+  margin-bottom: 0;
 }
 
-.select-section-dropdown {
+.ui.small.floated.language-filter {
+  min-width: 180px;
+  margin-bottom: 0;
+  font-weight: normal;
+
+  .ember-power-select-trigger {
+    color: white;
+    border-color: white;
+    background: transparent;
+
+    .ember-power-select-status-icon{
+      border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
+    }
+  }
+}
+
+.select-section-dropdown, .language-filter-dropdown {
   li {
     padding-top: .5em;
     padding-bottom: .5em;

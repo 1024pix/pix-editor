@@ -15,6 +15,7 @@ export default class CompetenceController extends Controller {
 
   @tracked view = 'production';
   @tracked section = 'challenges';
+  @tracked languageFilter = false;
   @tracked leftMaximized = false;
 
   @service router;
@@ -177,5 +178,10 @@ export default class CompetenceController extends Controller {
   @action
   selectSection(value) {
     this._transitionToSection(value.id);
+  }
+
+  @action
+  selectLanguageToFilter(value) {
+    this.languageFilter = value.id;
   }
 }

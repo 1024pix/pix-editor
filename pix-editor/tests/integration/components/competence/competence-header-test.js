@@ -13,14 +13,22 @@ module('Integration | Component | competence/competence-header', function(hooks)
 
     const competence = EmberObject.create({ name:'competence_name' });
     this.set('competence', competence);
-    this.set('externalAction', ()=>{});
+    this.set('selectSection', ()=>{});
+    this.set('selectLanguageToFilter', ()=>{});
+    this.set('section', 'challenges');
+    this.set('view', 'production');
 
     //  when
-
-    await render(hbs`{{competence/competence-header competence=competence selectSection=(action externalAction)}}`);
+    await render(hbs`<Competence::CompetenceHeader @competence={{this.competence}}
+                                                   @section={{this.section}}
+                                                   @languageFilter={{false}}
+                                                   @selectLanguageToFilter={{this.selectLanguageToFilter}}
+                                                   @view={{this.view}}
+                                                   @selectSection={{this.selectSection}}/>`);
 
     //  then
-    assert.dom('h1').exists();
-    assert.dom(this.element.querySelector('h1')).hasText('competence_name');
+    assert.dom('h1').hasText('competence_name');
+    assert.dom('.select-section').hasText('Epreuves');
+    assert.dom('.language-filter').hasText('Filtre par langue');
   });
 });
