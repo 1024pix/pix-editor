@@ -32,6 +32,10 @@ export default class AirtableSerializer extends RESTSerializer {
       delete payload.id;
       delete payload.fields;
       delete payload.createdTime;
+    } else if (payload.deleted) {
+      payload[type.modelName] = {};
+      delete payload.id;
+      delete payload.deleted;
     }
 
     return super.normalizeResponse(...arguments);
