@@ -253,7 +253,7 @@ export default class SkillModel extends Model {
     const json = {};
     this.eachAttribute((name) => {
       if (name !== 'id') {
-        json[`${name}`] = JSON.stringify(this[`${name}`]);
+        json[`${name}`] = this[`${name}`];
       }
     });
     return json;
