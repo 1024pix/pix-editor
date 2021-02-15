@@ -264,7 +264,7 @@ export default class ChallengeModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    const data = this.toJSON({ includeId:false });
+    const data = this.toJSON();
     delete data.pixId;
     if (data.illustration) {
       const illustration = data.illustration[0];
@@ -283,6 +283,16 @@ export default class ChallengeModel extends Model {
       });
     }
     return data;
+  }
+
+  toJSON() {
+    const json = {};
+    this.eachAttribute((name) => {
+      if (name !== 'id') {
+        json[`${name}`] = JSON.stringify(this[`${name}`]);
+      }
+    });
+    return json;
   }
 
 }
