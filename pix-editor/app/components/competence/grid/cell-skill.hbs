@@ -6,10 +6,14 @@
       {{#if (and @languageFilter this.hasNoClueByLanguage)}}
         <i class="idea icon empty" title="Indice manquant"></i>
       {{else if @languageFilter}}
-        <i class="idea icon validated"></i>
+        <i class="idea icon validated" title="Indice présent"></i>
       {{else if (or @skill.clue @skill.clueNA)}}
-        <i class={{concat "idea icon " @skill.clueCSS}}></i>
+        <i class={{concat "idea icon " @skill.clueCSS}} title="Indice {{@skill.clueStatus}}"></i>
       {{/if}}
-    <span class="tuto-count">{{this.tutoSolutionCountByLanguage}} - {{this.tutoMoreCountByLanguage}}</span>
+    <span class="tuto-count">
+      <span title="Nombre de tutoriels pour réussir la prochaine fois">{{this.tutoSolutionCountByLanguage}}</span>
+      -
+      <span title="Nombre de tutoriels pour en savoir plus">{{this.tutoMoreCountByLanguage}}</span>
+    </span>
   </div>
 </LinkTo>

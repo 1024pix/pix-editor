@@ -13,7 +13,7 @@
     border-color: white;
     background: transparent;
 
-    .ember-power-select-status-icon{
+    .ember-power-select-status-icon {
       border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
     }
   }
@@ -191,6 +191,7 @@
               color: $na-color;
               text-shadow: none;
             }
+
             &.empty {
               color: $deleted-background-color;
             }
@@ -339,6 +340,42 @@
 
       &:nth-child(2) {
         text-align: center;
+      }
+    }
+  }
+}
+
+.language-filter-info {
+  max-width: 400px;
+
+  .table {
+    width: 330px;
+
+    &.skillSection {
+      .color {
+        width: 80px;
+
+        &.warning {
+          background: #b5b3ff !important;
+        }
+
+        &.danger {
+          background: #c496ff;
+        }
+      }
+    }
+    &.challengeSection {
+      width: 380px;
+      .color {
+        width: 80px;
+
+        &.warning {
+          background: #fdc59f !important;
+        }
+
+        &.danger {
+          background: #FF5E5E;
+        }
       }
     }
   }

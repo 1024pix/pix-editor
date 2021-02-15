@@ -1,9 +1,9 @@
 <LinkTo data-test-skill-cell @route={{@link}} @model={{@skill.productionPrototype}} @tagName="td" class="skill skill-cell link production {{this.alertCSS}}">
   {{@skill.name}}
   <div class="alternative">
-    <span data-test-production-alternative-length class="production">{{this.productionChallengesFilteredByLanguage}}</span>
+    <span data-test-production-alternative-length class="production" title="Nombre d'épreuves en production">{{this.productionChallengesFilteredByLanguage}}</span>
     {{#if this.draftAlternativesFilteredByLanguage}}
-      <span data-test-draft-alternative-length class="draft">({{this.draftAlternativesFilteredByLanguage}})</span>
+      <span data-test-draft-alternative-length class="draft" title="Nombre d'épreuves en cours de construction">({{this.draftAlternativesFilteredByLanguage}})</span>
     {{/if}}
     {{#if @skill.productionPrototype.notDeclinable}}
       <span class="not-declinable">NR</span>
