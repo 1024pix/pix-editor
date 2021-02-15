@@ -43,49 +43,83 @@ module('Unit | Model | challenge', function(hooks) {
     };
   });
 
-  test('it should clone challenge to create new prototype version', function (assert) {
-    // given
-    const challenge = run(() => store.createRecord('challenge', prototype));
+  module('#duplicate', function() {
+    test('it should duplicate challenge to create new prototype version', async function (assert) {
+      // given
+      const challenge = run(() => store.createRecord('challenge', prototype));
 
-    // when
-    const clonedChallenge = challenge.clone();
+      // when
+      const clonedChallenge = await challenge.duplicate();
 
-    // then
-    assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-    assert.equal(clonedChallenge.pixId, 'generatedId');
-    assert.equal(clonedChallenge.status, 'proposé');
-    assert.equal(clonedChallenge.author, 'NEW');
-    assert.equal(clonedChallenge.version, null);
-    assert.equal(clonedChallenge.skills.length, 1);
+      // then
+      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
+      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.status, 'proposé');
+      assert.equal(clonedChallenge.author, 'NEW');
+      assert.equal(clonedChallenge.version, null);
+      assert.equal(clonedChallenge.skills.length, 1);
+    });
+
+    test('it should duplicate challenge to create new alternative version', async function (assert) {
+      // given
+      const challenge = run(() => store.createRecord('challenge', alternative));
+
+      // when
+      const clonedChallenge = await challenge.duplicate();
+
+      // then
+      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
+      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.status, 'proposé');
+      assert.equal(clonedChallenge.author, 'NEW');
+      assert.equal(clonedChallenge.alternativeVersion, null);
+      assert.equal(clonedChallenge.skills.length, 1);
+    });
+
+    test('it should clone the attachments', async function (assert) {
+      // given
+      const challenge = store.createRecord('challenge', prototype);
+      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
+
+      // when
+      const clonedChallenge = await challenge.duplicate();
+
+      // then
+      assert.equal(clonedChallenge.files.length, 1);
+      assert.equal(illustration.url, clonedChallenge.files.firstObject.url);
+      assert.notEqual(illustration.id, clonedChallenge.files.firstObject.id);
+      assert.ok(clonedChallenge.files.firstObject.cloneBeforeSave);
+    });
   });
 
-  test('it should clone challenge to create new alternative version', function (assert) {
-    // given
-    const challenge = run(() => store.createRecord('challenge', alternative));
+  module('#copyForDifferentSkill', function() {
+    test('it should create a copy of the challenge for a different skill', async function(assert) {
+      // given
+      const challenge = run(() => store.createRecord('challenge', prototype));
 
-    // when
-    const clonedChallenge = challenge.clone();
+      // when
+      const clonedChallenge = await challenge.copyForDifferentSkill();
 
-    // then
-    assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-    assert.equal(clonedChallenge.pixId, 'generatedId');
-    assert.equal(clonedChallenge.status, 'proposé');
-    assert.equal(clonedChallenge.author, 'NEW');
-    assert.equal(clonedChallenge.alternativeVersion, null);
-    assert.equal(clonedChallenge.skills.length, 1);
-  });
+      // then
+      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
+      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.status, 'proposé');
+      assert.equal(clonedChallenge.skills.length, 0);
+    });
 
-  test('it should clone challenge to duplicate', function(assert) {
-    // given
-    const challenge = run(() => store.createRecord('challenge', prototype));
+    test('it should clone the attachments', async function (assert) {
+      // given
+      const challenge = store.createRecord('challenge', prototype);
+      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
 
-    // when
-    const clonedChallenge = challenge.cloneToDuplicate();
+      // when
+      const clonedChallenge = await challenge.copyForDifferentSkill();
 
-    // then
-    assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-    assert.equal(clonedChallenge.pixId, 'generatedId');
-    assert.equal(clonedChallenge.status, 'proposé');
-    assert.equal(clonedChallenge.skills.length, 0);
+      // then
+      assert.equal(clonedChallenge.files.length, 1);
+      assert.equal(illustration.url, clonedChallenge.files.firstObject.url);
+      assert.notEqual(illustration.id, clonedChallenge.files.firstObject.id);
+      assert.ok(clonedChallenge.files.firstObject.cloneBeforeSave);
+    });
   });
 });

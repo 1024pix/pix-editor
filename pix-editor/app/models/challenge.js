@@ -218,7 +218,7 @@ export default class ChallengeModel extends Model {
     return this.save();
   }
 
-  clone() {
+  async duplicate() {
     const ignoredFields = ['skills', 'author'];
     if (this.isPrototype) {
       ignoredFields.push('version');
@@ -226,23 +226,29 @@ export default class ChallengeModel extends Model {
       ignoredFields.push('alternativeVersion');
     }
     const data = this._getJSON(ignoredFields);
-    data.status = 'proposé';
     data.author = [this.config.author];
+
+    data.status = 'proposé';
     data.skills = this.skills;
     data.pixId = this.idGenerator.newId();
-    return this.myStore.createRecord(this.constructor.modelName, data);
+    const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
+    await this._cloneAttachments(newChallenge);
+    return newChallenge;
   }
 
-  cloneToDuplicate() {
+  async copyForDifferentSkill() {
     const ignoredFields = ['skills'];
     const data = this._getJSON(ignoredFields);
+
     data.status = 'proposé';
     data.pixId = this.idGenerator.newId();
-    return this.myStore.createRecord(this.constructor.modelName, data);
+    const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
+    await this._cloneAttachments(newChallenge);
+    return newChallenge;
   }
 
-  derive() {
-    const alternative = this.clone();
+  async derive() {
+    const alternative = await this.duplicate();
     alternative.version = this.version;
     alternative.genealogy = 'Décliné 1';
     return alternative;
@@ -289,10 +295,18 @@ export default class ChallengeModel extends Model {
     const json = {};
     this.eachAttribute((name) => {
       if (name !== 'id') {
-        json[`${name}`] = JSON.stringify(this[`${name}`]);
+        json[`${name}`] = this[`${name}`];
       }
     });
     return json;
+  }
+
+  async _cloneAttachments(newChallenge) {
+    await this.files;
+    this.files.map((attachment) => {
+      const data = attachment.toJSON();
+      this.store.createRecord('attachment', { ...data, challenge: newChallenge, cloneBeforeSave: true });
+    });
   }
 
 }

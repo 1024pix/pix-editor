@@ -43,6 +43,7 @@ describe('Acceptance | Controller | config', () => {
               'storage-password': 'storagePasswordValue',
               'storage-key': 'storageKeyValue',
               'storage-auth': 'storageAuthValue',
+              'storage-bucket': 'storageBucketValue',
             },
           }
         };

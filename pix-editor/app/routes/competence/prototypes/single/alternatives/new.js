@@ -5,9 +5,9 @@ export default class NewRoute extends Route {
 
   model(params) {
     if (params.from) {
-      return this.store.findRecord('challenge',params.from)
+      return this.store.findRecord('challenge', params.from)
         .then(challenge => {
-          return challenge.clone();
+          return challenge.duplicate();
         });
     } else {
       const prototype = this.modelFor('competence/prototypes/single');

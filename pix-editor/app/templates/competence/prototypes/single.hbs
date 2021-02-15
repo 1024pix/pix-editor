@@ -53,7 +53,7 @@
   </div>
 </div>
 <div class="challenge">
-  <div class="challenge-data {{this.elementClass}}">
+  <div class="challenge-data {{this.elementClass}}" {{scroll-top this.edition}}>
     <Form::Challenge @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}}/>
     {{#if this.copyOperation}}
       <Field::Copy @value={{this.challenge.preview}} @onCopied={{this.linkCopied}}/>

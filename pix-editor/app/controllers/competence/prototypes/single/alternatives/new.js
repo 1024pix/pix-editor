@@ -49,7 +49,6 @@ export default class NewController extends Alternative {
       .then(() => this.currentData.getPrototype().getNextAlternativeVersion())
       .then(version => {
         challenge.alternativeVersion = version;
-        console.log(challenge.id);
         return challenge.save();
       });
   }

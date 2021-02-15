@@ -19,6 +19,7 @@ export default class ConfigService extends Service {
   @tracked storagePassword;
   @tracked storageKey;
   @tracked storageAuth;
+  @tracked storageBucket;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
@@ -36,5 +37,6 @@ export default class ConfigService extends Service {
     this.storagePassword = config.storagePassword;
     this.storageKey = config.storageKey;
     this.storageAuth = config.storageAuth;
+    this.storageBucket = config.storageBucket;
   }
 }
