@@ -1,5 +1,5 @@
 const chai = require('chai');
-const { attachmentUrl, challengeAttachmentsToCsv, challengesAttachmentsToCsv, renameFileToImport } = require('./index.js');
+const { challengeAttachmentsToCsv, challengesAttachmentsToCsv, renameFileToImport } = require('.');
 const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
@@ -41,10 +41,9 @@ describe('challengeAttachmentsToCsv', () => {
       },
     };
 
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/"
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id"';
 
-    const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
+    const csv = challengeAttachmentsToCsv(challenge);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -82,10 +81,9 @@ describe('challengeAttachmentsToCsv', () => {
       },
     };
 
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/"
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id"';
 
-    const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
+    const csv = challengeAttachmentsToCsv(challenge);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -127,11 +125,10 @@ describe('challengeAttachmentsToCsv', () => {
       }
     };
 
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/";
-    const expectedCsv = 'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id' + '\n' +
-                        'attLwY7ni4a6Naboz,Pix_etoile.pptx,34753,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation,attachment,some-challenge-id';
+    const expectedCsv = '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"' + '\n' +
+                        '"attLwY7ni4a6Naboz","Pix_etoile.pptx","34753","","https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation","attachment","some-challenge-id"';
 
-    const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl }  );
+    const csv = challengeAttachmentsToCsv(challenge);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -164,12 +161,11 @@ describe('challengeAttachmentsToCsv', () => {
       },
     };
 
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/";
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id' + '\n' +
-                        'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id"' + '\n' +
+                        '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"';
 
 
-    const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
+    const csv = challengeAttachmentsToCsv(challenge);
 
     expect(csv).to.equal(expectedCsv);
   })
@@ -191,10 +187,9 @@ describe('challengeAttachmentsToCsv', () => {
       },
     };
 
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/";
-    const expectedCsv = "attcKBWOyCUyATJ93,mailPJ.png,49502,\"Bonjour \"\"Monsieur\"\", \n Je suis un texte alternatif !\",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id";
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","Bonjour ""Monsieur"", \n Je suis un texte alternatif !\","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id"';
 
-    const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
+    const csv = challengeAttachmentsToCsv(challenge);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -231,14 +226,13 @@ describe('challengesAttachmentsToCsv', () => {
     };
 
     const challenges = [challenge, challenge];
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/";
     const expectedCsv = 'id,filename,size,alt,url,mimeType,type,challengeId'+ '\n' +
-          'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png,image/png,illustration,some-challenge-id2' + '\n' +
-                        'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id2' + '\n' +
-    'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png,image/png,illustration,some-challenge-id2' + '\n' +
-    'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id2';
+      '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
+      '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"' + '\n' +
+      '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
+      '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"';
 
-    const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl });
+    const csv = challengesAttachmentsToCsv(challenges);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -253,10 +247,9 @@ describe('challenges doesn\'t have any attachments and illustration', () => {
     };
 
     const challenges = [challenge, challenge];
-    const bucketBaseUrl = "https://dl.ovh.com/bucket/";
     const expectedCsv = 'id,filename,size,alt,url,mimeType,type,challengeId' + '\n';
 
-    const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl });
+    const csv = challengesAttachmentsToCsv(challenges);
 
     expect(csv).to.equal(expectedCsv);
   });
@@ -358,14 +351,3 @@ describe('rename files', () => {
   })
 });
 
-describe('Attachment url', () => {
-    it('should construct attachment url', () => {
-      const challengeId = 'some-challenge-id3';
-      const filename = 'Pix etoile.odp';
-      const bucketBaseUrl = "https://dl.ovh.com/bucket/";
-
-      const url = attachmentUrl({ challengeId, filename, type: 'attachment', bucketBaseUrl });
-
-      expect(url).to.equal('https://dl.ovh.com/bucket/some-challenge-id3_attachment_Pix%20etoile.odp');
-  });
-});
