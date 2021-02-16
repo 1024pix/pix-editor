@@ -1,13 +1,19 @@
-<LinkTo @route="competence.skills.single" @model={{@skill}} @tagName="td" class={{concat "skill skill-cell link skill-mode" (unless @skill.productionPrototype " draft-skill")}}>
-  <div class="skill-name {{@skill.descriptionCSS}}">
+<LinkTo @route="competence.skills.single" @model={{@skill}} @tagName="td" class="skill skill-cell link skill-mode {{this.alertCSS}}">
+  <div class="skill-name">
     {{@skill.name}}
   </div>
   <div class="help">
-    {{#if (or @skill.clue @skill.clueNA)}}
-    <i class={{concat "idea icon " @skill.clueCSS}}></i>
-    {{else}}
-    <i class="icon"></i>
-    {{/if}}
-    <span class="tuto-count">{{@skill.tutoSolutionCount}} - {{@skill.tutoMoreCount}}</span>
+      {{#if (and @languageFilter this.hasNoClueByLanguage)}}
+        <i class="idea icon empty" title="Indice manquant"></i>
+      {{else if @languageFilter}}
+        <i class="idea icon validated" title="Indice présent"></i>
+      {{else if (or @skill.clue @skill.clueNA)}}
+        <i class={{concat "idea icon " @skill.clueCSS}} title="Indice {{@skill.clueStatus}}"></i>
+      {{/if}}
+    <span class="tuto-count">
+      <span title="Nombre de tutoriels pour réussir la prochaine fois">{{this.tutoSolutionCountByLanguage}}</span>
+      -
+      <span title="Nombre de tutoriels pour en savoir plus">{{this.tutoMoreCountByLanguage}}</span>
+    </span>
   </div>
 </LinkTo>

@@ -1,8 +1,25 @@
-.select-section {
+.ui.small.floated.select-section {
   min-width: 150px;
+  margin-bottom: 0;
 }
 
-.select-section-dropdown {
+.ui.small.floated.language-filter {
+  min-width: 180px;
+  margin-bottom: 0;
+  font-weight: normal;
+
+  .ember-power-select-trigger {
+    color: white;
+    border-color: white;
+    background: transparent;
+
+    .ember-power-select-status-icon {
+      border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
+    }
+  }
+}
+
+.select-section-dropdown, .language-filter-dropdown {
   li {
     padding-top: .5em;
     padding-bottom: .5em;
@@ -55,14 +72,35 @@
       &.link {
         cursor: pointer;
 
+        &.production {
+          &.warning {
+            background: #fdc59f !important;
+          }
+
+          &.danger {
+            background: #FF5E5E !important;
+          }
+        }
+
         &.production,
         &.workbench {
           background-color: $challenge-background-color !important;
 
           &.active {
-            background-color: #EBEC5C !important;
+            position: relative;
             color: red !important;
+
+            &::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(146, 146, 55, 0.3);
+            }
           }
+
           .workbench__status {
             display: flex;
             justify-content: center;
@@ -96,41 +134,72 @@
         }
 
         &.skill-mode {
+          &.warning {
+            background: #b5b3ff !important;
+          }
+
+          &.danger {
+            background: #c496ff !important;
+          }
+        }
+
+        &.skill-mode,
+        &.skill-workbench {
           background-color: $skill-background-color !important;
 
+          &.active {
+            position: relative;
+            color: red !important;
+
+            &::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: rgba(124, 144, 167, 0.3);
+            }
+          }
+
           .idea.icon {
-            text-shadow: 1px 1px 1px rgba(0,0,0,.8);
+            text-shadow: 1px 1px 1px rgba(0, 0, 0, .8);
 
             &.validated,
             &.prevalidated {
               color: $validated-background-color;
             }
+
             &.to-be-submitted {
               color: $to-be-submitted-background-color;
             }
+
             &.need-work {
               color: $need-work-background-color;
             }
+
             &.suggested {
               color: $suggested-background-color;
             }
+
             &.archived {
               color: $archived-background-color;
               text-shadow: none;
             }
-            &.na{
+
+            &.na {
               color: $na-color;
               text-shadow: none;
+            }
+
+            &.empty {
+              color: $deleted-background-color;
             }
           }
 
           .tuto-count {
             font-size: 12px;
           }
-        }
-
-        &.skill-workbench {
-          background: $skill-background-color;
 
           .skill-workbench__status {
             display: flex;
@@ -157,11 +226,8 @@
               }
             }
           }
-
-          &.active {
-            background: #9ecafc !important;
-          }
         }
+
 
         &.i18n {
           height: 45px;
@@ -274,6 +340,42 @@
 
       &:nth-child(2) {
         text-align: center;
+      }
+    }
+  }
+}
+
+.language-filter-info {
+  max-width: 400px;
+
+  .table {
+    width: 330px;
+
+    &.skillSection {
+      .color {
+        width: 80px;
+
+        &.warning {
+          background: #b5b3ff !important;
+        }
+
+        &.danger {
+          background: #c496ff;
+        }
+      }
+    }
+    &.challengeSection {
+      width: 380px;
+      .color {
+        width: 80px;
+
+        &.warning {
+          background: #fdc59f !important;
+        }
+
+        &.danger {
+          background: #FF5E5E;
+        }
       }
     }
   }

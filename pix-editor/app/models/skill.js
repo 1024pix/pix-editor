@@ -48,15 +48,6 @@ export default class SkillModel extends Model {
     });
   }
 
-  get descriptionCSS() {
-    const status = this.descriptionStatus;
-    if (!status) {
-      return 'suggested';
-    } else {
-      return this._getCSSFromStatus(status);
-    }
-  }
-
   get clueCSS() {
     const status = this.clueStatus;
     if (!status) {
@@ -84,24 +75,6 @@ export default class SkillModel extends Model {
 
   get clueNA() {
     return (this.clueStatus === 'inapplicable');
-  }
-
-  get tutoSolutionCount() {
-    const ids = this.tutoSolution;
-    if (ids) {
-      return ids.length;
-    } else {
-      return 0;
-    }
-  }
-
-  get tutoMoreCount() {
-    const ids = this.tutoMore;
-    if (ids) {
-      return ids.length;
-    } else {
-      return 0;
-    }
   }
 
   get prototypes() {
@@ -307,3 +280,4 @@ export default class SkillModel extends Model {
   }
 
 }
+

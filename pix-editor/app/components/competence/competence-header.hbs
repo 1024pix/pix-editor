@@ -1,5 +1,16 @@
 <div class="ui main-title{{this.liteClass}}">
   <h1 class="ui left floated header">{{@competence.name}}</h1>
+  {{#if this.isProductionViewAndSkillsOrChallengesSection}}
+    <div class="selection ui small right floated header language-filter">
+      <PowerSelect @dropdownClass="language-filter-dropdown" @searchEnabled={{false}} @options={{this.languageOptions}} @selected={{this.selectedLanguageToFilter}} @onChange={{@selectLanguageToFilter}} as |language|>
+        {{#if language.id}}
+          {{language.id}} <i class="flag {{convert-language-as-flag language.id}}"></i>
+        {{else}}
+         {{language.title}}
+        {{/if}}
+      </PowerSelect>
+    </div>
+  {{/if}}
   <div class="selection ui small right floated header select-section">
     <PowerSelect @dropdownClass="select-section-dropdown" @searchEnabled={{false}} @options={{this.sections}} @selected={{this.selectedSection}} @onChange={{@selectSection}} as |section|>
       {{section.title}}

@@ -2,10 +2,14 @@
   <Competence::CompetenceHeader
     @competence={{this.competence}}
     @section={{this.section}}
+    @languageFilter={{this.languageFilter}}
+    @selectLanguageToFilter={{this.selectLanguageToFilter}}
+    @view={{this.view}}
     @selectSection={{this.selectSection}} />
   {{#unless this.leftMaximized}}
     <Competence::CompetenceActions
       @section={{this.section}}
+      @languageFilter={{this.languageFilter}}
       @view={{this.view}}
       @refresh={{this.refresh}}
       @selectView={{this.selectView}}
@@ -14,6 +18,7 @@
       {{#if this.displayGrid}}
         <Competence::CompetenceGrid
           @tubes={{this.competence.sortedTubes}}
+          @languageFilter={{this.languageFilter}}
           @section={{this.section}}
           @view={{this.view}}
           @link={{this.skillLink}} />
