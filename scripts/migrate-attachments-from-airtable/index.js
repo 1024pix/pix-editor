@@ -13,7 +13,9 @@ function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
   const challenges = require(backupBaseFolder + 'Epreuves.json');
   const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl: process.env.BUCKET_BASE_URL });
-  renameChallengesAttachments(challenges, backupBaseFolder);
+  if (process.argv.includes('--rename-files')) {
+    renameChallengesAttachments(challenges, backupBaseFolder);
+  }
   fs.writeFileSync(backupBaseFolder + 'challenges.csv', csv);
 }
 
