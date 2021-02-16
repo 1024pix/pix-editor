@@ -12,15 +12,4 @@ export default class Attachment extends Model {
   @tracked cloneBeforeSave;
 
   @belongsTo('challenge') challenge;
-
-  toJSON() {
-    const json = {};
-    this.eachAttribute((name) => {
-      if (name !== 'id') {
-        json[`${name}`] = this[`${name}`];
-      }
-    });
-    return json;
-  }
-
 }

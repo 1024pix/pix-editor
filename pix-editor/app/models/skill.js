@@ -213,23 +213,13 @@ export default class SkillModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    const data = this.toJSON();
+    const data = this.toJSON({ idIncluded: false });
     fieldsToRemove.forEach((current) => {
       if (data[current]) {
         delete data[current];
       }
     });
     return data;
-  }
-
-  toJSON() {
-    const json = {};
-    this.eachAttribute((name) => {
-      if (name !== 'id') {
-        json[`${name}`] = this[`${name}`];
-      }
-    });
-    return json;
   }
 
   _getCSSFromStatus(status) {

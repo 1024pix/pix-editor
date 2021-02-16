@@ -270,7 +270,7 @@ export default class ChallengeModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    const data = this.toJSON();
+    const data = this.toJSON({ idIncluded: false });
     delete data.pixId;
     if (data.illustration) {
       const illustration = data.illustration[0];
@@ -291,20 +291,10 @@ export default class ChallengeModel extends Model {
     return data;
   }
 
-  toJSON() {
-    const json = {};
-    this.eachAttribute((name) => {
-      if (name !== 'id') {
-        json[`${name}`] = this[`${name}`];
-      }
-    });
-    return json;
-  }
-
   async _cloneAttachments(newChallenge) {
     await this.files;
     this.files.map((attachment) => {
-      const data = attachment.toJSON();
+      const data = attachment.toJSON({ idIncluded: false });
       this.store.createRecord('attachment', { ...data, challenge: newChallenge, cloneBeforeSave: true });
     });
   }
