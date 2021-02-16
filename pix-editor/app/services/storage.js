@@ -26,11 +26,11 @@ export default class StorageService extends Service {
     });
   }
 
-  async cloneFile(url, date = Date, fetch = fetch) {
+  async cloneFile(url, date = Date, fetchFn = fetch) {
     const filename = url.split('/').reverse()[0];
     const cloneUrl = `${this.config.storagePost}${date.now()}.${this.filePath.getExtension(filename)}`;
     return this._callAPIWithRetry(async (token) => {
-      await fetch(cloneUrl, {
+      await fetchFn(cloneUrl, {
         method: 'PUT',
         headers: {
           'X-Auth-Token': token,
