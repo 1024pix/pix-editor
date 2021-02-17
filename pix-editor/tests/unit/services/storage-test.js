@@ -73,6 +73,42 @@ module('Unit | Service | storage', function(hooks) {
       // then
       assert.deepEqual(uploadedFile, expectedUploadedFile);
     });
+
+    test('it should add Content-* headers', async function(assert) {
+      // given
+      const storageService = this.owner.lookup('service:storage');
+      storageService.getStorageToken = sinon.stub().resolves('some-token');
+
+      const configService = this.owner.lookup('service:config');
+      configService.storagePost = 'https://dl.pix.fr/';
+
+      const date = {
+        now() { return 'NOW2'; }
+      };
+
+      const file = {
+        name: 'filename.txt',
+        size: 25,
+        type: 'text/plain',
+        uploadBinary: sinon.stub(),
+      };
+
+      file.uploadBinary.resolves();
+
+      const filename = 'custom filename.txt';
+      const expectedHeaders = {
+        'Content-Type': 'text/plain',
+        'Content-Disposition': 'attachment; filename="custom%20filename.txt"',
+        'X-Auth-Token': 'some-token',
+      };
+
+      // when
+      await storageService.uploadFile(file, filename, date);
+
+      // then
+      const { headers } = file.uploadBinary.args[0][1];
+      assert.deepEqual(headers, expectedHeaders);
+    });
   });
 
   module('cloneFile', function(hooks) {
