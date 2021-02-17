@@ -13,6 +13,7 @@ export default class TubeSerializer extends AirtableSerializer {
     practicalDescriptionEn: 'Description pratique en-us',
     competence: 'Competences',
     rawSkills: 'Acquis',
+    theme: 'Thematique',
     pixId: 'id persistant'
   };
 

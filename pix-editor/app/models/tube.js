@@ -16,6 +16,7 @@ export default class TubeModel extends Model {
   @attr pixId;
 
   @belongsTo('competence') competence;
+  @belongsTo('theme') theme;
   @hasMany('skill') rawSkills;
 
   @tracked selectedLevel = false;

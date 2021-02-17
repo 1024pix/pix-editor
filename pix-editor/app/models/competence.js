@@ -12,6 +12,7 @@ export default class CompetenceModel extends Model {
   @attr source;
 
   @hasMany('tube') rawTubes;
+  @hasMany('theme') rawThemes;
 
   get tubes() {
     return this.rawTubes.filter(tube => tube.name !== '@workbench');
