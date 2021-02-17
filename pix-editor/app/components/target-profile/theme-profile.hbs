@@ -1,0 +1,22 @@
+<div data-test-theme-profile class="row theme-profile">
+  <div class="three wide column theme-name">
+    <p>{{@theme.name}}</p>
+  </div>
+  <div class="thirteen wide column">
+    {{#each this.filteredTubes as |tube|}}
+      {{#if @isThematicResultMode}}
+        <TargetProfile::TubeProfile class="tube-profile thematicResult"
+                                    @tube={{tube}}
+                                    @clickAction={{this.clickOnThematicResultTube}}
+                                    @selectedSkillLevel={{tube.selectedThematicResultLevel}}
+                                    @showTubeDetails={{@showTubeDetails}}/>
+      {{else}}
+        <TargetProfile::TubeProfile class="tube-profile"
+                                    @tube={{tube}}
+                                    @clickAction={{this.clickOnTube}}
+                                    @selectedSkillLevel={{tube.selectedLevel}}
+                                    @showTubeDetails={{@showTubeDetails}}/>
+      {{/if}}
+    {{/each}}
+  </div>
+</div>

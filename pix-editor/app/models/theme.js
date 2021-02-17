@@ -11,4 +11,13 @@ export default class ThemeModel extends Model {
     return this.rawTubes.filter(tube => tube.name !== '@workbench');
   }
 
+  get productionTubes() {
+    let allTubes = this.tubes;
+    allTubes = allTubes.filter(tube => tube.hasProductionChallenge);
+    return allTubes.sortBy('name');
+  }
+
+  get hasSelectedProductionTube() {
+    return this.productionTubes.filter(tube => tube.selectedLevel).length > 0;
+  }
 }
