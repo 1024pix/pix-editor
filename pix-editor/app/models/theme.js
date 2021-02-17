@@ -18,6 +18,10 @@ export default class ThemeModel extends Model {
   }
 
   get hasSelectedProductionTube() {
-    return this.productionTubes.filter(tube => tube.selectedLevel).length > 0;
+    return this.selectedProductionTubeLength > 0;
+  }
+
+  get selectedProductionTubeLength() {
+    return this.productionTubes.filter(tube => tube.selectedLevel).length;
   }
 }

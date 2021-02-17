@@ -25,6 +25,7 @@ const margin = 15;
 const areaTitleHeight = 69;
 const fontColor = [65, 70, 87];
 const lightGrey = [250, 250, 250];
+const grey = [240, 240, 240];
 const colors = [[241, 161, 65], [87, 200, 132], [18, 163, 255], [255, 63, 148], [87, 77, 166], [56, 138, 255]];
 const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
 
@@ -118,7 +119,7 @@ export default class TargetProfilePdfExportComponent extends Component {
         pdf.text(this._getCenteredX(pdf, areaName.toUpperCase()), areaTitleHeight / 2 + 4, areaName.toUpperCase());
 
         competences.forEach(competence => {
-          const tubeHead = [[
+          const tableHead = [[
             {
               content: competence.title,
               colSpan: 3,
@@ -140,59 +141,18 @@ export default class TargetProfilePdfExportComponent extends Component {
             }
           ]];
 
-          const tubes = filter ? competence.productionTubes.filter(tube => tube.selectedLevel) : competence.productionTubes;
-          const tubeValues = tubes.reduce((values, tube, i) => {
-            const cells = [
-              {
-                content: tube.practicalTitleFr,
-                styles: {
-                  cellPadding: { top: 3, right: 5, bottom: 0, left: 5 },
-                  cellWidth: 100,
-                  font: 'RobotoCondensed',
-                  fontStyle: 'normal',
-                  fontSize: pSize,
-                  textColor: fontColor
-                }
-              },
-              {
-                content: tube.practicalDescriptionFr,
-                styles: {
-                  cellPadding: { top: 3, right: 5, bottom: 0, left: 5 },
-                  fontSize: pSize,
-                  font: 'RobotoCondensed',
-                  fontStyle: 'light',
-                  textColor: fontColor
-                }
-              }];
+          const themes = filter ? competence.themes.filter(theme => theme.hasSelectedProductionTube) : competence.themes;
 
-            if (i === 0) {
-              cells.forEach((value) => value.styles.cellPadding.top = margin / 2);
-            }
-
-            values.push(cells);
-            return values;
-          }, []);
-          //todo add theme
-          if (tubeValues && tubeValues[0]) {
-            tubeValues[0].unshift({
-              content: '',
-              rowSpan: tubeValues.length,
-              styles: {
-                cellPadding: { top: 0, right: 0, bottom: 0, left: margin },
-                cellWidth: 100,
-                valign: 'middle',
-                font: 'RobotoCondensed',
-                fontStyle: 'bold',
-                fontSize: pSize + 4,
-                textColor: fontColor
-              }
-            });
-          }
+          const tableBody = themes.reduce((values, theme, index) => {
+            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            const buildCell = this._buildCell(theme, tubes, index);
+            return [...values, ...buildCell];
+          },[]);
 
           pdf.autoTable({
             startY: y,
-            head: tubeHead,
-            body: tubeValues,
+            head: tableHead,
+            body: tableBody,
             styles: { fillColor: lightGrey },
             theme: 'plain',
             pageBreak: 'avoid',
@@ -216,8 +176,8 @@ export default class TargetProfilePdfExportComponent extends Component {
           // Reprint table to prevent text hide by roundedRect
           pdf.autoTable({
             startY: y,
-            head: tubeHead,
-            body: tubeValues,
+            head: tableHead,
+            body: tableBody,
             styles: { fillColor: lightGrey },
             theme: 'plain',
             pageBreak: 'avoid',
@@ -230,7 +190,21 @@ export default class TargetProfilePdfExportComponent extends Component {
           pdf.setDrawColor(255, 255, 255);
           pdf.setLineWidth(2);
           pdf.line(0, y + positionHead, pdfWidth, y + positionHead);
+
+          // Draw separation between theme
+          let indexCell = 0;
+          themes.forEach((theme) => {
+            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            indexCell += tubes.length;
+            const positionCell =  pdf.autoTable.previous.body[indexCell]?.cells[0];
+            if (positionCell) {
+              pdf.setDrawColor(255, 255, 255);
+              pdf.setLineWidth(1);
+              pdf.line(positionCell.x, positionCell.y + 2.5, pdfWidth - positionCell.x, positionCell.y + 2.5);
+            }
+          });
           y = 15 + pdf.autoTable.previous.finalY;
+
         });
         pdf.addPage();
       }
@@ -282,5 +256,79 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.text(line, this._getCenteredX(pdf, line), positionY);
       positionY += breakY;
     });
+  }
+
+  _buildCell(theme, tubes) {
+    const rowSpan = tubes.length;
+    const cellPaddingTop = 5;
+    const firstTube = tubes.shift();
+    const firstCell = [{
+      content: theme.name,
+      rowSpan,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 0, bottom: 1, left: margin },
+        cellWidth: 100,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'bold',
+        fontSize: pSize + 1,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: firstTube.practicalTitleFr,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 5 },
+        cellWidth: 100,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'normal',
+        fontSize: pSize,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: firstTube.practicalDescriptionFr,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 5 },
+        fontSize: pSize,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'light',
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    }];
+    return  tubes.reduce((values, tube, index) => {
+      const fillColor = index % 2 === 0 ? grey : lightGrey;
+      const cells = [
+        {
+          content: tube.practicalTitleFr,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 5 },
+            cellWidth: 100,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'normal',
+            fontSize: pSize,
+            textColor: fontColor,
+            fillColor
+          }
+        },
+        {
+          content: tube.practicalDescriptionFr,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 5 },
+            fontSize: pSize,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'light',
+            textColor: fontColor,
+            fillColor
+          }
+        }];
+      values.push(cells);
+      return values;
+    }, [firstCell]);
   }
 }

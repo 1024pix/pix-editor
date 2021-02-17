@@ -81,6 +81,15 @@ module('Unit | Model | theme', function(hooks) {
       assert.ok(tube.name === expectedSortedTube[index]);
     });
   });
+
+  test('it should return number of  selected tubes', function(assert) {
+    // when
+    const selectedProductionTubeLength = theme.selectedProductionTubeLength;
+
+    // then
+    assert.ok(selectedProductionTubeLength === 1);
+  });
+
   module('#hasSelectedProductionTube', function () {
     test('it should be true if has selected tube', function(assert) {
       // when
