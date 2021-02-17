@@ -101,11 +101,16 @@
     padding: 0 !important;
     background: #F3F3F3;
 
+    &:not(:nth-last-child(2)) {
+      border-bottom: #d4d4d4 solid 1px;
+    }
 
     .tube-description {
       display: flex !important;
-      justify-content: center;
       align-items: center;
+      font-weight: bold;
+      font-size: 1.1em;
+
     }
 
     .twelve.wide.column {

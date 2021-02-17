@@ -18,6 +18,10 @@ export default class CompetenceModel extends Model {
     return this.rawTubes.filter(tube => tube.name !== '@workbench');
   }
 
+  get themes() {
+    return this.rawThemes.filter(theme => theme.name.indexOf('workbench') === -1);
+  }
+
   get productionTubes() {
     let allTubes = this.rawTubes;
     allTubes = allTubes.filter(tube => tube.hasProductionChallenge);

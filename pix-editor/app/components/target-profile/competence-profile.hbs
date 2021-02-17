@@ -15,28 +15,30 @@
       </div>
     </div>
   </h2>
-  <div class="row tubes-profile">
-    <div class="four wide column tube-description">
-      <p></p>
+  {{#each @competence.themes as |theme|}}
+    <div class="row tubes-profile">
+      <div class="three wide column tube-description">
+        <p>{{theme.name}}</p>
+      </div>
+      <div class="thirteen wide column">
+        {{#each theme.tubes as |tube|}}
+          {{#if @isThematicResultMode}}
+            <TargetProfile::TubeProfile class="tube-profile thematicResult"
+                                        @tube={{tube}}
+                                        @clickAction={{this.clickOnThematicResultTube}}
+                                        @selectedSkillLevel={{tube.selectedThematicResultLevel}}
+                                        @showTubeDetails={{@showTubeDetails}}/>
+          {{else}}
+            <TargetProfile::TubeProfile class="tube-profile"
+                                        @tube={{tube}}
+                                        @clickAction={{this.clickOnTube}}
+                                        @selectedSkillLevel={{tube.selectedLevel}}
+                                        @showTubeDetails={{@showTubeDetails}}/>
+          {{/if}}
+        {{/each}}
+      </div>
     </div>
-    <div class="twelve wide column">
-      {{#each this.filteredTubes as |tube|}}
-        {{#if @isThematicResultMode}}
-          <TargetProfile::TubeProfile class="tube-profile thematicResult"
-                                      @tube={{tube}}
-                                      @clickAction={{this.clickOnThematicResultTube}}
-                                      @selectedSkillLevel={{tube.selectedThematicResultLevel}}
-                                      @showTubeDetails={{@showTubeDetails}}/>
-        {{else}}
-          <TargetProfile::TubeProfile class="tube-profile"
-                                      @tube={{tube}}
-                                      @clickAction={{this.clickOnTube}}
-                                      @selectedSkillLevel={{tube.selectedLevel}}
-                                      @showTubeDetails={{@showTubeDetails}}/>
-        {{/if}}
-      {{/each}}
-    </div>
-  </div>
+  {{/each}}
   <div class="row">
     <div class="fifteen wide column"></div>
     {{#if @isThematicResultMode}}
