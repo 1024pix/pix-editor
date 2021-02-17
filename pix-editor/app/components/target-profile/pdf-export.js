@@ -14,12 +14,12 @@ import 'Roboto-condensedLight.js';
 
 const legalMention = 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.';
 const firstPageTitleSize = 30;
-const firstPagePSize = 12;
-const firstPageLegalSize = 9;
+const firstPagePSize = 20;
+const firstPageLegalSize = 10.5;
 const areaTitleSize = 18;
-const competenceTitleSize = 14;
-const competenceTitleCellPadding = 8;
-const pSize = 6;
+const competenceTitleSize = 12;
+const competenceTitleCellPadding = 3;
+const pSize = 7.4;
 const footerSize = 4;
 const margin = 15;
 const areaTitleHeight = 69;
@@ -65,7 +65,8 @@ export default class TargetProfilePdfExportComponent extends Component {
     let y;
     const pdfName = this._generatePdfName(title);
     const areas = this.args.model;
-    const versionText = `Version du ${(new Date()).toLocaleDateString('fr')}`;
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const versionText = `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`;
     const pdf = new jsPDF('p', 'px', 'a4');
     const pdfWidth = pdf.internal.pageSize.width;
     const pdfHeight = pdf.internal.pageSize.height;
@@ -96,32 +97,33 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.setTextColor('#fff');
     this._generateCenteredLongText(pdf, title, 350, 35, 300);
     pdf.setFontSize(firstPagePSize);
-    pdf.setFont('AmpleSoft', 'normal');
-    pdf.text(versionText, this._getCenteredX(pdf, versionText), 560);
+    pdf.setFont('AmpleSoft', 'bold');
+    pdf.text(versionText, this._getCenteredX(pdf, versionText), 530);
     pdf.setFontSize(firstPageLegalSize);
     pdf.setFont('Roboto', 'normal');
-    pdf.text(legalMention, 68, 580, { maxWidth: 310, align: 'justify' });
+    pdf.text(legalMention, 44, 580, { maxWidth: 360, align: 'justify' });
     pdf.addPage();
 
 
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
       const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
-      y = areaTitleHeight;
+      y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
 
         const areaName = area.name.slice(3, area.name.length);
-        await this._buildRoundedGradientBackground(pdf, areaGradient[i], 0, 0, pdfWidth, 34);
-        pdf.setFont('AmpleSoft', 'normal');
+        await this._buildRoundedGradientBackground(pdf, areaGradient[i], -15, -30, pdfWidth + 30, 49);
+        pdf.setFont('AmpleSoft', 'bold');
         pdf.setFontSize(areaTitleSize);
         pdf.setTextColor('#fff');
-        pdf.text(this._getCenteredX(pdf, areaName.toUpperCase()), areaTitleHeight / 2 + 4, areaName.toUpperCase());
+        pdf.text(this._getCenteredX(pdf, areaName), (areaTitleHeight / 2) - 10, areaName);
 
         competences.forEach(competence => {
+          const competenceColor = colors[i];
           const tableHead = [[
             {
-              content: competence.title,
+              content: `${competence.code} ${competence.title}`,
               colSpan: 3,
               rowSpan: 1,
               styles: {
@@ -135,7 +137,7 @@ export default class TargetProfilePdfExportComponent extends Component {
                 font: 'RobotoCondensed',
                 fontStyle: 'bold',
                 fontSize: competenceTitleSize,
-                textColor: fontColor,
+                textColor: competenceColor,
                 valign: 'middle'
               }
             }
@@ -168,7 +170,7 @@ export default class TargetProfilePdfExportComponent extends Component {
           }
 
           // Draw rounded corner
-          pdf.setFillColor(...colors[i]);
+          pdf.setFillColor(...lightGrey);
           pdf.roundedRect(margin, y - 5, pageWidth, 10, 5, 5, 'F');
           pdf.setFillColor(...lightGrey);
           pdf.roundedRect(margin, newY - 5, pageWidth, 10, 5, 5, 'F');
@@ -216,7 +218,7 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.setFontSize(footerSize);
       pdf.setFont('Roboto', 'normal');
       pdf.setPage(i);
-      pdf.text(margin, pdfHeight - 10, `${legalMention} - ${versionText}`);
+      pdf.text(margin, pdfHeight - 4, `${legalMention} - ${versionText}`);
     }
 
     // Remove last empty page
@@ -266,8 +268,8 @@ export default class TargetProfilePdfExportComponent extends Component {
       content: theme.name,
       rowSpan,
       styles: {
-        cellPadding: { top: cellPaddingTop, right: 0, bottom: 1, left: margin },
-        cellWidth: 100,
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
+        cellWidth: 80,
         valign: 'middle',
         font: 'RobotoCondensed',
         fontStyle: 'bold',
@@ -278,7 +280,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     },{
       content: firstTube.practicalTitleFr,
       styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 5 },
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
         cellWidth: 100,
         valign: 'middle',
         font: 'RobotoCondensed',
@@ -290,7 +292,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     },{
       content: firstTube.practicalDescriptionFr,
       styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 5 },
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
         fontSize: pSize,
         valign: 'middle',
         font: 'RobotoCondensed',
@@ -305,7 +307,7 @@ export default class TargetProfilePdfExportComponent extends Component {
         {
           content: tube.practicalTitleFr,
           styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 5 },
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
             cellWidth: 100,
             valign: 'middle',
             font: 'RobotoCondensed',
@@ -318,7 +320,7 @@ export default class TargetProfilePdfExportComponent extends Component {
         {
           content: tube.practicalDescriptionFr,
           styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 5 },
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
             fontSize: pSize,
             valign: 'middle',
             font: 'RobotoCondensed',
