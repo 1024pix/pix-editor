@@ -6,7 +6,9 @@
       <div class="max-skill-level"><p>{{if @selectedSkillLevel @selectedSkillLevel ""}}</p></div>
     {{/if}}
     <div class="practicalTitle-profile {{if @selectedSkillLevel " active" ""}}">
-      <p>{{if @showTubeDetails @tube.name @tube.practicalTitleFr }}</p>
+      <p>
+        <span class="practicalTitle-profile__color-red">{{@tube.name}} </span>: {{@tube.practicalTitleFr}}
+      </p>
     </div>
   </div>
   <p class="practicalDescription-profile {{if @selectedSkillLevel " active"}}">{{@tube.practicalDescriptionFr}}</p>
