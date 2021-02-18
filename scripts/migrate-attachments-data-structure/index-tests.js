@@ -1,7 +1,7 @@
 const chai = require('chai');
 const { challengeAttachmentsToCsv, challengesAttachmentsToCsv, renameFileToImport } = require('.');
 const sinon = require('sinon');
-const sinonChai = require("sinon-chai");
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 
@@ -9,28 +9,28 @@ describe('challengeAttachmentsToCsv', () => {
 
   it('returns illustration as CSV string', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "thumbnails": {
-        "full": {
-          "height": 356,
-          "url": "https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png",
-          "width": 1096
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'thumbnails': {
+        'full': {
+          'height': 356,
+          'url': 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
+          'width': 1096
         },
-        "large": {
-          "height": 356,
-          "url": "https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png",
-          "width": 1096
+        'large': {
+          'height': 356,
+          'url': 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
+          'width': 1096
         },
-        "small": {
-          "height": 36,
-          "url": "https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png",
-          "width": 111
+        'small': {
+          'height': 36,
+          'url': 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
+          'width': 111
         }
       },
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const challenge = {
@@ -50,28 +50,28 @@ describe('challengeAttachmentsToCsv', () => {
 
   it('returns illustration as CSV string with no alt text', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "thumbnails": {
-        "full": {
-          "height": 356,
-          "url": "https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png",
-          "width": 1096
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'thumbnails': {
+        'full': {
+          'height': 356,
+          'url': 'https://dl.airtable.com/KBwIk4uSTUEoUPtUlkYJ_full_mailPJ.png',
+          'width': 1096
         },
-        "large": {
-          "height": 356,
-          "url": "https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png",
-          "width": 1096
+        'large': {
+          'height': 356,
+          'url': 'https://dl.airtable.com/g39wHIzTyy3isaTsn4BQ_large_mailPJ.png',
+          'width': 1096
         },
-        "small": {
-          "height": 36,
-          "url": "https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png",
-          "width": 111
+        'small': {
+          'height': 36,
+          'url': 'https://dl.airtable.com/2ADEU4ljTK32ts6nbkeA_small_mailPJ.png',
+          'width': 111
         }
       },
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const challenge = {
@@ -91,30 +91,30 @@ describe('challengeAttachmentsToCsv', () => {
   it('returns attachments as CSV string', () => {
     const attachments = [
       {
-        "filename": "Pix_etoile.odp",
-        "id": "attmRoYR3AfCyUiLW",
-        "size": 21258,
-        "type": "application/vnd.oasis.opendocument.presentation",
-        "url": "https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp"
+        'filename': 'Pix_etoile.odp',
+        'id': 'attmRoYR3AfCyUiLW',
+        'size': 21258,
+        'type': 'application/vnd.oasis.opendocument.presentation',
+        'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
       },
       {
-        "filename": "Pix_etoile.pptx",
-        "id": "attLwY7ni4a6Naboz",
-        "size": 34753,
-        "thumbnails": {
-          "large": {
-            "height": 240,
-            "url": "https://dl.airtable.com/attLwY7ni4a6Naboz-1a5ab1ea4c7a527b-320x240.jpg",
-            "width": 320
+        'filename': 'Pix_etoile.pptx',
+        'id': 'attLwY7ni4a6Naboz',
+        'size': 34753,
+        'thumbnails': {
+          'large': {
+            'height': 240,
+            'url': 'https://dl.airtable.com/attLwY7ni4a6Naboz-1a5ab1ea4c7a527b-320x240.jpg',
+            'width': 320
           },
-          "small": {
-            "height": 32,
-            "url": "https://dl.airtable.com/attLwY7ni4a6Naboz-fe6474e0106877ac-32x32.jpg",
-            "width": 32
+          'small': {
+            'height': 32,
+            'url': 'https://dl.airtable.com/attLwY7ni4a6Naboz-fe6474e0106877ac-32x32.jpg',
+            'width': 32
           }
         },
-        "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "url": "https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx"
+        'type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'url': 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx'
       }
     ];
 
@@ -135,20 +135,20 @@ describe('challengeAttachmentsToCsv', () => {
 
   it('returns attachments and illustrations as CSV string', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const attachments = [
       {
-        "filename": "Pix_etoile.odp",
-        "id": "attmRoYR3AfCyUiLW",
-        "size": 21258,
-        "type": "application/vnd.oasis.opendocument.presentation",
-        "url": "https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp"
+        'filename': 'Pix_etoile.odp',
+        'id': 'attmRoYR3AfCyUiLW',
+        'size': 21258,
+        'type': 'application/vnd.oasis.opendocument.presentation',
+        'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
       },
     ];
 
@@ -172,11 +172,11 @@ describe('challengeAttachmentsToCsv', () => {
 
   it('returns illustration as CSV string with escaped alternative text', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const challenge = {
@@ -199,20 +199,20 @@ describe('challengeAttachmentsToCsv', () => {
 describe('challengesAttachmentsToCsv', () => {
   it('returns a csv string with a header and lines', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const attachments = [
       {
-        "filename": "Pix_etoile.odp",
-        "id": "attmRoYR3AfCyUiLW",
-        "size": 21258,
-        "type": "application/vnd.oasis.opendocument.presentation",
-        "url": "https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp"
+        'filename': 'Pix_etoile.odp',
+        'id': 'attmRoYR3AfCyUiLW',
+        'size': 21258,
+        'type': 'application/vnd.oasis.opendocument.presentation',
+        'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
       },
     ];
 
@@ -258,11 +258,11 @@ describe('challenges doesn\'t have any attachments and illustration', () => {
 describe('rename files', () => {
   it('should rename illustration', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const challenge = {
@@ -283,11 +283,11 @@ describe('rename files', () => {
   it('should rename attachment', () => {
     const attachments = [
       {
-        "filename": "Pix_etoile.odp",
-        "id": "attmRoYR3AfCyUiLW",
-        "size": 21258,
-        "type": "application/vnd.oasis.opendocument.presentation",
-        "url": "https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp"
+        'filename': 'Pix_etoile.odp',
+        'id': 'attmRoYR3AfCyUiLW',
+        'size': 21258,
+        'type': 'application/vnd.oasis.opendocument.presentation',
+        'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
       },
     ];
 
@@ -308,27 +308,27 @@ describe('rename files', () => {
 
   it('should rename illustration and attachments', () => {
     const illustration = {
-      "filename": "mailPJ.png",
-      "id": "attcKBWOyCUyATJ93",
-      "size": 49502,
-      "type": "image/png",
-      "url": "https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png"
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
     };
 
     const attachments = [
       {
-        "filename": "Pix_etoile.odp",
-        "id": "attmRoYR3AfCyUiLW",
-        "size": 21258,
-        "type": "application/vnd.oasis.opendocument.presentation",
-        "url": "https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp"
+        'filename': 'Pix_etoile.odp',
+        'id': 'attmRoYR3AfCyUiLW',
+        'size': 21258,
+        'type': 'application/vnd.oasis.opendocument.presentation',
+        'url': 'https://dl.airtable.com/.attachments/afccd3fd63ded48bec58499f6024abce/5839412f/Pix_etoile.odp'
       },
       {
-        "filename": "Pix_etoile.pptx",
-        "id": "attLwY7ni4a6Naboz",
-        "size": 34753,
-        "type": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "url": "https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx"
+        'filename': 'Pix_etoile.pptx',
+        'id': 'attLwY7ni4a6Naboz',
+        'size': 34753,
+        'type': 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+        'url': 'https://dl.airtable.com/.attachments/3ff6e126ae8aa58d6b1109fd61db414c/cdd2a4fe/Pix_etoile.pptx'
       }
     ];
 
