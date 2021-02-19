@@ -2,6 +2,8 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { click, find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import Service from '@ember/service';
+import sinon from 'sinon';
 
 module('Integration | Component | challenge-form', function(hooks) {
   setupRenderingTest(hooks);
@@ -77,6 +79,14 @@ module('Integration | Component | challenge-form', function(hooks) {
     });
 
     test('it should hide and empty on click', async function (assert) {
+      // given
+      const confirmAskStub = sinon.stub().resolves();
+      class ConfirmService extends Service {
+        ask = confirmAskStub;
+      }
+      this.owner.unregister('service:confirm');
+      this.owner.register('service:confirm', ConfirmService);
+
       // when
       await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
       await click(find('[data-test-alternative-instructions-button]'));

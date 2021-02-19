@@ -5,6 +5,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeForm extends Component {
   @service config;
+  @service confirm;
 
   @tracked displayAlternativeInstructionsField;
 
@@ -143,8 +144,12 @@ export default class ChallengeForm extends Component {
   @action
   toggleAlternativeInstructionsFiled() {
     if (this.displayAlternativeInstructionsField) {
-      this.args.challenge.alternativeInstructions = '';
+      return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la consigne alternative ?')
+        .then(() => {
+          this.args.challenge.alternativeInstructions = '';
+          this.displayAlternativeInstructionsField = false;
+        });
     }
-    this.displayAlternativeInstructionsField = !this.displayAlternativeInstructionsField;
+    this.displayAlternativeInstructionsField = true;
   }
 }
