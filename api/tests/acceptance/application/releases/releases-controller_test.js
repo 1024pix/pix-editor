@@ -137,7 +137,7 @@ describe('Acceptance | Controller | release-controller', () => {
         // Then
         expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
       });
-      
+
       it('should handle error', async () => {
         // Given
         airtableBuilder.mockList({ tableName: 'Domaines' }).returns().activate(500);
@@ -147,19 +147,48 @@ describe('Acceptance | Controller | release-controller', () => {
         airtableBuilder.mockList({ tableName: 'Epreuves' }).returns().activate(500);
         airtableBuilder.mockList({ tableName: 'Tests' }).returns().activate(500);
         airtableBuilder.mockList({ tableName: 'Tutoriels' }).returns().activate(500);
-        
+
         const server = await createServer();
-        const currentContentOptions = {
+
+        // When
+        const response = await server.inject({
           method: 'GET',
           url: '/api/current-content',
           headers: generateAuthorizationHeader(user),
-        };
-        
-        // When
-        const response = await server.inject(currentContentOptions);
-        
+        });
+
         // Then
         expect(() => JSON.parse(response.result)).to.throw(Error);
+      });
+    });
+  });
+
+  describe('GET /latest-release - Returns latest release', () => {
+    context('nominal case', () => {
+      let user;
+      beforeEach(async function() {
+        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      });
+
+      it('should return latest release of learning content', async () => {
+        // Given
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { some: 'release' } });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        const latestRelease = JSON.parse(response.result);
+        expect(latestRelease.content).to.deep.equal(expectedLatestRelease.content);
+        expect(latestRelease.id).to.deep.equal(expectedLatestRelease.id);
+        expect(latestRelease.date).to.deep.equal(expectedLatestRelease.date);
       });
     });
   });

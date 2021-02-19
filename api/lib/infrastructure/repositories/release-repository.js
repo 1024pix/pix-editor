@@ -6,6 +6,8 @@ const challengeDatasource = require('../datasources/airtable/challenge-datasourc
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 
+const { knex } = require('../../../db/knex-database-connection');
+
 module.exports = {
   getCurrentContentAsStream(writableStream) {
     const timer = setInterval(() => {
@@ -24,6 +26,24 @@ module.exports = {
     });
     return writableStream;
   },
+
+  async create(getCurrentContent = _getCurrentContent) {
+    const content = await getCurrentContent();
+    const release = await knex('releases')
+      .returning(['id', 'content', 'createdAt'])
+      .insert({ content });
+
+    return release[0];
+  },
+
+  async getLatestRelease() {
+    const release = await knex('releases')
+      .select('id', 'content', 'createdAt')
+      .orderBy('createdAt', 'desc')
+      .limit(1);
+
+    return release[0];
+  }
 };
 
 async function _getCurrentContent() {
