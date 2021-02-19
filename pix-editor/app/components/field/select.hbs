@@ -1,4 +1,4 @@
-<div class={{concat "field" (if @edition "" " disabled")}}>
+<div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
   <label>{{@title}}</label>
 {{#if @multiple}}
   <PowerSelectMultiple @placeholder={{if @defaultText @defaultText ""}} @options={{@options}} @searchEnabled={{false}} @disabled={{if @edition false true}} @selected={{@value}} @onChange={{@setValue}} as |option|>

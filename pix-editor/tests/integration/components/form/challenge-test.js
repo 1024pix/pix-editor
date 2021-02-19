@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
+import { click, find, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 
 module('Integration | Component | challenge-form', function(hooks) {
@@ -12,14 +12,10 @@ module('Integration | Component | challenge-form', function(hooks) {
 
     // When
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
-    const labels = this.element.querySelectorAll('label');
-    const textLabels = [...labels].map(labelNode=>labelNode.textContent.trim());
-    const expectedLabels = ['Consigne', 'Type', 'Format QROC', 'Propositions', 'Réponses', 'Tolérance', 'T1 (espaces/casse/accents)', 'T2 (ponctuation)', 'T3 (distance d\'édition)', 'Embed', 'Type pédagogie', 'Déclinable', 'Timer', 'Internationalisation', 'Langue(s)', 'Géographie', 'Id'];
 
     // Then
-    assert.dom('.ui.form').exists();
-    expectedLabels.forEach(expectedLabel=>{
-      assert.ok(textLabels.includes(expectedLabel));
+    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach(field => {
+      assert.dom(`[${field}]`).exists();
     });
   });
 
@@ -29,18 +25,66 @@ module('Integration | Component | challenge-form', function(hooks) {
 
     // When
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
-    const labels = this.element.querySelectorAll('label');
-    const textLabels = [...labels].map(labelNode=>labelNode.textContent.trim());
-    const expectedLabels = ['Consigne', 'Type', 'Réponses', 'Embed', 'Type pédagogie', 'Déclinable', 'Timer', 'Internationalisation', 'Langue(s)', 'Géographie', 'Id'];
-    const notExpectedLabels = ['Format QROC', 'Tolérance', 'Propositions'];
 
     // Then
-    assert.dom('.ui.form').exists();
-    expectedLabels.forEach(expectedLabel=>{
-      assert.ok(textLabels.includes(expectedLabel));
+    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach(field => {
+      assert.dom(`[${field}]`).doesNotExist();
     });
-    notExpectedLabels.forEach(notExpectedLabel=>{
-      assert.notOk(textLabels.includes(notExpectedLabel));
+  });
+
+  module('if alternative instructions is empty', function (hooks) {
+
+    hooks.beforeEach(function () {
+      this.set('challengeData', { alternativeInstructions: '' });
+    });
+
+    test('alternative instructions field should be hidden', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} />`);
+
+      // then
+      assert.dom('[data-test-alternative-instructions-button]').hasText('Ajouter une consigne alternative');
+      assert.dom('[data-test-alternative-instructions-field]').doesNotExist();
+    });
+
+    test('it should display on click', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
+      await click(find('[data-test-alternative-instructions-button]'));
+
+      // then
+      assert.dom('[data-test-alternative-instructions-button]').hasText('Supprimer la consigne alternative');
+      assert.dom('[data-test-alternative-instructions-field]').exists();
+    });
+  });
+
+  module('if alternative instructions is filled', function (hooks) {
+
+    let challengeData;
+
+    hooks.beforeEach(function () {
+      challengeData = { alternativeInstructions: 'Somme Alternative instructions' };
+      this.set('challengeData', challengeData);
+    });
+
+    test('alternative instructions field should be displayed', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} />`);
+
+      // then
+      assert.dom('[data-test-alternative-instructions-button]').hasText('Supprimer la consigne alternative');
+      assert.dom('[data-test-alternative-instructions-field]').exists();
+    });
+
+    test('it should hide and empty on click', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
+      await click(find('[data-test-alternative-instructions-button]'));
+
+      // then
+      assert.dom('[data-test-alternative-instructions-button]').hasText('Ajouter une consigne alternative');
+      assert.dom('[data-test-alternative-instructions-field]').doesNotExist();
+      assert.ok(this.challengeData.alternativeInstructions === '');
     });
   });
 });
