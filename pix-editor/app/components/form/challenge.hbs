@@ -1,17 +1,25 @@
 <form action="" class="ui form">
   <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
+  {{#if @edition}}
+    <div class="ui text menu note-menu">
+      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsFiled}} type="button"><i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>{{this.toggleAlternativeInstructionButtonTitle}}</button>
+    </div>
+  {{/if}}
+  {{#if this.displayAlternativeInstructionsField}}
+    <Field::Mde data-test-alternative-instructions-field @title="Consigne alternative" @value={{@challenge.alternativeInstructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.alternativeInstructions)}}/>
+  {{/if}}
   {{#if @challenge.isPrototype}}
     <Field::Select @title="Type" @value={{this.challengeTypeValue}} @options={{this.options.types}} @edition={{@edition}} @setValue={{this.setChallengeType}}/>
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
-    <Field::Select @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
+    <Field::Select data-test-format-field @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
   {{/if}}
   {{#unless this.isAutoReply}}
-    <Field::Textarea @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
+    <Field::Textarea data-test-suggestion-field @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
   {{/unless}}
-  <Field::Textarea @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
+  <Field::Textarea data-test-answers-field @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
   {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
-      <div id="toleranceField" class={{concat "field" (if @edition "" " disabled")}}>
+      <div id="toleranceField" data-test-tolerence-fields class={{concat "field" (if @edition "" " disabled")}}>
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
@@ -50,23 +58,7 @@
       {{/if}}
     </div>
   {{#if @challenge.isDraft}}
-      <div class={{concat "field" (if @edition "" " disabled")}}>
-          <label>Qualité</label>
-          <div class="four fields">
-              <div class="field">
-                <Field::Select @title="Non voyant" @value={{@challenge.accessibility1}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility1}} @setValue={{fn (mut @challenge.accessibility1)}}/>
-              </div>
-              <div class="field">
-                <Field::Select @title="Daltonien" @value={{@challenge.accessibility2}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility2}} @setValue={{fn (mut @challenge.accessibility2)}}/>
-              </div>
-              <div class="field">
-                <Field::Select @title="Spoil" @value={{@challenge.spoil}} @edition={{@edition}} @multiple={{false}} @options={{this.options.spoil}} @setValue={{fn (mut @challenge.spoil)}} />
-              </div>
-              <div class="field">
-                <Field::Select @title="Responsive" @value={{@challenge.responsive}} @edition={{@edition}} @multiple={{false}} @options={{this.options.responsive}} @setValue={{fn (mut @challenge.responsive)}} />
-              </div>
-          </div>
-      </div>
+      <Field::Quality @edition={{@edition}} @challenge={{@challenge}}/>
   {{/if}}
   <div class={{concat "field" (if @edition "" " disabled")}}>
       <label>Internationalisation</label>

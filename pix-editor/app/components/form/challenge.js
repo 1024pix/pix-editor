@@ -1,9 +1,17 @@
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeForm extends Component {
   @service config;
+
+  @tracked displayAlternativeInstructionsField;
+
+  constructor() {
+    super(...arguments);
+    this.displayAlternativeInstructionsField = !!this.args.challenge.alternativeInstructions;
+  }
 
   options = {
     'types': [
@@ -89,6 +97,14 @@ export default class ChallengeForm extends Component {
     return this.options.types.find(type=> type.value === actualType);
   }
 
+  get toggleAlternativeInstructionButtonTitle() {
+    return this.displayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
+  }
+
+  get toggleAlternativeInstructionButtonIcon() {
+    return this.displayAlternativeInstructionsField ? 'minus' : 'plus';
+  }
+
   @action
   setChallengeType({ value }) {
     if (value === 'autoReply') {
@@ -122,5 +138,13 @@ export default class ChallengeForm extends Component {
     if (removedFile) {
       removedFile.deleteRecord();
     }
+  }
+
+  @action
+  toggleAlternativeInstructionsFiled() {
+    if (this.displayAlternativeInstructionsField) {
+      this.args.challenge.alternativeInstructions = '';
+    }
+    this.displayAlternativeInstructionsField = !this.displayAlternativeInstructionsField;
   }
 }
