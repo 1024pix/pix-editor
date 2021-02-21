@@ -2,11 +2,14 @@
 
 const createServer = require('../server');
 const logger = require('../lib/infrastructure/logger');
+const releaseJob = require('../lib/infrastructure/scheduled-jobs/release-job');
 
 const start = async () => {
   try {
     const server = await createServer();
     await server.start();
+
+    releaseJob.schedule();
 
     logger.info('Server running at %s', server.info.uri);
   } catch (err) {
