@@ -54,7 +54,11 @@
 </div>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top this.edition}}>
-    <Form::Challenge @challenge={{this.challenge}} @showIllustration={{this.showIllustration}} @edition={{this.edition}}/>
+    <Form::Challenge @challenge={{this.challenge}}
+                     @showIllustration={{this.showIllustration}}
+                     @edition={{this.edition}}
+                     @displayAlternativeInstructionsField={{this.displayAlternativeInstructionsField}}
+                     @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}/>
     {{#if this.copyOperation}}
       <Field::Copy @value={{this.challenge.preview}} @onCopied={{this.linkCopied}}/>
     {{/if}}
@@ -111,14 +115,14 @@
     @close={{this.closeChallengeLog}} />
 {{/if}}
 {{#if this.displayImage}}
-<PopIn::Image
-  @src={{this.popinImageSrc}}
-  @close={{this.closeIllustration}}/>
+  <PopIn::Image
+    @src={{this.popinImageSrc}}
+    @close={{this.closeIllustration}}/>
 {{/if}}
 {{#if this.displayChangeLog}}
-<PopIn::Changelog
-  @onApprove={{this.changelogApprove}}
-  @defaultValue={{this.changelogDefault}} />
+  <PopIn::Changelog
+    @onApprove={{this.changelogApprove}}
+    @defaultValue={{this.changelogDefault}} />
 {{/if}}
 {{#if this.mayMove}}
   {{#if this.displaySelectLocation}}

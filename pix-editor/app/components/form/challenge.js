@@ -1,18 +1,10 @@
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeForm extends Component {
   @service config;
   @service confirm;
-
-  @tracked displayAlternativeInstructionsField;
-
-  constructor() {
-    super(...arguments);
-    this.displayAlternativeInstructionsField = !!this.args.challenge.alternativeInstructions;
-  }
 
   options = {
     'types': [
@@ -98,12 +90,16 @@ export default class ChallengeForm extends Component {
     return this.options.types.find(type=> type.value === actualType);
   }
 
+  get hasAlternativeInstructionsOrDisplayAlternativeInstructionsField() {
+    return this.args.displayAlternativeInstructionsField || !!this.args.challenge.get('alternativeInstructions');
+  }
+
   get toggleAlternativeInstructionButtonTitle() {
-    return this.displayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
+    return this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
   }
 
   get toggleAlternativeInstructionButtonIcon() {
-    return this.displayAlternativeInstructionsField ? 'minus' : 'plus';
+    return this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField ? 'minus' : 'plus';
   }
 
   @action
@@ -142,14 +138,13 @@ export default class ChallengeForm extends Component {
   }
 
   @action
-  toggleAlternativeInstructionsFiled() {
-    if (this.displayAlternativeInstructionsField) {
-      return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la consigne alternative ?')
-        .then(() => {
-          this.args.challenge.alternativeInstructions = '';
-          this.displayAlternativeInstructionsField = false;
-        });
+  async toggleAlternativeInstructionsField() {
+    if (this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField) {
+      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la consigne alternative ?');
+      this.args.challenge.set('alternativeInstructions', '');
+      this.args.setDisplayAlternativeInstructionsField(false);
+    } else {
+      this.args.setDisplayAlternativeInstructionsField(true);
     }
-    this.displayAlternativeInstructionsField = true;
   }
 }

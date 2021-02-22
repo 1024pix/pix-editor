@@ -2,10 +2,10 @@
   <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
   {{#if @edition}}
     <div class="ui text menu note-menu">
-      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsFiled}} type="button"><i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>{{this.toggleAlternativeInstructionButtonTitle}}</button>
+      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsField}} type="button"><i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>{{this.toggleAlternativeInstructionButtonTitle}}</button>
     </div>
   {{/if}}
-  {{#if this.displayAlternativeInstructionsField}}
+  {{#if this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField}}
     <Field::Mde data-test-alternative-instructions-field @title="Consigne alternative" @value={{@challenge.alternativeInstructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.alternativeInstructions)}}/>
   {{/if}}
   {{#if @challenge.isPrototype}}

@@ -12,6 +12,7 @@ export default class SingleController extends Controller {
   elementClass = 'prototype-challenge';
 
   @tracked edition = false;
+  @tracked displayAlternativeInstructionsField = false;
   @tracked creation = false;
   @tracked popinImageSrc = '';
   @tracked displayImage = false;
@@ -99,6 +100,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  setDisplayAlternativeInstructionsField(value) {
+    this.displayAlternativeInstructionsField = value;
+  }
+
+  @action
   showIllustration() {
     const illustration = this.challenge.illustration[0];
     this.popinImageSrc = illustration.url;
@@ -161,6 +167,7 @@ export default class SingleController extends Controller {
   @action
   async cancelEdit() {
     this.edition = false;
+    this.displayAlternativeInstructionsField = false;
     this.challenge.rollbackAttributes();
     await this.challenge.files;
     this.challenge.files.forEach((file) => file.rollbackAttributes());
@@ -171,29 +178,35 @@ export default class SingleController extends Controller {
   }
 
   @action
-  save() {
-    this._displayChangelogPopIn(this.defaultSaveChangelog, (changelog) => {
-      this.loader.start();
-      return this._saveCheck(this.challenge)
-        .then(challenge => this._handleIllustration(challenge))
-        .then(challenge => this._handleAttachments(challenge))
-        .then(challenge => this._saveChallenge(challenge))
-        .then(challenge => this._saveAttachments(challenge))
-        .then(challenge => this._handleChangelog(challenge, changelog))
-        .then(() => {
-          this.edition = false;
-          if (!this.wasMaximized) {
-            this.minimize();
-          }
-          this._message('Épreuve mise à jour');
-        })
-        .catch((error) => {
-          Sentry.captureException(error);
-          this._errorMessage('Erreur lors de la mise à jour');
-        })
-        .finally(() => this.loader.stop());
-    });
+  async save() {
+    this._displayChangelogPopIn(this.defaultSaveChangelog, this._saveChallengeCallback);
   }
+
+  _saveChallengeCallback(changelog) {
+    this.loader.start();
+    return this._saveCheck(this.challenge)
+      .then(challenge => this._handleIllustration(challenge))
+      .then(challenge => this._handleAttachments(challenge))
+      .then(challenge => this._saveChallenge(challenge))
+      .then(challenge => this._saveAttachments(challenge))
+      .then(challenge => this._handleChangelog(challenge, changelog))
+      .then(() => {
+        this.edition = false;
+        this.displayAlternativeInstructionsField = false;
+        if (!this.wasMaximized) {
+          this.minimize();
+        }
+        this._message('Épreuve mise à jour');
+      })
+      .catch((error) => {
+        Sentry.captureException(error);
+        this._errorMessage('Erreur lors de la mise à jour');
+      })
+      .finally(() => {
+        this.loader.stop();
+      });
+  }
+
 
   @action
   duplicate() {
