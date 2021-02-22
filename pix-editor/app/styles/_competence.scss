@@ -60,10 +60,19 @@
     box-sizing: border-box;
     padding: 5px;
 
-
-    &:first-child:not(.ignored) {
-      background-color: #F9FAFB;
+    &.theme-cell {
+      width: 200px;
       padding-left: 10px;
+      background: rgba(0, 0, 0, 0.01);
+    }
+
+    &.tube-cell {
+      width: 160px;
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
+      padding-left: 10px;
+      background: rgba(0, 0, 0, 0.03);
+      font-weight: bold;
+
     }
 
     &.skill {

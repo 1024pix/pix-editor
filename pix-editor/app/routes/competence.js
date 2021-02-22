@@ -14,9 +14,13 @@ export default class CompetenceRoute extends Route {
     this.currentData.setCompetence(model);
     this.currentData.setSource(model.source);
     if (model.needsRefresh) {
-      return model.hasMany('rawTubes').reload()
+      return model.hasMany('rawThemes').reload()
+        .then(themes => {
+          const getTubes = themes.map(theme => theme.hasMany('rawTubes').reload());
+          return Promise.all(getTubes);
+        })
         .then(tubes => {
-          const getSkills = tubes.map(tube => tube.hasMany('rawSkills').reload());
+          const getSkills = tubes.map(tube => tube.hasMany('rawSkills').reload()).flat();
           return Promise.all(getSkills);
         })
         .then(skillsSet => {
@@ -34,9 +38,13 @@ export default class CompetenceRoute extends Route {
           model.needsRefresh = false;
         });
     } else {
-      return model.rawTubes
-        .then(tubes => {
-          const getSkills = tubes.map(tube => tube.rawSkills);
+      return model.rawThemes
+        .then(themes => {
+          const getTubes = themes.map(theme => theme.rawTubes);
+          return Promise.all(getTubes);
+        })
+        .then(tubesSet => {
+          const getSkills = tubesSet.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
           return Promise.all(getSkills);
         })
         .then(skillsSet => {

@@ -1,0 +1,18 @@
+{{#each this.tubesOrProductionTubes as |tube index|}}
+  <tr>
+    {{#if (eq index 0)}}
+      <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">{{@theme.name}}</td>
+      <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                      @tube={{tube}}
+                                      @section={{@section}}
+                                      @view={{@view}}
+                                      @link={{@link}}/>
+    {{else}}
+      <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                      @tube={{tube}}
+                                      @section={{@section}}
+                                      @view={{@view}}
+                                      @link={{@link}}/>
+  {{/if}}
+  </tr>
+{{/each}}

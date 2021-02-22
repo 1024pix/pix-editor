@@ -1,40 +1,12 @@
 <div class="competence-grid">
   <table class="ui celled table definition tubes">
     <tbody>
-    {{#each @tubes as |tube|}}
-      {{#if (or this.displayAllTubes tube.hasProductionChallenge) }}
-        <tr>
-          <td>
-            {{#if (and (eq @view "production") (eq @section "skills"))}}
-              <LinkTo @route="competence.tubes.single" @model={{tube}}>{{tube.name}}</LinkTo>
-            {{else}}
-              {{tube.name}}
-            {{/if}}
-          </td>
-          {{#if (eq @view "workbench")}}
-            {{#each tube.filledSkills as |skills index|}}
-              <Competence::Grid::GridCell @section={{@section}}
-                                          @view={{@view}}
-                                          @skill={{get skills 0}}
-                                          @skills={{skills}}
-                                          @link={{@link}}
-                                          @tube={{tube}}
-                                          @index={{index}} />
-            {{/each}}
-          {{else}}
-            {{#each tube.filledProductionSkills as |skill index|}}
-              <Competence::Grid::GridCell @section={{@section}}
-                                          @languageFilter={{@languageFilter}}
-                                          @view={{@view}}
-                                          @skill={{skill}}
-                                          @link={{@link}}
-                                          @tube={{tube}}
-                                          @index={{index}} />
-            {{/each}}
-          {{/if}}
-
-        </tr>
-      {{/if}}
+    {{#each @themes as |theme|}}
+     <Competence::CompetenceGridTheme @languageFilter={{@languageFilter}}
+                                      @section={{@section}}
+                                      @view={{@view}}
+                                      @theme={{theme}}
+                                      @link={{@link}}/>
     {{/each}}
     </tbody>
   </table>

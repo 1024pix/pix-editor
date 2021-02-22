@@ -1,0 +1,30 @@
+<td data-test-tube-cell class="tube-cell">
+  {{#if (and (eq @view "production") (eq @section "skills"))}}
+    <LinkTo @route="competence.tubes.single" @model={{@tube}}>{{@tube.name}}</LinkTo>
+  {{else}}
+    {{@tube.name}}
+  {{/if}}
+</td>
+
+{{#if (eq @view "workbench")}}
+  {{#each @tube.filledSkills as |skills index|}}
+    <Competence::Grid::GridCell @section={{@section}}
+                                @view={{@view}}
+                                @skill={{get skills 0}}
+                                @skills={{skills}}
+                                @link={{@link}}
+                                @tube={{@tube}}
+                                @index={{index}} />
+  {{/each}}
+{{else}}
+  {{#each @tube.filledProductionSkills as |skill index|}}
+
+    <Competence::Grid::GridCell @section={{@section}}
+                                @languageFilter={{@languageFilter}}
+                                @view={{@view}}
+                                @skill={{skill}}
+                                @link={{@link}}
+                                @tube={{@tube}}
+                                @index={{index}} />
+  {{/each}}
+{{/if}}
