@@ -17,9 +17,13 @@ export default class CompetenceThemesSingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controllerFor('competence.tubes.single').edition &&
+    const controller = this.controllerFor('competence.tubes.single');
+    if (controller.edition &&
       !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
+    } else if (controller.edition) {
+      controller.model.rollbackAttributes();
+      return true;
     } else {
       return true;
     }

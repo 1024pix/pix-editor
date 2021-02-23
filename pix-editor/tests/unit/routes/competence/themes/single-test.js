@@ -5,7 +5,7 @@ module('Unit | Route | competence/themes/single', function(hooks) {
   setupTest(hooks);
 
   test('it exists', function(assert) {
-    let route = this.owner.lookup('route:competence/themes/single');
+    const route = this.owner.lookup('route:competence/themes/single');
     assert.ok(route);
   });
 });

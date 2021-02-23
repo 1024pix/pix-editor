@@ -1,3 +1,38 @@
-<div>
-{{this.model.name}}
+<div class="tube-header">
+  <div class="ui menu">
+    <div class="item header {{if this.creation "creation"}}">
+      {{#if this.creation}}
+        Nouveau theme
+      {{else}}
+        {{this.theme.name}}
+      {{/if}}
+    </div>
+    <div class="ui right menu">
+      <button class="ui button icon item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+    </div>
+  </div>
+</div>
+<div class="tube-details">
+  <div class="tube-data" {{scroll-top this.edition}}>
+    <Form::Theme @theme={{this.theme}} @edition={{this.edition}} />
+  </div>
+  <div class="ui vertical compact labeled icon menu tube-menu">
+    {{#if this.edition}}
+      <button class="ui button item important-action" {{on "click" this.save}} type="button">
+        <i class="save icon"></i>
+        Enregistrer
+      </button>
+      <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
+        <i class="ban icon"></i>
+        Annuler
+      </button>
+    {{else}}
+      {{#if this.mayEdit}}
+        <button class="ui button item" {{on "click" this.edit}} type="button">
+          <i class="edit icon"></i>
+          Modifier
+        </button>
+      {{/if}}
+    {{/if}}
+  </div>
 </div>
