@@ -1,7 +1,13 @@
 {{#each this.tubesOrProductionTubes as |tube index|}}
   <tr>
     {{#if (eq index 0)}}
-      <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">{{@theme.name}}</td>
+      <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
+        {{#if (and (eq @view "workbench") (eq @section "skills"))}}
+          <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+        {{else}}
+          {{@theme.name}}
+        {{/if}}
+      </td>
       <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
                                       @tube={{tube}}
                                       @section={{@section}}
