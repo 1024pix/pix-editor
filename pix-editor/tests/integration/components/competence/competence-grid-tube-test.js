@@ -18,11 +18,10 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
     this.set('tube', tube);
   });
 
-  test('it should display a link section is set on `skills` and view on `production`', async function(assert) {
-    // todo do it on workbench view and to admin users ?
+  test('it should display a link section is set on `skills` and view on `workbench`', async function(assert) {
 
     // given
-    this.set('view', 'production');
+    this.set('view', 'workbench');
     this.set('section', 'skills');
 
     // when

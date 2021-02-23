@@ -1,5 +1,5 @@
 <td data-test-tube-cell class="tube-cell">
-  {{#if (and (eq @view "production") (eq @section "skills"))}}
+  {{#if (and (eq @view "workbench") (eq @section "skills"))}}
     <LinkTo @route="competence.tubes.single" @model={{@tube}}>{{@tube.name}}</LinkTo>
   {{else}}
     {{@tube.name}}
