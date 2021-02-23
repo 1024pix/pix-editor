@@ -1,5 +1,11 @@
+const logger = require('../logger');
+
 module.exports = {
   async notify({ pixApiClient  }) {
-    return pixApiClient.request({ url: '/api/cache/' });
+    try {
+      await pixApiClient.request({ url: '/api/cache/' });
+    } catch (error) {
+      logger.error(error, 'Notifiying about release creation failed');
+    }
   }
 };
