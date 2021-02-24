@@ -1,24 +1,33 @@
-{{#each this.tubesOrProductionTubes as |tube index|}}
+{{#if (and this.isWorkbenchSkillView this.hasNoTubes)}}
   <tr>
-    {{#if (eq index 0)}}
-      <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
-        {{#if (and (eq @view "workbench") (eq @section "skills"))}}
-          <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
-        {{else}}
-          {{@theme.name}}
-        {{/if}}
-      </td>
-      <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
-                                      @tube={{tube}}
-                                      @section={{@section}}
-                                      @view={{@view}}
-                                      @link={{@link}}/>
-    {{else}}
-      <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
-                                      @tube={{tube}}
-                                      @section={{@section}}
-                                      @view={{@view}}
-                                      @link={{@link}}/>
-  {{/if}}
+    <td data-test-theme-cell class="theme-cell">
+      <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+    </td>
+    <td data-test-empty-row colspan="8" class="empty-row"></td>
   </tr>
-{{/each}}
+{{else}}
+  {{#each this.tubesOrProductionTubes as |tube index|}}
+    <tr>
+      {{#if (eq index 0)}}
+        <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
+          {{#if this.isWorkbenchSkillView}}
+            <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+          {{else}}
+            {{@theme.name}}
+          {{/if}}
+        </td>
+        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                        @tube={{tube}}
+                                        @section={{@section}}
+                                        @view={{@view}}
+                                        @link={{@link}}/>
+      {{else}}
+        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                        @tube={{tube}}
+                                        @section={{@section}}
+                                        @view={{@view}}
+                                        @link={{@link}}/>
+      {{/if}}
+    </tr>
+  {{/each}}
+{{/if}}

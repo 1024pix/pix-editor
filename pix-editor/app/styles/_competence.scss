@@ -75,6 +75,10 @@
 
     }
 
+    &.empty-row {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
     &.skill {
       text-align: center;
 

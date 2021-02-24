@@ -1,13 +1,13 @@
 import Component from '@glimmer/component';
 
 export default class CompetenceCompetenceGridThemeComponent extends Component {
-  get displayAllTubes() {
-    return this.args.view === 'workbench';
+  get isWorkbenchSkillView() {
+    return this.args.view === 'workbench' && this.args.section === 'skills';
   }
 
   get tubesOrProductionTubes() {
     const theme = this.args.theme;
-    if (this.displayAllTubes) {
+    if (this.args.view === 'workbench') {
       return theme.tubes;
     }
     return theme.productionTubes;
@@ -15,5 +15,10 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
 
   get rowSpanTheme() {
     return this.tubesOrProductionTubes.length;
+  }
+
+  get hasNoTubes() {
+    const theme = this.args.theme;
+    return theme.tubes.length === 0;
   }
 }
