@@ -24,11 +24,11 @@
 </div>
 <div class="tube-details">
   <div class="tube-data" {{scroll-top this.edition}}>
-    <Form::Tube @tube={{this.tube}} @edition={{this.edition}} />
+    <Form::Tube @tube={{this.tube}} @edition={{this.edition}} @creation={{this.creation}} @setEmptyMandatoryField={{this.setEmptyMandatoryField}}/>
   </div>
   <div class="ui vertical compact labeled icon menu tube-menu">
     {{#if this.edition}}
-      <button class="ui button item important-action" {{on "click" this.save}} type="button">
+      <button class="ui button item important-action {{if this.disableSaveButton ' disabled'}}" {{on "click" this.save}} type="button">
         <i class="save icon"></i>
         Enregistrer
       </button>
