@@ -24,6 +24,12 @@ export default class CompetenceFooter extends Component {
     return section === 'skills' && view === 'workbench' && this.access.mayCreateTube();
   }
 
+  get mayCreateTheme() {
+    const section = this.args.section;
+    const view = this.args.view;
+    return section === 'skills' && view === 'workbench' && this.access.mayCreateTheme();
+  }
+
   get mayCreatePrototype() {
     const section = this.args.section;
     const view = this.args.view;

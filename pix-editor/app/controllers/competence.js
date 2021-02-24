@@ -148,6 +148,11 @@ export default class CompetenceController extends Controller {
   }
 
   @action
+  newTheme() {
+    this.transitionToRoute('competence.themes.new', this.competence);
+  }
+
+  @action
   exportSkills() {
     this.loader.start('Export des acquis...');
     const competence = this.competence;

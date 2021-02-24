@@ -40,6 +40,7 @@ Router.map(function() {
 
     this.route('themes', function() {
       this.route('single', { path:'/:theme_id' });
+      this.route('new');
     });
   });
   this.route('skill', { path:'/skill/:skill_name' });

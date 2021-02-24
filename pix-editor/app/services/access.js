@@ -24,6 +24,10 @@ export default class AccessService extends Service {
     return this.isEditor();
   }
 
+  mayCreateTheme() {
+    return this.isEditor();
+  }
+
   mayEditSkills() {
     return this.isEditor();
   }

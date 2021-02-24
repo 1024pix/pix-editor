@@ -7,6 +7,11 @@
       <i class="align justify icon"></i>
     </button>
   {{/if}}
+  {{#if this.mayCreateTheme}}
+    <button class="ui button left item" {{on "click" @newTheme}} type="button">
+      <i class="plus square outline icon"></i> Nouvelle Thématique
+    </button>
+  {{/if}}
   {{#if this.displayProductionStats}}
     <div class="item competence-info"><div class="competence-info">Tubes : {{@competence.productionTubeCount}}</div><div class="competence-info">Acquix : {{@competence.productionSkillCount}}</div></div>
   {{else}}
