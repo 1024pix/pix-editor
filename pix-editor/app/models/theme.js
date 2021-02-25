@@ -17,6 +17,10 @@ export default class ThemeModel extends Model {
     return allTubes.sortBy('name');
   }
 
+  get hasProductionTubes() {
+    return this.productionTubes.length > 0;
+  }
+
   get hasSelectedProductionTube() {
     return this.selectedProductionTubeLength > 0;
   }

@@ -7,7 +7,7 @@ export default class CompetenceProfile extends Component {
     if (this.args.filter) {
       return competence.themes.filter(theme => theme.hasSelectedProductionTube);
     }
-    return competence.themes;
+    return competence.themes.filter(theme => theme.hasProductionTubes);
   }
 
 }
