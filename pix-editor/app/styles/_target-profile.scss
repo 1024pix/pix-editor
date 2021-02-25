@@ -123,7 +123,7 @@
       & > div {
         display: flex;
         align-items: center;
-        width: 33%;
+        width: 35%;
 
 
         .icon {
@@ -162,11 +162,15 @@
           &.active {
             background-color: rgba(87, 200, 130, .3);
           }
+
+          &__color-red {
+            color: #7f0101;
+          }
         }
       }
 
       .practicalDescription-profile {
-        width: 67%;
+        width: 65%;
         padding: 10px 50px 10px 5px;
 
         &.active {
