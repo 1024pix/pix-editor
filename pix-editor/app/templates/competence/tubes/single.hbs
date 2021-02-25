@@ -1,7 +1,7 @@
 <div class="tube-header">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if this.mayMove}}
+      {{#if (and this.mayMove (not this.creation) (not this.edition))}}
         <button class="ui button icon item" {{on "click" this.selectCompetence}} type="button"><i class="icon random"></i></button>
       {{/if}}
     </div>
@@ -57,6 +57,7 @@
   @class="tube-select-competence"
   @onChange={{this.setCompetence}}
   @name={{this.tube.name}}
-  @selectTubeLevel={{false}}
+  @theme={{this.tube.theme}}
+  @isTubeLocation={{true}}
   @close={{this.closeSelectCompetence}} />
 {{/if}}

@@ -117,10 +117,11 @@ export default class SingleController extends Controller {
   }
 
   @action
-  setCompetence(newCompetence) {
+  setCompetence(newCompetence, newTheme) {
     const tube = this.tube;
     this.loader.start();
     tube.competence = newCompetence;
+    tube.theme = newTheme;
     return tube.save()
       .then(() => {
         this.loader.stop();

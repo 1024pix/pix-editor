@@ -11,6 +11,8 @@ export default class PopinSelectLocation extends Component {
   @tracked _selectedTube = null;
   @tracked _selectedSource = null;
   @tracked _selectedSkill = null;
+  @tracked _selectedTheme = null;
+  @tracked themesLoaded = false;
   @tracked tubesLoaded = false;
   @tracked skillsLoaded = false;
   @tracked selectedLevel = null;
@@ -19,6 +21,7 @@ export default class PopinSelectLocation extends Component {
 
   selectLevelOptions = [1,2,3,4,5,6,7,8];
 
+  _themes = A([]);
   _tubes = A([]);
   _skills = A([]);
 
@@ -64,6 +67,45 @@ export default class PopinSelectLocation extends Component {
       data: competence
     }));
   }
+
+  get selectedTheme() {
+    if (this._selectedTheme) {
+      return this._selectedTheme;
+    }
+    return this.themeList.find(item => (item.data === this.args.theme.content));
+
+  }
+
+  get themes() {
+    if (!this.themesLoaded) {
+      this._loadThemes().then(() => this._themes);
+    }
+    return this._themes;
+  }
+
+  get themeList() {
+    if (!this.themesLoaded) {
+      this._loadThemes();
+      return A([]);
+    } else {
+      return this.themes.map(theme => ({
+        label: theme.name,
+        data: theme
+      }));
+    }
+  }
+
+  _loadThemes() {
+    if (this.selectedCompetence) {
+      const competence = this.selectedCompetence.data;
+      competence.rawThemes
+        .then(() => {
+          this._themes = competence.sortedThemes;
+          this.themesLoaded = true;
+        });
+    }
+  }
+
 
   get tubes() {
     if (!this.tubesLoaded) {
@@ -148,6 +190,9 @@ export default class PopinSelectLocation extends Component {
   }
 
   get enableMoveActionButton() {
+    if (this.args.isTubeLocation) {
+      return this.themesLoaded && !!this._selectedTheme;
+    }
     if (this.args.isPrototypeLocation) {
       return (this.skillsLoaded && !!this._selectedSkill);
     }
@@ -167,7 +212,14 @@ export default class PopinSelectLocation extends Component {
   selectCompetence(item) {
     this.selectedCompetence = item;
     this.selectTube(null);
+    this.selectTheme(null);
     this.tubesLoaded = false;
+    this.themesLoaded = false;
+  }
+
+  @action
+  selectTheme(item) {
+    this._selectedTheme = item;
   }
 
   @action
@@ -209,14 +261,15 @@ export default class PopinSelectLocation extends Component {
   @action
   setLocation() {
     const competence = this.selectedCompetence.data;
-    const tube = this.selectedTube.data;
-    if (!this.args.selectTubeLevel) {
-      this.args.onChange(competence);
+    if (this.args.isTubeLocation) {
+      const theme = this._selectedTheme.data;
+      this.args.onChange(competence, theme);
     }
     if (this.args.isPrototypeLocation) {
       this.args.onChange([this._selectedSkill]);
     }
     if (this.args.isSkillLocation) {
+      const tube = this.selectedTube.data;
       this.args.onChange(competence, tube, this.selectedLevel);
     }
     this.args.close();
