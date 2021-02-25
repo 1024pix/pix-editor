@@ -12,9 +12,14 @@ export default class CompetenceModel extends Model {
   @attr source;
 
   @hasMany('tube') rawTubes;
+  @hasMany('theme') rawThemes;
 
   get tubes() {
     return this.rawTubes.filter(tube => tube.name !== '@workbench');
+  }
+
+  get themes() {
+    return this.rawThemes.filter(theme => theme.name.indexOf('workbench') === -1);
   }
 
   get productionTubes() {

@@ -7,6 +7,7 @@ export default class CompetenceSerializer extends AirtableSerializer {
     name:'Référence',
     title:'Titre fr-fr',
     code:'Sous-domaine',
+    rawThemes: 'Thematiques',
     rawTubes:'Tubes',
     description:'Description',
     pixId:'id persistant',

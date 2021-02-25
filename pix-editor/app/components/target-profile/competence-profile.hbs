@@ -1,5 +1,5 @@
 <div class="ui grid">
-  <h2 id="competence-profile-anchor-{{@competence.id}}" class="row competence-profile area-profile-{{@areaCode}}">
+  <h2 data-test-competence-profile id="competence-profile-anchor-{{@competence.id}}" class="row competence-profile area-profile-{{@areaCode}}">
     <div class="column competence-code right aligned">
       {{@competence.code}}
     </div>
@@ -15,28 +15,16 @@
       </div>
     </div>
   </h2>
-  <div class="row tubes-profile">
-    <div class="four wide column tube-description">
-      <p></p>
-    </div>
-    <div class="twelve wide column">
-      {{#each this.filteredTubes as |tube|}}
-        {{#if @isThematicResultMode}}
-          <TargetProfile::TubeProfile class="tube-profile thematicResult"
-                                      @tube={{tube}}
-                                      @clickAction={{this.clickOnThematicResultTube}}
-                                      @selectedSkillLevel={{tube.selectedThematicResultLevel}}
-                                      @showTubeDetails={{@showTubeDetails}}/>
-        {{else}}
-          <TargetProfile::TubeProfile class="tube-profile"
-                                      @tube={{tube}}
-                                      @clickAction={{this.clickOnTube}}
-                                      @selectedSkillLevel={{tube.selectedLevel}}
-                                      @showTubeDetails={{@showTubeDetails}}/>
-        {{/if}}
-      {{/each}}
-    </div>
-  </div>
+  {{#each this.filteredTheme as |theme|}}
+    <TargetProfile::ThemeProfile @showTubeDetails={{@showTubeDetails}}
+                                 @filter={{@filter}}
+                                 @isThematicResultMode={{@isThematicResultMode}}
+                                 @displayTube={{@displayTube}}
+                                 @displayThematicResultTube={{@displayThematicResultTube}}
+                                 @clearTube={{@clearTube}}
+                                 @setTubeLevel={{@setTubeLevel}}
+                                 @theme={{theme}}/>
+  {{/each}}
   <div class="row">
     <div class="fifteen wide column"></div>
     {{#if @isThematicResultMode}}

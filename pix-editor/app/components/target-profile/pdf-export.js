@@ -14,17 +14,18 @@ import 'Roboto-condensedLight.js';
 
 const legalMention = 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.';
 const firstPageTitleSize = 30;
-const firstPagePSize = 12;
-const firstPageLegalSize = 9;
+const firstPagePSize = 20;
+const firstPageLegalSize = 10.5;
 const areaTitleSize = 18;
-const competenceTitleSize = 14;
-const competenceTitleCellPadding = 8;
-const pSize = 6;
+const competenceTitleSize = 12;
+const competenceTitleCellPadding = 3;
+const pSize = 7.4;
 const footerSize = 4;
 const margin = 15;
 const areaTitleHeight = 69;
 const fontColor = [65, 70, 87];
 const lightGrey = [250, 250, 250];
+const grey = [240, 240, 240];
 const colors = [[241, 161, 65], [87, 200, 132], [18, 163, 255], [255, 63, 148], [87, 77, 166], [56, 138, 255]];
 const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
 
@@ -64,7 +65,8 @@ export default class TargetProfilePdfExportComponent extends Component {
     let y;
     const pdfName = this._generatePdfName(title);
     const areas = this.args.model;
-    const versionText = `Version du ${(new Date()).toLocaleDateString('fr')}`;
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const versionText = `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`;
     const pdf = new jsPDF('p', 'px', 'a4');
     const pdfWidth = pdf.internal.pageSize.width;
     const pdfHeight = pdf.internal.pageSize.height;
@@ -95,32 +97,33 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.setTextColor('#fff');
     this._generateCenteredLongText(pdf, title, 350, 35, 300);
     pdf.setFontSize(firstPagePSize);
-    pdf.setFont('AmpleSoft', 'normal');
-    pdf.text(versionText, this._getCenteredX(pdf, versionText), 560);
+    pdf.setFont('AmpleSoft', 'bold');
+    pdf.text(versionText, this._getCenteredX(pdf, versionText), 530);
     pdf.setFontSize(firstPageLegalSize);
     pdf.setFont('Roboto', 'normal');
-    pdf.text(legalMention, 68, 580, { maxWidth: 310, align: 'justify' });
+    pdf.text(legalMention, 44, 580, { maxWidth: 360, align: 'justify' });
     pdf.addPage();
 
 
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
       const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
-      y = areaTitleHeight;
+      y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
 
         const areaName = area.name.slice(3, area.name.length);
-        await this._buildRoundedGradientBackground(pdf, areaGradient[i], 0, 0, pdfWidth, 34);
-        pdf.setFont('AmpleSoft', 'normal');
+        await this._buildRoundedGradientBackground(pdf, areaGradient[i], -15, -30, pdfWidth + 30, 49);
+        pdf.setFont('AmpleSoft', 'bold');
         pdf.setFontSize(areaTitleSize);
         pdf.setTextColor('#fff');
-        pdf.text(this._getCenteredX(pdf, areaName.toUpperCase()), areaTitleHeight / 2 + 4, areaName.toUpperCase());
+        pdf.text(this._getCenteredX(pdf, areaName), (areaTitleHeight / 2) - 10, areaName);
 
         competences.forEach(competence => {
-          const tubeHead = [[
+          const competenceColor = colors[i];
+          const tableHead = [[
             {
-              content: competence.title,
+              content: `${competence.code} ${competence.title}`,
               colSpan: 3,
               rowSpan: 1,
               styles: {
@@ -134,65 +137,24 @@ export default class TargetProfilePdfExportComponent extends Component {
                 font: 'RobotoCondensed',
                 fontStyle: 'bold',
                 fontSize: competenceTitleSize,
-                textColor: fontColor,
+                textColor: competenceColor,
                 valign: 'middle'
               }
             }
           ]];
 
-          const tubes = filter ? competence.productionTubes.filter(tube => tube.selectedLevel) : competence.productionTubes;
-          const tubeValues = tubes.reduce((values, tube, i) => {
-            const cells = [
-              {
-                content: tube.practicalTitleFr,
-                styles: {
-                  cellPadding: { top: 3, right: 5, bottom: 0, left: 5 },
-                  cellWidth: 100,
-                  font: 'RobotoCondensed',
-                  fontStyle: 'normal',
-                  fontSize: pSize,
-                  textColor: fontColor
-                }
-              },
-              {
-                content: tube.practicalDescriptionFr,
-                styles: {
-                  cellPadding: { top: 3, right: 5, bottom: 0, left: 5 },
-                  fontSize: pSize,
-                  font: 'RobotoCondensed',
-                  fontStyle: 'light',
-                  textColor: fontColor
-                }
-              }];
+          const themes = filter ? competence.themes.filter(theme => theme.hasSelectedProductionTube) : competence.themes.filter(theme => theme.hasProductionTubes);
 
-            if (i === 0) {
-              cells.forEach((value) => value.styles.cellPadding.top = margin / 2);
-            }
-
-            values.push(cells);
-            return values;
-          }, []);
-          //todo add theme
-          if (tubeValues && tubeValues[0]) {
-            tubeValues[0].unshift({
-              content: '',
-              rowSpan: tubeValues.length,
-              styles: {
-                cellPadding: { top: 0, right: 0, bottom: 0, left: margin },
-                cellWidth: 100,
-                valign: 'middle',
-                font: 'RobotoCondensed',
-                fontStyle: 'bold',
-                fontSize: pSize + 4,
-                textColor: fontColor
-              }
-            });
-          }
+          const tableBody = themes.reduce((values, theme, index) => {
+            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            const buildCell = this._buildCell(theme, tubes, index);
+            return [...values, ...buildCell];
+          },[]);
 
           pdf.autoTable({
             startY: y,
-            head: tubeHead,
-            body: tubeValues,
+            head: tableHead,
+            body: tableBody,
             styles: { fillColor: lightGrey },
             theme: 'plain',
             pageBreak: 'avoid',
@@ -208,7 +170,7 @@ export default class TargetProfilePdfExportComponent extends Component {
           }
 
           // Draw rounded corner
-          pdf.setFillColor(...colors[i]);
+          pdf.setFillColor(...lightGrey);
           pdf.roundedRect(margin, y - 5, pageWidth, 10, 5, 5, 'F');
           pdf.setFillColor(...lightGrey);
           pdf.roundedRect(margin, newY - 5, pageWidth, 10, 5, 5, 'F');
@@ -216,8 +178,8 @@ export default class TargetProfilePdfExportComponent extends Component {
           // Reprint table to prevent text hide by roundedRect
           pdf.autoTable({
             startY: y,
-            head: tubeHead,
-            body: tubeValues,
+            head: tableHead,
+            body: tableBody,
             styles: { fillColor: lightGrey },
             theme: 'plain',
             pageBreak: 'avoid',
@@ -230,7 +192,21 @@ export default class TargetProfilePdfExportComponent extends Component {
           pdf.setDrawColor(255, 255, 255);
           pdf.setLineWidth(2);
           pdf.line(0, y + positionHead, pdfWidth, y + positionHead);
+
+          // Draw separation between theme
+          let indexCell = 0;
+          themes.forEach((theme) => {
+            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            indexCell += tubes.length;
+            const positionCell =  pdf.autoTable.previous.body[indexCell]?.cells[0];
+            if (positionCell) {
+              pdf.setDrawColor(255, 255, 255);
+              pdf.setLineWidth(1);
+              pdf.line(positionCell.x, positionCell.y + 2.5, pdfWidth - positionCell.x, positionCell.y + 2.5);
+            }
+          });
           y = 15 + pdf.autoTable.previous.finalY;
+
         });
         pdf.addPage();
       }
@@ -242,7 +218,7 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.setFontSize(footerSize);
       pdf.setFont('Roboto', 'normal');
       pdf.setPage(i);
-      pdf.text(margin, pdfHeight - 10, `${legalMention} - ${versionText}`);
+      pdf.text(margin, pdfHeight - 4, `${legalMention} - ${versionText}`);
     }
 
     // Remove last empty page
@@ -282,5 +258,79 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.text(line, this._getCenteredX(pdf, line), positionY);
       positionY += breakY;
     });
+  }
+
+  _buildCell(theme, tubes) {
+    const rowSpan = tubes.length;
+    const cellPaddingTop = 5;
+    const firstTube = tubes.shift();
+    const firstCell = [{
+      content: theme.name,
+      rowSpan,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
+        cellWidth: 80,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'bold',
+        fontSize: pSize + 1,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: firstTube.practicalTitleFr,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+        cellWidth: 100,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'normal',
+        fontSize: pSize,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: firstTube.practicalDescriptionFr,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+        fontSize: pSize,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'light',
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    }];
+    return  tubes.reduce((values, tube, index) => {
+      const fillColor = index % 2 === 0 ? grey : lightGrey;
+      const cells = [
+        {
+          content: tube.practicalTitleFr,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+            cellWidth: 100,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'normal',
+            fontSize: pSize,
+            textColor: fontColor,
+            fillColor
+          }
+        },
+        {
+          content: tube.practicalDescriptionFr,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+            fontSize: pSize,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'light',
+            textColor: fontColor,
+            fillColor
+          }
+        }];
+      values.push(cells);
+      return values;
+    }, [firstCell]);
   }
 }

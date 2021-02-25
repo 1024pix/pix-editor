@@ -14,17 +14,17 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     const competence_1 = EmberObject.create({
       name: 'competence_1',
       selectedProductionTubeCount: 2,
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
+      themes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
     });
     const competence_2 = EmberObject.create({
       name: 'competence_2',
       selectedProductionTubeCount: 0,
-      productionTubes: [{ selectedLevel: false }, { selectedLevel: false }]
+      themes: [{ productionTubes: [{ selectedLevel: false }, { selectedLevel: false }] }]
     });
     const competence_3 = EmberObject.create({
-      name: 'competence_1',
+      name: 'competence_3',
       selectedProductionTubeCount: 2,
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
+      themes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
     });
 
 
@@ -40,11 +40,9 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     this.set('filter', true);
 
     // when
-
-    await render(hbs`{{target-profile/area-profile area=area filter=filter}}`);
+    await render(hbs`<TargetProfile::AreaProfile @area={{this.area}} @filter={{this.filter}}/>`);
 
     //then
-
-    assert.equal(this.element.querySelectorAll('.competence-profile').length, 2);
+    assert.dom('[data-test-competence-profile]').exists({ count:2 });
   });
 });

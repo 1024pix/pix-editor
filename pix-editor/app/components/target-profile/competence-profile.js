@@ -1,35 +1,13 @@
 import Component from '@glimmer/component';
-import { action } from '@ember/object';
 
 export default class CompetenceProfile extends Component {
 
-  get filteredTubes() {
+  get filteredTheme() {
     const competence = this.args.competence;
     if (this.args.filter) {
-      return competence.productionTubes.filter(tube => tube.selectedLevel);
+      return competence.themes.filter(theme => theme.hasSelectedProductionTube);
     }
-    return competence.productionTubes;
+    return competence.themes.filter(theme => theme.hasProductionTubes);
   }
 
-  @action
-  clickOnTube(tube) {
-    if (this.args.showTubeDetails) {
-      this.args.displayTube(tube);
-    } else if (tube.selectedLevel) {
-      this.args.clearTube(tube);
-    } else {
-      this.args.setTubeLevel(tube);
-    }
-  }
-
-  @action
-  clickOnThematicResultTube(tube) {
-    if (this.args.showTubeDetails) {
-      this.args.displayThematicResultTube(tube);
-    } else if (tube.selectedThematicResultLevel) {
-      tube.selectedThematicResultLevel = false;
-    } else {
-      tube.selectedThematicResultLevel = tube.selectedLevel;
-    }
-  }
 }
