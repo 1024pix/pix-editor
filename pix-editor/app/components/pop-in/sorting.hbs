@@ -11,11 +11,11 @@
       </ul>
     </div>
     <div class="actions">
-      <div data-test-sorting-pop-in-deny class="ui blue cancel button" {{on "click" @onDeny}}>
+      <div data-test-sorting-pop-in-deny class="ui blue cancel button" {{on "click" (fn @onDeny @model)}}>
         <i class="remove icon" ></i>
         Annuler
       </div>
-      <div data-test-sorting-pop-in-approve class="ui green ok button" {{on "click" @onApprove}}>
+      <div data-test-sorting-pop-in-approve class="ui green ok button" {{on "click" (fn @onApprove @model)}}>
         <i class="checkmark icon" ></i>
         Ok
       </div>

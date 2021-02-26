@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render, findAll } from '@ember/test-helpers';
+import { click, render, findAll } from '@ember/test-helpers';
 import { drag }  from 'ember-sortable/test-support/helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
@@ -53,5 +53,21 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
     // then
     assert.ok(theme2.index === 2);
     assert.ok(theme3.index === 1);
+  });
+
+  test('it should trigger approve action', async function (assert) {
+    // when
+    await click('[data-test-sorting-pop-in-approve]');
+
+    // then
+    assert.deepEqual(approveActionStub.getCall(0).args[0], [theme1, theme2, theme3]);
+  });
+
+  test('it should trigger deny action', async function (assert) {
+    // when
+    await click('[data-test-sorting-pop-in-deny]');
+
+    // then
+    assert.deepEqual(denyActionStub.getCall(0).args[0], [theme1, theme2, theme3]);
   });
 });

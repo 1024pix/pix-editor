@@ -36,7 +36,7 @@
       @selectView={{this.selectView}}
       @newTube={{this.newTube}}
       @newTheme={{this.newTheme}}
-      @displaySortThemePopIn={{this.displaySortThemePopIn}}
+      @displaySortThemesPopIn={{this.displaySortThemesPopIn}}
       @newPrototype={{this.newPrototype}} />
   {{/unless}}
   {{outlet}}
@@ -47,5 +47,5 @@
 </div>
 {{/if}}
 {{#if this.displaySortingPopIn}}
-  <PopIn::Sorting @title={{'Trie des thématiques'}} @model={{this.competence.sortedThemes}} @onApprove={{this.sortingPopInApproveAction}} @onDeny={{this.sortingPopInCancelAction}}/>
+  <PopIn::Sorting @title={{this.sortingPopInTitle}} @model={{this.competence.sortedThemes}} @onApprove={{this.sortingPopInApproveAction}} @onDeny={{this.sortingPopInCancelAction}}/>
 {{/if}}

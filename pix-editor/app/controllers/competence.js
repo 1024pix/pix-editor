@@ -196,36 +196,44 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  displaySortThemePopIn() {
-    this.sortingPopInApproveAction = this.sortTheme;
-    this.sortingPopInCancelAction = this.cancelThemeSorting;
+  displaySortThemesPopIn() {
+    this.sortingPopInApproveAction = this.sortThemes;
+    this.sortingPopInCancelAction = this.cancelThemesSorting;
     this.sortingPopInTitle = 'Trie des thématiques';
     this.displaySortingPopIn = true;
   }
 
   @action
-  async sortTheme() {
-    const themes = this.competence.sortedThemes;
+  async sortThemes(themes) {
+    await this.saveSorting(themes, 'Thématiques ordonnées', 'Erreur lors du trie des thématiques');
+  }
+
+  @action
+  async saveSorting(models, successMessage, errorMessage) {
     this.loader.start();
     try {
-      for (const theme of themes) {
-        await theme.save();
+      for (const model of models) {
+        await model.save();
       }
       this.loader.stop();
-      this.notify.message('Thématiques ordonnées');
+      this.notify.message(successMessage);
       this.displaySortingPopIn = false;
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
       this.loader.stop();
-      this.notify.error('Erreur lors du trie des thématiques');
+      this.notify.error(errorMessage);
     }
   }
 
   @action
-  cancelThemeSorting() {
-    const themes = this.competence.sortedThemes;
-    themes.forEach(theme=>theme.rollbackAttributes());
+  cancelThemesSorting(themes) {
+    this.cancelSorting(themes);
+  }
+
+  @action
+  cancelSorting(models) {
+    models.forEach(model=>model.rollbackAttributes());
     this.displaySortingPopIn = false;
   }
 }

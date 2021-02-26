@@ -48,13 +48,13 @@ module('Unit | Controller | competence', function(hooks) {
 
   test('it should display sort theme pop-in', function(assert) {
     // when
-    controller.displaySortThemePopIn();
+    controller.displaySortThemesPopIn();
 
     // then
     assert.ok(controller.sortingPopInTitle === 'Trie des thématiques');
     assert.ok(controller.displaySortingPopIn);
-    assert.deepEqual(controller.sortingPopInApproveAction, controller.sortTheme);
-    assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelThemeSorting);
+    assert.deepEqual(controller.sortingPopInApproveAction, controller.sortThemes);
+    assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelThemesSorting);
   });
 
   test('it should cancel theme sorting', function (assert) {
@@ -62,7 +62,7 @@ module('Unit | Controller | competence', function(hooks) {
     controller.displaySortingPopIn = true;
 
     // when
-    controller.cancelThemeSorting();
+    controller.cancelThemesSorting([theme1, theme2]);
 
     // then
     assert.notOk(controller.displaySortingPopIn);
@@ -77,7 +77,7 @@ module('Unit | Controller | competence', function(hooks) {
     controller.displaySortingPopIn = true;
 
     // when
-    await controller.sortTheme();
+    await controller.sortThemes([theme1, theme2]);
 
     // then
     assert.ok(loaderStartStub.calledOnce);
@@ -98,10 +98,10 @@ module('Unit | Controller | competence', function(hooks) {
     controller.displaySortingPopIn = true;
 
     const errorStub = sinon.stub();
-    window.console = { error: errorStub };
+    window.console.error = errorStub;
 
     // when
-    await controller.sortTheme();
+    await controller.sortThemes([theme1, theme2]);
 
     // then
     assert.ok(loaderStartStub.calledOnce);
