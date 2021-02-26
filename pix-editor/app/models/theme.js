@@ -9,7 +9,7 @@ export default class ThemeModel extends Model {
   @hasMany('tube') rawTubes;
 
   get tubes() {
-    return this.rawTubes.filter(tube => tube.name !== '@workbench').sortBy('name');
+    return this.rawTubes.filter(tube => tube.name !== '@workbench').sortBy('index');
   }
 
   get productionTubes() {

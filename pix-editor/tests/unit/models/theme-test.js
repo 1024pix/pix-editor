@@ -37,16 +37,19 @@ module('Unit | Model | theme', function(hooks) {
     tube_2 = store.createRecord('tube', {
       name: '@tube_2',
       selectedLevel: 2,
+      index: 0,
       rawSkills: [activeSkill_1]
     });
 
     tube_3 = store.createRecord('tube', {
       name: '@tube_3',
+      index: 1,
       rawSkills: [deadSkill]
     });
 
     tube_4 = store.createRecord('tube', {
       name: '@tube_4',
+      index: 2,
       rawSkills: [activeSkill_2]
     });
 

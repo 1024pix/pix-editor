@@ -29,11 +29,11 @@ export default class CompetenceModel extends Model {
   get productionTubes() {
     let allTubes = this.rawTubes;
     allTubes = allTubes.filter(tube => tube.hasProductionChallenge);
-    return allTubes.sortBy('name');
+    return allTubes.sortBy('index');
   }
 
   get sortedTubes() {
-    return this.tubes.sortBy('name');
+    return this.tubes.sortBy('index');
   }
 
   get tubeCount() {
