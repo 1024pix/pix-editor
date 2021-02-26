@@ -1,0 +1,24 @@
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
+  <div class="ui standard modal visible active">
+    <div data-test-sorting-pop-in-title class="header">{{@title}}</div>
+    <div data-test-sorting-pop-in-content class="sortable-content">
+      <ul {{sortable-group onChange=this.reorderItems}}>
+        {{#each @model as |modelItem|}}
+          <li {{sortable-item model=modelItem}} {{sortable-handle}}>
+            <i class="ellipsis vertical icon"></i><span>{{modelItem.name}}</span><i class="ellipsis vertical icon"></i>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="actions">
+      <div data-test-sorting-pop-in-deny class="ui blue cancel button" {{on "click" @onDeny}}>
+        <i class="remove icon" ></i>
+        Annuler
+      </div>
+      <div data-test-sorting-pop-in-approve class="ui green ok button" {{on "click" @onApprove}}>
+        <i class="checkmark icon" ></i>
+        Ok
+      </div>
+    </div>
+  </div>
+</ModalDialog>

@@ -1,0 +1,30 @@
+.sortable-content {
+  ul {
+    list-style: none;
+    width: 75%;
+    margin: 50px auto;
+    padding: 0;
+
+    li {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: 5px;
+      padding: 10px 0;
+      background: $skill-background-color;
+      z-index:1;
+      cursor: grab;
+
+      &.is-dragging {
+        z-index:100;
+        box-shadow: #2f2f2f 0 0 30px;
+        cursor: grabbing;
+      }
+
+      i {
+        opacity: .3;
+      }
+    }
+  }
+}

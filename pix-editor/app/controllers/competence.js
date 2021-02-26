@@ -2,6 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import Sentry from '@sentry/ember';
 
 export default class CompetenceController extends Controller {
   queryParams = [{
@@ -17,6 +18,10 @@ export default class CompetenceController extends Controller {
   @tracked section = 'challenges';
   @tracked languageFilter = false;
   @tracked leftMaximized = false;
+  @tracked displaySortingPopIn = false;
+  @tracked sortingPopInTitle = '';
+  @tracked sortingPopInApproveAction = null;
+  @tracked sortingPopInCancelAction = null;
 
   @service router;
   @service config;
@@ -188,5 +193,39 @@ export default class CompetenceController extends Controller {
   @action
   selectLanguageToFilter(value) {
     this.languageFilter = value.id;
+  }
+
+  @action
+  displaySortThemePopIn() {
+    this.sortingPopInApproveAction = this.sortTheme;
+    this.sortingPopInCancelAction = this.cancelThemeSorting;
+    this.sortingPopInTitle = 'Trie des thématiques';
+    this.displaySortingPopIn = true;
+  }
+
+  @action
+  async sortTheme() {
+    const themes = this.competence.sortedThemes;
+    this.loader.start();
+    try {
+      for (const theme of themes) {
+        await theme.save();
+      }
+      this.loader.stop();
+      this.notify.message('Thématiques ordonnées');
+      this.displaySortingPopIn = false;
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.loader.stop();
+      this.notify.error('Erreur lors du trie des thématiques');
+    }
+  }
+
+  @action
+  cancelThemeSorting() {
+    const themes = this.competence.sortedThemes;
+    themes.forEach(theme=>theme.rollbackAttributes());
+    this.displaySortingPopIn = false;
   }
 }
