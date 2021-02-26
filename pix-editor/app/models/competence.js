@@ -23,7 +23,7 @@ export default class CompetenceModel extends Model {
   }
 
   get sortedThemes() {
-    return this.themes.sortBy('name');
+    return this.themes.sortBy('index');
   }
 
   get productionTubes() {
