@@ -10,15 +10,17 @@ function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
   const challenges = require(backupBaseFolder + 'Epreuves.json');
   const attachments = require(backupBaseFolder + 'Attachments.json');
-    console.log(attachments)
+  let challengeCount = 0;
   challenges.forEach((challenge) => {
     const errors = checkChallengeAttachments(challenge, attachments);
     if (_.isEmpty(errors)) {
-      console.log(`Challenge ${challenge.id} is ok`);
+      challengeCount ++;
+      // console.log(`Challenge ${challenge.id} is ok`);
     } else {
       console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`)
     }
   });
+  console.log(challengeCount)
 }
 
 function checkChallengeAttachments(challenge, attachments) {
@@ -52,7 +54,7 @@ function challengeAttachmentsToFiles(challenge) {
     files.push({
       filename: illustration.filename,
       size: illustration.size,
-      alt: fields['Texte alternatif illustration'] || '',
+      alt: sanitizeAltText(fields['Texte alternatif illustration']),
       url: illustration.url,
       mimeType: illustration.type,
       type: 'illustration',
@@ -73,6 +75,13 @@ function challengeAttachmentsToFiles(challenge) {
     });
   }
   return files;
+}
+
+function sanitizeAltText(text) {
+  if (text) {
+    return text.replace(/ \n/gm, '\n')
+  }
+  return ''
 }
 
 if (process.env.NODE_ENV !== 'test') {

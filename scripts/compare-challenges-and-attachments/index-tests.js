@@ -108,5 +108,44 @@ describe('checkChallengeAttachments', () => {
 
     expect(differences).to.deep.equal([expectedDifference]);
   });
+  
+  it('ignore when attachments alt have space before new line', () => {
+    const illustration = {
+      'filename': 'mailPJ.png',
+      'id': 'attcKBWOyCUyATJ93',
+      'size': 49502,
+      'type': 'image/png',
+      'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png'
+    };
+
+    const challenge = {
+      fields: {
+        'Illustration de la consigne': [illustration],
+        'Texte alternatif illustration': 'alternative text . \ntest',
+        'Record ID': 'some-challenge-id',
+      },
+    };
+
+    const attachment = {
+      'fields': {
+        'id': 'attcKBWOyCUyATJ93',
+        'Record ID': 'reczu9rZzvVD07Gme',
+        'challengeId': ['some-challenge-id'],
+        'filename': 'mailPJ.png',
+        'mimeType': 'image/png',
+        'size': 49502,
+        'type': 'illustration',
+        'url': 'https://dl.airtable.com/aa1yQxsRL2AdZYaZQNB2_mailPJ.png',
+        'alt': 'alternative text .\ntest',
+      },
+      'id': 'reczu9rZzvVD07Gme'
+    };
+
+    const attachments = [attachment];
+
+    const differences = checkChallengeAttachments(challenge, attachments);
+
+    expect(differences).to.deep.equal([]);
+  });
 });
 
