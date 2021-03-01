@@ -30,7 +30,7 @@ module('Integration | Component | target-profile/competence-profile', function(h
       title:'competence_title',
       description:'competence_description',
       code: '1',
-      themes: [theme_1, theme_2, theme_3]
+      sortedThemes: [theme_1, theme_2, theme_3]
     });
     this.set('competence', competence);
     this.set('filter', true);
@@ -61,7 +61,7 @@ module('Integration | Component | target-profile/competence-profile', function(h
       title:'competence_title',
       description:'competence_description',
       code: '1',
-      themes: [theme_1, theme_2]
+      sortedThemes: [theme_1, theme_2]
     });
     this.set('competence', competence);
 
