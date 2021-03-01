@@ -8,3 +8,8 @@ services:
     environment:
       POSTGRES_DB: pix_lcms
       POSTGRES_HOST_AUTH_METHOD: trust
+
+  redis:
+    image: redis:5.0.7-alpine
+    ports:
+      - "6380:6379"

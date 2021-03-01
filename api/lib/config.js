@@ -62,6 +62,11 @@ module.exports = (function() {
       debug: isFeatureEnabled(process.env.SENTRY_DEBUG),
       maxValueLength: 1000,
     },
+
+    scheduledJobs: {
+      redisUrl: process.env.REDIS_URL,
+      createReleaseTime: process.env.CREATE_RELEASE_TIME,
+    },
   };
 
   if (process.env.NODE_ENV === 'test') {

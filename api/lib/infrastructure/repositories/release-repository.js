@@ -6,6 +6,11 @@ const challengeDatasource = require('../datasources/airtable/challenge-datasourc
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 
+const { knex } = require('../../../db/knex-database-connection');
+
+const pixApiClient = require('../pix-api-client');
+const createdReleaseNotifier = require('../event-notifier/created-release-notifier');
+
 module.exports = {
   getCurrentContentAsStream(writableStream) {
     const timer = setInterval(() => {
@@ -24,6 +29,26 @@ module.exports = {
     });
     return writableStream;
   },
+
+  async create(getCurrentContent = _getCurrentContent) {
+    const content = await getCurrentContent();
+    const release = await knex('releases')
+      .returning(['id', 'content', 'createdAt'])
+      .insert({ content });
+
+    await createdReleaseNotifier.notify({ pixApiClient });
+
+    return release[0];
+  },
+
+  async getLatestRelease() {
+    const release = await knex('releases')
+      .select('id', 'content', 'createdAt')
+      .orderBy('createdAt', 'desc')
+      .limit(1);
+
+    return release[0];
+  }
 };
 
 async function _getCurrentContent() {
