@@ -22,6 +22,7 @@ export default class CompetenceController extends Controller {
   @tracked sortingPopInTitle = '';
   @tracked sortingPopInApproveAction = null;
   @tracked sortingPopInCancelAction = null;
+  @tracked sortingName = undefined;
 
   @service router;
   @service config;
@@ -201,11 +202,27 @@ export default class CompetenceController extends Controller {
     this.sortingPopInCancelAction = this.cancelThemesSorting;
     this.sortingPopInTitle = 'Trie des thématiques';
     this.displaySortingPopIn = true;
+    this.sortingName = 'theme';
+  }
+
+  @action
+  displaySortTubesPopIn() {
+    this.sortingPopInApproveAction = this.sortTubes;
+    this.sortingPopInCancelAction = this.cancelTubesSorting;
+    this.sortingPopInTitle = 'Trie des tubes';
+    this.displaySortingPopIn = true;
+    this.sortingName = 'tube';
   }
 
   @action
   async sortThemes(themes) {
     await this.saveSorting(themes, 'Thématiques ordonnées', 'Erreur lors du trie des thématiques');
+  }
+
+  @action
+  async sortTubes(themes) {
+    const tubes = themes.map(theme => theme.tubes).flat();
+    await this.saveSorting(tubes, 'Tubes ordonnés', 'Erreur lors du trie des tubes');
   }
 
   @action
@@ -229,6 +246,12 @@ export default class CompetenceController extends Controller {
   @action
   cancelThemesSorting(themes) {
     this.cancelSorting(themes);
+  }
+
+  @action
+  cancelTubesSorting(themes) {
+    const tubes = themes.map(theme => theme.tubes).flat();
+    this.cancelSorting(tubes);
   }
 
   @action

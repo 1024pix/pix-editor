@@ -25,6 +25,10 @@
     <button class="ui button left item" {{on "click" @newTube}} type="button">
       <i class="plus square outline icon"></i> Nouveau tube
     </button>
+
+    <button class="ui button left item" {{on "click" @displaySortTubesPopIn}} type="button">
+      <i class="exchange icon rotate-90"></i> Trier les Tubes
+    </button>
   {{/if}}
   {{#if this.mayCreatePrototype}}
       <button class="ui button right item" {{on "click" @newPrototype}} type="button">

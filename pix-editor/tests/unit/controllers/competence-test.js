@@ -29,6 +29,9 @@ module('Unit | Controller | competence', function(hooks) {
     this.owner.register('service:loader', LoaderService);
 
     rollbackAttributesStub = sinon.stub();
+
+    controller = this.owner.lookup('controller:competence');
+
     theme1 = {
       name: 'theme1',
       rollbackAttributes: rollbackAttributesStub
@@ -37,77 +40,163 @@ module('Unit | Controller | competence', function(hooks) {
       name: 'theme2',
       rollbackAttributes: rollbackAttributesStub
     };
-    const competence =  {
-      name: 'competenceName',
-      sortedThemes: [theme1, theme2],
-    };
+  });
+  module('#theme sorting', function () {
+    test('it should display sort theme pop-in', function(assert) {
+      // when
+      controller.displaySortThemesPopIn();
 
-    controller = this.owner.lookup('controller:competence');
-    controller.model = competence;
+      // then
+      assert.ok(controller.sortingPopInTitle === 'Trie des thématiques');
+      assert.ok(controller.sortingName === 'theme');
+      assert.ok(controller.displaySortingPopIn);
+      assert.deepEqual(controller.sortingPopInApproveAction, controller.sortThemes);
+      assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelThemesSorting);
+    });
+
+    test('it should cancel theme sorting', function (assert) {
+      // given
+      controller.displaySortingPopIn = true;
+
+      // when
+      controller.cancelThemesSorting([theme1, theme2]);
+
+      // then
+      assert.notOk(controller.displaySortingPopIn);
+      assert.ok(rollbackAttributesStub.calledTwice);
+    });
+
+    test('it should sort theme', async function (assert) {
+      // given
+      const saveStub = sinon.stub().resolves();
+      theme1.save = saveStub;
+      theme2.save = saveStub;
+      controller.displaySortingPopIn = true;
+
+      // when
+      await controller.sortThemes([theme1, theme2]);
+
+      // then
+      assert.ok(loaderStartStub.calledOnce);
+      assert.notOk(controller.displaySortingPopIn);
+      assert.ok(saveStub.calledTwice);
+      assert.ok(loaderStopStub.calledOnce);
+      assert.ok(notifyMessageStub.calledWith('Thématiques ordonnées'));
+    });
+
+    test('it should throw an error if sort theme saving is wrong', async function (assert) {
+      // given
+      const errorMessage = {
+        'error': ['error']
+      };
+      const saveStub = sinon.stub().rejects(errorMessage);
+      theme1.save = saveStub;
+      theme2.save = saveStub;
+      controller.displaySortingPopIn = true;
+
+      const errorStub = sinon.stub();
+      window.console.error = errorStub;
+
+      // when
+      await controller.sortThemes([theme1, theme2]);
+
+      // then
+      assert.ok(loaderStartStub.calledOnce);
+      assert.ok(controller.displaySortingPopIn);
+      assert.ok(loaderStopStub.calledOnce);
+      assert.ok(notifyErrorStub.calledWith('Erreur lors du trie des thématiques'));
+      assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
+    });
   });
 
-  test('it should display sort theme pop-in', function(assert) {
-    // when
-    controller.displaySortThemesPopIn();
+  module('#tube sorting', function (hooks) {
+    let rollbackTubeAttributesStub, tube1_1, tube1_2, tube2_1;
 
-    // then
-    assert.ok(controller.sortingPopInTitle === 'Trie des thématiques');
-    assert.ok(controller.displaySortingPopIn);
-    assert.deepEqual(controller.sortingPopInApproveAction, controller.sortThemes);
-    assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelThemesSorting);
-  });
+    hooks.beforeEach(function () {
+      rollbackTubeAttributesStub = sinon.stub();
 
-  test('it should cancel theme sorting', function (assert) {
-    // given
-    controller.displaySortingPopIn = true;
+      tube1_1 = {
+        name: 'tube1',
+        rollbackAttributes: rollbackTubeAttributesStub
+      };
+      tube1_2 = {
+        name: 'tube2',
+        rollbackAttributes: rollbackTubeAttributesStub
+      };
+      tube2_1 = {
+        name: 'tube3',
+        rollbackAttributes: rollbackTubeAttributesStub
+      };
+      theme1.tubes = [tube1_1, tube1_2];
+      theme2.tubes = [tube2_1];
+    });
+    test('it should display sort tubes pop-in', function(assert) {
+      // when
+      controller.displaySortTubesPopIn();
 
-    // when
-    controller.cancelThemesSorting([theme1, theme2]);
+      // then
+      assert.ok(controller.sortingPopInTitle === 'Trie des tubes');
+      assert.ok(controller.sortingName === 'tube');
+      assert.ok(controller.displaySortingPopIn);
+      assert.deepEqual(controller.sortingPopInApproveAction, controller.sortTubes);
+      assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelTubesSorting);
+    });
 
-    // then
-    assert.notOk(controller.displaySortingPopIn);
-    assert.ok(rollbackAttributesStub.calledTwice);
-  });
+    test('it should cancel tube sorting', function (assert) {
+      // given
+      controller.displaySortingPopIn = true;
 
-  test('it should sort theme', async function (assert) {
-    // given
-    const saveStub = sinon.stub().resolves();
-    theme1.save = saveStub;
-    theme2.save = saveStub;
-    controller.displaySortingPopIn = true;
+      // when
+      controller.cancelTubesSorting([theme1, theme2]);
 
-    // when
-    await controller.sortThemes([theme1, theme2]);
+      // then
+      assert.notOk(controller.displaySortingPopIn);
+      assert.ok(rollbackTubeAttributesStub.calledThrice);
+    });
 
-    // then
-    assert.ok(loaderStartStub.calledOnce);
-    assert.notOk(controller.displaySortingPopIn);
-    assert.ok(saveStub.calledTwice);
-    assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Thématiques ordonnées'));
-  });
+    test('it should sort tubes', async function (assert) {
+      // given
+      const saveTubeStub = sinon.stub().resolves();
+      tube1_1.save = saveTubeStub;
+      tube1_2.save = saveTubeStub;
+      tube2_1.save = saveTubeStub;
+      controller.displaySortingPopIn = true;
 
-  test('it should throw an error if sort theme saving is wrong', async function (assert) {
-    // given
-    const errorMessage = {
-      'error': ['error']
-    };
-    const saveStub = sinon.stub().rejects(errorMessage);
-    theme1.save = saveStub;
-    theme2.save = saveStub;
-    controller.displaySortingPopIn = true;
+      // when
+      await controller.sortTubes([theme1, theme2]);
 
-    const errorStub = sinon.stub();
-    window.console.error = errorStub;
+      // then
+      assert.ok(loaderStartStub.calledOnce);
 
-    // when
-    await controller.sortThemes([theme1, theme2]);
+      assert.notOk(controller.displaySortingPopIn);
+      assert.ok(saveTubeStub.calledThrice);
+      assert.ok(loaderStopStub.calledOnce);
+      assert.ok(notifyMessageStub.calledWith('Tubes ordonnés'));
+    });
 
-    // then
-    assert.ok(loaderStartStub.calledOnce);
-    assert.ok(controller.displaySortingPopIn);
-    assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors du trie des thématiques'));
-    assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
+    test('it should throw an error if sort tubes saving is wrong', async function (assert) {
+      // given
+      const errorMessage = {
+        'error': ['error']
+      };
+      const saveTubeStub = sinon.stub().rejects(errorMessage);
+      tube1_1.save = saveTubeStub;
+      tube1_2.save = saveTubeStub;
+      tube2_1.save = saveTubeStub;
+      controller.displaySortingPopIn = true;
+
+      const errorStub = sinon.stub();
+      window.console.error = errorStub;
+
+      // when
+      await controller.sortTubes([theme1, theme2]);
+
+      // then
+      assert.ok(loaderStartStub.calledOnce);
+      assert.ok(controller.displaySortingPopIn);
+      assert.ok(loaderStopStub.calledOnce);
+      assert.ok(notifyErrorStub.calledWith('Erreur lors du trie des tubes'));
+      assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
+    });
   });
 });

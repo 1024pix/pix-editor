@@ -2,8 +2,15 @@
   <div class="ui standard modal visible active">
     <div data-test-sorting-pop-in-title class="header">{{@title}}</div>
     <div data-test-sorting-pop-in-content class="sortable-content">
+      {{#if this.isTubeSorting}}
+        <Field::Select data-test-select-theme @defaultText="Choisir une thématique"
+                                              @options={{this.themeOptions}}
+                                              @value={{this.selectedTheme}}
+                                              @edition={{true}}
+                                              @setValue={{this.selectTheme}}/>
+      {{/if}}
       <ul {{sortable-group onChange=this.reorderItems}}>
-        {{#each @model as |modelItem|}}
+        {{#each this.sortingGroupModel as |modelItem|}}
           <li {{sortable-item model=modelItem}} {{sortable-handle}}>
             <i class="ellipsis vertical icon"></i><span>{{modelItem.name}}</span><i class="ellipsis vertical icon"></i>
           </li>
