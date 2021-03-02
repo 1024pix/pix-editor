@@ -72,7 +72,7 @@ function newFilename({ challengeId, filename, type }) {
 
 function escapeField(field) {
   if (!field) {
-    return "";
+    return '';
   }
   return field.replace(/"/g, '""');
 }
