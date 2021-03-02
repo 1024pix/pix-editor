@@ -38,14 +38,22 @@ function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
   const illustrations = fields['Illustration de la consigne'];
   if (illustrations) {
     const [illustration] = illustrations;
-    const alt = escapeField(fields['Texte alternatif illustration']);
     const url = attachmentUrl({
       challengeId: id,
       filename: illustration.filename,
       type: 'illustration',
       bucketBaseUrl,
     });
-    csv.push(`${illustration.id},${illustration.filename},${illustration.size},"${alt}",${url},${illustration.type},illustration,${id}`);
+    pushToCsv(csv, [
+      illustration.id,
+      illustration.filename,
+      illustration.size,
+      fields['Texte alternatif illustration'] || '',
+      url,
+      illustration.type,
+      'illustration',
+      id,
+    ]);
   }
 
   const attachments = fields['Pièce jointe'];
@@ -57,7 +65,16 @@ function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
         type: 'attachment',
         bucketBaseUrl,
       });
-      csv.push(`${attachment.id},${attachment.filename},${attachment.size},,${url},${attachment.type},attachment,${id}`);
+      pushToCsv(csv, [
+        attachment.id,
+        attachment.filename,
+        attachment.size,
+        '',
+        url,
+        attachment.type,
+        'attachment',
+        id,
+      ]);
     });
   }
   return csv.join('\n');
@@ -70,6 +87,10 @@ function attachmentUrl({ challengeId, filename, type, bucketBaseUrl }) {
 
 function newFilename({ challengeId, filename, type }) {
   return `${challengeId}_${type}_${filename}`;
+}
+
+function pushToCsv(csv, fields) {
+  return csv.push(fields.map(v => `"${escapeField(`${v}`)}"`).join(','));
 }
 
 function escapeField(field) {

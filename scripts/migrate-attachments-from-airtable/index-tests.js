@@ -42,7 +42,7 @@ describe('challengeAttachmentsToCsv', () => {
     };
 
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/'
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"';
 
     const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
 
@@ -83,7 +83,7 @@ describe('challengeAttachmentsToCsv', () => {
     };
 
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/'
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"';
 
     const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
 
@@ -128,8 +128,8 @@ describe('challengeAttachmentsToCsv', () => {
     };
 
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-    const expectedCsv = 'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id' + '\n' +
-                        'attLwY7ni4a6Naboz,Pix_etoile.pptx,34753,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation,attachment,some-challenge-id';
+    const expectedCsv = '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"' + '\n' +
+                        '"attLwY7ni4a6Naboz","Pix_etoile.pptx","34753","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.pptx","application/vnd.openxmlformats-officedocument.presentationml.presentation","attachment","some-challenge-id"';
 
     const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl }  );
 
@@ -165,8 +165,8 @@ describe('challengeAttachmentsToCsv', () => {
     };
 
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id' + '\n' +
-                        'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"' + '\n' +
+                        '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id"';
 
 
     const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
@@ -192,7 +192,7 @@ describe('challengeAttachmentsToCsv', () => {
     };
 
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
-    const expectedCsv = 'attcKBWOyCUyATJ93,mailPJ.png,49502,\"Bonjour \"\"Monsieur\"\", \n Je suis un texte alternatif !\",https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png,image/png,illustration,some-challenge-id';
+    const expectedCsv = '"attcKBWOyCUyATJ93","mailPJ.png","49502","Bonjour ""Monsieur"", \n Je suis un texte alternatif !","https://dl.ovh.com/bucket/some-challenge-id_illustration_mailPJ.png","image/png","illustration","some-challenge-id"';
 
     const csv = challengeAttachmentsToCsv(challenge, { bucketBaseUrl });
 
@@ -233,10 +233,10 @@ describe('challengesAttachmentsToCsv', () => {
     const challenges = [challenge, challenge];
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
     const expectedCsv = 'id,filename,size,alt,url,mimeType,type,challengeId'+ '\n' +
-          'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png,image/png,illustration,some-challenge-id2' + '\n' +
-                        'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id2' + '\n' +
-    'attcKBWOyCUyATJ93,mailPJ.png,49502,"alternative text",https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png,image/png,illustration,some-challenge-id2' + '\n' +
-    'attmRoYR3AfCyUiLW,Pix_etoile.odp,21258,,https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp,application/vnd.oasis.opendocument.presentation,attachment,some-challenge-id2';
+          '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
+                        '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"' + '\n' +
+    '"attcKBWOyCUyATJ93","mailPJ.png","49502","alternative text","https://dl.ovh.com/bucket/some-challenge-id2_illustration_mailPJ.png","image/png","illustration","some-challenge-id2"' + '\n' +
+    '"attmRoYR3AfCyUiLW","Pix_etoile.odp","21258","","https://dl.ovh.com/bucket/some-challenge-id2_attachment_Pix_etoile.odp","application/vnd.oasis.opendocument.presentation","attachment","some-challenge-id2"';
 
     const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl });
 
