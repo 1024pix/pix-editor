@@ -3,6 +3,7 @@ const path = require('path');
 
 module.exports = {
   main,
+  attachmentUrl,
   challengeAttachmentsToCsv,
   challengesAttachmentsToCsv,
   renameFileToImport,
@@ -11,16 +12,16 @@ module.exports = {
 function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
   const challenges = require(backupBaseFolder + 'Epreuves.json');
-  const csv = challengesAttachmentsToCsv(challenges);
+  const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl: process.env.BUCKET_BASE_URL });
   if (process.argv.includes('--rename-files')) {
     renameChallengesAttachments(challenges, backupBaseFolder);
   }
   fs.writeFileSync(backupBaseFolder + 'challenges.csv', csv);
 }
 
-function challengesAttachmentsToCsv(challenges) {
+function challengesAttachmentsToCsv(challenges, { bucketBaseUrl }) {
   const headers = "id,filename,size,alt,url,mimeType,type,challengeId";
-  const lines = challenges.map(challenge => challengeAttachmentsToCsv(challenge)).filter( line => line !== '');
+  const lines = challenges.map(challenge => challengeAttachmentsToCsv(challenge, { bucketBaseUrl })).filter( line => line !== '');
   return headers + "\n" + lines.join('\n');
 }
 
@@ -29,7 +30,7 @@ function renameChallengesAttachments(challenges, backupBaseFolder) {
   challenges.forEach(challenge => renameFileToImport(challenge, (oldFilename, newFilename) => fs.copyFileSync(folder + oldFilename, folder + newFilename)));
 }
 
-function challengeAttachmentsToCsv(challenge) {
+function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
   const { fields } = challenge;
   const id = fields['Record ID'];
   const csv = [];
@@ -37,12 +38,18 @@ function challengeAttachmentsToCsv(challenge) {
   const illustrations = fields['Illustration de la consigne'];
   if (illustrations) {
     const [illustration] = illustrations;
-    pushInCsv(csv, [
+    const url = attachmentUrl({
+      challengeId: id,
+      filename: illustration.filename,
+      type: 'illustration',
+      bucketBaseUrl,
+    });
+    pushToCsv(csv, [
       illustration.id,
       illustration.filename,
       illustration.size,
       fields['Texte alternatif illustration'] || '',
-      illustration.url,
+      url,
       illustration.type,
       'illustration',
       id,
@@ -52,12 +59,18 @@ function challengeAttachmentsToCsv(challenge) {
   const attachments = fields['Pièce jointe'];
   if (attachments) {
     attachments.forEach((attachment) => {
-      pushInCsv(csv, [
+      const url = attachmentUrl({
+        challengeId: id,
+        filename: attachment.filename,
+        type: 'attachment',
+        bucketBaseUrl,
+      });
+      pushToCsv(csv, [
         attachment.id,
         attachment.filename,
         attachment.size,
         '',
-        attachment.url,
+        url,
         attachment.type,
         'attachment',
         id,
@@ -67,12 +80,17 @@ function challengeAttachmentsToCsv(challenge) {
   return csv.join('\n');
 }
 
-function pushInCsv(csv, fields) {
-  return csv.push(fields.map(v => `"${escapeField(`${v}`)}"`).join(','));
+function attachmentUrl({ challengeId, filename, type, bucketBaseUrl }) {
+  const encodedFilename = encodeURIComponent(newFilename({ challengeId, filename, type }))
+  return `${bucketBaseUrl}${encodedFilename}`;
 }
 
 function newFilename({ challengeId, filename, type }) {
   return `${challengeId}_${type}_${filename}`;
+}
+
+function pushToCsv(csv, fields) {
+  return csv.push(fields.map(v => `"${escapeField(`${v}`)}"`).join(','));
 }
 
 function escapeField(field) {
