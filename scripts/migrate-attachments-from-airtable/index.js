@@ -100,7 +100,7 @@ function escapeField(field) {
   return field.replace(/"/g, '""');
 }
 
-function renameFileToImport( challenge, renameFile ) {
+function renameFileToImport(challenge, renameFile) {
   const { fields } = challenge;
   const challengeId = fields['Record ID'];
 
