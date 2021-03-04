@@ -1,0 +1,113 @@
+const _ = require('lodash');
+const axios = require('axios');
+const hasha = require('hasha');
+
+module.exports = {
+  checkChallengeAttachments,
+}
+
+async function main() {
+  const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
+  const challenges = require(backupBaseFolder + 'Epreuves.json');
+  const attachments = require(backupBaseFolder + 'Attachments.json');
+  let challengeCount = 0;
+  for (const challenge of challenges ){
+    const errors = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
+    if (_.isEmpty(errors)) {
+      challengeCount ++;
+      console.log(challengeCount / challenges.length * 100 + "%");
+    } else {
+      console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`)
+    }
+  }
+  console.log(challengeCount)
+}
+
+async function checkChallengeAttachments(challenge, attachments, remoteChecksumComputer) {
+  const challengeAttachments = attachments.filter(({ fields }) => {
+    const challengeId = fields.challengeId;
+    return challengeId && challengeId[0] === challenge.fields['Record ID']
+  }).map(formatChallengeAttachment);
+  const expectedFiles = challengeAttachmentsToFiles(challenge);
+
+  for (const file of expectedFiles) {
+    file.checksum = await remoteChecksumComputer(file.url);
+    delete file.url;
+  }
+  
+  for (const challengeAttachment of challengeAttachments) {
+    challengeAttachment.checksum = await remoteChecksumComputer(challengeAttachment.url);
+    delete challengeAttachment.url;
+  }
+
+  return _.differenceWith(expectedFiles, challengeAttachments, _.isEqual);
+}
+
+function formatChallengeAttachment(attachment) {
+  return {
+    filename: attachment.fields.filename,
+    size: attachment.fields.size,
+    alt: attachment.fields.alt || '',
+    mimeType: attachment.fields.mimeType,
+    type: attachment.fields.type,
+    url: attachment.fields.url
+  }
+}
+
+function challengeAttachmentsToFiles(challenge) {
+  const { fields } = challenge;
+  const id = fields['Record ID'];
+  const files = [];
+
+  const illustrations = fields['Illustration de la consigne'];
+  if (illustrations) {
+    const [illustration] = illustrations;
+    files.push({
+      filename: illustration.filename,
+      size: illustration.size,
+      alt: sanitizeAltText(fields['Texte alternatif illustration']),
+      mimeType: illustration.type,
+      type: 'illustration',
+      url: illustration.url
+    });
+  }
+
+  const attachments = fields['Pièce jointe'];
+  if (attachments) {
+    attachments.forEach((attachment) => {
+      files.push({
+        filename: attachment.filename,
+        size: attachment.size,
+        alt: '',
+        mimeType: attachment.type,
+        type: 'attachment',
+        url: attachment.url
+        
+      });
+    });
+  }
+  return files;
+}
+
+function sanitizeAltText(text) {
+  if (text) {
+    return text.replace(/ \n/gm, '\n')
+  }
+  return ''
+}
+
+async function remoteChecksumComputer(url) {
+
+  const response = await axios({
+    url,
+    method: 'GET',
+    responseType: 'stream'
+  })
+
+  return hasha.fromStream(response.data, {algorithm: 'sha1'});
+}
+
+if (process.env.NODE_ENV !== 'test') {
+  main();
+}
+
