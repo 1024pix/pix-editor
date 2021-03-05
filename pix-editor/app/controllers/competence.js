@@ -216,17 +216,16 @@ export default class CompetenceController extends Controller {
 
   @action
   async sortThemes(themes) {
-    await this.saveSorting(themes, 'Thématiques ordonnées', 'Erreur lors du trie des thématiques');
+    await this._saveSorting(themes, 'Thématiques ordonnées', 'Erreur lors du trie des thématiques');
   }
 
   @action
   async sortTubes(themes) {
     const tubes = themes.map(theme => theme.tubes).flat();
-    await this.saveSorting(tubes, 'Tubes ordonnés', 'Erreur lors du trie des tubes');
+    await this._saveSorting(tubes, 'Tubes ordonnés', 'Erreur lors du trie des tubes');
   }
 
-  @action
-  async saveSorting(models, successMessage, errorMessage) {
+  async _saveSorting(models, successMessage, errorMessage) {
     this.loader.start();
     try {
       for (const model of models) {
@@ -245,17 +244,16 @@ export default class CompetenceController extends Controller {
 
   @action
   cancelThemesSorting(themes) {
-    this.cancelSorting(themes);
+    this._cancelSorting(themes);
   }
 
   @action
   cancelTubesSorting(themes) {
     const tubes = themes.map(theme => theme.tubes).flat();
-    this.cancelSorting(tubes);
+    this._cancelSorting(tubes);
   }
 
-  @action
-  cancelSorting(models) {
+  _cancelSorting(models) {
     models.forEach(model=>model.rollbackAttributes());
     this.displaySortingPopIn = false;
   }
