@@ -7,17 +7,20 @@ export default class StorageService extends Service {
   @service config;
   @service filePath;
 
-  async uploadFile(file, filename, date = Date) {
+  async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
     const url = this.config.storagePost + date.now() +  '.' + this.filePath.getExtension(file.name);
     return this._callAPIWithRetry(async (token) => {
+      const headers = {
+        'X-Auth-Token': token,
+        'Content-Type': file.type,
+      };
+      if (isAttachment) {
+        headers['Content-Disposition'] = `attachment; filename="${encodeURIComponent(filename)}"`;
+      }
       await file.uploadBinary(url, {
         method: 'PUT',
-        headers: {
-          'X-Auth-Token': token,
-          'Content-Type': file.type,
-          'Content-Disposition': `attachment; filename="${encodeURIComponent(filename)}"`,
-        },
+        headers,
       });
 
       return {

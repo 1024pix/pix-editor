@@ -537,7 +537,7 @@ export default class SingleController extends Controller {
     if (illustration && illustration.length > 0 && illustration.firstObject.file) {
       this._loadingMessage('Envoi de l\'illustration...');
       const file = illustration.firstObject.file;
-      const newIllustration = await this.storage.uploadFile(file);
+      const newIllustration = await this.storage.uploadFile({ file });
       await this._createOrUpdateIllustration(challenge, newIllustration);
       challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
     } else if (challenge.alternativeText) {
@@ -595,7 +595,7 @@ export default class SingleController extends Controller {
       } : inputAttachment;
     }
     const filename = this._getAttachmentFullFilename(challenge, inputAttachment.file.name);
-    const newAttachment = await this.storage.uploadFile(inputAttachment.file, filename);
+    const newAttachment = await this.storage.uploadFile({ file: inputAttachment.file, filename, isAttachment: true });
     const attachmentRecord = {
       filename,
       url: newAttachment.url,
