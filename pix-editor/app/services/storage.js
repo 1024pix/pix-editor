@@ -61,11 +61,6 @@ export default class StorageService extends Service {
     }
   }
 
-  uploadFiles(files) {
-    const requests = files.map(file => this.uploadFile(file));
-    return Promise.all(requests);
-  }
-
   getStorageToken(renew) {
     const config = this.config;
     if (!renew && typeof config.storageToken !== 'undefined') {
