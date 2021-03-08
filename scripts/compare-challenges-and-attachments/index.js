@@ -1,6 +1,8 @@
 const _ = require('lodash');
 const axios = require('axios');
 const hasha = require('hasha');
+const pLimit = require('p-limit');
+const limit = pLimit(300);
 
 module.exports = {
   checkChallengeAttachments,
@@ -11,16 +13,18 @@ async function main() {
   const challenges = require(backupBaseFolder + 'Epreuves.json');
   const attachments = require(backupBaseFolder + 'Attachments.json');
   let challengeCount = 0;
-  for (const challenge of challenges ){
-    const errors = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
-    if (_.isEmpty(errors)) {
-      challengeCount ++;
-      console.log(challengeCount / challenges.length * 100 + "%");
-    } else {
-      console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`)
-    }
-  }
-  console.log(challengeCount)
+  const promises = challenges.map(async (challenge) => {
+    await limit(async () => {
+      const errors = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
+      if (_.isEmpty(errors)) {
+        challengeCount ++;
+        console.log(challengeCount / challenges.length * 100 + "%");
+      } else {
+        console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`)
+      }
+    });
+  });
+  await Promise.all(promises);
 }
 
 async function checkChallengeAttachments(challenge, attachments, remoteChecksumComputer) {
@@ -68,7 +72,7 @@ function challengeAttachmentsToFiles(challenge) {
       alt: sanitizeAltText(fields['Texte alternatif illustration']),
       mimeType: illustration.type,
       type: 'illustration',
-      url: illustration.url
+      url: illustration.url,
     });
   }
 
@@ -81,8 +85,7 @@ function challengeAttachmentsToFiles(challenge) {
         alt: '',
         mimeType: attachment.type,
         type: 'attachment',
-        url: attachment.url
-        
+        url: attachment.url,
       });
     });
   }
