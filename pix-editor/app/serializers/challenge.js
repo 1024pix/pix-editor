@@ -5,6 +5,7 @@ export default class ChallengeSerializer extends AirtableSerializer {
   primaryKey = 'Record ID';
 
   attrs = {
+    alternativeInstructions:'Consigne alternative',
     instructions:'Consigne',
     genealogy:'Généalogie',
     skillNames:'acquis',

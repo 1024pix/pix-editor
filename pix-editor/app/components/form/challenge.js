@@ -4,6 +4,7 @@ import Component from '@glimmer/component';
 
 export default class ChallengeForm extends Component {
   @service config;
+  @service confirm;
 
   options = {
     'types': [
@@ -89,6 +90,18 @@ export default class ChallengeForm extends Component {
     return this.options.types.find(type=> type.value === actualType);
   }
 
+  get shouldDisplayAlternativeInstructionsField() {
+    return this.args.displayAlternativeInstructionsField || !!this.args.challenge.get('alternativeInstructions');
+  }
+
+  get toggleAlternativeInstructionButtonTitle() {
+    return this.shouldDisplayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
+  }
+
+  get toggleAlternativeInstructionButtonIcon() {
+    return this.shouldDisplayAlternativeInstructionsField ? 'minus' : 'plus';
+  }
+
   @action
   setChallengeType({ value }) {
     if (value === 'autoReply') {
@@ -121,6 +134,17 @@ export default class ChallengeForm extends Component {
     const removedFile = this.args.challenge.files.findBy('filename', removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
+    }
+  }
+
+  @action
+  async toggleAlternativeInstructionsField() {
+    if (this.shouldDisplayAlternativeInstructionsField) {
+      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la consigne alternative ?');
+      this.args.challenge.set('alternativeInstructions', '');
+      this.args.setDisplayAlternativeInstructionsField(false);
+    } else {
+      this.args.setDisplayAlternativeInstructionsField(true);
     }
   }
 }

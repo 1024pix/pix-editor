@@ -7,89 +7,182 @@ import EmberObject from '@ember/object';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupTest(hooks);
-  let controller, store, prototype1_1, prototype2_1, prototype2_2, challenge1_1, challenge2_1, challenge2_2, skill1, skill2, tube;
+  let controller, messageStub;
+
   hooks.beforeEach(function () {
     //given
     controller = this.owner.lookup('controller:competence/prototypes/single');
-    store = this.owner.lookup('service:store');
 
     class ConfirmService extends Service {
       ask = sinon.stub().resolves()
     }
-
-    this.owner.unregister('service:confirm');
     this.owner.register('service:confirm', ConfirmService);
-    controller._message = sinon.stub();
+    messageStub = sinon.stub();
+    controller._message = messageStub;
+  });
 
-    const saveStub = sinon.stub().resolves({});
+  module('It should save challenge', function(hooks) {
+    let saveCheckStub, handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
+      startStub, stopStub, challenge;
 
-    prototype1_1 = store.createRecord('challenge', {
-      id: 'rec_proto1_1',
-      pixId: 'pix_proto1_1',
-      genealogy: 'Prototype 1',
-      status: 'proposé',
-      save: saveStub
+    hooks.beforeEach(function () {
+      startStub = sinon.stub();
+      stopStub = sinon.stub();
+      class LoaderService extends Service {
+        start = startStub;
+        stop = stopStub;
+      }
+      this.owner.register('service:loader', LoaderService);
+
+      challenge = {
+        id: 'rec123456'
+      };
+      controller.model = challenge;
+
+      saveCheckStub = sinon.stub().resolves(challenge);
+      controller._saveCheck = saveCheckStub;
+
+      handleIllustrationStub = sinon.stub().resolves(challenge);
+      controller._handleIllustration = handleIllustrationStub;
+
+      handleAttachmentStub = sinon.stub().resolves(challenge);
+      controller._handleAttachments = handleAttachmentStub;
+
+      saveChallengeStub = sinon.stub().resolves(challenge);
+      controller._saveChallenge = saveChallengeStub;
+
+      saveAttachmentsStub = sinon.stub().resolves(challenge);
+      controller._saveAttachments = saveAttachmentsStub;
+
+      handleChangelogStub = sinon.stub().resolves(challenge);
+      controller._handleChangelog = handleChangelogStub;
+
+      controller.wasMaximized = true;
+      controller.displayAlternativeInstructionsField = true;
     });
-    challenge1_1 = store.createRecord('challenge', {
-      id: 'rec_challenge1_1',
-      pixId: 'pix_challenge1_1',
-      status: 'proposé',
-      save: saveStub
+
+    test('it should call handler with appropriate args', async function(assert) {
+      // given
+      const changelog = 'some changelog';
+
+      // when
+      await controller._saveChallengeCallback(changelog);
+
+      // then
+      assert.ok(startStub.calledOnce);
+      assert.ok(saveCheckStub.calledWith(challenge));
+      assert.ok(handleIllustrationStub.calledWith(challenge));
+      assert.ok(handleAttachmentStub.calledWith(challenge));
+      assert.ok(saveChallengeStub.calledWith(challenge));
+      assert.ok(saveAttachmentsStub.calledWith(challenge));
+      assert.ok(handleChangelogStub.calledWith(challenge, changelog));
+      assert.ok(messageStub.calledWith('Épreuve mise à jour'));
+      assert.ok(stopStub.calledOnce);
+
     });
-    prototype2_1 = store.createRecord('challenge', {
-      id: 'rec_proto2_1',
-      pixId: 'pix_proto2_1',
-      status: 'validé',
-      genealogy: 'Prototype 1',
-      save: saveStub
+
+    test('it should reinitialize edition',  async function(assert) {
+      // given
+      controller.edition = true;
+      controller.displayAlternativeInstructionsField = true;
+
+      // when
+      await controller._saveChallengeCallback();
+
+      // then
+      assert.notOk(controller.displayAlternativeInstructionsField);
+      assert.notOk(controller.edition);
     });
-    challenge2_1 = store.createRecord('challenge', {
-      id: 'rec_challenge2_1',
-      pixId: 'pix_challenge2_1',
-      status: 'validé',
-      save: saveStub
-    });
-    prototype2_2 = store.createRecord('challenge', {
-      id: 'rec_proto2_2',
-      pixId: 'pix_proto2_2',
-      status: 'proposé',
-      genealogy: 'Prototype 1',
-      save: saveStub
-    });
-    challenge2_2 = store.createRecord('challenge', {
-      id: 'rec_challenge2_2',
-      pixId: 'pix_challenge2_2',
-      status: 'proposé',
-      save: saveStub
-    });
-    skill1 = store.createRecord('skill', {
-      id: 'rec_skill1',
-      pixId: 'pix_skill1',
-      status: 'en construction',
-      level:1,
-      challenges: [prototype1_1, challenge1_1],
-      save: saveStub
-    });
-    skill2 = store.createRecord('skill', {
-      id: 'rec_skill2',
-      pixId: 'pix_skill2',
-      status: 'actif',
-      level:1,
-      challenges: [prototype2_1, challenge2_1, prototype2_2, challenge2_2],
-      save: saveStub
-    });
-    tube = run(() => {
-      return store.createRecord('tube', {
-        id: 'rec_tube',
-        skills: [skill1, skill2]
-      });
-    });
-    tube.skills.forEach(skill=>{
-      skill.tube = tube;
+
+    test('it should catch error if saving is wrong', async function(assert) {
+      // given
+      const errorMessageStub = sinon.stub();
+      controller._errorMessage = errorMessageStub;
+
+      const wrongSaveCheckStub = sinon.stub().rejects();
+      controller._saveCheck = wrongSaveCheckStub;
+      // when
+      await controller._saveChallengeCallback();
+
+      // then
+      assert.ok(wrongSaveCheckStub.calledOnce);
+      assert.ok(errorMessageStub.calledWith('Erreur lors de la mise à jour'));
     });
   });
 
-  module('on prototype validation', function () {
+  module('on prototype validation', function (hooks) {
+    let prototype1_1, prototype2_1, prototype2_2, challenge1_1, challenge2_1, challenge2_2, skill1, skill2, tube;
+
+    hooks.beforeEach(function () {
+      const saveStub = sinon.stub().resolves({});
+      const store = this.owner.lookup('service:store');
+
+      prototype1_1 = store.createRecord('challenge', {
+        id: 'rec_proto1_1',
+        pixId: 'pix_proto1_1',
+        genealogy: 'Prototype 1',
+        status: 'proposé',
+        save: saveStub
+      });
+      challenge1_1 = store.createRecord('challenge', {
+        id: 'rec_challenge1_1',
+        pixId: 'pix_challenge1_1',
+        status: 'proposé',
+        save: saveStub
+      });
+      prototype2_1 = store.createRecord('challenge', {
+        id: 'rec_proto2_1',
+        pixId: 'pix_proto2_1',
+        status: 'validé',
+        genealogy: 'Prototype 1',
+        save: saveStub
+      });
+      challenge2_1 = store.createRecord('challenge', {
+        id: 'rec_challenge2_1',
+        pixId: 'pix_challenge2_1',
+        status: 'validé',
+        save: saveStub
+      });
+      prototype2_2 = store.createRecord('challenge', {
+        id: 'rec_proto2_2',
+        pixId: 'pix_proto2_2',
+        status: 'proposé',
+        genealogy: 'Prototype 1',
+        save: saveStub
+      });
+      challenge2_2 = store.createRecord('challenge', {
+        id: 'rec_challenge2_2',
+        pixId: 'pix_challenge2_2',
+        status: 'proposé',
+        save: saveStub
+      });
+      skill1 = store.createRecord('skill', {
+        id: 'rec_skill1',
+        pixId: 'pix_skill1',
+        status: 'en construction',
+        level:1,
+        challenges: [prototype1_1, challenge1_1],
+        save: saveStub
+      });
+      skill2 = store.createRecord('skill', {
+        id: 'rec_skill2',
+        pixId: 'pix_skill2',
+        status: 'actif',
+        level:1,
+        challenges: [prototype2_1, challenge2_1, prototype2_2, challenge2_2],
+        save: saveStub
+      });
+      tube = run(() => {
+        return store.createRecord('tube', {
+          id: 'rec_tube',
+          skills: [skill1, skill2]
+        });
+      });
+      tube.skills.forEach(skill=>{
+        skill.tube = tube;
+      });
+    });
+
     test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
       //when
       await controller._archivePreviousPrototype(prototype2_2);
@@ -99,6 +192,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.equal(challenge2_1.status, 'archivé');
       assert.equal(challenge2_2.status, 'périmé');
     });
+
     test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
       //when
       await controller._archiveOtherActiveSkillVersion(prototype1_1);
@@ -110,6 +204,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.equal(prototype2_2.status, 'périmé');
       assert.equal(challenge2_2.status, 'périmé');
     });
+
     test('it should validate skill', async function (assert) {
       //given
       prototype1_1.validate();
@@ -131,6 +226,29 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       //then
       assert.equal(challenge1_1.status, 'validé');
     });
+  });
+
+  test('it should cancel edition', async function(assert) {
+    // given
+    controller.edition = true;
+    controller.displayAlternativeInstructionsField = true;
+    controller.wasMaximized = true;
+    const rollbackAttributesStub = sinon.stub();
+    const challenge = EmberObject.create({
+      id: 'recChallenge',
+      files: [],
+      rollbackAttributes: rollbackAttributesStub
+    });
+    controller.model = challenge;
+
+    // when
+    await controller.cancelEdit();
+
+    // then
+    assert.notOk(controller.displayAlternativeInstructionsField);
+    assert.notOk(controller.edition);
+    assert.ok(rollbackAttributesStub.calledOnce);
+    assert.ok(messageStub.calledWith('Modification annulée'));
   });
 
   module('_handleIllustration', function(hooks) {

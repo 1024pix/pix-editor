@@ -4,6 +4,7 @@ import Model, { attr, hasMany } from '@ember-data/model';
 export default class ChallengeModel extends Model {
 
   @attr instructions;
+  @attr alternativeInstructions;
   @attr type;
   @attr format;
   @attr suggestion;
