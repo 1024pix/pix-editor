@@ -76,6 +76,7 @@ describe('Acceptance | Controller | release-controller', () => {
             proposals: 'Propositions du Challenge',
             type: 'Type d\'épreuve',
             solution: 'Bonnes réponses du Challenge',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
             t1Status: 'T1 - Espaces, casse & accents',
             t2Status: 'T2 - Ponctuation',
             t3Status: 'T3 - Distance d\'édition',
