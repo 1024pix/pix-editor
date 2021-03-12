@@ -90,16 +90,16 @@ export default class ChallengeForm extends Component {
     return this.options.types.find(type=> type.value === actualType);
   }
 
-  get hasAlternativeInstructionsOrDisplayAlternativeInstructionsField() {
+  get shouldDisplayAlternativeInstructionsField() {
     return this.args.displayAlternativeInstructionsField || !!this.args.challenge.get('alternativeInstructions');
   }
 
   get toggleAlternativeInstructionButtonTitle() {
-    return this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
+    return this.shouldDisplayAlternativeInstructionsField ? 'Supprimer la consigne alternative' : 'Ajouter une consigne alternative';
   }
 
   get toggleAlternativeInstructionButtonIcon() {
-    return this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField ? 'minus' : 'plus';
+    return this.shouldDisplayAlternativeInstructionsField ? 'minus' : 'plus';
   }
 
   @action
@@ -139,7 +139,7 @@ export default class ChallengeForm extends Component {
 
   @action
   async toggleAlternativeInstructionsField() {
-    if (this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField) {
+    if (this.shouldDisplayAlternativeInstructionsField) {
       await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la consigne alternative ?');
       this.args.challenge.set('alternativeInstructions', '');
       this.args.setDisplayAlternativeInstructionsField(false);

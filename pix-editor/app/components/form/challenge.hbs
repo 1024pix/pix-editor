@@ -1,77 +1,161 @@
 <form action="" class="ui form">
-  <Field::Mde @title="Consigne" @value={{@challenge.instructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.instructions)}}/>
+  <Field::Mde @title="Consigne"
+              @value={{@challenge.instructions}}
+              @edition={{@edition}}
+              @helpContent={{this.helpInstructions}}
+              @setValue={{fn (mut @challenge.instructions)}}/>
   {{#if @edition}}
     <div class="ui text menu note-menu">
-      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsField}} type="button"><i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>{{this.toggleAlternativeInstructionButtonTitle}}</button>
+      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsField}} type="button">
+        <i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>
+        {{this.toggleAlternativeInstructionButtonTitle}}
+      </button>
     </div>
   {{/if}}
-  {{#if this.hasAlternativeInstructionsOrDisplayAlternativeInstructionsField}}
-    <Field::Mde data-test-alternative-instructions-field @title="Consigne alternative" @value={{@challenge.alternativeInstructions}} @edition={{@edition}} @helpContent={{this.helpInstructions}} @setValue={{fn (mut @challenge.alternativeInstructions)}}/>
+  {{#if this.shouldDisplayAlternativeInstructionsField}}
+    <Field::Mde @title="Consigne alternative"
+                @value={{@challenge.alternativeInstructions}}
+                @edition={{@edition}}
+                @helpContent={{this.helpInstructions}}
+                @setValue={{fn (mut @challenge.alternativeInstructions)}}
+                data-test-alternative-instructions-field />
   {{/if}}
   {{#if @challenge.isPrototype}}
-    <Field::Select @title="Type" @value={{this.challengeTypeValue}} @options={{this.options.types}} @edition={{@edition}} @setValue={{this.setChallengeType}}/>
+    <Field::Select @title="Type"
+                   @value={{this.challengeTypeValue}}
+                   @options={{this.options.types}}
+                   @edition={{@edition}}
+                   @setValue={{this.setChallengeType}} />
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
-    <Field::Select data-test-format-field @title="Format QROC" @value={{@challenge.format}} @defaultText="Mots" @options={{this.options.format}} @edition={{@edition}} @setValue={{fn (mut @challenge.format)}}/>
+    <Field::Select @title="Format QROC"
+                   @value={{@challenge.format}}
+                   @defaultText="Mots"
+                   @options={{this.options.format}}
+                   @edition={{@edition}}
+                   @setValue={{fn (mut @challenge.format)}}
+                   data-test-format-field />
   {{/if}}
   {{#unless this.isAutoReply}}
-    <Field::Textarea data-test-suggestion-field @title="Propositions" @value={{@challenge.suggestion}} @edition={{@edition}} @helpContent={{this.helpSuggestions}} />
+    <Field::Textarea @title="Propositions"
+                     @value={{@challenge.suggestion}}
+                     @edition={{@edition}}
+                     @helpContent={{this.helpSuggestions}}
+                     data-test-suggestion-field />
   {{/unless}}
-  <Field::Textarea data-test-answers-field @title="Réponses" @value={{@challenge.answers}} @edition={{@edition}} @helpContent={{this.helpAnswers}} />
+  <Field::Textarea @title="Réponses"
+                   @value={{@challenge.answers}}
+                   @edition={{@edition}}
+                   @helpContent={{this.helpAnswers}}
+                   data-test-answers-field />
   {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
       <div id="toleranceField" data-test-tolerence-fields class={{concat "field" (if @edition "" " disabled")}}>
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
-                <Field::Checkbox @label="T1 (espaces/casse/accents)" @checked={{@challenge.t1}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T1 (espaces/casse/accents)"
+                                 @checked={{@challenge.t1}}
+                                 @disabled={{not @edition}} />
               </div>
               <div class="field">
-                <Field::Checkbox @label="T2 (ponctuation)" @checked={{@challenge.t2}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T2 (ponctuation)"
+                                 @checked={{@challenge.t2}}
+                                 @disabled={{not @edition}} />
               </div>
               <div class="field">
-                <Field::Checkbox @label="T3 (distance d'édition)" @checked={{@challenge.t3}} @disabled={{not @edition}} />
+                <Field::Checkbox @label="T3 (distance d'édition)"
+                                 @checked={{@challenge.t3}}
+                                 @disabled={{not @edition}} />
               </div>
           </div>
       </div>
   {{/if}}
   {{#if @challenge.supportsScoring}}
-    <Field::Textarea @value={{@challenge.scoring}} @title="Scoring" @edition={{@edition}} @helpContent={{this.helpScoring}} />
+    <Field::Textarea @value={{@challenge.scoring}}
+                     @title="Scoring"
+                     @edition={{@edition}}
+                     @helpContent={{this.helpScoring}} />
   {{/if}}
-  <Field::Illustration data-test-file-input-illustration @title="Illustration" @value={{@challenge.illustration}} @edition={{@edition}} @setValue={{fn (mut @challenge.illustration)}} @removeIllustration={{this.removeIllustration}} @display={{@showIllustration}} />
+  <Field::Illustration @title="Illustration"
+                       @value={{@challenge.illustration}}
+                       @edition={{@edition}}
+                       @setValue={{fn (mut @challenge.illustration)}}
+                       @removeIllustration={{this.removeIllustration}}
+                       @display={{@showIllustration}}
+                       data-test-file-input-illustration />
   {{#if @challenge.illustration}}
-    <Field::Textarea @value={{@challenge.alternativeText}} @title="Texte alternatif" @edition={{@edition}} />
+    <Field::Textarea @value={{@challenge.alternativeText}}
+                     @title="Texte alternatif"
+                     @edition={{@edition}} />
   {{/if}}
-  <Field::Files data-test-file-input-attachment @title="Pièces jointes" @value={{@challenge.attachments}} @baseName={{@challenge.attachmentBaseName}} @setValue={{fn (mut @challenge.attachments)}} @edition={{@edition}} @removeAttachment={{this.removeAttachment}}/>
-  <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
-  <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
-  <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
+  <Field::Files @title="Pièces jointes"
+                @value={{@challenge.attachments}}
+                @baseName={{@challenge.attachmentBaseName}}
+                @setValue={{fn (mut @challenge.attachments)}}
+                @edition={{@edition}}
+                @removeAttachment={{this.removeAttachment}}
+                data-test-file-input-attachment />
+  <Field::Input @title="Embed"
+                @value={{@challenge.embedURL}}
+                @edition={{@edition}}
+                @label="URL" />
+  <Field::Input @value={{@challenge.embedHeight}}
+                @edition={{@edition}}
+                @label="Hauteur" />
+  <Field::Input @value={{@challenge.embedTitle}}
+                @edition={{@edition}}
+                @label="Titre" />
   {{#if @challenge.isPrototype}}
-    <Field::Select @title="Type pédagogie" @value={{@challenge.pedagogy}} @options={{this.options.pedagogy}} @edition={{@edition}} @setValue={{fn (mut @challenge.pedagogy)}}/>
+    <Field::Select @title="Type pédagogie"
+                   @value={{@challenge.pedagogy}}
+                   @options={{this.options.pedagogy}}
+                   @edition={{@edition}}
+                   @setValue={{fn (mut @challenge.pedagogy)}}/>
   {{/if}}
   {{#if @challenge.isPrototype}}
-    <Field::Select @title="Déclinable" @value={{@challenge.declinable}} @options={{this.options.declinable}} @edition={{@edition}} @setValue={{fn (mut @challenge.declinable)}}/>
+    <Field::Select @title="Déclinable"
+                   @value={{@challenge.declinable}}
+                   @options={{this.options.declinable}}
+                   @edition={{@edition}}
+                   @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
     <div class={{concat "field" (if @edition "" " disabled")}}>
-        <Field::Checkbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
+        <Field::Checkbox @label="Timer"
+                         @checked={{@challenge.timerOn}}
+                         @disabled={{not @edition}} />
       {{#if @challenge.timer}}
-        <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
+        <Field::Input @value={{@challenge.timer}}
+                      @edition={{@edition}} />
       {{/if}}
     </div>
   {{#if @challenge.isDraft}}
-      <Field::Quality @edition={{@edition}} @challenge={{@challenge}}/>
+      <Field::Quality @edition={{@edition}}
+                      @challenge={{@challenge}}/>
   {{/if}}
   <div class={{concat "field" (if @edition "" " disabled")}}>
       <label>Internationalisation</label>
       <div class="two fields">
           <div class="field">
-            <Field::Select @title="Langue(s)" @value={{@challenge.languages}} @edition={{@edition}} @multiple={{true}} @options={{this.options.languages}} @setValue={{fn (mut @challenge.languages)}}/>
+            <Field::Select @title="Langue(s)"
+                           @value={{@challenge.languages}}
+                           @edition={{@edition}}
+                           @multiple={{true}}
+                           @options={{this.options.languages}}
+                           @setValue={{fn (mut @challenge.languages)}}/>
           </div>
           <div class="field">
-            <Field::Select @title="Géographie" @value={{@challenge.area}} @edition={{@edition}} @multiple={{false}} @options={{this.options.area}} @setValue={{fn (mut @challenge.area)}} />
+            <Field::Select @title="Géographie"
+                           @value={{@challenge.area}}
+                           @edition={{@edition}}
+                           @multiple={{false}}
+                           @options={{this.options.area}}
+                           @setValue={{fn (mut @challenge.area)}} />
           </div>
       </div>
   </div>
   {{#unless @edition}}
-    <Field::Input @value={{@challenge.pixId}} @title="Id" @edition={{false}} />
+    <Field::Input @value={{@challenge.pixId}}
+                  @title="Id"
+                  @edition={{false}} />
   {{/unless}}
 </form>
