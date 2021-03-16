@@ -8,9 +8,6 @@ const courseDatasource = require('../datasources/airtable/course-datasource');
 
 const { knex } = require('../../../db/knex-database-connection');
 
-const pixApiClient = require('../pix-api-client');
-const createdReleaseNotifier = require('../event-notifier/created-release-notifier');
-
 module.exports = {
   getCurrentContentAsStream(writableStream) {
     const timer = setInterval(() => {
@@ -35,8 +32,6 @@ module.exports = {
     const release = await knex('releases')
       .returning(['id', 'content', 'createdAt'])
       .insert({ content });
-
-    await createdReleaseNotifier.notify({ pixApiClient });
 
     return release[0];
   },
