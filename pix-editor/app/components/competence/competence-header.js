@@ -21,18 +21,18 @@ export default class CompetenceHeader extends Component {
   languageOptions = [{
     id: false,
     title: 'Filtre par langue'
-  },{
-    id: 'Francophone'
-  }, {
-    id: 'Franco Français'
   }, {
     id: 'Anglais'
   }, {
     id: 'Espagnol'
   }, {
+    id: 'Francophone'
+  }, {
+    id: 'Franco Français'
+  }, {
     id: 'Italie'
   }, {
-    id: 'Allemand'
+    id: 'Portugais'
   }];
 
   get liteClass() {
