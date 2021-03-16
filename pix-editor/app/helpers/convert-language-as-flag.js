@@ -16,6 +16,8 @@ export function convertLanguageAsFlag([language]) {
       return 'it';
     case 'Allemand':
       return 'de';
+    case 'Portugais':
+      return 'pt';
   }
 }
 
