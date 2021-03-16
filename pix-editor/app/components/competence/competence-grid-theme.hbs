@@ -16,18 +16,12 @@
             {{@theme.name}}
           {{/if}}
         </td>
-        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
-                                        @tube={{tube}}
-                                        @section={{@section}}
-                                        @view={{@view}}
-                                        @link={{@link}}/>
-      {{else}}
-        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
-                                        @tube={{tube}}
-                                        @section={{@section}}
-                                        @view={{@view}}
-                                        @link={{@link}}/>
       {{/if}}
+        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                        @tube={{tube}}
+                                        @section={{@section}}
+                                        @view={{@view}}
+                                        @link={{@link}}/>
     </tr>
   {{/each}}
 {{/if}}
