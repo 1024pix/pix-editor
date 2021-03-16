@@ -1,7 +1,7 @@
 const bunyan = require('bunyan');
 const settings = require('../config');
 
-const logger = bunyan.createLogger({ name: 'pix-api', streams: [] });
+const logger = bunyan.createLogger({ name: 'pix-lcms-api', streams: [] });
 
 if (settings.logging.enabled) {
 
