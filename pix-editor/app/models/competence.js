@@ -22,6 +22,10 @@ export default class CompetenceModel extends Model {
     return this.rawThemes.filter(theme => theme.name.indexOf('workbench') === -1);
   }
 
+  get sortedThemes() {
+    return this.themes.sortBy('name');
+  }
+
   get productionTubes() {
     let allTubes = this.rawTubes;
     allTubes = allTubes.filter(tube => tube.hasProductionChallenge);

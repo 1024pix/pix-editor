@@ -1,17 +1,10 @@
 import Route from '@ember/routing/route';
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 
-export default class SingleRoute extends Route {
 
-  @service currentData;
-
+export default class CompetenceThemesSingleRoute extends Route {
   model(params) {
-    return this.store.findRecord('tube', params.tube_id);
-  }
-
-  afterModel(model) {
-    this.currentData.setPrototype(model);
+    return this.store.findRecord('theme', params.theme_id);
   }
 
   setupController(controller) {
@@ -24,9 +17,13 @@ export default class SingleRoute extends Route {
 
   @action
   willTransition(transition) {
-    if (this.controllerFor('competence.tubes.single').edition &&
+    const controller = this.controllerFor('competence.tubes.single');
+    if (controller.edition &&
       !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
+    } else if (controller.edition) {
+      controller.model.rollbackAttributes();
+      return true;
     } else {
       return true;
     }

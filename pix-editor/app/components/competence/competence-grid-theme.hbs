@@ -1,0 +1,27 @@
+{{#if (and this.isWorkbenchSkillView this.hasNoTubes)}}
+  <tr>
+    <td data-test-theme-cell class="theme-cell">
+      <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+    </td>
+    <td data-test-empty-row colspan="8" class="empty-row"></td>
+  </tr>
+{{else}}
+  {{#each this.tubesOrProductionTubes as |tube index|}}
+    <tr>
+      {{#if (eq index 0)}}
+        <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
+          {{#if this.isWorkbenchSkillView}}
+            <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+          {{else}}
+            {{@theme.name}}
+          {{/if}}
+        </td>
+      {{/if}}
+        <Competence::CompetenceGridTube @languageFilter={{@languageFilter}}
+                                        @tube={{tube}}
+                                        @section={{@section}}
+                                        @view={{@view}}
+                                        @link={{@link}}/>
+    </tr>
+  {{/each}}
+{{/if}}

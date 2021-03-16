@@ -33,13 +33,15 @@ module('Acceptance | competence/prototypes/list', function () {
       this.server.create('challenge', { id: challengeId2, instructions: 'instructionsChallenge2' });
       this.server.create('challenge', { id: 'recChallenge3' });
       this.server.create('skill', { id: skillId1, pixId: skillPixId1, name: skillName, version: 3, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1,status: 'périmé', challengeIds: ['recChallenge1'] });
-      this.server.create('skill', { id: skillId2, pixId: skillPixId2, name: skillName, version: 2,createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
+      this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1, status: 'périmé', challengeIds: ['recChallenge1'] });
+      this.server.create('skill', { id: skillId2, pixId: skillPixId2, name: skillName, version: 2, createdAt: '2018-12-11T13:38:35.000Z', status: 'en construction', challengeIds: [challengeId2] });
       this.server.create('skill', { id: 'recSkill3', challengeIds: ['recChallenge3'] });
       this.server.create('tube', { id: tubeId1, rawSkillIds: [skillId1, skillId2, deadSkillId] });
       this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill3'] });
-      this.server.create('competence', { id: competenceId1, pixId: 'pixId recCompetence1.1', rawTubeIds: [tubeId1] });
-      this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawTubeIds: ['recTube2'] });
+      this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tubeId1] });
+      this.server.create('theme', { id: 'recTheme2', rawTubeIds: ['recTube2'] });
+      this.server.create('competence', { id: competenceId1, pixId: 'pixId recCompetence1.1', rawTubeIds: [tubeId1], rawThemeIds: ['recTheme1'] });
+      this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawTubeIds: ['recTube2'], rawThemeIds: ['recTheme2'] });
       this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: [competenceId1] });
       this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
 

@@ -17,7 +17,7 @@
     <div class="ui attached segment competence {{this.size}}">
       {{#if this.displayGrid}}
         <Competence::CompetenceGrid
-          @tubes={{this.competence.sortedTubes}}
+          @themes={{this.competence.sortedThemes}}
           @languageFilter={{this.languageFilter}}
           @section={{this.section}}
           @view={{this.view}}
@@ -35,6 +35,7 @@
       @view={{this.view}}
       @selectView={{this.selectView}}
       @newTube={{this.newTube}}
+      @newTheme={{this.newTheme}}
       @newPrototype={{this.newPrototype}} />
   {{/unless}}
   {{outlet}}

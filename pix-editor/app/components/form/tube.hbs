@@ -2,8 +2,9 @@
   {{#if @edition}}
     <Field::Input @value={{@tube.name}} @edition={{@edition}} @label="Nom"/>
   {{/if}}
-  <Field::Input @value={{@tube.title}} @edition={{@edition}} @label="Titre"/>
-  <Field::Textarea @title="Description" @value={{@tube.description}} @edition={{@edition}} />
+  {{#if @creation}}
+    <Field::Select data-test-select-theme @title="Thématique *" @defaultText="Sélectionner une thématique" @value={{this.selectedTheme}} @options={{this.themeList}} @edition={{true}} @setValue={{this.selectTheme}}/>
+  {{/if}}
   <div class="ui raised segment">
     <Field::Input @value={{@tube.practicalTitleFr}} @edition={{@edition}} @label="Titre pratique (fr)"/>
     <Field::Textarea @title="Description pratique (fr) :" @value={{@tube.practicalDescriptionFr}} @edition={{@edition}} />

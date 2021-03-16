@@ -37,10 +37,23 @@ export default function () {
           'Titre fr-fr': competence.title,
           'Sous-domaine': competence.code,
           'Tubes': competence.rawTubeIds,
+          'Thematiques': competence.rawThemeIds,
           'Description': competence.description,
           'Origine': competence.source,
         }
       };
+    });
+    return _response(request, { records });
+  });
+
+  this.get('/airtable/content/Thematiques/:id', (schema, request) => {
+    const theme = schema.themes.find(request.params.id);
+    return _serializeTheme(theme);
+  });
+
+  this.get('/airtable/content/Thematiques', (schema, request) => {
+    const records = schema.themes.all().models.map(theme => {
+      return _serializeTheme(theme);
     });
     return _response(request, { records });
   });
@@ -251,6 +264,18 @@ function _serializeTube(tube) {
       'Competences': tube.competenceIds,
       'Acquis': tube.rawSkillIds,
       'id persistant': tube.pixId,
+    }
+  };
+}
+
+function _serializeTheme(theme) {
+  return {
+    id: theme.id,
+    fields: {
+      'Record Id': theme.id,
+      'Nom': theme.name,
+      'Competence': theme.competenceId,
+      'Tubes': theme.rawTubeIds
     }
   };
 }

@@ -37,6 +37,11 @@ Router.map(function() {
     this.route('i18n', function() {
       this.route('single', { path:'/:skill_id' });
     });
+
+    this.route('themes', function() {
+      this.route('single', { path:'/:theme_id' });
+      this.route('new');
+    });
   });
   this.route('skill', { path:'/skill/:skill_name' });
   this.route('challenge', { path:'/challenge/:challenge_id' });

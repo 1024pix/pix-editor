@@ -10,6 +10,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
   let source1, source2,
     area1_1, area1_2,
     competence1_1_1, competence1_2_1, competence1_2_2,
+    theme1_1_1_1, theme1_1_1_2, theme1_2_1_1,
     tube1_1_1_1, tube1_2_1_1, tube1_2_1_2, tube1_2_2_1,
     skill1_1_1_1_1, skill1_1_1_1_2,
     skill1_2_1_1_1, skill1_2_1_1_2, skill1_2_1_1_3,
@@ -113,20 +114,35 @@ module('Integration | Component | popin-select-location', function (hooks) {
       rawSkills: stubRelationship(),
       filledLiveSkills: [false, [skill1_2_2_1_1], [skill1_2_2_1_2], false, false, false, false]
     };
+    theme1_1_1_1 = {
+      name: 'theme1_1_1_1',
+    };
+    theme1_1_1_2 = {
+      name: 'theme1_1_1_2',
+    };
+    theme1_2_1_1 = {
+      name: 'theme1_2_1_1',
+    };
     competence1_1_1 = {
       name: 'competence1_1_1',
       rawTubes: stubRelationship(),
-      sortedTubes: [tube1_1_1_1]
+      rawThemes: stubRelationship(),
+      sortedTubes: [tube1_1_1_1],
+      sortedThemes: [theme1_1_1_1, theme1_1_1_2]
     };
     competence1_2_1 = {
       name: 'competence1_2_1',
       rawTubes: stubRelationship(),
-      sortedTubes: [tube1_2_1_1, tube1_2_1_2]
+      rawThemes: stubRelationship(),
+      sortedTubes: [tube1_2_1_1, tube1_2_1_2],
+      sortedThemes: [theme1_2_1_1]
     };
     competence1_2_2 = {
       name: 'competence1_2_2',
       rawTubes: stubRelationship(),
-      sortedTubes: [tube1_2_2_1]
+      rawThemes: stubRelationship(),
+      sortedTubes: [tube1_2_2_1],
+      sortedThemes: []
     };
     source1 = 'pix';
     source2 = 'pix +';
@@ -293,6 +309,69 @@ module('Integration | Component | popin-select-location', function (hooks) {
       options.forEach((option, i) => {
         assert.dom(option).hasText(`${expectedOptionsResult[i]}`);
       });
+    });
+  });
+  module('if `isTubeLocation`', function (hooks) {
+    let setCompetenceStub;
+    hooks.beforeEach(async function () {
+      // given
+      setCompetenceStub = sinon.stub();
+      this.setCompetence = setCompetenceStub;
+      this.name = tube1_2_1_1.name;
+      theme1_2_1_1.content = theme1_2_1_1;
+      this.theme = theme1_2_1_1;
+      this.close = ()=>{};
+
+      // when
+      await render(hbs`<PopIn::SelectLocation @onChange={{this.setCompetence}}
+                                              @name={{this.name}}
+                                              @theme={{this.theme}}
+                                              @isTubeLocation={{true}}
+                                              @close={{this.close}} />`);
+    });
+
+    test('it should display appropriate fields', async function (assert) {
+      // then
+      assert.dom('[data-test-select-source]').hasText('Référentiel pix');
+      assert.dom('[data-test-select-competence]').hasText('Compétence competence1_2_1');
+      assert.dom('[data-test-select-theme]').hasText('Thématique* theme1_2_1_1');
+    });
+
+    test('it should display a list of competence theme', async function (assert) {
+      // given
+      const expectedThemeOptions = ['theme1_1_1_1', 'theme1_1_1_2'];
+
+      // when
+      await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
+      await click(findAll('.ember-power-select-options li')[0]);
+      await click('[data-test-select-theme] .ember-basic-dropdown-trigger');
+
+      // then
+      const themeOptions = findAll('.ember-power-select-options li');
+      themeOptions.forEach((themeOption, index) => {
+        assert.dom(themeOption).hasText(expectedThemeOptions[index]);
+      });
+    });
+
+    test('it should disable button action if have no selected theme', async function (assert) {
+      // when
+      await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
+      await click(findAll('.ember-power-select-options li')[0]);
+
+      // then
+      assert.dom('[data-test-move-action]').hasClass('disabled');
+    });
+
+    test('it should call setCompetence with a competence and a theme', async function (assert) {
+      // when
+      await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
+      await click(findAll('.ember-power-select-options li')[0]);
+      await click('[data-test-select-theme] .ember-basic-dropdown-trigger');
+      await click(findAll('.ember-power-select-options li')[0]);
+      await click('[data-test-move-action]');
+
+      // then
+      assert.deepEqual(setCompetenceStub.getCall(0).args, [competence1_1_1, theme1_1_1_1]);
     });
   });
 });

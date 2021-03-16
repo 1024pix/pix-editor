@@ -1,7 +1,7 @@
 <div class="tube-header">
   <div class="ui menu">
     <div class="ui left menu">
-      {{#if this.mayMove}}
+      {{#if (and this.mayMove (not this.creation) (not this.edition))}}
         <button class="ui button icon item" {{on "click" this.selectCompetence}} type="button"><i class="icon random"></i></button>
       {{/if}}
     </div>
@@ -24,11 +24,11 @@
 </div>
 <div class="tube-details">
   <div class="tube-data" {{scroll-top this.edition}}>
-    <Form::Tube @tube={{this.tube}} @edition={{this.edition}} />
+    <Form::Tube @tube={{this.tube}} @edition={{this.edition}} @creation={{this.creation}} @setEmptyMandatoryField={{this.setEmptyMandatoryField}}/>
   </div>
   <div class="ui vertical compact labeled icon menu tube-menu">
     {{#if this.edition}}
-      <button class="ui button item important-action" {{on "click" this.save}} type="button">
+      <button class="ui button item important-action {{if this.disableSaveButton ' disabled'}}" {{on "click" this.save}} type="button">
         <i class="save icon"></i>
         Enregistrer
       </button>
@@ -57,6 +57,7 @@
   @class="tube-select-competence"
   @onChange={{this.setCompetence}}
   @name={{this.tube.name}}
-  @selectTubeLevel={{false}}
+  @theme={{this.tube.theme}}
+  @isTubeLocation={{true}}
   @close={{this.closeSelectCompetence}} />
 {{/if}}
