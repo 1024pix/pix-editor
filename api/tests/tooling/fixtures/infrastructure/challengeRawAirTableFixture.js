@@ -82,6 +82,7 @@ module.exports = function challengeRawAirTableFixture({ id, fields } = { id: 're
         },
       ],
       'Bonnes réponses': '1, 5',
+      'Bonnes réponses à afficher': '1, 5',
       '_Niveau': [
         '3',
       ],
