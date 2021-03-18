@@ -198,20 +198,20 @@ export default class CompetenceController extends Controller {
 
   @action
   displaySortThemesPopIn() {
-    this.sortingPopInApproveAction = this.sortThemes;
-    this.sortingPopInCancelAction = this.cancelThemesSorting;
-    this.sortingPopInTitle = 'Trie des thématiques';
-    this.displaySortingPopIn = true;
-    this.sortingName = 'theme';
+    this._displaySortPopIn(this.sortThemes, this.cancelThemesSorting, 'Tri des thématiques', 'theme');
   }
 
   @action
   displaySortTubesPopIn() {
-    this.sortingPopInApproveAction = this.sortTubes;
-    this.sortingPopInCancelAction = this.cancelTubesSorting;
-    this.sortingPopInTitle = 'Trie des tubes';
+    this._displaySortPopIn(this.sortTubes, this.cancelTubesSorting, 'Tri des tubes', 'tube');
+  }
+
+  _displaySortPopIn(approveAction, cancelAction, title, sortingName) {
+    this.sortingPopInApproveAction = approveAction;
+    this.sortingPopInCancelAction = cancelAction;
+    this.sortingPopInTitle = title;
+    this.sortingName = sortingName;
     this.displaySortingPopIn = true;
-    this.sortingName = 'tube';
   }
 
   @action
