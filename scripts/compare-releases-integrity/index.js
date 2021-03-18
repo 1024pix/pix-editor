@@ -2,9 +2,9 @@ const axios = require('axios');
 const _ = require('lodash');
 const hasha = require('hasha');
 const pLimit = require('p-limit');
-const limit = pLimit(200);
+const limit = pLimit(100);
 const ProgressBar = require('progress');
-
+const diff = require('variable-diff');
 
 module.exports = {
   compareReleases,
@@ -48,11 +48,17 @@ async function compareReleases({ url: url1, token: token1 }, { url: url2, token:
   const newChallenges1 = await replaceAttachmentsWithProgress(challenges1, remoteChecksumComputer);
   const newChallenges2 = await replaceAttachmentsWithProgress(challenges2, remoteChecksumComputer);
 
-  return _.chain(_.differenceWith(newChallenges1, newChallenges2, _.isEqual))
-    .reject(_.isEmpty)
-    .map('id')
-    .value();
+  const diffs = [];
+  newChallenges1.forEach((challenge, index) => {
+    if (!_.isEqual(challenge, newChallenges2[index])) {
+      diffs.push(challenge.id);
+      const difference = diff(challenge, newChallenges2[index])
+      console.log(challenge.id, difference.text);
+    }
+  });
+  return diffs;
 }
+
 
 async function getRelease(url, token) {
   const { data: { content: { challenges } } } = await axios.get(`${url}/api/releases/latest`, {
