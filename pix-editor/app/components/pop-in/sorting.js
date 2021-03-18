@@ -39,8 +39,6 @@ export default class PopInSortingComponent extends Component {
 
   @action
   reorderItems(models) {
-    models.forEach((model, index)=> {
-      model.index = index;
-    });
+    models.forEach((model, index) => model.index = index);
   }
 }

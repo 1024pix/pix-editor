@@ -110,7 +110,7 @@ module('Unit | Controller | competence', function(hooks) {
       controller.displaySortThemesPopIn();
 
       // then
-      assert.ok(controller.sortingPopInTitle === 'Trie des thématiques');
+      assert.ok(controller.sortingPopInTitle === 'Tri des thématiques');
       assert.ok(controller.sortingName === 'theme');
       assert.ok(controller.displaySortingPopIn);
       assert.deepEqual(controller.sortingPopInApproveAction, controller.sortThemes);
@@ -168,7 +168,7 @@ module('Unit | Controller | competence', function(hooks) {
       controller.displaySortTubesPopIn();
 
       // then
-      assert.ok(controller.sortingPopInTitle === 'Trie des tubes');
+      assert.ok(controller.sortingPopInTitle === 'Tri des tubes');
       assert.ok(controller.sortingName === 'tube');
       assert.ok(controller.displaySortingPopIn);
       assert.deepEqual(controller.sortingPopInApproveAction, controller.sortTubes);

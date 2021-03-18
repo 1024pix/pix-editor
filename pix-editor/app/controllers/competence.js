@@ -22,7 +22,7 @@ export default class CompetenceController extends Controller {
   @tracked sortingPopInTitle = '';
   @tracked sortingPopInApproveAction = null;
   @tracked sortingPopInCancelAction = null;
-  @tracked sortingName = undefined;
+  @tracked sortingName;
 
   @service router;
   @service config;
@@ -254,7 +254,7 @@ export default class CompetenceController extends Controller {
   }
 
   _cancelSorting(models) {
-    models.forEach(model=>model.rollbackAttributes());
+    models.forEach(model => model.rollbackAttributes());
     this.displaySortingPopIn = false;
   }
 }
