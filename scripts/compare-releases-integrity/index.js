@@ -2,7 +2,9 @@ const axios = require('axios');
 const _ = require('lodash');
 const hasha = require('hasha');
 const pLimit = require('p-limit');
-const limit = pLimit(300);
+const limit = pLimit(200);
+const ProgressBar = require('progress');
+
 
 module.exports = {
   compareReleases,
@@ -25,12 +27,15 @@ async function main() {
 }
 
 function replaceAttachmentsWithProgress(challenges, remoteChecksumComputer) {
-  let progress = 0;
+  const bar = new ProgressBar('Replacing attachments url by checksum [:bar] :percent', {
+    total: challenges.length,
+    width: 50,
+  });
+
   return Promise.all(challenges.map(async (challenge) => {
     return limit(async () => {
       const newChallenge = await replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer);
-      progress++;
-      console.log(progress / challenges.length * 100 + "%");
+      bar.tick();
       return newChallenge;
     });
   }));
