@@ -102,6 +102,18 @@ export default class ChallengeForm extends Component {
     return this.shouldDisplayAlternativeInstructionsField ? 'minus' : 'plus';
   }
 
+  get shouldDisplaySolutionToDisplayField() {
+    return this.args.displaySolutionToDisplayField || !!this.args.challenge.get('solutionToDisplay');
+  }
+
+  get toggleSolutionToDisplayButtonTitle() {
+    return this.shouldDisplaySolutionToDisplayField ? 'Supprimer la bonne réponse à afficher' : 'Ajouter une bonne réponse à afficher';
+  }
+
+  get toggleSolutionToDisplayButtonIcon() {
+    return this.shouldDisplaySolutionToDisplayField ? 'minus' : 'plus';
+  }
+
   @action
   setChallengeType({ value }) {
     if (value === 'autoReply') {
@@ -145,6 +157,17 @@ export default class ChallengeForm extends Component {
       this.args.setDisplayAlternativeInstructionsField(false);
     } else {
       this.args.setDisplayAlternativeInstructionsField(true);
+    }
+  }
+
+  @action
+  async toggleSolutionToDisplayField() {
+    if (this.shouldDisplaySolutionToDisplayField) {
+      await this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer la bonne réponse à afficher ?');
+      this.args.challenge.set('solutionToDisplay', '');
+      this.args.setDisplaySolutionToDisplayField(false);
+    } else {
+      this.args.setDisplaySolutionToDisplayField(true);
     }
   }
 }

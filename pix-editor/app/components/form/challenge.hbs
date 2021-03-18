@@ -70,6 +70,20 @@
           </div>
       </div>
   {{/if}}
+  {{#if @edition}}
+    <div class="ui text menu note-menu">
+      <button data-test-solution-to-display-button class="ui button item" {{on "click" this.toggleSolutionToDisplayField}} type="button">
+        <i class="{{this.toggleSolutionToDisplayButtonIcon}} icon"></i>
+        {{this.toggleSolutionToDisplayButtonTitle}}
+      </button>
+    </div>
+  {{/if}}
+  {{#if this.shouldDisplaySolutionToDisplayField}}
+    <Field::Textarea @title="Bonne réponse à afficher"
+                @value={{@challenge.solutionToDisplay}}
+                @edition={{@edition}}
+                data-test-solution-to-display-field />
+  {{/if}}
   {{#if @challenge.supportsScoring}}
     <Field::Textarea @value={{@challenge.scoring}}
                      @title="Scoring"

@@ -58,7 +58,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       controller._handleChangelog = handleChangelogStub;
 
       controller.wasMaximized = true;
-      controller.displayAlternativeInstructionsField = true;
     });
 
     test('it should call handler with appropriate args', async function(assert) {
@@ -85,12 +84,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       // given
       controller.edition = true;
       controller.displayAlternativeInstructionsField = true;
+      controller.displaySolutionToDisplayField = true;
 
       // when
       await controller._saveChallengeCallback();
 
       // then
       assert.notOk(controller.displayAlternativeInstructionsField);
+      assert.notOk(controller.displaySolutionToDisplayField);
       assert.notOk(controller.edition);
     });
 
@@ -232,6 +233,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     // given
     controller.edition = true;
     controller.displayAlternativeInstructionsField = true;
+    controller.displaySolutionToDisplayField = true;
     controller.wasMaximized = true;
     const rollbackAttributesStub = sinon.stub();
     const challenge = EmberObject.create({
@@ -246,6 +248,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
     // then
     assert.notOk(controller.displayAlternativeInstructionsField);
+    assert.notOk(controller.displaySolutionToDisplayField);
     assert.notOk(controller.edition);
     assert.ok(rollbackAttributesStub.calledOnce);
     assert.ok(messageStub.calledWith('Modification annulée'));

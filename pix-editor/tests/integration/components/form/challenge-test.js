@@ -124,4 +124,92 @@ module('Integration | Component | challenge-form', function(hooks) {
       assert.dom('[data-test-alternative-instructions-field]').doesNotExist();
     });
   });
+
+  module('if solutionToDisplay is empty', function (hooks) {
+
+    hooks.beforeEach(function () {
+      const challengeData = EmberObject.create({ solutionToDisplay: '' });
+      this.set('challengeData', challengeData);
+    });
+
+    test('solutionToDisplay field should be hidden', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} />`);
+
+      // then
+      assert.dom('[data-test-solution-to-display-button]').hasText('Ajouter une bonne réponse à afficher');
+      assert.dom('[data-test-solution-to-display-field ]').doesNotExist();
+    });
+
+    test('solutionToDisplay field be display if `displaySolutionToDisplayField` is true', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}}
+                                        @edition={{true}}
+                                        @displaySolutionToDisplayField={{true}} />`);
+
+      // then
+      assert.dom('[data-test-solution-to-display-button]').hasText('Supprimer la bonne réponse à afficher');
+      assert.dom('[data-test-solution-to-display-field]').exists();
+    });
+
+    test('it should call `setDisplaySolutionToDisplayField` on click with `true` as argument', async function(assert) {
+      // given
+      const setDisplaySolutionToDisplayFieldStub = sinon.stub();
+      this.set('setDisplaySolutionToDisplayField', setDisplaySolutionToDisplayFieldStub);
+
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}}
+                                        @edition={{true}}
+                                        @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}} />`);
+
+      await click(find('[data-test-solution-to-display-button]'));
+
+      // then
+      assert.ok(setDisplaySolutionToDisplayFieldStub.calledWith(true));
+    });
+  });
+
+  module('if solutionToDisplay is filled', function (hooks) {
+
+    let challengeData;
+
+    hooks.beforeEach(function () {
+      challengeData = EmberObject.create({ solutionToDisplay: 'Somme solution to display' });
+      this.set('challengeData', challengeData);
+    });
+
+    test('solutionToDisplay field should be displayed', async function (assert) {
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}} />`);
+
+      // then
+      assert.dom('[data-test-solution-to-display-button]').hasText('Supprimer la bonne réponse à afficher');
+      assert.dom('[data-test-solution-to-display-field]').exists();
+    });
+
+    test('it should call `setDisplaySolutionToDisplayField` as argument `false` and empty `challenge.solutionToDisplay` on click', async function (assert) {
+      // given
+      const confirmAskStub = sinon.stub().resolves();
+      class ConfirmService extends Service {
+        ask = confirmAskStub;
+      }
+      this.owner.register('service:confirm', ConfirmService);
+
+      const setDisplaySolutionToDisplayFieldStub = sinon.stub();
+      this.set('setDisplaySolutionToDisplayField', setDisplaySolutionToDisplayFieldStub);
+
+      // when
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}}
+                                        @edition={{true}}
+                                        @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}} />`);
+
+      await click(find('[data-test-solution-to-display-button]'));
+
+      // then
+      assert.ok(setDisplaySolutionToDisplayFieldStub.calledWith(false));
+      assert.ok(this.challengeData.solutionToDisplay === '');
+      assert.dom('[data-test-solution-to-display-button]').hasText('Ajouter une bonne réponse à afficher');
+      assert.dom('[data-test-solution-to-display-field]').doesNotExist();
+    });
+  });
 });

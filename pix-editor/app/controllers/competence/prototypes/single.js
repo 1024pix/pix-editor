@@ -13,6 +13,7 @@ export default class SingleController extends Controller {
 
   @tracked edition = false;
   @tracked displayAlternativeInstructionsField = false;
+  @tracked displaySolutionToDisplayField = false;
   @tracked creation = false;
   @tracked popinImageSrc = '';
   @tracked displayImage = false;
@@ -105,6 +106,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  setDisplaySolutionToDisplayField(value) {
+    this.displaySolutionToDisplayField = value;
+  }
+
+  @action
   showIllustration() {
     const illustration = this.challenge.illustration[0];
     this.popinImageSrc = illustration.url;
@@ -168,6 +174,7 @@ export default class SingleController extends Controller {
   async cancelEdit() {
     this.edition = false;
     this.displayAlternativeInstructionsField = false;
+    this.displaySolutionToDisplayField = false;
     this.challenge.rollbackAttributes();
     await this.challenge.files;
     this.challenge.files.forEach((file) => file.rollbackAttributes());
@@ -193,6 +200,7 @@ export default class SingleController extends Controller {
       .then(() => {
         this.edition = false;
         this.displayAlternativeInstructionsField = false;
+        this.displaySolutionToDisplayField = false;
         if (!this.wasMaximized) {
           this.minimize();
         }
