@@ -22,6 +22,16 @@ exports.register = async function(server) {
       },
     },
     {
+      method: 'POST',
+      path: '/api/releases',
+      config: {
+        handler: async function(request, h) {
+          const release = await releaseRepository.create();
+          return h.response(JSON.stringify(release)).created();
+        },
+      },
+    },
+    {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
