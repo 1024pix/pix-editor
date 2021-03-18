@@ -66,16 +66,11 @@ module('Unit | Controller | competence', function(hooks) {
 
   test('it should catch error if save sorting fail', async function(assert) {
     // given
-    const errorMessage = {
-      'error': ['error']
-    };
-    const saveModelStub = sinon.stub().rejects(errorMessage);
+    const saveModelStub = sinon.stub().rejects();
     const model1 = {
       save: saveModelStub
     };
 
-    const errorStub = sinon.stub();
-    window.console.error = errorStub;
     // when
     await controller._saveSorting([model1], 'successMessage', 'errorMessage');
 
@@ -83,7 +78,6 @@ module('Unit | Controller | competence', function(hooks) {
     assert.ok(loaderStartStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyErrorStub.calledWith('errorMessage'));
-    assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
   });
 
   test('it should cancel sorting', function(assert) {
