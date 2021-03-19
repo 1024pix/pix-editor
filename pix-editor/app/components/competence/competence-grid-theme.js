@@ -1,8 +1,14 @@
 import Component from '@glimmer/component';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceCompetenceGridThemeComponent extends Component {
-  get isWorkbenchSkillView() {
-    return this.args.view === 'workbench' && this.args.section === 'skills';
+
+  @service access;
+
+  get mayCreateTube() {
+    const section = this.args.section;
+    const view = this.args.view;
+    return section === 'skills' && view === 'workbench' && this.access.mayCreateTube();
   }
 
   get tubesOrProductionTubes() {
