@@ -42,22 +42,22 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       // then
       assert.dom('[data-test-theme-cell]').hasText('Theme');
       assert.dom('[data-test-theme-cell]').hasAttribute('rowspan', '3');
-
     });
 
-    test('it should display a link to modify theme if section is skills and view is workbench', async function (assert) {
-      // given
-      this.set('view', 'workbench');
-      this.set('section', 'skills');
+    ['workbench', 'production'].forEach(view => {
+      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function (assert) {
+        // given
+        this.set('section', 'skills');
+        this.set('view', view);
 
-      // when
-      await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
-                                                         @view={{this.view}}
-                                                         @theme={{this.theme}}/>`);
+        // when
+        await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
+                                                           @view={{this.view}}
+                                                           @theme={{this.theme}}/>`);
 
-      // then
-      assert.dom('[data-test-theme-cell] a').hasText('Theme');
-
+        // then
+        assert.dom('[data-test-theme-managment]').exists();
+      });
     });
 
     ['skills', 'challenges', 'i18n', 'quality'].forEach(section => {

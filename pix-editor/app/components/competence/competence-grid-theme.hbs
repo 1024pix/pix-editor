@@ -10,8 +10,8 @@
     <tr>
       {{#if (eq index 0)}}
         <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
-          {{#if this.isWorkbenchSkillView}}
-            <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+          {{#if (eq @section 'skills')}}
+            <LinkTo data-test-theme-managment @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
           {{else}}
             {{@theme.name}}
           {{/if}}
