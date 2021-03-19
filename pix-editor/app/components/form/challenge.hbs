@@ -4,22 +4,21 @@
               @edition={{@edition}}
               @helpContent={{this.helpInstructions}}
               @setValue={{fn (mut @challenge.instructions)}}/>
-  {{#if @edition}}
-    <div class="ui text menu note-menu">
-      <button data-test-alternative-instructions-button class="ui button item" {{on "click" this.toggleAlternativeInstructionsField}} type="button">
-        <i class="{{this.toggleAlternativeInstructionButtonIcon}} icon"></i>
-        {{this.toggleAlternativeInstructionButtonTitle}}
-      </button>
-    </div>
-  {{/if}}
-  {{#if this.shouldDisplayAlternativeInstructionsField}}
+  <Field::ToggleField @edition={{@edition}}
+                      @model={{@challenge}}
+                      @modelField="alternativeInstructions"
+                      @hideTextButton="Supprimer la consigne alternative"
+                      @displayTextButton="Ajouter une consigne alternative"
+                      @confirmText="la consigne alternative"
+                      @displayField={{@displayAlternativeInstructionsField}}
+                      @setDisplayField={{@setDisplayAlternativeInstructionsField}}>
     <Field::Mde @title="Consigne alternative"
                 @value={{@challenge.alternativeInstructions}}
                 @edition={{@edition}}
                 @helpContent={{this.helpInstructions}}
                 @setValue={{fn (mut @challenge.alternativeInstructions)}}
                 data-test-alternative-instructions-field />
-  {{/if}}
+  </Field::ToggleField>
   {{#if @challenge.isPrototype}}
     <Field::Select @title="Type"
                    @value={{this.challengeTypeValue}}
@@ -70,20 +69,19 @@
           </div>
       </div>
   {{/if}}
-  {{#if @edition}}
-    <div class="ui text menu note-menu">
-      <button data-test-solution-to-display-button class="ui button item" {{on "click" this.toggleSolutionToDisplayField}} type="button">
-        <i class="{{this.toggleSolutionToDisplayButtonIcon}} icon"></i>
-        {{this.toggleSolutionToDisplayButtonTitle}}
-      </button>
-    </div>
-  {{/if}}
-  {{#if this.shouldDisplaySolutionToDisplayField}}
+  <Field::ToggleField @edition={{@edition}}
+                      @model={{@challenge}}
+                      @modelField="solutionToDisplay"
+                      @hideTextButton="Supprimer la bonne réponse à afficher"
+                      @displayTextButton="Ajouter une bonne réponse à afficher"
+                      @confirmText="la bonne réponse à afficher"
+                      @displayField={{@displaySolutionToDisplayField}}
+                      @setDisplayField={{@setDisplaySolutionToDisplayField}}>
     <Field::Textarea @title="Bonne réponse à afficher"
-                @value={{@challenge.solutionToDisplay}}
-                @edition={{@edition}}
-                data-test-solution-to-display-field />
-  {{/if}}
+                     @value={{@challenge.solutionToDisplay}}
+                     @edition={{@edition}}
+                     data-test-solution-to-display-field />
+  </Field::ToggleField>
   {{#if @challenge.supportsScoring}}
     <Field::Textarea @value={{@challenge.scoring}}
                      @title="Scoring"
