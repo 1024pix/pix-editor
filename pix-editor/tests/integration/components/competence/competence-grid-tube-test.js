@@ -18,6 +18,22 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
     this.set('tube', tube);
   });
 
+  ['workbench', 'production'].forEach(view => {
+    test(`it should display a link to display tube management if section is skills and view is ${view}`, async function (assert) {
+      // given
+      this.set('section', 'skills');
+      this.set('view', view);
+
+      // when
+      await render(hbs`<Competence::CompetenceGridTube @tube={{this.tube}}
+                                                       @section={{this.section}}
+                                                       @view={{this.view}} />`);
+
+      // then
+      assert.dom('[data-test-tube-managment]').exists();
+    });
+  });
+
   test('it should display a link section is set on `skills` and view on `workbench`', async function(assert) {
 
     // given
