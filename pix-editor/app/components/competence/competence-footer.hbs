@@ -11,6 +11,10 @@
     <button class="ui button left item" {{on "click" @newTheme}} type="button">
       <i class="plus square outline icon"></i> Nouvelle Thématique
     </button>
+
+    <button class="ui button left item" {{on "click" @displaySortThemesPopIn}} type="button">
+      <i class="exchange icon rotate-90"></i> Trier les Thématiques
+    </button>
   {{/if}}
   {{#if this.displayProductionStats}}
     <div class="item competence-info"><div class="competence-info">Tubes : {{@competence.productionTubeCount}}</div><div class="competence-info">Acquix : {{@competence.productionSkillCount}}</div></div>
@@ -20,6 +24,10 @@
   {{#if this.mayCreateTube}}
     <button class="ui button left item" {{on "click" @newTube}} type="button">
       <i class="plus square outline icon"></i> Nouveau tube
+    </button>
+
+    <button class="ui button left item" {{on "click" @displaySortTubesPopIn}} type="button">
+      <i class="exchange icon rotate-90"></i> Trier les Tubes
     </button>
   {{/if}}
   {{#if this.mayCreatePrototype}}

@@ -2,6 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import Sentry from '@sentry/ember';
 
 export default class CompetenceController extends Controller {
   queryParams = [{
@@ -17,6 +18,11 @@ export default class CompetenceController extends Controller {
   @tracked section = 'challenges';
   @tracked languageFilter = false;
   @tracked leftMaximized = false;
+  @tracked displaySortingPopIn = false;
+  @tracked sortingPopInTitle = '';
+  @tracked sortingPopInApproveAction = null;
+  @tracked sortingPopInCancelAction = null;
+  @tracked sortingName;
 
   @service router;
   @service config;
@@ -188,5 +194,67 @@ export default class CompetenceController extends Controller {
   @action
   selectLanguageToFilter(value) {
     this.languageFilter = value.id;
+  }
+
+  @action
+  displaySortThemesPopIn() {
+    this._displaySortPopIn(this.sortThemes, this.cancelThemesSorting, 'Tri des thématiques', 'theme');
+  }
+
+  @action
+  displaySortTubesPopIn() {
+    this._displaySortPopIn(this.sortTubes, this.cancelTubesSorting, 'Tri des tubes', 'tube');
+  }
+
+  _displaySortPopIn(approveAction, cancelAction, title, sortingName) {
+    this.sortingPopInApproveAction = approveAction;
+    this.sortingPopInCancelAction = cancelAction;
+    this.sortingPopInTitle = title;
+    this.sortingName = sortingName;
+    this.displaySortingPopIn = true;
+  }
+
+  @action
+  async sortThemes(themes) {
+    await this._saveSorting(themes, 'Thématiques ordonnées', 'Erreur lors du trie des thématiques');
+  }
+
+  @action
+  async sortTubes(themes) {
+    const tubes = themes.map(theme => theme.tubes).flat();
+    await this._saveSorting(tubes, 'Tubes ordonnés', 'Erreur lors du trie des tubes');
+  }
+
+  async _saveSorting(models, successMessage, errorMessage) {
+    this.loader.start();
+    try {
+      for (const model of models) {
+        await model.save();
+      }
+      this.loader.stop();
+      this.notify.message(successMessage);
+      this.displaySortingPopIn = false;
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.loader.stop();
+      this.notify.error(errorMessage);
+    }
+  }
+
+  @action
+  cancelThemesSorting(themes) {
+    this._cancelSorting(themes);
+  }
+
+  @action
+  cancelTubesSorting(themes) {
+    const tubes = themes.map(theme => theme.tubes).flat();
+    this._cancelSorting(tubes);
+  }
+
+  _cancelSorting(models) {
+    models.forEach(model => model.rollbackAttributes());
+    this.displaySortingPopIn = false;
   }
 }

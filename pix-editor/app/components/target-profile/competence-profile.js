@@ -5,9 +5,9 @@ export default class CompetenceProfile extends Component {
   get filteredTheme() {
     const competence = this.args.competence;
     if (this.args.filter) {
-      return competence.themes.filter(theme => theme.hasSelectedProductionTube);
+      return competence.sortedThemes.filter(theme => theme.hasSelectedProductionTube);
     }
-    return competence.themes.filter(theme => theme.hasProductionTubes);
+    return competence.sortedThemes.filter(theme => theme.hasProductionTubes);
   }
 
 }

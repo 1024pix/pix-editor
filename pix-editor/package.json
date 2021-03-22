@@ -63,6 +63,7 @@
     "ember-power-select": "4.1.0",
     "ember-qunit": "^5.1.1",
     "ember-resolver": "^8.0.2",
+    "ember-sortable": "^2.2.2",
     "ember-source": "~3.24.0",
     "ember-table": "^2.2.3",
     "ember-template-lint": "^2.15.0",

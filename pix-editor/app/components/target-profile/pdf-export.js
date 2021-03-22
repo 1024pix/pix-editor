@@ -143,7 +143,7 @@ export default class TargetProfilePdfExportComponent extends Component {
             }
           ]];
 
-          const themes = filter ? competence.themes.filter(theme => theme.hasSelectedProductionTube) : competence.themes.filter(theme => theme.hasProductionTubes);
+          const themes = filter ? competence.sortedThemes.filter(theme => theme.hasSelectedProductionTube) : competence.sortedThemes.filter(theme => theme.hasProductionTubes);
 
           const tableBody = themes.reduce((values, theme, index) => {
             const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;

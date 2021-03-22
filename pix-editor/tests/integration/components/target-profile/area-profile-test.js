@@ -14,17 +14,17 @@ module('Integration | Component | target-profile/area-profile', function (hooks)
     const competence_1 = EmberObject.create({
       name: 'competence_1',
       selectedProductionTubeCount: 2,
-      themes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
+      sortedThemes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
     });
     const competence_2 = EmberObject.create({
       name: 'competence_2',
       selectedProductionTubeCount: 0,
-      themes: [{ productionTubes: [{ selectedLevel: false }, { selectedLevel: false }] }]
+      sortedThemes: [{ productionTubes: [{ selectedLevel: false }, { selectedLevel: false }] }]
     });
     const competence_3 = EmberObject.create({
       name: 'competence_3',
       selectedProductionTubeCount: 2,
-      themes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
+      sortedThemes: [{ productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }] }]
     });
 
 

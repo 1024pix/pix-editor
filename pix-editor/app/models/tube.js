@@ -13,6 +13,7 @@ export default class TubeModel extends Model {
   @attr practicalTitleEn;
   @attr practicalDescriptionFr;
   @attr practicalDescriptionEn;
+  @attr index;
   @attr pixId;
 
   @belongsTo('competence') competence;

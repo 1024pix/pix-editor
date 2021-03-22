@@ -1,0 +1,31 @@
+<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
+  <div class="ui standard modal visible active">
+    <div data-test-sorting-pop-in-title class="header">{{@title}}</div>
+    <div data-test-sorting-pop-in-content class="sortable-content">
+      {{#if this.isTubeSorting}}
+        <Field::Select data-test-select-theme @defaultText="Choisir une thématique"
+                                              @options={{this.themeOptions}}
+                                              @value={{this.selectedTheme}}
+                                              @edition={{true}}
+                                              @setValue={{this.selectTheme}}/>
+      {{/if}}
+      <ul {{sortable-group onChange=this.reorderItems}}>
+        {{#each this.sortingGroupModel as |modelItem|}}
+          <li {{sortable-item model=modelItem}} {{sortable-handle}}>
+            <i class="ellipsis vertical icon"></i><span>{{modelItem.name}}</span><i class="ellipsis vertical icon"></i>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+    <div class="actions">
+      <div data-test-sorting-pop-in-deny class="ui blue cancel button" {{on "click" (fn @onDeny @model)}}>
+        <i class="remove icon" ></i>
+        Annuler
+      </div>
+      <div data-test-sorting-pop-in-approve class="ui green ok button" {{on "click" (fn @onApprove @model)}}>
+        <i class="checkmark icon" ></i>
+        Ok
+      </div>
+    </div>
+  </div>
+</ModalDialog>

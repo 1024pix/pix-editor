@@ -266,3 +266,11 @@ footer.ui.attached.header {
     background-color:rgba(0, 0, 0, 0.03);
   }
 }
+
+.ui.page.dimmer.inverted.active {
+  z-index: 10000;
+}
+
+.rotate-90 {
+  transform: rotate(90deg);
+}
