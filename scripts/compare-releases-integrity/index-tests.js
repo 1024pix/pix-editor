@@ -115,6 +115,33 @@ describe('#compareReleases', () => {
     url2Scope.isDone();
   });
 
+  it('should ignore text with space before new line', async () => {
+    const remoteChecksumComputer = sinon.stub();
+    const productionRelease = {
+      content: {
+        challenges: [{ id: 1, illustrationAlt: 'alternative text . \ntest' }]
+      }
+    };
+    const url1Scope = nock('http://url1.com')
+      .matchHeader('Authorization', 'Bearer myToken1')
+      .get('/api/releases/latest')
+      .reply(200, productionRelease);
+
+    const newRelease = {
+      content: {
+        challenges: [{ id: 1, illustrationAlt: 'alternative text .\ntest' }]
+      }
+    };
+    const url2Scope = nock('http://url2.com')
+      .matchHeader('Authorization', 'Bearer myToken2')
+      .get('/api/releases/latest')
+      .reply(200, newRelease);
+
+    const differences = await compareReleases({ url: 'http://url1.com', token: 'myToken1' }, { url: 'http://url2.com', token: 'myToken2' }, remoteChecksumComputer);
+
+    expect(differences).to.deep.equal([]);
+  });
+
   it('should return the differences', async () => {
     const remoteChecksumComputer = sinon.stub()
       .onFirstCall().resolves('sha1')

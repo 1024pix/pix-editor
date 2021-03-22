@@ -71,6 +71,9 @@ async function replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer
   if (challenge.illustrationUrl) {
     challenge.illustrationUrl = await remoteChecksumComputer(challenge.illustrationUrl);
   }
+  if (challenge.illustrationAlt) {
+    challenge.illustrationAlt = sanitizeText(challenge.illustrationAlt);
+  }
   if (challenge.attachments) {
     const newAttachments = [];
     for (const attachment of challenge.attachments) {
@@ -79,6 +82,13 @@ async function replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer
     challenge.attachments = newAttachments.sort();
   }
   return challenge;
+}
+
+function sanitizeText(text) {
+  if (text) {
+    return text.replace(/ \n/gm, '\n')
+  }
+  return ''
 }
 
 async function remoteChecksumComputer(url) {
