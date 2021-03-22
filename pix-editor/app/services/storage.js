@@ -6,6 +6,7 @@ export default class StorageService extends Service {
 
   @service config;
   @service filePath;
+  @service auth;
 
   async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
@@ -61,50 +62,31 @@ export default class StorageService extends Service {
     }
   }
 
-  getStorageToken(renew) {
-    const config = this.config;
-    if (!renew && typeof config.storageToken !== 'undefined') {
-      return Promise.resolve(config.storageToken);
-    } else {
-      var data = {
-        'auth': {
-          'identity': {
-            'methods': ['password'],
-            'password': {
-              'user': {
-                'name': config.storageUser,
-                'domain': { 'id': 'default' },
-                'password': config.storagePassword
-              }
-            }
-          },
-          'scope': {
-            'project': {
-              'name': config.storageTenant,
-              'domain': { 'id': 'default' }
-            }
-          }
-        }
-      };
-      return fetch(config.storageAuth, {
+  async getStorageToken(renew, fetchFn = fetch) {
+    try {
+      const config = this.config;
+      if (!renew && this._hasStorageToken()) {
+        return config.storageToken;
+      }
+      const response = await fetchFn('/api/file-storage-token', {
         method: 'POST',
-        headers: { 'Content-type': 'application/json' },
-        body: JSON.stringify(data)
-      })
-        .then(response => response.ok ? response.json() : false)
-        .then(response => {
-          if (response) {
-            config.storageToken = response.token;
-            return config.storageToken;
-          } else {
-            console.error('could not get storage token');
-            return false;
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          Sentry.captureException(error);
-        });
+        headers: { 'Authorization': `Bearer ${this.auth.key}` }
+      });
+      if (!response.ok) {
+        console.error('could not get storage token');
+        return false;
+      }
+      const json = await response.json();
+      config.storageToken = json.token;
+      return config.storageToken;
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      return false;
     }
+  }
+
+  _hasStorageToken() {
+    return typeof this.config.storageToken !== 'undefined';
   }
 }

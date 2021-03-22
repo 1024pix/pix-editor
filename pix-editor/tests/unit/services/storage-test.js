@@ -256,4 +256,78 @@ module('Unit | Service | storage', function(hooks) {
       assert.ok(fetch.calledOnce);
     });
   });
+
+  module('getStorageToken', function(hooks) {
+    const apiKey = 'apiKey';
+
+    hooks.beforeEach(function() {
+      const AuthService = class extends Service {
+        get key() {
+          return apiKey;
+        }
+      };
+      this.owner.register('service:auth', AuthService);
+    });
+
+    test('it calls api', async function(assert) {
+      const storageService = this.owner.lookup('service:storage');
+
+      const token = 'token';
+      const fetch = sinon.stub().resolves({
+        ok: true,
+        json() {
+          return Promise.resolve({ token });
+        }
+      });
+
+      const fetchedToken = await storageService.getStorageToken(false, fetch);
+
+      assert.ok(fetch.calledOnce);
+      assert.deepEqual(fetch.args[0], ['/api/file-storage-token', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer apiKey',
+        }
+      }]);
+      assert.equal(fetchedToken, token);
+    });
+
+    test('it returns the previously stored token', async function(assert) {
+      const storageService = this.owner.lookup('service:storage');
+      const configService = this.owner.lookup('service:config');
+      const token = 'token';
+      configService.storageToken = token;
+      const fetch = sinon.stub();
+
+      const fetchedToken = await storageService.getStorageToken(false, fetch);
+
+      assert.ok(fetch.notCalled);
+      assert.equal(fetchedToken, token);
+    });
+
+    test('it always calls the api when renew is true', async function(assert) {
+      const storageService = this.owner.lookup('service:storage');
+
+      const configService = this.owner.lookup('service:config');
+      const token = 'token';
+      configService.storageToken = token;
+      const fetch = sinon.stub().resolves({
+        ok: true,
+        json() {
+          return Promise.resolve({ token });
+        }
+      });
+
+      const fetchedToken = await storageService.getStorageToken(true, fetch);
+
+      assert.ok(fetch.calledOnce);
+      assert.deepEqual(fetch.args[0], ['/api/file-storage-token', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer apiKey',
+        }
+      }]);
+      assert.equal(fetchedToken, token);
+    });
+  });
 });
