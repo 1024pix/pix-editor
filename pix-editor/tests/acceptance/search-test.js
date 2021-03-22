@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find, waitUntil } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { mockAuthService } from '../mock-auth';
 
 module('Acceptance | Search', function(hooks) {
   setupApplicationTest(hooks);
@@ -11,7 +12,7 @@ module('Acceptance | Search', function(hooks) {
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
-    localStorage.setItem('pix-api-key', apiKey);
+    mockAuthService.call(this, apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1', pixId: 'REC_RECHERCHE' });

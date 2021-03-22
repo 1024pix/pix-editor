@@ -5,12 +5,13 @@ export default class AirtableAdapter extends RESTAdapter {
 
   namespace = '/api/airtable/content';
 
+  @service auth;
   @service config;
   @service ajaxQueue;
 
   get headers() {
     const headers = {};
-    const apiKey = localStorage.getItem('pix-api-key');
+    const apiKey = this.auth.key;
     if (apiKey) {
       headers['Authorization'] = `Bearer ${apiKey}`;
     }

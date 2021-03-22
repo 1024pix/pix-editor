@@ -5,6 +5,7 @@ import { selectFiles } from 'ember-file-upload/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { mockAuthService } from '../mock-auth';
 
 module('Acceptance | Create-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -14,7 +15,7 @@ module('Acceptance | Create-Challenge', function(hooks) {
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
-    localStorage.setItem('pix-api-key', apiKey);
+    mockAuthService.call(this, apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1' });

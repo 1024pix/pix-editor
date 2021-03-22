@@ -3,6 +3,7 @@ import { visit, currentURL, find, findAll, click, waitUntil } from '@ember/test-
 import { setupApplicationTest } from 'ember-qunit';
 import { later } from '@ember/runloop';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { mockAuthService } from '../../../mock-auth';
 
 const competenceId1 = 'recCompetence1_1';
 const tubeId1 = 'recTube1';
@@ -26,7 +27,7 @@ module('Acceptance | competence/prototypes/list', function () {
       //given
       this.server.create('config', 'default');
       apiKey = 'valid-api-key';
-      localStorage.setItem('pix-api-key', apiKey);
+      mockAuthService.call(this, apiKey);
       this.server.create('user', { apiKey, trigram: 'ABC' });
 
       this.server.create('challenge', { id: 'recChallenge1', instructions: 'instructionsChallenge1' });

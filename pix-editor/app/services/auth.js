@@ -8,6 +8,10 @@ export default class AuthService extends Service {
   }
 
   set key(key) {
-    localStorage.setItem(LOCAL_STORAGE_API_KEY, key);
+    if (key) {
+      localStorage.setItem(LOCAL_STORAGE_API_KEY, key);
+    } else {
+      localStorage.removeItem(LOCAL_STORAGE_API_KEY);
+    }
   }
 }

@@ -4,6 +4,7 @@ import { render, click } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { mockAuthService } from '../../../mock-auth';
 
 module('Integration | Component | logout', function(hooks) {
   setupRenderingTest(hooks);
@@ -40,7 +41,7 @@ module('Integration | Component | logout', function(hooks) {
     hooks.beforeEach(async function() {
       // given
       this.onDeny = sinon.stub();
-      localStorage.setItem('pix-api-key', 'api-key');
+      mockAuthService.call(this, 'api-key');
       await render(hbs`<PopIn::Logout @onDeny={{this.onDeny}}/>`);
       windowReloadStub = sinon.stub();
       class MockWindowService extends Service {
@@ -54,9 +55,9 @@ module('Integration | Component | logout', function(hooks) {
       await click('[data-test-logout-ok-button]');
     });
 
-    test('it should remove apiKey from local storage', async function(assert) {
+    test('it should remove from local storage', async function(assert) {
       //then
-      assert.equal(localStorage.getItem('pix-api-key'), undefined);
+      assert.equal(this.owner.lookup('service:auth').key, undefined);
     });
     
     test('it should reload application', async function(assert) {

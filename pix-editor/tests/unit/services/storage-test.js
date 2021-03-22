@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
+import { mockAuthService } from '../../mock-auth';
 
 module('Unit | Service | storage', function(hooks) {
   setupTest(hooks);
@@ -261,12 +262,7 @@ module('Unit | Service | storage', function(hooks) {
     const apiKey = 'apiKey';
 
     hooks.beforeEach(function() {
-      const AuthService = class extends Service {
-        get key() {
-          return apiKey;
-        }
-      };
-      this.owner.register('service:auth', AuthService);
+      mockAuthService.call(this, apiKey);
     });
 
     test('it calls api', async function(assert) {

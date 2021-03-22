@@ -4,6 +4,7 @@ import { visit, fillIn, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
+import { mockAuthService } from '../mock-auth';
 
 module('Acceptance | Login', function(hooks) {
   setupApplicationTest(hooks);
@@ -11,10 +12,10 @@ module('Acceptance | Login', function(hooks) {
   let apiKey;
 
   hooks.beforeEach(function() {
-    localStorage.removeItem('pix-api-key');
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
     this.server.create('user', { apiKey, trigram: 'ABC' });
+    mockAuthService.call(this, undefined);
   });
 
   test('visiting / when not connected', async function(assert) {

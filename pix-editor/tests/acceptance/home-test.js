@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { visit, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { mockAuthService } from '../mock-auth';
 
 const competenceIds = [
   'recCompetence1.1',
@@ -16,7 +17,7 @@ module('Acceptance | Home', function(hooks) {
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
-    localStorage.setItem('pix-api-key', apiKey);
+    mockAuthService.call(this, apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     competenceIds.map((competenceId) => this.server.create('competence', { id: competenceId, pixId: `pixId ${competenceId}` }));
