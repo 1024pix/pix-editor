@@ -54,6 +54,13 @@ module.exports = (function() {
       storageBucket: process.env.STORAGE_BUCKET,
     },
 
+    storage: {
+      authUrl: process.env.STORAGE_AUTH,
+      password: process.env.STORAGE_PASSWORD,
+      tenant: process.env.STORAGE_TENANT,
+      user: process.env.STORAGE_USER,
+    },
+
     sentry: {
       enabled: isFeatureEnabled(process.env.SENTRY_ENABLED),
       dsn: process.env.SENTRY_DSN,
@@ -96,6 +103,13 @@ module.exports = (function() {
       storageKey: 'storageKeyValue',
       storageAuth: 'storageAuthValue',
       storageBucket: 'storageBucketValue',
+    };
+
+    config.storage = {
+      authUrl: 'https://storage.auth.example.net/api/auth',
+      password: 'storagePassword',
+      tenant: 'storageTenant',
+      user: 'storageUser',
     };
   }
 
