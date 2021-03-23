@@ -1,8 +1,3 @@
-import AirtableAdapter from './airtable';
+import ApplicationAdapter from './application';
 
-export default class ChallengeAdapter extends AirtableAdapter {
-
-  pathForType() {
-    return 'Epreuves';
-  }
-}
+export default class ChallengeAdapter extends ApplicationAdapter {}

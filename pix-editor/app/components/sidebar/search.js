@@ -28,8 +28,9 @@ export default class SidebarSearchComponent extends Component {
     } else if (query.substr(0, 3) === 'rec') {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
-        filterByFormula: `AND(FIND('${query}', {id persistant}))`,
-        maxRecords: 20
+        filter: {
+          id: query,
+        },
       })
         .then(challenges => {
           return challenges.map(challenge => ({
@@ -40,8 +41,12 @@ export default class SidebarSearchComponent extends Component {
     } else {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
-        filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, '\\\'')}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
-        maxRecords: 20
+        filter: {
+          filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, '\\\'')}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
+        },
+        page: {
+          size: 20,
+        },
       })
         .then(challenges => {
           return challenges.map(challenge => ({
