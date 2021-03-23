@@ -3,7 +3,7 @@
     <td data-test-theme-cell class="theme-cell create-tube">
         <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
         <div class="ui mini basic icon buttons tube-management">
-          <button data-test-add-tube class="ui icon button" {{on "click" @newTube}} title="Nouveau tube" type="button">
+          <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
             <i class="plus square outline icon"></i>
           </button>
         </div>
@@ -22,7 +22,7 @@
           {{/if}}
           {{#if this.mayCreateTube}}
             <div class="ui mini basic icon buttons tube-management">
-              <button data-test-add-tube class="ui icon button" {{on "click" @newTube}} title="Nouveau tube" type="button">
+              <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
                 <i class="plus square outline icon"></i>
               </button>
               <button data-test-sort-tube class="ui icon button" {{on "click" @displaySortTubesPopIn}} title="Trier les Tubes" type="button">

@@ -149,8 +149,8 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  newTube() {
-    this.transitionToRoute('competence.tubes.new', this.competence);
+  newTube(theme) {
+    this.transitionToRoute('competence.tubes.new', this.competence, { queryParams: { themeId: theme.id } });
   }
 
   @action

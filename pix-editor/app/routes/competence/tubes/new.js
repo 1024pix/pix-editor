@@ -3,11 +3,23 @@ import { inject as service } from '@ember/service';
 
 export default class NewRoute extends Tube {
 
+  queryParams = {
+    themeId: {
+      refreshModel: true
+    }
+  };
+
   templateName = 'competence/tubes/single';
   @service idGenerator;
 
-  model() {
-    return this.store.createRecord('tube', { pixId:this.idGenerator.newId() });
+  model(params) {
+    return this.store.findRecord('theme', params.themeId)
+      .then(theme => {
+        return this.store.createRecord('tube', {
+          pixId:this.idGenerator.newId(),
+          theme
+        });
+      });
   }
 
   setupController(controller) {

@@ -60,6 +60,9 @@ export default class SingleController extends Controller {
 
   @action
   close() {
+    if (this.edition) {
+      this.cancelEdit();
+    }
     this.parentController.send('closeChildComponent');
   }
 
