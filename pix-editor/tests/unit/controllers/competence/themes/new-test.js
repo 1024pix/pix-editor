@@ -100,13 +100,10 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     this.owner.register('service:currentData', CurrentDataService);
 
     const errorMessage = {
-      'error': ['error']
+      'error': ['error-test']
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;
-
-    const errorStub = sinon.stub();
-    window.console = { error: errorStub };
 
     // when
     await controller.save();
@@ -117,6 +114,5 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyErrorStub.calledWith('Erreur lors de la création de la thématique'));
-    assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
   });
 });

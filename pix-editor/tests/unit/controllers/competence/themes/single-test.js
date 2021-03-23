@@ -72,14 +72,11 @@ module('Unit | Controller | competence/themes/single', function(hooks) {
   test('it should catch an error if save action failed', async function (assert) {
     // given
     const errorMessage = {
-      'error': ['error']
+      'error': ['error-test']
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;
     controller.edition = true;
-
-    const errorStub = sinon.stub();
-    window.console = { error: errorStub };
 
     // when
     await controller.save();
@@ -90,6 +87,5 @@ module('Unit | Controller | competence/themes/single', function(hooks) {
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour de la thématique'));
-    assert.deepEqual(errorStub.getCall(0).args[0], errorMessage);
   });
 });
