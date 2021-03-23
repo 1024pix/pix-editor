@@ -93,7 +93,7 @@ describe('#compareReleases', () => {
         challenges: [{ id: 1 }]
       }
     };
-    const url1Scope = nock('http://url1.com')
+    const url1Scope = nock('http://example.org')
       .matchHeader('Authorization', 'Bearer myToken1')
       .get('/api/releases/latest')
       .reply(200, productionRelease);
@@ -103,12 +103,12 @@ describe('#compareReleases', () => {
         challenges: [{ id: 1 }]
       }
     };
-    const url2Scope = nock('http://url2.com')
+    const url2Scope = nock('http://example.com')
       .matchHeader('Authorization', 'Bearer myToken2')
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://url1.com', token: 'myToken1' }, { url: 'http://url2.com', token: 'myToken2' }, remoteChecksumComputer);
+    const differences = await compareReleases({ url: 'http://example.org', token: 'myToken1' }, { url: 'http://example.com', token: 'myToken2' }, remoteChecksumComputer);
 
     expect(differences).to.deep.equal([]);
     url1Scope.isDone();
@@ -122,7 +122,7 @@ describe('#compareReleases', () => {
         challenges: [{ id: 1, illustrationAlt: 'alternative text . \ntest' }]
       }
     };
-    const url1Scope = nock('http://url1.com')
+    const url1Scope = nock('http://example.org')
       .matchHeader('Authorization', 'Bearer myToken1')
       .get('/api/releases/latest')
       .reply(200, productionRelease);
@@ -132,12 +132,12 @@ describe('#compareReleases', () => {
         challenges: [{ id: 1, illustrationAlt: 'alternative text .\ntest' }]
       }
     };
-    const url2Scope = nock('http://url2.com')
+    const url2Scope = nock('http://example.com')
       .matchHeader('Authorization', 'Bearer myToken2')
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://url1.com', token: 'myToken1' }, { url: 'http://url2.com', token: 'myToken2' }, remoteChecksumComputer);
+    const differences = await compareReleases({ url: 'http://example.org', token: 'myToken1' }, { url: 'http://example.com', token: 'myToken2' }, remoteChecksumComputer);
 
     expect(differences).to.deep.equal([]);
   });
@@ -157,7 +157,7 @@ describe('#compareReleases', () => {
         }]
       }
     };
-    nock('http://url1.com')
+    nock('http://example.org')
       .get('/api/releases/latest')
       .reply(200, productionRelease);
 
@@ -169,11 +169,11 @@ describe('#compareReleases', () => {
         }]
       }
     };
-    nock('http://url2.com')
+    nock('http://example.com')
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://url1.com' }, { url: 'http://url2.com' }, remoteChecksumComputer);
+    const differences = await compareReleases({ url: 'http://example.org' }, { url: 'http://example.com' }, remoteChecksumComputer);
 
 
     expect(differences).to.deep.equal([expectedDifference]);
