@@ -5,6 +5,7 @@ const skillDatasource = require('../datasources/airtable/skill-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
+const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
 
 const { knex } = require('../../../db/knex-database-connection');
 
@@ -43,7 +44,9 @@ module.exports = {
       .limit(1);
 
     return release[0];
-  }
+  },
+
+  assignAttachmentsToChallenges,
 };
 
 async function _getCurrentContent() {
@@ -52,9 +55,10 @@ async function _getCurrentContent() {
     competences,
     tubes,
     skills,
-    challenges,
+    challengesWithoutAttachments,
     tutorials,
-    courses
+    courses,
+    attachments,
   ] = await Promise.all([
     areaDatasource.list(),
     competenceDatasource.list(),
@@ -62,8 +66,12 @@ async function _getCurrentContent() {
     skillDatasource.list(),
     challengeDatasource.list(),
     tutorialDatasource.list(),
-    courseDatasource.list()
+    courseDatasource.list(),
+    attachmentDatasource.list(),
   ]);
+
+  const challenges = assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
+
   return {
     areas,
     competences,
@@ -74,3 +82,21 @@ async function _getCurrentContent() {
     courses,
   };
 }
+
+function assignAttachmentsToChallenges(challenges, attachments) {
+  attachments.forEach((attachment) => {
+    const challenge = challenges.find((challenge) => challenge.id === attachment.challengeId);
+
+    if (attachment.type === 'illustration') {
+      challenge.illustrationAlt = attachment.alt;
+      challenge.illustrationUrl = attachment.url;
+    } else {
+      if (!challenge.attachments) {
+        challenge.attachments = [];
+      }
+      challenge.attachments.push(attachment.url);
+    }
+  });
+  return challenges;
+}
+
