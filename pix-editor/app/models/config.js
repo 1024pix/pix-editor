@@ -6,10 +6,5 @@ export default class ConfigModel extends Model {
   @attr tableSkills;
   @attr tableTubes;
   @attr storagePost;
-  @attr storageTenant;
-  @attr storageUser;
-  @attr storagePassword;
-  @attr storageKey;
-  @attr storageAuth;
   @attr storageBucket;
 }

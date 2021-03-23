@@ -46,11 +46,6 @@ module.exports = (function() {
       tableSkills: process.env.TABLE_SKILLS,
       tableTubes: process.env.TABLE_TUBES,
       storagePost: process.env.STORAGE_POST,
-      storageTenant: process.env.STORAGE_TENANT,
-      storageUser: process.env.STORAGE_USER,
-      storagePassword: process.env.STORAGE_PASSWORD,
-      storageKey: process.env.STORAGE_KEY,
-      storageAuth: process.env.STORAGE_AUTH,
       storageBucket: process.env.STORAGE_BUCKET,
     },
 
@@ -97,11 +92,6 @@ module.exports = (function() {
       tableSkills: 'tableSkillsValue',
       tableTubes: 'tableTubesValue',
       storagePost: 'storagePostValue',
-      storageTenant: 'storageTenantValue',
-      storageUser: 'storageUserValue',
-      storagePassword: 'storagePasswordValue',
-      storageKey: 'storageKeyValue',
-      storageAuth: 'storageAuthValue',
       storageBucket: 'storageBucketValue',
     };
 
