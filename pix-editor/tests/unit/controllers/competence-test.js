@@ -5,7 +5,7 @@ import sinon from 'sinon';
 
 module('Unit | Controller | competence', function(hooks) {
   setupTest(hooks);
-  let controller, theme1, theme2, notifyMessageStub, notifyErrorStub, rollbackAttributesStub, loaderStartStub, loaderStopStub;
+  let controller, theme1, theme2, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
 
   hooks.beforeEach(function () {
     notifyMessageStub = sinon.stub();
@@ -28,18 +28,7 @@ module('Unit | Controller | competence', function(hooks) {
 
     this.owner.register('service:loader', LoaderService);
 
-    rollbackAttributesStub = sinon.stub();
-
     controller = this.owner.lookup('controller:competence');
-
-    theme1 = {
-      name: 'theme1',
-      rollbackAttributes: rollbackAttributesStub
-    };
-    theme2 = {
-      name: 'theme2',
-      rollbackAttributes: rollbackAttributesStub
-    };
   });
 
   test('it should save sorting', async function(assert) {
@@ -98,17 +87,33 @@ module('Unit | Controller | competence', function(hooks) {
     assert.notOk(controller.displaySortingPopIn);
   });
 
-  module('#theme sorting', function () {
+  module('#theme sorting', function (hooks) {
+    hooks.beforeEach(function () {
+      theme1 = {
+        name: 'theme1',
+      };
+      theme2 = {
+        name: 'theme2',
+      };
+
+      const competence = {
+        name: 'competenceName',
+        sortedThemes: [theme1, theme2],
+      };
+
+      controller.model = competence;
+      controller.sortingModel = null;
+    });
     test('it should display sort theme pop-in', function(assert) {
       // when
       controller.displaySortThemesPopIn();
 
       // then
       assert.ok(controller.sortingPopInTitle === 'Tri des thématiques');
-      assert.ok(controller.sortingName === 'theme');
       assert.ok(controller.displaySortingPopIn);
       assert.deepEqual(controller.sortingPopInApproveAction, controller.sortThemes);
       assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelThemesSorting);
+      assert.deepEqual(controller.sortingModel, [theme1, theme2]);
     });
 
     test('it should cancel theme sorting', function (assert) {
@@ -137,34 +142,27 @@ module('Unit | Controller | competence', function(hooks) {
   });
 
   module('#tube sorting', function (hooks) {
-    let rollbackTubeAttributesStub, tube1_1, tube1_2, tube2_1;
+    let tube1, tube2;
 
     hooks.beforeEach(function () {
-      rollbackTubeAttributesStub = sinon.stub();
 
-      tube1_1 = {
+      tube1 = {
         name: 'tube1',
-        rollbackAttributes: rollbackTubeAttributesStub
       };
-      tube1_2 = {
+      tube2 = {
         name: 'tube2',
-        rollbackAttributes: rollbackTubeAttributesStub
       };
-      tube2_1 = {
-        name: 'tube3',
-        rollbackAttributes: rollbackTubeAttributesStub
-      };
-      theme1.tubes = [tube1_1, tube1_2];
-      theme2.tubes = [tube2_1];
+      controller.sortingModel = null;
     });
+
     test('it should display sort tubes pop-in', function(assert) {
       // when
-      controller.displaySortTubesPopIn();
+      controller.displaySortTubesPopIn([tube1, tube2]);
 
       // then
       assert.ok(controller.sortingPopInTitle === 'Tri des tubes');
-      assert.ok(controller.sortingName === 'tube');
       assert.ok(controller.displaySortingPopIn);
+      assert.deepEqual(controller.sortingModel, [tube1, tube2]);
       assert.deepEqual(controller.sortingPopInApproveAction, controller.sortTubes);
       assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelTubesSorting);
     });
@@ -175,10 +173,10 @@ module('Unit | Controller | competence', function(hooks) {
       controller._cancelSorting = cancelSortingStub;
 
       // when
-      controller.cancelTubesSorting([theme1, theme2]);
+      controller.cancelTubesSorting([tube1, tube2]);
 
       // then
-      assert.ok(cancelSortingStub.calledWith([tube1_1, tube1_2, tube2_1]));
+      assert.ok(cancelSortingStub.calledWith([tube1, tube2]));
     });
 
     test('it should sort tubes', async function (assert) {
@@ -187,10 +185,10 @@ module('Unit | Controller | competence', function(hooks) {
       controller._saveSorting = saveSortingStub;
 
       // when
-      await controller.sortTubes([theme1, theme2]);
+      await controller.sortTubes([tube1, tube2]);
 
       // then
-      assert.ok(saveSortingStub.calledWith([tube1_1, tube1_2, tube2_1], 'Tubes ordonnés', 'Erreur lors du trie des tubes'));
+      assert.ok(saveSortingStub.calledWith([tube1, tube2], 'Tubes ordonnés', 'Erreur lors du trie des tubes'));
     });
   });
 });

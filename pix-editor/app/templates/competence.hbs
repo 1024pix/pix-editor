@@ -49,8 +49,7 @@
 {{/if}}
 {{#if this.displaySortingPopIn}}
   <PopIn::Sorting @title={{this.sortingPopInTitle}}
-                  @model={{this.competence.sortedThemes}}
+                  @model={{this.sortingModel}}
                   @onApprove={{this.sortingPopInApproveAction}}
-                  @onDeny={{this.sortingPopInCancelAction}}
-                  @sortingName={{this.sortingName}}/>
+                  @onDeny={{this.sortingPopInCancelAction}}/>
 {{/if}}
