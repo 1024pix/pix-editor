@@ -8,15 +8,15 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
     const competence = airtableBuilder.factory.buildCompetence({
       id: 'recCompetence',
-      areaId: competenceDataObject.areaId,
+      areaId: [competenceDataObject.areaId],
       description: competenceDataObject.description,
-      descriptionFrFr: competenceDataObject.description,
-      descriptionEnUs: competenceDataObject.description,
+      descriptionFrFr: competenceDataObject.descriptionFrFr,
+      descriptionEnUs: competenceDataObject.descriptionEnUs,
       index: competenceDataObject.index,
       skillIds: competenceDataObject.skillIds,
       name: competenceDataObject.name,
-      nameFrFr: competenceDataObject.name,
-      nameEnUs: competenceDataObject.name,
+      nameFrFr: competenceDataObject.nameFrFr,
+      nameEnUs: competenceDataObject.nameEnUs,
       origin: competenceDataObject.origin,
     });
     const token = 'dummy-pix-api-token';
@@ -34,11 +34,11 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     it('should refresh cache of updated record in pix api', async () => {
       // Given
       nock('https://api.test.pix.fr')
-        .post('/api/token', { user: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
 
-      nock('https://api.test.pix.fr')
+      const apiCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/competences/recCompetence', competenceDataObject)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
@@ -60,6 +60,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.result).to.deep.equal(competence);
+      apiCacheScope.done();
     });
 
     it('should return 200 when refresh cache fails', async () => {
