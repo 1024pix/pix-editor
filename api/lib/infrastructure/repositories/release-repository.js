@@ -6,6 +6,7 @@ const challengeDatasource = require('../datasources/airtable/challenge-datasourc
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
+const airtableSerializer = require('../serializers/airtable-serializer');
 
 const { knex } = require('../../../db/knex-database-connection');
 
@@ -52,6 +53,15 @@ module.exports = {
       .where('id', id);
 
     return release[0];
+  },
+
+  serializeEntity({ entity, type }) {
+    const { updatedRecord, model } = airtableSerializer.serialize({
+      airtableObject: entity,
+      tableName: type
+    });
+
+    return { updatedRecord, model };
   },
 
   assignAttachmentsToChallenges,

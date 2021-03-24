@@ -50,7 +50,7 @@ const buildChallenge = function buildChallenge({
       'acquis': skills,
       'Texte alternatif illustration': illustrationAlt,
       'Format': format,
-      'Langues': _convertLocalesToLanguages(locales),
+      'Langues': _convertLocalesToLanguages(locales || []),
       'Réponse automatique': autoReply,
       'Consigne alternative': alternativeInstruction,
       'Compétences (via tube) (id persistant)': [competenceId],

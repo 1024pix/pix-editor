@@ -1,9 +1,11 @@
 module.exports = function buildChallengeAirtableDataObject({
   id = 'recwWzTquPlvIl4So',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+  alternativeInstruction = '',
   proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
   type = 'QCM',
   solution = '1, 5',
+  solutionToDisplay = '1',
   t1Status = 'Activé',
   t2Status = 'Désactivé',
   t3Status = 'Activé',
@@ -23,14 +25,17 @@ module.exports = function buildChallengeAirtableDataObject({
   embedHeight = 500,
   format = 'mots',
   illustrationAlt = 'texte alternatif à l\'image',
+  autoReply = false,
 } = {}) {
 
   return {
     id,
     instruction,
+    alternativeInstruction,
     proposals,
     type,
     solution,
+    solutionToDisplay,
     t1Status,
     t2Status,
     t3Status,
@@ -47,5 +52,6 @@ module.exports = function buildChallengeAirtableDataObject({
     embedHeight,
     illustrationAlt,
     format,
+    autoReply,
   };
 };
