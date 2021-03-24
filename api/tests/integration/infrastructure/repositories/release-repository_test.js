@@ -49,5 +49,23 @@ describe('Integration | Repository | release-repository', function() {
       expect(latestRelease.content).to.deep.equal(newestReleaseContent);
     });
   });
+
+  describe('#getRelease', () => {
+    it('should return content of given release', async function() {
+      // Given
+      const otherReleaseContent = { some: 'property' };
+      const expectedReleaseContent = { some: 'old-property' };
+
+      databaseBuilder.factory.buildRelease({ id: 11, createdAt: '2021-01-01', content: otherReleaseContent });
+      databaseBuilder.factory.buildRelease({ id: 12, createdAt: '2020-01-01', content: expectedReleaseContent });
+      await databaseBuilder.commit();
+
+      // When
+      const givenRelease = await releaseRepository.getRelease(12);
+
+      // Then
+      expect(givenRelease.content).to.deep.equal(expectedReleaseContent);
+    });
+  });
 });
 

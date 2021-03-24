@@ -194,4 +194,54 @@ describe('Acceptance | Controller | release-controller', () => {
     });
   });
 
+  describe('GET /release/:id - Returns given release', () => {
+    let user;
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+    });
+
+    context('nominal case', () => {
+      it('should return release specified by id', async () => {
+        // Given
+        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { some: 'release' }, createdAt: new Date('2021-01-01') });
+        databaseBuilder.factory.buildRelease({ id: 43, content: { some: 'other-release' }, createdAt: new Date('2022-01-01') });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/42',
+          headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const release = JSON.parse(response.result);
+        expect(release.content).to.deep.equal(expectedRelease.content);
+        expect(release.id).to.deep.equal(expectedRelease.id);
+        expect(release.date).to.deep.equal(expectedRelease.date);
+      });
+    });
+
+    context('error case', () => {
+      it('should return a 404 when the release does not exist', async () => {
+        // Given
+        await databaseBuilder.commit();
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/42',
+          headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(404);
+      });
+    });
+  });
+
 });

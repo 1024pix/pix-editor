@@ -1,5 +1,6 @@
-const releaseRepository = require('../infrastructure/repositories/release-repository');
 const { PassThrough } = require('stream');
+const Boom = require('@hapi/boom');
+const releaseRepository = require('../infrastructure/repositories/release-repository');
 
 exports.register = async function(server) {
   server.route([
@@ -27,6 +28,20 @@ exports.register = async function(server) {
         handler: async function() {
           const release = await releaseRepository.getLatestRelease();
           return JSON.stringify(release);
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/releases/{id}',
+      config: {
+        handler: async function(request) {
+          const release = await releaseRepository.getRelease(request.params.id);
+          if (release) {
+            return JSON.stringify(release);
+          } else {
+            return Boom.notFound();
+          }
         },
       },
     },

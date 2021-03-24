@@ -43,7 +43,15 @@ module.exports = {
       .limit(1);
 
     return release[0];
-  }
+  },
+
+  async getRelease(id) {
+    const release = await knex('releases')
+      .select('id', 'content', 'createdAt')
+      .where('id', id);
+
+    return release[0];
+  },
 };
 
 async function _getCurrentContent() {
