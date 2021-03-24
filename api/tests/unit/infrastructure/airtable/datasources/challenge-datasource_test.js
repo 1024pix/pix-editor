@@ -41,18 +41,6 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(challenge.timer).to.be.undefined;
     });
 
-    it('should deal with a missing Pièce jointe', () => {
-      // given
-      const airtableEpreuveObject = challengeRawAirTableFixture();
-      airtableEpreuveObject.set('Pièce jointe', undefined);
-
-      // when
-      const challenge = challengeDatasource.fromAirTableObject(airtableEpreuveObject);
-
-      // then
-      expect(challenge.attachments).to.be.undefined;
-    });
-
     it('should deal with a missing competences', () => {
       // given
       const airtableEpreuveObject = challengeRawAirTableFixture();

@@ -35,6 +35,7 @@ module.exports = class AirtableBuilder {
     challenges,
     courses,
     tutorials,
+    attachments,
   }) {
     this.mockList({ tableName: 'Domaines' })
       .returns(areas)
@@ -56,6 +57,9 @@ module.exports = class AirtableBuilder {
       .activate();
     this.mockList({ tableName: 'Tutoriels' })
       .returns(tutorials)
+      .activate();
+    this.mockList({ tableName: 'Attachments' })
+      .returns(attachments)
       .activate();
   }
 

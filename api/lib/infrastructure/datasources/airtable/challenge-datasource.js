@@ -9,8 +9,6 @@ module.exports = datasource.extend({
 
   usedFields: [
     'id persistant',
-    'Illustration de la consigne',
-    'Pièce jointe',
     'Compétences (via tube) (id persistant)',
     'Timer',
     'Consigne',
@@ -28,7 +26,6 @@ module.exports = datasource.extend({
     'Embed URL',
     'Embed title',
     'Embed height',
-    'Texte alternatif illustration',
     'Format',
     'Réponse automatique',
     'Langues',
@@ -36,16 +33,6 @@ module.exports = datasource.extend({
   ],
 
   fromAirTableObject(airtableRecord) {
-
-    let illustrationUrl;
-    if (airtableRecord.get('Illustration de la consigne')) {
-      illustrationUrl = airtableRecord.get('Illustration de la consigne')[0].url;
-    }
-
-    let attachments;
-    if (airtableRecord.get('Pièce jointe')) {
-      attachments = airtableRecord.get('Pièce jointe').map((attachment) => attachment.url).reverse();
-    }
 
     let competenceId;
     if (airtableRecord.get('Compétences (via tube) (id persistant)')) {
@@ -75,10 +62,7 @@ module.exports = datasource.extend({
       embedTitle: airtableRecord.get('Embed title'),
       embedHeight: airtableRecord.get('Embed height'),
       timer,
-      illustrationUrl,
-      attachments,
       competenceId,
-      illustrationAlt: airtableRecord.get('Texte alternatif illustration'),
       format: airtableRecord.get('Format') || 'mots',
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
