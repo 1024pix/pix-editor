@@ -8,7 +8,6 @@ const {
   buildChallenge,
   buildTutorial,
   buildCourse,
-  buildAttachment,
 } = airtableBuilder.factory;
 
 describe('Acceptance | Controller | release-controller', () => {
@@ -116,17 +115,6 @@ describe('Acceptance | Controller | release-controller', () => {
             imageUrl: 'Image du Course',
           }],
         };
-        const attachments = [{
-          url: 'url de l‘illustration',
-          alt: 'Texte alternatif illustration',
-          type: 'illustration',
-          challengeId: 'recChallenge0',
-        }, {
-          url: 'url de la pièce jointe',
-          type: 'attachment',
-          challengeId: 'recChallenge0',
-        }];
-
         airtableBuilder.mockLists({
           areas: [buildArea(expectedCurrentContent.areas[0])],
           competences: [buildCompetence(expectedCurrentContent.competences[0])],
@@ -135,7 +123,6 @@ describe('Acceptance | Controller | release-controller', () => {
           challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
           tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
           courses: [buildCourse(expectedCurrentContent.courses[0])],
-          attachments: attachments.map(buildAttachment),
         });
 
         const server = await createServer();

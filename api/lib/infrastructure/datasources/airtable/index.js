@@ -5,7 +5,6 @@ const CourseDatasource = require('./course-datasource');
 const SkillDatasource = require('./skill-datasource');
 const TubeDatasource = require('./tube-datasource');
 const TutorialDatasource = require('./tutorial-datasource');
-const AttachmentDatasource = require('./attachment-datasource');
 
 module.exports = {
   AreaDatasource,
@@ -15,5 +14,4 @@ module.exports = {
   SkillDatasource,
   TubeDatasource,
   TutorialDatasource,
-  AttachmentDatasource,
 };
