@@ -58,7 +58,9 @@
                      @showIllustration={{this.showIllustration}}
                      @edition={{this.edition}}
                      @displayAlternativeInstructionsField={{this.displayAlternativeInstructionsField}}
-                     @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}/>
+                     @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}
+                     @displaySolutionToDisplayField={{this.displaySolutionToDisplayField}}
+                     @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}}/>
     {{#if this.copyOperation}}
       <Field::Copy @value={{this.challenge.preview}} @onCopied={{this.linkCopied}}/>
     {{/if}}

@@ -13,6 +13,7 @@ export default class ChallengeSerializer extends AirtableSerializer {
     format:'Format',
     suggestion:'Propositions',
     answers:'Bonnes réponses',
+    solutionToDisplay:'Bonnes réponses à afficher',
     t1:'T1 - Espaces, casse & accents',
     t2:'T2 - Ponctuation',
     t3:'T3 - Distance d\'édition',

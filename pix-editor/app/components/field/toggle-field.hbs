@@ -1,0 +1,11 @@
+{{#if @edition}}
+  <div class="ui text menu note-menu">
+    <button data-test-toggle-field-button class="ui button item" {{on "click" this.toggleFieldDisplay}} type="button">
+      <i class="{{this.buttonIcon}} icon"></i>
+      {{this.buttonTitle}}
+    </button>
+  </div>
+{{/if}}
+{{#if this.shouldDisplayField}}
+  {{yield}}
+{{/if}}

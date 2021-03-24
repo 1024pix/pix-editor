@@ -9,6 +9,7 @@ export default class ChallengeModel extends Model {
   @attr format;
   @attr suggestion;
   @attr answers;
+  @attr solutionToDisplay;
   @attr t1;
   @attr t2;
   @attr t3;
