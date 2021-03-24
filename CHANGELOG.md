@@ -1,5 +1,9 @@
 
 
+## v3.27.0 (24/03/2021)
+
+- [#129](https://github.com/1024pix/pix-editor/pull/129) [TECH] Nous y avons cru, mais le revert est nécessaire (was: no more airtable attachments)
+
 ## v3.26.0 (24/03/2021)
 
 - [#125](https://github.com/1024pix/pix-editor/pull/125) [FEATURE] Utilise la table attachments dans la release ce qui permet d'avoir des URLs en dl.pix.fr :rocket: (PIX-2386)
