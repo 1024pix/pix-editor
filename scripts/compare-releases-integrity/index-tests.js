@@ -6,11 +6,6 @@ const nock = require('nock');
 chai.use(sinonChai);
 const expect = chai.expect;
 
-// 1. Récupère la release en prod
-// 2. Récupère la release sur la RA
-// 3. Remplace les url des attachments par leur checksum
-// 4. Compare des 2 releases
-
 describe('#replaceAttachmentsUrlByChecksum', () => {
   it('returns challenge with attachments url replaced by checksum', async () => {
     const initialChallenge = {
@@ -108,7 +103,11 @@ describe('#compareReleases', () => {
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://example.org', token: 'myToken1' }, { url: 'http://example.com', token: 'myToken2' }, remoteChecksumComputer);
+    const differences = await compareReleases(
+      { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
+      { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
+      remoteChecksumComputer
+    );
 
     expect(differences).to.deep.equal([]);
     url1Scope.isDone();
@@ -137,7 +136,11 @@ describe('#compareReleases', () => {
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://example.org', token: 'myToken1' }, { url: 'http://example.com', token: 'myToken2' }, remoteChecksumComputer);
+    const differences = await compareReleases(
+      { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
+      { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
+      remoteChecksumComputer
+    );
 
     expect(differences).to.deep.equal([]);
   });
@@ -173,8 +176,11 @@ describe('#compareReleases', () => {
       .get('/api/releases/latest')
       .reply(200, newRelease);
 
-    const differences = await compareReleases({ url: 'http://example.org' }, { url: 'http://example.com' }, remoteChecksumComputer);
-
+    const differences = await compareReleases(
+      { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
+      { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
+      remoteChecksumComputer
+    );
 
     expect(differences).to.deep.equal([expectedDifference]);
   });

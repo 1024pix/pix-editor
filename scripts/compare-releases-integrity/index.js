@@ -61,7 +61,7 @@ async function compareReleases({ url: url1, token: token1 }, { url: url2, token:
 
 
 async function getRelease(url, token) {
-  const { data: { content: { challenges } } } = await axios.get(`${url}/api/releases/latest`, {
+  const { data: { content: { challenges } } } = await axios.get(url, {
     headers: { 'Authorization': 'Bearer '+ token }
   });
   return challenges;
