@@ -14,11 +14,6 @@ export default class ConfigService extends Service {
   @tracked tableSkills;
   @tracked tableTubes;
   @tracked storagePost;
-  @tracked storageTenant;
-  @tracked storageUser;
-  @tracked storagePassword;
-  @tracked storageKey;
-  @tracked storageAuth;
   @tracked storageBucket;
 
   async load() {
@@ -32,11 +27,6 @@ export default class ConfigService extends Service {
     this.tableSkills = config.tableSkills;
     this.tableTubes = config.tableTubes;
     this.storagePost = config.storagePost;
-    this.storageTenant = config.storageTenant;
-    this.storageUser = config.storageUser;
-    this.storagePassword = config.storagePassword;
-    this.storageKey = config.storageKey;
-    this.storageAuth = config.storageAuth;
     this.storageBucket = config.storageBucket;
   }
 }

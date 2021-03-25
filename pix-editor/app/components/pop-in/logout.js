@@ -5,11 +5,12 @@ import { inject as service } from '@ember/service';
 export default class LogoutComponent extends Component {
 
   @service window
+  @service auth;
 
   @action
   logout() {
     event.preventDefault();
-    localStorage.removeItem('pix-api-key');
+    this.auth.key = undefined;
     this.window.reload();
   }
 }

@@ -10,13 +10,3 @@ setApplication(Application.create(config.APP));
 setup(QUnit.assert);
 
 start();
-
-let actualApiKey;
-QUnit.testStart(() => {
-  actualApiKey = localStorage.getItem('pix-api-key');
-});
-
-QUnit.testDone(() => {
-  localStorage.setItem('pix-api-key', actualApiKey);
-});
-

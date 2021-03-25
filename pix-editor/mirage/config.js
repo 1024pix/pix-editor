@@ -192,6 +192,10 @@ export default function () {
     schema.notes.create(note);
     return note;
   });
+
+  this.post('/file-storage-token', () => {
+    return { token: 'token' };
+  });
 }
 
 function _response(request, responseData) {

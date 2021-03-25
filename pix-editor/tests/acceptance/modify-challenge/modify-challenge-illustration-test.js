@@ -6,6 +6,7 @@ import { later } from '@ember/runloop';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import Service from '@ember/service';
+import { mockAuthService } from '../../mock-auth';
 
 module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
   setupApplicationTest(hooks);
@@ -15,7 +16,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
     apiKey = 'valid-api-key';
-    localStorage.setItem('pix-api-key', apiKey);
+    mockAuthService.call(this, apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1' });

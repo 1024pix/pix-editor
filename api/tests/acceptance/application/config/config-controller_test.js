@@ -38,11 +38,6 @@ describe('Acceptance | Controller | config', () => {
               'table-skills': 'tableSkillsValue',
               'table-tubes': 'tableTubesValue',
               'storage-post': 'storagePostValue',
-              'storage-tenant': 'storageTenantValue',
-              'storage-user': 'storageUserValue',
-              'storage-password': 'storagePasswordValue',
-              'storage-key': 'storageKeyValue',
-              'storage-auth': 'storageAuthValue',
               'storage-bucket': 'storageBucketValue',
             },
           }

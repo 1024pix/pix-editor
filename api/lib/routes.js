@@ -6,4 +6,5 @@ module.exports = [
   require('./application/config'),
   require('./application/airtable-proxy'),
   require('./application/releases'),
+  require('./application/file-storage-token'),
 ];

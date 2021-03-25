@@ -1,9 +1,7 @@
 export default function(server) {
 
   server.create('config', 'default');
-  const apiKey = 'valid-api-key';
-  localStorage.setItem('pix-api-key', apiKey);
-  server.create('user', { apiKey, trigram: 'ABC' });
+  server.create('user', { trigram: 'ABC' });
 
 
   server.create('challenge', { id: 'recChallenge1' });

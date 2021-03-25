@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class PopinLoginForm extends Component {
 
   @service config;
+  @service auth;
 
   @tracked apiKey;
   @tracked errorMessage;
@@ -19,7 +20,7 @@ export default class PopinLoginForm extends Component {
   @action
   async validateApiKey() {
     event.preventDefault();
-    localStorage.setItem('pix-api-key', this.apiKey);
+    this.auth.key = this.apiKey;
     try {
       await this.config.load();
       this._closeModal();
@@ -28,7 +29,7 @@ export default class PopinLoginForm extends Component {
       this.isErrorMessagePresent = true;
       this.errorMessage = 'La clé saisie n\'a pas pu être validée. Vérifiez votre connexion ou contactez l\'équipe de développement.';
       if (this._isUnauthorizedError(error)) {
-        localStorage.removeItem('pix-api-key');
+        this.auth.key = undefined;
         this.errorMessage = 'La clé saisie n\'est pas valide. Vérifiez votre saisie.';
       }
     }

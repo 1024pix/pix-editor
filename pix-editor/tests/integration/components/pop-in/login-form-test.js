@@ -4,6 +4,7 @@ import { render, fillIn, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { mockAuthService } from '../../../mock-auth';
 
 module('Integration | Component | popin-login-form', function(hooks) {
   setupRenderingTest(hooks);
@@ -13,9 +14,10 @@ module('Integration | Component | popin-login-form', function(hooks) {
   hooks.beforeEach(function() {
     class ConfigService extends Service {
       load = configLoadStub;
-    }  
+    }
     this.owner.unregister('service:config');
     this.owner.register('service:config', ConfigService);
+    mockAuthService.call(this);
   });
 
   test('it should ask for apiKey', async function(assert) {
@@ -53,7 +55,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
     test('it should store api key in localStorage', async function(assert) {
       // then
-      assert.equal(localStorage.getItem('pix-api-key'), 'valid-api-key');
+      assert.equal(this.owner.lookup('service:auth').key, 'valid-api-key');
     });
 
   });
@@ -85,7 +87,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
     test('it should not store api key in localStorage', async function(assert) {
       // then
-      assert.equal(localStorage.getItem('pix-api-key'), undefined);
+      assert.equal(this.owner.lookup('service:auth').key, undefined);
     });
 
   });
@@ -110,7 +112,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
     test('it should store api key in localStorage', async function(assert) {
       // then
-      assert.equal(localStorage.getItem('pix-api-key'), 'server-error');
+      assert.equal(this.owner.lookup('service:auth').key, 'server-error');
     });
 
   });
