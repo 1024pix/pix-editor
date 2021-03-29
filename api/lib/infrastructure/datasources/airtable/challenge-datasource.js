@@ -1,4 +1,5 @@
 const datasource = require('./datasource');
+const airtable = require('../../airtable');
 const { ENGLISH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN } = require('../../../domain/constants').LOCALE;
 
 module.exports = datasource.extend({
@@ -69,6 +70,14 @@ module.exports = datasource.extend({
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
     };
   },
+
+  async filterById(id) {
+    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+      filterByFormula : `{id persistant} = '${id}'`,
+      maxRecords: 1,
+    });
+    return this.fromAirTableObject(airtableRawObjects[0]);
+  }
 });
 
 function _convertLanguagesToLocales(languages) {

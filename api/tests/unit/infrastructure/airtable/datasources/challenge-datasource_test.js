@@ -1,7 +1,9 @@
-const { expect } = require('../../../../test-helper');
+const { expect, airtableBuilder, sinon } = require('../../../../test-helper');
 const challengeDatasource = require('../../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
 const challengeAirtableDataObjectFixture = require('../../../../tooling/fixtures/infrastructure/challengeAirtableDataObjectFixture');
 const challengeRawAirTableFixture = require('../../../../tooling/fixtures/infrastructure/challengeRawAirTableFixture');
+const airtable = require('../../../../../lib/infrastructure/airtable');
+const airtableClient = require('airtable');
 
 describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', () => {
   describe('#fromAirTableObject', () => {
@@ -55,4 +57,23 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
     });
   });
 
+  describe('#filterById', () => {
+    it('calls airtable', async () => {
+      const challenge = airtableBuilder.factory.buildChallenge({
+        id: 'recChallenge',
+        skillIds: [],
+        skills: [],
+        attachments: [],
+      });
+      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+
+      sinon.stub(airtable, 'findRecords')
+        .withArgs('Epreuves', { filterByFormula: '{id persistant} = \'recChallenge\'', maxRecords: 1 })
+        .resolves([challengeRecord]);
+
+      const newChallenge = await challengeDatasource.filterById('recChallenge');
+
+      expect(newChallenge.id).to.equal('recChallenge');
+    });
+  });
 });

@@ -138,18 +138,23 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       t3Status: challengeDataObject.t3Status,
       scoring: challengeDataObject.scoring,
       status: challengeDataObject.status,
-      skillIds: challengeDataObject.skills,
+      skillIds: challengeDataObject.skillIds,
       skills: challengeDataObject.skills,
       timer: challengeDataObject.timer,
-      illustrationUrl: challengeDataObject.illustrationUrl,
-      attachments: challengeDataObject.attachments || [],
       competenceId: challengeDataObject.competenceId,
       embedUrl: challengeDataObject.embedUrl,
       embedTitle: challengeDataObject.embedTitle,
       embedHeight: challengeDataObject.embedHeight,
-      illustrationAlt: challengeDataObject.illustrationAlt,
       format: challengeDataObject.format,
       autoReply: challengeDataObject.autoReply,
+      locales: challengeDataObject.locales,
+    });
+    const attachment = airtableBuilder.factory.buildAttachment({
+      id: '1',
+      type: 'illustration',
+      url: 'http://example.com/my-illustration',
+      alt: 'my alt',
+      challengeId: 'recChallenge'
     });
     const token = 'dummy-pix-api-token';
 
@@ -165,20 +170,33 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
 
     it('should refresh cache of updated record in pix api', async () => {
       // Given
+      const expectedChallengePayload = {
+        ...challengeDataObject,
+        illustrationUrl: 'http://example.com/my-illustration',
+        illustrationAlt: 'my alt',
+      };
+
+      nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Epreuves', challenge)
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, challenge);
+
+      const attachmentsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments')
+        .query({ filterByFormula: '{challengeId persistant} = \'recChallenge\'' })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [attachment] });
+
       nock('https://api.test.pix.fr')
         .post('/api/token', { username: 'adminUser', password: '123' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
 
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/recChallenge', challengeDataObject)
+        .patch('/api/cache/challenges/recChallenge', expectedChallengePayload)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
-      nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Epreuves', challenge)
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, challenge);
       const server = await createServer();
 
       // When
@@ -192,6 +210,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.result).to.deep.equal(challenge);
+      attachmentsScope.done();
       apiCacheScope.done();
     });
   });

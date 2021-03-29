@@ -55,11 +55,23 @@ module.exports = {
     return release[0];
   },
 
-  serializeEntity({ entity, type }) {
+  async serializeEntity({ entity, type }) {
     const { updatedRecord, model } = airtableSerializer.serialize({
       airtableObject: entity,
       tableName: type
     });
+
+    if (model === attachmentDatasource.path()) {
+      const challenge = await challengeDatasource.filterById(updatedRecord.challengeId);
+      const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
+      _assignAttachmentsToChallenge(challenge, attachments);
+      return { updatedRecord: challenge, model: challengeDatasource.path() };
+    }
+
+    if (model === challengeDatasource.path()) {
+      const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.id);
+      _assignAttachmentsToChallenge(updatedRecord, attachments);
+    }
 
     return { updatedRecord, model };
   },
@@ -101,19 +113,26 @@ async function _getCurrentContent() {
   };
 }
 
+function _assignAttachmentToChallenge(challenge, attachment) {
+  if (attachment.type === 'illustration') {
+    challenge.illustrationAlt = attachment.alt;
+    challenge.illustrationUrl = attachment.url;
+  } else {
+    if (!challenge.attachments) {
+      challenge.attachments = [];
+    }
+    challenge.attachments.push(attachment.url);
+  }
+}
+
+function _assignAttachmentsToChallenge(challenge, attachments) {
+  attachments.forEach((attachment) => _assignAttachmentToChallenge(challenge, attachment));
+}
+
 function assignAttachmentsToChallenges(challenges, attachments) {
   attachments.forEach((attachment) => {
     const challenge = challenges.find((challenge) => challenge.id === attachment.challengeId);
-
-    if (attachment.type === 'illustration') {
-      challenge.illustrationAlt = attachment.alt;
-      challenge.illustrationUrl = attachment.url;
-    } else {
-      if (!challenge.attachments) {
-        challenge.attachments = [];
-      }
-      challenge.attachments.push(attachment.url);
-    }
+    _assignAttachmentToChallenge(challenge, attachment);
   });
   return challenges;
 }

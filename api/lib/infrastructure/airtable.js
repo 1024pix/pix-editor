@@ -6,11 +6,11 @@ function _airtableClient() {
   return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
 }
 
-function findRecords(tableName, fields) {
+function findRecords(tableName, options = {}) {
   logger.info({ tableName }, 'Querying Airtable');
   return _airtableClient()
     .table(tableName)
-    .select(fields ? { fields } : {})
+    .select(options)
     .all();
 }
 

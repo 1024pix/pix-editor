@@ -1,4 +1,5 @@
 const datasource = require('./datasource');
+const airtable = require('../../airtable');
 
 module.exports = datasource.extend({
 
@@ -28,5 +29,11 @@ module.exports = datasource.extend({
     };
   },
 
+  async filterByChallengeId(challengeId) {
+    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+      filterByFormula : `{challengeId persistant} = '${challengeId}'`,
+    });
+    return airtableRawObjects.map(this.fromAirTableObject);
+  }
 });
 

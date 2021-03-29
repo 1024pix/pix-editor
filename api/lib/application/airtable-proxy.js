@@ -21,7 +21,7 @@ exports.register = async function(server) {
           ) {
             try {
               const tableName = request.params.path.split('/')[0];
-              const { updatedRecord, model } = releaseRepository.serializeEntity({
+              const { updatedRecord, model } = await releaseRepository.serializeEntity({
                 entity: response.source,
                 type: tableName,
               });

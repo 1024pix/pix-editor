@@ -76,7 +76,7 @@ describe('Integration | Infrastructure | airtable', () => {
 
     it('should allow query for records with specific fields', async () => {
       // when
-      const records = await airtable.findRecords(tableName, ['titi', 'toto']);
+      const records = await airtable.findRecords(tableName, { fields: ['titi', 'toto'] });
 
       // then
       records.forEach((record, index) => {
