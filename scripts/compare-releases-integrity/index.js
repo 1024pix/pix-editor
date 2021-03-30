@@ -41,21 +41,29 @@ function replaceAttachmentsWithProgress(challenges, remoteChecksumComputer) {
   }));
 }
 
-async function compareReleases({ url: url1, token: token1 }, { url: url2, token: token2 }, remoteChecksumComputer) {
-  const challenges1 = await getRelease(url1, token1);
-  const challenges2 = await getRelease(url2, token2);
+async function compareReleases({ url: urlLeft, token: tokenLeft }, { url: urlRight, token: tokenRight }, remoteChecksumComputer) {
+  const challengesLeft = await getRelease(urlLeft, tokenLeft);
+  const challengesRight = await getRelease(urlRight, tokenRight);
 
-  const newChallenges1 = await replaceAttachmentsWithProgress(challenges1, remoteChecksumComputer);
-  const newChallenges2 = await replaceAttachmentsWithProgress(challenges2, remoteChecksumComputer);
+  const newChallengesLeft = await replaceAttachmentsWithProgress(challengesLeft, remoteChecksumComputer);
+  const newChallengesRight = await replaceAttachmentsWithProgress(challengesRight, remoteChecksumComputer);
 
   const diffs = [];
-  newChallenges1.forEach((challenge, index) => {
-    if (!_.isEqual(challenge, newChallenges2[index])) {
-      diffs.push(challenge.id);
-      const difference = diff(challenge, newChallenges2[index])
-      console.log(challenge.id, difference.text);
+
+  newChallengesLeft.forEach((challengeLeft) => {
+    const challengeRight = newChallengesRight.find((challenge) => challenge.id === challengeLeft.id);
+
+    if (!_.isEqual(challengeLeft, challengeRight)) {
+      diffs.push(challengeLeft.id);
+      const difference = diff(challengeLeft, challengeRight)
+      console.log(challengeLeft.id, difference.text);
     }
   });
+  if (newChallengesLeft.length !== newChallengesRight.length) {
+    console.log('The number of challenges differ between the 2 releases')
+    const missingIds = _.map(_.difference(newChallengesRight, newChallengesLeft), 'id');
+    diffs.push(...missingIds);
+  }
   return diffs;
 }
 

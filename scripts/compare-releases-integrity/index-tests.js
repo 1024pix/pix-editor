@@ -114,6 +114,45 @@ describe('#compareReleases', () => {
     url2Scope.isDone();
   });
 
+  it('should return an empty table when there is no differences when challenges are not ordered', async () => {
+    const remoteChecksumComputer = sinon.stub();
+    const productionRelease = {
+      content: {
+        challenges: [
+          { id: 1 },
+          { id: 2 },
+        ],
+      },
+    };
+    const url1Scope = nock('http://example.org')
+      .matchHeader('Authorization', 'Bearer myToken1')
+      .get('/api/releases/latest')
+      .reply(200, productionRelease);
+
+    const newRelease = {
+      content: {
+        challenges: [
+          { id: 2 },
+          { id: 1 },
+        ],
+      },
+    };
+    const url2Scope = nock('http://example.com')
+      .matchHeader('Authorization', 'Bearer myToken2')
+      .get('/api/releases/latest')
+      .reply(200, newRelease);
+
+    const differences = await compareReleases(
+      { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
+      { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
+      remoteChecksumComputer
+    );
+
+    expect(differences).to.deep.equal([]);
+    url1Scope.isDone();
+    url2Scope.isDone();
+  });
+
   it('should ignore text with space before new line', async () => {
     const remoteChecksumComputer = sinon.stub();
     const productionRelease = {
@@ -169,6 +208,42 @@ describe('#compareReleases', () => {
         challenges: [{
           id: 'recCorruptedChallenge',
           illustrationUrl: 'illustration-corrupted-url',
+        }]
+      }
+    };
+    nock('http://example.com')
+      .get('/api/releases/latest')
+      .reply(200, newRelease);
+
+    const differences = await compareReleases(
+      { url: 'http://example.org/api/releases/latest', token: 'myToken1' },
+      { url: 'http://example.com/api/releases/latest', token: 'myToken2' },
+      remoteChecksumComputer
+    );
+
+    expect(differences).to.deep.equal([expectedDifference]);
+  });
+
+  it('should return the differences when the number of challenges differ', async () => {
+    const remoteChecksumComputer = sinon.stub()
+      .onFirstCall().resolves('sha1')
+      .onSecondCall().resolves('sha2');
+
+    const expectedDifference = '1';
+
+    const productionRelease = {
+      content: {
+        challenges: []
+      }
+    };
+    nock('http://example.org')
+      .get('/api/releases/latest')
+      .reply(200, productionRelease);
+
+    const newRelease = {
+      content: {
+        challenges: [{
+          id: '1',
         }]
       }
     };
