@@ -17,6 +17,8 @@ module.exports = datasource.extend({
     'challengeId persistant',
   ],
 
+  sortField: 'createdAt',
+
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('Record ID'),

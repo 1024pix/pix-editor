@@ -7,7 +7,7 @@ const _DatasourcePrototype = {
   },
 
   async list() {
-    const airtableRawObjects = await airtable.findRecords(this.tableName, { fields: this.usedFields });
+    const airtableRawObjects = await airtable.findRecords(this.tableName, { fields: this.usedFields, sort: [{ field: this.sortField, direction: 'asc' }] });
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
@@ -16,6 +16,7 @@ const _DatasourcePrototype = {
 module.exports = {
 
   extend(props) {
+    props.sortField = props.sortField || 'id persistant';
     const result = Object.assign({}, _DatasourcePrototype, props);
     _.bindAll(result, _.functions(result));
     return result;
