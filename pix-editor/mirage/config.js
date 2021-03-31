@@ -11,19 +11,15 @@ export default function () {
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const { id, fields: { filename, url, mimeType, size, type, challengeId } } = schema.attachments.create(payload);
-    const attachmentResponse = {
+    return _serializeAttachment({
       id,
-      fields: {
-        'Record ID': id,
-        filename,
-        url,
-        mimeType,
-        size,
-        type,
-        challengeId
-      }
-    };
-    return _response(request, attachmentResponse);
+      filename,
+      url,
+      mimeType,
+      size,
+      type,
+      challengeId,
+    });
   });
 
   this.get('/airtable/content/Competences', (schema, request) => {
@@ -159,18 +155,12 @@ export default function () {
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
     const attachment = schema.attachments.find(request.params.id);
-    return {
-      id: attachment.id,
-      fields: {
-        'Record ID': attachment.id,
-        'challengeId': [attachment.challengeId],
-        'type': attachment.type,
-        'filename': attachment.filename,
-        'url': attachment.url,
-        'mimeType': attachment.mimeType,
-        'size': attachment.size,
-      }
-    };
+    return _serializeAttachment(attachment);
+  });
+
+  this.patch('/airtable/content/Attachments/:id', (schema, request) => {
+    const attachment = schema.attachments.find(request.params.id);
+    return _serializeAttachment(attachment);
   });
 
   this.delete('/airtable/content/Attachments/:id', (schema, request) => {
@@ -280,6 +270,21 @@ function _serializeTheme(theme) {
       'Nom': theme.name,
       'Competence': theme.competenceId,
       'Tubes': theme.rawTubeIds
+    }
+  };
+}
+
+function _serializeAttachment(attachment) {
+  return {
+    id: attachment.id,
+    fields: {
+      'Record ID': attachment.id,
+      'challengeId': [attachment.challengeId],
+      'type': attachment.type,
+      'filename': attachment.filename,
+      'url': attachment.url,
+      'mimeType': attachment.mimeType,
+      'size': attachment.size,
     }
   };
 }

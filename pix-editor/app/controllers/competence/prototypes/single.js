@@ -575,7 +575,7 @@ export default class SingleController extends Controller {
     const files = await challenge.files;
     const previousIllustration = files.findBy('type', 'illustration');
 
-    if (previousIllustration) {
+    if (previousIllustration && !previousIllustration.isDeleted) {
       previousIllustration.filename = newIllustration.filename;
       previousIllustration.url = newIllustration.url;
       previousIllustration.size = newIllustration.size;
