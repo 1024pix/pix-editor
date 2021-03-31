@@ -24,22 +24,14 @@ export default function () {
 
   this.get('/airtable/content/Competences', (schema, request) => {
     const records = schema.competences.all().models.map((competence) => {
-      return {
-        id: competence.id,
-        fields: {
-          'Record ID': competence.id,
-          'id persistant': competence.pixId,
-          'Référence': competence.name,
-          'Titre fr-fr': competence.title,
-          'Sous-domaine': competence.code,
-          'Tubes': competence.rawTubeIds,
-          'Thematiques': competence.rawThemeIds,
-          'Description': competence.description,
-          'Origine': competence.source,
-        }
-      };
+      return _serializeCompetence(competence);
     });
     return _response(request, { records });
+  });
+
+  this.get('/airtable/content/Competences/:id', (schema, request) => {
+    const competence = schema.competences.find(request.params.id);
+    return _serializeCompetence(competence);
   });
 
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
@@ -274,6 +266,7 @@ function _serializeTheme(theme) {
   };
 }
 
+
 function _serializeAttachment(attachment) {
   return {
     id: attachment.id,
@@ -285,6 +278,23 @@ function _serializeAttachment(attachment) {
       'url': attachment.url,
       'mimeType': attachment.mimeType,
       'size': attachment.size,
+    },
+  };
+}
+
+function _serializeCompetence(competence) {
+  return {
+    id: competence.id,
+    fields: {
+      'Record ID': competence.id,
+      'id persistant': competence.pixId,
+      'Référence': competence.name,
+      'Titre fr-fr': competence.title,
+      'Sous-domaine': competence.code,
+      'Tubes': competence.rawTubeIds,
+      'Thematiques': competence.rawThemeIds,
+      'Description': competence.description,
+      'Origine': competence.source,
     }
   };
 }
