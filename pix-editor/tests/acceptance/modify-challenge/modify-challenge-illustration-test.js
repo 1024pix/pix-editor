@@ -115,8 +115,10 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
         'filename': 'Certificat GUL 2020.png',
         'size': 178629,
         'type': 'image/png'
-      }]
+      }],
+      filesIds: ['recAttachment1'],
     });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
       uploadFile() {}
     }
@@ -128,6 +130,52 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     // when
     await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
     await click(find('[data-test-modify-challenge-button]'));
+    const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
+    await selectFiles('[data-test-file-input-illustration] input', file);
+
+    await later(this, async () => {}, 200);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-save-changelog-button]'));
+
+    const store = this.owner.lookup('service:store');
+    const attachments = await store.peekAll('attachment');
+    const challenge = await store.peekRecord('challenge', 'recChallenge2');
+    await challenge.files;
+    const newIllustration  = challenge.files.findBy('type', 'illustration');
+
+    // then
+    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.ok(storageServiceStub.uploadFile.calledOnce);
+    assert.ok(attachments.every(record => !record.isModified));
+    assert.equal(newIllustration.url, 'data:,');
+  });
+
+  test('delete and upload a new illustration', async function(assert) {
+    // given
+    this.server.create('challenge', {
+      id: 'recChallenge2',
+      illustration: [{
+        'id': 'attd74YR8ga7IOfWp',
+        'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
+        'filename': 'Certificat GUL 2020.png',
+        'size': 178629,
+        'type': 'image/png',
+      }],
+      filesIds: ['recAttachment1'],
+    });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
+    class StorageServiceStub extends Service {
+      uploadFile() {}
+    }
+
+    this.owner.register('service:storage', StorageServiceStub);
+    const storageServiceStub = this.owner.lookup('service:storage');
+    sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
+
+    // when
+    await visit('/competence/recCompetence2.1/prototypes/recChallenge2');
+    await click(find('[data-test-modify-challenge-button]'));
+    await click(find('[data-test-file-input-illustration] button.file-remove'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
