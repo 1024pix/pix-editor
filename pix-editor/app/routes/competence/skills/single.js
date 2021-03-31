@@ -33,9 +33,10 @@ export default class SingleRoute extends Route {
       !confirm('Êtes-vous sûr de vouloir abandonner la modification en cours ?')) {
       transition.abort();
     } else {
-      if (this.controllerFor('competence.skills.single').model.rollbackAttributes) {
+      const modelSkillSingle = this.controllerFor('competence.skills.single').model;
+      if (modelSkillSingle && modelSkillSingle.rollbackAttributes) {
         // may not exist if it was a new skill
-        this.controllerFor('competence.skills.single').model.rollbackAttributes();
+        modelSkillSingle.rollbackAttributes();
       }
       if (transition.targetName === 'competence.prototypes.index') {
         if (this.controllerFor('competence').view === 'workbench') {
