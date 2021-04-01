@@ -1,5 +1,12 @@
 
 
+## v3.28.0 (01/04/2021)
+
+- [#126](https://github.com/1024pix/pix-editor/pull/126) [FEATURE] Ajouter le champ `Bonne réponse à afficher` (PE-67).
+- [#134](https://github.com/1024pix/pix-editor/pull/134) [BUGFIX] Corrige l'erreur lors de la fermeture d'un nouveau acquis
+- [#133](https://github.com/1024pix/pix-editor/pull/133) [BUGFIX] Corrige la suppression et l'upload d'une illustration dans une épreuve
+- [#127](https://github.com/1024pix/pix-editor/pull/127) [TECH] Intégre la gestion des tokens d'upload dans l'API LCMS (PIX 2092)
+
 ## v3.27.0 (24/03/2021)
 
 - [#129](https://github.com/1024pix/pix-editor/pull/129) [TECH] Nous y avons cru, mais le revert est nécessaire (was: no more airtable attachments)
