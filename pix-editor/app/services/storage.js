@@ -17,7 +17,7 @@ export default class StorageService extends Service {
         'Content-Type': file.type,
       };
       if (isAttachment) {
-        headers['Content-Disposition'] = `attachment; filename="${encodeURIComponent(filename)}"`;
+        headers['Content-Disposition'] = this._getContentDispositionHeader(filename);
       }
       await file.uploadBinary(url, {
         method: 'PUT',
@@ -31,6 +31,10 @@ export default class StorageService extends Service {
         type: file.type,
       };
     });
+  }
+
+  _getContentDispositionHeader(filename) {
+    return `attachment; filename="${encodeURIComponent(filename)}"`;
   }
 
   async cloneFile(url, date = Date, fetchFn = fetch) {
@@ -54,7 +58,7 @@ export default class StorageService extends Service {
     try {
       return await fn(token);
     } catch (error) {
-      if (error.response.status === 401 && !renewToken) {
+      if (error.response && error.response.status === 401 && !renewToken) {
         return this._callAPIWithRetry(fn, true);
       } else {
         throw error;
@@ -88,5 +92,17 @@ export default class StorageService extends Service {
 
   _hasStorageToken() {
     return typeof this.config.storageToken !== 'undefined';
+  }
+
+  async renameFile(url, filename, fetchFn = fetch) {
+    return this._callAPIWithRetry(async (token) => {
+      await fetchFn(url, {
+        method: 'POST',
+        headers: {
+          'X-Auth-Token': token,
+          'Content-Disposition': this._getContentDispositionHeader(filename),
+        },
+      });
+    });
   }
 }

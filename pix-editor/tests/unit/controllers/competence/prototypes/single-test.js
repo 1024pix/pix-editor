@@ -694,6 +694,10 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
 
       challenge.files.forEach((file) => file.challenge = challenge);
+      storageServiceStub = {
+        renameFile: sinon.stub().resolves(),
+      };
+      controller.storage = storageServiceStub;
 
       const expectedPdfAttachement = {
         filename: 'updated-base-name.pdf',
@@ -717,6 +721,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedIllustration]);
+      assert.equal(storageServiceStub.renameFile.calledOnce, true);
     });
 
   });

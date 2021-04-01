@@ -36,11 +36,13 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() {}
+      renameFile() {}
     }
 
     this.owner.register('service:storage', StorageServiceStub);
     const storageServiceStub = this.owner.lookup('service:storage');
     sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
+    sinon.stub(storageServiceStub, 'renameFile').resolves();
 
     // when
     await visit('/');
