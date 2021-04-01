@@ -408,6 +408,44 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(challenge.files[0], expectedNewFile);
     });
 
+    test('it removes the alternative text of illustration', async function(assert) {
+      // given
+      challenge.files = [{
+        id: 'rec_123',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: 'former-alt-illustration',
+      }, {
+        id: 'rec_456',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'attachment',
+        alt: 'alt-attachment',
+      }];
+      challenge.alternativeText = '';
+      challenge.illustration = [];
+
+      const expectedNewFile = {
+        id: 'rec_123',
+        filename: 'attachment-name',
+        url: 'data:,',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        alt: '',
+      };
+
+      // when
+      await controller._handleIllustration(challenge);
+
+      // then
+      assert.deepEqual(challenge.files[0], expectedNewFile);
+    });
   });
 
   module('_saveAttachments', function(hooks) {
