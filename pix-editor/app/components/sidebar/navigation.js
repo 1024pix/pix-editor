@@ -4,6 +4,7 @@ import { action } from '@ember/object';
 
 export default class SidebarNavigationComponent extends Component {
   @service currentData;
+  @service access;
 
   get areas() {
     return this.currentData.getAreas();
@@ -15,6 +16,10 @@ export default class SidebarNavigationComponent extends Component {
 
   get source() {
     return this.currentData.getSource();
+  }
+
+  get mayCreateCompetence() {
+    return this.access.mayCreateCompetence() && this.source !== 'Pix';
   }
 
   @action
