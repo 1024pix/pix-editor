@@ -634,6 +634,9 @@ export default class SingleController extends Controller {
   }
 
   async _renameAttachmentFiles(challenge) {
+    if (!challenge.baseNameUpdated()) {
+      return;
+    }
     const files = await challenge.files;
     const attachments = files.filter((file) => file.type === 'attachment' && !file.isDeleted);
     for (const file of attachments.toArray()) {
