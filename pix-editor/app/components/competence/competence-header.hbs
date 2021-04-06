@@ -1,5 +1,7 @@
 <div class="ui main-title{{this.liteClass}}">
-  <h1 class="ui left floated header">{{@competence.name}}</h1>
+  <h1 class="ui left floated header">
+    <LinkTo @route="competence-management.single" @model={{@competence}} class="competence-management-link">{{@competence.name}}</LinkTo>
+  </h1>
   <div class="selection ui small right floated header select-section">
     <PowerSelect @dropdownClass="select-section-dropdown" @searchEnabled={{false}} @options={{this.sections}} @selected={{this.selectedSection}} @onChange={{@selectSection}} as |section|>
       {{section.title}}
