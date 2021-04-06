@@ -158,7 +158,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
       });
       newCompetence = store.createRecord('competence',{
         id: 'recCompetence0',
-        name: 'competenceName',
+        title: 'competenceName',
       });
     });
 

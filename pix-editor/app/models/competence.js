@@ -1,18 +1,25 @@
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class CompetenceModel extends Model {
 
   needsRefresh = false;
 
-  @attr('string', { readOnly: true }) name;
   @attr title;
-  @attr code;
+  @attr titleEn;
   @attr description;
+  @attr descriptionEn;
+  @attr code;
   @attr pixId;
   @attr source;
 
+  @belongsTo('area') area;
+
   @hasMany('tube') rawTubes;
   @hasMany('theme') rawThemes;
+
+  get name() {
+    return `${this.code} ${this.title}`;
+  }
 
   get tubes() {
     return this.rawTubes.filter(tube => tube.name !== '@workbench');

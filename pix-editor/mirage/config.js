@@ -309,13 +309,15 @@ function _serializeCompetence(competence) {
     fields: {
       'Record ID': competence.id,
       'id persistant': competence.pixId,
-      'Référence': competence.name,
       'Titre fr-fr': competence.title,
+      'Titre en-us': competence.titleEn,
       'Sous-domaine': competence.code,
       'Tubes': competence.rawTubeIds,
       'Thematiques': competence.rawThemeIds,
-      'Description': competence.description,
+      'Description fr-fr': competence.description,
+      'Description en-us': competence.description,
       'Origine': competence.source,
+      'Domaine': competence.areaId,
     }
   };
 }
