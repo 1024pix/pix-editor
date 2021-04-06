@@ -1,5 +1,39 @@
-<div class="main-left">
-  <div class="ui main-title{{this.liteClass}}">
+<div class="main-left competence-management">
+  <div class="ui main-title">
     <h1 class="ui left floated header">{{this.model.name}}</h1>
+  </div>
+  <div class="competence-management__details">
+    <div class="competence-management__data">
+      <form action="" class="ui form">
+        <Field::Input data-test-competence-title-input @value={{this.model.title}} @edition={{this.edition}} @label="Titre"/>
+        <Field::Textarea @title="Description :" @value={{this.model.description}} @edition={{this.edition}} />
+        <div class="ui raised segment">
+          <i class="flag gb uk"></i>
+          <Field::Input @value={{this.model.titleEn}} @edition={{this.edition}} @label="Titre (en)"/>
+          <Field::Textarea @title="Description (en) :" @value={{this.model.descriptionEn}} @edition={{this.edition}} />
+        </div>
+        {{#unless this.edition}}
+          <Field::Input @value={{this.model.pixId}} @title="Id" @edition={{false}} />
+        {{/unless}}
+      </form>
+    </div>
+    <div class="ui vertical compact labeled icon menu competence-management__menu">
+      {{#if this.mayEdit}}
+        <button data-test-edit-button class="ui button item" {{on "click" this.edit}} type="button">
+          <i class="edit icon"></i>
+          Modifier
+        </button>
+      {{/if}}
+      {{#if this.edition}}
+        <button data-test-save-button class="ui button item important-action" {{on "click" this.save}} type="button">
+          <i class="save icon"></i>
+          Enregistrer
+        </button>
+        <button data-test-cancel-button class="ui button item" {{on "click" this.cancelEdit}} type="button">
+          <i class="ban icon"></i>
+          Annuler
+        </button>
+      {{/if}}
+    </div>
   </div>
 </div>

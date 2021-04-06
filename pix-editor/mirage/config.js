@@ -40,6 +40,11 @@ export default function () {
     return _serializeCompetence(competence);
   });
 
+  this.patch('/airtable/content/Competences/:id', (schema, request) => {
+    const competence = schema.competences.find(request.params.id);
+    return _serializeChallenge(competence);
+  });
+
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
     const theme = schema.themes.find(request.params.id);
     return _serializeTheme(theme);
