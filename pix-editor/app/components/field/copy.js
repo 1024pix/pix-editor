@@ -6,7 +6,6 @@ export default class FieldCopyComponent extends Component {
 
   @action
   copy(element) {
-    console.log('inserted');
     element.select();
     try {
       var successful = document.execCommand('copy');
