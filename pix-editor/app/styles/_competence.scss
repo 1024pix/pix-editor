@@ -64,7 +64,26 @@
       width: 200px;
       padding-left: 10px;
       background: rgba(0, 0, 0, 0.01);
+
+      &.create-tube {
+        position: relative;
+        text-align: center;
+
+        a {
+          display: block;
+          margin-bottom: 30px;
+        }
+
+        .tube-management {
+          position: absolute;
+          display: flex;
+          width: calc(100% - 15px);
+          bottom: 5px;
+          border: none;
+        }
+      }
     }
+
 
     &.tube-cell {
       width: 160px;
@@ -377,8 +396,10 @@
         }
       }
     }
+
     &.challengeSection {
       width: 380px;
+
       .color {
         width: 80px;
 

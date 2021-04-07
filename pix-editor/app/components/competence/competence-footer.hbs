@@ -21,15 +21,6 @@
   {{else}}
     <div class="item competence-info"><div class="competence-info">Tubes : {{@competence.tubeCount}}</div><div class="competence-info">Acquix : {{@competence.skillCount}}</div></div>
   {{/if}}
-  {{#if this.mayCreateTube}}
-    <button class="ui button left item" {{on "click" @newTube}} type="button">
-      <i class="plus square outline icon"></i> Nouveau tube
-    </button>
-
-    <button class="ui button left item" {{on "click" @displaySortTubesPopIn}} type="button">
-      <i class="exchange icon rotate-90"></i> Trier les Tubes
-    </button>
-  {{/if}}
   {{#if this.mayCreatePrototype}}
       <button class="ui button right item" {{on "click" @newPrototype}} type="button">
           <i class="plus square outline icon" data-test-create-new-challenge></i> Nouveau prototype

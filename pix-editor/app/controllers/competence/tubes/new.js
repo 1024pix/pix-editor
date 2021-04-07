@@ -4,11 +4,19 @@ import { inject as service } from '@ember/service';
 import Sentry from '@sentry/ember';
 
 export default class NewController extends Tube {
+  queryParams = ['themeId'];
+
+  themeId = null;
   creation = true;
 
   @service currentData;
   @service notify;
   @service loader;
+
+  @action
+  close() {
+    this.cancelEdit();
+  }
 
   @action
   save() {
@@ -34,7 +42,9 @@ export default class NewController extends Tube {
   }
 
   @action
-  cancelEdit() {
+  async cancelEdit() {
+    const theme = await this.tube.get('theme');
+    theme.rollbackAttributes();
     this.store.deleteRecord(this.tube);
     this.edition = false;
     this.notify.message('Création annulée');

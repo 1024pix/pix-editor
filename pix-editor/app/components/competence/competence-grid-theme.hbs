@@ -1,7 +1,12 @@
-{{#if (and this.isWorkbenchSkillView this.hasNoTubes)}}
+{{#if (and this.mayCreateTube this.hasNoTubes)}}
   <tr>
-    <td data-test-theme-cell class="theme-cell">
-      <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+    <td data-test-theme-cell class="theme-cell create-tube">
+        <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+        <div class="ui mini basic icon buttons tube-management">
+          <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
+            <i class="plus square outline icon"></i>
+          </button>
+        </div>
     </td>
     <td data-test-empty-row colspan="8" class="empty-row"></td>
   </tr>
@@ -9,11 +14,21 @@
   {{#each this.tubesOrProductionTubes as |tube index|}}
     <tr>
       {{#if (eq index 0)}}
-        <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell">
-          {{#if this.isWorkbenchSkillView}}
-            <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+        <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell {{if this.mayCreateTube 'create-tube'}}">
+          {{#if (eq @section 'skills')}}
+            <LinkTo data-test-theme-managment @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
           {{else}}
             {{@theme.name}}
+          {{/if}}
+          {{#if this.mayCreateTube}}
+            <div class="ui mini basic icon buttons tube-management">
+              <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
+                <i class="plus square outline icon"></i>
+              </button>
+              <button data-test-sort-tube class="ui icon button" {{on "click" (fn @displaySortTubesPopIn @theme.tubes)}} title="Trier les Tubes" type="button">
+                <i class="exchange icon rotate-90"></i>
+              </button>
+            </div>
           {{/if}}
         </td>
       {{/if}}

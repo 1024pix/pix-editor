@@ -22,7 +22,7 @@ export default class CompetenceController extends Controller {
   @tracked sortingPopInTitle = '';
   @tracked sortingPopInApproveAction = null;
   @tracked sortingPopInCancelAction = null;
-  @tracked sortingName;
+  @tracked sortingModel;
 
   @service router;
   @service config;
@@ -149,8 +149,8 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  newTube() {
-    this.transitionToRoute('competence.tubes.new', this.competence);
+  newTube(theme) {
+    this.transitionToRoute('competence.tubes.new', this.competence, { queryParams: { themeId: theme.id } });
   }
 
   @action
@@ -198,19 +198,19 @@ export default class CompetenceController extends Controller {
 
   @action
   displaySortThemesPopIn() {
-    this._displaySortPopIn(this.sortThemes, this.cancelThemesSorting, 'Tri des thématiques', 'theme');
+    this._displaySortPopIn(this.sortThemes, this.cancelThemesSorting, 'Tri des thématiques', this.competence.sortedThemes);
   }
 
   @action
-  displaySortTubesPopIn() {
-    this._displaySortPopIn(this.sortTubes, this.cancelTubesSorting, 'Tri des tubes', 'tube');
+  displaySortTubesPopIn(tubes) {
+    this._displaySortPopIn(this.sortTubes, this.cancelTubesSorting, 'Tri des tubes', tubes);
   }
 
-  _displaySortPopIn(approveAction, cancelAction, title, sortingName) {
+  _displaySortPopIn(approveAction, cancelAction, title, sortingModel) {
     this.sortingPopInApproveAction = approveAction;
     this.sortingPopInCancelAction = cancelAction;
     this.sortingPopInTitle = title;
-    this.sortingName = sortingName;
+    this.sortingModel = sortingModel;
     this.displaySortingPopIn = true;
   }
 
@@ -220,8 +220,7 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  async sortTubes(themes) {
-    const tubes = themes.map(theme => theme.tubes).flat();
+  async sortTubes(tubes) {
     await this._saveSorting(tubes, 'Tubes ordonnés', 'Erreur lors du trie des tubes');
   }
 
@@ -248,8 +247,7 @@ export default class CompetenceController extends Controller {
   }
 
   @action
-  cancelTubesSorting(themes) {
-    const tubes = themes.map(theme => theme.tubes).flat();
+  cancelTubesSorting(tubes) {
     this._cancelSorting(tubes);
   }
 

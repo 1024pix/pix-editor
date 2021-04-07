@@ -21,6 +21,8 @@
           @languageFilter={{this.languageFilter}}
           @section={{this.section}}
           @view={{this.view}}
+          @newTube={{this.newTube}}
+          @displaySortTubesPopIn={{this.displaySortTubesPopIn}}
           @link={{this.skillLink}} />
       {{else}}
         <List::Workbench
@@ -34,10 +36,8 @@
       @section={{this.section}}
       @view={{this.view}}
       @selectView={{this.selectView}}
-      @newTube={{this.newTube}}
       @newTheme={{this.newTheme}}
       @displaySortThemesPopIn={{this.displaySortThemesPopIn}}
-      @displaySortTubesPopIn={{this.displaySortTubesPopIn}}
       @newPrototype={{this.newPrototype}} />
   {{/unless}}
   {{outlet}}
@@ -49,8 +49,7 @@
 {{/if}}
 {{#if this.displaySortingPopIn}}
   <PopIn::Sorting @title={{this.sortingPopInTitle}}
-                  @model={{this.competence.sortedThemes}}
+                  @model={{this.sortingModel}}
                   @onApprove={{this.sortingPopInApproveAction}}
-                  @onDeny={{this.sortingPopInCancelAction}}
-                  @sortingName={{this.sortingName}}/>
+                  @onDeny={{this.sortingPopInCancelAction}}/>
 {{/if}}

@@ -12,7 +12,6 @@ export default class CompetenceThemesSingleRoute extends Route {
     controller.edition = false;
     const competenceController = this.controllerFor('competence');
     competenceController.setSection('skills');
-    competenceController.setView('workbench');
   }
 
   @action

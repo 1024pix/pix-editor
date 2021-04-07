@@ -1,19 +1,16 @@
 <form action="" class="ui form">
   {{#if @edition}}
-    <Field::Input @value={{@tube.name}} @edition={{@edition}} @label="Nom"/>
-  {{/if}}
-  {{#if @creation}}
-    <Field::Select data-test-select-theme @title="Thématique *" @defaultText="Sélectionner une thématique" @value={{this.selectedTheme}} @options={{this.themeList}} @edition={{true}} @setValue={{this.selectTheme}}/>
+    <Field::Input data-test-name-field @value={{@tube.name}} @edition={{@edition}} @label="Nom"/>
   {{/if}}
   <div class="ui raised segment">
-    <Field::Input @value={{@tube.practicalTitleFr}} @edition={{@edition}} @label="Titre pratique (fr)"/>
-    <Field::Textarea @title="Description pratique (fr) :" @value={{@tube.practicalDescriptionFr}} @edition={{@edition}} />
+    <Field::Input data-test-practical-title-fr-field @value={{@tube.practicalTitleFr}} @edition={{@edition}} @label="Titre pratique (fr)"/>
+    <Field::Textarea data-test-practical-description-fr-field @title="Description pratique (fr) :" @value={{@tube.practicalDescriptionFr}} @edition={{@edition}} />
   </div>
   <div class="ui raised segment">
-    <Field::Input @value={{@tube.practicalTitleEn}} @edition={{@edition}} @label="Titre pratique (en)"/>
-    <Field::Textarea @title="Description pratique (en) :" @value={{@tube.practicalDescriptionEn}} @edition={{@edition}} />
+    <Field::Input data-test-practical-title-en-field @value={{@tube.practicalTitleEn}} @edition={{@edition}} @label="Titre pratique (en)"/>
+    <Field::Textarea data-test-practical-description-en-field @title="Description pratique (en) :" @value={{@tube.practicalDescriptionEn}} @edition={{@edition}} />
   </div>
   {{#unless @edition}}
-    <Field::Input @value={{@tube.pixId}} @title="Id" @edition={{false}} />
+    <Field::Input data-test-pix-id-field @value={{@tube.pixId}} @title="Id" @edition={{false}} />
   {{/unless}}
 </form>

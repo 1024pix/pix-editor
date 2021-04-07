@@ -8,7 +8,6 @@ export default class SingleController extends Controller {
 
   @tracked edition = false;
   @tracked displaySelectLocation = false;
-  @tracked isEmptyMandatoryField = true;
 
   creation = false;
   wasMaximized = false;
@@ -60,6 +59,9 @@ export default class SingleController extends Controller {
 
   @action
   close() {
+    if (this.edition) {
+      this.cancelEdit();
+    }
     this.parentController.send('closeChildComponent');
   }
 
@@ -135,10 +137,4 @@ export default class SingleController extends Controller {
         this.notify.error('Erreur lors de la mise à jour du tube');
       });
   }
-
-  @action
-  setEmptyMandatoryField(value) {
-    this.isEmptyMandatoryField = value;
-  }
-
 }

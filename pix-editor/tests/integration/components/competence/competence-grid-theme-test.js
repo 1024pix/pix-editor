@@ -3,6 +3,8 @@ import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
+import Service from '@ember/service';
+import sinon from 'sinon';
 
 module('Integration | Component | competence/competence-grid-theme', function (hooks) {
 
@@ -42,22 +44,22 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       // then
       assert.dom('[data-test-theme-cell]').hasText('Theme');
       assert.dom('[data-test-theme-cell]').hasAttribute('rowspan', '3');
-
     });
 
-    test('it should display a link to modify theme if section is skills and view is workbench', async function (assert) {
-      // given
-      this.set('view', 'workbench');
-      this.set('section', 'skills');
+    ['workbench', 'production'].forEach(view => {
+      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function (assert) {
+        // given
+        this.set('section', 'skills');
+        this.set('view', view);
 
-      // when
-      await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
-                                                         @view={{this.view}}
-                                                         @theme={{this.theme}}/>`);
+        // when
+        await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
+                                                           @view={{this.view}}
+                                                           @theme={{this.theme}}/>`);
 
-      // then
-      assert.dom('[data-test-theme-cell] a').hasText('Theme');
-
+        // then
+        assert.dom('[data-test-theme-managment]').exists();
+      });
     });
 
     ['skills', 'challenges', 'i18n', 'quality'].forEach(section => {
@@ -93,6 +95,32 @@ module('Integration | Component | competence/competence-grid-theme', function (h
 
       });
     });
+
+    test('it should display management tube buttons if section is skills and view is workbench and mayCreateTube is true', async function(assert) {
+      // given
+      const mayCreateTubeStub = sinon.stub().returns(true);
+      class Access extends Service {
+        mayCreateTube = mayCreateTubeStub
+      }
+      this.owner.register('service:access', Access);
+      const newTube = sinon.stub();
+      const displaySortTubesPopInStub = sinon.stub();
+      this.set('displaySortTubesPopIn', displaySortTubesPopInStub);
+      this.set('newTube', newTube);
+      this.set('view', 'workbench');
+      this.set('section', 'skills');
+
+      // when
+      await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
+                                                         @view={{this.view}}
+                                                         @newTube={{this.newTube}}
+                                                         @displaySortTubesPopIn={{this.displaySortTubesPopIn}}
+                                                         @theme={{this.theme}}/>`);
+      // then
+      assert.dom('[data-test-add-tube]').exists();
+      assert.dom('[data-test-sort-tube]').exists();
+
+    });
   });
 
   module('if theme have no tube', function (hooks) {
@@ -107,12 +135,18 @@ module('Integration | Component | competence/competence-grid-theme', function (h
     });
 
     [{ section: 'skills', view: 'production' },
+      { section: 'skills', view: 'workbench' },
       { section: 'challenges', view: 'production' },
       { section: 'challenges', view: 'workbench' },
       { section: 'i18n', view: null },
       { section: 'quality', view: null }].forEach(item => {
-      test(`it should not be display if section is ${item.section} and view is ${item.view}`, async function (assert) {
+      test(`it should not be display if section is ${item.section} and view is ${item.view} and mayCreateTube is false`, async function (assert) {
         // given
+        const mayCreateTubeStub = sinon.stub().returns(false);
+        class Access extends Service {
+          mayCreateTube = mayCreateTubeStub
+        }
+        this.owner.register('service:access', Access);
         this.set('view', item.view);
         this.set('section', item.section);
 
@@ -125,18 +159,27 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       });
     });
 
-    test('it should display theme name and empty cell if section is skills and view is workbench', async function (assert) {
+    test('it should be display with a create tube button if section is skills and view is workbench and mayCreateTube is true', async function (assert) {
       // given
+      const mayCreateTubeStub = sinon.stub().returns(true);
+      class Access extends Service {
+        mayCreateTube = mayCreateTubeStub
+      }
+      this.owner.register('service:access', Access);
+      const newTube = sinon.stub();
+      this.set('newTube', newTube);
       this.set('view', 'workbench');
       this.set('section', 'skills');
 
       // when
       await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
-                                                           @view={{this.view}}
-                                                           @theme={{this.theme}}/>`);
+                                                         @view={{this.view}}
+                                                         @newTube={{this.newTube}}
+                                                         @theme={{this.theme}}/>`);
       // then
       assert.dom('[data-test-theme-cell] a').hasText('Theme');
       assert.dom('[data-test-empty-row]').exists();
+      assert.dom('[data-test-add-tube]').exists();
     });
   });
 });
