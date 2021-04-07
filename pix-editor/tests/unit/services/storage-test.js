@@ -326,4 +326,98 @@ module('Unit | Service | storage', function(hooks) {
       assert.equal(fetchedToken, token);
     });
   });
+
+  module('renameFile', function(hooks) {
+    let storageService;
+    let fetch;
+    const storageToken = 'HaveFun';
+
+    hooks.beforeEach(function () {
+      storageService = this.owner.lookup('service:storage');
+      storageService.getStorageToken = sinon.stub().resolves(storageToken);
+
+      const configService = this.owner.lookup('service:config');
+      configService.storagePost = 'https://dl.ovh.com/bucket/';
+      configService.storageBucket = '/bucket';
+
+      fetch = sinon.stub();
+    });
+
+    test('it should rename the header of file', async function(assert) {
+      // given
+      fetch.resolves();
+
+      // when
+      await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
+
+      // then
+      assert.ok(fetch.calledOnce);
+      assert.deepEqual(fetch.args[0], ['https://dl.ovh.com/bucket/NOW.txt', {
+        method: 'POST',
+        headers: {
+          'X-Auth-Token': storageToken,
+          'Content-Disposition': 'attachment; filename="update-file-name.jpg"',
+        }
+      }]);
+    });
+
+    test('it should retry when token has expired', async function(assert) {
+      // given
+      fetch.onFirstCall().rejects({
+        response: { status: 401 }
+      });
+
+      fetch.onSecondCall().resolves();
+
+      // when
+      await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
+
+      // then
+      assert.ok(fetch.calledTwice);
+      assert.deepEqual(fetch.args[0], ['https://dl.ovh.com/bucket/NOW.txt', {
+        method: 'POST',
+        headers: {
+          'X-Auth-Token': storageToken,
+          'Content-Disposition': 'attachment; filename="update-file-name.jpg"',
+        }
+      }]);
+    });
+
+    test('it should retry when token has expired only one time', async function(assert) {
+      // given
+      fetch.rejects({
+        response: { status: 401 }
+      });
+
+      // then
+      try {
+        // when
+        await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
+        assert.ok(false, 'should raise en error');
+      } catch (e) {
+        assert.ok(true);
+      }
+
+      assert.ok(fetch.calledTwice);
+    });
+
+    test('it should raise error when API call failed', async function(assert) {
+      // given
+      fetch.rejects({
+        response: { status: 400 }
+      });
+
+      // then
+      try {
+        // when
+        await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
+        assert.ok(false, 'should raise an error');
+      } catch (e) {
+        assert.ok(true);
+      }
+
+      assert.ok(fetch.calledOnce);
+    });
+  });
+
 });
