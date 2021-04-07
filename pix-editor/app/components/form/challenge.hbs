@@ -36,11 +36,12 @@
                    data-test-format-field />
   {{/if}}
   {{#unless this.isAutoReply}}
-    <Field::Textarea @title="Propositions"
-                     @value={{@challenge.suggestion}}
-                     @edition={{@edition}}
-                     @helpContent={{this.helpSuggestions}}
-                     data-test-suggestion-field />
+    <Field::Mde @title="Propositions"
+                @value={{@challenge.suggestion}}
+                @setValue={{fn (mut @challenge.suggestion)}}
+                @edition={{@edition}}
+                @helpContent={{this.helpSuggestions}}
+                data-test-suggestion-field />
   {{/unless}}
   <Field::Textarea @title="Réponses"
                    @value={{@challenge.answers}}

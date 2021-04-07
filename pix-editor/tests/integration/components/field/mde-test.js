@@ -6,13 +6,25 @@ import hbs from 'htmlbars-inline-precompile';
 module('Integration | Component | form-mde.hbs', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-    this.value = 'some text';
-    await render(hbs`<Field::mde @value=this.value />`);
+  test('it should display Tui editor if `edition` is `true`', async function(assert) {
+    // given
+    this.set('edition', true);
 
-    assert.dom('.field').exists();
+    // when
+    await render(hbs`<Field::mde @edition={{this.edition}} />`);
 
+    // then
+    assert.dom('[data-test-tui-editor]').exists();
+  });
+
+  test('it should display `MarkdownToHtml` if `edition` is `false`', async function(assert) {
+    // given
+    this.set('edition', false);
+
+    // when
+    await render(hbs`<Field::mde @edition={{this.edition}} />`);
+
+    // then
+    assert.dom('[data-test-markdow-to-html]').exists();
   });
 });
