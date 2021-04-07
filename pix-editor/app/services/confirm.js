@@ -13,7 +13,7 @@ export default class ConfirmService extends Service {
         if (result) {
           resolve(parameter);
         } else {
-          reject();
+          reject(new Error('Operation was canceled by user'));
         }
       });
     });
