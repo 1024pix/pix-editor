@@ -7,11 +7,19 @@ import EmberObject from '@ember/object';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupTest(hooks);
-  let controller, messageStub;
+  let controller, messageStub, startStub, stopStub;
 
   hooks.beforeEach(function () {
     //given
     controller = this.owner.lookup('controller:competence/prototypes/single');
+
+    startStub = sinon.stub();
+    stopStub = sinon.stub();
+    class LoaderService extends Service {
+      start = startStub;
+      stop = stopStub;
+    }
+    this.owner.register('service:loader', LoaderService);
 
     class ConfirmService extends Service {
       ask = sinon.stub().resolves()
@@ -23,16 +31,9 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
   module('It should save challenge', function(hooks) {
     let saveCheckStub, handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
-      startStub, stopStub, challenge;
+      challenge;
 
     hooks.beforeEach(function () {
-      startStub = sinon.stub();
-      stopStub = sinon.stub();
-      class LoaderService extends Service {
-        start = startStub;
-        stop = stopStub;
-      }
-      this.owner.register('service:loader', LoaderService);
 
       challenge = {
         id: 'rec123456'
@@ -189,6 +190,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._archivePreviousPrototype(prototype2_2);
 
       //then
+      assert.ok(startStub.calledOnce);
+      assert.ok(stopStub.calledOnce);
       assert.equal(prototype2_1.status, 'archivé');
       assert.equal(challenge2_1.status, 'archivé');
       assert.equal(challenge2_2.status, 'périmé');
@@ -199,6 +202,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._archiveOtherActiveSkillVersion(prototype1_1);
 
       //then
+      assert.ok(startStub.calledOnce);
+      assert.ok(stopStub.calledOnce);
       assert.equal(skill2.status, 'archivé');
       assert.equal(prototype2_1.status, 'archivé');
       assert.equal(challenge2_1.status, 'archivé');
@@ -225,6 +230,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._validateAlternatives(prototype1_1);
 
       //then
+      assert.ok(startStub.calledOnce);
+      assert.ok(stopStub.calledOnce);
       assert.equal(challenge1_1.status, 'validé');
     });
   });

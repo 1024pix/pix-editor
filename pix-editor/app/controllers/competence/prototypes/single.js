@@ -428,8 +428,12 @@ export default class SingleController extends Controller {
     if (prototype == null) {
       return Promise.resolve(challenge);
     }
+    this.loader.stop();
     return this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?')
-      .then(() => prototype.archive())
+      .then(() => {
+        this.loader.start();
+        return prototype.archive();
+      })
       .then(() => this._archiveAlternatives(prototype))
       .then(() => challenge);
   }
@@ -442,8 +446,10 @@ export default class SingleController extends Controller {
     if (alternatives.length === 0) {
       return Promise.resolve(challenge);
     }
+    this.loader.stop();
     return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
       .then(() => {
+        this.loader.start();
         const alternativesPublication = alternatives.map(alternative => {
           return alternative.validate()
             .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`));
@@ -507,8 +513,12 @@ export default class SingleController extends Controller {
         if (!activeSkill) {
           return Promise.resolve(challenge);
         }
+        this.loader.stop();
         return this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
-          .then(() => activeSkill.archive())
+          .then(() => {
+            this.loader.start();
+            return activeSkill.archive();
+          })
           .then(() => {
             const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
               if (liveChallenge.isValidated) {
