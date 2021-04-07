@@ -1,5 +1,13 @@
 
 
+## v3.29.0 (07/04/2021)
+
+- [#138](https://github.com/1024pix/pix-editor/pull/138) [FEATURE] Ajout de routes API pour créer et récupérer une release.
+- [#137](https://github.com/1024pix/pix-editor/pull/137) [FEATURE] Utiliser l'editeur markdown pour éditer les proposition d'une épreuve (PE-71).
+- [#136](https://github.com/1024pix/pix-editor/pull/136) [BUGFIX] Renomme l'entête des attachements sur le seau de stockage.
+- [#135](https://github.com/1024pix/pix-editor/pull/135) [BUGFIX] Corrige la suppression du texte alternatif d'une illustration.
+- [#132](https://github.com/1024pix/pix-editor/pull/132) [TECH] Supprime le code de l'extension firefox
+
 ## v3.28.0 (01/04/2021)
 
 - [#126](https://github.com/1024pix/pix-editor/pull/126) [FEATURE] Ajouter le champ `Bonne réponse à afficher` (PE-67).
