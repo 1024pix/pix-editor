@@ -662,13 +662,13 @@ export default class SingleController extends Controller {
 
   async _saveAttachments(challenge) {
     await challenge.files;
-    await Promise.all(challenge.files.map(async file => {
+    for (const file of challenge.files.toArray()) {
       if (file.cloneBeforeSave) {
         file.url = await this.storage.cloneFile(file.url);
         file.cloneBeforeSave = false;
       }
-      return file.save();
-    }));
+      await file.save();
+    }
     return challenge;
   }
 

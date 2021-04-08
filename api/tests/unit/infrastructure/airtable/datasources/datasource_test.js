@@ -22,8 +22,8 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
   describe('#list', () => {
 
     beforeEach(() => {
-      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, usedFields) => {
-        return [{ id: 1, tableName, fields: usedFields }];
+      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, options) => {
+        return [{ id: 1, tableName, ...options }];
       });
     });
 

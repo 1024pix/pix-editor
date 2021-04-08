@@ -3,8 +3,8 @@ const config = require('../config');
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 const pixApiClient = require('../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../infrastructure/event-notifier/updated-record-notifier');
-const airtableSerializer = require('../infrastructure/serializers/airtable-serializer');
 const logger = require('../infrastructure/logger');
+const releaseRepository = require('../infrastructure/repositories/release-repository');
 
 exports.register = async function(server) {
   server.route([
@@ -21,9 +21,9 @@ exports.register = async function(server) {
           ) {
             try {
               const tableName = request.params.path.split('/')[0];
-              const { updatedRecord, model } = airtableSerializer.serialize({
-                airtableObject: response.source,
-                tableName
+              const { updatedRecord, model } = await releaseRepository.serializeEntity({
+                entity: response.source,
+                type: tableName,
               });
               await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
             } catch (err) {

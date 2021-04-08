@@ -1,17 +1,16 @@
-// Errors
 const infraErrors = require('../lib/infrastructure/errors');
-// Chai
 const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-as-promised'));
 chai.use(require('chai-sorted'));
-// Sinon
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
+const cache = require('../lib/infrastructure/cache');
 
 afterEach(async () => {
   airtableBuilder.cleanAll();
   await databaseBuilder.clean();
+  cache.flushAll();
   return sinon.restore();
 });
 

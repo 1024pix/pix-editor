@@ -5,6 +5,8 @@ const skillDatasource = require('../datasources/airtable/skill-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
+const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
+const airtableSerializer = require('../serializers/airtable-serializer');
 
 const { knex } = require('../../../db/knex-database-connection');
 
@@ -52,6 +54,29 @@ module.exports = {
 
     return release[0];
   },
+
+  async serializeEntity({ entity, type }) {
+    const { updatedRecord, model } = airtableSerializer.serialize({
+      airtableObject: entity,
+      tableName: type
+    });
+
+    if (model === attachmentDatasource.path()) {
+      const challenge = await challengeDatasource.filterById(updatedRecord.challengeId);
+      const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
+      _assignAttachmentsToChallenge(challenge, attachments);
+      return { updatedRecord: challenge, model: challengeDatasource.path() };
+    }
+
+    if (model === challengeDatasource.path()) {
+      const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.id);
+      _assignAttachmentsToChallenge(updatedRecord, attachments);
+    }
+
+    return { updatedRecord, model };
+  },
+
+  assignAttachmentsToChallenges,
 };
 
 async function _getCurrentContent() {
@@ -60,9 +85,10 @@ async function _getCurrentContent() {
     competences,
     tubes,
     skills,
-    challenges,
+    challengesWithoutAttachments,
     tutorials,
-    courses
+    courses,
+    attachments,
   ] = await Promise.all([
     areaDatasource.list(),
     competenceDatasource.list(),
@@ -70,8 +96,12 @@ async function _getCurrentContent() {
     skillDatasource.list(),
     challengeDatasource.list(),
     tutorialDatasource.list(),
-    courseDatasource.list()
+    courseDatasource.list(),
+    attachmentDatasource.list(),
   ]);
+
+  const challenges = assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
+
   return {
     areas,
     competences,
@@ -82,3 +112,28 @@ async function _getCurrentContent() {
     courses,
   };
 }
+
+function _assignAttachmentToChallenge(challenge, attachment) {
+  if (attachment.type === 'illustration') {
+    challenge.illustrationAlt = attachment.alt;
+    challenge.illustrationUrl = attachment.url;
+  } else {
+    if (!challenge.attachments) {
+      challenge.attachments = [];
+    }
+    challenge.attachments.push(attachment.url);
+  }
+}
+
+function _assignAttachmentsToChallenge(challenge, attachments) {
+  attachments.forEach((attachment) => _assignAttachmentToChallenge(challenge, attachment));
+}
+
+function assignAttachmentsToChallenges(challenges, attachments) {
+  attachments.forEach((attachment) => {
+    const challenge = challenges.find((challenge) => challenge.id === attachment.challengeId);
+    _assignAttachmentToChallenge(challenge, attachment);
+  });
+  return challenges;
+}
+
