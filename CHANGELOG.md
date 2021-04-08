@@ -1,5 +1,12 @@
 
 
+## v3.30.0 (08/04/2021)
+
+- [#131](https://github.com/1024pix/pix-editor/pull/131) [FEATURE] Utilise la table attachments et dl.pix.fr lors de la release (Pix-2386)
+- [#130](https://github.com/1024pix/pix-editor/pull/130) [FEATURE] Réorganisation des bouttons de gestion des sujets (PE-68).
+- [#140](https://github.com/1024pix/pix-editor/pull/140) [BUGFIX] Corrige la suppression d'une pièce jointe post création d'une déclinaison d'une épreuve.
+- [#139](https://github.com/1024pix/pix-editor/pull/139) [BUGFIX] Améliorer la gestion du loading lors de la validation d'une épreuve (PE-72)
+
 ## v3.29.0 (07/04/2021)
 
 - [#138](https://github.com/1024pix/pix-editor/pull/138) [FEATURE] Ajout de routes API pour créer et récupérer une release.
