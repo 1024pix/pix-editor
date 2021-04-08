@@ -12,6 +12,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
   setupMirage(hooks);
   let apiKey;
   let challenge;
+  let skill;
 
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
@@ -20,19 +21,11 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     challenge = this.server.create('challenge', { id: 'recChallenge1' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkillWorkbench', name: '@workbench', challengeIds: ['recChallenge1'] });
+    skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
-    this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
-    this.server.create('tube', { id: 'recTubeWorkbench', name: '@workbench', rawSkillIds: ['recSkillWorkbench'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('theme', { id: 'recThemeWorkbench', name: 'workbench_theme2', rawTubeIds: ['recTubeWorkbench'] });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1', 'recThemeWorkbench'], rawTubeIds: ['recTube1', 'recTubeWorkbench'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
+    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
-    this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
   });
 
   test('create a challenge alternative', async function(assert) {
@@ -95,5 +88,35 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.deepEqual(storageServiceStub.cloneFile.args[0], ['data:1,']);
     assert.notOk(clonedAttachment.isNew);
     assert.equal(clonedAttachment.url, 'data:2,');
+  });
+
+  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
+    // given
+    class StorageServiceStub extends Service {
+      cloneFile() {}
+    }
+    const challenge2 = this.server.create('challenge', { id: 'recChallenge2', attachments: [{ url: 'data:,', filename: 'test.ods' }], filesIds: ['recAttachment1'] });
+    this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', url: 'data:,', filename: 'test.ods', challenge: challenge2 });
+    skill.update({ challengeIds: ['recChallenge2'] });
+
+    this.owner.register('service:storage', StorageServiceStub);
+    const storageServiceStub = this.owner.lookup('service:storage');
+    sinon.stub(storageServiceStub, 'cloneFile');
+
+    // when
+    await visit('/competence/recCompetence1.1/prototypes/recChallenge2');
+    await click(find('.alternatives'));
+
+    await click(find('[data-test-new-alternative-action]'));
+    await click(find('[data-test-save-challenge-button]'));
+
+    await click(findAll('[data-test-modify-challenge-button]')[1]);
+    await click(find('[data-test-delete-attachment-button]'));
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-save-changelog-button]'));
+
+    // then
+    assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
+    assert.equal(storageServiceStub.cloneFile.callCount, 1);
   });
 });
