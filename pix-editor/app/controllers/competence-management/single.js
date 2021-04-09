@@ -4,7 +4,6 @@ import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
 import Sentry from '@sentry/ember';
 
-
 export default class CompetenceManagementSingleController extends Controller {
 
   @service access;
@@ -12,6 +11,10 @@ export default class CompetenceManagementSingleController extends Controller {
   @service loader;
 
   @tracked edition = false;
+
+  get competence() {
+    return this.model;
+  }
 
   get mayEdit() {
     return this.access.mayEditCompetence() && !this.edition;

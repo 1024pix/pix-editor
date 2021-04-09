@@ -1,19 +1,23 @@
 <div class="main-left competence-management">
   <div class="ui main-title">
-    <h1 class="ui left floated header">{{this.model.name}}</h1>
+    {{#if this.creation}}
+      <h1 class="ui left floated header">Nouvelle compétence {{this.competence.code}}</h1>
+    {{else}}
+      <h1 class="ui left floated header">{{this.competence.name}}</h1>
+    {{/if}}
   </div>
   <div class="competence-management__details">
     <div class="competence-management__data">
       <form action="" class="ui form">
-        <Field::Input data-test-competence-title-input @value={{this.model.title}} @edition={{this.edition}} @label="Titre"/>
-        <Field::Textarea @title="Description :" @value={{this.model.description}} @edition={{this.edition}} />
+        <Field::Input data-test-competence-title-input @value={{this.competence.title}} @edition={{this.edition}} @label="Titre"/>
+        <Field::Textarea @title="Description :" @value={{this.competence.description}} @edition={{this.edition}} />
         <div class="ui raised segment">
           <i class="flag gb uk"></i>
-          <Field::Input @value={{this.model.titleEn}} @edition={{this.edition}} @label="Titre (en)"/>
-          <Field::Textarea @title="Description (en) :" @value={{this.model.descriptionEn}} @edition={{this.edition}} />
+          <Field::Input @value={{this.competence.titleEn}} @edition={{this.edition}} @label="Titre (en)"/>
+          <Field::Textarea @title="Description (en) :" @value={{this.competence.descriptionEn}} @edition={{this.edition}} />
         </div>
         {{#unless this.edition}}
-          <Field::Input @value={{this.model.pixId}} @title="Id" @edition={{false}} />
+          <Field::Input @value={{this.competence.pixId}} @title="Id" @edition={{false}} />
         {{/unless}}
       </form>
     </div>
