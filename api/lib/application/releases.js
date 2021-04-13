@@ -1,6 +1,7 @@
 const { PassThrough } = require('stream');
 const Boom = require('@hapi/boom');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
+const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
 
 exports.register = async function(server) {
   server.route([
@@ -26,7 +27,8 @@ exports.register = async function(server) {
       path: '/api/releases',
       config: {
         handler: async function(request, h) {
-          const release = await releaseRepository.create();
+          const job = await createReleaseQueue.add();
+          const release = await job.finished();
           return h.response(JSON.stringify(release)).created();
         },
       },

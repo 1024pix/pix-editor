@@ -3,17 +3,21 @@ const config = require('../../config');
 const logger = require('../logger');
 const releaseRepository = require('../repositories/release-repository.js');
 
+const queue = new Queue('create-release-queue', config.scheduledJobs.redisUrl);
+queue.on('error', (err) => console.log(err, 'Creating queue for creating release failed'));
+queue.process(createRelease);
+
 module.exports = {
   schedule() {
     if (!_isScheduledReleaseEnabled()) {
       logger.info('Scheduled release is not enabled - check `CREATE_RELEASE_TIME` and `REDIS_URL` variables');
       return;
     }
-    const queue = new Queue('create-release-queue', config.scheduledJobs.redisUrl);
-    queue.on('error', (err) => logger.error(err, 'Creating queue for creating release failed'));
-    queue.process(createRelease);
     queue.add({}, releaseJobOptions);
-  }
+  },
+
+  queue,
+
 };
 
 const releaseJobOptions = {
@@ -29,6 +33,7 @@ const releaseJobOptions = {
 async function createRelease() {
   const release = await releaseRepository.create();
   logger.debug(`Periodic release created with id ${release.id}`);
+  return release;
 }
 
 function _isScheduledReleaseEnabled() {

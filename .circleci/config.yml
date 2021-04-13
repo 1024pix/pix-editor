@@ -43,6 +43,7 @@ jobs:
         environment:
           POSTGRES_USER: circleci
           POSTGRES_HOST_AUTH_METHOD: trust
+      - image: circleci/redis:6.0.10-alpine
     working_directory: ~/pix-editor/api
     steps:
       - attach_workspace:
