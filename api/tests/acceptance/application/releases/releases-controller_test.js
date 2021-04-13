@@ -116,7 +116,7 @@ function mockCurrentContent() {
     type: 'attachment',
     challengeId: 'recChallenge0',
   }];
-  
+
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
