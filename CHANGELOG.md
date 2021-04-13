@@ -1,5 +1,9 @@
 
 
+## v3.31.0 (13/04/2021)
+
+- [#141](https://github.com/1024pix/pix-editor/pull/141) [TECH] Utilisation de la file de jobs pour la création de release via l'API.
+
 ## v3.30.0 (08/04/2021)
 
 - [#131](https://github.com/1024pix/pix-editor/pull/131) [FEATURE] Utilise la table attachments et dl.pix.fr lors de la release (Pix-2386)
