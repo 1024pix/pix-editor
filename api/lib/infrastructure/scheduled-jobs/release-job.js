@@ -1,10 +1,16 @@
 const Queue = require('bull');
+const Sentry = require('@sentry/node');
 const config = require('../../config');
 const logger = require('../logger');
 const releaseRepository = require('../repositories/release-repository.js');
 
+const queueError = (err, message) => {
+  logger.error(err, message);
+  Sentry.captureException(err);
+};
 const queue = new Queue('create-release-queue', config.scheduledJobs.redisUrl);
-queue.on('error', (err) => console.log(err, 'Creating queue for creating release failed'));
+queue.on('error', (err) => queueError(err, 'Queue error for creating release'));
+queue.on('failed', (job, err) => queueError(err, `Release job ${job.id} failed`));
 queue.process(createRelease);
 
 module.exports = {
