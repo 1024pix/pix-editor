@@ -227,43 +227,35 @@ export default class SingleController extends Controller {
   }
 
   @action
-  validate(dropdown) {
+  async validate(dropdown) {
     if (dropdown) {
       dropdown.actions.close();
     }
-    return this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?')
-      .then(() => {
-        let defaultLogMessage;
-        if (this.challenge.isPrototype) {
-          defaultLogMessage = 'Mise en production du prototype';
-        } else {
-          defaultLogMessage = 'Mise en production de la déclinaison';
-        }
-        this._displayChangelogPopIn(defaultLogMessage, (changelog) => {
+    try {
+      await this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?');
+      const defaultLogMessage = this.challenge.isPrototype ? 'Mise en production du prototype' : 'Mise en production de la déclinaison';
+      this._displayChangelogPopIn(defaultLogMessage, async (changelog) => {
+        try {
           this.loader.start();
-          return this._validationChecks(this.challenge)
-            .then(challenge => this._archivePreviousPrototype(challenge))
-            .then(challenge => this._archiveOtherActiveSkillVersion(challenge))
-            .then(challenge => challenge.validate())
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(challenge => this._validateAlternatives(challenge))
-            .then(() => {
-              this._message('Mise en production réussie');
-              this.parentController.send('selectView', 'production', true);
-            })
-            .catch((error) => {
-              console.error(error);
-              Sentry.captureException(error);
-              this._errorMessage('Erreur lors de la mise en production');
-            })
-            .finally(() => this.loader.stop());
-        });
-      })
-      .catch((error) => {
-        Sentry.captureException(error);
-        this._message('Mise en production abandonnée');
-      });
+          const challenge = await this._validationChecks(this.challenge);
+          await this._archivePreviousPrototype(challenge);
+          await this._archiveOtherActiveSkillVersion(challenge);
+          await challenge.validate();
+          await this._handleChangelog(challenge, changelog);
+          await this._checkSkillsValidation(challenge);
+          await this._validateAlternatives(challenge);
+          this._message('Mise en production réussie');
+          this.parentController.send('selectView', 'production', true);
+        } catch (error) {
+          console.error(error);
+          Sentry.captureException(error);
+          this._errorMessage('Erreur lors de la mise en production');
+        } finally {
+          this.loader.stop();
+        }});
+    } catch (error) {
+      this._message('Mise en production abandonnée');
+    }
   }
 
   @action
@@ -419,45 +411,32 @@ export default class SingleController extends Controller {
     }
   }
 
-  _archivePreviousPrototype(challenge) {
-    if (!challenge.isPrototype) {
-      return Promise.resolve(challenge);
+  async _archivePreviousPrototype(challenge) {
+    const productionPrototype = challenge.firstSkill.productionPrototype;
+    if (!challenge.isPrototype || productionPrototype == null) {
+      return;
     }
-    const skill = challenge.firstSkill;
-    const prototype = skill.productionPrototype;
-    if (prototype == null) {
-      return Promise.resolve(challenge);
-    }
+
     this.loader.stop();
-    return this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?')
-      .then(() => {
-        this.loader.start();
-        return prototype.archive();
-      })
-      .then(() => this._archiveAlternatives(prototype))
-      .then(() => challenge);
+    await this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?');
+    this.loader.start();
+    await productionPrototype.archive();
+    await this._archiveAlternatives(productionPrototype);
   }
 
-  _validateAlternatives(challenge) {
-    if (!challenge.isPrototype) {
-      return Promise.resolve(challenge);
+  async _validateAlternatives(challenge) {
+    if (!challenge.isPrototype || challenge.draftAlternatives.length === 0) {
+      return;
     }
     const alternatives = challenge.draftAlternatives;
-    if (alternatives.length === 0) {
-      return Promise.resolve(challenge);
-    }
     this.loader.stop();
-    return this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?')
-      .then(() => {
-        this.loader.start();
-        const alternativesPublication = alternatives.map(alternative => {
-          return alternative.validate()
-            .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} mise en production`));
-        });
-        return Promise.all(alternativesPublication);
-      })
-      .catch(() => Promise.resolve())
-      .finally(() => challenge);
+    await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
+    this.loader.start();
+    const alternativesPublication = alternatives.map(async alternative => {
+      const validatedAlternative = await alternative.validate();
+      this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
+    });
+    return Promise.all(alternativesPublication);
   }
 
   _archiveAlternatives(challenge) {
@@ -498,40 +477,30 @@ export default class SingleController extends Controller {
       .then(() => challenge);
   }
 
-  _archiveOtherActiveSkillVersion(challenge) {
-    if (!challenge.isPrototype) {
-      return Promise.resolve(challenge);
-    }
+  async _archiveOtherActiveSkillVersion(challenge) {
     const currentSkill = challenge.firstSkill;
-    if (currentSkill.isActive) {
-      return Promise.resolve(challenge);
+    if (!challenge.isPrototype || currentSkill.isActive) {
+      return;
     }
-    return currentSkill.tube
-      .then(tube => {
-        const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
-        const activeSkill = skillVersions.find(skill => skill.isActive);
-        if (!activeSkill) {
-          return Promise.resolve(challenge);
-        }
-        this.loader.stop();
-        return this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`)
-          .then(() => {
-            this.loader.start();
-            return activeSkill.archive();
-          })
-          .then(() => {
-            const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
-              if (liveChallenge.isValidated) {
-                return liveChallenge.archive();
-              }
-              if (liveChallenge.isDraft) {
-                return liveChallenge.delete();
-              }
-            });
-            return Promise.all(challengesToArchiveOrDelete)
-              .then(() => challenge);
-          });
-      });
+    const tube = await currentSkill.tube;
+    const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
+    const activeSkill = skillVersions.find(skill => skill.isActive);
+    if (!activeSkill) {
+      return;
+    }
+    this.loader.stop();
+    await this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`);
+    this.loader.start();
+    await activeSkill.archive();
+    const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
+      if (liveChallenge.isValidated) {
+        return liveChallenge.archive();
+      }
+      if (liveChallenge.isDraft) {
+        return liveChallenge.delete();
+      }
+    });
+    await Promise.all(challengesToArchiveOrDelete);
   }
 
   _checkSkillsValidation(challenge) {
@@ -540,8 +509,8 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     }
     const skillChecks = skills.reduce((current, skill) => {
-      const prototype = skill.productionPrototype;
-      if (prototype) {
+      const prototypeProduction = skill.productionPrototype;
+      if (prototypeProduction) {
         if (!skill.isActive) {
           current.push(skill.activate()
             .then(skill => {
@@ -672,20 +641,18 @@ export default class SingleController extends Controller {
     return challenge;
   }
 
-  _handleChangelog(challenge, changelog) {
-    if (changelog) {
-      const entry = this.store.createRecord('changelogEntry', {
-        text: changelog,
-        recordId: challenge.pixId,
-        author: this.config.author,
-        createdAt: (new Date()).toISOString(),
-        elementType: this.changelogEntry.challenge
-      });
-      return entry.save()
-        .then(() => challenge);
-    } else {
-      return Promise.resolve(challenge);
+  async _handleChangelog(challenge, changelog) {
+    if (!changelog) {
+      return;
     }
+    const entry = this.store.createRecord('changelogEntry', {
+      text: changelog,
+      recordId: challenge.pixId,
+      author: this.config.author,
+      createdAt: (new Date()).toISOString(),
+      elementType: this.changelogEntry.challenge
+    });
+    await entry.save();
   }
 
   _message(text) {
