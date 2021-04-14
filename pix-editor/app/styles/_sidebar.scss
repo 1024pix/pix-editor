@@ -80,30 +80,6 @@
           background: rgba(0, 0, 0, 0.08);
         }
       }
-
-      .content button {
-        position: relative;
-        width: 100%;
-        border: none !important;
-        color: white !important;
-        text-align: left !important;
-        box-shadow: none;
-        padding: 0.9rem 1.14rem;
-
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 1px;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        &:hover, &:active, &:focus {
-          background: rgba(0, 0, 0, 0.08) !important;
-        }
-      }
     }
   }
 

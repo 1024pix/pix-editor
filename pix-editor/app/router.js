@@ -44,6 +44,7 @@ Router.map(function() {
     });
   });
   this.route('competence-management', function() {
+    this.route('new', { path: 'new/:area_id' });
     this.route('single', { path: '/:competence_id' });
   });
   this.route('skill', { path:'/skill/:skill_name' });
