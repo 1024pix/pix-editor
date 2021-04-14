@@ -45,6 +45,12 @@ export default function () {
     return _serializeChallenge(competence);
   });
 
+  this.post('/airtable/content/Competences', (schema, request) => {
+    const competence = JSON.parse(request.requestBody);
+    const createdCompetence = schema.competences.create(competence);
+    return _serializeCompetence(createdCompetence);
+  });
+
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
     const theme = schema.themes.find(request.params.id);
     return _serializeTheme(theme);
@@ -55,6 +61,12 @@ export default function () {
       return _serializeTheme(theme);
     });
     return _response(request, { records });
+  });
+
+  this.post('/airtable/content/Thematiques', (schema, request) => {
+    const theme = JSON.parse(request.requestBody);
+    const createdTheme =  schema.themes.create(theme);
+    return _serializeTheme(createdTheme);
   });
 
   this.get('/airtable/content/Tubes/:id', (schema, request) => {
@@ -69,60 +81,28 @@ export default function () {
     return _response(request, { records });
   });
 
+  this.post('/airtable/content/Tubes', (schema, request) => {
+    const tube = JSON.parse(request.requestBody);
+    const createdTube =  schema.themes.create(tube);
+    return _serializeTheme(createdTube);
+  });
+
   this.get('/airtable/content/Acquis/:id', (schema, request) => {
     const skill = schema.skills.find(request.params.id);
-    return {
-      id: skill.id,
-      fields: {
-        'Record Id': skill.id,
-        'Nom': skill.name,
-        'Indice fr-fr': skill.clue,
-        'Indice en-us': skill.clueEn,
-        'Statut de l\'indice': skill.clueStatus,
-        'Epreuves': skill.challengeIds,
-        'Description': skill.description,
-        'Statut de la description': skill.descriptionStatus,
-        'Comprendre': undefined,
-        'En savoir plus': undefined,
-        'Compétence': skill.competence,
-        'Tube': skill.tubeId,
-        'Level': skill.level,
-        'Status': skill.status,
-        'Internationalisation': skill.i18n,
-        'id persistant': skill.pixId,
-        'Date': skill.createdAt,
-        'Version': skill.version,
-      }
-    };
+    return _serializeSkill(skill);
   });
 
   this.get('/airtable/content/Acquis', (schema, request) => {
     const records = schema.skills.all().models.map((skill) => {
-      return {
-        id: skill.id,
-        fields: {
-          'Record Id': skill.id,
-          'Nom': skill.name,
-          'Indice fr-fr': skill.clue,
-          'Indice en-us': skill.clueEn,
-          'Statut de l\'indice': skill.clueStatus,
-          'Epreuves': skill.challengeIds,
-          'Description': skill.description,
-          'Statut de la description': skill.descriptionStatus,
-          'Comprendre': undefined,
-          'En savoir plus': undefined,
-          'Compétence': skill.competence,
-          'Tube': skill.tubeId,
-          'Level': skill.level,
-          'Status': skill.status,
-          'Internationalisation': skill.i18n,
-          'id persistant': skill.pixId,
-          'Date': skill.createdAt,
-          'Version': skill.version,
-        }
-      };
+      return _serializeSkill(skill);
     });
     return _response(request, { records });
+  });
+
+  this.post('/airtable/content/Acquis', (schema, request) => {
+    const skill = JSON.parse(request.requestBody);
+    const createdSkill =  schema.themes.create(skill);
+    return _serializeTheme(createdSkill);
   });
 
   this.get('/airtable/content/Epreuves/:id', (schema, request) => {
@@ -242,6 +222,32 @@ function _serializeChallenge(challenge) {
       'Géographie': challenge.area,
       'Réponse automatique': challenge.autoReply,
       'files': challenge.filesIds,
+    }
+  };
+}
+
+function _serializeSkill(skill) {
+  return {
+    id: skill.id,
+    fields: {
+      'Record Id': skill.id,
+      'Nom': skill.name,
+      'Indice fr-fr': skill.clue,
+      'Indice en-us': skill.clueEn,
+      'Statut de l\'indice': skill.clueStatus,
+      'Epreuves': skill.challengeIds,
+      'Description': skill.description,
+      'Statut de la description': skill.descriptionStatus,
+      'Comprendre': undefined,
+      'En savoir plus': undefined,
+      'Compétence': skill.competence,
+      'Tube': skill.tubeId,
+      'Level': skill.level,
+      'Status': skill.status,
+      'Internationalisation': skill.i18n,
+      'id persistant': skill.pixId,
+      'Date': skill.createdAt,
+      'Version': skill.version,
     }
   };
 }
