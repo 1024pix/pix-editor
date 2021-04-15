@@ -416,10 +416,7 @@ export default class SingleController extends Controller {
     if (!challenge.isPrototype || productionPrototype == null) {
       return;
     }
-
-    this.loader.stop();
     await this.confirm.ask('Archivage du prototype précédent', 'Êtes-vous sûr de vouloir archiver le prototype précédent et ses déclinaisons ?');
-    this.loader.start();
     await productionPrototype.archive();
     await this._archiveAlternatives(productionPrototype);
   }
@@ -429,9 +426,7 @@ export default class SingleController extends Controller {
       return;
     }
     const alternatives = challenge.draftAlternatives;
-    this.loader.stop();
     await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
-    this.loader.start();
     const alternativesPublication = alternatives.map(async alternative => {
       const validatedAlternative = await alternative.validate();
       this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
@@ -488,9 +483,7 @@ export default class SingleController extends Controller {
     if (!activeSkill) {
       return;
     }
-    this.loader.stop();
     await this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`);
-    this.loader.start();
     await activeSkill.archive();
     const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
       if (liveChallenge.isValidated) {
