@@ -190,8 +190,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._archivePreviousPrototype(prototype2_2);
 
       //then
-      assert.ok(startStub.calledOnce);
-      assert.ok(stopStub.calledOnce);
       assert.equal(prototype2_1.status, 'archivé');
       assert.equal(challenge2_1.status, 'archivé');
       assert.equal(challenge2_2.status, 'périmé');
@@ -202,8 +200,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._archiveOtherActiveSkillVersion(prototype1_1);
 
       //then
-      assert.ok(startStub.calledOnce);
-      assert.ok(stopStub.calledOnce);
       assert.equal(skill2.status, 'archivé');
       assert.equal(prototype2_1.status, 'archivé');
       assert.equal(challenge2_1.status, 'archivé');
@@ -230,8 +226,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       await controller._validateAlternatives(prototype1_1);
 
       //then
-      assert.ok(startStub.calledOnce);
-      assert.ok(stopStub.calledOnce);
       assert.equal(challenge1_1.status, 'validé');
     });
   });

@@ -1,14 +1,22 @@
 import Service from '@ember/service';
+import { inject as service } from '@ember/service';
+
 
 export default class ConfirmService extends Service {
   target = null;
+
+  @service loader;
 
   setTarget(aTarget) {
     this.target = aTarget;
   }
 
-  ask(title, text, parameter) {
-    return new Promise((resolve, reject) => {
+  async ask(title, text, parameter) {
+    const wasLoading = this.loader.isLoading;
+    if (wasLoading) {
+      this.loader.stop();
+    }
+    await new Promise((resolve, reject) => {
       this.target.confirmAsk(title, text, (result) => {
         if (result) {
           resolve(parameter);
@@ -17,5 +25,8 @@ export default class ConfirmService extends Service {
         }
       });
     });
+    if (wasLoading) {
+      this.loader.start();
+    }
   }
 }
