@@ -15,7 +15,7 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
       // given
       const options = {
         method: 'GET',
-        url: '/api/areas',
+        url: '/api/config',
       };
 
       // when
