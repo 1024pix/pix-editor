@@ -7,6 +7,8 @@ export default Factory.extend({
   competenceIds() {
     return [];
   },
+  titleFrFr: '',
+  titleEnUs: '',
 
 });
 

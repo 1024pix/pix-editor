@@ -4,7 +4,6 @@ export default function () {
 
   this.namespace = 'api';
 
-  this.get('/areas', ({ areas }, request) => _response(request, areas.all()));
   this.get('/users/me', ({ users }, request) => _response(request, users.first()));
   this.get('/config', ({ configs }, request) => _response(request, configs.first()));
 
@@ -20,6 +19,13 @@ export default function () {
       type,
       challengeId,
     });
+  });
+
+  this.get('/airtable/content/Domaines', (schema, request) => {
+    const records = schema.areas.all().models.map((area) => {
+      return _serializeArea(area);
+    });
+    return _response(request, { records });
   });
 
   this.get('/airtable/content/Competences', (schema, request) => {
@@ -279,6 +285,21 @@ function _serializeAttachment(attachment) {
       'mimeType': attachment.mimeType,
       'size': attachment.size,
     },
+  };
+}
+
+function _serializeArea(area) {
+  return {
+    id: area.id,
+    fields: {
+      'Record ID': area.id,
+      'id persistant': area.pixId,
+      'Nom': area.name,
+      'Code': area.code,
+      'Titre fr-fr': area.titleFrFr,
+      'Titre en-us': area.titleEnUs,
+      'Competences (identifiants)': area.competenceIds,
+    }
   };
 }
 
