@@ -1,5 +1,11 @@
 
 
+## v3.32.0 (20/04/2021)
+
+- [#145](https://github.com/1024pix/pix-editor/pull/145) [TECH] Ajout de logs sur la queue de release
+- [#144](https://github.com/1024pix/pix-editor/pull/144) [TECH] Utiliser le proxy airTable pour récupérer les domaines.
+- [#143](https://github.com/1024pix/pix-editor/pull/143) [TECH] refactorisation la gestion du loading lors de la validation d'une épreuve.
+
 ## v3.31.0 (13/04/2021)
 
 - [#141](https://github.com/1024pix/pix-editor/pull/141) [TECH] Utilisation de la file de jobs pour la création de release via l'API.
