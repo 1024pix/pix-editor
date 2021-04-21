@@ -17,7 +17,7 @@ export default class CompetenceManagementSingleController extends Controller {
   }
 
   get mayEdit() {
-    return this.access.mayEditCompetence() && !this.edition;
+    return this.access.isAdmin() && !this.edition;
   }
 
   @action

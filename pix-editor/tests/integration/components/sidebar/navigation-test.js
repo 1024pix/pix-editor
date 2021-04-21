@@ -40,9 +40,12 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         getSource() {
           return 'Pix';
         }
+        get isPixSource() {
+          return true;
+        }
       });
       this.owner.register('service:access', class MockService extends Service {
-        mayCreateCompetence() {
+        isAdmin() {
           return true;
         }
       });
@@ -105,6 +108,9 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         }
         getSource() {
           return 'Pix +';
+        }
+        get isPixSource() {
+          return false;
         }
       });
 

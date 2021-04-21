@@ -19,7 +19,7 @@ export default class SidebarNavigationComponent extends Component {
   }
 
   get mayCreateCompetence() {
-    return this.access.mayCreateCompetence() && this.source !== 'Pix';
+    return this.access.isAdmin() && !this.currentData.isPixSource;
   }
 
   @action

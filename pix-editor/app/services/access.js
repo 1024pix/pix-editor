@@ -20,14 +20,6 @@ export default class AccessService extends Service {
     return this.isEditor();
   }
 
-  mayCreateCompetence() {
-    return this.isAdmin();
-  }
-
-  mayEditCompetence() {
-    return this.isAdmin();
-  }
-
   mayCreateTube() {
     return this.isEditor();
   }
