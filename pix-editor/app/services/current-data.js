@@ -43,6 +43,10 @@ export default class CurrentDataService extends Service {
     return this._source;
   }
 
+  get isPixSource() {
+    return this.getSource() === 'Pix';
+  }
+
   getCompetence() {
     return this._competence;
   }

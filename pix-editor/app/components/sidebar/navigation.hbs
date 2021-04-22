@@ -1,17 +1,20 @@
-<Field::Select @value={{this.source}} @options={{this.sources}} @setValue={{this.setSource}} @edition={{true}}/>
+<Field::Select data-test-sources-select @value={{this.source}} @options={{this.sources}} @setValue={{this.setSource}} @edition={{true}}/>
 <AccordionList as |accordion|>
   <div class="ui accordion inverted">
     {{#each this.areas as |area|}}
       <accordion.item as |accordionItem|>
         <accordionItem.toggle data-test-area-item @class="title">
           <i class="dropdown icon"></i>
-          {{area.name}}
+          <span>{{area.name}}</span>
         </accordionItem.toggle>
         <accordionItem.panel>
           <div class="content">
             {{#each area.sortedCompetences as |competence|}}
               <LinkTo data-test-competence-item @route="competence" @model={{competence.id}} class="item" @invokeAction={{@close}}> {{competence.name}}</LinkTo>
             {{/each}}
+            {{#if this.mayCreateCompetence}}
+              <LinkTo data-test-add-competence @route="competence-management.new" @model={{area.id}} class="item" @invokeAction={{@close}}><i class="plus square icon"></i>Ajouter une compétence</LinkTo>
+            {{/if}}
           </div>
         </accordionItem.panel>
       </accordion.item>

@@ -2,10 +2,11 @@ import { Factory } from 'ember-cli-mirage';
 
 export default Factory.extend({
 
-  name: 'Name',
   title: 'Title',
+  titleEn: 'TitleEn',
   code: 'Code',
   description: 'Description',
+  descriptionEn: 'DescriptionEn',
   pixId: '',
   source: 'Pix',
 });

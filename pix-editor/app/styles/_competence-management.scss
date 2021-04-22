@@ -1,0 +1,13 @@
+.competence-management {
+  &__details {
+    @extend .challenge;
+  }
+
+  &__data {
+    @extend .challenge-data;
+  }
+
+  &__menu {
+    @extend %challenge-menu;
+  }
+}

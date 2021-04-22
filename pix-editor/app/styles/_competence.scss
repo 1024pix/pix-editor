@@ -26,6 +26,15 @@
   }
 }
 
+.competence-management-link {
+  color: white;
+
+   &:hover {
+     color: white;
+     text-decoration: underline;
+   }
+}
+
 .competence {
   flex: 1 1 0;
   overflow: hidden;

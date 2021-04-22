@@ -2,7 +2,7 @@
 
   &.ui.sidebar {
     transition: transform 0.5s, visibility 0.5s;
-    z-index:99;
+    z-index: 99;
   }
 
   h1.header {
@@ -20,13 +20,13 @@
   }
 
   .ember-power-select-trigger {
-    margin:10px 5px;
-    background-color:transparent;
-    color:rgba(255, 255, 255, 0.5);
-    border-color:transparent;
+    margin: 10px 5px;
+    background-color: transparent;
+    color: rgba(255, 255, 255, 0.5);
+    border-color: transparent;
 
     .ember-power-select-status-icon {
-      border-top-color:transparent;
+      border-top-color: transparent;
     }
   }
 
@@ -37,24 +37,50 @@
       background: transparent;
       border-color: rgba(255, 255, 255, 0.9);
 
-      .ember-power-select-placeholder{
+      .ember-power-select-placeholder {
         color: rgba(255, 255, 255, 0.9);
       }
-      .custom-trigger{
-        color:rgba(255, 255, 255, 0.9);
+
+      .custom-trigger {
+        color: rgba(255, 255, 255, 0.9);
       }
     }
 
     .ember-power-select-dropdown.ember-basic-dropdown-content--in-place {
-      width:auto;
-      left:5px;
-      right:5px;
+      width: auto;
+      left: 5px;
+      right: 5px;
     }
   }
 
+  .title.AccordionToggle {
+    display: flex;
 
-  .accordion .content a {
-    white-space: nowrap;
+    &:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    span {
+      display: block;
+    }
+  }
+
+  .accordion {
+    .is-active {
+      .liquid-container {
+        background: #2c90d2;
+        margin-bottom: 8px;
+      }
+
+      a.item {
+        white-space: nowrap;
+        border: none;
+
+        &:hover, &.active, &.active:hover {
+          background: rgba(0, 0, 0, 0.08);
+        }
+      }
+    }
   }
 
   .ui.menu {
@@ -132,7 +158,7 @@
     a, p {
       display: block;
       padding: 13px 5px;
-      margin-bottom:0;
+      margin-bottom: 0;
 
       &:hover {
         background-color: rgba(255, 255, 255, 0.08);
