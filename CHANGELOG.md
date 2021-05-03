@@ -1,5 +1,10 @@
 
 
+## v3.33.0 (03/05/2021)
+
+- [#142](https://github.com/1024pix/pix-editor/pull/142) [FEATURE] Ajouter la gestion des compétences (PE-2).
+- [#146](https://github.com/1024pix/pix-editor/pull/146) [BUGFIX] Ré-essaie de s‘authentifier sur l‘API Pix si le jeton est expiré.
+
 ## v3.32.0 (20/04/2021)
 
 - [#145](https://github.com/1024pix/pix-editor/pull/145) [TECH] Ajout de logs sur la queue de release
