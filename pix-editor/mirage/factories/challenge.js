@@ -31,7 +31,6 @@ export default Factory.extend({
   responsive: 'responsive',
   locales: 'languages',
   area: 'area',
-  _definedBaseName: '_definedBaseName',
   autoReply: 'autoReply',
   files: null,
 });
