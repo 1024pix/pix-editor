@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Sentry = require('@sentry/node');
 const config = require('../config');
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 const pixApiClient = require('../infrastructure/pix-api-client');
@@ -28,6 +29,7 @@ exports.register = async function(server) {
               await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
             } catch (err) {
               logger.error(err);
+              Sentry.captureException(err);
             }
           }
           return response;

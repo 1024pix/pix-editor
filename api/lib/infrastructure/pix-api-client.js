@@ -5,14 +5,28 @@ const config = require('../config');
 
 module.exports = {
   async request({ payload, url }) {
-    const token = await _getToken();
-    return axios.patch(
-      `${config.pixApi.baseUrl}${url}`,
-      payload,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
+    return _callAPIWithRetry((token) => {
+      return axios.patch(
+        `${config.pixApi.baseUrl}${url}`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    });
   },
 };
+
+async function _callAPIWithRetry(fn, renewToken = false) {
+  const token = await _getToken(renewToken);
+  try {
+    return await fn(token);
+  } catch (error) {
+    if (error.response && error.response.status === 401 && !renewToken) {
+      return _callAPIWithRetry(fn, true);
+    } else {
+      throw error;
+    }
+  }
+}
 
 async function _authenticate() {
   const data = qs.stringify({
@@ -31,6 +45,9 @@ async function _authenticate() {
   return response.data.access_token;
 }
 
-function _getToken() {
+function _getToken(renewToken) {
+  if (renewToken) {
+    return _authenticate();
+  }
   return cache.get('pix-api-token') || _authenticate();
 }
