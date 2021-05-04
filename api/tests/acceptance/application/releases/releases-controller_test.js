@@ -235,7 +235,7 @@ describe('Acceptance | Controller | release-controller', () => {
         });
 
         // Then
-        expect(response.statusCode).to.equal(201);
+        expect(response.statusCode).to.equal(200);
         const release = JSON.parse(response.result);
         expect(release.content).to.deep.equal(expectedCurrentContent);
       });
