@@ -4,6 +4,18 @@ const releaseRepository = require('../infrastructure/repositories/release-reposi
 const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
 const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
 
+function _getWritableStream() {
+  const writableStream = new PassThrough();
+  writableStream.headers = {
+    'content-type': 'application/json',
+
+    // WHY: to avoid compression because when compressing, the server buffers
+    // for too long causing a response timeout.
+    'content-encoding': 'identity',
+  };
+  return writableStream;
+}
+
 exports.register = async function(server) {
   server.route([
     {
@@ -11,15 +23,7 @@ exports.register = async function(server) {
       path: '/api/current-content',
       config: {
         handler: function() {
-          const writableStream = new PassThrough();
-          writableStream.headers = {
-            'content-type': 'application/json',
-
-            // WHY: to avoid compression because when compressing, the server buffers
-            // for too long causing a response timeout.
-            'content-encoding': 'identity',
-          };
-          return releaseRepository.getCurrentContentAsStream(writableStream);
+          return promiseStreamer(releaseRepository.getCurrentContent(), _getWritableStream());
         },
       },
     },
@@ -29,12 +33,7 @@ exports.register = async function(server) {
       config: {
         handler: async function() {
           const job = await createReleaseQueue.add();
-          const writableStream = new PassThrough();
-          writableStream.headers = {
-            'content-type': 'application/json',
-            'content-encoding': 'identity',
-          };
-          return promiseStreamer(job.finished(), writableStream);
+          return promiseStreamer(job.finished(), _getWritableStream());
         },
       },
     },
