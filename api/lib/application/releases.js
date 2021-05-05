@@ -2,7 +2,7 @@ const { PassThrough } = require('stream');
 const Boom = require('@hapi/boom');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
 const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
-const { jobStreamer } = require('../infrastructure/utils/job-streamer');
+const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
 
 exports.register = async function(server) {
   server.route([
@@ -34,7 +34,7 @@ exports.register = async function(server) {
             'content-type': 'application/json',
             'content-encoding': 'identity',
           };
-          return jobStreamer(job, writableStream);
+          return promiseStreamer(job.finished(), writableStream);
         },
       },
     },
