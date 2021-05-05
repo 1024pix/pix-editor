@@ -11,23 +11,7 @@ const airtableSerializer = require('../serializers/airtable-serializer');
 const { knex } = require('../../../db/knex-database-connection');
 
 module.exports = {
-  getCurrentContentAsStream(writableStream) {
-    const timer = setInterval(() => {
-      writableStream.write('\n');
-    }, 1000);
-    _getCurrentContent().then(
-      (data) => {
-        writableStream.write(JSON.stringify(data));
-        clearInterval(timer);
-        writableStream.end();
-      }
-    ).catch(() => {
-      clearInterval(timer);
-      writableStream.write('error');
-      writableStream.end();
-    });
-    return writableStream;
-  },
+  getCurrentContent() { return _getCurrentContent(); },
 
   async create(getCurrentContent = _getCurrentContent) {
     const content = await getCurrentContent();
