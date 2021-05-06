@@ -28,20 +28,19 @@ export default class ApplicationRoute extends Route {
 
   model() {
     if (this.configured) {
-      return this.store.findAll('area');
+      return this.store.findAll('framework');
     }
   }
-  afterModel(model) {
+
+  async afterModel(model) {
     if (model) {
-      this.currentData.setAreas(model);
-      const getCompetences = model.map((area => area.competences));
-      return Promise.all(getCompetences)
-        .then(competences => {
-          const sources = model.map(area => area.source);
-          this.currentData.setSources([...new Set(sources)]);
-          this.currentData.setSource('Pix');
-          return competences;
-        });
+      const areas = await Promise.all(model.map(framework => framework.areas.toArray()).flat());
+      this.currentData.setAreas(areas);
+      const sources = model.map(framework => framework.name);
+      this.currentData.setSources(sources);
+      this.currentData.setSource('Pix');
+      const areasFromFramework = await Promise.all(model.map(framework => framework.areas));
+      return areasFromFramework.map(areas => areas.map(area => area.competences));
     }
   }
 
