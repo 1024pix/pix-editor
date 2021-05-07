@@ -24,10 +24,10 @@ module('Integration | Component | main-sidebar', function(hooks) {
       getAreas() {
         return [];
       }
-      getSources() {
+      getFrameworks() {
         return [];
       }
-      getSource() {
+      getFramework() {
         return '';
       }
     });

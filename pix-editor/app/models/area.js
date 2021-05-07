@@ -1,10 +1,11 @@
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class AreaModel extends Model {
   @attr name;
   @attr code;
 
   @hasMany('competence') competences;
+  @belongsTo('framework') framework;
 
   get sortedCompetences() {
     return this.competences.sortBy('code');

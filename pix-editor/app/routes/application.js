@@ -36,9 +36,9 @@ export default class ApplicationRoute extends Route {
     if (model) {
       const areas = await Promise.all(model.map(framework => framework.areas.toArray()).flat());
       this.currentData.setAreas(areas);
-      const sources = model.map(framework => framework.name);
-      this.currentData.setSources(sources);
-      this.currentData.setSource('Pix');
+      this.currentData.setFrameworks(model);
+      const pixFramework = model.find(framework => framework.name === 'Pix');
+      this.currentData.setFramework(pixFramework);
       const areasFromFramework = await Promise.all(model.map(framework => framework.areas));
       return areasFromFramework.map(areas => areas.map(area => area.competences));
     }
