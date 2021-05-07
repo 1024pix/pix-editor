@@ -7,7 +7,7 @@ import sinon from 'sinon';
 
 module('Integration | Component | popin-select-location', function (hooks) {
   setupRenderingTest(hooks);
-  let source1, source2,
+  let framework1, framework2,
     area1_1, area1_2,
     competence1_1_1, competence1_2_1, competence1_2_2,
     theme1_1_1_1, theme1_1_1_2, theme1_2_1_1,
@@ -144,15 +144,19 @@ module('Integration | Component | popin-select-location', function (hooks) {
       sortedTubes: [tube1_2_2_1],
       sortedThemes: []
     };
-    source1 = 'pix';
-    source2 = 'pix +';
     area1_1 = {
-      source: source1,
       sortedCompetences: [competence1_1_1],
     };
     area1_2 = {
-      source: source1,
       sortedCompetences: [competence1_2_1, competence1_2_2],
+    };
+    framework1 = {
+      name: 'pix',
+      areas: [area1_1, area1_2]
+    };
+    framework2 = {
+      name: 'pix+',
+      areas: []
     };
 
     this.owner.register('service:currentData', class MockService extends Service {
@@ -164,12 +168,12 @@ module('Integration | Component | popin-select-location', function (hooks) {
         return [area1_1, area1_2];
       }
 
-      getSources() {
-        return [source1, source2];
+      getFrameworks() {
+        return [framework1, framework2];
       }
 
-      getSource() {
-        return source1;
+      getFramework() {
+        return framework1;
       }
     });
   });
