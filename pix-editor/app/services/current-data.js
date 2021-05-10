@@ -38,14 +38,6 @@ export default class CurrentDataService extends Service {
     return this._framework;
   }
 
-  setSources(sources) {
-    this._sources = sources;
-  }
-
-  setSource(source) {
-    this._source = source;
-  }
-
   get isPixFramework() {
     return this._framework.name === 'Pix';
   }
@@ -54,22 +46,7 @@ export default class CurrentDataService extends Service {
     if (filteredBySource && this._framework) {
       return this._framework.areas;
     }
-    if (filteredBySource && this._areas) {
-      return this._areas.filter(area => area.source === this._source);
-    }
     return this._areas;
-  }
-
-  getSources() {
-    return this._sources;
-  }
-
-  getSource() {
-    return this._source;
-  }
-
-  get isPixSource() {
-    return this.getSource() === 'Pix';
   }
 
   getCompetence() {
