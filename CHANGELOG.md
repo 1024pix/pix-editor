@@ -1,5 +1,11 @@
 
 
+## v3.34.0 (10/05/2021)
+
+- [#149](https://github.com/1024pix/pix-editor/pull/149) [FEATURE] Ajout d'information sur le champs des propositions de réponses des QROC.
+- [#147](https://github.com/1024pix/pix-editor/pull/147) [FEATURE] Envoi des retours a la ligne en continu lors de la création de la release
+- [#148](https://github.com/1024pix/pix-editor/pull/148) [TECH] Mise à jour de bull et de ioredis
+
 ## v3.33.0 (03/05/2021)
 
 - [#142](https://github.com/1024pix/pix-editor/pull/142) [FEATURE] Ajouter la gestion des compétences (PE-2).
