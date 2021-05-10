@@ -17,7 +17,7 @@ export default class TargetProfileController extends Controller {
   @tracked displayThematicResultTubeLevel = false;
   @tracked displaySingleEntry = false;
   @tracked displayThresholdCalculation = false;
-  @tracked _selectedSources = null;
+  @tracked _selectedFrameworks;
   @tracked singleEntryPopInTitle = null;
   @tracked singleEntryPopInLabel = null;
   @tracked singleEntryPopInAction = null;
@@ -47,29 +47,32 @@ export default class TargetProfileController extends Controller {
     }, 0);
   }
 
-  get sources() {
-    return this.currentData.getSources();
+  get frameworks() {
+    return this.currentData.getFrameworks();
   }
 
-  get selectedSources() {
-    if (!this._selectedSources) {
-      return [this.currentData.getSource()];
+  get selectedFrameworks() {
+    if (this._selectedFrameworks) {
+      return this._selectedFrameworks;
     }
-    return this._selectedSources;
+    return [this.frameworkList.find(item => (item.data === this.currentData.getFramework()))];
   }
 
-  set selectedSources(value) {
-    this._selectedSources = value;
-    return value;
+  get frameworkList() {
+    return this.frameworks.map(framework => ({
+      label: framework.name,
+      data: framework
+    }));
   }
 
   get areas() {
-    return this.model.filter(area => this.selectedSources.includes(area.source));
+    const selectedFrameworkData = this.selectedFrameworks.map(framework => framework.data);
+    return selectedFrameworkData.map(framework => framework.areas.toArray()).flat();
   }
 
   @action
-  selectSources(values) {
-    this.selectedSources = values;
+  selectFrameworks(values) {
+    this._selectedFrameworks = values;
   }
 
   @action
@@ -237,50 +240,60 @@ export default class TargetProfileController extends Controller {
     try {
       const file = event.target.files[0];
       const reader = new FileReader();
-      const areas = this.model;
-      const that = this;
-      reader.onload = (event) => {
-        const data = event.target.result;
-        const tubes = JSON.parse(data);
-        const indexedTubes = tubes.reduce((values, tube) => {
-          values[tube.id] = tube;
-          return values;
-        }, {});
-        const sources = [];
-        areas.forEach(area => {
-          const competences = area.competences;
-          competences.forEach(competence => {
-            const tubes = competence.tubes;
-            tubes.forEach(tube => {
-              if (indexedTubes[tube.pixId]) {
-                if (indexedTubes[tube.pixId].level === 'max') {
-                  const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
-                  tube.selectedLevel = level;
-                  tube.selectedSkills = skills;
-                } else {
-                  tube.selectedLevel = indexedTubes[tube.pixId].level;
-                  tube.selectedSkills = indexedTubes[tube.pixId].skills;
-                }
-                if (!sources.includes(competence.source)) {
-                  sources.push(competence.source);
-                }
-              } else {
-                tube.selectedLevel = false;
-                tube.selectedSkills = [];
-              }
-            });
-          });
-        });
-        that.selectedSources = sources;
-        this.notify.message('Fichier correctement chargé');
-        //TODO: find a better way to be able to reload same file
-        document.getElementById('target-profile__open-file').value = '';
-      };
+      reader.onload = this._buildTargetProfileFromFile.bind(this);
       reader.readAsText(file);
     } catch (error) {
       this.notify.error('Erreur lors de l\'ouverture du fichier');
       Sentry.captureException(error);
     }
+  }
+
+  async _buildTargetProfileFromFile(event) {
+    const areas = this.currentData.getAreas(false);
+    const data = event.target.result;
+    const tubes = JSON.parse(data);
+    const indexedTubes = tubes.reduce((values, tube) => {
+      values[tube.id] = tube;
+      return values;
+    }, {});
+    const frameworksName = [];
+    for (const area of areas) {
+      const framework = await area.framework;
+      const competences = area.competences;
+      competences.forEach(competence => {
+        const tubes = competence.tubes;
+        tubes.forEach(tube => {
+          if (indexedTubes[tube.pixId]) {
+            if (indexedTubes[tube.pixId].level === 'max') {
+              const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
+              tube.selectedLevel = level;
+              tube.selectedSkills = skills;
+            } else {
+              tube.selectedLevel = indexedTubes[tube.pixId].level;
+              tube.selectedSkills = indexedTubes[tube.pixId].skills;
+            }
+            if (!frameworksName.includes(framework.name)) {
+              frameworksName.push(framework.name);
+            }
+          } else {
+            tube.selectedLevel = false;
+            tube.selectedSkills = [];
+          }
+        });
+      });
+    }
+    this._updateSelectedFrameworks(frameworksName);
+    this.notify.message('Fichier correctement chargé');
+    this._emptyOpenFile();
+  }
+
+  _emptyOpenFile() {
+    //TODO: find a better way to be able to reload same file
+    document.getElementById('target-profile__open-file').value = '';
+  }
+
+  _updateSelectedFrameworks(frameworksName) {
+    this._selectedFrameworks = this.frameworkList.filter(framework => frameworksName.includes(framework.label));
   }
 
   @action

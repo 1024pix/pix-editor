@@ -68,8 +68,8 @@
         <div class="two wide column">Référentiel :
         </div>
         <div class="three wide column">
-          <Field::Select @options={{this.sources}} @value={{this.selectedSources}} @multiple={{true}}
-                         @setValue={{this.selectSources}} @edition={{true}} />
+          <Field::Select @options={{this.frameworkList}} @value={{this.selectedFrameworks}} @multiple={{true}}
+                         @setValue={{this.selectFrameworks}} @edition={{true}} />
         </div>
         <div class="six wide center aligned column"></div>
         <div class="four wide right aligned column">{{this.selectedTubeCount}}/{{this.tubeCount}}</div>
