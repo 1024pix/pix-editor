@@ -17,7 +17,7 @@ export default class CellProduction extends Component {
     const languageFilter = this.args.languageFilter;
     if (languageFilter) {
       const filteredChallenges = challenges.filter(challenge => {
-        return challenge.languages?.includes(languageFilter);
+        return challenge.locales?.includes(languageFilter);
       });
       return filteredChallenges.length;
     }

@@ -12,7 +12,7 @@ export default class PrototypesList extends SortedList {
     maxWidth:150,
   },{
     name:'Consigne',
-    valuePath:'instructions',
+    valuePath:'instruction',
   },{
     name:'Auteur',
     valuePath:'author',
@@ -26,7 +26,7 @@ export default class PrototypesList extends SortedList {
 
   sortTypes = {
     'Version':'string',
-    'instructions':'string',
+    'instruction':'string',
     'type':'string',
     'status':'string'
   }

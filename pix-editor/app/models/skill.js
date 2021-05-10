@@ -126,7 +126,7 @@ export default class SkillModel extends Model {
 
   get languagesAndAlternativesCount() {
     const languagesAndAlternativesCount = this.validatedChallenges.reduce((acc, challenge) => {
-      return this._extractLanguagesAndAlternativesCountFromChallenges(acc, challenge.languages);
+      return this._extractLanguagesAndAlternativesCountFromChallenges(acc, challenge.locales);
     }, new Map());
     return new Map([...languagesAndAlternativesCount.entries()].sort());
   }

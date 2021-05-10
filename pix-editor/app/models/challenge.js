@@ -3,16 +3,16 @@ import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class ChallengeModel extends Model {
 
-  @attr instructions;
-  @attr alternativeInstructions;
+  @attr instruction;
+  @attr alternativeInstruction;
   @attr type;
   @attr format;
-  @attr suggestion;
-  @attr answers;
+  @attr proposals;
+  @attr solution;
   @attr solutionToDisplay;
-  @attr t1;
-  @attr t2;
-  @attr t3;
+  @attr t1Status;
+  @attr t2Status;
+  @attr t3Status;
   @attr illustration;
   @attr attachments;
   @attr pedagogy;
@@ -35,7 +35,7 @@ export default class ChallengeModel extends Model {
   @attr spoil;
   @attr responsive;
   @attr alternativeText;
-  @attr languages;
+  @attr locales;
   @attr area;
   @attr({ readOnly:true }) _definedBaseName;
   @attr autoReply;

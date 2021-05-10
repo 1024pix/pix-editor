@@ -13,19 +13,19 @@ module('Unit | Controller | competence/i18n/single', function(hooks) {
     languagesAndAlternativesCount.set('Francophone',1);
     const challenge1 = {
       id: 'rec654258',
-      languages: ['Francophone','Franco Français'],
+      locales: ['Francophone','Franco Français'],
     };
     const challenge2 = {
       id: 'rec654259',
-      languages: ['Anglais'],
+      locales: ['Anglais'],
     };
     const challenge3 = {
       id: 'rec654259',
-      languages: ['Anglais'],
+      locales: ['Anglais'],
     };
     const challenge4 = {
       id: 'rec456789',
-      languages: ['Franco Français'],
+      locales: ['Franco Français'],
       alternatives:[]
     };
     const skill = {

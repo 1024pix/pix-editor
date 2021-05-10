@@ -6,7 +6,7 @@ export default class ArchiveList extends SortedList {
 
   @service router;
 
-  list = [{ instructions:'coucou' }];
+  list = [{ instruction:'coucou' }];
 
   headers = [{
     name:'Version',
@@ -20,10 +20,10 @@ export default class ArchiveList extends SortedList {
   },
   {
     name:'Consigne',
-    valuePath:'instructions',
+    valuePath:'instruction',
   },{
     name:'Langue(s)',
-    valuePath:'languages',
+    valuePath:'locales',
     maxWidth:80,
     minWidth:75,
     languages:true

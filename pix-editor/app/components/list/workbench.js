@@ -13,7 +13,7 @@ export default class CompetencesList extends SortedList {
     maxWidth:150
   },{
     name:'Consigne',
-    valuePath:'instructions',
+    valuePath:'instruction',
   },{
     name:'Type',
     valuePath:'type',
@@ -27,7 +27,7 @@ export default class CompetencesList extends SortedList {
 
   sortTypes = {
     'authorText':'string',
-    'instructions':'string',
+    'instruction':'string',
     'type':'string',
     'status':'string'
   }

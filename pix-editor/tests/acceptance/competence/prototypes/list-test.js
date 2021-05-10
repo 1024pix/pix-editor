@@ -30,8 +30,8 @@ module('Acceptance | competence/prototypes/list', function () {
       mockAuthService.call(this, apiKey);
       this.server.create('user', { apiKey, trigram: 'ABC' });
 
-      this.server.create('challenge', { id: 'recChallenge1', instructions: 'instructionsChallenge1' });
-      this.server.create('challenge', { id: challengeId2, instructions: 'instructionsChallenge2' });
+      this.server.create('challenge', { id: 'recChallenge1', instruction: 'instructionsChallenge1' });
+      this.server.create('challenge', { id: challengeId2, instruction: 'instructionsChallenge2' });
       this.server.create('challenge', { id: 'recChallenge3' });
       this.server.create('skill', { id: skillId1, pixId: skillPixId1, name: skillName, version: 3, createdAt: '2020-12-11T13:38:35.000Z', challengeIds: ['recChallenge1'] });
       this.server.create('skill', { id: deadSkillId, pixId: deadSkillPixId, name: skillName, version: 1, status: 'périmé', challengeIds: ['recChallenge1'] });

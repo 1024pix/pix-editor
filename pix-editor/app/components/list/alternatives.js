@@ -12,10 +12,10 @@ export default class AlternativesList extends SortedList {
     maxWidth:50,
   },{
     name:'Consigne',
-    valuePath:'instructions',
+    valuePath:'instruction',
   },{
     name:'Langue(s)',
-    valuePath:'languages',
+    valuePath:'locales',
     maxWidth:80,
     minWidth:75,
     languages:true
