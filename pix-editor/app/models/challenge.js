@@ -20,7 +20,6 @@ export default class ChallengeModel extends Model {
   @attr declinable;
   @attr('number') version;
   @attr genealogy;
-  @attr({ readOnly:true }) skillNames;
   @attr status;
   @attr({ readOnly:true }) preview;
   @attr pixId;
@@ -62,6 +61,10 @@ export default class ChallengeModel extends Model {
   get isValidated() {
     const status = this.status;
     return ['validé', 'validé sans test', 'pré-validé'].includes(status);
+  }
+
+  get skillNames() {
+    return this.skills.map((skill) => skill.name);
   }
 
   get isDraft() {

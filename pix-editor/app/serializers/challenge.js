@@ -8,7 +8,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
     alternativeInstruction: 'Consigne alternative',
     instruction: 'Consigne',
     genealogy: 'Généalogie',
-    skillNames: 'acquis',
     type: 'Type d\'épreuve',
     format: 'Format',
     proposals:'Propositions',
