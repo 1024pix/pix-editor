@@ -7,7 +7,6 @@ export default class SkillModel extends Model {
   _pinnedRelationships = {};
 
   @attr('string', { readOnly: true }) name;
-  @attr competence;
   @attr clue;
   @attr clueEn;
   @attr clueStatus;

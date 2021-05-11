@@ -133,7 +133,6 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     const expectedSkill = {
       name: '@workbench',
       tube: 'tube',
-      competence,
       pixId: 'recId',
     };
 

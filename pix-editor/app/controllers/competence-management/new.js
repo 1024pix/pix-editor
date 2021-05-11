@@ -81,11 +81,10 @@ export default class CompetenceManagementNewController extends Controller {
     return await tubeWorkbench.save();
   }
 
-  async _createSkillWorkbench(tube, competence) {
+  async _createSkillWorkbench(tube) {
     const skillWorkbench = this.store.createRecord('skill', {
       name: '@workbench',
       tube,
-      competence,
       pixId: this.idGenerator.newId(),
     });
     return await skillWorkbench.save();

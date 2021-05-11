@@ -153,7 +153,6 @@ export default class SingleController extends Controller {
         this.loader.start();
         newSkill.tube = newTube;
         newSkill.level = level;
-        newSkill.competence = [competence.get('id')];
         newSkill.version = newTube.getNextSkillVersion(level);
         return this._duplicateLiveChallenges()
           .then((newChallenges) => {
