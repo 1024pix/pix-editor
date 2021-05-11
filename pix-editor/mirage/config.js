@@ -1,6 +1,18 @@
-import Mirage from 'ember-cli-mirage';
+import Mirage, { createServer, discoverEmberDataModels, applyEmberDataSerializers } from 'ember-cli-mirage';
+import { getDsSerializers, getDsModels } from 'ember-cli-mirage/ember-data';
 
-export default function () {
+export function makeServer(config) {
+  const finalConfig = {
+    ...config,
+    models: { ...discoverEmberDataModels(), ...config.models },
+    serializers: applyEmberDataSerializers(config.serializers),
+    routes,
+  };
+
+  return createServer(finalConfig);
+}
+
+function routes() {
 
   this.namespace = 'api';
 
@@ -9,105 +21,112 @@ export default function () {
 
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
-    const { id, fields: { filename, url, mimeType, size, type, challengeId } } = schema.attachments.create(payload);
-    return _serializeAttachment({
-      id,
-      filename,
-      url,
-      mimeType,
-      size,
-      type,
-      challengeId,
-    });
+    const attachment = _deserializePayload(payload, 'attachment');
+    const createdAttachment = schema.attachments.create(attachment);
+    return _serializeModel(createdAttachment, 'attachment');
   });
 
   this.get('/airtable/content/Domaines', (schema, request) => {
     const records = schema.areas.all().models.map((area) => {
-      return _serializeArea(area);
+      return _serializeModel(area, 'area');
     });
     return _response(request, { records });
   });
 
+  this.get('/airtable/content/Domaines/:id', (schema, request) => {
+    const area = schema.areas.find(request.params.id);
+    return _serializeModel(area, 'area');
+  });
+
   this.get('/airtable/content/Competences', (schema, request) => {
     const records = schema.competences.all().models.map((competence) => {
-      return _serializeCompetence(competence);
+      return _serializeModel(competence, 'competence');
     });
     return _response(request, { records });
   });
 
   this.get('/airtable/content/Competences/:id', (schema, request) => {
     const competence = schema.competences.find(request.params.id);
-    return _serializeCompetence(competence);
+    return _serializeModel(competence, 'competence');
   });
 
   this.patch('/airtable/content/Competences/:id', (schema, request) => {
+    const competencePayload = JSON.parse(request.requestBody);
     const competence = schema.competences.find(request.params.id);
-    return _serializeChallenge(competence);
+    const competenceNew = _deserializePayload(competencePayload, 'competence');
+    competence.update({ ...competenceNew });
+    return _serializeModel(competence, 'competence');
   });
 
   this.post('/airtable/content/Competences', (schema, request) => {
-    const competence = JSON.parse(request.requestBody);
+    const competencePayload = JSON.parse(request.requestBody);
+    const competence = _deserializePayload(competencePayload, 'competence');
+
     const createdCompetence = schema.competences.create(competence);
-    return _serializeCompetence(createdCompetence);
+
+    return _serializeModel(createdCompetence, 'competence');
   });
 
   this.get('/airtable/content/Thematiques/:id', (schema, request) => {
     const theme = schema.themes.find(request.params.id);
-    return _serializeTheme(theme);
+    return _serializeModel(theme, 'theme');
   });
 
   this.get('/airtable/content/Thematiques', (schema, request) => {
     const records = schema.themes.all().models.map(theme => {
-      return _serializeTheme(theme);
+      return _serializeModel(theme, 'theme');
     });
     return _response(request, { records });
   });
 
   this.post('/airtable/content/Thematiques', (schema, request) => {
-    const theme = JSON.parse(request.requestBody);
+    const themePayload = JSON.parse(request.requestBody);
+    const theme = _deserializePayload(themePayload, 'theme');
     const createdTheme =  schema.themes.create(theme);
-    return _serializeTheme(createdTheme);
+    return _serializeModel(createdTheme, 'theme');
   });
 
   this.get('/airtable/content/Tubes/:id', (schema, request) => {
     const tube = schema.tubes.find(request.params.id);
-    return _serializeTube(tube);
+    return _serializeModel(tube, 'tube');
   });
 
   this.get('/airtable/content/Tubes', (schema, request) => {
     const records = schema.tubes.all().models.map(tube => {
-      return _serializeTube(tube);
+      return _serializeModel(tube, 'tube');
     });
     return _response(request, { records });
   });
 
   this.post('/airtable/content/Tubes', (schema, request) => {
-    const tube = JSON.parse(request.requestBody);
+    const tubePayload = JSON.parse(request.requestBody);
+    const tube = _deserializePayload(tubePayload, 'tube');
     const createdTube =  schema.themes.create(tube);
-    return _serializeTheme(createdTube);
+    return _serializeModel(createdTube, 'tube');
   });
 
   this.get('/airtable/content/Acquis/:id', (schema, request) => {
     const skill = schema.skills.find(request.params.id);
-    return _serializeSkill(skill);
+    return _serializeModel(skill, 'skill');
   });
 
   this.get('/airtable/content/Acquis', (schema, request) => {
     const records = schema.skills.all().models.map((skill) => {
-      return _serializeSkill(skill);
+      return _serializeModel(skill, 'skill');
     });
     return _response(request, { records });
   });
 
   this.post('/airtable/content/Acquis', (schema, request) => {
-    const skill = JSON.parse(request.requestBody);
+    const skillPayload = JSON.parse(request.requestBody);
+    const skill = _deserializePayload(skillPayload, 'skill');
     const createdSkill =  schema.themes.create(skill);
-    return _serializeTheme(createdSkill);
+    return _serializeModel(createdSkill, 'skill');
   });
 
   this.get('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChallenge(challenge);
+    return _serializeModel(challenge, 'challenge');
   });
 
   this.get('/airtable/content/Epreuves', (schema, request) => {
@@ -115,35 +134,36 @@ export default function () {
     let records = null;
     if (findPersistentId && request.queryParams.maxRecords === '1') {
       const challenge = schema.challenges.findBy({ pixId: findPersistentId[1] });
-      records = [_serializeChallenge(challenge)];
+      records = [_serializeModel(challenge, 'challenge')];
     } else {
       records = schema.challenges.all().models.map(challenge => {
-        return _serializeChallenge(challenge);
+        return _serializeModel(challenge, 'challenge');
       });
     }
     return _response(request, { records });
   });
 
   this.post('/airtable/content/Epreuves', (schema, request) => {
-    const challenge = JSON.parse(request.requestBody);
+    const challengePayload = JSON.parse(request.requestBody);
+    const challenge = _deserializePayload(challengePayload, 'challenge');
     const createdChallenge = schema.challenges.create(challenge);
 
-    challenge.fields['Acquix'].forEach(skillId => {
+    challengePayload.fields['Acquix'].forEach(skillId => {
       const skill = schema.skills.find(skillId);
       skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
       skill.save();
     });
-    return _serializeChallenge(createdChallenge);
+    return _serializeModel(createdChallenge, 'challenge');
   });
 
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
     const attachment = schema.attachments.find(request.params.id);
-    return _serializeAttachment(attachment);
+    return _serializeModel(attachment, 'attachment');
   });
 
   this.patch('/airtable/content/Attachments/:id', (schema, request) => {
     const attachment = schema.attachments.find(request.params.id);
-    return _serializeAttachment(attachment);
+    return _serializeModel(attachment, 'attachment');
   });
 
   this.delete('/airtable/content/Attachments/:id', (schema, request) => {
@@ -157,13 +177,14 @@ export default function () {
 
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
-    return _serializeChallenge(challenge);
+    return _serializeModel(challenge, 'challenge');
   });
 
   this.post('/airtable/changelog/Notes', (schema, request) => {
-    const note = JSON.parse(request.requestBody);
-    schema.notes.create(note);
-    return note;
+    const notePayload = JSON.parse(request.requestBody);
+    const note = _deserializePayload(notePayload, 'note');
+    const createdNote = schema.notes.create(note);
+    return _serializeModel(createdNote, 'note');
   });
 
   this.post('/file-storage-token', () => {
@@ -182,153 +203,43 @@ function _isRequestAuthorized(request) {
 
 const unauthorizedErrorResponse = new Mirage.Response(401);
 
-function _serializeChallenge(challenge) {
-  return {
-    id: challenge.id,
-    fields: {
-      'Record ID': challenge.id,
-      'Consigne': challenge.instructions,
-      'Généalogie': challenge.genealogy,
-      'acquis': challenge.skillNames,
-      'Type d\'épreuve': challenge.type,
-      'Format': challenge.format,
-      'Propositions': challenge.suggestion,
-      'Bonnes réponses': challenge.answers,
-      'T1 - Espaces, casse & accents': challenge.t1,
-      'T2 - Ponctuation': challenge.t2,
-      'T3 - Distance d\'édition': challenge.t3,
-      'Illustration de la consigne': challenge.illustration,
-      'Pièce jointe': challenge.attachments,
-      'Type péda': challenge.pedagogy,
-      'Auteur': challenge.author,
-      'Déclinable': challenge.declinable,
-      'Statut': challenge.status,
-      'Preview': challenge.preview,
-      'Acquix': challenge.skillIds,
-      'id persistant': challenge.pixId,
-      'Scoring': challenge.scoring,
-      'Timer': challenge.timer,
-      'Embed URL': challenge.embedURL,
-      'Embed title': challenge.embedTitle,
-      'Embed height': challenge.embedHeight,
-      'Version prototype': challenge.version,
-      'Version déclinaison': challenge.alternativeVersion,
-      'Non voyant': challenge.accessibility1,
-      'Daltonien': challenge.accessibility2,
-      'Spoil': challenge.spoil,
-      'Responsive': challenge.responsive,
-      'Texte alternatif illustration': challenge.alternativeText,
-      'Langues': challenge.languages,
-      'Géographie': challenge.area,
-      'Réponse automatique': challenge.autoReply,
-      'files': challenge.filesIds,
+function _serializeModel(instance, modelName) {
+  const serializer = new (getDsSerializers()[modelName]);
+  const payload = { id: instance.id, fields: { [serializer.primaryKey] : instance.id } };
+  const model = new getDsModels();
+  const relationships = model[modelName].relationships;
+
+  for (const [key, value] of Object.entries(serializer.attrs)) {
+    payload.fields[value] = instance[key];
+  }
+  relationships.forEach(allRelationships => {
+    allRelationships.forEach(relationship => {
+      const meta = relationship.meta;
+      const relationshipSerializedKey = serializer.attrs[meta.key];
+      if (meta.kind === 'hasMany') {
+        payload.fields[relationshipSerializedKey] = instance.attrs[`${meta.name.slice(0, -1)}Ids`];
+      }
+      if (meta.kind === 'belongsTo') {
+        payload.fields[relationshipSerializedKey] = instance.attrs[`${meta.name}Id`];
+      }
+    });
+  });
+
+  return payload;
+}
+
+function _deserializePayload(payload, modelName) {
+  const serializer = new (getDsSerializers()[modelName]);
+  for (const [key, value] of Object.entries(serializer.attrs)) {
+    const payloadValue = payload.fields[value];
+    if (payloadValue && Array.isArray(payloadValue) && key[key.length - 1] !== 's') {
+      payload[key + 'Id'] = payloadValue[0];
+    } else if (payloadValue && Array.isArray(payloadValue)) {
+      payload[key + 'Ids'] = payloadValue;
+    } else if (payloadValue) {
+      payload[key] = payloadValue;
     }
-  };
+  }
+  return payload;
 }
 
-function _serializeSkill(skill) {
-  return {
-    id: skill.id,
-    fields: {
-      'Record Id': skill.id,
-      'Nom': skill.name,
-      'Indice fr-fr': skill.clue,
-      'Indice en-us': skill.clueEn,
-      'Statut de l\'indice': skill.clueStatus,
-      'Epreuves': skill.challengeIds,
-      'Description': skill.description,
-      'Statut de la description': skill.descriptionStatus,
-      'Comprendre': undefined,
-      'En savoir plus': undefined,
-      'Compétence': skill.competence,
-      'Tube': skill.tubeId,
-      'Level': skill.level,
-      'Status': skill.status,
-      'Internationalisation': skill.i18n,
-      'id persistant': skill.pixId,
-      'Date': skill.createdAt,
-      'Version': skill.version,
-    }
-  };
-}
-
-function _serializeTube(tube) {
-  return {
-    id: tube.id,
-    fields: {
-      'Record Id': tube.id,
-      'Nom': tube.name,
-      'Titre': tube.title,
-      'Description': tube.description,
-      'Titre pratique fr-fr': tube.practicalTitleFr,
-      'Titre pratique en-us': tube.practicalTitleEn,
-      'Description pratique fr-fr': tube.practicalDescriptionFr,
-      'Description pratique en-us': tube.practicalDescriptionEn,
-      'Competences': tube.competenceIds,
-      'Acquis': tube.rawSkillIds,
-      'id persistant': tube.pixId,
-    }
-  };
-}
-
-function _serializeTheme(theme) {
-  return {
-    id: theme.id,
-    fields: {
-      'Record Id': theme.id,
-      'Nom': theme.name,
-      'Competence': theme.competenceId,
-      'Tubes': theme.rawTubeIds
-    }
-  };
-}
-
-
-function _serializeAttachment(attachment) {
-  return {
-    id: attachment.id,
-    fields: {
-      'Record ID': attachment.id,
-      'challengeId': [attachment.challengeId],
-      'type': attachment.type,
-      'filename': attachment.filename,
-      'url': attachment.url,
-      'mimeType': attachment.mimeType,
-      'size': attachment.size,
-    },
-  };
-}
-
-function _serializeArea(area) {
-  return {
-    id: area.id,
-    fields: {
-      'Record ID': area.id,
-      'id persistant': area.pixId,
-      'Nom': area.name,
-      'Code': area.code,
-      'Titre fr-fr': area.titleFrFr,
-      'Titre en-us': area.titleEnUs,
-      'Competences (identifiants)': area.competenceIds,
-    }
-  };
-}
-
-function _serializeCompetence(competence) {
-  return {
-    id: competence.id,
-    fields: {
-      'Record ID': competence.id,
-      'id persistant': competence.pixId,
-      'Titre fr-fr': competence.title,
-      'Titre en-us': competence.titleEn,
-      'Sous-domaine': competence.code,
-      'Tubes': competence.rawTubeIds,
-      'Thematiques': competence.rawThemeIds,
-      'Description fr-fr': competence.description,
-      'Description en-us': competence.description,
-      'Origine': competence.source,
-      'Domaine': competence.areaId,
-    }
-  };
-}
