@@ -21,7 +21,7 @@ module.exports = function buildCompetence({
       'Titre fr-fr': nameFrFr,
       'Titre en-us': nameEnUs,
       'Acquis (via Tubes) (id persistant)': skillIds,
-      'Origine': origin,
+      'Origine2': origin,
       'Description': description,
       'Description fr-fr': descriptionFrFr,
       'Description en-us': descriptionEnUs,
