@@ -15,7 +15,6 @@ export default class SkillSerializer extends AirtableSerializer {
     descriptionStatus:'Statut de la description',
     tutoSolution: 'Comprendre',
     tutoMore: 'En savoir plus',
-    competence:'Compétence',
     tube:'Tube',
     level:'Level',
     status:'Status',

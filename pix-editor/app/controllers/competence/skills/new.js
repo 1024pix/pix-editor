@@ -29,28 +29,23 @@ export default class NewController extends Skill {
   }
 
   @action
-  save() {
+  async save() {
     this.loader.start();
     const skill = this.skill;
     const tube = this.tube;
-    return tube.competence
-      .then(competence=> {
-        skill.tube = tube;
-        skill.competence = [competence.get('id')];
-        skill.version = tube.getNextSkillVersion(skill.level);
-        return skill.save();
-      })
-      .then(()=>this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction))
-      .then(() => {
-        this.edition = false;
-        this.loader.stop();
-        this.notify.message('Acquis créé');
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this.loader.stop();
-        this.notify.error('Erreur lors de la création de l\'acquis');
-      });
+    try {
+      skill.tube = tube;
+      skill.version = tube.getNextSkillVersion(skill.level);
+      await skill.save();
+      await this._handleSkillChangelog(skill, this.defaultSaveSkillChangelog, this.changelogEntry.createAction);
+      this.edition = false;
+      this.loader.stop();
+      this.notify.message('Acquis créé');
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la création de l\'acquis');
+    }
   }
 }
