@@ -8,7 +8,7 @@ export default class I18n extends SortedList {
 
   headers = [{
     name:'Consigne',
-    valuePath:'challenge.instructions',
+    valuePath:'challenge.instruction',
   },{
     name:'Langue',
     valuePath:'language',

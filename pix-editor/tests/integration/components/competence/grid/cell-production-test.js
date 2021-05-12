@@ -11,28 +11,28 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
     // given
     const challenge1 = {
       id: 'challenge1',
-      languages: ['Francophone', 'Franco Français']
+      locales: ['Francophone', 'Franco Français']
     };
     const challenge2 = {
       id: 'challenge2',
-      languages: ['Francophone']
+      locales: ['Francophone']
     };
     const challenge3 = {
       id: 'challenge3',
-      languages: ['Espagnol']
+      locales: ['Espagnol']
     };
     const challenge4 = {
       id: 'challenge4',
-      languages: ['Francophone', 'Franco Français']
+      locales: ['Francophone', 'Franco Français']
     };
     const challenge5 = {
       id: 'challenge5',
-      languages: ['Anglais']
+      locales: ['Anglais']
     };
     skill = EmberObject.create({
       productionPrototype: {
         id: 'challenge6',
-        languages: ['Francophone', 'Franco Français'],
+        locales: ['Francophone', 'Franco Français'],
         productionAlternatives: [challenge1, challenge2, challenge3],
         draftAlternatives: [challenge4, challenge5]
       }

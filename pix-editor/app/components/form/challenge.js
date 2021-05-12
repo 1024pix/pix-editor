@@ -23,7 +23,7 @@ export default class ChallengeForm extends Component {
     'accessibility2':['RAS','OK','KO'],
     'responsive':['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
     'spoil':['Non Sp', 'Difficilement Sp', 'Facilement Sp'],
-    'languages':['Allemand', 'Anglais', 'Espagnol', 'Franco Français', 'Francophone', 'Italie', 'Portugais'],
+    'locales':['Allemand', 'Anglais', 'Espagnol', 'Franco Français', 'Francophone', 'Italie', 'Portugais'],
     'area':['Afghanistan','Afrique du Sud','Albanie','Algérie','Allemagne','Andorre','Angola','Antigua-et-Barbuda','Arabie saoudite','Argentine','Arménie','Australie','Autriche','Azerbaïdjan','Bahamas','Bahreïn','Bangladesh','Barbade','Belgique','Belize','Bénin','Bhoutan','Biélorussie','Birmanie','Bolivie','Bosnie-Herzégovine','Botswana','Brésil','Brunei','Bulgarie','Burkina Faso','Burundi','Cambodge','Cameroun','Canada','Cap-Vert','Chili','Chine','Chypre','Colombie','Les Comores','Congo','Îles Cook','Corée du Nord','Corée du Sud','Costa Rica','Côte d\'ivoire','Croatie','Cuba','Danemark','Djibouti','République dominicaine','Dominique','Égypte','Émirats arabes unis','Équateur','Érythrée','Espagne','Estonie','Eswatini','Éthiopie','Fidji','Finlande','France','Gabon','Gambie','Géorgie','Ghana','Grèce','Grenade','Guinée','Guatémala','Guinée équatoriale','Guinée-Bissao','Guyana','Haïti','Honduras','Hongrie','Inde','Indonésie','Institutions internationales','Irak','Iran','Irlande','Islande','Israël','Italie','Jamaïque','Japon','Jordanie','Kazakhstan','Kenya','Kirghizstan','Kiribati','Kosovo','Koweït','Laos','Lésotho','Lettonie','Liban','Libéria','Libye','Liechtenstein','Lituanie','Luxembourg','Macédoine du Nord','Madagascar','Malaisie','Malawi','Maldives','Mali','Malte','Maroc','Îles Marshall','Maurice','Mauritanie','Mexique','Micronésie','Moldavie','Monaco','Mongolie','Monténégro','Mozambique','Namibie','Nauru','Népal','Neutre','Nicaragua','Niger','Nigéria','Niue','Norvège','Nouvelle-Zélande','Oman','Ouganda','Ouzbékistan','Pakistan','Palaos','La Palestine','Panama','Papouasie-Nouvelle-Guinée','Paraguay','Pays-Bas','Pérou','Philippines','Pologne','Portugal','Qatar','République centrafricaine','Roumanie','Russie','Rwanda','Saint-Christophe-et-Niévès','Sainte-Lucie','Saint-Marin','Saint-Vincent-et-les-Grenadines','Salomon','Salvador','Samoa','Sao Tomé-et-Principe','Sénégal','Serbie','Sierra Leone','Singapour','Slovaquie','Slovénie','Somalie','Soudan','Soudan du Sud','Sri Lanka','Suède','Suisse','Suriname','Syrie','Tadjikistan','Tanzanie','Tchad','Tchéquie','Thaïlande','Timor oriental','Togo','Tonga','Trinité-et-Tobago','Tunisie','Turkménistan','Turquie','Tuvalu','UK','Ukraine','Uruguay','USA','Vanuatu','Vatican','Vénézuéla','Vietnam','Yémen','Zambie','Zimbabwé']
   }
 
@@ -96,10 +96,10 @@ export default class ChallengeForm extends Component {
       this.args.challenge.type = 'QROC';
       this.args.challenge.autoReply = true;
       this.args.challenge.format = 'mots';
-      this.args.challenge.suggestion = null;
-      this.args.challenge.t1 = null;
-      this.args.challenge.t2 = null;
-      this.args.challenge.t3 = null;
+      this.args.challenge.proposals = null;
+      this.args.challenge.t1Status = null;
+      this.args.challenge.t2Status = null;
+      this.args.challenge.t3Status = null;
     } else {
       this.args.challenge.type = value;
       this.args.challenge.autoReply = false;

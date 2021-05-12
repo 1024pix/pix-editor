@@ -17,9 +17,9 @@ export default class NewRoute extends PrototypeRoute {
       const newChallenge = this.store.createRecord('challenge', {
         competence: [this.modelFor('competence').id],
         status: 'proposé',
-        t1: true,
-        t2: true,
-        t3: true,
+        t1Status: true,
+        t2Status: true,
+        t3Status: true,
         genealogy: 'Prototype 1',
         author: [this.config.author],
         pixId: this.idGenerator.newId()

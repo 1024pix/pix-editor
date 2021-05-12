@@ -26,8 +26,8 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     };
     const challenge = {
       pixId: 'rec654258',
-      languages: ['Francophone','Franco Français'],
-      instructions: 'Some instructions 1'
+      locales: ['Francophone','Franco Français'],
+      instruction: 'Some instructions 1'
     };
     this.closeAction = function() {};
     this.challenge = challenge;

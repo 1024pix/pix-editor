@@ -224,7 +224,6 @@ function _serializeModel(instance, modelName) {
       }
     });
   });
-
   return payload;
 }
 

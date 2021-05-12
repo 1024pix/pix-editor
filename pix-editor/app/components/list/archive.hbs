@@ -19,9 +19,9 @@
           {{else}}
             Non
           {{/if}}
-        {{else if r.columnValue.languages}}
+        {{else if r.columnValue.locales}}
         <div class="challenge_languages">
-          {{#each r.rowValue.languages as |language| }}
+          {{#each r.rowValue.locales as |language| }}
             <i class="{{convert-language-as-flag language}} flag" title="{{language}}"></i>
           {{/each}}
         </div>

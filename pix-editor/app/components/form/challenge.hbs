@@ -1,22 +1,22 @@
 <form action="" class="ui form">
   <Field::Mde @title="Consigne"
-              @value={{@challenge.instructions}}
+              @value={{@challenge.instruction}}
               @edition={{@edition}}
               @helpContent={{this.helpInstructions}}
-              @setValue={{fn (mut @challenge.instructions)}}/>
+              @setValue={{fn (mut @challenge.instruction)}}/>
   <Field::ToggleField @edition={{@edition}}
                       @model={{@challenge}}
-                      @modelField="alternativeInstructions"
+                      @modelField="alternativeInstruction"
                       @hideTextButton="Supprimer la consigne alternative"
                       @displayTextButton="Ajouter une consigne alternative"
                       @confirmText="la consigne alternative"
                       @displayField={{@displayAlternativeInstructionsField}}
                       @setDisplayField={{@setDisplayAlternativeInstructionsField}}>
     <Field::Mde @title="Consigne alternative"
-                @value={{@challenge.alternativeInstructions}}
+                @value={{@challenge.alternativeInstruction}}
                 @edition={{@edition}}
                 @helpContent={{this.helpInstructions}}
-                @setValue={{fn (mut @challenge.alternativeInstructions)}}
+                @setValue={{fn (mut @challenge.alternativeInstruction)}}
                 data-test-alternative-instructions-field />
   </Field::ToggleField>
   {{#if @challenge.isPrototype}}
@@ -37,14 +37,14 @@
   {{/if}}
   {{#unless this.isAutoReply}}
     <Field::Mde @title="Propositions"
-                @value={{@challenge.suggestion}}
-                @setValue={{fn (mut @challenge.suggestion)}}
+                @value={{@challenge.proposals}}
+                @setValue={{fn (mut @challenge.proposals)}}
                 @edition={{@edition}}
                 @helpContent={{this.helpSuggestions}}
                 data-test-suggestion-field />
   {{/unless}}
   <Field::Textarea @title="Réponses"
-                   @value={{@challenge.answers}}
+                   @value={{@challenge.solution}}
                    @edition={{@edition}}
                    @helpContent={{this.helpAnswers}}
                    data-test-answers-field />
@@ -54,17 +54,17 @@
           <div class="three fields">
               <div class="field">
                 <Field::Checkbox @label="T1 (espaces/casse/accents)"
-                                 @checked={{@challenge.t1}}
+                                 @checked={{@challenge.t1Status}}
                                  @disabled={{not @edition}} />
               </div>
               <div class="field">
                 <Field::Checkbox @label="T2 (ponctuation)"
-                                 @checked={{@challenge.t2}}
+                                 @checked={{@challenge.t2Status}}
                                  @disabled={{not @edition}} />
               </div>
               <div class="field">
                 <Field::Checkbox @label="T3 (distance d'édition)"
-                                 @checked={{@challenge.t3}}
+                                 @checked={{@challenge.t3Status}}
                                  @disabled={{not @edition}} />
               </div>
           </div>
@@ -150,11 +150,11 @@
       <div class="two fields">
           <div class="field">
             <Field::Select @title="Langue(s)"
-                           @value={{@challenge.languages}}
+                           @value={{@challenge.locales}}
                            @edition={{@edition}}
                            @multiple={{true}}
-                           @options={{this.options.languages}}
-                           @setValue={{fn (mut @challenge.languages)}}/>
+                           @options={{this.options.locales}}
+                           @setValue={{fn (mut @challenge.locales)}}/>
           </div>
           <div class="field">
             <Field::Select @title="Géographie"

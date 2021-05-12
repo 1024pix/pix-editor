@@ -8,24 +8,22 @@ module('Unit | Model | skill', function(hooks) {
   let store;
   const challenge1 = {
     id: 'rec654258',
-    languages: ['Francophone','Franco Français'],
+    locales: ['Francophone','Franco Français'],
     status:'validé'
   };
   const challenge2 = {
     id: 'rec654259',
-    languages: ['Anglais'],
+    locales: ['Anglais'],
     status:'validé'
-
   };
   const challenge3 = {
     id: 'rec654260',
-    languages: ['Anglais'],
+    locales: ['Anglais'],
     status:'validé'
-
   };
   const challenge4 = {
     id: 'rec654261',
-    languages: ['Franco Français'],
+    locales: ['Franco Français'],
     status:'validé',
   };
   hooks.beforeEach (function() {
@@ -38,10 +36,10 @@ module('Unit | Model | skill', function(hooks) {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
-        store.createRecord('challenge',challenge1)
-        ,store.createRecord('challenge',challenge2)
-        ,store.createRecord('challenge',challenge3)
-        ,store.createRecord('challenge',challenge4)
+        store.createRecord('challenge',challenge1),
+        store.createRecord('challenge',challenge2),
+        store.createRecord('challenge',challenge3),
+        store.createRecord('challenge',challenge4),
       ]
     }));
 
@@ -58,10 +56,10 @@ module('Unit | Model | skill', function(hooks) {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
-        store.createRecord('challenge',challenge1)
-        ,store.createRecord('challenge',challenge2)
-        ,store.createRecord('challenge',challenge3)
-        ,store.createRecord('challenge',challenge4)
+        store.createRecord('challenge',challenge1),
+        store.createRecord('challenge',challenge2),
+        store.createRecord('challenge',challenge3),
+        store.createRecord('challenge',challenge4),
       ]
     }));
 

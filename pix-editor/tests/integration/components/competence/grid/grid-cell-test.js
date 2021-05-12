@@ -12,7 +12,7 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
     const section = 'i18n';
     const challenge = {
       id: 'rec456789',
-      languages: ['Francophone'],
+      locales: ['Francophone'],
     };
     const skill = {
       id: 'rec123456',
