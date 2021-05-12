@@ -56,9 +56,9 @@ export default class PopinChallengeLog extends Component {
   @action
   addNote() {
     const newNote = this.store.createRecord('note', {
-      recordId:this.args.challenge.pixId,
-      author:this.config.author,
-      elementType:this.changelogEntry.challenge
+      recordId: this.args.challenge.id,
+      author: this.config.author,
+      elementType: this.changelogEntry.challenge
     });
     this.logEntry = newNote;
     this.list = false;
@@ -127,7 +127,7 @@ export default class PopinChallengeLog extends Component {
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
-      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
+      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(notes => {
           this.notes = notes;
           this.notesLoaded = true;
@@ -141,7 +141,7 @@ export default class PopinChallengeLog extends Component {
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
-      return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+      return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
         .then(entries => {
           this.changelogEntries = entries;
           this.changelogLoaded = true;

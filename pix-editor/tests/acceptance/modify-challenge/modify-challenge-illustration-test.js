@@ -70,6 +70,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
+      airtableId: 'airtableId2',
       illustration: [{
         'id': 'attd74YR8ga7IOfWp',
         'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
@@ -110,6 +111,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
+      airtableId: 'airtableId2',
       illustration: [{
         'id': 'attd74YR8ga7IOfWp',
         'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',

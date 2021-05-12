@@ -22,7 +22,7 @@ export default class SkillModel extends Model {
   @belongsTo('tube')
   tube;
 
-  @hasMany('challenge')
+  @hasMany('challenge', { readOnly: true })
   challenges;
 
   @hasMany('tutorial')

@@ -156,9 +156,8 @@ export default class SingleController extends Controller {
       newSkill.tube = newTube;
       newSkill.level = level;
       newSkill.version = newTube.getNextSkillVersion(level);
-      const newChallenges = await this._duplicateLiveChallenges();
-      newSkill.challenges = newChallenges;
       await newSkill.save();
+      await this._duplicateLiveChallenges(newSkill);
       await this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction);
 
       this.notify.message('Acquis et épreuves associées dupliqués');
@@ -172,12 +171,13 @@ export default class SingleController extends Controller {
     }
   }
 
-  async _duplicateLiveChallenges() {
+  async _duplicateLiveChallenges(newSkill) {
     const skill = this.skill;
     const challenges = await skill.challenges;
     const liveChallenges = challenges.filter(challenge => challenge.isLive);
     const newChallenges = await Promise.all(liveChallenges.map(async (challenge) => {
       const newChallenge = await challenge.copyForDifferentSkill();
+      newChallenge.skills = [newSkill];
       await newChallenge.save();
       await this._saveDuplicatedAttachments(newChallenge);
       return newChallenge;
@@ -334,7 +334,7 @@ export default class SingleController extends Controller {
   _handleChallengeChangelog(challenge, changelogValue) {
     const entry = this.store.createRecord('changelogEntry', {
       text: changelogValue,
-      recordId: challenge.pixId,
+      recordId: challenge.id,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.challenge

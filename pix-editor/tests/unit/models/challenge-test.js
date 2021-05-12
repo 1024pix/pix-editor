@@ -23,8 +23,8 @@ module('Unit | Model | challenge', function(hooks) {
     idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
 
     prototype =  {
-      id: 'rec_1',
-      pixId: 'pix_1',
+      id: 'pix_1',
+      airtableId: 'rec_1',
       status:'validé',
       genealogy: 'Prototype 1',
       author: 'DEV',
@@ -33,8 +33,8 @@ module('Unit | Model | challenge', function(hooks) {
       idGenerator: idGeneratorStub
     };
     alternative =  {
-      id: 'rec_1',
-      pixId: 'pix_1',
+      id: 'pix_1',
+      airtableId: 'rec_1',
       status:'validé',
       author: 'DEV',
       alternativeVersion: 1,
@@ -53,7 +53,7 @@ module('Unit | Model | challenge', function(hooks) {
 
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.id, 'generatedId');
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.author, 'NEW');
       assert.equal(clonedChallenge.version, null);
@@ -69,7 +69,7 @@ module('Unit | Model | challenge', function(hooks) {
 
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.id, 'generatedId');
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.author, 'NEW');
       assert.equal(clonedChallenge.alternativeVersion, null);
@@ -102,7 +102,7 @@ module('Unit | Model | challenge', function(hooks) {
 
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.pixId, 'generatedId');
+      assert.equal(clonedChallenge.id, 'generatedId');
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.skills.length, 0);
     });

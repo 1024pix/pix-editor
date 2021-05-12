@@ -140,7 +140,7 @@ function routes() {
     const findPersistentId = /AND\(FIND\('(.+)', \{id persistant\}\)\)/.exec(request.queryParams.filterByFormula);
     let records = null;
     if (findPersistentId && request.queryParams.maxRecords === '1') {
-      const challenge = schema.challenges.findBy({ pixId: findPersistentId[1] });
+      const challenge = schema.challenges.find(findPersistentId[1]);
       records = [_serializeModel(challenge, 'challenge')];
     } else {
       records = schema.challenges.all().models.map(challenge => {
@@ -183,7 +183,7 @@ function routes() {
   });
 
   this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
-    const challenge = schema.challenges.find(request.params.id);
+    const challenge = schema.challenges.findBy({ airtableId: request.params.id });
     return _serializeModel(challenge, 'challenge');
   });
 

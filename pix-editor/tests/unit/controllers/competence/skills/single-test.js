@@ -3,7 +3,6 @@ import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
 import sinon from 'sinon';
 
-
 module('Unit | Controller | competence/skills/single', function (hooks) {
   setupTest(hooks);
 
@@ -64,14 +63,14 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     controller.store = storeStub;
     const changelogValue = 'Epreuve modifié';
     const challenge = {
-      pixId: 'rec123456',
+      id: 'rec123456',
       name: 'challengeName',
     };
 
     const expectedChangelog = {
       author,
       text: changelogValue,
-      recordId: challenge.pixId,
+      recordId: challenge.id,
       createdAt: date,
       elementType: changelogEntryService.challenge,
     };
@@ -179,7 +178,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     controller.model = skill;
 
     // when
-    const result = await controller._duplicateLiveChallenges();
+    const result = await controller._duplicateLiveChallenges(skill);
 
     // then
     assert.equal(result.length, 2);
@@ -221,7 +220,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     sinon.stub(storageServiceStub, 'cloneFile').resolves('data:2,');
 
     // when
-    const newChallenges = await controller._duplicateLiveChallenges();
+    const newChallenges = await controller._duplicateLiveChallenges(skill);
 
     // then
     assert.equal(newChallenges.length, 1);

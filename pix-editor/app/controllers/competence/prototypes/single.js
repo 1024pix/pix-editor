@@ -640,7 +640,7 @@ export default class SingleController extends Controller {
     }
     const entry = this.store.createRecord('changelogEntry', {
       text: changelog,
-      recordId: challenge.pixId,
+      recordId: challenge.id,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.challenge

@@ -1,12 +1,8 @@
 import Route from '@ember/routing/route';
 
 export default class ChallengeRoute extends Route {
-  async model(params) {
-    const challenges = await this.store.query('challenge', {
-      filterByFormula:`AND(FIND('${params.challenge_id}', {id persistant}))`,
-      maxRecords: 1
-    });
-    return challenges.firstObject;
+  model(params) {
+    return this.store.findRecord('challenge', params.challenge_id);
   }
 
   async afterModel(model) {
