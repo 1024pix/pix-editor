@@ -1,5 +1,13 @@
 
 
+## v3.35.0 (17/05/2021)
+
+- [#159](https://github.com/1024pix/pix-editor/pull/159) [TECH] Ajout du type d'erreur lors d'une erreur de queue
+- [#158](https://github.com/1024pix/pix-editor/pull/158) [TECH] Rend cohérent les noms des propriétés d'un challenge entre ceux de la release et ceux de `pix-editor`.
+- [#157](https://github.com/1024pix/pix-editor/pull/157) [TECH] Mise à jour des dépendances
+- [#155](https://github.com/1024pix/pix-editor/pull/155) [TECH] Refacto de la serialization de mirage.
+- [#150](https://github.com/1024pix/pix-editor/pull/150) [TECH] Ajoute le service Redis dans le job end-to-end de la CI.
+
 ## v3.34.0 (10/05/2021)
 
 - [#149](https://github.com/1024pix/pix-editor/pull/149) [FEATURE] Ajout d'information sur le champs des propositions de réponses des QROC.
