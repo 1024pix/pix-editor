@@ -4,8 +4,8 @@ const config = require('../../config');
 const logger = require('../logger');
 const releaseRepository = require('../repositories/release-repository.js');
 
-const queueError = (err, message) => {
-  logger.error(err, message);
+const queueError = (err, ...messages) => {
+  logger.error(err, ...messages);
   Sentry.captureException(err);
 };
 const queueMessage = (message) => {
@@ -13,7 +13,7 @@ const queueMessage = (message) => {
 };
 
 const queue = new Queue('create-release-queue', config.scheduledJobs.redisUrl);
-queue.on('error', (err) => queueError(err, 'Queue error for creating release'));
+queue.on('error', (err, additionalError) => queueError(err, 'Queue error for creating release', additionalError));
 queue.on('failed', (job, err) => queueError(err, `Release job ${job.id} failed`));
 queue.on('waiting', (jobId) => queueMessage(`A job ${jobId} has been scheduled`));
 queue.on('active', () => queueMessage('A job has started'));
