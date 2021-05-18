@@ -33,7 +33,11 @@ exports.register = async function(server) {
       config: {
         handler: async function() {
           const job = await createReleaseQueue.add();
-          return promiseStreamer(job.finished(), _getWritableStream());
+          const promise = async () => {
+            const releaseId = await job.finished();
+            return releaseRepository.getRelease(releaseId);
+          };
+          return promiseStreamer(promise(), _getWritableStream());
         },
       },
     },
