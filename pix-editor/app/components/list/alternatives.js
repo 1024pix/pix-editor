@@ -18,7 +18,7 @@ export default class AlternativesList extends SortedList {
     valuePath:'locales',
     maxWidth:80,
     minWidth:75,
-    languages:true
+    locales:true
   },{
     name:'Auteur',
     valuePath:'author',
