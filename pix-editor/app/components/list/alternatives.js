@@ -7,27 +7,27 @@ export default class AlternativesList extends SortedList {
   @service router;
 
   headers = [{
-    name:'Indice',
-    valuePath:'alternativeVersion',
-    maxWidth:50,
+    name: 'Indice',
+    valuePath: 'alternativeVersion',
+    maxWidth: 50,
   },{
-    name:'Consigne',
-    valuePath:'instruction',
+    name: 'Consigne',
+    valuePath: 'instruction',
   },{
-    name:'Langue(s)',
-    valuePath:'locales',
-    maxWidth:80,
-    minWidth:75,
-    locales:true
+    name: 'Langue(s)',
+    valuePath: 'locales',
+    maxWidth: 80,
+    minWidth: 75,
+    locales: true
   },{
-    name:'Auteur',
-    valuePath:'author',
-    maxWidth:80,
+    name: 'Auteur',
+    valuePath: 'author',
+    maxWidth: 80,
   },{
-    name:'Statut',
-    valuePath:'status',
-    maxWidth:130,
-    style:true
+    name: 'Statut',
+    valuePath: 'status',
+    maxWidth: 130,
+    style: true
   }];
 
   @action
