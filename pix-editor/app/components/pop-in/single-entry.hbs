@@ -5,7 +5,7 @@
       {{@title}}
     </div>
     <div class="content">
-      <form class="ui form">
+      <form class="ui form" {{on "submit" this.validate}}>
         <div class="field">
           <label>{{@label}}</label>
           <Field::Input @value={{this.value}} @edition={{true}} />

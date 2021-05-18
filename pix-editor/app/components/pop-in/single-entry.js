@@ -14,7 +14,8 @@ export default class PopinSingleEntry extends Component {
   }
 
   @action
-  validate() {
+  validate(e) {
+    e.preventDefault();
     this.args.setValue(this.value);
     this.closeModal();
   }
