@@ -3,13 +3,10 @@ import { action } from '@ember/object';
 
 export default class ListRoute extends Route {
 
-  model(params) {
-    return this.store.findRecord('tube', params.tube_id)
-      .then(tube => {
-        return  this.store.findRecord('skill', params.skill_id).then(skill=>{
-          return { skills: tube.filledSkills[skill.level - 1], skill };
-        });
-      });
+  async model(params) {
+    const tube = await this.store.findRecord('tube', params.tube_id);
+    const skill = await this.store.findRecord('skill', params.skill_id);
+    return { skills: tube.filledSkills[skill.level - 1], skill };
   }
 
   setupController(controller, model) {
