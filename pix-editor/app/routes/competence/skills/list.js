@@ -2,12 +2,10 @@ import Route from '@ember/routing/route';
 
 export default class CompetenceSkillsListRoute extends Route {
 
-  model(params) {
-    return this.store.findRecord('tube', params.tube_id)
-      .then(tube => {
-        const intLevel = parseInt(params.level);
-        return { tube, sortedSkills: tube.filledSkills[intLevel - 1] };
-      });
+  async model(params) {
+    const tube = await this.store.findRecord('tube', params.tube_id);
+    const intLevel = parseInt(params.level);
+    return { tube, sortedSkills: tube.filledSkills[intLevel - 1] };
   }
 
   setupController() {

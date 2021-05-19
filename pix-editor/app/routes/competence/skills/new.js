@@ -7,19 +7,18 @@ export default class NewRoute extends SingleRoute {
 
   model() {
     return {
-      skill:this.store.createRecord('skill', { status:'en construction', pixId:this.idGenerator.newId() })
+      skill: this.store.createRecord('skill', { status:'en construction', pixId:this.idGenerator.newId() })
     };
   }
 
-  afterModel(model) {
+  async afterModel(model) {
     const params = this.paramsFor(this.routeName);
-    return this.store.findRecord('tube', params.tube_id)
-      .then((tube) => {
-        const level = parseInt(params.level) + 1;
-        model.skill.name = tube.name + level;
-        model.skill.level = level;
-        model.tube = tube;
-      });
+    const tube = await this.store.findRecord('tube', params.tube_id);
+    const level = parseInt(params.level) + 1;
+    model.skill.name = tube.name + level;
+    model.skill.level = level;
+    model.tube = tube;
+    return tube;
   }
 
   setupController(controller) {

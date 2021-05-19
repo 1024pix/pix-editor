@@ -12,14 +12,12 @@ export default class NewRoute extends Tube {
   templateName = 'competence/tubes/single';
   @service idGenerator;
 
-  model(params) {
-    return this.store.findRecord('theme', params.themeId)
-      .then(theme => {
-        return this.store.createRecord('tube', {
-          pixId:this.idGenerator.newId(),
-          theme
-        });
-      });
+  async model(params) {
+    const theme = await this.store.findRecord('theme', params.themeId);
+    return this.store.createRecord('tube', {
+      pixId:this.idGenerator.newId(),
+      theme
+    });
   }
 
   setupController(controller) {
