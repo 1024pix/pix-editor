@@ -7,12 +7,10 @@ export default class NewRoute extends PrototypeRoute {
   @service config;
   @service idGenerator;
 
-  model(params) {
+  async model(params) {
     if (params.from) {
-      return this.store.findRecord('challenge', params.from)
-        .then((prototype) => {
-          return prototype.duplicate();
-        });
+      const prototype = await this.store.findRecord('challenge', params.from);
+      return prototype.duplicate();
     } else {
       const newChallenge = this.store.createRecord('challenge', {
         competence: [this.modelFor('competence').id],
@@ -25,11 +23,9 @@ export default class NewRoute extends PrototypeRoute {
         pixId: this.idGenerator.newId()
       });
       if (params.fromSkill) {
-        return this.store.findRecord('skill', params.fromSkill)
-          .then((skill) => {
-            newChallenge.skills.pushObject(skill);
-            return newChallenge;
-          });
+        const skill = await this.store.findRecord('skill', params.fromSkill);
+        newChallenge.skills.pushObject(skill);
+        return newChallenge;
       }
       newChallenge.skills.pushObject(this.modelFor('competence').workbenchSkill);
       return newChallenge;
