@@ -1,5 +1,13 @@
 
 
+## v3.36.0 (19/05/2021)
+
+- [#162](https://github.com/1024pix/pix-editor/pull/162) [BUGFIX] Corrige l'affichage des drapeaux dans la liste des épreuves archivés
+- [#161](https://github.com/1024pix/pix-editor/pull/161) [BUGFIX] Empêcher le rechargement d'une page lorsque l'on appuye sur entrer dans un formulaire.
+- [#160](https://github.com/1024pix/pix-editor/pull/160) [BUGFIX] Correction de l'affichage des drapeaux dans la liste des alternatives
+- [#163](https://github.com/1024pix/pix-editor/pull/163) [TECH] Évite de remplir redis lors de la création de release
+- [#164](https://github.com/1024pix/pix-editor/pull/164) [TECH] Refactoring des `model` des routes en utilisant async/await
+
 ## v3.35.0 (17/05/2021)
 
 - [#159](https://github.com/1024pix/pix-editor/pull/159) [TECH] Ajout du type d'erreur lors d'une erreur de queue
