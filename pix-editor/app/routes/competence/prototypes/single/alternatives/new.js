@@ -3,12 +3,10 @@ import Route from '@ember/routing/route';
 export default class NewRoute extends Route {
   templateName = 'competence/prototypes/single';
 
-  model(params) {
+  async model(params) {
     if (params.from) {
-      return this.store.findRecord('challenge', params.from)
-        .then(challenge => {
-          return challenge.duplicate();
-        });
+      const challenge = await this.store.findRecord('challenge', params.from);
+      return challenge.duplicate();
     } else {
       const prototype = this.modelFor('competence/prototypes/single');
       return prototype.derive();
