@@ -5,8 +5,18 @@ export default class CurrentDataService extends Service {
   @tracked _areas = null;
   @tracked _competence = null;
   @tracked _prototype = null;
+  @tracked _frameworks = null;
+  @tracked _framework = null;
   @tracked _sources = null;
   @tracked _source = null;
+
+  setFrameworks(frameworks) {
+    this._frameworks = frameworks;
+  }
+
+  setFramework(framework) {
+    this._framework = framework;
+  }
 
   setAreas(areas) {
     this._areas = areas;
@@ -20,31 +30,23 @@ export default class CurrentDataService extends Service {
     this._prototype = prototype;
   }
 
-  setSources(sources) {
-    this._sources = sources;
+  getFrameworks() {
+    return this._frameworks;
   }
 
-  setSource(source) {
-    this._source = source;
+  getFramework() {
+    return this._framework;
+  }
+
+  get isPixFramework() {
+    return this._framework.name === 'Pix';
   }
 
   getAreas(filteredBySource = true) {
-    if (filteredBySource && this._areas)
-      return this._areas.filter(area => area.source === this._source);
-    else
-      return this._areas;
-  }
-
-  getSources() {
-    return this._sources;
-  }
-
-  getSource() {
-    return this._source;
-  }
-
-  get isPixSource() {
-    return this.getSource() === 'Pix';
+    if (filteredBySource && this._framework) {
+      return this._framework.areas;
+    }
+    return this._areas;
   }
 
   getCompetence() {

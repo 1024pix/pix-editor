@@ -7,12 +7,14 @@ export default class CompetenceRoute extends Route {
   @service currentData;
 
   model(params) {
-    return this.store.peekRecord('competence', params.competence_id);
+    return this.store.findRecord('competence', params.competence_id);
   }
 
-  afterModel(model) {
+  async afterModel(model) {
     this.currentData.setCompetence(model);
-    this.currentData.setSource(model.source);
+    const area = await model.area;
+    const framework = await area.framework;
+    this.currentData.setFramework(framework);
     if (model.needsRefresh) {
       return model.hasMany('rawThemes').reload()
         .then(themes => {

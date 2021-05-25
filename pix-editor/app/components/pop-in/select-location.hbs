@@ -10,7 +10,7 @@
     </div>
     <div class="content">
       <form action="" class="ui form">
-        <Field::Select data-test-select-source @title="Référentiel" @value={{this.selectedSource}} @options={{this.sources}} @edition={{true}} @setValue={{this.selectSource}} />
+        <Field::Select data-test-select-source @title="Référentiel" @value={{this.selectedFramework}} @options={{this.frameworkList}} @edition={{true}} @setValue={{this.selectFramework}} />
         <Field::Select data-test-select-competence @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
         {{#if @isTubeLocation}}
           <Field::Select data-test-select-theme @title="Thématique*" @defaultText="Sélectionner une thématique" @value={{this.selectedTheme}} @options={{this.themeList}} @edition={{true}} @setValue={{this.selectTheme}}/>

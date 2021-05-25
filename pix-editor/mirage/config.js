@@ -26,6 +26,13 @@ function routes() {
     return _serializeModel(createdAttachment, 'attachment');
   });
 
+  this.get('/airtable/content/Referentiel', (schema, request) => {
+    const records = schema.frameworks.all().models.map((framework) => {
+      return _serializeModel(framework, 'framework');
+    });
+    return _response(request, { records });
+  });
+
   this.get('/airtable/content/Domaines', (schema, request) => {
     const records = schema.areas.all().models.map((area) => {
       return _serializeModel(area, 'area');
@@ -241,4 +248,3 @@ function _deserializePayload(payload, modelName) {
   }
   return payload;
 }
-

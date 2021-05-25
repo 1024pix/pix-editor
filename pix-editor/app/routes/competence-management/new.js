@@ -20,10 +20,11 @@ export default class CompetenceManagementNewRoute extends Route {
       });
   }
 
-  afterModel(model) {
+  async afterModel(model) {
     if (model) {
       const area = model.area;
-      this.currentData.setSource(area.source);
+      const framework = await area.framework;
+      this.currentData.setFramework(framework);
     }
   }
 

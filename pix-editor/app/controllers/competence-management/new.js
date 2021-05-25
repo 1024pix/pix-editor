@@ -46,7 +46,6 @@ export default class CompetenceManagementNewController extends Controller {
 
   async _createCompetence(area) {
     this.competence.area = area;
-    this.competence.source = area.source;
     await this.competence.save();
   }
 

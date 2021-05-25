@@ -9,7 +9,7 @@ export default class PopinSelectLocation extends Component {
   //todo refacto element loading
   @tracked _selectedCompetence = null;
   @tracked _selectedTube = null;
-  @tracked _selectedSource = null;
+  @tracked _selectedFramework = null;
   @tracked _selectedSkill = null;
   @tracked _selectedTheme = null;
   @tracked themesLoaded = false;
@@ -25,27 +25,34 @@ export default class PopinSelectLocation extends Component {
   _tubes = A([]);
   _skills = A([]);
 
-  get sources() {
-    return this.currentData.getSources();
+  get frameworks() {
+    return this.currentData.getFrameworks();
   }
 
-  get selectedSource() {
-    if (this._selectedSource) {
-      return this._selectedSource;
+  get selectedFramework() {
+    if (this._selectedFramework) {
+      return this._selectedFramework;
     }
-    return this.currentData.getSource();
+    return this.frameworkList.find(item => (item.data === this.currentData.getFramework()));
   }
 
-  set selectedSource(value) {
-    this._selectedSource = value;
+  set selectedFramework(value) {
+    this._selectedFramework = value;
     return value;
+  }
+
+  get frameworkList() {
+    return this.frameworks.map(framework => ({
+      label: framework.name,
+      data: framework
+    }));
   }
 
   get selectedCompetence() {
     if (this._selectedCompetence) {
       return this._selectedCompetence;
     }
-    return this.competenceList.find(item => (item.data == this.currentData.getCompetence()));
+    return this.competenceList.find(item => (item.data === this.currentData.getCompetence()));
   }
 
   set selectedCompetence(value) {
@@ -54,8 +61,9 @@ export default class PopinSelectLocation extends Component {
   }
 
   get competences() {
-    const areas = this.currentData.getAreas(false);
-    const areaCompetences = areas.filter(area => area.source === this.selectedSource).map(area => area.sortedCompetences);
+    const framework = this.selectedFramework.data;
+    const areas = framework.areas;
+    const areaCompetences = areas.map(area => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
@@ -203,8 +211,8 @@ export default class PopinSelectLocation extends Component {
   }
 
   @action
-  selectSource(source) {
-    this.selectedSource = source;
+  selectFramework(source) {
+    this.selectedFramework = source;
     this.selectCompetence(null);
   }
 

@@ -66,7 +66,6 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       competence.save = saveStub;
       const expectedCompetence = {
         area,
-        source: 'Pix+',
         code: '1.1',
         save: saveStub
       };

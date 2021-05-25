@@ -7,7 +7,7 @@ import Service from '@ember/service';
 module('Integration | Component | sidebar/navigation', function(hooks) {
   setupRenderingTest(hooks);
   module('#isAdmin', function(hooks) {
-    let areas, sources;
+    let areas, frameworks, pixFramework, pixFranceFramework;
 
     hooks.beforeEach(function () {
       areas = [{
@@ -29,18 +29,27 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
           name:'competence2_2'
         }]
       }];
-      sources = ['Pix', 'Pix +'];
+
+      pixFramework = {
+        name: 'Pix'
+      };
+
+      pixFranceFramework = {
+        name: 'Pix +'
+      };
+
+      frameworks = [pixFramework, pixFranceFramework];
       this.owner.register('service:currentData', class MockService extends Service {
         getAreas() {
           return areas;
         }
-        getSources() {
-          return sources;
+        getFrameworks() {
+          return frameworks;
         }
-        getSource() {
-          return 'Pix';
+        getFramework() {
+          return pixFramework;
         }
-        get isPixSource() {
+        get isPixFramework  () {
           return true;
         }
       });
@@ -51,18 +60,18 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
     });
 
-    test('it should display a list of sources', async function(assert) {
+    test('it should display a list of frameworks', async function(assert) {
       // given
-      const expectedSources = ['Pix', 'Pix +'];
+      const expectedFrameworks = ['Pix', 'Pix +'];
 
       // when
       await render(hbs`<Sidebar::Navigation />`);
-      await click('[data-test-sources-select] .ember-basic-dropdown-trigger');
+      await click('[data-test-frameworks-select] .ember-basic-dropdown-trigger');
 
       // then
       const sourcesList = findAll('.ember-power-select-option');
       sourcesList.forEach(source => {
-        assert.ok(expectedSources.includes(source.textContent.trim()));
+        assert.ok(expectedFrameworks.includes(source.textContent.trim()));
       });
     });
 
@@ -103,13 +112,13 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         getAreas() {
           return areas;
         }
-        getSources() {
-          return sources;
+        getFrameworks() {
+          return frameworks;
         }
-        getSource() {
-          return 'Pix +';
+        getFramework() {
+          return pixFranceFramework;
         }
-        get isPixSource() {
+        get isPixFramework() {
           return false;
         }
       });

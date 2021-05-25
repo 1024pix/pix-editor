@@ -1,10 +1,12 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
+import Service from '@ember/service';
+
 
 module('Unit | Controller | target-profile', function (hooks) {
   setupTest(hooks);
-  let tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, controller;
+  let tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, framework, controller;
   hooks.beforeEach(function () {
     // given
     skill1 = {
@@ -33,6 +35,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     };
     tube1 = {
       id: 'rec123456',
+      pixId: 'pix123456',
       name: 'tube1',
       selectedLevel: 5,
       selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId],
@@ -58,8 +61,9 @@ module('Unit | Controller | target-profile', function (hooks) {
       name: 'skill2_1_4',
       level: 4
     };
-    tube2 =  {
-      id: 'rec123456',
+    tube2 = {
+      id: 'rec123457',
+      pixId: 'pix123457',
       name: 'tube1',
       selectedLevel: 4,
       selectedSkills: [skill7.pixId, skill8.pixId, skill9.pixId],
@@ -68,25 +72,31 @@ module('Unit | Controller | target-profile', function (hooks) {
       productionSkills: [skill7, skill8, skill9]
     };
 
-    areas = [
-      {
-        id: 'recArea1',
-        competences: [
-          {
-            id: 'recCompetence1_1',
-            tubes: [tube1]
-          }
-        ]
-      }, {
-        id: 'recArea2',
-        competences: [
-          {
-            id: 'recCompetence2_1',
-            tubes: [tube2]
-          }
-        ]
-      },
-    ];
+    const area1 = {
+      id: 'recArea1',
+      competences: [
+        {
+          id: 'recCompetence1_1',
+          tubes: [tube1]
+        }
+      ]
+    };
+    const area2 = {
+      id: 'recArea2',
+      competences: [
+        {
+          id: 'recCompetence2_1',
+          tubes: [tube2]
+        }
+      ]
+    };
+    areas = [area1, area2];
+    framework = {
+      name: 'Pix',
+      areas
+    };
+    area1.framework = framework;
+    area2.framework = framework;
     controller = this.owner.lookup('controller:target-profile');
   });
 
@@ -187,9 +197,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
-
-    controller.model = [{ ...areas[0], source: areas[0] }, { ...areas[1], source: areas[1] }];
-    controller._selectedSources = areas;
+    controller._selectedFrameworks = [{ data: framework }];
 
     // when
     controller.generate('title');
@@ -203,9 +211,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     // given
     const fileSaverStub = sinon.stub();
     controller.fileSaver.saveAs = fileSaverStub;
-
-    controller.model = [{ ...areas[0], source: areas[0] }, { ...areas[1], source: areas[1] }];
-    controller._selectedSources = areas;
+    controller._selectedFrameworks = [{ data: framework }];
 
     // when
     controller.generateThematicResult('title');
@@ -215,4 +221,143 @@ module('Unit | Controller | target-profile', function (hooks) {
     assert.deepEqual(controller.fileSaver.saveAs.getCall(0).args[0], expectedResult);
   });
 
+  test('it should save profile state', function (assert) {
+    // given
+    const fileSaverStub = sinon.stub();
+    controller.fileSaver.saveAs = fileSaverStub;
+    controller._selectedFrameworks = [{ data: framework }];
+
+    const expectedResult = JSON.stringify([
+      {
+        id: 'pix123456',
+        level: 5,
+        skills: ['pix321654', 'pix321655', 'pix321656']
+      }, {
+        id: 'pix123457',
+        level: 4,
+        skills: ['pixSkill2_1_1', 'pixSkill2_1_2', 'pixSkill2_1_4']
+      }]);
+
+    // when
+    controller.save();
+
+    // then
+    assert.deepEqual(fileSaverStub.getCall(0).args[0], expectedResult);
+  });
+
+  test('it should build a profile state', async function(assert) {
+    // given
+    const skill10 = {
+      id: 'recSkill3_1_1',
+      pixId: 'pixSkill3_1_1',
+      name: 'skill3_1_1',
+      level: 1
+    };
+    const skill11 = {
+      id: 'recSkill3_1_2',
+      pixId: 'pixSkill3_1_2',
+      name: 'skill3_1_2',
+      level: 2
+    };
+    const skill12 = {
+      id: 'recSkill3_1_6',
+      pixId: 'pixSkill3_1_6',
+      name: 'skill3_1_6',
+      level: 6
+    };
+    const tube3 = {
+      id: 'rec666457',
+      pixId: 'pix666457',
+      name: 'tube3',
+      productionSkills: [skill10, skill11, skill12]
+    };
+    const area3 = {
+      id: 'recArea3',
+      competences: [{
+        id: 'recCompetence3_1',
+        tubes: [tube3]
+      }]
+    };
+    const framework2 = {
+      name: 'Pix+',
+      areas: [area3]
+    };
+    area3.framework = framework2;
+
+    this.owner.register('service:currentData', class MockService extends Service {
+
+      getAreas() {
+        return [area3, ...areas];
+      }
+
+      getFrameworks() {
+        return [framework, framework2];
+      }
+    });
+
+    const notifyMessageStub = sinon.stub();
+
+    class NotifyService extends Service {
+      message = notifyMessageStub;
+    }
+
+    this.owner.register('service:notify', NotifyService);
+
+    controller._emptyOpenFile = () => { return true; };
+
+    const targetResult = JSON.stringify([
+      {
+        id: 'pix123456',
+        level: 'max',
+      }, {
+        id: 'pix666457',
+        level: 2,
+        skills: ['pixSkill3_1_1', 'pixSkill3_1_2']
+      }]);
+
+    const expectedTube1 = {
+      id: 'rec123456',
+      pixId: 'pix123456',
+      name: 'tube1',
+      selectedLevel: 6,
+      selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId, skill6.pixId],
+      selectedThematicResultLevel: 2,
+      selectedThematicResultSkills: [skill1.pixId, skill2.pixId],
+      productionSkills: [skill1, skill2, skill5, skill6]
+    };
+
+    const expectedTube2 = {
+      id: 'rec123457',
+      pixId: 'pix123457',
+      name: 'tube1',
+      selectedLevel: false,
+      selectedSkills: [],
+      selectedThematicResultLevel: 1,
+      selectedThematicResultSkills: [skill7.pixId],
+      productionSkills: [skill7, skill8, skill9]
+    };
+
+    const expectedTube3 = {
+      id: 'rec666457',
+      pixId: 'pix666457',
+      name: 'tube3',
+      selectedLevel: 2,
+      selectedSkills: [skill10.pixId, skill11.pixId],
+      productionSkills: [skill10, skill11, skill12]
+    };
+
+    const explectedSelectedFrameworks = [
+      { data: framework, label: 'Pix' },
+      { data: framework2, label: 'Pix+' },
+    ];
+
+    // when
+    await controller._buildTargetProfileFromFile({ target:{ result: targetResult } });
+
+    // then
+    assert.deepEqual(tube1, expectedTube1);
+    assert.deepEqual(tube2, expectedTube2);
+    assert.deepEqual(tube3, expectedTube3);
+    assert.deepEqual(controller._selectedFrameworks, explectedSelectedFrameworks);
+  });
 });

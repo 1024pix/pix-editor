@@ -7,12 +7,14 @@ export default class CompetenceManagementSingleRoute extends Route {
   @service currentData;
 
   model(params) {
-    return this.store.peekRecord('competence', params.competence_id);
+    return this.store.findRecord('competence', params.competence_id);
   }
 
-  afterModel(model) {
+  async afterModel(model) {
     if (model) {
-      this.currentData.setSource(model.source);
+      const area = await model.area;
+      const framework = await area.framework;
+      this.currentData.setFramework(framework);
     }
   }
 
