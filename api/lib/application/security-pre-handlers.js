@@ -3,6 +3,7 @@ const JSONAPIError = require('jsonapi-serializer').Error;
 
 module.exports = {
   checkUserIsAuthenticated,
+  checkUserIsAuthenticatedViaBasic,
 };
 
 async function checkUserIsAuthenticated(request, h) {
@@ -16,6 +17,16 @@ async function checkUserIsAuthenticated(request, h) {
   }
   catch (error) {
     return _replyWithAuthenticationError(h);
+  }
+}
+
+async function checkUserIsAuthenticatedViaBasic(username) {
+  try {
+    const user = await userRepository.findByApiKey(username);
+    return { isValid: true, credentials: { user } };
+  }
+  catch (error) {
+    return { isValid: false };
   }
 }
 

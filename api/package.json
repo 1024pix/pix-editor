@@ -38,9 +38,14 @@
   "author": "GIP Pix",
   "license": "ISC",
   "dependencies": {
+    "@admin-bro/hapi": "^3.0.0",
+    "@admin-bro/sequelize": "^1.2.1",
+    "@hapi/basic": "^6.0.0",
+    "@hapi/boom": "^9.1.2",
     "@hapi/hapi": "20.0.3",
-    "@hapi/inert": "6.0.3",
+    "@hapi/inert": "^6.0.3",
     "@hapi/vision": "^6.0.1",
+    "admin-bro": "^4.0.1",
     "airtable": "0.10.1",
     "axios": "0.21.1",
     "blipp": "4.0.2",
@@ -58,7 +63,8 @@
     "node-cache": "^5.1.2",
     "pg": "8.5.1",
     "prom-client": "13.0.0",
-    "qs": "6.9.6"
+    "qs": "6.9.6",
+    "sequelize": "^6.6.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",

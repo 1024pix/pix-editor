@@ -9,6 +9,7 @@ const routes = require('./lib/routes');
 const plugins = require('./lib/plugins');
 const config = require('./lib/config');
 const security = require('./lib/infrastructure/security');
+const securityPreHandlers = require('./lib/application/security-pre-handlers');
 
 const createServer = async () => {
 
@@ -25,7 +26,6 @@ const createServer = async () => {
     port: config.port,
     router: {
       isCaseSensitive: false,
-      stripTrailingSlash: true
     }
   });
 
@@ -34,6 +34,8 @@ const createServer = async () => {
   server.auth.scheme('api-token', security.scheme);
   server.auth.strategy('default', 'api-token');
   server.auth.default('default');
+  await server.register(require('@hapi/basic'));
+  server.auth.strategy('simple', 'basic', { validate: (request, username) => securityPreHandlers.checkUserIsAuthenticatedViaBasic(username) });
 
   const configuration = [].concat(plugins, routes);
 
