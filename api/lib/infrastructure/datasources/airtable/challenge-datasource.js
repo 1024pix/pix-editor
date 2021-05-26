@@ -31,6 +31,7 @@ module.exports = datasource.extend({
     'Réponse automatique',
     'Langues',
     'Consigne alternative',
+    'Focalisée',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -68,6 +69,7 @@ module.exports = datasource.extend({
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
+      focusable: airtableRecord.get('Focalisée'),
     };
   },
 
