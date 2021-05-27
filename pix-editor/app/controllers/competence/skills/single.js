@@ -146,31 +146,30 @@ export default class SingleController extends Controller {
       (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
   }
 
-  _duplicateToLocationCallback(changelogValue, competence, newTube, level) {
-    const currentSkill = this.skill;
-    return currentSkill.clone()
-      .then(newSkill=>{
-        this.loader.start();
-        newSkill.tube = newTube;
-        newSkill.level = level;
-        newSkill.version = newTube.getNextSkillVersion(level);
-        return this._duplicateLiveChallenges()
-          .then((newChallenges) => {
-            newSkill.challenges = newChallenges;
-            return newSkill.save()
-              .then(() => this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction))
-              .then(() => {
-                this.notify.message('Acquis et épreuves associées dupliqués');
-                this.transitionToRoute('competence.skills.single', competence, newSkill);
-              })
-              .catch((error) => {
-                console.error(error);
-                Sentry.captureException(error);
-                this.notify.error('Erreur lors de la duplication de l\'acquis');
-              })
-              .finally(() => {this.loader.stop();});
-          });
-      });
+  async _duplicateToLocationCallback(changelogValue, competence, newTube, level) {
+    this.loader.start();
+
+    try {
+      const currentSkill = this.skill;
+      const newSkill = await currentSkill.clone();
+
+      newSkill.tube = newTube;
+      newSkill.level = level;
+      newSkill.version = newTube.getNextSkillVersion(level);
+      const newChallenges = await this._duplicateLiveChallenges();
+      newSkill.challenges = newChallenges;
+      await newSkill.save();
+      await this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction);
+
+      this.notify.message('Acquis et épreuves associées dupliqués');
+      this.transitionToRoute('competence.skills.single', competence, newSkill);
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.notify.error('Erreur lors de la duplication de l\'acquis');
+    } finally {
+      this.loader.stop();
+    }
   }
 
   async _duplicateLiveChallenges() {
