@@ -10,6 +10,7 @@ module.exports = datasource.extend({
 
   usedFields: [
     'id persistant',
+    'Record ID',
     'Compétences (via tube) (id persistant)',
     'Timer',
     'Consigne',
@@ -31,6 +32,19 @@ module.exports = datasource.extend({
     'Langues',
     'Consigne alternative',
     'Focalisée',
+    'Acquix',
+    'Genéalogie',
+    'Type péda',
+    'Auteur',
+    'Déclinable',
+    'Preview',
+    'Version prototype',
+    'Version déclinaison',
+    'Non voyant',
+    'Daltonien',
+    'Spoil',
+    'Responsive',
+    'Géographie',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -47,6 +61,7 @@ module.exports = datasource.extend({
 
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.get('Record ID'),
       instruction: airtableRecord.get('Consigne'),
       proposals: airtableRecord.get('Propositions'),
       type: airtableRecord.get('Type d\'épreuve'),
@@ -68,6 +83,19 @@ module.exports = datasource.extend({
       locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
       focusable: airtableRecord.get('Focalisée'),
+      skills: airtableRecord.get('Acquix') || [],
+      genealogy: airtableRecord.get('Généalogie'),
+      pedagogy: airtableRecord.get('Type péda'),
+      author: airtableRecord.get('Auteur'),
+      declinable: airtableRecord.get('Déclinable'),
+      preview: airtableRecord.get('Preview'),
+      version: airtableRecord.get('Version prototype'),
+      alternativeVersion: airtableRecord.get('Version déclinaison'),
+      accessibility1: airtableRecord.get('Non voyant'),
+      accessibility2: airtableRecord.get('Daltonien'),
+      spoil: airtableRecord.get('Spoil'),
+      responsive: airtableRecord.get('Responsive'),
+      area: airtableRecord.get('Géographie'),
     };
   },
 
