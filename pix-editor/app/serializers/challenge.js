@@ -2,9 +2,11 @@ import AirtableSerializer from './airtable';
 
 export default class ChallengeSerializer extends AirtableSerializer {
 
-  primaryKey = 'Record ID';
+  primaryKey = 'id persistant';
+  airtableId = 'Record ID';
 
   attrs = {
+    airtableId: 'Record ID',
     alternativeInstruction: 'Consigne alternative',
     instruction: 'Consigne',
     genealogy: 'Généalogie',
@@ -24,7 +26,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
     status: 'Statut',
     preview: 'Preview',
     skills: 'Acquix',
-    pixId: 'id persistant',
     scoring: 'Scoring',
     timer: 'Timer',
     embedURL: 'Embed URL',

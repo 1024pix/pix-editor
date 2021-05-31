@@ -49,6 +49,7 @@ export default class AirtableSerializer extends RESTSerializer {
     const json = super.serialize(snapshot, options);
 
     delete json.created;
+    delete json[this.airtableId];
 
     return json;
   }
@@ -58,13 +59,6 @@ export default class AirtableSerializer extends RESTSerializer {
       return;
     }
     return super.serializeAttribute(...arguments);
-  }
-
-  serializeHasMany(snapshot, json, relationship) {
-    if (relationship.options && relationship.options.readOnly) {
-      return;
-    }
-    return super.serializeHasMany(snapshot, json, relationship);
   }
 
   serializeBelongsTo(snapshot, json, relationship) {
@@ -84,4 +78,31 @@ export default class AirtableSerializer extends RESTSerializer {
     json[payloadKey] = [belongsToId];
   }
 
+  serializeHasMany(snapshot, json, relationship) {
+    if (relationship.options && relationship.options.readOnly) {
+      return;
+    }
+
+    const key = relationship.key;
+
+    if (this.shouldSerializeHasMany(snapshot, key, relationship)) {
+
+      const hasMany = snapshot.hasMany(key);
+
+      if (hasMany !== undefined) {
+        // if provided, use the mapping provided by `attrs` in
+        // the serializer
+        let payloadKey = this._getMappedKey(key, snapshot.type);
+        if (payloadKey === key && this.keyForRelationship) {
+          payloadKey = this.keyForRelationship(key, 'hasMany', 'serialize');
+        }
+
+        json[payloadKey] = hasMany.map((model) => {
+          if (model.attributes().airtableId)
+            return model.attributes().airtableId;
+          return model.id;
+        });
+      }
+    }
+  }
 }

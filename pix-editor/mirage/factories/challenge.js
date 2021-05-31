@@ -20,7 +20,7 @@ export default Factory.extend({
   skillNames: 'skillNames',
   status: 'validé',
   preview: 'preview',
-  pixId: 'pixId',
+  airtableId: undefined,
   scoring: 'scoring',
   timer: 'timer',
   embedURL: 'embedURL',

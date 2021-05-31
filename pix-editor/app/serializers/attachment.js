@@ -17,9 +17,8 @@ export default class AttachmentSerializer extends AirtableSerializer {
 
   serializeBelongsTo(snapshot, json, relationship) {
     const payloadKey = 'challengeId';
-
     const key = relationship.key;
-    json[payloadKey] = [snapshot.belongsTo(key, { id: true })];
 
+    json[payloadKey] = [snapshot.belongsTo(key).attributes().airtableId];
   }
 }

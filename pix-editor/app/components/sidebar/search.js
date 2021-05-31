@@ -33,8 +33,8 @@ export default class SidebarSearchComponent extends Component {
       })
         .then(challenges => {
           return challenges.map(challenge => ({
-            title: challenge.pixId,
-            id: challenge.pixId
+            title: challenge.id,
+            id: challenge.id
           }));
         });
     } else {
@@ -46,7 +46,7 @@ export default class SidebarSearchComponent extends Component {
         .then(challenges => {
           return challenges.map(challenge => ({
             title: challenge.instruction.substr(0, 100),
-            id: challenge.pixId
+            id: challenge.id
           }));
         });
     }

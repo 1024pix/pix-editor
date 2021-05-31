@@ -25,7 +25,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
       status: 'en cours'
     };
     const challenge = {
-      pixId: 'rec654258',
+      id: 'rec654258',
       locales: ['Francophone','Franco Français'],
       instruction: 'Some instructions 1'
     };
@@ -46,7 +46,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
     //then
-    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(0).args,['note',{ filterByFormula:`AND(Record_Id = '${this.challenge.pixId}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
+    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(0).args,['note',{ filterByFormula:`AND(Record_Id = '${this.challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
 
   test('it queries changelogs', async function(assert) {
@@ -54,7 +54,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
     //then
-    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args,['changelogEntry', { filterByFormula:`AND(Record_Id = '${this.challenge.pixId}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
+    assert.deepEqual(paginatedQueryLoadNotesStub.getCall(1).args,['changelogEntry', { filterByFormula:`AND(Record_Id = '${this.challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] }]);
   });
 
 });

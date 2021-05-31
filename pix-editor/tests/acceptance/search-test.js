@@ -15,7 +15,7 @@ module('Acceptance | Search', function(hooks) {
     mockAuthService.call(this, apiKey);
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', pixId: 'REC_RECHERCHE' });
+    this.server.create('challenge', { id: 'recChallenge1', airtableId: 'REC_RECHERCHE' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
     this.server.create('skill', { id: 'recSkillWorkbench', name: '@workbench', challengeIds: ['recChallenge1'] });

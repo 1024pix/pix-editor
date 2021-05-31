@@ -7,7 +7,7 @@ module('Unit | Serializer | attachment', function(hooks) {
 
   test('it serializes attachments', function(assert) {
     const store = this.owner.lookup('service:store');
-    const challenge = run(() => store.createRecord('challenge', { id: 'challengeId' }));
+    const challenge = run(() => store.createRecord('challenge', { id: 'challengeId', airtableId: 'myAirtableId' }));
     const attachment = run(() => store.createRecord('attachment', {
       filename: 'filename',
       url: 'url',
@@ -25,7 +25,7 @@ module('Unit | Serializer | attachment', function(hooks) {
       size: 'size',
       type: 'type',
       alt: 'alt',
-      challengeId: ['challengeId'],
+      challengeId: ['myAirtableId'],
     };
 
     const serializedAttachment = attachment.serialize();

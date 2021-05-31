@@ -9,7 +9,7 @@ export default class SkillSerializer extends AirtableSerializer {
     clue:'Indice fr-fr',
     clueEn:'Indice en-us',
     clueStatus:'Statut de l\'indice',
-    challenges:'Epreuves',
+    challenges:'Epreuves (id persistant)',
     createdAt:'Date',
     description:'Description',
     descriptionStatus:'Statut de la description',

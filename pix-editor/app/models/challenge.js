@@ -3,6 +3,7 @@ import Model, { attr, hasMany } from '@ember-data/model';
 
 export default class ChallengeModel extends Model {
 
+  @attr('string') airtableId;
   @attr instruction;
   @attr alternativeInstruction;
   @attr type;
@@ -22,7 +23,6 @@ export default class ChallengeModel extends Model {
   @attr genealogy;
   @attr status;
   @attr({ readOnly:true }) preview;
-  @attr pixId;
   @attr scoring;
   @attr('number') timer;
   @attr embedURL;
@@ -235,7 +235,7 @@ export default class ChallengeModel extends Model {
 
     data.status = 'proposé';
     data.skills = this.skills;
-    data.pixId = this.idGenerator.newId();
+    data.id = this.idGenerator.newId();
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;
@@ -246,7 +246,7 @@ export default class ChallengeModel extends Model {
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';
-    data.pixId = this.idGenerator.newId();
+    data.id = this.idGenerator.newId();
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;
@@ -276,7 +276,6 @@ export default class ChallengeModel extends Model {
 
   _getJSON(fieldsToRemove) {
     const data = this.toJSON({ idIncluded: false });
-    delete data.pixId;
     if (data.illustration) {
       const illustration = data.illustration[0];
       data.illustration = [{ url:illustration.url, filename:illustration.filename }];
