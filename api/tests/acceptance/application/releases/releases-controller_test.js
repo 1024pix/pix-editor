@@ -73,7 +73,6 @@ function mockCurrentContent() {
       scoring: 'Scoring du Challenge',
       status: 'Statut du Challenge',
       skillIds: ['recSkill0'],
-      skills: ['recSkill0'],
       embedUrl: 'Embed URL',
       embedTitle: 'Embed title',
       embedHeight: 'Embed height',

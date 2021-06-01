@@ -139,7 +139,6 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       scoring: challengeDataObject.scoring,
       status: challengeDataObject.status,
       skillIds: challengeDataObject.skillIds,
-      skills: challengeDataObject.skills,
       timer: challengeDataObject.timer,
       competenceId: challengeDataObject.competenceId,
       embedUrl: challengeDataObject.embedUrl,
