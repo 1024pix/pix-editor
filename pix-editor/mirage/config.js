@@ -45,6 +45,13 @@ function routes() {
     return _serializeModel(area, 'area');
   });
 
+  this.post('/airtable/content/Domaines', (schema, request) => {
+    const areaPayload = JSON.parse(request.requestBody);
+    const area = _deserializePayload(areaPayload, 'area');
+    const createdArea = schema.competences.create(area);
+    return _serializeModel(createdArea, 'area');
+  });
+
   this.get('/airtable/content/Competences', (schema, request) => {
     const records = schema.competences.all().models.map((competence) => {
       return _serializeModel(competence, 'competence');
@@ -68,9 +75,7 @@ function routes() {
   this.post('/airtable/content/Competences', (schema, request) => {
     const competencePayload = JSON.parse(request.requestBody);
     const competence = _deserializePayload(competencePayload, 'competence');
-
     const createdCompetence = schema.competences.create(competence);
-
     return _serializeModel(createdCompetence, 'competence');
   });
 
