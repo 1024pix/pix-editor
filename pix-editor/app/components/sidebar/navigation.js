@@ -17,6 +17,10 @@ export default class SidebarNavigationComponent extends Component {
     return this.currentData.getFrameworks() || [];
   }
 
+  get framework() {
+    return this.currentData.getFramework();
+  }
+
   get selectedFramework() {
     if (this._selectedFramework) {
       return this._selectedFramework;
@@ -32,6 +36,10 @@ export default class SidebarNavigationComponent extends Component {
   }
 
   get mayCreateCompetence() {
+    return this.access.isAdmin() && !this.currentData.isPixFramework;
+  }
+
+  get mayCreateArea() {
     return this.access.isAdmin() && !this.currentData.isPixFramework;
   }
 

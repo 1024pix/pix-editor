@@ -52,4 +52,8 @@ Router.map(function() {
   this.route('target-profile');
   this.route('statistics');
   this.route('events-log');
+
+  this.route('area-management', function() {
+    this.route('new', { path: 'new/:framework_id' });
+  });
 });

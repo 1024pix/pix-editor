@@ -19,5 +19,8 @@
         </accordionItem.panel>
       </accordion.item>
     {{/each}}
+    {{#if this.mayCreateArea}}
+      <LinkTo data-test-add-area @route="area-management.new" @model={{this.framework.id}} class="item" @invokeAction={{@close}}><i class="plus square icon"></i>Ajouter un domaine</LinkTo>
+    {{/if}}
   </div>
 </AccordionList>
