@@ -10,7 +10,6 @@ module.exports = datasource.extend({
 
   usedFields: [
     'id persistant',
-    'Record ID',
     'Compétences (via tube) (id persistant)',
     'Timer',
     'Consigne',
@@ -32,6 +31,7 @@ module.exports = datasource.extend({
     'Langues',
     'Consigne alternative',
     'Focalisée',
+    'Record ID',
     'Acquix',
     'Genéalogie',
     'Type péda',
@@ -61,7 +61,6 @@ module.exports = datasource.extend({
 
     return {
       id: airtableRecord.get('id persistant'),
-      airtableId: airtableRecord.get('Record ID'),
       instruction: airtableRecord.get('Consigne'),
       proposals: airtableRecord.get('Propositions'),
       type: airtableRecord.get('Type d\'épreuve'),
@@ -83,6 +82,7 @@ module.exports = datasource.extend({
       locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
       focusable: airtableRecord.get('Focalisée'),
+      airtableId: airtableRecord.get('Record ID'),
       skills: airtableRecord.get('Acquix') || [],
       genealogy: airtableRecord.get('Généalogie'),
       pedagogy: airtableRecord.get('Type péda'),

@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const areaDatasource = require('../datasources/airtable/area-datasource');
 const competenceDatasource = require('../datasources/airtable/competence-datasource');
 const tubeDatasource = require('../datasources/airtable/tube-datasource');
@@ -46,15 +47,18 @@ module.exports = {
     });
 
     if (model === attachmentDatasource.path()) {
-      const challenge = await challengeDatasource.filterById(updatedRecord.challengeId);
+      const rawChallenge = await challengeDatasource.filterById(updatedRecord.challengeId);
       const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
-      _assignAttachmentsToChallenge(challenge, attachments);
+      _assignAttachmentsToChallenge(rawChallenge, attachments);
+      const challenge = _filterChallengeFields(rawChallenge);
       return { updatedRecord: challenge, model: challengeDatasource.path() };
     }
 
     if (model === challengeDatasource.path()) {
       const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.id);
       _assignAttachmentsToChallenge(updatedRecord, attachments);
+      const challenge = _filterChallengeFields(updatedRecord);
+      return { updatedRecord: challenge, model };
     }
 
     return { updatedRecord, model };
@@ -84,8 +88,8 @@ async function _getCurrentContent() {
     attachmentDatasource.list(),
   ]);
 
-  const challenges = assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
-
+  let challenges = assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
+  challenges = _filterChallengesFields(challenges);
   return {
     areas,
     competences,
@@ -95,6 +99,41 @@ async function _getCurrentContent() {
     tutorials,
     courses,
   };
+}
+
+function _filterChallengesFields(challenges) {
+  return challenges.map(_filterChallengeFields);
+}
+
+function _filterChallengeFields(challenge) {
+  const fieldsToInclude = [
+    'id',
+    'instruction',
+    'proposals',
+    'type',
+    'solution',
+    'solutionToDisplay',
+    't1Status',
+    't2Status',
+    't3Status',
+    'scoring',
+    'status',
+    'skillIds',
+    'embedUrl',
+    'embedTitle',
+    'embedHeight',
+    'timer',
+    'competenceId',
+    'format',
+    'autoReply',
+    'locales',
+    'alternativeInstruction',
+    'attachments',
+    'illustrationAlt',
+    'illustrationUrl',
+  ];
+
+  return _.pick(challenge, fieldsToInclude);
 }
 
 function _assignAttachmentToChallenge(challenge, attachment) {
