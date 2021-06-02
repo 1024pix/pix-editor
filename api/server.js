@@ -35,7 +35,7 @@ const createServer = async () => {
   server.auth.strategy('default', 'api-token');
   server.auth.default('default');
   await server.register(require('@hapi/basic'));
-  server.auth.strategy('simple', 'basic', { validate: (request, username) => securityPreHandlers.checkUserIsAuthenticatedViaBasic(username) });
+  server.auth.strategy('simple', 'basic', { validate: (request, username) => securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(username) });
 
   const configuration = [].concat(plugins, routes);
 

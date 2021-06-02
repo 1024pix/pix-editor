@@ -3,7 +3,7 @@ const JSONAPIError = require('jsonapi-serializer').Error;
 
 module.exports = {
   checkUserIsAuthenticatedViaBearer,
-  checkUserIsAuthenticatedViaBasic,
+  checkUserIsAuthenticatedViaBasicAndAdmin,
 };
 
 async function checkUserIsAuthenticatedViaBearer(request, h) {
@@ -14,18 +14,19 @@ async function checkUserIsAuthenticatedViaBearer(request, h) {
   try {
     const user = await userRepository.findByApiKey(apiKey);
     return h.authenticated({ credentials: { user } });
-  }
-  catch (error) {
+  } catch (error) {
     return _replyWithAuthenticationError(h);
   }
 }
 
-async function checkUserIsAuthenticatedViaBasic(username) {
+async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
   try {
     const user = await userRepository.findByApiKey(username);
+    if (user.access !== 'admin') {
+      throw new Error('not an admin');
+    }
     return { isValid: true, credentials: { user } };
-  }
-  catch (error) {
+  } catch (error) {
     return { isValid: false };
   }
 }
