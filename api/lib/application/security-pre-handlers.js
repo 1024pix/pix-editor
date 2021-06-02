@@ -2,11 +2,11 @@ const userRepository = require('../infrastructure/repositories/user-repository')
 const JSONAPIError = require('jsonapi-serializer').Error;
 
 module.exports = {
-  checkUserIsAuthenticated,
+  checkUserIsAuthenticatedViaBearer,
   checkUserIsAuthenticatedViaBasic,
 };
 
-async function checkUserIsAuthenticated(request, h) {
+async function checkUserIsAuthenticatedViaBearer(request, h) {
   if (!request.headers.authorization) {
     return _replyWithAuthenticationError(h);
   }

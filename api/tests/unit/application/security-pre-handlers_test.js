@@ -6,7 +6,7 @@ const { UserNotFoundError } = require('../../../lib/domain/errors');
 
 describe('Unit | Application | SecurityPreHandlers', () => {
 
-  describe('#checkUserIsAuthenticated', () => {
+  describe('#checkUserIsAuthenticatedViaBearer', () => {
 
     context('Successful case', () => {
 
@@ -25,7 +25,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
 
         // when
-        const response = await securityPreHandlers.checkUserIsAuthenticated(request, hFake);
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, hFake);
 
         // then
         expect(response.authenticated).to.deep.equal({ credentials: { user: authenticatedUser } });
@@ -39,7 +39,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         // given
         const request = { headers: { } };
         // when
-        const response = await securityPreHandlers.checkUserIsAuthenticated(request, hFake);
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, hFake);
 
         // then
         expect(response.statusCode).to.equal(401);
@@ -55,7 +55,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).rejects(new UserNotFoundError());
 
         // when
-        const response = await securityPreHandlers.checkUserIsAuthenticated(request, hFake);
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, hFake);
       
         // then
         expect(response.statusCode).to.equal(401);
