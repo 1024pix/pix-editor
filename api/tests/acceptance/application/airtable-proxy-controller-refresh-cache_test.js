@@ -147,6 +147,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       format: challengeDataObject.format,
       autoReply: challengeDataObject.autoReply,
       locales: challengeDataObject.locales,
+      focusable: challengeDataObject.focusable,
     };
     const challenge = airtableBuilder.factory.buildChallenge({
       ...expectedChallenge,

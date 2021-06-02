@@ -131,6 +131,7 @@ function _filterChallengeFields(challenge) {
     'attachments',
     'illustrationAlt',
     'illustrationUrl',
+    'focusable',
   ];
 
   return _.pick(challenge, fieldsToInclude);

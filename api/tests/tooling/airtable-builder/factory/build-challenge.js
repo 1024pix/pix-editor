@@ -34,6 +34,7 @@ const buildChallenge = function buildChallenge({
   spoil,
   responsive,
   area,
+  focusable,
 }) {
   return {
     id,
@@ -73,6 +74,7 @@ const buildChallenge = function buildChallenge({
       'Spoil': spoil,
       'Responsive': responsive,
       'Géographie': area,
+      'Focalisée': focusable,
     },
   };
 };
