@@ -1,5 +1,9 @@
 
 
+## v3.37.2 (07/06/2021)
+
+- [#174](https://github.com/1024pix/pix-editor/pull/174) [BUGFIX] Répare la page statistiques.
+
 ## v3.37.1 (07/06/2021)
 
 - [#173](https://github.com/1024pix/pix-editor/pull/173) [BUGFIX] Corrige le nom du champ Généalogie
