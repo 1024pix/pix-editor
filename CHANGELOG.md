@@ -1,5 +1,16 @@
 
 
+## v3.37.0 (07/06/2021)
+
+- [#168](https://github.com/1024pix/pix-editor/pull/168) [FEATURE] Ajout de admin-bro
+- [#166](https://github.com/1024pix/pix-editor/pull/166) [FEATURE] Récupérer la colonne Airtable 'Focalisée' de la table Epreuves (PIX-2616).
+- [#171](https://github.com/1024pix/pix-editor/pull/171) [BUGFIX] Corrige le type du champ Origin2
+- [#172](https://github.com/1024pix/pix-editor/pull/172) [TECH] Ajout de tout les champs des challenges utilisé dans Pix-editor dans le datasource de l'API
+- [#167](https://github.com/1024pix/pix-editor/pull/167) [TECH] Utilise les id persistant des challenges comme id dans pix-editor
+- [#165](https://github.com/1024pix/pix-editor/pull/165) [TECH] Supprime l'existence des tests
+- [#156](https://github.com/1024pix/pix-editor/pull/156) [TECH] Utiliser une nouvelle table référentiel à la place de la colonne source d'une compétence (PE-75).
+- [#169](https://github.com/1024pix/pix-editor/pull/169) [CLEAN] Supprime le champ non utilisé skills des objets challenge de la release.
+
 ## v3.36.0 (19/05/2021)
 
 - [#162](https://github.com/1024pix/pix-editor/pull/162) [BUGFIX] Corrige l'affichage des drapeaux dans la liste des épreuves archivés
