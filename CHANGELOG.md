@@ -1,5 +1,9 @@
 
 
+## v3.37.1 (07/06/2021)
+
+- [#173](https://github.com/1024pix/pix-editor/pull/173) [BUGFIX] Corrige le nom du champ Généalogie
+
 ## v3.37.0 (07/06/2021)
 
 - [#168](https://github.com/1024pix/pix-editor/pull/168) [FEATURE] Ajout de admin-bro
