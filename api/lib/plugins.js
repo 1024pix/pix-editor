@@ -4,8 +4,19 @@ const settings = require('./config');
 const Blipp = require('blipp');
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
+const AdminBro = require('admin-bro');
+const AdminBroPlugin = require('@admin-bro/hapi');
+const AdminBroSequelize = require('@admin-bro/sequelize');
+const { User, Release } = require('./models');
+
+AdminBro.registerAdapter(AdminBroSequelize);
 
 const isProduction = ['production', 'staging'].includes(process.env.NODE_ENV);
+
+const adminBroOptions = {
+  resources: [User, Release],
+  auth: { strategy: 'simple' }
+};
 
 const consoleReporters =
   isProduction ?
@@ -51,6 +62,10 @@ const plugins = [
         console: consoleReporters,
       },
     },
+  },
+  {
+    plugin: AdminBroPlugin,
+    options: adminBroOptions,
   },
   ...(settings.sentry.enabled ? [
     {

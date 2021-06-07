@@ -69,6 +69,13 @@ module.exports = (function() {
       redisUrl: process.env.REDIS_URL,
       createReleaseTime: process.env.CREATE_RELEASE_TIME,
     },
+
+    database: {
+      url: process.env.DATABASE_URL,
+      poolMaxSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE, 4),
+      asyncStackTraceEnabled: isFeatureEnabled(process.env.KNEX_ASYNC_STACKTRACE_ENABLED),
+      sslEnabled: isFeatureEnabled(process.env.DATABASE_SSL_ENABLED),
+    },
   };
 
   if (process.env.NODE_ENV === 'test') {
@@ -101,6 +108,8 @@ module.exports = (function() {
       tenant: 'storageTenant',
       user: 'storageUser',
     };
+
+    config.database.url = process.env.TEST_DATABASE_URL;
   }
 
   return config;

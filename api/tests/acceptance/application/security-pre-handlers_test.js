@@ -9,7 +9,7 @@ describe('Acceptance | Application | SecurityPreHandlers', () => {
     server = await createServer();
   });
 
-  describe('#checkUserIsAuthenticated', () => {
+  describe('#checkUserIsAuthenticatedViaBearer', () => {
 
     it('should disallow access resource with well formed JSON API error', async () => {
       // given

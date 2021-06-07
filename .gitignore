@@ -24,6 +24,7 @@ testem.log
 
 api/public/pix-editor/**
 **/.eslintcache
+api/.adminbro
 
 # ember-try
 **/.node_modules.ember-try/
