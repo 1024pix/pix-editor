@@ -1,9 +1,12 @@
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class StatisticsRoute extends Route {
 
+  @service currentData;
+
   model() {
-    return this.modelFor('application');
+    return this.currentData.getFramework().areas;
   }
 
   afterModel(model) {
