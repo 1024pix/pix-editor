@@ -126,28 +126,9 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
   describe('POST /api/airtable/content/Epreuves', () => {
     const challengeDataObject = domainBuilder.buildChallenge({ id: 'recChallenge' });
     const challenge = airtableBuilder.factory.buildChallenge({
-      id: 'recChallenge',
-      instruction: challengeDataObject.instruction,
-      alternativeInstruction: challengeDataObject.alternativeInstruction,
-      proposals: challengeDataObject.proposals,
-      type: challengeDataObject.type,
-      solution: challengeDataObject.solution,
-      solutionToDisplay: challengeDataObject.solutionToDisplay,
-      t1Status: challengeDataObject.t1Status,
-      t2Status: challengeDataObject.t2Status,
-      t3Status: challengeDataObject.t3Status,
-      scoring: challengeDataObject.scoring,
-      status: challengeDataObject.status,
-      skillIds: challengeDataObject.skillIds,
-      timer: challengeDataObject.timer,
-      competenceId: challengeDataObject.competenceId,
-      embedUrl: challengeDataObject.embedUrl,
-      embedTitle: challengeDataObject.embedTitle,
-      embedHeight: challengeDataObject.embedHeight,
-      format: challengeDataObject.format,
-      autoReply: challengeDataObject.autoReply,
-      locales: challengeDataObject.locales,
+      ...challengeDataObject,
     });
+    const expectedChallenge = domainBuilder.buildChallengeForRelease(challengeDataObject);
     const attachment = airtableBuilder.factory.buildAttachment({
       id: '1',
       type: 'illustration',
@@ -170,7 +151,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     it('should refresh cache of updated record in pix api', async () => {
       // Given
       const expectedChallengePayload = {
-        ...challengeDataObject,
+        ...expectedChallenge,
         illustrationUrl: 'http://example.com/my-illustration',
         illustrationAlt: 'my alt',
       };

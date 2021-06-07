@@ -1,5 +1,6 @@
-const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
+const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
 const createServer = require('../../../../server');
+
 const {
   buildArea,
   buildCompetence,
@@ -85,6 +86,7 @@ function mockCurrentContent() {
       autoReply: false,
       locales: ['fr-fr'],
       alternativeInstruction: 'Consigne alternative',
+      focusable: false,
     }],
     tutorials: [{
       id: 'recTutorial0',
@@ -121,7 +123,7 @@ function mockCurrentContent() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
+    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     courses: [buildCourse(expectedCurrentContent.courses[0])],
     attachments: attachments.map(buildAttachment),

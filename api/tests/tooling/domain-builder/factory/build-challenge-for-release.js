@@ -1,10 +1,11 @@
-module.exports = function ChallengeAirtableDataObjectFixture({
+module.exports = function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+  alternativeInstruction = '',
   proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
   type = 'QCM',
   solution = '1, 5',
-  solutionToDisplay = '1, 5',
+  solutionToDisplay = '1',
   t1Status = 'Activé',
   t2Status = 'Désactivé',
   t3Status = 'Activé',
@@ -16,15 +17,16 @@ module.exports = function ChallengeAirtableDataObjectFixture({
   embedUrl = 'https://github.io/page/epreuve.html',
   embedTitle = 'Epreuve de selection de dossier',
   embedHeight = 500,
-  format = 'petit',
-  locales = ['fr'],
+  format = 'mots',
   autoReply = false,
-  alternativeInstruction = '',
+  locales = [],
   focusable = false,
 } = {}) {
+
   return {
     id,
     instruction,
+    alternativeInstruction,
     proposals,
     type,
     solution,
@@ -41,9 +43,8 @@ module.exports = function ChallengeAirtableDataObjectFixture({
     embedTitle,
     embedHeight,
     format,
-    locales,
     autoReply,
-    alternativeInstruction,
+    locales,
     focusable,
   };
 };

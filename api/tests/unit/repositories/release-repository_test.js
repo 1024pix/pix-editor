@@ -42,65 +42,6 @@ describe('Unit | Controller | release-repository', () => {
     });
   });
 
-  describe('#assignAttachmentsToChallenges', () => {
-    it('assign illustration and attachments to challenge', () => {
-      const expectedChallenge = {
-        id: 'recChallenge0',
-        some: 'property',
-        attachments: [ 'url de la pièce jointe' ],
-        illustrationAlt: 'Texte alternatif de l\'illustration',
-        illustrationUrl: 'url de l\'illustration',
-      };
-
-      const attachments = [{
-        url: 'url de la pièce jointe',
-        challengeId: 'recChallenge0',
-        type: 'attachment',
-      }, {
-        url: 'url de l\'illustration',
-        alt: 'Texte alternatif de l\'illustration',
-        challengeId: 'recChallenge0',
-        type: 'illustration',
-      }];
-
-      const challengesWithoutAttachments = [{
-        id: 'recChallenge0',
-        some: 'property',
-      }];
-
-      const challenges = releaseRepository.assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
-
-      expect(challenges[0]).to.deep.equal(expectedChallenge);
-    });
-
-    it('assign multiple attachments to challenge', () => {
-      const expectedChallenge = {
-        id: 'recChallenge0',
-        some: 'property',
-        attachments: [ 'url de la pièce jointe', 'url de la pièce jointe 2' ],
-      };
-
-      const attachments = [{
-        url: 'url de la pièce jointe',
-        challengeId: 'recChallenge0',
-        type: 'attachment',
-      }, {
-        url: 'url de la pièce jointe 2',
-        challengeId: 'recChallenge0',
-        type: 'attachment',
-      }];
-
-      const challengesWithoutAttachments = [{
-        id: 'recChallenge0',
-        some: 'property',
-      }];
-
-      const challenges = releaseRepository.assignAttachmentsToChallenges(challengesWithoutAttachments, attachments);
-
-      expect(challenges[0]).to.deep.equal(expectedChallenge);
-    });
-  });
-
   describe('#serializeEntity', () => {
     it('serialize a challenge and fetch attachments', async () => {
       const challengeDataObject = domainBuilder.buildChallenge({ id: 'recChallenge' });
@@ -226,7 +167,7 @@ describe('Unit | Controller | release-repository', () => {
       });
       const type = 'Attachments';
 
-      sinon.stub(challengeDatasource, 'filterById').withArgs('recChallenge').resolves([challenge]);
+      sinon.stub(challengeDatasource, 'filterById').withArgs('recChallenge').resolves(challenge);
       sinon.stub(attachmentDatasource, 'filterByChallengeId').withArgs('recChallenge').resolves(attachmentRecords);
 
       const { updatedRecord, model } = await releaseRepository.serializeEntity({ entity, type });

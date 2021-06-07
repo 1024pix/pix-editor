@@ -1,43 +1,34 @@
-const { expect, airtableBuilder, sinon } = require('../../../../test-helper');
+const { expect, domainBuilder, airtableBuilder, sinon } = require('../../../../test-helper');
 const challengeDatasource = require('../../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const challengeAirtableDataObjectFixture = require('../../../../tooling/fixtures/infrastructure/challengeAirtableDataObjectFixture');
-const challengeRawAirTableFixture = require('../../../../tooling/fixtures/infrastructure/challengeRawAirTableFixture');
 const airtable = require('../../../../../lib/infrastructure/airtable');
 const airtableClient = require('airtable');
+const AirtableRecord = require('airtable').Record;
 
 describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', () => {
   describe('#fromAirTableObject', () => {
 
     it('should create a Challenge from the AirtableRecord', () => {
       // given
-      const expectedChallenge = challengeAirtableDataObjectFixture();
+      const expectedChallenge = domainBuilder.buildChallenge();
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
+      const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
 
       // when
-      const challenge = challengeDatasource.fromAirTableObject(challengeRawAirTableFixture());
+      const challenge = challengeDatasource.fromAirTableObject(challengeRecord);
 
       // then
       expect(challenge).to.deep.equal(expectedChallenge);
     });
 
-    it('should deal with a missing illustration', () => {
-      // given
-      const airtableEpreuveObject = challengeRawAirTableFixture();
-      airtableEpreuveObject.set('Illustration de la consigne', undefined);
-
-      // when
-      const challenge = challengeDatasource.fromAirTableObject(airtableEpreuveObject);
-
-      // then
-      expect(challenge.illustrationUrl).to.be.undefined;
-    });
-
     it('should deal with a missing timer', () => {
       // given
-      const airtableEpreuveObject = challengeRawAirTableFixture();
-      airtableEpreuveObject.set('Timer', undefined);
+      const expectedChallenge = domainBuilder.buildChallenge();
+      expectedChallenge.timer = undefined;
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
+      const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
 
       // when
-      const challenge = challengeDatasource.fromAirTableObject(airtableEpreuveObject);
+      const challenge = challengeDatasource.fromAirTableObject(challengeRecord);
 
       // then
       expect(challenge.timer).to.be.undefined;
@@ -45,12 +36,13 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should deal with a missing competences', () => {
       // given
-      const airtableEpreuveObject = challengeRawAirTableFixture();
-      airtableEpreuveObject.set('competences', undefined);
-      airtableEpreuveObject.set('Compétences (via tube) (id persistant)', undefined);
+      const expectedChallenge = domainBuilder.buildChallenge();
+      expectedChallenge.competenceId = undefined;
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
+      const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
 
       // when
-      const challenge = challengeDatasource.fromAirTableObject(airtableEpreuveObject);
+      const challenge = challengeDatasource.fromAirTableObject(challengeRecord);
 
       // then
       expect(challenge.competenceId).to.be.undefined;
