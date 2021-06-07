@@ -33,7 +33,7 @@ module.exports = datasource.extend({
     'Focalisée',
     'Record ID',
     'Acquix',
-    'Genéalogie',
+    'Généalogie',
     'Type péda',
     'Auteur',
     'Déclinable',
