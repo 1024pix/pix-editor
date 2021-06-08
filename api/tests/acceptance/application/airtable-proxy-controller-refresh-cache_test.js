@@ -5,20 +5,8 @@ const createServer = require('../../../server');
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
 
   describe('POST /api/airtable/content/Competences', () => {
-    const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
-    const competence = airtableBuilder.factory.buildCompetence({
-      id: 'recCompetence',
-      areaId: [competenceDataObject.areaId],
-      description: competenceDataObject.description,
-      descriptionFrFr: competenceDataObject.descriptionFrFr,
-      descriptionEnUs: competenceDataObject.descriptionEnUs,
-      index: competenceDataObject.index,
-      skillIds: competenceDataObject.skillIds,
-      name: competenceDataObject.name,
-      nameFrFr: competenceDataObject.nameFrFr,
-      nameEnUs: competenceDataObject.nameEnUs,
-      origin: competenceDataObject.origin,
-    });
+    const competenceDataObject = domainBuilder.buildCompetence({ id: 'recCompetence' });
+    const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
     const token = 'dummy-pix-api-token';
 
     let user;
@@ -37,7 +25,6 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .post('/api/token', { username: 'adminUser', password: '123' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
-
       const apiCacheScope = nock('https://api.test.pix.fr')
         .patch('/api/cache/competences/recCompetence', competenceDataObject)
         .matchHeader('Authorization', `Bearer ${token}`)
