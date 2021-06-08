@@ -1,17 +1,18 @@
-const { expect } = require('../../../../test-helper');
+const { expect, domainBuilder, airtableBuilder } = require('../../../../test-helper');
 const tubeDatasource = require('../../../../../lib/infrastructure/datasources/airtable/tube-datasource');
-const tubeRawAirTableFixture = require('../../../../tooling/fixtures/infrastructure/tubeRawAirTableFixture');
-const tubeAirtableDataModelFixture = require('../../../../tooling/fixtures/infrastructure/tubeAirtableDataObjectFixture');
+const AirtableRecord = require('airtable').Record;
 
 describe('Unit | Infrastructure | Datasource | Airtable | TubeDatasource', () => {
   describe('#fromAirTableObject', () => {
 
     it('should create a Tube from the AirtableRecord', () => {
       // given
-      const expectedTube = tubeAirtableDataModelFixture();
+      const expectedTube = domainBuilder.buildTube();
+      const airtableTube = airtableBuilder.factory.buildTube(expectedTube);
+      const tubeRecord = new AirtableRecord('Tube', airtableTube.id, airtableTube);
 
       // when
-      const tube = tubeDatasource.fromAirTableObject(tubeRawAirTableFixture());
+      const tube = tubeDatasource.fromAirTableObject(tubeRecord);
 
       // then
       expect(tube).to.deep.equal(expectedTube);

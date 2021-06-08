@@ -6,4 +6,5 @@ module.exports = {
   buildCompetence: require('./build-competence-airtable-data-object'),
   buildAttachment: require('./build-attachment'),
   buildSkill: require('./build-skill-airtable-data-object'),
+  buildTube: require('./build-tube-airtable-data-object'),
 };
