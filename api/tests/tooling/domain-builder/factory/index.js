@@ -5,4 +5,5 @@ module.exports = {
   buildChallengeForRelease: require('./build-challenge-for-release'),
   buildCompetence: require('./build-competence-airtable-data-object'),
   buildAttachment: require('./build-attachment'),
+  buildSkill: require('./build-skill-airtable-data-object'),
 };

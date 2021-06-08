@@ -1,7 +1,6 @@
-const { expect } = require('../../../../test-helper');
+const { expect, domainBuilder, airtableBuilder } = require('../../../../test-helper');
 const skillDatasource = require('../../../../../lib/infrastructure/datasources/airtable/skill-datasource');
-const skillAirtableDataObjectFixture = require('../../../../tooling/fixtures/infrastructure/skillAirtableDataObjectFixture');
-const { skillRawAirTableFixture } = require('../../../../tooling/fixtures/infrastructure/skillRawAirTableFixture');
+const AirtableRecord = require('airtable').Record;
 
 describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () => {
 
@@ -9,10 +8,12 @@ describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () =
 
     it('should create a Skill from the AirtableRecord', () => {
       // given
-      const expectedSkill = skillAirtableDataObjectFixture();
+      const expectedSkill = domainBuilder.buildSkill();
+      const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
+      const skillRecord = new AirtableRecord('Acquis', airtableSkill.id, airtableSkill);
 
       // when
-      const skill = skillDatasource.fromAirTableObject(skillRawAirTableFixture());
+      const skill = skillDatasource.fromAirTableObject(skillRecord);
 
       // then
       expect(skill).to.deep.equal(expectedSkill);
