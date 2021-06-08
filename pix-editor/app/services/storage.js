@@ -10,7 +10,7 @@ export default class StorageService extends Service {
 
   async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
-    const url = this.config.storagePost + date.now() +  '.' + this.filePath.getExtension(file.name);
+    const url = this.config.storagePost + date.now() + '/' + filename;
     return this._callAPIWithRetry(async (token) => {
       const headers = {
         'X-Auth-Token': token,
@@ -38,14 +38,15 @@ export default class StorageService extends Service {
   }
 
   async cloneFile(url, date = Date, fetchFn = fetch) {
+    const path = url.replace(this.config.storagePost, '');
     const filename = url.split('/').reverse()[0];
-    const cloneUrl = `${this.config.storagePost}${date.now()}.${this.filePath.getExtension(filename)}`;
+    const cloneUrl = `${this.config.storagePost}${date.now()}/${filename}`;
     return this._callAPIWithRetry(async (token) => {
       await fetchFn(cloneUrl, {
         method: 'PUT',
         headers: {
           'X-Auth-Token': token,
-          'X-Copy-From': `${this.config.storageBucket}/${filename}`,
+          'X-Copy-From': `${this.config.storageBucket}/${path}`,
         },
       });
 
