@@ -1,20 +1,21 @@
-const { expect } = require('../../../../test-helper');
+const { expect, domainBuilder, airtableBuilder } = require('../../../../test-helper');
 const tutorialDatasource = require('../../../../../lib/infrastructure/datasources/airtable/tutorial-datasource');
-const tutorialAirtableDataObjectFixture = require('../../../../tooling/fixtures/infrastructure/tutorialAirtableDataObjectFixture');
-const tutorialRawAirTableFixture = require('../../../../tooling/fixtures/infrastructure/tutorialRawAirtableFixture');
+const AirtableRecord = require('airtable').Record;
 
 describe('Unit | Infrastructure | Datasource | Airtable | TutorialDatasource', () => {
   describe('#fromAirTableObject', () => {
 
     it('should create a Tutorial from the AirtableRecord', () => {
       // given
-      const expectedTuto = tutorialAirtableDataObjectFixture();
+      const expectedTutorial = domainBuilder.buildTutorial();
+      const airtableTutorial = airtableBuilder.factory.buildTutorial(expectedTutorial);
+      const tutorialRecord = new AirtableRecord('Tutorial', airtableTutorial.id, airtableTutorial);
 
       // when
-      const tuto = tutorialDatasource.fromAirTableObject(tutorialRawAirTableFixture());
+      const tuto = tutorialDatasource.fromAirTableObject(tutorialRecord);
 
       // then
-      expect(tuto).to.deep.equal(expectedTuto);
+      expect(tuto).to.deep.equal(expectedTutorial);
     });
   });
 });
