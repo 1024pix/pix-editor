@@ -22,10 +22,6 @@ const User = sequelize.define('user', {
 });
 
 const Release = sequelize.define('release', {
-  content: {
-    type: DataTypes.JSONB,
-    allowNull: false
-  },
   createdAt: {
     type: DataTypes.DATE,
   }
