@@ -14,7 +14,29 @@ AdminBro.registerAdapter(AdminBroSequelize);
 const isProduction = ['production', 'staging'].includes(process.env.NODE_ENV);
 
 const adminBroOptions = {
-  resources: [User, Release],
+  resources: [{
+    resource: User,
+    options: {
+      properties: {
+        access: {
+          availableValues: [
+            {
+              value: 'readonly',
+              label: 'Lecture seule'
+            },
+            {
+              value: 'editor',
+              label: 'Editeur'
+            },
+            {
+              value: 'admin',
+              label: 'Admin'
+            }
+          ],
+        },
+      },
+    },
+  }, Release],
   auth: { strategy: 'simple' }
 };
 
