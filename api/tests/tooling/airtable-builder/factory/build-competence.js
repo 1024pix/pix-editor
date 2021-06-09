@@ -16,7 +16,7 @@ module.exports = function buildCompetence({
     'fields': {
       'id persistant': id,
       'Sous-domaine': index,
-      'Domaine (id persistant)': areaId,
+      'Domaine (id persistant)': [areaId],
       'Titre': name,
       'Titre fr-fr': nameFrFr,
       'Titre en-us': nameEnUs,
