@@ -1,5 +1,13 @@
 
 
+## v3.38.0 (09/06/2021)
+
+- [#178](https://github.com/1024pix/pix-editor/pull/178) [FEATURE] Limite les valeurs possible dans admin-bro pour la propriété access des Users
+- [#176](https://github.com/1024pix/pix-editor/pull/176) [FEATURE] Garder le nom d'une image lors de son téléchargement
+- [#170](https://github.com/1024pix/pix-editor/pull/170) [FEATURE] Permettre la création de nouveaux domaines (PE-69).
+- [#177](https://github.com/1024pix/pix-editor/pull/177) [BUGFIX] Ne pas crasher l'application quand on affiche les releases sur l'admin.
+- [#175](https://github.com/1024pix/pix-editor/pull/175) [TECH] Nettoyage des différents builder (PIX-2686)
+
 ## v3.37.2 (07/06/2021)
 
 - [#174](https://github.com/1024pix/pix-editor/pull/174) [BUGFIX] Répare la page statistiques.
