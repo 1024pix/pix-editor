@@ -1,7 +1,10 @@
 import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class AreaModel extends Model {
-  @attr name;
+  @attr({ readonly: true }) name;
+  @attr pixId;
+  @attr titleFrFr;
+  @attr titleEnUs;
   @attr code;
 
   @hasMany('competence') competences;
@@ -31,5 +34,4 @@ export default class AreaModel extends Model {
   get source() {
     return this.competences.firstObject.source;
   }
-
 }

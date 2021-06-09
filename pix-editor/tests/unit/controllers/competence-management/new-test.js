@@ -41,7 +41,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     // then
     assert.notOk(controller.edition);
     assert.ok(deleteRecordStub.calledWith(competence));
-    assert.ok(notifyMessageStub.calledWith, 'Création de la compétence annulée');
+    assert.ok(notifyMessageStub.calledWith('Création de la compétence annulée'));
     assert.ok(transitionToRouteStub.calledWith('index'));
   });
 

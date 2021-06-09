@@ -39,7 +39,7 @@ export default class CurrentDataService extends Service {
   }
 
   get isPixFramework() {
-    return this._framework.name === 'Pix';
+    return this._framework && this._framework.name === 'Pix';
   }
 
   getAreas(filteredBySource = true) {

@@ -11,6 +11,7 @@ export default class AreaSerializer extends AirtableSerializer {
     titleFrFr: 'Titre fr-fr',
     titleEnUs: 'Titre en-us',
     competences: 'Competences (identifiants)',
+    framework: 'Referentiel',
   };
 
   payloadKeyFromModelName() {

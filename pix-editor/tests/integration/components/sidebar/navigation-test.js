@@ -75,7 +75,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
     });
 
-    test('it should display a list of areas', async function(assert) {
+    test('it should display only a list of areas', async function(assert) {
       // given
       const expectedAreas = ['area_1', 'area_2'];
 
@@ -87,6 +87,31 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       areasList.forEach(area => {
         assert.ok(expectedAreas.includes(area.textContent.trim()));
       });
+      assert.dom('[data-test-add-area]').doesNotExist();
+    });
+
+    test('it should display a button to create area if `source` is not `Pix`', async function(assert) {
+      // given
+      this.owner.register('service:currentData', class MockService extends Service {
+        getAreas() {
+          return areas;
+        }
+        getFrameworks() {
+          return frameworks;
+        }
+        getFramework() {
+          return pixFranceFramework;
+        }
+        get isPixFramework() {
+          return false;
+        }
+      });
+
+      // when
+      await render(hbs`<Sidebar::Navigation />`);
+
+      // then
+      assert.dom('[data-test-add-area]').exists();
     });
 
     test('it should display only a list of competences', async function(assert) {

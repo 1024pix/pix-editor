@@ -1,0 +1,26 @@
+<div class="main-left area-management">
+  <div class="ui main-title">
+      <h1 class="ui left floated header">Nouveau domaine du pix + {{this.framework.name}}</h1>
+  </div>
+  <div class="area-management__details">
+    <div class="area-management__data">
+      <form action="" class="ui form">
+        <Field::Input data-test-area-title-input @value={{this.area.titleFrFr}} @edition={{true}} @label="Titre"/>
+        <div class="ui raised segment">
+          <i class="flag gb uk"></i>
+          <Field::Input @value={{this.area.titleEnUs}} @edition={{true}} @label="Titre (en)"/>
+        </div>
+      </form>
+    </div>
+    <div class="ui vertical compact labeled icon menu area-management__menu">
+        <button data-test-save-button class="ui button item important-action" {{on "click" this.save}} type="button">
+          <i class="save icon"></i>
+          Enregistrer
+        </button>
+        <button data-test-cancel-button class="ui button item" {{on "click" this.cancelEdit}} type="button">
+          <i class="ban icon"></i>
+          Annuler
+        </button>
+    </div>
+  </div>
+</div>
