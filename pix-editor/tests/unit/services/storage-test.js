@@ -27,7 +27,7 @@ module('Unit | Service | storage', function(hooks) {
       };
 
       const expectedUploadedFile = {
-        url: 'https://dl.ovh.com/bucket/NOW.txt',
+        url: 'https://dl.ovh.com/bucket/NOW/filename.txt',
         filename: 'filename.txt',
         size: 25,
         type: 'text/plain',
@@ -62,7 +62,7 @@ module('Unit | Service | storage', function(hooks) {
       const filename = 'custom-filename.txt';
 
       const expectedUploadedFile = {
-        url: 'https://dl.ovh.com/bucket/NOW2.txt',
+        url: 'https://dl.ovh.com/bucket/NOW2/custom-filename.txt',
         filename: 'custom-filename.txt',
         size: 25,
         type: 'text/plain',
@@ -175,13 +175,36 @@ module('Unit | Service | storage', function(hooks) {
       const uploadedUrl = await storageService.cloneFile('https://dl.ovh.com/bucket/NOW.txt', date, fetch);
 
       // then
-      assert.equal(uploadedUrl, 'https://dl.ovh.com/bucket/NOW2.txt');
+      assert.equal(uploadedUrl, 'https://dl.ovh.com/bucket/NOW2/NOW.txt');
       assert.ok(fetch.calledOnce);
       assert.deepEqual(fetch.args[0], [uploadedUrl, {
         method: 'PUT',
         headers: {
           'X-Auth-Token': storageToken,
           'X-Copy-From': '/bucket/NOW.txt'
+        }
+      }]);
+    });
+
+    test('it should clone a file when the file is in a sub directory', async function(assert) {
+      // given
+      fetch.resolves();
+
+      const date = {
+        now() { return 'NOW2'; }
+      };
+
+      // when
+      const uploadedUrl = await storageService.cloneFile('https://dl.ovh.com/bucket/NOW/test.txt', date, fetch);
+
+      // then
+      assert.equal(uploadedUrl, 'https://dl.ovh.com/bucket/NOW2/test.txt');
+      assert.ok(fetch.calledOnce);
+      assert.deepEqual(fetch.args[0], [uploadedUrl, {
+        method: 'PUT',
+        headers: {
+          'X-Auth-Token': storageToken,
+          'X-Copy-From': '/bucket/NOW/test.txt'
         }
       }]);
     });
@@ -202,7 +225,7 @@ module('Unit | Service | storage', function(hooks) {
       const uploadedUrl = await storageService.cloneFile('https://dl.ovh.com/bucket/NOW.txt', date, fetch);
 
       // then
-      assert.equal(uploadedUrl, 'https://dl.ovh.com/bucket/NOW2.txt');
+      assert.equal(uploadedUrl, 'https://dl.ovh.com/bucket/NOW2/NOW.txt');
       assert.ok(fetch.calledTwice);
       assert.deepEqual(fetch.args[0], [uploadedUrl, {
         method: 'PUT',
