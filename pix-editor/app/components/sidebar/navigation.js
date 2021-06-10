@@ -2,14 +2,21 @@ import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
+import Sentry from '@sentry/ember';
 
 export default class SidebarNavigationComponent extends Component {
   addFrameworkLabel = 'Créer un nouveau référentiel';
 
-  @service currentData;
   @service access;
+  @service currentData;
+  @service loader;
+  @service notify;
+  @service router;
+  @service store;
 
   @tracked _selectedFramework;
+  @tracked newFramework;
+  @tracked displayNewFrameworkPopIn;
 
   get areas() {
     return this.currentData.getAreas();
@@ -59,9 +66,44 @@ export default class SidebarNavigationComponent extends Component {
   @action
   setFramework(item) {
     if (item.data === 'create') {
+      this._openNewFrameworkPopIn();
       return;
     }
     this.currentData.setFramework(item.data);
     this._selectedFramework = item;
+  }
+
+  @action
+  _openNewFrameworkPopIn() {
+    this.newFramework = this.store.createRecord('framework', {});
+    this.displayNewFrameworkPopIn = true;
+  }
+
+  @action
+  closeNewFrameworkPopIn() {
+    this.store.deleteRecord(this.newFramework);
+    this.displayNewFrameworkPopIn = false;
+  }
+
+  @action
+  async saveFramework() {
+    try {
+      const router = this.router;
+      this.loader.start();
+      await this.newFramework.save();
+      this.setFramework({
+        label: this.newFramework.name,
+        data: this.newFramework
+      });
+      this.notify.message('Référentiel créé');
+      this.displayNewFrameworkPopIn = false;
+      router.transitionTo('index');
+    } catch (error) {
+      Sentry.captureException(error);
+      console.log(error);
+      this.notify.error('Erreur lors de la création du Référentiel');
+    } finally {
+      this.loader.stop();
+    }
   }
 }

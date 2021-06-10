@@ -24,3 +24,6 @@
     {{/if}}
   </div>
 </AccordionList>
+{{#if this.displayNewFrameworkPopIn}}
+  <PopIn::NewFramework @framework={{this.newFramework}} @close={{this.closeNewFrameworkPopIn}} @save={{this.saveFramework}}/>
+{{/if}}

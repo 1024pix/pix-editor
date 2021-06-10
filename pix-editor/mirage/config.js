@@ -33,6 +33,13 @@ function routes() {
     return _response(request, { records });
   });
 
+  this.post('/airtable/content/Referentiel', (schema, request) => {
+    const areaPayload = JSON.parse(request.requestBody);
+    const framework = _deserializePayload(areaPayload, 'framework');
+    const createdFramework = schema.competences.create(framework);
+    return _serializeModel(createdFramework, 'framework');
+  });
+
   this.get('/airtable/content/Domaines', (schema, request) => {
     const records = schema.areas.all().models.map((area) => {
       return _serializeModel(area, 'area');
