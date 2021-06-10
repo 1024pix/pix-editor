@@ -4,6 +4,8 @@ import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 
 export default class SidebarNavigationComponent extends Component {
+  addFrameworkLabel = 'Créer un nouveau référentiel';
+
   @service currentData;
   @service access;
 
@@ -25,14 +27,25 @@ export default class SidebarNavigationComponent extends Component {
     if (this._selectedFramework) {
       return this._selectedFramework;
     }
-    return this.frameworkList.find(item => (item.data.name === this.currentData.getFramework().name));
+    return this.frameworkList.find(item => {
+      if (this.currentData.getFramework()) {
+        return item.label === this.currentData.getFramework().name;
+      }
+    });
   }
 
   get frameworkList() {
-    return this.frameworks.map(framework => ({
+    const frameworkList = this.frameworks.map(framework => ({
       label: framework.name,
       data: framework
     }));
+    if (this.access.isAdmin()) {
+      frameworkList.push({
+        label: this.addFrameworkLabel,
+        data: 'create'
+      });
+    }
+    return frameworkList;
   }
 
   get mayCreateCompetence() {
@@ -45,6 +58,9 @@ export default class SidebarNavigationComponent extends Component {
 
   @action
   setFramework(item) {
+    if (item.data === 'create') {
+      return;
+    }
     this.currentData.setFramework(item.data);
     this._selectedFramework = item;
   }
