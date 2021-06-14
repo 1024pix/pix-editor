@@ -1,6 +1,7 @@
 const axios = require('axios');
 const pLimit = require('p-limit');
 const limit = pLimit(300);
+const getToken = require('../common/token');
 
 module.exports = {
   setHeadersToAttachments,
@@ -37,35 +38,6 @@ async function setHeadersToAttachments(attachments) {
     }
   });
   await Promise.all(promises);
-}
-
-async function getToken() {
-  const data = {
-    'auth': {
-      'identity': {
-        'methods': ['password'],
-        'password': {
-          'user': {
-            'name': process.env.BUCKET_USER,
-            'domain': { 'id': 'default' },
-            'password': process.env.BUCKET_PASSWORD,
-          }
-        }
-      },
-      'scope': {
-        'project': {
-          'name': process.env.BUCKET_NAME,
-          'domain': { 'id': 'default' }
-        }
-      }
-    }
-  };
-
-  const response = await axios.post(process.env.TOKEN_URL, JSON.stringify(data), {
-    headers: { 'Content-Type': 'application/json' }
-  });
-
-  return response.headers['x-subject-token'];
 }
 
 if (process.env.NODE_ENV !== 'test') {
