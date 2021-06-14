@@ -6,7 +6,7 @@ describe('Set headers to attachments', () => {
     process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
     process.env.BUCKET_USER = 'user';
     process.env.BUCKET_PASSWORD = 'password';
-    process.env.BUCKET_NAME = 'bucket name';
+    process.env.STORAGE_TENANT = 'tenant name';
 
     const setHeaderToAttachmentApiCall = nock('https://dl.pix.fr')
       .matchHeader('X-Auth-Token', 'TOKEN')
@@ -36,7 +36,7 @@ describe('Set headers to attachments', () => {
           },
           'scope': {
             'project': {
-              'name': 'bucket name',
+              'name': 'tenant name',
               'domain': { 'id': 'default' }
             }
           }

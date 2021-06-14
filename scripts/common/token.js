@@ -15,7 +15,7 @@ module.exports = async function getToken() {
       },
       'scope': {
         'project': {
-          'name': process.env.BUCKET_NAME,
+          'name': process.env.STORAGE_TENANT,
           'domain': { 'id': 'default' }
         }
       }

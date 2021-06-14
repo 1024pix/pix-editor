@@ -54,6 +54,7 @@ describe('Migrate attachments in subfolder', () => {
       process.env.BUCKET_USER = 'user';
       process.env.BUCKET_PASSWORD = 'password';
       process.env.BUCKET_NAME = 'bucket name';
+      process.env.STORAGE_TENANT = 'tenant';
 
       const cloneFileCall = nock('https://dl.pix.fr')
             .matchHeader('X-Auth-Token', 'TOKEN')
@@ -76,7 +77,7 @@ describe('Migrate attachments in subfolder', () => {
                 },
                 'scope': {
                   'project': {
-                    'name': 'bucket name',
+                    'name': 'tenant',
                     'domain': { 'id': 'default' }
                   }
                 }

@@ -46,8 +46,11 @@ async function cloneFile(originalUrl, filename, clock = Date) {
     }
   };
 
-  await axios.put(newUrl, {}, config);
-
+  try {
+    await axios.put(newUrl, {}, config);
+  } catch (error) {
+    console.log(`Clone file ${filename} from ${originalUrl} error: ${error}`)
+  }
   return newUrl;
 }
 
