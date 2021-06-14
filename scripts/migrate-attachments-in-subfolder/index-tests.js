@@ -1,10 +1,11 @@
 const chai = require('chai');
-const { shouldBeMigrated } = require('./index.js');
+const { shouldBeMigrated, cloneFile } = require('./index.js');
 const sinon = require('sinon');
 const AirtableRecord = require('airtable').Record;
 const sinonChai = require("sinon-chai");
 chai.use(sinonChai);
 const expect = chai.expect;
+const nock = require('nock');
 
 describe('Migrate attachments in subfolder', () => {
 
@@ -37,6 +38,59 @@ describe('Migrate attachments in subfolder', () => {
         },
       });
       expect(shouldBeMigrated(record)).to.be.true;
+    });
+  });
+
+  describe('#cloneFile', () => {
+    beforeEach(() => {
+      nock.cleanAll();
+      nock.disableNetConnect();
+    });
+
+    it('clone the file to a subdir', async () => {
+      const clock = { now: () => '123456' };
+
+      process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
+      process.env.BUCKET_USER = 'user';
+      process.env.BUCKET_PASSWORD = 'password';
+      process.env.BUCKET_NAME = 'bucket name';
+
+      const cloneFileCall = nock('https://dl.pix.fr')
+            .matchHeader('X-Auth-Token', 'TOKEN')
+            .matchHeader('X-Copy-From', 'bucket name/123456.ods')
+            .put('/123456/toto.ods')
+            .reply(200);
+
+      const getTokenApiCall = nock('https://auth.cloud.ovh.net/v3')
+            .post('/auth/tokens', {
+              'auth': {
+                'identity': {
+                  'methods': ['password'],
+                  'password': {
+                    'user': {
+                      'name': 'user',
+                      'domain': { 'id': 'default' },
+                      'password':'password'
+                    }
+                  }
+                },
+                'scope': {
+                  'project': {
+                    'name': 'bucket name',
+                    'domain': { 'id': 'default' }
+                  }
+                }
+              }
+            })
+            .reply(200, {}, {
+              'x-subject-token': 'TOKEN'
+            });
+
+      const newUrl = await cloneFile('https://dl.pix.fr/123456.ods', 'toto.ods', clock);
+
+      getTokenApiCall.done();
+      cloneFileCall.done();
+      expect(newUrl).to.equal('https://dl.pix.fr/123456/toto.ods');
     });
   });
 

@@ -1,8 +1,11 @@
 const Airtable = require('airtable');
+const axios = require('axios');
+const getToken = require('../common/token');
 
 module.exports = {
   main,
   shouldBeMigrated,
+  cloneFile,
 }
 
 function eachRecord(callback) {
@@ -23,6 +26,23 @@ function eachRecord(callback) {
 
 function shouldBeMigrated(record) {
   return !record.get('url').endsWith('/' + record.get('filename'));
+}
+
+async function cloneFile(originalUrl, filename, clock = Date) {
+  const token = await getToken();
+  const parsedUrl = new URL(originalUrl);
+  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + clock.now() + '/' + filename;
+
+  const config = {
+    headers: {
+      'X-Auth-Token': token,
+      'X-Copy-From': process.env.BUCKET_NAME + parsedUrl.pathname,
+    }
+  };
+
+  await axios.put(newUrl, {}, config);
+
+  return newUrl;
 }
 
 function main() {
