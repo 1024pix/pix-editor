@@ -2,6 +2,7 @@ const Airtable = require('airtable');
 
 module.exports = {
   main,
+  shouldBeMigrated,
 }
 
 function eachRecord(callback) {
@@ -20,9 +21,15 @@ function eachRecord(callback) {
  });
 }
 
+function shouldBeMigrated(record) {
+  return !record.get('url').endsWith('/' + record.get('filename'));
+}
+
 function main() {
   eachRecord((record) => {
-    console.log(record.get('Record ID'));
+    if (shouldBeMigrated(record)) {
+      console.log(record.get('Record ID'));
+    }
   });
 }
 
