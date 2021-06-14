@@ -31,7 +31,7 @@ function eachRecord(callback) {
 }
 
 function shouldBeMigrated(record) {
-  return !record.get('url').endsWith('/' + record.get('filename'));
+  return !record.get('url').endsWith('/' + encodeURIComponent(record.get('filename')));
 }
 
 async function cloneFile(originalUrl, filename, clock = Date) {

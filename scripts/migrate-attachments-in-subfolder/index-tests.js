@@ -20,6 +20,16 @@ describe('Migrate attachments in subfolder', () => {
       expect(shouldBeMigrated(record)).to.be.false;
     });
 
+    it('returns false if the url ends with the encoded filename', () => {
+      const record = new AirtableRecord('Attachment', '1', {
+        fields: {
+          url: 'https://dl.example.net/1234567/toto%20filename.ods',
+          filename: 'toto filename.ods',
+        },
+      });
+      expect(shouldBeMigrated(record)).to.be.false;
+    });
+
     it('returns true if the url does not end with the filename', () => {
       const record = new AirtableRecord('Attachment', '1', {
         fields: {
