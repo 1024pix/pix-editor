@@ -13,31 +13,31 @@ function main() {
 }
 
 async function setHeadersToAttachments(attachments) {
-    const token = await getToken();
-    let count = 0;
+  const token = await getToken();
+  let count = 0;
 
-    const promises = attachments.map(async (attachment) => {
-      const config = {
-        headers: {
-          'Content-Type': attachment.fields.mimeType,
-          'X-Auth-Token': token,
-        }
-      };
-      if (attachment.fields.type === 'attachment') {
-        config.headers['Content-Disposition'] = `attachment; filename="${encodeURIComponent(attachment.fields.filename)}"`;
+  const promises = attachments.map(async (attachment) => {
+    const config = {
+      headers: {
+        'Content-Type': attachment.fields.mimeType,
+        'X-Auth-Token': token,
       }
-      try {
-        await limit(() => {
-          count ++;
-          console.log(`Progress: ${count / attachments.length * 100}`);
-          return axios.post(attachment.fields.url, {}, config)
-        });
-      } catch (error) {
-        console.error(error, `Error while setting headers of file ${attachment.fields.filename}`);
-      }
-    });
-    await Promise.all(promises);
-  }
+    };
+    if (attachment.fields.type === 'attachment') {
+      config.headers['Content-Disposition'] = `attachment; filename="${encodeURIComponent(attachment.fields.filename)}"`;
+    }
+    try {
+      await limit(() => {
+        count ++;
+        console.log(`Progress: ${count / attachments.length * 100}`);
+        return axios.post(attachment.fields.url, {}, config)
+      });
+    } catch (error) {
+      console.error(error, `Error while setting headers of file ${attachment.fields.filename}`);
+    }
+  });
+  await Promise.all(promises);
+}
 
 async function getToken() {
   const data = {
