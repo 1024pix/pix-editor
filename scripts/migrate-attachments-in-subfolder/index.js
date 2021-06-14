@@ -38,10 +38,10 @@ function shouldBeMigrated(record) {
   return !record.get('url').endsWith('/' + encodeURIComponent(record.get('filename')));
 }
 
-async function cloneFile(originalUrl, filename, clock = Date) {
+async function cloneFile(originalUrl, randomString, filename, clock = Date) {
   const token = await getToken();
   const parsedUrl = new URL(originalUrl);
-  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + clock.now() + '/' + encodeURIComponent(filename);
+  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
 
   const config = {
     headers: {
@@ -83,7 +83,7 @@ function main() {
 
   eachRecord(async (record) => {
     if (shouldBeMigrated(record)) {
-      const newUrl = await cloneFile(record.get('url'), record.get('filename'));
+      const newUrl = await cloneFile(record.get('url'), record.id, record.get('filename'));
       await updateRecord(getBaseAttachments(), record.id, newUrl);
     }
     bar.tick();
