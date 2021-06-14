@@ -37,7 +37,7 @@ function shouldBeMigrated(record) {
 async function cloneFile(originalUrl, filename, clock = Date) {
   const token = await getToken();
   const parsedUrl = new URL(originalUrl);
-  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + clock.now() + '/' + filename;
+  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + clock.now() + '/' + encodeURIComponent(filename);
 
   const config = {
     headers: {
