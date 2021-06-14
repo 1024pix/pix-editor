@@ -1,5 +1,5 @@
 const chai = require('chai');
-const { shouldBeMigrated, cloneFile } = require('./index.js');
+const { shouldBeMigrated, cloneFile, updateRecord } = require('./index.js');
 const sinon = require('sinon');
 const AirtableRecord = require('airtable').Record;
 const sinonChai = require("sinon-chai");
@@ -94,4 +94,20 @@ describe('Migrate attachments in subfolder', () => {
     });
   });
 
+    describe('#updateRecord', () => {
+      it('updates url in attachment record', async () => {
+        const base = {
+          update: sinon.stub().yields(),
+        };
+        await updateRecord(base, 'rec123', 'https://dl.pix.fr/6789/toto.ods');
+        expect(base.update).to.be.calledWith([
+          {
+            id: 'rec123',
+            fields: {
+              url: 'https://dl.pix.fr/6789/toto.ods'
+            }
+          }
+        ]);
+      });
+    });
 });

@@ -1,19 +1,25 @@
 const Airtable = require('airtable');
 const axios = require('axios');
 const getToken = require('../common/token');
+const ProgressBar = require('progress');
 
 module.exports = {
   main,
   shouldBeMigrated,
   cloneFile,
+  updateRecord,
 }
 
-function eachRecord(callback) {
+function getBaseAttachments() {
   const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY
   }).base(process.env.AIRTABLE_BASE);
 
-  base('Attachments').select({
+  return base('Attachments');
+}
+
+function eachRecord(callback) {
+  getBaseAttachments().select({
     view: "Grid view"
  }).eachPage(function page(records, fetchNextPage) {
     records.forEach(callback);
@@ -45,11 +51,34 @@ async function cloneFile(originalUrl, filename, clock = Date) {
   return newUrl;
 }
 
+async function updateRecord(base, id, url) {
+  return new Promise((resolve, reject) => {
+    base.update([
+      {
+        id,
+        fields: {
+          url,
+        },
+      },
+    ], (err, records) => {
+      if (err) reject();
+      else resolve();
+    });
+  });
+}
+
 function main() {
-  eachRecord((record) => {
+  const bar = new ProgressBar('[:bar] :percent', {
+    total: 10000,
+    width: 50,
+  });
+
+  eachRecord(async (record) => {
     if (shouldBeMigrated(record)) {
-      console.log(record.get('Record ID'));
+      const newUrl = await cloneFile(record.get('url'), record.get('filename'));
+      await updateRecord(getBaseAttachments(), record.id, newUrl);
     }
+    bar.tick();
   });
 }
 
