@@ -60,11 +60,7 @@ describe('Migrate attachments in subfolder', () => {
     it('clone the file to a subdir', async () => {
       const clock = { now: () => '123456' };
 
-      process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
-      process.env.BUCKET_USER = 'user';
-      process.env.BUCKET_PASSWORD = 'password';
       process.env.BUCKET_NAME = 'bucket name';
-      process.env.STORAGE_TENANT = 'tenant';
 
       const cloneFileCall = nock('https://dl.pix.fr')
             .matchHeader('X-Auth-Token', 'TOKEN')
@@ -72,34 +68,8 @@ describe('Migrate attachments in subfolder', () => {
             .put('/randomstring123456/toto.ods')
             .reply(200);
 
-      const getTokenApiCall = nock('https://auth.cloud.ovh.net/v3')
-            .post('/auth/tokens', {
-              'auth': {
-                'identity': {
-                  'methods': ['password'],
-                  'password': {
-                    'user': {
-                      'name': 'user',
-                      'domain': { 'id': 'default' },
-                      'password':'password'
-                    }
-                  }
-                },
-                'scope': {
-                  'project': {
-                    'name': 'tenant',
-                    'domain': { 'id': 'default' }
-                  }
-                }
-              }
-            })
-            .reply(200, {}, {
-              'x-subject-token': 'TOKEN'
-            });
+      const newUrl = await cloneFile('TOKEN', 'https://dl.pix.fr/123456.ods', 'randomstring', 'toto.ods', clock);
 
-      const newUrl = await cloneFile('https://dl.pix.fr/123456.ods', 'randomstring', 'toto.ods', clock);
-
-      getTokenApiCall.done();
       cloneFileCall.done();
       expect(newUrl).to.equal('https://dl.pix.fr/randomstring123456/toto.ods');
     });
@@ -107,11 +77,7 @@ describe('Migrate attachments in subfolder', () => {
     it('encode the filename when cloing', async () => {
       const clock = { now: () => '123456' };
 
-      process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
-      process.env.BUCKET_USER = 'user';
-      process.env.BUCKET_PASSWORD = 'password';
       process.env.BUCKET_NAME = 'bucket name';
-      process.env.STORAGE_TENANT = 'tenant';
 
       const cloneFileCall = nock('https://dl.pix.fr')
             .matchHeader('X-Auth-Token', 'TOKEN')
@@ -119,34 +85,8 @@ describe('Migrate attachments in subfolder', () => {
             .put('/randomstring123456/toto%20filename.ods')
             .reply(200);
 
-      const getTokenApiCall = nock('https://auth.cloud.ovh.net/v3')
-            .post('/auth/tokens', {
-              'auth': {
-                'identity': {
-                  'methods': ['password'],
-                  'password': {
-                    'user': {
-                      'name': 'user',
-                      'domain': { 'id': 'default' },
-                      'password':'password'
-                    }
-                  }
-                },
-                'scope': {
-                  'project': {
-                    'name': 'tenant',
-                    'domain': { 'id': 'default' }
-                  }
-                }
-              }
-            })
-            .reply(200, {}, {
-              'x-subject-token': 'TOKEN'
-            });
+      const newUrl = await cloneFile('TOKEN', 'https://dl.pix.fr/123456.ods', 'randomstring', 'toto filename.ods', clock);
 
-      const newUrl = await cloneFile('https://dl.pix.fr/123456.ods', 'randomstring', 'toto filename.ods', clock);
-
-      getTokenApiCall.done();
       cloneFileCall.done();
       expect(newUrl).to.equal('https://dl.pix.fr/randomstring123456/toto%20filename.ods');
     });
