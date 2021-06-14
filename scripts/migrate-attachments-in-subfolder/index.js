@@ -2,6 +2,8 @@ const Airtable = require('airtable');
 const axios = require('axios');
 const getToken = require('../common/token');
 const ProgressBar = require('progress');
+const pLimit = require('p-limit');
+const limit = pLimit(10);
 
 module.exports = {
   main,
@@ -21,8 +23,10 @@ function getBaseAttachments() {
 function eachRecord(callback) {
   getBaseAttachments().select({
     view: "Grid view"
- }).eachPage(function page(records, fetchNextPage) {
-    records.forEach(callback);
+ }).eachPage(async function page(records, fetchNextPage) {
+    records.forEach(async (record) => {
+      await limit(() => callback(record));
+    });
 
     fetchNextPage();
  }, function done(err) {
@@ -47,9 +51,10 @@ async function cloneFile(originalUrl, filename, clock = Date) {
   };
 
   try {
-    await axios.put(newUrl, {}, config);
+    await axios.put(newUrl, null, config);
   } catch (error) {
-    console.log(`Clone file ${filename} from ${originalUrl} error: ${error}`)
+    console.error(error);
+    process.exit(1);
   }
   return newUrl;
 }
