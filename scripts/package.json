@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "airtable": "0.11.1",
     "axios": "^0.21.1",
     "chai": "4.2.0",
     "hasha": "^5.2.2",
