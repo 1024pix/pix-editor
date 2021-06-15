@@ -19,7 +19,10 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     transitionToRouteStub = sinon.stub();
     controller.transitionToRoute = transitionToRouteStub;
     area = {
-      source: 'Pix+'
+      source: 'Pix+',
+      framework: {
+        name: 'Pix+',
+      },
     };
     competence = {
       code: '1.1'
@@ -119,24 +122,26 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     controller.store.createRecord = createRecordStub;
 
     const expectedTheme = {
-      name: 'workbench_1_1',
+      name: 'workbench_Pix+_1_1',
       competence,
       index: 0
     };
     const expectedTube = {
       name: '@workbench',
       theme: 'theme',
+      title: 'Tube pour l\'atelier de la compétence 1.1 Pix+',
       competence,
       pixId: 'recId',
     };
     const expectedSkill = {
       name: '@workbench',
       tube: 'tube',
+      description: 'Acquis pour l\'atelier de la compétence 1.1 Pix+',
       pixId: 'recId',
     };
 
     // when
-    await controller._createWorkbench();
+    await controller._createWorkbench('Pix+');
 
     // then
     assert.deepEqual(createRecordStub.getCall(0).args, ['theme', expectedTheme]);

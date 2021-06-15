@@ -47,7 +47,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     // then
     const area = await store.peekRecord('area', 'recArea1');
     const newCompetence = area.competences.find(competence => competence.title === newCompetenceTitle);
-    const workbenchTheme = newCompetence.rawThemes.find(theme => theme.name === 'workbench_1_2');
+    const workbenchTheme = newCompetence.rawThemes.find(theme => theme.name === 'workbench_Pix+_1_2');
     const workbenchTube = workbenchTheme.rawTubes.find(tube => tube.name === '@workbench');
     const workbenchSkill = workbenchTube.rawSkills.find(skill => skill.name === '@workbench');
     assert.ok(newCompetence);
