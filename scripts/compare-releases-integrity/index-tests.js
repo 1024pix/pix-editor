@@ -1,5 +1,5 @@
 const chai = require('chai');
-const { replaceAttachmentsUrlByChecksum, compareReleases } = require('.');
+const { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } = require('.');
 const sinon = require('sinon');
 const sinonChai = require('sinon-chai');
 const nock = require('nock');
@@ -78,6 +78,7 @@ describe('#replaceAttachmentsUrlByChecksum', () => {
 
 describe('#compareReleases', () => {
   beforeEach(() => {
+    nock.cleanAll();
     nock.disableNetConnect();
   });
 
@@ -258,5 +259,32 @@ describe('#compareReleases', () => {
     );
 
     expect(differences).to.deep.equal([expectedDifference]);
+  });
+});
+
+describe('#remoteChecksumComputer', () => {
+  beforeEach(() => {
+    nock.cleanAll();
+    nock.disableNetConnect();
+  });
+
+  it('compute the hash of the remote file', async () => {
+    const requestCall = nock('http://example.net')
+      .get('/file.jpg')
+      .reply(200, 'test');
+    const hash = await remoteChecksumComputer('http://example.net/file.jpg');
+
+    expect(hash).to.equal('a94a8fe5ccb19ba61c4c0873d391e987982fbbd3');
+    requestCall.isDone();
+  });
+
+  it('returns an error when the server returns an error', async () => {
+    const requestCall = nock('http://example.net')
+      .get('/file.jpg')
+      .reply(400, '');
+    const hash = await remoteChecksumComputer('http://example.net/file.jpg');
+
+    expect(hash).to.equal('http://example.net/file.jpg');
+    requestCall.isDone();
   });
 });

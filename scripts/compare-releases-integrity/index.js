@@ -9,6 +9,7 @@ const diff = require('variable-diff');
 module.exports = {
   compareReleases,
   replaceAttachmentsUrlByChecksum,
+  remoteChecksumComputer,
 };
 
 async function main() {
@@ -100,13 +101,17 @@ function sanitizeText(text) {
 }
 
 async function remoteChecksumComputer(url) {
-  const response = await axios({
-    url,
-    method: 'GET',
-    responseType: 'stream',
-  });
-
-  return hasha.fromStream(response.data, { algorithm: 'sha1' });
+  try {
+    const response = await axios({
+      url,
+      method: 'GET',
+      responseType: 'stream',
+    });
+    return hasha.fromStream(response.data, { algorithm: 'sha1' });
+  } catch (e) {
+    console.error(`Error getting file ${url}: ${e}`)
+    return url;
+  }
 }
 
 if (process.env.NODE_ENV !== 'test') {
