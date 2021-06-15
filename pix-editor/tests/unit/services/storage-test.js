@@ -20,15 +20,15 @@ module('Unit | Service | storage', function(hooks) {
       };
 
       const file = {
-        name: 'filename.txt',
+        name: 'filename with space.txt',
         size: 25,
         type: 'text/plain',
         uploadBinary: sinon.stub().resolves(),
       };
 
       const expectedUploadedFile = {
-        url: 'https://dl.ovh.com/bucket/NOW/filename.txt',
-        filename: 'filename.txt',
+        url: 'https://dl.ovh.com/bucket/NOW/filename%20with%20space.txt',
+        filename: 'filename with space.txt',
         size: 25,
         type: 'text/plain',
       };

@@ -10,7 +10,7 @@ export default class StorageService extends Service {
 
   async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
-    const url = this.config.storagePost + date.now() + '/' + filename;
+    const url = this.config.storagePost + date.now() + '/' + encodeURIComponent(filename);
     return this._callAPIWithRetry(async (token) => {
       const headers = {
         'X-Auth-Token': token,
