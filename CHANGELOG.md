@@ -1,5 +1,10 @@
 
 
+## v3.39.0 (15/06/2021)
+
+- [#182](https://github.com/1024pix/pix-editor/pull/182) [BUGFIX] Encode le nom du fichier dans l'URL lors de l'upload
+- [#181](https://github.com/1024pix/pix-editor/pull/181) [TECH] Gère les erreurs lors du calcul de la somme de controle des fichiers distant
+
 ## v3.38.0 (09/06/2021)
 
 - [#178](https://github.com/1024pix/pix-editor/pull/178) [FEATURE] Limite les valeurs possible dans admin-bro pour la propriété access des Users
