@@ -62,7 +62,7 @@ async function compareReleases({ url: urlLeft, token: tokenLeft }, { url: urlRig
   });
   if (newChallengesLeft.length !== newChallengesRight.length) {
     console.log('The number of challenges differ between the 2 releases')
-    const missingIds = _.map(_.difference(newChallengesRight, newChallengesLeft), 'id');
+    const missingIds = _.difference(_.map(newChallengesRight, 'id').sort(), _.map(newChallengesLeft, 'id').sort());
     diffs.push(...missingIds);
   }
   return diffs;
