@@ -29,7 +29,7 @@ export default class SidebarSearchComponent extends Component {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
         filter: {
-          id: query,
+          id: [query],
         },
       })
         .then(challenges => {

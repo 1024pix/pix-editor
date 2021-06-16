@@ -1,3 +1,4 @@
+const qs = require('qs');
 const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
 const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
 
@@ -8,7 +9,9 @@ exports.register = async function(server) {
       path: '/api/challenges',
       config: {
         handler: async function(request) {
-          const challenges = await challengeRepository.filter();
+          const params = qs.parse(request.url.search, { ignoreQueryPrefix: true });
+          const filter = params.filter || {};
+          const challenges = await challengeRepository.filter(filter);
           return challengeSerializer.serialize(challenges);
         },
       },

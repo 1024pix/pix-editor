@@ -11,6 +11,16 @@ const _DatasourcePrototype = {
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
+  async filter({ ids }) {
+    const airtableRawObjects = await airtable.findRecords(
+      this.tableName,
+      {
+        fields: this.usedFields,
+        filterByFormula: 'OR(' + ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
+      },
+    );
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 };
 
 module.exports = {
