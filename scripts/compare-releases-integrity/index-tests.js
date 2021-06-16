@@ -230,11 +230,17 @@ describe('#compareReleases', () => {
       .onFirstCall().resolves('sha1')
       .onSecondCall().resolves('sha2');
 
-    const expectedDifference = '1';
+    const expectedDifference = ['2', '4', '5'];
 
     const productionRelease = {
       content: {
-        challenges: []
+        challenges: [{
+          id: '1',
+        },{
+          id: '2',
+        }, {
+          id: '3',
+        }]
       }
     };
     nock('http://example.org')
@@ -245,6 +251,12 @@ describe('#compareReleases', () => {
       content: {
         challenges: [{
           id: '1',
+        }, {
+          id: '5',
+        }, {
+          id: '3',
+        }, {
+          id: '4',
         }]
       }
     };
@@ -258,7 +270,7 @@ describe('#compareReleases', () => {
       remoteChecksumComputer
     );
 
-    expect(differences).to.deep.equal([expectedDifference]);
+    expect(differences).to.deep.equal(expectedDifference);
   });
 });
 
