@@ -174,11 +174,11 @@ function routes() {
   });
 
   this.get('/challenges', (schema, request) => {
-    const findId = request.queryParams['filter[id]'];
+    const ids = request.queryParams['filter[ids]'];
     let records = null;
 
-    if (findId) {
-      records = schema.challenges.where({ id: findId });
+    if (ids) {
+      records = schema.challenges.find(ids);
     } else {
       records = schema.challenges.all();
     }

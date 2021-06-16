@@ -10,7 +10,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     tableName: 'Airtable_table',
 
-    usedFields: ['Shi', 'Foo', 'Bar'],
+    usedFields: ['Shi', 'Foo', 'Me'],
 
     fromAirTableObject: (record) => ({
       id: record.id,
@@ -32,7 +32,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await someDatasource.list();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Bar'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'] }]);
     });
 
     it('should correctly manage the `this` context', async () => {
@@ -43,7 +43,30 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await unboundList();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Bar'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'] }]);
+    });
+  });
+
+  describe('#filter', () => {
+
+    it('should fetch records of a given type and given ids', async () => {
+      // given
+      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, options) => {
+        const returnValue = [{ id: 1, tableName, ...options }];
+        return returnValue;
+      });
+
+      // when
+      await someDatasource.filter({ ids: ['1', '2'] });
+
+      // then
+      expect(airtable.findRecords).to.have.been.calledWith(
+        'Airtable_table',
+        {
+          fields: ['Shi', 'Foo', 'Me'],
+          filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})',
+        }
+      );
     });
   });
 });
