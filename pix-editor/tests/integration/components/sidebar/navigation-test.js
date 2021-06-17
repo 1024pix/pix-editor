@@ -60,9 +60,9 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       });
     });
 
-    test('it should display a list of frameworks', async function(assert) {
+    test('it should display a list of frameworks with a creation item', async function(assert) {
       // given
-      const expectedFrameworks = ['Pix', 'Pix +'];
+      const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
       await render(hbs`<Sidebar::Navigation />`);
