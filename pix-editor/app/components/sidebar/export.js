@@ -29,7 +29,9 @@ export default class SidebarExportComponent extends Component {
   async _loadContent(areas) {
     const getCompetences = areas.map(area => area.competences);
     const areaCompetences = await Promise.all(getCompetences);
-    const getTubes = areaCompetences.map(competences => competences.map(competence => competence.rawTubes)).flat();
+    const getThemes = areaCompetences.map(competences => competences.map(competence => competence.rawThemes)).flat();
+    const competenceThemes = await Promise.all(getThemes);
+    const getTubes = competenceThemes.map(themes => themes.map(theme => theme.rawTubes)).flat();
     const competenceTubes = await Promise.all(getTubes);
     const getSkills = competenceTubes.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
     const tubeSkills = await Promise.all(getSkills);
@@ -40,26 +42,29 @@ export default class SidebarExportComponent extends Component {
   _buildCSVContent(areas) {
     return areas.reduce((content, area) => {
       return area.sortedCompetences.reduce((content, competence) => {
-        return competence.productionTubes.reduce((content, tube) => {
-          let fields = [
-            area.name,
-            competence.name,
-            tube.name,
-            tube.title,
-            tube.description,
-            tube.practicalTitleFr,
-            tube.practicalDescriptionFr,
-            tube.productionSkills.reduce((table, skill) => {
-              table[skill.level - 1] = skill.name;
-              return table;
-            }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(',')
-          ];
-          fields = fields.map(field => this._formatCSVString(field));
-          return content + '\n' + fields.join(',');
+        return competence.sortedThemes.reduce((content, theme) => {
+          return theme.productionTubes.reduce((content, tube) => {
+            let fields = [
+              area.name,
+              competence.name,
+              theme.name,
+              tube.name,
+              tube.title,
+              tube.description,
+              tube.practicalTitleFr,
+              tube.practicalDescriptionFr,
+              tube.productionSkills.reduce((table, skill) => {
+                table[skill.level - 1] = skill.name;
+                return table;
+              }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(',')
+            ];
+            fields = fields.map(field => this._formatCSVString(field));
+            return content + '\n' + fields.join(',');
 
+          }, content);
         }, content);
       }, content);
-    }, '"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
+    }, '"Domaine","Compétence","Thématique","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
   }
 
   _formatCSVString(str) {

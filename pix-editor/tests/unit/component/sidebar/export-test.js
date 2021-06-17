@@ -70,16 +70,28 @@ module('unit | Component | sidebar/export', function(hooks) {
       rawSkills: productionSkill_2_1,
     };
 
-    const competence1 = {
-      name: 'competence1',
+    const theme1 = {
+      name: 'theme1',
       productionTubes: [productionTubes_1_1, productionTubes_1_2],
       rawTubes: [productionTubes_1_1, productionTubes_1_2],
     };
 
-    const competence2 = {
-      name: 'competence2',
+    const theme2 = {
+      name: 'theme2',
       productionTubes: [productionTubes_2_1],
       rawTubes: [productionTubes_2_1],
+    };
+
+    const competence1 = {
+      name: 'competence1',
+      sortedThemes: [theme1],
+      rawThemes: [theme1],
+    };
+
+    const competence2 = {
+      name: 'competence2',
+      sortedThemes: [theme2],
+      rawThemes: [theme2],
     };
 
     areas = [{
@@ -91,10 +103,10 @@ module('unit | Component | sidebar/export', function(hooks) {
 
   test('it should return formatted cvs content', function(assert) {
     // given
-    const expectedCsvContent = `"Domaine","Compétence","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"
-"area","competence1","tube1","title_tube1","description_tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
-"area","competence1","tube2","title_tube2","description_tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
-"area","competence2","tube3","title_tube3","description_tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`
+    const expectedCsvContent = `"Domaine","Compétence","Thématique","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"
+"area","competence1","theme1","tube1","title_tube1","description_tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
+"area","competence1","theme1","tube2","title_tube2","description_tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
+"area","competence2","theme2","tube3","title_tube3","description_tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`;
 
     // when
     const csvContent = component._buildCSVContent(areas);
@@ -103,10 +115,10 @@ module('unit | Component | sidebar/export', function(hooks) {
     assert.equal(csvContent, expectedCsvContent);
   });
 
-  test('it should escape `"` by `"`', function(assert) {
+  test('it should format CSV string', function(assert) {
     // given
-    const string = "hello";
-    const expectedResult = "\"hello\"";
+    const string = 'hello';
+    const expectedResult = '"hello"';
 
     // when
     const result = component._formatCSVString(string);
@@ -173,6 +185,4 @@ module('unit | Component | sidebar/export', function(hooks) {
       assert.ok(notifyErrorStub.calledWith('Erreur lors de l\'exportation des sujets'));
     });
   });
-
-
 });
