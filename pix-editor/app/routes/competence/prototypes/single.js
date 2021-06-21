@@ -10,8 +10,9 @@ export default class SingleRoute extends Route {
     return this.store.findRecord('challenge', params.prototype_id);
   }
 
-  afterModel(model) {
+  async afterModel(model) {
     super.afterModel(...arguments);
+    await model.files;
     this.currentData.setPrototype(model);
   }
 

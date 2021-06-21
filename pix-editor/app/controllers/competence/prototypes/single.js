@@ -112,7 +112,7 @@ export default class SingleController extends Controller {
 
   @action
   showIllustration() {
-    const illustration = this.challenge.illustration[0];
+    const illustration = this.challenge.illustration;
     this.popinImageSrc = illustration.url;
     this.displayImage = true;
   }
@@ -207,6 +207,7 @@ export default class SingleController extends Controller {
         this._message('Épreuve mise à jour');
       })
       .catch((error) => {
+        console.error(error);
         Sentry.captureException(error);
         this._errorMessage('Erreur lors de la mise à jour');
       })
@@ -527,94 +528,47 @@ export default class SingleController extends Controller {
 
   async _handleIllustration(challenge) {
     const illustration = challenge.illustration;
-    if (illustration && illustration.length > 0 && illustration.firstObject.file) {
+    if (illustration && illustration.isNew && !illustration.cloneBeforeSave) {
       this._loadingMessage('Envoi de l\'illustration...');
-      const file = illustration.firstObject.file;
-      const newIllustration = await this.storage.uploadFile({ file });
-      await this._createOrUpdateIllustration(challenge, newIllustration);
-      challenge.illustration = [{ url: newIllustration.url, filename: newIllustration.filename }];
-    } else {
-      const files = await challenge.files;
-      const previousIllustration = files.findBy('type', 'illustration');
-      if (previousIllustration && !previousIllustration.isDeleted) {
-        previousIllustration.alt = challenge.alternativeText;
-      }
+      const newIllustration = await this.storage.uploadFile({ file: illustration.file });
+      challenge.illustration.url = newIllustration.url;
     }
     return challenge;
   }
 
-  async _createOrUpdateIllustration(challenge, newIllustration) {
-    const files = await challenge.files;
-    const previousIllustration = files.findBy('type', 'illustration');
-
-    if (previousIllustration && !previousIllustration.isDeleted) {
-      previousIllustration.filename = newIllustration.filename;
-      previousIllustration.url = newIllustration.url;
-      previousIllustration.size = newIllustration.size;
-      previousIllustration.mimeType = newIllustration.type;
-      previousIllustration.alt = challenge.alternativeText;
-      return;
-    }
-    const attachment = {
-      filename: newIllustration.filename,
-      url: newIllustration.url,
-      size: newIllustration.size,
-      mimeType: newIllustration.type,
-      type: 'illustration',
-      alt: challenge.alternativeText,
-      challenge
-    };
-    this.store.createRecord('attachment', attachment);
-  }
-
   async _handleAttachments(challenge) {
     const attachments = challenge.attachments;
-    if (!attachments) {
+    if (attachments.length === 0) {
       return challenge;
     }
     this._loadingMessage('Gestion des pièces jointes...');
-    const newAttachments = await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
-    challenge.attachments = newAttachments.map(attachment => ({ url: attachment.url, filename: attachment.filename }));
+    await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
     await this._renameAttachmentFiles(challenge);
 
     return challenge;
   }
 
-  async _handleAttachment(inputAttachment, challenge) {
-    if (!inputAttachment.file) {
-      return challenge.baseNameUpdated() ? {
-        url: inputAttachment.url,
-        filename: this._getAttachmentFullFilename(challenge, inputAttachment.filename)
-      } : inputAttachment;
+  async _handleAttachment(attachment) {
+    if (!attachment.isNew || attachment.cloneBeforeSave) {
+      return;
     }
-    const filename = this._getAttachmentFullFilename(challenge, inputAttachment.file.name);
-    const newAttachment = await this.storage.uploadFile({ file: inputAttachment.file, filename, isAttachment: true });
-    const attachmentRecord = {
-      filename,
-      url: newAttachment.url,
-      size: newAttachment.size,
-      mimeType: newAttachment.type,
-      type: 'attachment',
-      challenge
-    };
-    this.store.createRecord('attachment', attachmentRecord);
-    return newAttachment;
-  }
-
-  _getAttachmentFullFilename(challenge, filename) {
-    return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
+    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true });
+    attachment.url = newAttachment.url;
   }
 
   async _renameAttachmentFiles(challenge) {
     if (!challenge.baseNameUpdated()) {
       return;
     }
-    const files = await challenge.files;
-    const attachments = files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+    const attachments = await challenge.attachments;
     for (const file of attachments.toArray()) {
       file.filename = this._getAttachmentFullFilename(challenge, file.filename);
       await this.storage.renameFile(file.url, file.filename);
     }
+  }
+
+  _getAttachmentFullFilename(challenge, filename) {
+    return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
   }
 
   _saveChallenge(challenge) {

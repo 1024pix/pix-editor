@@ -265,15 +265,13 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     hooks.beforeEach(function() {
       challenge = EmberObject.create({
         id: 'recChallenge',
-        alternativeText: 'alt-illustration',
-        illustration: [{
-          file: {
-            name: 'attachment-name',
-            size: 123,
-            type: 'image/png'
-          }
-        }],
-        files: []
+        illustration: {
+          filename: 'attachment-name',
+          size: 123,
+          mimeType: 'image/png',
+          type: 'illustration',
+          isNew: true,
+        }
       });
 
       storageServiceStub = {
@@ -299,7 +297,11 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       // given
       const expectedIllustration = {
         url: 'data:,',
-        filename: 'attachment-name'
+        filename: 'attachment-name',
+        size: 123,
+        mimeType: 'image/png',
+        type: 'illustration',
+        isNew: true,
       };
 
       // when
@@ -308,144 +310,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       // then
       assert.ok(storageServiceStub.uploadFile.calledOnce);
       assert.ok(loaderServiceStub.start.calledWith('Envoi de l\'illustration...'));
-      assert.deepEqual(challenge.illustration, [expectedIllustration]);
-    });
-
-    test('it creates attachment', async function(assert) {
-      // given
-      const expectedAttachement = {
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: 'alt-illustration',
-        challenge
-      };
-      const record = { save: sinon.stub().resolves() };
-      storeServiceStub.createRecord.returns(record);
-
-      // when
-      await controller._handleIllustration(challenge);
-
-      // then
-      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedAttachement));
-      assert.ok(record.save.notCalled);
-    });
-
-    test('it updates the attachment', async function(assert) {
-      // given
-      challenge.files = [{
-        id: 'rec_123',
-        filename: 'old-attachment-name',
-        url: 'data:,',
-        size: 654,
-        mimeType: 'image/jpeg',
-        type: 'illustration',
-        alt: 'former-alt-illustration',
-      }, {
-        id: 'rec_456',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'attachment',
-        alt: 'alt-attachment',
-      }];
-
-      const expectedNewFile = {
-        id: 'rec_123',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: 'alt-illustration',
-      };
-
-      // when
-      await controller._handleIllustration(challenge);
-
-      // then
-      assert.deepEqual(challenge.files[0], expectedNewFile);
-    });
-
-    test('it updates the alternative text of illustration', async function(assert) {
-      // given
-      challenge.files = [{
-        id: 'rec_123',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: 'former-alt-illustration',
-      }, {
-        id: 'rec_456',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'attachment',
-        alt: 'alt-attachment',
-      }];
-      challenge.alternativeText = 'new-alt-illustration';
-      challenge.illustration = [];
-
-      const expectedNewFile = {
-        id: 'rec_123',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: 'new-alt-illustration',
-      };
-
-      // when
-      await controller._handleIllustration(challenge);
-
-      // then
-      assert.deepEqual(challenge.files[0], expectedNewFile);
-    });
-
-    test('it removes the alternative text of illustration', async function(assert) {
-      // given
-      challenge.files = [{
-        id: 'rec_123',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: 'former-alt-illustration',
-      }, {
-        id: 'rec_456',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'attachment',
-        alt: 'alt-attachment',
-      }];
-      challenge.alternativeText = '';
-      challenge.illustration = [];
-
-      const expectedNewFile = {
-        id: 'rec_123',
-        filename: 'attachment-name',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        alt: '',
-      };
-
-      // when
-      await controller._handleIllustration(challenge);
-
-      // then
-      assert.deepEqual(challenge.files[0], expectedNewFile);
+      assert.deepEqual(challenge.illustration, expectedIllustration);
     });
   });
 
@@ -501,15 +366,16 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       challenge = EmberObject.create({
         id: 'recChallenge',
         attachmentBaseName,
-        baseNameUpdated: sinon.stub().returns(true),
+        baseNameUpdated: sinon.stub().returns(false),
         attachments: [{
+          filename: `${attachmentBaseName}.pdf`,
           file: {
-            name: attachmentBaseName + '.pdf',
+            name: `${attachmentBaseName}.pdf`,
             filePath: '',
-            baseNameUpdated: true,
             size: 123,
-            type: 'application/pdf'
+            type: 'application/pdf',
           },
+          isNew: true,
         },
         ],
         files:[]
@@ -523,9 +389,16 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       };
       controller.storage = storageServiceStub;
 
-      const expectedAttachement = [{
-        url: 'data:,',
+      const expectedAttachment = [{
+        file: {
+          filePath: '',
+          name: 'attachment-base-name.pdf',
+          size: 123,
+          type: 'application/pdf'
+        },
         filename: 'attachment-base-name.pdf',
+        isNew: true,
+        url: 'data:,'
       }];
 
       // when
@@ -534,7 +407,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       // then
       assert.ok(storageServiceStub.uploadFile.calledOnce);
       assert.ok(loaderServiceStub.start.calledWith('Gestion des pièces jointes...'));
-      assert.deepEqual(challenge.attachments, expectedAttachement);
+      assert.deepEqual(challenge.attachments, expectedAttachment);
     });
 
     test('it uploads two files', async function(assert) {
@@ -545,17 +418,21 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         attachmentBaseName,
         baseNameUpdated: sinon.stub().returns(true),
         attachments: [{
+          filename: `${attachmentBaseName}.doc`,
           file: {
-            name: attachmentBaseName + '.doc',
+            name: `${attachmentBaseName}.doc`,
             size: 123,
             type: 'application/msword',
           },
+          isNew: true,
         }, {
+          filename: `${attachmentBaseName}.pdf`,
           file: {
-            name: attachmentBaseName + '.pdf',
+            name: `${attachmentBaseName}.pdf`,
             size: 123,
             type: 'application/pdf',
           },
+          isNew: true,
         }],
         files:[]
       });
@@ -563,27 +440,34 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       const uploadFileStub = sinon.stub();
       uploadFileStub.onFirstCall().resolves({
         url: 'data:,',
-        filename: challenge.attachmentBaseName + '.doc',
-        size: 123,
-        type: 'application/msdoc'
       });
       uploadFileStub.onSecondCall().resolves({
         url: 'data:,',
-        filename: challenge.attachmentBaseName + '.pdf',
-        size: 456,
-        type: 'application/pdf'
       });
       storageServiceStub = {
-        uploadFile: uploadFileStub
+        uploadFile: uploadFileStub,
+        renameFile: sinon.stub(),
       };
       controller.storage = storageServiceStub;
 
       const expectedAttachements = [{
+        filename: `${attachmentBaseName}.doc`,
         url: 'data:,',
-        filename: 'attachment-base-name.doc',
+        file: {
+          name: `${attachmentBaseName}.doc`,
+          size: 123,
+          type: 'application/msword',
+        },
+        isNew: true,
       }, {
+        filename: `${attachmentBaseName}.pdf`,
         url: 'data:,',
-        filename: 'attachment-base-name.pdf',
+        file: {
+          name: `${attachmentBaseName}.pdf`,
+          size: 123,
+          type: 'application/pdf',
+        },
+        isNew: true,
       }];
 
       // when
@@ -595,90 +479,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(newChallenge.attachments, expectedAttachements);
     });
 
-    test('it creates attachments', async function (assert) {
-      const attachmentBaseName = 'attachment-base-name';
-      challenge = EmberObject.create({
-        id: 'recChallenge',
-        attachmentBaseName,
-        baseNameUpdated: () => false,
-        attachments: [{
-          file: {
-            name: attachmentBaseName + '.pdf',
-            size: 123,
-            type: 'application/pdf',
-          },
-        }, {
-          file: {
-            name: attachmentBaseName + '.doc',
-            size: 456,
-            type: 'application/msdoc',
-          },
-        }],
-        files: []
-      });
-
-      const uploadFileStub = sinon.stub();
-      uploadFileStub.onFirstCall().resolves({
-        filename: challenge.attachmentBaseName + '.pdf',
-        url: 'data:,',
-        size: 123,
-        type: 'application/pdf'
-      });
-      uploadFileStub.onSecondCall().resolves({
-        filename: challenge.attachmentBaseName + '.doc',
-        url: 'data:,',
-        size: 456,
-        type: 'application/msdoc'
-      });
-
-      storageServiceStub = {
-        uploadFile: uploadFileStub
-      };
-      controller.storage = storageServiceStub;
-
-      const expectedPdfAttachement = {
-        filename: 'attachment-base-name.pdf',
-        url: 'data:,',
-        size: 123,
-        mimeType: 'application/pdf',
-        type: 'attachment',
-        challenge
-      };
-      const expectedDocAttachement = {
-        filename: 'attachment-base-name.doc',
-        url: 'data:,',
-        size: 456,
-        mimeType: 'application/msdoc',
-        type: 'attachment',
-        challenge
-      };
-
-      const record = { save: sinon.stub().resolves() };
-      storeServiceStub.createRecord.returns(record);
-
-      // when
-      await controller._handleAttachments(challenge);
-
-      // then
-      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedPdfAttachement));
-      assert.ok(storeServiceStub.createRecord.calledWith('attachment', expectedDocAttachement));
-    });
-
     test('it renames attachments', async function (assert) {
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
         id: 'recChallenge',
         attachmentBaseName: 'updated-base-name',
         baseNameUpdated: () => true,
-        attachments: [{
-          filename: attachmentBaseName + '.pdf',
-          size: 123,
-          type: 'application/pdf',
-        }, {
-          filename: attachmentBaseName + '.doc',
-          size: 456,
-          type: 'application/msdoc',
-        }],
         files: [{
           filename: attachmentBaseName + '.pdf',
           url: 'data:,',
@@ -686,15 +492,16 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           mimeType: 'application/pdf',
           type: 'attachment',
         }, {
-          filename: attachmentBaseName + '.doc',
+          filename: attachmentBaseName + '.png',
           url: 'data:,',
           size: 456,
-          mimeType: 'application/msdoc',
+          mimeType: 'image/png',
           type: 'illustration',
         }]
       });
 
       challenge.files.forEach((file) => file.challenge = challenge);
+      challenge.attachments = challenge.files.filter(file => file.type === 'attachment');
       storageServiceStub = {
         renameFile: sinon.stub().resolves(),
       };
@@ -709,10 +516,10 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         challenge
       };
       const expectedIllustration = {
-        filename: 'attachment-base-name.doc',
+        filename: 'attachment-base-name.png',
         url: 'data:,',
         size: 456,
-        mimeType: 'application/msdoc',
+        mimeType: 'image/png',
         type: 'illustration',
         challenge
       };
@@ -724,6 +531,5 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedIllustration]);
       assert.true(storageServiceStub.renameFile.calledOnce);
     });
-
   });
 });

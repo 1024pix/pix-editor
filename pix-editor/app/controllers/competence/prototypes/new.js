@@ -37,6 +37,7 @@ export default class NewController extends Prototype {
         this.transitionToRoute('competence.prototypes.single', this.currentData.getCompetence(), challenge);
       })
       .catch((error) => {
+        console.error(error);
         Sentry.captureException(error);
         this._errorMessage('Erreur lors de la création');
       })
