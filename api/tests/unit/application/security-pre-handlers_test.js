@@ -11,7 +11,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
     context('Successful case', () => {
 
       it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
-      // given
+        // given
         const apiKey = 'valid.api.key';
         const authorizationHeader = `Bearer ${apiKey}`;
         const request = { headers: { authorization: authorizationHeader } };
@@ -124,4 +124,59 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       });
     });
   });
+
+  describe('#checkUserHasWriteAccess', () => {
+    it('returns nothing when the user is admin', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'admin',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
+    it('returns nothing when the user is editor', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'editor',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
+    it('returns an error when the user is readonly', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'readonly',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+  });
+
 });
