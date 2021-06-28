@@ -216,14 +216,10 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
-    let user;
-    beforeEach(async function() {
-      user = databaseBuilder.factory.buildAdminUser();
-    });
-
     context('nominal case', () => {
       it('should create the release', async () => {
         // Given
+        const user = databaseBuilder.factory.buildAdminUser();
         const server = await createServer();
         await databaseBuilder.commit();
         const expectedCurrentContent = mockCurrentContent();
@@ -240,6 +236,26 @@ describe('Acceptance | Controller | release-controller', () => {
         const release = JSON.parse(response.result);
         expect(release.content).to.deep.equal(expectedCurrentContent);
       });
+    });
+
+    context('error case', async () => {
+      it('should return a 403 when user is not allowed to create release', async () => {
+        //given
+        const user = databaseBuilder.factory.buildReadonlyUser();
+        const server = await createServer();
+        await databaseBuilder.commit();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/releases',
+          headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(403);
+      });
+      
     });
   });
 
