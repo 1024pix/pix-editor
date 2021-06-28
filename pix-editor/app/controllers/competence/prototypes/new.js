@@ -34,7 +34,7 @@ export default class NewController extends Prototype {
         this.edition = false;
         this.send('minimize');
         this._message('Prototype enregistré');
-        this.transitionToRoute('competence.prototypes.single', this.currentData.getCompetence(), challenge);
+        this.transitionToRoute('competence.prototypes.single', this.currentData.getCompetence(), challenge.id);
       })
       .catch((error) => {
         console.error(error);
