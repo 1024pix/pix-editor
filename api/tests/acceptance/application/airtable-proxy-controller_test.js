@@ -7,13 +7,13 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
   describe('GET/POST/PUT/DELETE /api/airtable/content/Competences', () => {
 
     async function createAdminUser() {
-      const user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
       return user;
     }
 
     async function createReadonlyUser() {
-      const user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'readonly', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      const user = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
       return user;
     }

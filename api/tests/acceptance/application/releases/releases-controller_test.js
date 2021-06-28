@@ -138,7 +138,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
-        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+        user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });
 
@@ -189,7 +189,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
-        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+        user = databaseBuilder.factory.buildAdminUser();
       });
 
       it('should return latest release of learning content', async () => {
@@ -218,7 +218,7 @@ describe('Acceptance | Controller | release-controller', () => {
   describe('POST /releases - Creates the release', () => {
     let user;
     beforeEach(async function() {
-      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      user = databaseBuilder.factory.buildAdminUser();
     });
 
     context('nominal case', () => {
@@ -246,7 +246,7 @@ describe('Acceptance | Controller | release-controller', () => {
   describe('GET /releases/:id - Returns given release', () => {
     let user;
     beforeEach(async function() {
-      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      user = databaseBuilder.factory.buildAdminUser();
     });
 
     context('nominal case', () => {

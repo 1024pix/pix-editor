@@ -7,7 +7,7 @@ describe('Acceptance | Controller | config', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
-        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey:'11b2cab8-050e-4165-8064-29a1e58d8997' });
+        user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });
 
