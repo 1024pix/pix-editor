@@ -1,6 +1,6 @@
 const databaseBuffer = require('../database-buffer');
 
-module.exports = function buildUser({
+function buildUser({
   id,
   name,
   trigram,
@@ -16,5 +16,19 @@ module.exports = function buildUser({
     tableName: 'users',
     values,
   });
+}
+
+function buildAdminUser() {
+  return buildUser({ name: 'User', trigram: 'ADM', access: 'admin', apiKey: 'admin-api-key' });
+}
+
+function buildReadonlyUser() {
+  return buildUser({ name: 'User', trigram: 'RDO', access: 'readonly', apiKey: 'readonly-api-key' });
+}
+
+module.exports = {
+  buildUser,
+  buildAdminUser,
+  buildReadonlyUser,
 };
 

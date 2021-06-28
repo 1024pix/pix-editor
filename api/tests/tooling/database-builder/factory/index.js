@@ -1,4 +1,4 @@
 module.exports = {
-  buildUser: require('./build-user'),
+  ...require('./build-user'),
   buildRelease: require('./build-release'),
 };
