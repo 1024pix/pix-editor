@@ -19,7 +19,7 @@ exports.register = async function(server) {
             if (request.method !== 'get') {
               return securityPreHandlers.checkUserHasWriteAccess(request, h);
             }
-            return null;
+            return h.response(true);
           }
         }],
         handler: async function(request, h) {
@@ -48,6 +48,14 @@ exports.register = async function(server) {
       method: ['GET', 'POST', 'PATCH', 'DELETE'],
       path: '/api/airtable/changelog/{path*}',
       config: {
+        pre: [{
+          method: (request, h) => {
+            if (request.method !== 'get') {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            }
+            return h.response(true);
+          }
+        }],
         handler: async function(request, h) {
           return _proxyRequestToAirtable(request, h, config.airtable.editorBase);
         }

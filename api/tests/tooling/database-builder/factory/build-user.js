@@ -19,11 +19,11 @@ function buildUser({
 }
 
 function buildAdminUser() {
-  return buildUser({ name: 'User', trigram: 'ADM', access: 'admin', apiKey: 'admin-api-key' });
+  return buildUser({ name: 'User', trigram: 'ADM', access: 'admin', apiKey: '00000000-0000-0000-0000-000000000000' });
 }
 
 function buildReadonlyUser() {
-  return buildUser({ name: 'User', trigram: 'RDO', access: 'readonly', apiKey: 'readonly-api-key' });
+  return buildUser({ name: 'User', trigram: 'RDO', access: 'readonly', apiKey: '10000000-0000-0000-0000-000000000000' });
 }
 
 module.exports = {
