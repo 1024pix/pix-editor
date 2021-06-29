@@ -6,6 +6,7 @@ module('Unit | Service | changelog-entry', function(hooks) {
 
   // Replace this with your real tests.
   test('it should return an elementType', function(assert) {
+    assert.expect(2);
     //given
     const keys = ['skill', 'challenge'];
     const expectedResults = ['acquis', 'épreuve'];

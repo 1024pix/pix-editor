@@ -16,6 +16,6 @@ module('Integration | Component | popin-changelog', function(hooks) {
     await click('[data-test-save-changelog-button]');
 
     //then
-    assert.equal(this.approve.called, true);
+    assert.true(this.approve.called);
   });
 });

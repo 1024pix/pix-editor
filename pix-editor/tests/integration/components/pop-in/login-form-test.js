@@ -45,7 +45,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
 
     test('it should use load api from config service', async function(assert) {
       // then
-      assert.equal(configLoadStub.called, true);
+      assert.true(configLoadStub.called);
     });
 
     test('it should not display error message', async function(assert) {

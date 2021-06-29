@@ -8,7 +8,7 @@ import { mockAuthService } from '../../../mock-auth';
 
 module('Integration | Component | logout', function(hooks) {
   setupRenderingTest(hooks);
-  
+
   test('it should ask for deconnection', async function(assert) {
     // given
     this.onDeny = sinon.stub();
@@ -21,17 +21,17 @@ module('Integration | Component | logout', function(hooks) {
   });
 
   module('deny button', function() {
-    
+
     test('it should call onDeny function', async function(assert) {
       // given
       this.onDeny = sinon.stub();
       await render(hbs`<PopIn::Logout @onDeny={{this.onDeny}}/>`);
-      
+
       // when
       await click('[data-test-logout-cancel-button]');
-      
+
       // then
-      assert.equal(this.onDeny.called, true);
+      assert.true(this.onDeny.called);
     });
   });
 
@@ -50,7 +50,7 @@ module('Integration | Component | logout', function(hooks) {
         }
       }
       this.owner.register('service:window', MockWindowService);
-      
+
       // when
       await click('[data-test-logout-ok-button]');
     });
@@ -59,12 +59,12 @@ module('Integration | Component | logout', function(hooks) {
       //then
       assert.equal(this.owner.lookup('service:auth').key, undefined);
     });
-    
+
     test('it should reload application', async function(assert) {
       //then
-      assert.equal(windowReloadStub.called, true);
+      assert.true(windowReloadStub.called);
     });
-    
+
   });
-      
+
 });

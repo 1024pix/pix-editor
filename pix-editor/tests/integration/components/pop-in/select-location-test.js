@@ -177,7 +177,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       }
     });
   });
-  module('if `isPrototypeLocation`', async function (hooks) {
+  module('if `isPrototypeLocation`', function (hooks) {
     hooks.beforeEach(async function () {
       // when
       this.setSkills = sinon.stub();
@@ -214,6 +214,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
     });
 
     test('it should display a list of skills on click', async function (assert) {
+      assert.expect(5);
       // given
       const expectedGroupResult = ['Niveau 1', 'Niveau 6'];
       const expectedOptionsResult = [ 'skill1_2_1_1_1 (v.1)', 'skill1_2_1_1_2 (v.1)', 'skill1_2_1_1_3 (v.2)'];
@@ -226,7 +227,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       const options = findAll('.ember-power-select-options ul>li');
 
       groupOptions.forEach((groupOption, i)=>{
-        assert.ok(groupOption.textContent.trim().indexOf(expectedGroupResult[i]) !== -1);
+        assert.notStrictEqual(groupOption.textContent.trim().indexOf(expectedGroupResult[i]), -1);
       });
 
       options.forEach((option, i)=>{
@@ -280,7 +281,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       }]);
     });
   });
-  module('if `isSkillLocation`', async function (hooks) {
+  module('if `isSkillLocation`', function (hooks) {
     hooks.beforeEach(async function () {
       // when
       this.copyToNewLocation = sinon.stub();

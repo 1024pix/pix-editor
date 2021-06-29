@@ -28,6 +28,7 @@ module('Unit | Service | access', function(hooks) {
   module('mayEdit', function() {
 
     test('it should return `false` if challenge is not live', function (assert) {
+      assert.expect(2);
       //given
       const challenges = [{
         id: 'rec123655',
@@ -48,6 +49,7 @@ module('Unit | Service | access', function(hooks) {
     });
 
     test('it should return `true` if challenge is live and level is `EDITOR` or more', function (assert) {
+      assert.expect(2);
       //given
       const challenge = {
         id: 'rec123655',
@@ -56,7 +58,7 @@ module('Unit | Service | access', function(hooks) {
         isPrototype: true
       };
 
-      const roles = [ADMIN,EDITOR];
+      const roles = [ADMIN, EDITOR];
 
       //when
       roles.forEach(role => {

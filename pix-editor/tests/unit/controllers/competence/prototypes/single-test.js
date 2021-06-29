@@ -722,7 +722,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.deepEqual(challenge.files, [expectedPdfAttachement, expectedIllustration]);
-      assert.equal(storageServiceStub.renameFile.calledOnce, true);
+      assert.true(storageServiceStub.renameFile.calledOnce);
     });
 
   });
