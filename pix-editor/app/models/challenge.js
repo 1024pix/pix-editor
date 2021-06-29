@@ -14,8 +14,6 @@ export default class ChallengeModel extends Model {
   @attr t1Status;
   @attr t2Status;
   @attr t3Status;
-  @attr illustration;
-  @attr attachments;
   @attr pedagogy;
   @attr author;
   @attr declinable;
@@ -33,7 +31,6 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
-  @attr alternativeText;
   @attr locales;
   @attr area;
   @attr({ readOnly:true }) _definedBaseName;
@@ -45,6 +42,14 @@ export default class ChallengeModel extends Model {
   @service('store') myStore;
   @service config;
   @service idGenerator;
+
+  get illustration() {
+    return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
+  }
+
+  get attachments() {
+    return this.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+  }
 
   get isPrototype() {
     return (this.genealogy === 'Prototype 1');

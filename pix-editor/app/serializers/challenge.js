@@ -18,8 +18,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
     t1Status: 'T1 - Espaces, casse & accents',
     t2Status: 'T2 - Ponctuation',
     t3Status: 'T3 - Distance d\'édition',
-    illustration: 'Illustration de la consigne',
-    attachments: 'Pièce jointe',
     pedagogy: 'Type péda',
     author: 'Auteur',
     declinable: 'Déclinable',
@@ -37,7 +35,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
     accessibility2: 'Daltonien',
     spoil: 'Spoil',
     responsive: 'Responsive',
-    alternativeText: 'Texte alternatif illustration',
     locales: 'Langues',
     area: 'Géographie',
     autoReply: 'Réponse automatique',
@@ -59,9 +56,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
         }
       }
     });
-    if (attributes['attachments']) {
-      attributes['attachments'] = attributes['attachments'].reverse();
-    }
     return attributes;
   }
 
@@ -73,12 +67,6 @@ export default class ChallengeSerializer extends AirtableSerializer {
         json[payloadKey] = 'Activé';
       } else {
         json[payloadKey] = 'Désactivé';
-      }
-    } else if (key === 'attachements') {
-      const payloadKey =  this._getMappedKey(key, snapshot.type);
-      const value = snapshot.attr(key);
-      if (value) {
-        json[payloadKey] = value.reverse();
       }
     } else {
       return super.serializeAttribute(...arguments);

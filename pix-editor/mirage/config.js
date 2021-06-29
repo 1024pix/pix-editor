@@ -258,5 +258,6 @@ function _deserializePayload(payload, modelName) {
       payload[key] = payloadValue;
     }
   }
+  payload.id = payload.fields[serializer.primaryKey];
   return payload;
 }

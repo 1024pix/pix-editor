@@ -96,7 +96,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     class StorageServiceStub extends Service {
       cloneFile() {}
     }
-    const challenge2 = this.server.create('challenge', { id: 'recChallenge2', attachments: [{ url: 'data:,', filename: 'test.ods' }], filesIds: ['recAttachment1'] });
+    const challenge2 = this.server.create('challenge', { id: 'recChallenge2', filesIds: ['recAttachment1'] });
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', url: 'data:,', filename: 'test.ods', challenge: challenge2 });
     skill.update({ challengeIds: ['recChallenge2'] });
 

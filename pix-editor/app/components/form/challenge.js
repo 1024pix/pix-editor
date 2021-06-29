@@ -5,6 +5,7 @@ import Component from '@glimmer/component';
 export default class ChallengeForm extends Component {
   @service config;
   @service confirm;
+  @service store;
 
   options = {
     'types': [
@@ -108,12 +109,40 @@ export default class ChallengeForm extends Component {
   }
 
   @action
+  addIllustration(file, alt = '') {
+    const attachment = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'illustration',
+      challenge: this.args.challenge,
+      alt,
+    };
+    this.store.createRecord('attachment', attachment);
+  }
+
+  @action
   async removeIllustration() {
     await this.args.challenge.files;
-    const removedFile = this.args.challenge.files.findBy('type', 'illustration');
+    const removedFile = this.args.challenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
+      return removedFile.alt;
     }
+  }
+
+  @action
+  addAttachment(file) {
+    const attachment = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'attachment',
+      challenge: this.args.challenge,
+    };
+    this.store.createRecord('attachment', attachment);
   }
 
   @action

@@ -1,12 +1,12 @@
 <div class="field" ...attributes>
-  {{#if (or @value.length @edition)}}
+  {{#if (or @value @edition)}}
     <label>{{@title}}</label>
   {{/if}}
-  {{#if @value.length}}
-    {{#if @value.0.url}}
-      <img src={{@value.0.url}} alt="" class="clickable" {{on "click" @display}} role="presentation">
+  {{#if @value}}
+    {{#if @value.url}}
+      <img src={{@value.url}} alt="" class="clickable" {{on "click" @display}} role="presentation">
     {{else}}
-      {{@value.0.file.name}} ({{@value.0.file.size}} octets)
+      {{@value.file.name}} ({{@value.file.size}} octets)
     {{/if}}
     {{#if @edition}}
       <button {{on "click" this.remove}} class="ui button file-remove" type="button"><i class="remove icon" data-test-delete-illustration-button></i></button>
