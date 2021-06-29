@@ -61,6 +61,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display a list of frameworks with a creation item', async function(assert) {
+      assert.expect(3);
       // given
       const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
@@ -76,6 +77,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display only a list of areas', async function(assert) {
+      assert.expect(3);
       // given
       const expectedAreas = ['area_1', 'area_2'];
 
@@ -115,6 +117,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display only a list of competences', async function(assert) {
+      assert.expect(3);
       // given
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
