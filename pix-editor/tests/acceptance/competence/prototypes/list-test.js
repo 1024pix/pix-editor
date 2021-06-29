@@ -17,7 +17,7 @@ const deadSkillPixId = 'pixDeadSkill';
 const challengeId2 = 'recChallenge2';
 
 module('Acceptance | competence/prototypes/list', function () {
-  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', async function (hooks) {
+  module('visiting /competence/:competence_id/prototypes/list/:tube_id/:skill_id', function (hooks) {
 
     setupApplicationTest(hooks);
     setupMirage(hooks);
