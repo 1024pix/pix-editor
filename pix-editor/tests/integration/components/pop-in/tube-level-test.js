@@ -64,25 +64,27 @@ module('Integration | Component | popin-tube-level', function (hooks) {
   });
 
   test('it should display a list of an ordered list of skills level', function (assert) {
+    assert.expect(8);
     // when
     const expectedResult = ['1', '2', '', '', '5', '6', '', ''];
 
     // then
     const skillsList = this.element.querySelectorAll('.levels .level');
     skillsList.forEach((node, i) => {
-      assert.ok(node.textContent.trim() === expectedResult[i]);
+      assert.equal(node.textContent.trim(), expectedResult[i]);
     });
   });
 
   test('it should display selected skill level', function (assert) {
+    assert.expect(3);
     // when
     const expectedResult = ['1', '2'];
 
     // then
     const skillsList = this.element.querySelectorAll('.levels .level.selected');
-    assert.ok(skillsList.length === expectedResult.length);
+    assert.equal(skillsList.length, expectedResult.length);
     skillsList.forEach((node, i) => {
-      assert.ok(node.textContent.trim() === expectedResult[i]);
+      assert.equal(node.textContent.trim(), expectedResult[i]);
     });
   });
 
