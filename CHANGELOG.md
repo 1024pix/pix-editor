@@ -1,5 +1,17 @@
 
 
+## v3.40.0 (29/06/2021)
+
+- [#186](https://github.com/1024pix/pix-editor/pull/186) [FEATURE] Ajouter les thématiques à l'export des sujet (PE-64)
+- [#179](https://github.com/1024pix/pix-editor/pull/179) [FEATURE] Permettre la création de nouveaux référentiels Pix + (PE-70).
+- [#184](https://github.com/1024pix/pix-editor/pull/184) [BUGFIX] Corrige la sortie de comparaison de releases
+- [#188](https://github.com/1024pix/pix-editor/pull/188) [TECH] Utilise la table `attachments` dans les formulaires de Pix Editor.
+- [#189](https://github.com/1024pix/pix-editor/pull/189) [TECH] Vérification des droits sur les routes API.
+- [#190](https://github.com/1024pix/pix-editor/pull/190) [TECH] Ajout du linter eslint-plugin-qunit
+- [#183](https://github.com/1024pix/pix-editor/pull/183) [TECH] Améliorer le nommage des thematique/sujet/acquis des ateliers (PE-78)
+- [#180](https://github.com/1024pix/pix-editor/pull/180) [TECH] Migre les fichiers attachés dans un sous dossier pour préserver leur nom original
+- [#187](https://github.com/1024pix/pix-editor/pull/187) Ajout d'un fichier de licence
+
 ## v3.39.0 (15/06/2021)
 
 - [#182](https://github.com/1024pix/pix-editor/pull/182) [BUGFIX] Encode le nom du fichier dans l'URL lors de l'upload
