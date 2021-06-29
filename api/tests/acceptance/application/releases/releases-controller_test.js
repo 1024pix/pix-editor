@@ -138,7 +138,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
-        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+        user = databaseBuilder.factory.buildAdminUser();
         await databaseBuilder.commit();
       });
 
@@ -189,7 +189,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
-        user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+        user = databaseBuilder.factory.buildAdminUser();
       });
 
       it('should return latest release of learning content', async () => {
@@ -216,14 +216,10 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
-    let user;
-    beforeEach(async function() {
-      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
-    });
-
     context('nominal case', () => {
       it('should create the release', async () => {
         // Given
+        const user = databaseBuilder.factory.buildAdminUser();
         const server = await createServer();
         await databaseBuilder.commit();
         const expectedCurrentContent = mockCurrentContent();
@@ -241,12 +237,32 @@ describe('Acceptance | Controller | release-controller', () => {
         expect(release.content).to.deep.equal(expectedCurrentContent);
       });
     });
+
+    context('error case', async () => {
+      it('should return a 403 when user is not allowed to create release', async () => {
+        //given
+        const user = databaseBuilder.factory.buildReadonlyUser();
+        const server = await createServer();
+        await databaseBuilder.commit();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/releases',
+          headers: generateAuthorizationHeader(user),
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(403);
+      });
+      
+    });
   });
 
   describe('GET /releases/:id - Returns given release', () => {
     let user;
     beforeEach(async function() {
-      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
+      user = databaseBuilder.factory.buildAdminUser();
     });
 
     context('nominal case', () => {

@@ -4,18 +4,15 @@ const createServer = require('../../../server');
 
 describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => {
   describe('PATCH /api/airtable/changelog/Notes', () => {
-    let user;
-    beforeEach(async function() {
-      user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey: '11b2cab8-050e-4165-8064-29a1e58d8997' });
-      await databaseBuilder.commit();
-    });
-
     afterEach(function() {
       nock.cleanAll();
     });
 
     it('should proxy patch changelog to airtable', async () => {
       //Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+
       nock('https://api.airtable.com')
         .patch('/v0/airtableEditorBaseValue/Notes', { param: 'value' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -38,6 +35,9 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
 
     it('should return airtable status code', async () => {
       //Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+
       nock('https://api.airtable.com')
         .post('/v0/airtableEditorBaseValue/Notes', { param: 'value' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -56,6 +56,27 @@ describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => 
       // Then
       expect(response.statusCode).to.equal(401);
       expect(response.result).to.equal('Unauthorized');
+    });
+
+    context('when user is readonly', () => {
+      it('should return a 403 error code', async () => {
+        //Given
+        const user = databaseBuilder.factory.buildReadonlyUser();
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/airtable/changelog/Notes',
+          headers: generateAuthorizationHeader(user),
+          payload: { param: 'value' }
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(403);
+      });
     });
 
   });

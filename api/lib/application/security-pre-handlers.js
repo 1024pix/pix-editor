@@ -4,6 +4,7 @@ const JSONAPIError = require('jsonapi-serializer').Error;
 module.exports = {
   checkUserIsAuthenticatedViaBearer,
   checkUserIsAuthenticatedViaBasicAndAdmin,
+  checkUserHasWriteAccess,
 };
 
 async function checkUserIsAuthenticatedViaBearer(request, h) {
@@ -31,6 +32,14 @@ async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
   }
 }
 
+async function checkUserHasWriteAccess(request, h) {
+  const authenticatedUser = request.auth.credentials.user;
+  if (authenticatedUser.access === 'readonly') {
+    return _replyForbiddenError(h);
+  }
+  return h.response(true);
+}
+
 async function _replyWithAuthenticationError(h) {
   const errorHttpStatusCode = 401;
 
@@ -38,6 +47,18 @@ async function _replyWithAuthenticationError(h) {
     code: errorHttpStatusCode,
     title: 'Unauthorized access',
     detail: 'Missing or invalid access token in request auhorization headers.'
+  });
+
+  return h.response(jsonApiError).code(errorHttpStatusCode).takeover();
+}
+
+function _replyForbiddenError(h) {
+  const errorHttpStatusCode = 403;
+
+  const jsonApiError = new JSONAPIError({
+    code: errorHttpStatusCode,
+    title: 'Forbidden access',
+    detail: 'Missing or insufficient permissions.',
   });
 
   return h.response(jsonApiError).code(errorHttpStatusCode).takeover();

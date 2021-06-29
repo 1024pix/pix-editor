@@ -7,7 +7,7 @@ describe('Acceptance | Controller | users-controller', () => {
 
     it('should return authenticated user details', async () => {
       // Given
-      const user = databaseBuilder.factory.buildUser({ name: 'User', trigram: 'ABC', access: 'admin', apiKey:'11b2cab8-050e-4165-8064-29a1e58d8997' });
+      const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
       const expectedAuthenticatedUser = {
         data: {

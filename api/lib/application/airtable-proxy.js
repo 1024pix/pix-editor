@@ -6,6 +6,7 @@ const pixApiClient = require('../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../infrastructure/event-notifier/updated-record-notifier');
 const logger = require('../infrastructure/logger');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
+const securityPreHandlers = require('./security-pre-handlers');
 
 exports.register = async function(server) {
   server.route([
@@ -13,6 +14,14 @@ exports.register = async function(server) {
       method: ['GET', 'POST', 'PATCH', 'DELETE'],
       path: '/api/airtable/content/{path*}',
       config: {
+        pre: [{
+          method: (request, h) => {
+            if (request.method !== 'get') {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            }
+            return h.response(true);
+          }
+        }],
         handler: async function(request, h) {
           const response = await _proxyRequestToAirtable(request, h, config.airtable.base);
           if (
@@ -39,6 +48,14 @@ exports.register = async function(server) {
       method: ['GET', 'POST', 'PATCH', 'DELETE'],
       path: '/api/airtable/changelog/{path*}',
       config: {
+        pre: [{
+          method: (request, h) => {
+            if (request.method !== 'get') {
+              return securityPreHandlers.checkUserHasWriteAccess(request, h);
+            }
+            return h.response(true);
+          }
+        }],
         handler: async function(request, h) {
           return _proxyRequestToAirtable(request, h, config.airtable.editorBase);
         }

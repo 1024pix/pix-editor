@@ -11,7 +11,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
     context('Successful case', () => {
 
       it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
-      // given
+        // given
         const apiKey = 'valid.api.key';
         const authorizationHeader = `Bearer ${apiKey}`;
         const request = { headers: { authorization: authorizationHeader } };
@@ -47,20 +47,136 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       });
 
       it('should disallow access to resource when api key is wrong', async () => {
-      // given
+        // given
         const apiKey = 'wrong.api.key';
         const authorizationHeader = `Bearer ${apiKey}`;
         const request = { headers: { authorization: authorizationHeader } };
-      
+
         sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).rejects(new UserNotFoundError());
 
         // when
         const response = await securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, hFake);
-      
+
         // then
         expect(response.statusCode).to.equal(401);
         expect(response.isTakeOver).to.be.true;
       });
     });
   });
+
+  describe('#checkUserIsAuthenticatedViaBasicAndAdmin', () => {
+
+    context('Successful case', () => {
+
+      it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
+      // given
+        const apiKey = 'valid.api.key';
+        const authenticatedUser = new User({
+          id: '1',
+          name: 'AuthenticatedUser',
+          trigram: 'ABC',
+          apiKey,
+          access: 'admin',
+        });
+        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
+
+        // when
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
+
+        // then
+        expect(response).to.deep.equal({ isValid: true, credentials: { user: authenticatedUser } });
+      });
+
+    });
+
+    context('Error cases', () => {
+
+      it('should disallow access to resource when the api key is not found', async () => {
+        // given
+        const apiKey = 'invalid.api.key';
+
+        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).rejects();
+
+        // when
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
+
+        // then
+        expect(response).to.be.deep.equal({ isValid: false });
+      });
+
+      it('should disallow access to resource when the user is not an admin', async () => {
+        // given
+        const apiKey = 'valid.api.key';
+        const authenticatedUser = new User({
+          id: '1',
+          name: 'AuthenticatedUser',
+          trigram: 'ABC',
+          apiKey,
+          access: 'readonly',
+        });
+        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
+
+        // when
+        const response = await securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
+
+        // then
+        expect(response).to.deep.equal({ isValid: false });
+      });
+    });
+  });
+
+  describe('#checkUserHasWriteAccess', () => {
+    it('returns nothing when the user is admin', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'admin',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
+    it('returns nothing when the user is editor', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'editor',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
+    it('returns an error when the user is readonly', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'readonly',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await securityPreHandlers.checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+  });
+
 });

@@ -3,6 +3,7 @@ const Boom = require('@hapi/boom');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
 const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
 const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
+const securityPreHandlers = require('./security-pre-handlers');
 
 function _getWritableStream() {
   const writableStream = new PassThrough();
@@ -31,6 +32,9 @@ exports.register = async function(server) {
       method: 'POST',
       path: '/api/releases',
       config: {
+        pre:[{
+          method: securityPreHandlers.checkUserHasWriteAccess,
+        }],
         handler: async function() {
           const job = await createReleaseQueue.add();
           const promise = async () => {

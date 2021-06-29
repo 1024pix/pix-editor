@@ -8,7 +8,7 @@ describe('Integration | Repository | user-repository', function() {
 
     it('should return user associated to given apiKey', async function() {
       // Given
-      const apiKey = '11567d7c-b787-4ecb-ac44-800e11f64a66';
+      const apiKey = '00000000-0000-0000-0000-000000000000';
       const userToCreate = {
         apiKey,
         id: 1,
@@ -34,7 +34,7 @@ describe('Integration | Repository | user-repository', function() {
 
     it('should throw an error when user is not found', async function() {
       // Given
-      const apiKey = '11567d7c-b787-4ecb-ac44-800e11f64a66';
+      const apiKey = '00000000-0000-0000-0000-000000000000';
 
       // When
       const error = await catchErr(userRepository.findByApiKey)(apiKey);
