@@ -101,6 +101,7 @@ module('Unit | Controller | target-profile', function (hooks) {
   });
 
   test('it should set tube-level arguments for production tube', function (assert) {
+    assert.expect(7);
     // when
     controller.displayTube(tube1);
 
@@ -127,6 +128,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       assert.equal(value, expectedResult[i]);
     });
   });
+
   test('it should set a profile tube, with a level and a list of production skill id under this level ', function (assert) {
     // when
     controller.setProfileTube(tube1, 2, [skill1.pixId, skill2.pixId]);
@@ -150,7 +152,9 @@ module('Unit | Controller | target-profile', function (hooks) {
     // then
     assert.deepEqual([tube1.selectedLevel, tube1.selectedSkills], [false, []]);
   });
+
   test('it should set tube-level arguments for thematic result tube', function (assert) {
+    assert.expect(7);
     // when
     controller.displayThematicResultTube(tube1);
 
