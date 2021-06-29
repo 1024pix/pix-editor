@@ -6,7 +6,7 @@ describe('Unit | Serializer | JSONAPI | user-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a User', () => {
       // Given
-      const user = new User({ id: 100, name: 'User', trigram: 'ABC', access: 'admin', apiKey:'11b2cab8-050e-4165-8064-29a1e58d8997' });
+      const user = new User({ id: 100, name: 'User', trigram: 'ABC', access: 'admin', apiKey:'00000000-0000-0000-0000-000000000000' });
       const expectedSerializedUser = {
         data: {
           type: 'users',
