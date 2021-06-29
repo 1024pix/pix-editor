@@ -65,23 +65,25 @@ module('Unit | Model | theme', function(hooks) {
   });
 
   test('it should not return workbench tubes', function(assert) {
+    assert.expect(3);
     // when
     const tubes = theme.tubes;
 
     // then
-    tubes.forEach(tube=>{
+    tubes.forEach((tube) => {
       assert.ok(['@tube_2', '@tube_3', '@tube_4'].includes(tube.name));
     });
   });
 
   test('it should return sorted production tubes', function(assert) {
+    assert.expect(2);
     // when
     const tubes = theme.productionTubes;
     const expectedSortedTube = ['@tube_2', '@tube_4'];
 
     // then
-    tubes.forEach((tube, index)=>{
-      assert.ok(tube.name === expectedSortedTube[index]);
+    tubes.forEach((tube, index) => {
+      assert.equal(tube.name, expectedSortedTube[index]);
     });
   });
 
@@ -90,7 +92,7 @@ module('Unit | Model | theme', function(hooks) {
     const selectedProductionTubeLength = theme.selectedProductionTubeLength;
 
     // then
-    assert.ok(selectedProductionTubeLength === 1);
+    assert.equal(selectedProductionTubeLength, 1);
   });
 
   module('#hasSelectedProductionTube', function () {
