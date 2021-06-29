@@ -40,8 +40,7 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
 
     //then
-    // assert.dom('.ember-modal-dialog').exists();
-    assert.equal(this.element.querySelector('.ui.button.positive').disabled, true);
+    assert.true(this.element.querySelector('.ui.button.positive').disabled);
   });
 
   test('save input should not be disabled if mandatory field are empty', async function(assert) {
@@ -64,6 +63,6 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
 
     //then
-    assert.equal(this.element.querySelector('.ui.button.positive').disabled, false);
+    assert.false(this.element.querySelector('.ui.button.positive').disabled);
   });
 });
