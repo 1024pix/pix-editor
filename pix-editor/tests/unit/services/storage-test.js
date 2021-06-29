@@ -237,6 +237,7 @@ module('Unit | Service | storage', function(hooks) {
     });
 
     test('it should retry when token has expired only one time', async function(assert) {
+      assert.expect(2);
       // given
       fetch.rejects({
         response: { status: 401 }
@@ -259,6 +260,7 @@ module('Unit | Service | storage', function(hooks) {
     });
 
     test('it should raise error when API call failed', async function(assert) {
+      assert.expect(2);
       // given
       fetch.rejects({
         response: { status: 400 }
@@ -407,6 +409,7 @@ module('Unit | Service | storage', function(hooks) {
     });
 
     test('it should retry when token has expired only one time', async function(assert) {
+      assert.expect(2);
       // given
       fetch.rejects({
         response: { status: 401 }
@@ -425,6 +428,7 @@ module('Unit | Service | storage', function(hooks) {
     });
 
     test('it should raise error when API call failed', async function(assert) {
+      assert.expect(2);
       // given
       fetch.rejects({
         response: { status: 400 }
