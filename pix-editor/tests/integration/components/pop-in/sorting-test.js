@@ -55,8 +55,8 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
     await drag('mouse', draggableItem, () => { return { dy: draggableItem.offsetHeight * 2 + 1, dx: undefined };});
 
     // then
-    assert.ok(modelToSort2.index === 2);
-    assert.ok(modelToSort3.index === 1);
+    assert.equal(modelToSort2.index, 2);
+    assert.equal(modelToSort3.index, 1);
   });
 
   test('it should trigger approve action', async function (assert) {
