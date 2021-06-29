@@ -37,7 +37,7 @@ module('Acceptance | Login', function(hooks) {
     await click('[data-test-login-button]');
 
     // then
-    assert.equal(windowReloadStub.called, true);
+    assert.true(windowReloadStub.called);
   });
 });
 
