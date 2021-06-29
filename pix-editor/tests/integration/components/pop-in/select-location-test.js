@@ -281,7 +281,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       }]);
     });
   });
-  module('if `isSkillLocation`', async function (hooks) {
+  module('if `isSkillLocation`', function (hooks) {
     hooks.beforeEach(async function () {
       // when
       this.copyToNewLocation = sinon.stub();
