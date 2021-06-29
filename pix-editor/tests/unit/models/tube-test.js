@@ -71,6 +71,7 @@ module('Unit | Model | tube', function(hooks) {
 
   // Replace this with your real tests.
   test('it should return an array of skill with status is not `archivé` or `périmé`', function(assert) {
+    assert.expect(4);
     // given
     const wrongStatus = ['archivé', 'périmé'];
 
@@ -78,7 +79,7 @@ module('Unit | Model | tube', function(hooks) {
     const liveSkills = tube.liveSkills;
 
     // then
-    liveSkills.forEach(skill=>{
+    liveSkills.forEach(skill => {
       assert.notOk(wrongStatus.includes(skill.status));
     });
   });
