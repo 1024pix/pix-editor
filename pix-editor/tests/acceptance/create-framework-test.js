@@ -4,7 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { mockAuthService } from '../mock-auth';
 
-module.only('Acceptance | Search', function(hooks) {
+module('Acceptance | Search', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let apiKey, store;
