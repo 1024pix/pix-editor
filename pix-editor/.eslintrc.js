@@ -11,11 +11,13 @@ module.exports = {
     }
   },
   plugins: [
-    'ember'
+    'ember',
+    'qunit',
   ],
   extends: [
     'eslint:recommended',
-    'plugin:ember/recommended'
+    'plugin:ember/recommended',
+    'plugin:qunit/recommended',
   ],
   env: {
     browser: true
