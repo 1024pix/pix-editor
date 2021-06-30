@@ -76,10 +76,10 @@
       Annuler
     </button>
   {{else}}
-    <button class="ui button item" {{on "click" this.preview}} type="button">
+    <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
       Prévisualiser
-    </button>
+    </a>
     {{#if this.mayEdit}}
       <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>
@@ -93,10 +93,10 @@
       </button>
     {{/if}}
     {{#if this.mayAccessAirtable}}
-      <button class="ui button item" {{on "click" this.openAirtable}} type="button">
+      <a class="ui button item" href={{this.airtableUrl}} target="_blank" rel="noopener noreferrer">
         <i class="table icon"></i>
         Airtable
-      </button>
+      </a>
     {{/if}}
     <button class="ui button item" {{on "click" this.copyLink}} type="button">
       <i class="linkify icon"></i>

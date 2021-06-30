@@ -67,10 +67,10 @@
       </button>
     {{else}}
       {{#if this.skill.productionPrototype}}
-        <button class="ui button item" {{on "click" this.previewPrototype}} type="button">
+        <a class="ui button item" href={{this.previewPrototypeUrl}} target="_blank" rel="noopener noreferrer">
           <i class="eye icon"></i>
           Prévisualiser
-        </button>
+        </a>
       {{/if}}
       {{#if this.mayEdit}}
         <button class="ui button item" {{on "click" this.edit}} type="button">
@@ -79,10 +79,10 @@
         </button>
       {{/if}}
       {{#if this.mayAccessAirtable}}
-        <button class="ui button item" {{on "click" this.openAirtable}} type="button">
+        <a class="ui button item" href={{this.airtableUrl}} target="_blank"  rel="noopener noreferrer">
           <i class="table icon"></i>
           Airtable
-        </button>
+        </a>
       {{/if}}
       {{#unless this.skill.isLive}}
         <button class="ui button item" {{on "click" this.displayChallenges}} type="button">
