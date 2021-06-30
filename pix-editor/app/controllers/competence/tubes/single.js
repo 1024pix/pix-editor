@@ -105,7 +105,7 @@ export default class SingleController extends Controller {
 
   @action
   openAirtable() {
-    window.open(`${this.config.airtableUrl}${this.config.tableTubes}/${this.tube.id}`, 'airtable');
+    window.open(`${this.config.airtableUrl}${this.config.tableTubes}/${this.tube.id}`);
   }
 
   @action

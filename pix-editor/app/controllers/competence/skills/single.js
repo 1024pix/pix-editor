@@ -65,12 +65,12 @@ export default class SingleController extends Controller {
   @action
   previewPrototype() {
     const prototype = this.skill.productionPrototype;
-    window.open(prototype.preview, prototype.id);
+    window.open(prototype.preview);
   }
 
   @action
   openAirtable() {
-    window.open(this.config.airtableUrl + this.config.tableSkills + '/' + this.skill.id, 'airtable');
+    window.open(this.config.airtableUrl + this.config.tableSkills + '/' + this.skill.id);
   }
 
   @action
