@@ -6,11 +6,13 @@ chai.use(require('chai-sorted'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 const cache = require('../lib/infrastructure/cache');
+const nock = require('nock');
 
 afterEach(async () => {
   airtableBuilder.cleanAll();
   await databaseBuilder.clean();
   cache.flushAll();
+  nock.cleanAll();
   return sinon.restore();
 });
 
@@ -90,7 +92,6 @@ function streamToPromise(stream) {
 }
 
 // Nock
-const nock = require('nock');
 nock.disableNetConnect();
 
 // airtableBuilder

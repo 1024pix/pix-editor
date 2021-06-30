@@ -4,9 +4,6 @@ const pixApiClient = require('../../../lib/infrastructure/pix-api-client');
 const cache = require('../../../lib/infrastructure/cache');
 
 describe('Unit | Infrastructure | PIX API Client', () => {
-  afterEach(function() {
-    nock.cleanAll();
-  });
 
   describe('#request', () => {
     context('when token is in cache', () => {

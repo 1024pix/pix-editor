@@ -1,12 +1,7 @@
-const nock = require('nock');
 const { expect, domainBuilder, sinon } = require('../../../test-helper');
 const updatedRecordNotifier = require('../../../../lib/infrastructure/event-notifier/updated-record-notifier');
 
 describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () => {
-
-  afterEach(function() {
-    nock.cleanAll();
-  });
 
   describe('#Notify', () => {
 

@@ -4,10 +4,6 @@ const createServer = require('../../../server');
 
 describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => {
   describe('PATCH /api/airtable/changelog/Notes', () => {
-    afterEach(function() {
-      nock.cleanAll();
-    });
-
     it('should proxy patch changelog to airtable', async () => {
       //Given
       const user = databaseBuilder.factory.buildAdminUser();
