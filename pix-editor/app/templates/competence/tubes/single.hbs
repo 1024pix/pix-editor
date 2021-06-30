@@ -44,10 +44,10 @@
         </button>
       {{/if}}
       {{#if this.mayAccessAirtable}}
-        <button class="ui button item" {{on "click" this.openAirtable}} type="button">
+        <a class="ui button item" href={{this.airtableUrl}} target="_blank" rel="noopener noreferrer">
           <i class="table icon"></i>
           Airtable
-        </button>
+        </a>
       {{/if}}
     {{/if}}
   </div>

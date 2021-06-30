@@ -100,6 +100,15 @@ export default class SingleController extends Controller {
     }
   }
 
+  get previewUrl() {
+    return this.challenge.preview;
+  }
+
+
+  get airtableUrl() {
+    return `${this.config.airtableUrl}${this.config.tableChallenges}/${ this.challenge.id}`;
+  }
+
   @action
   setDisplayAlternativeInstructionsField(value) {
     this.displayAlternativeInstructionsField = value;
@@ -135,17 +144,6 @@ export default class SingleController extends Controller {
   @action
   close() {
     this.parentController.send('closeChildComponent');
-  }
-
-  @action
-  preview() {
-    const challenge = this.challenge;
-    window.open(challenge.preview, challenge.id);
-  }
-
-  @action
-  openAirtable() {
-    window.open(this.config.airtableUrl + this.config.tableChallenges + '/' + this.challenge.id, 'airtable');
   }
 
   @action

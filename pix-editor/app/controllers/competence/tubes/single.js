@@ -47,6 +47,10 @@ export default class SingleController extends Controller {
     return this.isEmptyMandatoryField;
   }
 
+  get airtableUrl() {
+    return `${this.config.airtableUrl}${this.config.tableTubes}/${this.tube.id}`;
+  }
+
   @action
   maximize() {
     this.parentController.maximizeLeft(true);
@@ -101,11 +105,6 @@ export default class SingleController extends Controller {
         this.loader.stop();
         this.notify.error('Erreur lors de la mise à jour du tube');
       });
-  }
-
-  @action
-  openAirtable() {
-    window.open(`${this.config.airtableUrl}${this.config.tableTubes}/${this.tube.id}`, 'airtable');
   }
 
   @action

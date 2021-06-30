@@ -62,15 +62,13 @@ export default class SingleController extends Controller {
     return this.access.mayDeleteSkill(this.skill);
   }
 
-  @action
-  previewPrototype() {
+  get previewPrototypeUrl() {
     const prototype = this.skill.productionPrototype;
-    window.open(prototype.preview, prototype.id);
+    return prototype.preview;
   }
 
-  @action
-  openAirtable() {
-    window.open(this.config.airtableUrl + this.config.tableSkills + '/' + this.skill.id, 'airtable');
+  get airtableUrl() {
+    return `${this.config.airtableUrl}${this.config.tableSkills}/${this.skill.id}`;
   }
 
   @action
