@@ -37,7 +37,7 @@ const buildChallenge = function buildChallenge({
   focusable,
 }) {
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
       'Consigne': instruction,

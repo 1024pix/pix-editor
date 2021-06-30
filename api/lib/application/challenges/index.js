@@ -31,6 +31,17 @@ exports.register = async function(server) {
         },
       },
     },
+    {
+      method: 'POST',
+      path: '/api/challenges',
+      config: {
+        handler: async function(request, h) {
+          const challenge = await challengeSerializer.deserialize(request.payload);
+          const createdChallenge = await challengeRepository.create(challenge);
+          return h.response(challengeSerializer.serialize(createdChallenge)).created();
+        },
+      },
+    },
   ]);
 };
 

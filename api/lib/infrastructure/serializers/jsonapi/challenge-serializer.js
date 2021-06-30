@@ -1,4 +1,4 @@
-const { Serializer } = require('jsonapi-serializer');
+const { Serializer, Deserializer } = require('jsonapi-serializer');
 
 module.exports = {
   serialize(challenge) {
@@ -38,5 +38,21 @@ module.exports = {
         'focusable',
       ],
     }).serialize(challenge);
-  }
+  },
+
+  deserialize(challenge) {
+    return new Promise((resolve, reject) => {
+      new Deserializer({
+        keyForAttribute: 'camelCase',
+        skills: {
+          valueForRelationship(skill) {
+            return skill.id;
+          },
+        },
+      }).deserialize(challenge, (err, challenges) => {
+        return err ? reject(err) : resolve(challenges);
+      });
+    });
+  },
+
 };

@@ -5,5 +5,9 @@ module.exports = {
     return (params && params.ids)
       ? challengesDataSource.filter(params)
       : challengesDataSource.list();
-  }
+  },
+
+  create(challenge) {
+    return challengesDataSource.create(challenge);
+  },
 };

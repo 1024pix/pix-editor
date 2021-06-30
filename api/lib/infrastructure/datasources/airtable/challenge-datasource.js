@@ -71,6 +71,7 @@ module.exports = datasource.extend({
       t3Status: airtableRecord.get('T3 - Distance d\'édition'),
       scoring: airtableRecord.get('Scoring'),
       status: airtableRecord.get('Statut'),
+      skills: airtableRecord.get('Acquix') || [],
       skillIds: airtableRecord.get('Acquix (id persistant)') || [],
       embedUrl: airtableRecord.get('Embed URL'),
       embedTitle: airtableRecord.get('Embed title'),
@@ -83,7 +84,6 @@ module.exports = datasource.extend({
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
       focusable: airtableRecord.get('Focalisée'),
       airtableId: airtableRecord.get('Record ID'),
-      skills: airtableRecord.get('Acquix') || [],
       genealogy: airtableRecord.get('Généalogie'),
       pedagogy: airtableRecord.get('Type péda'),
       author: airtableRecord.get('Auteur'),
@@ -96,6 +96,44 @@ module.exports = datasource.extend({
       spoil: airtableRecord.get('Spoil'),
       responsive: airtableRecord.get('Responsive'),
       area: airtableRecord.get('Géographie'),
+    };
+  },
+
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'id persistant': model.id,
+        'Consigne': model.instruction,
+        'Propositions': model.proposals,
+        'Type d\'épreuve': model.type,
+        'Bonnes réponses': model.solution,
+        'Bonnes réponses à afficher': model.solutionToDisplay,
+        'T1 - Espaces, casse & accents': model.t1Status,
+        'T2 - Ponctuation': model.t2Status,
+        'T3 - Distance d\'édition': model.t3Status,
+        'Statut': model.status,
+        'Embed URL': model.embedUrl,
+        'Embed title': model.embedTitle,
+        'Embed height': model.embedHeight,
+        'Timer': model.timer,
+        'Format': model.format,
+        'Réponse automatique': model.autoReply,
+        'Langues': _convertLocalesToLanguages(model.locales),
+        'Consigne alternative': model.alternativeInstruction,
+        'Focalisée': model.focusable,
+        'Acquix': model.skills,
+        'Généalogie': model.genealogy,
+        'Type péda': model.pedagogy,
+        'Auteur': model.author,
+        'Déclinable': model.declinable,
+        'Version prototype': model.version,
+        'Version déclinaison': model.alternativeVersion,
+        'Non voyant': model.accessibility1,
+        'Daltonien': model.accessibility2,
+        'Spoil': model.spoil,
+        'Responsive': model.responsive,
+        'Géographie': model.area,
+      }
     };
   },
 
@@ -122,5 +160,22 @@ function _convertLanguageToLocale(language) {
       return FRENCH_FRANCE;
     default:
       return FRENCH_SPOKEN;
+  }
+}
+
+function _convertLocalesToLanguages(locales) {
+  return locales.map((locale) => _convertLocaleToLanguage(locale));
+}
+
+function _convertLocaleToLanguage(locale) {
+  switch (locale) {
+    case ENGLISH_SPOKEN:
+      return 'Anglais';
+    case FRENCH_SPOKEN:
+      return 'Francophone';
+    case FRENCH_FRANCE:
+      return 'Franco Français';
+    default:
+      return 'Franco Français';
   }
 }
