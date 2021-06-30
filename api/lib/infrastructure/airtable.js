@@ -14,6 +14,14 @@ function findRecords(tableName, options = {}) {
     .all();
 }
 
+async function createRecord(tableName, body) {
+  const records = await _airtableClient()
+    .table(tableName)
+    .create([body]);
+  return records[0];
+}
+
 module.exports = {
   findRecords,
+  createRecord,
 };

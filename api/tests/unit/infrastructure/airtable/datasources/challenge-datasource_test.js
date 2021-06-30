@@ -49,6 +49,31 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
     });
   });
 
+  describe('#toAirTableObject', () => {
+
+    function _removeReadonlyFields(airtableChallenge) {
+      delete airtableChallenge.id;
+      delete airtableChallenge.fields.Preview;
+      delete airtableChallenge.fields['Record ID'];
+      delete airtableChallenge.fields['Compétences (via tube) (id persistant)'];
+      delete airtableChallenge.fields['Acquix (id persistant)'];
+      delete airtableChallenge.fields['Scoring'];
+    }
+
+    it('should serialize a challenge to an airtable object', () => {
+      // given
+      const createdChallenge = domainBuilder.buildChallenge({ locales: ['fr-fr'] });
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(createdChallenge);
+      _removeReadonlyFields(airtableChallenge);
+
+      // when
+      const challenge = challengeDatasource.toAirTableObject(createdChallenge);
+
+      // then
+      expect(challenge).to.deep.equal(airtableChallenge);
+    });
+  });
+
   describe('#filterById', () => {
     it('calls airtable', async () => {
       const challenge = airtableBuilder.factory.buildChallenge({

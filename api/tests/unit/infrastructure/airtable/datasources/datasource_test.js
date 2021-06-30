@@ -17,6 +17,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       tableName: record.tableName,
       fields: record.fields
     }),
+    toAirTableObject: (model) => ({
+      fields: {
+        'id persistant': model.id,
+      }
+    }),
   });
 
   describe('#list', () => {
@@ -67,6 +72,28 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
           filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})',
         }
       );
+    });
+  });
+
+  describe('#create', () => {
+
+    it('should create record', async () => {
+      // given
+      sinon.stub(airtable, 'createRecord').callsFake(async (tableName, options) => {
+        const returnValue = { id: 1, tableName, ...options };
+        return returnValue;
+      });
+
+      // when
+      const createdChallenge = await someDatasource.create({ id: 'created-record-id' });
+
+      // then
+      expect(createdChallenge).to.deep.equal({
+        id: 1,
+        tableName: 'Airtable_table',
+        fields: { 'id persistant': 'created-record-id' },
+      });
+
     });
   });
 });

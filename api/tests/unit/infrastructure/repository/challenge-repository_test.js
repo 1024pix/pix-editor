@@ -36,5 +36,20 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
+
+  describe('#create', () => {
+    it('should call the datasource', async() => {
+      // given
+      const createdChallenge = 'new challenge';
+      sinon.stub(challengesDataSource, 'create').resolves(createdChallenge);
+
+      // when
+      const challenge = await challengeRepository.create({ id: 'created-challenge-id' });
+
+      // then
+      expect(challengesDataSource.create).to.be.calledWith({ id: 'created-challenge-id' });
+      expect(challenge).to.deep.equal(createdChallenge);
+    });
+  });
 });
 
