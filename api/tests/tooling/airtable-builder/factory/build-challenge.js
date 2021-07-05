@@ -46,9 +46,9 @@ const buildChallenge = function buildChallenge({
       'Bonnes réponses': solution,
       'Bonnes réponses à afficher': solutionToDisplay,
       'Timer': timer,
-      'T1 - Espaces, casse & accents': t1Status,
-      'T2 - Ponctuation': t2Status,
-      'T3 - Distance d\'édition': t3Status,
+      'T1 - Espaces, casse & accents': _convertStatusFromBoolToString(t1Status),
+      'T2 - Ponctuation': _convertStatusFromBoolToString(t2Status),
+      'T3 - Distance d\'édition': _convertStatusFromBoolToString(t3Status),
       'Statut': status,
       'Scoring': scoring,
       'Embed URL': embedUrl,
@@ -78,6 +78,10 @@ const buildChallenge = function buildChallenge({
     },
   };
 };
+
+function _convertStatusFromBoolToString(status) {
+  return status ? 'Activé' : 'Désactivé';
+}
 
 function _convertLocalesToLanguages(locales) {
   return locales.map((locale) => {
