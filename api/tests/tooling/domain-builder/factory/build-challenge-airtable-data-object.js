@@ -1,5 +1,5 @@
 module.exports = function buildChallengeAirtableDataObject({
-  id = 'recwWzTquPlvIl4So',
+  id = 'persistant id',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',
   proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
@@ -34,7 +34,7 @@ module.exports = function buildChallengeAirtableDataObject({
   spoil = 'Non Sp',
   responsive = 'non',
   area = 'France',
-  airtableId = 'recwWzTquPlvIl4So',
+  airtableId = 'airtable id',
 } = {}) {
 
   return {
