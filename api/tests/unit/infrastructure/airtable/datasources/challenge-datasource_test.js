@@ -61,6 +61,41 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(challenge.t2Status).to.be.false;
       expect(challenge.t3Status).to.be.true;
     });
+
+    it('should convert language to locale', () => {
+      // given
+      const expectedLocales = ['de', 'en', 'es', 'it', 'fr', 'fr-fr', 'pt'];
+      const languages = ['Allemand', 'Anglais', 'Espagnol', 'Italie', 'Francophone', 'Franco Français', 'Portugais'];
+      const challengeRecord = new AirtableRecord('Epreuves', 1, {
+        fields: {
+          Langues: languages,
+        },
+      });
+
+      // when
+      const challenge = challengeDatasource.fromAirTableObject(challengeRecord);
+
+      // then
+      expect(challenge.locales).to.deep.equal(expectedLocales);
+    });
+
+    it('throw error when the language is unknown', () => {
+      // given
+      const languages = ['Belge'];
+      const challengeRecord = new AirtableRecord('Epreuves', 1, {
+        fields: {
+          Langues: languages,
+        },
+      });
+
+      // when
+      const toThrow = () => {
+        return challengeDatasource.fromAirTableObject(challengeRecord);
+      };
+
+      // then
+      expect(toThrow).to.throw();
+    });
   });
 
   describe('#toAirTableObject', () => {
@@ -98,6 +133,35 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(challenge.fields['T1 - Espaces, casse & accents']).to.equal('Activé');
       expect(challenge.fields['T2 - Ponctuation']).to.equal('Désactivé');
       expect(challenge.fields['T3 - Distance d\'édition']).to.equal('Désactivé');
+    });
+
+    it('should convert locale to language', () => {
+      // given
+      const locales = ['de', 'en', 'es', 'it', 'fr', 'fr-fr', 'pt'];
+
+      const expectedLanguages = ['Allemand', 'Anglais', 'Espagnol', 'Italie', 'Francophone', 'Franco Français', 'Portugais'];
+      const createdChallenge = domainBuilder.buildChallenge({ locales });
+
+      // when
+      const challenge = challengeDatasource.toAirTableObject(createdChallenge);
+
+      // then
+      expect(challenge.fields.Langues).to.deep.equal(expectedLanguages);
+    });
+
+    it('throw an exception when an unexpected locale appear', () => {
+      // given
+      const locales = ['fr-be'];
+
+      const createdChallenge = domainBuilder.buildChallenge({ locales });
+
+      // when
+      const toThrow = function() {
+        return challengeDatasource.toAirTableObject(createdChallenge);
+      };
+
+      // then
+      expect(toThrow).to.throw();
     });
   });
 
