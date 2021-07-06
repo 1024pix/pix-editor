@@ -15,9 +15,6 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       await databaseBuilder.commit();
 
     });
-    afterEach(function() {
-      nock.cleanAll();
-    });
 
     it('should refresh cache of updated record in pix api', async () => {
       // Given
@@ -130,9 +127,6 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
 
-    });
-    afterEach(function() {
-      nock.cleanAll();
     });
 
     it('should refresh cache of updated record in pix api', async () => {

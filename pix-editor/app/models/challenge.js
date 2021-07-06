@@ -1,5 +1,6 @@
 import { inject as service } from '@ember/service';
 import Model, { attr, hasMany } from '@ember-data/model';
+import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeModel extends Model {
 
@@ -33,7 +34,6 @@ export default class ChallengeModel extends Model {
   @attr responsive;
   @attr locales;
   @attr area;
-  @attr({ readOnly:true }) _definedBaseName;
   @attr autoReply;
 
   @hasMany('skill') skills;
@@ -43,6 +43,8 @@ export default class ChallengeModel extends Model {
   @service config;
   @service idGenerator;
 
+  @tracked _definedBaseName;
+  
   get illustration() {
     return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
   }

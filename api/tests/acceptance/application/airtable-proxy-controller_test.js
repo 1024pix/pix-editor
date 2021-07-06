@@ -18,10 +18,6 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
       return user;
     }
 
-    afterEach(function() {
-      nock.cleanAll();
-    });
-
     describe('nominal cases', () => {
 
       it('should proxy request to airtable', async () => {
