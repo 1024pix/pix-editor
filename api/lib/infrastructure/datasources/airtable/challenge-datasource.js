@@ -1,6 +1,17 @@
 const datasource = require('./datasource');
 const airtable = require('../../airtable');
-const { ENGLISH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN } = require('../../../domain/constants').LOCALE;
+const { ITALIAN_SPOKEN, ENGLISH_SPOKEN, DEUTSCH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN, PORTUGUESE_SPOKEN, SPANISH_SPOKEN } = require('../../../domain/constants').LOCALE;
+const _ = require('lodash');
+
+const localeToLanguageMap = Object.freeze({
+  [DEUTSCH_SPOKEN]: 'Allemand',
+  [ENGLISH_SPOKEN]: 'Anglais',
+  [FRENCH_FRANCE]: 'Franco Français',
+  [FRENCH_SPOKEN]: 'Francophone',
+  [ITALIAN_SPOKEN]: 'Italie',
+  [SPANISH_SPOKEN]: 'Espagnol',
+  [PORTUGUESE_SPOKEN]: 'Portugais',
+});
 
 module.exports = datasource.extend({
 
@@ -162,16 +173,12 @@ function _convertLanguagesToLocales(languages) {
 }
 
 function _convertLanguageToLocale(language) {
-  switch (language) {
-    case 'Anglais':
-      return ENGLISH_SPOKEN;
-    case 'Francophone':
-      return FRENCH_SPOKEN;
-    case 'Franco Français':
-      return FRENCH_FRANCE;
-    default:
-      return FRENCH_SPOKEN;
+  const locale = _.findKey(localeToLanguageMap, (lang) => language === lang);
+  if (!locale) {
+    throw new Error('Langue inconnue');
   }
+
+  return locale;
 }
 
 function _convertLocalesToLanguages(locales) {
@@ -179,14 +186,10 @@ function _convertLocalesToLanguages(locales) {
 }
 
 function _convertLocaleToLanguage(locale) {
-  switch (locale) {
-    case ENGLISH_SPOKEN:
-      return 'Anglais';
-    case FRENCH_SPOKEN:
-      return 'Francophone';
-    case FRENCH_FRANCE:
-      return 'Franco Français';
-    default:
-      return 'Franco Français';
+  const language = localeToLanguageMap[locale];
+  if (!language) {
+    throw new Error('Locale inconnue');
   }
+
+  return language;
 }
