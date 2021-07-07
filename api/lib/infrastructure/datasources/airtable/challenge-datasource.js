@@ -1,17 +1,7 @@
 const datasource = require('./datasource');
 const airtable = require('../../airtable');
-const { ITALIAN_SPOKEN, ENGLISH_SPOKEN, DEUTSCH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN, PORTUGUESE_SPOKEN, SPANISH_SPOKEN } = require('../../../domain/constants').LOCALE;
+const { LOCALE_TO_LANGUAGE_MAP } = require('../../../domain/constants');
 const _ = require('lodash');
-
-const localeToLanguageMap = Object.freeze({
-  [DEUTSCH_SPOKEN]: 'Allemand',
-  [ENGLISH_SPOKEN]: 'Anglais',
-  [FRENCH_FRANCE]: 'Franco Français',
-  [FRENCH_SPOKEN]: 'Francophone',
-  [ITALIAN_SPOKEN]: 'Italie',
-  [SPANISH_SPOKEN]: 'Espagnol',
-  [PORTUGUESE_SPOKEN]: 'Portugais',
-});
 
 module.exports = datasource.extend({
 
@@ -173,7 +163,7 @@ function _convertLanguagesToLocales(languages) {
 }
 
 function _convertLanguageToLocale(language) {
-  const locale = _.findKey(localeToLanguageMap, (lang) => language === lang);
+  const locale = _.findKey(LOCALE_TO_LANGUAGE_MAP, (lang) => language === lang);
   if (!locale) {
     throw new Error('Langue inconnue');
   }
@@ -186,7 +176,7 @@ function _convertLocalesToLanguages(locales) {
 }
 
 function _convertLocaleToLanguage(locale) {
-  const language = localeToLanguageMap[locale];
+  const language = LOCALE_TO_LANGUAGE_MAP[locale];
   if (!language) {
     throw new Error('Locale inconnue');
   }
