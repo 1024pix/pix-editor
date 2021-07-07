@@ -150,11 +150,11 @@
       <div class="two fields">
           <div class="field">
             <Field::Select @title="Langue(s)"
-                           @value={{@challenge.locales}}
+                           @value={{this.languages}}
                            @edition={{@edition}}
                            @multiple={{true}}
                            @options={{this.options.locales}}
-                           @setValue={{fn (mut @challenge.locales)}}/>
+                           @setValue={{this.setLocales}}/>
           </div>
           <div class="field">
             <Field::Select @title="Géographie"
