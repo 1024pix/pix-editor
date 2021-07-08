@@ -7,4 +7,5 @@ export default class ConfigModel extends Model {
   @attr tableTubes;
   @attr storagePost;
   @attr storageBucket;
+  @attr localeToLanguageMap;
 }

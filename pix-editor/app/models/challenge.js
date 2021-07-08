@@ -32,7 +32,7 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
-  @attr locales;
+  @attr ({ defaultValue: function() { return []; } }) locales;
   @attr area;
   @attr autoReply;
 
