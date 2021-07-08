@@ -27,6 +27,12 @@ const _DatasourcePrototype = {
     const airtableRawObject = await airtable.createRecord(this.tableName, airtableRequestBody);
     return this.fromAirTableObject(airtableRawObject);
   },
+
+  async update(model) {
+    const airtableRequestBody = this.toAirTableObject(model);
+    const airtableRawObject = await airtable.updateRecord(this.tableName, airtableRequestBody);
+    return this.fromAirTableObject(airtableRawObject);
+  },
 };
 
 module.exports = {

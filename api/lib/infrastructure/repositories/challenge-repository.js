@@ -10,4 +10,8 @@ module.exports = {
   create(challenge) {
     return challengesDataSource.create(challenge);
   },
+
+  update(challenge) {
+    return challengesDataSource.update(challenge);
+  },
 };

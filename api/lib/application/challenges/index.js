@@ -42,6 +42,17 @@ exports.register = async function(server) {
         },
       },
     },
+    {
+      method: 'PATCH',
+      path: '/api/challenges/{id}',
+      config: {
+        handler: async function(request, h) {
+          const challenge = await challengeSerializer.deserialize(request.payload);
+          const updatedChallenge = await challengeRepository.update(challenge);
+          return h.response(challengeSerializer.serialize(updatedChallenge));
+        },
+      },
+    },
   ]);
 };
 

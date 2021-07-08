@@ -21,7 +21,15 @@ async function createRecord(tableName, body) {
   return records[0];
 }
 
+async function updateRecord(tableName, body) {
+  const records = await _airtableClient()
+    .table(tableName)
+    .update([body]);
+  return records[0];
+}
+
 module.exports = {
   findRecords,
   createRecord,
+  updateRecord,
 };
