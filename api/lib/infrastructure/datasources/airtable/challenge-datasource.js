@@ -101,7 +101,7 @@ module.exports = datasource.extend({
   },
 
   toAirTableObject(model) {
-    return {
+    const body = {
       fields: {
         'id persistant': model.id,
         'Consigne': model.instruction,
@@ -136,6 +136,10 @@ module.exports = datasource.extend({
         'Géographie': model.area,
       }
     };
+    if (model.airtableId) {
+      body.id = model.airtableId;
+    }
+    return body;
   },
 
   async filterById(id) {
