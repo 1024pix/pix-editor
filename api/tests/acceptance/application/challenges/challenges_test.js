@@ -271,6 +271,70 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
     });
 
+    it('should search challenges', async () => {
+      // Given
+      const airtableCall = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Epreuves')
+        .query({
+          fields: {
+            '': [
+              'id persistant',
+              'Compétences (via tube) (id persistant)',
+              'Timer',
+              'Consigne',
+              'Propositions',
+              'Type d\'épreuve',
+              'Bonnes réponses',
+              'Bonnes réponses à afficher',
+              'T1 - Espaces, casse & accents',
+              'T2 - Ponctuation',
+              'T3 - Distance d\'édition',
+              'Scoring',
+              'Statut',
+              'Acquix (id persistant)',
+              'Embed URL',
+              'Embed title',
+              'Embed height',
+              'Format',
+              'Réponse automatique',
+              'Langues',
+              'Consigne alternative',
+              'Focalisée',
+              'Record ID',
+              'Acquix',
+              'Généalogie',
+              'Type péda',
+              'Auteur',
+              'Déclinable',
+              'Preview',
+              'Version prototype',
+              'Version déclinaison',
+              'Non voyant',
+              'Daltonien',
+              'Spoil',
+              'Responsive',
+              'Géographie'
+            ],
+          },
+          filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')',
+        })
+        .reply(200, {
+          records: []
+        });
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/challenges?filter[search]=query term',
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // Then
+      expect(airtableCall.isDone()).to.be.true;
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal({ data: [] });
+    });
   });
 
   describe('GET /challenges/:id', () => {

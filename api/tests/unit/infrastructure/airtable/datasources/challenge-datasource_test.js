@@ -183,4 +183,36 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(newChallenge.id).to.equal('recChallenge');
     });
   });
+
+  describe('#search', () => {
+    it('should search challenges with a query',  async () => {
+      const challenge = airtableBuilder.factory.buildChallenge({
+        id: 'recChallenge',
+        skillIds: [],
+        skills: [],
+        attachments: [],
+      });
+      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+
+      sinon.stub(airtable, 'findRecords')
+        .resolves([ challengeRecord ]);
+
+      challengeDatasource.usedFields = Symbol('used fields');
+      const challenges = await challengeDatasource.search('query term');
+
+      expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+      expect(challenges.length).to.equal(1);
+      expect(challenges[0].id).to.equal('recChallenge');
+    });
+
+    it('should escape the query', async () => {
+      sinon.stub(airtable, 'findRecords')
+        .resolves([]);
+
+      challengeDatasource.usedFields = Symbol('used fields');
+      await challengeDatasource.search('query \' term');
+
+      expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query \\\' term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+    });
+  });
 });
