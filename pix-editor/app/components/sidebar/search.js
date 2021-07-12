@@ -29,7 +29,7 @@ export default class SidebarSearchComponent extends Component {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
         filter: {
-          id: [query],
+          ids: [query],
         },
       })
         .then(challenges => {
@@ -42,7 +42,7 @@ export default class SidebarSearchComponent extends Component {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
         filter: {
-          filterByFormula: `AND(FIND('${query.toLowerCase().replace(/'/g, '\\\'')}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`,
+          search: query.toLowerCase(),
         },
         page: {
           size: 20,

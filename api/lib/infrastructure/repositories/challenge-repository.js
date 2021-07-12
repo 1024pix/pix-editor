@@ -2,9 +2,13 @@ const challengesDataSource = require('../datasources/airtable/challenge-datasour
 
 module.exports = {
   async filter(params) {
-    return (params && params.ids)
-      ? challengesDataSource.filter(params)
-      : challengesDataSource.list();
+    if (params && params.ids) {
+      return challengesDataSource.filter(params);
+    }
+    if (params && params.search) {
+      return challengesDataSource.search(params.search);
+    }
+    return challengesDataSource.list();
   },
 
   create(challenge) {
