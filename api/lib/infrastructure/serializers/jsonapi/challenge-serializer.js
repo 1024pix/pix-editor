@@ -2,6 +2,7 @@ const { Serializer, Deserializer } = require('jsonapi-serializer');
 
 module.exports = {
   serialize(challenge) {
+
     return new Serializer('challenges', {
       attributes: [
         'airtableId',
@@ -36,7 +37,13 @@ module.exports = {
         'area',
         'autoReply',
         'focusable',
+        'skills',
       ],
+      skills: {
+        ref(challenge, skillId) {
+          return skillId;
+        }
+      },
     }).serialize(challenge);
   },
 
