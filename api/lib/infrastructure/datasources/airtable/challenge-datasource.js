@@ -45,6 +45,8 @@ module.exports = datasource.extend({
     'Spoil',
     'Responsive',
     'Géographie',
+    'Difficulté calculé',
+    'Discrimination calculé',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -96,6 +98,8 @@ module.exports = datasource.extend({
       spoil: airtableRecord.get('Spoil'),
       responsive: airtableRecord.get('Responsive'),
       area: airtableRecord.get('Géographie'),
+      delta: parseFloat(airtableRecord.get('Difficulté calculé')),
+      alpha: parseFloat(airtableRecord.get('Discrimination calculé')),
     };
   },
 

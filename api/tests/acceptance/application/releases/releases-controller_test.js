@@ -87,6 +87,8 @@ function mockCurrentContent() {
       locales: ['fr-fr'],
       alternativeInstruction: 'Consigne alternative',
       focusable: false,
+      delta: 0.5,
+      alpha: 0.9,
     }],
     tutorials: [{
       id: 'recTutorial0',

@@ -35,6 +35,8 @@ const buildChallenge = function buildChallenge({
   responsive,
   area,
   focusable,
+  delta,
+  alpha,
 }) {
   return {
     id,
@@ -75,6 +77,8 @@ const buildChallenge = function buildChallenge({
       'Responsive': responsive,
       'Géographie': area,
       'Focalisée': focusable,
+      'Difficulté calculé': delta ? delta.toString() : '',
+      'Discrimination calculé': alpha ? alpha.toString() : '',
     },
   };
 };
