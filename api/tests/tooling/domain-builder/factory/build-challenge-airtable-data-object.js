@@ -1,14 +1,14 @@
 module.exports = function buildChallengeAirtableDataObject({
-  id = 'recwWzTquPlvIl4So',
+  id = 'persistant id',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',
   proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
   type = 'QCM',
   solution = '1, 5',
   solutionToDisplay = '1',
-  t1Status = 'Activé',
-  t2Status = 'Désactivé',
-  t3Status = 'Activé',
+  t1Status = true,
+  t2Status = false,
+  t3Status = true,
   scoring = '1: @outilsTexte2\n2: @outilsTexte4',
   status = 'validé',
   skillIds = ['recUDrCWD76fp5MsE'],
@@ -34,7 +34,7 @@ module.exports = function buildChallengeAirtableDataObject({
   spoil = 'Non Sp',
   responsive = 'non',
   area = 'France',
-  airtableId = 'recwWzTquPlvIl4So',
+  airtableId = 'airtable id',
 } = {}) {
 
   return {

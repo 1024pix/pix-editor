@@ -1,4 +1,5 @@
 const path = require('path');
+const { LOCALE_TO_LANGUAGE_MAP } = require('./domain/constants');
 
 function isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
@@ -47,6 +48,7 @@ module.exports = (function() {
       tableTubes: process.env.TABLE_TUBES,
       storagePost: process.env.STORAGE_POST,
       storageBucket: process.env.STORAGE_BUCKET,
+      localeToLanguageMap: LOCALE_TO_LANGUAGE_MAP,
     },
 
     storage: {
@@ -76,6 +78,7 @@ module.exports = (function() {
       asyncStackTraceEnabled: isFeatureEnabled(process.env.KNEX_ASYNC_STACKTRACE_ENABLED),
       sslEnabled: isFeatureEnabled(process.env.DATABASE_SSL_ENABLED),
     },
+
   };
 
   if (process.env.NODE_ENV === 'test') {

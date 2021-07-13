@@ -35,7 +35,7 @@ module('Acceptance | Search', function(hooks) {
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '  recPixChallenge1  ');
+    await fillIn('[data-test-sidebar-search] input', '  recChallenge1  ');
     await waitUntil(function() {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });

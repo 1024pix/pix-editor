@@ -110,40 +110,27 @@ module('unit | Component | form/challenge', function(hooks) {
     assert.ok(createRecordStub.calledWith('attachment', expectedAttachment));
   });
 
-  test('it should remove attachment', async function(assert) {
+  test('it should set locales properly', async function(assert) {
     // given
-    const deleteRecordStub = sinon.stub();
-    const deleteRecordStub2 = sinon.stub();
+    const input = [
+      { label: 'Anglais', value: 'en' },
+      { label: 'Franco Français', value: 'fr-fr' },
+      { label: 'Francophone', value: 'fr' }
+    ];
 
-    const attachment = {
-      filename: 'file_name.doc',
-      size: 123,
-      mimeType: 'application/msdoc',
-      type: 'attachment',
-      deleteRecord: deleteRecordStub,
-    };
+    const expected = ['en','fr-fr','fr'];
 
     const challenge = {
       id: 'recchallenge_1',
       name: 'challenge',
-      files: [
-        attachment,
-        {
-          filename: 'file_name2.doc',
-          size: 123,
-          mimeType: 'application/msdoc',
-          type: 'attachment',
-          deleteRecord: deleteRecordStub2,
-        }
-      ],
+      locales: []
     };
     component.args.challenge = challenge;
 
     // when
-    await component.removeAttachment(attachment);
+    component.setLocales(input);
 
     // then
-    assert.ok(deleteRecordStub.calledOnce);
-    assert.ok(deleteRecordStub2.notCalled);
+    assert.deepEqual(challenge.locales, expected);
   });
 });

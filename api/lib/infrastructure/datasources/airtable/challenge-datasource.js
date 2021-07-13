@@ -1,6 +1,7 @@
 const datasource = require('./datasource');
 const airtable = require('../../airtable');
-const { ENGLISH_SPOKEN, FRENCH_FRANCE, FRENCH_SPOKEN } = require('../../../domain/constants').LOCALE;
+const { LOCALE_TO_LANGUAGE_MAP } = require('../../../domain/constants');
+const _ = require('lodash');
 
 module.exports = datasource.extend({
 
@@ -66,11 +67,12 @@ module.exports = datasource.extend({
       type: airtableRecord.get('Type d\'épreuve'),
       solution: airtableRecord.get('Bonnes réponses'),
       solutionToDisplay: airtableRecord.get('Bonnes réponses à afficher'),
-      t1Status: airtableRecord.get('T1 - Espaces, casse & accents'),
-      t2Status: airtableRecord.get('T2 - Ponctuation'),
-      t3Status: airtableRecord.get('T3 - Distance d\'édition'),
+      t1Status: _convertAirtableValueToBoolean(airtableRecord.get('T1 - Espaces, casse & accents')),
+      t2Status: _convertAirtableValueToBoolean(airtableRecord.get('T2 - Ponctuation')),
+      t3Status: _convertAirtableValueToBoolean(airtableRecord.get('T3 - Distance d\'édition')),
       scoring: airtableRecord.get('Scoring'),
       status: airtableRecord.get('Statut'),
+      skills: airtableRecord.get('Acquix') || [],
       skillIds: airtableRecord.get('Acquix (id persistant)') || [],
       embedUrl: airtableRecord.get('Embed URL'),
       embedTitle: airtableRecord.get('Embed title'),
@@ -83,7 +85,6 @@ module.exports = datasource.extend({
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
       focusable: airtableRecord.get('Focalisée'),
       airtableId: airtableRecord.get('Record ID'),
-      skills: airtableRecord.get('Acquix') || [],
       genealogy: airtableRecord.get('Généalogie'),
       pedagogy: airtableRecord.get('Type péda'),
       author: airtableRecord.get('Auteur'),
@@ -99,6 +100,60 @@ module.exports = datasource.extend({
     };
   },
 
+  toAirTableObject(model) {
+    const body = {
+      fields: {
+        'id persistant': model.id,
+        'Consigne': model.instruction,
+        'Propositions': model.proposals,
+        'Type d\'épreuve': model.type,
+        'Bonnes réponses': model.solution,
+        'Bonnes réponses à afficher': model.solutionToDisplay,
+        'T1 - Espaces, casse & accents': _convertBooleanToAirtableValue(model.t1Status),
+        'T2 - Ponctuation': _convertBooleanToAirtableValue(model.t2Status),
+        'T3 - Distance d\'édition': _convertBooleanToAirtableValue(model.t3Status),
+        'Statut': model.status,
+        'Embed URL': model.embedUrl,
+        'Embed title': model.embedTitle,
+        'Embed height': model.embedHeight,
+        'Timer': model.timer,
+        'Format': model.format,
+        'Réponse automatique': model.autoReply,
+        'Langues': _convertLocalesToLanguages(model.locales),
+        'Consigne alternative': model.alternativeInstruction,
+        'Focalisée': model.focusable,
+        'Acquix': model.skills,
+        'Généalogie': model.genealogy,
+        'Type péda': model.pedagogy,
+        'Auteur': model.author,
+        'Déclinable': model.declinable,
+        'Version prototype': model.version,
+        'Version déclinaison': model.alternativeVersion,
+        'Non voyant': model.accessibility1,
+        'Daltonien': model.accessibility2,
+        'Spoil': model.spoil,
+        'Responsive': model.responsive,
+        'Géographie': model.area,
+      }
+    };
+    if (model.airtableId) {
+      body.id = model.airtableId;
+    }
+    return body;
+  },
+
+  async search(params) {
+    const options = {
+      fields: this.usedFields,
+      filterByFormula : `AND(FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`
+    };
+    if (params.page && params.page.size) {
+      options.maxRecords = params.page.size;
+    }
+    const airtableRawObjects = await airtable.findRecords(this.tableName, options);
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
   async filterById(id) {
     const airtableRawObjects = await airtable.findRecords(this.tableName, {
       filterByFormula : `{id persistant} = '${id}'`,
@@ -108,19 +163,43 @@ module.exports = datasource.extend({
   }
 });
 
+function _escapeQuery(value) {
+  return value.replace(/'/g, '\\\'');
+}
+
+function _convertBooleanToAirtableValue(value) {
+  if (value) {
+    return 'Activé';
+  }
+  return 'Désactivé';
+}
+
+function _convertAirtableValueToBoolean(value) {
+  return value === 'Activé';
+}
+
 function _convertLanguagesToLocales(languages) {
   return languages.map((language) => _convertLanguageToLocale(language));
 }
 
 function _convertLanguageToLocale(language) {
-  switch (language) {
-    case 'Anglais':
-      return ENGLISH_SPOKEN;
-    case 'Francophone':
-      return FRENCH_SPOKEN;
-    case 'Franco Français':
-      return FRENCH_FRANCE;
-    default:
-      return FRENCH_SPOKEN;
+  const locale = _.findKey(LOCALE_TO_LANGUAGE_MAP, (lang) => language === lang);
+  if (!locale) {
+    throw new Error('Langue inconnue');
   }
+
+  return locale;
+}
+
+function _convertLocalesToLanguages(locales) {
+  return locales.map((locale) => _convertLocaleToLanguage(locale));
+}
+
+function _convertLocaleToLanguage(locale) {
+  const language = LOCALE_TO_LANGUAGE_MAP[locale];
+  if (!language) {
+    throw new Error('Locale inconnue');
+  }
+
+  return language;
 }

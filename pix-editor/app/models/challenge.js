@@ -32,7 +32,7 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
-  @attr locales;
+  @attr ({ defaultValue: function() { return []; } }) locales;
   @attr area;
   @attr autoReply;
 
@@ -231,7 +231,7 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = ['skills', 'author'];
+    const ignoredFields = ['skills', 'author', 'airtableId'];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -249,7 +249,7 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = ['skills'];
+    const ignoredFields = ['skills', 'airtableId'];
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';

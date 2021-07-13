@@ -15,6 +15,7 @@ module.exports = {
         'storageKey',
         'storageAuth',
         'storageBucket',
+        'localeToLanguageMap',
       ],
     }).serialize(config);
   }
