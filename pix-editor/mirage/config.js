@@ -143,38 +143,6 @@ function routes() {
     return _serializeModel(createdSkill, 'skill');
   });
 
-  this.get('/airtable/content/Epreuves/:id', (schema, request) => {
-    const challenge = schema.challenges.find(request.params.id);
-    return _serializeModel(challenge, 'challenge');
-  });
-
-  this.get('/airtable/content/Epreuves', (schema, request) => {
-    const findPersistentId = /AND\(FIND\('(.+)', \{id persistant\}\)\)/.exec(request.queryParams.filterByFormula);
-    let records = null;
-    if (findPersistentId && request.queryParams.maxRecords === '1') {
-      const challenge = schema.challenges.find(findPersistentId[1]);
-      records = [_serializeModel(challenge, 'challenge')];
-    } else {
-      records = schema.challenges.all().models.map(challenge => {
-        return _serializeModel(challenge, 'challenge');
-      });
-    }
-    return _response(request, { records });
-  });
-
-  this.post('/airtable/content/Epreuves', (schema, request) => {
-    const challengePayload = JSON.parse(request.requestBody);
-    const challenge = _deserializePayload(challengePayload, 'challenge');
-    const createdChallenge = schema.challenges.create(challenge);
-
-    challengePayload.fields['Acquix'].forEach(skillId => {
-      const skill = schema.skills.find(skillId);
-      skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
-      skill.save();
-    });
-    return _serializeModel(createdChallenge, 'challenge');
-  });
-
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
     const attachment = schema.attachments.find(request.params.id);
     return _serializeModel(attachment, 'attachment');
@@ -194,11 +162,6 @@ function routes() {
     };
   });
 
-  this.patch('/airtable/content/Epreuves/:id', (schema, request) => {
-    const challenge = schema.challenges.findBy({ airtableId: request.params.id });
-    return _serializeModel(challenge, 'challenge');
-  });
-
   this.post('/airtable/changelog/Notes', (schema, request) => {
     const notePayload = JSON.parse(request.requestBody);
     const note = _deserializePayload(notePayload, 'note');
@@ -208,6 +171,38 @@ function routes() {
 
   this.post('/file-storage-token', () => {
     return { token: 'token' };
+  });
+
+  this.get('/challenges', (schema, request) => {
+    const ids = request.queryParams['filter[ids]'];
+    let records = null;
+
+    if (ids) {
+      records = schema.challenges.find(ids);
+    } else {
+      records = schema.challenges.all();
+    }
+    return records;
+  });
+
+  this.get('/challenges/:id', (schema, request) => {
+    return schema.challenges.find(request.params.id);
+  });
+
+  this.post('/challenges', (schema, request) => {
+    const challenge = JSON.parse(request.requestBody);
+    const createdChallenge = schema.challenges.create(challenge);
+
+    challenge.data.relationships.skills.data.forEach(({ id: skillId }) => {
+      const skill = schema.skills.find(skillId);
+      skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
+      skill.save();
+    });
+    return createdChallenge;
+  });
+
+  this.patch('/challenges/:id', (schema, request) => {
+    return schema.challenges.find(request.params.id);
   });
 }
 

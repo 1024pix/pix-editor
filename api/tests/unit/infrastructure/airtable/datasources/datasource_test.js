@@ -10,12 +10,13 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     tableName: 'Airtable_table',
 
-    usedFields: ['Shi', 'Foo', 'Bar'],
+    usedFields: ['Shi', 'Foo', 'Me'],
 
-    fromAirTableObject: (record) => ({
-      id: record.id,
-      tableName: record.tableName,
-      fields: record.fields
+    fromAirTableObject: (record) => ({ ...record }),
+    toAirTableObject: (model) => ({
+      fields: {
+        'id persistant': model.id,
+      }
     }),
   });
 
@@ -32,7 +33,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await someDatasource.list();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Bar'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
     });
 
     it('should correctly manage the `this` context', async () => {
@@ -43,7 +44,60 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await unboundList();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Bar'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+    });
+
+    it('should get list with limit', async () => {
+      // when
+      const record = await someDatasource.list({ page: { size: 20 } });
+      // then
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], maxRecords: 20, sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+
+    });
+  });
+
+  describe('#filter', () => {
+
+    it('should fetch records of a given type and given ids', async () => {
+      // given
+      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, options) => {
+        const returnValue = [{ id: 1, tableName, ...options }];
+        return returnValue;
+      });
+
+      // when
+      await someDatasource.filter({ filter: { ids: ['1', '2'] } });
+
+      // then
+      expect(airtable.findRecords).to.have.been.calledWith(
+        'Airtable_table',
+        {
+          fields: ['Shi', 'Foo', 'Me'],
+          filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})',
+        }
+      );
+    });
+  });
+
+  describe('#create', () => {
+
+    it('should create record', async () => {
+      // given
+      sinon.stub(airtable, 'createRecord').callsFake(async (tableName, options) => {
+        const returnValue = { id: 1, tableName, ...options };
+        return returnValue;
+      });
+
+      // when
+      const createdChallenge = await someDatasource.create({ id: 'created-record-id' });
+
+      // then
+      expect(createdChallenge).to.deep.equal({
+        id: 1,
+        tableName: 'Airtable_table',
+        fields: { 'id persistant': 'created-record-id' },
+      });
+
     });
   });
 });

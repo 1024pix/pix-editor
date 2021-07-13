@@ -15,6 +15,7 @@ export default class ConfigService extends Service {
   @tracked tableTubes;
   @tracked storagePost;
   @tracked storageBucket;
+  @tracked localeToLanguageMap;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
@@ -28,5 +29,6 @@ export default class ConfigService extends Service {
     this.tableTubes = config.tableTubes;
     this.storagePost = config.storagePost;
     this.storageBucket = config.storageBucket;
+    this.localeToLanguageMap = config.localeToLanguageMap;
   }
 }

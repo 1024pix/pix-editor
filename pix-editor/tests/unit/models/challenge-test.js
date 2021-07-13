@@ -54,6 +54,7 @@ module('Unit | Model | challenge', function(hooks) {
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
       assert.equal(clonedChallenge.id, 'generatedId');
+      assert.equal(clonedChallenge.airtableId, null);
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.author, 'NEW');
       assert.equal(clonedChallenge.version, null);
@@ -103,6 +104,7 @@ module('Unit | Model | challenge', function(hooks) {
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
       assert.equal(clonedChallenge.id, 'generatedId');
+      assert.equal(clonedChallenge.airtableId, null);
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.skills.length, 0);
     });

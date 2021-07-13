@@ -15,7 +15,6 @@ export default Factory.extend({
   declinable: 'declinable',
   version: 'version',
   genealogy: 'Prototype 1',
-  skillNames: 'skillNames',
   status: 'validé',
   preview: 'preview',
   airtableId: undefined,
