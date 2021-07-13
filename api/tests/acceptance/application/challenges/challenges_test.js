@@ -12,6 +12,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
     delete body.fields['Compétences (via tube) (id persistant)'];
     delete body.fields['Acquix (id persistant)'];
     delete body.fields['Scoring'];
+    delete body.fields['Discrimination calculée'];
+    delete body.fields['Difficulté calculée'];
     if (deleteId) {
       delete body.id;
     }
@@ -71,7 +73,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           maxRecords: 100,
@@ -189,7 +193,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})'
@@ -357,7 +363,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           maxRecords: 100,
@@ -422,7 +430,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')',
@@ -498,7 +508,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           filterByFormula: 'OR(\'challengeId\' = {id persistant})'
@@ -614,7 +626,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Daltonien',
               'Spoil',
               'Responsive',
-              'Géographie'
+              'Géographie',
+              'Difficulté calculée',
+              'Discrimination calculée',
             ],
           },
           filterByFormula: 'OR(\'challengeId2\' = {id persistant})'

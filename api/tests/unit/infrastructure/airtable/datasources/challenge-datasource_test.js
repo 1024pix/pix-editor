@@ -106,6 +106,8 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       delete airtableChallenge.fields['Compétences (via tube) (id persistant)'];
       delete airtableChallenge.fields['Acquix (id persistant)'];
       delete airtableChallenge.fields['Scoring'];
+      delete airtableChallenge.fields['Difficulté calculée'];
+      delete airtableChallenge.fields['Discrimination calculée'];
     }
 
     it('should serialize a challenge to an airtable object', () => {
