@@ -110,6 +110,8 @@ module.exports = (function() {
     };
 
     config.database.url = process.env.TEST_DATABASE_URL;
+
+    config.scheduledJobs.redisUrl = config.scheduledJobs.redisUrl + '/1';
   }
 
   return config;
