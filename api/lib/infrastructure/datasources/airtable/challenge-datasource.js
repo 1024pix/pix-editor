@@ -142,11 +142,15 @@ module.exports = datasource.extend({
     return body;
   },
 
-  async search(query) {
-    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+  async search(params) {
+    const options = {
       fields: this.usedFields,
       filterByFormula : `AND(FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`
     };
+    if (params.page && params.page.size) {
+      options.maxRecords = params.page.size;
+    }
+    const airtableRawObjects = await airtable.findRecords(this.tableName, options);
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 

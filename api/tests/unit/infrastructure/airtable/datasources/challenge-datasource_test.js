@@ -198,7 +198,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         .resolves([ challengeRecord ]);
 
       challengeDatasource.usedFields = Symbol('used fields');
-      const challenges = await challengeDatasource.search('query term');
+      const challenges = await challengeDatasource.search({ filter: { search: 'query term' } });
 
       expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
       expect(challenges.length).to.equal(1);
@@ -210,7 +210,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         .resolves([]);
 
       challengeDatasource.usedFields = Symbol('used fields');
-      await challengeDatasource.search('query \' term');
+      await challengeDatasource.search({ filter: { search: 'query \' term' } });
 
       expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query \\\' term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
     });

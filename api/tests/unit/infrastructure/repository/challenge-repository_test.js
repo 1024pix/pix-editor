@@ -12,27 +12,27 @@ describe('Unit | Repository | challenge-repository', () => {
         sinon.stub(challengesDataSource, 'filter').resolves([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter({ ids: ['1', '2'] });
+        const challenges = await challengeRepository.filter({ filter: { ids: ['1', '2'] } });
 
         // then
         expect(challenges.length).equal(2);
-        expect(challengesDataSource.filter).to.be.calledWith({ ids: ['1', '2'] });
+        expect(challengesDataSource.filter).to.be.calledWith({ filter: { ids: ['1', '2'] } });
       });
     });
 
-    describe('when ids are not specified', () => {
+    describe('when ids and search are not specified', () => {
       it('should return all challenges',  async () => {
         // given
         sinon.stub(challengesDataSource, 'filter').resolves([{},{}]);
         sinon.stub(challengesDataSource, 'list').resolves([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter();
+        const challenges = await challengeRepository.filter({ page: { size: 20 } });
 
         // then
         expect(challenges.length).equal(2);
         expect(challengesDataSource.filter).to.be.not.called;
-        expect(challengesDataSource.list).to.be.called;
+        expect(challengesDataSource.list).to.be.calledWith({ page: { size: 20 } });
       });
     });
 
@@ -44,13 +44,13 @@ describe('Unit | Repository | challenge-repository', () => {
         sinon.stub(challengesDataSource, 'search').resolves([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter({ search: 'toto' });
+        const challenges = await challengeRepository.filter({ filter: { search: 'toto' } });
 
         // then
         expect(challenges.length).equal(2);
         expect(challengesDataSource.filter).to.be.not.called;
         expect(challengesDataSource.list).to.be.not.called;
-        expect(challengesDataSource.search).to.be.calledWith('toto');
+        expect(challengesDataSource.search).to.be.calledWith({ filter: { search: 'toto' } });
       });
     });
   });
