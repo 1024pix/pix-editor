@@ -1,7 +1,17 @@
 const qs = require('qs');
 const Boom = require('@hapi/boom');
+const _ = require('lodash');
 const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
 const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
+
+function _parseQueryParams(search) {
+  const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
+  const params = _.defaults(paramsParsed, { filter: {}, page: { size: 100 } });
+  if (params.page.size) {
+    params.page.size = parseInt(params.page.size);
+  }
+  return params;
+}
 
 exports.register = async function(server) {
   server.route([
@@ -10,9 +20,8 @@ exports.register = async function(server) {
       path: '/api/challenges',
       config: {
         handler: async function(request) {
-          const params = qs.parse(request.url.search, { ignoreQueryPrefix: true });
-          const filter = params.filter || {};
-          const challenges = await challengeRepository.filter(filter);
+          const params = _parseQueryParams(request.url.search);
+          const challenges = await challengeRepository.filter(params);
           return challengeSerializer.serialize(challenges);
         },
       },
@@ -22,8 +31,8 @@ exports.register = async function(server) {
       path: '/api/challenges/{id}',
       config: {
         handler: async function(request) {
-          const filter = { ids: [request.params.id] };
-          const challenges = await challengeRepository.filter(filter);
+          const params = { filter: { ids: [request.params.id] } };
+          const challenges = await challengeRepository.filter(params);
           if (challenges.length === 0) {
             return Boom.notFound();
           }

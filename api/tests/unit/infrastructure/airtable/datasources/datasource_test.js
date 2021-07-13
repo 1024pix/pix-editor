@@ -12,11 +12,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     usedFields: ['Shi', 'Foo', 'Me'],
 
-    fromAirTableObject: (record) => ({
-      id: record.id,
-      tableName: record.tableName,
-      fields: record.fields
-    }),
+    fromAirTableObject: (record) => ({ ...record }),
     toAirTableObject: (model) => ({
       fields: {
         'id persistant': model.id,
@@ -37,7 +33,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await someDatasource.list();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
     });
 
     it('should correctly manage the `this` context', async () => {
@@ -48,7 +44,15 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       const record = await unboundList();
 
       // then
-      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'] }]);
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+    });
+
+    it('should get list with limit', async () => {
+      // when
+      const record = await someDatasource.list({ page: { size: 20 } });
+      // then
+      expect(record).to.deep.equal([{ id: 1, tableName: 'Airtable_table', fields: ['Shi', 'Foo', 'Me'], maxRecords: 20, sort: [{ direction: 'asc', field: 'id persistant' }] }]);
+
     });
   });
 
@@ -62,7 +66,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       });
 
       // when
-      await someDatasource.filter({ ids: ['1', '2'] });
+      await someDatasource.filter({ filter: { ids: ['1', '2'] } });
 
       // then
       expect(airtable.findRecords).to.have.been.calledWith(

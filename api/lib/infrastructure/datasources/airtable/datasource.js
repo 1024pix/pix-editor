@@ -6,12 +6,16 @@ const _DatasourcePrototype = {
     return `${this.modelName.toLowerCase()}s`;
   },
 
-  async list() {
-    const airtableRawObjects = await airtable.findRecords(this.tableName, { fields: this.usedFields, sort: [{ field: this.sortField, direction: 'asc' }] });
+  async list(params = {}) {
+    const options = { fields: this.usedFields, sort: [{ field: this.sortField, direction: 'asc' }] };
+    if (params.page && params.page.size) {
+      options.maxRecords = params.page.size;
+    }
+    const airtableRawObjects = await airtable.findRecords(this.tableName, options);
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
-  async filter({ ids }) {
+  async filter({ filter: { ids } }) {
     const airtableRawObjects = await airtable.findRecords(
       this.tableName,
       {
