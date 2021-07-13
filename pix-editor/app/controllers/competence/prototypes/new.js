@@ -67,7 +67,7 @@ export default class NewController extends Prototype {
     return operation.then(challenge => {
       const version = challenge.version;
       if (version > 0) {
-        this._message(`Nouvelle version : ${version}`, true);
+        this._message(`Nouvelle version : ${version}`, true);
       }
       return challenge;
     });
