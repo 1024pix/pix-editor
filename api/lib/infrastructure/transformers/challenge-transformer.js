@@ -39,6 +39,8 @@ function _filterChallengeFields(_learningContent, challenge) {
     'illustrationAlt',
     'illustrationUrl',
     'focusable',
+    'alpha',
+    'delta',
   ];
 
   return _.pick(challenge, fieldsToInclude);

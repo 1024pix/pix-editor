@@ -35,6 +35,8 @@ module.exports = function buildChallengeAirtableDataObject({
   responsive = 'non',
   area = 'France',
   airtableId = 'airtable id',
+  delta = 0.2,
+  alpha = 0.5,
 } = {}) {
 
   return {
@@ -74,5 +76,7 @@ module.exports = function buildChallengeAirtableDataObject({
     spoil,
     responsive,
     area,
+    delta,
+    alpha,
   };
 };

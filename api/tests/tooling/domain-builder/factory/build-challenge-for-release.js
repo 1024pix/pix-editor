@@ -21,6 +21,8 @@ module.exports = function buildChallengeForRelease({
   autoReply = false,
   locales = [],
   focusable = false,
+  delta = 0.2,
+  alpha = 0.5,
 } = {}) {
 
   return {
@@ -46,5 +48,7 @@ module.exports = function buildChallengeForRelease({
     autoReply,
     locales,
     focusable,
+    delta,
+    alpha,
   };
 };
