@@ -23,6 +23,7 @@
     "variable-diff": "2.0.2"
   },
   "devDependencies": {
+    "@fast-csv/parse": "^4.3.6",
     "nock": "^13.0.10"
   }
 }
