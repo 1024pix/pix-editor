@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha \"./**/*tests.js\" --exclude \"./**/node_modules/**\""
+    "test": "NODE_ENV=test mocha \"./**/*tests.js\" --exclude \"./**/node_modules/**\"",
+    "test:watch": "npm test -- --watch"
   },
   "author": "",
   "license": "ISC",
