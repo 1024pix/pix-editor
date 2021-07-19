@@ -3,6 +3,7 @@ const Boom = require('@hapi/boom');
 const _ = require('lodash');
 const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
 const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
+const securityPreHandlers = require('../security-pre-handlers');
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -44,6 +45,7 @@ exports.register = async function(server) {
       method: 'POST',
       path: '/api/challenges',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
@@ -55,6 +57,7 @@ exports.register = async function(server) {
       method: 'PATCH',
       path: '/api/challenges/{id}',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await challengeRepository.update(challenge);
