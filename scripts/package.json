@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha \"./**/*tests.js\" --exclude \"./**/node_modules/**\""
+    "test": "NODE_ENV=test mocha \"./**/*tests.js\" --exclude \"./**/node_modules/**\"",
+    "test:watch": "npm test -- --watch"
   },
   "author": "",
   "license": "ISC",
@@ -22,6 +23,7 @@
     "variable-diff": "2.0.2"
   },
   "devDependencies": {
+    "@fast-csv/parse": "^4.3.6",
     "nock": "^13.0.10"
   }
 }
