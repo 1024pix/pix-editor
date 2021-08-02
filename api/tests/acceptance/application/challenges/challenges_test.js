@@ -783,6 +783,102 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
       });
     });
+
+    it('should invalidate the cache on the PIX API', async () => {
+      // Given
+      const challenge = domainBuilder.buildChallenge({ id: 'challengeId' });
+      const expectedChallengeRelease = domainBuilder.buildChallengeForRelease(challenge);
+      const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
+      const expectedBody = { records: [expectedBodyChallenge] };
+      const token = 'not-a-real-token';
+
+      const attachmentsScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Attachments')
+        .query({ filterByFormula: '{challengeId persistant} = \'challengeId\'' })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [] });
+
+      const apiTokenScope = nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': token });
+
+      const apiCacheScope = nock('https://api.test.pix.fr')
+        .patch('/api/cache/challenges/challengeId', expectedChallengeRelease)
+        .matchHeader('Authorization', `Bearer ${token}`)
+        .reply(200);
+
+      const airtableCall = nock('https://api.airtable.com')
+        .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+        .reply(
+          200,
+          { records: [airtableBuilder.factory.buildChallenge(challenge)] }
+        );
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'POST',
+        url: '/api/challenges',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'challenges',
+            id: challenge.id,
+            attributes: {
+              instruction: challenge.instruction,
+              'alternative-instruction': challenge.alternativeInstruction,
+              type: challenge.type,
+              format: challenge.format,
+              proposals: challenge.proposals,
+              solution: challenge.solution,
+              'solution-to-display': challenge.solutionToDisplay,
+              't1-status': challenge.t1Status,
+              't2-status': challenge.t2Status,
+              't3-status': challenge.t3Status,
+              pedagogy: challenge.pedagogy,
+              author: challenge.author,
+              declinable: challenge.declinable,
+              version: challenge.version,
+              genealogy: challenge.genealogy,
+              status: challenge.status,
+              preview: challenge.preview,
+              scoring: challenge.scoring,
+              timer: challenge.timer,
+              'embed-url': challenge.embedUrl,
+              'embed-title': challenge.embedTitle,
+              'embed-height': challenge.embedHeight,
+              'alternative-version': challenge.alternativeVersion,
+              accessibility1: challenge.accessibility1,
+              accessibility2: challenge.accessibility2,
+              spoil: challenge.spoil,
+              responsive: challenge.responsive,
+              locales: challenge.locales,
+              area: challenge.area,
+              'auto-reply': challenge.autoReply,
+              focusable: challenge.focusable,
+            },
+            relationships: {
+              skills: {
+                data: challenge.skills.map((skill) => {
+                  return {
+                    type: 'skills',
+                    id: skill,
+                  };
+                }),
+              },
+            },
+          },
+        },
+      });
+
+      // Then
+      expect(attachmentsScope.isDone()).to.be.true;
+      expect(apiTokenScope.isDone()).to.be.true;
+      expect(airtableCall.isDone()).to.be.true;
+      expect(apiCacheScope.isDone()).to.be.true;
+      expect(response.statusCode).to.equal(201);
+    });
   });
 
   describe('PATCH /challenge', () => {

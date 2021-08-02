@@ -1,9 +1,15 @@
 const qs = require('qs');
 const Boom = require('@hapi/boom');
 const _ = require('lodash');
+const Sentry = require('@sentry/node');
+const logger = require('../../infrastructure/logger');
 const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
 const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
 const securityPreHandlers = require('../security-pre-handlers');
+const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
+const createChallengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
+const pixApiClient = require('../../infrastructure/pix-api-client');
+const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -12,6 +18,24 @@ function _parseQueryParams(search) {
     params.page.size = parseInt(params.page.size);
   }
   return params;
+}
+
+async function _refreshCache(challenge) {
+  try {
+    const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
+    const learningContent = {
+      attachments,
+    };
+    const challengeTransformer = createChallengeTransformer(learningContent);
+    const newChallenge = challengeTransformer(challenge);
+
+    const model = 'challenges';
+    
+    await updatedRecordNotifier.notify({ updatedRecord: newChallenge, model, pixApiClient });
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+  }
 }
 
 exports.register = async function(server) {
@@ -49,6 +73,7 @@ exports.register = async function(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
+          await _refreshCache(createdChallenge);
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -61,6 +86,7 @@ exports.register = async function(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await challengeRepository.update(challenge);
+          await _refreshCache(updatedChallenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },
