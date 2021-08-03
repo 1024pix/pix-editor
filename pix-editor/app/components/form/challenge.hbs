@@ -132,15 +132,20 @@
                    @edition={{@edition}}
                    @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
-    <div class={{concat "field" (if @edition "" " disabled")}}>
-        <Field::Checkbox @label="Timer"
-                         @checked={{@challenge.timerOn}}
-                         @disabled={{not @edition}} />
-      {{#if @challenge.timer}}
-        <Field::Input @value={{@challenge.timer}}
-                      @edition={{@edition}} />
-      {{/if}}
-    </div>
+  <div class={{concat "field" (if @edition "" " disabled")}}>
+      <Field::Checkbox @label="Timer"
+                       @checked={{@challenge.timerOn}}
+                       @disabled={{not @edition}} />
+    {{#if @challenge.timer}}
+      <Field::Input @value={{@challenge.timer}}
+                    @edition={{@edition}} />
+    {{/if}}
+  </div>
+  <div class={{concat "field" (if @edition "" " disabled")}}>
+      <Field::Checkbox @label="Focus"
+                       @checked={{@challenge.focusable}}
+                       @disabled={{not @edition}} />
+  </div>
   {{#if @challenge.isDraft}}
       <Field::Quality @edition={{@edition}}
                       @challenge={{@challenge}}/>
