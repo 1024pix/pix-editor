@@ -1,5 +1,19 @@
 
 
+## v3.41.0 (03/08/2021)
+
+- [#198](https://github.com/1024pix/pix-editor/pull/198) [FEATURE] Rafraichit le cache de la recette lorsqu'une épreuve est ajoutée ou modifiée
+- [#197](https://github.com/1024pix/pix-editor/pull/197) [FEATURE] Crée un script d'import des paramètres delta en alpha
+- [#199](https://github.com/1024pix/pix-editor/pull/199) [FEATURE] Vérifie que l'utilisateur a les droits en écriture dans l'API challenges
+- [#194](https://github.com/1024pix/pix-editor/pull/194) [BUGFIX] Supprime un caractère non voulu dans le message de nouvelle version
+- [#191](https://github.com/1024pix/pix-editor/pull/191) [BUGFIX] N'essaye pas d'ouvrir airtable ou la preview toujours dans la même fenêtre
+- [#196](https://github.com/1024pix/pix-editor/pull/196) [TECH] Ajouter les colonnes `Difficulté calculée` et `Discrimination calculée` au référentiel
+- [#195](https://github.com/1024pix/pix-editor/pull/195) [TECH] Utilise une base de données spécifique pour redis en mode test
+- [#185](https://github.com/1024pix/pix-editor/pull/185) [TECH] Utilise le format JSON:API pour la communication entre pix editor et l'api LCMS pour la manipulation des Epreuves.
+- [#193](https://github.com/1024pix/pix-editor/pull/193) [TECH] Mise à jour des dépendances "vulnérable"
+- [#192](https://github.com/1024pix/pix-editor/pull/192) [TECH] Nettoyage d'attribut et de l'utilisation de nock.cleanAll
+- [#200](https://github.com/1024pix/pix-editor/pull/200) [PIX-2816] Ajout de la validation des paramêtres avec JOI
+
 ## v3.40.0 (29/06/2021)
 
 - [#186](https://github.com/1024pix/pix-editor/pull/186) [FEATURE] Ajouter les thématiques à l'export des sujet (PE-64)
