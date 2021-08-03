@@ -466,7 +466,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return given challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallenge({ id: 'challengeId' });
+      const challenge = domainBuilder.buildChallenge({ id: 'recChallengeId1' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
@@ -513,7 +513,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Discrimination calculée',
             ],
           },
-          filterByFormula: 'OR(\'challengeId\' = {id persistant})'
+          filterByFormula: 'OR(\'recChallengeId1\' = {id persistant})'
         })
         .reply(200, {
           records: [
@@ -526,7 +526,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // When
       const response = await server.inject({
         method: 'GET',
-        url: '/api/challenges/challengeId',
+        url: '/api/challenges/recChallengeId1',
         headers: generateAuthorizationHeader(user)
       });
 
@@ -535,7 +535,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(response.result).to.deep.equal({
         data: {
           type: 'challenges',
-          id: 'challengeId',
+          id: 'recChallengeId1',
           attributes: {
             'airtable-id': challenge.airtableId,
             instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
@@ -631,7 +631,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'Discrimination calculée',
             ],
           },
-          filterByFormula: 'OR(\'challengeId2\' = {id persistant})'
+          filterByFormula: 'OR(\'recChallengeId2\' = {id persistant})'
         })
         .reply(200, {
           records: []
@@ -642,7 +642,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // When
       const response = await server.inject({
         method: 'GET',
-        url: '/api/challenges/challengeId2',
+        url: '/api/challenges/recChallengeId2',
         headers: generateAuthorizationHeader(user)
       });
 
@@ -786,7 +786,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should invalidate the cache on the PIX API', async () => {
       // Given
-      const challenge = domainBuilder.buildChallenge({ id: 'challengeId' });
+      const challenge = domainBuilder.buildChallenge({ id: 'recChallengeId' });
       const expectedChallengeRelease = domainBuilder.buildChallengeForRelease(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
@@ -794,7 +794,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const attachmentsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
-        .query({ filterByFormula: '{challengeId persistant} = \'challengeId\'' })
+        .query({ filterByFormula: '{challengeId persistant} = \'recChallengeId\'' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [] });
 
@@ -804,7 +804,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .reply(200, { 'access_token': token });
 
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/challengeId', expectedChallengeRelease)
+        .patch('/api/cache/challenges/recChallengeId', expectedChallengeRelease)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
@@ -890,7 +890,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should update a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallenge({ id: 'challengeId' });
+      const challenge = domainBuilder.buildChallenge({ id: 'recChallengeId' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge);
       const expectedBody = { records: [expectedBodyChallenge] };
@@ -906,7 +906,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // When
       const response = await server.inject({
         method: 'PATCH',
-        url: '/api/challenges/{id}',
+        url: `/api/challenges/${challenge.id}`,
         headers: generateAuthorizationHeader(user),
         payload: {
           data: {
@@ -966,7 +966,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(response.result).to.deep.equal({
         data: {
           type: 'challenges',
-          id: 'challengeId',
+          id: 'recChallengeId',
           attributes: {
             'airtable-id': challenge.airtableId,
             instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',

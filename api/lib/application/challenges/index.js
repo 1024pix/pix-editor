@@ -1,6 +1,7 @@
 const qs = require('qs');
 const Boom = require('@hapi/boom');
 const _ = require('lodash');
+const Joi = require('joi');
 const Sentry = require('@sentry/node');
 const logger = require('../../infrastructure/logger');
 const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
@@ -19,6 +20,8 @@ function _parseQueryParams(search) {
   }
   return params;
 }
+
+const challengeIdType = Joi.string().pattern(/^rec[a-zA-Z0-9]+$/).required();
 
 async function _refreshCache(challenge) {
   try {
@@ -55,6 +58,11 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/challenges/{id}',
       config: {
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+          }),
+        },
         handler: async function(request) {
           const params = { filter: { ids: [request.params.id] } };
           const challenges = await challengeRepository.filter(params);
@@ -82,6 +90,11 @@ exports.register = async function(server) {
       method: 'PATCH',
       path: '/api/challenges/{id}',
       config: {
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+          }),
+        },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
