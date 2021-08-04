@@ -1,5 +1,10 @@
 
 
+## v3.41.1 (04/08/2021)
+
+- [#202](https://github.com/1024pix/pix-editor/pull/202) |BUGFIX] Corrige l'affichage des drapeaux dans la liste des épreuves
+- [#203](https://github.com/1024pix/pix-editor/pull/203) [BUGFIX] Serialiser et déserialiser la relation des pièces jointes de airtable dans pix-editor.
+
 ## v3.41.0 (03/08/2021)
 
 - [#198](https://github.com/1024pix/pix-editor/pull/198) [FEATURE] Rafraichit le cache de la recette lorsqu'une épreuve est ajoutée ou modifiée
