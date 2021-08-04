@@ -38,12 +38,21 @@ module.exports = {
         'autoReply',
         'focusable',
         'skills',
+        'files',
       ],
+      typeForAttribute(attribute) {
+        if (attribute === 'files') return 'attachments';
+      },
       skills: {
         ref(challenge, skillId) {
           return skillId;
         }
       },
+      files: {
+        ref(challenge, fileId) {
+          return fileId;
+        }
+      }
     }).serialize(challenge);
   },
 
@@ -54,6 +63,11 @@ module.exports = {
         skills: {
           valueForRelationship(skill) {
             return skill.id;
+          },
+        },
+        attachments: {
+          valueForRelationship(attachment) {
+            return attachment.id;
           },
         },
       }).deserialize(challenge, (err, challenges) => {

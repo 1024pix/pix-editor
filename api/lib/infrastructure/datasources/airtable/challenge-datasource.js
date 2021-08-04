@@ -28,6 +28,7 @@ module.exports = datasource.extend({
     'Embed title',
     'Embed height',
     'Format',
+    'files',
     'Réponse automatique',
     'Langues',
     'Consigne alternative',
@@ -82,6 +83,7 @@ module.exports = datasource.extend({
       timer,
       competenceId,
       format: airtableRecord.get('Format') || 'mots',
+      files: airtableRecord.get('files'),
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       alternativeInstruction: airtableRecord.get('Consigne alternative') || '',
@@ -138,6 +140,7 @@ module.exports = datasource.extend({
         'Spoil': model.spoil,
         'Responsive': model.responsive,
         'Géographie': model.area,
+        'files': model.files,
       }
     };
     if (model.airtableId) {
