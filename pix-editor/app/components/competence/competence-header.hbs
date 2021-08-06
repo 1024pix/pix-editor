@@ -9,11 +9,11 @@
   </div>
   {{#if this.isProductionViewAndSkillsOrChallengesSection}}
     <div class="selection ui small right floated header language-filter">
-      <PowerSelect @dropdownClass="language-filter-dropdown" @searchEnabled={{false}} @options={{this.languageOptions}} @selected={{this.selectedLanguageToFilter}} @onChange={{@selectLanguageToFilter}} as |language|>
-        {{#if language.id}}
-          {{language.id}} <i class="flag {{convert-language-as-flag language.id}}"></i>
+      <PowerSelect @dropdownClass="language-filter-dropdown" @searchEnabled={{false}} @options={{this.languageOptions}} @selected={{this.selectedLanguageToFilter}} @onChange={{@selectLanguageToFilter}} as |languageOption|>
+        {{#if languageOption.local}}
+          {{languageOption.language}} <i class="flag {{convert-language-as-flag languageOption.local}}"></i>
         {{else}}
-          {{language.title}}
+          {{languageOption.title}}
         {{/if}}
       </PowerSelect>
     </div>

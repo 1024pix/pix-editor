@@ -19,20 +19,26 @@ export default class CompetenceHeader extends Component {
   }];
 
   languageOptions = [{
-    id: false,
+    local: false,
     title: 'Filtre par langue'
   }, {
-    id: 'Anglais'
+    language: 'Anglais',
+    local: 'en',
   }, {
-    id: 'Espagnol'
+    language: 'Espagnol',
+    local: 'es',
   }, {
-    id: 'Francophone'
+    language: 'Francophone',
+    local: 'fr',
   }, {
-    id: 'Franco Français'
+    language: 'Franco Français',
+    local: 'fr-fr'
   }, {
-    id: 'Italie'
+    language: 'Italie',
+    local: 'it',
   }, {
-    id: 'Portugais'
+    language: 'Portugais',
+    local: 'pt',
   }];
 
   get liteClass() {
@@ -46,7 +52,7 @@ export default class CompetenceHeader extends Component {
 
   get selectedLanguageToFilter() {
     const languageFilter = this.args.languageFilter;
-    return this.languageOptions.find(languagesOption => languagesOption.id === languageFilter);
+    return this.languageOptions.find(languagesOption => languagesOption.local === languageFilter);
   }
 
   get isProductionViewAndSkillsOrChallengesSection() {

@@ -5,10 +5,10 @@ export default class CompetenceGridCellSkillComponent extends Component {
 
   get hasNoClueByLanguage() {
     switch (this.args.languageFilter) {
-      case 'Francophone':
-      case 'Franco Français':
+      case 'fr':
+      case 'fr-fr':
         return !this.args.skill.clue;
-      case 'Anglais':
+      case 'en':
         return !this.args.skill.clueEn;
       default :
         return true;
@@ -50,17 +50,12 @@ export default class CompetenceGridCellSkillComponent extends Component {
 
   _convertLanguageFilterToLanguageTutorial(language) {
     switch (language) {
-      case 'Francophone' :
-      case 'Franco Français':
+      case 'fr' :
         return 'fr-fr';
-      case 'Anglais':
+      case 'en':
         return 'en-us';
-      case 'Espagnol':
-        return 'es';
-      case 'Italie':
-        return 'it';
-      case 'Allemand':
-        return 'de';
+      default :
+        return language;
     }
   }
 }

@@ -46,7 +46,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
   module('#languageFilter activated', function () {
     test('it should display a clue status and number of tutorials filtered by language', async function (assert) {
       // given
-      this.set('languageFilter', 'Anglais');
+      this.set('languageFilter', 'en');
 
       // when
       await render(hbs`<Competence::Grid::CellSkill @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
@@ -58,7 +58,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
 
     test('it should alert with warning class if have no `tutoMore` or `tutoSolution`', async function (assert) {
       // given
-      this.set('languageFilter', 'Anglais');
+      this.set('languageFilter', 'en');
 
       // when
       await render(hbs`<Competence::Grid::CellSkill @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
@@ -69,7 +69,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
 
     test('it should alert with danger class if have no `tutoMore` and `tutoSolution`', async function (assert) {
       // given
-      this.set('languageFilter', 'Allemand');
+      this.set('languageFilter', 'de');
 
       // when
       await render(hbs`<Competence::Grid::CellSkill @skill={{this.skill}} @languageFilter={{this.languageFilter}}/>`);
