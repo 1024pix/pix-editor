@@ -1,5 +1,11 @@
 
 
+## v3.42.0 (09/08/2021)
+
+- [#201](https://github.com/1024pix/pix-editor/pull/201) [FEATURE] Permettre de désigner une épreuve comme "focus" (pix-2877).
+- [#205](https://github.com/1024pix/pix-editor/pull/205) [BUGFIX] Utilise la file d'attente pour les appels xmlhttprequest dans l'adaptateur Application
+- [#204](https://github.com/1024pix/pix-editor/pull/204) [BUGFIX] Filtrer la vue épreuves et acquis par langue.
+
 ## v3.41.1 (04/08/2021)
 
 - [#202](https://github.com/1024pix/pix-editor/pull/202) |BUGFIX] Corrige l'affichage des drapeaux dans la liste des épreuves
