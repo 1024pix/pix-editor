@@ -4,6 +4,7 @@ import JSONAPIAdapter from '@ember-data/adapter/json-api';
 export default class ApplicationAdapter extends JSONAPIAdapter {
 
   @service auth;
+  @service ajaxQueue;
 
   namespace = 'api';
 
@@ -14,5 +15,9 @@ export default class ApplicationAdapter extends JSONAPIAdapter {
       headers['Authorization'] = `Bearer ${apiKey}`;
     }
     return headers;
+  }
+
+  ajax() {
+    return this.ajaxQueue.add(() => super.ajax(...arguments));
   }
 }
