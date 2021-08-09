@@ -49,7 +49,7 @@
                    @helpContent={{this.helpAnswers}}
                    data-test-answers-field />
   {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
-      <div id="toleranceField" data-test-tolerence-fields class={{concat "field" (if @edition "" " disabled")}}>
+      <div id="toleranceField" data-test-tolerence-fields class="field {{if @edition "" "disabled"}}">
           <label>Tolérance</label>
           <div class="three fields">
               <div class="field">
@@ -132,20 +132,25 @@
                    @edition={{@edition}}
                    @setValue={{fn (mut @challenge.declinable)}}/>
   {{/if}}
-    <div class={{concat "field" (if @edition "" " disabled")}}>
-        <Field::Checkbox @label="Timer"
-                         @checked={{@challenge.timerOn}}
-                         @disabled={{not @edition}} />
-      {{#if @challenge.timer}}
-        <Field::Input @value={{@challenge.timer}}
-                      @edition={{@edition}} />
-      {{/if}}
-    </div>
+  <div class="field {{if @edition "" "disabled"}}">
+      <Field::Checkbox @label="Timer"
+                       @checked={{@challenge.timerOn}}
+                       @disabled={{not @edition}} />
+    {{#if @challenge.timer}}
+      <Field::Input @value={{@challenge.timer}}
+                    @edition={{@edition}} />
+    {{/if}}
+  </div>
+  <div class="field {{if @edition "" "disabled"}}">
+      <Field::Checkbox @label="Focus"
+                       @checked={{@challenge.focusable}}
+                       @disabled={{not @edition}} />
+  </div>
   {{#if @challenge.isDraft}}
       <Field::Quality @edition={{@edition}}
                       @challenge={{@challenge}}/>
   {{/if}}
-  <div class={{concat "field" (if @edition "" " disabled")}}>
+  <div class="field {{if @edition "" "disabled"}}">
       <label>Internationalisation</label>
       <div class="two fields">
           <div class="field">

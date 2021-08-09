@@ -35,6 +35,7 @@ export default class ChallengeModel extends Model {
   @attr ({ defaultValue: function() { return []; } }) locales;
   @attr area;
   @attr autoReply;
+  @attr focusable;
 
   @hasMany('skill') skills;
   @hasMany('attachment', { inverse: 'challenge' }) files;
