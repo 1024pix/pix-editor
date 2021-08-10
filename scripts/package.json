@@ -11,10 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@samwen/base62-util": "^1.0.4",
     "airtable": "0.11.1",
     "axios": "^0.21.1",
     "chai": "4.2.0",
     "hasha": "^5.2.2",
+    "js-crypto-random": "^1.0.2",
     "lodash": "4.17.21",
     "mocha": "8.2.1",
     "p-limit": "3.1.0",
