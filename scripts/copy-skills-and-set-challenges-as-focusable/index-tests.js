@@ -5,7 +5,12 @@ chai.use(sinonChai);
 const expect = chai.expect;
 const nock = require('nock');
 const AirtableRecord = require('airtable').Record;
-const { findAndDuplicateSkill, duplicateAssociatedSkillChallenges, findChallengesFromASkill, Add findAndDuplicateAssociatedSkillChallenges } = require('.');
+const {
+  findAndDuplicateSkill,
+  prepareNewChallenge,
+  cloneAttachmentsFromAChallenge,
+  findChallengesFromASkill
+} = require('.');
 
 describe('Copy skills and set challenges as focusable', () => {
   describe('#findAndDuplicateSkill', () => {
@@ -114,35 +119,32 @@ describe('Copy skills and set challenges as focusable', () => {
     });
   });
 
-  describe('#duplicateAssociatedSkillChallenges', () => {
-    it('should call airtable to duplicate associated challenges of a skill', async () => {
+  describe('#prepareNewChallenge', () => {
+    it('should create the updated airtable serialization', () => {
       const destinationSkillId = 2;
-      const challenges = [
-        new AirtableRecord('Challenges', 'recAirtableId1', {
-          fields: {
-            'id persistant': '1',
-            'Statut': 'validé',
-            'Consigne': 'Coucou',
-            'Focalisée': false,
-          },
-        }),
-      ];
-      const base = {
-        create: sinon.stub().resolves(),
-      };
+      const challenge =  new AirtableRecord('Challenges', 'recAirtableId1', {
+        fields: {
+          'id persistant': '1',
+          'Statut': 'validé',
+          'Consigne': 'Coucou',
+          'Focalisée': false,
+        },
+      });
+      const newAttachmentsId = [1, 2];
       const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
 
-      await duplicateAssociatedSkillChallenges(base, idGenerator, challenges, destinationSkillId);
+      const newChallenge = prepareNewChallenge(challenge, destinationSkillId, newAttachmentsId, idGenerator);
 
-      expect(base.create).to.have.been.calledWith([{
+      expect(newChallenge).to.deep.equal({
         fields: {
           'id persistant': 'challengeIdPersistantRandom',
           'Statut': 'validé',
           'Consigne': 'Coucou',
           'Acquix': [destinationSkillId],
           'Focalisée': true,
-        }
-      }]);
+          'files': [1, 2],
+        },
+      });
     });
   });
 
@@ -154,9 +156,9 @@ describe('Copy skills and set challenges as focusable', () => {
       process.env.BUCKET_NAME = 'bucket name';
     });
 
-    it('should retrieve challenge attachments from a challenge', async () => {
+    it('should retrieve challenge attachments from a challenge and clone them', async () => {
       const challengePersistantId = 1;
-      const airtableData = [
+      const airtableAttachments = [
         new AirtableRecord('Attachments', 'recAttachmentAirtableId1', {
           fields: {
             filename: 'attachment.pdf',
@@ -170,11 +172,15 @@ describe('Copy skills and set challenges as focusable', () => {
           },
         }),
       ];
+      const newAirtableAttachments = [
+        new AirtableRecord('Attachments', 'recNewAttachmentAirtableId1'),
+        new AirtableRecord('Attachments', 'recNewAttachmentAirtableId2'),
+      ];
       const base = {
         select: sinon.stub().returns({
-          all: sinon.stub().resolves(airtableData)
+          all: sinon.stub().resolves(airtableAttachments)
         }),
-        create: sinon.stub().resolves(),
+        create: sinon.stub().resolves(newAirtableAttachments),
       };
 
       const token = 'TOKEN';
@@ -189,7 +195,7 @@ describe('Copy skills and set challenges as focusable', () => {
         .put('/recAttachmentAirtableId2123456/attachment2.pdf')
         .reply(200);
 
-      await cloneAttachmentsFromAChallenge(base, token, challengePersistantId, { now() { return '123456'; } });
+      const result = await cloneAttachmentsFromAChallenge(base, token, challengePersistantId, { now() { return '123456'; } });
 
       expect(base.select).to.have.been.calledWith({
         fields: [
@@ -220,6 +226,7 @@ describe('Copy skills and set challenges as focusable', () => {
           },
         },
       ]);
+      expect(result).to.deep.equal(['recNewAttachmentAirtableId1', 'recNewAttachmentAirtableId2']);
     });
   });
 });

@@ -5,6 +5,7 @@ const random = require('js-crypto-random');
 const { base62_encode } =  require('@samwen/base62-util');
 const { parseString } = require('@fast-csv/parse');
 const axios = require('axios');
+const getToken = require('../common/token');
 
 async function findAndDuplicateSkill(base, idGenerator, persistentId) {
   const skill = (await base.select({
@@ -36,6 +37,10 @@ function getBaseSkills(table) {
 
 function getBaseChallenges(table) {
   return table('Epreuves');
+}
+
+function getBaseAttachments(table) {
+  return table('Attachments');
 }
 
 function idGenerator(prefix) {
@@ -85,19 +90,16 @@ async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   }).all();
 }
 
-async function duplicateAssociatedSkillChallenges(base, idGenerator, challenges, destinationSkillId) {
-  const duplicatedChallenges = challenges.map((challenge) => {
-    return {
-      fields: {
-        ...challenge.fields,
-        'id persistant': idGenerator('challenge'),
-        'Acquix': [destinationSkillId],
-        'Focalisée': true,
-      }
+function prepareNewChallenge(challenge, destinationSkillId, newAttachmentsId, idGenerator) {
+  return {
+    fields: {
+      ...challenge.fields,
+      'id persistant': idGenerator('challenge'),
+      'Acquix': [destinationSkillId],
+      'Focalisée': true,
+      'files': newAttachmentsId,
     }
-  });
-
-  return base.create(duplicatedChallenges);
+  };
 }
 
 async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
@@ -144,7 +146,9 @@ async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId
     }
   }));
 
-  return base.create(duplicatedAttachments);
+  const newAttachments = await base.create(duplicatedAttachments);
+
+  return newAttachments.map((attachment) => attachment.getId());
 }
 
 async function main() {
@@ -152,13 +156,20 @@ async function main() {
   const airtableClient = createAirtableClient();
   const baseSkills = getBaseSkills(airtableClient);
   const baseChallenges = getBaseChallenges(airtableClient);
+  const baseAttachments = getBaseAttachments(airtableClient);
+  const token = await getToken();
   parseString(csv, { headers: true })
     .on('error', error => console.error(error))
     .on('data', async (row) => {
       try {
         const sourceSkillIdPersistent = row.idPersistant;
         const newSkillId = await findAndDuplicateSkill(baseSkills, idGenerator, sourceSkillIdPersistent);
-        await duplicateAssociatedSkillChallenges(baseChallenges, idGenerator, sourceSkillIdPersistent, newSkillId);
+        const challenges = await findChallengesFromASkill(baseChallenges, sourceSkillIdPersistent);
+        const duplicatedChallenges = await Promise.all(challenges.map(async (challenge) => {
+          const newAttachmentsIds = await cloneAttachmentsFromAChallenge(baseAttachments, token, challenge.get('id persistant'));
+          return prepareNewChallenge(challenge, newSkillId, newAttachmentsIds, idGenerator);
+        }));
+        await baseChallenges.create(duplicatedChallenges);
       } catch (e) {
         console.error(e);
       }
@@ -173,6 +184,6 @@ if (process.env.NODE_ENV !== 'test') {
 module.exports = {
   findChallengesFromASkill,
   findAndDuplicateSkill,
-  duplicateAssociatedSkillChallenges,
+  prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
 };
