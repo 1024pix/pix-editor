@@ -4,6 +4,7 @@ const Airtable = require('airtable');
 const random = require('js-crypto-random');
 const { base62_encode } =  require('@samwen/base62-util');
 const { parseString } = require('@fast-csv/parse');
+const axios = require('axios');
 
 async function findAndDuplicateSkill(base, idGenerator, persistentId) {
   const skill = (await base.select({
@@ -99,6 +100,53 @@ async function duplicateAssociatedSkillChallenges(base, idGenerator, challenges,
   return base.create(duplicatedChallenges);
 }
 
+async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
+  const parsedUrl = new URL(originalUrl);
+  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
+
+  const config = {
+    headers: {
+      'X-Auth-Token': token,
+      'X-Copy-From': process.env.BUCKET_NAME + parsedUrl.pathname,
+    }
+  };
+
+  try {
+    await axios.put(newUrl, null, config);
+  } catch (error) {
+    console.error(error);
+    process.exit(1);
+  }
+  return newUrl;
+}
+
+
+async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId, clock = Date) {
+  const attachments = await base.select({
+    fields: [
+    'filename',
+    'size',
+    'alt',
+    'url',
+    'mimeType',
+    'type',
+    ],
+    filterByFormula : `{challengeId persistant} = '${challengePersistentId}'`
+  }).all();
+
+  const duplicatedAttachments = await Promise.all(attachments.map( async (attachment) => {
+    const attachmentUrl = await cloneFile(token, attachment.get('url'), attachment.getId(), attachment.get('filename'), clock);
+    return {
+      fields: {
+        ...attachment.fields,
+        url: attachmentUrl,
+      }
+    }
+  }));
+
+  return base.create(duplicatedAttachments);
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
   const airtableClient = createAirtableClient();
@@ -126,4 +174,5 @@ module.exports = {
   findChallengesFromASkill,
   findAndDuplicateSkill,
   duplicateAssociatedSkillChallenges,
+  cloneAttachmentsFromAChallenge,
 };
