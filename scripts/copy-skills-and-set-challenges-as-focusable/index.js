@@ -7,13 +7,15 @@ const { parseString } = require('@fast-csv/parse');
 const axios = require('axios');
 const getToken = require('../common/token');
 
-async function findAndDuplicateSkill(base, idGenerator, persistentId) {
-  const skill = (await base.select({
+async function findSkill(base, persistentId) {
+  return (await base.select({
     fields: ['id persistant', 'Indice', 'Indice fr-fr', 'Indice en-us', 'Statut de l\'indice', 'Compétence', 'Comprendre', 'En savoir plus', 'Tags', 'Description', 'Statut de la description', 'Level', 'Tube', 'Status', 'Internationalisation', 'Version'],
     filterByFormula: `{id persistant} = '${persistentId}'`,
     maxRecords: 1,
   }).all())[0];
+}
 
+async function duplicateSkill(base, idGenerator, skill) {
   const createdRecords = await base.create([{
     fields: {
       ...skill.fields,
@@ -187,13 +189,16 @@ async function main() {
     .on('data', async (row) => {
       try {
         const sourceSkillIdPersistent = row.idPersistant;
-        const newSkillId = await findAndDuplicateSkill(baseSkills, idGenerator, sourceSkillIdPersistent);
+        const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
+        const newSkillId = await duplicateSkill(baseSkills, idGenerator, skill);
         const challenges = await findChallengesFromASkill(baseChallenges, sourceSkillIdPersistent);
         const duplicatedChallenges = await Promise.all(challenges.map(async (challenge) => {
           const newAttachmentsIds = await cloneAttachmentsFromAChallenge(baseAttachments, token, challenge.get('id persistant'));
           return prepareNewChallenge(challenge, newSkillId, newAttachmentsIds, idGenerator);
         }));
         await baseChallenges.create(duplicatedChallenges);
+        await archiveChallenges(baseChallenges, challenges);
+        await archiveSkill(baseSkills, skill);
       } catch (e) {
         console.error(e);
       }
@@ -206,8 +211,9 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = {
+  findSkill,
+  duplicateSkill,
   findChallengesFromASkill,
-  findAndDuplicateSkill,
   prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
   archiveChallenges,

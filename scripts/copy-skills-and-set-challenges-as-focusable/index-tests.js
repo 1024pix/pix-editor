@@ -6,7 +6,8 @@ const expect = chai.expect;
 const nock = require('nock');
 const AirtableRecord = require('airtable').Record;
 const {
-  findAndDuplicateSkill,
+  findSkill,
+  duplicateSkill,
   prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
   findChallengesFromASkill,
@@ -15,8 +16,8 @@ const {
 } = require('.');
 
 describe('Copy skills and set challenges as focusable', () => {
-  describe('#findAndDuplicateSkill', () => {
-    it('should call airtable to find skill and duplicate it', async () => {
+  describe('#findSkill', () => {
+    it('should call airtable to find a skill', async () => {
       const persistentId = 1;
       const airtableData = [
         new AirtableRecord('Skill', 'recAirtableId1', {
@@ -28,26 +29,43 @@ describe('Copy skills and set challenges as focusable', () => {
           },
         }),
       ];
-      const createdAirtableData = [
-        new AirtableRecord('Skill', 'recNewSkillId'),
-      ];
       const base = {
         select: sinon.stub().returns({
           all: sinon.stub().resolves(airtableData)
         }),
-        create: sinon.stub().resolves(createdAirtableData),
       };
-      const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
+      const skill = await findSkill(base, persistentId);
 
-      const createdSkillId = await findAndDuplicateSkill(base, idGenerator, persistentId);
-
-      expect(createdSkillId).to.equal('recNewSkillId');
       expect(base.select).to.have.been.calledWith({
         fields: ['id persistant', 'Indice', 'Indice fr-fr', 'Indice en-us', 'Statut de l\'indice', 'Compétence', 'Comprendre', 'En savoir plus', 'Tags', 'Description', 'Statut de la description', 'Level', 'Tube', 'Status', 'Internationalisation', 'Version'],
         filterByFormula : "{id persistant} = '1'",
         maxRecords: 1
       });
+      expect(skill).to.deep.equal(airtableData[0]);
+    });
+  });
 
+  describe('#duplicateSkill', () => {
+    it('should duplicate skill', async () => {
+      const skill  = new AirtableRecord('Skill', 'recAirtableId1', {
+        fields: {
+          'id persistant': '1',
+          'Version': 2,
+          'Status': 'actif',
+          'Description': 'Coucou'
+        },
+      });
+      const createdAirtableData = [
+        new AirtableRecord('Skill', 'recNewSkillId'),
+      ];
+      const base = {
+        create: sinon.stub().resolves(createdAirtableData),
+      };
+      const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
+
+      const createdSkillId = await duplicateSkill(base, idGenerator, skill);
+
+      expect(createdSkillId).to.equal('recNewSkillId');
       expect(base.create).to.have.been.calledWith([{
         fields: {
           'id persistant': 'skillIdPersistantRandom',
