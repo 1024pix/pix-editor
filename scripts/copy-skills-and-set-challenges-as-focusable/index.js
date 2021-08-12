@@ -43,15 +43,79 @@ function idGenerator(prefix) {
   return `${prefix}${randomBase62}`;
 }
 
+async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
+  return base.select({
+    fields: [
+      'id persistant',
+      'Timer',
+      'Consigne',
+      'Propositions',
+      'Type d\'épreuve',
+      'Bonnes réponses',
+      'Bonnes réponses à afficher',
+      'T1 - Espaces, casse & accents',
+      'T2 - Ponctuation',
+      'T3 - Distance d\'édition',
+      'Scoring',
+      'Statut',
+      'Embed URL',
+      'Embed title',
+      'Embed height',
+      'Format',
+      'files',
+      'Réponse automatique',
+      'Langues',
+      'Consigne alternative',
+      'Focalisée',
+      'Acquix',
+      'Généalogie',
+      'Type péda',
+      'Auteur',
+      'Déclinable',
+      'Version prototype',
+      'Version déclinaison',
+      'Non voyant',
+      'Daltonien',
+      'Spoil',
+      'Responsive',
+      'Géographie',
+    ],
+    filterByFormula: `{Acquix (id persistant)} = '${sourceSkillIdPersistent}'`,
+  }).all();
+}
+
+async function duplicateAssociatedSkillChallenges(base, idGenerator, challenges, destinationSkillId) {
+  const duplicatedChallenges = challenges.map((challenge) => {
+    return {
+      fields: {
+        ...challenge.fields,
+        'id persistant': idGenerator('challenge'),
+        'Acquix': [destinationSkillId],
+        'Focalisée': true,
+      }
+    }
+  });
+
+  return base.create(duplicatedChallenges);
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
-  const base = getBaseSkills();
-    parseString(csv, { headers: true })
+  const airtableClient = createAirtableClient();
+  const baseSkills = getBaseSkills(airtableClient);
+  const baseChallenges = getBaseChallenges(airtableClient);
+  parseString(csv, { headers: true })
     .on('error', error => console.error(error))
-    .on('data', row => {
-      findAndDuplicateSkill(base, idGenerator, row.idPersistant).catch((e)=> console.error(e))
+    .on('data', async (row) => {
+      try {
+        const sourceSkillIdPersistent = row.idPersistant;
+        const newSkillId = await findAndDuplicateSkill(baseSkills, idGenerator, sourceSkillIdPersistent);
+        await duplicateAssociatedSkillChallenges(baseChallenges, idGenerator, sourceSkillIdPersistent, newSkillId);
+      } catch (e) {
+        console.error(e);
+      }
     })
-    .on('end', () => console.log('test'));
+    .on('end', () => console.log('The end'));
 }
 
 if (process.env.NODE_ENV !== 'test') {
@@ -59,5 +123,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = {
-  findAndDuplicateSkill
+  findChallengesFromASkill,
+  findAndDuplicateSkill,
+  duplicateAssociatedSkillChallenges,
 };
