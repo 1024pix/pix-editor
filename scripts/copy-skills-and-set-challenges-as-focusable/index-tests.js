@@ -9,7 +9,8 @@ const {
   findAndDuplicateSkill,
   prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
-  findChallengesFromASkill
+  findChallengesFromASkill,
+  archiveChallenges,
 } = require('.');
 
 describe('Copy skills and set challenges as focusable', () => {
@@ -227,6 +228,50 @@ describe('Copy skills and set challenges as focusable', () => {
         },
       ]);
       expect(result).to.deep.equal(['recNewAttachmentAirtableId1', 'recNewAttachmentAirtableId2']);
+    });
+  });
+
+  describe('#archiveChallenges', () => {
+
+    it('should archive challenges', async () => {
+      const challenges = [
+        new AirtableRecord('Challenges', 'recAirtableId1', {
+          fields: {
+            'id persistant': '1',
+            'Statut': 'validé',
+            'Consigne': 'Coucou',
+            'Focalisée': false,
+          },
+        }),
+        new AirtableRecord('Challenges', 'recAirtableId2', {
+          fields: {
+            'id persistant': '2',
+            'Statut': 'validé sans test',
+            'Consigne': 'Coucou',
+            'Focalisée': false,
+          },
+        }),
+      ];
+      const base = {
+        update: sinon.stub(),
+      };
+
+      await archiveChallenges(base, challenges);
+
+      expect(base.update).to.have.been.calledWith([
+        {
+          id: 'recAirtableId1',
+          fields: {
+            'Statut': 'archivé'
+          },
+        },
+        {
+          id: 'recAirtableId2',
+          fields: {
+            'Statut': 'archivé',
+          },
+        },
+      ]);
     });
   });
 });

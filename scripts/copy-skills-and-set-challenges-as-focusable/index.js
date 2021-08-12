@@ -151,6 +151,19 @@ async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId
   return newAttachments.map((attachment) => attachment.getId());
 }
 
+function archiveChallenges(base, challenges) {
+  const archivedChallenges = challenges.map((challenge) => {
+    return {
+      id: challenge.getId(),
+      fields: {
+        'Statut': 'archivé',
+      },
+    };
+  });
+
+  return base.update(archivedChallenges);
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
   const airtableClient = createAirtableClient();
@@ -186,4 +199,5 @@ module.exports = {
   findAndDuplicateSkill,
   prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
+  archiveChallenges
 };
