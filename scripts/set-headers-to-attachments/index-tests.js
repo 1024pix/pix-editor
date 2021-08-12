@@ -82,4 +82,4 @@ describe('Set headers to attachments', () => {
     setHeaderToIllustrationApiCall.done();
     getTokenApiCall.done();
   });
-})
+});

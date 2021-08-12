@@ -88,7 +88,7 @@ describe('checkChallengeAttachments', () => {
       'mimeType': 'image/png',
       'size': 49502,
       'type': 'illustration',
-    }
+    };
 
     const remoteChecksumComputer = sinon.stub();
     remoteChecksumComputer.onFirstCall().resolves('checksum')
@@ -125,7 +125,7 @@ describe('checkChallengeAttachments', () => {
       'mimeType': 'image/png',
       'size': 49502,
       'type': 'illustration',
-    }
+    };
     
     const remoteChecksumComputer = sinon.stub();
     remoteChecksumComputer.resolves('checksum');
@@ -159,7 +159,7 @@ describe('checkChallengeAttachments', () => {
       'mimeType': 'image/png',
       'size': 49502,
       'type': 'attachment',
-    }
+    };
 
     const remoteChecksumComputer = sinon.stub();
     remoteChecksumComputer.resolves('checksum');

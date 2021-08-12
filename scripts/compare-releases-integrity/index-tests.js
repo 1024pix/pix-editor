@@ -183,6 +183,8 @@ describe('#compareReleases', () => {
     );
 
     expect(differences).to.deep.equal([]);
+    url1Scope.done();
+    url2Scope.done();
   });
 
   it('should return the differences', async () => {

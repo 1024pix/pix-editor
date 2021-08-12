@@ -9,8 +9,11 @@ function matchData(csvData, jsonData) {
     const result = [];
 
     parseString(csvData, { headers: true })
-      .on('error', error => console.error(error))
-      .on('data', row => {
+      .on('error', (error) => {
+        console.error(error);
+        reject(error);
+      })
+      .on('data', (row) => {
         const match = jsonData.find((objectJson) => {
           return objectJson.id === row.ChallengeIdHash;
         });
@@ -29,10 +32,10 @@ async function findAirtableIds(base, challengesWithPersistentIds) {
     return base
       .select({
         fields: ['Record ID', 'id persistant'],
-        filterByFormula: 'OR(' + chunk.map(({id}) => `'${id}' = {id persistant}`).join(',') + ')',
+        filterByFormula: 'OR(' + chunk.map(({ id }) => `'${id}' = {id persistant}`).join(',') + ')',
       })
       .all();
-  })
+  });
   const airtableRecords = (await Promise.all(promises)).flat();
 
   return airtableRecords.map((airtableRecord) => {
@@ -63,13 +66,13 @@ async function updateRecords(base, data) {
     return new Promise((resolve, reject) => {
       base.update(
         payload,
-        (err, records) => {
-          bar.tick()
+        (err) => {
+          bar.tick();
           if (err) reject();
           else resolve();
         });
     });
-  })
+  });
   return Promise.all(promises);
 }
 

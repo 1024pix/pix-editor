@@ -31,7 +31,7 @@ async function setHeadersToAttachments(attachments) {
       await limit(() => {
         count ++;
         console.log(`Progress: ${count / attachments.length * 100}`);
-        return axios.post(attachment.fields.url, {}, config)
+        return axios.post(attachment.fields.url, {}, config);
       });
     } catch (error) {
       console.error(error, `Error while setting headers of file ${attachment.fields.filename}`);

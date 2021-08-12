@@ -2,7 +2,7 @@ const chai = require('chai');
 const { shouldBeMigrated, cloneFile, updateRecord } = require('./index.js');
 const sinon = require('sinon');
 const AirtableRecord = require('airtable').Record;
-const sinonChai = require("sinon-chai");
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 const nock = require('nock');
@@ -63,10 +63,10 @@ describe('Migrate attachments in subfolder', () => {
       process.env.BUCKET_NAME = 'bucket name';
 
       const cloneFileCall = nock('https://dl.pix.fr')
-            .matchHeader('X-Auth-Token', 'TOKEN')
-            .matchHeader('X-Copy-From', 'bucket name/123456.ods')
-            .put('/randomstring123456/toto.ods')
-            .reply(200);
+        .matchHeader('X-Auth-Token', 'TOKEN')
+        .matchHeader('X-Copy-From', 'bucket name/123456.ods')
+        .put('/randomstring123456/toto.ods')
+        .reply(200);
 
       const newUrl = await cloneFile('TOKEN', 'https://dl.pix.fr/123456.ods', 'randomstring', 'toto.ods', clock);
 
@@ -80,10 +80,10 @@ describe('Migrate attachments in subfolder', () => {
       process.env.BUCKET_NAME = 'bucket name';
 
       const cloneFileCall = nock('https://dl.pix.fr')
-            .matchHeader('X-Auth-Token', 'TOKEN')
-            .matchHeader('X-Copy-From', 'bucket name/123456.ods')
-            .put('/randomstring123456/toto%20filename.ods')
-            .reply(200);
+        .matchHeader('X-Auth-Token', 'TOKEN')
+        .matchHeader('X-Copy-From', 'bucket name/123456.ods')
+        .put('/randomstring123456/toto%20filename.ods')
+        .reply(200);
 
       const newUrl = await cloneFile('TOKEN', 'https://dl.pix.fr/123456.ods', 'randomstring', 'toto filename.ods', clock);
 

@@ -1,6 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
-const sinonChai = require("sinon-chai");
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 const AirtableRecord = require('airtable').Record;
@@ -10,7 +10,7 @@ const { matchData, findAirtableIds, updateRecords } = require('.');
 describe('Populate alpha and delta column', () => {
   describe('#matchData', () => {
     it('should return a object table with challenge persistent id, alpha and delta',  async () => {
-      const csvData = "ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2";
+      const csvData = 'ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2';
       const jsonData = [{
         id: 'hash1',
         alpha: 0.123,
@@ -36,7 +36,7 @@ describe('Populate alpha and delta column', () => {
     });
 
     it('should ignore entries with not match',  async () => {
-      const csvData = "ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2";
+      const csvData = 'ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2';
       const jsonData = [{
         id: 'hash1',
         alpha: 0.123,
@@ -150,7 +150,7 @@ describe('Populate alpha and delta column', () => {
         update: sinon.stub().yields(),
       };
       await updateRecords(base, data);
-      expect(base.update).to.have.been.calledTwice
+      expect(base.update).to.have.been.calledTwice;
     });
   });
 });
