@@ -13,6 +13,7 @@ const {
   findChallengesFromASkill,
   archiveChallenges,
   archiveSkill,
+  activateSkill,
 } = require('.');
 
 describe('Copy skills and set challenges as focusable', () => {
@@ -63,9 +64,9 @@ describe('Copy skills and set challenges as focusable', () => {
       };
       const idGenerator = (prefix) => `${prefix}IdPersistantRandom`;
 
-      const createdSkillId = await duplicateSkill(base, idGenerator, skill);
+      const createdSkill = await duplicateSkill(base, idGenerator, skill);
 
-      expect(createdSkillId).to.equal('recNewSkillId');
+      expect(createdSkill).to.deep.equal(createdAirtableData[0]);
       expect(base.create).to.have.been.calledWith([{
         fields: {
           'id persistant': 'skillIdPersistantRandom',
@@ -78,7 +79,7 @@ describe('Copy skills and set challenges as focusable', () => {
   });
 
   describe('#findChallengesFromASkill', () => {
-    it('should find challenges from a skill', async () => {
+    it('should find challenges from a skill when status is validated, validated without tests and pre-validated', async () => {
       const skillPersistentId = 1;
       const airtableData = [
         new AirtableRecord('Challenges', 'recAirtableId1', {
@@ -134,7 +135,8 @@ describe('Copy skills and set challenges as focusable', () => {
           'Responsive',
           'Géographie',
         ],
-        filterByFormula : "{Acquix (id persistant)} = '1'",
+        filterByFormula : "AND({Acquix (id persistant)} = '1', " +
+          "OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))",
       });
     });
   });
@@ -315,6 +317,33 @@ describe('Copy skills and set challenges as focusable', () => {
           id: 'recAirtableId1',
           fields: {
             'Status': 'archivé'
+          },
+        },
+      ]);
+    });
+  });
+
+  describe('#activateSkill', () => {
+
+    it('should activate skill', async () => {
+      const skill = new AirtableRecord('Skills', 'recAirtableId1', {
+        fields: {
+          'id persistant': '1',
+          'Status': 'en construction',
+          'Description': 'Coucou',
+        },
+      });
+      const base = {
+        update: sinon.stub(),
+      };
+
+      await activateSkill(base, skill);
+
+      expect(base.update).to.have.been.calledWith([
+        {
+          id: 'recAirtableId1',
+          fields: {
+            'Status': 'actif'
           },
         },
       ]);

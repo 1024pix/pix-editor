@@ -17,15 +17,14 @@ async function findSkill(base, persistentId) {
 }
 
 async function duplicateSkill(base, idGenerator, skill) {
-  const createdRecords = await base.create([{
+  return (await base.create([{
     fields: {
       ...skill.fields,
       'id persistant': idGenerator('skill'),
       Version: skill.get('Version') + 1,
       Status: 'en construction',
     }
-  }]);
-  return createdRecords[0].getId();
+  }]))[0];
 }
 
 function createAirtableClient() {
@@ -89,7 +88,7 @@ async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
       'Responsive',
       'Géographie',
     ],
-    filterByFormula: `{Acquix (id persistant)} = '${sourceSkillIdPersistent}'`,
+    filterByFormula: `AND({Acquix (id persistant)} = '${sourceSkillIdPersistent}', OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
   }).all();
 }
 
@@ -167,15 +166,23 @@ function archiveChallenges(base, challenges) {
   return base.update(archivedChallenges);
 }
 
-function archiveSkill(base, skill) {
-  const archivedSkill = {
+function changeSkillStatus(base, skill, status) {
+  const updatedSkill = {
     id: skill.getId(),
     fields: {
-      'Status': 'archivé',
+      'Status': status,
     },
   };
 
-  return base.update([archivedSkill]);
+  return base.update([updatedSkill]);
+}
+
+function archiveSkill(base, skill) {
+  return changeSkillStatus(base, skill, 'archivé');
+}
+
+function activateSkill(base, skill) {
+  return changeSkillStatus(base, skill, 'actif');
 }
 
 function getRows(csvData) {
@@ -219,6 +226,7 @@ async function main() {
       await baseChallenges.create(duplicatedChallenges);
       await archiveChallenges(baseChallenges, challenges);
       await archiveSkill(baseSkills, skill);
+      await activateSkill(baseSkills, newSkill);
     } catch (e) {
       console.error(e);
     }
@@ -238,4 +246,5 @@ module.exports = {
   cloneAttachmentsFromAChallenge,
   archiveChallenges,
   archiveSkill,
+  activateSkill,
 };
