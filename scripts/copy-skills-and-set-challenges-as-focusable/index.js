@@ -164,6 +164,17 @@ function archiveChallenges(base, challenges) {
   return base.update(archivedChallenges);
 }
 
+function archiveSkill(base, skill) {
+  const archivedSkill = {
+    id: skill.getId(),
+    fields: {
+      'Status': 'archivé',
+    },
+  };
+
+  return base.update([archivedSkill]);
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
   const airtableClient = createAirtableClient();
@@ -199,5 +210,6 @@ module.exports = {
   findAndDuplicateSkill,
   prepareNewChallenge,
   cloneAttachmentsFromAChallenge,
-  archiveChallenges
+  archiveChallenges,
+  archiveSkill,
 };

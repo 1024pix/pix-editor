@@ -11,6 +11,7 @@ const {
   cloneAttachmentsFromAChallenge,
   findChallengesFromASkill,
   archiveChallenges,
+  archiveSkill,
 } = require('.');
 
 describe('Copy skills and set challenges as focusable', () => {
@@ -269,6 +270,33 @@ describe('Copy skills and set challenges as focusable', () => {
           id: 'recAirtableId2',
           fields: {
             'Statut': 'archivé',
+          },
+        },
+      ]);
+    });
+  });
+
+  describe('#archiveSkill', () => {
+
+    it('should archive skill', async () => {
+      const skill = new AirtableRecord('Skills', 'recAirtableId1', {
+        fields: {
+          'id persistant': '1',
+          'Status': 'validé',
+          'Description': 'Coucou',
+        },
+      });
+      const base = {
+        update: sinon.stub(),
+      };
+
+      await archiveSkill(base, skill);
+
+      expect(base.update).to.have.been.calledWith([
+        {
+          id: 'recAirtableId1',
+          fields: {
+            'Status': 'archivé'
           },
         },
       ]);
