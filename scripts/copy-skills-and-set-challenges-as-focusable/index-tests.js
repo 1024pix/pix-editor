@@ -1,6 +1,6 @@
 const chai = require('chai');
 const sinon = require('sinon');
-const sinonChai = require("sinon-chai");
+const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 const nock = require('nock');
@@ -16,9 +16,9 @@ const {
   activateSkill,
 } = require('.');
 
-describe('Copy skills and set challenges as focusable', () => {
-  describe('#findSkill', () => {
-    it('should call airtable to find a skill', async () => {
+describe('Copy skills and set challenges as focusable', function() {
+  describe('#findSkill', function() {
+    it('should call airtable to find a skill', async function() {
       const persistentId = 1;
       const airtableData = [
         new AirtableRecord('Skill', 'recAirtableId1', {
@@ -39,15 +39,15 @@ describe('Copy skills and set challenges as focusable', () => {
 
       expect(base.select).to.have.been.calledWith({
         fields: ['id persistant', 'Indice', 'Indice fr-fr', 'Indice en-us', 'Statut de l\'indice', 'Compétence', 'Comprendre', 'En savoir plus', 'Tags', 'Description', 'Statut de la description', 'Level', 'Tube', 'Status', 'Internationalisation', 'Version'],
-        filterByFormula : "{id persistant} = '1'",
+        filterByFormula : '{id persistant} = \'1\'',
         maxRecords: 1
       });
       expect(skill).to.deep.equal(airtableData[0]);
     });
   });
 
-  describe('#duplicateSkill', () => {
-    it('should duplicate skill', async () => {
+  describe('#duplicateSkill', function() {
+    it('should duplicate skill', async function() {
       const skill  = new AirtableRecord('Skill', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
@@ -74,20 +74,20 @@ describe('Copy skills and set challenges as focusable', () => {
           'Status': 'en construction',
           'Description': 'Coucou',
         }
-      }])
+      }]);
     });
   });
 
-  describe('#findChallengesFromASkill', () => {
-    it('should find challenges from a skill when status is validated, validated without tests and pre-validated', async () => {
+  describe('#findChallengesFromASkill', function() {
+    it('should find challenges from a skill when status is validated, validated without tests and pre-validated', async function() {
       const skillPersistentId = 1;
       const airtableData = [
         new AirtableRecord('Challenges', 'recAirtableId1', {
           fields: {
-          'id persistant': '1',
-          'Statut': 'validé',
-          'Consigne': 'Coucou',
-          'Focalisée': false,
+            'id persistant': '1',
+            'Statut': 'validé',
+            'Consigne': 'Coucou',
+            'Focalisée': false,
           },
         }),
       ];
@@ -97,7 +97,7 @@ describe('Copy skills and set challenges as focusable', () => {
         }),
       };
 
-      await findChallengesFromASkill(base, skillPersistentId)
+      await findChallengesFromASkill(base, skillPersistentId);
 
       expect(base.select).to.have.been.calledWith({
         fields: [
@@ -135,14 +135,14 @@ describe('Copy skills and set challenges as focusable', () => {
           'Responsive',
           'Géographie',
         ],
-        filterByFormula : "AND({Acquix (id persistant)} = '1', " +
-          "OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))",
+        filterByFormula : 'AND({Acquix (id persistant)} = \'1\', ' +
+          'OR({Statut} = \'validé\', {Statut} = \'validé sans test\', {Statut} = \'pré-validé\'))',
       });
     });
   });
 
-  describe('#prepareNewChallenge', () => {
-    it('should create the updated airtable serialization', () => {
+  describe('#prepareNewChallenge', function() {
+    it('should create the updated airtable serialization', function() {
       const destinationSkillId = 2;
       const challenge =  new AirtableRecord('Challenges', 'recAirtableId1', {
         fields: {
@@ -170,15 +170,15 @@ describe('Copy skills and set challenges as focusable', () => {
     });
   });
 
-  describe('#cloneAttachmentsFromAChallenge', () => {
+  describe('#cloneAttachmentsFromAChallenge', function() {
 
-    beforeEach(() => {
+    beforeEach(function() {
       nock.cleanAll();
       nock.disableNetConnect();
       process.env.BUCKET_NAME = 'bucket name';
     });
 
-    it('should retrieve challenge attachments from a challenge and clone them', async () => {
+    it('should retrieve challenge attachments from a challenge and clone them', async function() {
       const challengePersistantId = 1;
       const airtableAttachments = [
         new AirtableRecord('Attachments', 'recAttachmentAirtableId1', {
@@ -228,7 +228,7 @@ describe('Copy skills and set challenges as focusable', () => {
           'mimeType',
           'type',
         ],
-        filterByFormula : "{challengeId persistant} = '1'"
+        filterByFormula : '{challengeId persistant} = \'1\''
       });
 
       cloneFileCall.done();
@@ -252,9 +252,9 @@ describe('Copy skills and set challenges as focusable', () => {
     });
   });
 
-  describe('#archiveChallenges', () => {
+  describe('#archiveChallenges', function() {
 
-    it('should archive challenges', async () => {
+    it('should archive challenges', async function() {
       const challenges = [
         new AirtableRecord('Challenges', 'recAirtableId1', {
           fields: {
@@ -296,9 +296,9 @@ describe('Copy skills and set challenges as focusable', () => {
     });
   });
 
-  describe('#archiveSkill', () => {
+  describe('#archiveSkill', function() {
 
-    it('should archive skill', async () => {
+    it('should archive skill', async function() {
       const skill = new AirtableRecord('Skills', 'recAirtableId1', {
         fields: {
           'id persistant': '1',
@@ -323,9 +323,9 @@ describe('Copy skills and set challenges as focusable', () => {
     });
   });
 
-  describe('#activateSkill', () => {
+  describe('#activateSkill', function() {
 
-    it('should activate skill', async () => {
+    it('should activate skill', async function() {
       const skill = new AirtableRecord('Skills', 'recAirtableId1', {
         fields: {
           'id persistant': '1',

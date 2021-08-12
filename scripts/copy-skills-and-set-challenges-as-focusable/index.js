@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const fs = require('fs');
 const Airtable = require('airtable');
 const random = require('js-crypto-random');
@@ -106,7 +105,7 @@ function prepareNewChallenge(challenge, destinationSkillId, newAttachmentsId, id
 
 async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
   const parsedUrl = new URL(originalUrl);
-  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
+  const newUrl = parsedUrl.protocol + '//' + parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
 
   const config = {
     headers: {
@@ -124,28 +123,27 @@ async function cloneFile(token, originalUrl, randomString, filename, clock = Dat
   return newUrl;
 }
 
-
 async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId, clock = Date) {
   const attachments = await base.select({
     fields: [
-    'filename',
-    'size',
-    'alt',
-    'url',
-    'mimeType',
-    'type',
+      'filename',
+      'size',
+      'alt',
+      'url',
+      'mimeType',
+      'type',
     ],
     filterByFormula : `{challengeId persistant} = '${challengePersistentId}'`
   }).all();
 
-  const duplicatedAttachments = await Promise.all(attachments.map( async (attachment) => {
+  const duplicatedAttachments = await Promise.all(attachments.map(async (attachment) => {
     const attachmentUrl = await cloneFile(token, attachment.get('url'), attachment.getId(), attachment.get('filename'), clock);
     return {
       fields: {
         ...attachment.fields,
         url: attachmentUrl,
       }
-    }
+    };
   }));
 
   const newAttachments = await base.create(duplicatedAttachments);
@@ -190,8 +188,11 @@ function getRows(csvData) {
     const rows = [];
 
     parseString(csvData, { headers: true })
-      .on('error', error => console.error(error))
-      .on('data', row => {
+      .on('error', (error) => {
+        console.error(error);
+        reject(error);
+      })
+      .on('data', (row) => {
         rows.push(row);
       })
       .on('end', () => resolve(rows));
