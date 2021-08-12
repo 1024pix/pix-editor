@@ -6,6 +6,7 @@ const { base62_encode } =  require('@samwen/base62-util');
 const { parseString } = require('@fast-csv/parse');
 const axios = require('axios');
 const getToken = require('../common/token');
+const ProgressBar = require('progress');
 
 async function findSkill(base, persistentId) {
   return (await base.select({
@@ -177,6 +178,19 @@ function archiveSkill(base, skill) {
   return base.update([archivedSkill]);
 }
 
+function getRows(csvData) {
+  return new Promise((resolve, reject) => {
+    const rows = [];
+
+    parseString(csvData, { headers: true })
+      .on('error', error => console.error(error))
+      .on('data', row => {
+        rows.push(row);
+      })
+      .on('end', () => resolve(rows));
+  });
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
   const airtableClient = createAirtableClient();
@@ -184,26 +198,32 @@ async function main() {
   const baseChallenges = getBaseChallenges(airtableClient);
   const baseAttachments = getBaseAttachments(airtableClient);
   const token = await getToken();
-  parseString(csv, { headers: true })
-    .on('error', error => console.error(error))
-    .on('data', async (row) => {
-      try {
-        const sourceSkillIdPersistent = row.idPersistant;
-        const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
-        const newSkillId = await duplicateSkill(baseSkills, idGenerator, skill);
-        const challenges = await findChallengesFromASkill(baseChallenges, sourceSkillIdPersistent);
-        const duplicatedChallenges = await Promise.all(challenges.map(async (challenge) => {
-          const newAttachmentsIds = await cloneAttachmentsFromAChallenge(baseAttachments, token, challenge.get('id persistant'));
-          return prepareNewChallenge(challenge, newSkillId, newAttachmentsIds, idGenerator);
-        }));
-        await baseChallenges.create(duplicatedChallenges);
-        await archiveChallenges(baseChallenges, challenges);
-        await archiveSkill(baseSkills, skill);
-      } catch (e) {
-        console.error(e);
-      }
-    })
-    .on('end', () => console.log('The end'));
+
+  const rows = await getRows(csv);
+
+  const bar = new ProgressBar('[:bar] :percent', {
+    total: rows.length,
+    width: 50,
+  });
+
+  await Promise.all(rows.map(async (row) => {
+    try {
+      const sourceSkillIdPersistent = row.idPersistant;
+      const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
+      const newSkill = await duplicateSkill(baseSkills, idGenerator, skill);
+      const challenges = await findChallengesFromASkill(baseChallenges, sourceSkillIdPersistent);
+      const duplicatedChallenges = await Promise.all(challenges.map(async (challenge) => {
+        const newAttachmentsIds = await cloneAttachmentsFromAChallenge(baseAttachments, token, challenge.get('id persistant'));
+        return prepareNewChallenge(challenge, newSkill.getId(), newAttachmentsIds, idGenerator);
+      }));
+      await baseChallenges.create(duplicatedChallenges);
+      await archiveChallenges(baseChallenges, challenges);
+      await archiveSkill(baseSkills, skill);
+    } catch (e) {
+      console.error(e);
+    }
+    bar.tick();
+  }));
 }
 
 if (process.env.NODE_ENV !== 'test') {
