@@ -237,15 +237,15 @@ async function main() {
 
 if (process.env.NODE_ENV !== 'test') {
   main();
+} else {
+  module.exports = {
+    findSkill,
+    duplicateSkill,
+    findChallengesFromASkill,
+    prepareNewChallenge,
+    cloneAttachmentsFromAChallenge,
+    archiveChallenges,
+    archiveSkill,
+    activateSkill,
+  };
 }
-
-module.exports = {
-  findSkill,
-  duplicateSkill,
-  findChallengesFromASkill,
-  prepareNewChallenge,
-  cloneAttachmentsFromAChallenge,
-  archiveChallenges,
-  archiveSkill,
-  activateSkill,
-};
