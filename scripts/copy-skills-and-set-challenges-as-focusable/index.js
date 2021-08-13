@@ -8,22 +8,24 @@ const getToken = require('../common/token');
 const ProgressBar = require('progress');
 
 async function findSkill(base, persistentId) {
-  return (await base.select({
+  const foundSkills = await base.select({
     fields: ['id persistant', 'Indice', 'Indice fr-fr', 'Indice en-us', 'Statut de l\'indice', 'Compétence', 'Comprendre', 'En savoir plus', 'Tags', 'Description', 'Statut de la description', 'Level', 'Tube', 'Status', 'Internationalisation', 'Version'],
     filterByFormula: `{id persistant} = '${persistentId}'`,
     maxRecords: 1,
-  }).all())[0];
+  }).all();
+  return foundSkills[0];
 }
 
 async function duplicateSkill(base, idGenerator, skill) {
-  return (await base.create([{
+  const createdSkills = await base.create([{
     fields: {
       ...skill.fields,
       'id persistant': idGenerator('skill'),
       Version: skill.get('Version') + 1,
       Status: 'en construction',
     }
-  }]))[0];
+  }]);
+  return createdSkills[0];
 }
 
 function createAirtableClient() {
