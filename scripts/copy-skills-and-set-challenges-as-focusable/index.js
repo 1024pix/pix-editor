@@ -6,10 +6,11 @@ const { parseString } = require('@fast-csv/parse');
 const axios = require('axios');
 const getToken = require('../common/token');
 const ProgressBar = require('progress');
+const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
 
 async function findSkill(base, persistentId) {
   const foundSkills = await base.select({
-    fields: ['id persistant', 'Indice', 'Indice fr-fr', 'Indice en-us', 'Statut de l\'indice', 'Compétence', 'Comprendre', 'En savoir plus', 'Tags', 'Description', 'Statut de la description', 'Level', 'Tube', 'Status', 'Internationalisation', 'Version'],
+    fields: USEFUL_SKILL_FIELDS,
     filterByFormula: `{id persistant} = '${persistentId}'`,
     maxRecords: 1,
   }).all();
@@ -54,41 +55,7 @@ function idGenerator(prefix) {
 
 async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   return base.select({
-    fields: [
-      'id persistant',
-      'Timer',
-      'Consigne',
-      'Propositions',
-      'Type d\'épreuve',
-      'Bonnes réponses',
-      'Bonnes réponses à afficher',
-      'T1 - Espaces, casse & accents',
-      'T2 - Ponctuation',
-      'T3 - Distance d\'édition',
-      'Scoring',
-      'Statut',
-      'Embed URL',
-      'Embed title',
-      'Embed height',
-      'Format',
-      'files',
-      'Réponse automatique',
-      'Langues',
-      'Consigne alternative',
-      'Focalisée',
-      'Acquix',
-      'Généalogie',
-      'Type péda',
-      'Auteur',
-      'Déclinable',
-      'Version prototype',
-      'Version déclinaison',
-      'Non voyant',
-      'Daltonien',
-      'Spoil',
-      'Responsive',
-      'Géographie',
-    ],
+    fields: USEFUL_CHALLENGE_FIELDS,
     filterByFormula: `AND({Acquix (id persistant)} = '${sourceSkillIdPersistent}', OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
   }).all();
 }
