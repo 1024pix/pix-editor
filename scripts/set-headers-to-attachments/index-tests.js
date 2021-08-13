@@ -1,8 +1,8 @@
 const { setHeadersToAttachments } = require('.');
 const nock = require('nock');
 
-describe('Set headers to attachments', () => {
-  it('set header Content-Disposition only to type attachments', async () => {
+describe('Set headers to attachments', function() {
+  it('set header Content-Disposition only to type attachments', async function() {
     process.env.TOKEN_URL = 'https://auth.cloud.ovh.net/v3/auth/tokens';
     process.env.BUCKET_USER = 'user';
     process.env.BUCKET_PASSWORD = 'password';
@@ -82,4 +82,4 @@ describe('Set headers to attachments', () => {
     setHeaderToIllustrationApiCall.done();
     getTokenApiCall.done();
   });
-})
+});

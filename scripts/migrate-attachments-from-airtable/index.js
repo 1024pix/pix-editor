@@ -7,7 +7,7 @@ module.exports = {
   challengeAttachmentsToCsv,
   challengesAttachmentsToCsv,
   renameFileToImport,
-}
+};
 
 function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
@@ -20,14 +20,14 @@ function main() {
 }
 
 function challengesAttachmentsToCsv(challenges, { bucketBaseUrl }) {
-  const headers = "id,filename,size,alt,url,mimeType,type,challengeId";
-  const lines = challenges.map(challenge => challengeAttachmentsToCsv(challenge, { bucketBaseUrl })).filter( line => line !== '');
-  return headers + "\n" + lines.join('\n');
+  const headers = 'id,filename,size,alt,url,mimeType,type,challengeId';
+  const lines = challenges.map((challenge) => challengeAttachmentsToCsv(challenge, { bucketBaseUrl })).filter((line) => line !== '');
+  return headers + '\n' + lines.join('\n');
 }
 
 function renameChallengesAttachments(challenges, backupBaseFolder) {
   const folder = backupBaseFolder + 'attachments/';
-  challenges.forEach(challenge => renameFileToImport(challenge, (oldFilename, newFilename) => fs.copyFileSync(folder + oldFilename, folder + newFilename)));
+  challenges.forEach((challenge) => renameFileToImport(challenge, (oldFilename, newFilename) => fs.copyFileSync(folder + oldFilename, folder + newFilename)));
 }
 
 function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
@@ -81,7 +81,7 @@ function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
 }
 
 function attachmentUrl({ challengeId, filename, type, bucketBaseUrl }) {
-  const encodedFilename = encodeURIComponent(newFilename({ challengeId, filename, type }))
+  const encodedFilename = encodeURIComponent(newFilename({ challengeId, filename, type }));
   return `${bucketBaseUrl}${encodedFilename}`;
 }
 
@@ -90,7 +90,7 @@ function newFilename({ challengeId, filename, type }) {
 }
 
 function pushToCsv(csv, fields) {
-  return csv.push(fields.map(v => `"${escapeField(`${v}`)}"`).join(','));
+  return csv.push(fields.map((v) => `"${escapeField(`${v}`)}"`).join(','));
 }
 
 function escapeField(field) {

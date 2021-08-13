@@ -6,7 +6,7 @@ const limit = pLimit(300);
 
 module.exports = {
   checkChallengeAttachments,
-}
+};
 
 async function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
@@ -18,9 +18,9 @@ async function main() {
       const errors = await checkChallengeAttachments(challenge, attachments, remoteChecksumComputer);
       if (_.isEmpty(errors)) {
         challengeCount ++;
-        console.log(challengeCount / challenges.length * 100 + "%");
+        console.log(challengeCount / challenges.length * 100 + '%');
       } else {
-        console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`)
+        console.error(`Found inconsistent challenge and attachments: challenge ${challenge.id} should have these attachments ${JSON.stringify(errors)}`);
       }
     });
   });
@@ -30,7 +30,7 @@ async function main() {
 async function checkChallengeAttachments(challenge, attachments, remoteChecksumComputer) {
   const challengeAttachments = attachments.filter(({ fields }) => {
     const challengeId = fields.challengeId;
-    return challengeId && challengeId[0] === challenge.fields['Record ID']
+    return challengeId && challengeId[0] === challenge.fields['Record ID'];
   }).map(formatChallengeAttachment);
   const expectedFiles = challengeAttachmentsToFiles(challenge);
 
@@ -38,7 +38,7 @@ async function checkChallengeAttachments(challenge, attachments, remoteChecksumC
     file.checksum = await remoteChecksumComputer(file.url);
     delete file.url;
   }
-  
+
   for (const challengeAttachment of challengeAttachments) {
     challengeAttachment.checksum = await remoteChecksumComputer(challengeAttachment.url);
     delete challengeAttachment.url;
@@ -55,12 +55,11 @@ function formatChallengeAttachment(attachment) {
     mimeType: attachment.fields.mimeType,
     type: attachment.fields.type,
     url: attachment.fields.url
-  }
+  };
 }
 
 function challengeAttachmentsToFiles(challenge) {
   const { fields } = challenge;
-  const id = fields['Record ID'];
   const files = [];
 
   const illustrations = fields['Illustration de la consigne'];
@@ -94,9 +93,9 @@ function challengeAttachmentsToFiles(challenge) {
 
 function sanitizeAltText(text) {
   if (text) {
-    return text.replace(/ \n/gm, '\n')
+    return text.replace(/ \n/gm, '\n');
   }
-  return ''
+  return '';
 }
 
 async function remoteChecksumComputer(url) {
@@ -105,9 +104,9 @@ async function remoteChecksumComputer(url) {
     url,
     method: 'GET',
     responseType: 'stream'
-  })
+  });
 
-  return hasha.fromStream(response.data, {algorithm: 'sha1'});
+  return hasha.fromStream(response.data, { algorithm: 'sha1' });
 }
 
 if (process.env.NODE_ENV !== 'test') {

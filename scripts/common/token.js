@@ -27,4 +27,4 @@ module.exports = async function getToken() {
   });
 
   return response.headers['x-subject-token'];
-}
+};

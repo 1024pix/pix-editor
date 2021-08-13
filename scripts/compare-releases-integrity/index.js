@@ -56,22 +56,21 @@ async function compareReleases({ url: urlLeft, token: tokenLeft }, { url: urlRig
 
     if (!_.isEqual(challengeLeft, challengeRight)) {
       diffs.push(challengeLeft.id);
-      const difference = diff(challengeLeft, challengeRight)
+      const difference = diff(challengeLeft, challengeRight);
       console.log(challengeLeft.id, difference.text);
     }
   });
   if (newChallengesLeft.length !== newChallengesRight.length) {
-    console.log('The number of challenges differ between the 2 releases')
+    console.log('The number of challenges differ between the 2 releases');
     const missingIds = _.difference(_.map(newChallengesRight, 'id').sort(), _.map(newChallengesLeft, 'id').sort());
     diffs.push(...missingIds);
   }
   return diffs;
 }
 
-
 async function getRelease(url, token) {
   const { data: { content: { challenges } } } = await axios.get(url, {
-    headers: { 'Authorization': 'Bearer '+ token }
+    headers: { 'Authorization': 'Bearer ' + token }
   });
   return challenges;
 }
@@ -95,9 +94,9 @@ async function replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer
 
 function sanitizeText(text) {
   if (text) {
-    return text.replace(/ \n/gm, '\n')
+    return text.replace(/ \n/gm, '\n');
   }
-  return ''
+  return '';
 }
 
 async function remoteChecksumComputer(url) {
@@ -109,7 +108,7 @@ async function remoteChecksumComputer(url) {
     });
     return hasha.fromStream(response.data, { algorithm: 'sha1' });
   } catch (e) {
-    console.error(`Error getting file ${url}: ${e}`)
+    console.error(`Error getting file ${url}: ${e}`);
     return url;
   }
 }

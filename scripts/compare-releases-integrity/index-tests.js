@@ -6,8 +6,8 @@ const nock = require('nock');
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe('#replaceAttachmentsUrlByChecksum', () => {
-  it('returns challenge with attachments url replaced by checksum', async () => {
+describe('#replaceAttachmentsUrlByChecksum', function() {
+  it('returns challenge with attachments url replaced by checksum', async function() {
     const initialChallenge = {
       some: 'property',
       illustrationUrl: 'illustration-url',
@@ -33,7 +33,7 @@ describe('#replaceAttachmentsUrlByChecksum', () => {
     expect(remoteChecksumComputerStub).to.be.calledWith('attachments-url-2');
   });
 
-  it('should works when there is no attachments', async () => {
+  it('should works when there is no attachments', async function() {
     const initialChallenge = {
       some: 'property',
       illustrationUrl: 'illustration-url',
@@ -52,7 +52,7 @@ describe('#replaceAttachmentsUrlByChecksum', () => {
     expect(remoteChecksumComputerStub).to.be.calledWith('illustration-url');
   });
 
-  it('should works when there is no illustrations', async () => {
+  it('should works when there is no illustrations', async function() {
     const initialChallenge = {
       some: 'property',
       attachments: [
@@ -76,13 +76,13 @@ describe('#replaceAttachmentsUrlByChecksum', () => {
   });
 });
 
-describe('#compareReleases', () => {
-  beforeEach(() => {
+describe('#compareReleases', function() {
+  beforeEach(function() {
     nock.cleanAll();
     nock.disableNetConnect();
   });
 
-  it('should return an empty table when there is no differences', async () => {
+  it('should return an empty table when there is no differences', async function() {
     const remoteChecksumComputer = sinon.stub();
     const productionRelease = {
       content: {
@@ -115,7 +115,7 @@ describe('#compareReleases', () => {
     url2Scope.isDone();
   });
 
-  it('should return an empty table when there is no differences when challenges are not ordered', async () => {
+  it('should return an empty table when there is no differences when challenges are not ordered', async function() {
     const remoteChecksumComputer = sinon.stub();
     const productionRelease = {
       content: {
@@ -154,7 +154,7 @@ describe('#compareReleases', () => {
     url2Scope.isDone();
   });
 
-  it('should ignore text with space before new line', async () => {
+  it('should ignore text with space before new line', async function() {
     const remoteChecksumComputer = sinon.stub();
     const productionRelease = {
       content: {
@@ -183,9 +183,11 @@ describe('#compareReleases', () => {
     );
 
     expect(differences).to.deep.equal([]);
+    url1Scope.done();
+    url2Scope.done();
   });
 
-  it('should return the differences', async () => {
+  it('should return the differences', async function() {
     const remoteChecksumComputer = sinon.stub()
       .onFirstCall().resolves('sha1')
       .onSecondCall().resolves('sha2');
@@ -225,7 +227,7 @@ describe('#compareReleases', () => {
     expect(differences).to.deep.equal([expectedDifference]);
   });
 
-  it('should return the differences when the number of challenges differ', async () => {
+  it('should return the differences when the number of challenges differ', async function() {
     const remoteChecksumComputer = sinon.stub()
       .onFirstCall().resolves('sha1')
       .onSecondCall().resolves('sha2');
@@ -274,13 +276,13 @@ describe('#compareReleases', () => {
   });
 });
 
-describe('#remoteChecksumComputer', () => {
-  beforeEach(() => {
+describe('#remoteChecksumComputer', function() {
+  beforeEach(function() {
     nock.cleanAll();
     nock.disableNetConnect();
   });
 
-  it('compute the hash of the remote file', async () => {
+  it('compute the hash of the remote file', async function() {
     const requestCall = nock('http://example.net')
       .get('/file.jpg')
       .reply(200, 'test');
@@ -290,7 +292,7 @@ describe('#remoteChecksumComputer', () => {
     requestCall.isDone();
   });
 
-  it('returns an error when the server returns an error', async () => {
+  it('returns an error when the server returns an error', async function() {
     const requestCall = nock('http://example.net')
       .get('/file.jpg')
       .reply(400, '');

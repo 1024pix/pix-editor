@@ -1,0 +1,6 @@
+extends:
+  - '../.eslintrc.yaml'
+  - 'plugin:mocha/recommended'
+
+globals:
+  include: true

@@ -10,7 +10,7 @@ module.exports = {
   shouldBeMigrated,
   cloneFile,
   updateRecord,
-}
+};
 
 function getBaseAttachments() {
   const base = new Airtable({
@@ -22,16 +22,16 @@ function getBaseAttachments() {
 
 function eachRecord(callback) {
   getBaseAttachments().select({
-    view: "Grid view"
- }).eachPage(async function page(records, fetchNextPage) {
+    view: 'Grid view'
+  }).eachPage(async function page(records, fetchNextPage) {
     records.forEach(async (record) => {
       await limit(() => callback(record));
     });
 
     fetchNextPage();
- }, function done(err) {
-   if (err) { console.error(err); return; }
- });
+  }, function done(err) {
+    if (err) { console.error(err); return; }
+  });
 }
 
 function shouldBeMigrated(record) {
@@ -40,7 +40,7 @@ function shouldBeMigrated(record) {
 
 async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
   const parsedUrl = new URL(originalUrl);
-  const newUrl = parsedUrl.protocol + '//'+ parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
+  const newUrl = parsedUrl.protocol + '//' + parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
 
   const config = {
     headers: {
@@ -67,7 +67,7 @@ async function updateRecord(base, id, url) {
           url,
         },
       },
-    ], (err, records) => {
+    ], (err) => {
       if (err) reject();
       else resolve();
     });
