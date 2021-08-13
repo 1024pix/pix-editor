@@ -123,6 +123,16 @@ async function cloneFile(token, originalUrl, randomString, filename, clock = Dat
   return newUrl;
 }
 
+async function cloneAndPrepareAttachment(attachment, token, clock) {
+  const attachmentUrl = await cloneFile(token, attachment.get('url'), attachment.getId(), attachment.get('filename'), clock);
+  return {
+    fields: {
+      ...attachment.fields,
+      url: attachmentUrl,
+    }
+  };
+}
+
 async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId, clock = Date) {
   const attachments = await base.select({
     fields: [
@@ -136,14 +146,8 @@ async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId
     filterByFormula : `{challengeId persistant} = '${challengePersistentId}'`
   }).all();
 
-  const duplicatedAttachments = await Promise.all(attachments.map(async (attachment) => {
-    const attachmentUrl = await cloneFile(token, attachment.get('url'), attachment.getId(), attachment.get('filename'), clock);
-    return {
-      fields: {
-        ...attachment.fields,
-        url: attachmentUrl,
-      }
-    };
+  const duplicatedAttachments = await Promise.all(attachments.map((attachment) => {
+    return cloneAndPrepareAttachment(attachment, token, clock);
   }));
 
   const newAttachments = await base.create(duplicatedAttachments);
