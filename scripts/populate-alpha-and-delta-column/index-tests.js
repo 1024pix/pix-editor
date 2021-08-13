@@ -7,9 +7,9 @@ const AirtableRecord = require('airtable').Record;
 const _ = require('lodash');
 const { matchData, findAirtableIds, updateRecords } = require('.');
 
-describe('Populate alpha and delta column', () => {
-  describe('#matchData', () => {
-    it('should return a object table with challenge persistent id, alpha and delta',  async () => {
+describe('Populate alpha and delta column', function() {
+  describe('#matchData', function() {
+    it('should return a object table with challenge persistent id, alpha and delta',  async function() {
       const csvData = 'ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2';
       const jsonData = [{
         id: 'hash1',
@@ -35,7 +35,7 @@ describe('Populate alpha and delta column', () => {
       expect(result).to.deep.equal(expectedResult);
     });
 
-    it('should ignore entries with not match',  async () => {
+    it('should ignore entries with not match',  async function() {
       const csvData = 'ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2';
       const jsonData = [{
         id: 'hash1',
@@ -54,8 +54,8 @@ describe('Populate alpha and delta column', () => {
     });
   });
 
-  describe('#findAirtableIds', () => {
-    it('should request airtable with the persistent ids', async () => {
+  describe('#findAirtableIds', function() {
+    it('should request airtable with the persistent ids', async function() {
       const data = [{
         id: 'recPix1',
         alpha: 0.123,
@@ -105,8 +105,8 @@ describe('Populate alpha and delta column', () => {
     });
   });
 
-  describe('#updateRecords', () => {
-    it('updates alpha and delta in challenges records', async () => {
+  describe('#updateRecords', function() {
+    it('updates alpha and delta in challenges records', async function() {
       const data = [{
         id: 'recAirtableId1',
         alpha: 0.123,
@@ -138,7 +138,7 @@ describe('Populate alpha and delta column', () => {
       ]);
     });
 
-    it('should batch updates with up to 10 records at a time', async () => {
+    it('should batch updates with up to 10 records at a time', async function() {
       const data = _.times(11).map((index) => {
         return {
           id: index,

@@ -5,9 +5,9 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe('checkChallengeAttachments', () => {
+describe('checkChallengeAttachments', function() {
 
-  it('returns empty table when attachments are correct for given challenge', async () => {
+  it('returns empty table when attachments are correct for given challenge', async function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -48,7 +48,7 @@ describe('checkChallengeAttachments', () => {
     expect(differences).to.deep.equal([]);
   });
 
-  it('returns array containing illustrations with wrong checksum', async () => {
+  it('returns array containing illustrations with wrong checksum', async function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -100,7 +100,7 @@ describe('checkChallengeAttachments', () => {
     expect(differences).to.deep.equal([expectedDifference]);
   });
 
-  it('returns table containing missing illustration when any', async () => {
+  it('returns table containing missing illustration when any', async function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -135,7 +135,7 @@ describe('checkChallengeAttachments', () => {
     expect(differences).to.deep.equal([expectedDifference]);
   });
 
-  it('returns table containing missing attachment when any', async () => {
+  it('returns table containing missing attachment when any', async function() {
     const attachment = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -169,7 +169,7 @@ describe('checkChallengeAttachments', () => {
     expect(differences).to.deep.equal([expectedDifference]);
   });
 
-  it('ignore when attachments alt have space before new line', async () => {
+  it('ignore when attachments alt have space before new line', async function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',

@@ -7,10 +7,10 @@ chai.use(sinonChai);
 const expect = chai.expect;
 const nock = require('nock');
 
-describe('Migrate attachments in subfolder', () => {
+describe('Migrate attachments in subfolder', function() {
 
-  describe('#shouldBeMigrated', () => {
-    it('returns false if the url ends with the filename', () => {
+  describe('#shouldBeMigrated', function() {
+    it('returns false if the url ends with the filename', function() {
       const record = new AirtableRecord('Attachment', '1', {
         fields: {
           url: 'https://dl.example.net/1234567/toto.ods',
@@ -20,7 +20,7 @@ describe('Migrate attachments in subfolder', () => {
       expect(shouldBeMigrated(record)).to.be.false;
     });
 
-    it('returns false if the url ends with the encoded filename', () => {
+    it('returns false if the url ends with the encoded filename', function() {
       const record = new AirtableRecord('Attachment', '1', {
         fields: {
           url: 'https://dl.example.net/1234567/toto%20filename.ods',
@@ -30,7 +30,7 @@ describe('Migrate attachments in subfolder', () => {
       expect(shouldBeMigrated(record)).to.be.false;
     });
 
-    it('returns true if the url does not end with the filename', () => {
+    it('returns true if the url does not end with the filename', function() {
       const record = new AirtableRecord('Attachment', '1', {
         fields: {
           url: 'https://dl.example.net/1234567.ods',
@@ -40,7 +40,7 @@ describe('Migrate attachments in subfolder', () => {
       expect(shouldBeMigrated(record)).to.be.true;
     });
 
-    it('returns true if the last segment of url is not the filename', () => {
+    it('returns true if the last segment of url is not the filename', function() {
       const record = new AirtableRecord('Attachment', '1', {
         fields: {
           url: 'https://dl.example.net/rec_1234567_toto.ods',
@@ -51,13 +51,13 @@ describe('Migrate attachments in subfolder', () => {
     });
   });
 
-  describe('#cloneFile', () => {
-    beforeEach(() => {
+  describe('#cloneFile', function() {
+    beforeEach(function() {
       nock.cleanAll();
       nock.disableNetConnect();
     });
 
-    it('clone the file to a subdir', async () => {
+    it('clone the file to a subdir', async function() {
       const clock = { now: () => '123456' };
 
       process.env.BUCKET_NAME = 'bucket name';
@@ -74,7 +74,7 @@ describe('Migrate attachments in subfolder', () => {
       expect(newUrl).to.equal('https://dl.pix.fr/randomstring123456/toto.ods');
     });
 
-    it('encode the filename when cloing', async () => {
+    it('encode the filename when cloing', async function() {
       const clock = { now: () => '123456' };
 
       process.env.BUCKET_NAME = 'bucket name';
@@ -92,8 +92,8 @@ describe('Migrate attachments in subfolder', () => {
     });
   });
 
-  describe('#updateRecord', () => {
-    it('updates url in attachment record', async () => {
+  describe('#updateRecord', function() {
+    it('updates url in attachment record', async function() {
       const base = {
         update: sinon.stub().yields(),
       };

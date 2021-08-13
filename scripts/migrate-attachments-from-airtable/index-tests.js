@@ -5,9 +5,9 @@ const sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 const expect = chai.expect;
 
-describe('challengeAttachmentsToCsv', () => {
+describe('challengeAttachmentsToCsv', function() {
 
-  it('returns illustration as CSV string', () => {
+  it('returns illustration as CSV string', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -49,7 +49,7 @@ describe('challengeAttachmentsToCsv', () => {
     expect(csv).to.equal(expectedCsv);
   });
 
-  it('returns illustration as CSV string with no alt text', () => {
+  it('returns illustration as CSV string with no alt text', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -90,7 +90,7 @@ describe('challengeAttachmentsToCsv', () => {
     expect(csv).to.equal(expectedCsv);
   });
 
-  it('returns attachments as CSV string', () => {
+  it('returns attachments as CSV string', function() {
     const attachments = [
       {
         'filename': 'Pix_etoile.odp',
@@ -136,7 +136,7 @@ describe('challengeAttachmentsToCsv', () => {
     expect(csv).to.equal(expectedCsv);
   });
 
-  it('returns attachments and illustrations as CSV string', () => {
+  it('returns attachments and illustrations as CSV string', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -173,7 +173,7 @@ describe('challengeAttachmentsToCsv', () => {
     expect(csv).to.equal(expectedCsv);
   });
 
-  it('returns illustration as CSV string with escaped alternative text', () => {
+  it('returns illustration as CSV string with escaped alternative text', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -200,8 +200,8 @@ describe('challengeAttachmentsToCsv', () => {
 
 });
 
-describe('challengesAttachmentsToCsv', () => {
-  it('returns a csv string with a header and lines', () => {
+describe('challengesAttachmentsToCsv', function() {
+  it('returns a csv string with a header and lines', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -243,8 +243,8 @@ describe('challengesAttachmentsToCsv', () => {
   });
 });
 
-describe('challenges doesn\'t have any attachments and illustration', () => {
-  it('should return a challenge csv file without attachments and illustration', () => {
+describe('challenges doesn\'t have any attachments and illustration', function() {
+  it('should return a challenge csv file without attachments and illustration', function() {
     const challenge = {
       fields: {
         'Record ID': 'some-challenge-id',
@@ -261,8 +261,8 @@ describe('challenges doesn\'t have any attachments and illustration', () => {
   });
 });
 
-describe('rename files', () => {
-  it('should rename illustration', () => {
+describe('rename files', function() {
+  it('should rename illustration', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -286,7 +286,7 @@ describe('rename files', () => {
     expect(stubRenameSync).to.be.calledWith('attcKBWOyCUyATJ93.png', 'some-challenge-id_illustration_mailPJ.png');
   });
 
-  it('should rename attachment', () => {
+  it('should rename attachment', function() {
     const attachments = [
       {
         'filename': 'Pix_etoile.odp',
@@ -312,7 +312,7 @@ describe('rename files', () => {
     expect(stubRenameSync).to.be.calledWith('attmRoYR3AfCyUiLW.odp', 'some-challenge-id2_attachment_Pix_etoile.odp');
   });
 
-  it('should rename illustration and attachments', () => {
+  it('should rename illustration and attachments', function() {
     const illustration = {
       'filename': 'mailPJ.png',
       'id': 'attcKBWOyCUyATJ93',
@@ -357,8 +357,8 @@ describe('rename files', () => {
   });
 });
 
-describe('Attachment url', () => {
-  it('should construct attachment url', () => {
+describe('Attachment url', function() {
+  it('should construct attachment url', function() {
     const challengeId = 'some-challenge-id3';
     const filename = 'Pix etoile.odp';
     const bucketBaseUrl = 'https://dl.ovh.com/bucket/';
