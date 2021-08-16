@@ -67,7 +67,7 @@ export default class TutorialForm extends Component {
         this.store.createRecord('tag', {
           title: title,
           notes: notes,
-          pixId: this.idGenerator.newId()
+          pixId: this.idGenerator.newId('tag')
         }).save()
           .then((tag) => {
             tutorial.tags.pushObject(tag);

@@ -20,7 +20,7 @@ export default class NewRoute extends PrototypeRoute {
         t3Status: true,
         genealogy: 'Prototype 1',
         author: [this.config.author],
-        id: this.idGenerator.newId()
+        id: this.idGenerator.newId('challenge')
       });
       if (params.fromSkill) {
         const skill = await this.store.findRecord('skill', params.fromSkill);

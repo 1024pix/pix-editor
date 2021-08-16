@@ -45,7 +45,7 @@ export default class Tutorials extends Component {
   addTutorial(item, options) {
     if (item.id === 'create') {
       const date = new Date();
-      this.newTutorial = this.store.createRecord('tutorial', { pixId: this.idGenerator.newId(), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` });
+      this.newTutorial = this.store.createRecord('tutorial', { pixId: this.idGenerator.newId('tutorial'), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` });
       this.displayTutorialPopin = true;
     } else {
       return this.store.findRecord('tutorial', item.id)

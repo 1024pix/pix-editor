@@ -243,7 +243,7 @@ export default class ChallengeModel extends Model {
 
     data.status = 'proposé';
     data.skills = this.skills;
-    data.id = this.idGenerator.newId();
+    data.id = this.idGenerator.newId('challenge');
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;
@@ -254,7 +254,7 @@ export default class ChallengeModel extends Model {
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';
-    data.id = this.idGenerator.newId();
+    data.id = this.idGenerator.newId('challenge');
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;

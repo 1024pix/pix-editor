@@ -7,7 +7,7 @@ export default class NewRoute extends SingleRoute {
 
   model() {
     return {
-      skill: this.store.createRecord('skill', { status:'en construction', pixId:this.idGenerator.newId() })
+      skill: this.store.createRecord('skill', { status: 'en construction', pixId: this.idGenerator.newId('skill') })
     };
   }
 

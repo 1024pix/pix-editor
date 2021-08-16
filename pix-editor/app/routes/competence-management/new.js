@@ -14,7 +14,7 @@ export default class CompetenceManagementNewRoute extends Route {
       .then(competences => {
         const competence = this.store.createRecord('competence', {
           code: `${area.code}.${competences.length + 1}`,
-          pixId: this.idGenerator.newId(),
+          pixId: this.idGenerator.newId('competence'),
         });
         return { competence, area };
       });
