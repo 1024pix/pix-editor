@@ -21,7 +21,7 @@ function _parseQueryParams(search) {
   return params;
 }
 
-const challengeIdType = Joi.string().pattern(/^rec[a-zA-Z0-9]+$/).required();
+const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
 async function _refreshCache(challenge) {
   try {
