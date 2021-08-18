@@ -7,6 +7,7 @@ const { parseString } = require('@fast-csv/parse');
 const axios = require('axios');
 const getToken = require('../common/token');
 const ProgressBar = require('progress');
+const bluebird = require('bluebird');
 const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
 
 async function findSkill(base, persistentId) {
@@ -205,7 +206,7 @@ async function main() {
     width: 50,
   });
 
-  await Promise.all(rows.map(async (row) => {
+  bluebird.mapSeries(async (row) => {
     try {
       const sourceSkillIdPersistent = row.idPersistant;
       const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
@@ -220,10 +221,11 @@ async function main() {
       await archiveSkill(baseSkills, skill);
       await activateSkill(baseSkills, newSkill);
     } catch (e) {
+      console.log('row error: ', row);
       console.error(e);
     }
     bar.tick();
-  }));
+  });
 }
 
 if (process.env.NODE_ENV !== 'test') {
