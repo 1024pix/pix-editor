@@ -5,8 +5,11 @@ chai.use(sinonChai);
 const expect = chai.expect;
 const nock = require('nock');
 const AirtableRecord = require('airtable').Record;
+const _ = require('lodash');
 const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
 const {
+  bulkCreate,
+  bulkUpdate,
   findSkill,
   duplicateSkill,
   prepareNewChallenge,
@@ -313,6 +316,60 @@ describe('Copy skills and set challenges as focusable', function() {
           },
         },
       ]);
+    });
+  });
+
+  describe('#bulkCreate', function() {
+    it('should create the records and return the result', async function() {
+      const expectedResult = [Symbol()];
+      const base = {
+        create: sinon.stub().resolves(expectedResult),
+      };
+      const records = [1];
+
+      const result = await bulkCreate(base, records);
+      expect(base.create).to.have.been.calledWith([1]);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+    it('should create the records by batch of 10 and return the result', async function() {
+      const expectedResult = [Symbol()];
+      const base = {
+        create: sinon.stub().resolves(expectedResult),
+      };
+      const records = _.times(11).map((i) => i);
+
+      const result = await bulkCreate(base, records);
+      expect(base.create).to.have.been.calledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(base.create).to.have.been.calledWith([10]);
+      expect(result).to.deep.equal(expectedResult.concat(expectedResult));
+    });
+  });
+
+  describe('#bulkUpdate', function() {
+    it('should update the records and return the result', async function() {
+      const expectedResult = [Symbol()];
+      const base = {
+        update: sinon.stub().resolves(expectedResult),
+      };
+      const records = [1];
+
+      const result = await bulkUpdate(base, records);
+      expect(base.update).to.have.been.calledWith([1]);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+    it('should update the records by batch of 10 and return the result', async function() {
+      const expectedResult = [Symbol()];
+      const base = {
+        update: sinon.stub().resolves(expectedResult),
+      };
+      const records = _.times(11).map((i) => i);
+
+      const result = await bulkUpdate(base, records);
+      expect(base.update).to.have.been.calledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      expect(base.update).to.have.been.calledWith([10]);
+      expect(result).to.deep.equal(expectedResult.concat(expectedResult));
     });
   });
 });

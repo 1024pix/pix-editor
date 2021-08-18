@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const fs = require('fs');
 const Airtable = require('airtable');
 const random = require('js-crypto-random');
@@ -119,7 +120,7 @@ async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId
     return cloneAndPrepareAttachment(attachment, token, clock);
   }));
 
-  const newAttachments = await base.create(duplicatedAttachments);
+  const newAttachments = await bulkCreate(base, duplicatedAttachments);
 
   return newAttachments.map((attachment) => attachment.getId());
 }
@@ -134,7 +135,7 @@ function archiveChallenges(base, challenges) {
     };
   });
 
-  return base.update(archivedChallenges);
+  return bulkUpdate(base, archivedChallenges);
 }
 
 function changeSkillStatus(base, skill, status) {
@@ -172,6 +173,23 @@ function getRows(csvData) {
   });
 }
 
+async function bulkOnBase(base, method, records) {
+  const recordsChunk = _.chunk(records, 10);
+  const promises = recordsChunk.map(async (records) => {
+    return base[method](records);
+  });
+  const newRecords = await Promise.all(promises);
+  return newRecords.flat();
+}
+
+async function bulkCreate(base, records) {
+  return bulkOnBase(base, 'create', records);
+}
+
+async function bulkUpdate(base, records) {
+  return bulkOnBase(base, 'update', records);
+}
+
 async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
   const airtableClient = createAirtableClient();
@@ -197,7 +215,7 @@ async function main() {
         const newAttachmentsIds = await cloneAttachmentsFromAChallenge(baseAttachments, token, challenge.get('id persistant'));
         return prepareNewChallenge(challenge, newSkill.getId(), newAttachmentsIds, idGenerator);
       }));
-      await baseChallenges.create(duplicatedChallenges);
+      await bulkCreate(baseChallenges, duplicatedChallenges);
       await archiveChallenges(baseChallenges, challenges);
       await archiveSkill(baseSkills, skill);
       await activateSkill(baseSkills, newSkill);
@@ -212,6 +230,8 @@ if (process.env.NODE_ENV !== 'test') {
   main();
 } else {
   module.exports = {
+    bulkCreate,
+    bulkUpdate,
     findSkill,
     duplicateSkill,
     findChallengesFromASkill,
