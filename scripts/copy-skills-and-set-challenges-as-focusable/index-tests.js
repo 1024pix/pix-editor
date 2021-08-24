@@ -105,7 +105,7 @@ describe('Copy skills and set challenges as focusable', function() {
 
       expect(base.select).to.have.been.calledWith({
         fields: USEFUL_CHALLENGE_FIELDS,
-        filterByFormula : 'AND({Acquix (id persistant)} = \'1\', ' +
+        filterByFormula : 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), ' +
           'OR({Statut} = \'validé\', {Statut} = \'validé sans test\', {Statut} = \'pré-validé\'))',
       });
     });

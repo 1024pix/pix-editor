@@ -11,7 +11,7 @@ const bluebird = require('bluebird');
 const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
 
 async function main() {
-  const csv = fs.readFileSync('./file.csv', 'utf-8');
+  const csv = fs.readFileSync('./skillToFocus.csv', 'utf-8');
   const airtableClient = createAirtableClient();
   const baseSkills = getBaseSkills(airtableClient);
   const baseChallenges = getBaseChallenges(airtableClient);
@@ -25,7 +25,7 @@ async function main() {
     width: 50,
   });
 
-  bluebird.mapSeries(async (row) => {
+  bluebird.mapSeries(rows, async (row) => {
     try {
       const sourceSkillIdPersistent = row.idPersistant;
       const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
@@ -105,7 +105,7 @@ async function duplicateSkill(base, idGenerator, skill) {
 async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   return base.select({
     fields: USEFUL_CHALLENGE_FIELDS,
-    filterByFormula: `AND({Acquix (id persistant)} = '${sourceSkillIdPersistent}', OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
+    filterByFormula: `AND(FIND('${sourceSkillIdPersistent}', ARRAYJOIN({Acquix (id persistant)})), OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
   }).all();
 }
 
