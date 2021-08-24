@@ -25,7 +25,8 @@ async function main() {
     width: 50,
   });
 
-  bluebird.mapSeries(rows, async (row) => {
+  const challengesToArchived = [];
+  await bluebird.mapSeries(rows, async (row) => {
     try {
       const sourceSkillIdPersistent = row.idPersistant;
       const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
@@ -36,7 +37,7 @@ async function main() {
         return prepareNewChallenge(challenge, newSkill.getId(), newAttachmentsIds, idGenerator);
       }));
       await bulkCreate(baseChallenges, duplicatedChallenges);
-      await archiveChallenges(baseChallenges, challenges);
+      challengesToArchived.push(...challenges);
       await archiveSkill(baseSkills, skill);
       await activateSkill(baseSkills, newSkill);
     } catch (e) {
@@ -45,6 +46,7 @@ async function main() {
     }
     bar.tick();
   });
+  await archiveChallenges(baseChallenges, challengesToArchived);
 }
 
 function createAirtableClient() {
