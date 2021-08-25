@@ -11,7 +11,7 @@ const bluebird = require('bluebird');
 const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
 
 async function main() {
-  const csv = fs.readFileSync('./file.csv', 'utf-8');
+  const csv = fs.readFileSync('./skillToFocus.csv', 'utf-8');
   const airtableClient = createAirtableClient();
   const baseSkills = getBaseSkills(airtableClient);
   const baseChallenges = getBaseChallenges(airtableClient);
@@ -25,7 +25,8 @@ async function main() {
     width: 50,
   });
 
-  bluebird.mapSeries(async (row) => {
+  const challengesToArchived = [];
+  await bluebird.mapSeries(rows, async (row) => {
     try {
       const sourceSkillIdPersistent = row.idPersistant;
       const skill = await findSkill(baseSkills, sourceSkillIdPersistent);
@@ -36,7 +37,7 @@ async function main() {
         return prepareNewChallenge(challenge, newSkill.getId(), newAttachmentsIds, idGenerator);
       }));
       await bulkCreate(baseChallenges, duplicatedChallenges);
-      await archiveChallenges(baseChallenges, challenges);
+      challengesToArchived.push(...challenges);
       await archiveSkill(baseSkills, skill);
       await activateSkill(baseSkills, newSkill);
     } catch (e) {
@@ -45,6 +46,7 @@ async function main() {
     }
     bar.tick();
   });
+  await archiveChallenges(baseChallenges, challengesToArchived);
 }
 
 function createAirtableClient() {
@@ -105,7 +107,7 @@ async function duplicateSkill(base, idGenerator, skill) {
 async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   return base.select({
     fields: USEFUL_CHALLENGE_FIELDS,
-    filterByFormula: `AND({Acquix (id persistant)} = '${sourceSkillIdPersistent}', OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
+    filterByFormula: `AND(FIND('${sourceSkillIdPersistent}', ARRAYJOIN({Acquix (id persistant)})), OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
   }).all();
 }
 
@@ -216,16 +218,20 @@ async function bulkCreate(base, records) {
 }
 
 async function bulkUpdate(base, records) {
-  return bulkOnBase(base, 'update', records);
+  const uniqRecords = _.uniqBy(records,'id');
+  return bulkOnBase(base, 'update', uniqRecords);
 }
 
 async function bulkOnBase(base, method, records) {
   const recordsChunk = _.chunk(records, 10);
-  const promises = recordsChunk.map(async (records) => {
-    return base[method](records);
-  });
-  const newRecords = await Promise.all(promises);
-  return newRecords.flat();
+  try {
+    const newRecords = await bluebird.mapSeries(recordsChunk, (records) => {
+      return base[method](records);
+    });
+    return newRecords.flat();
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 if (process.env.NODE_ENV !== 'test') {
