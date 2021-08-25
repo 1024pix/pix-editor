@@ -218,15 +218,20 @@ async function bulkCreate(base, records) {
 }
 
 async function bulkUpdate(base, records) {
-  return bulkOnBase(base, 'update', records);
+  const uniqRecords = _.uniqBy(records,'id');
+  return bulkOnBase(base, 'update', uniqRecords);
 }
 
 async function bulkOnBase(base, method, records) {
   const recordsChunk = _.chunk(records, 10);
-  const newRecords = await bluebird.mapSeries(recordsChunk, (records) => {
-    return base[method](records);
-  });
-  return newRecords.flat();
+  try {
+    const newRecords = await bluebird.mapSeries(recordsChunk, (records) => {
+      return base[method](records);
+    });
+    return newRecords.flat();
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 if (process.env.NODE_ENV !== 'test') {

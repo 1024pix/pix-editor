@@ -348,14 +348,26 @@ describe('Copy skills and set challenges as focusable', function() {
 
   describe('#bulkUpdate', function() {
     it('should update the records and return the result', async function() {
-      const expectedResult = [Symbol()];
+      const expectedResult = [{ id: 'rec123' }];
       const base = {
         update: sinon.stub().resolves(expectedResult),
       };
-      const records = [1];
+      const records = [{ id: 1 }];
 
       const result = await bulkUpdate(base, records);
-      expect(base.update).to.have.been.calledWith([1]);
+      expect(base.update).to.have.been.calledWith([{ id: 1 }]);
+      expect(result).to.deep.equal(expectedResult);
+    });
+
+    it('should remove duplicate records before update', async function() {
+      const expectedResult = [{ id: 'rec123' }];
+      const base = {
+        update: sinon.stub().resolves(expectedResult),
+      };
+      const records = [{ id: 1 }, { id: 1 }];
+
+      const result = await bulkUpdate(base, records);
+      expect(base.update).to.have.been.calledWith([{ id: 1 }]);
       expect(result).to.deep.equal(expectedResult);
     });
 
@@ -364,11 +376,22 @@ describe('Copy skills and set challenges as focusable', function() {
       const base = {
         update: sinon.stub().resolves(expectedResult),
       };
-      const records = _.times(11).map((i) => i);
+      const records = _.times(11).map((i) => { return { id: i }; });
 
       const result = await bulkUpdate(base, records);
-      expect(base.update).to.have.been.calledWith([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-      expect(base.update).to.have.been.calledWith([10]);
+      expect(base.update).to.have.been.calledWith([
+        { id: 0 },
+        { id: 1 },
+        { id: 2 },
+        { id: 3 },
+        { id: 4 },
+        { id: 5 },
+        { id: 6 },
+        { id: 7 },
+        { id: 8 },
+        { id: 9 },
+      ]);
+      expect(base.update).to.have.been.calledWith([{ id: 10 }]);
       expect(result).to.deep.equal(expectedResult.concat(expectedResult));
     });
   });
