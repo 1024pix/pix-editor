@@ -223,10 +223,9 @@ async function bulkUpdate(base, records) {
 
 async function bulkOnBase(base, method, records) {
   const recordsChunk = _.chunk(records, 10);
-  const promises = recordsChunk.map(async (records) => {
+  const newRecords = await bluebird.mapSeries(recordsChunk, (records) => {
     return base[method](records);
   });
-  const newRecords = await Promise.all(promises);
   return newRecords.flat();
 }
 
