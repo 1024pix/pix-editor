@@ -1,5 +1,12 @@
 
 
+## v3.43.0 (30/08/2021)
+
+- [#209](https://github.com/1024pix/pix-editor/pull/209) [FEATURE] Préfixe l'id persistant des modèles par leur type
+- [#208](https://github.com/1024pix/pix-editor/pull/208) [BUGFIX] Correction du script de copie d'acquis pour les épreuves focus
+- [#206](https://github.com/1024pix/pix-editor/pull/206) [TECH] Ajout d'un script permettant de passer des épreuves en focus via une liste d'acquis (PIX-2962).
+- [#207](https://github.com/1024pix/pix-editor/pull/207) [TECH] Ajout d'un linter dans le dossier scripts
+
 ## v3.42.0 (09/08/2021)
 
 - [#201](https://github.com/1024pix/pix-editor/pull/201) [FEATURE] Permettre de désigner une épreuve comme "focus" (pix-2877).
