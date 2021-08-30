@@ -15,7 +15,7 @@ export default class NewRoute extends Tube {
   async model(params) {
     const theme = await this.store.findRecord('theme', params.themeId);
     return this.store.createRecord('tube', {
-      pixId:this.idGenerator.newId(),
+      pixId: this.idGenerator.newId('tube'),
       theme
     });
   }

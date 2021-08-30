@@ -200,7 +200,7 @@ export default class SkillModel extends Model {
     const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore', 'version'];
     const data = this._getJSON(ignoredFields);
     data.status = 'en construction';
-    data.pixId = this.idGenerator.newId();
+    data.pixId = this.idGenerator.newId('skill');
     const newSkill = this.myStore.createRecord(this.constructor.modelName, data);
     const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)

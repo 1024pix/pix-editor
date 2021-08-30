@@ -5,9 +5,9 @@ const RECORD_ID_PREFIX = 'rec';
 
 
 export default class IdGeneratorService extends Service {
-  newId() {
+  newId(prefix = RECORD_ID_PREFIX) {
     const randomString = random.getRandomAsciiString(10);
     const randomBase62 = base62_encode(randomString);
-    return `${RECORD_ID_PREFIX}${randomBase62}`;
+    return `${prefix}${randomBase62}`;
   }
 }

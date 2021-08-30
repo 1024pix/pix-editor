@@ -78,7 +78,7 @@ export default class CompetenceManagementNewController extends Controller {
       title,
       theme,
       competence,
-      pixId: this.idGenerator.newId(),
+      pixId: this.idGenerator.newId('tube'),
     });
     return await tubeWorkbench.save();
   }
@@ -89,7 +89,7 @@ export default class CompetenceManagementNewController extends Controller {
       name: '@workbench',
       description,
       tube,
-      pixId: this.idGenerator.newId(),
+      pixId: this.idGenerator.newId('skill'),
     });
     return await skillWorkbench.save();
   }

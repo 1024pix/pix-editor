@@ -12,7 +12,7 @@ export default class AreaManagementNewRoute extends Route {
     const areas = await framework.get('areas');
     const area = this.store.createRecord('area', {
       code: `${areas.length + 1}`,
-      pixId: this.idGenerator.newId(),
+      pixId: this.idGenerator.newId('area'),
     });
     return { area, framework };
   }
