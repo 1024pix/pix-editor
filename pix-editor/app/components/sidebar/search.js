@@ -12,7 +12,7 @@ export default class SidebarSearchComponent extends Component {
   @action
   getSearchResults(query) {
     query = query.trim();
-    if (query.substr(0, 1) === '@') {
+    if (query.startsWith('@')) {
       this.routeModel = 'skill';
       return this.store.query('skill', {
         filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
@@ -25,7 +25,7 @@ export default class SidebarSearchComponent extends Component {
             name: skill.name
           }));
         });
-    } else if (query.substr(0, 3) === 'rec') {
+    } else if (query.startsWith('rec')) {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
         filter: {
