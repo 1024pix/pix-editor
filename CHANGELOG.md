@@ -1,5 +1,10 @@
 
 
+## v3.43.1 (30/08/2021)
+
+- [#210](https://github.com/1024pix/pix-editor/pull/210) [FEATURE] Ajouter la syntaxe du menu déroulant dans l'infobulle d'aide (PE-79).
+- [#213](https://github.com/1024pix/pix-editor/pull/213) [BUGFIX] Correction de la recherche d'épreuves par id
+
 ## v3.43.0 (30/08/2021)
 
 - [#209](https://github.com/1024pix/pix-editor/pull/209) [FEATURE] Préfixe l'id persistant des modèles par leur type
