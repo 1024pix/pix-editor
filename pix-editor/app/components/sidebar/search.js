@@ -10,50 +10,44 @@ export default class SidebarSearchComponent extends Component {
   @service router;
 
   @action
-  getSearchResults(query) {
+  async getSearchResults(query) {
     query = query.trim();
     if (query.startsWith('@')) {
       this.routeModel = 'skill';
-      return this.store.query('skill', {
+      const skills = await this.store.query('skill', {
         filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
         maxRecords: 20,
         sort: [{ field: 'Nom', direction: 'asc' }]
-      })
-        .then(skills => {
-          return skills.map(skill => ({
-            title: skill.name,
-            name: skill.name
-          }));
-        });
+      });
+      return skills.map(skill => ({
+        title: skill.name,
+        name: skill.name
+      }));
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       this.routeModel = 'challenge';
-      return this.store.query('challenge', {
+      const challenges = await this.store.query('challenge', {
         filter: {
           ids: [query],
         },
-      })
-        .then(challenges => {
-          return challenges.map(challenge => ({
-            title: challenge.id,
-            id: challenge.id
-          }));
-        });
+      });
+      return challenges.map(challenge => ({
+        title: challenge.id,
+        id: challenge.id
+      }));
     } else {
       this.routeModel = 'challenge';
-      return this.store.query('challenge', {
+      const challenges = await this.store.query('challenge', {
         filter: {
           search: query.toLowerCase(),
         },
         page: {
           size: 20,
         },
-      })
-        .then(challenges => {
-          return challenges.map(challenge => ({
-            title: challenge.instruction.substr(0, 100),
-            id: challenge.id
-          }));
-        });
+      });
+      return challenges.map(challenge => ({
+        title: challenge.instruction.substr(0, 100),
+        id: challenge.id
+      }));
     }
   }
 
