@@ -25,7 +25,7 @@ export default class SidebarSearchComponent extends Component {
             name: skill.name
           }));
         });
-    } else if (query.startsWith('rec')) {
+    } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       this.routeModel = 'challenge';
       return this.store.query('challenge', {
         filter: {
