@@ -8,6 +8,8 @@ const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
 const airtableSerializer = require('../serializers/airtable-serializer');
 const createChallengeTransformer = require('../transformers/challenge-transformer');
+const Release = require('../../domain/models/Release');
+const Content = require('../../domain/models/Content');
 
 const { knex } = require('../../../db/knex-database-connection');
 
@@ -71,6 +73,14 @@ module.exports = {
 
     return { updatedRecord, model };
   },
+
+  toDomain(releaseDTO) {
+    return new Release({
+      id: releaseDTO.id,
+      content: Content.from(releaseDTO.content),
+      createdAt: releaseDTO.createdAt,
+    });
+  }
 };
 
 async function _getCurrentContent() {
