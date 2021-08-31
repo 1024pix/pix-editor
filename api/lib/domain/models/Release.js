@@ -9,9 +9,9 @@ module.exports = class Release {
   } = {}) {
     this.id = id;
     // attributes
-    this.content = content;
     this.createdAt = createdAt;
     // includes
+    this.content = content;
     // references
   }
 };
