@@ -55,7 +55,7 @@ describe('Integration | Repository | release-repository', function() {
     it('should return content of given release', async function() {
       // Given
       const otherReleaseContent = { some: 'property' };
-      const expectedReleaseContent = { some: 'old-property' };
+      const expectedReleaseContent = { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] };
 
       databaseBuilder.factory.buildRelease({ id: 11, createdAt: '2021-01-01', content: otherReleaseContent });
       databaseBuilder.factory.buildRelease({ id: 12, createdAt: '2020-01-01', content: expectedReleaseContent });

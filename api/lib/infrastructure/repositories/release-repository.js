@@ -39,7 +39,7 @@ module.exports = {
       .select('id', 'content', 'createdAt')
       .where('id', id);
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async serializeEntity({ entity, type }) {
@@ -75,6 +75,9 @@ module.exports = {
   },
 
   toDomain(releaseDTO) {
+    if (!releaseDTO) {
+      return null;
+    }
     return new Release({
       id: releaseDTO.id,
       content: Content.from(releaseDTO.content),
