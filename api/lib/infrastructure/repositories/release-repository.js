@@ -22,7 +22,7 @@ module.exports = {
       .returning(['id', 'content', 'createdAt'])
       .insert({ content });
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async getLatestRelease() {

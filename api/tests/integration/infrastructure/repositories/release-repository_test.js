@@ -20,7 +20,7 @@ describe('Integration | Repository | release-repository', function() {
 
     it('should return saved release with id and creation date', async function() {
       // Given
-      const currentContent = { some: 'property' };
+      const currentContent = { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] };
       const fakeGetCurrentContent = async function() { return currentContent; };
 
       // When
