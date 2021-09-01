@@ -31,7 +31,7 @@ module.exports = {
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async getRelease(id) {

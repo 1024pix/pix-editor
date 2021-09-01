@@ -197,7 +197,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return latest release of learning content', async () => {
         // Given
-        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { some: 'release' } });
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] } });
         await databaseBuilder.commit();
 
         const server = await createServer();

@@ -36,7 +36,7 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getLatestRelease', function() {
     it('should return content of newest created release', async function() {
       // Given
-      const newestReleaseContent = { some: 'property' };
+      const newestReleaseContent = { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] };
       const oldestReleaseContent = { some: 'old-property' };
 
       databaseBuilder.factory.buildRelease({ createdAt: '2021-01-01', content: newestReleaseContent });
