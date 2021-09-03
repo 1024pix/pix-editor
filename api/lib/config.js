@@ -82,6 +82,7 @@ module.exports = (function() {
     notifications: {
       slack: {
         webhookUrl: process.env.NOTIFICATIONS_SLACK_WEBHOOK_URL,
+        enable: process.env.NOTIFICATIONS_SLACK_ENABLE,
       }
     }
 
@@ -123,6 +124,8 @@ module.exports = (function() {
     config.scheduledJobs.redisUrl = config.scheduledJobs.redisUrl + '/1';
     
     config.notifications.slack.webhookUrl = 'https://hooks.slack.com/testUrl';
+
+    config.notifications.slack.enable = false;
   }
 
   return config;

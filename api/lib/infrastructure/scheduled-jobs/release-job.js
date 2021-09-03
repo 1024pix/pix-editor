@@ -56,11 +56,15 @@ const releaseJobOptions = {
 async function createRelease() {
   try {
     const release = await releaseRepository.create();
-    await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier());
+    if (config.notifications.slack.enable) {
+      await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier());
+    }
     logger.info(`Periodic release created with id ${release.id}`);
     return release.id;
   } catch (error) {
-    await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier());
+    if (config.notifications.slack.enable) {
+      await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier());
+    }
     logger.error(error);
   }
 }
