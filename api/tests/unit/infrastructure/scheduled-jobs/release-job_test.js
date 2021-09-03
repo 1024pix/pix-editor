@@ -44,13 +44,13 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should send a Slack success notification', async () => {
         // given
-        sinon.stub(config.notifications.slack, 'enable').value(true);
+        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
         
         // when
         await releaseJob.createRelease();
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier());
+        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
       });
 
       it('should log the success', async () => {
@@ -85,13 +85,13 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should send a Slack notification with error message', async () => {
         // given
-        sinon.stub(config.notifications.slack, 'enable').value(true);
+        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
         await releaseJob.createRelease();
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier());
+        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier('http://webook.url'));
       });
     });
 
@@ -100,26 +100,26 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         // given
         sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
         sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
-        sinon.stub(config.notifications.slack, 'enable').value(true);
+        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
         await releaseJob.createRelease();
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier());
+        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
       });
 
       it('should send a Slack failure notification', async function() {
         // given
         sinon.stub(releaseRepository, 'create').throws(new Error('Network error'));
         sinon.stub(learningContentNotification, 'notifyReleaseCreationFailure').resolves();
-        sinon.stub(config.notifications.slack, 'enable').value(true);
-        
+        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
+
         // when
         await releaseJob.createRelease();
-        
+
         // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier());
+        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier('http://webook.url'));
       });
       
     });
@@ -130,7 +130,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
         sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
         sinon.stub(config.notifications.slack, 'enable').value(false);
-        
+
         // When
         await releaseJob.createRelease();
 

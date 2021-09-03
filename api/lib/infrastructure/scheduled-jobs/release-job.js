@@ -57,13 +57,13 @@ async function createRelease() {
   try {
     const release = await releaseRepository.create();
     if (config.notifications.slack.enable) {
-      await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier());
+      await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.info(`Periodic release created with id ${release.id}`);
     return release.id;
   } catch (error) {
     if (config.notifications.slack.enable) {
-      await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier());
+      await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.error(error);
   }

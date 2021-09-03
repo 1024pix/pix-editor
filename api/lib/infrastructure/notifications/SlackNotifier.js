@@ -1,11 +1,15 @@
 const axios = require('axios');
-const config = require('../../config');
 
 class SlackNotifier {
+  constructor(webhookUrl) {
+    if (!webhookUrl) {
+      throw new Error('WebhookURL is required');
+    }
+    this.webhookUrl = webhookUrl;
+  }
 
   send(blocks) {
-    const webhookUrl = config.notifications.slack.webhookUrl;
-    return axios.post(webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
+    return axios.post(this.webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
   }
 
 }
