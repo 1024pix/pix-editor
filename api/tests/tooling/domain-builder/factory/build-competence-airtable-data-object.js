@@ -20,6 +20,7 @@ module.exports = function buildCompetenceAirtableDataObject({
     'recRV35kIeqUQj8cI',
     'rec50NXHkatsRkjVQ',
   ],
+  fullName = '1.1 Mener une recherche et une veille d’information',
 } = {}) {
 
   return {
@@ -34,5 +35,6 @@ module.exports = function buildCompetenceAirtableDataObject({
     description,
     descriptionFrFr,
     descriptionEnUs,
+    fullName,
   };
 };
