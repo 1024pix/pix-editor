@@ -10,7 +10,10 @@ module.exports = function buildSkill(
     competenceId = 'recofJCxg0NqTqTdP',
     pixValue = 2.4,
     status = 'actif',
-    tubeId = 'recTU0X22abcdefgh'
+    tubeId = 'recTU0X22abcdefgh',
+    description = 'skill description',
+    level = 5,
+    internationalisation = 'Monde',
   } = {}) {
   return {
     id,
@@ -24,5 +27,8 @@ module.exports = function buildSkill(
     pixValue,
     status,
     tubeId,
+    description,
+    level,
+    internationalisation,
   };
 };

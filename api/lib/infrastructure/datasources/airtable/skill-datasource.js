@@ -20,6 +20,9 @@ module.exports = datasource.extend({
     'Compétence (via Tube) (id persistant)',
     'Status',
     'Tube (id persistant)',
+    'Description',
+    'Level',
+    'Internationalisation',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -36,6 +39,9 @@ module.exports = datasource.extend({
       competenceId: _.head(airtableRecord.get('Compétence (via Tube) (id persistant)')),
       status: airtableRecord.get('Status'),
       tubeId: _.head(airtableRecord.get('Tube (id persistant)')),
+      description: airtableRecord.get('Description'),
+      level: airtableRecord.get('Level'),
+      internationalisation: airtableRecord.get('Internationalisation'),
     };
   },
 });
