@@ -52,7 +52,7 @@ const releaseJobOptions = {
 
 async function createRelease() {
   const release = await releaseRepository.create();
-  logger.debug(`Periodic release created with id ${release.id}`);
+  logger.info(`Periodic release created with id ${release.id}`);
   return release.id;
 }
 
