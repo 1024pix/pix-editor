@@ -2,7 +2,8 @@ const { expect, databaseBuilder, knex } = require('../../../test-helper');
 const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
 
 describe('Integration | Repository | release-repository', function() {
-  describe('#create', () => {
+
+  describe('#create', function() {
     it('should save current content as a new release', async function() {
       // Given
       const currentContent = { some: 'property' };
@@ -32,7 +33,7 @@ describe('Integration | Repository | release-repository', function() {
     });
   });
 
-  describe('#getLatestRelease', () => {
+  describe('#getLatestRelease', function() {
     it('should return content of newest created release', async function() {
       // Given
       const newestReleaseContent = { some: 'property' };
@@ -50,7 +51,7 @@ describe('Integration | Repository | release-repository', function() {
     });
   });
 
-  describe('#getRelease', () => {
+  describe('#getRelease', function() {
     it('should return content of given release', async function() {
       // Given
       const otherReleaseContent = { some: 'property' };

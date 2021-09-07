@@ -42,17 +42,6 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(releaseId).to.equal(resolvedCreatedRelease.id);
       });
 
-      it('should send a Slack success notification', async () => {
-        // given
-        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
-        
-        // when
-        await releaseJob.createRelease();
-
-        // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
-      });
-
       it('should log the success', async () => {
         //given
         const successLogStub = sinon.stub(logger, 'debug');
@@ -62,6 +51,28 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
         //then
         expect(successLogStub).to.have.been.called;
+      });
+
+      it('should send a Slack success notification if slack notification is enabled', async () => {
+        // given
+        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
+
+        // when
+        await releaseJob.createRelease();
+
+        // then
+        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
+      });
+
+      it('should not send a slack success notification if slack notification is disabled', async function() {
+        // given
+        sinon.stub(config.notifications.slack, 'enable').value(false);
+
+        // When
+        await releaseJob.createRelease();
+
+        // Then
+        expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
       });
     });
 
@@ -83,7 +94,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(errorLogStub).to.have.been.called;
       });
 
-      it('should send a Slack notification with error message', async () => {
+      it('should send a Slack notification with error message if Slack notification is enabled', async () => {
         // given
         sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
 
@@ -91,66 +102,19 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         await releaseJob.createRelease();
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier('http://webook.url'));
-      });
-    });
-
-    describe('when slack notification is enable', function() {
-      it('should send a Slack success notification', async function() {
-        // given
-        sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
-        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
-
-        // when
-        await releaseJob.createRelease();
-
-        // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
+        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error', new SlackNotifier('http://webook.url'));
       });
 
-      it('should send a Slack failure notification', async function() {
+      it('should not send a slack failure notification if Slack notification is disabled', async function() {
         // given
-        sinon.stub(releaseRepository, 'create').throws(new Error('Network error'));
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationFailure').resolves();
-        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
-
-        // when
-        await releaseJob.createRelease();
-
-        // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error',new SlackNotifier('http://webook.url'));
-      });
-      
-    });
-    
-    describe('when slack notification is disabled', function() {
-      it('should not send a slack success notification', async function() {
-        // given
-        sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
         sinon.stub(config.notifications.slack, 'enable').value(false);
 
         // When
         await releaseJob.createRelease();
 
-        // Then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
-      });
-
-      it('should not send a slack failure notification', async function() {
-        // given
-        sinon.stub(releaseRepository, 'create').throws(new Error('Network error'));
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationFailure').resolves();
-        sinon.stub(config.notifications.slack, 'enable').value(false);
-        
-        // When
-        await releaseJob.createRelease();
-        
         // Then
         expect(learningContentNotification.notifyReleaseCreationFailure).to.not.have.been.called;
       });
     });
   });
-
 });
