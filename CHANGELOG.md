@@ -1,5 +1,10 @@
 
 
+## v3.43.2 (08/09/2021)
+
+- [#216](https://github.com/1024pix/pix-editor/pull/216) [FEATURE] Change le texte du bouton pour uploader une illustration lorsqu'il y a déjà une
+- [#215](https://github.com/1024pix/pix-editor/pull/215) [TECH] Change le niveau de log de debug a info
+
 ## v3.43.1 (30/08/2021)
 
 - [#210](https://github.com/1024pix/pix-editor/pull/210) [FEATURE] Ajouter la syntaxe du menu déroulant dans l'infobulle d'aide (PE-79).
