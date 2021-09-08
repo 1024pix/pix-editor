@@ -44,7 +44,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should log the success', async () => {
         //given
-        const successLogStub = sinon.stub(logger, 'debug');
+        const successLogStub = sinon.stub(logger, 'info');
 
         //when
         await releaseJob.createRelease();
