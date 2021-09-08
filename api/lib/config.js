@@ -79,6 +79,13 @@ module.exports = (function() {
       sslEnabled: isFeatureEnabled(process.env.DATABASE_SSL_ENABLED),
     },
 
+    notifications: {
+      slack: {
+        webhookUrl: process.env.NOTIFICATIONS_SLACK_WEBHOOK_URL,
+        enable: process.env.NOTIFICATIONS_SLACK_ENABLE,
+      }
+    }
+
   };
 
   if (process.env.NODE_ENV === 'test') {
@@ -115,6 +122,10 @@ module.exports = (function() {
     config.database.url = process.env.TEST_DATABASE_URL;
 
     config.scheduledJobs.redisUrl = config.scheduledJobs.redisUrl + '/1';
+    
+    config.notifications.slack.webhookUrl = 'https://hooks.slack.com/testUrl';
+
+    config.notifications.slack.enable = false;
   }
 
   return config;

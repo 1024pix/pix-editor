@@ -3,6 +3,8 @@ const Sentry = require('@sentry/node');
 const config = require('../../config');
 const logger = require('../logger');
 const releaseRepository = require('../repositories/release-repository.js');
+const SlackNotifier = require('../notifications/SlackNotifier');
+const learningContentNotification = require('../../domain/services/learning-content-notification');
 
 const queueError = (err, ...messages) => {
   logger.error(err, ...messages);
@@ -38,6 +40,7 @@ module.exports = {
 
   queue,
 
+  createRelease,
 };
 
 const releaseJobOptions = {
@@ -51,9 +54,19 @@ const releaseJobOptions = {
 };
 
 async function createRelease() {
-  const release = await releaseRepository.create();
-  logger.info(`Periodic release created with id ${release.id}`);
-  return release.id;
+  try {
+    const release = await releaseRepository.create();
+    if (config.notifications.slack.enable) {
+      await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
+    }
+    logger.info(`Periodic release created with id ${release.id}`);
+    return release.id;
+  } catch (error) {
+    if (config.notifications.slack.enable) {
+      await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier(config.notifications.slack.webhookUrl));
+    }
+    logger.error(error);
+  }
 }
 
 function _isScheduledReleaseEnabled() {

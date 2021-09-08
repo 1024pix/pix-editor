@@ -1,5 +1,6 @@
-const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader } = require('../../../test-helper');
+const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon } = require('../../../test-helper');
 const createServer = require('../../../../server');
+const axios = require('axios');
 
 const {
   buildArea,
@@ -218,6 +219,11 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('POST /releases - Creates the release', () => {
+
+    beforeEach(function() {
+      sinon.stub(axios, 'post').resolves();
+    });
+
     context('nominal case', () => {
       it('should create the release', async () => {
         // Given
@@ -257,7 +263,6 @@ describe('Acceptance | Controller | release-controller', () => {
         // Then
         expect(response.statusCode).to.equal(403);
       });
-      
     });
   });
 
