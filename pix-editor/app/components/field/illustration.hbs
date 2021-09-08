@@ -16,7 +16,11 @@
     <FileUpload @name="illustration" @accept="image/*" @onfileadd={{this.add}}>
     {{!-- template-lint-disable link-href-attributes  --}}
       <a class="ui button">
-        Choisir une image...
+        {{#if @value}}
+          Remplacer l'image...
+        {{else}}
+          Choisir une image...
+        {{/if}}
       </a>
     {{!-- template-lint-enable link-href-attributes  --}}
     </FileUpload>
