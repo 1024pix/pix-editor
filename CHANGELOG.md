@@ -1,5 +1,9 @@
 
 
+## v3.44.0 (09/09/2021)
+
+- [#212](https://github.com/1024pix/pix-editor/pull/212) [FEATURE] Notifier d'une création d'une release du contenus pédagogique. 
+
 ## v3.43.2 (08/09/2021)
 
 - [#216](https://github.com/1024pix/pix-editor/pull/216) [FEATURE] Change le texte du bouton pour uploader une illustration lorsqu'il y a déjà une
