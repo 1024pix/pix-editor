@@ -11,7 +11,7 @@
       @loadingMessage="Recherche en cours..."
       @noMatchesMessage="Pas de résultat" as |result|>
       {{#if result.isSkill}}
-        {{result.title}} <span class="skill-result-status {{result.statusCSS}}" title={{result.status}}></span>
+        {{result.title}} v{{result.version}}<span class="skill-result-status {{result.statusCSS}}" title={{result.status}}></span>
       {{else}}
         {{result.title}}
       {{/if}}
