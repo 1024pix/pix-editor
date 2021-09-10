@@ -20,8 +20,10 @@ export default class SidebarSearchComponent extends Component {
         sort: [{ field: 'Nom', direction: 'asc' }]
       });
       return skills.map(skill => ({
+        isSkill: true,
         title: skill.name,
-        name: skill.name
+        name: skill.name,
+        status: skill.status
       }));
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       this.routeModel = 'challenge';
