@@ -23,7 +23,8 @@ export default class SidebarSearchComponent extends Component {
         isSkill: true,
         title: skill.name,
         name: skill.name,
-        status: skill.status
+        status: skill.status,
+        statusCSS: skill.statusCSS
       }));
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       this.routeModel = 'challenge';
