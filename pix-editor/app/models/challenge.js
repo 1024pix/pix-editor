@@ -45,7 +45,7 @@ export default class ChallengeModel extends Model {
   @service idGenerator;
 
   @tracked _definedBaseName;
-  
+
   get illustration() {
     return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
   }
@@ -204,6 +204,10 @@ export default class ChallengeModel extends Model {
     if (this._definedBaseName) {
       return this._definedBaseName;
     }
+    return this._firstAttachmentBaseName;
+  }
+
+  get _firstAttachmentBaseName() {
     const attachments = this.attachments;
     if (attachments && attachments.length > 0) {
       return attachments[0].filename.replace(/\.[^/.]+$/, '');
@@ -279,7 +283,7 @@ export default class ChallengeModel extends Model {
   }
 
   baseNameUpdated() {
-    return Object.keys(this.changedAttributes()).includes('_definedBaseName');
+    return this._firstAttachmentBaseName !== this.attachmentBaseName;
   }
 
   _getJSON(fieldsToRemove) {
