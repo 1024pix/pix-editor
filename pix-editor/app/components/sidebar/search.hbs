@@ -10,6 +10,10 @@
       @searchPlaceholder="Rechercher..."
       @loadingMessage="Recherche en cours..."
       @noMatchesMessage="Pas de résultat" as |result|>
-      {{result.title}}
+      {{#if result.isSkill}}
+        {{result.title}} v{{result.version}}<span class="skill-result-status {{result.statusCSS}}" title={{result.status}}></span>
+      {{else}}
+        {{result.title}}
+      {{/if}}
     </PowerSelect>
   </div>

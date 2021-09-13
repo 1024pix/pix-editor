@@ -40,6 +40,35 @@
       left: 5px;
       right: 5px;
     }
+
+    .ember-power-select-option {
+      display: flex;
+      align-items: center;
+
+      .skill-result-status {
+        display: inline-block;
+        margin-left: .5em;
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+
+        &.validated {
+          background: $production-background-color;
+        }
+
+        &.suggested {
+          background: $suggested-background-color;
+        }
+
+        &.archived {
+          background: $archived-background-color;
+        }
+
+        &.deleted {
+          background: $deleted-background-color;
+        }
+      }
+    }
   }
 
   #select-framework {
