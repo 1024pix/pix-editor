@@ -1,5 +1,12 @@
 
 
+## v3.45.0 (13/09/2021)
+
+- [#217](https://github.com/1024pix/pix-editor/pull/217) [FEATURE] Ajouter le statut et la version d'un acquis dans le résultat de recherche (PIX-3206)
+- [#218](https://github.com/1024pix/pix-editor/pull/218) [BUGFIX] Corrige le renommage des pièces jointes
+- [#219](https://github.com/1024pix/pix-editor/pull/219) [TECH] Met à jour le wording des notifications slack
+- [#211](https://github.com/1024pix/pix-editor/pull/211) [DOC] Enrichir le README avec les infos de connexion en local
+
 ## v3.44.0 (09/09/2021)
 
 - [#212](https://github.com/1024pix/pix-editor/pull/212) [FEATURE] Notifier d'une création d'une release du contenus pédagogique. 
