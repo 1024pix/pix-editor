@@ -18,7 +18,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
             mrkdwn_in: ['text'],
             color: '#5bc0de',
             title: 'Information',
-            text: 'Une nouvelle version du référentiel vient d’être déployée.',
+            text: 'Une nouvelle version du référentiel vient d’être créée.',
           }
         ]
       };
@@ -45,7 +45,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
             mrkdwn_in: ['text'],
             color: '#d9534f',
             title: 'Information',
-            text: 'Une erreur s’est produite lors du déploiement du référentiel.',
+            text: 'Une erreur s’est produite lors de la création de la version du référentiel.',
             fields: [
               {
                 title: 'Error',
