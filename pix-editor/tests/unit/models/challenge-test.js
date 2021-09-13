@@ -124,4 +124,40 @@ module('Unit | Model | challenge', function(hooks) {
       assert.ok(clonedChallenge.files.firstObject.cloneBeforeSave);
     });
   });
+
+  module('#baseNameUpdated', function() {
+    test('it should return true if the base name is updated', function(assert) {
+      // given
+      const challenge = store.createRecord('challenge', prototype);
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+
+      // when
+      challenge.attachmentBaseName = 'otherName';
+
+      // then
+      assert.true(challenge.baseNameUpdated());
+    });
+
+    test('it should return false if the base name is not updated', function(assert) {
+      // given
+      const challenge = store.createRecord('challenge', prototype);
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+
+      // when
+      challenge.attachmentBaseName = 'filename';
+
+      // then
+      assert.false(challenge.baseNameUpdated());
+    });
+
+    test('it should return true if the base name undefined', function(assert) {
+      // given
+      const challenge = store.createRecord('challenge', prototype);
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+
+      // then
+      assert.false(challenge.baseNameUpdated());
+    });
+
+  });
 });
