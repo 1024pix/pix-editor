@@ -19,6 +19,8 @@ module.exports = (function() {
 
     environment: (process.env.NODE_ENV || 'development'),
 
+    isProduction: ['production'].includes(process.env.NODE_ENV),
+
     hapi: {
       options: {}
     },

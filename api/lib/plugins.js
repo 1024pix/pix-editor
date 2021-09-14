@@ -11,8 +11,6 @@ const { User, Release } = require('./models');
 
 AdminBro.registerAdapter(AdminBroSequelize);
 
-const isProduction = ['production', 'staging'].includes(process.env.NODE_ENV);
-
 const adminBroOptions = {
   resources: [{
     resource: User,
@@ -40,49 +38,16 @@ const adminBroOptions = {
   auth: { strategy: 'simple' }
 };
 
-const consoleReporters =
-  isProduction ?
-    [
-      {
-        module: 'good-squeeze',
-        name: 'SafeJson',
-        args: []
-      },
-    ]
-    :
-    [
-      {
-        module: 'good-squeeze',
-        name: 'Squeeze',
-        args: [{
-          response: '*',
-          log: '*'
-        }]
-      },
-      {
-        module: 'good-console',
-        args: [{
-          color: settings.logging.colorEnabled
-        }]
-      }
-    ]
-    ;
-
-if (settings.logging.enabled) {
-  consoleReporters.push('stdout');
-}
-
 const plugins = [
   Metrics,
   Inert,
   Vision,
   Blipp,
   {
-    plugin: require('good'),
+    plugin: require('hapi-pino'),
     options: {
-      reporters: {
-        console: consoleReporters,
-      },
+      instance: require('./infrastructure/logger'),
+      logQueryParams: true,
     },
   },
   {
