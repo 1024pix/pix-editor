@@ -22,7 +22,8 @@ module.exports = (function() {
     isProduction: ['production'].includes(process.env.NODE_ENV),
 
     hapi: {
-      options: {}
+      options: {},
+      enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
     },
 
     airtable: {
@@ -125,7 +126,7 @@ module.exports = (function() {
     config.database.url = process.env.TEST_DATABASE_URL;
 
     config.scheduledJobs.redisUrl = config.scheduledJobs.redisUrl + '/1';
-    
+
     config.notifications.slack.webhookUrl = 'https://hooks.slack.com/testUrl';
 
     config.notifications.slack.enable = false;

@@ -8,6 +8,8 @@ const AdminBro = require('admin-bro');
 const AdminBroPlugin = require('@admin-bro/hapi');
 const AdminBroSequelize = require('@admin-bro/sequelize');
 const { User, Release } = require('./models');
+const { get } = require('lodash');
+const monitoringTools = require('./infrastructure/monitoring-tools');
 
 AdminBro.registerAdapter(AdminBroSequelize);
 
@@ -38,6 +40,19 @@ const adminBroOptions = {
   auth: { strategy: 'simple' }
 };
 
+function logObjectSerializer(obj) {
+  if (settings.hapi.enableRequestMonitoring) {
+    const context = monitoringTools.getContext();
+    return {
+      ...obj,
+      user_id: get(context, 'request') ? monitoringTools.extractUserIdFromRequest(context.request) : '-',
+      metrics: get(context, 'metrics'),
+    };
+  } else {
+    return { ... obj };
+  }
+}
+
 const plugins = [
   Metrics,
   Inert,
@@ -46,6 +61,9 @@ const plugins = [
   {
     plugin: require('hapi-pino'),
     options: {
+      serializers: {
+        req: logObjectSerializer,
+      },
       instance: require('./infrastructure/logger'),
       logQueryParams: true,
     },

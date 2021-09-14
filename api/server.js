@@ -10,6 +10,9 @@ const plugins = require('./lib/plugins');
 const config = require('./lib/config');
 const security = require('./lib/infrastructure/security');
 const securityPreHandlers = require('./lib/application/security-pre-handlers');
+const monitoringTools = require('./lib/infrastructure/monitoring-tools');
+
+monitoringTools.installHapiHook();
 
 const createServer = async () => {
 
