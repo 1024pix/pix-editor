@@ -2,6 +2,7 @@
 // https://www.npmjs.com/package/dotenv#usage
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
+const Oppsy = require('@hapi/oppsy');
 
 const preResponseUtils = require('./lib/infrastructure/utils/pre-response-utils');
 
@@ -42,9 +43,22 @@ const createServer = async () => {
 
   const configuration = [].concat(plugins, routes);
 
+  if (config.isProduction) await enableOpsMetrics(server);
+
   await server.register(configuration);
 
   return server;
 };
 
+const enableOpsMetrics = async function(server) {
+
+  const oppsy = new Oppsy(server);
+
+  oppsy.on('ops', (data) => {
+    server.log(['ops'], data);
+  });
+
+  oppsy.start(config.logging.emitOpsEventEachSeconds * 1000);
+
+};
 module.exports = createServer;
