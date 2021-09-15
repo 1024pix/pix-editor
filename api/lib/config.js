@@ -70,6 +70,7 @@ module.exports = (function() {
     scheduledJobs: {
       redisUrl: process.env.REDIS_URL,
       createReleaseTime: process.env.CREATE_RELEASE_TIME,
+      attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
     },
 
     database: {

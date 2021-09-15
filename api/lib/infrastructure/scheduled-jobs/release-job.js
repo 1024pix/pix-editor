@@ -44,7 +44,8 @@ module.exports = {
 };
 
 const releaseJobOptions = {
-  attempts: 1,
+  attempts: config.scheduledJobs.attempts,
+  backoff: { type: 'exponential', delay: 100 },
   removeOnComplete: true,
   removeOnFail: 1,
   repeat: {
