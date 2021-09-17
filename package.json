@@ -7,8 +7,8 @@
     "doc": "docs"
   },
   "engines": {
-    "node": "14.15.4",
-    "npm": "6.14.10"
+    "node": "14.17.6",
+    "npm": "6.14.15"
   },
   "scripts": {
     "install": "cd pix-editor && npm ci && cd ../api && npm ci",
