@@ -19,8 +19,6 @@ module.exports = (function() {
 
     environment: (process.env.NODE_ENV || 'development'),
 
-    isProduction: ['production'].includes(process.env.NODE_ENV),
-
     hapi: {
       options: {},
       enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
@@ -37,6 +35,7 @@ module.exports = (function() {
       colorEnabled: (process.env.NODE_ENV === 'development'),
       logLevel: (process.env.LOG_LEVEL || 'info'),
       emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
+      prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT)
     },
 
     pixApi: {

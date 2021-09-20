@@ -6,7 +6,7 @@ const nullDestination = { write() {} };
 const logger = pino({
   level: settings.logging.logLevel,
   redact: ['req.headers.authorization'],
-  prettyPrint: !settings.isProduction,
+  prettyPrint: settings.logging.prettyPrint,
 },
 (settings.logging.enabled) ? pino.destination() : nullDestination);
 
