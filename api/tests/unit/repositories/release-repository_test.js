@@ -8,8 +8,10 @@ const tutorialDatasource = require('../../../lib/infrastructure/datasources/airt
 const courseDatasource = require('../../../lib/infrastructure/datasources/airtable/course-datasource');
 const attachmentDatasource = require('../../../lib/infrastructure/datasources/airtable/attachment-datasource');
 const releaseRepository = require('../../../lib/infrastructure/repositories/release-repository');
+const Release = require('../../../lib/domain/models/Release');
+const Content = require('../../../lib/domain/models/Content');
 
-describe('Unit | Controller | release-repository', () => {
+describe('Unit | Repository | release-repository', () => {
 
   describe('#getCurrentContent', () => {
 
@@ -176,6 +178,20 @@ describe('Unit | Controller | release-repository', () => {
       expect(updatedRecord.illustrationAlt).to.equal('texte alternatif à l\'image');
       expect(updatedRecord.attachments).to.deep.equal(['http://example.com/attachment']);
       expect(model).to.equal('challenges');
+    });
+  });
+
+  describe('#toDomain', function() {
+    it('should build Release model with given parameters', function() {
+      const databaseObjectRelease = { id: 123, content: { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] }, createdAt: '2021-08-31' };
+
+      const release = releaseRepository.toDomain(databaseObjectRelease);
+
+      expect(release).to.be.instanceOf(Release);
+      expect(release.id).to.equal(databaseObjectRelease.id);
+      expect(release.content).to.deep.equal(databaseObjectRelease.content);
+      expect(release.content).to.be.instanceOf(Content);
+      expect(release.createdAt).to.deep.equal(databaseObjectRelease.createdAt);
     });
   });
 });

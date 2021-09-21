@@ -8,6 +8,8 @@ const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
 const airtableSerializer = require('../serializers/airtable-serializer');
 const createChallengeTransformer = require('../transformers/challenge-transformer');
+const Release = require('../../domain/models/Release');
+const Content = require('../../domain/models/Content');
 
 const { knex } = require('../../../db/knex-database-connection');
 
@@ -20,7 +22,7 @@ module.exports = {
       .returning(['id', 'content', 'createdAt'])
       .insert({ content });
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async getLatestRelease() {
@@ -29,7 +31,7 @@ module.exports = {
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async getRelease(id) {
@@ -37,7 +39,7 @@ module.exports = {
       .select('id', 'content', 'createdAt')
       .where('id', id);
 
-    return release[0];
+    return this.toDomain(release[0]);
   },
 
   async serializeEntity({ entity, type }) {
@@ -71,6 +73,17 @@ module.exports = {
 
     return { updatedRecord, model };
   },
+
+  toDomain(releaseDTO) {
+    if (!releaseDTO) {
+      return null;
+    }
+    return new Release({
+      id: releaseDTO.id,
+      content: Content.from(releaseDTO.content),
+      createdAt: releaseDTO.createdAt,
+    });
+  }
 };
 
 async function _getCurrentContent() {

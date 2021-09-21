@@ -197,7 +197,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return latest release of learning content', async () => {
         // Given
-        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { some: 'release' } });
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] } });
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -275,7 +275,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       it('should return release specified by id', async () => {
         // Given
-        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { some: 'release' }, createdAt: new Date('2021-01-01') });
+        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] }, createdAt: new Date('2021-01-01') });
         databaseBuilder.factory.buildRelease({ id: 43, content: { some: 'other-release' }, createdAt: new Date('2022-01-01') });
         await databaseBuilder.commit();
 
