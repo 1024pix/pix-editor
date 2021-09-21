@@ -1,5 +1,12 @@
 
 
+## v3.46.0 (21/09/2021)
+
+- [#220](https://github.com/1024pix/pix-editor/pull/220) [TECH] Remplacer Bunyan et les plugins Good, Good-console, Good-squeeze qui ont été dépréciées par Pino et Hapi-pino (PIX-3451)
+- [#214](https://github.com/1024pix/pix-editor/pull/214) [TECH] Ajouter des modèles de données
+- [#222](https://github.com/1024pix/pix-editor/pull/222) [TECH] Montée de version de node (v14.17.6).
+- [#221](https://github.com/1024pix/pix-editor/pull/221) [TECH] Configure le nombre d'essai pour créer une release
+
 ## v3.45.0 (13/09/2021)
 
 - [#217](https://github.com/1024pix/pix-editor/pull/217) [FEATURE] Ajouter le statut et la version d'un acquis dans le résultat de recherche (PIX-3206)
