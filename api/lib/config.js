@@ -20,7 +20,8 @@ module.exports = (function() {
     environment: (process.env.NODE_ENV || 'development'),
 
     hapi: {
-      options: {}
+      options: {},
+      enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
     },
 
     airtable: {
@@ -33,6 +34,8 @@ module.exports = (function() {
       enabled: isFeatureEnabled(process.env.LOG_ENABLED),
       colorEnabled: (process.env.NODE_ENV === 'development'),
       logLevel: (process.env.LOG_LEVEL || 'info'),
+      emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
+      prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT)
     },
 
     pixApi: {
@@ -123,7 +126,7 @@ module.exports = (function() {
     config.database.url = process.env.TEST_DATABASE_URL;
 
     config.scheduledJobs.redisUrl = config.scheduledJobs.redisUrl + '/1';
-    
+
     config.notifications.slack.webhookUrl = 'https://hooks.slack.com/testUrl';
 
     config.notifications.slack.enable = false;

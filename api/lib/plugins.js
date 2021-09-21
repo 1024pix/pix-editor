@@ -8,10 +8,10 @@ const AdminBro = require('admin-bro');
 const AdminBroPlugin = require('@admin-bro/hapi');
 const AdminBroSequelize = require('@admin-bro/sequelize');
 const { User, Release } = require('./models');
+const { get } = require('lodash');
+const monitoringTools = require('./infrastructure/monitoring-tools');
 
 AdminBro.registerAdapter(AdminBroSequelize);
-
-const isProduction = ['production', 'staging'].includes(process.env.NODE_ENV);
 
 const adminBroOptions = {
   resources: [{
@@ -40,36 +40,17 @@ const adminBroOptions = {
   auth: { strategy: 'simple' }
 };
 
-const consoleReporters =
-  isProduction ?
-    [
-      {
-        module: 'good-squeeze',
-        name: 'SafeJson',
-        args: []
-      },
-    ]
-    :
-    [
-      {
-        module: 'good-squeeze',
-        name: 'Squeeze',
-        args: [{
-          response: '*',
-          log: '*'
-        }]
-      },
-      {
-        module: 'good-console',
-        args: [{
-          color: settings.logging.colorEnabled
-        }]
-      }
-    ]
-    ;
-
-if (settings.logging.enabled) {
-  consoleReporters.push('stdout');
+function logObjectSerializer(obj) {
+  if (settings.hapi.enableRequestMonitoring) {
+    const context = monitoringTools.getContext();
+    return {
+      ...obj,
+      user_id: get(context, 'request') ? monitoringTools.extractUserIdFromRequest(context.request) : '-',
+      metrics: get(context, 'metrics'),
+    };
+  } else {
+    return { ... obj };
+  }
 }
 
 const plugins = [
@@ -78,11 +59,13 @@ const plugins = [
   Vision,
   Blipp,
   {
-    plugin: require('good'),
+    plugin: require('hapi-pino'),
     options: {
-      reporters: {
-        console: consoleReporters,
+      serializers: {
+        req: logObjectSerializer,
       },
+      instance: require('./infrastructure/logger'),
+      logQueryParams: true,
     },
   },
   {
