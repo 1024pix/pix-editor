@@ -1,9 +1,9 @@
 module.exports = function buildAttachment({
-  id,
-  url,
-  alt,
-  type,
-  challengeId,
+  id = 'attachmentId',
+  url = 'http://',
+  alt = 'alt text',
+  type = 'image',
+  challengeId = 'recChallengeId',
 } = {}) {
 
   return {

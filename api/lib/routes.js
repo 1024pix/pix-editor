@@ -7,4 +7,5 @@ module.exports = [
   require('./application/releases'),
   require('./application/file-storage-token'),
   require('./application/challenges'),
+  require('./application/databases'),
 ];
