@@ -58,7 +58,7 @@
     "hapi-sentry": "^3.2.0",
     "joi": "^17.4.2",
     "jsonapi-serializer": "3.6.7",
-    "knex": "0.21.16",
+    "knex": "^0.95.11",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
     "pg": "8.5.1",
