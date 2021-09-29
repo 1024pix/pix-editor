@@ -42,7 +42,7 @@
     "@admin-bro/sequelize": "^1.2.1",
     "@hapi/basic": "^6.0.0",
     "@hapi/boom": "^9.1.4",
-    "@hapi/hapi": "20.0.3",
+    "@hapi/hapi": "^20.2.0",
     "@hapi/inert": "^6.0.3",
     "@hapi/oppsy": "^3.0.0",
     "@hapi/vision": "^6.0.1",
