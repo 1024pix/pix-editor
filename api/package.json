@@ -48,7 +48,7 @@
     "@hapi/vision": "^6.1.0",
     "@sentry/node": "^6.13.2",
     "admin-bro": "^4.0.1",
-    "airtable": "0.10.1",
+    "airtable": "^0.11.1",
     "axios": "0.21.1",
     "blipp": "4.0.2",
     "bull": "^3.22.4",
