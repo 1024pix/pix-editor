@@ -8,6 +8,7 @@ export default class ApplicationRoute extends Route {
 
   @service config;
   @service currentData;
+  @service intl;
 
   _openLoginForm() {
     this.controllerFor('application').send('openLoginForm');
@@ -17,6 +18,7 @@ export default class ApplicationRoute extends Route {
     try {
       await this.config.load();
       this.configured = true;
+      this.intl.setLocale(['fr']);
     } catch (error) {
       this.configured = false;
     }
