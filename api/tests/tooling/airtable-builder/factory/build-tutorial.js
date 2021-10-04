@@ -6,6 +6,8 @@ module.exports = function buildTutorial({
   source,
   link,
   locale,
+  tutorialForSkills,
+  furtherInformation,
 } = {}) {
 
   return {
@@ -18,6 +20,8 @@ module.exports = function buildTutorial({
       'Source': source,
       'Lien': link,
       'Langue': locale,
+      'Solution à': tutorialForSkills,
+      'En savoir plus': furtherInformation,
     },
   };
 };

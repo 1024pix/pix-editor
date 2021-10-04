@@ -10,6 +10,7 @@ module.exports = function buildCompetence({
   areaId,
   skillIds,
   origin,
+  fullName,
 }) {
   return {
     id,
@@ -25,6 +26,7 @@ module.exports = function buildCompetence({
       'Description': description,
       'Description fr-fr': descriptionFrFr,
       'Description en-us': descriptionEnUs,
+      'Référence': fullName,
     },
   };
 };

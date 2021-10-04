@@ -5,6 +5,7 @@ module.exports = function buildCourse({
   competences,
   challenges,
   imageUrl,
+  adaptive,
 } = {}) {
 
   return {
@@ -16,6 +17,7 @@ module.exports = function buildCourse({
       'Image': [{ url: imageUrl }],
       'Épreuves (id persistant)': challenges,
       'Competence (id persistant)': competences,
+      'Adaptatif ?': adaptive,
     },
   };
 };

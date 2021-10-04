@@ -17,6 +17,7 @@ module.exports = function buildCourse(
       'rec3XmZPwLagZl7Ku',
     ],
     competences = ['rec8116cdd76088af'],
+    adaptive = false,
   } = {}) {
   return {
     id,
@@ -24,6 +25,7 @@ module.exports = function buildCourse(
     description,
     imageUrl,
     name,
+    adaptive,
     // relations
     challenges,
     competences,

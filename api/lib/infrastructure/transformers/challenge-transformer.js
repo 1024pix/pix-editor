@@ -1,6 +1,10 @@
 const _ = require('lodash');
 
-module.exports = function createChallengeTransformer(learningContent) {
+module.exports = {
+  createChallengeTransformer
+};
+
+function createChallengeTransformer(learningContent) {
   function _transformChallengeForRelease(challenge) {
     const transformers = [_addAttachmentsToChallenge, _filterChallengeFields];
 
@@ -10,7 +14,7 @@ module.exports = function createChallengeTransformer(learningContent) {
   }
 
   return _transformChallengeForRelease;
-};
+}
 
 function _filterChallengeFields(_learningContent, challenge) {
   const fieldsToInclude = [

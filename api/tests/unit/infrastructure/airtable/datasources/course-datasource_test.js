@@ -23,6 +23,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | CourseDatasource', () 
               'url': 'https://example.org/course.png',
             }
           ],
+          'Adaptatif ?': 'true',
         },
       });
 
@@ -37,6 +38,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | CourseDatasource', () 
         description: 'course-description',
         imageUrl: 'https://example.org/course.png',
         challenges: ['recChallenge2', 'recChallenge1'],
+        adaptive: true,
       };
 
       expect(course).to.deep.equal(expectedCourse);

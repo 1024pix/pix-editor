@@ -7,7 +7,11 @@ const tutorialDatasource = require('../datasources/airtable/tutorial-datasource'
 const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
 const airtableSerializer = require('../serializers/airtable-serializer');
-const createChallengeTransformer = require('../transformers/challenge-transformer');
+const challengeTransformer = require('../transformers/challenge-transformer');
+const competenceTransformer = require('../transformers/competence-transformer');
+const skillTransformer = require('../transformers/skill-transformer');
+const courseTransformer = require('../transformers/course-transformer');
+const tutorialTransformer = require('../transformers/tutorial-transformer');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
 
@@ -54,8 +58,8 @@ module.exports = {
       const learningContent = {
         attachments,
       };
-      const challengeTransformer = createChallengeTransformer(learningContent);
-      const challenge = challengeTransformer(rawChallenge);
+      const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+      const challenge = transformChallenge(rawChallenge);
 
       return { updatedRecord: challenge, model: challengeDatasource.path() };
     }
@@ -65,8 +69,8 @@ module.exports = {
       const learningContent = {
         attachments,
       };
-      const challengeTransformer = createChallengeTransformer(learningContent);
-      const challenge = challengeTransformer(updatedRecord);
+      const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+      const challenge = transformChallenge(updatedRecord);
 
       return { updatedRecord: challenge, model };
     }
@@ -116,16 +120,21 @@ async function _getCurrentContent() {
     courses,
     attachments,
   };
-  const challengeTransformer = createChallengeTransformer(learningContent);
-  const challenges = challengesWithoutAttachments.map(challengeTransformer);
+  const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+  const challenges = challengesWithoutAttachments.map(transformChallenge);
+
+  const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
+  const filteredSkills = skillTransformer.filterSkillsFields(skills);
+  const filteredCourses = courseTransformer.filterCoursesFields(courses);
+  const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
 
   return {
     areas,
-    competences,
+    competences: filteredCompetences,
     tubes,
-    skills,
+    skills: filteredSkills,
     challenges,
-    tutorials,
-    courses,
+    tutorials: filteredTutorials,
+    courses: filteredCourses,
   };
 }

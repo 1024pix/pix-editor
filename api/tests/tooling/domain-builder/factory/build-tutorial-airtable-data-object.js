@@ -6,7 +6,9 @@ module.exports = function buildTutorial(
     link = 'http://www.example.com/this-is-an-example.html',
     source = 'Source Example, Example',
     title = 'Communiquer',
-    locale = 'fr-fr'
+    locale = 'fr-fr',
+    tutorialForSkills = ['skillId1'],
+    furtherInformation = ['skillId2'],
   } = {}) {
   return {
     id,
@@ -16,5 +18,7 @@ module.exports = function buildTutorial(
     source,
     title,
     locale,
+    tutorialForSkills,
+    furtherInformation,
   };
 };

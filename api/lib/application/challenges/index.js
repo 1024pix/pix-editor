@@ -8,7 +8,7 @@ const challengeRepository = require('../../infrastructure/repositories/challenge
 const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
 const securityPreHandlers = require('../security-pre-handlers');
 const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
-const createChallengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
+const challengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
 const pixApiClient = require('../../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
 
@@ -29,11 +29,11 @@ async function _refreshCache(challenge) {
     const learningContent = {
       attachments,
     };
-    const challengeTransformer = createChallengeTransformer(learningContent);
-    const newChallenge = challengeTransformer(challenge);
+    const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+    const newChallenge = transformChallenge(challenge);
 
     const model = 'challenges';
-    
+
     await updatedRecordNotifier.notify({ updatedRecord: newChallenge, model, pixApiClient });
   } catch (err) {
     logger.error(err);

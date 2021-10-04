@@ -14,6 +14,7 @@ module.exports = datasource.extend({
     'Competence (id persistant)',
     'Épreuves (id persistant)',
     'Image',
+    'Adaptatif ?',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -29,6 +30,7 @@ module.exports = datasource.extend({
       competences: airtableRecord.get('Competence (id persistant)'),
       challenges: _.reverse(airtableRecord.get('Épreuves (id persistant)')),
       imageUrl,
+      adaptive: Boolean(airtableRecord.get('Adaptatif ?')),
     };
   },
 });

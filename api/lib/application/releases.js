@@ -1,21 +1,8 @@
-const { PassThrough } = require('stream');
 const Boom = require('@hapi/boom');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
 const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
 const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
 const securityPreHandlers = require('./security-pre-handlers');
-
-function _getWritableStream() {
-  const writableStream = new PassThrough();
-  writableStream.headers = {
-    'content-type': 'application/json',
-
-    // WHY: to avoid compression because when compressing, the server buffers
-    // for too long causing a response timeout.
-    'content-encoding': 'identity',
-  };
-  return writableStream;
-}
 
 exports.register = async function(server) {
   server.route([
@@ -24,7 +11,7 @@ exports.register = async function(server) {
       path: '/api/current-content',
       config: {
         handler: function() {
-          return promiseStreamer(releaseRepository.getCurrentContent(), _getWritableStream());
+          return promiseStreamer(releaseRepository.getCurrentContent());
         },
       },
     },
@@ -41,7 +28,7 @@ exports.register = async function(server) {
             const releaseId = await job.finished();
             return releaseRepository.getRelease(releaseId);
           };
-          return promiseStreamer(promise(), _getWritableStream());
+          return promiseStreamer(promise());
         },
       },
     },

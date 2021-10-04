@@ -8,6 +8,11 @@ const tutorialDatasource = require('../../../lib/infrastructure/datasources/airt
 const courseDatasource = require('../../../lib/infrastructure/datasources/airtable/course-datasource');
 const attachmentDatasource = require('../../../lib/infrastructure/datasources/airtable/attachment-datasource');
 const releaseRepository = require('../../../lib/infrastructure/repositories/release-repository');
+const challengeTransformer = require('../../../lib/infrastructure/transformers/challenge-transformer');
+const competenceTransformer = require('../../../lib/infrastructure/transformers/competence-transformer');
+const skillTransformer = require('../../../lib/infrastructure/transformers/skill-transformer');
+const courseTransformer = require('../../../lib/infrastructure/transformers/course-transformer');
+const tutorialTransformer = require('../../../lib/infrastructure/transformers/tutorial-transformer');
 const Release = require('../../../lib/domain/models/Release');
 const Content = require('../../../lib/domain/models/Content');
 
@@ -17,30 +22,61 @@ describe('Unit | Repository | release-repository', () => {
 
     it('should return current content', async () => {
       //Given
-      sinon.stub(areaDatasource, 'list').resolves([]);
-      sinon.stub(competenceDatasource, 'list').resolves([]);
-      sinon.stub(tubeDatasource, 'list').resolves([]);
-      sinon.stub(skillDatasource, 'list').resolves([]);
-      sinon.stub(challengeDatasource, 'list').resolves([]);
-      sinon.stub(tutorialDatasource, 'list').resolves([]);
-      sinon.stub(courseDatasource, 'list').resolves([]);
-      sinon.stub(attachmentDatasource, 'list').resolves([]);
-
+      const areas = [];
+      const competences = [];
+      const tubes = [];
+      const skills = [];
+      const challenges = [];
+      const tutorials = [];
+      const courses = [];
+      const attachments = [];
+      const transformedCompetences = [Symbol('transformed-competence')];
+      const transformedSkills = [Symbol('transformed-skill')];
+      const transformedCourses = [Symbol('transformed-course')];
+      const transformedTutorials = [Symbol('transformed-tutorial')];
       const expectedCurrentContent = {
         areas: [],
-        competences: [],
+        competences: transformedCompetences,
         tubes: [],
-        skills: [],
+        skills: transformedSkills,
         challenges: [],
-        tutorials: [],
-        courses: [],
+        tutorials: transformedTutorials,
+        courses: transformedCourses,
       };
+
+      sinon.stub(areaDatasource, 'list').resolves(areas);
+      sinon.stub(competenceDatasource, 'list').resolves(competences);
+      sinon.stub(tubeDatasource, 'list').resolves(tubes);
+      sinon.stub(skillDatasource, 'list').resolves(skills);
+      sinon.stub(challengeDatasource, 'list').resolves(challenges);
+      sinon.stub(tutorialDatasource, 'list').resolves(tutorials);
+      sinon.stub(courseDatasource, 'list').resolves(courses);
+      sinon.stub(attachmentDatasource, 'list').resolves(attachments);
+      sinon.stub(challengeTransformer, 'createChallengeTransformer').returns(() => {});
+      sinon.stub(competenceTransformer, 'filterCompetencesFields').returns(transformedCompetences);
+      sinon.stub(skillTransformer, 'filterSkillsFields').returns(transformedSkills);
+      sinon.stub(courseTransformer, 'filterCoursesFields').returns(transformedCourses);
+      sinon.stub(tutorialTransformer, 'filterTutorialsFields').returns(transformedTutorials);
 
       //When
       const currentContent = await releaseRepository.getCurrentContent();
 
       //Then
       expect(currentContent).to.deep.equal(expectedCurrentContent);
+      expect(challengeTransformer.createChallengeTransformer).to.have.been.calledWithExactly({
+        areas,
+        competences,
+        tubes,
+        skills,
+        courses,
+        tutorials,
+        attachments,
+        challengesWithoutAttachments: challenges
+      });
+      expect(competenceTransformer.filterCompetencesFields).to.have.been.calledWithExactly(competences);
+      expect(skillTransformer.filterSkillsFields).to.have.been.calledWithExactly(skills);
+      expect(courseTransformer.filterCoursesFields).to.have.been.calledWithExactly(courses);
+      expect(tutorialTransformer.filterTutorialsFields).to.have.been.calledWithExactly(tutorials);
     });
   });
 

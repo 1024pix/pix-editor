@@ -10,6 +10,9 @@ const buildSkill = function buildSkill({
   competenceId,
   status,
   tubeId,
+  description,
+  level,
+  internationalisation,
 } = {}) {
 
   return {
@@ -26,6 +29,9 @@ const buildSkill = function buildSkill({
       'Nom': name,
       'Compétence (via Tube) (id persistant)': [competenceId],
       'PixValue': pixValue,
+      'Description': description,
+      'Level': level,
+      'Internationalisation': internationalisation,
     },
   };
 };
