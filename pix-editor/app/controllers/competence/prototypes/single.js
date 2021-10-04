@@ -109,7 +109,7 @@ export default class SingleController extends Controller {
     return `${this.config.airtableUrl}${this.config.tableChallenges}/${ this.challenge.id}`;
   }
 
-  get isoStringDate() {
+  get lastUpdatedAtISO() {
     return this.challenge.updatedAt.toISOString();
   }
 
