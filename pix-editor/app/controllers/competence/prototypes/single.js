@@ -109,6 +109,10 @@ export default class SingleController extends Controller {
     return `${this.config.airtableUrl}${this.config.tableChallenges}/${ this.challenge.id}`;
   }
 
+  get isoStringDate() {
+    return this.challenge.updatedAt.toISOString();
+  }
+
   @action
   setDisplayAlternativeInstructionsField(value) {
     this.displayAlternativeInstructionsField = value;

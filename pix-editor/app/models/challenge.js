@@ -36,6 +36,7 @@ export default class ChallengeModel extends Model {
   @attr area;
   @attr autoReply;
   @attr focusable;
+  @attr('date') updatedAt;
 
   @hasMany('skill') skills;
   @hasMany('attachment', { inverse: 'challenge' }) files;
