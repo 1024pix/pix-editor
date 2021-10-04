@@ -38,6 +38,7 @@ module.exports = function buildChallengeAirtableDataObject({
   airtableId = 'airtable id',
   delta = 0.2,
   alpha = 0.5,
+  updatedAt = '2021-10-04'
 } = {}) {
 
   return {
@@ -80,5 +81,6 @@ module.exports = function buildChallengeAirtableDataObject({
     area,
     delta,
     alpha,
+    updatedAt
   };
 };

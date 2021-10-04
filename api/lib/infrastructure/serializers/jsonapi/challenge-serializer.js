@@ -39,6 +39,7 @@ module.exports = {
         'focusable',
         'skills',
         'files',
+        'updatedAt',
       ],
       typeForAttribute(attribute) {
         if (attribute === 'files') return 'attachments';
