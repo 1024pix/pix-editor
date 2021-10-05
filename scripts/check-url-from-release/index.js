@@ -10,11 +10,16 @@ function findUrlsFromChallenge(challenge) {
 
 function findUrlsFromRelease(release) {
   return release.challenges.flatMap((challenge) => {
-    return findUrlsFromChallenge(challenge);
+    return findUrlsFromChallenge(challenge).map(url => ({ id: challenge.id, url }));
   });
+}
+
+function buildCsv(urlList) {
+  return urlList.map(currentUrl => `${currentUrl.id},${currentUrl.url}`).join('\n');
 }
 
 module.exports = {
   findUrlsFromChallenge,
-  findUrlsFromRelease
+  findUrlsFromRelease,
+  buildCsv,
 };
