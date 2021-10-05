@@ -14,7 +14,7 @@ async function main() {
 }
 
 function findUrlsFromChallenge(challenge) {
-  const urls = (challenge.instruction || '').match(urlRegex());
+  const urls = (challenge.instruction || '').match(urlRegex({ strict: true }));
   if (!urls) {
     return [];
   }
