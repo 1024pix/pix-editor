@@ -24,6 +24,7 @@
     "progress": "2.0.3",
     "sinon": "9.2.4",
     "sinon-chai": "^3.5.0",
+    "url-regex-safe": "^2.0.2",
     "variable-diff": "2.0.2"
   },
   "devDependencies": {
