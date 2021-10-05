@@ -22,6 +22,7 @@
     "mocha": "8.2.1",
     "p-limit": "3.1.0",
     "progress": "2.0.3",
+    "showdown": "^1.9.1",
     "sinon": "9.2.4",
     "sinon-chai": "^3.5.0",
     "url-regex-safe": "^2.0.2",

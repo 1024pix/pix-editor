@@ -34,6 +34,16 @@ describe('Check urls from release', function() {
       expect(urls).to.deep.equal(['https://example.com/']);
     });
 
+    it('should find url from a markdown link', function() {
+      const challenge = {
+        id: 'challenge123',
+        instruction: 'instructions [https://example.com/](https://example.com/)',
+      };
+      const urls = findUrlsFromChallenge(challenge);
+
+      expect(urls).to.deep.equal(['https://example.com/']);
+    });
+
     it('should find not find url that are document name', function() {
       const challenge = {
         id: 'challenge123',

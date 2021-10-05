@@ -1,6 +1,8 @@
 const urlRegex = require('url-regex-safe');
 const axios = require('axios');
 const fs = require('fs');
+const showdown = require('showdown');
+const _ = require('lodash');
 
 async function main() {
   const url = process.env.RELEASE_URL;
@@ -13,12 +15,22 @@ async function main() {
   fs.writeFileSync('urlList.csv', csv);
 }
 
+function cleanUrl(url) {
+  const index = url.indexOf('</');
+  if (index >= 0) {
+    return url.substr(0, index);
+  }
+  return url;
+}
+
 function findUrlsFromChallenge(challenge) {
-  const urls = (challenge.instruction || '').match(urlRegex({ strict: true }));
+  const converter = new showdown.Converter();
+  const instruction = converter.makeHtml(challenge.instruction || '');
+  const urls = instruction.match(urlRegex({ strict: true }));
   if (!urls) {
     return [];
   }
-  return urls;
+  return _.uniq(urls.map(cleanUrl));
 }
 
 function findUrlsFromRelease(release) {
