@@ -53,6 +53,16 @@ describe('Check urls from release', function() {
 
       expect(urls).to.deep.equal([]);
     });
+
+    it('should prepend https in urls if not present', function() {
+      const challenge = {
+        id: 'challenge123',
+        instruction: 'instructions www.example.com',
+      };
+      const urls = findUrlsFromChallenge(challenge);
+
+      expect(urls).to.deep.equal(['https://www.example.com']);
+    });
   });
 
   describe('#findUrlsFromRelease', function() {

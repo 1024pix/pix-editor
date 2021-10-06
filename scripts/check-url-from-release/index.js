@@ -23,6 +23,13 @@ function cleanUrl(url) {
   return url;
 }
 
+function prependProtocol(url) {
+  if (!url.includes('http')) {
+    url = 'https://' + url;
+  }
+  return url;
+}
+
 function findUrlsFromChallenge(challenge) {
   const converter = new showdown.Converter();
   const instruction = converter.makeHtml(challenge.instruction || '');
@@ -30,7 +37,7 @@ function findUrlsFromChallenge(challenge) {
   if (!urls) {
     return [];
   }
-  return _.uniq(urls.map(cleanUrl));
+  return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
 function findUrlsFromRelease(release) {
