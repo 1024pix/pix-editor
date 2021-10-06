@@ -57,6 +57,10 @@ async function getRelease(url, token) {
   return content;
 }
 
+function getLiveChallenges(release) {
+  return release.challenges.filter((challenge) => challenge.status !== 'périmé');
+}
+
 if (process.env.NODE_ENV !== 'test') {
   main();
 }
@@ -65,5 +69,6 @@ module.exports = {
   findUrlsFromChallenge,
   findUrlsFromRelease,
   buildCsv,
+  getLiveChallenges
 };
 

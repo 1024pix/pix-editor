@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { findUrlsFromChallenge, findUrlsFromRelease, buildCsv } = require('.');
+const { findUrlsFromChallenge, findUrlsFromRelease, buildCsv, getLiveChallenges } = require('.');
 
 describe('Check urls from release', function() {
   describe('#findUrlsFromChallenge', function() {
@@ -63,8 +63,9 @@ describe('Check urls from release', function() {
 
       expect(urls).to.deep.equal(['https://www.example.com']);
     });
+    
   });
-
+  
   describe('#findUrlsFromRelease', function() {
     it('should find urls from a release', function() {
       const release = {
@@ -89,10 +90,43 @@ describe('Check urls from release', function() {
         { id: 'challenge1', url: 'https://other_example.net/' },
         { id: 'challenge3', url: 'https://example.com/' },
       ];
-
+      
       const urls = findUrlsFromRelease(release);
-
+      
       expect(urls).to.deep.equal(expectedOutput);
+    });
+    it('should use challenge that are not outdated', function() {
+      const release = {
+        challenges : [
+          {
+            id: 'challenge1',
+            status: 'validé'
+          },
+          {
+            id: 'challenge2',
+            status: 'proposé'
+          },
+          {
+            id: 'challenge3',
+            status: 'périmé'
+          }
+        ]
+      };
+      
+      const expectedOutput = [
+        {
+          id: 'challenge1',
+          status: 'validé'
+        },
+        {
+          id: 'challenge2',
+          status: 'proposé'
+        }
+      ];
+      
+      const challenges = getLiveChallenges(release);
+      
+      expect(challenges).to.deep.equal(expectedOutput);
     });
 
   });
