@@ -41,6 +41,9 @@
     <div class={{concat "item header" (if this.creation " creation" "")}}>
       {{this.challengeTitle}}
       <div class="ui circular label {{this.challenge.statusCSS}}">{{this.challenge.status}}</div>
+      {{#unless this.challenge.isNew}}
+        <time class="ui colored label" title="Dernière modification" datetime="{{this.lastUpdatedAtISO}}">{{format-date this.challenge.updatedAt}}</time>
+      {{/unless}}
     </div>
     <div class="ui right menu">
       {{#if this.maximized}}

@@ -49,6 +49,7 @@ module.exports = datasource.extend({
     'Géographie',
     'Difficulté calculée',
     'Discrimination calculée',
+    'updated_at',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -103,6 +104,7 @@ module.exports = datasource.extend({
       area: airtableRecord.get('Géographie'),
       delta: parseFloat(airtableRecord.get('Difficulté calculée')),
       alpha: parseFloat(airtableRecord.get('Discrimination calculée')),
+      updatedAt: airtableRecord.get('updated_at')
     };
   },
 
