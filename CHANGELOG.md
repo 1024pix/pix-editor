@@ -1,5 +1,11 @@
 
 
+## v3.47.0 (06/10/2021)
+
+- [#226](https://github.com/1024pix/pix-editor/pull/226) [FEATURE] Ajout de la date de dernière modification dans les épreuves
+- [#225](https://github.com/1024pix/pix-editor/pull/225) [TECH] Préparer LCMS à l'utilisation par pix-db-replication
+- [#223](https://github.com/1024pix/pix-editor/pull/223) [TECH] Mise a jour des dépendances de l'API.
+
 ## v3.46.0 (21/09/2021)
 
 - [#220](https://github.com/1024pix/pix-editor/pull/220) [TECH] Remplacer Bunyan et les plugins Good, Good-console, Good-squeeze qui ont été dépréciées par Pino et Hapi-pino (PIX-3451)
