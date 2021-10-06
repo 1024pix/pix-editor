@@ -8,8 +8,9 @@ async function main() {
   const url = process.env.RELEASE_URL;
   const token = process.env.TOKEN_LCMS;
   const release = await getRelease(url, token);
+  const challenges = getLiveChallenges(release);
 
-  const urlList = findUrlsFromRelease(release);
+  const urlList = findUrlsFromChallenges(challenges);
   const csv = buildCsv(urlList);
 
   fs.writeFileSync('urlList.csv', csv);
@@ -40,8 +41,8 @@ function findUrlsFromChallenge(challenge) {
   return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
-function findUrlsFromRelease(release) {
-  return release.challenges.flatMap((challenge) => {
+function findUrlsFromChallenges(challenges) {
+  return challenges.flatMap((challenge) => {
     return findUrlsFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
   });
 }
@@ -67,7 +68,7 @@ if (process.env.NODE_ENV !== 'test') {
 
 module.exports = {
   findUrlsFromChallenge,
-  findUrlsFromRelease,
+  findUrlsFromChallenges,
   buildCsv,
   getLiveChallenges
 };

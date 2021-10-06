@@ -1,6 +1,6 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { findUrlsFromChallenge, findUrlsFromRelease, buildCsv, getLiveChallenges } = require('.');
+const { findUrlsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
 
 describe('Check urls from release', function() {
   describe('#findUrlsFromChallenge', function() {
@@ -63,36 +63,34 @@ describe('Check urls from release', function() {
 
       expect(urls).to.deep.equal(['https://www.example.com']);
     });
-    
+
   });
-  
-  describe('#findUrlsFromRelease', function() {
-    it('should find urls from a release', function() {
-      const release = {
-        challenges: [
-          {
-            id: 'challenge1',
-            instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
-          },
-          {
-            id: 'challenge2',
-            instruction: 'instructions',
-          },
-          {
-            id: 'challenge3',
-            instruction: 'instructions [link](https://example.com/)',
-          }
-        ]
-      };
+
+  describe('#findUrlsFromChallenges', function() {
+    it('should find urls from challenges', function() {
+      const challenges = [
+        {
+          id: 'challenge1',
+          instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
+        },
+        {
+          id: 'challenge2',
+          instruction: 'instructions',
+        },
+        {
+          id: 'challenge3',
+          instruction: 'instructions [link](https://example.com/)',
+        }
+      ];
 
       const expectedOutput = [
         { id: 'challenge1', url: 'https://example.net/' },
         { id: 'challenge1', url: 'https://other_example.net/' },
         { id: 'challenge3', url: 'https://example.com/' },
       ];
-      
-      const urls = findUrlsFromRelease(release);
-      
+
+      const urls = findUrlsFromChallenges(challenges);
+
       expect(urls).to.deep.equal(expectedOutput);
     });
     it('should use challenge that are not outdated', function() {
@@ -112,7 +110,7 @@ describe('Check urls from release', function() {
           }
         ]
       };
-      
+
       const expectedOutput = [
         {
           id: 'challenge1',
@@ -123,9 +121,9 @@ describe('Check urls from release', function() {
           status: 'proposé'
         }
       ];
-      
+
       const challenges = getLiveChallenges(release);
-      
+
       expect(challenges).to.deep.equal(expectedOutput);
     });
 
