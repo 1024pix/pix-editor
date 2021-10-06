@@ -93,6 +93,9 @@ describe('Check urls from release', function() {
 
       expect(urls).to.deep.equal(expectedOutput);
     });
+  });
+
+  describe('#getLiveChallenges', function() {
     it('should use challenge that are not outdated', function() {
       const release = {
         challenges : [
