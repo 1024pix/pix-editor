@@ -1,5 +1,9 @@
 
 
+## v3.48.0 (07/10/2021)
+
+- [#228](https://github.com/1024pix/pix-editor/pull/228) [BUGFIX] Permettre le remplacement d'une illustration
+
 ## v3.47.0 (06/10/2021)
 
 - [#226](https://github.com/1024pix/pix-editor/pull/226) [FEATURE] Ajout de la date de dernière modification dans les épreuves
