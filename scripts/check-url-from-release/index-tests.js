@@ -1,9 +1,16 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { findUrl, findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
+const {
+  findUrl,
+  findUrlsInstructionFromChallenge,
+  findUrlsProposalsFromChallenge,
+  findUrlsSolutionFromChallenge,
+  findUrlsFromChallenges,
+  buildCsv,
+  getLiveChallenges
+} = require('.');
 
 describe('Check urls from release', function() {
-
   describe('#findUrl', function() {
     it('should not find url from field value when there is no url', function() {
       const fieldValue = 'instructions';
@@ -53,29 +60,50 @@ describe('Check urls from release', function() {
 
       expect(urls).to.deep.equal(['https://example.com/']);
     });
+  });
 
-    describe('#findUrlsProposalsFromChallenge', function() {
-      it('should not find url proposals from a challenge when there is no url', function() {
-        const challenge = {
-          id: 'challenge123',
-          proposals: 'proposals',
-        };
-        const urls = findUrlsProposalsFromChallenge(challenge);
+  describe('#findUrlsProposalsFromChallenge', function() {
+    it('should not find url proposals from a challenge when there is no url', function() {
+      const challenge = {
+        id: 'challenge123',
+        proposals: 'proposals',
+      };
+      const urls = findUrlsProposalsFromChallenge(challenge);
 
-        expect(urls).to.deep.equal([]);
-      });
-
-      it('should find url proposals from a challenge', function() {
-        const challenge = {
-          id: 'challenge123',
-          proposals: 'instructions [link](https://example.com/)',
-        };
-        const urls = findUrlsProposalsFromChallenge(challenge);
-
-        expect(urls).to.deep.equal(['https://example.com/']);
-      });
+      expect(urls).to.deep.equal([]);
     });
 
+    it('should find url proposals from a challenge', function() {
+      const challenge = {
+        id: 'challenge123',
+        proposals: 'proposals [link](https://example.com/)',
+      };
+      const urls = findUrlsProposalsFromChallenge(challenge);
+
+      expect(urls).to.deep.equal(['https://example.com/']);
+    });
+  });
+
+  describe('#findUrlsSolutionFromChallenge', function() {
+    it('should not find url solution from a challenge when there is no url', function() {
+      const challenge = {
+        id: 'challenge123',
+        solution: 'solution',
+      };
+      const urls = findUrlsSolutionFromChallenge(challenge);
+
+      expect(urls).to.deep.equal([]);
+    });
+
+    it('should find url solution from a challenge', function() {
+      const challenge = {
+        id: 'challenge123',
+        solution: 'solution [link](https://example.com/)',
+      };
+      const urls = findUrlsSolutionFromChallenge(challenge);
+
+      expect(urls).to.deep.equal(['https://example.com/']);
+    });
   });
 
   describe('#findUrlsFromChallenges', function() {

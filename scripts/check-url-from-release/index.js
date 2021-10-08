@@ -39,6 +39,10 @@ function findUrlsProposalsFromChallenge(challenge) {
   return findUrl(challenge.proposals || '');
 }
 
+function findUrlsSolutionFromChallenge(challenge) {
+  return findUrl(challenge.solution || '');
+}
+
 function findUrl(value) {
   const converter = new showdown.Converter();
   const html = converter.makeHtml(value);
@@ -80,6 +84,7 @@ module.exports = {
   findUrl,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
+  findUrlsSolutionFromChallenge,
   findUrlsFromChallenges,
   buildCsv,
   getLiveChallenges
