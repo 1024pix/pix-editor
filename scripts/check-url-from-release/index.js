@@ -31,7 +31,7 @@ function prependProtocol(url) {
   return url;
 }
 
-function findUrlsFromChallenge(challenge) {
+function findUrlsInstructionFromChallenge(challenge) {
   const converter = new showdown.Converter();
   const instruction = converter.makeHtml(challenge.instruction || '');
   const urls = instruction.match(urlRegex({ strict: true }));
@@ -41,9 +41,19 @@ function findUrlsFromChallenge(challenge) {
   return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
+function findUrlsProposalsFromChallenge(challenge) {
+  const converter = new showdown.Converter();
+  const proposals = converter.makeHtml(challenge.proposals || '');
+  const urls = proposals.match(urlRegex({ strict: true }));
+  if (!urls) {
+    return [];
+  }
+  return _.uniq(urls.map(cleanUrl).map(prependProtocol));
+}
+
 function findUrlsFromChallenges(challenges) {
   return challenges.flatMap((challenge) => {
-    return findUrlsFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
+    return findUrlsInstructionFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
   });
 }
 
@@ -67,7 +77,8 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = {
-  findUrlsFromChallenge,
+  findUrlsInstructionFromChallenge,
+  findUrlsProposalsFromChallenge,
   findUrlsFromChallenges,
   buildCsv,
   getLiveChallenges

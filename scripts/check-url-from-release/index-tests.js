@@ -1,15 +1,15 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { findUrlsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
+const { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
 
 describe('Check urls from release', function() {
-  describe('#findUrlsFromChallenge', function() {
-    it('should not find url from a challenge when there is no url', function() {
+  describe('#findUrlsInstructionFromChallenge', function() {
+    it('should not find url instruction from a challenge when there is no url', function() {
       const challenge = {
         id: 'challenge123',
         instruction: 'instructions',
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal([]);
     });
@@ -19,37 +19,37 @@ describe('Check urls from release', function() {
         id: 'challenge123',
         instruction: null,
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal([]);
     });
 
-    it('should find url from a challenge', function() {
+    it('should find url instruction from a challenge', function() {
       const challenge = {
         id: 'challenge123',
         instruction: 'instructions [link](https://example.com/)',
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal(['https://example.com/']);
     });
 
-    it('should find url from a markdown link', function() {
+    it('should find url instruction from a markdown link', function() {
       const challenge = {
         id: 'challenge123',
         instruction: 'instructions [https://example.com/](https://example.com/)',
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal(['https://example.com/']);
     });
 
-    it('should find not find url that are document name', function() {
+    it('should find not find url instruction that are document name', function() {
       const challenge = {
         id: 'challenge123',
         instruction: 'instructions report.docx',
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal([]);
     });
@@ -59,9 +59,31 @@ describe('Check urls from release', function() {
         id: 'challenge123',
         instruction: 'instructions www.example.com',
       };
-      const urls = findUrlsFromChallenge(challenge);
+      const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal(['https://www.example.com']);
+    });
+
+    describe('#findUrlsProposalsFromChallenge', function() {
+      it('should not find url proposals from a challenge when there is no url', function() {
+        const challenge = {
+          id: 'challenge123',
+          proposals: 'proposals',
+        };
+        const urls = findUrlsProposalsFromChallenge(challenge);
+
+        expect(urls).to.deep.equal([]);
+      });
+
+      it('should find url proposals from a challenge', function() {
+        const challenge = {
+          id: 'challenge123',
+          proposals: 'instructions [link](https://example.com/)',
+        };
+        const urls = findUrlsProposalsFromChallenge(challenge);
+
+        expect(urls).to.deep.equal(['https://example.com/']);
+      });
     });
 
   });
