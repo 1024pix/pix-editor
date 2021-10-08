@@ -1,19 +1,39 @@
 const chai = require('chai');
 const expect = chai.expect;
-const { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
+const { findUrl, findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge, findUrlsFromChallenges, buildCsv, getLiveChallenges } = require('.');
 
 describe('Check urls from release', function() {
-  describe('#findUrlsInstructionFromChallenge', function() {
-    it('should not find url instruction from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: 'instructions',
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
+
+  describe('#findUrl', function() {
+    it('should not find url from field value when there is no url', function() {
+      const fieldValue = 'instructions';
+      const urls = findUrlsInstructionFromChallenge(fieldValue);
+
+      expect(urls).to.deep.equal([]);
+    });
+    it('should find url from a markdown link', function() {
+      const fieldValue =  'instructions [https://example.com/](https://example.com/)';
+      const urls = findUrl(fieldValue);
+
+      expect(urls).to.deep.equal(['https://example.com/']);
+    });
+
+    it('should find not find url that are document name', function() {
+      const fieldValue = 'instructions report.docx';
+      const urls = findUrl(fieldValue);
 
       expect(urls).to.deep.equal([]);
     });
 
+    it('should prepend https in urls if not present', function() {
+      const fieldValue =  'instructions www.example.com';
+      const urls = findUrl(fieldValue);
+
+      expect(urls).to.deep.equal(['https://www.example.com']);
+    });
+  });
+
+  describe('#findUrlsInstructionFromChallenge', function() {
     it('should not find url from a challenge when there is no instructions', function() {
       const challenge = {
         id: 'challenge123',
@@ -32,36 +52,6 @@ describe('Check urls from release', function() {
       const urls = findUrlsInstructionFromChallenge(challenge);
 
       expect(urls).to.deep.equal(['https://example.com/']);
-    });
-
-    it('should find url instruction from a markdown link', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: 'instructions [https://example.com/](https://example.com/)',
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-
-    it('should find not find url instruction that are document name', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: 'instructions report.docx',
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should prepend https in urls if not present', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: 'instructions www.example.com',
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://www.example.com']);
     });
 
     describe('#findUrlsProposalsFromChallenge', function() {

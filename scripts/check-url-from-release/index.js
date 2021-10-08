@@ -32,19 +32,17 @@ function prependProtocol(url) {
 }
 
 function findUrlsInstructionFromChallenge(challenge) {
-  const converter = new showdown.Converter();
-  const instruction = converter.makeHtml(challenge.instruction || '');
-  const urls = instruction.match(urlRegex({ strict: true }));
-  if (!urls) {
-    return [];
-  }
-  return _.uniq(urls.map(cleanUrl).map(prependProtocol));
+  return findUrl(challenge.instruction || '');
 }
 
 function findUrlsProposalsFromChallenge(challenge) {
+  return findUrl(challenge.proposals || '');
+}
+
+function findUrl(value) {
   const converter = new showdown.Converter();
-  const proposals = converter.makeHtml(challenge.proposals || '');
-  const urls = proposals.match(urlRegex({ strict: true }));
+  const html = converter.makeHtml(value);
+  const urls = html.match(urlRegex({ strict: true }));
   if (!urls) {
     return [];
   }
@@ -77,6 +75,7 @@ if (process.env.NODE_ENV !== 'test') {
 }
 
 module.exports = {
+  findUrl,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsFromChallenges,
