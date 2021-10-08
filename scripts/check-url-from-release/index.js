@@ -51,7 +51,9 @@ function findUrl(value) {
 
 function findUrlsFromChallenges(challenges) {
   return challenges.flatMap((challenge) => {
-    return findUrlsInstructionFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
+    const instructionsUrl = findUrlsInstructionFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
+    const proposalsUrl = findUrlsProposalsFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
+    return _.uniqBy([...instructionsUrl, ...proposalsUrl], 'url');
   });
 }
 

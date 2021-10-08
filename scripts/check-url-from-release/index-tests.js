@@ -84,20 +84,24 @@ describe('Check urls from release', function() {
         {
           id: 'challenge1',
           instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
+          proposals: 'proposals [link](https://example.net/)'
         },
         {
           id: 'challenge2',
           instruction: 'instructions',
+          proposals: 'proposals [link](https://example.fr/)'
         },
         {
           id: 'challenge3',
           instruction: 'instructions [link](https://example.com/)',
+          proposals: 'proposals',
         }
       ];
 
       const expectedOutput = [
         { id: 'challenge1', url: 'https://example.net/' },
         { id: 'challenge1', url: 'https://other_example.net/' },
+        { id: 'challenge2', url: 'https://example.fr/' },
         { id: 'challenge3', url: 'https://example.com/' },
       ];
 
