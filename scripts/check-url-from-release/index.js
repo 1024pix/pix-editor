@@ -39,10 +39,6 @@ function findUrlsProposalsFromChallenge(challenge) {
   return findUrlsInMarkdown(challenge.proposals || '');
 }
 
-function findUrlsSolutionFromChallenge(challenge) {
-  return findUrlsInMarkdown(challenge.solution || '');
-}
-
 function findUrlsInMarkdown(value) {
   const converter = new showdown.Converter();
   const html = converter.makeHtml(value);
@@ -57,8 +53,7 @@ function findUrlsFromChallenges(challenges) {
   return challenges.flatMap((challenge) => {
     const functions = [
       findUrlsInstructionFromChallenge,
-      findUrlsProposalsFromChallenge,
-      findUrlsSolutionFromChallenge
+      findUrlsProposalsFromChallenge
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
@@ -91,7 +86,6 @@ module.exports = {
   findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
-  findUrlsSolutionFromChallenge,
   findUrlsFromChallenges,
   buildCsv,
   getLiveChallenges

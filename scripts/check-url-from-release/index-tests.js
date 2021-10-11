@@ -4,7 +4,6 @@ const {
   findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
-  findUrlsSolutionFromChallenge,
   findUrlsFromChallenges,
   buildCsv,
   getLiveChallenges
@@ -80,28 +79,6 @@ describe('Check urls from release', function() {
         proposals: 'proposals [link](https://example.com/)',
       };
       const urls = findUrlsProposalsFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
-
-  describe('#findUrlsSolutionFromChallenge', function() {
-    it('should not find url solution from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        solution: 'solution',
-      };
-      const urls = findUrlsSolutionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url solution from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        solution: 'solution [link](https://example.com/)',
-      };
-      const urls = findUrlsSolutionFromChallenge(challenge);
 
       expect(urls).to.deep.equal(['https://example.com/']);
     });
