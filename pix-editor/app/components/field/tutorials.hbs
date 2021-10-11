@@ -7,7 +7,7 @@
             @searchEnabled={{true}}
             @search={{this.getSearchTutorialResults}}
             @placeholder="commencer la recherche par > pour rechercher par Tag"
-            @onChange={{this.addTutorial}}
+            @onChange={{this.attachTutorial}}
             @dropdownClass={{concat "search-result  search-tuto-" this.searchClass}}
             @triggerComponent="power-select/custom-trigger"
             @searchMessage=""
@@ -63,13 +63,23 @@
             </div>
           </div>
         </div>
-      {{else}}
+      {{else if (not @edition)}}
         <div class="card">
           <div class="content">
             aucun élément
           </div>
         </div>
       {{/each}}
+      {{#if @edition}}
+        <div class="card">
+          <div class="content">
+            <a href="#" {{on "click" this.addTutorial}}>
+              <i class="icon plus circle"></i>
+              Ajouter un tutorial
+            </a>
+          </div>
+        </div>
+      {{/if}}
     </div>
   {{/if}}
 </div>

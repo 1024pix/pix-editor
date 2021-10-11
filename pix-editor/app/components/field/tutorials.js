@@ -33,20 +33,24 @@ export default class Tutorials extends Component {
         id: tutorial.id
       };
     });
-    results.push({ title: 'Nouveau ', description: 'Ajouter un tutoriel', id: 'create' });
     return results;
   }
 
   @action
-  async addTutorial(item, options) {
-    if (item.id === 'create') {
-      const date = new Date();
-      this.newTutorial = this.store.createRecord('tutorial', { pixId: this.idGenerator.newId('tutorial'), title: options.searchText, date:`${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}` });
-      this.displayTutorialPopin = true;
-    } else {
-      const tutorial = await this.store.findRecord('tutorial', item.id);
-      this.args.addTutorial(tutorial);
-    }
+  async attachTutorial(item) {
+    const tutorial = await this.store.findRecord('tutorial', item.id);
+    this.args.addTutorial(tutorial);
+  }
+
+  @action
+  addTutorial(e) {
+    e.preventDefault();
+    const date = new Date();
+    this.newTutorial = this.store.createRecord('tutorial', {
+      pixId: this.idGenerator.newId('tutorial'),
+      date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+    });
+    this.displayTutorialPopin = true;
   }
 
   @action
