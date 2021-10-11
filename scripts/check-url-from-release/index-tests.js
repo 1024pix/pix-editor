@@ -1,7 +1,7 @@
 const chai = require('chai');
 const expect = chai.expect;
 const {
-  findUrl,
+  findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsSolutionFromChallenge,
@@ -11,30 +11,31 @@ const {
 } = require('.');
 
 describe('Check urls from release', function() {
-  describe('#findUrl', function() {
+  describe('#findUrlsInMarkdown', function() {
     it('should not find url from field value when there is no url', function() {
       const fieldValue = 'instructions';
-      const urls = findUrlsInstructionFromChallenge(fieldValue);
+      const urls = findUrlsInMarkdown(fieldValue);
 
       expect(urls).to.deep.equal([]);
     });
+
     it('should find url from a markdown link', function() {
       const fieldValue =  'instructions [https://example.com/](https://example.com/)';
-      const urls = findUrl(fieldValue);
+      const urls = findUrlsInMarkdown(fieldValue);
 
       expect(urls).to.deep.equal(['https://example.com/']);
     });
 
     it('should find not find url that are document name', function() {
       const fieldValue = 'instructions report.docx';
-      const urls = findUrl(fieldValue);
+      const urls = findUrlsInMarkdown(fieldValue);
 
       expect(urls).to.deep.equal([]);
     });
 
     it('should prepend https in urls if not present', function() {
       const fieldValue =  'instructions www.example.com';
-      const urls = findUrl(fieldValue);
+      const urls = findUrlsInMarkdown(fieldValue);
 
       expect(urls).to.deep.equal(['https://www.example.com']);
     });
