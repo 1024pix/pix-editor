@@ -55,9 +55,16 @@ function findUrl(value) {
 
 function findUrlsFromChallenges(challenges) {
   return challenges.flatMap((challenge) => {
-    const instructionsUrl = findUrlsInstructionFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
-    const proposalsUrl = findUrlsProposalsFromChallenge(challenge).map((url) => ({ id: challenge.id, url }));
-    return _.uniqBy([...instructionsUrl, ...proposalsUrl], 'url');
+    const functions = [
+      findUrlsInstructionFromChallenge,
+      findUrlsProposalsFromChallenge,
+      findUrlsSolutionFromChallenge
+    ];
+    const urls = functions
+      .flatMap((fun) => fun(challenge))
+      .map((url) => ({ id: challenge.id, url }));
+
+    return _.uniqBy(urls, 'url');
   });
 }
 
@@ -89,4 +96,3 @@ module.exports = {
   buildCsv,
   getLiveChallenges
 };
-
