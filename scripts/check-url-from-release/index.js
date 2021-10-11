@@ -1,8 +1,9 @@
 const urlRegex = require('url-regex-safe');
 const axios = require('axios');
-const fs = require('fs');
 const showdown = require('showdown');
 const _ = require('lodash');
+const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
+const CsvFileReporter = require('image-url-checker/dist/reporting/CsvFileReporter').default;
 
 async function main() {
   const url = process.env.RELEASE_URL;
@@ -11,9 +12,27 @@ async function main() {
   const challenges = getLiveChallenges(release);
 
   const urlList = findUrlsFromChallenges(challenges);
-  const csv = buildCsv(urlList);
 
-  fs.writeFileSync('urlList.csv', csv);
+  const separator = ',';
+  const lines = urlList.map((line, index) => {
+    return {
+      reference: line.id,
+      url: line.url,
+      index,
+      raw: [line.id, line.url].join(','),
+      separator
+    };
+  });
+  const options = {
+    separator,
+    output: 'result.csv',
+    headers: ['User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0'],
+    bulk: 50,
+  };
+  const analyzer = new Analyzer(options);
+  const analyzedLines = await analyzer.analyze(lines);
+  const reporter = new CsvFileReporter(options);
+  await reporter.report(analyzedLines);
 }
 
 function cleanUrl(url) {
