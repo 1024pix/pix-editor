@@ -16,9 +16,17 @@ export default class Tutorials extends Component {
   @service notify;
   @service loader;
 
-  async _searchTutorial(query, tagSearch) {
+  async _searchTutorial(query) {
+    let tagSearch = false;
+    if (query.startsWith('>')) {
+      tagSearch = query
+        .split('>')
+        .filter((tag) => tag)
+        .map((tag) => `FIND('${tag.trim()}', LOWER(Tags))`)
+        .join(', ');
+    }
     const tutorials = await this.store.query('tutorial', {
-      filterByFormula: tagSearch ? `FIND('${query}', LOWER(Tags))` : `FIND('${query}', LOWER(Titre))`,
+      filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query}', LOWER(Titre))`,
       maxRecords: 100,
       sort: [{ field: 'Titre', direction: 'asc' }]
     });
@@ -61,13 +69,7 @@ export default class Tutorials extends Component {
 
   @action
   getSearchTutorialResults(query) {
-    query = query.toLowerCase();
-    let tagSearch = false;
-    if (query[0] === '>') {
-      query = query.substring(1);
-      tagSearch = true;
-    }
-    return this._searchTutorial(query, tagSearch);
+    return this._searchTutorial(query.toLowerCase());
   }
 
   @action
