@@ -39,8 +39,11 @@
           <div class="content">
             <div class="header">
               {{#if @edition}}
-                <div {{on "click" (fn @removeTutorial tutorial)}} class="ui right floated icon button">
+                <div {{on "click" (fn @removeTutorial tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
                   <i class="close icon"></i>
+                </div>
+                <div {{on "click" (fn this.editTutorial tutorial)}} title="Modifier le tutoriel" class="ui right floated button">
+                  <i class="edit icon"></i>
                 </div>
               {{/if}}
               <a class="ui right floated button basic" href={{tutorial.link}} target="_blank"
@@ -84,6 +87,6 @@
   {{/if}}
 </div>
 {{#if this.displayTutorialPopin}}
-  <PopIn::Tutorial @tutorial={{this.newTutorial}} @close={{this.closeTutorialPopin}}
+  <PopIn::Tutorial @tutorial={{this.tutorial}} @close={{this.closeTutorialPopin}}
                    @saveTutorial={{this.saveTutorial}}/>
 {{/if}}

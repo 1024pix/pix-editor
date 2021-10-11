@@ -7,7 +7,7 @@ import Sentry from '@sentry/ember';
 export default class Tutorials extends Component {
 
   @tracked displayTutorialPopin = false;
-  @tracked newTutorial = null;
+  @tracked tutorial = null;
   defaultTitle = '';
 
   @service store;
@@ -46,10 +46,16 @@ export default class Tutorials extends Component {
   addTutorial(e) {
     e.preventDefault();
     const date = new Date();
-    this.newTutorial = this.store.createRecord('tutorial', {
+    this.tutorial = this.store.createRecord('tutorial', {
       pixId: this.idGenerator.newId('tutorial'),
       date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
     });
+    this.displayTutorialPopin = true;
+  }
+
+  @action
+  editTutorial(tutorial) {
+    this.tutorial = tutorial;
     this.displayTutorialPopin = true;
   }
 
@@ -74,7 +80,7 @@ export default class Tutorials extends Component {
     this.displayTutorialPopin = false;
     this.loader.start();
     try {
-      const tutorial = await this.newTutorial.save();
+      const tutorial = await this.tutorial.save();
       this.loader.stop();
       this.notify.message('Tutoriel créé');
       this.args.addTutorial(tutorial);
