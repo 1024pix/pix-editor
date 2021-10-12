@@ -82,10 +82,6 @@ function findUrlsFromChallenges(challenges) {
   });
 }
 
-function buildCsv(urlList) {
-  return urlList.map((currentUrl) => `${currentUrl.id},${currentUrl.url}`).join('\n');
-}
-
 async function getRelease(url, token) {
   const { data: { content: content } } = await axios.get(url, {
     headers: { 'Authorization': 'Bearer ' + token }
@@ -106,6 +102,5 @@ module.exports = {
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsFromChallenges,
-  buildCsv,
   getLiveChallenges
 };
