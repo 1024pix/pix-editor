@@ -16,6 +16,6 @@ export default class TutorialModel extends Model {
   @hasMany('tag') tags;
 
   get tagsTitle() {
-    return this.tags.map(tag=>tag.title).join(' | ');
+    return this.tags.map(tag => tag.title).join(' | ');
   }
 }
