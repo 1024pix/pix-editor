@@ -1,5 +1,11 @@
 
 
+## v3.49.0 (12/10/2021)
+
+- [#231](https://github.com/1024pix/pix-editor/pull/231) [FEATURE] Recherche de tutoriel par multiple tags
+- [#229](https://github.com/1024pix/pix-editor/pull/229) [FEATURE] Pouvoir modifier les tutoriels
+- [#227](https://github.com/1024pix/pix-editor/pull/227) [TECH] Monter de version caniuse-lite
+
 ## v3.48.0 (07/10/2021)
 
 - [#228](https://github.com/1024pix/pix-editor/pull/228) [BUGFIX] Permettre le remplacement d'une illustration
