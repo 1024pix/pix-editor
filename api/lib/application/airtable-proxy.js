@@ -71,7 +71,7 @@ async function _proxyRequestToAirtable(request, h, airtableBase) {
     { headers: { 'Authorization': `Bearer ${config.airtable.apiKey}`, 'Content-Type': 'application/json' },
       params: request.query,
       method: request.method,
-      data: request.payload,
+      data: request.payload ? request.payload : {},
       validateStatus: () => true
     });
   return h.response(response.data).code(response.status);
