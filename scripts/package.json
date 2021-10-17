@@ -16,6 +16,7 @@
     "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "chai": "4.2.0",
+    "googleapis": "^88.2.0",
     "hasha": "^5.2.2",
     "image-url-checker": "github:francois2metz/image-url-checker",
     "js-crypto-random": "^1.0.2",
