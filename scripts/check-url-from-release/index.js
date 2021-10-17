@@ -3,13 +3,15 @@ const axios = require('axios');
 const showdown = require('showdown');
 const _ = require('lodash');
 const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
-const CsvFileReporter = require('image-url-checker/dist/reporting/CsvFileReporter').default;
+const { getAuthToken, clearSpreadsheetValues, setSpreadsheetValues } = require('./google-sheet.js');
 
 async function main() {
   const url = process.env.RELEASE_URL;
   const token = process.env.TOKEN_LCMS;
   const release = await getRelease(url, token);
   const challenges = getLiveChallenges(release);
+  const spreadsheetId = process.env.SPREADSHEET_ID;
+  const sheetNameRange = process.env.SHEET_NAME;
 
   const urlList = findUrlsFromChallenges(challenges);
 
@@ -31,8 +33,31 @@ async function main() {
   };
   const analyzer = new Analyzer(options);
   const analyzedLines = await analyzer.analyze(lines);
-  const reporter = new CsvFileReporter(options);
-  await reporter.report(analyzedLines);
+  const formatedLines = analyzedLines.filter((line) => {
+    return line.status === 'KO';
+  }).map((line) => {
+    return [line.reference, line.url, line.status, line.error, line.comments.join(', ')];
+  });
+  try {
+    const auth = await getAuthToken();
+    await clearSpreadsheetValues({
+      spreadsheetId,
+      auth,
+      range: `${sheetNameRange}!A2:Z999`,
+    });
+    await setSpreadsheetValues({
+      spreadsheetId,
+      auth,
+      range: 'feuille_1!A:Z',
+      valueInputOption: 'RAW',
+      resource: {
+        values: formatedLines
+      }
+    });
+  } catch (error) {
+    console.log(error.message, error.stack);
+  }
+
 }
 
 function cleanUrl(url) {
