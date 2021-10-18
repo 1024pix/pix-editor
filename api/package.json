@@ -54,8 +54,10 @@
     "bull": "^3.29.2",
     "dotenv": "^10.0.0",
     "faker": "^5.5.3",
+    "googleapis": "^88.2.0",
     "hapi-pino": "^8.4.0",
     "hapi-sentry": "^3.2.0",
+    "image-url-checker": "github:francois2metz/image-url-checker",
     "joi": "^17.4.2",
     "jsonapi-serializer": "3.6.7",
     "knex": "^0.95.11",
@@ -65,7 +67,9 @@
     "pino": "^6.13.3",
     "prom-client": "^14.0.0",
     "qs": "^6.10.1",
-    "sequelize": "^6.6.2"
+    "sequelize": "^6.6.2",
+    "showdown": "^1.9.1",
+    "url-regex-safe": "^2.0.2"
   },
   "devDependencies": {
     "chai": "^4.3.4",

@@ -3,9 +3,10 @@ const sheets = google.sheets('v4');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
-async function getAuthToken() {
+async function getAuthToken(credentials) {
   const auth = new google.auth.GoogleAuth({
-    scopes: SCOPES
+    scopes: SCOPES,
+    credentials,
   });
   
   const authToken = await auth.getClient();

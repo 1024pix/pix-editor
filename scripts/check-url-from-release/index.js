@@ -3,7 +3,7 @@ const axios = require('axios');
 const showdown = require('showdown');
 const _ = require('lodash');
 const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
-const { getAuthToken, clearSpreadsheetValues, setSpreadsheetValues } = require('./google-sheet.js');
+const { getAuthToken, clearSpreadsheetValues, setSpreadsheetValues } = require('../../api/lib/infrastructure/utils/google-sheet.js');
 
 async function main() {
   const url = process.env.RELEASE_URL;

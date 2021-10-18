@@ -1,2 +1,0 @@
-const Queue = require('bull');
-

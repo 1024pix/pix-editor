@@ -4,6 +4,7 @@ const logger = require('../logger');
 const releaseRepository = require('../repositories/release-repository.js');
 const SlackNotifier = require('../notifications/SlackNotifier');
 const learningContentNotification = require('../../domain/services/learning-content-notification');
+const checkUrlsJob = require('./check-urls-job');
 
 const queue = createQueue('create-release-queue');
 queue.process(createRelease);
@@ -26,6 +27,7 @@ async function createRelease() {
       await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.info(`Periodic release created with id ${release.id}`);
+    checkUrlsJob.start();
     return release.id;
   } catch (error) {
     if (config.notifications.slack.enable) {
