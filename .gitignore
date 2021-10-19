@@ -25,7 +25,6 @@ testem.log
 api/public/pix-editor/**
 **/.eslintcache
 api/.adminbro
-scripts/**/url-checker-service-key.json
 
 # ember-try
 **/.node_modules.ember-try/
