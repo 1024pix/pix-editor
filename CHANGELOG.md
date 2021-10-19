@@ -1,5 +1,12 @@
 
 
+## v3.50.0 (19/10/2021)
+
+- [#234](https://github.com/1024pix/pix-editor/pull/234) [FEATURE] Mise en ligne automatique des urls KO dans un google sheet (PIX-3580).
+- [#230](https://github.com/1024pix/pix-editor/pull/230) [FEATURE] Vérifier les urls des épreuves
+- [#232](https://github.com/1024pix/pix-editor/pull/232) [TECH] Monté de version d'axios
+- [#233](https://github.com/1024pix/pix-editor/pull/233) [TECH] Monter les BDD de développement en version majeure 13.3 depuis la 12.3.
+
 ## v3.49.0 (12/10/2021)
 
 - [#231](https://github.com/1024pix/pix-editor/pull/231) [FEATURE] Recherche de tutoriel par multiple tags
