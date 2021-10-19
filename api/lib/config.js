@@ -88,6 +88,12 @@ module.exports = (function() {
         webhookUrl: process.env.NOTIFICATIONS_SLACK_WEBHOOK_URL,
         enable: process.env.NOTIFICATIONS_SLACK_ENABLE,
       }
+    },
+
+    checkUrlsJobs: {
+      googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
+      spreadsheetId: process.env.CHECK_URLS_SPREADSHEET_ID,
+      sheetName: process.env.CHECK_URLS_SHEET_NAME,
     }
 
   };
