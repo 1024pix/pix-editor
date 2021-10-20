@@ -5,7 +5,8 @@ const {
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsFromChallenges,
-  getLiveChallenges
+  getLiveChallenges,
+  findUrlsFromTutorials
 } = require('../../../../lib/infrastructure/scheduled-jobs/check-urls-job');
 
 describe('Check urls from release', function() {
@@ -151,5 +152,43 @@ describe('Check urls from release', function() {
       expect(challenges).to.deep.equal(expectedOutput);
     });
 
+  });
+
+  describe('#findUrlsFromTutorials', function() {
+    it('should find urls from tutorials', function() {
+      const tutorials = [
+        {
+          id: 'tutorial1',
+          link: 'https://example.net/'
+        },
+        {
+          id: 'tutorial2',
+          link: 'https://example.net/'
+        },
+        {
+          id: 'tutorial13',
+          link: 'https://example.net/'
+        }
+      ];
+
+      const exepectedOutput = [
+        {
+          id: 'tutorial1',
+          url: 'https://example.net/'
+        },
+        {
+          id: 'tutorial2',
+          url: 'https://example.net/'
+        },
+        {
+          id: 'tutorial13',
+          url: 'https://example.net/'
+        }
+      ];
+
+      const urls = findUrlsFromTutorials(tutorials);
+
+      expect(urls).to.deep.equal(exepectedOutput);
+    });
   });
 });
