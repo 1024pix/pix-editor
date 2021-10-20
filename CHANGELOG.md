@@ -1,5 +1,10 @@
 
 
+## v3.51.0 (20/10/2021)
+
+- [#236](https://github.com/1024pix/pix-editor/pull/236) [FEATURE] A la recherche des URLs des tutorials cassées (PIX-3581)
+- [#235](https://github.com/1024pix/pix-editor/pull/235) [BUGFIX] Corrige une typo
+
 ## v3.50.0 (19/10/2021)
 
 - [#234](https://github.com/1024pix/pix-editor/pull/234) [FEATURE] Mise en ligne automatique des urls KO dans un google sheet (PIX-3580).
