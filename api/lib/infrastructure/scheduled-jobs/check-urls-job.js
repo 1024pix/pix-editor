@@ -68,6 +68,12 @@ function findUrlsFromChallenges(challenges) {
   });
 }
 
+function findUrlsFromTutorials(tutorials) {
+  return tutorials.map((tutorial) => {
+    return { id: tutorial.id, url: tutorial.link };
+  });
+}
+
 async function analyzeUrls(urlList) {
   const separator = ',';
   const lines = urlList.map((line, index) => {
@@ -97,18 +103,18 @@ function getDataToUpload(analyzedLines) {
   });
 }
 
-async function sendDataToGoogleSheet(dataToUpload) {
+async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   try {
     const auth = await getAuthToken(config.checkUrlsJobs.googleAuthCredentials);
     await clearSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
-      range: `${config.checkUrlsJobs.sheetName}!A2:Z999`,
+      range: `${sheetName}!A2:Z999`,
     });
     await setSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
-      range: `${config.checkUrlsJobs.sheetName}!A:Z`,
+      range: `${sheetName}!A:Z`,
       valueInputOption: 'RAW',
       resource: {
         values: dataToUpload
@@ -121,13 +127,31 @@ async function sendDataToGoogleSheet(dataToUpload) {
 
 async function checkUrlsFromRelease() {
   const release = await releaseRepository.getLatestRelease();
+
+  await checkAndUploadKOUrlsFromChallenges(release);
+  await checkAndUploadKOUrlsFromTutorials(release);
+}
+
+async function checkAndUploadKOUrlsFromChallenges(release) {
   const challenges = getLiveChallenges(release.content);
 
   const urlList = findUrlsFromChallenges(challenges);
 
+  await checkAndUploadUrlList(urlList, config.checkUrlsJobs.challengesSheetName);
+}
+
+async function checkAndUploadKOUrlsFromTutorials(release) {
+  const tutorials = release.content.tutorials;
+
+  const urlList = findUrlsFromTutorials(tutorials);
+
+  await checkAndUploadUrlList(urlList, config.checkUrlsJobs.tutorialsSheetName);
+}
+
+async function checkAndUploadUrlList(urlList, sheetName) {
   const analyzedLines = await analyzeUrls(urlList);
   const dataToUpload = getDataToUpload(analyzedLines);
-  await sendDataToGoogleSheet(dataToUpload);
+  await sendDataToGoogleSheet(dataToUpload, sheetName);
 }
 
 function start() {
@@ -141,5 +165,6 @@ module.exports = {
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsFromChallenges,
+  findUrlsFromTutorials,
   start,
 };

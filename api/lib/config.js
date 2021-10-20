@@ -93,7 +93,8 @@ module.exports = (function() {
     checkUrlsJobs: {
       googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
       spreadsheetId: process.env.CHECK_URLS_SPREADSHEET_ID,
-      sheetName: process.env.CHECK_URLS_SHEET_NAME,
+      challengesSheetName: process.env.CHECK_URLS_CHALLENGES_SHEET_NAME,
+      tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
     }
 
   };
