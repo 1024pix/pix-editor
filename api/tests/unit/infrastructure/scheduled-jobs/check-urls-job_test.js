@@ -86,32 +86,50 @@ describe('Check urls from release', function() {
 
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', function() {
+      const release = {
+        skills: [
+          {
+            id: 'skill1',
+            name: '@mySkill1'
+          },
+          {
+            id: 'skill2',
+            name: '@mySkill2'
+          }
+        ]
+      };
       const challenges = [
         {
           id: 'challenge1',
           instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
-          proposals: 'proposals [link](https://example.net/)'
+          proposals: 'proposals [link](https://example.net/)',
+          skillIds: ['skill1'],
+          status: 'validé',
         },
         {
           id: 'challenge2',
           instruction: 'instructions',
-          proposals: 'proposals [link](https://example.fr/)'
+          proposals: 'proposals [link](https://example.fr/)',
+          skillIds: [],
+          status: 'validé',
         },
         {
           id: 'challenge3',
           instruction: 'instructions [link](https://example.com/)',
           proposals: 'proposals',
+          skillIds: ['skill1', 'skill2'],
+          status: 'validé',
         }
       ];
 
       const expectedOutput = [
-        { id: 'challenge1', url: 'https://example.net/' },
-        { id: 'challenge1', url: 'https://other_example.net/' },
-        { id: 'challenge2', url: 'https://example.fr/' },
-        { id: 'challenge3', url: 'https://example.com/' },
+        { id: '@mySkill1;challenge1;validé', url: 'https://example.net/' },
+        { id: '@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
+        { id: ';challenge2;validé', url: 'https://example.fr/' },
+        { id: '@mySkill1 @mySkill2;challenge3;validé', url: 'https://example.com/' },
       ];
 
-      const urls = findUrlsFromChallenges(challenges);
+      const urls = findUrlsFromChallenges(challenges, release);
 
       expect(urls).to.deep.equal(expectedOutput);
     });

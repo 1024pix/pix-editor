@@ -54,7 +54,12 @@ function findUrlsInMarkdown(value) {
   return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
-function findUrlsFromChallenges(challenges) {
+function findSkillsNameFromChallenge(challenge, release) {
+  const skills = release.skills.filter(({ id }) => challenge.skillIds.includes(id));
+  return skills.map((s) => s.name).join(' ');
+}
+
+function findUrlsFromChallenges(challenges, release) {
   return challenges.flatMap((challenge) => {
     const functions = [
       findUrlsInstructionFromChallenge,
@@ -62,7 +67,9 @@ function findUrlsFromChallenges(challenges) {
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
-      .map((url) => ({ id: challenge.id, url }));
+      .map((url) => {
+        return { id: [findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status].join(';'), url };
+      });
 
     return _.uniqBy(urls, 'url');
   });
@@ -99,7 +106,7 @@ function getDataToUpload(analyzedLines) {
   return analyzedLines.filter((line) => {
     return line.status === 'KO';
   }).map((line) => {
-    return [line.reference, line.url, line.status, line.error, line.comments.join(', ')];
+    return [...line.reference.split(';'), line.url, line.status, line.error, line.comments.join(', ')];
   });
 }
 
@@ -135,7 +142,7 @@ async function checkUrlsFromRelease() {
 async function checkAndUploadKOUrlsFromChallenges(release) {
   const challenges = getLiveChallenges(release.content);
 
-  const urlList = findUrlsFromChallenges(challenges);
+  const urlList = findUrlsFromChallenges(challenges, release.content);
 
   await checkAndUploadUrlList(urlList, config.checkUrlsJobs.challengesSheetName);
 }
