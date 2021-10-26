@@ -59,6 +59,14 @@ function findSkillsNameFromChallenge(challenge, release) {
   return skills.map((s) => s.name).join(' ');
 }
 
+function findSkillsNameFromTutorial(tutorial, release) {
+  const skills = release.skills.filter((skill) => {
+    return skill.tutorialIds.includes(tutorial.id) ||
+      skill.learningMoreTutorialIds.includes(tutorial.id);
+  });
+  return skills.map((s) => s.name).join(' ');
+}
+
 function findUrlsFromChallenges(challenges, release) {
   return challenges.flatMap((challenge) => {
     const functions = [
@@ -75,9 +83,9 @@ function findUrlsFromChallenges(challenges, release) {
   });
 }
 
-function findUrlsFromTutorials(tutorials) {
+function findUrlsFromTutorials(tutorials, release) {
   return tutorials.map((tutorial) => {
-    return { id: tutorial.id, url: tutorial.link };
+    return { id: [findSkillsNameFromTutorial(tutorial, release), tutorial.id].join(';'), url: tutorial.link };
   });
 }
 
@@ -150,7 +158,7 @@ async function checkAndUploadKOUrlsFromChallenges(release) {
 async function checkAndUploadKOUrlsFromTutorials(release) {
   const tutorials = release.content.tutorials;
 
-  const urlList = findUrlsFromTutorials(tutorials);
+  const urlList = findUrlsFromTutorials(tutorials, release.content);
 
   await checkAndUploadUrlList(urlList, config.checkUrlsJobs.tutorialsSheetName);
 }

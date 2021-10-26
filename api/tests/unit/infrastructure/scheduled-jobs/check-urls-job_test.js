@@ -174,6 +174,20 @@ describe('Check urls from release', function() {
 
   describe('#findUrlsFromTutorials', function() {
     it('should find urls from tutorials', function() {
+      const release = {
+        skills: [
+          {
+            name: '@mySkill1',
+            tutorialIds: ['tutorial1', 'tutorial3'],
+            learningMoreTutorialIds: [],
+          },
+          {
+            name: '@mySkill2',
+            tutorialIds: [],
+            learningMoreTutorialIds: ['tutorial3'],
+          },
+        ],
+      };
       const tutorials = [
         {
           id: 'tutorial1',
@@ -184,27 +198,27 @@ describe('Check urls from release', function() {
           link: 'https://example.net/'
         },
         {
-          id: 'tutorial13',
+          id: 'tutorial3',
           link: 'https://example.net/'
         }
       ];
 
       const expectedOutput = [
         {
-          id: 'tutorial1',
+          id: '@mySkill1;tutorial1',
           url: 'https://example.net/'
         },
         {
-          id: 'tutorial2',
+          id: ';tutorial2',
           url: 'https://example.net/'
         },
         {
-          id: 'tutorial13',
+          id: '@mySkill1 @mySkill2;tutorial3',
           url: 'https://example.net/'
         }
       ];
 
-      const urls = findUrlsFromTutorials(tutorials);
+      const urls = findUrlsFromTutorials(tutorials, release);
 
       expect(urls).to.deep.equal(expectedOutput);
     });
