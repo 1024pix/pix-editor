@@ -171,7 +171,7 @@ describe('Check urls from release', function() {
         }
       ];
 
-      const exepectedOutput = [
+      const expectedOutput = [
         {
           id: 'tutorial1',
           url: 'https://example.net/'
@@ -188,7 +188,7 @@ describe('Check urls from release', function() {
 
       const urls = findUrlsFromTutorials(tutorials);
 
-      expect(urls).to.deep.equal(exepectedOutput);
+      expect(urls).to.deep.equal(expectedOutput);
     });
   });
 });
