@@ -23,7 +23,7 @@ exports.register = async function(server) {
           method: securityPreHandlers.checkUserHasWriteAccess,
         }],
         handler: async function() {
-          const job = await createReleaseQueue.add();
+          const job = await createReleaseQueue.add({ slackNotification: true });
           const promise = async () => {
             const releaseId = await job.finished();
             return releaseRepository.getRelease(releaseId);

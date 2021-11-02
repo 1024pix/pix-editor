@@ -20,17 +20,17 @@ const releaseJobOptions = {
   },
 };
 
-async function createRelease() {
+async function createRelease(job) {
   try {
     const release = await releaseRepository.create();
-    if (config.notifications.slack.enable) {
+    if (_isSlackNotificationGloballyEnabled() && job.data.slackNotification === true) {
       await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.info(`Periodic release created with id ${release.id}`);
     checkUrlsJob.start();
     return release.id;
   } catch (error) {
-    if (config.notifications.slack.enable) {
+    if (_isSlackNotificationGloballyEnabled()) {
       await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.error(error);
@@ -47,6 +47,10 @@ function schedule() {
 
 function _isScheduledReleaseEnabled() {
   return config.scheduledJobs.createReleaseTime && config.scheduledJobs.redisUrl;
+}
+
+function _isSlackNotificationGloballyEnabled() {
+  return config.notifications.slack.enable;
 }
 
 module.exports = {
