@@ -36,7 +36,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
   });
 
   module('It should save challenge', function(hooks) {
-    let saveCheckStub, handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
+    let handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
       challenge;
 
     hooks.beforeEach(function () {
@@ -45,9 +45,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         id: 'rec123456'
       };
       controller.model = challenge;
-
-      saveCheckStub = sinon.stub().resolves(challenge);
-      controller._saveCheck = saveCheckStub;
 
       handleIllustrationStub = sinon.stub().resolves(challenge);
       controller._handleIllustration = handleIllustrationStub;
@@ -76,7 +73,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.ok(startStub.calledOnce);
-      assert.ok(saveCheckStub.calledWith(challenge));
       assert.ok(handleIllustrationStub.calledWith(challenge));
       assert.ok(handleAttachmentStub.calledWith(challenge));
       assert.ok(saveChallengeStub.calledWith(challenge));
@@ -100,21 +96,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.notOk(controller.displayAlternativeInstructionsField);
       assert.notOk(controller.displaySolutionToDisplayField);
       assert.notOk(controller.edition);
-    });
-
-    test('it should catch error if saving is wrong', async function(assert) {
-      // given
-      const errorMessageStub = sinon.stub();
-      controller._errorMessage = errorMessageStub;
-
-      const wrongSaveCheckStub = sinon.stub().rejects();
-      controller._saveCheck = wrongSaveCheckStub;
-      // when
-      await controller._saveChallengeCallback();
-
-      // then
-      assert.ok(wrongSaveCheckStub.calledOnce);
-      assert.ok(errorMessageStub.calledWith('Erreur lors de la mise à jour'));
     });
   });
 
@@ -270,15 +251,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    test('it returns the challenge when there is no errors', async function(assert) {
-      await controller._saveCheck(challenge);
-      assert.ok(true);
+    test('it returns the challenge when there is no errors', function(assert) {
+      assert.ok(controller._saveCheck(challenge));
     });
 
     test('rejects when autoReply is true and there is no embed url', function(assert) {
       challenge.autoReply = true;
       challenge.embedURL = '';
-      assert.rejects(controller._saveCheck(challenge));
+      assert.notOk(controller._saveCheck(challenge));
       assert.ok(errorStub.calledOnce);
     });
 
@@ -286,7 +266,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       challenge.solution = `- test
 - 'hola
 `;
-      assert.rejects(controller._saveCheck(challenge));
+      assert.notOk(controller._saveCheck(challenge));
       assert.ok(errorStub.calledOnce);
     });
   });
