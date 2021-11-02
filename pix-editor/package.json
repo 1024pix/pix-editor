@@ -98,6 +98,7 @@
     "canvg": "^3.0.6",
     "file-saver": "2.0.5",
     "js-crypto-random": "1.0.0",
+    "js-yaml": "^4.1.0",
     "jspdf": "^2.3.1",
     "jspdf-autotable": "3.5.13",
     "lodash": "^4.17.21",

@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
+import yaml from 'js-yaml';
 
 export default class SingleController extends Controller {
 
@@ -392,7 +393,20 @@ export default class SingleController extends Controller {
     if (challenge.autoReply && !challenge.embedURL) {
       return this._error('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
     }
+    if (!this._validateYAML(challenge.solution)) {
+      return this._error('Le champ solution n\'est pas correctement formaté');
+    }
+
     return Promise.resolve(challenge);
+  }
+
+  _validateYAML(content) {
+    try {
+      yaml.load(content);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   _validationChecks(challenge) {

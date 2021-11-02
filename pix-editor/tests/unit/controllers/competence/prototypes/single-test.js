@@ -281,6 +281,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.rejects(controller._saveCheck(challenge));
       assert.ok(errorStub.calledOnce);
     });
+
+    test('rejects when solution is not a valid YAML', function(assert) {
+      challenge.solution = `- test
+- 'hola
+`;
+      assert.rejects(controller._saveCheck(challenge));
+      assert.ok(errorStub.calledOnce);
+    });
   });
 
   module('_handleIllustration', function(hooks) {
