@@ -7,7 +7,7 @@ import EmberObject from '@ember/object';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupTest(hooks);
-  let controller, messageStub, startStub, stopStub;
+  let controller, messageStub, startStub, stopStub, errorStub;
 
   hooks.beforeEach(function () {
     //given
@@ -20,6 +20,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       stop = stopStub;
     }
     this.owner.register('service:loader', LoaderService);
+
+    errorStub = sinon.stub();
+    class NotifyService extends Service {
+      error = errorStub
+    }
+    this.owner.register('service:notify', NotifyService);
 
     class ConfirmService extends Service {
       ask = sinon.stub().resolves()
@@ -253,6 +259,28 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(rollbackAttributesStub.calledOnce);
     assert.ok(messageStub.calledWith('Modification annulée'));
+  });
+
+  module('_saveCheck', function(hooks) {
+    let challenge;
+
+    hooks.beforeEach(function() {
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+      });
+    });
+
+    test('it returns the challenge when there is no errors', async function(assert) {
+      await controller._saveCheck(challenge);
+      assert.ok(true);
+    });
+
+    test('rejects when autoReply is true and there is no embed url', function(assert) {
+      challenge.autoReply = true;
+      challenge.embedURL = '';
+      assert.rejects(controller._saveCheck(challenge));
+      assert.ok(errorStub.calledOnce);
+    });
   });
 
   module('_handleIllustration', function(hooks) {
