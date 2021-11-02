@@ -398,7 +398,7 @@ export default class SingleController extends Controller {
       return false;
     }
     if (!this._validateYAML(challenge.solution)) {
-      this._errorMessage('Le champ solution n\'est pas correctement formaté');
+      this._errorMessage('Le champ "Réponses" n\'est pas correctement formaté');
       return false;
     }
 
