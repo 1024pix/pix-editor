@@ -7,7 +7,7 @@ import EmberObject from '@ember/object';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupTest(hooks);
-  let controller, messageStub, startStub, stopStub;
+  let controller, messageStub, startStub, stopStub, errorStub;
 
   hooks.beforeEach(function () {
     //given
@@ -21,6 +21,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     }
     this.owner.register('service:loader', LoaderService);
 
+    errorStub = sinon.stub();
+    class NotifyService extends Service {
+      error = errorStub
+    }
+    this.owner.register('service:notify', NotifyService);
+
     class ConfirmService extends Service {
       ask = sinon.stub().resolves()
     }
@@ -30,7 +36,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
   });
 
   module('It should save challenge', function(hooks) {
-    let saveCheckStub, handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
+    let handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
       challenge;
 
     hooks.beforeEach(function () {
@@ -39,9 +45,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         id: 'rec123456'
       };
       controller.model = challenge;
-
-      saveCheckStub = sinon.stub().resolves(challenge);
-      controller._saveCheck = saveCheckStub;
 
       handleIllustrationStub = sinon.stub().resolves(challenge);
       controller._handleIllustration = handleIllustrationStub;
@@ -70,7 +73,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.ok(startStub.calledOnce);
-      assert.ok(saveCheckStub.calledWith(challenge));
       assert.ok(handleIllustrationStub.calledWith(challenge));
       assert.ok(handleAttachmentStub.calledWith(challenge));
       assert.ok(saveChallengeStub.calledWith(challenge));
@@ -94,21 +96,6 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.notOk(controller.displayAlternativeInstructionsField);
       assert.notOk(controller.displaySolutionToDisplayField);
       assert.notOk(controller.edition);
-    });
-
-    test('it should catch error if saving is wrong', async function(assert) {
-      // given
-      const errorMessageStub = sinon.stub();
-      controller._errorMessage = errorMessageStub;
-
-      const wrongSaveCheckStub = sinon.stub().rejects();
-      controller._saveCheck = wrongSaveCheckStub;
-      // when
-      await controller._saveChallengeCallback();
-
-      // then
-      assert.ok(wrongSaveCheckStub.calledOnce);
-      assert.ok(errorMessageStub.calledWith('Erreur lors de la mise à jour'));
     });
   });
 
@@ -253,6 +240,35 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     assert.notOk(controller.edition);
     assert.ok(rollbackAttributesStub.calledOnce);
     assert.ok(messageStub.calledWith('Modification annulée'));
+  });
+
+  module('_saveCheck', function(hooks) {
+    let challenge;
+
+    hooks.beforeEach(function() {
+      challenge = EmberObject.create({
+        id: 'recChallenge',
+      });
+    });
+
+    test('it returns the challenge when there is no errors', function(assert) {
+      assert.ok(controller._saveCheck(challenge));
+    });
+
+    test('rejects when autoReply is true and there is no embed url', function(assert) {
+      challenge.autoReply = true;
+      challenge.embedURL = '';
+      assert.notOk(controller._saveCheck(challenge));
+      assert.ok(errorStub.calledOnce);
+    });
+
+    test('rejects when solution is not a valid YAML', function(assert) {
+      challenge.solution = `- test
+- 'hola
+`;
+      assert.notOk(controller._saveCheck(challenge));
+      assert.ok(errorStub.calledOnce);
+    });
   });
 
   module('_handleIllustration', function(hooks) {

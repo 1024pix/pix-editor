@@ -3,6 +3,7 @@ import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
+import yaml from 'js-yaml';
 
 export default class SingleController extends Controller {
 
@@ -187,13 +188,16 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async save() {
+  save() {
+    if (!this._saveCheck(this.challenge)) {
+      return;
+    }
     this._displayChangelogPopIn(this.defaultSaveChangelog, this._saveChallengeCallback);
   }
 
-  _saveChallengeCallback(changelog) {
+  async _saveChallengeCallback(changelog) {
     this.loader.start();
-    return this._saveCheck(this.challenge)
+    return Promise.resolve(this.challenge)
       .then(challenge => this._handleIllustration(challenge))
       .then(challenge => this._handleAttachments(challenge))
       .then(challenge => this._saveChallenge(challenge))
@@ -390,9 +394,24 @@ export default class SingleController extends Controller {
 
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
-      return this._error('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
+      this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
+      return false;
     }
-    return Promise.resolve(challenge);
+    if (!this._validateYAML(challenge.solution)) {
+      this._errorMessage('Le champ "Réponses" n\'est pas correctement formaté');
+      return false;
+    }
+
+    return true;
+  }
+
+  _validateYAML(content) {
+    try {
+      yaml.load(content);
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   _validationChecks(challenge) {
