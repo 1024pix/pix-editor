@@ -1,5 +1,16 @@
 
 
+## v3.52.0 (03/11/2021)
+
+
+### :rocket: Enhancement
+- [#237](https://github.com/1024pix/pix-editor/pull/237) [FEATURE] Ajout de contexte pour la vérifications des URLs KO
+- [#240](https://github.com/1024pix/pix-editor/pull/240) [FEATURE] Valide le champ réponses d'une épreuve (PIX-3747)
+
+### :building_construction: Tech
+- [#239](https://github.com/1024pix/pix-editor/pull/239) [TECH] Désactive les notifications de succès de la création de référentiel lorsqu'elle est prévue
+- [#238](https://github.com/1024pix/pix-editor/pull/238) [TECH] Mise à jour vers bull 4
+
 ## v3.51.0 (20/10/2021)
 
 - [#236](https://github.com/1024pix/pix-editor/pull/236) [FEATURE] A la recherche des URLs des tutorials cassées (PIX-3581)
