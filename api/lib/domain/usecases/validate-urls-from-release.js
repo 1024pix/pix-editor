@@ -1,7 +1,9 @@
 const showdown = require('showdown');
 const _ = require('lodash');
 const urlRegex = require('url-regex-safe');
-const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
+const axios = require('axios');
+
+const logger = require('../../infrastructure/logger');
 
 function getLiveChallenges(release) {
   return release.challenges.filter((challenge) => challenge.status !== 'périmé');
@@ -76,31 +78,61 @@ function findUrlsFromTutorials(tutorials, release) {
 }
 
 async function analyzeUrls(urlList) {
-  const separator = ',';
-  const lines = urlList.map((line, index) => {
-    return {
-      reference: line.id,
-      url: line.url,
-      index,
-      raw: [line.id, line.url].join(','),
-      separator
-    };
-  });
   const options = {
-    separator,
-    headers: ['User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0'],
+    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0' },
+    timeout: 15000,
+    maxRedirects: 10,
     bulk: 50,
   };
-  const analyzer = new Analyzer(options);
-  const analyzedLines = await analyzer.analyze(lines);
+  const analyzedLines = await analyze(urlList, options);
   return analyzedLines;
+}
+
+async function analyze(lines, options) {
+  const pMap = (await import('p-map')).default;
+  const newLines = await pMap(lines, async (line) => {
+    const config = { timeout: options.timeout, maxRedirects: options.maxRedirects, headers: options.headers };
+    try {
+      new URL(line.url);
+    } catch (e) {
+      return { id: line.id, url: line.url, status: 'KO', error: 'FORMAT_ERROR', comments: e.message };
+    }
+    try {
+      logger.trace(`checking ${line.url}`);
+      const response = await checkUrl(line.url, config);
+      if (response.status === 200) {
+        return { id: line.id, url: line.url, status: 'OK', error: '', comments: '' };
+      } else {
+        return {
+          id: line.id,
+          url: line.url,
+          status: 'KO',
+          error: 'HTTP_ERROR',
+          comments: 'HTTP status is not 200'
+        };
+      }
+    } catch (e) {
+      return { id: line.id, url: line.url, status: 'KO', error: 'HTTP_ERROR', comments: e.message };
+    } finally {
+      logger.trace(`done checking ${line.url}`);
+    }
+  }, options.bulk);
+  return newLines;
+}
+
+async function checkUrl(url, config) {
+  try {
+    return (await axios.head(url, config));
+  } catch (e) {
+    return (await axios.get(url, config));
+  }
 }
 
 function getDataToUpload(analyzedLines) {
   return analyzedLines.filter((line) => {
     return line.status === 'KO';
   }).map((line) => {
-    return [...line.reference.split(';'), line.url, line.status, line.error, line.comments.join(', ')];
+    return [...line.id.split(';'), line.url, line.status, line.error, line.comments];
   });
 }
 
