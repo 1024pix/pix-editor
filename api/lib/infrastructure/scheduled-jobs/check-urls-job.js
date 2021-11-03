@@ -1,5 +1,6 @@
 const createQueue = require('./create-queue');
 const config = require('../../config');
+
 const queue = createQueue('check-urls-queue');
 
 const checkUrlsJobOptions = {
