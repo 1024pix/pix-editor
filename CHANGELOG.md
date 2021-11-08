@@ -1,5 +1,14 @@
 
 
+## v3.52.1 (08/11/2021)
+
+
+### :building_construction: Tech
+- [#243](https://github.com/1024pix/pix-editor/pull/243) [TECH] Arrêtons le mensonge dans le message au moment d'arrêter le serveur API
+
+### :bug: Bug fix
+- [#241](https://github.com/1024pix/pix-editor/pull/241) [BUGFIX] Corrige la validation du champ réponse
+
 ## v3.52.0 (03/11/2021)
 
 
