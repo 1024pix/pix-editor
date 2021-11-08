@@ -397,7 +397,7 @@ export default class SingleController extends Controller {
       this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
       return false;
     }
-    if (!this._validateYAML(challenge.solution)) {
+    if (['QROCM-ind', 'QROCM-dep'].includes(challenge.type) && !this._validateYAML(challenge.solution)) {
       this._errorMessage('Le champ "Réponses" n\'est pas correctement formaté');
       return false;
     }

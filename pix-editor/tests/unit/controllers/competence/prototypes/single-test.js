@@ -262,12 +262,24 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.ok(errorStub.calledOnce);
     });
 
-    test('rejects when solution is not a valid YAML', function(assert) {
+    test('accept any solution on a QCROC', function(assert) {
+      challenge.type = 'QROC';
       challenge.solution = `- test
 - 'hola
 `;
-      assert.notOk(controller._saveCheck(challenge));
-      assert.ok(errorStub.calledOnce);
+      assert.ok(controller._saveCheck(challenge));
+      assert.notOk(errorStub.calledOnce);
+    });
+
+    ['QROCM-ind', 'QROCM-dep'].forEach((type) => {
+      test('rejects when solution is not a valid YAML on a ' + type, function(assert) {
+        challenge.type = type;
+        challenge.solution = `- test
+- 'hola
+`;
+        assert.notOk(controller._saveCheck(challenge));
+        assert.ok(errorStub.calledOnce);
+      });
     });
   });
 
