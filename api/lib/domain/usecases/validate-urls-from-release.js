@@ -2,8 +2,6 @@ const showdown = require('showdown');
 const _ = require('lodash');
 const urlRegex = require('url-regex-safe');
 const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
-const { getAuthToken, clearSpreadsheetValues, setSpreadsheetValues }  = require('../../infrastructure/utils/google-sheet');
-const config = require('../../config');
 
 function getLiveChallenges(release) {
   return release.challenges.filter((challenge) => challenge.status !== 'périmé');
@@ -106,55 +104,31 @@ function getDataToUpload(analyzedLines) {
   });
 }
 
-async function sendDataToGoogleSheet(dataToUpload, sheetName) {
-  try {
-    const auth = await getAuthToken(config.checkUrlsJobs.googleAuthCredentials);
-    await clearSpreadsheetValues({
-      spreadsheetId: config.checkUrlsJobs.spreadsheetId,
-      auth,
-      range: `${sheetName}!A2:Z999`,
-    });
-    await setSpreadsheetValues({
-      spreadsheetId: config.checkUrlsJobs.spreadsheetId,
-      auth,
-      range: `${sheetName}!A:Z`,
-      valueInputOption: 'RAW',
-      resource: {
-        values: dataToUpload
-      }
-    });
-  } catch (error) {
-    console.log(error.message, error.stack);
-  }
-}
-
-async function validateUrlsFromRelease({ releaseRepository }) {
+async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository }) {
   const release = await releaseRepository.getLatestRelease();
 
-  await checkAndUploadKOUrlsFromChallenges(release);
-  await checkAndUploadKOUrlsFromTutorials(release);
+  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository });
+  await checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release) {
+async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository }) {
   const challenges = getLiveChallenges(release.content);
 
   const urlList = findUrlsFromChallenges(challenges, release.content);
 
-  await checkAndUploadUrlList(urlList, config.checkUrlsJobs.challengesSheetName);
+  const analyzedLines = await analyzeUrls(urlList);
+  const dataToUpload = getDataToUpload(analyzedLines);
+  await urlErrorRepository.updateChallenges(dataToUpload);
 }
 
-async function checkAndUploadKOUrlsFromTutorials(release) {
+async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository }) {
   const tutorials = release.content.tutorials;
 
   const urlList = findUrlsFromTutorials(tutorials, release.content);
 
-  await checkAndUploadUrlList(urlList, config.checkUrlsJobs.tutorialsSheetName);
-}
-
-async function checkAndUploadUrlList(urlList, sheetName) {
   const analyzedLines = await analyzeUrls(urlList);
   const dataToUpload = getDataToUpload(analyzedLines);
-  await sendDataToGoogleSheet(dataToUpload, sheetName);
+  await urlErrorRepository.updateTutorials(dataToUpload);
 }
 
 module.exports = {

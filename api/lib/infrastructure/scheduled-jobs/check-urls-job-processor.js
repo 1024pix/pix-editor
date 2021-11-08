@@ -2,9 +2,10 @@ const { validateUrlsFromRelease } = require('../../domain/usecases/validate-urls
 const logger = require('../../infrastructure/logger');
 const { disconnect } = require('../../../db/knex-database-connection');
 const releaseRepository = require('../../infrastructure/repositories/release-repository');
+const urlErrorRepository = require('../../infrastructure/repositories/url-error-repository');
 
 module.exports = function() {
-  return validateUrlsFromRelease({ releaseRepository });
+  return validateUrlsFromRelease({ releaseRepository, urlErrorRepository });
 };
 
 async function exitOnSignal(signal) {
