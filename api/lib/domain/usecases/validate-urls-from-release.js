@@ -2,7 +2,6 @@ const showdown = require('showdown');
 const _ = require('lodash');
 const urlRegex = require('url-regex-safe');
 const Analyzer = require('image-url-checker/dist/analyzing/Analyzer').default;
-const releaseRepository = require('../../infrastructure/repositories/release-repository');
 const { getAuthToken, clearSpreadsheetValues, setSpreadsheetValues }  = require('../../infrastructure/utils/google-sheet');
 const config = require('../../config');
 
@@ -129,7 +128,7 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   }
 }
 
-async function validateUrlsFromRelease() {
+async function validateUrlsFromRelease({ releaseRepository }) {
   const release = await releaseRepository.getLatestRelease();
 
   await checkAndUploadKOUrlsFromChallenges(release);
