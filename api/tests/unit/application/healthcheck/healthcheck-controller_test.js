@@ -12,7 +12,7 @@ describe('Unit | Controller | healthcheckController', () => {
       // then
       expect(response).to.include.keys('name', 'version', 'description');
       expect(response['name']).to.equal('learning-content-api');
-      expect(response['description']).to.equal('API permettant d\'intéragir avec le référentiel de contenu Pix');
+      expect(response['description']).to.equal('API permettant d\'interagir avec le référentiel de contenu Pix');
       expect(response['environment']).to.equal('test');
     });
   });
