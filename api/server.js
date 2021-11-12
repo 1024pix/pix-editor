@@ -43,7 +43,7 @@ const createServer = async () => {
 
   const configuration = [].concat(plugins, routes);
 
-  if (config.logging.enabled) await enableOpsMetrics(server);
+  if (config.logging.logOpsMetrics) await enableOpsMetrics(server);
 
   await server.register(configuration);
 
