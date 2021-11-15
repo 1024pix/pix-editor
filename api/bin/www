@@ -6,6 +6,9 @@ const { queue: checkUrlQueue } = require('../lib/infrastructure/scheduled-jobs/c
 const releaseJob = require('../lib/infrastructure/scheduled-jobs/release-job');
 const { disconnect } = require('../db/knex-database-connection');
 
+const validateEnvironmentVariables = require('../lib/infrastructure/validate-environement-variables');
+validateEnvironmentVariables();
+
 const start = async () => {
   try {
     const server = await createServer();
