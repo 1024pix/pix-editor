@@ -1,5 +1,12 @@
 
 
+## v3.52.2 (15/11/2021)
+
+
+### :building_construction: Tech
+- [#244](https://github.com/1024pix/pix-editor/pull/244) [TECH] Expliciter la journalisation des métriques OPS.
+- [#242](https://github.com/1024pix/pix-editor/pull/242) [TECH] Déplace le travail asynchrone de vérification des URLs dans son propre processus
+
 ## v3.52.1 (08/11/2021)
 
 
