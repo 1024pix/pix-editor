@@ -7,7 +7,7 @@ const {
   findUrlsFromChallenges,
   getLiveChallenges,
   findUrlsFromTutorials
-} = require('../../../../lib/infrastructure/scheduled-jobs/check-urls-job');
+} = require('../../../../lib/domain/usecases/validate-urls-from-release');
 
 describe('Check urls from release', function() {
   describe('#findUrlsInMarkdown', function() {
