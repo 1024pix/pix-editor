@@ -12,6 +12,7 @@ module.exports = class Skill {
     competenceId,
     status,
     tubeId,
+    version,
     // includes
     // references
   } = {}) {
@@ -27,6 +28,7 @@ module.exports = class Skill {
     this.competenceId = competenceId;
     this.status = status;
     this.tubeId = tubeId;
+    this.version = version;
     // includes
     // references
   }

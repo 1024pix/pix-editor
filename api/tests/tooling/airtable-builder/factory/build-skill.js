@@ -13,6 +13,7 @@ const buildSkill = function buildSkill({
   description,
   level,
   internationalisation,
+  version,
 } = {}) {
 
   return {
@@ -32,6 +33,7 @@ const buildSkill = function buildSkill({
       'Description': description,
       'Level': level,
       'Internationalisation': internationalisation,
+      'Version': version,
     },
   };
 };

@@ -23,6 +23,7 @@ module.exports = datasource.extend({
     'Description',
     'Level',
     'Internationalisation',
+    'Version',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -42,6 +43,7 @@ module.exports = datasource.extend({
       description: airtableRecord.get('Description'),
       level: airtableRecord.get('Level'),
       internationalisation: airtableRecord.get('Internationalisation'),
+      version: airtableRecord.get('Version')
     };
   },
 });
