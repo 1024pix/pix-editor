@@ -14,6 +14,7 @@ module.exports = function buildSkill(
     description = 'skill description',
     level = 5,
     internationalisation = 'Monde',
+    version = 1,
   } = {}) {
   return {
     id,
@@ -30,5 +31,6 @@ module.exports = function buildSkill(
     description,
     level,
     internationalisation,
+    version,
   };
 };

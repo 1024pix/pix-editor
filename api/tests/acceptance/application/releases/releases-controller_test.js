@@ -61,6 +61,7 @@ function mockCurrentContent() {
       competenceId: 'recCompetence0',
       status: 'validé',
       tubeId: 'recTube0',
+      version: 1,
     }],
     challenges: [{
       id: 'recChallenge0',
