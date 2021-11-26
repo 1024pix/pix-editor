@@ -1,5 +1,11 @@
 
 
+## v3.53.0 (26/11/2021)
+
+
+### :rocket: Enhancement
+- [#245](https://github.com/1024pix/pix-editor/pull/245) [FEATURE] Versioner l'acquis dans le référentiel (PIX-3901)
+
 ## v3.52.2 (15/11/2021)
 
 
