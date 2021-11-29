@@ -7,4 +7,5 @@ module.exports = {
   buildSkill: require('./build-skill'),
   buildTube: require('./build-tube'),
   buildTutorial: require('./build-tutorial'),
+  buildThematic: require('./build-thematic'),
 };

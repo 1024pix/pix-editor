@@ -6,6 +6,7 @@ const challengeDatasource = require('../datasources/airtable/challenge-datasourc
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
+const thematicDatasource = require('../datasources/airtable/thematic-datasource');
 const airtableSerializer = require('../serializers/airtable-serializer');
 const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
@@ -100,6 +101,7 @@ async function _getCurrentContent() {
     tutorials,
     courses,
     attachments,
+    thematics,
   ] = await Promise.all([
     areaDatasource.list(),
     competenceDatasource.list(),
@@ -109,6 +111,7 @@ async function _getCurrentContent() {
     tutorialDatasource.list(),
     courseDatasource.list(),
     attachmentDatasource.list(),
+    thematicDatasource.list(),
   ]);
   const learningContent = {
     areas,
@@ -119,6 +122,7 @@ async function _getCurrentContent() {
     tutorials,
     courses,
     attachments,
+    thematics,
   };
   const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
   const challenges = challengesWithoutAttachments.map(transformChallenge);
@@ -136,5 +140,6 @@ async function _getCurrentContent() {
     challenges,
     tutorials: filteredTutorials,
     courses: filteredCourses,
+    thematics,
   };
 }
