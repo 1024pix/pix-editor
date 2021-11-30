@@ -3,6 +3,7 @@ const Challenge = require('./Challenge');
 const Competence = require('./Competence');
 const Course = require('./Course');
 const Skill = require('./Skill');
+const Thematic = require('./Thematic');
 const Tutorial = require('./Tutorial');
 const Tube = require('./Tube');
 
@@ -15,6 +16,7 @@ module.exports = class Content {
     competences,
     courses,
     skills,
+    thematics,
     tubes,
     tutorials,
     // references
@@ -26,6 +28,7 @@ module.exports = class Content {
     this.competences = competences;
     this.courses = courses;
     this.skills = skills;
+    this.thematics = thematics;
     this.tubes = tubes;
     this.tutorials = tutorials;
     // references
@@ -37,6 +40,7 @@ module.exports = class Content {
     competences,
     courses,
     skills,
+    thematics,
     tubes,
     tutorials,
   }) {
@@ -46,6 +50,7 @@ module.exports = class Content {
     content.competences = competences ? competences.map((competence) => new Competence(competence)) : [];
     content.courses = courses ? courses.map((course) => new Course(course)) : [];
     content.skills = skills ? skills.map((skill) => new Skill(skill)) : [];
+    content.thematics = thematics ? thematics.map((thematic) => new Thematic(thematic)) : [];
     content.tubes = tubes ? tubes.map((tube) => new Tube(tube)) : [];
     content.tutorials = tutorials ? tutorials.map((tutorial) => new Tutorial(tutorial)) : [];
 

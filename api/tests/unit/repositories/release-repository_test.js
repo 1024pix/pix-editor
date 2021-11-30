@@ -7,6 +7,7 @@ const challengeDatasource = require('../../../lib/infrastructure/datasources/air
 const tutorialDatasource = require('../../../lib/infrastructure/datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../../../lib/infrastructure/datasources/airtable/course-datasource');
 const attachmentDatasource = require('../../../lib/infrastructure/datasources/airtable/attachment-datasource');
+const thematicDatasource = require('../../../lib/infrastructure/datasources/airtable/thematic-datasource');
 const releaseRepository = require('../../../lib/infrastructure/repositories/release-repository');
 const challengeTransformer = require('../../../lib/infrastructure/transformers/challenge-transformer');
 const competenceTransformer = require('../../../lib/infrastructure/transformers/competence-transformer');
@@ -30,6 +31,7 @@ describe('Unit | Repository | release-repository', () => {
       const tutorials = [];
       const courses = [];
       const attachments = [];
+      const thematics = [];
       const transformedCompetences = [Symbol('transformed-competence')];
       const transformedSkills = [Symbol('transformed-skill')];
       const transformedCourses = [Symbol('transformed-course')];
@@ -42,6 +44,7 @@ describe('Unit | Repository | release-repository', () => {
         challenges: [],
         tutorials: transformedTutorials,
         courses: transformedCourses,
+        thematics,
       };
 
       sinon.stub(areaDatasource, 'list').resolves(areas);
@@ -52,6 +55,7 @@ describe('Unit | Repository | release-repository', () => {
       sinon.stub(tutorialDatasource, 'list').resolves(tutorials);
       sinon.stub(courseDatasource, 'list').resolves(courses);
       sinon.stub(attachmentDatasource, 'list').resolves(attachments);
+      sinon.stub(thematicDatasource, 'list').resolves(thematics);
       sinon.stub(challengeTransformer, 'createChallengeTransformer').returns(() => {});
       sinon.stub(competenceTransformer, 'filterCompetencesFields').returns(transformedCompetences);
       sinon.stub(skillTransformer, 'filterSkillsFields').returns(transformedSkills);
@@ -71,6 +75,7 @@ describe('Unit | Repository | release-repository', () => {
         courses,
         tutorials,
         attachments,
+        thematics,
         challengesWithoutAttachments: challenges
       });
       expect(competenceTransformer.filterCompetencesFields).to.have.been.calledWithExactly(competences);
@@ -219,7 +224,7 @@ describe('Unit | Repository | release-repository', () => {
 
   describe('#toDomain', function() {
     it('should build Release model with given parameters', function() {
-      const databaseObjectRelease = { id: 123, content: { areas: [], challenges: [], competences: [], courses: [], skills: [], tubes: [], tutorials: [] }, createdAt: '2021-08-31' };
+      const databaseObjectRelease = { id: 123, content: { areas: [], challenges: [], competences: [], courses: [], skills: [], thematics: [], tubes: [], tutorials: [] }, createdAt: '2021-08-31' };
 
       const release = releaseRepository.toDomain(databaseObjectRelease);
 
