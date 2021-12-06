@@ -16,8 +16,6 @@ export default class TargetProfileRoute extends Route {
     const getTubes = competenceTheme.map(themes => themes.map(theme => theme.rawTubes)).flat();
     const themeTubes = await Promise.all(getTubes);
     const getSkills = themeTubes.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
-    const tubeSkills = await Promise.all(getSkills);
-    const getChallenges = tubeSkills.map(skills => skills.map(skill => skill.challenges)).flat();
-    await Promise.all(getChallenges);
+    return Promise.all(getSkills);
   }
 }
