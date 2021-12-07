@@ -34,8 +34,7 @@ export default class CompetenceModel extends Model {
   }
 
   get productionTubes() {
-    let allTubes = this.rawTubes;
-    allTubes = allTubes.filter(tube => tube.hasProductionChallenge);
+    const allTubes = this.rawTubes.filter(tube => tube.hasProductionSkills);
     return allTubes.sortBy('index');
   }
 

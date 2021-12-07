@@ -36,7 +36,7 @@ export default class TubeModel extends Model {
   }
 
   get productionSkills() {
-    return this.sortedSkills.filter(skill => skill.productionPrototype != null);
+    return this.sortedSkills.filter(skill => skill.status === 'actif');
   }
 
   get productionSkillCount() {
@@ -93,4 +93,7 @@ export default class TubeModel extends Model {
     return this.productionSkillCount > 0;
   }
 
+  get hasProductionSkills() {
+    return this.productionSkillCount > 0;
+  }
 }
