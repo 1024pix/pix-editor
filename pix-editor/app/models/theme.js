@@ -13,7 +13,7 @@ export default class ThemeModel extends Model {
   }
 
   get productionTubes() {
-    return this.tubes.filter(tube => tube.hasProductionChallenge);
+    return this.tubes.filter(tube => tube.hasProductionSkills);
   }
 
   get hasProductionTubes() {

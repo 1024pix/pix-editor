@@ -89,10 +89,6 @@ export default class TubeModel extends Model {
     }, [false, false, false, false, false, false, false]);
   }
 
-  get hasProductionChallenge() {
-    return this.productionSkillCount > 0;
-  }
-
   get hasProductionSkills() {
     return this.productionSkillCount > 0;
   }

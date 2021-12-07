@@ -38,7 +38,7 @@ export default class AccessService extends Service {
 
   mayMoveTube(tube) {
     const level = this.config.accessLevel;
-    if (tube.hasProductionChallenge) {
+    if (tube.hasProductionSkills) {
       return level === ADMIN;
     } else {
       return level >= EDITOR;
