@@ -1,5 +1,14 @@
 
 
+## v3.54.0 (08/12/2021)
+
+
+### :building_construction: Tech
+- [#246](https://github.com/1024pix/pix-editor/pull/246) [TECH] Ajouter les thématiques dans release (PIX-3943) 
+
+### :coffee: Various
+- [#247](https://github.com/1024pix/pix-editor/pull/247) [SPEEEEEED] Rend beaucoup plus rapide la page de génération des profils cibles
+
 ## v3.53.0 (26/11/2021)
 
 
