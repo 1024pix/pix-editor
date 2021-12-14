@@ -74,7 +74,6 @@ function mockCurrentContent() {
       t1Status: false,
       t2Status: true,
       t3Status: false,
-      scoring: 'Scoring du Challenge',
       status: 'Statut du Challenge',
       skillIds: ['recSkill0'],
       embedUrl: 'Embed URL',
