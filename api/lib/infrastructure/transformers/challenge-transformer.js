@@ -27,7 +27,6 @@ function _filterChallengeFields(_learningContent, challenge) {
     't1Status',
     't2Status',
     't3Status',
-    'scoring',
     'status',
     'skillIds',
     'embedUrl',

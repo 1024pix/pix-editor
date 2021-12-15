@@ -23,7 +23,6 @@ module.exports = {
         'genealogy',
         'status',
         'preview',
-        'scoring',
         'timer',
         'embedUrl',
         'embedTitle',

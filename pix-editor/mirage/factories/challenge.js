@@ -18,7 +18,6 @@ export default Factory.extend({
   status: 'validé',
   preview: 'preview',
   airtableId: undefined,
-  scoring: 'scoring',
   timer: 'timer',
   embedURL: 'embedURL',
   embedTitle: 'embedTitle',

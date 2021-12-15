@@ -22,7 +22,6 @@ export default class ChallengeModel extends Model {
   @attr genealogy;
   @attr status;
   @attr({ readOnly:true }) preview;
-  @attr scoring;
   @attr('number') timer;
   @attr embedURL;
   @attr embedTitle;
@@ -164,10 +163,6 @@ export default class ChallengeModel extends Model {
   get isTextBased() {
     const type = this.type;
     return ['QROC','QROCM','QROCM-ind','QROCM-dep'].includes(type);
-  }
-
-  get supportsScoring() {
-    return this.type === 'QROCM-dep';
   }
 
   get timerOn() {

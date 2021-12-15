@@ -15,7 +15,6 @@ const challengeAirtableFields = [
   'T1 - Espaces, casse & accents',
   'T2 - Ponctuation',
   'T3 - Distance d\'édition',
-  'Scoring',
   'Statut',
   'Acquix (id persistant)',
   'Embed URL',
@@ -54,7 +53,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
     delete body.fields['Record ID'];
     delete body.fields['Compétences (via tube) (id persistant)'];
     delete body.fields['Acquix (id persistant)'];
-    delete body.fields['Scoring'];
     delete body.fields['Discrimination calculée'];
     delete body.fields['Difficulté calculée'];
     delete body.fields['updated_at'];
@@ -124,7 +122,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: 'Prototype 1',
               status: 'validé',
               preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-              scoring: '1: @outilsTexte2\n2: @outilsTexte4',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -218,7 +215,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: 'Prototype 1',
               status: 'validé',
               preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-              scoring: '1: @outilsTexte2\n2: @outilsTexte4',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -275,7 +271,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: 'Prototype 1',
               status: 'validé',
               preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-              scoring: '1: @outilsTexte2\n2: @outilsTexte4',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -431,7 +426,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
             genealogy: 'Prototype 1',
             status: 'validé',
             preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-            scoring: '1: @outilsTexte2\n2: @outilsTexte4',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -546,7 +540,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: challenge.genealogy,
               status: challenge.status,
               preview: challenge.preview,
-              scoring: challenge.scoring,
               timer: challenge.timer,
               'embed-url': challenge.embedUrl,
               'embed-title': challenge.embedTitle,
@@ -610,7 +603,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
             genealogy: 'Prototype 1',
             status: 'validé',
             preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-            scoring: '1: @outilsTexte2\n2: @outilsTexte4',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -707,7 +699,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: challenge.genealogy,
               status: challenge.status,
               preview: challenge.preview,
-              scoring: challenge.scoring,
               timer: challenge.timer,
               'embed-url': challenge.embedUrl,
               'embed-title': challenge.embedTitle,
@@ -796,7 +787,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
               genealogy: challenge.genealogy,
               status: challenge.status,
               preview: challenge.preview,
-              scoring: challenge.scoring,
               timer: challenge.timer,
               'embed-url': challenge.embedUrl,
               'embed-title': challenge.embedTitle,
@@ -860,7 +850,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
             genealogy: 'Prototype 1',
             status: 'validé',
             preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
-            scoring: '1: @outilsTexte2\n2: @outilsTexte4',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
