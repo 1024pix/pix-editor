@@ -10,7 +10,6 @@ module.exports = class Challenge {
     t1Status,
     t2Status,
     t3Status,
-    scoring,
     status,
     skills,
     skillIds,
@@ -56,7 +55,6 @@ module.exports = class Challenge {
     this.t1Status = t1Status;
     this.t2Status = t2Status;
     this.t3Status = t3Status;
-    this.scoring = scoring;
     this.status = status;
     this.skills = skills;
     this.skillIds = skillIds;

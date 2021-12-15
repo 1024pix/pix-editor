@@ -83,12 +83,6 @@
                      @edition={{@edition}}
                      data-test-solution-to-display-field />
   </Field::ToggleField>
-  {{#if @challenge.supportsScoring}}
-    <Field::Textarea @value={{@challenge.scoring}}
-                     @title="Scoring"
-                     @edition={{@edition}}
-                     @helpContent={{this.helpScoring}} />
-  {{/if}}
   <Field::Illustration @title="Illustration"
                        @value={{@challenge.illustration}}
                        @edition={{@edition}}

@@ -105,7 +105,6 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       delete airtableChallenge.fields['Record ID'];
       delete airtableChallenge.fields['Compétences (via tube) (id persistant)'];
       delete airtableChallenge.fields['Acquix (id persistant)'];
-      delete airtableChallenge.fields['Scoring'];
       delete airtableChallenge.fields['Difficulté calculée'];
       delete airtableChallenge.fields['Discrimination calculée'];
       delete airtableChallenge.fields['updated_at'];
