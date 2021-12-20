@@ -10,7 +10,7 @@ Le service se présente sous la forme d’une plateforme en ligne d’évaluatio
 
 Le but de PIX est de susciter l’envie de se former tout au long de la vie en proposant des méthodes d’évaluation innovantes, exigeantes et bienveillantes ainsi que des recommandations de formations ciblées.
 
-Pix Editor propose une interface pour communiquer avec le référentiel de contenu pédagogique.
+Pix Editor propose une interface pour lire et modifier le référentiel de contenu pédagogique.
 
 Installation
 ------------
@@ -20,13 +20,16 @@ Installation
 Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 * [Git](http://git-scm.com/) (2.6.4)
-* [Node.js](http://nodejs.org/) (v12.14.1) et NPM (6.13.4)
-* [Ember CLI](http://ember-cli.com/) (3.15.2)
+* [Node.js](http://nodejs.org/) (v14.17.x) et NPM (6.14.x)
 * [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
 
 ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
 
 > Les versions indiquées sont celles préconisées pour un bon fonctionnement de l'application.
+
+#### Airtable
+
+Pix-editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
 
 ### Instructions
 
