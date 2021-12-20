@@ -1,31 +1,66 @@
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../../.env' });
 const _ = require('lodash');
-const { findUrlsFromChallenges } = require('../../lib/domain/usecases/validate-urls-from-release');
+const { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } = require('../../lib/domain/usecases/validate-urls-from-release');
 const releaseRepository = require('../../lib/infrastructure/repositories/release-repository');
 const { disconnect } = require('../../db/knex-database-connection');
 
 async function getExternalUrlsList() {
   const release = (await releaseRepository.getLatestRelease()).content;
-  const activeChallenges = getActiveChallenges(release);
+  const skillIdsWithFramework = getSkillIdsWithFramework(release);
+  const activeChallenges = getActiveChallenges(release.challenges);
   const urlsFromChallenges = findUrlsFromChallenges(activeChallenges, release);
 
-  const urls = urlsFromChallenges.map(({ url }) => {
+  const baseUrl = function(url) {
     const parsedUrl = new URL(url);
     return parsedUrl.protocol + '//' + parsedUrl.host;
+  };
+
+  urlsFromChallenges.forEach((urlChallenge) => {
+    urlChallenge.origin = skillIdsWithFramework[urlChallenge.skillIds[0]];
+    urlChallenge.url = baseUrl(urlChallenge.url);
   });
 
-  const uniqUrls = _.uniq(urls).filter((url) => {
-    return !url.includes('epreuves.pix.fr');
-  });
+  const uniqUrls = _.uniqBy(urlsFromChallenges, 'url');
 
-  uniqUrls.forEach((url) => {
-    console.log(url);
+  uniqUrls.forEach(({ origin, url, locales }) => {
+    console.log([origin, url, locales.join(';')].join(','));
   });
 }
 
-function getActiveChallenges(release) {
+function findUrlsFromChallenges(challenges) {
+  const urlsFromChallenges = challenges.flatMap((challenge) => {
+    const functions = [
+      findUrlsInstructionFromChallenge,
+      findUrlsProposalsFromChallenge
+    ];
+    return functions
+      .flatMap((fun) => fun(challenge))
+      .map((url) => {
+        return { id: challenge.id, locales: challenge.locales, url, skillIds: challenge.skillIds };
+      });
+  });
+  return _.uniqBy(urlsFromChallenges, 'url');
+}
+
+function getSkillIdsWithFramework(release) {
+  return release.competences.reduce((memo, competence) => {
+    return {
+      ...competence.skillIds.reduce((memo2, skillId) => {
+        return {
+          [skillId]: competence.origin,
+          ...memo2
+        };
+      }, {}),
+      ...memo
+    };
+  }, {});
+}
+
+function getActiveChallenges(challenges) {
   const challengeInactiveStatus = ['périmé', 'proposé'];
-  return release.challenges.filter((challenge) => !challengeInactiveStatus.includes(challenge.status));
+  return challenges.filter((challenge) =>  {
+    return !challengeInactiveStatus.includes(challenge.status);
+  });
 }
 
-getExternalUrlsList().finally(() => { disconnect() });
+getExternalUrlsList().finally(() => { disconnect(); });
