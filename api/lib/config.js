@@ -87,7 +87,7 @@ module.exports = (function() {
     notifications: {
       slack: {
         webhookUrl: process.env.NOTIFICATIONS_SLACK_WEBHOOK_URL,
-        enable: process.env.NOTIFICATIONS_SLACK_ENABLE,
+        enable: isFeatureEnabled(process.env.NOTIFICATIONS_SLACK_ENABLE),
       }
     },
 
