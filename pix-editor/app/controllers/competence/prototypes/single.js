@@ -267,63 +267,61 @@ export default class SingleController extends Controller {
   }
 
   @action
-  archive(dropdown) {
+  async archive(dropdown) {
     if (dropdown) {
       dropdown.actions.close();
     }
-    return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?')
-      .then(() => {
-        this._displayChangelogPopIn('Archivage de l\'épreuve', (changelog) => {
+    try {
+      await this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'épreuve ?');
+      this._displayChangelogPopIn('Archivage de l\'épreuve', async (changelog) => {
+        try {
           this.loader.start();
-          return this.challenge.archive()
-            .then(challenge => this._archiveAlternatives(challenge))
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(() => {
-              this._message('Épreuve archivée');
-              this.send('close');
-            })
-            .catch((error) => {
-              Sentry.captureException(error);
-              this._errorMessage('Erreur lors de l\'archivage');
-            })
-            .finally(() => this.loader.stop());
-        });
-      })
-      .catch((error) => {
-        Sentry.captureException(error);
-        this._message('Archivage abandonné');
+          await this.challenge.archive();
+          await this._archiveAlternatives(this.challenge);
+          await this._handleChangelog(this.challenge, changelog);
+          await this._checkSkillsValidation(this.challenge);
+          this._message('Épreuve archivée');
+          this.send('close');
+        } catch (error) {
+          Sentry.captureException(error);
+          this._errorMessage('Erreur lors de l\'archivage');
+        } finally {
+          this.loader.stop();
+        }
       });
+    } catch (error) {
+      Sentry.captureException(error);
+      this._message('Archivage abandonné');
+    }
   }
 
   @action
-  delete(dropdown) {
+  async delete(dropdown) {
     if (dropdown) {
       dropdown.actions.close();
     }
-    return this.confirm.ask(this.intl.t('challenge.obsolete.confirm.title'), this.intl.t('challenge.obsolete.confirm.message'))
-      .then(() => {
-        this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), (changelog) => {
+    try {
+      await this.confirm.ask(this.intl.t('challenge.obsolete.confirm.title'), this.intl.t('challenge.obsolete.confirm.message'));
+      this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
+        try {
           this.loader.start();
-          return this.challenge.delete()
-            .then(challenge => this._deleteAlternatives(challenge))
-            .then(challenge => this._handleChangelog(challenge, changelog))
-            .then(challenge => this._checkSkillsValidation(challenge))
-            .then(() => {
-              this._message(this.intl.t('challenge.obsolete.success'));
-              this.send('close');
-            })
-            .catch((error) => {
-              Sentry.captureException(error);
-              this._errorMessage(this.intl.t('challenge.obsolete.error'));
-            })
-            .finally(() => this.loader.stop());
-        });
-      })
-      .catch((error) => {
-        Sentry.captureException(error);
-        this._message(this.intl.t('challenge.obsolete.cancel'));
+          await this.challenge.delete();
+          await this._deleteAlternatives(this.challenge);
+          await this._handleChangelog(this.challenge, changelog);
+          await this._checkSkillsValidation(this.challenge);
+          this._message(this.intl.t('challenge.obsolete.success'));
+          this.send('close');
+        } catch (error) {
+          Sentry.captureException(error);
+          this._errorMessage(this.intl.t('challenge.obsolete.error'));
+        } finally {
+          this.loader.stop();
+        }
       });
+    } catch (error) {
+      Sentry.captureException(error);
+      this._message(this.intl.t('challenge.obsolete.cancel'));
+    }
   }
 
   @action
