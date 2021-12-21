@@ -34,6 +34,7 @@ export default class SingleController extends Controller {
   @service loader;
   @service confirm;
   @service changelogEntry;
+  @service intl;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -300,28 +301,28 @@ export default class SingleController extends Controller {
     if (dropdown) {
       dropdown.actions.close();
     }
-    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'épreuve ?')
+    return this.confirm.ask(this.intl.t('challenge.obsolete.confirm.title'), this.intl.t('challenge.obsolete.confirm.message'))
       .then(() => {
-        this._displayChangelogPopIn('Suppression de l\'épreuve', (changelog) => {
+        this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), (changelog) => {
           this.loader.start();
           return this.challenge.delete()
             .then(challenge => this._deleteAlternatives(challenge))
             .then(challenge => this._handleChangelog(challenge, changelog))
             .then(challenge => this._checkSkillsValidation(challenge))
             .then(() => {
-              this._message('Épreuve supprimée');
+              this._message(this.intl.t('challenge.obsolete.success'));
               this.send('close');
             })
             .catch((error) => {
               Sentry.captureException(error);
-              this._errorMessage('Erreur lors de la suppression');
+              this._errorMessage(this.intl.t('challenge.obsolete.error'));
             })
             .finally(() => this.loader.stop());
         });
       })
       .catch((error) => {
         Sentry.captureException(error);
-        this._message('Suppression abandonnée');
+        this._message(this.intl.t('challenge.obsolete.cancel'));
       });
   }
 
