@@ -1,6 +1,5 @@
 module.exports = class Area {
   constructor({
-    // attributes
     id,
     code,
     titleFrFr,
@@ -9,10 +8,7 @@ module.exports = class Area {
     competenceIds,
     competenceAirtableIds,
     color,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.code = code;
     this.titleFrFr = titleFrFr;
@@ -21,7 +17,5 @@ module.exports = class Area {
     this.name = name;
     this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
-    // includes
-    // references
   }
 };

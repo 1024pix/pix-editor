@@ -9,8 +9,6 @@ const Tube = require('./Tube');
 
 module.exports = class Content {
   constructor({
-    // attributes
-    // includes
     areas,
     challenges,
     competences,
@@ -19,10 +17,7 @@ module.exports = class Content {
     thematics,
     tubes,
     tutorials,
-    // references
   } = {}) {
-    // attributes
-    // includes
     this.areas = areas;
     this.challenges = challenges;
     this.competences = competences;
@@ -31,7 +26,6 @@ module.exports = class Content {
     this.thematics = thematics;
     this.tubes = tubes;
     this.tutorials = tutorials;
-    // references
   }
 
   static from({

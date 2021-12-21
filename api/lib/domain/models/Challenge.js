@@ -1,6 +1,5 @@
 module.exports = class Challenge {
   constructor({
-    // attributes
     id,
     instruction,
     proposals,
@@ -42,10 +41,7 @@ module.exports = class Challenge {
     illustrationAlt,
     illustrationUrl,
     attachments,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.instruction = instruction;
     this.proposals = proposals;
@@ -87,7 +83,5 @@ module.exports = class Challenge {
     this.illustrationAlt = illustrationAlt;
     this.illustrationUrl = illustrationUrl;
     this.attachments = attachments;
-    // includes
-    // references
   }
 };
