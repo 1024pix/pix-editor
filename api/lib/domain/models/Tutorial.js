@@ -1,6 +1,5 @@
 module.exports = class Tutorial {
   constructor({
-    // attributes
     id,
     duration,
     format,
@@ -8,10 +7,7 @@ module.exports = class Tutorial {
     source,
     title,
     locale,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.duration = duration;
     this.format = format;
@@ -19,7 +15,5 @@ module.exports = class Tutorial {
     this.source = source;
     this.title = title;
     this.locale = locale;
-    // includes
-    // references
   }
 };
