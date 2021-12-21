@@ -1,1 +1,14 @@
-price_banner: The {product} costs {price, number, ::currency/USD}
+competence:
+  prototypes:
+    archive: Archiver
+    obsolete: Rendre obsolète
+    validate: Valider
+challenge:
+  obsolete:
+    confirm:
+      title: Rendre obsolète
+      message: Êtes-vous sûr de vouloir de rendre obsolète l'épreuve ?
+    changelog: Obsolescence de l'épreuve
+    success: Épreuve périmée
+    error: Erreur lors de l'obsolescence de l'épreuve
+    cancel: Obsolescence abandonnée

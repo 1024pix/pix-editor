@@ -15,19 +15,19 @@
               {{#if this.mayValidate}}
                 <button class="ui button validate item"  {{on "click" (fn this.validate dd)}} type="button">
                   <i class="checkmark icon"></i>
-                  Valider
+                  {{t 'competence.prototypes.validate'}}
                 </button>
               {{/if}}
               {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" (fn this.archive dd)}} type="button">
                   <i class="archive icon"></i>
-                  Archiver
+                  {{t 'competence.prototypes.archive'}}
                 </button>
               {{/if}}
               {{#if this.mayDelete}}
               <button class="ui button archive item"  {{on "click" (fn this.delete dd)}} type="button">
                   <i class="trash alternate icon"></i>
-                  Supprimer
+                  {{t 'competence.prototypes.obsolete'}}
                 </button>
               {{/if}}
           </dd.Content>
