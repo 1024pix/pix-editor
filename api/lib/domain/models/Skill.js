@@ -1,6 +1,5 @@
 module.exports = class Skill {
   constructor({
-    // attributes
     id,
     name,
     hintFrFr,
@@ -13,10 +12,7 @@ module.exports = class Skill {
     status,
     tubeId,
     version,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.name = name;
     this.hintFrFr = hintFrFr;
@@ -29,7 +25,5 @@ module.exports = class Skill {
     this.status = status;
     this.tubeId = tubeId;
     this.version = version;
-    // includes
-    // references
   }
 };

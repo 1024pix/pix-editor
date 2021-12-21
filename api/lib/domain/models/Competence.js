@@ -1,6 +1,5 @@
 module.exports = class Competence {
   constructor({
-    // attributes
     id,
     name,
     nameFrFr,
@@ -12,10 +11,7 @@ module.exports = class Competence {
     areaId,
     skillIds,
     origin,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.name = name;
     this.nameFrFr = nameFrFr;
@@ -27,7 +23,5 @@ module.exports = class Competence {
     this.areaId = areaId;
     this.skillIds = skillIds;
     this.origin = origin;
-    // includes
-    // references
   }
 };
