@@ -240,7 +240,12 @@ export default class TargetProfileController extends Controller {
     try {
       const file = event.target.files[0];
       const reader = new FileReader();
-      reader.onload = this._buildTargetProfileFromFile.bind(this);
+      reader.onload = (event) => {
+        const data = event.target.result;
+        this._buildTargetProfileFromFile(JSON.parse(data));
+        this._emptyOpenFile();
+        this.notify.message('Fichier chargé');
+      };
       reader.readAsText(file);
     } catch (error) {
       this.notify.error('Erreur lors de l\'ouverture du fichier');
@@ -248,10 +253,30 @@ export default class TargetProfileController extends Controller {
     }
   }
 
-  async _buildTargetProfileFromFile(event) {
+  _emptyOpenFile() {
+    //TODO: find a better way to be able to reload same file
+    document.getElementById('target-profile__open-file').value = '';
+  }
+
+  async _buildTargetProfileFromFile(data) {
+    const typeOfFile = this._determineFileType(data);
+    const funcsByType = {
+      orga: this._buildTargetProfileFromPixOrga.bind(this),
+      editor: this._buildTargetProfileFromPixEditor.bind(this),
+    };
+    const frameworksName = await funcsByType[typeOfFile](data);
+    this._updateSelectedFrameworks(frameworksName);
+  }
+
+  _determineFileType(data) {
+    if (Array.isArray(data) && data.length > 0 && typeof(data[0]) === 'string') {
+      return 'orga';
+    }
+    return 'editor';
+  }
+
+  async _buildTargetProfileFromPixEditor(tubes) {
     const areas = this.currentData.getAreas(false);
-    const data = event.target.result;
-    const tubes = JSON.parse(data);
     const indexedTubes = tubes.reduce((values, tube) => {
       values[tube.id] = tube;
       return values;
@@ -259,8 +284,7 @@ export default class TargetProfileController extends Controller {
     const frameworksName = [];
     for (const area of areas) {
       const framework = await area.framework;
-      const competences = area.competences;
-      competences.forEach(competence => {
+      area.competences.forEach(competence => {
         const tubes = competence.tubes;
         tubes.forEach(tube => {
           if (indexedTubes[tube.pixId]) {
@@ -282,14 +306,32 @@ export default class TargetProfileController extends Controller {
         });
       });
     }
-    this._updateSelectedFrameworks(frameworksName);
-    this.notify.message('Fichier correctement chargé');
-    this._emptyOpenFile();
+    return frameworksName;
   }
 
-  _emptyOpenFile() {
-    //TODO: find a better way to be able to reload same file
-    document.getElementById('target-profile__open-file').value = '';
+  async _buildTargetProfileFromPixOrga(tubesFromFile) {
+    const areas = this.currentData.getAreas(false);
+    const frameworksName = [];
+    for (const area of areas) {
+      const framework = await area.framework;
+      area.competences.forEach(competence => {
+        const tubes = competence.tubes;
+        tubes.forEach(tube => {
+          if (tubesFromFile.includes(tube.pixId)) {
+            const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
+            tube.selectedLevel = level;
+            tube.selectedSkills = skills;
+            if (!frameworksName.includes(framework.name)) {
+              frameworksName.push(framework.name);
+            }
+          } else {
+            tube.selectedLevel = false;
+            tube.selectedSkills = [];
+          }
+        });
+      });
+    }
+    return frameworksName;
   }
 
   _updateSelectedFrameworks(frameworksName) {
