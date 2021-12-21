@@ -1,6 +1,5 @@
 module.exports = class Tube {
   constructor({
-    // attributes
     id,
     name,
     title,
@@ -10,10 +9,7 @@ module.exports = class Tube {
     practicalDescriptionFrFr,
     practicalDescriptionEnUs,
     competenceId,
-    // includes
-    // references
   } = {}) {
-    // attributes
     this.id = id;
     this.name = name;
     this.title = title;
@@ -23,7 +19,5 @@ module.exports = class Tube {
     this.practicalDescriptionFrFr = practicalDescriptionFrFr;
     this.practicalDescriptionEnUs = practicalDescriptionEnUs;
     this.competenceId = competenceId;
-    // includes
-    // references
   }
 };
