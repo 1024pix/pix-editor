@@ -99,47 +99,47 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     });
   });
 
-  module('on prototype validation', function (hooks) {
-    let prototype1_1, prototype2_1, prototype2_2, challenge1_1, challenge2_1, challenge2_2, skill1, skill2, tube;
+  module('#prototype actions', function(hooks) {
+    let proposalPrototype1_1, validatePrototype2_1, proposalPrototype2_2, proposalChallenge1_1, validateChallenge2_1, proposalChallenge2_2, skill1, skill2, tube;
 
     hooks.beforeEach(function () {
       const saveStub = sinon.stub().resolves({});
       const store = this.owner.lookup('service:store');
 
-      prototype1_1 = store.createRecord('challenge', {
+      proposalPrototype1_1 = store.createRecord('challenge', {
         id: 'rec_proto1_1',
         pixId: 'pix_proto1_1',
         genealogy: 'Prototype 1',
         status: 'proposé',
         save: saveStub
       });
-      challenge1_1 = store.createRecord('challenge', {
+      proposalChallenge1_1 = store.createRecord('challenge', {
         id: 'rec_challenge1_1',
         pixId: 'pix_challenge1_1',
         status: 'proposé',
         save: saveStub
       });
-      prototype2_1 = store.createRecord('challenge', {
+      validatePrototype2_1 = store.createRecord('challenge', {
         id: 'rec_proto2_1',
         pixId: 'pix_proto2_1',
         status: 'validé',
         genealogy: 'Prototype 1',
         save: saveStub
       });
-      challenge2_1 = store.createRecord('challenge', {
+      validateChallenge2_1 = store.createRecord('challenge', {
         id: 'rec_challenge2_1',
         pixId: 'pix_challenge2_1',
         status: 'validé',
         save: saveStub
       });
-      prototype2_2 = store.createRecord('challenge', {
+      proposalPrototype2_2 = store.createRecord('challenge', {
         id: 'rec_proto2_2',
         pixId: 'pix_proto2_2',
         status: 'proposé',
         genealogy: 'Prototype 1',
         save: saveStub
       });
-      challenge2_2 = store.createRecord('challenge', {
+      proposalChallenge2_2 = store.createRecord('challenge', {
         id: 'rec_challenge2_2',
         pixId: 'pix_challenge2_2',
         status: 'proposé',
@@ -150,7 +150,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         pixId: 'pix_skill1',
         status: 'en construction',
         level:1,
-        challenges: [prototype1_1, challenge1_1],
+        challenges: [proposalPrototype1_1, proposalChallenge1_1],
         save: saveStub
       });
       skill2 = store.createRecord('skill', {
@@ -158,7 +158,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         pixId: 'pix_skill2',
         status: 'actif',
         level:1,
-        challenges: [prototype2_1, challenge2_1, prototype2_2, challenge2_2],
+        challenges: [validatePrototype2_1, validateChallenge2_1, proposalPrototype2_2, proposalChallenge2_2],
         save: saveStub
       });
       tube = run(() => {
@@ -172,48 +172,85 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
-      //when
-      await controller._archivePreviousPrototype(prototype2_2);
+    module('on prototype validation', function() {
+      test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
+        //when
+        await controller._archivePreviousPrototype(proposalPrototype2_2);
 
-      //then
-      assert.equal(prototype2_1.status, 'archivé');
-      assert.equal(challenge2_1.status, 'archivé');
-      assert.equal(challenge2_2.status, 'périmé');
+        //then
+        assert.equal(validatePrototype2_1.status, 'archivé');
+        assert.equal(validateChallenge2_1.status, 'archivé');
+        assert.equal(proposalChallenge2_2.status, 'périmé');
+      });
+
+      test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
+        //when
+        await controller._archiveOtherActiveSkillVersion(proposalPrototype1_1);
+
+        //then
+        assert.equal(skill2.status, 'archivé');
+        assert.equal(validatePrototype2_1.status, 'archivé');
+        assert.equal(validateChallenge2_1.status, 'archivé');
+        assert.equal(proposalPrototype2_2.status, 'périmé');
+        assert.equal(proposalChallenge2_2.status, 'périmé');
+      });
+
+      test('it should validate skill', async function (assert) {
+        //given
+        proposalPrototype1_1.validate();
+
+        //when
+        await controller._checkSkillsValidation(proposalPrototype1_1);
+
+        //then
+        assert.equal(skill1.status, 'actif');
+      });
+
+      test('it should validate alternatives', async function (assert) {
+        //given
+        proposalPrototype1_1.validate();
+
+        //when
+        await controller._validateAlternatives(proposalPrototype1_1);
+
+        //then
+        assert.equal(proposalChallenge1_1.status, 'validé');
+      });
     });
 
-    test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
-      //when
-      await controller._archiveOtherActiveSkillVersion(prototype1_1);
+    module('on prototype archive', function() {
+      test('it should deactivate the current active skill if there is proposal prototype', async function(assert) {
+        // when
+        await controller._archiveOrDeactivateSkill(validatePrototype2_1);
 
-      //then
-      assert.equal(skill2.status, 'archivé');
-      assert.equal(prototype2_1.status, 'archivé');
-      assert.equal(challenge2_1.status, 'archivé');
-      assert.equal(prototype2_2.status, 'périmé');
-      assert.equal(challenge2_2.status, 'périmé');
-    });
+        // then
+        assert.equal(skill2.status, 'en construction');
+      });
+      test('it should archive the current active skill if there is no proposal prototype', async function(assert) {
+        // given
+        proposalPrototype2_2.archive();
 
-    test('it should validate skill', async function (assert) {
-      //given
-      prototype1_1.validate();
+        // when
+        await controller._archiveOrDeactivateSkill(validatePrototype2_1);
 
-      //when
-      await controller._checkSkillsValidation(prototype1_1);
+        // then
+        assert.equal(skill2.status, 'archivé');
+      });
+      test('it should not change the skill status if is not a production prototype', async function(assert) {
+        // when
+        await controller._archiveOrDeactivateSkill(proposalPrototype2_2);
 
-      //then
-      assert.equal(skill1.status, 'actif');
-    });
+        // then
+        assert.equal(skill2.status, 'actif');
+        assert.equal(skill1.status, 'en construction');
+      });
+      test('it should archive alternatives', async function(assert) {
+        // when
+        await controller._archiveAlternatives(validatePrototype2_1);
 
-    test('it should validate alternatives', async function (assert) {
-      //given
-      prototype1_1.validate();
-
-      //when
-      await controller._validateAlternatives(prototype1_1);
-
-      //then
-      assert.equal(challenge1_1.status, 'validé');
+        // then
+        assert.equal(validateChallenge2_1.status, 'archivé');
+      });
     });
   });
 

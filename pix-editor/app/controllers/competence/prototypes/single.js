@@ -276,10 +276,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn('Archivage de l\'épreuve', async (changelog) => {
         try {
           this.loader.start();
-          await this.challenge.archive();
           await this._archiveAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._checkSkillsValidation(this.challenge);
+          await this._archiveOrDeactivateSkill(this.challenge);
+          await this.challenge.archive();
           this._message('Épreuve archivée');
           this.send('close');
         } catch (error) {
@@ -544,6 +544,22 @@ export default class SingleController extends Controller {
       return current;
     }, []);
     return Promise.all(skillChecks).then(() => challenge);
+  }
+
+  _archiveOrDeactivateSkill(challenge) {
+    const skill = challenge.firstSkill;
+    const isProductionPrototype = skill.productionPrototype?.id === challenge.id;
+    if (!isProductionPrototype) {
+      return;
+    }
+    const prototypesStatusOtherVersion = skill.prototypes
+      .filter((prototype) => prototype.id !== challenge.id)
+      .map((prototype) => prototype.status);
+    const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
+    if (haveProposalPrototype) {
+      return skill.deactivate();
+    }
+    return skill.archive();
   }
 
   async _handleIllustration(challenge) {
