@@ -305,10 +305,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
         try {
           this.loader.start();
-          await this.challenge.obsolete();
           await this._obsoleteAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._checkSkillsValidation(this.challenge);
+          await this._obsoleteArchiveOrDeactivateSkill(this.challenge);
+          await this.challenge.obsolete();
           this._message(this.intl.t('challenge.obsolete.success'));
           this.send('close');
         } catch (error) {
@@ -560,6 +560,24 @@ export default class SingleController extends Controller {
       return skill.deactivate();
     }
     return skill.archive();
+  }
+
+  _obsoleteArchiveOrDeactivateSkill(challenge) {
+    const skill = challenge.firstSkill;
+    const isProductionPrototype = skill.productionPrototype?.id === challenge.id;
+    if (!isProductionPrototype) {
+      return;
+    }
+    const prototypesStatusOtherVersion = skill.prototypes
+      .filter((prototype) => prototype.id !== challenge.id)
+      .map((prototype) => prototype.status);
+    if (prototypesStatusOtherVersion.includes('proposé')) {
+      return skill.deactivate();
+    }
+    if (prototypesStatusOtherVersion.includes('archivé')) {
+      return skill.archive();
+    }
+    return skill.obsolete();
   }
 
   async _handleIllustration(challenge) {
