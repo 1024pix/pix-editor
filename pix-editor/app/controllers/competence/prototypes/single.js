@@ -500,7 +500,7 @@ export default class SingleController extends Controller {
     }
     const tube = await currentSkill.tube;
     const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
-    const activeSkill = skillVersions.find(skill => skill.isActive);
+    const activeSkill = skillVersions ? skillVersions.find(skill => skill.isActive) : false;
     if (!activeSkill) {
       return;
     }
