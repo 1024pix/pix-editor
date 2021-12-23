@@ -252,6 +252,51 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.equal(validateChallenge2_1.status, 'archivé');
       });
     });
+
+    module('on prototype obsolete', function() {
+      test('it should obsolete alternative', async function(assert) {
+        // when
+        await controller._obsoleteAlternatives(validatePrototype2_1);
+
+        // then
+        assert.equal(validateChallenge2_1.status, 'périmé');
+      });
+      test('it should deactivate the current active skill if there is proposal prototype', async function(assert) {
+        // when
+        await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
+
+        // then
+        assert.equal(skill2.status, 'en construction');
+      });
+      test('it should archive the current active skill if there is archive prototype', async function(assert) {
+        // given
+        await proposalPrototype2_2.archive();
+
+        // when
+        await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
+
+        // then
+        assert.equal(skill2.status, 'archivé');
+      });
+      test('it should delete the current active skill if there is no archive or proposal prototype', async function(assert) {
+        // given
+        await proposalPrototype2_2.obsolete();
+
+        // when
+        await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
+
+        // then
+        assert.equal(skill2.status, 'périmé');
+      });
+      test('it should not change the skill status if is not a production prototype', async function(assert) {
+        // when
+        await controller._obsoleteArchiveOrDeactivateSkill(proposalPrototype2_2);
+
+        // then
+        assert.equal(skill2.status, 'actif');
+        assert.equal(skill1.status, 'en construction');
+      });
+    });
   });
 
   test('it should cancel edition', async function(assert) {
