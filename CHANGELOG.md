@@ -1,5 +1,24 @@
 
 
+## v3.55.0 (27/12/2021)
+
+
+### :rocket: Enhancement
+- [#3](https://github.com/1024pix/pix-editor/pull/3) [FEATURE] Extraire les urls depuis le référentiel Pix
+- [#7](https://github.com/1024pix/pix-editor/pull/7) [FEATURE] Importer une sélection de sujets généré depuis Pix Orga vers Pix Editor (PIX-3958).
+- [#6](https://github.com/1024pix/pix-editor/pull/6) [FEATURE] Uniformiser le wording de suppression d'épreuve
+
+### :building_construction: Tech
+- [#5](https://github.com/1024pix/pix-editor/pull/5) [TECH] Supprime les commentaires inutiles dans les modèles
+
+### :bug: Bug fix
+- [#8](https://github.com/1024pix/pix-editor/pull/8) [BUGFIX] Corrige des erreurs lors de l'archivage ou de obsolescence d'une épreuve
+- [#2](https://github.com/1024pix/pix-editor/pull/2) [BUGFIX] Corrige la configuration des notifications slack
+
+### :coffee: Various
+- [#4](https://github.com/1024pix/pix-editor/pull/4) [DOC] Mise à jour du README
+- [#1](https://github.com/1024pix/pix-editor/pull/1) [CLEANUP] Supprime l'information de scoring
+
 ## v3.54.0 (08/12/2021)
 
 
