@@ -17,6 +17,7 @@ module.exports = datasource.extend({
     'Description en-us',
     'Domaine (id persistant)',
     'Acquis (via Tubes) (id persistant)',
+    'Thematiques',
     'Origine2',
     'Référence',
   ],
@@ -33,6 +34,7 @@ module.exports = datasource.extend({
       descriptionEnUs: airtableRecord.get('Description en-us') || airtableRecord.get('Description'),
       areaId: airtableRecord.get('Domaine (id persistant)') ? airtableRecord.get('Domaine (id persistant)')[0] : '',
       skillIds: airtableRecord.get('Acquis (via Tubes) (id persistant)') || [],
+      thematicIds: airtableRecord.get('Thematiques') || [],
       origin: airtableRecord.get('Origine2')[0],
       fullName: airtableRecord.get('Référence'),
     };
