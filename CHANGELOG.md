@@ -1,5 +1,11 @@
 
 
+## v3.56.0 (28/12/2021)
+
+
+### :rocket: Enhancement
+- [#10](https://github.com/1024pix/pix-editor/pull/10) [FEATURE] Ajout de l'information de la relation competence -> thematique (PIX-3948)
+
 ## v3.55.0 (27/12/2021)
 
 
