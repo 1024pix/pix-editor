@@ -9,6 +9,7 @@ module.exports = function buildCompetence({
   descriptionEnUs,
   areaId,
   skillIds,
+  thematicIds,
   origin,
   fullName,
 }) {
@@ -22,6 +23,7 @@ module.exports = function buildCompetence({
       'Titre fr-fr': nameFrFr,
       'Titre en-us': nameEnUs,
       'Acquis (via Tubes) (id persistant)': skillIds,
+      'Thematiques': thematicIds,
       'Origine2': [origin],
       'Description': description,
       'Description fr-fr': descriptionFrFr,
