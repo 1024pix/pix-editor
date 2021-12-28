@@ -35,6 +35,7 @@ function mockCurrentContent() {
       areaId: '1',
       origin: 'Pix',
       skillIds: ['recSkill0'],
+      thematicIds: ['recThematic0'],
       description: 'Description de la compétence',
       descriptionFrFr: 'Description de la compétence - fr',
       descriptionEnUs: 'Description de la compétence - en',

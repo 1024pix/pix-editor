@@ -10,6 +10,7 @@ module.exports = class Competence {
     descriptionEnUs,
     areaId,
     skillIds,
+    thematicIds,
     origin,
   } = {}) {
     this.id = id;
@@ -22,6 +23,7 @@ module.exports = class Competence {
     this.descriptionEnUs = descriptionEnUs;
     this.areaId = areaId;
     this.skillIds = skillIds;
+    this.thematicIds = thematicIds;
     this.origin = origin;
   }
 };
