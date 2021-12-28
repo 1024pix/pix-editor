@@ -20,6 +20,7 @@ module.exports = function buildCompetenceAirtableDataObject({
     'recRV35kIeqUQj8cI',
     'rec50NXHkatsRkjVQ',
   ],
+  thematicIds = ['recFvllz2Ckz'],
   fullName = '1.1 Mener une recherche et une veille d’information',
 } = {}) {
 
@@ -32,6 +33,7 @@ module.exports = function buildCompetenceAirtableDataObject({
     areaId,
     origin,
     skillIds,
+    thematicIds,
     description,
     descriptionFrFr,
     descriptionEnUs,

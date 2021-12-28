@@ -12,6 +12,7 @@ function filterCompetencesFields(competences) {
     'descriptionEnUs',
     'areaId',
     'skillIds',
+    'thematicIds',
     'origin',
   ];
   return competences.map((competence) => _.pick(competence, fieldsToInclude));
