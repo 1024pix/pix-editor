@@ -244,7 +244,7 @@ export default class SingleController extends Controller {
 
   @action
   obsoleteSkill(dropdown) {
-    if (this.skill.productioPrototype) {
+    if (this.skill.productionPrototype) {
       this.notify.error(this.intl.t('skill.obsolete.skill_with_live_challenges'));
       return;
     }
