@@ -82,7 +82,7 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
     assert.dom('[data-test-draft-count]').hasText('2');
     assert.dom('[data-test-active-count]').hasText('1');
     assert.dom('[data-test-archived-count]').hasText('2');
-    assert.dom('[data-test-deleted-count]').hasText('1');
+    assert.dom('[data-test-obsolete-count]').hasText('1');
   });
 
 });

@@ -70,7 +70,7 @@ export default class AccessService extends Service {
   }
 
   mayObsoleteSkill(skill) {
-    if (skill.isDeleted) {
+    if (skill.isObsolete) {
       return false;
     }
     const level = this.config.accessLevel;
