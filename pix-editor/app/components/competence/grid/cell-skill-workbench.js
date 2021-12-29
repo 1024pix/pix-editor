@@ -8,9 +8,9 @@ export default class CompetenceGridCellSkillWorkbenchComponent extends Component
     return archivedSkill.length;
   }
 
-  get deletedCount() {
-    const deletedSkill = this.args.skills.filter(skill=> skill.isDeleted);
-    return deletedSkill.length;
+  get obsoleteCount() {
+    const obsoleteSkills = this.args.skills.filter(skill=> skill.isObsolete);
+    return obsoleteSkills.length;
   }
 
   get draftCount() {
@@ -31,7 +31,7 @@ export default class CompetenceGridCellSkillWorkbenchComponent extends Component
     return this.archivedCount > 0;
   }
 
-  get hasDeletedSkill() {
-    return this.deletedCount > 0;
+  get hasObsoleteSkill() {
+    return this.obsoleteCount > 0;
   }
 }
