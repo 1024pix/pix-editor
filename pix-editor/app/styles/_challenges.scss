@@ -149,6 +149,10 @@ img.clickable {
       display: none;
     }
 
+    .ember-basic-dropdown-trigger, .ember-basic-dropdown-trigger .item {
+      height: 100%;
+    }
+
     .ember-basic-dropdown-content .ui.button {
       margin:0;
     }
