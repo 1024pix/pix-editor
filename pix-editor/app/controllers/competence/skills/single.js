@@ -8,16 +8,11 @@ export default class SingleController extends Controller {
 
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = 'Mise à jour de l\'acquis';
-  defaultArchiveChangelog = 'Archivage de l\'acquis';
-  defaultDeleteChangelog = 'Suppression de l\'acquis';
-
 
   @tracked edition = false;
   @tracked displaySelectLocation = false;
   @tracked displayChangeLog = false;
   @tracked changelogText = '';
-
 
   @controller('competence')
   parentController;
@@ -37,6 +32,7 @@ export default class SingleController extends Controller {
   @service loader;
   @service notify;
   @service storage;
+  @service intl;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -110,7 +106,7 @@ export default class SingleController extends Controller {
 
   @action
   save() {
-    this._displayChangelogPopIn(this.defaultSaveChangelog, (changelogValue)=>{
+    this._displayChangelogPopIn(this.intl.t('skill.changelog.update'), (changelogValue)=>{
       this.loader.start();
       const skill = this.skill;
       const prototype = this.skill.productionPrototype;
@@ -199,32 +195,32 @@ export default class SingleController extends Controller {
   @action
   archiveSkill(dropdown) {
     if (this.skill.productionPrototype) {
-      this.notify.error('Vous ne pouvez pas archiver un acquis avec des épreuves publiées');
+      this.notify.error(this.intl.t('skill.archive.skill_with_live_challenges'));
       return;
     }
     if (dropdown) {
       dropdown.actions.close();
     }
     const challenges = this.skill.challenges;
-    return this.confirm.ask('Archivage', 'Êtes-vous sûr de vouloir archiver l\'acquis ?')
+    return this.confirm.ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
       .then(() => {
-        this._displayChangelogPopIn(this.defaultArchiveChangelog,(changelogValue)=>{
-          this.loader.start('Archivage de l\'acquis');
+        this._displayChangelogPopIn(this.intl.t('skill.changelog.archive'), (changelogValue)=>{
+          this.loader.start(this.intl.t('skill.archive.loader_start'));
           return this.skill.archive()
             .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.archiveAction))
             .then(() => {
               this.close();
-              this.notify.message('Acquis archivé');
+              this.notify.message(this.intl.t('skill.archive.success'));
             })
             .then(() => {
               const updateChallenges = challenges.filter(challenge => challenge.isDraft).map(challenge => {
                 return challenge.archive()
-                  .then(()=>this._handleChallengeChangelog(challenge, `Archivage de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`))
+                  .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
                     if (challenge.isPrototype) {
-                      this.notify.message('Prototype archivé');
+                      this.notify.message(this.intl.t('skill.archive.challenge.prototype'));
                     } else {
-                      this.notify.message(`Déclinaison n°${challenge.alternativeVersion} archivée`);
+                      this.notify.message(this.intl.t('skill.archive.challenge.prototype', { number: challenge.alternativeVersion }));
                     }
                   });
               });
@@ -233,7 +229,7 @@ export default class SingleController extends Controller {
             .catch(error => {
               console.error(error);
               Sentry.captureException(error);
-              this.notify.error('Erreur lors de l\'archivage de l\'acquis');
+              this.notify.error(this.intl.t('skill.archive.error'));
             })
             .finally(() => {
               this.loader.stop();
@@ -242,39 +238,39 @@ export default class SingleController extends Controller {
       })
       .catch((error) => {
         Sentry.captureException(error);
-        this.notify.message('Archivage abandonné');
+        this.notify.message(this.intl.t('skill.archive.cancel'));
       });
   }
 
   @action
   deleteSkill(dropdown) {
     if (this.skill.productioPrototype) {
-      this.notify.error('Vous ne pouvez pas Supprimer un acquis avec des épreuves publiées');
+      this.notify.error(this.intl.t('skill.obsolete.skill_with_live_challenges'));
       return;
     }
     if (dropdown) {
       dropdown.actions.close();
     }
     const challenges = this.skill.challenges;
-    return this.confirm.ask('Suppression', 'Êtes-vous sûr de vouloir supprimer l\'acquis ?')
+    return this.confirm.ask(this.intl.t('skill.obsolete.confirm.title'), this.intl.t('skill.obsolete.confirm.message'))
       .then(() => {
-        this._displayChangelogPopIn(this.defaultDeleteChangelog,(changelogValue)=>{
-          this.loader.start('Suppression de l\'acquis');
+        this._displayChangelogPopIn(this.intl.t('skill.changelog.obsolete'), (changelogValue) => {
+          this.loader.start(this.intl.t('skill.obsolete.loader_start'));
           return this.skill.delete()
             .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
-              this.notify.message('Acquis supprimé');
+              this.notify.message(this.intl.t('skill.obsolete.success'));
             })
             .then(() => {
               const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
                 return challenge.delete()
-                  .then(()=>this._handleChallengeChangelog(challenge, `Suppression de l'épreuve suite à la suppression de l'acquis ${this.skill.name}`))
+                  .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
                     if (challenge.isPrototype) {
-                      this.notify.message('Prototype Supprimé');
+                      this.notify.message(this.intl.t('skill.obsolete.challenge.prototype'));
                     } else {
-                      this.notify.message(`Déclinaison n°${challenge.alternativeVersion} Supprimée`);
+                      this.notify.message(this.intl.t('skill.obsolete.challenge.prototype', { number: challenge.alternativeVersion }));
                     }
                   });
               });
@@ -283,7 +279,7 @@ export default class SingleController extends Controller {
             .catch(error => {
               console.error(error);
               Sentry.captureException(error);
-              this.notify.error('Erreur lors de la suppression de l\'acquis');
+              this.notify.error(this.intl.t('skill.obsolete.error'));
             })
             .finally(() => {
               this.loader.stop();
@@ -292,7 +288,7 @@ export default class SingleController extends Controller {
       })
       .catch((error) => {
         Sentry.captureException(error);
-        this.notify.message('Suppression abandonnée');
+        this.notify.message(this.intl.t('skill.obsolete.cancel'));
       });
   }
 
