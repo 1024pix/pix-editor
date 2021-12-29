@@ -21,13 +21,13 @@
               {{#if this.mayArchive}}
                 <button class="ui button archive item"  {{on "click" (fn this.archiveSkill dd)}} type="button">
                   <i class="archive icon"></i>
-                  Archiver
+                  {{t 'competence.skills.archive'}}
                 </button>
               {{/if}}
               {{#if this.mayDelete}}
                 <button class="ui button delete item"  {{on "click" (fn this.deleteSkill dd)}} type="button">
                   <i class="trash alternate icon"></i>
-                  Supprimer
+                  {{t 'competence.skills.obsolete'}}
                 </button>
               {{/if}}
             </dd.Content>
