@@ -54,8 +54,8 @@ export default class SingleController extends Controller {
     return this.access.mayArchiveSkill(this.skill);
   }
 
-  get mayDelete() {
-    return this.access.mayDeleteSkill(this.skill);
+  get mayObsolete() {
+    return this.access.mayObsoleteSkill(this.skill);
   }
 
   get previewPrototypeUrl() {
@@ -243,7 +243,7 @@ export default class SingleController extends Controller {
   }
 
   @action
-  deleteSkill(dropdown) {
+  obsoleteSkill(dropdown) {
     if (this.skill.productioPrototype) {
       this.notify.error(this.intl.t('skill.obsolete.skill_with_live_challenges'));
       return;

@@ -12,7 +12,7 @@
                 @models={{array this.skill.tube.id this.skill.level}}>
           <i class="clone icon"></i>&nbsp;v{{this.skill.version}}
         </LinkTo>
-        {{#if (or this.mayArchive this.mayDelete)}}
+        {{#if (or this.mayArchive this.mayObsolete)}}
           <BasicDropdown title="Actions" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
             <dd.Trigger>
               <button class="ui icon button item" type="button"><i class="bolt icon"></i></button>
@@ -24,8 +24,8 @@
                   {{t 'competence.skills.archive'}}
                 </button>
               {{/if}}
-              {{#if this.mayDelete}}
-                <button class="ui button delete item"  {{on "click" (fn this.deleteSkill dd)}} type="button">
+              {{#if this.mayObsolete}}
+                <button class="ui button delete item"  {{on "click" (fn this.obsoleteSkill dd)}} type="button">
                   <i class="trash alternate icon"></i>
                   {{t 'competence.skills.obsolete'}}
                 </button>
