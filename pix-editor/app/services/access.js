@@ -69,7 +69,7 @@ export default class AccessService extends Service {
     }
   }
 
-  mayDeleteSkill(skill) {
+  mayObsoleteSkill(skill) {
     if (skill.isDeleted) {
       return false;
     }
