@@ -164,7 +164,7 @@ export default class SkillModel extends Model {
     return this.save();
   }
 
-  delete() {
+  obsolete() {
     this.status = 'périmé';
     return this.save();
   }
