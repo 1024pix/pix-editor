@@ -15,6 +15,9 @@ challenge:
     success: Épreuve périmée
     error: Erreur lors de l'obsolescence de l'épreuve
     cancel: Obsolescence abandonnée
+  alternative:
+    archive: Déclinaison n°{number} archivée
+    obsolete: Déclinaison n°{number} périmée
 skill:
   changelog:
     update: Mise à jour de l'acquis

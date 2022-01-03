@@ -466,11 +466,11 @@ export default class SingleController extends Controller {
     }
     const alternativesArchive = toArchive.map(alternative => {
       return alternative.archive()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`));
+        .then(alternative => this._message(this.intl.t('challenge.alternative.archive', { number: alternative.alternativeVersion })));
     });
     const alternativesObsolete = toObsolete.map(alternative => {
       return alternative.obsolete()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
+        .then(alternative => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
     });
     const alternativesArchiveAndObsolete = [...alternativesArchive, ...alternativesObsolete];
     return Promise.all(alternativesArchiveAndObsolete)
@@ -487,7 +487,7 @@ export default class SingleController extends Controller {
     }
     const alternativesObsolete = toObsolete.map(alternative => {
       return alternative.obsolete()
-        .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
+        .then(alternative => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
     });
     return Promise.all(alternativesObsolete)
       .then(() => challenge);
