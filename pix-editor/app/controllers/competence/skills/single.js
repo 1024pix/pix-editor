@@ -256,7 +256,7 @@ export default class SingleController extends Controller {
       .then(() => {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.obsolete'), (changelogValue) => {
           this.loader.start(this.intl.t('skill.obsolete.loader_start'));
-          return this.skill.delete()
+          return this.skill.obsolete()
             .then(()=>this._handleSkillChangelog(this.skill, changelogValue, this.changelogEntry.deleteAction))
             .then(() => {
               this.close();
