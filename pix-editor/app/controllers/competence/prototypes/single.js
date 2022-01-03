@@ -81,8 +81,8 @@ export default class SingleController extends Controller {
     return this.access.mayArchive(this.challenge);
   }
 
-  get mayDelete() {
-    return this.access.mayDelete(this.challenge);
+  get mayObsolete() {
+    return this.access.mayObsolete(this.challenge);
   }
 
   get mayMove() {
@@ -296,7 +296,7 @@ export default class SingleController extends Controller {
   }
 
   @action
-  async delete(dropdown) {
+  async obsolete(dropdown) {
     if (dropdown) {
       dropdown.actions.close();
     }
@@ -305,8 +305,8 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
         try {
           this.loader.start();
-          await this.challenge.delete();
-          await this._deleteAlternatives(this.challenge);
+          await this.challenge.obsolete();
+          await this._obsoleteAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
           await this._checkSkillsValidation(this.challenge);
           this._message(this.intl.t('challenge.obsolete.success'));
@@ -460,36 +460,36 @@ export default class SingleController extends Controller {
       return Promise.resolve(challenge);
     }
     const toArchive = challenge.productionAlternatives;
-    const toDelete = challenge.draftAlternatives;
-    if (toArchive.length === 0 && toDelete.length) {
+    const toObsolete = challenge.draftAlternatives;
+    if (toArchive.length === 0 && toObsolete.length) {
       return Promise.resolve(challenge);
     }
     const alternativesArchive = toArchive.map(alternative => {
       return alternative.archive()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} archivée`));
     });
-    const alternativesDelete = toDelete.map(alternative => {
-      return alternative.delete()
+    const alternativesObsolete = toObsolete.map(alternative => {
+      return alternative.obsolete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
-    const alternativesArchiveAndDelete = [...alternativesArchive, ...alternativesDelete];
-    return Promise.all(alternativesArchiveAndDelete)
+    const alternativesArchiveAndObsolete = [...alternativesArchive, ...alternativesObsolete];
+    return Promise.all(alternativesArchiveAndObsolete)
       .then(() => challenge);
   }
 
-  _deleteAlternatives(challenge) {
+  _obsoleteAlternatives(challenge) {
     if (!challenge.isPrototype) {
       return Promise.resolve(challenge);
     }
-    const toDelete = challenge.alternatives.filter(alternative => !alternative.isDeleted);
-    if (toDelete.length === 0) {
+    const toObsolete = challenge.alternatives.filter(alternative => !alternative.isObsolete);
+    if (toObsolete.length === 0) {
       return Promise.resolve(challenge);
     }
-    const alternativesDelete = toDelete.map(alternative => {
-      return alternative.delete()
+    const alternativesObsolete = toObsolete.map(alternative => {
+      return alternative.obsolete()
         .then(alternative => this._message(`Alternative n°${alternative.alternativeVersion} supprimée`));
     });
-    return Promise.all(alternativesDelete)
+    return Promise.all(alternativesObsolete)
       .then(() => challenge);
   }
 
@@ -506,15 +506,15 @@ export default class SingleController extends Controller {
     }
     await this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`);
     await activeSkill.archive();
-    const challengesToArchiveOrDelete = activeSkill.liveChallenges.map(liveChallenge => {
+    const challengesToArchiveOrObsolete = activeSkill.liveChallenges.map(liveChallenge => {
       if (liveChallenge.isValidated) {
         return liveChallenge.archive();
       }
       if (liveChallenge.isDraft) {
-        return liveChallenge.delete();
+        return liveChallenge.obsolete();
       }
     });
-    await Promise.all(challengesToArchiveOrDelete);
+    await Promise.all(challengesToArchiveOrObsolete);
   }
 
   _checkSkillsValidation(challenge) {

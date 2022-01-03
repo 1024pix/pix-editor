@@ -263,8 +263,8 @@ export default class SingleController extends Controller {
               this.notify.message(this.intl.t('skill.obsolete.success'));
             })
             .then(() => {
-              const updateChallenges = challenges.filter(challenge => !challenge.isDeleted).map(challenge => {
-                return challenge.delete()
+              const updateChallenges = challenges.filter(challenge => !challenge.isObsolete).map(challenge => {
+                return challenge.obsolete()
                   .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
                     if (challenge.isPrototype) {
