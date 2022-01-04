@@ -41,7 +41,7 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
     await clearSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
-      range: `${sheetName}!A2:Z999`,
+      range: `${sheetName}!A2:Z9999`,
     });
     await setSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
