@@ -37,7 +37,7 @@ module('Unit | Service | access', function(hooks) {
       },{
         id: 'rec123656',
         name: 'deletedChallenge',
-        isDeleted: true
+        isObsolete: true
       }];
 
       //when

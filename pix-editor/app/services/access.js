@@ -69,8 +69,8 @@ export default class AccessService extends Service {
     }
   }
 
-  mayDeleteSkill(skill) {
-    if (skill.isDeleted) {
+  mayObsoleteSkill(skill) {
+    if (skill.isObsolete) {
       return false;
     }
     const level = this.config.accessLevel;
@@ -89,9 +89,9 @@ export default class AccessService extends Service {
     const level = this.config.accessLevel;
     const production = challenge.isValidated;
     const archived = challenge.isArchived;
-    const deleted = challenge.isDeleted;
+    const obsolete = challenge.isObsolete;
     const prototype = challenge.isPrototype;
-    if (archived || deleted) {
+    if (archived || obsolete) {
       return false;
     }
     return level >= EDITOR || (!production && !prototype && level === REPLICATOR);
@@ -133,8 +133,8 @@ export default class AccessService extends Service {
     }
   }
 
-  mayDelete(challenge) {
-    if (challenge.isDeleted) {
+  mayObsolete(challenge) {
+    if (challenge.isObsolete) {
       return false;
     }
     const level = this.config.accessLevel;

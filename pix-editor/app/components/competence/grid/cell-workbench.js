@@ -20,9 +20,9 @@ export default class CellWorkbench extends Component {
     return archivedPrototypes.length;
   }
 
-  get deletedPrototypesCount() {
-    const deletedPrototypes = this.prototypes.filter(prototype => prototype.isDeleted);
-    return deletedPrototypes.length;
+  get obsoletePrototypesCount() {
+    const obsoletePrototypes = this.prototypes.filter(prototype => prototype.isObsolete);
+    return obsoletePrototypes.length;
   }
 
   get hasDraftPrototypes() {
@@ -33,7 +33,7 @@ export default class CellWorkbench extends Component {
     return this.archivedPrototypesCount > 0;
   }
 
-  get hasDeletedPrototypes() {
-    return this.deletedPrototypesCount > 0;
+  get hasObsoletePrototypes() {
+    return this.obsoletePrototypesCount > 0;
   }
 }

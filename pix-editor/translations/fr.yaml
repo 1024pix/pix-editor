@@ -3,6 +3,9 @@ competence:
     archive: Archiver
     obsolete: Rendre obsolète
     validate: Valider
+  skills:
+    archive: Archiver
+    obsolete: Rendre obsolète
 challenge:
   obsolete:
     confirm:
@@ -12,3 +15,37 @@ challenge:
     success: Épreuve périmée
     error: Erreur lors de l'obsolescence de l'épreuve
     cancel: Obsolescence abandonnée
+  alternative:
+    archive: Déclinaison n°{number} archivée
+    obsolete: Déclinaison n°{number} périmée
+skill:
+  changelog:
+    update: Mise à jour de l'acquis
+    archive: Archivage de l'acquis
+    obsolete: Obsolescence de l'acquis
+  archive:
+    skill_with_live_challenges: Vous ne pouvez pas archiver un acquis avec des épreuves publiées
+    confirm:
+      title: Archivage
+      message: Êtes-vous sûr de vouloir archiver l'acquis ?
+    loader_start: Archivage de l'acquis
+    success: Acquis archivé
+    error: Erreur lors de l'archivage de l'acquis
+    cancel: Archivage abandonné
+    challenge:
+      changelog: Archivage de l'épreuve suite à l'archivage de l'acquis {skillName}
+      prototype: Prototype archivé
+      alternative: Déclinaison n°{number} archivée
+  obsolete:
+    skill_with_live_challenges: Vous ne pouvez pas rendre obsolète un acquis avec des épreuves publiées
+    confirm:
+      title: Suppression
+      message: Êtes-vous sûr de vouloir rendre obsolète l'acquis ?
+    loader_start: Obsolescence de l'acquis
+    success: Acquis périmé
+    error: Erreur lors de l'obsolescence de l'acquis
+    cancel: Obsolescence abandonnée
+    challenge:
+      changelog: Obscolescence de l'épreuve suite à l'obsolescence de l'acquis {skillName}
+      prototype: Prototype périmé
+      alternative: Déclinaison n°{number} périmée

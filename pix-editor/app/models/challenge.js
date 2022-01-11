@@ -83,10 +83,9 @@ export default class ChallengeModel extends Model {
     return this.status === 'archivé';
   }
 
-  get isDeleted() {
+  get isObsolete() {
     return this.status === 'périmé';
   }
-
 
   get notDeclinable() {
     const declinable = this.declinable;
@@ -221,7 +220,7 @@ export default class ChallengeModel extends Model {
     return this.save();
   }
 
-  delete() {
+  obsolete() {
     this.status = 'périmé';
     return this.save();
   }
