@@ -70,6 +70,6 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
     assert.dom('[data-test-draft-prototype-count]').hasText('1');
     assert.dom('[data-test-validated-prototype-count]').hasText('1');
     assert.dom('[data-test-archived-prototype-count]').hasText('3');
-    assert.dom('[data-test-deleted-prototype-count]').hasText('2');
+    assert.dom('[data-test-obsolete-prototype-count]').hasText('2');
   });
 });

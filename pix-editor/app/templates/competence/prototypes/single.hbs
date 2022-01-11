@@ -8,7 +8,7 @@
       {{#if (and this.challenge.isPrototype (not this.challenge.isWorkbench))}}
           <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
       {{/if}}
-      {{#if (or this.mayValidate this.mayArchive this.mayDelete)}}
+      {{#if (or this.mayValidate this.mayArchive this.mayObsolete)}}
         <BasicDropdown @id="testdd" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
           <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
           <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
@@ -24,8 +24,8 @@
                   {{t 'competence.prototypes.archive'}}
                 </button>
               {{/if}}
-              {{#if this.mayDelete}}
-              <button class="ui button archive item"  {{on "click" (fn this.delete dd)}} type="button">
+              {{#if this.mayObsolete}}
+              <button class="ui button archive item"  {{on "click" (fn this.obsolete dd)}} type="button">
                   <i class="trash alternate icon"></i>
                   {{t 'competence.prototypes.obsolete'}}
                 </button>
