@@ -67,8 +67,7 @@ export default class ChallengeModel extends Model {
   }
 
   get isValidated() {
-    const status = this.status;
-    return ['validé', 'validé sans test', 'pré-validé'].includes(status);
+    return this.status === 'validé';
   }
 
   get skillNames() {
@@ -96,8 +95,6 @@ export default class ChallengeModel extends Model {
     const status = this.status;
     switch (status) {
       case 'validé':
-      case 'validé sans test':
-      case 'pré-validé':
         return 'validated';
       case 'proposé':
         return 'suggested';
