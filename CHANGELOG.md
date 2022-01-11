@@ -1,5 +1,18 @@
 
 
+## v3.57.0 (11/01/2022)
+
+
+### :rocket: Enhancement
+- [#14](https://github.com/1024pix/pix-editor/pull/14) [FEATURE] Met à jour le wording de mise en obsolescence des acquis (PIX-4092)
+
+### :building_construction: Tech
+- [#12](https://github.com/1024pix/pix-editor/pull/12) [TECH] Utilise notre propre vérificateur d'URLs en erreur
+- [#11](https://github.com/1024pix/pix-editor/pull/11) [TECH] Ajout du numéro de job dans les logs 
+
+### :bug: Bug fix
+- [#13](https://github.com/1024pix/pix-editor/pull/13) [BUGFIX] Corrige la taille du bouton dropdown pour changer le statut d'un acquis/épreuve
+
 ## v3.56.0 (28/12/2021)
 
 
