@@ -107,7 +107,7 @@ async function duplicateSkill(base, idGenerator, skill) {
 async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   return base.select({
     fields: USEFUL_CHALLENGE_FIELDS,
-    filterByFormula: `AND(FIND('${sourceSkillIdPersistent}', ARRAYJOIN({Acquix (id persistant)})), OR({Statut} = 'validé', {Statut} = 'validé sans test', {Statut} = 'pré-validé'))`,
+    filterByFormula: `AND(FIND('${sourceSkillIdPersistent}', ARRAYJOIN({Acquix (id persistant)})), {Statut} = 'validé'))`,
   }).all();
 }
 
