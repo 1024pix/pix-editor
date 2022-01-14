@@ -105,8 +105,7 @@ describe('Copy skills and set challenges as focusable', function() {
 
       expect(base.select).to.have.been.calledWith({
         fields: USEFUL_CHALLENGE_FIELDS,
-        filterByFormula : 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), ' +
-          'OR({Statut} = \'validé\', {Statut} = \'validé sans test\', {Statut} = \'pré-validé\'))',
+        filterByFormula : 'AND(FIND(\'1\', ARRAYJOIN({Acquix (id persistant)})), {Statut} = \'validé\'))',
       });
     });
   });
@@ -236,7 +235,7 @@ describe('Copy skills and set challenges as focusable', function() {
         new AirtableRecord('Challenges', 'recAirtableId2', {
           fields: {
             'id persistant': '2',
-            'Statut': 'validé sans test',
+            'Statut': 'validé',
             'Consigne': 'Coucou',
             'Focalisée': false,
           },
