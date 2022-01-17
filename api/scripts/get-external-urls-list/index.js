@@ -22,8 +22,8 @@ async function getExternalUrlsList() {
 
   const uniqUrls = _.uniqBy(urlsFromChallenges, 'url');
 
-  uniqUrls.forEach(({ origin, url, locales }) => {
-    console.log([origin, url, locales.join(';')].join(','));
+  uniqUrls.forEach(({ origin, url, locales, status }) => {
+    console.log([origin, url, locales.join(';'), status].join(','));
   });
 }
 
@@ -36,7 +36,7 @@ function findUrlsFromChallenges(challenges) {
     return functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: challenge.id, locales: challenge.locales, url, skillIds: challenge.skillIds };
+        return { id: challenge.id, locales: challenge.locales, url, skillIds: challenge.skillIds, status: challenge.status };
       });
   });
   return _.uniqBy(urlsFromChallenges, 'url');
