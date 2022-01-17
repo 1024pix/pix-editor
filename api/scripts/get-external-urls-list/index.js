@@ -18,12 +18,13 @@ async function getExternalUrlsList() {
   urlsFromChallenges.forEach((urlChallenge) => {
     urlChallenge.origin = skillIdsWithFramework[urlChallenge.skillIds[0]];
     urlChallenge.url = baseUrl(urlChallenge.url);
+    urlChallenge.tube = getTubeName(release, urlChallenge);
   });
 
   const uniqUrls = _.uniqBy(urlsFromChallenges, 'url');
 
-  uniqUrls.forEach(({ origin, url, locales, status }) => {
-    console.log([origin, url, locales.join(';'), status].join(','));
+  uniqUrls.forEach(({ origin, url, locales, status, tube }) => {
+    console.log([origin, tube, url, locales.join(';'), status].join(','));
   });
 }
 
@@ -41,6 +42,16 @@ function findUrlsFromChallenges(challenges) {
   });
   return _.uniqBy(urlsFromChallenges, 'url');
 }
+
+function getTubeName(release, challenge) {
+  const skill = release.skills.find((skill) => {
+    return skill.id === challenge.skillIds[0];
+  });
+  const tube = release.tubes.find((tube) => {
+    return tube.id === skill.tubeId;
+  });
+  return tube.name;
+};
 
 function getSkillIdsWithFramework(release) {
   return release.competences.reduce((memo, competence) => {
