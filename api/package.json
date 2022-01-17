@@ -50,6 +50,7 @@
     "admin-bro": "^4.0.1",
     "airtable": "^0.11.1",
     "axios": "^0.23.0",
+    "axios-cookiejar-support": "^2.0.3",
     "blipp": "4.0.2",
     "bull": "^4.0.0",
     "dotenv": "^10.0.0",
@@ -69,6 +70,7 @@
     "qs": "^6.10.1",
     "sequelize": "^6.6.2",
     "showdown": "^1.9.1",
+    "tough-cookie": "^4.0.0",
     "url-regex-safe": "^2.0.2"
   },
   "devDependencies": {
