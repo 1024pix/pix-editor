@@ -1,5 +1,17 @@
 
 
+## v3.58.0 (17/01/2022)
+
+
+### :rocket: Enhancement
+- [#16](https://github.com/1024pix/pix-editor/pull/16) [FEATURE] Ajout de contexte sur l'extract des URLs du référentiel (PIX-4154)
+
+### :bug: Bug fix
+- [#17](https://github.com/1024pix/pix-editor/pull/17) [BUGFIX] Corrige la concurrence de vérifications des URLs
+
+### :coffee: Various
+- [#15](https://github.com/1024pix/pix-editor/pull/15) [CLEANUP] Supprime la gestion des status pré-validé et validé sans test des épreuves (PIX-4126)
+
 ## v3.57.0 (11/01/2022)
 
 
