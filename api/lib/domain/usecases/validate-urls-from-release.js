@@ -79,7 +79,10 @@ function findUrlsFromTutorials(tutorials, release) {
 
 async function analyzeUrls(urlList) {
   const options = {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0' },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0',
+      'Accept': '*/*'
+    },
     timeout: 15000,
     maxRedirects: 10,
     bulk: 50,
