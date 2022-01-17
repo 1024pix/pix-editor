@@ -2,6 +2,8 @@ const showdown = require('showdown');
 const _ = require('lodash');
 const urlRegex = require('url-regex-safe');
 const axios = require('axios');
+const { wrapper } = require('axios-cookiejar-support');
+const { CookieJar } = require('tough-cookie');
 
 const logger = require('../../infrastructure/logger');
 
@@ -124,10 +126,12 @@ async function analyze(lines, options) {
 }
 
 async function checkUrl(url, config) {
+  const jar = new CookieJar();
+  const client = wrapper(axios.create({ jar }));
   try {
-    return (await axios.head(url, config));
+    return (await client.head(url, config));
   } catch (e) {
-    return (await axios.get(url, config));
+    return (await client.get(url, config));
   }
 }
 
