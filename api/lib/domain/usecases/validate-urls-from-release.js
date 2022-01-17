@@ -116,7 +116,7 @@ async function analyze(lines, options) {
     } finally {
       logger.trace(`done checking ${line.url}`);
     }
-  }, options.bulk);
+  }, { concurrency: options.bulk });
   return newLines;
 }
 
