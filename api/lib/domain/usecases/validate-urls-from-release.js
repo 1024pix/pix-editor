@@ -171,6 +171,7 @@ async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository }
 }
 
 module.exports = {
+  checkUrl,
   validateUrlsFromRelease,
   getLiveChallenges,
   findUrlsInMarkdown,
