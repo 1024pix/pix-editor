@@ -2,6 +2,8 @@ const showdown = require('showdown');
 const _ = require('lodash');
 const urlRegex = require('url-regex-safe');
 const axios = require('axios');
+const { wrapper } = require('axios-cookiejar-support');
+const { CookieJar } = require('tough-cookie');
 
 const logger = require('../../infrastructure/logger');
 
@@ -79,7 +81,10 @@ function findUrlsFromTutorials(tutorials, release) {
 
 async function analyzeUrls(urlList) {
   const options = {
-    headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0' },
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:64.0) Gecko/20100101 Firefox/80.0',
+      'Accept': '*/*'
+    },
     timeout: 15000,
     maxRedirects: 10,
     bulk: 50,
@@ -121,10 +126,12 @@ async function analyze(lines, options) {
 }
 
 async function checkUrl(url, config) {
+  const jar = new CookieJar();
+  const client = wrapper(axios.create({ jar }));
   try {
-    return (await axios.head(url, config));
+    return (await client.head(url, config));
   } catch (e) {
-    return (await axios.get(url, config));
+    return (await client.get(url, config));
   }
 }
 
@@ -164,6 +171,7 @@ async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository }
 }
 
 module.exports = {
+  checkUrl,
   validateUrlsFromRelease,
   getLiveChallenges,
   findUrlsInMarkdown,
