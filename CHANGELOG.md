@@ -1,5 +1,11 @@
 
 
+## v3.58.1 (19/01/2022)
+
+
+### :bug: Bug fix
+- [#18](https://github.com/1024pix/pix-editor/pull/18) |BUGFIX] Corrige certaines urls injustement marqué comme invalides
+
 ## v3.58.0 (17/01/2022)
 
 
