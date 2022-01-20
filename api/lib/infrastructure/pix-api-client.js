@@ -32,6 +32,7 @@ async function _authenticate() {
   const data = qs.stringify({
     username: config.pixApi.user,
     password: config.pixApi.password,
+    grant_type: 'password',
   });
 
   const response = await axios.post(

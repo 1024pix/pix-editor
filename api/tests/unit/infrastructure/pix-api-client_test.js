@@ -38,7 +38,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(401);
 
         const authInterceptor = nock('https://api.test.pix.fr')
-          .post('/api/token', 'username=adminUser&password=123')
+          .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
           .reply(200, { 'access_token': newToken });
 
@@ -69,7 +69,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(401);
 
         const authInterceptor = nock('https://api.test.pix.fr')
-          .post('/api/token', 'username=adminUser&password=123')
+          .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
           .reply(200, { 'access_token': newToken });
 
@@ -106,7 +106,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200);
 
         const authInterceptor = nock('https://api.test.pix.fr')
-          .post('/api/token', 'username=adminUser&password=123')
+          .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
           .reply(200, { 'access_token': token });
 
@@ -130,7 +130,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
           .reply(200);
 
         nock('https://api.test.pix.fr')
-          .post('/api/token', 'username=adminUser&password=123')
+          .post('/api/token', 'username=adminUser&password=123&grant_type=password')
           .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
           .reply(200, { 'access_token': token });
 

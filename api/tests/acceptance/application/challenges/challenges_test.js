@@ -655,7 +655,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .reply(200, { records: [] });
 
       const apiTokenScope = nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
 
