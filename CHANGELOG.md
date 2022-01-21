@@ -1,5 +1,11 @@
 
 
+## v3.59.0 (21/01/2022)
+
+
+### :building_construction: Tech
+- [#20](https://github.com/1024pix/pix-editor/pull/20) [TECH] Ajouter le champ responsive d'une épreuve a la release du référentiel (PIX-4202).
+
 ## v3.58.2 (21/01/2022)
 
 
