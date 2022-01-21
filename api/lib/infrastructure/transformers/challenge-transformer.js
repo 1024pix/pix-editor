@@ -44,6 +44,7 @@ function _filterChallengeFields(_learningContent, challenge) {
     'focusable',
     'alpha',
     'delta',
+    'responsive',
   ];
 
   return _.pick(challenge, fieldsToInclude);

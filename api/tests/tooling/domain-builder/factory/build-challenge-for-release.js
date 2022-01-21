@@ -22,6 +22,7 @@ module.exports = function buildChallengeForRelease({
   focusable = false,
   delta = 0.2,
   alpha = 0.5,
+  responsive = 'Smartphone',
 } = {}) {
 
   return {
@@ -48,5 +49,6 @@ module.exports = function buildChallengeForRelease({
     focusable,
     delta,
     alpha,
+    responsive,
   };
 };
