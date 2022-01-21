@@ -92,6 +92,7 @@ function mockCurrentContent() {
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
+      responsive: 'Smartphone',
     }],
     tutorials: [{
       id: 'recTutorial0',
