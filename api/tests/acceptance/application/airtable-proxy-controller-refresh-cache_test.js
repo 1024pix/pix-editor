@@ -19,7 +19,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     it('should refresh cache of updated record in pix api', async () => {
       // Given
       nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
       const apiCacheScope = nock('https://api.test.pix.fr')
@@ -50,7 +50,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     it('should return 200 when refresh cache fails', async () => {
       // Given
       nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
 
@@ -82,7 +82,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
     it('should return 200 when Pix API authentication fails', async () => {
       // Given
       const apiTokenScope = nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(400);
 
@@ -149,7 +149,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(200, { records: [attachment] });
 
       nock('https://api.test.pix.fr')
-        .post('/api/token', { username: 'adminUser', password: '123' })
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
 
