@@ -1,5 +1,11 @@
 
 
+## v3.58.2 (21/01/2022)
+
+
+### :bug: Bug fix
+- [#19](https://github.com/1024pix/pix-editor/pull/19) [BUGFIX] Corriger la preview des nouvelles épreuves sur la recette (PIX-4181).
+
 ## v3.58.1 (19/01/2022)
 
 
