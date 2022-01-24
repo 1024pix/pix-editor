@@ -39,13 +39,16 @@ Pix-editor utilise [Airtable](https://airtable.com/). La structure de la base pe
 $ git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
 ```
 
-**2/ Creer un un fichier .env**
+**2/ Créer un un fichier .env**
 
 Copier le sample.env situer à la racine et le renommer en .env:
 ```bash
 cp api/sample.env api/.env
 ```
-Remplire les valeurs des variables dans le fichier `.env`.
+
+Remplir les valeurs des variables dans le fichier `.env`.
+
+> La description et le format attendu de chaque option/variable est documentée dans le fichier `sample.env`.
 
 **3/ Installer les dépendances**
 
@@ -61,21 +64,22 @@ cd pix-editor
 $ npm ci
 ```
 
-**4/ Lancer la base de données**
+**4/ Lancer, configurer et initialiser la base de données**
 
 ```bash
 docker-compose up -d
+(cd api && npm run db:reset)
 ```
 
 **5/ Lancer l'application**
 
-Sur api:
+Dans un premier processus ou terminal, depuis le répertoire `~/api`:
 ```bash
 cd api
 $ npm start
 ```
 
-Sur pix-editor:
+Dans un premier processus ou terminal, depuis le répertoire `~/pix-editor`:
 ```bash
 cd pix-editor
 $ npm start
@@ -84,7 +88,7 @@ $ npm start
 **6/ Accéder à l'application**
 
 [l'API](http://localhost:3002) tourne en local sur le port 3002.
-[l'application Pix-Editor](http://localhost:4200) sur le port 4200.
+[l'application Pix-Editor](http://localhost:4300) sur le port 4300.
 
 
 Licence
