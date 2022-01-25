@@ -29,15 +29,19 @@ module.exports = class AirtableBuilder {
 
   mockLists({
     areas,
-    competences,
-    tubes,
-    skills,
-    challenges,
-    courses,
-    tutorials,
     attachments,
+    challenges,
+    competences,
+    courses,
+    frameworks,
+    skills,
     thematics,
+    tubes,
+    tutorials,
   }) {
+    this.mockList({ tableName: 'Referentiel' })
+      .returns(frameworks)
+      .activate();
     this.mockList({ tableName: 'Domaines' })
       .returns(areas)
       .activate();
