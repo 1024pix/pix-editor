@@ -9,25 +9,23 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 * [Node.js](http://nodejs.org/) (v14.17.x) et NPM (6.14.x)
 * [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
 
-⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
-
-> Les versions indiquées sont celles préconisées pour un bon fonctionnement de l'application.
+> ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
 
 ### Airtable
 
-Pix-editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
+Pix Editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
 
 ## Instructions
 
 **1/ Récupérer le code source**
 
 ```bash
-$ git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
+git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
 ```
 
-**2/ Créer un un fichier .env**
+**2/ Créer un fichier .env**
 
-Copier le sample.env situer à la racine et le renommer en .env:
+Copier le fichier `sample.env` situé à la racine du projet et le renommer en .env:
 ```bash
 cp api/sample.env api/.env
 ```
@@ -36,20 +34,13 @@ Remplir les valeurs des variables dans le fichier `.env` (cf. section [Configura
 
 **3/ Installer les dépendances**
 
-Sur api:
+Depuis la racine du projet :
 ```bash
-cd api
-$ npm ci
-```
-
-Sur pix-editor:
-```bash
-cd pix-editor
-$ npm ci
+(cd api && npm ci)
+(cd pix-editor && npm ci)
 ```
 
 **4/ Lancer, configurer et initialiser la base de données**
-
 ```bash
 docker-compose up -d
 (cd api && npm run db:reset)
@@ -57,16 +48,14 @@ docker-compose up -d
 
 **5/ Lancer l'application**
 
-Dans un premier processus ou terminal, depuis le répertoire `~/api`:
+Dans un premier processus ou terminal, depuis le répertoire racine :
 ```bash
-cd api
-$ npm start
+(cd api && npm start)
 ```
 
-Dans un premier processus ou terminal, depuis le répertoire `~/pix-editor`:
+Dans un second processus ou terminal, toujours depuis le répertoire :
 ```bash
-cd pix-editor
-$ npm start
+(cd pix-editor && npm start)
 ```
 
 **6/ Accéder à l'application**

@@ -11,7 +11,7 @@
     "npm": "6.14.15"
   },
   "scripts": {
-    "install": "cd pix-editor && npm ci && cd ../api && npm ci",
+    "install": "(cd pix-editor && npm ci) && (cd api && npm ci)",
     "start": "cd api && npm start",
     "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor && cd .. && npm run signal-github",
     "signal-github": "./scripts/signal_deploy_to_pr.sh",
