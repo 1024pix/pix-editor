@@ -53,7 +53,7 @@ Dans un premier processus ou terminal, depuis le répertoire racine :
 (cd api && npm start)
 ```
 
-Dans un second processus ou terminal, toujours depuis le répertoire :
+Dans un second processus ou terminal, toujours depuis le répertoire racine :
 ```bash
 (cd pix-editor && npm start)
 ```
@@ -63,8 +63,10 @@ Dans un second processus ou terminal, toujours depuis le répertoire :
 [L'API](http://localhost:3002) tourne en local sur le port 3002.
 [L'application Pix-Editor](http://localhost:4300) sur le port 4300.
 
-> Par défaut, et en local, utiliser l'un des 2 jetons renseignés dans le fichier `./api/db/seeds/seed.js` (cf. `defaultUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
+> ℹ️ Par défaut, et en local, utiliser l'un des 2 jetons renseignés dans le fichier `./api/db/seeds/seed.js` (cf. `defaultUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
 
+> ⚠️ Si vous parvenez à vous authentifier, mais qu'une page blanche s'affiche, cela signifie très probablement que votre schéma de base Airtable est différent de celui utilisé pour le projet Pix. Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
+ 
 ## Configuration
 
 La description et le format attendu de chaque option/variable est documentée dans le fichier `sample.env`.
