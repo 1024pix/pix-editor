@@ -144,6 +144,7 @@ describe('Unit | Repository | release-repository', () => {
         competenceAirtableIds: [],
         titleFrFr: 'Bonjour',
         titleEnUs: 'Hello',
+        frameworkId: 'recFramework0',
       });
       const type = 'Domaines';
       sinon.stub(attachmentDatasource, 'filterByChallengeId');
@@ -160,6 +161,7 @@ describe('Unit | Repository | release-repository', () => {
         competenceAirtableIds: [],
         titleFrFr: 'Bonjour',
         titleEnUs: 'Hello',
+        frameworkId: 'recFramework0',
       });
       expect(attachmentDatasource.filterByChallengeId).to.not.have.been.called;
       expect(challengeDatasource.filterById).to.not.have.been.called;

@@ -26,6 +26,7 @@ function mockCurrentContent() {
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
       color: 'jaffa',
+      frameworkId: 'recFramework0',
     }],
     competences: [{
       id: 'recCompetence0',

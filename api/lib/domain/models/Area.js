@@ -8,6 +8,7 @@ module.exports = class Area {
     competenceIds,
     competenceAirtableIds,
     color,
+    frameworkId,
   } = {}) {
     this.id = id;
     this.code = code;
@@ -17,5 +18,6 @@ module.exports = class Area {
     this.name = name;
     this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
+    this.frameworkId = frameworkId;
   }
 };
