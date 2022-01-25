@@ -4,14 +4,15 @@ const axios = require('axios');
 
 const {
   buildArea,
-  buildCompetence,
-  buildTube,
-  buildSkill,
-  buildChallenge,
-  buildTutorial,
-  buildCourse,
   buildAttachment,
+  buildChallenge,
+  buildCompetence,
+  buildCourse,
+  buildFramework,
+  buildSkill,
   buildThematic,
+  buildTube,
+  buildTutorial,
 } = airtableBuilder.factory;
 
 function mockCurrentContent() {
@@ -39,6 +40,10 @@ function mockCurrentContent() {
       description: 'Description de la compétence',
       descriptionFrFr: 'Description de la compétence - fr',
       descriptionEnUs: 'Description de la compétence - en',
+    }],
+    frameworks: [{
+      id: 'recFramework0',
+      name: 'Nom du referentiel'
     }],
     tubes: [{
       id: 'recTube0',
@@ -135,14 +140,15 @@ function mockCurrentContent() {
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
-    competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    tubes: [buildTube(expectedCurrentContent.tubes[0])],
-    skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
-    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
-    courses: [buildCourse(expectedCurrentContent.courses[0])],
     attachments: attachments.map(buildAttachment),
+    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
+    competences: [buildCompetence(expectedCurrentContent.competences[0])],
+    courses: [buildCourse(expectedCurrentContent.courses[0])],
+    frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
+    skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: expectedCurrentContent.thematics.map(buildThematic),
+    tubes: [buildTube(expectedCurrentContent.tubes[0])],
+    tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
 
   return expectedCurrentContent;
@@ -210,7 +216,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return latest release of learning content', async () => {
         // Given
-        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -288,7 +294,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       it('should return release specified by id', async () => {
         // Given
-        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], skills: [], thematics: [], tubes: [], tutorials: [] }, createdAt: new Date('2021-01-01') });
+        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] }, createdAt: new Date('2021-01-01') });
         databaseBuilder.factory.buildRelease({ id: 43, content: { some: 'other-release' }, createdAt: new Date('2022-01-01') });
         await databaseBuilder.commit();
 

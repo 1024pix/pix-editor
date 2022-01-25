@@ -2,10 +2,11 @@ const Area = require('./Area');
 const Challenge = require('./Challenge');
 const Competence = require('./Competence');
 const Course = require('./Course');
+const Framework = require('./Framework');
 const Skill = require('./Skill');
 const Thematic = require('./Thematic');
-const Tutorial = require('./Tutorial');
 const Tube = require('./Tube');
+const Tutorial = require('./Tutorial');
 
 module.exports = class Content {
   constructor({
@@ -13,6 +14,7 @@ module.exports = class Content {
     challenges,
     competences,
     courses,
+    frameworks,
     skills,
     thematics,
     tubes,
@@ -22,6 +24,7 @@ module.exports = class Content {
     this.challenges = challenges;
     this.competences = competences;
     this.courses = courses;
+    this.frameworks = frameworks;
     this.skills = skills;
     this.thematics = thematics;
     this.tubes = tubes;
@@ -33,6 +36,7 @@ module.exports = class Content {
     challenges,
     competences,
     courses,
+    frameworks,
     skills,
     thematics,
     tubes,
@@ -43,6 +47,7 @@ module.exports = class Content {
     content.challenges = challenges ? challenges.map((challenge) => new Challenge(challenge)) : [];
     content.competences = competences ? competences.map((competence) => new Competence(competence)) : [];
     content.courses = courses ? courses.map((course) => new Course(course)) : [];
+    content.frameworks = frameworks ? frameworks.map((framework) => new Framework(framework)) : [];
     content.skills = skills ? skills.map((skill) => new Skill(skill)) : [];
     content.thematics = thematics ? thematics.map((thematic) => new Thematic(thematic)) : [];
     content.tubes = tubes ? tubes.map((tube) => new Tube(tube)) : [];
