@@ -63,7 +63,7 @@ Dans un second processus ou terminal, toujours depuis le répertoire :
 [L'API](http://localhost:3002) tourne en local sur le port 3002.
 [L'application Pix-Editor](http://localhost:4300) sur le port 4300.
 
-> Par défaut, et en local, utiliser l'un des 2 jetons renseignés dans le fichier `~/api/db/seeds/seed.js` (cf. `defaultUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
+> Par défaut, et en local, utiliser l'un des 2 jetons renseignés dans le fichier `./api/db/seeds/seed.js` (cf. `defaultUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
 
 ## Configuration
 
