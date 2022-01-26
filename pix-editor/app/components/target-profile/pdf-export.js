@@ -12,7 +12,10 @@ import 'Roboto-condensed.js';
 import 'Roboto-condensedBold.js';
 import 'Roboto-condensedLight.js';
 
-const legalMention = 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.';
+const legalMentionByLanguage = {
+  en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',
+  fr: 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.'
+};
 const firstPageTitleSize = 30;
 const firstPagePSize = 20;
 const firstPageLegalSize = 10.5;
@@ -61,12 +64,13 @@ export default class TargetProfilePdfExportComponent extends Component {
   }
 
   @action
-  async generatePDF(title) {
+  async generatePDF(title, language) {
     let y;
-    const pdfName = this._generatePdfName(title);
     const areas = this.args.model;
-    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-    const versionText = `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`;
+    const legalMention = legalMentionByLanguage[language];
+    const pdfName = this._generatePdfName(title);
+    const versionText = this._getVersionText(language);
+
     const pdf = new jsPDF('p', 'px', 'a4');
     const pdfWidth = pdf.internal.pageSize.width;
     const pdfHeight = pdf.internal.pageSize.height;
@@ -111,8 +115,7 @@ export default class TargetProfilePdfExportComponent extends Component {
       y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
-
-        const areaName = area.name.slice(3, area.name.length);
+        const areaName = this._getTranslatedAreaName(language, area);
         await this._buildRoundedGradientBackground(pdf, areaGradient[i], -15, -30, pdfWidth + 30, 49);
         pdf.setFont('AmpleSoft', 'bold');
         pdf.setFontSize(areaTitleSize);
@@ -121,9 +124,10 @@ export default class TargetProfilePdfExportComponent extends Component {
 
         competences.forEach(competence => {
           const competenceColor = colors[i];
+          const competenceName = this._getTranslatedCompetenceName(language, competence);
           const tableHead = [[
             {
-              content: `${competence.code} ${competence.title}`,
+              content: `${competence.code} ${competenceName}`,
               colSpan: 3,
               rowSpan: 1,
               styles: {
@@ -145,9 +149,9 @@ export default class TargetProfilePdfExportComponent extends Component {
 
           const themes = filter ? competence.sortedThemes.filter(theme => theme.hasSelectedProductionTube) : competence.sortedThemes.filter(theme => theme.hasProductionTubes);
 
-          const tableBody = themes.reduce((values, theme, index) => {
+          const tableBody = themes.reduce((values, theme) => {
             const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
-            const buildCell = this._buildCell(theme, tubes, index);
+            const buildCell = this._buildCell(theme, tubes, language);
             return [...values, ...buildCell];
           },[]);
 
@@ -226,6 +230,136 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.save(`${pdfName}.pdf`);
   }
 
+
+  _buildCell(theme, tubes, language) {
+    const rowSpan = tubes.length;
+    const cellPaddingTop = 5;
+    const firstTube = tubes.shift();
+    const { tubeName, tubeDescription  } = this._getTranslatedTubeNameAndDescription(language, firstTube);
+    const themeName = this._getTranslatedThemeName(language, theme);
+    const firstCell = [{
+      content: themeName,
+      rowSpan,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
+        cellWidth: 80,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'bold',
+        fontSize: pSize + 1,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: tubeName,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+        cellWidth: 100,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'normal',
+        fontSize: pSize,
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    },{
+      content: tubeDescription,
+      styles: {
+        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
+        fontSize: pSize,
+        valign: 'middle',
+        font: 'RobotoCondensed',
+        fontStyle: 'light',
+        textColor: fontColor,
+        fillColor: lightGrey,
+      }
+    }];
+    return  tubes.reduce((values, tube, index) => {
+      const fillColor = index % 2 === 0 ? grey : lightGrey;
+      const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, tube);
+      const cells = [
+        {
+          content: tubeName,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+            cellWidth: 100,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'normal',
+            fontSize: pSize,
+            textColor: fontColor,
+            fillColor
+          }
+        },
+        {
+          content: tubeDescription,
+          styles: {
+            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
+            fontSize: pSize,
+            valign: 'middle',
+            font: 'RobotoCondensed',
+            fontStyle: 'light',
+            textColor: fontColor,
+            fillColor
+          }
+        }];
+      values.push(cells);
+      return values;
+    }, [firstCell]);
+  }
+
+  _getVersionText(language) {
+    const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const versionTextByLanguage = {
+      en: `Version ${(new Date()).toLocaleDateString('en', dateOptions)}`,
+      fr: `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`
+    };
+    return versionTextByLanguage[language];
+  }
+
+  _getTranslatedAreaName(language, area) {
+    const areaNameKeys = {
+      en: 'titleEnUs',
+      fr: 'titleFrFr'
+    };
+    return this._getTranslatedField(areaNameKeys, language, area);
+  }
+
+  _getTranslatedCompetenceName(language, competence) {
+    const competenceNameKeys = {
+      en: 'titleEn',
+      fr: 'title'
+    };
+    return this._getTranslatedField(competenceNameKeys, language, competence);
+  }
+
+  _getTranslatedThemeName(language, theme) {
+    const themeNameKeys = {
+      en: 'nameEnUs',
+      fr: 'name'
+    };
+    return this._getTranslatedField(themeNameKeys, language, theme);
+  }
+
+  _getTranslatedTubeNameAndDescription(language, tube) {
+    const tubeNameKeys = {
+      en :  'practicalTitleEn',
+      fr : 'practicalTitleFr',
+    };
+    const tubeDescriptionKeys = {
+      en :  'practicalDescriptionEn',
+      fr : 'practicalDescriptionFr',
+    };
+    const tubeName = this._getTranslatedField(tubeNameKeys, language, tube);
+    const tubeDescription = this._getTranslatedField(tubeDescriptionKeys, language, tube);
+    return { tubeName, tubeDescription };
+  }
+
+  _getTranslatedField(keys, language, model) {
+    const modelKey = keys[language];
+    return model[modelKey];
+  }
+
   _getCenteredX(pdf, text) {
     const textWidth = pdf.getStringUnitWidth(text) * pdf.internal.getFontSize() / pdf.internal.scaleFactor;
     return (pdf.internal.pageSize.width - textWidth) / 2;
@@ -258,79 +392,5 @@ export default class TargetProfilePdfExportComponent extends Component {
       pdf.text(line, this._getCenteredX(pdf, line), positionY);
       positionY += breakY;
     });
-  }
-
-  _buildCell(theme, tubes) {
-    const rowSpan = tubes.length;
-    const cellPaddingTop = 5;
-    const firstTube = tubes.shift();
-    const firstCell = [{
-      content: theme.name,
-      rowSpan,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: margin },
-        cellWidth: 80,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'bold',
-        fontSize: pSize + 1,
-        textColor: fontColor,
-        fillColor: lightGrey,
-      }
-    },{
-      content: firstTube.practicalTitleFr,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
-        cellWidth: 100,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'normal',
-        fontSize: pSize,
-        textColor: fontColor,
-        fillColor: lightGrey,
-      }
-    },{
-      content: firstTube.practicalDescriptionFr,
-      styles: {
-        cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
-        fontSize: pSize,
-        valign: 'middle',
-        font: 'RobotoCondensed',
-        fontStyle: 'light',
-        textColor: fontColor,
-        fillColor: lightGrey,
-      }
-    }];
-    return  tubes.reduce((values, tube, index) => {
-      const fillColor = index % 2 === 0 ? grey : lightGrey;
-      const cells = [
-        {
-          content: tube.practicalTitleFr,
-          styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
-            cellWidth: 100,
-            valign: 'middle',
-            font: 'RobotoCondensed',
-            fontStyle: 'normal',
-            fontSize: pSize,
-            textColor: fontColor,
-            fillColor
-          }
-        },
-        {
-          content: tube.practicalDescriptionFr,
-          styles: {
-            cellPadding: { top: 1, right: 5, bottom: 1, left: 1 },
-            fontSize: pSize,
-            valign: 'middle',
-            font: 'RobotoCondensed',
-            fontStyle: 'light',
-            textColor: fontColor,
-            fillColor
-          }
-        }];
-      values.push(cells);
-      return values;
-    }, [firstCell]);
   }
 }
