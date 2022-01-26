@@ -12,79 +12,11 @@ Le but de PIX est de susciter l’envie de se former tout au long de la vie en p
 
 Pix Editor propose une interface pour lire et modifier le référentiel de contenu pédagogique.
 
+
 Installation
 ------------
 
-### Prérequis
-
-Vous devez au préalable avoir correctement installé les logiciels suivants :
-
-* [Git](http://git-scm.com/) (2.6.4)
-* [Node.js](http://nodejs.org/) (v14.17.x) et NPM (6.14.x)
-* [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
-
-⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
-
-> Les versions indiquées sont celles préconisées pour un bon fonctionnement de l'application.
-
-#### Airtable
-
-Pix-editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
-
-### Instructions
-
-**1/ Récupérer le code source**
-
-```bash
-$ git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
-```
-
-**2/ Creer un un fichier .env**
-
-Copier le sample.env situer à la racine et le renommer en .env:
-```bash
-cp api/sample.env api/.env
-```
-Remplire les valeurs des variables dans le fichier `.env`.
-
-**3/ Installer les dépendances**
-
-Sur api:
-```bash
-cd api
-$ npm ci
-```
-
-Sur pix-editor:
-```bash
-cd pix-editor
-$ npm ci
-```
-
-**4/ Lancer la base de données**
-
-```bash
-docker-compose up -d
-```
-
-**5/ Lancer l'application**
-
-Sur api:
-```bash
-cd api
-$ npm start
-```
-
-Sur pix-editor:
-```bash
-cd pix-editor
-$ npm start
-```
-
-**6/ Accéder à l'application**
-
-[l'API](http://localhost:3002) tourne en local sur le port 3002.
-[l'application Pix-Editor](http://localhost:4200) sur le port 4200.
+Les instructions d'installation et de configuration des applications Pix Editor et LCMS API, sont disponibles depuis le fichier [INSTALL.md](INSTALL.md).
 
 
 Licence
