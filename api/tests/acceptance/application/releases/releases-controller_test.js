@@ -93,6 +93,7 @@ function mockCurrentContent() {
       delta: 0.5,
       alpha: 0.9,
       responsive: 'Smartphone',
+      genealogy: 'Prototype 1',
     }],
     tutorials: [{
       id: 'recTutorial0',

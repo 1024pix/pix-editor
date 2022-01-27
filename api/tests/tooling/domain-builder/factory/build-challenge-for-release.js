@@ -23,6 +23,7 @@ module.exports = function buildChallengeForRelease({
   delta = 0.2,
   alpha = 0.5,
   responsive = 'Smartphone',
+  genealogy = 'Prototype 1',
 } = {}) {
 
   return {
@@ -50,5 +51,6 @@ module.exports = function buildChallengeForRelease({
     delta,
     alpha,
     responsive,
+    genealogy,
   };
 };
