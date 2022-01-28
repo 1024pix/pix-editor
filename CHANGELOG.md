@@ -1,5 +1,18 @@
 
 
+## v3.60.0 (28/01/2022)
+
+
+### :rocket: Enhancement
+- [#23](https://github.com/1024pix/pix-editor/pull/23) [FEATURE]  Affichage du nom des thématiques en anglais (PIX-4258)
+
+### :building_construction: Tech
+- [#24](https://github.com/1024pix/pix-editor/pull/24) [TECH] Ajout de la généalogie d'une épreuve (PIX-4271).
+
+### :coffee: Various
+- [#22](https://github.com/1024pix/pix-editor/pull/22) [CLEANUP] Corrige le chemin des tests unitaires des datasources
+- [#21](https://github.com/1024pix/pix-editor/pull/21) [DOC] Améliorer la documentation (`sample.env`, `README.md`, `INSTALL.md`).
+
 ## v3.59.0 (21/01/2022)
 
 
