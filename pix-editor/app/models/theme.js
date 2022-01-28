@@ -3,6 +3,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 export default class ThemeModel extends Model {
 
   @attr name;
+  @attr nameEnUs;
   @attr index;
 
   @belongsTo('competence') competence;
