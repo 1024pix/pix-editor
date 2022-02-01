@@ -200,7 +200,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         proposalPrototype1_1.validate();
 
         //when
-        await controller._checkSkillsValidation(proposalPrototype1_1);
+        await controller._checkSkillValidation(proposalPrototype1_1);
 
         //then
         assert.equal(skill1.status, 'actif');

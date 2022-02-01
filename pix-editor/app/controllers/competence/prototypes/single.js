@@ -250,7 +250,7 @@ export default class SingleController extends Controller {
           await this._archiveOtherActiveSkillVersion(challenge);
           await challenge.validate();
           await this._handleChangelog(challenge, changelog);
-          await this._checkSkillsValidation(challenge);
+          await this._checkSkillValidation(challenge);
           await this._validateAlternatives(challenge);
           this._message('Mise en production réussie');
           this.parentController.send('selectView', 'production', true);
@@ -517,33 +517,12 @@ export default class SingleController extends Controller {
     await Promise.all(challengesToArchiveOrObsolete);
   }
 
-  _checkSkillsValidation(challenge) {
-    const skills = challenge.skills;
-    if (skills.length === 0) {
-      return Promise.resolve(challenge);
+  async _checkSkillValidation(challenge) {
+    const skill = challenge.firstSkill;
+    if (challenge.isPrototype && !skill.isActive) {
+      await skill.activate();
+      this._message(`Activation de l'acquis ${skill.name}`);
     }
-    const skillChecks = skills.reduce((current, skill) => {
-      const prototypeProduction = skill.productionPrototype;
-      if (prototypeProduction) {
-        if (!skill.isActive) {
-          current.push(skill.activate()
-            .then(skill => {
-              this._message(`Activation de l'acquis ${skill.name}`);
-              return skill;
-            }));
-        }
-      } else {
-        if (skill.isActive) {
-          current.push(skill.deactivate()
-            .then(skill => {
-              this._message(`Désactivation de l'acquis ${skill.name}`);
-              return skill;
-            }));
-        }
-      }
-      return current;
-    }, []);
-    return Promise.all(skillChecks).then(() => challenge);
   }
 
   _archiveOrDeactivateSkill(challenge) {
