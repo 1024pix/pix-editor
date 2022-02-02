@@ -12,6 +12,7 @@ module.exports = class Challenge {
     status,
     skills,
     skillIds,
+    skillId,
     embedUrl,
     embedTitle,
     embedHeight,
@@ -54,6 +55,7 @@ module.exports = class Challenge {
     this.status = status;
     this.skills = skills;
     this.skillIds = skillIds;
+    this.skillId = skillId;
     this.embedUrl = embedUrl;
     this.embedTitle = embedTitle;
     this.embedHeight = embedHeight;
