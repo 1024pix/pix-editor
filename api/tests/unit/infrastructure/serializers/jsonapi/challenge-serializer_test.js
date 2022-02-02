@@ -76,6 +76,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       // Given
       const expectedDeserializedChallenge = domainBuilder.buildChallenge();
       delete expectedDeserializedChallenge.skillIds;
+      delete expectedDeserializedChallenge.skillId;
       delete expectedDeserializedChallenge.delta;
       delete expectedDeserializedChallenge.alpha;
       const json = {

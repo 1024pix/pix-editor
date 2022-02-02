@@ -76,6 +76,7 @@ module.exports = datasource.extend({
       status: airtableRecord.get('Statut'),
       skills: airtableRecord.get('Acquix') || [],
       skillIds: airtableRecord.get('Acquix (id persistant)') || [],
+      skillId: (airtableRecord.get('Acquix (id persistant)') || [])[0],
       embedUrl: airtableRecord.get('Embed URL'),
       embedTitle: airtableRecord.get('Embed title'),
       embedHeight: airtableRecord.get('Embed height'),
