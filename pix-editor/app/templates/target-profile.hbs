@@ -85,7 +85,7 @@
                                   @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}}
                                   @isThematicResultMode={{this.isThematicResultMode}}/>
     {{/each}}
-    <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
+    <Input @type="file" id="target-profile__open-file" {{on "change" this.openFile}} />
   </div>
 </div>
 {{#if this.displayTubeLevel}}
