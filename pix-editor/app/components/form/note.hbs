@@ -6,7 +6,7 @@
     <div class="field {{if @edition "" "disabled"}}">
       <label>Texte</label>
       <div class="ui input">
-        <Textarea @value={{@entry.text}} @rows="4" @readonly={{not @edition}} />
+        <Textarea @value={{@entry.text}} rows="4" readonly={{not @edition}} />
       </div>
     </div>
   </form>
