@@ -49,3 +49,14 @@ skill:
       changelog: Obscolescence de l'épreuve suite à l'obsolescence de l'acquis {skillName}
       prototype: Prototype périmé
       alternative: Déclinaison n°{number} périmée
+target_profile:
+  pdf_export:
+    title: Export PDF
+    field:
+      title: Tittre
+      language: Langue
+common:
+  validate: Valider
+  cancle: Annuler
+  pop_in:
+    close: Fermer la boite de dialogue

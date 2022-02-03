@@ -12,21 +12,21 @@
        aria-hidden="true"
        tabindex="0"
       {{on "click" this.closeModal}}
-    ><span class="sr-only">Fermer la boite de dialogue</span></i>
+    ><span class="sr-only">{{t 'common.pop_in.close'}}</span></i>
     <h2 id="pdf-entries-header" class="header">
-      Export PDF
+      {{t 'target_profile.pdf_export.title'}}
     </h2>
     <div class="content">
       <form class="ui form" {{on "submit" this.validate}}>
         <div class="field">
-          <Field::Input @title="Titre"
+          <Field::Input @title={{t 'target_profile.pdf_export.field.title'}}
                         @value={{this.title}}
                         @edition={{true}}
                         data-test-pdf-title-field
           />
         </div>
         <div class="field">
-          <Field::Select @title="Langue"
+          <Field::Select @title={{t 'target_profile.pdf_export.field.language'}}
                          @value={{this.selectedLanguage}}
                          @options={{this.options.language}}
                          @edition={{true}}
@@ -41,7 +41,7 @@
               class="ui deny button"
         {{on "click" this.closeModal}}
       >
-        Annuler
+        {{t 'common.cancle'}}
       </button>
       <button type="submit"
               class="ui green button"
@@ -51,7 +51,7 @@
         <i class="checkmark icon"
            aria-hidden="true"
         ></i>
-        Valider
+        {{t 'common.validate'}}
       </button>
     </div>
   </div>
