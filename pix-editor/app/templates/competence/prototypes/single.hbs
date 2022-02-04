@@ -126,8 +126,19 @@
 {{/if}}
 {{#if this.displayChangeLog}}
   <PopIn::Changelog
-    @onApprove={{this.changelogApprove}}
-    @defaultValue={{this.changelogDefault}} />
+          @onApprove={{this.changelogApprove}}
+          @defaultValue={{this.changelogDefault}} />
+{{/if}}
+{{#if this.displayConfirmLog}}
+  <PopIn::ConfirmLog
+    @title={{t 'common.confirm-log.save'}}
+    @onApprove={{this.saveChallengeCallback}}
+    @defaultValue={{this.defaultSaveChangelog}}
+    @inputId="changelog-message"
+    @onDeny={{this.closeComfirmLogPopin}}
+    @content={{t 'common.confirm-log.content'}}
+    @label={{t 'common.confirm-log.label'}}
+  />
 {{/if}}
 {{#if this.mayMove}}
   {{#if this.displaySelectLocation}}

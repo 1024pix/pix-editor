@@ -33,5 +33,4 @@ export default class SingleController extends PrototypeController {
   minimize() {
     this.parentController.maximizeRight(false);
   }
-
 }
