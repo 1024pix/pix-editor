@@ -111,10 +111,11 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     await click(find('[data-test-new-alternative-action]'));
     await click(find('[data-test-save-challenge-button]'));
 
+
     await click(findAll('[data-test-modify-challenge-button]')[1]);
     await click(find('[data-test-delete-attachment-button]'));
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-save-changelog-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
 
     // then
     assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');

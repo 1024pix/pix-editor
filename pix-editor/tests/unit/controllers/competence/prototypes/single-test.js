@@ -69,7 +69,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       const changelog = 'some changelog';
 
       // when
-      await controller._saveChallengeCallback(changelog);
+      await controller.saveChallengeCallback(changelog);
 
       // then
       assert.ok(startStub.calledOnce);
@@ -90,7 +90,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       controller.displaySolutionToDisplayField = true;
 
       // when
-      await controller._saveChallengeCallback();
+      await controller.saveChallengeCallback();
 
       // then
       assert.notOk(controller.displayAlternativeInstructionsField);

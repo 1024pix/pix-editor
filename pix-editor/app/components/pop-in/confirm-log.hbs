@@ -2,9 +2,12 @@
   <div class="ui standard modal visible active">
     <div class="header">{{@title}}</div>
     <div class="content">
-      {{@content}}
+      <p>
+        {{@content}}
+      </p>
     <form class="ui form">
       <Field::Checkbox
+        class="checkbox-layout"
         @label="Je veux ajouter une note de changelog"
         @checked={{this.displayTextarea}}
         data-test-confirm-log-check
