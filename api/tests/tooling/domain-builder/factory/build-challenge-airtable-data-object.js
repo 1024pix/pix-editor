@@ -53,6 +53,7 @@ module.exports = function buildChallengeAirtableDataObject({
     t3Status,
     status,
     skillIds,
+    skillId: skillIds[0],
     timer,
     competenceId,
     embedUrl,
