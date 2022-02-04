@@ -1,0 +1,10 @@
+.changelog-layout {
+  display: flex;
+  flex-direction: column;
+  padding-top: 1.5rem;
+
+  .changelog-textarea {
+    margin-top: 0.3rem;
+    padding: 0.5rem;
+  }
+}
