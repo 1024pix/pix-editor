@@ -41,6 +41,7 @@ function _filterChallengeFields(_learningContent, challenge) {
     'solutionToDisplay',
     'status',
     'skillIds',
+    'skillId',
     't1Status',
     't2Status',
     't3Status',
