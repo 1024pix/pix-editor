@@ -1,12 +1,13 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import EmberObject from '@ember/object';
 
+import setupIntlRenderingTest from '../../../../setup-intl-rendering';
+
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
-  setupTest(hooks);
+  setupIntlRenderingTest(hooks);
   let controller, messageStub, startStub, stopStub, errorStub;
 
   hooks.beforeEach(function () {
