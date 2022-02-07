@@ -527,13 +527,11 @@ export default class SingleController extends Controller {
 
   _archiveOrDeactivateSkill(challenge) {
     const skill = challenge.firstSkill;
-    const isProductionPrototype = skill.productionPrototype?.id === challenge.id;
+    const isProductionPrototype = this._isProductionPrototype(challenge);
     if (!isProductionPrototype) {
       return;
     }
-    const prototypesStatusOtherVersion = skill.prototypes
-      .filter((prototype) => prototype.id !== challenge.id)
-      .map((prototype) => prototype.status);
+    const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
     const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
     if (haveProposalPrototype) {
       return skill.deactivate();
@@ -543,13 +541,11 @@ export default class SingleController extends Controller {
 
   _obsoleteArchiveOrDeactivateSkill(challenge) {
     const skill = challenge.firstSkill;
-    const isProductionPrototype = skill.productionPrototype?.id === challenge.id;
+    const isProductionPrototype = this._isProductionPrototype(challenge);
     if (!isProductionPrototype) {
       return;
     }
-    const prototypesStatusOtherVersion = skill.prototypes
-      .filter((prototype) => prototype.id !== challenge.id)
-      .map((prototype) => prototype.status);
+    const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
     if (prototypesStatusOtherVersion.includes('proposé')) {
       return skill.deactivate();
     }
@@ -557,6 +553,17 @@ export default class SingleController extends Controller {
       return skill.archive();
     }
     return skill.obsolete();
+  }
+
+  _isProductionPrototype(challenge) {
+    const skill = challenge.firstSkill;
+    return skill.productionPrototype?.id === challenge.id;
+  }
+
+  _getPrototypesStatusOtherVersion(skill, challenge) {
+    return skill.prototypes
+      .filter((prototype) => prototype.id !== challenge.id)
+      .map((prototype) => prototype.status);
   }
 
   async _handleIllustration(challenge) {
