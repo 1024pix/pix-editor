@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import Model, { attr, hasMany } from '@ember-data/model';
+import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeModel extends Model {
@@ -37,7 +37,7 @@ export default class ChallengeModel extends Model {
   @attr focusable;
   @attr('date') updatedAt;
 
-  @hasMany('skill') skills;
+  @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
 
   @service('store') myStore;
@@ -59,9 +59,9 @@ export default class ChallengeModel extends Model {
   }
 
   get isWorkbench() {
-    const skill = this.firstSkill;
+    const skill = this.skill;
     if (skill) {
-      return skill.name === '@workbench';
+      return skill.get('name') === '@workbench';
     }
     return false;
   }
@@ -70,8 +70,8 @@ export default class ChallengeModel extends Model {
     return this.status === 'validé';
   }
 
-  get skillNames() {
-    return this.skills.map((skill) => skill.name);
+  get skillName() {
+    return this.skill.get('name');
   }
 
   get isDraft() {
@@ -116,9 +116,9 @@ export default class ChallengeModel extends Model {
       return [];
     }
     const currentVersion = this.version;
-    const skill = this.firstSkill;
+    const skill = this.skill;
     if (skill) {
-      return skill.alternatives.filter(alternative => {
+      return skill.get('alternatives').filter(alternative => {
         return (alternative.version === currentVersion);
       }).sort((a, b) => {
         return a.alternativeVersion > b.alternativeVersion;
@@ -128,18 +128,14 @@ export default class ChallengeModel extends Model {
     }
   }
 
-  get firstSkill() {
-    return this.skills.firstObject;
-  }
-
   get relatedPrototype() {
     if (this.isPrototype) {
       return null;
     }
     const currentVersion = this.version;
-    const skill = this.firstSkill;
+    const skill = this.skill;
     if (skill) {
-      return skill.prototypes.find(prototype => (prototype.version === currentVersion));
+      return skill.get('prototypes').find(prototype => (prototype.version === currentVersion));
     }
     return null;
   }
@@ -188,8 +184,8 @@ export default class ChallengeModel extends Model {
     return '';
   }
 
-  get skillLevels() {
-    return this.skills.map(skill => skill.level);
+  get skillLevel() {
+    return this.skill.get('level');
   }
 
   get attachmentBaseName() {
@@ -228,7 +224,7 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = ['skills', 'author', 'airtableId'];
+    const ignoredFields = ['skill', 'author', 'airtableId'];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -238,7 +234,7 @@ export default class ChallengeModel extends Model {
     data.author = [this.config.author];
 
     data.status = 'proposé';
-    data.skills = this.skills;
+    data.skill = this.skill;
     data.id = this.idGenerator.newId('challenge');
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
@@ -246,7 +242,7 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = ['skills', 'airtableId'];
+    const ignoredFields = ['skill', 'airtableId'];
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';
