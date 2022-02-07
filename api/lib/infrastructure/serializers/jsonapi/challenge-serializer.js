@@ -36,14 +36,14 @@ module.exports = {
         'area',
         'autoReply',
         'focusable',
-        'skills',
+        'skill',
         'files',
         'updatedAt',
       ],
       typeForAttribute(attribute) {
         if (attribute === 'files') return 'attachments';
       },
-      skills: {
+      skill: {
         ref(challenge, skillId) {
           return skillId;
         }
@@ -52,6 +52,10 @@ module.exports = {
         ref(challenge, fileId) {
           return fileId;
         }
+      },
+      transform(challenge) {
+        challenge.skill = challenge.skills[0];
+        return challenge;
       }
     }).serialize(challenge);
   },
@@ -70,6 +74,11 @@ module.exports = {
             return attachment.id;
           },
         },
+        transform(challenge) {
+          challenge.skills = [challenge.skill];
+          delete challenge.skill;
+          return challenge;
+        }
       }).deserialize(challenge, (err, challenges) => {
         return err ? reject(err) : resolve(challenges);
       });
