@@ -8,10 +8,9 @@ export default class ChallengeRoute extends Route {
   async afterModel(model) {
     if (model) {
       try {
-        await model.skills;
-        const firstSkill = model.firstSkill;
-        await firstSkill.challenges; // in order to load model.relatedPrototype later on
-        const tube = await firstSkill.tube;
+        const skill = await model.skill;
+        await skill.challenges; // in order to load model.relatedPrototype later on
+        const tube = await skill.tube;
         const competence = await tube.competence;
         if (model.isPrototype) {
           return this.transitionTo('competence.prototypes.single', competence, model);
