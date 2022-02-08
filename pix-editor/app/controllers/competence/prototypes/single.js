@@ -250,7 +250,7 @@ export default class SingleController extends Controller {
           await this._archiveOtherActiveSkillVersion(challenge);
           await challenge.validate();
           await this._handleChangelog(challenge, changelog);
-          await this._checkSkillsValidation(challenge);
+          await this._checkSkillValidation(challenge);
           await this._validateAlternatives(challenge);
           this._message('Mise en production réussie');
           this.parentController.send('selectView', 'production', true);
@@ -276,10 +276,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn('Archivage de l\'épreuve', async (changelog) => {
         try {
           this.loader.start();
-          await this.challenge.archive();
           await this._archiveAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._checkSkillsValidation(this.challenge);
+          await this._archiveOrDeactivateSkill(this.challenge);
+          await this.challenge.archive();
           this._message('Épreuve archivée');
           this.send('close');
         } catch (error) {
@@ -305,10 +305,10 @@ export default class SingleController extends Controller {
       this._displayChangelogPopIn(this.intl.t('challenge.obsolete.changelog'), async (changelog) => {
         try {
           this.loader.start();
-          await this.challenge.obsolete();
           await this._obsoleteAlternatives(this.challenge);
           await this._handleChangelog(this.challenge, changelog);
-          await this._checkSkillsValidation(this.challenge);
+          await this._obsoleteArchiveOrDeactivateSkill(this.challenge);
+          await this.challenge.obsolete();
           this._message(this.intl.t('challenge.obsolete.success'));
           this.send('close');
         } catch (error) {
@@ -500,7 +500,7 @@ export default class SingleController extends Controller {
     }
     const tube = await currentSkill.tube;
     const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
-    const activeSkill = skillVersions.find(skill => skill.isActive);
+    const activeSkill = skillVersions ? skillVersions.find(skill => skill.isActive) : false;
     if (!activeSkill) {
       return;
     }
@@ -517,33 +517,53 @@ export default class SingleController extends Controller {
     await Promise.all(challengesToArchiveOrObsolete);
   }
 
-  _checkSkillsValidation(challenge) {
-    const skills = challenge.skills;
-    if (skills.length === 0) {
-      return Promise.resolve(challenge);
+  async _checkSkillValidation(challenge) {
+    const skill = challenge.firstSkill;
+    if (challenge.isPrototype && !skill.isActive) {
+      await skill.activate();
+      this._message(`Activation de l'acquis ${skill.name}`);
     }
-    const skillChecks = skills.reduce((current, skill) => {
-      const prototypeProduction = skill.productionPrototype;
-      if (prototypeProduction) {
-        if (!skill.isActive) {
-          current.push(skill.activate()
-            .then(skill => {
-              this._message(`Activation de l'acquis ${skill.name}`);
-              return skill;
-            }));
-        }
-      } else {
-        if (skill.isActive) {
-          current.push(skill.deactivate()
-            .then(skill => {
-              this._message(`Désactivation de l'acquis ${skill.name}`);
-              return skill;
-            }));
-        }
-      }
-      return current;
-    }, []);
-    return Promise.all(skillChecks).then(() => challenge);
+  }
+
+  _archiveOrDeactivateSkill(challenge) {
+    const skill = challenge.firstSkill;
+    const isProductionPrototype = this._isProductionPrototype(challenge);
+    if (!isProductionPrototype) {
+      return;
+    }
+    const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
+    const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
+    if (haveProposalPrototype) {
+      return skill.deactivate();
+    }
+    return skill.archive();
+  }
+
+  _obsoleteArchiveOrDeactivateSkill(challenge) {
+    const skill = challenge.firstSkill;
+    const isProductionPrototype = this._isProductionPrototype(challenge);
+    if (!isProductionPrototype) {
+      return;
+    }
+    const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
+    if (prototypesStatusOtherVersion.includes('proposé')) {
+      return skill.deactivate();
+    }
+    if (prototypesStatusOtherVersion.includes('archivé')) {
+      return skill.archive();
+    }
+    return skill.obsolete();
+  }
+
+  _isProductionPrototype(challenge) {
+    const skill = challenge.firstSkill;
+    return skill.productionPrototype?.id === challenge.id;
+  }
+
+  _getPrototypesStatusOtherVersion(skill, challenge) {
+    return skill.prototypes
+      .filter((prototype) => prototype.id !== challenge.id)
+      .map((prototype) => prototype.status);
   }
 
   async _handleIllustration(challenge) {
