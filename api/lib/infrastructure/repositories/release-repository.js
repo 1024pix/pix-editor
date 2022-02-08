@@ -1,17 +1,18 @@
 const areaDatasource = require('../datasources/airtable/area-datasource');
-const competenceDatasource = require('../datasources/airtable/competence-datasource');
-const tubeDatasource = require('../datasources/airtable/tube-datasource');
-const skillDatasource = require('../datasources/airtable/skill-datasource');
-const challengeDatasource = require('../datasources/airtable/challenge-datasource');
-const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
-const courseDatasource = require('../datasources/airtable/course-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
+const challengeDatasource = require('../datasources/airtable/challenge-datasource');
+const competenceDatasource = require('../datasources/airtable/competence-datasource');
+const courseDatasource = require('../datasources/airtable/course-datasource');
+const frameworkDatasource = require('../datasources/airtable/framework-datasource');
+const skillDatasource = require('../datasources/airtable/skill-datasource');
 const thematicDatasource = require('../datasources/airtable/thematic-datasource');
+const tubeDatasource = require('../datasources/airtable/tube-datasource');
+const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
 const airtableSerializer = require('../serializers/airtable-serializer');
 const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
-const skillTransformer = require('../transformers/skill-transformer');
 const courseTransformer = require('../transformers/course-transformer');
+const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
@@ -94,35 +95,38 @@ module.exports = {
 async function _getCurrentContent() {
   const [
     areas,
-    competences,
-    tubes,
-    skills,
-    challengesWithoutAttachments,
-    tutorials,
-    courses,
     attachments,
+    challengesWithoutAttachments,
+    competences,
+    courses,
+    frameworks,
+    skills,
     thematics,
+    tubes,
+    tutorials,
   ] = await Promise.all([
     areaDatasource.list(),
-    competenceDatasource.list(),
-    tubeDatasource.list(),
-    skillDatasource.list(),
-    challengeDatasource.list(),
-    tutorialDatasource.list(),
-    courseDatasource.list(),
     attachmentDatasource.list(),
+    challengeDatasource.list(),
+    competenceDatasource.list(),
+    courseDatasource.list(),
+    frameworkDatasource.list(),
+    skillDatasource.list(),
     thematicDatasource.list(),
+    tubeDatasource.list(),
+    tutorialDatasource.list(),
   ]);
   const learningContent = {
     areas,
-    competences,
-    tubes,
-    skills,
-    challengesWithoutAttachments,
-    tutorials,
-    courses,
     attachments,
+    challengesWithoutAttachments,
+    competences,
+    courses,
+    frameworks,
+    skills,
     thematics,
+    tubes,
+    tutorials,
   };
   const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
   const challenges = challengesWithoutAttachments.map(transformChallenge);
@@ -134,12 +138,13 @@ async function _getCurrentContent() {
 
   return {
     areas,
-    competences: filteredCompetences,
-    tubes,
-    skills: filteredSkills,
     challenges,
-    tutorials: filteredTutorials,
+    competences: filteredCompetences,
     courses: filteredCourses,
+    frameworks,
+    skills: filteredSkills,
     thematics,
+    tubes,
+    tutorials: filteredTutorials,
   };
 }

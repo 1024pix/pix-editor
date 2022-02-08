@@ -7,6 +7,7 @@ const buildArea = function buildArea({
   code,
   name,
   color,
+  frameworkId,
 } = {}) {
   return {
     id,
@@ -18,7 +19,8 @@ const buildArea = function buildArea({
       'Titre en-us': titleEnUs,
       'Code': code,
       'Nom': name,
-      'Couleur': color
+      'Couleur': color,
+      'Referentiel': [frameworkId],
     },
   };
 };

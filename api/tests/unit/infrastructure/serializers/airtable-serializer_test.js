@@ -1,7 +1,7 @@
 const { expect, domainBuilder, airtableBuilder } = require('../../../test-helper');
 const airtableSerializer = require('../../../../lib/infrastructure/serializers/airtable-serializer');
 
-describe('API | Infrastructure | Serializers | Airtable Serializer', () => {
+describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {
   describe('#serialize', () => {
 
     it('should create a Area from the AirtableRecord', () => {
@@ -20,6 +20,7 @@ describe('API | Infrastructure | Serializers | Airtable Serializer', () => {
         titleFrFr: 'Information et données',
         titleEnUs: 'Information and data',
         color: 'jaffa',
+        frameworkId: 'recFramework0'
       });
       const tableName = 'Domaines';
 

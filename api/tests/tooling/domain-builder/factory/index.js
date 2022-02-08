@@ -1,6 +1,7 @@
 module.exports = {
   buildAreaAirtableDataObject: require('./build-area-airtable-data-object'),
   buildCourse: require('./build-course-airtable-data-object'),
+  buildFramework: require('./build-framework'),
   buildRelease: require('./build-release'),
   buildChallenge: require('./build-challenge-airtable-data-object'),
   buildChallengeForRelease: require('./build-challenge-for-release'),

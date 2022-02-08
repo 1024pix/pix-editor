@@ -16,6 +16,7 @@ module.exports = datasource.extend({
     'Competences (identifiants) (id persistant)',
     'Competences (identifiants)',
     'Couleur',
+    'Referentiel',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -28,8 +29,8 @@ module.exports = datasource.extend({
       competenceIds: airtableRecord.get('Competences (identifiants) (id persistant)'),
       competenceAirtableIds: airtableRecord.get('Competences (identifiants)'),
       color: airtableRecord.get('Couleur'),
+      frameworkId: airtableRecord.get('Referentiel')[0],
     };
   },
 
 });
-
