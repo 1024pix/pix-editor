@@ -10,8 +10,9 @@ export default class NewController extends Tube {
   creation = true;
 
   @service currentData;
-  @service notify;
   @service loader;
+  @service notify;
+  @service router;
 
   @action
   close() {
@@ -31,7 +32,7 @@ export default class NewController extends Tube {
         this.notify.message('Tube créé');
       })
       .then(() => {
-        this.transitionToRoute('competence.tubes.single', competence, tube);
+        this.router.transitionTo('competence.tubes.single', competence, tube);
       })
       .catch((error) => {
         console.error(error);

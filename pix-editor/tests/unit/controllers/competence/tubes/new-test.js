@@ -80,7 +80,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
   test('it should save record', async function(assert) {
     // given
     const transitionToRouteStub = sinon.stub();
-    controller.transitionToRoute = transitionToRouteStub;
+    controller.router.transitionTo = transitionToRouteStub;
 
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;

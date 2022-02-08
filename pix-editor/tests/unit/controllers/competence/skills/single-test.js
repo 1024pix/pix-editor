@@ -89,7 +89,8 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     // given
     const store = this.owner.lookup('service:store');
 
-    const transitionToRouteStub = sinon.stub(controller, 'transitionToRoute');
+    const transitionToRouteStub = sinon.stub();
+    controller.router.transitionTo = transitionToRouteStub;
 
     sinon.stub(controller, '_handleSkillChangelog').resolves();
     sinon.stub(controller, '_duplicateLiveChallenges').resolves([]);
@@ -98,7 +99,8 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       stop:  sinon.stub()
     };
     controller.notify = {
-      message: sinon.stub()
+      message: sinon.stub(),
+      error: sinon.stub()
     };
 
     const competence = {

@@ -25,8 +25,9 @@ export default class SingleController extends Controller {
 
   @service access;
   @service config;
-  @service notify;
   @service loader;
+  @service notify;
+  @service router;
 
   get mayAccessAirtable() {
     return this.access.mayAccessAirtable();
@@ -127,7 +128,7 @@ export default class SingleController extends Controller {
       .then(() => {
         this.loader.stop();
         this.notify.message('Tube mis à jour');
-        this.transitionToRoute('competence.tubes.single', newCompetence, tube);
+        this.router.transitionTo('competence.tubes.single', newCompetence, tube);
       })
       .catch((error) => {
         console.error(error);

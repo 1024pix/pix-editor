@@ -5,8 +5,9 @@ import Sentry from '@sentry/ember';
 
 export default class AreaManagementNewController extends Controller {
 
-  @service notify;
   @service loader;
+  @service notify;
+  @service router;
 
   get area() {
     return this.model.area;
@@ -20,7 +21,7 @@ export default class AreaManagementNewController extends Controller {
   cancelEdit() {
     this.store.deleteRecord(this.area);
     this.notify.message('Création du domaine annulé');
-    this.transitionToRoute('index');
+    this.router.transitionTo('index');
   }
 
   @action
@@ -30,7 +31,7 @@ export default class AreaManagementNewController extends Controller {
       this.area.framework = this.framework;
       await this.area.save();
       this.notify.message('Domaine créé');
-      this.transitionToRoute('index');
+      this.router.transitionTo('index');
     } catch (error) {
       Sentry.captureException(error);
       console.log(error);
