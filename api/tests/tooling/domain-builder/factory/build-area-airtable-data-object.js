@@ -13,6 +13,7 @@ module.exports = function buildAreaAirtableDataObject({
     'recChallenge0'
   ],
   color = 'jaffa',
+  frameworkId = 'recFramework0',
 } = {}) {
 
   return {
@@ -24,5 +25,6 @@ module.exports = function buildAreaAirtableDataObject({
     competenceIds,
     competenceAirtableIds,
     color,
+    frameworkId,
   };
 };
