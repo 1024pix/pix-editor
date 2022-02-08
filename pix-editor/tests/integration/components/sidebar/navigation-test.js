@@ -67,6 +67,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
       // when
       await render(hbs`<Sidebar::Navigation />`);
+
       await click('[data-test-frameworks-select] .ember-basic-dropdown-trigger');
 
       // then
@@ -85,7 +86,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       await render(hbs`<Sidebar::Navigation />`);
 
       // then
-      const areasList = findAll('.AccordionToggle.title');
+      const areasList = findAll('[data-test-area-item]');
       areasList.forEach(area => {
         assert.ok(expectedAreas.includes(area.textContent.trim()));
       });
@@ -117,19 +118,17 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
     });
 
     test('it should display only a list of competences', async function(assert) {
-      assert.expect(3);
       // given
       const expectedCompenteces = ['competence1_1', 'competence1_2'];
 
       // when
       await render(hbs`<Sidebar::Navigation />`);
-      await click(findAll('.AccordionToggle.title')[0]);
+      await click(findAll('[data-test-area-item] button')[0]);
 
       // then
       const competencesList = findAll('[data-test-competence-item]');
-      competencesList.forEach(competence => {
-        assert.ok(expectedCompenteces.includes(competence.textContent.trim()));
-      });
+      assert.ok(expectedCompenteces.includes(competencesList[0].textContent.trim()));
+      assert.ok(expectedCompenteces.includes(competencesList[1].textContent.trim()));
       assert.dom('[data-test-add-competence]').doesNotExist();
 
     });
@@ -153,7 +152,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
       // when
       await render(hbs`<Sidebar::Navigation />`);
-      await click(findAll('.AccordionToggle.title')[0]);
+      await click(findAll('[data-test-area-item]')[0]);
 
       // then
       assert.dom('[data-test-add-competence]').exists();

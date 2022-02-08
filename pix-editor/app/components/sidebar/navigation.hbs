@@ -3,10 +3,10 @@
   <div class="ui accordion inverted">
     {{#each this.areas as |area|}}
       <accordion.item as |accordionItem|>
-        <accordionItem.toggle data-test-area-item @class="title">
+        <accordionItem.header data-test-area-item @class="title">
           <i class="dropdown icon"></i>
           <span>{{area.name}}</span>
-        </accordionItem.toggle>
+        </accordionItem.header>
         <accordionItem.panel>
           <div class="content">
             {{#each area.sortedCompetences as |competence|}}
