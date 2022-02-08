@@ -22,7 +22,7 @@
               @placeholder="Source"
               @onChange={{fn (mut @tutorial.source)}}
               @dropdownClass="search-result tutorial-search"
-              @triggerComponent="power-select/custom-trigger"
+              @triggerComponent={{ component "power-select/custom-trigger" }}
               @searchMessage=""
               @searchPlaceholder="Rechercher..."
               @loadingMessage="Recherche en cours..." as |result|>
@@ -48,7 +48,7 @@
         @placeholder="Nom"
         @onChange={{this.selectTag}}
         @dropdownClass="search-result tutorial-search"
-        @triggerComponent="power-select/custom-trigger"
+        @triggerComponent={{ component "power-select/custom-trigger" }}
         @searchMessage=""
         @searchPlaceholder="Rechercher..."
         @loadingMessage="Recherche en cours..." as |result|>
