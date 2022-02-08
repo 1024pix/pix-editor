@@ -53,7 +53,7 @@ export default class CompetenceSkillsSingleArchiveController extends Controller 
   @action
   closeChildComponent() {
     this.maximizeRight(false);
-    this.transitionToRoute('competence.skills.single.archive');
+    this.router.transitionTo('competence.skills.single.archive');
   }
 
 }

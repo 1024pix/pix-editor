@@ -11,6 +11,7 @@ export default class NewController extends Prototype {
   @tracked from = '';
   @service currentData;
   @service loader;
+  @service router;
 
   defaultSaveChangelog = 'Création du prototype';
 
@@ -34,7 +35,7 @@ export default class NewController extends Prototype {
         this.edition = false;
         this.send('minimize');
         this._message('Prototype enregistré');
-        this.transitionToRoute('competence.prototypes.single', this.currentData.getCompetence(), challenge.id);
+        this.router.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), challenge.id);
       })
       .catch((error) => {
         console.error(error);

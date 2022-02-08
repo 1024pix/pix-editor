@@ -17,7 +17,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     controller = this.owner.lookup('controller:competence-management/new');
     controller.edition = true;
     transitionToRouteStub = sinon.stub();
-    controller.transitionToRoute = transitionToRouteStub;
+    controller.router.transitionTo = transitionToRouteStub;
     area = {
       source: 'Pix+',
       framework: {

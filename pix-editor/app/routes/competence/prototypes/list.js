@@ -1,7 +1,10 @@
 import { action } from '@ember/object';
 import AuthenticatedRoute from '../../authenticated';
+import { inject as service } from '@ember/service';
 
 export default class ListRoute extends AuthenticatedRoute {
+
+  @service router;
 
   async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);
@@ -21,9 +24,9 @@ export default class ListRoute extends AuthenticatedRoute {
   @action
   willTransition(transition) {
     if (transition.targetName === 'competence.skills.index') {
-      return this.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
+      return this.router.transitionTo('competence.skills.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
     } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.prototypes.list').selectedSkill.productionPrototype) {
-      return this.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
+      return this.router.transitionTo('competence.quality.single', this.controllerFor('competence').model, this.controllerFor('competence.prototypes.list').selectedSkill);
     }
     return true;
   }

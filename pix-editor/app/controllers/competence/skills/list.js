@@ -9,6 +9,7 @@ export default class CompetenceHistoryListController extends Controller {
 
   @service access;
   @service currentData;
+  @service router;
 
   get firstSkill() {
     return this.model.sortedSkills[0];
@@ -22,7 +23,7 @@ export default class CompetenceHistoryListController extends Controller {
   newSkillVersion() {
     const tube = this.model.tube;
     const level = parseInt(this.firstSkill.level) - 1;
-    this.transitionToRoute('competence.skills.new', this.currentData.getCompetence(), tube.id, level);
+    this.router.transitionTo('competence.skills.new', this.currentData.getCompetence(), tube.id, level);
   }
 
   @action
