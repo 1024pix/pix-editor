@@ -2,7 +2,6 @@ competence:
   prototypes:
     archive: Archiver
     obsolete: Rendre obsolète
-    validate: Valider
   skills:
     archive: Archiver
     obsolete: Rendre obsolète
@@ -20,7 +19,9 @@ challenge:
     obsolete: Déclinaison n°{number} périmée
 skill:
   changelog:
-    update: Mise à jour de l'acquis
+    update-message: Mise à jour de l'acquis
+    update-status: Acquis mis à jour
+    update-error: Erreur lors de la mise à jour de l'acquis
     archive: Archivage de l'acquis
     obsolete: Obsolescence de l'acquis
   archive:
@@ -53,10 +54,22 @@ target_profile:
   pdf_export:
     title: Export PDF
     field:
-      title: Tittre
+      title: Titre
       language: Langue
+prototype:
+  changelog:
+    update-message: Mise à jour du prototype
+    update-status: Épreuve mise à jour
+    update-error: Erreur lors de la mise à jour
 common:
   validate: Valider
-  cancle: Annuler
+  cancel: Annuler
   pop_in:
     close: Fermer la boite de dialogue
+  confirm-log:
+    save: Enregistrer les modifications
+    content: Êtes vous sûr de vouloir enregistrer ?
+    label: Message d'enregistrement
+  modify:
+    cancel: Modification annulée
+

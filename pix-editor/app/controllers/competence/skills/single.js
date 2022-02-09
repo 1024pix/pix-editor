@@ -8,11 +8,13 @@ export default class SingleController extends Controller {
 
   wasMaximized = false;
   changelogCallback = null;
+  defaultSaveChangelog = this.intl.t('skill.changelog.update-message');
 
   @tracked edition = false;
   @tracked displaySelectLocation = false;
   @tracked displayChangeLog = false;
   @tracked changelogText = '';
+  @tracked displayConfirmLog = false;
 
   @controller('competence')
   parentController;
@@ -101,32 +103,42 @@ export default class SingleController extends Controller {
     if (!this.wasMaximized) {
       this.minimize();
     }
-    this.notify.message('Modification annulée');
+    this.notify.message(this.intl.t('common.modify.cancel'));
   }
 
   @action
   save() {
-    this._displayChangelogPopIn(this.intl.t('skill.changelog.update'), (changelogValue)=>{
-      this.loader.start();
-      const skill = this.skill;
-      const prototype = this.skill.productionPrototype;
-      const operation = prototype ? prototype.save() : Promise.resolve();
-      return operation.then(()=>{
-        return skill.save();
+    this.displayConfirmLog = true;
+  }
+
+  @action
+  closeComfirmLogPopin() {
+    this.displayConfirmLog = false;
+  }
+
+  @action
+  async saveSkillCallBack(changelog) {
+    this.closeComfirmLogPopin();
+    this.loader.start();
+    const skill = this.skill;
+    const prototype = this.skill.productionPrototype;
+    const operation = prototype ? prototype.save() : Promise.resolve();
+
+    return operation.then(()=>{
+      return skill.save();
+    })
+      .then(()=>this._handleSkillChangelog(skill, changelog, this.changelogEntry.modifyAction))
+      .then(() => {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message(this.intl.t('skill.changelog.update-status'));
       })
-        .then(()=>this._handleSkillChangelog(skill, changelogValue, this.changelogEntry.modifyAction))
-        .then(() => {
-          this.edition = false;
-          this.loader.stop();
-          this.notify.message('Acquis mis à jour');
-        })
-        .catch((error) => {
-          console.error(error);
-          Sentry.captureException(error);
-          this.loader.stop();
-          this.notify.error('Erreur lors de la mise à jour de l\'acquis');
-        });
-    });
+      .catch((error) => {
+        console.error(error);
+        Sentry.captureException(error);
+        this.loader.stop();
+        this.notify.error(this.intl.t('skill.changelog.update-error'));
+      });
   }
 
   @action
@@ -312,6 +324,9 @@ export default class SingleController extends Controller {
   }
 
   _handleSkillChangelog(skill, changelogValue, action) {
+    if (!changelogValue) {
+      return;
+    }
     const entry = this.store.createRecord('changelogEntry', {
       text: changelogValue,
       recordId: skill.pixId,
