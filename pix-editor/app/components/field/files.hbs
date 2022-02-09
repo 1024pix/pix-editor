@@ -20,8 +20,8 @@
     </FileUpload>
     {{#if @value.length}}
       <div class="ui input">
-          <div class="label-input">Nom :</div>
-          <Input @value={{@baseName}} />
+          <label class="label-input" for="name">Nom :</label>
+          <Input id="name" @value={{@baseName}} />
       </div>
     {{/if}}
   {{/if}}
