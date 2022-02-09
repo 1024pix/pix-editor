@@ -1,5 +1,5 @@
 <div class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}} ...attributes>
-    <label>
+    <label for="textarea">
         {{#if @edition}}
             <button {{on "click" this.toggleMaximized}} class={{concat "ui compact icon right floated button" (if this.maximized " primary" " basic")}} type="button"><i class={{concat (if this.maximized "compress " "expand ")  "icon"}}></i></button>
             {{#if @helpContent}}
@@ -14,5 +14,5 @@
         {{/if}}
         {{@title}}
     </label>
-    <Textarea @value={{@value}} rows="4" readonly={{not @edition}} class="attached" />
+    <Textarea id="textarea" @value={{@value}} rows="4" readonly={{not @edition}} class="attached" />
 </div>
