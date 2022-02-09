@@ -11,6 +11,7 @@ export default class NewController extends Alternative {
   @service currentData;
   @service loader;
   @service router;
+  @service store;
 
   defaultSaveChangelog = 'Création de la déclinaison';
 

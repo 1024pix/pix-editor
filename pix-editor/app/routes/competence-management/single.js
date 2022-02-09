@@ -5,6 +5,7 @@ import AuthenticatedRoute from '../authenticated';
 export default class CompetenceManagementSingleRoute extends AuthenticatedRoute {
 
   @service currentData;
+  @service store;
 
   model(params) {
     return this.store.findRecord('competence', params.competence_id);

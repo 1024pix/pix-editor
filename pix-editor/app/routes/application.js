@@ -8,6 +8,7 @@ export default class ApplicationRoute extends Route {
   @service config;
   @service currentData;
   @service intl;
+  @service store;
 
   _openLoginForm() {
     this.controllerFor('application').send('openLoginForm');

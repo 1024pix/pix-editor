@@ -1,6 +1,9 @@
 import AuthenticatedRoute from '../../authenticated';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceSkillsListRoute extends AuthenticatedRoute {
+
+  @service store;
 
   async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);

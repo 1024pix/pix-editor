@@ -11,6 +11,7 @@ export default class NewRoute extends Tube {
 
   templateName = 'competence/tubes/single';
   @service idGenerator;
+  @service store;
 
   async model(params) {
     const theme = await this.store.findRecord('theme', params.themeId);

@@ -4,9 +4,10 @@ import AuthenticatedRoute from '../authenticated';
 
 export default class CompetenceManagementNewRoute extends AuthenticatedRoute {
   templateName = 'competence-management/single';
-  @service idGenerator;
-  @service currentData;
   @service confirm;
+  @service currentData;
+  @service idGenerator;
+  @service store;
 
   model(params) {
     const area = this.store.peekRecord('area', params.area_id);

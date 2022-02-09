@@ -36,6 +36,7 @@ export default class SingleController extends Controller {
   @service notify;
   @service router;
   @service storage;
+  @service store;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;

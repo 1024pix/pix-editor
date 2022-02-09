@@ -12,6 +12,7 @@ export default class NewController extends Prototype {
   @service currentData;
   @service loader;
   @service router;
+  @service store;
 
   defaultSaveChangelog = 'Création du prototype';
 

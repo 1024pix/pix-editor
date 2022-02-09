@@ -6,6 +6,7 @@ export default class SingleRoute extends AuthenticatedRoute {
 
   @service currentData
   @service router;
+  @service store;
 
   model(params) {
     return this.store.findRecord('challenge', params.prototype_id);

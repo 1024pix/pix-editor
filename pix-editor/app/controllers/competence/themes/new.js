@@ -11,6 +11,7 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
   @service loader;
   @service notify;
   @service router;
+  @service store;
 
   @action
   async save() {

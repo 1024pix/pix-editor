@@ -10,6 +10,7 @@ export default class CompetenceManagementNewController extends Controller {
   @service loader;
   @service notify;
   @service router;
+  @service store;
 
   creation = true;
 
