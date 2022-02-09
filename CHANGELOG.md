@@ -1,5 +1,19 @@
 
 
+## v3.61.0 (09/02/2022)
+
+
+### :rocket: Enhancement
+- [#31](https://github.com/1024pix/pix-editor/pull/31) [FEATURE] Modification de la popin de changelog lors de la modification
+- [#28](https://github.com/1024pix/pix-editor/pull/28) [FEATURE] Expose les différentiels référentiels dans la release  
+- [#26](https://github.com/1024pix/pix-editor/pull/26) [FEATURE] Permettre l'extraction de la liste des sujet en anglais (PIX-4156).
+
+### :building_construction: Tech
+- [#29](https://github.com/1024pix/pix-editor/pull/29) [TECH] Exposer la relation Skill -> Challenge sous forme de 1 -> N plutot que N <-> N
+
+### :coffee: Various
+- [#9](https://github.com/1024pix/pix-editor/pull/9) [BUG FIX] Archiver ou rendre obsolète un prototype actif crée un soucis dans la gestion du statut de son acquis (PIX 4064)
+
 ## v3.60.0 (28/01/2022)
 
 
