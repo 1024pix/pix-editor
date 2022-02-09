@@ -6,10 +6,9 @@ import Sentry from '@sentry/ember';
 import yaml from 'js-yaml';
 
 export default class SingleController extends Controller {
-
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = 'Mise à jour du prototype';
+  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   elementClass = 'prototype-challenge';
 
   @tracked edition = false;
@@ -23,6 +22,7 @@ export default class SingleController extends Controller {
   @tracked displayChangeLog = false;
   @tracked copyOperation = false;
   @tracked changelogDefault = '';
+  @tracked displayConfirmLog = false;
 
   @service config;
   @service store;
@@ -185,7 +185,7 @@ export default class SingleController extends Controller {
     if (!this.wasMaximized) {
       this.minimize();
     }
-    this._message('Modification annulée');
+    this._message(this.intl.t('common.modify.cancel'));
   }
 
   @action
@@ -193,10 +193,12 @@ export default class SingleController extends Controller {
     if (!this._saveCheck(this.challenge)) {
       return;
     }
-    this._displayChangelogPopIn(this.defaultSaveChangelog, this._saveChallengeCallback);
+    this.displayConfirmLog = true;
   }
 
-  async _saveChallengeCallback(changelog) {
+  @action
+  async saveChallengeCallback(changelog) {
+    this.closeComfirmLogPopin();
     this.loader.start();
     return Promise.resolve(this.challenge)
       .then(challenge => this._handleIllustration(challenge))
@@ -211,18 +213,17 @@ export default class SingleController extends Controller {
         if (!this.wasMaximized) {
           this.minimize();
         }
-        this._message('Épreuve mise à jour');
+        this._message(this.intl.t('prototype.changelog.update-status'));
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
-        this._errorMessage('Erreur lors de la mise à jour');
+        this._errorMessage(this.intl.t('prototype.changelog.update-error'));
       })
       .finally(() => {
         this.loader.stop();
       });
   }
-
 
   @action
   duplicate() {
@@ -389,6 +390,11 @@ export default class SingleController extends Controller {
         .then(() => this._handleChangelog(prototype, changelog))
         .finally(() => this.loader.stop());
     });
+  }
+
+  @action
+  closeComfirmLogPopin() {
+    this.displayConfirmLog = false;
   }
 
   _saveCheck(challenge) {

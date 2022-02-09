@@ -1,12 +1,13 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import EmberObject from '@ember/object';
 
+import setupIntlRenderingTest from '../../../../setup-intl-rendering';
+
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
-  setupTest(hooks);
+  setupIntlRenderingTest(hooks);
   let controller, messageStub, startStub, stopStub, errorStub;
 
   hooks.beforeEach(function () {
@@ -69,7 +70,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       const changelog = 'some changelog';
 
       // when
-      await controller._saveChallengeCallback(changelog);
+      await controller.saveChallengeCallback(changelog);
 
       // then
       assert.ok(startStub.calledOnce);
@@ -90,7 +91,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       controller.displaySolutionToDisplayField = true;
 
       // when
-      await controller._saveChallengeCallback();
+      await controller.saveChallengeCallback();
 
       // then
       assert.notOk(controller.displayAlternativeInstructionsField);

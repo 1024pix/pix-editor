@@ -13,10 +13,10 @@ context('Modifying challenge', () => {
     cy.contains('@eval2').click();
     cy.contains('Modifier').click();
     cy.contains('Enregistrer').click();
-    cy.intercept('POST', '/api/**').as('route');
+    cy.intercept('PATCH', '/api/*/**').as('route');
 
     // when
-    cy.contains('Enregistrer').click();
+    cy.contains('Valider').click();
 
     // then
     cy.wait('@route').its('response.statusCode').should('be.within', 200, 204);

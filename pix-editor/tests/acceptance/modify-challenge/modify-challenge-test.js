@@ -42,7 +42,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
     await later(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-save-changelog-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');

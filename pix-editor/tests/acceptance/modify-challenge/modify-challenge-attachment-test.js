@@ -55,7 +55,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
     await later(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-save-changelog-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
@@ -90,7 +90,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
     await later(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
-    await click(find('[data-test-save-changelog-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
 
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
