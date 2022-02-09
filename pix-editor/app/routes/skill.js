@@ -4,6 +4,8 @@ import { inject as service } from '@ember/service';
 export default class SkillRoute extends AuthenticatedRoute {
 
   @service router;
+  @service store;
+
   model(params) {
     return this.store.query('skill', { filterByFormula:`FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
   }

@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 export default class NewRoute extends SingleRoute {
   templateName = 'competence/skills/single';
   @service idGenerator;
+  @service store;
 
   model() {
     return {

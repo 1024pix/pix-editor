@@ -16,10 +16,11 @@ export default class NewController extends Skill {
     return this.model.tube;
   }
 
-  @service notify;
-  @service loader;
   @service changelogEntry;
-
+  @service loader;
+  @service notify;
+  @service store;
+  
   @action
   cancelEdit() {
     this.store.deleteRecord(this.skill);

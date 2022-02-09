@@ -8,6 +8,7 @@ export default class AreaManagementNewController extends Controller {
   @service loader;
   @service notify;
   @service router;
+  @service store;
 
   get area() {
     return this.model.area;

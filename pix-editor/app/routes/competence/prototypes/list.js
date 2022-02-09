@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service';
 export default class ListRoute extends AuthenticatedRoute {
 
   @service router;
+  @service store;
 
   async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);

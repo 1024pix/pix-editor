@@ -13,6 +13,7 @@ export default class NewController extends Tube {
   @service loader;
   @service notify;
   @service router;
+  @service store;
 
   @action
   close() {

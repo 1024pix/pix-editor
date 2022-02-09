@@ -5,6 +5,7 @@ import AuthenticatedRoute from '../../authenticated';
 export default class SingleRoute extends AuthenticatedRoute {
 
   @service currentData;
+  @service store;
 
   model(params) {
     return this.store.findRecord('tube', params.tube_id);
