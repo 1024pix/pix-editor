@@ -30,6 +30,10 @@ module.exports = function(environment) {
       MAX_CONCURRENT_AJAX_CALLS: _getEnvironmentVariableAsNumber({ environmentVariableName: 'MAX_CONCURRENT_AJAX_CALLS', defaultValue: 4, minValue: 1 }),
     },
 
+    fontawesome: {
+      warnIfNoIconsIncluded: false,
+    },
+
     '@sentry/ember': {
       disablePerformance: true,
       sentry: {
