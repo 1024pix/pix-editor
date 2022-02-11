@@ -1,5 +1,12 @@
 
 
+## v3.62.0 (11/02/2022)
+
+
+### :bug: Bug fix
+- [#33](https://github.com/1024pix/pix-editor/pull/33) [BUGFIX] Le titre du bouton valider lorsqu'on met en production une épreuve en "proposée" ne possède pas de traduction.
+- [#32](https://github.com/1024pix/pix-editor/pull/32) [BUGFIX] Le titre de la popIn qui s'affiche lors de la modification d'un acquis ne possède pas de traduction (PIX-4352).
+
 ## v3.61.0 (09/02/2022)
 
 
