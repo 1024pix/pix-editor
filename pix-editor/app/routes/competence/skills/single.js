@@ -22,7 +22,8 @@ export default class SingleRoute extends Route {
     competenceController.setSection('skills');
     if (model.isActive) {
       competenceController.setView('production');
-    } else {
+    }
+    if (!model.isActive && competenceController.view !== 'draft') {
       competenceController.setView('workbench');
     }
   }

@@ -37,8 +37,14 @@ export default class GridCell extends Component {
               return 'add-skill';
             }
             break;
+          case 'draft' :
+            if (skill) {
+              return 'skill-draft';
+            } else if (this.access.mayEditSkills()) {
+              return 'add-skill';
+            }
+            break;
         }
-
         break;
       case 'quality':
         if (skill) {
