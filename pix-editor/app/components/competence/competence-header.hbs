@@ -7,7 +7,7 @@
       {{section.title}}
     </PowerSelect>
   </div>
-  {{#if this.isProductionViewAndSkillsOrChallengesSection}}
+  {{#if this.displayLanguageFilter}}
     <div class="selection ui small right floated header language-filter">
       <PowerSelect @dropdownClass="language-filter-dropdown" @searchEnabled={{false}} @options={{this.languageOptions}} @selected={{this.selectedLanguageToFilter}} @onChange={{@selectLanguageToFilter}} as |languageOption|>
         {{#if languageOption.local}}
