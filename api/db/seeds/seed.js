@@ -7,7 +7,7 @@ exports.seed = (knex) => {
     trigram: 'DEV',
     name: 'Utilisateur pour le développement',
     access: 'admin',
-    apiKey: process.env.REVIEW_APP_USER_API_KEY || defaultUserApiKey,
+    apiKey: process.env.REVIEW_APP_USER_API_KEY || adminUserApiKey,
   });
 
   databaseBuilder.factory.buildUser({
@@ -20,6 +20,6 @@ exports.seed = (knex) => {
   return databaseBuilder.commit();
 };
 
-const defaultUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
+const adminUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
 const defaultEditorUserApiKey = !process.env.REVIEW_APP && 'adaf3eee-09dc-4f9a-a504-ff92e74c9d0f';
 
