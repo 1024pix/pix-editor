@@ -96,6 +96,7 @@
     "@samwen/base62-util": "1.0.3",
     "acorn": "8.0.5",
     "canvg": "^3.0.6",
+    "crypto-js": "^4.1.1",
     "file-saver": "2.0.5",
     "js-crypto-random": "1.0.0",
     "js-yaml": "^4.1.0",
