@@ -597,7 +597,7 @@ export default class SingleController extends Controller {
     if (!attachment.isNew || attachment.cloneBeforeSave) {
       return;
     }
-    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true, hash:true });
+    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true });
     attachment.url = newAttachment.url;
   }
 
