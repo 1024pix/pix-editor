@@ -27,6 +27,10 @@ export default class TubeModel extends Model {
     return this.rawSkills.filter(skill => skill.isLive);
   }
 
+  get draftSkills() {
+    return this.rawSkills.filter(skill => skill.isDraft);
+  }
+
   get deadSkills() {
     return this.rawSkills.filter(skill => !skill.isLive);
   }
@@ -57,6 +61,19 @@ export default class TubeModel extends Model {
 
   get filledLiveSkills() {
     return this._getFilledOrderedVersions(this.liveSkills);
+  }
+
+  get filledDraftSkills() {
+    return this._getFilledOrderedVersions(this.draftSkills);
+  }
+
+  get filledLastDraftSkills() {
+    return this.filledDraftSkills.map((draftSkills) => {
+      if (draftSkills) {
+        return draftSkills[draftSkills.length - 1];
+      }
+      return draftSkills;
+    });
   }
 
   get filledDeadSkills() {

@@ -29,6 +29,7 @@
           {{/if}}
         </div>
         <div class="item workbench {{if (eq @view "workbench") "active" ""}}"  {{on "click" (fn @selectView "workbench")}}>Atelier</div>
+        <div data-test-select-draft-view class="item proposal {{if (eq @view "draft") "active" ""}}"  {{on "click" (fn @selectView "draft")}}>En construction</div>
       </div>
       {{#if (eq @view "production")}}
         <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
