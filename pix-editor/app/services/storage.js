@@ -1,7 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
 import Sentry from '@sentry/ember';
-import sha256 from 'crypto-js/sha256';
 
 export default class StorageService extends Service {
 
@@ -9,18 +8,19 @@ export default class StorageService extends Service {
   @service filePath;
   @service auth;
 
-  async uploadFile({ file, filename, date = Date, isAttachment = false, hash = false }) {
+  async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
-    const finalName = hash ? this._hashFileName(filename) : filename;
-    const url = this.config.storagePost + date.now() + '/' + encodeURIComponent(finalName);
     return this._callAPIWithRetry(async (token) => {
       const headers = {
         'X-Auth-Token': token,
         'Content-Type': file.type,
       };
+      let finalName = filename;
       if (isAttachment) {
+        finalName = this._hashFileName(filename);
         headers['Content-Disposition'] = this._getContentDispositionHeader(filename);
       }
+      const url = this.config.storagePost + date.now() + '/' + encodeURIComponent(finalName);
       await file.uploadBinary(url, {
         method: 'PUT',
         headers,
@@ -42,8 +42,13 @@ export default class StorageService extends Service {
   _hashFileName(filename) {
     const pos = filename.lastIndexOf('.');
     const extension = filename.substr(pos);
-    const name = filename.substr(0,pos);
-    const hash = sha256(name).toString().substring(0,10);
+
+    let hash = '';
+    for (let i = 0; i < 10; i++) {
+      const charCode = Math.round(Math.random() * 25 + 65);
+      hash += String.fromCharCode(charCode);
+    }
+
     return hash + extension;
   }
 
