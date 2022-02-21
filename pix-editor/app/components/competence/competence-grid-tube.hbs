@@ -16,9 +16,18 @@
                                 @tube={{@tube}}
                                 @index={{index}} />
   {{/each}}
+{{else if (eq @view "draft")}}
+  {{#each @tube.filledLastDraftSkills as |skill index|}}
+    <Competence::Grid::GridCell @section={{@section}}
+                                @languageFilter={{@languageFilter}}
+                                @view={{@view}}
+                                @skill={{skill}}
+                                @link={{@link}}
+                                @tube={{@tube}}
+                                @index={{index}} />
+  {{/each}}
 {{else}}
   {{#each @tube.filledProductionSkills as |skill index|}}
-
     <Competence::Grid::GridCell @section={{@section}}
                                 @languageFilter={{@languageFilter}}
                                 @view={{@view}}

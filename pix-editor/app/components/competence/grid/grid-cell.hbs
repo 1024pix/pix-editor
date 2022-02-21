@@ -6,6 +6,8 @@
   <Competence::Grid::CellSkillWorkbench @tube={{@tube}} @skill={{@skill}} @skills={{@skills}}/>
 {{else if (eq this.cellType "skill")}}
   <Competence::Grid::CellSkill @skill={{@skill}} @languageFilter={{@languageFilter}}/>
+{{else if (eq this.cellType "skill-draft")}}
+  <Competence::Grid::CellSkill @skill={{@skill}} @languageFilter={{@languageFilter}}/>
 {{else if (eq this.cellType "add-skill")}}
   <td>
     <LinkTo @route="competence.skills.new" @models={{array @tube.id @index}} class="add-skill">

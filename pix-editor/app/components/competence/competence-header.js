@@ -55,7 +55,10 @@ export default class CompetenceHeader extends Component {
     return this.languageOptions.find(languagesOption => languagesOption.local === languageFilter);
   }
 
-  get isProductionViewAndSkillsOrChallengesSection() {
-    return this.args.view === 'production' && (this.args.section === 'skills' || this.args.section === 'challenges');
+  get displayLanguageFilter() {
+    if (this.args.section === 'skills') {
+      return this.args.view === 'production' || this.args.view === 'draft';
+    }
+    return this.args.section === 'challenges' && this.args.view === 'production';
   }
 }
