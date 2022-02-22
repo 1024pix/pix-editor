@@ -21,7 +21,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
+    this.server.create('skill', { id: 'recSkill2', challengeIds: [] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -80,6 +80,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
         'type': 'image/png'
       }],
       filesIds: ['recAttachment1'],
+      skillId: 'recSkill2',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge2', filename: 'attachment.png' });
 
@@ -113,6 +114,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
         'type': 'image/png'
       }],
       filesIds: ['recAttachment1'],
+      skillId: 'recSkill2',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', challengeId: 'recChallenge2', filename: 'attachment.png' });
 

@@ -21,7 +21,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
+    this.server.create('skill', { id: 'recSkill2', challengeIds: [] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -79,6 +79,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
         'type': 'image/png'
       }],
       filesIds: ['recAttachment1'],
+      skillId: 'recSkill2',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
@@ -120,6 +121,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
         'type': 'image/png'
       }],
       filesIds: ['recAttachment1'],
+      skillId: 'recSkill2',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
@@ -165,6 +167,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
         'type': 'image/png',
       }],
       filesIds: ['recAttachment1'],
+      skillId: 'recSkill2',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {

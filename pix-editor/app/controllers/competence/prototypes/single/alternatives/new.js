@@ -44,7 +44,7 @@ export default class NewController extends Alternative {
   }
 
   _setAlternativeVersion(challenge) {
-    const skill = challenge.firstSkill;
+    const skill = challenge.skill;
     return skill.reload()
       .then(() => this.currentData.getPrototype().getNextAlternativeVersion())
       .then(version => {

@@ -29,7 +29,7 @@ module('Unit | Model | challenge', function(hooks) {
       genealogy: 'Prototype 1',
       author: 'DEV',
       version: 1,
-      skills: [store.createRecord('skill', {})],
+      skill: store.createRecord('skill', {}),
       idGenerator: idGeneratorStub
     };
     alternative =  {
@@ -38,7 +38,7 @@ module('Unit | Model | challenge', function(hooks) {
       status:'validé',
       author: 'DEV',
       alternativeVersion: 1,
-      skills: [store.createRecord('skill', {})],
+      skill: store.createRecord('skill', {}),
       idGenerator: idGeneratorStub
     };
   });
@@ -58,7 +58,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.author, 'NEW');
       assert.equal(clonedChallenge.version, null);
-      assert.equal(clonedChallenge.skills.length, 1);
+      assert.ok(clonedChallenge.skill);
     });
 
     test('it should duplicate challenge to create new alternative version', async function (assert) {
@@ -74,7 +74,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.equal(clonedChallenge.status, 'proposé');
       assert.equal(clonedChallenge.author, 'NEW');
       assert.equal(clonedChallenge.alternativeVersion, null);
-      assert.equal(clonedChallenge.skills.length, 1);
+      assert.ok(clonedChallenge.skill);
     });
 
     test('it should clone the attachments', async function (assert) {
@@ -100,13 +100,14 @@ module('Unit | Model | challenge', function(hooks) {
 
       // when
       const clonedChallenge = await challenge.copyForDifferentSkill();
+      const skill = await clonedChallenge.skill;
 
       // then
       assert.equal(clonedChallenge.constructor.modelName, 'challenge');
       assert.equal(clonedChallenge.id, 'generatedId');
       assert.equal(clonedChallenge.airtableId, null);
       assert.equal(clonedChallenge.status, 'proposé');
-      assert.equal(clonedChallenge.skills.length, 0);
+      assert.notOk(skill);
     });
 
     test('it should clone the attachments', async function (assert) {

@@ -143,12 +143,12 @@
 {{#if this.mayMove}}
   {{#if this.displaySelectLocation}}
     <PopIn::SelectLocation
-      @onChange={{this.setSkills}}
+      @onChange={{this.setSkill}}
       @title="Acquis du prototype"
       @selectTubeLevel={{true}}
       @isPrototypeLocation={{true}}
-      @tube={{this.challenge.firstSkill.tube}}
-      @skill={{this.challenge.firstSkill}}
+      @tube={{this.challenge.skill.tube}}
+      @skill={{this.challenge.skill}}
       @multipleLevel={{true}}
       @close={{this.closeMovePrototype}} />
   {{/if}}

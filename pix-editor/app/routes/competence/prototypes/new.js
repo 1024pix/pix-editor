@@ -24,10 +24,10 @@ export default class NewRoute extends PrototypeRoute {
       });
       if (params.fromSkill) {
         const skill = await this.store.findRecord('skill', params.fromSkill);
-        newChallenge.skills.pushObject(skill);
+        newChallenge.skill = skill;
         return newChallenge;
       }
-      newChallenge.skills.pushObject(this.modelFor('competence').workbenchSkill);
+      newChallenge.skill = this.modelFor('competence').workbenchSkill;
       return newChallenge;
     }
   }
