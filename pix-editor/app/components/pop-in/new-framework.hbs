@@ -1,22 +1,25 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{@close}}>
-  <div class="ui modal visible active">
-    <i class="close icon" {{on "click" @close}}></i>
-    <div class="header">
-      Créer un référentiel
-    </div>
-    <div class="content">
-      <form action="" class="ui form" {{on "submit" this.saveOnSubmit}}>
-        <Field::Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom"/>
-      </form>
-    </div>
-    <div class="actions">
-      <div class="ui deny button" {{on "click" @close}}>
-        Annuler
-      </div>
-      <button type="button" data-test-save-action {{on "click" @save}} class="ui positive right labeled icon button" disabled={{this.hasEmptyMandatoryField}}>
-        Enregistrer
-        <i class="save icon"></i>
-      </button>
-    </div>
-  </div>
-</ModalDialog>
+<PixModal
+  @title="Créer un référentiel"
+  @onCloseButtonClick={{@close}}
+>
+  <:content>
+    <form action="" class="ui form" {{on "submit" this.saveOnSubmit}}>
+      <Field::Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom"/>
+    </form>
+  </:content>
+  <:footer>
+    <PixButton @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{@close}}
+    >
+      Annuler
+    </PixButton>
+    <PixButton data-test-save-action
+               @triggerAction={{@save}}
+               @isDisabled={{this.hasEmptyMandatoryField}}
+    >
+      Enregistrer
+      <i class="save icon"></i>
+    </PixButton>
+  </:footer>
+</PixModal>

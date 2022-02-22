@@ -1,20 +1,22 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{@close}}>
-  <div class="ui modal visible active">
-    <i class="close icon" {{on "click" @close}}></i>
-    <div class="header">
-      Créer un tutoriel
-    </div>
-    <div class="content">
-      <Form::Tutorial @tutorial={{@tutorial}} />
-    </div>
-    <div class="actions">
-      <div class="ui deny button" {{on "click" @close}}>
-        Annuler
-      </div>
-      <button type="button" {{on "click" @saveTutorial}} class="ui positive right labeled icon button" disabled={{this.hasEmptyMandatoryField}}>
-        Enregistrer
-        <i class="save icon"></i>
-      </button>
-    </div>
-  </div>
-</ModalDialog>
+<PixModal @title="Créer un tutoriel"
+          @onCloseButtonClick={{@close}}
+>
+  <:content>
+    <Form::Tutorial @tutorial={{@tutorial}} />
+  </:content>
+  <:footer>
+    <PixButton @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{@close}}
+    >
+      {{t 'common.cancel'}}
+    </PixButton>
+    <PixButton data-test-save-tutorial-button
+               @triggerAction={{@saveTutorial}}
+               @isDisabled={{this.hasEmptyMandatoryField}}
+    >
+      Enregistrer
+      <i class="save icon"></i>
+    </PixButton>
+  </:footer>
+</PixModal>

@@ -40,7 +40,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
       await fillIn('#login-api-key', 'valid-api-key');
 
       //  when
-      await click('.button');
+      await click('[data-test-login-button]');
     });
 
     test('it should use load api from config service', async function(assert) {
@@ -76,7 +76,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
       await fillIn('#login-api-key', 'invalid-api-key');
 
       //  when
-      await click('.button');
+      await click('[data-test-login-button]');
     });
 
     test('it should display an invalid credentials message if authentication with api key failed', async function(assert) {
@@ -101,7 +101,7 @@ module('Integration | Component | popin-login-form', function(hooks) {
       await fillIn('#login-api-key', 'server-error');
 
       //  when
-      await click('.button');
+      await click('[data-test-login-button]');
     });
 
     test('it should display an error message', async function(assert) {

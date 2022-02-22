@@ -6,20 +6,6 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | pop-in/tutorial', function(hooks) {
   setupRenderingTest(hooks);
 
-  test('it renders', async function(assert) {
-    //given
-    this.set('close', () => {});
-    this.set('saveTutorial', () => {});
-    this.set('tutorial', {});
-    //when
-    // await render(hbs`{{pop-in/tutorial close=(action close) saveTutorial=(action saveTutorial) tutorial=tutorial}}`);
-    await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
-
-    //then
-    assert.dom('.ember-modal-dialog').exists();
-
-  });
-
   test('save input should be disabled if mandatory field are empty', async function(assert) {
     //given
     this.set('close', () => {});
@@ -40,7 +26,7 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
 
     //then
-    assert.true(this.element.querySelector('.ui.button.positive').disabled);
+    assert.dom('[data-test-save-tutorial-button]').isDisabled();
   });
 
   test('save input should not be disabled if mandatory field are empty', async function(assert) {
@@ -63,6 +49,6 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
 
     //then
-    assert.false(this.element.querySelector('.ui.button.positive').disabled);
+    assert.dom('[data-test-save-tutorial-button]').isNotDisabled();
   });
 });

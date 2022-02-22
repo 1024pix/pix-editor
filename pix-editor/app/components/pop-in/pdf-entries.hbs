@@ -1,58 +1,41 @@
-<ModalDialog @targetAttachment="center"
-             @overlayClassNames="custom-overlay-modal"
-             @onClose={{this.closeModal}}
+<PixModal
+  @title={{t 'target_profile.pdf_export.title'}}
+  @onCloseButtonClick={{this.closeModal}}
 >
-  <div
-    class="ui modal visible active"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="pdf-entries-header"
-  >
-    <i class="close icon"
-       aria-hidden="true"
-       tabindex="0"
-      {{on "click" this.closeModal}}
-    ><span class="sr-only">{{t 'common.pop_in.close'}}</span></i>
-    <h2 id="pdf-entries-header" class="header">
-      {{t 'target_profile.pdf_export.title'}}
-    </h2>
-    <div class="content">
-      <form class="ui form" {{on "submit" this.validate}}>
-        <div class="field">
-          <Field::Input @title={{t 'target_profile.pdf_export.field.title'}}
-                        @value={{this.title}}
-                        @edition={{true}}
-                        data-test-pdf-title-field
-          />
-        </div>
-        <div class="field">
-          <Field::Select @title={{t 'target_profile.pdf_export.field.language'}}
-                         @value={{this.selectedLanguage}}
-                         @options={{this.options.language}}
-                         @edition={{true}}
-                         @setValue={{this.setLanguage}}
-                         data-test-pdf-language-field
-          />
-        </div>
-      </form>
-    </div>
-    <div class="actions">
-      <button type="button"
-              class="ui deny button"
-        {{on "click" this.closeModal}}
-      >
-        {{t 'common.cancel'}}
-      </button>
-      <button type="submit"
-              class="ui green button"
-              data-test-validate-pdf-entries
-        {{on "click" this.validate}}
-      >
-        <i class="checkmark icon"
-           aria-hidden="true"
-        ></i>
-        {{t 'common.validate'}}
-      </button>
-    </div>
-  </div>
-</ModalDialog>
+  <:content>
+    <form class="ui form" {{on "submit" this.validate}}>
+      <div class="field">
+        <Field::Input @title={{t 'target_profile.pdf_export.field.title'}}
+                      @value={{this.title}}
+                      @edition={{true}}
+                      data-test-pdf-title-field
+        />
+      </div>
+      <div class="field">
+        <Field::Select @title={{t 'target_profile.pdf_export.field.language'}}
+                       @value={{this.selectedLanguage}}
+                       @options={{this.options.language}}
+                       @edition={{true}}
+                       @setValue={{this.setLanguage}}
+                       data-test-pdf-language-field
+        />
+      </div>
+    </form>
+  </:content>
+  <:footer>
+    <PixButton @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{this.closeModal}}
+    >
+      {{t 'common.cancel'}}
+    </PixButton>
+    <PixButton data-test-validate-pdf-entries
+               @triggerAction={{this.validate}}
+    >
+      <i class="checkmark icon"
+         aria-hidden="true"
+      ></i>
+      {{t 'common.validate'}}
+    </PixButton>
+  </:footer>
+</PixModal>

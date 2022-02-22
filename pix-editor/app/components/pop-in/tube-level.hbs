@@ -1,31 +1,34 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-  <div class="ui modal visible active popin-tube-level {{if @isThematicResultMode " thematicResult" ""}}">
-    <i class="close icon" {{on "click" this.closeModal}}></i>
-    <div class="header">
-      {{@tube.name}}
+<PixModal @title={{@tube.name}}
+          @onCloseButtonClick={{this.closeModal}}
+          class="popin-tube-level"
+>
+  <:content>
+    <div class="levels">
+      {{#each this.skillsAndSelectedStatus as |skillAndSelectedStatus|}}
+        {{#if skillAndSelectedStatus}}
+          <div class="level {{if skillAndSelectedStatus.isSelected "selected"}}" {{on "click" (fn this.select skillAndSelectedStatus.skill)}} >
+            {{skillAndSelectedStatus.skill.level}}
+          </div>
+        {{else}}
+          <div class="level disabled"></div>
+        {{/if}}
+      {{/each}}
     </div>
-    <div class="content">
-      <div class="levels">
-        {{#each this.skillsAndSelectedStatus as |skillAndSelectedStatus|}}
-          {{#if skillAndSelectedStatus}}
-            <div class="level {{if skillAndSelectedStatus.isSelected "selected"}}" {{on "click" (fn this.select skillAndSelectedStatus.skill)}} >
-              {{skillAndSelectedStatus.skill.level}}
-            </div>
-          {{else}}
-            <div class="level disabled"></div>
-          {{/if}}
-        {{/each}}
-      </div>
-    </div>
-    <div class="actions">
-      <div data-test-cancel-button class="ui deny button" {{on "click" this.closeModal}}>
-        Annuler
-      </div>
-      {{#if this.mayUnset}}
-        <div data-test-erase-button class="ui black right button" {{on "click" this.clear}}>
-          Effacer
-        </div>
-      {{/if}}
-    </div>
-  </div>
-</ModalDialog>
+  </:content>
+  <:footer>
+    <PixButton data-test-cancel-button
+               @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{this.closeModal}}
+    >
+      {{t 'common.cancel'}}
+    </PixButton>
+    {{#if this.mayUnset}}
+      <PixButton data-test-erase-button
+                 @triggerAction={{this.clear}}
+      >
+        Effacer
+      </PixButton>
+    {{/if}}
+  </:footer>
+</PixModal>

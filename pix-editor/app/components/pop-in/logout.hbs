@@ -1,20 +1,22 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-  <div class="ui modal visible active closable">
-    <div class="header">
-      Déconnexion
-    </div>
-    <div data-test-logout-message class="content">
-      <p>Voulez-vous vraiment vous déconnecter ?</p>
-    </div>
-    <div class="actions">
-     <div data-test-logout-cancel-button class="ui blue cancel button" {{on "click" @onDeny}}>
-        <i class="remove icon" ></i>
-        Non
-      </div>
-      <div data-test-logout-ok-button class="ui green ok button" {{on "click" this.logout}}>
-        <i class="checkmark icon" ></i>
-        Oui
-      </div>
-    </div>
-  </div>
-</ModalDialog>
+<PixModal
+  @title="Déconnexion"
+  @onCloseButtonClick={{@onDeny}}
+>
+  <:content>
+    <p data-test-logout-message >Voulez-vous vraiment vous déconnecter ?</p>
+  </:content>
+  <:footer>
+    <PixButton data-test-logout-cancel-button
+               @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{@onDeny}}
+    >
+      Non
+    </PixButton>
+    <PixButton data-test-logout-ok-button
+               @triggerAction={{this.logout}}
+    >
+      Oui
+    </PixButton>
+  </:footer>
+</PixModal>
