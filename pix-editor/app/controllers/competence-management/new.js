@@ -72,7 +72,7 @@ export default class CompetenceManagementNewController extends Controller {
   }
 
   async _createTubeWorkbench(theme, competence, frameworkName) {
-    const title = `Tube pour l'atelier de la compétence ${this.competence.code} ${frameworkName}`;
+    const title = `Sujet pour l'atelier de la compétence ${this.competence.code} ${frameworkName}`;
     const tubeWorkbench = this.store.createRecord('tube', {
       name: '@workbench',
       title,

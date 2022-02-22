@@ -6,7 +6,7 @@ export default class ThemeSerializer extends AirtableSerializer {
   attrs = {
     name: 'Nom',
     nameEnUs:'Titre en-us',
-    rawTubes: 'Tubes',
+    rawTubes: 'Sujets',
     competence: 'Competence',
     index: 'Index'
   };

@@ -96,14 +96,14 @@ export default class SingleController extends Controller {
       .then(()=> {
         this.edition = false;
         this.loader.stop();
-        this.notify.message('Tube mis à jour');
+        this.notify.message('Sujet mis à jour');
         return tube.hasMany('rawSkills').reload();
       })
       .catch((error) => {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour du tube');
+        this.notify.error('Erreur lors de la mise à jour du sujet');
       });
   }
 

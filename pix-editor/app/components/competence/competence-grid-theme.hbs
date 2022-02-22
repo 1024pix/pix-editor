@@ -22,7 +22,7 @@
           {{/if}}
           {{#if this.mayCreateTube}}
             <div class="ui mini basic icon buttons tube-management">
-              <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
+              <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau sujet" type="button">
                 <i class="plus square outline icon"></i>
               </button>
               <button data-test-sort-tube class="ui icon button" {{on "click" (fn @displaySortTubesPopIn @theme.tubes)}} title="Trier les Tubes" type="button">

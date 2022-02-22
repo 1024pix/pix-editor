@@ -93,7 +93,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Tube créé'));
+    assert.ok(notifyMessageStub.calledWith('Sujet créé'));
     assert.ok(transitionToRouteStub.calledWith('competence.tubes.single', { name:'Competence' }, controller.model));
   });
 
@@ -113,6 +113,6 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la création du tube'));
+    assert.ok(notifyErrorStub.calledWith('Erreur lors de la création du sujet'));
   });
 });

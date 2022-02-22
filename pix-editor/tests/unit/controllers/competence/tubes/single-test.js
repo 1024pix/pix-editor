@@ -59,7 +59,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
     assert.notOk(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyMessageStub.calledWith('Tube mis à jour'));
+    assert.ok(notifyMessageStub.calledWith('Sujet mis à jour'));
     assert.ok(reloadSkillsStub.calledOnce);
   });
 
@@ -80,7 +80,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
     assert.ok(controller.edition);
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
-    assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour du tube'));
+    assert.ok(notifyErrorStub.calledWith('Erreur lors de la mise à jour du sujet'));
   });
 
   test('it should start edition', function(assert) {

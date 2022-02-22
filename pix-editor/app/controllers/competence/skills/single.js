@@ -148,7 +148,7 @@ export default class SingleController extends Controller {
 
   @action
   duplicateToLocation(competence, newTube, level) {
-    this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du tube ${newTube.name} de la compétence "${competence.name}"`,
+    this._displayChangelogPopIn(`Duplication de l'acquis ${this.skill.name} vers le niveau ${level} du sujet ${newTube.name} de la compétence "${competence.name}"`,
       (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
   }
 

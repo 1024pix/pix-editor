@@ -129,7 +129,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     const expectedTube = {
       name: '@workbench',
       theme: 'theme',
-      title: 'Tube pour l\'atelier de la compétence 1.1 Pix+',
+      title: 'Sujet pour l\'atelier de la compétence 1.1 Pix+',
       competence,
       pixId: 'recId',
     };

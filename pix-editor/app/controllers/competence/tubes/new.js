@@ -28,7 +28,7 @@ export default class NewController extends Tube {
       .then(() => {
         this.edition = false;
         this.loader.stop();
-        this.notify.message('Tube créé');
+        this.notify.message('Sujet créé');
       })
       .then(() => {
         this.transitionToRoute('competence.tubes.single', competence, tube);
@@ -37,7 +37,7 @@ export default class NewController extends Tube {
         console.error(error);
         Sentry.captureException(error);
         this.loader.stop();
-        this.notify.error('Erreur lors de la création du tube');
+        this.notify.error('Erreur lors de la création du sujet');
       });
   }
 
