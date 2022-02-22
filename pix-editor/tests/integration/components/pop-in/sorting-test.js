@@ -40,7 +40,7 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
                                      @onApprove={{this.approveAction}} />`);
 
     // then
-    assert.dom('[data-test-sorting-pop-in-title]').hasText('My title');
+    assert.dom('[data-test-sorting-pop-in-title] h1').hasText('My title');
     assert.dom('[data-test-sorting-pop-in-content] li').exists({ count: 3 });
   });
 

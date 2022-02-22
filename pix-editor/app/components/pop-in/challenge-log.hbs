@@ -1,9 +1,8 @@
-<ModalDialog @targetAttachment="center" @containerClassNames="popin-prototype-log" @overlayClassNames="custom-overlay-modal" @onClose={{this.close}}>
-  <div class="ui modal visible active">
-    <i class="close icon" {{on "click" this.close}}></i>
-    <div class="header">
-      Journal de {{@challenge.skillName}}
-    </div>
+<PixModal
+  @title='Journal de {{@challenge.skillNames}}'
+  @onCloseButtonClick={{this.close}}
+>
+  <:content>
     {{#if this.list}}
       <div class="ui content segment basic custom-tab">
         <AriaTabs as |at|>
@@ -37,5 +36,5 @@
     {{else}}
       <Form::Note @entry={{this.logEntry}} @edition={{this.logEntryEdition}} @close={{this.closeLogForm}} @save={{this.saveEntry}} @mayEdit={{this.mayEditEntry}} @edit={{this.editEntry}} />
     {{/if}}
-  </div>
-</ModalDialog>
+  </:content>
+</PixModal>

@@ -25,6 +25,13 @@ export default class PopinSelectLocation extends Component {
   _tubes = A([]);
   _skills = A([]);
 
+  get titleModal() {
+    if (this.args.title) {
+      return this.args.title;
+    }
+    return `Emplacement de ${this.args.name}`;
+  }
+
   get frameworks() {
     return this.currentData.getFrameworks();
   }
