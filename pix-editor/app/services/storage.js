@@ -10,15 +10,17 @@ export default class StorageService extends Service {
 
   async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
-    const url = this.config.storagePost + date.now() + '/' + encodeURIComponent(filename);
     return this._callAPIWithRetry(async (token) => {
       const headers = {
         'X-Auth-Token': token,
         'Content-Type': file.type,
       };
+      let finalName = filename;
       if (isAttachment) {
+        finalName = this._hashFileName(filename);
         headers['Content-Disposition'] = this._getContentDispositionHeader(filename);
       }
+      const url = this.config.storagePost + date.now() + '/' + encodeURIComponent(finalName);
       await file.uploadBinary(url, {
         method: 'PUT',
         headers,
@@ -35,6 +37,19 @@ export default class StorageService extends Service {
 
   _getContentDispositionHeader(filename) {
     return `attachment; filename="${encodeURIComponent(filename)}"`;
+  }
+
+  _hashFileName(filename) {
+    const pos = filename.lastIndexOf('.');
+    const extension = filename.substr(pos);
+
+    let hash = '';
+    for (let i = 0; i < 10; i++) {
+      const charCode = Math.round(Math.random() * 25 + 65);
+      hash += String.fromCharCode(charCode);
+    }
+
+    return hash + extension;
   }
 
   async cloneFile(url, date = Date, fetchFn = fetch) {
