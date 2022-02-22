@@ -17,8 +17,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     this.server.create('user', { apiKey, trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1' });
+    this.server.create('challenge', { id: 'recChallenge2' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
-    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge1'] });
+    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });

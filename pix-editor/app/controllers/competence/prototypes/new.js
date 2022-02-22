@@ -51,11 +51,11 @@ export default class NewController extends Prototype {
     if (challenge.isWorkbench) {
       operation = Promise.resolve(challenge);
     } else {
-      const firstSkill = challenge.firstSkill;
-      if (!firstSkill) {
+      const skill = challenge.skill;
+      if (!skill) {
         operation = Promise.resolve(challenge);
       } else {
-        const version = firstSkill.getNextPrototypeVersion();
+        const version = skill.getNextPrototypeVersion();
         if (version > 0) {
           challenge.version = version;
           operation = challenge.save();

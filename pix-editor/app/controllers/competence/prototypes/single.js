@@ -53,7 +53,7 @@ export default class SingleController extends Controller {
     } else if (this.challenge.isWorkbench) {
       return '';
     } else {
-      return this.challenge.skillNames;
+      return this.challenge.skillName;
     }
   }
 
@@ -95,8 +95,8 @@ export default class SingleController extends Controller {
 
   get level() {
     const challenge = this.challenge;
-    if (challenge.skillLevels[0]) {
-      return challenge.skillLevels;
+    if (challenge.skillLevel) {
+      return challenge.skillLevel;
     } else {
       return false;
     }
@@ -337,7 +337,7 @@ export default class SingleController extends Controller {
 
   @action
   async showVersions() {
-    const skill = await this.challenge.firstSkill;
+    const skill = await this.challenge.skill;
     const tube = await skill.get('tube');
     this.transitionToRoute('competence.prototypes.list', tube.id, skill.id);
   }
@@ -361,19 +361,19 @@ export default class SingleController extends Controller {
   }
 
   @action
-  setSkills(skills) {
-    if (skills.length === 0) {
+  setSkill(skill) {
+    if (skill) {
       this._errorMessage('Aucun acquis sélectionné');
       return;
     }
     this._displayChangelogPopIn('Changement d\'acquis de l\'épreuve', (changelog) => {
       this.loader.start();
       const prototype = this.challenge;
-      const prototypeVersion = this._getNextPrototypeVersion(skills);
+      const prototypeVersion = skill.getNextPrototypeVersion();
       const challenges = this.challenge.alternatives;
       challenges.pushObject(prototype);
       const updateChallenges = challenges.reduce((current, challenge) => {
-        challenge.skills = skills;
+        challenge.skill = skill;
         challenge.version = prototypeVersion;
         current.push(challenge.save()
           .then(() => {
@@ -425,7 +425,7 @@ export default class SingleController extends Controller {
       return this._error('L\'épreuve est déjà en production');
     }
     if (challenge.isPrototype) {
-      if (challenge.firstSkill == null) {
+      if (challenge.skill == null) {
         return this._error('L\'épreuve n\'est pas rattachée à un acquis');
       }
       return Promise.resolve(challenge);
@@ -439,7 +439,8 @@ export default class SingleController extends Controller {
   }
 
   async _archivePreviousPrototype(challenge) {
-    const productionPrototype = challenge.firstSkill.productionPrototype;
+    const skill = await challenge.skill;
+    const productionPrototype = skill.productionPrototype;
     if (!challenge.isPrototype || productionPrototype == null) {
       return;
     }
@@ -500,7 +501,7 @@ export default class SingleController extends Controller {
   }
 
   async _archiveOtherActiveSkillVersion(challenge) {
-    const currentSkill = challenge.firstSkill;
+    const currentSkill = await challenge.skill;
     if (!challenge.isPrototype || currentSkill.isActive) {
       return;
     }
@@ -524,17 +525,16 @@ export default class SingleController extends Controller {
   }
 
   async _checkSkillValidation(challenge) {
-    const skill = challenge.firstSkill;
+    const skill = await challenge.skill;
     if (challenge.isPrototype && !skill.isActive) {
       await skill.activate();
       this._message(`Activation de l'acquis ${skill.name}`);
     }
   }
 
-  _archiveOrDeactivateSkill(challenge) {
-    const skill = challenge.firstSkill;
-    const isProductionPrototype = this._isProductionPrototype(challenge);
-    if (!isProductionPrototype) {
+  async _archiveOrDeactivateSkill(challenge) {
+    const skill = await challenge.skill;
+    if (!this._isProductionPrototype(challenge)) {
       return;
     }
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
@@ -545,10 +545,9 @@ export default class SingleController extends Controller {
     return skill.archive();
   }
 
-  _obsoleteArchiveOrDeactivateSkill(challenge) {
-    const skill = challenge.firstSkill;
-    const isProductionPrototype = this._isProductionPrototype(challenge);
-    if (!isProductionPrototype) {
+  async _obsoleteArchiveOrDeactivateSkill(challenge) {
+    const skill = await challenge.skill;
+    if (!this._isProductionPrototype(challenge)) {
       return;
     }
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
@@ -562,8 +561,8 @@ export default class SingleController extends Controller {
   }
 
   _isProductionPrototype(challenge) {
-    const skill = challenge.firstSkill;
-    return skill.productionPrototype?.id === challenge.id;
+    const skill = challenge.skill;
+    return skill.get('productionPrototype')?.id === challenge.id;
   }
 
   _getPrototypesStatusOtherVersion(skill, challenge) {
@@ -669,11 +668,5 @@ export default class SingleController extends Controller {
     this.changelogCallback = callback;
     this.changelogDefault = defaultMessage;
     this.displayChangeLog = true;
-  }
-
-  _getNextPrototypeVersion(skills) {
-    return skills.map(skill => skill.getNextPrototypeVersion()).reduce((current, version) => {
-      return Math.max(version, current);
-    }, 1);
   }
 }

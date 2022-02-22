@@ -191,14 +191,15 @@ function routes() {
 
   this.post('/challenges', (schema, request) => {
     const challenge = JSON.parse(request.requestBody);
+    const skillId = challenge.data.relationships.skill.data.id;
+    const skill = schema.skills.find(skillId);
     challenge.updatedAt = new Date();
-    const createdChallenge = schema.challenges.create(challenge);
 
-    challenge.data.relationships.skills.data.forEach(({ id: skillId }) => {
-      const skill = schema.skills.find(skillId);
-      skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
-      skill.save();
-    });
+    const createdChallenge = schema.challenges.create(challenge);
+    createdChallenge.skill = skill;
+
+    skill.challengeIds = [...skill.challengeIds, createdChallenge.id];
+    skill.save();
     return createdChallenge;
   });
 

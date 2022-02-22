@@ -45,8 +45,7 @@ export default class SingleRoute extends Route {
       if (transition.targetName === 'competence.skills.index' || transition.targetName === 'competence.quality.index') {
         const challenge = this.controllerFor('competence.prototypes.single').model;
         if (!challenge.isWorkbench) {
-          const skills = challenge.skills;
-          const skill = skills.firstObject;
+          const skill = challenge.skill;
           if (skill) {
             if (transition.targetName === 'competence.quality.index' && skill.productionPrototype) {
               return this.transitionTo('competence.quality.single', this.currentData.getCompetence(), skill);

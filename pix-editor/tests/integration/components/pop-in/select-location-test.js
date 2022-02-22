@@ -180,24 +180,23 @@ module('Integration | Component | popin-select-location', function (hooks) {
   module('if `isPrototypeLocation`', function (hooks) {
     hooks.beforeEach(async function () {
       // when
-      this.setSkills = sinon.stub();
+      this.setSkill = sinon.stub();
       this.closeMovePrototype = () => {
       };
       tube1_2_1_1.content = tube1_2_1_1;
       this.tube = tube1_2_1_1;
       this.challenge = {
         name: 'challenge1',
-        firstSkill: skill1_2_1_1_2,
-        skills: [skill1_2_1_1_2]
+        skill: skill1_2_1_1_2
       };
 
       await render(hbs`<PopIn::SelectLocation
-                        @onChange={{this.setSkills}}
+                        @onChange={{this.setSkill}}
                         @title="Acquis du prototype"
                         @selectTubeLevel={{true}}
                         @isPrototypeLocation={{true}}
                         @tube={{this.tube}}
-                        @skill={{this.challenge.firstSkill}}
+                        @skill={{this.challenge.skill}}
                         @multipleLevel={{true}}
                         @close={{this.closeMovePrototype}} />`);
     });
@@ -262,7 +261,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       assert.dom('[data-test-move-action]').hasClass('disabled');
     });
 
-    test('it should invoke `setSkills` on click with new skill location argument', async function (assert) {
+    test('it should invoke `setSkill` on click with new skill location argument', async function (assert) {
       // when
       await click(findAll('.ember-basic-dropdown-trigger')[2]);
       await click(findAll('.ember-power-select-options li')[1]);
@@ -271,7 +270,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       await click('[data-test-move-action]');
 
       // then
-      assert.deepEqual(this.setSkills.getCall(0).args[0], [{
+      assert.deepEqual(this.setSkill.getCall(0).args[0], [{
         id: 'skill1_2_1_2_1',
         pixId: 'pixIdSkill1_2_1_2_1',
         name: 'skill1_2_1_2_1',
