@@ -88,10 +88,9 @@ export default class AccessService extends Service {
   mayEdit(challenge) {
     const level = this.config.accessLevel;
     const production = challenge.isValidated;
-    const archived = challenge.isArchived;
     const obsolete = challenge.isObsolete;
     const prototype = challenge.isPrototype;
-    if (archived || obsolete) {
+    if (obsolete) {
       return false;
     }
     return level >= EDITOR || (!production && !prototype && level === REPLICATOR);

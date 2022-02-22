@@ -13,7 +13,7 @@ module('Unit | Service | access', function(hooks) {
   hooks.beforeEach(function() {
     accessService = this.owner.lookup('service:access');
   });
-  
+
   function _stubAccessLevel(accessLevel, owner) {
     class ConfigService extends Service {
       constructor() {
@@ -27,45 +27,52 @@ module('Unit | Service | access', function(hooks) {
 
   module('mayEdit', function() {
 
-    test('it should return `false` if challenge is not live', function (assert) {
-      assert.expect(2);
+    test('it should return `false` if challenge is obsolete', function (assert) {
       //given
-      const challenges = [{
-        id: 'rec123655',
-        name: 'archivedChallenge',
-        isArchived: true
-      },{
+      const challenge = {
         id: 'rec123656',
         name: 'deletedChallenge',
         isObsolete: true
-      }];
-
-      //when
-      challenges.forEach(challenge=>{
-
-        //then
-        assert.notOk(accessService.mayEdit(challenge));
-      });
-    });
-
-    test('it should return `true` if challenge is live and level is `EDITOR` or more', function (assert) {
-      assert.expect(2);
-      //given
-      const challenge = {
-        id: 'rec123655',
-        name: 'challenge',
-        isValidated: true,
-        isPrototype: true
       };
 
-      const roles = [ADMIN, EDITOR];
-
       //when
-      roles.forEach(role => {
-        _stubAccessLevel(role, this.owner);
+      const accessResult = accessService.mayEdit(challenge);
+
+      //then
+      assert.notOk(accessResult);
+    });
+
+    module('#liveChallenge', function(hooks) {
+      let validatedChallenge, archivedChallenge;
+      hooks.beforeEach(function () {
+        validatedChallenge = {
+          id: 'recChallenge1',
+          name: 'challenge',
+          isValidated: true,
+        };
+
+        archivedChallenge = {
+          id: 'recChallenge2',
+          name: 'challenge',
+          isArchived: true,
+        };
+      });
+      test('it should return `true` if challenge is live and level is `EDITOR`', function (assert) {
+        //when
+        _stubAccessLevel(EDITOR, this.owner);
 
         //then
-        assert.ok(accessService.mayEdit(challenge));
+        assert.ok(accessService.mayEdit(validatedChallenge));
+        assert.ok(accessService.mayEdit(archivedChallenge));
+
+      });
+      test('it should return `true` if challenge is live and level is `ADMIN`', function (assert) {
+        //when
+        _stubAccessLevel(ADMIN, this.owner);
+
+        //then
+        assert.ok(accessService.mayEdit(validatedChallenge));
+        assert.ok(accessService.mayEdit(archivedChallenge));
       });
     });
 
