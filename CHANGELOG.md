@@ -1,5 +1,19 @@
 
 
+## v3.63.0 (23/02/2022)
+
+
+### :rocket: Enhancement
+- [#39](https://github.com/1024pix/pix-editor/pull/39) [FEATURE] Pouvoir modifier une épreuve archivée depuis pix editor (PIX-442).
+- [#35](https://github.com/1024pix/pix-editor/pull/35) [FEATURE] Ajouter une vue 'en construction' pour la section acquis (PIX-3588).
+
+### :building_construction: Tech
+- [#36](https://github.com/1024pix/pix-editor/pull/36) [TECH] Corriger le nom des fichiers des pièces jointes au moment de la création d'une épreuve (PIX-4018)
+- [#34](https://github.com/1024pix/pix-editor/pull/34) [TECH] Renommer la clé d'api admin
+
+### :coffee: Various
+- [#37](https://github.com/1024pix/pix-editor/pull/37) [CLEANUP] Modifie la relation challenge -> skill en 1 -> 1 (PIX-4290)
+
 ## v3.62.0 (11/02/2022)
 
 
