@@ -316,6 +316,30 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.equal(skill1.status, 'en construction');
       });
     });
+
+    module('#setSkill', function () {
+      test('it should display an error message if have no skill', async function(assert) {
+        // when
+        await controller.setSkill();
+
+        // then
+        assert.ok(errorStub.calledWith('Aucun acquis sélectionné'));
+      });
+
+      test('it should set a new skill for prototype and is alternative with proper version', async function(assert) {
+        // when
+        await controller._setSkill(proposalPrototype1_1, skill2);
+
+        // then
+        assert.ok(messageStub.calledTwice);
+        assert.ok(messageStub.getCalls()[0].calledWith('Changement d\'acquis effectué pour la déclinaison n°1'));
+        assert.ok(messageStub.getCalls()[1].calledWith('Changement d\'acquis effectué pour le prototype'));
+        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.equal(proposalChallenge1_1.version, 3);
+        assert.equal(proposalChallenge1_1.version, 3);
+      });
+    });
   });
 
   test('it should cancel edition', async function(assert) {
