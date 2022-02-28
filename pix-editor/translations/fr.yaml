@@ -6,6 +6,12 @@ competence:
     archive: Archiver
     obsolete: Rendre obsolète
 challenge:
+  move:
+    message: Changement d'acquis de l'épreuve
+    success-prototype-message: Changement d'acquis effectué pour le prototype
+    success-alternative-message: Changement d'acquis effectué pour la déclinaison n°{number}
+    error-no-skill: Aucun acquis sélectionné
+    error: Le changement d'acquis de l'épreuve a échoué
   obsolete:
     confirm:
       title: Rendre obsolète

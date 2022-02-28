@@ -51,7 +51,10 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_1_1_2',
       level: 6,
       version: 1,
-      status: 'actif'
+      status: 'actif',
+      get() {
+        return  'skill1_2_1_1_2';
+      }
     };
     skill1_2_1_1_3 = {
       id: 'skill1_2_1_1_3',
@@ -270,14 +273,14 @@ module('Integration | Component | popin-select-location', function (hooks) {
       await click('[data-test-move-action]');
 
       // then
-      assert.deepEqual(this.setSkill.getCall(0).args[0], [{
+      assert.deepEqual(this.setSkill.getCall(0).args[0], {
         id: 'skill1_2_1_2_1',
         pixId: 'pixIdSkill1_2_1_2_1',
         name: 'skill1_2_1_2_1',
         level: 3,
         status: 'actif',
         version: 1
-      }]);
+      });
     });
   });
   module('if `isSkillLocation`', function (hooks) {
