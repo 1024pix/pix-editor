@@ -2,3 +2,34 @@ extends: '../.eslintrc.yaml'
 
 globals:
   include: true
+rules:
+  "import/no-import-module-exports": "off"
+  'import/no-restricted-paths': [ 'error',
+    "basePath": "lib",
+    "zones": [
+      {
+        "target": "domain",
+        "from": "infrastructure",
+        "message": "Domain is closed to the outside. You need to do a dependency injection"
+      },
+      {
+        "target": "domain",
+        "from": "application",
+        "message": "Domain is closed to the outside. It's Application calling Domain"
+      },
+      {
+        "target": "application",
+        "from": "infrastructure",
+        "message": "Application should only talk to Domain"
+      },
+      {
+        "target": "infrastructure",
+        "from": "application",
+        "message": "Infrastructure should only talk to Domain"
+      }
+    ]
+  ]
+overrides:
+   - files: ['tests/**/*.js', 'routes.js', 'plugins.js', 'config.js', 'lib/models/*.js', 'lib/interfaces/**/*.js' ]
+     rules :
+       'import/no-restricted-paths': off
