@@ -120,7 +120,7 @@ function routes() {
   this.post('/airtable/content/Tubes', (schema, request) => {
     const tubePayload = JSON.parse(request.requestBody);
     const tube = _deserializePayload(tubePayload, 'tube');
-    const createdTube =  schema.themes.create(tube);
+    const createdTube =  schema.tubes.create(tube);
     return _serializeModel(createdTube, 'tube');
   });
 
@@ -204,7 +204,14 @@ function routes() {
   });
 
   this.patch('/challenges/:id', (schema, request) => {
-    return schema.challenges.find(request.params.id);
+    const challenge = schema.challenges.find(request.params.id);
+    const body = JSON.parse(request.requestBody);
+
+    const skillId = body.data.relationships.skill.data.id;
+    const skill = schema.skills.find(skillId);
+    challenge.skill = skill;
+
+    return challenge;
   });
 }
 
