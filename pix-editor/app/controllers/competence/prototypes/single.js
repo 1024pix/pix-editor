@@ -362,39 +362,49 @@ export default class SingleController extends Controller {
 
   @action
   setSkill(skill) {
-    if (skill) {
-      this._errorMessage('Aucun acquis sélectionné');
+    if (!skill) {
+      this._errorMessage(this.intl.t('challenge.move.error-no-skill'));
       return;
     }
-    this._displayChangelogPopIn('Changement d\'acquis de l\'épreuve', (changelog) => {
+    this._displayChangelogPopIn(this.intl.t('challenge.move.message'), async (changelog) => {
       this.loader.start();
-      const prototype = this.challenge;
-      const prototypeVersion = skill.getNextPrototypeVersion();
-      const challenges = this.challenge.alternatives;
-      challenges.pushObject(prototype);
-      const updateChallenges = challenges.reduce((current, challenge) => {
-        challenge.skill = skill;
-        challenge.version = prototypeVersion;
-        current.push(challenge.save()
-          .then(() => {
-            if (challenge.isPrototype) {
-              this._message('Changement d\'acquis effectué pour le prototype');
-            } else {
-              this._message(`Changement d'acquis effectué pour la déclinaison n°${challenge.alternativeVersion}`);
-            }
-          })
-        );
-        return current;
-      }, []);
-      return Promise.all(updateChallenges)
-        .then(() => this._handleChangelog(prototype, changelog))
-        .finally(() => this.loader.stop());
+      try {
+        const prototype = this.challenge;
+        await this._setSkill(prototype, skill);
+        await this._handleChangelog(prototype, changelog);
+      } catch (error) {
+        Sentry.captureException(error);
+        this._message(this.intl.t('challenge.move.error'));
+      } finally {
+        this.loader.stop();
+      }
     });
   }
 
   @action
   closeComfirmLogPopin() {
     this.displayConfirmLog = false;
+  }
+
+  async _setSkill(prototype, skill) {
+    const prototypeVersion = skill.getNextPrototypeVersion();
+    const challenges = prototype.alternatives;
+    challenges.pushObject(prototype);
+    const updateChallenges = challenges.reduce((current, challenge) => {
+      challenge.skill = skill;
+      challenge.version = prototypeVersion;
+      current.push(challenge.save()
+        .then(() => {
+          if (challenge.isPrototype) {
+            this._message(this.intl.t('challenge.move.success-prototype-message'));
+          } else {
+            this._message(this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }));
+          }
+        })
+      );
+      return current;
+    }, []);
+    await Promise.all(updateChallenges);
   }
 
   _saveCheck(challenge) {

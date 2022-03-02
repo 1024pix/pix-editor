@@ -252,7 +252,7 @@ export default class PopinSelectLocation extends Component {
     this.skillsGroupByLevelList.find(groupOptions=>{
       if (groupOptions) {
         result = groupOptions.options.find(skill=> {
-          return skill.id === this.args.skill.id;
+          return skill.id === this.args.skill.get('id');
         });
         return !!result;
       }
@@ -274,7 +274,7 @@ export default class PopinSelectLocation extends Component {
       this.args.onChange(competence, theme);
     }
     if (this.args.isPrototypeLocation) {
-      this.args.onChange([this._selectedSkill]);
+      this.args.onChange(this._selectedSkill);
     }
     if (this.args.isSkillLocation) {
       const tube = this.selectedTube.data;

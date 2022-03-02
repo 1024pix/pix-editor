@@ -101,7 +101,15 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
   });
 
   module('#prototype actions', function(hooks) {
-    let proposalPrototype1_1, validatePrototype2_1, proposalPrototype2_2, proposalChallenge1_1, validateChallenge2_1, proposalChallenge2_2, skill1, skill2, tube;
+    let proposalPrototype1_1,
+      validatePrototype2_1,
+      proposalPrototype2_2,
+      proposalChallenge1_1,
+      validateChallenge2_1,
+      proposalChallenge2_2,
+      skill1,
+      skill2,
+      tube;
 
     hooks.beforeEach(function () {
       const saveStub = sinon.stub().resolves({});
@@ -111,6 +119,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         id: 'rec_proto1_1',
         pixId: 'pix_proto1_1',
         genealogy: 'Prototype 1',
+        version: 1,
         status: 'proposé',
         save: saveStub
       });
@@ -118,12 +127,15 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         id: 'rec_challenge1_1',
         pixId: 'pix_challenge1_1',
         status: 'proposé',
+        version: 1,
+        alternativeVersion: 1,
         save: saveStub
       });
       validatePrototype2_1 = store.createRecord('challenge', {
         id: 'rec_proto2_1',
         pixId: 'pix_proto2_1',
         status: 'validé',
+        version: 1,
         genealogy: 'Prototype 1',
         save: saveStub
       });
@@ -131,18 +143,21 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         id: 'rec_challenge2_1',
         pixId: 'pix_challenge2_1',
         status: 'validé',
+        version: 1,
         save: saveStub
       });
       proposalPrototype2_2 = store.createRecord('challenge', {
         id: 'rec_proto2_2',
         pixId: 'pix_proto2_2',
         status: 'proposé',
+        version: 2,
         genealogy: 'Prototype 1',
         save: saveStub
       });
       proposalChallenge2_2 = store.createRecord('challenge', {
         id: 'rec_challenge2_2',
         pixId: 'pix_challenge2_2',
+        version: 2,
         status: 'proposé',
         save: saveStub
       });
@@ -175,6 +190,9 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
     module('on prototype validation', function() {
       test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
+        //given
+        proposalChallenge2_2.version = 1;
+
         //when
         await controller._archivePreviousPrototype(proposalPrototype2_2);
 
@@ -296,6 +314,30 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         // then
         assert.equal(skill2.status, 'actif');
         assert.equal(skill1.status, 'en construction');
+      });
+    });
+
+    module('#setSkill', function () {
+      test('it should display an error message if have no skill', async function(assert) {
+        // when
+        await controller.setSkill();
+
+        // then
+        assert.ok(errorStub.calledWith('Aucun acquis sélectionné'));
+      });
+
+      test('it should set a new skill for prototype and is alternative with proper version', async function(assert) {
+        // when
+        await controller._setSkill(proposalPrototype1_1, skill2);
+
+        // then
+        assert.ok(messageStub.calledTwice);
+        assert.ok(messageStub.getCalls()[0].calledWith('Changement d\'acquis effectué pour la déclinaison n°1'));
+        assert.ok(messageStub.getCalls()[1].calledWith('Changement d\'acquis effectué pour le prototype'));
+        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.equal(proposalChallenge1_1.version, 3);
+        assert.equal(proposalChallenge1_1.version, 3);
       });
     });
   });
