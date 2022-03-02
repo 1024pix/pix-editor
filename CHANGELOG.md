@@ -1,5 +1,11 @@
 
 
+## v3.63.1 (02/03/2022)
+
+
+### :bug: Correction
+- [#41](https://github.com/1024pix/pix-editor/pull/41) [BUGFIX]  Réparer le déplacement d'un prototype (PIX-4476).
+
 ## v3.63.0 (23/02/2022)
 
 
