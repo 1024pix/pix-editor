@@ -46,30 +46,14 @@ export default class NewController extends Prototype {
       });
   }
 
-  _setVersion(challenge) {
-    let operation;
-    if (challenge.isWorkbench) {
-      operation = Promise.resolve(challenge);
-    } else {
-      const skill = challenge.skill;
-      if (!skill) {
-        operation = Promise.resolve(challenge);
-      } else {
-        const version = skill.getNextPrototypeVersion();
-        if (version > 0) {
-          challenge.version = version;
-          operation = challenge.save();
-        } else {
-          operation = Promise.resolve(challenge);
-        }
-      }
+  async _setVersion(challenge) {
+    if (!challenge.isWorkbench) {
+      const skill = await challenge.skill;
+      const version = skill.getNextPrototypeVersion();
+      challenge.version = version;
+      await challenge.save();
+      this._message(this.intl.t('challenge.new.version', { version }), true);
     }
-    return operation.then(challenge => {
-      const version = challenge.version;
-      if (version > 0) {
-        this._message(`Nouvelle version : ${version}`, true);
-      }
-      return challenge;
-    });
+    return challenge;
   }
 }
