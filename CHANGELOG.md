@@ -1,5 +1,11 @@
 
 
+## v3.63.2 (07/03/2022)
+
+
+### :bug: Correction
+- [#43](https://github.com/1024pix/pix-editor/pull/43) [BUGFIX] Réparer la création d'une nouvelle version d'un prototype (PIX-4476)
+
 ## v3.63.1 (02/03/2022)
 
 
