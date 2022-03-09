@@ -75,7 +75,6 @@ module.exports = datasource.extend({
       t3Status: _convertAirtableValueToBoolean(airtableRecord.get('T3 - Distance d\'édition')),
       status: airtableRecord.get('Statut'),
       skills: airtableRecord.get('Acquix') || [],
-      skillIds: airtableRecord.get('Acquix (id persistant)') || [],
       skillId: (airtableRecord.get('Acquix (id persistant)') || [])[0],
       embedUrl: airtableRecord.get('Embed URL'),
       embedTitle: airtableRecord.get('Embed title'),
