@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../authenticated';
 
-export default class CompetenceI18nIndexRoute extends Route {
+export default class CompetenceI18nIndexRoute extends AuthenticatedRoute {
   setupController() {
     super.setupController(...arguments);
     const competenceController = this.controllerFor('competence');
