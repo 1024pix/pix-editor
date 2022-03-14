@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../../authenticated';
 
-export default class AlternativesRoute extends Route {
+export default class AlternativesRoute extends AuthenticatedRoute {
 
   model() {
     return this.modelFor('competence.prototypes.single');

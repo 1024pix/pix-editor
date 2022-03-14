@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from './authenticated';
 
-export default class ChallengeRoute extends Route {
+export default class ChallengeRoute extends AuthenticatedRoute {
   model(params) {
     return this.store.findRecord('challenge', params.challenge_id);
   }

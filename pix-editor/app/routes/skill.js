@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from './authenticated';
 
-export default class SkillRoute extends Route {
+export default class SkillRoute extends AuthenticatedRoute {
   model(params) {
     return this.store.query('skill', { filterByFormula:`FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
   }

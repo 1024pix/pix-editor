@@ -1,18 +1,10 @@
-import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import AuthenticatedRoute from './authenticated';
 
-export default class CompetenceRoute extends Route {
+export default class CompetenceRoute extends AuthenticatedRoute {
   @service paginatedQuery;
   @service currentData;
-  @service auth;
-  @service router;
-
-  beforeModel(transition) {
-    if (!this.auth.connected) {
-      this.router.transitionTo('index');
-    }
-  }
 
   model(params) {
     return this.store.findRecord('competence', params.competence_id);
