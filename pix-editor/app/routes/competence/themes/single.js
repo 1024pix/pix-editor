@@ -1,8 +1,8 @@
-import Route from '@ember/routing/route';
 import { action } from '@ember/object';
+import AuthenticatedRoute from '../../authenticated';
 
 
-export default class CompetenceThemesSingleRoute extends Route {
+export default class CompetenceThemesSingleRoute extends AuthenticatedRoute {
   model(params) {
     return this.store.findRecord('theme', params.theme_id);
   }

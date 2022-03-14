@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../../../authenticated';
 
-export default class NewRoute extends Route {
+export default class NewRoute extends AuthenticatedRoute {
   templateName = 'competence/prototypes/single';
 
   async model(params) {

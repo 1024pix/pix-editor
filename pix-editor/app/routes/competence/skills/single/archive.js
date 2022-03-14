@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../../authenticated';
 
-export default class CompetenceSkillsSingleArchiveRoute extends Route {
+export default class CompetenceSkillsSingleArchiveRoute extends AuthenticatedRoute {
   renderTemplate() {
     this.render('competence/skills/single/archive', {
       into: 'competence',

@@ -18,7 +18,8 @@ export default class ApplicationRoute extends Route {
       await this.config.load();
       this.auth.connected = true;
       this.intl.setLocale(['fr']);
-    } catch (_e) {
+    } catch (_) {
+      console.log('not authenticated');
     }
 
     if (!this.auth.connected) {

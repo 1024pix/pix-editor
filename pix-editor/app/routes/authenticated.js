@@ -7,7 +7,7 @@ export default class AuthenticatedRoute extends Route {
 
   beforeModel() {
     if (!this.auth.connected) {
-      this.router.transitionTo('index');
+      this.router.transitionTo('');
     }
   }
 }
