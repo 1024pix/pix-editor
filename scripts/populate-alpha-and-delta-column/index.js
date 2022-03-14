@@ -1,3 +1,12 @@
+// Populate the alpha and dela columns
+// You must have 2 files:
+//  - a csv file with the mapping between the hash and the challenge id: names file.csv
+//  - a json file with hash and alpha and beta: file.json
+// To run the script:
+// > cd scripts
+// > npm ci
+// > AIRTABLE_API_KEY=XXX AIRTABLE_BASE=XXXX node populate-alpha-and-delta-column/
+
 const _ = require('lodash');
 const fs = require('fs');
 const Airtable = require('airtable');
