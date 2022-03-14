@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../authenticated';
 
-export default class CompetenceSkillsListRoute extends Route {
+export default class CompetenceSkillsListRoute extends AuthenticatedRoute {
 
   async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);

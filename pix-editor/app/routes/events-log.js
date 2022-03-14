@@ -1,7 +1,7 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import AuthenticatedRoute from './authenticated';
 
-export default class EventsLogRoute extends Route {
+export default class EventsLogRoute extends AuthenticatedRoute {
 
   @service paginatedQuery;
 

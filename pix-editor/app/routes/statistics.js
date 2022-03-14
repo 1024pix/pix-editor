@@ -1,7 +1,7 @@
-import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import AuthenticatedRoute from './authenticated';
 
-export default class StatisticsRoute extends Route {
+export default class StatisticsRoute extends AuthenticatedRoute {
 
   @service currentData;
 

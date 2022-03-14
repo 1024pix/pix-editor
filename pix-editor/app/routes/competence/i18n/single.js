@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from '../../authenticated';
 
-export default class CompetenceI18nSingleRoute extends Route {
+export default class CompetenceI18nSingleRoute extends AuthenticatedRoute {
 
   model(params) {
     return this.store.findRecord('skill', params.skill_id);

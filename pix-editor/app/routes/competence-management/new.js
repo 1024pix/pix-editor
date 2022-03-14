@@ -1,8 +1,8 @@
-import Route from '@ember/routing/route';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import AuthenticatedRoute from '../authenticated';
 
-export default class CompetenceManagementNewRoute extends Route {
+export default class CompetenceManagementNewRoute extends AuthenticatedRoute {
   templateName = 'competence-management/single';
   @service idGenerator;
   @service currentData;

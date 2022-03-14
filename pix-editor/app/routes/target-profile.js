@@ -1,6 +1,6 @@
-import Route from '@ember/routing/route';
+import AuthenticatedRoute from './authenticated';
 
-export default class TargetProfileRoute extends Route {
+export default class TargetProfileRoute extends AuthenticatedRoute {
 
   model() {
     return this.modelFor('application');

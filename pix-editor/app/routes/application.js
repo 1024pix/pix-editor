@@ -4,8 +4,7 @@ import { inject as service } from '@ember/service';
 import { scheduleOnce } from '@ember/runloop';
 
 export default class ApplicationRoute extends Route {
-  configured = false;
-
+  @service auth;
   @service config;
   @service currentData;
   @service intl;
@@ -17,19 +16,19 @@ export default class ApplicationRoute extends Route {
   async beforeModel() {
     try {
       await this.config.load();
-      this.configured = true;
+      this.auth.connected = true;
       this.intl.setLocale(['fr']);
-    } catch (error) {
-      this.configured = false;
+    } catch (_) {
+      console.log('not authenticated');
     }
 
-    if (!this.configured) {
+    if (!this.auth.connected) {
       scheduleOnce('afterRender', this, this._openLoginForm);
     }
   }
 
   model() {
-    if (this.configured) {
+    if (this.auth.connected) {
       return this.store.findAll('framework');
     }
   }
