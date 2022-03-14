@@ -36,9 +36,17 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/releases/latest',
       config: {
-        handler: async function() {
+        handler: async function(req, h) {
+          const ifModifiedSince = req.headers['if-modified-since'];
+          if (ifModifiedSince != null) {
+            const releaseInfo = await releaseRepository.getLatestReleaseInfo();
+            const releaseDate = releaseInfo.createdAt.toUTCString();
+            if (releaseDate === ifModifiedSince) {
+              return h.response().header('Last-Modified', releaseDate);
+            }
+          }
           const release = await releaseRepository.getLatestRelease();
-          return JSON.stringify(release);
+          return h.response(release).header('Last-Modified', release.createdAt.toUTCString());
         },
       },
     },
@@ -46,10 +54,10 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/releases/{id}',
       config: {
-        handler: async function(request) {
+        handler: async function(request, h) {
           const release = await releaseRepository.getRelease(request.params.id);
           if (release) {
-            return JSON.stringify(release);
+            return h.response(release);
           } else {
             return Boom.notFound();
           }

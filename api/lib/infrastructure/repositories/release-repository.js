@@ -40,6 +40,15 @@ module.exports = {
     return this.toDomain(release[0]);
   },
 
+  async getLatestReleaseInfo() {
+    const release = await knex('releases')
+      .select('id', 'createdAt')
+      .orderBy('createdAt', 'desc')
+      .limit(1);
+
+    return this.toDomain(release[0]);
+  },
+
   async getRelease(id) {
     const release = await knex('releases')
       .select('id', 'content', 'createdAt')
@@ -86,7 +95,7 @@ module.exports = {
     }
     return new Release({
       id: releaseDTO.id,
-      content: Content.from(releaseDTO.content),
+      content: releaseDTO.content != null ? Content.from(releaseDTO.content) : null,
       createdAt: releaseDTO.createdAt,
     });
   }

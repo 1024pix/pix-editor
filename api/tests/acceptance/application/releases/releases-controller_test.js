@@ -208,12 +208,12 @@ describe('Acceptance | Controller | release-controller', () => {
   });
 
   describe('GET /latest-release - Returns latest release', () => {
-    context('nominal case', () => {
-      let user;
-      beforeEach(async function() {
-        user = databaseBuilder.factory.buildAdminUser();
-      });
+    let user;
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+    });
 
+    context('nominal case', () => {
       it('should return latest release of learning content', async () => {
         // Given
         const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
@@ -229,10 +229,59 @@ describe('Acceptance | Controller | release-controller', () => {
         });
 
         // Then
-        const latestRelease = JSON.parse(response.result);
+        expect(response.statusCode).to.equal(200);
+        const latestRelease = response.result;
         expect(latestRelease.content).to.deep.equal(expectedLatestRelease.content);
         expect(latestRelease.id).to.deep.equal(expectedLatestRelease.id);
-        expect(latestRelease.date).to.deep.equal(expectedLatestRelease.date);
+        expect(latestRelease.createdAt).to.deep.equal(expectedLatestRelease.createdAt);
+      });
+    });
+
+    context('when client uses if-modified-since', () => {
+      it('should respond 304 Not Modified if there was no new release', async() => {
+        // Given
+        const latestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers: {
+            ...generateAuthorizationHeader(user),
+            'If-Modified-Since': latestRelease.createdAt.toUTCString(),
+          },
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(304);
+      });
+
+      it('should return the latest release if there was a new one', async() => {
+        // Given
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/releases/latest',
+          headers: {
+            ...generateAuthorizationHeader(user),
+            'If-Modified-Since': new Date('2022-03-14T09:22:00Z').toUTCString(),
+          },
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const latestRelease = response.result;
+        expect(latestRelease.content).to.deep.equal(expectedLatestRelease.content);
+        expect(latestRelease.id).to.deep.equal(expectedLatestRelease.id);
+        expect(latestRelease.createdAt).to.deep.equal(expectedLatestRelease.createdAt);
       });
     });
   });
@@ -309,10 +358,10 @@ describe('Acceptance | Controller | release-controller', () => {
 
         // Then
         expect(response.statusCode).to.equal(200);
-        const release = JSON.parse(response.result);
+        const release = response.result;
         expect(release.content).to.deep.equal(expectedRelease.content);
         expect(release.id).to.deep.equal(expectedRelease.id);
-        expect(release.date).to.deep.equal(expectedRelease.date);
+        expect(release.createdAt).to.deep.equal(expectedRelease.createdAt);
       });
     });
 
