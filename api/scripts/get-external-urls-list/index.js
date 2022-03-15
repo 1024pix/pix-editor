@@ -16,7 +16,7 @@ async function getExternalUrlsList() {
   };
 
   urlsFromChallenges.forEach((urlChallenge) => {
-    urlChallenge.origin = skillIdsWithFramework[urlChallenge.skillIds[0]];
+    urlChallenge.origin = skillIdsWithFramework[urlChallenge.skillId];
     urlChallenge.url = baseUrl(urlChallenge.url);
     urlChallenge.tube = getTubeName(release, urlChallenge);
   });
@@ -37,7 +37,7 @@ function findUrlsFromChallenges(challenges) {
     return functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: challenge.id, locales: challenge.locales, url, skillIds: challenge.skillIds, status: challenge.status };
+        return { id: challenge.id, locales: challenge.locales, url, skillId: challenge.skillId, status: challenge.status };
       });
   });
   return _.uniqBy(urlsFromChallenges, 'url');
@@ -45,13 +45,13 @@ function findUrlsFromChallenges(challenges) {
 
 function getTubeName(release, challenge) {
   const skill = release.skills.find((skill) => {
-    return skill.id === challenge.skillIds[0];
+    return skill.id === challenge.skillId;
   });
   const tube = release.tubes.find((tube) => {
     return tube.id === skill.tubeId;
   });
   return tube.name;
-};
+}
 
 function getSkillIdsWithFramework(release) {
   return release.competences.reduce((memo, competence) => {

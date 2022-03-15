@@ -103,21 +103,14 @@ describe('Check urls from release', function() {
           id: 'challenge1',
           instruction: 'instructions [link](https://example.net/) further instructions [other_link](https://other_example.net/)',
           proposals: 'proposals [link](https://example.net/)',
-          skillIds: ['skill1'],
+          skillId: 'skill1',
           status: 'validé',
         },
         {
           id: 'challenge2',
           instruction: 'instructions',
           proposals: 'proposals [link](https://example.fr/)',
-          skillIds: [],
-          status: 'validé',
-        },
-        {
-          id: 'challenge3',
-          instruction: 'instructions [link](https://example.com/)',
-          proposals: 'proposals',
-          skillIds: ['skill1', 'skill2'],
+          skillId: undefined,
           status: 'validé',
         }
       ];
@@ -126,7 +119,6 @@ describe('Check urls from release', function() {
         { id: '@mySkill1;challenge1;validé', url: 'https://example.net/' },
         { id: '@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
         { id: ';challenge2;validé', url: 'https://example.fr/' },
-        { id: '@mySkill1 @mySkill2;challenge3;validé', url: 'https://example.com/' },
       ];
 
       const urls = findUrlsFromChallenges(challenges, release);
