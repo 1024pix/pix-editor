@@ -1,5 +1,18 @@
 
 
+## v3.63.3 (15/03/2022)
+
+
+### :building_construction: Tech
+- [#46](https://github.com/1024pix/pix-editor/pull/46) [TECH] Ajout du trigramme de l'utilisateur dans les rapports de Sentry.
+
+### :bug: Correction
+- [#45](https://github.com/1024pix/pix-editor/pull/45) [BUGFIX] Corriger la déconnexion d'une page
+
+### :coffee: Autre
+- [#44](https://github.com/1024pix/pix-editor/pull/44) [DOC] Ajouter de la documentation au script `populate-alpha-and-delta-column`
+- [#40](https://github.com/1024pix/pix-editor/pull/40) [CLEANUP] Supprime la propriété skillIds de la release
+
 ## v3.63.2 (07/03/2022)
 
 
