@@ -45,7 +45,7 @@ function findUrlsInMarkdown(value) {
 }
 
 function findSkillsNameFromChallenge(challenge, release) {
-  const skills = release.skills.filter(({ id }) => challenge.skillIds.includes(id));
+  const skills = release.skills.filter(({ id }) => challenge.skillId === id);
   return skills.map((s) => s.name).join(' ');
 }
 
