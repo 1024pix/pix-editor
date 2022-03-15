@@ -1,5 +1,11 @@
 
 
+## v3.63.4 (15/03/2022)
+
+
+### :bug: Correction
+- [#47](https://github.com/1024pix/pix-editor/pull/47) [BUGFIX] Attribuer la bonne relation épreuves > acquis dans nos scriptes
+
 ## v3.63.3 (15/03/2022)
 
 
