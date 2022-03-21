@@ -14,7 +14,9 @@ module('Integration | Component | note-form', function(hooks) {
     this.set('editAction', function() {});
     this.set('entry', { status:false });
 
-    await render(hbs`{{form/note close=(action closeAction) edit=(action editAction) entry=entry}}`);
+    await render(hbs`<Form::Note @close={{this.closeAction}}
+                                 @edit={{this.editAction}}
+                                 @entry={{this.entry}} />`);
 
     assert.dom('.ui.content').exists();
 

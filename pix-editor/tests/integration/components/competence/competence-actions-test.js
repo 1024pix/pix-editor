@@ -57,16 +57,14 @@ module('Integration | Component | competence/competence-actions', function(hooks
 
     // given
 
-    this.set('config', { lite:false });
     this.set('externalAction', ()=>{});
 
     // when
-    await render(hbs`{{competence/competence-actions
-      shareSkills=(action externalAction)
-      selectView=(action externalAction)
-      refresh=(action externalAction)
-      config=config
-      section="challenges"}}`);
+    await render(hbs` <Competence::CompetenceActions
+            @section='challenges'
+            @refresh={{this.externalAction}}
+            @selectView={{this.externalAction}}
+            @shareSkills={{this.externalAction}}/>`);
 
     // then
 

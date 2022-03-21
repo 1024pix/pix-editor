@@ -10,7 +10,7 @@ module('Integration | Component | sorted-list', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{list/sorted}}`);
+    await render(hbs`<List::Sorted />`);
 
     assert.dom(this.element).hasText('');
 
