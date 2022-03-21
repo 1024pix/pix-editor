@@ -10,10 +10,8 @@ module('Integration | Component | popin-single-entry', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{pop-in/single-entry}}`);
+    await render(hbs`<PopIn::SingleEntry @title="title"/>`);
 
-    //assert.equal(this.element.textContent.trim(), '');
-    assert.dom('.ember-modal-dialog').exists();
-
+    assert.dom('.pix-modal').exists();
   });
 });

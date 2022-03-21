@@ -11,7 +11,7 @@ module('Integration | Component | select', function(hooks) {
     // Handle any actions with this.set('myAction', function(val) { ... });
     this.set('setValue', function() {});
 
-    await render(hbs`{{field/select setValue=setValue}}`);
+    await render(hbs`<Field::Select @setValue={{this.setValue}} />`);
 
     assert.dom('.field').exists();
 

@@ -2,40 +2,18 @@ import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import Service from '@ember/service';
 
 module('Integration | Component | main-sidebar', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders main-sideBar', async function(assert) {
-    this.set('openAction', function() {});
-    this.set('loadingAction', function() {});
-    this.set('finishedAction', function() {});
-    this.set('messageAction', function() {});
-    this.set('burger', {
-      state:{
-        actions:{
-          close:function() {}
-        }
-      }
-    });
+    this.set('menuOpen', function() {});
+    this.set('openLogout', function() {});
+    this.set('closeMenu', function() {});
 
-    this.owner.register('service:currentData', class MockService extends Service {
-      getAreas() {
-        return [];
-      }
-      getFrameworks() {
-        return [];
-      }
-      getFramework() {
-        return '';
-      }
-    });
-
-    await render(hbs`{{sidebar/main openLogout=(action openAction)
-    showMessage=(action messageAction)
-    burger=burger
-    }}`);
+    await render(hbs`<Sidebar::Main @openLogout={{this.openLogout}}
+                                    @open={{this.menuOpen}}
+                                    @close={{this.closeMenu}} />`);
 
     assert.dom('.main-sidebar').exists();
   });

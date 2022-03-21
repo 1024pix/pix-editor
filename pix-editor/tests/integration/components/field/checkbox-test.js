@@ -10,7 +10,7 @@ module('Integration | Component | checkbox', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{field/checkbox label="search"}}`);
+    await render(hbs`<Field::Checkbox @label="search" />`);
 
     assert.dom('.ui.checkbox').exists();
 
