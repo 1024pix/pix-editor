@@ -33,8 +33,13 @@ module('Integration | Component | list/i18n', function(hooks) {
 
     this.set('challengesByLanguages', challengesByLanguages);
 
+    this.skill = {
+      id: 'skillId',
+      productionPrototype:  {}
+    };
+
     // when
-    await render(hbs`<List::I18n @list={{challengesByLanguages}} @skill={{skill}}/>`);
+    await render(hbs`<List::I18n @list={{this.challengesByLanguages}} @skill={{this.skill}}/>`);
 
     // then
     assert.equal(this.element.querySelectorAll('.challenge-prototype').length, 3);
