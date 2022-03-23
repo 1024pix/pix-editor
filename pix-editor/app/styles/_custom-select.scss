@@ -12,8 +12,13 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   border-color: #ddd;
 }
 
-.ember-power-select-trigger {
-  height: 37px;
+.field {
+  .ember-power-select-trigger {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    height: 37px;
+  }
 }
 
 @keyframes drop-effect {
