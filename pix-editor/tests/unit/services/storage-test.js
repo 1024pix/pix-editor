@@ -212,7 +212,7 @@ module('Unit | Service | storage', function(hooks) {
     test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({
-        response: { status: 401 }
+        status: 401
       });
 
       fetch.onSecondCall().resolves();
@@ -240,7 +240,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        response: { status: 401 }
+        status: 401
       });
 
       const date = {
@@ -263,7 +263,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        response: { status: 400 }
+        status: 400
       });
 
       const date = {
@@ -389,7 +389,7 @@ module('Unit | Service | storage', function(hooks) {
     test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({
-        response: { status: 401 }
+        status: 401
       });
 
       fetch.onSecondCall().resolves();
@@ -412,7 +412,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        response: { status: 401 }
+        status: 401
       });
 
       // then
@@ -431,7 +431,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        response: { status: 400 }
+        status: 400
       });
 
       // then
