@@ -74,7 +74,7 @@ export default class StorageService extends Service {
     try {
       return await fn(token);
     } catch (error) {
-      if (error.response && error.response.status === 401 && !renewToken) {
+      if (error.status === 401 && !renewToken) {
         return this._callAPIWithRetry(fn, true);
       } else {
         throw error;
