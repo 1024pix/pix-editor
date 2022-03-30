@@ -1,5 +1,11 @@
 
 
+## v3.63.5 (30/03/2022)
+
+
+### :bug: Correction
+- [#50](https://github.com/1024pix/pix-editor/pull/50) [BUGFIX] Réparer le rafraîchissement du jeton du seau OVH (PIX-4659).
+
 ## v3.63.4 (15/03/2022)
 
 
