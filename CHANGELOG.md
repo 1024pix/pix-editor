@@ -1,5 +1,11 @@
 
 
+## v3.64.0 (06/04/2022)
+
+
+### :building_construction: Tech
+- [#30](https://github.com/1024pix/pix-editor/pull/30) [TECH] Mise a jour d'Ember en 3.26.1 (PIX-4314).
+
 ## v3.63.5 (30/03/2022)
 
 
