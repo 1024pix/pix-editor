@@ -13,7 +13,7 @@ module('Integration | Component | skill-form', function(hooks) {
     this.set('skill', { i18n:false });
 
 
-    await render(hbs`{{form/skill skill=skill}}`);
+    await render(hbs`<Form::Skill @skill={{this.skill}} />`);
 
     assert.dom('.ui.form').exists();
 

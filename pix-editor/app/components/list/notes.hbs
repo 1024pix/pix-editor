@@ -1,4 +1,4 @@
-<PixTable as |t|>
+<EmberTable as |t|>
   <t.head
     @columns={{this.headers}}
     @widthConstraint={{'eq-container'}}
@@ -8,6 +8,7 @@
     @sorts={{this.sorts}}
     @sortFunction={{this.sort}}/>
   <t.body
+    @renderAll={{this.renderAll}}
     @rows={{this.list}}
     @rowSelectionMode={{'single'}}
     @checkboxSelectionMode={{'none'}}
@@ -18,4 +19,4 @@
       </r.cell>
     </b.row>
   </t.body>
-</PixTable>
+</EmberTable>

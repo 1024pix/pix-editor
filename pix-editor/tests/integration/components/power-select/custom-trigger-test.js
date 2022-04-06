@@ -10,9 +10,7 @@ module('Integration | Component | power-select-custom-trigger', function(hooks) 
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{power-select/custom-trigger}}`);
-
-    assert.dom(this.element).hasText('');
+    await render(hbs`<PowerSelect::CustomTrigger />`);
 
     assert.dom('.search.icon.custom-trigger').exists();
 

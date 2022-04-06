@@ -10,11 +10,10 @@ module('Integration | Component | competence-grid', function(hooks) {
     // given
     // when
 
-    await render(hbs`{{competence/competence-grid}}`);
+    await render(hbs`<Competence::CompetenceGrid />`);
 
     // then
 
-    assert.ok(true);
-
+    assert.dom('.competence-grid').exists();
   });
 });

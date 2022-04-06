@@ -10,7 +10,7 @@ module('Integration | Component | form-illustration', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{field/illustration}}`);
+    await render(hbs`<Field::Illustration />`);
 
     assert.dom('.field').exists();
 

@@ -12,7 +12,7 @@ module('Integration | Component | workbench-list', function(hooks) {
 
 
     // when
-    await render(hbs`{{list/workbench}}`);
+    await render(hbs`<List::Workbench />`);
 
 
     // then

@@ -1,7 +1,10 @@
 import AuthenticatedRoute from '../../../../authenticated';
+import { inject as service } from '@ember/service';
 
 export default class NewRoute extends AuthenticatedRoute {
   templateName = 'competence/prototypes/single';
+
+  @service store;
 
   async model(params) {
     if (params.from) {

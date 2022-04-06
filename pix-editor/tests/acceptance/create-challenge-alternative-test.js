@@ -43,7 +43,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
-    await click(findAll('[data-test-skill-cell]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('.alternatives'));
     await click(find('[data-test-new-alternative-action]'));
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
@@ -75,7 +75,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
-    await click(findAll('[data-test-skill-cell]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('.alternatives'));
     await click(find('[data-test-new-alternative-action]'));
     await click(find('[data-test-save-challenge-button]'));

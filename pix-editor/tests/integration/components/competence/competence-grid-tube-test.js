@@ -61,7 +61,7 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
                                                      @view={{this.view}} />`);
 
     // then
-    assert.dom('td.skill').includesText('@skill1');
+    assert.dom('td.skill-cell').includesText('@skill1');
 
   });
 
@@ -76,7 +76,7 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
                                                      @view={{this.view}} />`);
 
     // then
-    assert.dom('td.skill').includesText('@productionSkill1');
+    assert.dom('td.skill-cell').includesText('@productionSkill1');
 
   });
 });

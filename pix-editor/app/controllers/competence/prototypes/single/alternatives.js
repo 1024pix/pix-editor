@@ -14,10 +14,10 @@ export default class AlternativesController extends Controller {
   @tracked competence = null;
   @tracked rightMaximized = false;
 
-  @service router;
-  @service config;
   @service access;
+  @service config;
   @service currentData;
+  @service router;
 
   @controller('competence') competenceController;
 
@@ -41,18 +41,18 @@ export default class AlternativesController extends Controller {
 
   @action
   newAlternative() {
-    this.transitionToRoute('competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge);
+    this.router.transitionTo('competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge);
   }
 
   @action
   closeChildComponent() {
     this.maximizeRight(false);
-    this.transitionToRoute('competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
+    this.router.transitionTo('competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, { queryParams: { from: challenge.id } });
+    this.router.transitionTo('competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, { queryParams: { from: challenge.id } });
   }
 
   @action

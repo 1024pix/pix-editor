@@ -71,7 +71,7 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     this.owner.register('service:currentData', CurrentDataService);
 
     const transitionToRouteStub = sinon.stub();
-    controller.transitionToRoute = transitionToRouteStub;
+    controller.router.transitionTo = transitionToRouteStub;
 
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;

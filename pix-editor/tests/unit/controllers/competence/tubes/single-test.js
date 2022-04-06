@@ -165,7 +165,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
     test('it should set a competence and a theme', async function(assert) {
       // given
       const transitionToRouteStub = sinon.stub();
-      controller.transitionToRoute = transitionToRouteStub;
+      controller.router.transitionTo = transitionToRouteStub;
       const saveStub = sinon.stub().resolves();
       controller.model.save = saveStub;
 

@@ -7,13 +7,18 @@ module('Integration | Component | quality-view', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
+    // given
+    const skill = {
+      productionPrototype: {},
+      tutoSolution: [],
+      tutoMore: []
+    };
 
-    await render(hbs`{{quality-view}}`);
+    this.skill = skill;
+    // when
+    await render(hbs`<Competence::Grid::CellQuality @skill={{this.skill}} />`);
 
+    // then
     assert.dom(this.element).hasText('0');
-
-
   });
 });

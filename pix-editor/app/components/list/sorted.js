@@ -1,3 +1,4 @@
+import ENV from 'pixeditor/config/environment';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
@@ -41,6 +42,11 @@ export default class SortedList extends Component {
       sortEmptyLast = isAscending;
     }
     return isAscending ? compare(valueA, valueB, sortEmptyLast) : -compare(valueA, valueB, sortEmptyLast);
+  }
+
+  // Fix EmberTable rendering for tests
+  get renderAll() {
+    return ENV.environment === 'test';
   }
 
   @action

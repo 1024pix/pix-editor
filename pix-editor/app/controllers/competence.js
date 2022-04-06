@@ -110,16 +110,16 @@ export default class CompetenceController extends Controller {
   _transitionToSection(section) {
     switch (section) {
       case 'skills':
-        this.transitionToRoute('competence.skills', this.competence);
+        this.router.transitionTo('competence.skills', this.competence);
         break;
       case 'challenges':
-        this.transitionToRoute('competence.prototypes', this.competence);
+        this.router.transitionTo('competence.prototypes', this.competence);
         break;
       case 'quality':
-        this.transitionToRoute('competence.quality', this.competence);
+        this.router.transitionTo('competence.quality', this.competence);
         break;
       case 'i18n':
-        this.transitionToRoute('competence.i18n', this.competence);
+        this.router.transitionTo('competence.i18n', this.competence);
         break;
     }
   }
@@ -140,22 +140,22 @@ export default class CompetenceController extends Controller {
 
   @action
   newPrototype() {
-    this.transitionToRoute('competence.prototypes.new', this.competence);
+    this.router.transitionTo('competence.prototypes.new', this.competence);
   }
 
   @action
   copyChallenge(challenge) {
-    this.transitionToRoute('competence.prototypes.new', this.competence, { queryParams: { from: challenge.id } });
+    this.router.transitionTo('competence.prototypes.new', this.competence, { queryParams: { from: challenge.id } });
   }
 
   @action
   newTube(theme) {
-    this.transitionToRoute('competence.tubes.new', this.competence, { queryParams: { themeId: theme.id } });
+    this.router.transitionTo('competence.tubes.new', this.competence, { queryParams: { themeId: theme.id } });
   }
 
   @action
   newTheme() {
-    this.transitionToRoute('competence.themes.new', this.competence);
+    this.router.transitionTo('competence.themes.new', this.competence);
   }
 
   @action

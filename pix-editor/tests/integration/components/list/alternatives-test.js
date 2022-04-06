@@ -10,7 +10,7 @@ module('Integration | Component | alternatives-list', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{list/alternatives}}`);
+    await render(hbs`<List::Alternatives />`);
 
     assert.dom('.ember-table').exists();
 

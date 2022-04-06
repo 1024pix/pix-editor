@@ -1,8 +1,11 @@
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import AuthenticatedRoute from '../../authenticated';
 
-
 export default class CompetenceThemesSingleRoute extends AuthenticatedRoute {
+
+  @service store;
+
   model(params) {
     return this.store.findRecord('theme', params.theme_id);
   }

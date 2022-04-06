@@ -10,7 +10,7 @@ module('Integration | Component | form-input', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{field/input}}`);
+    await render(hbs`<Field::Input />`);
 
     assert.dom('.field').exists();
 

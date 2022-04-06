@@ -3,8 +3,9 @@ import { inject as service } from '@ember/service';
 import AuthenticatedRoute from './authenticated';
 
 export default class CompetenceRoute extends AuthenticatedRoute {
-  @service paginatedQuery;
   @service currentData;
+  @service paginatedQuery;
+  @service store;
 
   model(params) {
     return this.store.findRecord('competence', params.competence_id);

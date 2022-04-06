@@ -1,10 +1,11 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
-  <div class="ui standard modal visible active">
-    <div class="header">{{@title}}</div>
-    <div class="content">
-      <p>
-        {{@content}}
-      </p>
+<PixModal
+  @title={{@title}}
+  @onCloseButtonClick={{@onDeny}}
+>
+  <:content>
+    <p>
+      {{@content}}
+    </p>
     <form class="ui form">
       <Field::Checkbox
         class="checkbox-layout"
@@ -13,24 +14,23 @@
         data-test-confirm-log-check
       />
       {{#if this.displayTextarea}}
-      <div class="changelog-layout">
-       <label for={{this.inputId}} >
-          {{@label}}
-        </label>
-        <Textarea id={{this.inputId}} @value={{this.defaultValue}} @rows="4" class="changelog-textarea"/>
+        <div class="changelog-layout">
+          <label for={{this.inputId}} >
+            {{@label}}
+          </label>
+          <Textarea id={{this.inputId}} @value={{this.defaultValue}} rows="4" class="changelog-textarea" />
         </div>
       {{/if}}
     </form>
-    </div>
-    <div class="actions">
-      <button type="button" class="ui blue cancel button" {{on "click" @onDeny}} data-test-confirm-log-cancel>
-        <i class="remove icon" ></i>
-        {{t 'common.cancel'}}
-      </button>
-      <button type="button" class="ui green ok button" {{on "click" (fn @onApprove this.changeLogValue)}} data-test-confirm-log-approve>
-        <i class="checkmark icon" ></i>
-        {{t 'common.validate'}}
-      </button>
-    </div>
-  </div>
-</ModalDialog>
+  </:content>
+  <:footer>
+    <PixButton data-test-confirm-log-cancel
+      @backgroundColor="transparent-light"
+      @isBorderVisible={{true}}
+      @triggerAction={{@onDeny}}
+    >
+      {{t 'common.cancel'}}
+    </PixButton>
+    <PixButton data-test-confirm-log-approve @triggerAction={{fn @onApprove this.changeLogValue}}>{{t 'common.validate'}}</PixButton>
+  </:footer>
+</PixModal>

@@ -11,6 +11,7 @@ export default class ListController extends Controller {
   @service access;
   @service config;
   @service currentData;
+  @service router;
 
   @tracked selectedSkill;
 
@@ -33,9 +34,9 @@ export default class ListController extends Controller {
     const prototypes = this.selectedSkill.sortedPrototypes;
     if (prototypes.length > 0) {
       const prototype = prototypes.firstObject;
-      this.transitionToRoute('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { from: prototype.id } });
+      this.router.transitionTo('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { from: prototype.id } });
     } else {
-      this.transitionToRoute('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.selectedSkill.id } });
+      this.router.transitionTo('competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.selectedSkill.id } });
     }
   }
 }

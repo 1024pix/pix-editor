@@ -1,8 +1,8 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{@close}}>
-  <div class="ui modal visible active">
-    <i class="close icon" {{on "click" @close}}></i>
-    <div class="image content">
-      <img class="image" src={{@src}} alt="illustration">
-    </div>
-  </div>
-</ModalDialog>
+<PixModal
+    @title="Illustration"
+    @onCloseButtonClick={{@close}}
+>
+  <:content>
+    <img class="image-modal" src={{@imageSrc}} alt="illustration">
+  </:content>
+</PixModal>

@@ -6,6 +6,7 @@ export default class SingleRoute extends SkillRoute {
   templateName = 'competence/skills/single';
 
   @service currentData;
+  @service router;
 
   setupController() {
     super.setupController(...arguments);
@@ -25,10 +26,10 @@ export default class SingleRoute extends SkillRoute {
         const skill = this.controllerFor('competence.quality.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
-          return this.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
+          return this.router.transitionTo('competence.prototypes.single', this.currentData.getCompetence(), prototype);
         }
       } else if (transition.targetName === 'competence.skills.index') {
-        return this.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controllerFor('competence.quality.single').model);
+        return this.router.transitionTo('competence.skills.single', this.currentData.getCompetence(), this.controllerFor('competence.quality.single').model);
       }
       return true;
     }

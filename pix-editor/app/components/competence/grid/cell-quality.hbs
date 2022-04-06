@@ -1,24 +1,26 @@
-<LinkTo @route="competence.quality.single" @model={{@skill}} @tagName="td" class="skill-cell quality-skill-link link skill">
+<td class="skill-cell quality-skill-cell">
   <EmberTooltip @tooltipClass="custom-tooltip quality-tooltip" @arrowClass="custom-arrow" @side="right-start">
     <table class="quality-indication-details">
       <tbody>
         {{this.popupBuild}}
       </tbody>
     </table>
-  </EmberTooltip>
-  <div class="quality {{this.qualityClassColor}}">
-    <div class=" quality-indication">
-      <span>{{@skill.name}}</span>
-      <span>{{this.qualityIndication}}</span>
+  </EmberTooltip >
+  <LinkTo @route="competence.quality.single" @model={{@skill}} class="skill-cell__link">
+    <div class="quality {{this.qualityClassColor}}">
+      <div class=" quality-indication">
+        <span>{{@skill.name}}</span>
+        <span>{{this.qualityIndication}}</span>
+      </div>
+      {{#if this.classTutorial}}
+        <i class="lab icon {{this.classTutorial}}"></i>
+      {{/if}}
+      {{#if @skill.productionPrototype.timer }}
+        <i class="time icon"></i>
+      {{/if}}
+      {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
+        <br>
+      {{/if}}
     </div>
-    {{#if this.classTutorial}}
-      <i class="lab icon {{this.classTutorial}}"></i>
-    {{/if}}
-    {{#if @skill.productionPrototype.timer }}
-      <i class="time icon"></i>
-    {{/if}}
-    {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
-      <br>
-    {{/if}}
-  </div>
-</LinkTo>
+  </LinkTo>
+</td>

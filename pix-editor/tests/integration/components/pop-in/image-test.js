@@ -12,8 +12,9 @@ module('Integration | Component | popin-image', function(hooks) {
 
     this.set('closeAction', function() {});
 
-    await render(hbs`{{pop-in/image close=(action closeAction)}}`);
+    await render(hbs`<PopIn::Image @close={{this.closeAction}}
+                                   @title="image" />`);
 
-    assert.dom('.ember-modal-dialog').exists();
+    assert.dom('.pix-modal').exists();
   });
 });

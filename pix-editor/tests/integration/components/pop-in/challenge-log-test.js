@@ -15,7 +15,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     class PaginatedQueryService extends Service {
       query = paginatedQueryLoadNotesStub.resolves([note]);
     }
-    
+
     this.owner.unregister('service:paginatedQuery');
     this.owner.register('service:paginatedQuery', PaginatedQueryService);
     const note = {
@@ -38,7 +38,7 @@ module('Integration | Component | popin-challenge-log', function(hooks) {
     await render(hbs`<PopIn::Challenge-log @close={{this.closeAction}} @challenge={{this.challenge}}/>`);
 
     //then
-    assert.dom('.ember-modal-dialog').exists();
+    assert.dom('.pix-modal').exists();
   });
 
   test('it queries notes', async function(assert) {

@@ -8,8 +8,10 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
   creation = true;
 
   @service currentData;
-  @service notify;
   @service loader;
+  @service notify;
+  @service router;
+  @service store;
 
   @action
   async save() {
@@ -22,7 +24,7 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
       this.edition = false;
       this.loader.stop();
       this.notify.message('Thématique créé');
-      this.transitionToRoute('competence.themes.single', competence, theme);
+      this.router.transitionTo('competence.themes.single', competence, theme);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);

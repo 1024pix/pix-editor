@@ -10,7 +10,8 @@ module('Integration | Component | quality', function(hooks) {
 
     this.set('challenge', { accessibility1:false, accessibility2:false, spoil:false, responsive:false });
 
-    await render(hbs`{{field/quality title="form_title" challenge=challenge}}`);
+    await render(hbs`<Field::Quality @title="form_title"
+                                     @challenge={{this.challenge}} />`);
 
     assert.dom(this.element.getElementsByTagName('label')[0]).hasText('form_title');
 

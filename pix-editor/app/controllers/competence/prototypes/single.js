@@ -24,17 +24,18 @@ export default class SingleController extends Controller {
   @tracked changelogDefault = '';
   @tracked displayConfirmLog = false;
 
-  @service config;
-  @service store;
   @service access;
-  @service storage
-  @service filePath;
-  @service currentData;
-  @service notify;
-  @service loader;
-  @service confirm;
   @service changelogEntry;
+  @service config;
+  @service confirm;
+  @service currentData;
+  @service filePath;
   @service intl;
+  @service loader;
+  @service notify;
+  @service router;
+  @service storage
+  @service store;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -232,7 +233,7 @@ export default class SingleController extends Controller {
 
   @action
   showAlternatives() {
-    this.transitionToRoute('competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
+    this.router.transitionTo('competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
   }
 
   @action
@@ -339,7 +340,7 @@ export default class SingleController extends Controller {
   async showVersions() {
     const skill = await this.challenge.skill;
     const tube = await skill.get('tube');
-    this.transitionToRoute('competence.prototypes.list', tube.id, skill.id);
+    this.router.transitionTo('competence.prototypes.list', tube.id, skill.id);
   }
 
   @action

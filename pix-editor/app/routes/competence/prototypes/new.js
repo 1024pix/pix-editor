@@ -6,6 +6,7 @@ export default class NewRoute extends PrototypeRoute {
 
   @service config;
   @service idGenerator;
+  @service store;
 
   async model(params) {
     if (params.from) {
