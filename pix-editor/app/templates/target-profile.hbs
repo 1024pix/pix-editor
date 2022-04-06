@@ -5,24 +5,24 @@
       <div class="target-profile-filter {{if this.isThematicResultMode "active"}}">
         Résultat thématique
         <div class="ui toggle checkbox ">
-          <Input @type="checkbox" @checked={{this.isThematicResultMode}} {{on 'change' this.toggleThematicResult}}
+          <Input id="thematicResult" @type="checkbox" @checked={{this.isThematicResultMode}} {{on 'change' this.toggleThematicResult}}
                  class="toggle"/>
-          <label class="checkbox-label"></label>
+          <label class="checkbox-label" for="thematicResult"></label>
         </div>
       </div>
       {{#unless this.isThematicResultMode}}
         <div class="target-profile-filter {{if this.showTubeDetails "active"}}">
           Détails des sujets
           <div class="ui toggle checkbox ">
-            <Input @type="checkbox" @checked={{this.showTubeDetails}} class="toggle"/>
-            <label class="checkbox-label"></label>
+            <Input id="tubeDetails" @type="checkbox" @checked={{this.showTubeDetails}} class="toggle"/>
+            <label class="checkbox-label" for="tubeDetails"></label>
           </div>
         </div>
         <div class="target-profile-filter {{if this.filter "active"}}">
           Filtrer les sujets sélectionnés
           <div class="ui toggle checkbox ">
-            <Input @type="checkbox" @checked={{this.filter}} class="toggle"/>
-            <label class="checkbox-label"></label>
+            <Input id="filter" @type="checkbox" @checked={{this.filter}} class="toggle"/>
+            <label class="checkbox-label" for="filter"></label>
           </div>
         </div>
       {{/unless}}
@@ -85,7 +85,7 @@
                                   @setTubeLevel={{this.setProfileTube}} @filter={{this.filter}}
                                   @isThematicResultMode={{this.isThematicResultMode}}/>
     {{/each}}
-    <Input @type="file" @id="target-profile__open-file" @change={{this.openFile}} />
+    <Input @type="file" id="target-profile__open-file" {{on "change" this.openFile}} />
   </div>
 </div>
 {{#if this.displayTubeLevel}}

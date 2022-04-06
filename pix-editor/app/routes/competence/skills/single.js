@@ -4,8 +4,9 @@ import AuthenticatedRoute from '../../authenticated';
 
 export default class SingleRoute extends AuthenticatedRoute {
 
-  @service
-  currentData;
+  @service currentData;
+  @service router;
+  @service store;
 
   model(params) {
     return this.store.findRecord('skill', params.skill_id);
@@ -46,13 +47,13 @@ export default class SingleRoute extends AuthenticatedRoute {
         const skill = this.controllerFor('competence.skills.single').skill;
         const prototype = skill.productionPrototype;
         if (prototype) {
-          return this.transitionTo('competence.prototypes.single', prototype);
+          return this.router.transitionTo('competence.prototypes.single', prototype);
         } else {
           const tube = skill.tube;
-          return this.transitionTo('competence.prototypes.list', tube.get('id'), skill.id);
+          return this.router.transitionTo('competence.prototypes.list', tube.get('id'), skill.id);
         }
       } else if (transition.targetName === 'competence.quality.index' && this.controllerFor('competence.skills.single').skill.productionPrototype) {
-        return this.transitionTo('competence.quality.single', this.controllerFor('competence.skills.single').skill);
+        return this.router.transitionTo('competence.quality.single', this.controllerFor('competence.skills.single').skill);
       }
 
       return true;

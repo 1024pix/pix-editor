@@ -12,8 +12,10 @@ module('Integration | Component | popin-confirm', function(hooks) {
     this.set('approveAction', function() {});
     this.set('denyAction', function() {});
 
-    await render(hbs`{{pop-in/confirm onApprove=(action approveAction) onDeny=(action denyAction)}}`);
+    await render(hbs`<PopIn::Confirm @onApprove={{this.approveAction}}
+                                     @onDeny={{this.denyAction}}
+                                     @title="title" />`);
 
-    assert.dom('.ember-modal-dialog').exists();
+    assert.dom('.pix-modal').exists();
   });
 });

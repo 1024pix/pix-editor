@@ -31,10 +31,12 @@ export default class SingleController extends Controller {
   @service changelogEntry;
   @service config;
   @service confirm;
+  @service intl;
   @service loader;
   @service notify;
+  @service router;
   @service storage;
-  @service intl;
+  @service store;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -167,7 +169,7 @@ export default class SingleController extends Controller {
       await this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction);
 
       this.notify.message('Acquis et épreuves associées dupliqués');
-      this.transitionToRoute('competence.skills.single', competence, newSkill);
+      this.router.transitionTo('competence.skills.single', competence, newSkill);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
@@ -306,7 +308,7 @@ export default class SingleController extends Controller {
 
   @action
   displayChallenges() {
-    this.transitionToRoute('competence.skills.single.archive');
+    this.router.transitionTo('competence.skills.single.archive');
   }
 
   @action

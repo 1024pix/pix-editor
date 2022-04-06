@@ -29,7 +29,7 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
-    await click(findAll('[data-test-skill-cell]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
 
     assert.dom('time').hasAttribute('datetime','2021-10-04T14:00:00.000Z');
   });

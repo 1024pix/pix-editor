@@ -10,7 +10,7 @@ module('Integration | Component | form-textarea', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{field/textarea}}`);
+    await render(hbs`<Field::Textarea />`);
 
     assert.dom('.field').exists();
 

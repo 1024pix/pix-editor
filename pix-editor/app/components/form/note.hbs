@@ -4,9 +4,9 @@
       <Field::Select @title="Statut" @value={{@entry.status}} @options={{this.options.status}} @edition={{@edition}} @setValue={{fn (mut @entry.status)}}/>
     </div>
     <div class="field {{if @edition "" "disabled"}}">
-      <label>Texte</label>
+      <label for="note">Texte</label>
       <div class="ui input">
-        <Textarea @value={{@entry.text}} @rows="4" @readonly={{not @edition}} />
+        <Textarea id="note" @value={{@entry.text}} rows="4" readonly={{not @edition}} />
       </div>
     </div>
   </form>

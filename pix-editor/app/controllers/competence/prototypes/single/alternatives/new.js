@@ -10,6 +10,8 @@ export default class NewController extends Alternative {
   @tracked from = '';
   @service currentData;
   @service loader;
+  @service router;
+  @service store;
 
   defaultSaveChangelog = 'Création de la déclinaison';
 
@@ -33,7 +35,7 @@ export default class NewController extends Alternative {
         this.edition = false;
         this.send('minimize');
         this._message(`Déclinaison numéro ${challenge.alternativeVersion} enregistrée`);
-        this.transitionToRoute('competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), challenge);
+        this.router.transitionTo('competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), challenge);
       })
       .catch((error) => {
         console.error(error);

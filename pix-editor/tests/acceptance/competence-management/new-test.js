@@ -56,7 +56,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.ok(workbenchSkill);
     assert.dom(findAll('[data-test-main-message]')[0]).hasText('Compétence créée');
     assert.dom(findAll('[data-test-main-message]')[1]).hasText('Atelier créé');
-    assert.equal(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
+    assert.equal(currentURL(), `/competence/${newCompetence.id}/skills?leftMaximized=false&view=workbench`);
   });
 
   test('it should cancel creation', async function(assert) {

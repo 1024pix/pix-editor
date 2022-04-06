@@ -10,7 +10,7 @@ module('Integration | Component | prototypes-list', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{list/prototypes}}`);
+    await render(hbs`<List::Prototypes />`);
 
     assert.dom('.ember-table').exists();
 

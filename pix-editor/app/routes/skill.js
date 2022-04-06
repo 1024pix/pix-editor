@@ -1,6 +1,11 @@
 import AuthenticatedRoute from './authenticated';
+import { inject as service } from '@ember/service';
 
 export default class SkillRoute extends AuthenticatedRoute {
+
+  @service router;
+  @service store;
+
   model(params) {
     return this.store.query('skill', { filterByFormula:`FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
   }
@@ -10,10 +15,10 @@ export default class SkillRoute extends AuthenticatedRoute {
       const skill = model.firstObject;
       const tube = await skill.tube;
       const competence = await tube.competence;
-      this.transitionTo('competence.skills.single', competence.id, skill.id);
+      this.router.transitionTo('competence.skills.single', competence.id, skill.id);
     } else {
       // redirect to home page
-      this.transitionTo('index');
+      this.router.transitionTo('index');
     }
   }
 }

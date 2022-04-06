@@ -1,6 +1,11 @@
 import AuthenticatedRoute from './authenticated';
+import { inject as service } from '@ember/service';
 
 export default class ChallengeRoute extends AuthenticatedRoute {
+
+  @service router;
+  @service store;
+
   model(params) {
     return this.store.findRecord('challenge', params.challenge_id);
   }
@@ -13,15 +18,15 @@ export default class ChallengeRoute extends AuthenticatedRoute {
         const tube = await skill.tube;
         const competence = await tube.competence;
         if (model.isPrototype) {
-          return this.transitionTo('competence.prototypes.single', competence, model);
+          return this.router.transitionTo('competence.prototypes.single', competence, model);
         } else {
-          return this.transitionTo('competence.prototypes.single.alternatives.single', competence, model.relatedPrototype, model);
+          return this.router.transitionTo('competence.prototypes.single.alternatives.single', competence, model.relatedPrototype, model);
         }
       } catch (e) {
-        this.transitionTo('index');
+        this.router.transitionTo('index');
       }
     } else {
-      return this.transitionTo('index');
+      return this.router.transitionTo('index');
     }
   }
 }

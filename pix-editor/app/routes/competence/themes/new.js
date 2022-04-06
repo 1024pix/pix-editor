@@ -1,7 +1,9 @@
 import CompetenceThemesSingleRoute from './single';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceThemesNewRoute extends CompetenceThemesSingleRoute {
   templateName = 'competence/themes/single';
+  @service store;
 
   model() {
     return this.store.createRecord('theme');

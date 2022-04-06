@@ -1,45 +1,43 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal" @onClose={{this.closeModal}}>
-  <div class="ui standard modal visible active">
-    <i class="close icon" {{on "click" this.closeModal}}></i>
-    <div class="header">
-      {{#if @title}}
-        {{@title}}
-      {{else}}
-        Emplacement de {{@name}}
+<PixModal @title={{this.titleModal}}
+          @onCloseButtonClick={{this.closeModal}}
+>
+  <:content>
+    <form action="" class="ui form">
+      <Field::Select data-test-select-source @title="Référentiel" @value={{this.selectedFramework}} @options={{this.frameworkList}} @edition={{true}} @setValue={{this.selectFramework}} />
+      <Field::Select data-test-select-competence @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
+      {{#if @isTubeLocation}}
+        <Field::Select data-test-select-theme @title="Thématique*" @defaultText="Sélectionner une thématique" @value={{this.selectedTheme}} @options={{this.themeList}} @edition={{true}} @setValue={{this.selectTheme}}/>
       {{/if}}
-    </div>
-    <div class="content">
-      <form action="" class="ui form">
-        <Field::Select data-test-select-source @title="Référentiel" @value={{this.selectedFramework}} @options={{this.frameworkList}} @edition={{true}} @setValue={{this.selectFramework}} />
-        <Field::Select data-test-select-competence @title="Compétence" @value={{this.selectedCompetence}} @options={{this.competenceList}} @edition={{true}} @setValue={{this.selectCompetence}}/>
-        {{#if @isTubeLocation}}
-          <Field::Select data-test-select-theme @title="Thématique*" @defaultText="Sélectionner une thématique" @value={{this.selectedTheme}} @options={{this.themeList}} @edition={{true}} @setValue={{this.selectTheme}}/>
-        {{/if}}
-        {{#if @selectTubeLevel}}
-          <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
-          {{#if this.selectedTube}}
-             {{#if @isPrototypeLocation}}
-               <div data-test-skill-list class="field">
-                 <label>Acquis</label>
-                 <PowerSelect  @options={{this.skillsGroupByLevelList}} @searchEnabled={{false}} @selected={{this.selectedSKill}} @onChange={{this.selectSkill}} as |skill|>
-                   <span class="skill-list">{{skill.name}} (v.{{skill.version}}) <span class="skill-list__status {{if (eq skill.status "actif") "active" "draft"}}" title={{skill.status}}></span></span>
-                 </PowerSelect>
-               </div>
-             {{else}}
-               <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.selectLevelOptions}} @edition={{true}} @setValue={{this.selectLevel}}/>
-             {{/if}}
+      {{#if @selectTubeLevel}}
+        <Field::Select @title="Tube" @value={{this.selectedTube}} @options={{this.tubeList}} @edition={{true}} @setValue={{this.selectTube}}/>
+        {{#if this.selectedTube}}
+          {{#if @isPrototypeLocation}}
+            <div data-test-skill-list class="field">
+              <label>Acquis</label>
+              <PowerSelect  @options={{this.skillsGroupByLevelList}} @searchEnabled={{false}} @selected={{this.selectedSKill}} @onChange={{this.selectSkill}} as |skill|>
+                <span class="skill-list">{{skill.name}} (v.{{skill.version}}) <span class="skill-list__status {{if (eq skill.status "actif") "active" "draft"}}" title={{skill.status}}></span></span>
+              </PowerSelect>
+            </div>
+          {{else}}
+            <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.selectLevelOptions}} @edition={{true}} @setValue={{this.selectLevel}}/>
           {{/if}}
         {{/if}}
-      </form>
-    </div>
-    <div class="actions">
-      <div class="ui deny button" {{on "click" this.closeModal}}>
-        Annuler
-      </div>
-      <div data-test-move-action class="ui green button {{unless this.enableMoveActionButton " disabled"}}" {{on "click" this.setLocation}}>
-        <i class="checkmark icon"></i>
-          {{this.titleButtonAction}}
-      </div>
-    </div>
-  </div>
-</ModalDialog>
+      {{/if}}
+    </form>
+  </:content>
+  <:footer>
+    <PixButton @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{this.closeModal}}
+    >
+      {{t 'common.cancel'}}
+    </PixButton>
+    <PixButton data-test-move-action
+               @triggerAction={{this.setLocation}}
+               @isDisabled={{not this.enableMoveActionButton}}
+    >
+      <i class="checkmark icon"></i>
+      {{this.titleButtonAction}}
+    </PixButton>
+  </:footer>
+</PixModal>

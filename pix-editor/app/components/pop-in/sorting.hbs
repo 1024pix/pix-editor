@@ -1,6 +1,8 @@
-<ModalDialog @targetAttachment="center" @overlayClassNames="custom-overlay-modal">
-  <div class="ui standard modal visible active">
-    <div data-test-sorting-pop-in-title class="header">{{@title}}</div>
+<PixModal data-test-sorting-pop-in-title
+          @title={{@title}}
+          @onCloseButtonClick={{fn @onDeny @model}}
+>
+  <:content>
     <div data-test-sorting-pop-in-content class="sortable-content">
       <ul {{sortable-group onChange=this.reorderItems}}>
         {{#each this.models as |modelItem|}}
@@ -10,15 +12,21 @@
         {{/each}}
       </ul>
     </div>
-    <div class="actions">
-      <div data-test-sorting-pop-in-deny class="ui blue cancel button" {{on "click" (fn @onDeny @model)}}>
-        <i class="remove icon" ></i>
-        Annuler
-      </div>
-      <div data-test-sorting-pop-in-approve class="ui green ok button" {{on "click" (fn @onApprove @model)}}>
-        <i class="checkmark icon" ></i>
-        Ok
-      </div>
-    </div>
-  </div>
-</ModalDialog>
+  </:content>
+  <:footer>
+    <PixButton data-test-sorting-pop-in-deny
+               @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{fn @onDeny @model}}
+    >
+      <i class="remove icon" ></i>
+      {{t 'common.cancel'}}
+    </PixButton>
+    <PixButton data-test-sorting-pop-in-approve
+               @triggerAction={{fn @onApprove @model}}
+    >
+      <i class="checkmark icon" ></i>
+      Ok
+    </PixButton>
+  </:footer>
+</PixModal>

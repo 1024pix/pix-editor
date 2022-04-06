@@ -13,7 +13,7 @@
     {{/if}}
   {{/if}}
   {{#if @edition}}
-    <FileUpload @name="illustration" @accept="image/*" @onfileadd={{this.add}}>
+    <FileUpload @name="illustration" @accept="image/*" @onFileAdd={{this.add}}>
     {{!-- template-lint-disable link-href-attributes  --}}
       <a class="ui button">
         {{#if @value}}

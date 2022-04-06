@@ -4,8 +4,9 @@ import AuthenticatedRoute from '../authenticated';
 
 export default class AreaManagementNewRoute extends AuthenticatedRoute {
 
-  @service idGenerator;
   @service currentData;
+  @service idGenerator;
+  @service store;
 
   async model(params) {
     const framework = this.store.peekRecord('framework', params.framework_id);

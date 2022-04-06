@@ -18,7 +18,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
 
     controller = this.owner.lookup('controller:area-management/new');
     transitionToRouteStub = sinon.stub();
-    controller.transitionToRoute = transitionToRouteStub;
+    controller.router.transitionTo = transitionToRouteStub;
     area = {
       name: 'newArea'
     };

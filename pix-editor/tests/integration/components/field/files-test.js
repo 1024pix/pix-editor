@@ -10,7 +10,7 @@ module('Integration | Component | form-files', function(hooks) {
     // Set any properties with this.set('myProperty', 'value');
     // Handle any actions with this.set('myAction', function(val) { ... });
 
-    await render(hbs`{{field/files}}`);
+    await render(hbs`<Field::Files />`);
 
     assert.dom('.field').exists();
 
