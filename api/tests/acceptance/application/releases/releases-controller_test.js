@@ -120,7 +120,8 @@ function mockCurrentContent() {
     }],
     thematics: [{
       id: 'recThematic0',
-      name: 'Name',
+      name: 'Nom',
+      nameEnUs: 'name',
       competenceId: 'recCompetence0',
       tubeIds: ['recTube'],
       index: 0
@@ -334,5 +335,4 @@ describe('Acceptance | Controller | release-controller', () => {
       });
     });
   });
-
 });
