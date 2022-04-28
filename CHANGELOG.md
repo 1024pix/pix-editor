@@ -1,5 +1,11 @@
 
 
+## v3.65.0 (28/04/2022)
+
+
+### :building_construction: Tech
+- [#51](https://github.com/1024pix/pix-editor/pull/51) [TECH] Ajouter le champ du nom de la thématique traduite en anglais dans la release (PIX-4855).
+
 ## v3.64.0 (06/04/2022)
 
 
