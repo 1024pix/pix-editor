@@ -1,5 +1,11 @@
 
 
+## v3.66.0 (05/05/2022)
+
+
+### :rocket: Amélioration
+- [#52](https://github.com/1024pix/pix-editor/pull/52) [FEATURE] Exposer le niveau des acquis dans la release
+
 ## v3.65.0 (28/04/2022)
 
 
