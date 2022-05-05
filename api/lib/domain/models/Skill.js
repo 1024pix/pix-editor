@@ -12,6 +12,7 @@ module.exports = class Skill {
     status,
     tubeId,
     version,
+    level,
   } = {}) {
     this.id = id;
     this.name = name;
@@ -25,5 +26,6 @@ module.exports = class Skill {
     this.status = status;
     this.tubeId = tubeId;
     this.version = version;
+    this.level = level;
   }
 };
