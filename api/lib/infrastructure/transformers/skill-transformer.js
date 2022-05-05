@@ -13,7 +13,8 @@ function filterSkillsFields(skills) {
     'pixValue',
     'status',
     'tubeId',
-    'version'
+    'version',
+    'level'
   ];
   return skills.map((skill) => _.pick(skill, fieldsToInclude));
 }
