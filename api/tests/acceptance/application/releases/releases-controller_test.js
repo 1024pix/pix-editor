@@ -70,6 +70,7 @@ function mockCurrentContent() {
       status: 'validé',
       tubeId: 'recTube0',
       version: 1,
+      level: 1,
     }],
     challenges: [{
       id: 'recChallenge0',
