@@ -138,5 +138,27 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       // Then
       expect(challenge).to.deep.equal(expectedDeserializedChallenge);
     });
+
+    it('should allow empty skill relationships', async function() {
+      // Given
+      const json = {
+        data: {
+          type: 'challenges',
+          id: 'challengeId',
+          attributes: {},
+          relationships: {
+            skill: {
+              data: null
+            },
+          },
+        }
+      };
+
+      // When
+      const challenge = await serializer.deserialize(json);
+
+      // Then
+      expect(challenge.skills).to.deep.equal([]);
+    });
   });
 });
