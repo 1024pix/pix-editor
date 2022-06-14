@@ -1,5 +1,11 @@
 
 
+## v3.66.1 (14/06/2022)
+
+
+### :bug: Correction
+- [#53](https://github.com/1024pix/pix-editor/pull/53) [BUGFIX] Correction de duplication d'un acquis.
+
 ## v3.66.0 (05/05/2022)
 
 
