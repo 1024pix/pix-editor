@@ -75,7 +75,7 @@ module.exports = {
           },
         },
         transform(challenge) {
-          challenge.skills = [challenge.skill];
+          challenge.skills = challenge.skill ? [challenge.skill] : [];
           delete challenge.skill;
           return challenge;
         }
