@@ -185,7 +185,7 @@ export default class SingleController extends Controller {
     const liveChallenges = challenges.filter(challenge => challenge.isLive);
     const newChallenges = await Promise.all(liveChallenges.map(async (challenge) => {
       const newChallenge = await challenge.copyForDifferentSkill();
-      newChallenge.skills = [newSkill];
+      newChallenge.skill = newSkill;
       await newChallenge.save();
       await this._saveDuplicatedAttachments(newChallenge);
       return newChallenge;
