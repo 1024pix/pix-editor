@@ -139,7 +139,7 @@ function routes() {
   this.post('/airtable/content/Acquis', (schema, request) => {
     const skillPayload = JSON.parse(request.requestBody);
     const skill = _deserializePayload(skillPayload, 'skill');
-    const createdSkill =  schema.themes.create(skill);
+    const createdSkill =  schema.skills.create(skill);
     return _serializeModel(createdSkill, 'skill');
   });
 
