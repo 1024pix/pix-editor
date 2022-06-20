@@ -3,7 +3,7 @@
     <div class="ui left menu">
       {{#unless this.edition}}
         {{#if this.mayDuplicate}}
-          <button class="ui icon button" {{on "click" this.duplicateSkill}} type="button" title="Dupliquer vers"><i
+          <button data-test-duplicate-skill-action class="ui icon button" {{on "click" this.duplicateSkill}} type="button" title="Dupliquer vers"><i
                   class="icon copy"></i></button>
         {{/if}}
         <LinkTo class="ui button icon item"
