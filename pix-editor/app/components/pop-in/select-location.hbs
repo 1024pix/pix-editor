@@ -19,7 +19,7 @@
               </PowerSelect>
             </div>
           {{else}}
-            <Field::Select @title="Niveau" @value={{this.selectedLevel}} @options={{this.selectLevelOptions}} @edition={{true}} @setValue={{this.selectLevel}}/>
+            <Field::Select @title="Niveau" data-test-select-level @value={{this.selectedLevel}} @options={{this.selectLevelOptions}} @edition={{true}} @setValue={{this.selectLevel}}/>
           {{/if}}
         {{/if}}
       {{/if}}
