@@ -1,5 +1,11 @@
 
 
+## v3.66.2 (20/06/2022)
+
+
+### :bug: Correction
+- [#54](https://github.com/1024pix/pix-editor/pull/54) [BUGFIX] Permettre la duplication d'un acquis avec ses épreuves.
+
 ## v3.66.1 (14/06/2022)
 
 
