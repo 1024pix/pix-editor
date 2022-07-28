@@ -7,37 +7,74 @@ const Vision = require('@hapi/vision');
 const AdminBro = require('admin-bro');
 const AdminBroPlugin = require('@admin-bro/hapi');
 const AdminBroSequelize = require('@admin-bro/sequelize');
-const { User, Release } = require('./models');
+const { User, Release, Training } = require('./models');
 const { get } = require('lodash');
 const monitoringTools = require('./infrastructure/monitoring-tools');
 
 AdminBro.registerAdapter(AdminBroSequelize);
 
 const adminBroOptions = {
-  resources: [{
-    resource: User,
-    options: {
-      properties: {
-        access: {
-          availableValues: [
-            {
-              value: 'readonly',
-              label: 'Lecture seule'
-            },
-            {
-              value: 'editor',
-              label: 'Editeur'
-            },
-            {
-              value: 'admin',
-              label: 'Admin'
-            }
-          ],
+  resources: [
+    {
+      resource: User,
+      options: {
+        properties: {
+          access: {
+            availableValues: [
+              {
+                value: 'readonly',
+                label: 'Lecture seule',
+              },
+              {
+                value: 'editor',
+                label: 'Editeur',
+              },
+              {
+                value: 'admin',
+                label: 'Admin',
+              },
+            ],
+          },
         },
       },
     },
-  }, Release],
-  auth: { strategy: 'simple' }
+    Release,
+    {
+      resource: Training,
+      options: {
+        properties: {
+          locale: {
+            availableValues: [
+              {
+                value: 'fr-fr',
+                label: 'Franco Français',
+              },
+            ],
+          },
+          type: {
+            availableValues: [
+              {
+                value: 'autoformation',
+                label: 'Parcours d\'autoformation',
+              },
+              {
+                value: 'webinaire',
+                label: 'Webinaire',
+              },
+            ],
+          },
+          duration: {
+            props: { placeholder: '1d 10h 30m' },
+            components: {
+              show: AdminBro.bundle('../adminbro/components/show.duration.component.jsx'),
+              list: AdminBro.bundle('../adminbro/components/list.duration.component.jsx'),
+            },
+          },
+        },
+      },
+    },
+  ],
+  auth: { strategy: 'simple' },
 };
 
 function logObjectSerializer(obj) {
@@ -49,7 +86,7 @@ function logObjectSerializer(obj) {
       metrics: get(context, 'metrics'),
     };
   } else {
-    return { ... obj };
+    return { ...obj };
   }
 }
 
@@ -72,26 +109,26 @@ const plugins = [
     plugin: AdminBroPlugin,
     options: adminBroOptions,
   },
-  ...(settings.sentry.enabled ? [
-    {
-      plugin: require('hapi-sentry'),
-      options: {
-        client: {
-          dsn: settings.sentry.dsn,
-          environment: settings.sentry.environment,
-          release: `v${Pack.version}`,
-          maxBreadcrumbs: settings.sentry.maxBreadcrumbs,
-          debug: settings.sentry.debug,
-          maxValueLength: settings.sentry.maxValueLength,
-        },
-        scope: {
-          tags: [
-            { name: 'source', value: 'api' },
-          ],
+  ...(settings.sentry.enabled
+    ? [
+      {
+        plugin: require('hapi-sentry'),
+        options: {
+          client: {
+            dsn: settings.sentry.dsn,
+            environment: settings.sentry.environment,
+            release: `v${Pack.version}`,
+            maxBreadcrumbs: settings.sentry.maxBreadcrumbs,
+            debug: settings.sentry.debug,
+            maxValueLength: settings.sentry.maxValueLength,
+          },
+          scope: {
+            tags: [{ name: 'source', value: 'api' }],
+          },
         },
       },
-    },
-  ] : []),
+    ]
+    : []),
 ];
 
 module.exports = plugins;
