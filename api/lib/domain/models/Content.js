@@ -7,6 +7,7 @@ const Skill = require('./Skill');
 const Thematic = require('./Thematic');
 const Tube = require('./Tube');
 const Tutorial = require('./Tutorial');
+const Training = require('./Training');
 
 module.exports = class Content {
   constructor({
@@ -19,6 +20,7 @@ module.exports = class Content {
     thematics,
     tubes,
     tutorials,
+    trainings,
   } = {}) {
     this.areas = areas;
     this.challenges = challenges;
@@ -29,6 +31,7 @@ module.exports = class Content {
     this.thematics = thematics;
     this.tubes = tubes;
     this.tutorials = tutorials;
+    this.trainings = trainings;
   }
 
   static from({
@@ -41,6 +44,7 @@ module.exports = class Content {
     thematics,
     tubes,
     tutorials,
+    trainings,
   }) {
     const content = new Content();
     content.areas = areas ? areas.map((area) => new Area(area)) : [];
@@ -52,6 +56,7 @@ module.exports = class Content {
     content.thematics = thematics ? thematics.map((thematic) => new Thematic(thematic)) : [];
     content.tubes = tubes ? tubes.map((tube) => new Tube(tube)) : [];
     content.tutorials = tutorials ? tutorials.map((tutorial) => new Tutorial(tutorial)) : [];
+    content.trainings = trainings ? trainings.map((training) => new Training(training)) : [];
 
     return content;
   }

@@ -14,6 +14,7 @@ const competenceTransformer = require('../transformers/competence-transformer');
 const courseTransformer = require('../transformers/course-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
+const trainingRepository = require('./training-repository');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
 
@@ -104,6 +105,7 @@ async function _getCurrentContent() {
     thematics,
     tubes,
     tutorials,
+    trainings,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
@@ -115,6 +117,7 @@ async function _getCurrentContent() {
     thematicDatasource.list(),
     tubeDatasource.list(),
     tutorialDatasource.list(),
+    trainingRepository.list(),
   ]);
   const learningContent = {
     areas,
@@ -146,5 +149,6 @@ async function _getCurrentContent() {
     thematics,
     tubes,
     tutorials: filteredTutorials,
+    trainings
   };
 }

@@ -1,6 +1,7 @@
-const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon } = require('../../../test-helper');
+const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon, knex } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const axios = require('axios');
+const Training = require('../../../../lib/domain/models/Training');
 
 const {
   buildArea,
@@ -15,7 +16,21 @@ const {
   buildTutorial,
 } = airtableBuilder.factory;
 
-function mockCurrentContent() {
+async function mockCurrentContent() {
+
+  databaseBuilder.factory.buildTraining({
+    id: 1000,
+    title: 'Travail de groupe et collaboration entre les personnels',
+    link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
+    type: 'autoformation',
+    duration: '06:00:00',
+    locale: 'fr-fr',
+    targetProfileIds: [1822, 2214],
+  });
+  await databaseBuilder.commit();
+
+  const training = await knex('trainings').first();
+
   const expectedCurrentContent = {
     areas: [{
       id: 'recArea0',
@@ -126,7 +141,8 @@ function mockCurrentContent() {
       competenceId: 'recCompetence0',
       tubeIds: ['recTube'],
       index: 0
-    }]
+    }],
+    trainings: [new Training(training)]
   };
 
   const attachments = [{
@@ -168,7 +184,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return current learning content', async () => {
         // Given
-        const expectedCurrentContent = mockCurrentContent();
+        const expectedCurrentContent = await mockCurrentContent();
 
         const server = await createServer();
         const currentContentOptions = {
@@ -181,7 +197,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const response = await server.inject(currentContentOptions);
 
         // Then
-        expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
+        expect(JSON.parse(response.result)).to.deep.equal(JSON.parse(JSON.stringify(expectedCurrentContent)));
       });
 
       it('should handle error', async () => {
@@ -218,7 +234,7 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return latest release of learning content', async () => {
         // Given
-        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [], trainings: [] } });
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -251,7 +267,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const user = databaseBuilder.factory.buildAdminUser();
         const server = await createServer();
         await databaseBuilder.commit();
-        const expectedCurrentContent = mockCurrentContent();
+        const expectedCurrentContent = await mockCurrentContent();
 
         // When
         const response = await server.inject({
@@ -263,7 +279,7 @@ describe('Acceptance | Controller | release-controller', () => {
         // Then
         expect(response.statusCode).to.equal(200);
         const release = JSON.parse(response.result);
-        expect(release.content).to.deep.equal(expectedCurrentContent);
+        expect(release.content).to.deep.equal(JSON.parse(JSON.stringify(expectedCurrentContent)));
       });
     });
 
@@ -296,7 +312,7 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       it('should return release specified by id', async () => {
         // Given
-        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] }, createdAt: new Date('2021-01-01') });
+        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [], trainings: [] }, createdAt: new Date('2021-01-01') });
         databaseBuilder.factory.buildRelease({ id: 43, content: { some: 'other-release' }, createdAt: new Date('2022-01-01') });
         await databaseBuilder.commit();
 
