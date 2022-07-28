@@ -7,8 +7,6 @@ module.exports = class Training {
     duration,
     locale,
     targetProfileIds,
-    createdAt,
-    updatedAt
   } = {}) {
     this.id = id;
     this.title = title;
@@ -17,7 +15,5 @@ module.exports = class Training {
     this.duration = duration;
     this.locale = locale;
     this.targetProfileIds = targetProfileIds;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
   }
 };
