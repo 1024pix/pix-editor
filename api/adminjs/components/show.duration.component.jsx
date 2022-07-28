@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box } from '@admin-bro/design-system'
+import { Box, ValueGroup } from '@adminjs/design-system'
 import { useInterval } from './use-interval';
 
 const ShowInterval = (record) => {
@@ -8,7 +8,10 @@ const ShowInterval = (record) => {
 
   return (
     <Box>
-      {value}
+      <ValueGroup
+        label="Duration"
+        value={value}
+      />
     </Box>
   )
 }
