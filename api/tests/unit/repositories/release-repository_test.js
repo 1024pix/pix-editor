@@ -34,6 +34,7 @@ describe('Unit | Repository | release-repository', () => {
       const thematics = [];
       const tubes = [];
       const tutorials = [];
+      const trainings = [];
       const transformedCompetences = [Symbol('transformed-competence')];
       const transformedSkills = [Symbol('transformed-skill')];
       const transformedCourses = [Symbol('transformed-course')];
@@ -47,6 +48,7 @@ describe('Unit | Repository | release-repository', () => {
         skills: transformedSkills,
         thematics,
         tubes: [],
+        trainings,
         tutorials: transformedTutorials,
       };
 
@@ -239,8 +241,9 @@ describe('Unit | Repository | release-repository', () => {
           frameworks: [],
           skills: [],
           thematics: [],
+          trainings: [],
           tubes: [],
-          tutorials: []
+          tutorials: [],
         },
         createdAt: '2021-08-31'
       };
