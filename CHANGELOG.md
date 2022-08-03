@@ -1,5 +1,12 @@
 
 
+## v3.67.0 (03/08/2022)
+
+
+### :rocket: Amélioration
+- [#57](https://github.com/1024pix/pix-editor/pull/57) [FEATURE] Ajouter les formations à la release (PIX-5436).
+- [#56](https://github.com/1024pix/pix-editor/pull/56) [FEATURE] Créé l'entité training sur le PG LCMS (PIX-5418)
+
 ## v3.66.2 (20/06/2022)
 
 
