@@ -9,16 +9,14 @@ const Tube = require('../../../../lib/domain/models/Tube');
 const Tutorial = require('../../../../lib/domain/models/Tutorial');
 
 describe('Unit | Domain | Content', () => {
-
   describe('#from', () => {
-
-    it('should return a Content model', function() {
+    it('should return a Content model', function () {
       const content = Content.from({});
 
       expect(content).to.be.instanceOf(Content);
     });
 
-    it('should return a Content model with models as attributes', function() {
+    it('should return a Content model with models as attributes', function () {
       const content = Content.from({
         areas: [{ id: 123 }],
         challenges: [{ id: 123 }],
