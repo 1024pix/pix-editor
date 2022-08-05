@@ -6,12 +6,24 @@ module.exports = class Thematic {
     index,
     competenceId,
     tubeIds,
-  } = {}) {
+  } = {}, locale) {
     this.id = id;
-    this.name = name;
-    this.nameEnUs = nameEnUs;
     this.index = index;
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
+
+    if (!locale) {
+      this.name = name;
+      this.nameEnUs = nameEnUs;
+    }
+
+    if (locale === 'en') {
+      this.name = nameEnUs;
+      this.nameEnUs = nameEnUs;
+    }
+
+    if (locale === 'fr-fr' || locale === 'fr') {
+      this.name = name;
+    }
   }
 };
