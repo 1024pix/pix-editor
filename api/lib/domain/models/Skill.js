@@ -13,11 +13,9 @@ module.exports = class Skill {
     tubeId,
     version,
     level,
-  } = {}) {
+  } = {}, locale) {
     this.id = id;
     this.name = name;
-    this.hintFrFr = hintFrFr;
-    this.hintEnUs = hintEnUs;
     this.hintStatus = hintStatus;
     this.tutorialIds = tutorialIds;
     this.learningMoreTutorialIds = learningMoreTutorialIds;
@@ -27,5 +25,20 @@ module.exports = class Skill {
     this.tubeId = tubeId;
     this.version = version;
     this.level = level;
+
+    if (!locale) {
+      this.hintFrFr = hintFrFr;
+      this.hintEnUs = hintEnUs;
+    }
+
+    if (locale === 'fr' || locale === 'fr-fr') {
+      this.hintFrFr = hintFrFr;
+      this.hint = hintFrFr;
+    }
+
+    if (locale === 'en') {
+      this.hintEnUs = hintEnUs;
+      this.hint = hintEnUs;
+    }
   }
 };
