@@ -3,6 +3,7 @@ const chai = require('chai');
 const expect = chai.expect;
 chai.use(require('chai-as-promised'));
 chai.use(require('chai-sorted'));
+chai.use(require('chai-shallow-deep-equal'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
 const cache = require('../lib/infrastructure/cache');
