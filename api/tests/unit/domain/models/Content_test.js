@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
-const Tutorial = require('../../../../lib/domain/models/Tutorial');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -62,6 +61,17 @@ describe('Unit | Domain | Content', () => {
         practicalDescriptionEnUs: 'practicalDescriptionEn',
         competenceId: 'recCompetence1',
       });
+      const tutorialAirtable = domainBuilder.buildTutorialAirtableDataObject({
+        id: 'recTutorialA',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceA',
+        title: 'titleA',
+        locale: 'any',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
@@ -69,7 +79,7 @@ describe('Unit | Domain | Content', () => {
         courses: [{ id: 123 }],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
-        tutorials: [{ id: 123 }],
+        tutorials: [tutorialAirtable],
       };
     });
 
@@ -135,6 +145,17 @@ describe('Unit | Domain | Content', () => {
         practicalDescriptionEnUs: 'practicalDescriptionEn',
         competenceId: 'recCompetence1',
       });
+      const expectedTutorial = domainBuilder.buildTutorial({
+        id: 'recTutorialA',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceA',
+        title: 'titleA',
+        locale: 'any',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
 
       expect(content.areas).to.deepEqualArray([expectedArea]);
       expect(content.competences).to.deepEqualArray([expectedCompetence]);
@@ -142,7 +163,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.courses[0]).to.be.instanceOf(Course);
       expect(content.skills).to.deepEqualArray([expectedSkill]);
       expect(content.tubes).to.deepEqualArray([expectedTube]);
-      expect(content.tutorials[0]).to.be.instanceOf(Tutorial);
+      expect(content.tutorials).to.deepEqualArray([expectedTutorial]);
     });
   });
 });

@@ -7,7 +7,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | TutorialDatasource', (
 
     it('should create a Tutorial from the AirtableRecord', () => {
       // given
-      const expectedTutorial = domainBuilder.buildTutorial();
+      const expectedTutorial = domainBuilder.buildTutorialAirtableDataObject();
       const airtableTutorial = airtableBuilder.factory.buildTutorial(expectedTutorial);
       const tutorialRecord = new AirtableRecord('Tutorial', airtableTutorial.id, airtableTutorial);
 
