@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
-const Tube = require('../../../../lib/domain/models/Tube');
 const Tutorial = require('../../../../lib/domain/models/Tutorial');
 
 describe('Unit | Domain | Content', () => {
@@ -52,13 +51,24 @@ describe('Unit | Domain | Content', () => {
         internationalisation: 'Monde',
         version: 2,
       });
+      const tubeAirtable = domainBuilder.buildTubeAirtableDataObject({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitleFrFr: 'practicalTitleFr',
+        practicalTitleEnUs: 'practicalTitleEn',
+        practicalDescriptionFrFr: 'practicalDescriptionFr',
+        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        competenceId: 'recCompetence1',
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
         skills: [skillAirtable],
-        tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitleEnUs: 'practical title', practicalDescriptionFrFr: 'description pratique', practicalDescriptionEnUs: 'practical description' }],
+        tubes: [tubeAirtable],
         tutorials: [{ id: 123 }],
       };
     });
@@ -114,13 +124,24 @@ describe('Unit | Domain | Content', () => {
         internationalisation: 'Monde',
         version: 2,
       });
+      const expectedTube = domainBuilder.buildTube({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitleFrFr: 'practicalTitleFr',
+        practicalTitleEnUs: 'practicalTitleEn',
+        practicalDescriptionFrFr: 'practicalDescriptionFr',
+        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        competenceId: 'recCompetence1',
+      });
 
       expect(content.areas).to.deepEqualArray([expectedArea]);
       expect(content.competences).to.deepEqualArray([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.courses[0]).to.be.instanceOf(Course);
       expect(content.skills).to.deepEqualArray([expectedSkill]);
-      expect(content.tubes[0]).to.be.instanceOf(Tube);
+      expect(content.tubes).to.deepEqualArray([expectedTube]);
       expect(content.tutorials[0]).to.be.instanceOf(Tutorial);
     });
   });
