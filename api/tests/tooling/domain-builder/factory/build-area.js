@@ -11,7 +11,7 @@ const buildArea = function({
   titleFrFr = 'titreArea1',
   titleEnUs = 'titleArea1',
   locale = 'fr-fr',
-  } = {}) {
+} = {}) {
   return new Area({
     id,
     code,
@@ -34,7 +34,7 @@ buildArea.withLocaleFr = function({
   competenceAirtableIds,
   color,
   frameworkId,
-  } = {}) {
+} = {}) {
   return new Area({
     id,
     code,
@@ -72,15 +72,15 @@ buildArea.withLocaleFrFr = function({
 };
 
 buildArea.withLocaleEnUs = function({
-    id,
-    code,
-    title,
-    name,
-    competenceIds,
-    competenceAirtableIds,
-    color,
-    frameworkId,
-  } = {}) {
+  id,
+  code,
+  title,
+  name,
+  competenceIds,
+  competenceAirtableIds,
+  color,
+  frameworkId,
+} = {}) {
   return new Area({
     id,
     code,
