@@ -3,6 +3,7 @@ const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
 const Training = require('../../../../lib/domain/models/Training');
+const Thematic = require('../../../../lib/domain/models/Thematic');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -82,6 +83,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
         trainings: [{ id: 345 }],
+        thematics: [{ id: 345 }],
       };
     });
 
@@ -171,6 +173,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.tubes).to.deep.equal([expectedTube]);
       expect(content.tutorials).to.deep.equal([expectedTutorial]);
       expect(content.trainings[0]).to.be.instanceOf(Training);
+      expect(content.thematics[0]).to.be.instanceOf(Thematic);
     });
 
     it('should return a version for locale "fr-fr"', function() {
@@ -242,6 +245,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeFrFr],
         tutorials: [expectedTutorialFrFr],
         trainings: [{ id: 345 }],
+        thematics: [{ id: 345 }],
       };
 
       expect(content['fr-fr']).to.shallowDeepEqual(expectedContent);
@@ -316,6 +320,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeEnUs],
         tutorials: [expectedTutorialEnUs],
         trainings: [{ id: 345 }],
+        thematics: [{ id: 345 }],
       };
       expect(content['en']).to.shallowDeepEqual(expectedContent);
     });
@@ -390,6 +395,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeFr],
         tutorials: [expectedTutorialFr],
         trainings: [{ id: 345 }],
+        thematics: [{ id: 345 }],
       };
       expect(content['fr']).to.shallowDeepEqual(expectedContent);
     });
