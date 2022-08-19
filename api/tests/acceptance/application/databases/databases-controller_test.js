@@ -20,7 +20,7 @@ function mockCurrentContent() {
     tubes: [domainBuilder.buildTubeAirtableDataObject()],
     skills: [domainBuilder.buildSkillAirtableDataObject()],
     challenges: [domainBuilder.buildChallenge()],
-    tutorials: [domainBuilder.buildTutorial()],
+    tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
     courses: [domainBuilder.buildCourse({ challenges: ['recChallenge0'] })],
   };
 
