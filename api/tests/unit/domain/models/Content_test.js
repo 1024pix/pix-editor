@@ -2,6 +2,7 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
+const Thematic = require('../../../../lib/domain/models/Thematic');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -80,6 +81,7 @@ describe('Unit | Domain | Content', () => {
         skills: [skillAirtable],
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
+        thematics: [{ id: 345 }],
       };
     });
 
@@ -164,6 +166,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.skills).to.deepEqualArray([expectedSkill]);
       expect(content.tubes).to.deepEqualArray([expectedTube]);
       expect(content.tutorials).to.deepEqualArray([expectedTutorial]);
+      expect(content.thematics[0]).to.be.instanceOf(Thematic);
     });
   });
 });
