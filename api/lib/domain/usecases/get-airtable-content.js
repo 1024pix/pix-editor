@@ -6,6 +6,7 @@ const challengeDatasource = require('../../infrastructure/datasources/airtable/c
 const tutorialDatasource = require('../../infrastructure/datasources/airtable/tutorial-datasource');
 const courseDatasource = require('../../infrastructure/datasources/airtable/course-datasource');
 const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
+const thematicDatasource = require('../../infrastructure/datasources/airtable/thematic-datasource');
 
 async function getAirtableContent() {
   const [
@@ -17,6 +18,7 @@ async function getAirtableContent() {
     tutorials,
     courses,
     attachments,
+    thematics,
   ] = await Promise.all([
     areaDatasource.list(),
     competenceDatasource.list(),
@@ -26,6 +28,7 @@ async function getAirtableContent() {
     tutorialDatasource.list(),
     courseDatasource.list(),
     attachmentDatasource.list(),
+    thematicDatasource.list(),
   ]);
 
   return {
@@ -37,6 +40,7 @@ async function getAirtableContent() {
     tutorials,
     courses,
     attachments,
+    thematics,
   };
 }
 
