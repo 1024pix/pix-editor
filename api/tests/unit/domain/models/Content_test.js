@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
-const Tube = require('../../../../lib/domain/models/Tube');
 const Tutorial = require('../../../../lib/domain/models/Tutorial');
 const Training = require('../../../../lib/domain/models/Training');
 
@@ -53,13 +52,24 @@ describe('Unit | Domain | Content', () => {
         internationalisation: 'Monde',
         version: 2,
       });
+      const tubeAirtable = domainBuilder.buildTubeAirtableDataObject({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitleFrFr: 'practicalTitleFr',
+        practicalTitleEnUs: 'practicalTitleEn',
+        practicalDescriptionFrFr: 'practicalDescriptionFr',
+        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        competenceId: 'recCompetence1',
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
         skills: [skillAirtable],
-        tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitleEnUs: 'practical title', practicalDescriptionFrFr: 'description pratique', practicalDescriptionEnUs: 'practical description' }],
+        tubes: [tubeAirtable],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
       };
@@ -118,7 +128,20 @@ describe('Unit | Domain | Content', () => {
         level: 2,
         internationalisation: 'Monde',
         version: 2,
-        locale: null
+        locale: null,
+      });
+
+      const expectedTube = domainBuilder.buildTube({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitleFrFr: 'practicalTitleFr',
+        practicalTitleEnUs: 'practicalTitleEn',
+        practicalDescriptionFrFr: 'practicalDescriptionFr',
+        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        competenceId: 'recCompetence1',
+        locale: null,
       });
 
       expect(content.areas).to.deep.equal([expectedArea]);
@@ -126,7 +149,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.courses[0]).to.be.instanceOf(Course);
       expect(content.skills).to.deep.equal([expectedSkill]);
-      expect(content.tubes[0]).to.be.instanceOf(Tube);
+      expect(content.tubes).to.deep.equal([expectedTube]);
       expect(content.tutorials[0]).to.be.instanceOf(Tutorial);
       expect(content.trainings[0]).to.be.instanceOf(Training);
     });
@@ -173,13 +196,23 @@ describe('Unit | Domain | Content', () => {
         version: 2,
       });
 
+      const expectedTubeFrFr = domainBuilder.buildTube.withLocaleFrFr({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitle: 'practicalTitleFr',
+        practicalDescription: 'practicalDescriptionFr',
+        competenceId: 'recCompetence1',
+      });
+
       const expectedContent = {
         areas: [expectedAreaFrFr],
         competences: [expectedCompetenceFrFr],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
         skills: [expectedSkillFrFr],
-        tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],
+        tubes: [expectedTubeFrFr],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
       };
@@ -229,13 +262,23 @@ describe('Unit | Domain | Content', () => {
         version: 2,
       });
 
+      const expectedTubeEnUs = domainBuilder.buildTube.withLocaleEnUs({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitle: 'practicalTitleEn',
+        practicalDescription: 'practicalDescriptionEn',
+        competenceId: 'recCompetence1',
+      });
+
       const expectedContent = {
         areas: [expectedAreaEnUs],
         competences: [expectedCompetenceEnUs],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
         skills: [expectedSkillEnUs],
-        tubes: [{ id: 123, practicalTitleEnUs: 'practical title', practicalTitle: 'practical title', practicalDescriptionEnUs: 'practical description',  practicalDescription: 'practical description' }],
+        tubes: [expectedTubeEnUs],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
       };
@@ -284,13 +327,24 @@ describe('Unit | Domain | Content', () => {
         version: 2,
       });
 
+      const expectedTubeFr = domainBuilder.buildTube.withLocaleFr({
+        id: 'recTubeA',
+        name: 'nameTubeA',
+        title: 'titleTubeA',
+        description: 'descriptionTubeA',
+        practicalTitle: 'practicalTitleFr',
+        practicalDescription: 'practicalDescriptionFr',
+        competenceId: 'recCompetence1',
+        locale: null,
+      });
+
       const expectedContent = {
         areas: [expectedAreaFr],
         competences: [expectedCompetenceFr],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
         skills: [expectedSkillFr],
-        tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],
+        tubes: [expectedTubeFr],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
       };
