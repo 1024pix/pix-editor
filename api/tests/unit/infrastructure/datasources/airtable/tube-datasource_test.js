@@ -7,7 +7,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | TubeDatasource', () =>
 
     it('should create a Tube from the AirtableRecord', () => {
       // given
-      const expectedTube = domainBuilder.buildTube();
+      const expectedTube = domainBuilder.buildTubeAirtableDataObject();
       const airtableTube = airtableBuilder.factory.buildTube(expectedTube);
       const tubeRecord = new AirtableRecord('Tube', airtableTube.id, airtableTube);
 

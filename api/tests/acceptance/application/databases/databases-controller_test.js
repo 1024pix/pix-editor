@@ -17,7 +17,7 @@ function mockCurrentContent() {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaAirtableDataObject()],
     competences: [domainBuilder.buildCompetenceAirtableDataObject()],
-    tubes: [domainBuilder.buildTube()],
+    tubes: [domainBuilder.buildTubeAirtableDataObject()],
     skills: [domainBuilder.buildSkillAirtableDataObject()],
     challenges: [domainBuilder.buildChallenge()],
     tutorials: [domainBuilder.buildTutorial()],
