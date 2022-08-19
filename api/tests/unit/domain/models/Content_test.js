@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
-const Skill = require('../../../../lib/domain/models/Skill');
 const Tube = require('../../../../lib/domain/models/Tube');
 const Tutorial = require('../../../../lib/domain/models/Tutorial');
 const Training = require('../../../../lib/domain/models/Training');
@@ -37,12 +36,29 @@ describe('Unit | Domain | Content', () => {
         descriptionEnUs: 'descriptionEnCompetenceA',
         fullName: '1.2 nameCompetenceA',
       });
+      const skillAirtable = domainBuilder.buildSkillAirtableDataObject({
+        id: 'recSkillA',
+        name: 'nameSkillA',
+        hintFrFr: 'hintFr',
+        hintEnUs: 'hintEn',
+        hintStatus: 'hintStatusA',
+        tutorialIds: ['tutorialId1'],
+        learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
+        competenceId: 'competenceId1',
+        pixValue: 1.8,
+        status: 'actif',
+        tubeId: 'tubeIdB',
+        description: 'skill description A',
+        level: 2,
+        internationalisation: 'Monde',
+        version: 2,
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
-        skills: [{ id: 123, hintFrFr: 'indice', hintEnUs: 'hint' }],
+        skills: [skillAirtable],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitleEnUs: 'practical title', practicalDescriptionFrFr: 'description pratique', practicalDescriptionEnUs: 'practical description' }],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
@@ -85,11 +101,31 @@ describe('Unit | Domain | Content', () => {
         descriptionEnUs: 'descriptionEnCompetenceA',
         locale: null,
       });
+
+      const expectedSkill = domainBuilder.buildSkill({
+        id: 'recSkillA',
+        name: 'nameSkillA',
+        hintFrFr: 'hintFr',
+        hintEnUs: 'hintEn',
+        hintStatus: 'hintStatusA',
+        tutorialIds: ['tutorialId1'],
+        learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
+        competenceId: 'competenceId1',
+        pixValue: 1.8,
+        status: 'actif',
+        tubeId: 'tubeIdB',
+        description: 'skill description A',
+        level: 2,
+        internationalisation: 'Monde',
+        version: 2,
+        locale: null
+      });
+
       expect(content.areas).to.deep.equal([expectedArea]);
       expect(content.competences).to.deep.equal([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.courses[0]).to.be.instanceOf(Course);
-      expect(content.skills[0]).to.be.instanceOf(Skill);
+      expect(content.skills).to.deep.equal([expectedSkill]);
       expect(content.tubes[0]).to.be.instanceOf(Tube);
       expect(content.tutorials[0]).to.be.instanceOf(Tutorial);
       expect(content.trainings[0]).to.be.instanceOf(Training);
@@ -108,6 +144,7 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+
       const expectedCompetenceFrFr = domainBuilder.buildCompetence.withLocaleFrFr({
         id: 'recCompetenceA',
         name: 'nameFrCompetenceA',
@@ -118,16 +155,35 @@ describe('Unit | Domain | Content', () => {
         thematicIds: [],
         description: 'descriptionFrCompetenceA',
       });
+
+      const expectedSkillFrFr = domainBuilder.buildSkill.withLocaleFrFr({
+        id: 'recSkillA',
+        name: 'nameSkillA',
+        hint: 'hintFr',
+        hintStatus: 'hintStatusA',
+        tutorialIds: ['tutorialId1'],
+        learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
+        competenceId: 'competenceId1',
+        pixValue: 1.8,
+        status: 'actif',
+        tubeId: 'tubeIdB',
+        description: 'skill description A',
+        level: 2,
+        internationalisation: 'Monde',
+        version: 2,
+      });
+
       const expectedContent = {
         areas: [expectedAreaFrFr],
         competences: [expectedCompetenceFrFr],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
-        skills: [{ id: 123, hint: 'indice', hintFrFr: 'indice' }],
+        skills: [expectedSkillFrFr],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
       };
+
       expect(content['fr-fr']).to.shallowDeepEqual(expectedContent);
     });
 
@@ -144,6 +200,7 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+
       const expectedCompetenceEnUs = domainBuilder.buildCompetence.withLocaleEnUs({
         id: 'recCompetenceA',
         name: 'nameEnCompetenceA',
@@ -154,12 +211,30 @@ describe('Unit | Domain | Content', () => {
         thematicIds: [],
         description: 'descriptionEnCompetenceA',
       });
+
+      const expectedSkillEnUs = domainBuilder.buildSkill.withLocaleEnUs({
+        id: 'recSkillA',
+        name: 'nameSkillA',
+        hint: 'hintEn',
+        hintStatus: 'hintStatusA',
+        tutorialIds: ['tutorialId1'],
+        learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
+        competenceId: 'competenceId1',
+        pixValue: 1.8,
+        status: 'actif',
+        tubeId: 'tubeIdB',
+        description: 'skill description A',
+        level: 2,
+        internationalisation: 'Monde',
+        version: 2,
+      });
+
       const expectedContent = {
         areas: [expectedAreaEnUs],
         competences: [expectedCompetenceEnUs],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
-        skills: [{ id: 123, hint: 'hint', hintEnUs: 'hint' }],
+        skills: [expectedSkillEnUs],
         tubes: [{ id: 123, practicalTitleEnUs: 'practical title', practicalTitle: 'practical title', practicalDescriptionEnUs: 'practical description',  practicalDescription: 'practical description' }],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
@@ -180,6 +255,7 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+
       const expectedCompetenceFr = domainBuilder.buildCompetence.withLocaleFr({
         id: 'recCompetenceA',
         name: 'nameFrCompetenceA',
@@ -190,12 +266,30 @@ describe('Unit | Domain | Content', () => {
         thematicIds: [],
         description: 'descriptionFrCompetenceA',
       });
+
+      const expectedSkillFr = domainBuilder.buildSkill.withLocaleFr({
+        id: 'recSkillA',
+        name: 'nameSkillA',
+        hint: 'hintFr',
+        hintStatus: 'hintStatusA',
+        tutorialIds: ['tutorialId1'],
+        learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
+        competenceId: 'competenceId1',
+        pixValue: 1.8,
+        status: 'actif',
+        tubeId: 'tubeIdB',
+        description: 'skill description A',
+        level: 2,
+        internationalisation: 'Monde',
+        version: 2,
+      });
+
       const expectedContent = {
         areas: [expectedAreaFr],
         competences: [expectedCompetenceFr],
         challenges: [{ id: 123 }],
         courses: [{ id: 123 }],
-        skills: [{ id: 123, hint: 'indice', hintFrFr: 'indice' }],
+        skills: [expectedSkillFr],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],
         tutorials: [{ id: 123 }],
         trainings: [{ id: 345 }],
