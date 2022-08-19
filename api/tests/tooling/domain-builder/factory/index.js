@@ -1,4 +1,5 @@
 module.exports = {
+  buildArea: require('./build-area'),
   buildAreaAirtableDataObject: require('./build-area-airtable-data-object'),
   buildCourse: require('./build-course-airtable-data-object'),
   buildFramework: require('./build-framework'),

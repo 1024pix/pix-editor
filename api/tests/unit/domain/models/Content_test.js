@@ -1,6 +1,5 @@
-const { expect } = require('../../../test-helper');
+const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
-const Area = require('../../../../lib/domain/models/Area');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Competence = require('../../../../lib/domain/models/Competence');
 const Course = require('../../../../lib/domain/models/Course');
@@ -13,8 +12,19 @@ describe('Unit | Domain | Content', () => {
   describe('#from', () => {
     let data;
     beforeEach(function() {
+      const areaAirtable = domainBuilder.buildAreaAirtableDataObject({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        titleFrFr: 'Information et données',
+        titleEnUs: 'Information and data',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
       data = {
-        areas: [{ id: 123, titleFrFr: 'titre', titleEnUs: 'title' }],
+        areas: [areaAirtable],
         challenges: [{ id: 123 }],
         competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', nameEnUs: 'name',  description: 'description fr', descriptionFrFr: 'description fr', descriptionEnUs: 'description en' }],
         courses: [{ id: 123 }],
@@ -34,7 +44,19 @@ describe('Unit | Domain | Content', () => {
     it('should return a Content model with models as attributes', function() {
       const content = Content.from(data);
 
-      expect(content.areas[0]).to.be.instanceOf(Area);
+      const expectedArea = domainBuilder.buildArea({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        titleFrFr: 'Information et données',
+        titleEnUs: 'Information and data',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+        locale: null,
+      });
+      expect(content.areas).to.deep.equal([expectedArea]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.competences[0]).to.be.instanceOf(Competence);
       expect(content.courses[0]).to.be.instanceOf(Course);
@@ -47,8 +69,18 @@ describe('Unit | Domain | Content', () => {
     it('should return a version for locale "fr-fr"', function() {
       const content = Content.from(data);
 
+      const expectedAreaFrFr = domainBuilder.buildArea.withLocaleFrFr({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        title: 'Information et données',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
       const expectedContent = {
-        areas: [{ id: 123, title: 'titre', titleFrFr: 'titre' }],
+        areas: [expectedAreaFrFr],
         challenges: [{ id: 123 }],
         competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', description: 'description fr', descriptionFrFr: 'description fr' }],
         courses: [{ id: 123 }],
@@ -63,8 +95,18 @@ describe('Unit | Domain | Content', () => {
     it('should return a version for locale "en"', function() {
       const content = Content.from(data);
 
+      const expectedAreaEnUs = domainBuilder.buildArea.withLocaleEnUs({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        title: 'Information and data',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
       const expectedContent = {
-        areas: [{ id: 123, title: 'title', titleEnUs: 'title' }],
+        areas: [expectedAreaEnUs],
         challenges: [{ id: 123 }],
         competences: [{ id: 123, name: 'name', nameEnUs: 'name', description: 'description en', descriptionEnUs: 'description en' }],
         courses: [{ id: 123 }],
@@ -79,8 +121,18 @@ describe('Unit | Domain | Content', () => {
     it('should return a version for locale "fr"', function() {
       const content = Content.from(data);
 
+      const expectedAreaFr = domainBuilder.buildArea.withLocaleFr({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        title: 'Information et données',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
       const expectedContent = {
-        areas: [{ id: 123, title: 'titre', titleFrFr: 'titre' }],
+        areas: [expectedAreaFr],
         challenges: [{ id: 123 }],
         competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', description: 'description fr', descriptionFrFr: 'description fr' }],
         courses: [{ id: 123 }],
