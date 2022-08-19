@@ -16,7 +16,7 @@ function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaAirtableDataObject()],
-    competences: [domainBuilder.buildCompetence()],
+    competences: [domainBuilder.buildCompetenceAirtableDataObject()],
     tubes: [domainBuilder.buildTube()],
     skills: [domainBuilder.buildSkill()],
     challenges: [domainBuilder.buildChallenge()],

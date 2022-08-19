@@ -5,7 +5,7 @@ const createServer = require('../../../server');
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
 
   describe('POST /api/airtable/content/Competences', () => {
-    const competenceDataObject = domainBuilder.buildCompetence({ id: 'recCompetence' });
+    const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
     const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
     const token = 'dummy-pix-api-token';
 
