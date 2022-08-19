@@ -1,6 +1,5 @@
-const { expect } = require('../../../test-helper');
+const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
-const Area = require('../../../../lib/domain/models/Area');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Competence = require('../../../../lib/domain/models/Competence');
 const Course = require('../../../../lib/domain/models/Course');
@@ -9,12 +8,22 @@ const Tube = require('../../../../lib/domain/models/Tube');
 const Tutorial = require('../../../../lib/domain/models/Tutorial');
 
 describe('Unit | Domain | Content', () => {
-
   describe('#from', () => {
     let data;
     beforeEach(function() {
+      const areaAirtable = domainBuilder.buildAreaAirtableDataObject({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        titleFrFr: 'Information et données',
+        titleEnUs: 'Information and data',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
       data = {
-        areas: [{ id: 123, titleFrFr: 'titre', titleEnUs: 'title' }],
+        areas: [areaAirtable],
         challenges: [{ id: 123 }],
         competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', nameEnUs: 'name',  description: 'description fr', descriptionFrFr: 'description fr', descriptionEnUs: 'description en' }],
         courses: [{ id: 123 }],
@@ -33,7 +42,18 @@ describe('Unit | Domain | Content', () => {
     it('should return a Content model with models as attributes', function() {
       const content = Content.from(data);
 
-      expect(content.areas[0]).to.be.instanceOf(Area);
+      const expectedArea = domainBuilder.buildArea({
+        id: 'recAreaA',
+        code: 'codeAreaA',
+        name: 'nameAreaA',
+        color: 'colorAreaA',
+        titleFrFr: 'Information et données',
+        titleEnUs: 'Information and data',
+        competenceIds: ['recCompA', 'recCompB'],
+        competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
+        frameworkId: 'recFrameworkA',
+      });
+      expect(content.areas).to.deep.equal([expectedArea]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.competences[0]).to.be.instanceOf(Competence);
       expect(content.courses[0]).to.be.instanceOf(Course);
