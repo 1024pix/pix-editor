@@ -25,10 +25,10 @@ module.exports = {
   async create(getCurrentContent = _getCurrentContent) {
     const content = await getCurrentContent();
     const release = await knex('releases')
-      .returning(['id', 'content', 'createdAt'])
+      .returning(['id'])
       .insert({ content });
 
-    return this.toDomain(release[0]);
+    return release[0].id;
   },
 
   async getLatestRelease() {

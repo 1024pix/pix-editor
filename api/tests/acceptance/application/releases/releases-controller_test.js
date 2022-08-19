@@ -902,6 +902,10 @@ describe('Acceptance | Controller | release-controller', () => {
       sinon.stub(axios, 'post').resolves();
     });
 
+    afterEach(function() {
+      return knex('releases').delete();
+    });
+
     context('nominal case', () => {
       it('should create the release', async () => {
         // Given
