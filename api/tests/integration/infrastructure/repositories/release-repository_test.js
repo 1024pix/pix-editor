@@ -4,6 +4,11 @@ const releaseRepository = require('../../../../lib/infrastructure/repositories/r
 describe('Integration | Repository | release-repository', function() {
 
   describe('#create', function() {
+
+    afterEach(function() {
+      return knex('releases').delete();
+    });
+
     it('should save current content as a new release', async function() {
       // Given
       const currentContent = { some: 'property' };
@@ -18,18 +23,17 @@ describe('Integration | Repository | release-repository', function() {
       expect(releasesInDb[0].content).to.deep.equal(currentContent);
     });
 
-    it('should return saved release with id and creation date', async function() {
+    it('should return the saved release ID', async function() {
       // Given
       const currentContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
       const fakeGetCurrentContent = async function() { return currentContent; };
 
       // When
-      const release = await releaseRepository.create(fakeGetCurrentContent);
+      const releaseId = await releaseRepository.create(fakeGetCurrentContent);
 
       // Then
-      expect(release.id).to.be.not.null;
-      expect(release.createdAt).to.be.instanceOf(Date);
-      expect(release.content).to.deep.equal(currentContent);
+      const [releasesInDbId] = await knex('releases').pluck('id');
+      expect(releaseId).to.equal(releasesInDbId);
     });
   });
 
