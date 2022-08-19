@@ -14,5 +14,6 @@ module.exports = {
   buildThematic: require('./build-thematic'),
   buildTube: require('./build-tube'),
   buildTubeAirtableDataObject: require('./build-tube-airtable-data-object'),
-  buildTutorial: require('./build-tutorial-airtable-data-object'),
+  buildTutorial: require('./build-tutorial'),
+  buildTutorialAirtableDataObject: require('./build-tutorial-airtable-data-object'),
 };
