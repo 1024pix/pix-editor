@@ -1,7 +1,6 @@
 const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
-const Competence = require('../../../../lib/domain/models/Competence');
 const Course = require('../../../../lib/domain/models/Course');
 const Skill = require('../../../../lib/domain/models/Skill');
 const Tube = require('../../../../lib/domain/models/Tube');
@@ -23,10 +22,25 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+      const competenceAirtable = domainBuilder.buildCompetenceAirtableDataObject({
+        id: 'recCompetenceA',
+        name: 'nameCompetenceA',
+        nameFrFr: 'nameFrCompetenceA',
+        nameEnUs: 'nameEnCompetenceA',
+        index: '1.2',
+        areaId: 'recAreaA',
+        origin: 'Pix',
+        skillIds: [],
+        thematicIds: [],
+        description: 'descriptionCompetenceA',
+        descriptionFrFr: 'descriptionFrCompetenceA',
+        descriptionEnUs: 'descriptionEnCompetenceA',
+        fullName: '1.2 nameCompetenceA',
+      });
       data = {
         areas: [areaAirtable],
+        competences: [competenceAirtable],
         challenges: [{ id: 123 }],
-        competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', nameEnUs: 'name',  description: 'description fr', descriptionFrFr: 'description fr', descriptionEnUs: 'description en' }],
         courses: [{ id: 123 }],
         skills: [{ id: 123, hintFrFr: 'indice', hintEnUs: 'hint' }],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitleEnUs: 'practical title', practicalDescriptionFrFr: 'description pratique', practicalDescriptionEnUs: 'practical description' }],
@@ -56,9 +70,24 @@ describe('Unit | Domain | Content', () => {
         frameworkId: 'recFrameworkA',
         locale: null,
       });
+      const expectedCompetence = domainBuilder.buildCompetence({
+        id: 'recCompetenceA',
+        name: 'nameCompetenceA',
+        nameFrFr: 'nameFrCompetenceA',
+        nameEnUs: 'nameEnCompetenceA',
+        index: '1.2',
+        areaId: 'recAreaA',
+        origin: 'Pix',
+        skillIds: [],
+        thematicIds: [],
+        description: 'descriptionCompetenceA',
+        descriptionFrFr: 'descriptionFrCompetenceA',
+        descriptionEnUs: 'descriptionEnCompetenceA',
+        locale: null,
+      });
       expect(content.areas).to.deep.equal([expectedArea]);
+      expect(content.competences).to.deep.equal([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
-      expect(content.competences[0]).to.be.instanceOf(Competence);
       expect(content.courses[0]).to.be.instanceOf(Course);
       expect(content.skills[0]).to.be.instanceOf(Skill);
       expect(content.tubes[0]).to.be.instanceOf(Tube);
@@ -79,10 +108,20 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+      const expectedCompetenceFrFr = domainBuilder.buildCompetence.withLocaleFrFr({
+        id: 'recCompetenceA',
+        name: 'nameFrCompetenceA',
+        index: '1.2',
+        areaId: 'recAreaA',
+        origin: 'Pix',
+        skillIds: [],
+        thematicIds: [],
+        description: 'descriptionFrCompetenceA',
+      });
       const expectedContent = {
         areas: [expectedAreaFrFr],
+        competences: [expectedCompetenceFrFr],
         challenges: [{ id: 123 }],
-        competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', description: 'description fr', descriptionFrFr: 'description fr' }],
         courses: [{ id: 123 }],
         skills: [{ id: 123, hint: 'indice', hintFrFr: 'indice' }],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],
@@ -105,10 +144,20 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+      const expectedCompetenceEnUs = domainBuilder.buildCompetence.withLocaleEnUs({
+        id: 'recCompetenceA',
+        name: 'nameEnCompetenceA',
+        index: '1.2',
+        areaId: 'recAreaA',
+        origin: 'Pix',
+        skillIds: [],
+        thematicIds: [],
+        description: 'descriptionEnCompetenceA',
+      });
       const expectedContent = {
         areas: [expectedAreaEnUs],
+        competences: [expectedCompetenceEnUs],
         challenges: [{ id: 123 }],
-        competences: [{ id: 123, name: 'name', nameEnUs: 'name', description: 'description en', descriptionEnUs: 'description en' }],
         courses: [{ id: 123 }],
         skills: [{ id: 123, hint: 'hint', hintEnUs: 'hint' }],
         tubes: [{ id: 123, practicalTitleEnUs: 'practical title', practicalTitle: 'practical title', practicalDescriptionEnUs: 'practical description',  practicalDescription: 'practical description' }],
@@ -131,10 +180,20 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
+      const expectedCompetenceFr = domainBuilder.buildCompetence.withLocaleFr({
+        id: 'recCompetenceA',
+        name: 'nameFrCompetenceA',
+        index: '1.2',
+        areaId: 'recAreaA',
+        origin: 'Pix',
+        skillIds: [],
+        thematicIds: [],
+        description: 'descriptionFrCompetenceA',
+      });
       const expectedContent = {
         areas: [expectedAreaFr],
+        competences: [expectedCompetenceFr],
         challenges: [{ id: 123 }],
-        competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', description: 'description fr', descriptionFrFr: 'description fr' }],
         courses: [{ id: 123 }],
         skills: [{ id: 123, hint: 'indice', hintFrFr: 'indice' }],
         tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitle: 'titre pratique', practicalDescriptionFrFr: 'description pratique',  practicalDescription: 'description pratique' }],

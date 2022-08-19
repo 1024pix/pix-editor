@@ -8,7 +8,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | CompetenceDatasource',
 
     it('should create a Competence from the AirtableRecord', () => {
       // given
-      const expectedCompetence = domainBuilder.buildCompetence();
+      const expectedCompetence = domainBuilder.buildCompetenceAirtableDataObject();
       const airtableCompetence = airtableBuilder.factory.buildCompetence(expectedCompetence);
       const competenceRecord = new AirtableRecord('Competence', airtableCompetence.id, airtableCompetence);
 
