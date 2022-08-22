@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/1024pix/pix/tree/dev.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/1024pix/pix) PIX EDITOR
+[![CircleCI](https://circleci.com/gh/1024pix/pix-editor/tree/dev.svg?style=shield)](https://circleci.com/gh/1024pix/pix-editor) PIX EDITOR
 ===
 
 Présentation
