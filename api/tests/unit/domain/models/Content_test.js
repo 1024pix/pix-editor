@@ -3,7 +3,6 @@ const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
 const Training = require('../../../../lib/domain/models/Training');
-const Thematic = require('../../../../lib/domain/models/Thematic');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -74,6 +73,14 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const thematicAirtable = domainBuilder.buildThematicAirtableDataObject({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        nameEnUs: 'Name of the thematic',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
@@ -83,7 +90,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
         trainings: [{ id: 345 }],
-        thematics: [{ id: 345 }],
+        thematics: [thematicAirtable],
       };
     });
 
@@ -164,6 +171,15 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedThematic = domainBuilder.buildThematic({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        nameEnUs: 'Name of the thematic',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+        locale: null,
+      });
 
       expect(content.areas).to.deep.equal([expectedArea]);
       expect(content.competences).to.deep.equal([expectedCompetence]);
@@ -173,7 +189,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.tubes).to.deep.equal([expectedTube]);
       expect(content.tutorials).to.deep.equal([expectedTutorial]);
       expect(content.trainings[0]).to.be.instanceOf(Training);
-      expect(content.thematics[0]).to.be.instanceOf(Thematic);
+      expect(content.thematics).to.deep.equal([expectedThematic]);
     });
 
     it('should return a version for locale "fr-fr"', function() {
@@ -235,6 +251,13 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedThematicFrFr = domainBuilder.buildThematic.withLocaleFrFr({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
 
       const expectedContent = {
         areas: [expectedAreaFrFr],
@@ -245,7 +268,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeFrFr],
         tutorials: [expectedTutorialFrFr],
         trainings: [{ id: 345 }],
-        thematics: [{ id: 345 }],
+        thematics: [expectedThematicFrFr],
       };
 
       expect(content['fr-fr']).to.shallowDeepEqual(expectedContent);
@@ -310,6 +333,13 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedThematicEnUs = domainBuilder.buildThematic.withLocaleEnUs({
+        id: 'recThematic1',
+        name: 'Name of the thematic',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
 
       const expectedContent = {
         areas: [expectedAreaEnUs],
@@ -320,7 +350,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeEnUs],
         tutorials: [expectedTutorialEnUs],
         trainings: [{ id: 345 }],
-        thematics: [{ id: 345 }],
+        thematics: [expectedThematicEnUs],
       };
       expect(content['en']).to.shallowDeepEqual(expectedContent);
     });
@@ -385,6 +415,13 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedThematicFr = domainBuilder.buildThematic.withLocaleFr({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
 
       const expectedContent = {
         areas: [expectedAreaFr],
@@ -395,7 +432,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [expectedTubeFr],
         tutorials: [expectedTutorialFr],
         trainings: [{ id: 345 }],
-        thematics: [{ id: 345 }],
+        thematics: [expectedThematicFr],
       };
       expect(content['fr']).to.shallowDeepEqual(expectedContent);
     });
