@@ -1,6 +1,5 @@
 const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
-const Challenge = require('../../../../lib/domain/models/Challenge');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -87,10 +86,38 @@ describe('Unit | Domain | Content', () => {
         challenges: ['recChallengeId1'],
         competences: ['recCompetenceId1'],
       });
+      const challengeAirtable = domainBuilder.buildChallengeAirtableDataObject({
+        id: 'recChallengeA',
+        instruction: 'instructionChallengeA',
+        alternativeInstruction: 'alternativeInstructionChallengeA',
+        proposals: 'proposalsChallengeA',
+        type: 'QCM',
+        solution: 'solutionChallengeA',
+        solutionToDisplay: 'solutionToDisplayChallengeA',
+        t1Status: 'Activé',
+        t2Status: 'Désactivé',
+        t3Status: 'Activé',
+        status: 'validé',
+        skillId: 'recSkillId1',
+        timer: 1234,
+        competenceId: 'recCompetence1',
+        embedUrl: 'http://www.example.com/this-is-an-example.html',
+        embedTitle: 'embedTitleChallenge',
+        embedHeight: 500,
+        format: 'mots',
+        autoReply: false,
+        locales: ['any'],
+        focusable: false,
+        delta: 0.2,
+        alpha: 0.5,
+        responsive: 'Smartphone',
+        genealogy: 'Prototype 1',
+      });
+      challengeAirtable.attachments = ['some_url'];
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
-        challenges: [{ id: 123 }],
+        challenges: [challengeAirtable],
         courses: [courseAirtable],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
@@ -188,10 +215,38 @@ describe('Unit | Domain | Content', () => {
         challenges: ['recChallengeId1'],
         competences: ['recCompetenceId1'],
       });
+      const expectedChallenge = domainBuilder.buildChallengeForRelease({
+        id: 'recChallengeA',
+        instruction: 'instructionChallengeA',
+        alternativeInstruction: 'alternativeInstructionChallengeA',
+        proposals: 'proposalsChallengeA',
+        type: 'QCM',
+        solution: 'solutionChallengeA',
+        solutionToDisplay: 'solutionToDisplayChallengeA',
+        t1Status: 'Activé',
+        t2Status: 'Désactivé',
+        t3Status: 'Activé',
+        status: 'validé',
+        skillId: 'recSkillId1',
+        timer: 1234,
+        competenceId: 'recCompetence1',
+        embedUrl: 'http://www.example.com/this-is-an-example.html',
+        embedTitle: 'embedTitleChallenge',
+        embedHeight: 500,
+        format: 'mots',
+        autoReply: false,
+        locales: ['any'],
+        focusable: false,
+        delta: 0.2,
+        alpha: 0.5,
+        responsive: 'Smartphone',
+        genealogy: 'Prototype 1',
+        attachments: ['some_url'],
+      });
 
       expect(content.areas).to.deepEqualArray([expectedArea]);
       expect(content.competences).to.deepEqualArray([expectedCompetence]);
-      expect(content.challenges[0]).to.be.instanceOf(Challenge);
+      expect(content.challenges).to.deepEqualArray([expectedChallenge]);
       expect(content.courses).to.deepEqualArray([expectedCourse]);
       expect(content.skills).to.deepEqualArray([expectedSkill]);
       expect(content.tubes).to.deepEqualArray([expectedTube]);

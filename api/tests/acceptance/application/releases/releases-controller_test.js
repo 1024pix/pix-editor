@@ -1,4 +1,4 @@
-const { expect, domainBuilder, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon } = require('../../../test-helper');
+const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon, knex } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const axios = require('axios');
 
@@ -144,7 +144,7 @@ async function mockCurrentContent() {
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
+    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     courses: [buildCourse(expectedCurrentContent.courses[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
@@ -230,10 +230,7 @@ async function mockContentForRelease() {
       embedTitle: 'Embed title',
       embedHeight: 'Embed height',
       timer: 12,
-      illustrationUrl: 'url de l‘illustration',
-      attachments: ['url de la pièce jointe'],
       competenceId: 'recCompetence0',
-      illustrationAlt: 'Texte alternatif illustration',
       format: 'mots',
       autoReply: false,
       locales: ['fr-fr'],
@@ -243,6 +240,7 @@ async function mockContentForRelease() {
       alpha: 0.9,
       responsive: 'Smartphone',
       genealogy: 'Prototype 1',
+      attachments: ['url de la pièce jointe'],
     }],
     tutorials: [{
       id: 'recTutorial0',
@@ -285,7 +283,7 @@ async function mockContentForRelease() {
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
+    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     courses: [buildCourse(expectedCurrentContent.courses[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
