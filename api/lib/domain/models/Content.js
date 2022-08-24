@@ -1,5 +1,5 @@
 const Area = require('./Area');
-const Challenge = require('./Challenge');
+const ChallengeForRelease = require('./ChallengeForRelease');
 const Competence = require('./Competence');
 const Course = require('./Course');
 const Framework = require('./Framework');
@@ -46,7 +46,7 @@ module.exports = class Content {
   }) {
     const content = new Content();
     content.areas = areas ? areas.map((area) => new Area(area)) : [];
-    content.challenges = challenges ? challenges.map((challenge) => new Challenge(challenge)) : [];
+    content.challenges = challenges ? challenges.map((challenge) => new ChallengeForRelease(challenge)) : [];
     content.competences = competences ? competences.map((competence) => new Competence(competence)) : [];
     content.courses = courses ? courses.map((course) => new Course(course)) : [];
     content.frameworks = frameworks ? frameworks.map((framework) => new Framework(framework)) : [];
@@ -56,42 +56,42 @@ module.exports = class Content {
     content.tutorials = tutorials ? tutorials.map((tutorial) => new Tutorial(tutorial)) : [];
 
     content['fr-fr'] = {
-      areas: map(areas, (area) => new Area(area, 'fr-fr')), 
-      challenges: map(challenges, (challenge) => new Challenge(challenge)), 
-      competences: map(competences, (competence) => new Competence(competence, 'fr-fr')), 
-      courses: map(courses, (course) => new Course(course)), 
-      frameworks: map(frameworks, (framework) => new Framework(framework)), 
-      skills: map(skills, (skill) => new Skill(skill, 'fr-fr')), 
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr-fr')), 
-      tubes: map(tubes, (tube) => new Tube(tube, 'fr-fr')), 
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)), 
-      trainings: map(trainings, (training) => new Training(training)), 
+      areas: map(areas, (area) => new Area(area, 'fr-fr')),
+      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      competences: map(competences, (competence) => new Competence(competence, 'fr-fr')),
+      courses: map(courses, (course) => new Course(course)),
+      frameworks: map(frameworks, (framework) => new Framework(framework)),
+      skills: map(skills, (skill) => new Skill(skill, 'fr-fr')),
+      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr-fr')),
+      tubes: map(tubes, (tube) => new Tube(tube, 'fr-fr')),
+      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
+      trainings: map(trainings, (training) => new Training(training)),
     };
 
     content['fr'] = {
-      areas: map(areas, (area) => new Area(area, 'fr')), 
-      challenges: map(challenges, (challenge) => new Challenge(challenge)), 
-      competences: map(competences, (competence) => new Competence(competence, 'fr')), 
-      courses: map(courses, (course) => new Course(course)), 
-      frameworks: map(frameworks, (framework) => new Framework(framework)), 
-      skills: map(skills, (skill) => new Skill(skill, 'fr')), 
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr')), 
-      tubes: map(tubes, (tube) => new Tube(tube, 'fr')), 
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)), 
-      trainings: map(trainings, (training) => new Training(training)), 
+      areas: map(areas, (area) => new Area(area, 'fr')),
+      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      competences: map(competences, (competence) => new Competence(competence, 'fr')),
+      courses: map(courses, (course) => new Course(course)),
+      frameworks: map(frameworks, (framework) => new Framework(framework)),
+      skills: map(skills, (skill) => new Skill(skill, 'fr')),
+      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr')),
+      tubes: map(tubes, (tube) => new Tube(tube, 'fr')),
+      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
+      trainings: map(trainings, (training) => new Training(training)),
     };
 
     content['en'] = {
-      areas: map(areas, (area) => new Area(area, 'en')), 
-      challenges: map(challenges, (challenge) => new Challenge(challenge)), 
-      competences: map(competences, (competence) => new Competence(competence, 'en')), 
-      courses: map(courses, (course) => new Course(course)), 
-      frameworks: map(frameworks, (framework) => new Framework(framework)), 
-      skills: map(skills, (skill) => new Skill(skill, 'en')), 
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'en')), 
-      tubes: map(tubes, (tube) => new Tube(tube, 'en')), 
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)), 
-      trainings: map(trainings, (training) => new Training(training)), 
+      areas: map(areas, (area) => new Area(area, 'en')),
+      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      competences: map(competences, (competence) => new Competence(competence, 'en')),
+      courses: map(courses, (course) => new Course(course)),
+      frameworks: map(frameworks, (framework) => new Framework(framework)),
+      skills: map(skills, (skill) => new Skill(skill, 'en')),
+      thematics: map(thematics, (thematic) => new Thematic(thematic, 'en')),
+      tubes: map(tubes, (tube) => new Tube(tube, 'en')),
+      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
+      trainings: map(trainings, (training) => new Training(training)),
     };
 
     return content;
