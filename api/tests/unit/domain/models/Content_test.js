@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
 const Course = require('../../../../lib/domain/models/Course');
-const Thematic = require('../../../../lib/domain/models/Thematic');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -73,6 +72,14 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const thematicAirtable = domainBuilder.buildThematicAirtableDataObject({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        nameEnUs: 'Name of the thematic',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
@@ -81,7 +88,7 @@ describe('Unit | Domain | Content', () => {
         skills: [skillAirtable],
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
-        thematics: [{ id: 345 }],
+        thematics: [thematicAirtable],
       };
     });
 
@@ -158,6 +165,14 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedThematic = domainBuilder.buildThematic({
+        id: 'recThematic1',
+        name: 'Nom de la thématique',
+        nameEnUs: 'Name of the thematic',
+        competenceId: 'recCompetence0',
+        tubeIds: ['recTube0'],
+        index: 0,
+      });
 
       expect(content.areas).to.deepEqualArray([expectedArea]);
       expect(content.competences).to.deepEqualArray([expectedCompetence]);
@@ -166,7 +181,7 @@ describe('Unit | Domain | Content', () => {
       expect(content.skills).to.deepEqualArray([expectedSkill]);
       expect(content.tubes).to.deepEqualArray([expectedTube]);
       expect(content.tutorials).to.deepEqualArray([expectedTutorial]);
-      expect(content.thematics[0]).to.be.instanceOf(Thematic);
+      expect(content.thematics).to.deepEqualArray([expectedThematic]);
     });
   });
 });
