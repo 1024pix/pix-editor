@@ -23,7 +23,7 @@ function mockCurrentContent() {
     challenges: [domainBuilder.buildChallenge()],
     tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
     thematics: [domainBuilder.buildThematicAirtableDataObject()],
-    courses: [domainBuilder.buildCourse({ challenges: ['recChallenge0'] })],
+    courses: [domainBuilder.buildCourseAirtableDataObject({ challenges: ['recChallenge0'] })],
   };
 
   airtableBuilder.mockLists({
