@@ -1,7 +1,6 @@
 const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
-const Course = require('../../../../lib/domain/models/Course');
 const Training = require('../../../../lib/domain/models/Training');
 
 describe('Unit | Domain | Content', () => {
@@ -81,11 +80,19 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const courseAirtable = domainBuilder.buildCourseAirtableDataObject({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [{ id: 123 }],
-        courses: [{ id: 123 }],
+        courses: [courseAirtable],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
@@ -180,11 +187,19 @@ describe('Unit | Domain | Content', () => {
         index: 0,
         locale: null,
       });
+      const expectedCourse = domainBuilder.buildCourse({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
 
       expect(content.areas).to.deep.equal([expectedArea]);
       expect(content.competences).to.deep.equal([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
-      expect(content.courses[0]).to.be.instanceOf(Course);
+      expect(content.courses).to.deep.equal([expectedCourse]);
       expect(content.skills).to.deep.equal([expectedSkill]);
       expect(content.tubes).to.deep.equal([expectedTube]);
       expect(content.tutorials).to.deep.equal([expectedTutorial]);
@@ -258,12 +273,20 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const expectedCourseFrFr = domainBuilder.buildCourse({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
 
       const expectedContent = {
         areas: [expectedAreaFrFr],
         competences: [expectedCompetenceFrFr],
         challenges: [{ id: 123 }],
-        courses: [{ id: 123 }],
+        courses: [expectedCourseFrFr],
         skills: [expectedSkillFrFr],
         tubes: [expectedTubeFrFr],
         tutorials: [expectedTutorialFrFr],
@@ -340,12 +363,20 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const expectedCourseEnUs = domainBuilder.buildCourse({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
 
       const expectedContent = {
         areas: [expectedAreaEnUs],
         competences: [expectedCompetenceEnUs],
         challenges: [{ id: 123 }],
-        courses: [{ id: 123 }],
+        courses: [expectedCourseEnUs],
         skills: [expectedSkillEnUs],
         tubes: [expectedTubeEnUs],
         tutorials: [expectedTutorialEnUs],
@@ -422,12 +453,20 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const expectedCourseFr = domainBuilder.buildCourse({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
 
       const expectedContent = {
         areas: [expectedAreaFr],
         competences: [expectedCompetenceFr],
         challenges: [{ id: 123 }],
-        courses: [{ id: 123 }],
+        courses: [expectedCourseFr],
         skills: [expectedSkillFr],
         tubes: [expectedTubeFr],
         tutorials: [expectedTutorialFr],
