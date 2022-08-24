@@ -1,7 +1,6 @@
 const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 const Challenge = require('../../../../lib/domain/models/Challenge');
-const Course = require('../../../../lib/domain/models/Course');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -80,11 +79,19 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const courseAirtable = domainBuilder.buildCourseAirtableDataObject({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [{ id: 123 }],
-        courses: [{ id: 123 }],
+        courses: [courseAirtable],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
@@ -173,11 +180,19 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
+      const expectedCourse = domainBuilder.buildCourse({
+        id: 'recCourse1',
+        description: 'descriptionCourse1',
+        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
+        name: 'nameCourse1',
+        challenges: ['recChallengeId1'],
+        competences: ['recCompetenceId1'],
+      });
 
       expect(content.areas).to.deepEqualArray([expectedArea]);
       expect(content.competences).to.deepEqualArray([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
-      expect(content.courses[0]).to.be.instanceOf(Course);
+      expect(content.courses).to.deepEqualArray([expectedCourse]);
       expect(content.skills).to.deepEqualArray([expectedSkill]);
       expect(content.tubes).to.deepEqualArray([expectedTube]);
       expect(content.tutorials).to.deepEqualArray([expectedTutorial]);
