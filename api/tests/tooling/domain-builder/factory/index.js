@@ -2,7 +2,7 @@ module.exports = {
   buildArea: require('./build-area'),
   buildAreaAirtableDataObject: require('./build-area-airtable-data-object'),
   buildAttachment: require('./build-attachment'),
-  buildChallenge: require('./build-challenge-airtable-data-object'),
+  buildChallengeAirtableDataObject: require('./build-challenge-airtable-data-object'),
   buildChallengeForRelease: require('./build-challenge-for-release'),
   buildCompetence: require('./build-competence'),
   buildCompetenceAirtableDataObject: require('./build-competence-airtable-data-object'),

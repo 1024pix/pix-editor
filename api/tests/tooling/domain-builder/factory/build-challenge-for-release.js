@@ -1,3 +1,5 @@
+const ChallengeForRelease = require('../../../../lib/domain/models/ChallengeForRelease');
+
 module.exports = function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
@@ -24,9 +26,10 @@ module.exports = function buildChallengeForRelease({
   alpha = 0.5,
   responsive = 'Smartphone',
   genealogy = 'Prototype 1',
+  attachments,
 } = {}) {
 
-  return {
+  return new ChallengeForRelease({
     id,
     instruction,
     alternativeInstruction,
@@ -52,5 +55,6 @@ module.exports = function buildChallengeForRelease({
     alpha,
     responsive,
     genealogy,
-  };
+    attachments,
+  });
 };

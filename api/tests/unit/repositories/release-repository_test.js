@@ -90,7 +90,7 @@ describe('Unit | Repository | release-repository', () => {
 
   describe('#serializeEntity', () => {
     it('serialize a challenge and fetch attachments', async () => {
-      const challengeDataObject = domainBuilder.buildChallenge({ id: 'recChallenge' });
+      const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
       const entity = airtableBuilder.factory.buildChallenge({
         id: 'recChallenge',
         instruction: challengeDataObject.instruction,
@@ -190,7 +190,7 @@ describe('Unit | Repository | release-repository', () => {
         }),
       ];
 
-      const challenge = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallengeAirtableDataObject({
         id: 'recChallenge',
         instruction : 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
         alternativeInstruction : '',

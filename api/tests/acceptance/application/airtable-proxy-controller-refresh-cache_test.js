@@ -108,10 +108,8 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
   });
 
   describe('POST /api/airtable/content/Epreuves', () => {
-    const challengeDataObject = domainBuilder.buildChallenge({ id: 'recChallenge' });
-    const challenge = airtableBuilder.factory.buildChallenge({
-      ...challengeDataObject,
-    });
+    const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
+    const challenge = airtableBuilder.factory.buildChallenge(challengeDataObject);
     const expectedChallenge = domainBuilder.buildChallengeForRelease(challengeDataObject);
     const attachment = airtableBuilder.factory.buildAttachment({
       id: '1',
