@@ -1,4 +1,4 @@
-module.exports = function buildCourse(
+module.exports = function buildCourseAirtableDataObject(
   {
     id = 'recPBOj7JzBcgXEtO',
     // attributes

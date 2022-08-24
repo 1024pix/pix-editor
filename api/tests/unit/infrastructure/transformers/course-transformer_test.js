@@ -4,7 +4,7 @@ const { filterCoursesFields } = require('../../../../lib/infrastructure/transfor
 describe('Unit | Infrastructure | course-transformer', function() {
 
   it('should only keep useful fields', function() {
-    const airtableCompetences = [domainBuilder.buildCourse()];
+    const airtableCompetences = [domainBuilder.buildCourseAirtableDataObject()];
 
     const courses = filterCoursesFields(airtableCompetences);
 
