@@ -9,6 +9,7 @@ const TubeForRelease = require('./TubeForRelease');
 const TutorialForRelease = require('./TutorialForRelease');
 
 const map = require('lodash/map');
+const filter = require('lodash/filter');
 
 module.exports = class Content {
   constructor({
@@ -64,7 +65,8 @@ module.exports = class Content {
       skills: map(skills, (skill) => new SkillForRelease(skill, 'fr-fr')),
       thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'fr-fr')),
       tubes: map(tubes, (tube) => new TubeForRelease(tube, 'fr-fr')),
-      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
+      tutorials: filter(tutorials, (tutorial) => tutorial.locale === 'fr-fr')
+        .map((tutorial) => new TutorialForRelease(tutorial)),
     };
 
     content['fr'] = {
@@ -76,7 +78,8 @@ module.exports = class Content {
       skills: map(skills, (skill) => new SkillForRelease(skill, 'fr')),
       thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'fr')),
       tubes: map(tubes, (tube) => new TubeForRelease(tube, 'fr')),
-      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
+      tutorials: filter(tutorials, (tutorial) => tutorial.locale === 'fr-fr')
+        .map((tutorial) => new TutorialForRelease(tutorial)),
     };
 
     content['en'] = {
@@ -88,7 +91,8 @@ module.exports = class Content {
       skills: map(skills, (skill) => new SkillForRelease(skill, 'en')),
       thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'en')),
       tubes: map(tubes, (tube) => new TubeForRelease(tube, 'en')),
-      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
+      tutorials: filter(tutorials, (tutorial) => tutorial.locale === 'en-us')
+        .map((tutorial) => new TutorialForRelease(tutorial)),
     };
 
     return content;

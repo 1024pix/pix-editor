@@ -248,7 +248,7 @@ async function mockContentForRelease() {
       link: 'Lien du Tutoriel',
       source: 'Source du Tutoriel',
       title: 'Titre du Tutoriel',
-      locale: 'Langue du Tutoriel',
+      locale: 'fr-fr',
     }],
     courses: [{
       id: 'recCourse0',
@@ -372,15 +372,7 @@ async function mockContentForRelease() {
         practicalTitleEnUs: 'Titre pratique du Tube - en',
         title: 'Titre du Tube',
       }],
-      tutorials: [{
-        duration: 'Durée du Tutoriel',
-        format: 'Format du Tutoriel',
-        id: 'recTutorial0',
-        link: 'Lien du Tutoriel',
-        locale: 'Langue du Tutoriel',
-        source: 'Source du Tutoriel',
-        title: 'Titre du Tutoriel',
-      }],
+      tutorials: [],
     },
     fr: {
       areas: [{
@@ -492,7 +484,7 @@ async function mockContentForRelease() {
         format: 'Format du Tutoriel',
         id: 'recTutorial0',
         link: 'Lien du Tutoriel',
-        locale: 'Langue du Tutoriel',
+        locale: 'fr-fr',
         source: 'Source du Tutoriel',
         title: 'Titre du Tutoriel',
       }],
@@ -607,7 +599,7 @@ async function mockContentForRelease() {
         format: 'Format du Tutoriel',
         id: 'recTutorial0',
         link: 'Lien du Tutoriel',
-        locale: 'Langue du Tutoriel',
+        locale: 'fr-fr',
         source: 'Source du Tutoriel',
         title: 'Titre du Tutoriel',
       }],

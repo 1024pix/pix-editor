@@ -60,14 +60,36 @@ describe('Unit | Domain | Content', () => {
         practicalDescriptionEnUs: 'practicalDescriptionEn',
         competenceId: 'recCompetence1',
       });
-      const tutorialAirtable = domainBuilder.buildTutorialAirtableDataObject({
-        id: 'recTutorialA',
+      const tutorialAirtableAny = domainBuilder.buildTutorialAirtableDataObject({
+        id: 'recTutorialAny',
         duration: '00:03:31',
         format: 'vidéo',
         link: 'http://www.example.com/this-is-an-example.html',
-        source: 'sourceA',
-        title: 'titleA',
+        source: 'sourceAny',
+        title: 'titleAny',
         locale: 'any',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
+      const tutorialAirtableEn = domainBuilder.buildTutorialAirtableDataObject({
+        id: 'recTutorialEn',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceEn',
+        title: 'titleEn',
+        locale: 'en-us',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
+      const tutorialAirtableFr = domainBuilder.buildTutorialAirtableDataObject({
+        id: 'recTutorialFr',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceFr',
+        title: 'titleFr',
+        locale: 'fr-fr',
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
@@ -122,7 +144,7 @@ describe('Unit | Domain | Content', () => {
         courses: [courseAirtable],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
-        tutorials: [tutorialAirtable],
+        tutorials: [tutorialAirtableAny, tutorialAirtableEn, tutorialAirtableFr],
         thematics: [thematicAirtable],
         frameworks: [frameworkAirtable],
       };
@@ -194,17 +216,40 @@ describe('Unit | Domain | Content', () => {
         competenceId: 'recCompetence1',
         locale: null,
       });
-      const expectedTutorial = domainBuilder.buildTutorialForRelease({
-        id: 'recTutorialA',
+      const expectedTutorialAny = domainBuilder.buildTutorialForRelease({
+        id: 'recTutorialAny',
         duration: '00:03:31',
         format: 'vidéo',
         link: 'http://www.example.com/this-is-an-example.html',
-        source: 'sourceA',
-        title: 'titleA',
+        source: 'sourceAny',
+        title: 'titleAny',
         locale: 'any',
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
+      const expectedTutorialEn = domainBuilder.buildTutorialForRelease({
+        id: 'recTutorialEn',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceEn',
+        title: 'titleEn',
+        locale: 'en-us',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
+      const expectedTutorialFr = domainBuilder.buildTutorialForRelease({
+        id: 'recTutorialFr',
+        duration: '00:03:31',
+        format: 'vidéo',
+        link: 'http://www.example.com/this-is-an-example.html',
+        source: 'sourceFr',
+        title: 'titleFr',
+        locale: 'fr-fr',
+        tutorialForSkills: ['skillId1'],
+        furtherInformation: ['skillId2'],
+      });
+
       const expectedThematic = domainBuilder.buildThematicForRelease({
         id: 'recThematic1',
         name: 'Nom de la thématique',
@@ -258,7 +303,7 @@ describe('Unit | Domain | Content', () => {
         courses: [expectedCourse],
         skills: [expectedSkill],
         tubes: [expectedTube],
-        tutorials: [expectedTutorial],
+        tutorials: [expectedTutorialAny, expectedTutorialEn, expectedTutorialFr],
         thematics: [expectedThematic],
         frameworks: [expectedFramework],
       };
@@ -315,13 +360,13 @@ describe('Unit | Domain | Content', () => {
         competenceId: 'recCompetence1',
       });
       const expectedTutorialFrFr = domainBuilder.buildTutorialForRelease({
-        id: 'recTutorialA',
+        id: 'recTutorialFr',
         duration: '00:03:31',
         format: 'vidéo',
         link: 'http://www.example.com/this-is-an-example.html',
-        source: 'sourceA',
-        title: 'titleA',
-        locale: 'any',
+        source: 'sourceFr',
+        title: 'titleFr',
+        locale: 'fr-fr',
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
@@ -433,13 +478,13 @@ describe('Unit | Domain | Content', () => {
         competenceId: 'recCompetence1',
       });
       const expectedTutorialEnUs = domainBuilder.buildTutorialForRelease({
-        id: 'recTutorialA',
+        id: 'recTutorialEn',
         duration: '00:03:31',
         format: 'vidéo',
         link: 'http://www.example.com/this-is-an-example.html',
-        source: 'sourceA',
-        title: 'titleA',
-        locale: 'any',
+        source: 'sourceEn',
+        title: 'titleEn',
+        locale: 'en-us',
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
@@ -551,13 +596,13 @@ describe('Unit | Domain | Content', () => {
         locale: null,
       });
       const expectedTutorialFr = domainBuilder.buildTutorialForRelease({
-        id: 'recTutorialA',
+        id: 'recTutorialFr',
         duration: '00:03:31',
         format: 'vidéo',
         link: 'http://www.example.com/this-is-an-example.html',
-        source: 'sourceA',
-        title: 'titleA',
-        locale: 'any',
+        source: 'sourceFr',
+        title: 'titleFr',
+        locale: 'fr-fr',
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
