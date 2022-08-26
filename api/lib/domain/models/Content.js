@@ -58,7 +58,8 @@ module.exports = class Content {
 
     content['fr-fr'] = {
       areas: map(areas, (area) => new AreaForRelease(area, 'fr-fr')),
-      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      challenges: filter(challenges, (challenge) => challenge.locales.includes('fr-fr'))
+        .map((challenge) => new ChallengeForRelease(challenge)),
       competences: map(competences, (competence) => new CompetenceForRelease(competence, 'fr-fr')),
       courses: map(courses, (course) => new CourseForRelease(course)),
       frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
@@ -71,7 +72,8 @@ module.exports = class Content {
 
     content['fr'] = {
       areas: map(areas, (area) => new AreaForRelease(area, 'fr')),
-      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      challenges: filter(challenges, (challenge) => challenge.locales.includes('fr'))
+        .map((challenge) => new ChallengeForRelease(challenge)),
       competences: map(competences, (competence) => new CompetenceForRelease(competence, 'fr')),
       courses: map(courses, (course) => new CourseForRelease(course)),
       frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
@@ -84,7 +86,8 @@ module.exports = class Content {
 
     content['en'] = {
       areas: map(areas, (area) => new AreaForRelease(area, 'en')),
-      challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
+      challenges: filter(challenges, (challenge) => challenge.locales.includes('en'))
+        .map((challenge) => new ChallengeForRelease(challenge)),
       competences: map(competences, (competence) => new CompetenceForRelease(competence, 'en')),
       courses: map(courses, (course) => new CourseForRelease(course)),
       frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
