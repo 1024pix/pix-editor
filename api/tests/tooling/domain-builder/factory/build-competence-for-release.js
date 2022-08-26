@@ -1,6 +1,6 @@
-const Competence = require('../../../../lib/domain/models/Competence');
+const CompetenceForRelease = require('../../../../lib/domain/models/CompetenceForRelease');
 
-const buildCompetence = function({
+const buildCompetenceForRelease = function({
   id = 'recCompetence1',
   name = 'nameCompetence1',
   nameFrFr = 'nameFrCompetence1',
@@ -15,7 +15,7 @@ const buildCompetence = function({
   origin = 'Pix',
   locale = 'fr-fr',
 } = {}) {
-  return new Competence({
+  return new CompetenceForRelease({
     id,
     name,
     nameFrFr,
@@ -31,7 +31,7 @@ const buildCompetence = function({
   }, locale);
 };
 
-buildCompetence.withLocaleFr = function({
+buildCompetenceForRelease.withLocaleFr = function({
   id,
   name,
   index,
@@ -41,7 +41,7 @@ buildCompetence.withLocaleFr = function({
   thematicIds,
   origin,
 } = {}) {
-  return new Competence({
+  return new CompetenceForRelease({
     id,
     name: null,
     nameFrFr: name,
@@ -57,7 +57,7 @@ buildCompetence.withLocaleFr = function({
   }, 'fr');
 };
 
-buildCompetence.withLocaleFrFr = function({
+buildCompetenceForRelease.withLocaleFrFr = function({
   id,
   name,
   index,
@@ -67,7 +67,7 @@ buildCompetence.withLocaleFrFr = function({
   thematicIds,
   origin,
 } = {}) {
-  return new Competence({
+  return new CompetenceForRelease({
     id,
     name: null,
     nameFrFr: name,
@@ -83,7 +83,7 @@ buildCompetence.withLocaleFrFr = function({
   }, 'fr-fr');
 };
 
-buildCompetence.withLocaleEnUs = function({
+buildCompetenceForRelease.withLocaleEnUs = function({
   id,
   name,
   index,
@@ -93,7 +93,7 @@ buildCompetence.withLocaleEnUs = function({
   thematicIds,
   origin,
 } = {}) {
-  return new Competence({
+  return new CompetenceForRelease({
     id,
     name: null,
     nameFrFr: null,
@@ -108,4 +108,4 @@ buildCompetence.withLocaleEnUs = function({
     origin,
   }, 'en');
 };
-module.exports = buildCompetence;
+module.exports = buildCompetenceForRelease;

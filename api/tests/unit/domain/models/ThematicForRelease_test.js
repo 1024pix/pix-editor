@@ -1,17 +1,17 @@
 const { expect } = require('../../../test-helper');
-const Thematic = require('../../../../lib/domain/models/Thematic');
+const ThematicForRelease = require('../../../../lib/domain/models/ThematicForRelease');
 
-describe('Unit | Domain | Thematic', function() {
+describe('Unit | Domain | ThematicForRelease', function() {
   describe('constructor', function() {
     it('should return domain object Thematic', function() {
       // when
-      const thematic = new Thematic();
+      const thematic = new ThematicForRelease();
 
       // then
-      expect(thematic).to.be.instanceOf(Thematic);
+      expect(thematic).to.be.instanceOf(ThematicForRelease);
     });
 
-    it('should return domain object Competence with common fields', function() {
+    it('should return domain object Thematic with common fields', function() {
       const thematicData = {
         id: 'rec1',
         index: '1.1',
@@ -20,7 +20,7 @@ describe('Unit | Domain | Thematic', function() {
       };
 
       // when
-      const thematic = new Thematic(thematicData);
+      const thematic = new ThematicForRelease(thematicData);
 
       // then
       expect(thematic).to.deep.contains(thematicData);
@@ -34,7 +34,7 @@ describe('Unit | Domain | Thematic', function() {
       };
 
       // when
-      const thematic = new Thematic(thematicData, null);
+      const thematic = new ThematicForRelease(thematicData, null);
 
       // then
       expect(thematic).to.deep.contains(thematicData);
@@ -46,7 +46,7 @@ describe('Unit | Domain | Thematic', function() {
       };
 
       // when
-      const thematic = new Thematic(thematicData, 'fr-fr');
+      const thematic = new ThematicForRelease(thematicData, 'fr-fr');
 
       // then
       expect(thematic).to.deep.contains(thematicData);
@@ -58,7 +58,7 @@ describe('Unit | Domain | Thematic', function() {
       };
 
       // when
-      const thematic = new Thematic(thematicData, 'fr');
+      const thematic = new ThematicForRelease(thematicData, 'fr');
 
       // then
       expect(thematic).to.deep.contains(thematicData);
@@ -75,7 +75,7 @@ describe('Unit | Domain | Thematic', function() {
       };
 
       // when
-      const thematic = new Thematic(thematicData, 'en');
+      const thematic = new ThematicForRelease(thematicData, 'en');
 
       // then
       expect(thematic).to.deep.contains(expectedThematic);

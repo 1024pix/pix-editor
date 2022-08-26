@@ -1,14 +1,14 @@
 const { expect } = require('../../../test-helper');
-const Skill = require('../../../../lib/domain/models/Skill');
+const SkillForRelease = require('../../../../lib/domain/models/SkillForRelease');
 
-describe('Unit | Domain | Skill', function() {
+describe('Unit | Domain | SkillForRelease', function() {
   describe('constructor', function() {
     it('should return domain object Skill', function() {
       // when
-      const skill = new Skill();
+      const skill = new SkillForRelease();
 
       // then
-      expect(skill).to.be.instanceOf(Skill);
+      expect(skill).to.be.instanceOf(SkillForRelease);
     });
 
     it('should return domain object Skill with common fields', function() {
@@ -27,7 +27,7 @@ describe('Unit | Domain | Skill', function() {
       };
 
       // when
-      const skill = new Skill(skillData);
+      const skill = new SkillForRelease(skillData);
 
       // then
       expect(skill).to.deep.contains(skillData);
@@ -41,7 +41,7 @@ describe('Unit | Domain | Skill', function() {
       };
 
       // when
-      const skill = new Skill(skillData, null);
+      const skill = new SkillForRelease(skillData, null);
 
       // then
       expect(skill).to.deep.contains(skillData);
@@ -60,7 +60,7 @@ describe('Unit | Domain | Skill', function() {
       };
 
       // when
-      const skill = new Skill(skillData, 'fr-fr');
+      const skill = new SkillForRelease(skillData, 'fr-fr');
 
       // then
       expect(skill).to.deep.contains(expectedSkill);
@@ -79,7 +79,7 @@ describe('Unit | Domain | Skill', function() {
       };
 
       // when
-      const skill = new Skill(skillData, 'fr');
+      const skill = new SkillForRelease(skillData, 'fr');
 
       // then
       expect(skill).to.deep.contains(expectedSkill);
@@ -97,9 +97,8 @@ describe('Unit | Domain | Skill', function() {
         hint: 'indice en-us 1',
       };
 
-
       // when
-      const skill = new Skill(skillData, 'en');
+      const skill = new SkillForRelease(skillData, 'en');
 
       // then
       expect(skill).to.deep.contains(expectedSkill);

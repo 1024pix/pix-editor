@@ -1,6 +1,6 @@
-const Tube = require('../../../../lib/domain/models/Tube');
+const TubeForRelease = require('../../../../lib/domain/models/TubeForRelease');
 
-const buildTube = function({
+const buildTubeForRelease = function({
   id = 'recTIddrkopID23Fp',
   name = '@Moteur',
   title = 'Moteur de recherche',
@@ -12,7 +12,7 @@ const buildTube = function({
   competenceId = 'recsvLz0W2ShyfD63',
   locale = 'fr-fr',
 } = {}) {
-  return new Tube({
+  return new TubeForRelease({
     id,
     name,
     title,
@@ -25,7 +25,7 @@ const buildTube = function({
   }, locale);
 };
 
-buildTube.withLocaleFr = function({
+buildTubeForRelease.withLocaleFr = function({
   id,
   name,
   title,
@@ -34,7 +34,7 @@ buildTube.withLocaleFr = function({
   practicalDescription,
   competenceId,
 } = {}) {
-  return new Tube({
+  return new TubeForRelease({
     id,
     name,
     title,
@@ -47,7 +47,7 @@ buildTube.withLocaleFr = function({
   }, 'fr');
 };
 
-buildTube.withLocaleFrFr = function({
+buildTubeForRelease.withLocaleFrFr = function({
   id,
   name,
   title,
@@ -56,7 +56,7 @@ buildTube.withLocaleFrFr = function({
   practicalDescription,
   competenceId,
 } = {}) {
-  return new Tube({
+  return new TubeForRelease({
     id,
     name,
     title,
@@ -69,7 +69,7 @@ buildTube.withLocaleFrFr = function({
   }, 'fr-fr');
 };
 
-buildTube.withLocaleEnUs = function({
+buildTubeForRelease.withLocaleEnUs = function({
   id,
   name,
   title,
@@ -78,7 +78,7 @@ buildTube.withLocaleEnUs = function({
   practicalDescription,
   competenceId,
 } = {}) {
-  return new Tube({
+  return new TubeForRelease({
     id,
     name,
     title,
@@ -90,4 +90,4 @@ buildTube.withLocaleEnUs = function({
     competenceId,
   }, 'en');
 };
-module.exports = buildTube;
+module.exports = buildTubeForRelease;

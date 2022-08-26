@@ -1,6 +1,6 @@
-const Area = require('../../../../lib/domain/models/Area');
+const AreaForRelease = require('../../../../lib/domain/models/AreaForRelease');
 
-const buildArea = function({
+const buildAreaForRelease = function({
   id = 'recArea1',
   name = 'nameArea1',
   code = 'codeArea1',
@@ -12,7 +12,7 @@ const buildArea = function({
   titleEnUs = 'titleArea1',
   locale = 'fr-fr',
 } = {}) {
-  return new Area({
+  return new AreaForRelease({
     id,
     code,
     titleFrFr,
@@ -25,7 +25,7 @@ const buildArea = function({
   }, locale);
 };
 
-buildArea.withLocaleFr = function({
+buildAreaForRelease.withLocaleFr = function({
   id,
   code,
   title,
@@ -35,7 +35,7 @@ buildArea.withLocaleFr = function({
   color,
   frameworkId,
 } = {}) {
-  return new Area({
+  return new AreaForRelease({
     id,
     code,
     titleFrFr: title,
@@ -48,7 +48,7 @@ buildArea.withLocaleFr = function({
   }, 'fr');
 };
 
-buildArea.withLocaleFrFr = function({
+buildAreaForRelease.withLocaleFrFr = function({
   id,
   code,
   title,
@@ -58,7 +58,7 @@ buildArea.withLocaleFrFr = function({
   color,
   frameworkId,
 } = {}) {
-  return new Area({
+  return new AreaForRelease({
     id,
     code,
     titleFrFr: title,
@@ -71,7 +71,7 @@ buildArea.withLocaleFrFr = function({
   }, 'fr-fr');
 };
 
-buildArea.withLocaleEnUs = function({
+buildAreaForRelease.withLocaleEnUs = function({
   id,
   code,
   title,
@@ -81,7 +81,7 @@ buildArea.withLocaleEnUs = function({
   color,
   frameworkId,
 } = {}) {
-  return new Area({
+  return new AreaForRelease({
     id,
     code,
     titleFrFr: null,
@@ -94,4 +94,4 @@ buildArea.withLocaleEnUs = function({
   }, 'en');
 };
 
-module.exports = buildArea;
+module.exports = buildAreaForRelease;

@@ -1,17 +1,17 @@
 const { expect } = require('../../../test-helper');
-const Area = require('../../../../lib/domain/models/Area');
+const AreaForRelease = require('../../../../lib/domain/models/AreaForRelease');
 
-describe('Unit | Domain | Area', () => {
+describe('Unit | Domain | AreaForRelease', () => {
   describe('constructor', () => {
-    it('should return domain object Area', function() {
+    it('should return domain object AreaForRelease', function() {
       // when
-      const area = new Area();
+      const area = new AreaForRelease();
 
       // then
-      expect(area).to.be.instanceOf(Area);
+      expect(area).to.be.instanceOf(AreaForRelease);
     });
 
-    it('should return domain object Area with common fields ', function() {
+    it('should return domain object AreaForRelease with common fields ', function() {
       const areaData  = {
         id : 'rec1',
         code: 1,
@@ -23,20 +23,20 @@ describe('Unit | Domain | Area', () => {
       };
 
       // when
-      const area = new Area(areaData);
+      const area = new AreaForRelease(areaData);
 
       // then
       expect(area).to.deep.contains(areaData);
     });
 
-    it('should return domain object Area without locale ', function() {
+    it('should return domain object AreaForRelease without locale ', function() {
       const areaData  = {
         titleFrFr: 'Domaine',
-        titleEnUs: 'Area',
+        titleEnUs: 'AreaForRelease',
       };
 
       // when
-      const area = new Area(areaData,null);
+      const area = new AreaForRelease(areaData,null);
 
       // then
       expect(area).to.deep.contains(areaData);
@@ -47,16 +47,16 @@ describe('Unit | Domain | Area', () => {
         titleFrFr: 'Domaine',
       };
 
-      const expectedArea  = {
+      const expectedAreaForRelease  = {
         titleFrFr: 'Domaine',
         title: 'Domaine',
       };
 
       // when
-      const area = new Area(areaData, 'fr-fr');
+      const area = new AreaForRelease(areaData, 'fr-fr');
 
       // then
-      expect(area).to.deep.contains(expectedArea);
+      expect(area).to.deep.contains(expectedAreaForRelease);
     });
 
     it('should return french title fields when there is "fr" locale', function() {
@@ -64,33 +64,33 @@ describe('Unit | Domain | Area', () => {
         titleFrFr: 'Domaine',
       };
 
-      const expectedArea  = {
+      const expectedAreaForRelease  = {
         titleFrFr: 'Domaine',
         title: 'Domaine',
       };
 
       // when
-      const area = new Area(areaData, 'fr');
+      const area = new AreaForRelease(areaData, 'fr');
 
       // then
-      expect(area).to.deep.contains(expectedArea);
+      expect(area).to.deep.contains(expectedAreaForRelease);
     });
 
     it('should return english title fields when there is "en" locale', function() {
       const areaData  = {
-        titleEnUs: 'Area',
+        titleEnUs: 'AreaForRelease',
       };
 
-      const expectedArea  = {
-        titleEnUs: 'Area',
-        title: 'Area',
+      const expectedAreaForRelease  = {
+        titleEnUs: 'AreaForRelease',
+        title: 'AreaForRelease',
       };
 
       // when
-      const area = new Area(areaData, 'en');
+      const area = new AreaForRelease(areaData, 'en');
 
       // then
-      expect(area).to.deep.contains(expectedArea);
+      expect(area).to.deep.contains(expectedAreaForRelease);
     });
   });
 });

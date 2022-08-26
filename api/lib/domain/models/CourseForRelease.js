@@ -1,4 +1,4 @@
-module.exports = class Course {
+module.exports = class CourseForRelease {
   constructor({
     id,
     name,

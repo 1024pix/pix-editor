@@ -1,17 +1,17 @@
 const { expect } = require('../../../test-helper');
-const Competence = require('../../../../lib/domain/models/Competence');
+const CompetenceForRelease = require('../../../../lib/domain/models/CompetenceForRelease');
 
-describe('Unit | Domain | Competence', function() {
+describe('Unit | Domain | CompetenceForRelease', function() {
   describe('constructor', function() {
-    it('should return domain object Competence', function() {
+    it('should return domain object CompetenceForRelease', function() {
       // when
-      const competence = new Competence();
+      const competence = new CompetenceForRelease();
 
       // then
-      expect(competence).to.be.instanceOf(Competence);
+      expect(competence).to.be.instanceOf(CompetenceForRelease);
     });
 
-    it('should return domain object Competence with common fields', function() {
+    it('should return domain object CompetenceForRelease with common fields', function() {
       const competenceData = {
         id: 'rec1',
         index: '1.1',
@@ -22,13 +22,13 @@ describe('Unit | Domain | Competence', function() {
       };
 
       // when
-      const competence = new Competence(competenceData);
+      const competence = new CompetenceForRelease(competenceData);
 
       // then
       expect(competence).to.deep.contains(competenceData);
     });
 
-    it('should return domain object Competence without locale ', function() {
+    it('should return domain object CompetenceForRelease without locale ', function() {
       // given
       const competenceData = {
         name: 'Nom 1',
@@ -40,7 +40,7 @@ describe('Unit | Domain | Competence', function() {
       };
 
       // when
-      const competence = new Competence(competenceData, null);
+      const competence = new CompetenceForRelease(competenceData, null);
 
       // then
       expect(competence).to.deep.contains(competenceData);
@@ -53,7 +53,7 @@ describe('Unit | Domain | Competence', function() {
         descriptionFrFr: 'desc fr-fr',
       };
 
-      const expectedCompetence = {
+      const expectedCompetenceForRelease = {
         nameFrFr: 'Nom fr-fr 1',
         name: 'Nom fr-fr 1',
         description: 'desc fr-fr',
@@ -61,10 +61,10 @@ describe('Unit | Domain | Competence', function() {
       };
 
       // when
-      const competence = new Competence(competenceData, 'fr-fr');
+      const competence = new CompetenceForRelease(competenceData, 'fr-fr');
 
       // then
-      expect(competence).to.deep.contains(expectedCompetence);
+      expect(competence).to.deep.contains(expectedCompetenceForRelease);
     });
 
     it('should return french fields when there is "fr" locale', function() {
@@ -74,7 +74,7 @@ describe('Unit | Domain | Competence', function() {
         descriptionFrFr: 'desc fr-fr',
       };
 
-      const expectedCompetence = {
+      const expectedCompetenceForRelease = {
         nameFrFr: 'Nom fr-fr 1',
         name: 'Nom fr-fr 1',
         description: 'desc fr-fr',
@@ -82,10 +82,10 @@ describe('Unit | Domain | Competence', function() {
       };
 
       // when
-      const competence = new Competence(competenceData, 'fr');
+      const competence = new CompetenceForRelease(competenceData, 'fr');
 
       // then
-      expect(competence).to.deep.contains(expectedCompetence);
+      expect(competence).to.deep.contains(expectedCompetenceForRelease);
     });
 
     it('should return english fields when there is "en" locale', function() {
@@ -95,7 +95,7 @@ describe('Unit | Domain | Competence', function() {
         descriptionEnUs: 'desc en',
       };
 
-      const expectedCompetence = {
+      const expectedCompetenceForRelease = {
         nameEnUs: 'Name 1',
         name: 'Name 1',
         description: 'desc en',
@@ -103,10 +103,10 @@ describe('Unit | Domain | Competence', function() {
       };
 
       // when
-      const competence = new Competence(competenceData, 'en');
+      const competence = new CompetenceForRelease(competenceData, 'en');
 
       // then
-      expect(competence).to.deep.contains(expectedCompetence);
+      expect(competence).to.deep.contains(expectedCompetenceForRelease);
     });
   });
 });

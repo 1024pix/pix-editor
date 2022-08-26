@@ -1,6 +1,6 @@
-const Skill = require('../../../../lib/domain/models/Skill');
+const SkillForRelease = require('../../../../lib/domain/models/SkillForRelease');
 
-const buildSkill = function({
+const buildSkillForRelease = function({
   id = 'recTIddrkopID28Ep',
   name = '@accesDonnées1',
   hintFrFr = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
@@ -18,7 +18,7 @@ const buildSkill = function({
   version = 1,
   locale = 'fr-fr',
 } = {}) {
-  return new Skill({
+  return new SkillForRelease({
     id,
     name,
     hintFrFr,
@@ -37,7 +37,7 @@ const buildSkill = function({
   }, locale);
 };
 
-buildSkill.withLocaleFr = function({
+buildSkillForRelease.withLocaleFr = function({
   id,
   name,
   hint,
@@ -53,7 +53,7 @@ buildSkill.withLocaleFr = function({
   internationalisation,
   version,
 } = {}) {
-  return new Skill({
+  return new SkillForRelease({
     id,
     name,
     hintFrFr: hint,
@@ -72,7 +72,7 @@ buildSkill.withLocaleFr = function({
   }, 'fr');
 };
 
-buildSkill.withLocaleFrFr = function({
+buildSkillForRelease.withLocaleFrFr = function({
   id,
   name,
   hint,
@@ -88,7 +88,7 @@ buildSkill.withLocaleFrFr = function({
   internationalisation,
   version,
 } = {}) {
-  return new Skill({
+  return new SkillForRelease({
     id,
     name,
     hintFrFr: hint,
@@ -107,7 +107,7 @@ buildSkill.withLocaleFrFr = function({
   }, 'fr-fr');
 };
 
-buildSkill.withLocaleEnUs = function({
+buildSkillForRelease.withLocaleEnUs = function({
   id,
   name,
   hint,
@@ -123,7 +123,7 @@ buildSkill.withLocaleEnUs = function({
   internationalisation,
   version,
 } = {}) {
-  return new Skill({
+  return new SkillForRelease({
     id,
     name,
     hintFrFr: null,
@@ -141,4 +141,4 @@ buildSkill.withLocaleEnUs = function({
     version,
   }, 'en');
 };
-module.exports = buildSkill;
+module.exports = buildSkillForRelease;

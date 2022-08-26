@@ -1,4 +1,4 @@
-module.exports = class Competence {
+module.exports = class CompetenceForRelease {
   constructor(
     {
       id,
