@@ -3,32 +3,32 @@ const { expect, domainBuilder } = require('../../../test-helper');
 describe('Unit | chai-custom-helpers | deepEqualInstanceOmitting', function() {
   it('should fail assertion when both objects are not of the same instance', function() {
     // given
-    const area = domainBuilder.buildArea();
-    const competence = domainBuilder.buildCompetence();
+    const area = domainBuilder.buildAreaForRelease();
+    const competence = domainBuilder.buildCompetenceForRelease();
     const areaDTO = { ...area };
 
     // when / then
     global.chaiErr(function() {
       expect(competence).to.deepEqualInstanceOmitting(area);
-    }, 'expected \'Competence\' to equal \'Area\'');
+    }, 'expected \'CompetenceForRelease\' to equal \'AreaForRelease\'');
     global.chaiErr(function() {
       expect(areaDTO).to.deepEqualInstanceOmitting(area);
-    }, 'expected \'Object\' to equal \'Area\'');
+    }, 'expected \'Object\' to equal \'AreaForRelease\'');
   });
 
   it('should fail assertion when both objects have not the same content', function() {
     // given
-    const area = domainBuilder.buildArea({
+    const area = domainBuilder.buildAreaForRelease({
       id: 123,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],
     });
-    const otherArea = domainBuilder.buildArea({
+    const otherArea = domainBuilder.buildAreaForRelease({
       id: 124,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],
     });
-    const anotherArea = domainBuilder.buildArea({
+    const anotherArea = domainBuilder.buildAreaForRelease({
       id: 123,
       name: 'name',
       competenceIds: ['recUVW', 'recXYZ'],
@@ -59,12 +59,12 @@ describe('Unit | chai-custom-helpers | deepEqualInstanceOmitting', function() {
 
   it('should succeed assertion when both objects have the same type and content, regardless of the reference', function() {
     // given
-    const area = domainBuilder.buildArea({
+    const area = domainBuilder.buildAreaForRelease({
       id: 124,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],
     });
-    const sameArea = domainBuilder.buildArea({
+    const sameArea = domainBuilder.buildAreaForRelease({
       id: 124,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],
@@ -77,12 +77,12 @@ describe('Unit | chai-custom-helpers | deepEqualInstanceOmitting', function() {
 
   it('should succeed assertion when both objects have the same type and partial content', function() {
     // given
-    const area = domainBuilder.buildArea({
+    const area = domainBuilder.buildAreaForRelease({
       id: 123,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],
     });
-    const areaDifferentId = domainBuilder.buildArea({
+    const areaDifferentId = domainBuilder.buildAreaForRelease({
       id: 456,
       name: 'someName',
       competenceIds: ['recABC', 'recDEF'],

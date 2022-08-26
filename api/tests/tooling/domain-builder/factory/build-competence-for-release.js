@@ -1,6 +1,6 @@
-const Competence = require('../../../../lib/domain/models/Competence');
+const CompetenceForRelease = require('../../../../lib/domain/models/CompetenceForRelease');
 
-const buildCompetence = function({
+const buildCompetenceForRelease = function({
   id = 'recCompetence1',
   name = 'nameCompetence1',
   nameFrFr = 'nameFrCompetence1',
@@ -14,7 +14,7 @@ const buildCompetence = function({
   thematicIds = ['recThematic1'],
   origin = 'Pix',
 } = {}) {
-  return new Competence({
+  return new CompetenceForRelease({
     id,
     name,
     nameFrFr,
@@ -30,4 +30,4 @@ const buildCompetence = function({
   });
 };
 
-module.exports = buildCompetence;
+module.exports = buildCompetenceForRelease;

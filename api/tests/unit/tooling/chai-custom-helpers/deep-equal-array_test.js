@@ -22,8 +22,8 @@ describe('Unit | chai-custom-helpers | deepEqualArray', function() {
       expect([1]).to.deepEqualArray(['coucou']);
     }, 'expected \'Number\' to equal \'String\'');
     global.chaiErr(function() {
-      expect([domainBuilder.buildArea()]).to.deepEqualArray([domainBuilder.buildCompetence()]);
-    }, 'expected \'Area\' to equal \'Competence\'');
+      expect([domainBuilder.buildAreaForRelease()]).to.deepEqualArray([domainBuilder.buildCompetenceForRelease()]);
+    }, 'expected \'AreaForRelease\' to equal \'CompetenceForRelease\'');
   });
 
   it('should fail assertion when compared values of array have not the same content', function() {
@@ -34,7 +34,7 @@ describe('Unit | chai-custom-helpers | deepEqualArray', function() {
 
   it('should succeed assertion when compared arrays have the same values in order', function() {
     // given
-    const area = domainBuilder.buildArea({
+    const area = domainBuilder.buildAreaForRelease({
       id:'recArea1',
       name: 'nameArea1',
       code: 'codeArea1',
@@ -45,7 +45,7 @@ describe('Unit | chai-custom-helpers | deepEqualArray', function() {
       titleFrFr: 'titreArea1',
       titleEnUs: 'titleArea1',
     });
-    const sameArea = domainBuilder.buildArea({
+    const sameArea = domainBuilder.buildAreaForRelease({
       id:'recArea1',
       name: 'nameArea1',
       code: 'codeArea1',
@@ -56,7 +56,7 @@ describe('Unit | chai-custom-helpers | deepEqualArray', function() {
       titleFrFr: 'titreArea1',
       titleEnUs: 'titleArea1',
     });
-    const competence = domainBuilder.buildCompetence();
+    const competence = domainBuilder.buildCompetenceForRelease();
 
     // then
     expect([area, competence]).to.deepEqualArray([sameArea, competence]);

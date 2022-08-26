@@ -1,12 +1,12 @@
-const Area = require('./Area');
+const AreaForRelease = require('./AreaForRelease');
 const ChallengeForRelease = require('./ChallengeForRelease');
-const Competence = require('./Competence');
-const Course = require('./Course');
-const Framework = require('./Framework');
-const Skill = require('./Skill');
-const Thematic = require('./Thematic');
-const Tube = require('./Tube');
-const Tutorial = require('./Tutorial');
+const CompetenceForRelease = require('./CompetenceForRelease');
+const CourseForRelease = require('./CourseForRelease');
+const FrameworkForRelease = require('./FrameworkForRelease');
+const SkillForRelease = require('./SkillForRelease');
+const ThematicForRelease = require('./ThematicForRelease');
+const TubeForRelease = require('./TubeForRelease');
+const TutorialForRelease = require('./TutorialForRelease');
 
 module.exports = class Content {
   constructor({
@@ -43,15 +43,15 @@ module.exports = class Content {
     tutorials,
   }) {
     const content = new Content();
-    content.areas = areas ? areas.map((area) => new Area(area)) : [];
+    content.areas = areas ? areas.map((area) => new AreaForRelease(area)) : [];
     content.challenges = challenges ? challenges.map((challenge) => new ChallengeForRelease(challenge)) : [];
-    content.competences = competences ? competences.map((competence) => new Competence(competence)) : [];
-    content.courses = courses ? courses.map((course) => new Course(course)) : [];
-    content.frameworks = frameworks ? frameworks.map((framework) => new Framework(framework)) : [];
-    content.skills = skills ? skills.map((skill) => new Skill(skill)) : [];
-    content.thematics = thematics ? thematics.map((thematic) => new Thematic(thematic)) : [];
-    content.tubes = tubes ? tubes.map((tube) => new Tube(tube)) : [];
-    content.tutorials = tutorials ? tutorials.map((tutorial) => new Tutorial(tutorial)) : [];
+    content.competences = competences ? competences.map((competence) => new CompetenceForRelease(competence)) : [];
+    content.courses = courses ? courses.map((course) => new CourseForRelease(course)) : [];
+    content.frameworks = frameworks ? frameworks.map((framework) => new FrameworkForRelease(framework)) : [];
+    content.skills = skills ? skills.map((skill) => new SkillForRelease(skill)) : [];
+    content.thematics = thematics ? thematics.map((thematic) => new ThematicForRelease(thematic)) : [];
+    content.tubes = tubes ? tubes.map((tube) => new TubeForRelease(tube)) : [];
+    content.tutorials = tutorials ? tutorials.map((tutorial) => new TutorialForRelease(tutorial)) : [];
 
     return content;
   }

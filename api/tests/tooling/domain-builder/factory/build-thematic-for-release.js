@@ -1,6 +1,6 @@
-const Thematic = require('../../../../lib/domain/models/Thematic');
+const ThematicForRelease = require('../../../../lib/domain/models/ThematicForRelease');
 
-const buildThematic = function({
+const buildThematicForRelease = function({
   id = 'recFvllz2Ckz',
   name = 'Nom de la thématique',
   nameEnUs = 'Thematic\'s name',
@@ -8,7 +8,7 @@ const buildThematic = function({
   tubeIds = ['recTube0'],
   index = 0,
 } = {}) {
-  return new Thematic({
+  return new ThematicForRelease({
     id,
     name,
     nameEnUs,
@@ -18,4 +18,4 @@ const buildThematic = function({
   });
 };
 
-module.exports = buildThematic;
+module.exports = buildThematicForRelease;

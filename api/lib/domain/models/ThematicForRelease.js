@@ -1,4 +1,4 @@
-module.exports = class Thematic {
+module.exports = class ThematicForRelease {
   constructor({
     id,
     name,

@@ -1,6 +1,6 @@
-const Area = require('../../../../lib/domain/models/Area');
+const AreaForRelease = require('../../../../lib/domain/models/AreaForRelease');
 
-const buildArea = function({
+const buildAreaForRelease = function({
   id = 'recArea1',
   name = 'nameArea1',
   code = 'codeArea1',
@@ -11,7 +11,7 @@ const buildArea = function({
   titleFrFr = 'titreArea1',
   titleEnUs = 'titleArea1',
 } = {}) {
-  return new Area({
+  return new AreaForRelease({
     id,
     code,
     titleFrFr,
@@ -24,4 +24,4 @@ const buildArea = function({
   });
 };
 
-module.exports = buildArea;
+module.exports = buildAreaForRelease;

@@ -1,4 +1,4 @@
-module.exports = class Skill {
+module.exports = class SkillForRelease {
   constructor({
     id,
     name,
