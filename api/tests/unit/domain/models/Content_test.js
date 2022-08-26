@@ -3,7 +3,7 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 
 describe('Unit | Domain | Content', () => {
-  describe('#from', () => {
+  describe('#buildForRelease', () => {
     let data;
     beforeEach(function() {
       const areaAirtable = domainBuilder.buildAreaAirtableDataObject({
@@ -129,13 +129,13 @@ describe('Unit | Domain | Content', () => {
     });
 
     it('should return a Content model', function() {
-      const content = Content.from({});
+      const contentForRelease = Content.buildForRelease({});
 
-      expect(content).to.be.instanceOf(Content);
+      expect(contentForRelease).to.be.instanceOf(Content);
     });
 
     it('should return a Content model with models as attributes', function() {
-      const content = Content.from(data);
+      const contentForRelease = Content.buildForRelease(data);
 
       const expectedArea = domainBuilder.buildArea({
         id: 'recAreaA',
@@ -251,7 +251,7 @@ describe('Unit | Domain | Content', () => {
       });
       const expectedFramework = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
-      const expectedContent = {
+      const expectedContentForRelease = {
         areas: [expectedArea],
         competences: [expectedCompetence],
         challenges: [expectedChallenge],
@@ -263,11 +263,11 @@ describe('Unit | Domain | Content', () => {
         frameworks: [expectedFramework],
       };
 
-      expect(_.omit(content, ['fr-fr', 'fr', 'en'])).to.deep.equal(expectedContent);
+      expect(_.omit(contentForRelease, ['fr-fr', 'fr', 'en'])).to.deep.equal(expectedContentForRelease);
     });
 
     it('should return a version for locale "fr-fr"', function() {
-      const content = Content.from(data);
+      const contentForRelease = Content.buildForRelease(data);
 
       const expectedAreaFrFr = domainBuilder.buildArea.withLocaleFrFr({
         id: 'recAreaA',
@@ -369,7 +369,7 @@ describe('Unit | Domain | Content', () => {
       });
       const expectedFrameworkFrFr = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
-      const expectedContent = {
+      const expectedContentForRelease = {
         areas: [expectedAreaFrFr],
         competences: [expectedCompetenceFrFr],
         challenges: [expectedChallengeFrFr],
@@ -381,11 +381,11 @@ describe('Unit | Domain | Content', () => {
         frameworks: [expectedFrameworkFrFr],
       };
 
-      expect(content['fr-fr']).to.deep.equal(expectedContent);
+      expect(contentForRelease['fr-fr']).to.deep.equal(expectedContentForRelease);
     });
 
     it('should return a version for locale "en"', function() {
-      const content = Content.from(data);
+      const contentForRelease = Content.buildForRelease(data);
 
       const expectedAreaEnUs = domainBuilder.buildArea.withLocaleEnUs({
         id: 'recAreaA',
@@ -487,7 +487,7 @@ describe('Unit | Domain | Content', () => {
       });
       const expectedFrameworkEnUs = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
-      const expectedContent = {
+      const expectedContentForRelease = {
         areas: [expectedAreaEnUs],
         competences: [expectedCompetenceEnUs],
         challenges: [expectedChallengeEnUs],
@@ -498,11 +498,11 @@ describe('Unit | Domain | Content', () => {
         thematics: [expectedThematicEnUs],
         frameworks: [expectedFrameworkEnUs],
       };
-      expect(content['en']).to.deep.equal(expectedContent);
+      expect(contentForRelease['en']).to.deep.equal(expectedContentForRelease);
     });
 
     it('should return a version for locale "fr"', function() {
-      const content = Content.from(data);
+      const contentForRelease = Content.buildForRelease(data);
 
       const expectedAreaFr = domainBuilder.buildArea.withLocaleFr({
         id: 'recAreaA',
@@ -605,7 +605,7 @@ describe('Unit | Domain | Content', () => {
       });
       const expectedFrameworkFr = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
-      const expectedContent = {
+      const expectedContentForRelease = {
         areas: [expectedAreaFr],
         competences: [expectedCompetenceFr],
         challenges: [expectedChallengeFr],
@@ -616,7 +616,7 @@ describe('Unit | Domain | Content', () => {
         thematics: [expectedThematicFr],
         frameworks: [expectedFrameworkFr],
       };
-      expect(content['fr']).to.deep.equal(expectedContent);
+      expect(contentForRelease['fr']).to.deep.equal(expectedContentForRelease);
     });
   });
 });
