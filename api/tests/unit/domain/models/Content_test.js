@@ -1,6 +1,6 @@
+const _ = require('lodash');
 const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
-const Training = require('../../../../lib/domain/models/Training');
 
 describe('Unit | Domain | Content', () => {
   describe('#from', () => {
@@ -124,6 +124,7 @@ describe('Unit | Domain | Content', () => {
         tutorials: [tutorialAirtable],
         trainings: [{ id: 345 }],
         thematics: [thematicAirtable],
+        frameworks: [frameworkAirtable],
       };
     });
 
@@ -248,16 +249,21 @@ describe('Unit | Domain | Content', () => {
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
       });
+      const expectedFramework = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
-      expect(content.areas).to.deep.equal([expectedArea]);
-      expect(content.competences).to.deep.equal([expectedCompetence]);
-      expect(content.challenges).to.deep.equal([expectedChallenge]);
-      expect(content.courses).to.deep.equal([expectedCourse]);
-      expect(content.skills).to.deep.equal([expectedSkill]);
-      expect(content.tubes).to.deep.equal([expectedTube]);
-      expect(content.tutorials).to.deep.equal([expectedTutorial]);
-      expect(content.trainings[0]).to.be.instanceOf(Training);
-      expect(content.thematics).to.deep.equal([expectedThematic]);
+      const expectedContent = {
+        areas: [expectedArea],
+        competences: [expectedCompetence],
+        challenges: [expectedChallenge],
+        courses: [expectedCourse],
+        skills: [expectedSkill],
+        tubes: [expectedTube],
+        tutorials: [expectedTutorial],
+        thematics: [expectedThematic],
+        frameworks: [expectedFramework],
+      };
+
+      expect(_.omit(content, ['fr-fr', 'fr', 'en'])).to.deep.equal(expectedContent);
     });
 
     it('should return a version for locale "fr-fr"', function() {
@@ -361,6 +367,7 @@ describe('Unit | Domain | Content', () => {
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
       });
+      const expectedFrameworkFrFr = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
       const expectedContent = {
         areas: [expectedAreaFrFr],
@@ -370,11 +377,11 @@ describe('Unit | Domain | Content', () => {
         skills: [expectedSkillFrFr],
         tubes: [expectedTubeFrFr],
         tutorials: [expectedTutorialFrFr],
-        trainings: [{ id: 345 }],
         thematics: [expectedThematicFrFr],
+        frameworks: [expectedFrameworkFrFr],
       };
 
-      expect(content['fr-fr']).to.shallowDeepEqual(expectedContent);
+      expect(content['fr-fr']).to.deep.equal(expectedContent);
     });
 
     it('should return a version for locale "en"', function() {
@@ -478,6 +485,7 @@ describe('Unit | Domain | Content', () => {
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
       });
+      const expectedFrameworkEnUs = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
       const expectedContent = {
         areas: [expectedAreaEnUs],
@@ -487,10 +495,10 @@ describe('Unit | Domain | Content', () => {
         skills: [expectedSkillEnUs],
         tubes: [expectedTubeEnUs],
         tutorials: [expectedTutorialEnUs],
-        trainings: [{ id: 345 }],
         thematics: [expectedThematicEnUs],
+        frameworks: [expectedFrameworkEnUs],
       };
-      expect(content['en']).to.shallowDeepEqual(expectedContent);
+      expect(content['en']).to.deep.equal(expectedContent);
     });
 
     it('should return a version for locale "fr"', function() {
@@ -595,6 +603,7 @@ describe('Unit | Domain | Content', () => {
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
       });
+      const expectedFrameworkFr = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
 
       const expectedContent = {
         areas: [expectedAreaFr],
@@ -604,10 +613,10 @@ describe('Unit | Domain | Content', () => {
         skills: [expectedSkillFr],
         tubes: [expectedTubeFr],
         tutorials: [expectedTutorialFr],
-        trainings: [{ id: 345 }],
         thematics: [expectedThematicFr],
+        frameworks: [expectedFrameworkFr],
       };
-      expect(content['fr']).to.shallowDeepEqual(expectedContent);
+      expect(content['fr']).to.deep.equal(expectedContent);
     });
   });
 });
