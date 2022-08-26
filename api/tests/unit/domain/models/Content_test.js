@@ -134,7 +134,7 @@ describe('Unit | Domain | Content', () => {
     it('should return a Content model with models as attributes', function() {
       const contentForRelease = Content.buildForRelease(data);
 
-      const expectedArea = domainBuilder.buildArea({
+      const expectedArea = domainBuilder.buildAreaForRelease({
         id: 'recAreaA',
         code: 'codeAreaA',
         name: 'nameAreaA',
@@ -145,7 +145,7 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
-      const expectedCompetence = domainBuilder.buildCompetence({
+      const expectedCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'recCompetenceA',
         name: 'nameCompetenceA',
         nameFrFr: 'nameFrCompetenceA',
@@ -159,7 +159,7 @@ describe('Unit | Domain | Content', () => {
         descriptionFrFr: 'descriptionFrCompetenceA',
         descriptionEnUs: 'descriptionEnCompetenceA',
       });
-      const expectedSkill = domainBuilder.buildSkill({
+      const expectedSkill = domainBuilder.buildSkillForRelease({
         id: 'recSkillA',
         name: 'nameSkillA',
         hintFrFr: 'hintFr',
@@ -176,7 +176,7 @@ describe('Unit | Domain | Content', () => {
         internationalisation: 'Monde',
         version: 2,
       });
-      const expectedTube = domainBuilder.buildTube({
+      const expectedTube = domainBuilder.buildTubeForRelease({
         id: 'recTubeA',
         name: 'nameTubeA',
         title: 'titleTubeA',
@@ -187,7 +187,7 @@ describe('Unit | Domain | Content', () => {
         practicalDescriptionEnUs: 'practicalDescriptionEn',
         competenceId: 'recCompetence1',
       });
-      const expectedTutorial = domainBuilder.buildTutorial({
+      const expectedTutorial = domainBuilder.buildTutorialForRelease({
         id: 'recTutorialA',
         duration: '00:03:31',
         format: 'vidéo',
@@ -198,7 +198,7 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
-      const expectedThematic = domainBuilder.buildThematic({
+      const expectedThematic = domainBuilder.buildThematicForRelease({
         id: 'recThematic1',
         name: 'Nom de la thématique',
         nameEnUs: 'Name of the thematic',
@@ -206,7 +206,7 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
-      const expectedCourse = domainBuilder.buildCourse({
+      const expectedCourse = domainBuilder.buildCourseForRelease({
         id: 'recCourse1',
         description: 'descriptionCourse1',
         imageUrl: 'http://www.example.com/this-is-an-example.jpg',
@@ -242,7 +242,8 @@ describe('Unit | Domain | Content', () => {
         genealogy: 'Prototype 1',
         attachments: ['some_url'],
       });
-      const expectedFramework = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
+      const expectedFramework = domainBuilder.buildFrameworkForRelease({ id: 'recFramework', name: 'le framework' });
+
       const expectedContentForRelease = new Content({
         areas: [expectedArea],
         competences: [expectedCompetence],

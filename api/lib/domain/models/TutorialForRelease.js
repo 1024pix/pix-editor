@@ -1,4 +1,4 @@
-module.exports = class Tutorial {
+module.exports = class TutorialForRelease {
   constructor({
     id,
     duration,

@@ -1,6 +1,6 @@
-const Skill = require('../../../../lib/domain/models/Skill');
+const SkillForRelease = require('../../../../lib/domain/models/SkillForRelease');
 
-const buildSkill = function({
+const buildSkillForRelease = function({
   id = 'recTIddrkopID28Ep',
   name = '@accesDonnées1',
   hintFrFr = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
@@ -17,7 +17,7 @@ const buildSkill = function({
   internationalisation = 'Monde',
   version = 1,
 } = {}) {
-  return new Skill({
+  return new SkillForRelease({
     id,
     name,
     hintFrFr,
@@ -36,4 +36,4 @@ const buildSkill = function({
   });
 };
 
-module.exports = buildSkill;
+module.exports = buildSkillForRelease;

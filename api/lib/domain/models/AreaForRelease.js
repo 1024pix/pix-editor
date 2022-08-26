@@ -1,4 +1,4 @@
-module.exports = class Area {
+module.exports = class AreaForRelease {
   constructor({
     id,
     code,

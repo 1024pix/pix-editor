@@ -1,6 +1,6 @@
-const Tube = require('../../../../lib/domain/models/Tube');
+const TubeForRelease = require('../../../../lib/domain/models/TubeForRelease');
 
-const buildTube = function({
+const buildTubeForRelease = function({
   id = 'recTIddrkopID23Fp',
   name = '@Moteur',
   title = 'Moteur de recherche',
@@ -11,7 +11,7 @@ const buildTube = function({
   practicalDescriptionEnUs = 'Identify a web browser and a search engine, know how the search engine works',
   competenceId = 'recsvLz0W2ShyfD63',
 } = {}) {
-  return new Tube({
+  return new TubeForRelease({
     id,
     name,
     title,
@@ -24,4 +24,4 @@ const buildTube = function({
   });
 };
 
-module.exports = buildTube;
+module.exports = buildTubeForRelease;

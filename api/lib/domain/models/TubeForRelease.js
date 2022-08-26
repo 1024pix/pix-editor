@@ -1,4 +1,4 @@
-module.exports = class Tube {
+module.exports = class TubeForRelease {
   constructor({
     id,
     name,
