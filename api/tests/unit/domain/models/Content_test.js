@@ -114,6 +114,10 @@ describe('Unit | Domain | Content', () => {
         genealogy: 'Prototype 1',
       });
       challengeAirtable.attachments = ['some_url'];
+      const frameworkAirtable = domainBuilder.buildFrameworkAirtableDataObject({
+        id: 'recFramework',
+        name: 'le framework',
+      });
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
@@ -123,6 +127,7 @@ describe('Unit | Domain | Content', () => {
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],
         thematics: [thematicAirtable],
+        frameworks: [frameworkAirtable],
       };
     });
 
@@ -243,15 +248,19 @@ describe('Unit | Domain | Content', () => {
         genealogy: 'Prototype 1',
         attachments: ['some_url'],
       });
-
-      expect(content.areas).to.deepEqualArray([expectedArea]);
-      expect(content.competences).to.deepEqualArray([expectedCompetence]);
-      expect(content.challenges).to.deepEqualArray([expectedChallenge]);
-      expect(content.courses).to.deepEqualArray([expectedCourse]);
-      expect(content.skills).to.deepEqualArray([expectedSkill]);
-      expect(content.tubes).to.deepEqualArray([expectedTube]);
-      expect(content.tutorials).to.deepEqualArray([expectedTutorial]);
-      expect(content.thematics).to.deepEqualArray([expectedThematic]);
+      const expectedFramework = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
+      const expectedContent = new Content({
+        areas: [expectedArea],
+        competences: [expectedCompetence],
+        challenges: [expectedChallenge],
+        courses: [expectedCourse],
+        skills: [expectedSkill],
+        tubes: [expectedTube],
+        tutorials: [expectedTutorial],
+        thematics: [expectedThematic],
+        frameworks: [expectedFramework],
+      });
+      expect(content).to.deepEqualInstance(expectedContent);
     });
   });
 });
