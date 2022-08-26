@@ -9,6 +9,7 @@ module.exports = {
   buildCourse: require('./build-course'),
   buildCourseAirtableDataObject: require('./build-course-airtable-data-object'),
   buildFramework: require('./build-framework'),
+  buildFrameworkAirtableDataObject: require('./build-framework-airtable-data-object'),
   buildRelease: require('./build-release'),
   buildSkill: require('./build-skill'),
   buildSkillAirtableDataObject: require('./build-skill-airtable-data-object'),
