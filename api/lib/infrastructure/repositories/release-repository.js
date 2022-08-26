@@ -86,7 +86,7 @@ function _toDomain(releaseDTO) {
   }
   return new Release({
     id: releaseDTO.id,
-    content: Content.from(releaseDTO.content),
+    content: Content.buildForRelease(releaseDTO.content),
     createdAt: releaseDTO.createdAt,
   });
 }
