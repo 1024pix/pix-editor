@@ -1,17 +1,17 @@
 const { expect } = require('../../../test-helper');
-const Tube = require('../../../../lib/domain/models/Tube');
+const TubeForRelease = require('../../../../lib/domain/models/TubeForRelease');
 
-describe('Unit | Domain | Tube', function() {
+describe('Unit | Domain | TubeForRelease', function() {
   describe('constructor', function() {
-    it('should return domain object Tube', function() {
+    it('should return domain object TubeForRelease', function() {
       // when
-      const tube = new Tube();
+      const tube = new TubeForRelease();
 
       // then
-      expect(tube).to.be.instanceOf(Tube);
+      expect(tube).to.be.instanceOf(TubeForRelease);
     });
 
-    it('should return domain object Tube with common fields', function() {
+    it('should return domain object TubeForRelease with common fields', function() {
       const tubeData = {
         id: 'rec1',
         name: 'tube1',
@@ -21,13 +21,13 @@ describe('Unit | Domain | Tube', function() {
       };
 
       // when
-      const tube = new Tube(tubeData);
+      const tube = new TubeForRelease(tubeData);
 
       // then
       expect(tube).to.deep.contains(tubeData);
     });
 
-    it('should return domain object Tube without locale', function() {
+    it('should return domain object TubeForRelease without locale', function() {
       // given
       const tubeData = {
         practicalTitleFrFr: 'title fr-fr 1',
@@ -37,7 +37,7 @@ describe('Unit | Domain | Tube', function() {
       };
 
       // when
-      const tube = new Tube(tubeData, null);
+      const tube = new TubeForRelease(tubeData, null);
 
       // then
       expect(tube).to.deep.contains(tubeData);
@@ -58,7 +58,7 @@ describe('Unit | Domain | Tube', function() {
       };
 
       // when
-      const tube = new Tube(tubeData, 'fr-fr');
+      const tube = new TubeForRelease(tubeData, 'fr-fr');
 
       // then
       expect(tube).to.deep.contains(expectedTube);
@@ -79,7 +79,7 @@ describe('Unit | Domain | Tube', function() {
       };
 
       // when
-      const tube = new Tube(tubeData, 'fr');
+      const tube = new TubeForRelease(tubeData, 'fr');
 
       // then
       expect(tube).to.deep.contains(expectedTube);
@@ -100,7 +100,7 @@ describe('Unit | Domain | Tube', function() {
       };
 
       // when
-      const tube = new Tube(tubeData, 'en');
+      const tube = new TubeForRelease(tubeData, 'en');
 
       // then
       expect(tube).to.deep.contains(expectedTube);

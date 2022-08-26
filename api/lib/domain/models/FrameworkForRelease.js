@@ -1,4 +1,4 @@
-module.exports = class Framework {
+module.exports = class FrameworkForRelease {
   constructor({
     id,
     name,

@@ -158,20 +158,6 @@ async function mockCurrentContent() {
 }
 
 async function mockContentForRelease() {
-
-  databaseBuilder.factory.buildTraining({
-    id: 1000,
-    title: 'Travail de groupe et collaboration entre les personnels',
-    link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
-    type: 'autoformation',
-    duration: '06:00:00',
-    locale: 'fr-fr',
-    targetProfileIds: [1822, 2214],
-  });
-  await databaseBuilder.commit();
-
-  const training = await knex('trainings').first();
-
   const expectedCurrentContent = {
     areas: [{
       id: 'recArea0',

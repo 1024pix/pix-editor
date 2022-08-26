@@ -1,6 +1,6 @@
-const Tutorial = require('../../../../lib/domain/models/Tutorial');
+const TutorialForRelease = require('../../../../lib/domain/models/TutorialForRelease');
 
-module.exports = function buildTutorial(
+module.exports = function buildTutorialForRelease(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',
@@ -12,7 +12,7 @@ module.exports = function buildTutorial(
     tutorialForSkills = ['skillId1'],
     furtherInformation = ['skillId2'],
   } = {}) {
-  return new Tutorial({
+  return new TutorialForRelease({
     id,
     duration,
     format,

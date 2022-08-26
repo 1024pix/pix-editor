@@ -1,6 +1,6 @@
-const Thematic = require('../../../../lib/domain/models/Thematic');
+const ThematicForRelease = require('../../../../lib/domain/models/ThematicForRelease');
 
-const buildThematic = function({
+const buildThematicForRelease = function({
   id = 'recFvllz2Ckz',
   name = 'Nom de la thématique',
   nameEnUs = 'Thematic\'s name',
@@ -9,7 +9,7 @@ const buildThematic = function({
   index = 0,
   locale = 'fr-fr',
 } = {}) {
-  return new Thematic({
+  return new ThematicForRelease({
     id,
     name,
     nameEnUs,
@@ -19,14 +19,14 @@ const buildThematic = function({
   }, locale);
 };
 
-buildThematic.withLocaleFr = function({
+buildThematicForRelease.withLocaleFr = function({
   id,
   name,
   competenceId,
   tubeIds,
   index,
 } = {}) {
-  return new Thematic({
+  return new ThematicForRelease({
     id,
     name,
     nameEnUs: null,
@@ -36,14 +36,14 @@ buildThematic.withLocaleFr = function({
   }, 'fr');
 };
 
-buildThematic.withLocaleFrFr = function({
+buildThematicForRelease.withLocaleFrFr = function({
   id,
   name,
   competenceId,
   tubeIds,
   index,
 } = {}) {
-  return new Thematic({
+  return new ThematicForRelease({
     id,
     name,
     nameEnUs: null,
@@ -53,14 +53,14 @@ buildThematic.withLocaleFrFr = function({
   }, 'fr-fr');
 };
 
-buildThematic.withLocaleEnUs = function({
+buildThematicForRelease.withLocaleEnUs = function({
   id,
   name,
   competenceId,
   tubeIds,
   index,
 } = {}) {
-  return new Thematic({
+  return new ThematicForRelease({
     id,
     name,
     nameEnUs: name,
@@ -70,4 +70,4 @@ buildThematic.withLocaleEnUs = function({
   }, 'en');
 };
 
-module.exports = buildThematic;
+module.exports = buildThematicForRelease;

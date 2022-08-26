@@ -1,12 +1,12 @@
-const Area = require('./Area');
+const AreaForRelease = require('./AreaForRelease');
 const ChallengeForRelease = require('./ChallengeForRelease');
-const Competence = require('./Competence');
-const Course = require('./Course');
-const Framework = require('./Framework');
-const Skill = require('./Skill');
-const Thematic = require('./Thematic');
-const Tube = require('./Tube');
-const Tutorial = require('./Tutorial');
+const CompetenceForRelease = require('./CompetenceForRelease');
+const CourseForRelease = require('./CourseForRelease');
+const FrameworkForRelease = require('./FrameworkForRelease');
+const SkillForRelease = require('./SkillForRelease');
+const ThematicForRelease = require('./ThematicForRelease');
+const TubeForRelease = require('./TubeForRelease');
+const TutorialForRelease = require('./TutorialForRelease');
 
 const map = require('lodash/map');
 
@@ -45,53 +45,50 @@ module.exports = class Content {
     tutorials,
   }) {
     const content = new Content();
-    content.areas = areas ? areas.map((area) => new Area(area)) : [];
+    content.areas = areas ? areas.map((area) => new AreaForRelease(area)) : [];
     content.challenges = challenges ? challenges.map((challenge) => new ChallengeForRelease(challenge)) : [];
-    content.competences = competences ? competences.map((competence) => new Competence(competence)) : [];
-    content.courses = courses ? courses.map((course) => new Course(course)) : [];
-    content.frameworks = frameworks ? frameworks.map((framework) => new Framework(framework)) : [];
-    content.skills = skills ? skills.map((skill) => new Skill(skill)) : [];
-    content.thematics = thematics ? thematics.map((thematic) => new Thematic(thematic)) : [];
-    content.tubes = tubes ? tubes.map((tube) => new Tube(tube)) : [];
-    content.tutorials = tutorials ? tutorials.map((tutorial) => new Tutorial(tutorial)) : [];
+    content.competences = competences ? competences.map((competence) => new CompetenceForRelease(competence)) : [];
+    content.courses = courses ? courses.map((course) => new CourseForRelease(course)) : [];
+    content.frameworks = frameworks ? frameworks.map((framework) => new FrameworkForRelease(framework)) : [];
+    content.skills = skills ? skills.map((skill) => new SkillForRelease(skill)) : [];
+    content.thematics = thematics ? thematics.map((thematic) => new ThematicForRelease(thematic)) : [];
+    content.tubes = tubes ? tubes.map((tube) => new TubeForRelease(tube)) : [];
+    content.tutorials = tutorials ? tutorials.map((tutorial) => new TutorialForRelease(tutorial)) : [];
 
     content['fr-fr'] = {
-      areas: map(areas, (area) => new Area(area, 'fr-fr')),
+      areas: map(areas, (area) => new AreaForRelease(area, 'fr-fr')),
       challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
-      competences: map(competences, (competence) => new Competence(competence, 'fr-fr')),
-      courses: map(courses, (course) => new Course(course)),
-      frameworks: map(frameworks, (framework) => new Framework(framework)),
-      skills: map(skills, (skill) => new Skill(skill, 'fr-fr')),
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr-fr')),
-      tubes: map(tubes, (tube) => new Tube(tube, 'fr-fr')),
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
-      trainings: map(trainings, (training) => new Training(training)),
+      competences: map(competences, (competence) => new CompetenceForRelease(competence, 'fr-fr')),
+      courses: map(courses, (course) => new CourseForRelease(course)),
+      frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
+      skills: map(skills, (skill) => new SkillForRelease(skill, 'fr-fr')),
+      thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'fr-fr')),
+      tubes: map(tubes, (tube) => new TubeForRelease(tube, 'fr-fr')),
+      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
     };
 
     content['fr'] = {
-      areas: map(areas, (area) => new Area(area, 'fr')),
+      areas: map(areas, (area) => new AreaForRelease(area, 'fr')),
       challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
-      competences: map(competences, (competence) => new Competence(competence, 'fr')),
-      courses: map(courses, (course) => new Course(course)),
-      frameworks: map(frameworks, (framework) => new Framework(framework)),
-      skills: map(skills, (skill) => new Skill(skill, 'fr')),
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'fr')),
-      tubes: map(tubes, (tube) => new Tube(tube, 'fr')),
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
-      trainings: map(trainings, (training) => new Training(training)),
+      competences: map(competences, (competence) => new CompetenceForRelease(competence, 'fr')),
+      courses: map(courses, (course) => new CourseForRelease(course)),
+      frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
+      skills: map(skills, (skill) => new SkillForRelease(skill, 'fr')),
+      thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'fr')),
+      tubes: map(tubes, (tube) => new TubeForRelease(tube, 'fr')),
+      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
     };
 
     content['en'] = {
-      areas: map(areas, (area) => new Area(area, 'en')),
+      areas: map(areas, (area) => new AreaForRelease(area, 'en')),
       challenges: map(challenges, (challenge) => new ChallengeForRelease(challenge)),
-      competences: map(competences, (competence) => new Competence(competence, 'en')),
-      courses: map(courses, (course) => new Course(course)),
-      frameworks: map(frameworks, (framework) => new Framework(framework)),
-      skills: map(skills, (skill) => new Skill(skill, 'en')),
-      thematics: map(thematics, (thematic) => new Thematic(thematic, 'en')),
-      tubes: map(tubes, (tube) => new Tube(tube, 'en')),
-      tutorials: map(tutorials, (tutorial) => new Tutorial(tutorial)),
-      trainings: map(trainings, (training) => new Training(training)),
+      competences: map(competences, (competence) => new CompetenceForRelease(competence, 'en')),
+      courses: map(courses, (course) => new CourseForRelease(course)),
+      frameworks: map(frameworks, (framework) => new FrameworkForRelease(framework)),
+      skills: map(skills, (skill) => new SkillForRelease(skill, 'en')),
+      thematics: map(thematics, (thematic) => new ThematicForRelease(thematic, 'en')),
+      tubes: map(tubes, (tube) => new TubeForRelease(tube, 'en')),
+      tutorials: map(tutorials, (tutorial) => new TutorialForRelease(tutorial)),
     };
 
     return content;

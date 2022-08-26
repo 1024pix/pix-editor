@@ -4,7 +4,7 @@ const { filterTutorialsFields } = require('../../../../lib/infrastructure/transf
 describe('Unit | Infrastructure | tutorial-transformer', function() {
 
   it('should only keep useful fields', function() {
-    const airtableTutorials = [domainBuilder.buildTutorial()];
+    const airtableTutorials = [domainBuilder.buildTutorialAirtableDataObject()];
 
     const tutorials = filterTutorialsFields(airtableTutorials);
 
