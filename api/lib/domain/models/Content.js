@@ -31,7 +31,7 @@ module.exports = class Content {
     this.tutorials = tutorials;
   }
 
-  static from({
+  static buildForRelease({
     areas,
     challenges,
     competences,

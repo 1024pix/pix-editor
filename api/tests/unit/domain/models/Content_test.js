@@ -2,7 +2,7 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 
 describe('Unit | Domain | Content', () => {
-  describe('#from', () => {
+  describe('#buildForRelease', () => {
     let data;
     beforeEach(function() {
       const areaAirtable = domainBuilder.buildAreaAirtableDataObject({
@@ -131,14 +131,8 @@ describe('Unit | Domain | Content', () => {
       };
     });
 
-    it('should return a Content model', function() {
-      const content = Content.from({});
-
-      expect(content).to.be.instanceOf(Content);
-    });
-
     it('should return a Content model with models as attributes', function() {
-      const content = Content.from(data);
+      const contentForRelease = Content.buildForRelease(data);
 
       const expectedArea = domainBuilder.buildArea({
         id: 'recAreaA',
@@ -249,7 +243,7 @@ describe('Unit | Domain | Content', () => {
         attachments: ['some_url'],
       });
       const expectedFramework = domainBuilder.buildFramework({ id: 'recFramework', name: 'le framework' });
-      const expectedContent = new Content({
+      const expectedContentForRelease = new Content({
         areas: [expectedArea],
         competences: [expectedCompetence],
         challenges: [expectedChallenge],
@@ -260,7 +254,7 @@ describe('Unit | Domain | Content', () => {
         thematics: [expectedThematic],
         frameworks: [expectedFramework],
       });
-      expect(content).to.deepEqualInstance(expectedContent);
+      expect(contentForRelease).to.deepEqualInstance(expectedContentForRelease);
     });
   });
 });
