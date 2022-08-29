@@ -4,16 +4,16 @@ const settings = require('./config');
 const Blipp = require('blipp');
 const Inert = require('@hapi/inert');
 const Vision = require('@hapi/vision');
-const AdminBro = require('admin-bro');
-const AdminBroPlugin = require('@admin-bro/hapi');
-const AdminBroSequelize = require('@admin-bro/sequelize');
+const AdminJS = require('adminjs');
+const AdminJSPlugin = require('@adminjs/hapi').default;
+const AdminJSSequelize = require('@adminjs/sequelize');
 const { User, Release, Training } = require('./models');
 const { get } = require('lodash');
 const monitoringTools = require('./infrastructure/monitoring-tools');
 
-AdminBro.registerAdapter(AdminBroSequelize);
+AdminJS.registerAdapter(AdminJSSequelize);
 
-const adminBroOptions = {
+const adminJSOptions = {
   resources: [
     {
       resource: User,
@@ -66,8 +66,8 @@ const adminBroOptions = {
           duration: {
             props: { placeholder: '1d 10h 30m' },
             components: {
-              show: AdminBro.bundle('../adminbro/components/show.duration.component.jsx'),
-              list: AdminBro.bundle('../adminbro/components/list.duration.component.jsx'),
+              show: AdminJS.bundle('../adminjs/components/show.duration.component.jsx'),
+              list: AdminJS.bundle('../adminjs/components/list.duration.component.jsx'),
             },
           },
         },
@@ -106,8 +106,8 @@ const plugins = [
     },
   },
   {
-    plugin: AdminBroPlugin,
-    options: adminBroOptions,
+    plugin: AdminJSPlugin,
+    options: adminJSOptions,
   },
   ...(settings.sentry.enabled
     ? [
