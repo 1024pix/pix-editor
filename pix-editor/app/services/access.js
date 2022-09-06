@@ -1,5 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 
+const READ_PIX_ONLY = 0;
 const READ_ONLY = 1;
 const REPLICATOR = 2;
 const EDITOR = 3;
@@ -152,6 +153,11 @@ export default class AccessService extends Service {
     return this.isAdmin() && challenge.isPrototype && challenge.isDraft;
   }
 
+  isReadOnly() {
+    const level = this.config.accessLevel;
+    return level >= READ_ONLY;
+  }
+
   isReplicator() {
     const level = this.config.accessLevel;
     return (level >= REPLICATOR);
@@ -169,6 +175,8 @@ export default class AccessService extends Service {
 
   getLevel(accessString) {
     switch (accessString) {
+      case 'readpixonly' :
+        return READ_PIX_ONLY;
       case 'readonly':
         return READ_ONLY;
       case 'replicator':

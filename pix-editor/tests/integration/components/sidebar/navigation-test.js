@@ -57,6 +57,9 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         }
       });
       this.owner.register('service:access', class MockService extends Service {
+        isReadOnly() {
+          return true;
+        }
         isAdmin() {
           return true;
         }

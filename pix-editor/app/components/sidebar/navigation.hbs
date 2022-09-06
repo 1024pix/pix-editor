@@ -1,4 +1,6 @@
-<Field::Select data-test-frameworks-select id="select-framework" @value={{this.selectedFramework}} @options={{this.frameworkList}} @setValue={{this.setFramework}} @edition={{true}}/>
+{{#if this.mayShowFrameworkList}}
+  <Field::Select data-test-frameworks-select id="select-framework" @value={{this.selectedFramework}} @options={{this.frameworkList}} @setValue={{this.setFramework}} @edition={{true}}/>
+{{/if}}
 <AccordionList as |accordion|>
     {{#each this.areas as |area|}}
       <accordion.item as |accordionItem|>
