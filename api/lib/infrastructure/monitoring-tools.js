@@ -75,10 +75,6 @@ function pushInContext(path, value) {
 function installHapiHook() {
   if (!settings.hapi.enableRequestMonitoring) return;
 
-  if (require('@hapi/hapi/package.json').version !== '20.0.3') {
-    throw new Error('Hapi version changed, please check if patch still works');
-  }
-
   const Request = require('@hapi/hapi/lib/request');
 
   const originalMethod = Request.prototype._execute;
