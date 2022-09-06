@@ -1,5 +1,11 @@
 
 
+## v3.69.1 (06/09/2022)
+
+
+### :rocket: Amélioration
+- [#64](https://github.com/1024pix/pix-editor/pull/64) [FEATURE] Ajouter les rôles manquants adminJs.
+
 ## v3.69.0 (06/09/2022)
 
 
