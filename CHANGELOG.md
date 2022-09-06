@@ -1,5 +1,11 @@
 
 
+## v3.69.0 (06/09/2022)
+
+
+### :rocket: Amélioration
+- [#63](https://github.com/1024pix/pix-editor/pull/63) [FEATURE] Ajout d'un nouveau rôle pour limiter l’accès au référentiel pix (PIX-5618).
+
 ## v3.68.0 (06/09/2022)
 
 
