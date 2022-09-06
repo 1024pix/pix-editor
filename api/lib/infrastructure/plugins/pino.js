@@ -7,6 +7,7 @@ function logObjectSerializer(obj) {
     const context = monitoringTools.getContext();
     return {
       ...obj,
+      route: context?.request?.route?.path,
       user_id: get(context, 'request') ? monitoringTools.extractUserIdFromRequest(context.request) : '-',
       metrics: get(context, 'metrics'),
     };
