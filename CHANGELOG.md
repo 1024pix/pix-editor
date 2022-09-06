@@ -1,5 +1,19 @@
 
 
+## v3.68.0 (06/09/2022)
+
+
+### :building_construction: Tech
+- [#55](https://github.com/1024pix/pix-editor/pull/55) [TECH] Mettre à jour AdminBro vers AdminJS (PIX-5433).
+- [#58](https://github.com/1024pix/pix-editor/pull/58) [TECH] Utilise l'automerge 1024pix.
+
+### :bug: Correction
+- [#62](https://github.com/1024pix/pix-editor/pull/62) [BUGFIX] Corrige l'enrichissement des logs de requêtes
+
+### :coffee: Autre
+- [#61](https://github.com/1024pix/pix-editor/pull/61) [CLEANUP] Met à jour l'action d'auto merge commune
+- [#59](https://github.com/1024pix/pix-editor/pull/59) [CLEANUP] Correction du badge circleci dans le readme
+
 ## v3.67.0 (03/08/2022)
 
 
