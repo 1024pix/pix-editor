@@ -21,6 +21,7 @@
     "db:prepare": "npm run db:delete && npm run db:create && npm run db:migrate",
     "db:seed": "knex --knexfile db/knexfile.js seed:run",
     "db:reset": "npm run db:prepare && npm run db:seed",
+    "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
     "lint": "eslint lib tests",
     "lint:fix": "eslint lib tests --fix",
     "preinstall": "npx check-engine",
