@@ -55,10 +55,6 @@ export default class SidebarNavigationComponent extends Component {
     return frameworkList;
   }
 
-  get mayShowFrameworkList() {
-    return this.access.isReadOnly();
-  }
-
   get mayCreateCompetence() {
     return this.access.isAdmin() && !this.currentData.isPixFramework;
   }

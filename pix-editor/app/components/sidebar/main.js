@@ -5,6 +5,7 @@ import ENV from 'pixeditor/config/environment';
 export default class SidebarMain extends Component {
   version = ENV.APP.version;
 
+  @service access;
   @service config;
   @service currentData;
 
@@ -16,4 +17,7 @@ export default class SidebarMain extends Component {
     return this.currentData.getAreas();
   }
 
+  get mayGenerateTargetProfile() {
+    return this.access.isReadOnly();
+  }
 }
