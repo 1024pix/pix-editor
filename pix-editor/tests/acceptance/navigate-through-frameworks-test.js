@@ -18,29 +18,43 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
   for (const role of ['readonly', 'replicator', 'editor', 'admin']) {
     module(`when user is ${role}`, function(hooks) {
-      hooks.beforeEach(function () {
+      hooks.beforeEach(async function () {
+        //given
         this.server.create('user', { apiKey, trigram: 'ABC', access: role, });
-      });
-      test('it should display select framework', async function (assert) {
-        // when
-        await visit('/');
 
+        //when
+        await visit('/');
+      });
+
+      test('it should display select framework', async function (assert) {
         // then
         assert.dom('[data-test-frameworks-select]').exists();
+      });
+
+      test('it should display generator target profile link', async function (assert) {
+        // then
+        assert.dom('[data-test-target-profile-link]').exists();
       });
     });
   }
 
   module('when user is `readpixonly`', function(hooks) {
-    hooks.beforeEach(function () {
+    hooks.beforeEach(async function () {
+      //given
       this.server.create('user', { apiKey, trigram: 'ABC', access: 'readpixonly', });
-    });
-    test('it should not have access to framework list', async function (assert) {
+
       // when
       await visit('/');
+    });
 
+    test('it should not have access to framework list', async function (assert) {
       // then
       assert.dom('[data-test-frameworks-select]').doesNotExist();
+    });
+
+    test('it should not display generator target profile link', async function (assert) {
+      // then
+      assert.dom('[data-test-target-profile-link]').doesNotExist();
     });
   });
 });
