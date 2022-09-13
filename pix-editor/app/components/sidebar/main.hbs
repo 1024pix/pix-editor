@@ -2,11 +2,13 @@
   <h1 class="header">Pix Editor</h1>
   <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
   <Sidebar::Search @close={{@close}} />
-  <Sidebar::Navigation @areas={{this.areas}} @close={{@close}}/>
+  <Sidebar::Navigation @mayShowFrameworkList={{this.mayGenerateTargetProfile}} @areas={{this.areas}} @close={{@close}}/>
   <div class="secondary-links">
-    <LinkTo @route="target-profile" {{on "click" @close}}>
-      <i class="crosshairs icon"></i> Générateur de profil cible
-    </LinkTo>
+    {{#if this.mayGenerateTargetProfile}}
+      <LinkTo data-test-target-profile-link @route="target-profile" {{on "click" @close}}>
+        <i class="crosshairs icon"></i> Générateur de profil cible
+      </LinkTo>
+    {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>
     <LinkTo @route="statistics" {{on "click" @close}}>
       <i class="chart bar icon"></i> Statistiques

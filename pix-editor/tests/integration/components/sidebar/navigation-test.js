@@ -12,6 +12,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
     hooks.beforeEach(function () {
       this.closeAction = sinon.stub();
+      this.mayShowFrameworkList = sinon.stub().returns(true);
 
       areas = [{
         name: 'area_1',
@@ -57,9 +58,6 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         }
       });
       this.owner.register('service:access', class MockService extends Service {
-        isReadOnly() {
-          return true;
-        }
         isAdmin() {
           return true;
         }
@@ -72,7 +70,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       const expectedFrameworks = ['Pix', 'Pix +', 'Créer un nouveau référentiel'];
 
       // when
-      await render(hbs`<Sidebar::Navigation @close={{this.closeAction}}/>`);
+      await render(hbs`<Sidebar::Navigation @mayShowFrameworkList={{this.mayShowFrameworkList}} @close={{this.closeAction}}/>`);
 
       await click('[data-test-frameworks-select] .ember-basic-dropdown-trigger');
 
