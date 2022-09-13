@@ -17,7 +17,7 @@ export default class SidebarMain extends Component {
     return this.currentData.getAreas();
   }
 
-  get mayShowFrameworkList() {
+  get mayGenerateTargetProfile() {
     return this.access.isReadOnly();
   }
 }
