@@ -4,9 +4,11 @@
   <Sidebar::Search @close={{@close}} />
   <Sidebar::Navigation @areas={{this.areas}} @close={{@close}}/>
   <div class="secondary-links">
-    <LinkTo @route="target-profile" {{on "click" @close}}>
-      <i class="crosshairs icon"></i> Générateur de profil cible
-    </LinkTo>
+    {{#if this.mayShowFrameworkList}}
+      <LinkTo data-test-target-profile-link @route="target-profile" {{on "click" @close}}>
+        <i class="crosshairs icon"></i> Générateur de profil cible
+      </LinkTo>
+    {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>
     <LinkTo @route="statistics" {{on "click" @close}}>
       <i class="chart bar icon"></i> Statistiques
