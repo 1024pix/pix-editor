@@ -1,5 +1,14 @@
 
 
+## v3.70.0 (26/09/2022)
+
+
+### :rocket: Amélioration
+- [#65](https://github.com/1024pix/pix-editor/pull/65) [FEATURE] Ne pas afficher le générateur de profile cible pour les utilisateur `READ_PIX_ONLY` (PIX-5671).
+
+### :building_construction: Tech
+- [#66](https://github.com/1024pix/pix-editor/pull/66) [TECH] Mise a jour caniuse-lite (PIX-5719).
+
 ## v3.69.1 (06/09/2022)
 
 
