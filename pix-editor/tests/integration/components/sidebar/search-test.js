@@ -8,12 +8,13 @@ module('Integration | Component | sidebar/search', function(hooks) {
   setupRenderingTest(hooks);
 
   test('it renders', async function(assert) {
-    // Set any properties with this.set('myProperty', 'value');
-    // Handle any actions with this.set('myAction', function(val) { ... });
-    this.mayShowFrameworkList = sinon.stub().returns(true);
+    // given
+    this.mayShowSearch = sinon.stub().returns(true);
 
-    await render(hbs`<Sidebar::Search @mayShowFrameworkList={{this.mayShowFrameworkList}} />`);
+    // when
+    await render(hbs`<Sidebar::Search @mayShowSearch={{this.mayShowSearch}} />`);
 
+    // then
     assert.dom('.sidebar-search').exists();
   });
 });
