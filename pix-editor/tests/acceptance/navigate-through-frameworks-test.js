@@ -35,6 +35,11 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
         // then
         assert.dom('[data-test-target-profile-link]').exists();
       });
+
+      test('it should display search bar', function(assert) {
+        // then
+        assert.dom('[data-test-sidebar-search]').exists();
+      });
     });
   }
 
@@ -55,6 +60,11 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
     test('it should not display generator target profile link', async function (assert) {
       // then
       assert.dom('[data-test-target-profile-link]').doesNotExist();
+    });
+
+    test('it should not display search bar', function(assert) {
+      // then
+      assert.dom('[data-test-sidebar-search]').doesNotExist();
     });
   });
 });
