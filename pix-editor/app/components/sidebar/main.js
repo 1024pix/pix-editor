@@ -20,4 +20,12 @@ export default class SidebarMain extends Component {
   get mayGenerateTargetProfile() {
     return this.access.isReadOnly();
   }
+
+  get maySwitchFramework() {
+    return this.access.isReadOnly();
+  }
+
+  get maySearch() {
+    return this.access.isReadOnly();
+  }
 }

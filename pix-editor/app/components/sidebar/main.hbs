@@ -1,8 +1,8 @@
 <div class="ui inverted left wide sidebar {{if @open "visible "}}main-sidebar menu vertical {{if this.config.lite "lite" ""}}">
   <h1 class="header">Pix Editor</h1>
   <p class="legal-mention" style="margin: 0;">Confidentiel - secret - ne pas divulguer</p>
-  <Sidebar::Search @close={{@close}} />
-  <Sidebar::Navigation @mayShowFrameworkList={{this.mayGenerateTargetProfile}} @areas={{this.areas}} @close={{@close}}/>
+  <Sidebar::Search @displaySearch={{this.maySearch}} @close={{@close}} />
+  <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @areas={{this.areas}} @close={{@close}}/>
   <div class="secondary-links">
     {{#if this.mayGenerateTargetProfile}}
       <LinkTo data-test-target-profile-link @route="target-profile" {{on "click" @close}}>
