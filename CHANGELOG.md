@@ -1,5 +1,11 @@
 
 
+## v3.71.0 (10/10/2022)
+
+
+### :rocket: Amélioration
+- [#67](https://github.com/1024pix/pix-editor/pull/67) [FEATURE] Ne pas afficher le champ de recherche pour les utilisateurs `READ_PIX_ONLY` (PIX-5819). 
+
 ## v3.70.0 (26/09/2022)
 
 
