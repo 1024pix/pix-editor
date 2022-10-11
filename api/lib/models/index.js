@@ -36,38 +36,7 @@ const Release = sequelize.define(
   }
 );
 
-const Training = sequelize.define('training', {
-  title: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  link: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      isUrl: true,
-    },
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  duration: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  locale: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  targetProfileIds: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
-    allowNull: false,
-  },
-});
-
 module.exports = {
   User,
   Release,
-  Training,
 };
