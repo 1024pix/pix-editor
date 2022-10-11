@@ -20,7 +20,7 @@ describe('Integration | Repository | release-repository', function() {
 
     it('should return saved release with id and creation date', async function() {
       // Given
-      const currentContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [], trainings: [] };
+      const currentContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
       const fakeGetCurrentContent = async function() { return currentContent; };
 
       // When
@@ -36,7 +36,7 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getLatestRelease', function() {
     it('should return content of newest created release', async function() {
       // Given
-      const newestReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [], trainings: [] };
+      const newestReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
       const oldestReleaseContent = { some: 'old-property' };
 
       databaseBuilder.factory.buildRelease({ createdAt: '2021-01-01', content: newestReleaseContent });
@@ -55,7 +55,7 @@ describe('Integration | Repository | release-repository', function() {
     it('should return content of given release', async function() {
       // Given
       const otherReleaseContent = { some: 'property' };
-      const expectedReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [], trainings: [] };
+      const expectedReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
 
       databaseBuilder.factory.buildRelease({ id: 11, createdAt: '2021-01-01', content: otherReleaseContent });
       databaseBuilder.factory.buildRelease({ id: 12, createdAt: '2020-01-01', content: expectedReleaseContent });
