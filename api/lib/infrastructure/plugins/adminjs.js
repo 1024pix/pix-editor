@@ -1,7 +1,7 @@
 const AdminJS = require('adminjs');
 const AdminJSPlugin = require('@adminjs/hapi').default;
 const AdminJSSequelize = require('@adminjs/sequelize');
-const { User, Release, Training } = require('../../models');
+const { User, Release } = require('../../models');
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
@@ -39,40 +39,6 @@ const adminJSOptions = {
       },
     },
     Release,
-    {
-      resource: Training,
-      options: {
-        properties: {
-          locale: {
-            availableValues: [
-              {
-                value: 'fr-fr',
-                label: 'Franco Français',
-              },
-            ],
-          },
-          type: {
-            availableValues: [
-              {
-                value: 'autoformation',
-                label: 'Parcours d\'autoformation',
-              },
-              {
-                value: 'webinaire',
-                label: 'Webinaire',
-              },
-            ],
-          },
-          duration: {
-            props: { placeholder: '1d 10h 30m' },
-            components: {
-              show: AdminJS.bundle('../../../adminjs/components/show.duration.component.jsx'),
-              list: AdminJS.bundle('../../../adminjs/components/list.duration.component.jsx'),
-            },
-          },
-        },
-      },
-    },
   ],
   auth: { strategy: 'simple' },
 };
