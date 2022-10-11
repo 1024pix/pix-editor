@@ -24,42 +24,6 @@ exports.seed = (knex) => {
     apiKey: process.env.REVIEW_APP_READ_PIX_ONLY_USER_API_KEY || readPixOnlyUserApiKey,
   });
 
-  databaseBuilder.factory.buildTraining({
-    title: '(tp 8, 9) Travail de groupe et collaboration entre les personnels',
-    link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
-    type: 'autoformation',
-    duration: '06:00:00',
-    locale: 'fr-fr',
-    targetProfileIds: [8, 9],
-  });
-
-  databaseBuilder.factory.buildTraining({
-    title: '(tp 9) Moodle : Partager et échanger ses ressources',
-    link: 'https://tube-strasbourg.beta.education.fr/videos/watch/7df08eb6-603e-46a8-9be3-a34092fe7e68',
-    type: 'webinaire',
-    duration: '01:00:00',
-    locale: 'fr-fr',
-    targetProfileIds: [9],
-  });
-
-  databaseBuilder.factory.buildTraining({
-    title: '(tp 9) Mollitia, distinctio rem possimus consectetur commodi, quae molestias praesentium animi magnam eveniet quam excepturi esse, corporis voluptate',
-    link: 'https://tube-strasbourg.beta.education.fr/videos/watch/7df08eb6-603e-46a8-9be3-a34092fe7e68',
-    type: 'webinaire',
-    duration: '01:00:00',
-    locale: 'fr-fr',
-    targetProfileIds: [9],
-  });
-
-  databaseBuilder.factory.buildTraining({
-    title: '(tp 8, 9) Un belge a dit une fois : "il a été à la boulangerie pour acheter des couques, un cougnou et du craquelin. Un vrai goulaf"',
-    link: 'https://tube-strasbourg.beta.education.fr/videos/watch/7df08eb6-603e-46a8-9be3-a34092fe7e68',
-    type: 'autoformation',
-    duration: '50:00:00',
-    locale: 'fr-be',
-    targetProfileIds: [8, 9],
-  });
-
   return databaseBuilder.commit();
 };
 
