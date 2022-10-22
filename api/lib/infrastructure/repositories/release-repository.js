@@ -95,7 +95,7 @@ async function _getCurrentContent() {
   const [
     areas,
     attachments,
-    challengesWithoutAttachments,
+    challenges,
     competences,
     courses,
     frameworks,
@@ -115,35 +115,22 @@ async function _getCurrentContent() {
     tubeDatasource.list(),
     tutorialDatasource.list(),
   ]);
-  const learningContent = {
-    areas,
-    attachments,
-    challengesWithoutAttachments,
-    competences,
-    courses,
-    frameworks,
-    skills,
-    thematics,
-    tubes,
-    tutorials,
-  };
-  const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
-  const challenges = challengesWithoutAttachments.map(transformChallenge);
-
+  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
+  const transformedChallenges = challenges.map(transformChallenge);
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredCourses = courseTransformer.filterCoursesFields(courses);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
 
   return {
-    areas,
-    challenges,
-    competences: filteredCompetences,
-    courses: filteredCourses,
     frameworks,
-    skills: filteredSkills,
+    areas,
+    competences: filteredCompetences,
     thematics,
     tubes,
+    skills: filteredSkills,
+    challenges: transformedChallenges,
+    courses: filteredCourses,
     tutorials: filteredTutorials,
   };
 }
