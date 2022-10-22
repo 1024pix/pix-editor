@@ -1,4 +1,4 @@
-const { expect, databaseBuilder, knex } = require('../../../test-helper');
+const { expect, databaseBuilder, knex, domainBuilder } = require('../../../test-helper');
 const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
 
 describe('Integration | Repository | release-repository', function() {
@@ -25,8 +25,8 @@ describe('Integration | Repository | release-repository', function() {
 
     it('should return the saved release ID', async function() {
       // Given
-      const currentContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
-      const fakeGetCurrentContent = async function() { return currentContent; };
+      const currentContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+      const fakeGetCurrentContent = async function() { return currentContentDTO; };
 
       // When
       const releaseId = await releaseRepository.create(fakeGetCurrentContent);
@@ -40,36 +40,39 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getLatestRelease', function() {
     it('should return content of newest created release', async function() {
       // Given
-      const newestReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
-      const oldestReleaseContent = { some: 'old-property' };
-
-      databaseBuilder.factory.buildRelease({ createdAt: '2021-01-01', content: newestReleaseContent });
-      databaseBuilder.factory.buildRelease({ createdAt: '2020-01-01', content: oldestReleaseContent });
+      const newestReleaseContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+      const oldestReleaseContentDTO = { some: 'old-property' };
+      databaseBuilder.factory.buildRelease({ id: 1, createdAt: new Date('2021-02-02'), content: newestReleaseContentDTO });
+      databaseBuilder.factory.buildRelease({ id: 2, createdAt: new Date('2020-01-01'), content: oldestReleaseContentDTO });
       await databaseBuilder.commit();
 
       // When
       const latestRelease = await releaseRepository.getLatestRelease();
 
       // Then
-      expect(latestRelease.content).to.deep.equal(newestReleaseContent);
+      const expectedContent = domainBuilder.buildContentForRelease(newestReleaseContentDTO);
+      const expectedRelease = domainBuilder.buildDomainRelease({ id: 1, createdAt: new Date('2021-02-02'), content: expectedContent });
+      expect(latestRelease).to.deepEqualInstance(expectedRelease);
     });
   });
 
   describe('#getRelease', function() {
     it('should return content of given release', async function() {
       // Given
-      const otherReleaseContent = { some: 'property' };
-      const expectedReleaseContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+      const otherReleaseContentDTO = { some: 'property' };
+      const expectedReleaseContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
 
-      databaseBuilder.factory.buildRelease({ id: 11, createdAt: '2021-01-01', content: otherReleaseContent });
-      databaseBuilder.factory.buildRelease({ id: 12, createdAt: '2020-01-01', content: expectedReleaseContent });
+      databaseBuilder.factory.buildRelease({ id: 11, createdAt: new Date('2021-01-01'), content: otherReleaseContentDTO });
+      databaseBuilder.factory.buildRelease({ id: 12, createdAt: new Date('2020-01-01'), content: expectedReleaseContentDTO });
       await databaseBuilder.commit();
 
       // When
       const givenRelease = await releaseRepository.getRelease(12);
 
       // Then
-      expect(givenRelease.content).to.deep.equal(expectedReleaseContent);
+      const expectedContent = domainBuilder.buildContentForRelease(expectedReleaseContentDTO);
+      const expectedRelease = domainBuilder.buildDomainRelease({ id: 12, createdAt: new Date('2020-01-01'), content: expectedContent });
+      expect(givenRelease).to.deepEqualInstance(expectedRelease);
     });
   });
 });
