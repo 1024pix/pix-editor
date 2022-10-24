@@ -1,93 +1,9 @@
 const { expect, domainBuilder, airtableBuilder, sinon } = require('../../test-helper');
-const areaDatasource = require('../../../lib/infrastructure/datasources/airtable/area-datasource');
-const competenceDatasource = require('../../../lib/infrastructure/datasources/airtable/competence-datasource');
-const tubeDatasource = require('../../../lib/infrastructure/datasources/airtable/tube-datasource');
-const skillDatasource = require('../../../lib/infrastructure/datasources/airtable/skill-datasource');
 const challengeDatasource = require('../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const tutorialDatasource = require('../../../lib/infrastructure/datasources/airtable/tutorial-datasource');
-const courseDatasource = require('../../../lib/infrastructure/datasources/airtable/course-datasource');
-const frameworkDatasource = require('../../../lib/infrastructure/datasources/airtable/framework-datasource');
 const attachmentDatasource = require('../../../lib/infrastructure/datasources/airtable/attachment-datasource');
-const thematicDatasource = require('../../../lib/infrastructure/datasources/airtable/thematic-datasource');
 const releaseRepository = require('../../../lib/infrastructure/repositories/release-repository');
-const challengeTransformer = require('../../../lib/infrastructure/transformers/challenge-transformer');
-const competenceTransformer = require('../../../lib/infrastructure/transformers/competence-transformer');
-const skillTransformer = require('../../../lib/infrastructure/transformers/skill-transformer');
-const courseTransformer = require('../../../lib/infrastructure/transformers/course-transformer');
-const tutorialTransformer = require('../../../lib/infrastructure/transformers/tutorial-transformer');
 
 describe('Unit | Repository | release-repository', () => {
-
-  describe('#getCurrentContent', () => {
-
-    it('should return current content', async () => {
-      //Given
-      const areas = [];
-      const attachments = [];
-      const challenges = [];
-      const competences = [];
-      const courses = [];
-      const frameworks = [];
-      const skills = [];
-      const thematics = [];
-      const tubes = [];
-      const tutorials = [];
-      const transformedCompetences = [Symbol('transformed-competence')];
-      const transformedSkills = [Symbol('transformed-skill')];
-      const transformedCourses = [Symbol('transformed-course')];
-      const transformedTutorials = [Symbol('transformed-tutorial')];
-      const expectedCurrentContent = {
-        areas: [],
-        challenges: [],
-        competences: transformedCompetences,
-        courses: transformedCourses,
-        frameworks: [],
-        skills: transformedSkills,
-        thematics,
-        tubes: [],
-        tutorials: transformedTutorials,
-      };
-
-      sinon.stub(areaDatasource, 'list').resolves(areas);
-      sinon.stub(attachmentDatasource, 'list').resolves(attachments);
-      sinon.stub(challengeDatasource, 'list').resolves(challenges);
-      sinon.stub(competenceDatasource, 'list').resolves(competences);
-      sinon.stub(courseDatasource, 'list').resolves(courses);
-      sinon.stub(frameworkDatasource, 'list').resolves(frameworks);
-      sinon.stub(skillDatasource, 'list').resolves(skills);
-      sinon.stub(thematicDatasource, 'list').resolves(thematics);
-      sinon.stub(tubeDatasource, 'list').resolves(tubes);
-      sinon.stub(tutorialDatasource, 'list').resolves(tutorials);
-      sinon.stub(challengeTransformer, 'createChallengeTransformer').returns(() => {});
-      sinon.stub(competenceTransformer, 'filterCompetencesFields').returns(transformedCompetences);
-      sinon.stub(skillTransformer, 'filterSkillsFields').returns(transformedSkills);
-      sinon.stub(courseTransformer, 'filterCoursesFields').returns(transformedCourses);
-      sinon.stub(tutorialTransformer, 'filterTutorialsFields').returns(transformedTutorials);
-
-      //When
-      const currentContent = await releaseRepository.getCurrentContent();
-
-      //Then
-      expect(currentContent).to.deep.equal(expectedCurrentContent);
-      expect(challengeTransformer.createChallengeTransformer).to.have.been.calledWithExactly({
-        areas,
-        attachments,
-        challengesWithoutAttachments: challenges,
-        competences,
-        courses,
-        frameworks,
-        skills,
-        thematics,
-        tubes,
-        tutorials
-      });
-      expect(competenceTransformer.filterCompetencesFields).to.have.been.calledWithExactly(competences);
-      expect(skillTransformer.filterSkillsFields).to.have.been.calledWithExactly(skills);
-      expect(courseTransformer.filterCoursesFields).to.have.been.calledWithExactly(courses);
-      expect(tutorialTransformer.filterTutorialsFields).to.have.been.calledWithExactly(tutorials);
-    });
-  });
-
   describe('#serializeEntity', () => {
     it('serialize a challenge and fetch attachments', async () => {
       const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
