@@ -1,4 +1,4 @@
-const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon } = require('../../../test-helper');
+const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon, knex } = require('../../../test-helper');
 const createServer = require('../../../../server');
 const axios = require('axios');
 
@@ -326,15 +326,6 @@ async function mockContentForRelease() {
         nameEnUs: 'name',
         tubeIds: ['recTube'],
       }],
-      trainings: [{
-        duration: { hours: 6 },
-        id: 1000,
-        link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
-        locale: 'fr-fr',
-        targetProfileIds: [1822, 2214],
-        title: 'Travail de groupe et collaboration entre les personnels',
-        type: 'autoformation',
-      }],
       tubes: [{
         competenceId: 'recCompetence0',
         description: 'Description du Tube',
@@ -406,15 +397,6 @@ async function mockContentForRelease() {
         index: 0,
         name: 'Nom',
         tubeIds: ['recTube'],
-      }],
-      trainings: [{
-        duration: { hours: 6 },
-        id: 1000,
-        link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
-        locale: 'fr-fr',
-        targetProfileIds: [ 1822, 2214 ],
-        title: 'Travail de groupe et collaboration entre les personnels',
-        type: 'autoformation',
       }],
       tubes: [{
         competenceId: 'recCompetence0',
@@ -521,15 +503,6 @@ async function mockContentForRelease() {
         index: 0,
         name: 'Nom',
         tubeIds: ['recTube'],
-      }],
-      trainings: [{
-        duration: { hours: 6 },
-        id: 1000,
-        link: 'https://magistere.education.fr/ac-normandie/enrol/index.php?id=5924',
-        locale: 'fr-fr',
-        targetProfileIds: [ 1822, 2214 ],
-        title: 'Travail de groupe et collaboration entre les personnels',
-        type: 'autoformation',
       }],
       tubes: [{
         competenceId: 'recCompetence0',
