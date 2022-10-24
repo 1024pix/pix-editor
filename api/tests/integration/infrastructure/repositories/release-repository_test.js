@@ -420,7 +420,7 @@ describe('Integration | Repository | release-repository', function() {
         accessibility1: 'challenge211111 accessibility1',
         accessibility2: 'challenge211111 accessibility2',
         spoil: 'challenge211111 spoil',
-        responsive: [],
+        responsive: ['Tablet'],
         area: 'challenge211111 area',
         focusable: 'challenge211111 focusable',
         delta: 100,
@@ -657,6 +657,8 @@ describe('Integration | Repository | release-repository', function() {
           practicalDescriptionFrFr: 'tube1111 practicalDescriptionFrFr',
           practicalDescriptionEnUs: 'tube1111 practicalDescriptionEnUs',
           competenceId: 'competence11',
+          isMobileCompliant: false,
+          isTabletCompliant: false,
         },
         {
           id: 'tube1121',
@@ -668,6 +670,8 @@ describe('Integration | Repository | release-repository', function() {
           practicalDescriptionFrFr: 'tube1121 practicalDescriptionFrFr',
           practicalDescriptionEnUs: 'tube1121 practicalDescriptionEnUs',
           competenceId: 'competence11',
+          isMobileCompliant: false,
+          isTabletCompliant: false,
         },
         {
           id: 'tube1211',
@@ -679,6 +683,8 @@ describe('Integration | Repository | release-repository', function() {
           practicalDescriptionFrFr: 'tube1211 practicalDescriptionFrFr',
           practicalDescriptionEnUs: 'tube1211 practicalDescriptionEnUs',
           competenceId: 'competence12',
+          isMobileCompliant: false,
+          isTabletCompliant: false,
         },
         {
           id: 'tube1212',
@@ -690,6 +696,8 @@ describe('Integration | Repository | release-repository', function() {
           practicalDescriptionFrFr: 'tube1212 practicalDescriptionFrFr',
           practicalDescriptionEnUs: 'tube1212 practicalDescriptionEnUs',
           competenceId: 'competence12',
+          isMobileCompliant: true,
+          isTabletCompliant: false,
         },
         {
           id: 'tube2111',
@@ -701,6 +709,8 @@ describe('Integration | Repository | release-repository', function() {
           practicalDescriptionFrFr: 'tube2111 practicalDescriptionFrFr',
           practicalDescriptionEnUs: 'tube2111 practicalDescriptionEnUs',
           competenceId: 'competence21',
+          isMobileCompliant: false,
+          isTabletCompliant: true,
         },
       ];
       const expectedSkillDTOs = [
@@ -843,7 +853,7 @@ describe('Integration | Repository | release-repository', function() {
           locales: ['fr'],
           alternativeInstruction: 'challenge211111 alternativeInstruction',
           genealogy: 'challenge211111 genealogy',
-          responsive: [],
+          responsive: ['Tablet'],
           focusable: 'challenge211111 focusable',
           delta: 100,
           alpha: 200,
