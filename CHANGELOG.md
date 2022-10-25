@@ -1,5 +1,11 @@
 
 
+## v3.72.1 (25/10/2022)
+
+
+### :bug: Correction
+- [#70](https://github.com/1024pix/pix-editor/pull/70) [BUGFIX] Améliorer le libellé indiquant la présence d'une alternative textuelle sur les illustrations dans une épreuve
+
 ## v3.72.0 (25/10/2022)
 
 
