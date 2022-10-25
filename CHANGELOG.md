@@ -1,5 +1,11 @@
 
 
+## v3.72.0 (25/10/2022)
+
+
+### :building_construction: Tech
+- [#68](https://github.com/1024pix/pix-editor/pull/68) [TECH] Suppression des formations (PIX-5777)
+
 ## v3.71.0 (10/10/2022)
 
 
