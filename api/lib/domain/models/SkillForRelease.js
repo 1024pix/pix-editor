@@ -13,7 +13,7 @@ module.exports = class SkillForRelease {
     tubeId,
     version,
     level,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.hintFrFr = hintFrFr;

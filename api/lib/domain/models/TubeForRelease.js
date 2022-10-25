@@ -9,7 +9,7 @@ module.exports = class TubeForRelease {
     practicalDescriptionFrFr,
     practicalDescriptionEnUs,
     competenceId,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.title = title;
