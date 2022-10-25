@@ -11,6 +11,18 @@ const Tutorial = require('../../../../lib/domain/models/Tutorial');
 describe('Unit | Domain | Content', () => {
 
   describe('#from', () => {
+    let data;
+    beforeEach(function() {
+      data = {
+        areas: [{ id: 123, titleFrFr: 'titre', titleEnUs: 'title' }],
+        challenges: [{ id: 123 }],
+        competences: [{ id: 123, name: 'nom', nameFrFr: 'nom', nameEnUs: 'name',  description: 'description fr', descriptionFrFr: 'description fr', descriptionEnUs: 'description en' }],
+        courses: [{ id: 123 }],
+        skills: [{ id: 123, hintFrFr: 'indice', hintEnUs: 'hint' }],
+        tubes: [{ id: 123, practicalTitleFrFr: 'titre pratique', practicalTitleEnUs: 'practical title', practicalDescriptionFrFr: 'description pratique', practicalDescriptionEnUs: 'practical description' }],
+        tutorials: [{ id: 123 }],
+      };
+    });
 
     it('should return a Content model', function() {
       const content = Content.from({});
@@ -19,15 +31,7 @@ describe('Unit | Domain | Content', () => {
     });
 
     it('should return a Content model with models as attributes', function() {
-      const content = Content.from({
-        areas: [{ id: 123 }],
-        challenges: [{ id: 123 }],
-        competences: [{ id: 123 }],
-        courses: [{ id: 123 }],
-        skills: [{ id: 123 }],
-        tubes: [{ id: 123 }],
-        tutorials: [{ id: 123 }],
-      });
+      const content = Content.from(data);
 
       expect(content.areas[0]).to.be.instanceOf(Area);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
