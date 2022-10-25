@@ -81,8 +81,8 @@ describe('Unit | Domain | Content', () => {
         descriptionFrFr: 'descriptionFrCompetenceA',
         descriptionEnUs: 'descriptionEnCompetenceA',
       });
-      expect(content.areas).to.deep.equal([expectedArea]);
-      expect(content.competences).to.deep.equal([expectedCompetence]);
+      expect(content.areas).to.deepEqualArray([expectedArea]);
+      expect(content.competences).to.deepEqualArray([expectedCompetence]);
       expect(content.challenges[0]).to.be.instanceOf(Challenge);
       expect(content.courses[0]).to.be.instanceOf(Course);
       expect(content.skills[0]).to.be.instanceOf(Skill);
