@@ -6,7 +6,7 @@ module.exports = class ThematicForRelease {
     index,
     competenceId,
     tubeIds,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.nameEnUs = nameEnUs;

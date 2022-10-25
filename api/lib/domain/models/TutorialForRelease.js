@@ -7,7 +7,7 @@ module.exports = class TutorialForRelease {
     source,
     title,
     locale,
-  } = {}) {
+  }) {
     this.id = id;
     this.duration = duration;
     this.format = format;

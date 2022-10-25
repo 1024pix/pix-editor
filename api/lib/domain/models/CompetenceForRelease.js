@@ -12,7 +12,7 @@ module.exports = class CompetenceForRelease {
     skillIds,
     thematicIds,
     origin,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.nameFrFr = nameFrFr;

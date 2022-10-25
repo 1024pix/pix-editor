@@ -9,7 +9,7 @@ module.exports = class AreaForRelease {
     competenceAirtableIds,
     color,
     frameworkId,
-  } = {}) {
+  }) {
     this.id = id;
     this.code = code;
     this.titleFrFr = titleFrFr;

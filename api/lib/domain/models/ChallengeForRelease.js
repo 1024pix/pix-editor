@@ -26,7 +26,7 @@ module.exports = class ChallengeForRelease {
     responsive,
     genealogy,
     attachments,
-  } = {}) {
+  }) {
     this.id = id;
     this.instruction = instruction;
     this.proposals = proposals;

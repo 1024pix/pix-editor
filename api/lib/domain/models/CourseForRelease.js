@@ -6,7 +6,7 @@ module.exports = class CourseForRelease {
     competences,
     challenges,
     imageUrl,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.description = description;
