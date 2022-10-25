@@ -1,10 +1,13 @@
 const infraErrors = require('../lib/infrastructure/errors');
 const chai = require('chai');
 const expect = chai.expect;
+const _ = require('lodash');
 chai.use(require('chai-as-promised'));
 chai.use(require('chai-sorted'));
 const sinon = require('sinon');
 chai.use(require('sinon-chai'));
+const customChaiHelpers = require('./tooling/chai-custom-helpers/index');
+_.each(customChaiHelpers, chai.use);
 const cache = require('../lib/infrastructure/cache');
 const nock = require('nock');
 
@@ -101,6 +104,33 @@ const airtableBuilder = new AirtableBuilder({ nock });
 function generateAuthorizationHeader(user) {
   return { authorization: `Bearer ${user.apiKey}` };
 }
+
+// Inspired by what is done within chai project itself to test assertions
+// https://github.com/chaijs/chai/blob/main/test/bootstrap/index.js
+global.chaiErr = function globalErr(fn, val) {
+  if (chai.util.type(fn) !== 'function') throw new chai.AssertionError('Invalid fn');
+
+  try {
+    fn();
+  } catch (err) {
+    switch (chai.util.type(val).toLowerCase()) {
+      case 'undefined':
+        return;
+      case 'string':
+        return chai.expect(err.message).to.equal(val);
+      case 'regexp':
+        return chai.expect(err.message).to.match(val);
+      case 'object':
+        return Object.keys(val).forEach(function(key) {
+          chai.expect(err).to.have.property(key).and.to.deep.equal(val[key]);
+        });
+    }
+
+    throw new chai.AssertionError('Invalid val');
+  }
+
+  throw new chai.AssertionError('Expected an error');
+};
 
 module.exports = {
   airtableBuilder,
