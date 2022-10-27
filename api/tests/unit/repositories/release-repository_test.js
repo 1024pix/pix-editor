@@ -15,8 +15,6 @@ const competenceTransformer = require('../../../lib/infrastructure/transformers/
 const skillTransformer = require('../../../lib/infrastructure/transformers/skill-transformer');
 const courseTransformer = require('../../../lib/infrastructure/transformers/course-transformer');
 const tutorialTransformer = require('../../../lib/infrastructure/transformers/tutorial-transformer');
-const Release = require('../../../lib/domain/models/Release');
-const Content = require('../../../lib/domain/models/Content');
 
 describe('Unit | Repository | release-repository', () => {
 
@@ -92,7 +90,7 @@ describe('Unit | Repository | release-repository', () => {
 
   describe('#serializeEntity', () => {
     it('serialize a challenge and fetch attachments', async () => {
-      const challengeDataObject = domainBuilder.buildChallenge({ id: 'recChallenge' });
+      const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
       const entity = airtableBuilder.factory.buildChallenge({
         id: 'recChallenge',
         instruction: challengeDataObject.instruction,
@@ -192,7 +190,7 @@ describe('Unit | Repository | release-repository', () => {
         }),
       ];
 
-      const challenge = domainBuilder.buildChallenge({
+      const challenge = domainBuilder.buildChallengeAirtableDataObject({
         id: 'recChallenge',
         instruction : 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
         alternativeInstruction : '',
@@ -224,34 +222,6 @@ describe('Unit | Repository | release-repository', () => {
       expect(updatedRecord.illustrationAlt).to.equal('texte alternatif à l\'image');
       expect(updatedRecord.attachments).to.deep.equal(['http://example.com/attachment']);
       expect(model).to.equal('challenges');
-    });
-  });
-
-  describe('#toDomain', function() {
-    it('should build Release model with given parameters', function() {
-      const databaseObjectRelease = {
-        id: 123,
-        content: {
-          areas: [],
-          challenges: [],
-          competences: [],
-          courses: [],
-          frameworks: [],
-          skills: [],
-          thematics: [],
-          tubes: [],
-          tutorials: [],
-        },
-        createdAt: '2021-08-31'
-      };
-
-      const release = releaseRepository.toDomain(databaseObjectRelease);
-
-      expect(release).to.be.instanceOf(Release);
-      expect(release.id).to.equal(databaseObjectRelease.id);
-      expect(release.content).to.deep.equal(databaseObjectRelease.content);
-      expect(release.content).to.be.instanceOf(Content);
-      expect(release.createdAt).to.deep.equal(databaseObjectRelease.createdAt);
     });
   });
 });

@@ -26,10 +26,10 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
     describe('when release creation succeeded', () => {
 
-      const resolvedCreatedRelease = new Release({ id: 1, content: 'JSON content', createdAt: new Date() });
+      const resolvedCreatedReleaseId = 1;
 
       beforeEach(() => {
-        sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
+        sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedReleaseId);
         sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
       });
 
@@ -39,7 +39,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
         // then
         expect(releaseId).to.exist;
-        expect(releaseId).to.equal(resolvedCreatedRelease.id);
+        expect(releaseId).to.equal(resolvedCreatedReleaseId);
       });
 
       it('should log the success', async () => {

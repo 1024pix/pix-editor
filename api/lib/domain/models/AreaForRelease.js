@@ -1,4 +1,4 @@
-module.exports = class Area {
+module.exports = class AreaForRelease {
   constructor({
     id,
     code,
@@ -9,7 +9,7 @@ module.exports = class Area {
     competenceAirtableIds,
     color,
     frameworkId,
-  } = {}) {
+  }) {
     this.id = id;
     this.code = code;
     this.titleFrFr = titleFrFr;

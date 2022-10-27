@@ -1,4 +1,4 @@
-module.exports = class Skill {
+module.exports = class SkillForRelease {
   constructor({
     id,
     name,
@@ -13,7 +13,7 @@ module.exports = class Skill {
     tubeId,
     version,
     level,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.hintFrFr = hintFrFr;

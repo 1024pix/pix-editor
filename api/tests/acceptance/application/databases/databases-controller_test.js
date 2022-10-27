@@ -10,18 +10,20 @@ const {
   buildTutorial,
   buildCourse,
   buildAttachment,
+  buildThematic,
 } = airtableBuilder.factory;
 
 function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaAirtableDataObject()],
-    competences: [domainBuilder.buildCompetence()],
-    tubes: [domainBuilder.buildTube()],
-    skills: [domainBuilder.buildSkill()],
-    challenges: [domainBuilder.buildChallenge()],
-    tutorials: [domainBuilder.buildTutorial()],
-    courses: [domainBuilder.buildCourse({ challenges: ['recChallenge0'] })],
+    competences: [domainBuilder.buildCompetenceAirtableDataObject()],
+    tubes: [domainBuilder.buildTubeAirtableDataObject()],
+    skills: [domainBuilder.buildSkillAirtableDataObject()],
+    challenges: [domainBuilder.buildChallengeAirtableDataObject()],
+    tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
+    thematics: [domainBuilder.buildThematicAirtableDataObject()],
+    courses: [domainBuilder.buildCourseAirtableDataObject({ challenges: ['recChallenge0'] })],
   };
 
   airtableBuilder.mockLists({
@@ -29,8 +31,9 @@ function mockCurrentContent() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge(domainBuilder.buildChallenge(expectedCurrentContent.challenges[0]))],
+    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
+    thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     courses: [buildCourse(expectedCurrentContent.courses[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
   });

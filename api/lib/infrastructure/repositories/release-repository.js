@@ -25,10 +25,9 @@ module.exports = {
   async create(getCurrentContent = _getCurrentContent) {
     const content = await getCurrentContent();
     const release = await knex('releases')
-      .returning(['id', 'content', 'createdAt'])
-      .insert({ content });
+      .insert({ content }, ['id']);
 
-    return this.toDomain(release[0]);
+    return release[0].id;
   },
 
   async getLatestRelease() {
@@ -37,7 +36,7 @@ module.exports = {
       .orderBy('createdAt', 'desc')
       .limit(1);
 
-    return this.toDomain(release[0]);
+    return _toDomain(release[0]);
   },
 
   async getRelease(id) {
@@ -45,7 +44,7 @@ module.exports = {
       .select('id', 'content', 'createdAt')
       .where('id', id);
 
-    return this.toDomain(release[0]);
+    return _toDomain(release[0]);
   },
 
   async serializeEntity({ entity, type }) {
@@ -79,18 +78,18 @@ module.exports = {
 
     return { updatedRecord, model };
   },
-
-  toDomain(releaseDTO) {
-    if (!releaseDTO) {
-      return null;
-    }
-    return new Release({
-      id: releaseDTO.id,
-      content: Content.from(releaseDTO.content),
-      createdAt: releaseDTO.createdAt,
-    });
-  }
 };
+
+function _toDomain(releaseDTO) {
+  if (!releaseDTO) {
+    return null;
+  }
+  return new Release({
+    id: releaseDTO.id,
+    content: Content.buildForRelease(releaseDTO.content),
+    createdAt: releaseDTO.createdAt,
+  });
+}
 
 async function _getCurrentContent() {
   const [

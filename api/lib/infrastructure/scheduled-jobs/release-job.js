@@ -22,13 +22,13 @@ const releaseJobOptions = {
 
 async function createRelease(job) {
   try {
-    const release = await releaseRepository.create();
+    const releaseId = await releaseRepository.create();
     if (_isSlackNotificationGloballyEnabled() && job.data.slackNotification === true) {
       await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
     }
-    logger.info(`Periodic release created with id ${release.id}`);
+    logger.info(`Periodic release created with id ${releaseId}`);
     checkUrlsJob.start();
-    return release.id;
+    return releaseId;
   } catch (error) {
     if (_isSlackNotificationGloballyEnabled()) {
       await learningContentNotification.notifyReleaseCreationFailure(error.message, new SlackNotifier(config.notifications.slack.webhookUrl));

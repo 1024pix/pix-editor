@@ -1,4 +1,4 @@
-module.exports = class Tube {
+module.exports = class TubeForRelease {
   constructor({
     id,
     name,
@@ -9,7 +9,7 @@ module.exports = class Tube {
     practicalDescriptionFrFr,
     practicalDescriptionEnUs,
     competenceId,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.title = title;
