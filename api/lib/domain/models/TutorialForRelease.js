@@ -1,4 +1,4 @@
-module.exports = class Tutorial {
+module.exports = class TutorialForRelease {
   constructor({
     id,
     duration,
@@ -7,7 +7,7 @@ module.exports = class Tutorial {
     source,
     title,
     locale,
-  } = {}) {
+  }) {
     this.id = id;
     this.duration = duration;
     this.format = format;

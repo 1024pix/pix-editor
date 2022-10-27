@@ -1,4 +1,4 @@
-module.exports = class Course {
+module.exports = class CourseForRelease {
   constructor({
     id,
     name,
@@ -6,7 +6,7 @@ module.exports = class Course {
     competences,
     challenges,
     imageUrl,
-  } = {}) {
+  }) {
     this.id = id;
     this.name = name;
     this.description = description;

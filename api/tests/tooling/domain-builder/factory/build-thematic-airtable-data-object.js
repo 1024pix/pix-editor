@@ -1,4 +1,4 @@
-module.exports = function buildThematic(
+module.exports = function buildThematicAirtableDataObject(
   {
     id = 'recFvllz2Ckz',
     name = 'Nom de la thématique',

@@ -1,4 +1,6 @@
-module.exports = function buildTutorialAirtableDataObject(
+const TutorialForRelease = require('../../../../lib/domain/models/TutorialForRelease');
+
+module.exports = function buildTutorialForRelease(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',
@@ -10,7 +12,7 @@ module.exports = function buildTutorialAirtableDataObject(
     tutorialForSkills = ['skillId1'],
     furtherInformation = ['skillId2'],
   } = {}) {
-  return {
+  return new TutorialForRelease({
     id,
     duration,
     format,
@@ -20,5 +22,5 @@ module.exports = function buildTutorialAirtableDataObject(
     locale,
     tutorialForSkills,
     furtherInformation,
-  };
+  });
 };
