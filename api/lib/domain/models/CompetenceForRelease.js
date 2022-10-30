@@ -1,3 +1,4 @@
+const { LOCALE } = require('../constants');
 module.exports = class CompetenceForRelease {
   constructor({
     id,
@@ -25,5 +26,22 @@ module.exports = class CompetenceForRelease {
     this.skillIds = skillIds;
     this.thematicIds = thematicIds;
     this.origin = origin;
+
+    this.name_i18n = _computeNameForI18N({ nameFrFr, nameEnUs });
+    this.description_i18n = _computeDescriptionForI18N({ descriptionFrFr, descriptionEnUs });
   }
 };
+
+function _computeNameForI18N({ nameFrFr, nameEnUs }) {
+  return {
+    fr: nameFrFr,
+    en: nameEnUs,
+  };
+}
+
+function _computeDescriptionForI18N({ descriptionFrFr, descriptionEnUs }) {
+  return {
+    fr: descriptionFrFr,
+    en: descriptionEnUs,
+  };
+}
