@@ -285,7 +285,11 @@ async function mockContentForRelease() {
       nameEnUs: 'name',
       competenceId: 'recCompetence0',
       tubeIds: ['recTube'],
-      index: 0
+      index: 0,
+      name_i18n: {
+        en: 'name',
+        fr: 'Nom',
+      },
     }],
   };
 

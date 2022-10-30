@@ -1,4 +1,5 @@
 const { LOCALE } = require('../constants');
+
 module.exports = class CompetenceForRelease {
   constructor({
     id,
