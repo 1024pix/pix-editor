@@ -13,5 +13,14 @@ module.exports = class ThematicForRelease {
     this.index = index;
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
+
+    this.name_i18n = _computeNameForI18N({ name, nameEnUs });
   }
 };
+
+function _computeNameForI18N({ name, nameEnUs }) {
+  return {
+    fr: name,
+    en: nameEnUs,
+  };
+}
