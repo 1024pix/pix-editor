@@ -214,6 +214,14 @@ async function mockContentForRelease() {
       competenceId: 'recCompetence0',
       isMobileCompliant: true,
       isTabletCompliant: false,
+      practicalTitle_i18n: {
+        en: 'Titre pratique du Tube - en',
+        fr: 'Titre pratique du Tube - fr',
+      },
+      practicalDescription_i18n: {
+        en: 'Description pratique du Tube - en',
+        fr: 'Description pratique du Tube - fr',
+      },
     }],
     skills: [{
       id: 'recSkill0',

@@ -23,5 +23,23 @@ module.exports = class TubeForRelease {
     this.competenceId = competenceId;
     this.isMobileCompliant = isMobileCompliant;
     this.isTabletCompliant = isTabletCompliant;
+
+    this.practicalTitle_i18n = _computePracticalTitleForI18N({ practicalTitleFrFr, practicalTitleEnUs });
+    this.practicalDescription_i18n = _computePracticalDescriptionForI18N({ practicalDescriptionFrFr, practicalDescriptionEnUs });
   }
 };
+
+function _computePracticalTitleForI18N({ practicalTitleFrFr, practicalTitleEnUs }) {
+  return {
+    fr: practicalTitleFrFr,
+    en: practicalTitleEnUs,
+  };
+}
+
+function _computePracticalDescriptionForI18N({ practicalDescriptionFrFr, practicalDescriptionEnUs }) {
+  return {
+    fr: practicalDescriptionFrFr,
+    en: practicalDescriptionEnUs,
+  };
+}
+
