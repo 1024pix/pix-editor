@@ -171,6 +171,10 @@ async function mockContentForRelease() {
       competenceAirtableIds: ['recCompetence123'],
       color: 'jaffa',
       frameworkId: 'recFramework0',
+      title_i18n: {
+        en: 'Titre du Domaine - en',
+        fr: 'Titre du Domaine - fr',
+      },
     }],
     competences: [{
       id: 'recCompetence0',

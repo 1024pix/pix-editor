@@ -19,5 +19,14 @@ module.exports = class AreaForRelease {
     this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
     this.frameworkId = frameworkId;
+
+    this.title_i18n = _computeTitleForI18N({ titleFrFr, titleEnUs });
   }
 };
+
+function _computeTitleForI18N({ titleFrFr, titleEnUs }) {
+  return {
+    fr: titleFrFr,
+    en: titleEnUs,
+  };
+}
