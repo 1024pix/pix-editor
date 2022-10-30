@@ -189,6 +189,14 @@ async function mockContentForRelease() {
       description: 'Description de la compétence',
       descriptionFrFr: 'Description de la compétence - fr',
       descriptionEnUs: 'Description de la compétence - en',
+      name_i18n: {
+        en: 'Nom de la Compétence - en',
+        fr: 'Nom de la Compétence - fr',
+      },
+      description_i18n: {
+        en: 'Description de la compétence - en',
+        fr: 'Description de la compétence - fr',
+      },
     }],
     frameworks: [{
       id: 'recFramework0',
