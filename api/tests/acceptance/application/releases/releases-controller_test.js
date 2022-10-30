@@ -229,6 +229,10 @@ async function mockContentForRelease() {
       tubeId: 'recTube0',
       version: 1,
       level: 1,
+      hint_i18n: {
+        en: 'Indice - en',
+        fr: 'Indice - fr',
+      },
     }],
     challenges: [{
       id: 'recChallenge0',

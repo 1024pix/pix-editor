@@ -27,5 +27,14 @@ module.exports = class SkillForRelease {
     this.tubeId = tubeId;
     this.version = version;
     this.level = level;
+
+    this.hint_i18n = _computeHintForI18N({ hintFrFr, hintEnUs });
   }
 };
+
+function _computeHintForI18N({ hintFrFr, hintEnUs }) {
+  return {
+    fr: hintFrFr,
+    en: hintEnUs,
+  };
+}
