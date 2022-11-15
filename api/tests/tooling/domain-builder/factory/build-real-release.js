@@ -1,8 +1,9 @@
 const Release = require('../../../../lib/domain/models/Release');
+const buildContentForRelease = require('./build-content-for-release');
 
 module.exports = function buildRelease({
   id = 123,
-  content = { id: 'content' },
+  content = buildContentForRelease(),
   createdAt = new Date('2020-01-01'),
 } = {}) {
   return new Release({
