@@ -4,19 +4,11 @@ module.exports = {
   createChallengeTransformer
 };
 
-function createChallengeTransformer(learningContent) {
-  function _transformChallengeForRelease(challenge) {
-    const transformers = [_addAttachmentsToChallenge, _filterChallengeFields];
-
-    return transformers.reduce((accumulator, transformer) => {
-      return transformer(learningContent, accumulator);
-    }, challenge);
-  }
-
-  return _transformChallengeForRelease;
+function createChallengeTransformer({ attachments }) {
+  return (challenge) => _filterChallengeFields(_addAttachmentsToChallenge({ attachments }, challenge));
 }
 
-function _filterChallengeFields(_learningContent, challenge) {
+function _filterChallengeFields(challenge) {
   const fieldsToInclude = [
     'id',
     'alpha',
@@ -63,10 +55,10 @@ function _assignAttachmentToChallenge(challenge, attachment) {
   }
 }
 
-function _addAttachmentsToChallenge(learningContent, challenge) {
+function _addAttachmentsToChallenge({ attachments }, challenge) {
   const newChallenge = { ...challenge };
-  const attachments = learningContent.attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
-  attachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
+  const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
+  challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
 
   return newChallenge;
 }

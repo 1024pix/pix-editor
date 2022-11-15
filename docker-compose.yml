@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres:13.3-alpine
     ports:
-      - "5433:5432"
+      - "5444:5432"
     environment:
       POSTGRES_DB: pix_lcms
       POSTGRES_HOST_AUTH_METHOD: trust

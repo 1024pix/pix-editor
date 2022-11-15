@@ -9,6 +9,8 @@ module.exports = class TubeForRelease {
     practicalDescriptionFrFr,
     practicalDescriptionEnUs,
     competenceId,
+    isMobileCompliant,
+    isTabletCompliant,
   }) {
     this.id = id;
     this.name = name;
@@ -19,5 +21,7 @@ module.exports = class TubeForRelease {
     this.practicalDescriptionFrFr = practicalDescriptionFrFr;
     this.practicalDescriptionEnUs = practicalDescriptionEnUs;
     this.competenceId = competenceId;
+    this.isMobileCompliant = isMobileCompliant;
+    this.isTabletCompliant = isTabletCompliant;
   }
 };

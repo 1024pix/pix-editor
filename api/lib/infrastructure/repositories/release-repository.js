@@ -11,6 +11,7 @@ const tutorialDatasource = require('../datasources/airtable/tutorial-datasource'
 const airtableSerializer = require('../serializers/airtable-serializer');
 const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
+const tubeTransformer = require('../transformers/tube-transformer');
 const courseTransformer = require('../transformers/course-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
@@ -56,10 +57,7 @@ module.exports = {
     if (model === attachmentDatasource.path()) {
       const rawChallenge = await challengeDatasource.filterById(updatedRecord.challengeId);
       const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
-      const learningContent = {
-        attachments,
-      };
-      const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+      const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
       const challenge = transformChallenge(rawChallenge);
 
       return { updatedRecord: challenge, model: challengeDatasource.path() };
@@ -95,7 +93,7 @@ async function _getCurrentContent() {
   const [
     areas,
     attachments,
-    challengesWithoutAttachments,
+    challenges,
     competences,
     courses,
     frameworks,
@@ -115,35 +113,23 @@ async function _getCurrentContent() {
     tubeDatasource.list(),
     tutorialDatasource.list(),
   ]);
-  const learningContent = {
-    areas,
-    attachments,
-    challengesWithoutAttachments,
-    competences,
-    courses,
-    frameworks,
-    skills,
-    thematics,
-    tubes,
-    tutorials,
-  };
-  const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
-  const challenges = challengesWithoutAttachments.map(transformChallenge);
-
+  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
+  const transformedChallenges = challenges.map(transformChallenge);
+  const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredCourses = courseTransformer.filterCoursesFields(courses);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
 
   return {
-    areas,
-    challenges,
-    competences: filteredCompetences,
-    courses: filteredCourses,
     frameworks,
-    skills: filteredSkills,
+    areas,
+    competences: filteredCompetences,
     thematics,
-    tubes,
+    tubes: transformedTubes,
+    skills: filteredSkills,
+    challenges: transformedChallenges,
+    courses: filteredCourses,
     tutorials: filteredTutorials,
   };
 }
