@@ -18,6 +18,10 @@ const {
 async function mockCurrentContent() {
 
   const expectedCurrentContent = {
+    frameworks: [{
+      id: 'recFramework0',
+      name: 'Nom du referentiel'
+    }],
     areas: [{
       id: 'recArea0',
       name: 'Nom du Domaine',
@@ -43,9 +47,13 @@ async function mockCurrentContent() {
       descriptionFrFr: 'Description de la compétence - fr',
       descriptionEnUs: 'Description de la compétence - en',
     }],
-    frameworks: [{
-      id: 'recFramework0',
-      name: 'Nom du referentiel'
+    thematics: [{
+      id: 'recThematic0',
+      name: 'Nom',
+      nameEnUs: 'name',
+      competenceId: 'recCompetence0',
+      tubeIds: ['recTube0'],
+      index: 0
     }],
     tubes: [{
       id: 'recTube0',
@@ -57,6 +65,8 @@ async function mockCurrentContent() {
       practicalDescriptionFrFr: 'Description pratique du Tube - fr',
       practicalDescriptionEnUs: 'Description pratique du Tube - en',
       competenceId: 'recCompetence0',
+      thematicId: 'recThematic0',
+      skillIds: ['recSkill0'],
       isMobileCompliant: true,
       isTabletCompliant: false,
     }],
@@ -122,14 +132,6 @@ async function mockCurrentContent() {
       challenges: ['recChallenge0'],
       imageUrl: 'Image du Course',
     }],
-    thematics: [{
-      id: 'recThematic0',
-      name: 'Nom',
-      nameEnUs: 'name',
-      competenceId: 'recCompetence0',
-      tubeIds: ['recTube'],
-      index: 0
-    }],
   };
 
   const attachments = [{
@@ -161,6 +163,10 @@ async function mockCurrentContent() {
 
 async function mockContentForRelease() {
   const expectedCurrentContent = {
+    frameworks: [{
+      id: 'recFramework0',
+      name: 'Nom du referentiel'
+    }],
     areas: [{
       id: 'recArea0',
       name: 'Nom du Domaine',
@@ -198,9 +204,17 @@ async function mockContentForRelease() {
         fr: 'Description de la compétence - fr',
       },
     }],
-    frameworks: [{
-      id: 'recFramework0',
-      name: 'Nom du referentiel'
+    thematics: [{
+      id: 'recThematic0',
+      name: 'Nom',
+      nameEnUs: 'name',
+      competenceId: 'recCompetence0',
+      tubeIds: ['recTube0'],
+      index: 0,
+      name_i18n: {
+        en: 'name',
+        fr: 'Nom',
+      },
     }],
     tubes: [{
       id: 'recTube0',
@@ -212,6 +226,8 @@ async function mockContentForRelease() {
       practicalDescriptionFrFr: 'Description pratique du Tube - fr',
       practicalDescriptionEnUs: 'Description pratique du Tube - en',
       competenceId: 'recCompetence0',
+      thematicId: 'recThematic0',
+      skillIds: ['recSkill0'],
       isMobileCompliant: true,
       isTabletCompliant: false,
       practicalTitle_i18n: {
@@ -286,18 +302,6 @@ async function mockContentForRelease() {
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
       imageUrl: 'Image du Course',
-    }],
-    thematics: [{
-      id: 'recThematic0',
-      name: 'Nom',
-      nameEnUs: 'name',
-      competenceId: 'recCompetence0',
-      tubeIds: ['recTube'],
-      index: 0,
-      name_i18n: {
-        en: 'name',
-        fr: 'Nom',
-      },
     }],
   };
 

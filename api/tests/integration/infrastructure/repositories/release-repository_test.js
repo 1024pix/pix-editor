@@ -770,6 +770,8 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence11',
       isMobileCompliant: false,
       isTabletCompliant: false,
+      thematicId: 'thematic111',
+      skillIds: ['skill11111', 'skill11112'],
     },
     {
       id: 'tube1121',
@@ -783,6 +785,8 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence11',
       isMobileCompliant: false,
       isTabletCompliant: false,
+      thematicId: 'thematic112',
+      skillIds: [],
     },
     {
       id: 'tube1211',
@@ -796,6 +800,8 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence12',
       isMobileCompliant: false,
       isTabletCompliant: false,
+      thematicId: 'thematic121',
+      skillIds: [],
     },
     {
       id: 'tube1212',
@@ -809,6 +815,8 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence12',
       isMobileCompliant: true,
       isTabletCompliant: false,
+      thematicId: 'thematic121',
+      skillIds: ['skill12121'],
     },
     {
       id: 'tube2111',
@@ -822,6 +830,8 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence21',
       isMobileCompliant: false,
       isTabletCompliant: true,
+      thematicId: 'thematic211',
+      skillIds: ['skill21111'],
     },
   ];
   const expectedSkillDTOs = [

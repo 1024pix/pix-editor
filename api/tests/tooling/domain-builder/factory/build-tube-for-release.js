@@ -10,6 +10,8 @@ const buildTubeForRelease = function({
   practicalDescriptionFrFr = 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche',
   practicalDescriptionEnUs = 'Identify a web browser and a search engine, know how the search engine works',
   competenceId = 'recsvLz0W2ShyfD63',
+  thematicId = 'thematic123',
+  skillIds = ['skillABC', 'skillDEF'],
 } = {}) {
   return new TubeForRelease({
     id,
@@ -21,6 +23,8 @@ const buildTubeForRelease = function({
     practicalDescriptionFrFr,
     practicalDescriptionEnUs,
     competenceId,
+    thematicId,
+    skillIds,
   });
 };
 
