@@ -5,7 +5,7 @@ const LOCALE = {
   ITALIAN_SPOKEN: 'it',
   DEUTSCH_SPOKEN: 'de',
   PORTUGUESE_SPOKEN: 'pt',
-  SPANISH_SPOKEN: 'es'
+  SPANISH_SPOKEN: 'es',
 };
 
 const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
