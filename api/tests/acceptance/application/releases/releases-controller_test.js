@@ -171,6 +171,10 @@ async function mockContentForRelease() {
       competenceAirtableIds: ['recCompetence123'],
       color: 'jaffa',
       frameworkId: 'recFramework0',
+      title_i18n: {
+        en: 'Titre du Domaine - en',
+        fr: 'Titre du Domaine - fr',
+      },
     }],
     competences: [{
       id: 'recCompetence0',
@@ -185,6 +189,14 @@ async function mockContentForRelease() {
       description: 'Description de la compétence',
       descriptionFrFr: 'Description de la compétence - fr',
       descriptionEnUs: 'Description de la compétence - en',
+      name_i18n: {
+        en: 'Nom de la Compétence - en',
+        fr: 'Nom de la Compétence - fr',
+      },
+      description_i18n: {
+        en: 'Description de la compétence - en',
+        fr: 'Description de la compétence - fr',
+      },
     }],
     frameworks: [{
       id: 'recFramework0',
@@ -202,6 +214,14 @@ async function mockContentForRelease() {
       competenceId: 'recCompetence0',
       isMobileCompliant: true,
       isTabletCompliant: false,
+      practicalTitle_i18n: {
+        en: 'Titre pratique du Tube - en',
+        fr: 'Titre pratique du Tube - fr',
+      },
+      practicalDescription_i18n: {
+        en: 'Description pratique du Tube - en',
+        fr: 'Description pratique du Tube - fr',
+      },
     }],
     skills: [{
       id: 'recSkill0',
@@ -217,6 +237,10 @@ async function mockContentForRelease() {
       tubeId: 'recTube0',
       version: 1,
       level: 1,
+      hint_i18n: {
+        en: 'Indice - en',
+        fr: 'Indice - fr',
+      },
     }],
     challenges: [{
       id: 'recChallenge0',
@@ -269,7 +293,11 @@ async function mockContentForRelease() {
       nameEnUs: 'name',
       competenceId: 'recCompetence0',
       tubeIds: ['recTube'],
-      index: 0
+      index: 0,
+      name_i18n: {
+        en: 'name',
+        fr: 'Nom',
+      },
     }],
   };
 
