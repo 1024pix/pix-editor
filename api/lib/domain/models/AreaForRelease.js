@@ -1,3 +1,5 @@
+const generateI18NAttribute = require('../services/i18n-key-generator-for-release-models');
+
 module.exports = class AreaForRelease {
   constructor({
     id,
@@ -19,14 +21,7 @@ module.exports = class AreaForRelease {
     this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
     this.frameworkId = frameworkId;
-
-    this.title_i18n = _computeTitleForI18N({ titleFrFr, titleEnUs });
+    const { key, value } = generateI18NAttribute('title', { frValue: titleFrFr, enValue: titleEnUs });
+    this[key] = value;
   }
 };
-
-function _computeTitleForI18N({ titleFrFr, titleEnUs }) {
-  return {
-    fr: titleFrFr,
-    en: titleEnUs,
-  };
-}

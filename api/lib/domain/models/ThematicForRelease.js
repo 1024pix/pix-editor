@@ -1,3 +1,5 @@
+const generateI18NAttribute = require('../services/i18n-key-generator-for-release-models');
+
 module.exports = class ThematicForRelease {
   constructor({
     id,
@@ -14,13 +16,7 @@ module.exports = class ThematicForRelease {
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
 
-    this.name_i18n = _computeNameForI18N({ name, nameEnUs });
+    const { key, value } = generateI18NAttribute('name', { frValue: name, enValue: nameEnUs });
+    this[key] = value;
   }
 };
-
-function _computeNameForI18N({ name, nameEnUs }) {
-  return {
-    fr: name,
-    en: nameEnUs,
-  };
-}
