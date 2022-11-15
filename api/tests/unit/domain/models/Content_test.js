@@ -2,7 +2,6 @@ const { expect, domainBuilder } = require('../../../test-helper');
 const Content = require('../../../../lib/domain/models/Content');
 
 describe('Unit | Domain | Content', () => {
-  // TODO this test is not logical
   describe('#buildForRelease', () => {
     let data;
     beforeEach(function() {
