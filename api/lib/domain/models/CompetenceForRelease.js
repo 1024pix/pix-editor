@@ -1,4 +1,4 @@
-const { LOCALE } = require('../constants');
+const generateI18NAttribute = require('../services/i18n-key-generator-for-release-models');
 
 module.exports = class CompetenceForRelease {
   constructor({
@@ -28,21 +28,9 @@ module.exports = class CompetenceForRelease {
     this.thematicIds = thematicIds;
     this.origin = origin;
 
-    this.name_i18n = _computeNameForI18N({ nameFrFr, nameEnUs });
-    this.description_i18n = _computeDescriptionForI18N({ descriptionFrFr, descriptionEnUs });
+    const { key: nameKey, value: nameValue } = generateI18NAttribute('name', { frValue: nameFrFr, enValue: nameEnUs });
+    this[nameKey] = nameValue;
+    const { key: descriptionKey, value: descriptionValue } = generateI18NAttribute('description', { frValue: descriptionFrFr, enValue: descriptionEnUs });
+    this[descriptionKey] = descriptionValue;
   }
 };
-
-function _computeNameForI18N({ nameFrFr, nameEnUs }) {
-  return {
-    fr: nameFrFr,
-    en: nameEnUs,
-  };
-}
-
-function _computeDescriptionForI18N({ descriptionFrFr, descriptionEnUs }) {
-  return {
-    fr: descriptionFrFr,
-    en: descriptionEnUs,
-  };
-}
