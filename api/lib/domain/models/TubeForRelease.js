@@ -13,6 +13,8 @@ module.exports = class TubeForRelease {
     competenceId,
     isMobileCompliant,
     isTabletCompliant,
+    thematicId,
+    skillIds,
   }) {
     this.id = id;
     this.name = name;
@@ -25,6 +27,8 @@ module.exports = class TubeForRelease {
     this.competenceId = competenceId;
     this.isMobileCompliant = isMobileCompliant;
     this.isTabletCompliant = isTabletCompliant;
+    this.thematicId = thematicId;
+    this.skillIds = skillIds;
 
     const { key: practicalTitleKey, value: practicalTitleValue } = generateI18NAttribute('practicalTitle', { frValue: practicalTitleFrFr, enValue: practicalTitleEnUs });
     this[practicalTitleKey] = practicalTitleValue;

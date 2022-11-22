@@ -118,6 +118,8 @@ describe('Unit | Domain | Content', () => {
         id: 'recFramework',
         name: 'le framework',
       });
+      tubeAirtable.thematicId = 'recThematic1';
+      tubeAirtable.skillIds = ['recSkillA'];
       data = {
         areas: [areaAirtable],
         competences: [competenceAirtable],
@@ -186,6 +188,8 @@ describe('Unit | Domain | Content', () => {
         practicalDescriptionFrFr: 'practicalDescriptionFr',
         practicalDescriptionEnUs: 'practicalDescriptionEn',
         competenceId: 'recCompetence1',
+        thematicId: 'recThematic1',
+        skillIds: ['recSkillA'],
       });
       const expectedTutorial = domainBuilder.buildTutorialForRelease({
         id: 'recTutorialA',
