@@ -1,5 +1,16 @@
 
 
+## v3.73.0 (23/11/2022)
+
+
+### :rocket: Amélioration
+- [#73](https://github.com/1024pix/pix-editor/pull/73) [FEATURE] Ajouter les liens vers la thématique parente et les acquis enfants sur le modèle Tube de la release (PIX-6331)
+- [#69](https://github.com/1024pix/pix-editor/pull/69) [FEATURE] Ajouter les informations de compatibilité Smartphone/Tablette au niveau des sujets (PIX-6128)
+
+### :building_construction: Tech
+- [#72](https://github.com/1024pix/pix-editor/pull/72) [TECH] Ajout d'attribut dictionnaire i18n sur les modèles de la Release (PIX-5731)
+- [#71](https://github.com/1024pix/pix-editor/pull/71) [TECH] Sépare les modèles d'édition avec ceux destinés à la release dans l'API (PIX-6148)
+
 ## v3.72.1 (25/10/2022)
 
 
