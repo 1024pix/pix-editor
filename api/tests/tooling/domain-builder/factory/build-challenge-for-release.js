@@ -27,6 +27,8 @@ module.exports = function buildChallengeForRelease({
   responsive = 'Smartphone',
   genealogy = 'Prototype 1',
   attachments,
+  illustrationAlt = 'alt illu',
+  illustrationUrl = 'url illu',
 } = {}) {
 
   return new ChallengeForRelease({
@@ -56,5 +58,7 @@ module.exports = function buildChallengeForRelease({
     responsive,
     genealogy,
     attachments,
+    illustrationAlt,
+    illustrationUrl,
   });
 };
