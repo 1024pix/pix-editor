@@ -56,7 +56,7 @@ function _assignAttachmentToChallenge(challenge, attachment) {
 }
 
 function _addAttachmentsToChallenge({ attachments }, challenge) {
-  const newChallenge = { ...challenge };
+  const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
   const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
   challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
 

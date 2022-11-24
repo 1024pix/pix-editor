@@ -114,6 +114,8 @@ describe('Unit | Domain | Content', () => {
         genealogy: 'Prototype 1',
       });
       challengeAirtable.attachments = ['some_url'];
+      challengeAirtable.illustrationUrl = null;
+      challengeAirtable.illustrationAlt = null;
       const frameworkAirtable = domainBuilder.buildFrameworkAirtableDataObject({
         id: 'recFramework',
         name: 'le framework',
@@ -245,6 +247,8 @@ describe('Unit | Domain | Content', () => {
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
         attachments: ['some_url'],
+        illustrationAlt: null,
+        illustrationUrl: null,
       });
       const expectedFramework = domainBuilder.buildFrameworkForRelease({ id: 'recFramework', name: 'le framework' });
 

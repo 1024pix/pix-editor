@@ -285,6 +285,8 @@ async function mockContentForRelease() {
       responsive: ['Smartphone'],
       genealogy: 'Prototype 1',
       attachments: ['url de la pièce jointe'],
+      illustrationUrl: 'url de l‘illustration',
+      illustrationAlt: 'Texte alternatif illustration',
     }],
     tutorials: [{
       id: 'recTutorial0',
