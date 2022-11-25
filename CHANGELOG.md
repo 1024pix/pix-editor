@@ -1,5 +1,11 @@
 
 
+## v3.73.1 (25/11/2022)
+
+
+### :bug: Correction
+- [#74](https://github.com/1024pix/pix-editor/pull/74) [BUGFIX] Les images des épreuves ne sont plus présentes dans le payload de récupération de releases (PIX-6394)
+
 ## v3.73.0 (23/11/2022)
 
 
