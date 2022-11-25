@@ -631,7 +631,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
     it('should invalidate the cache on the PIX API', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallengeId' });
-      const expectedChallengeRelease = JSON.parse(JSON.stringify(domainBuilder.buildChallengeForRelease(challenge)));
+      const expectedChallengeRelease = JSON.parse(JSON.stringify(domainBuilder.buildChallengeForRelease({
+        ...challenge,
+        illustrationUrl: null,
+        illustrationAlt: null,
+      })));
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
       const token = 'not-a-real-token';

@@ -924,6 +924,8 @@ function _getRichCurrentContentDTO() {
       delta: 1.1,
       alpha: 2.2,
       attachments: ['attachment1 url', 'attachment2 url'],
+      illustrationUrl: null,
+      illustrationAlt: null,
     },
     {
       id: 'challenge121212',
@@ -951,6 +953,8 @@ function _getRichCurrentContentDTO() {
       focusable: 'challenge121212 focusable',
       delta: 123,
       alpha: 456,
+      illustrationUrl: null,
+      illustrationAlt: null,
     },
     {
       id: 'challenge211111',
@@ -979,6 +983,8 @@ function _getRichCurrentContentDTO() {
       delta: 100,
       alpha: 200,
       attachments: ['attachment3 url'],
+      illustrationUrl: null,
+      illustrationAlt: null,
     },
     {
       id: 'challenge211112',
@@ -1006,6 +1012,8 @@ function _getRichCurrentContentDTO() {
       focusable: 'challenge211112 focusable',
       delta: 100,
       alpha: 200,
+      illustrationUrl: null,
+      illustrationAlt: null,
     },
     {
       id: 'challenge211113',
@@ -1033,6 +1041,8 @@ function _getRichCurrentContentDTO() {
       focusable: 'challenge211113 focusable',
       delta: 100,
       alpha: 200,
+      illustrationUrl: null,
+      illustrationAlt: null,
     },
   ];
   const expectedCourseDTOs = [

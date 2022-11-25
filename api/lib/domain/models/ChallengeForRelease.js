@@ -26,6 +26,8 @@ module.exports = class ChallengeForRelease {
     responsive,
     genealogy,
     attachments,
+    illustrationAlt,
+    illustrationUrl,
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -53,5 +55,7 @@ module.exports = class ChallengeForRelease {
     this.delta = delta;
     this.alpha = alpha;
     this.attachments = attachments;
+    this.illustrationAlt = illustrationAlt;
+    this.illustrationUrl = illustrationUrl;
   }
 };
