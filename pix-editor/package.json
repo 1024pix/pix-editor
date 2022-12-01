@@ -99,7 +99,7 @@
   "dependencies": {
     "@samwen/base62-util": "^1.0.4",
     "acorn": "^8.8.1",
-    "canvg": "^3.0.6",
+    "canvg": "^4.0.1",
     "file-saver": "2.0.5",
     "js-crypto-random": "1.0.0",
     "js-yaml": "^4.1.0",
