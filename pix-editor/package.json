@@ -107,6 +107,6 @@
     "jspdf-autotable": "^3.5.28",
     "lodash": "^4.17.21",
     "p-queue": "6.6.2",
-    "semantic-ui-css": "^2.4.1"
+    "semantic-ui-css": "^2.5.0"
   }
 }
