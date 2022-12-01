@@ -78,7 +78,7 @@
     "ember-tui-editor": "^3.0.5",
     "ember-welcome-page": "^4.0.0",
     "eslint": "7.23.0",
-    "eslint-plugin-ember": "10.3.0",
+    "eslint-plugin-ember": "^11.2.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-qunit": "^6.2.0",
     "liquid-fire": "^0.31.0",
