@@ -97,7 +97,7 @@
     "edition": "octane"
   },
   "dependencies": {
-    "@samwen/base62-util": "1.0.3",
+    "@samwen/base62-util": "^1.0.4",
     "acorn": "8.0.5",
     "canvg": "^3.0.6",
     "file-saver": "2.0.5",
