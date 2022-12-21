@@ -5,15 +5,16 @@ const createServer = require('../../../server');
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
 
   describe('POST /api/airtable/content/Competences', () => {
-    const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
-    const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+    let competenceDataObject;
+    let competence;
     const token = 'dummy-pix-api-token';
 
     let user;
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-
+      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
+      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
     });
 
     it('should refresh cache of updated record in pix api', async () => {
