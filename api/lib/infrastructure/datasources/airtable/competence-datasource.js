@@ -25,13 +25,11 @@ module.exports = datasource.extend({
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('id persistant'),
-      name: airtableRecord.get('Titre'),
       name_i18n: {
         fr: airtableRecord.get('Titre fr-fr') || airtableRecord.get('Titre'),
         en: airtableRecord.get('Titre en-us') || airtableRecord.get('Titre'),
       },
       index: airtableRecord.get('Sous-domaine'),
-      description: airtableRecord.get('Description'),
       description_i18n: {
         fr: airtableRecord.get('Description fr-fr') || airtableRecord.get('Description'),
         en: airtableRecord.get('Description en-us') || airtableRecord.get('Description'),

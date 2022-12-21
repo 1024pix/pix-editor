@@ -4,9 +4,7 @@ function filterCompetencesFields(competences) {
   const fieldsToInclude = [
     'id',
     'index',
-    'name',
     'name_i18n',
-    'description',
     'description_i18n',
     'areaId',
     'skillIds',
