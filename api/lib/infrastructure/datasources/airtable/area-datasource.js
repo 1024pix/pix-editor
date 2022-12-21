@@ -23,8 +23,10 @@ module.exports = datasource.extend({
     return {
       id: airtableRecord.get('id persistant'),
       code: airtableRecord.get('Code'),
-      titleFrFr: airtableRecord.get('Titre fr-fr') || airtableRecord.get('Titre'),
-      titleEnUs: airtableRecord.get('Titre en-us') || airtableRecord.get('Titre'),
+      title_i18n: {
+        fr: airtableRecord.get('Titre fr-fr') || airtableRecord.get('Titre'),
+        en: airtableRecord.get('Titre en-us') || airtableRecord.get('Titre'),
+      },
       name: airtableRecord.get('Nom'),
       competenceIds: airtableRecord.get('Competences (identifiants) (id persistant)'),
       competenceAirtableIds: airtableRecord.get('Competences (identifiants)'),

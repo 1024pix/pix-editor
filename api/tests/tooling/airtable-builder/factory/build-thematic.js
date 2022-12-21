@@ -1,8 +1,10 @@
 module.exports = function buildThematic(
   {
     id,
-    name,
-    nameEnUs,
+    name_i18n: {
+      fr: name,
+      en: nameEnUs,
+    },
     competenceId,
     tubeIds,
     index,

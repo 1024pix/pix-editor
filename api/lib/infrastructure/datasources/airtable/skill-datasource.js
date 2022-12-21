@@ -31,8 +31,10 @@ module.exports = datasource.extend({
     return {
       id: airtableRecord.get('id persistant'),
       name: airtableRecord.get('Nom'),
-      hintFrFr: airtableRecord.get('Indice fr-fr'),
-      hintEnUs: airtableRecord.get('Indice en-us'),
+      hint_i18n: {
+        fr: airtableRecord.get('Indice fr-fr'),
+        en: airtableRecord.get('Indice en-us'),
+      },
       hintStatus: airtableRecord.get('Statut de l\'indice') || 'no status',
       tutorialIds: airtableRecord.get('Comprendre (id persistant)') || [],
       learningMoreTutorialIds: airtableRecord.get('En savoir plus (id persistant)') || [],
