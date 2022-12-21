@@ -1,13 +1,11 @@
 module.exports = function buildCompetenceAirtableDataObject({
   id = 'recsvLz0W2ShyfD63',
-  name = 'Mener une recherche et une veille d’information',
   name_i18n = {
     fr: 'Mener une recherche et une veille d’information',
     en: 'Browsing, searching and filtering data, information and digital content',
   },
   index = '1.1',
   areaId = 'recvoGdo7z2z7pXWa',
-  description = 'Une description',
   description_i18n = {
     fr: 'Une description',
     en: 'Some description',
@@ -30,14 +28,12 @@ module.exports = function buildCompetenceAirtableDataObject({
 
   return {
     id,
-    name,
     name_i18n,
     index,
     areaId,
     origin,
     skillIds,
     thematicIds,
-    description,
     description_i18n,
     fullName,
   };

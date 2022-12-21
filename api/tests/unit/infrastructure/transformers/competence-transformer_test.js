@@ -9,7 +9,6 @@ describe('Unit | Infrastructure | competence-transformer', function() {
     const competences = filterCompetencesFields(airtableCompetences);
 
     expect(competences.length).to.equal(1);
-    expect(competences[0].name).to.exist;
     expect(competences[0].fullName).to.not.exist;
   });
 });

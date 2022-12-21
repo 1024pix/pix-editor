@@ -37,7 +37,6 @@ async function mockCurrentContent() {
     competences: [{
       id: 'recCompetence0',
       index: '1.1',
-      name: 'Nom de la Compétence',
       name_i18n: {
         fr: 'Nom de la Compétence - fr',
         en: 'Nom de la Compétence - en',
@@ -46,7 +45,6 @@ async function mockCurrentContent() {
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
-      description: 'Description de la compétence',
       description_i18n: {
         fr: 'Description de la compétence - fr',
         en: 'Description de la compétence - en',
@@ -195,12 +193,10 @@ async function mockContentForRelease() {
     competences: [{
       id: 'recCompetence0',
       index: '1.1',
-      name: 'Nom de la Compétence',
       areaId: '1',
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
-      description: 'Description de la compétence',
       name_i18n: {
         en: 'Nom de la Compétence - en',
         fr: 'Nom de la Compétence - fr',

@@ -144,12 +144,10 @@ function _mockRichAirtableContent() {
   const airtableCompetence11 = airtableBuilder.factory.buildCompetence({
     id: 'competence11',
     index: 'competence11 index',
-    name: 'competence11 name',
     name_i18n: {
       fr: 'competence11 nameFrFr',
       en: 'competence11 nameEnUs',
     },
-    description: 'competence11 description',
     description_i18n: {
       fr: 'competence11 descriptionFrFr',
       en: 'competence11 descriptionEnUs',
@@ -163,12 +161,10 @@ function _mockRichAirtableContent() {
   const airtableCompetence12 = airtableBuilder.factory.buildCompetence({
     id: 'competence12',
     index: 'competence12 index',
-    name: 'competence12 name',
     name_i18n: {
       fr: 'competence12 nameFrFr',
       en: 'competence12 nameEnUs',
     },
-    description: 'competence12 description',
     description_i18n: {
       fr: 'competence12 descriptionFrFr',
       en: 'competence12 descriptionEnUs',
@@ -182,12 +178,10 @@ function _mockRichAirtableContent() {
   const airtableCompetence21 = airtableBuilder.factory.buildCompetence({
     id: 'competence21',
     index: 'competence21 index',
-    name: 'competence21 name',
     name_i18n: {
       fr: 'competence21 nameFrFr',
       en: 'competence21 nameEnUs',
     },
-    description: 'competence21 description',
     description_i18n: {
       fr: 'competence21 descriptionFrFr',
       en: 'competence21 descriptionEnUs',
@@ -716,12 +710,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence11',
       index: 'competence11 index',
-      name: 'competence11 name',
       name_i18n: {
         fr: 'competence11 nameFrFr',
         en: 'competence11 nameEnUs',
       },
-      description: 'competence11 description',
       description_i18n: {
         fr: 'competence11 descriptionFrFr',
         en: 'competence11 descriptionEnUs',
@@ -740,12 +732,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence12',
       index: 'competence12 index',
-      name: 'competence12 name',
       name_i18n: {
         fr: 'competence12 nameFrFr',
         en: 'competence12 nameEnUs',
       },
-      description: 'competence12 description',
       description_i18n: {
         fr: 'competence12 descriptionFrFr',
         en: 'competence12 descriptionEnUs',
@@ -762,12 +752,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence21',
       index: 'competence21 index',
-      name: 'competence21 name',
       name_i18n: {
         fr: 'competence21 nameFrFr',
         en: 'competence21 nameEnUs',
       },
-      description: 'competence21 description',
       description_i18n: {
         fr: 'competence21 descriptionFrFr',
         en: 'competence21 descriptionEnUs',
