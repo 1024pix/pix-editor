@@ -19,8 +19,10 @@ module.exports = datasource.extend({
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.id,
-      name: airtableRecord.get('Nom'),
-      nameEnUs: airtableRecord.get('Titre en-us'),
+      name_i18n: {
+        fr: airtableRecord.get('Nom'),
+        en: airtableRecord.get('Titre en-us'),
+      },
       competenceId: airtableRecord.get('Competence (id persistant)')[0],
       tubeIds: airtableRecord.get('Tubes (id persistant)'),
       index: airtableRecord.get('Index'),
