@@ -2,7 +2,7 @@
 // https://www.npmjs.com/package/dotenv#usage
 require('dotenv').config();
 const Hapi = require('@hapi/hapi');
-const Oppsy = require('@hapi/oppsy');
+const Oppsy = require('oppsy');
 
 const preResponseUtils = require('./lib/infrastructure/utils/pre-response-utils');
 
