@@ -46,7 +46,7 @@
     "@hapi/cookie": "^11.0.2",
     "@hapi/hapi": "^20.2.0",
     "@hapi/inert": "^6.0.5",
-    "@hapi/oppsy": "^3.0.0",
+    "oppsy": "https://github.com/1024pix/oppsy#main",
     "@hapi/vision": "^6.1.0",
     "@sentry/node": "^6.13.2",
     "adminjs": "^6.1.2",
