@@ -1,5 +1,11 @@
 
 
+## v3.74.0 (27/12/2022)
+
+
+### :building_construction: Tech
+- [#76](https://github.com/1024pix/pix-editor/pull/76) [TECH] Mettre à jour les paquets non problématiques de Pix Editor (PIX-6461).
+
 ## v3.73.2 (27/12/2022)
 
 
