@@ -1,5 +1,13 @@
 
 
+## v3.73.2 (27/12/2022)
+
+
+### :building_construction: Tech
+- [#79](https://github.com/1024pix/pix-editor/pull/79) [TECH] Tracer facilement les métriques infra
+- [#80](https://github.com/1024pix/pix-editor/pull/80) [TECH] Ne plus ajouter de lien vers la review-app dans la pull-request
+- [#75](https://github.com/1024pix/pix-editor/pull/75) [TECH] Mettre a jour le port utiliser par la base de donnée dans les variables d'environnement.
+
 ## v3.73.1 (25/11/2022)
 
 
