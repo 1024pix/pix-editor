@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import Canvg, { presets } from 'canvg';
+import { Canvg, presets } from 'canvg';
 import { firstPageBackground, area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, pixLogoWhite } from 'pdf-assets.js';
 import 'AmpleSoft-bold.js';
 import 'AmpleSoft-normal.js';
