@@ -4,8 +4,7 @@ function filterSkillsFields(skills) {
   const fieldsToInclude = [
     'id',
     'name',
-    'hintFrFr',
-    'hintEnUs',
+    'hint_i18n',
     'hintStatus',
     'tutorialIds',
     'learningMoreTutorialIds',

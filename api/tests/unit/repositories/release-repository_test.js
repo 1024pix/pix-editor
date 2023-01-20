@@ -56,8 +56,10 @@ describe('Unit | Repository | release-repository', () => {
         name: '1',
         competenceIds: [],
         competenceAirtableIds: [],
-        titleFrFr: 'Bonjour',
-        titleEnUs: 'Hello',
+        title_i18n: {
+          fr: 'Bonjour',
+          en: 'Hello',
+        },
         frameworkId: 'recFramework0',
       });
       const type = 'Domaines';
@@ -73,8 +75,10 @@ describe('Unit | Repository | release-repository', () => {
         name: '1',
         competenceIds: [],
         competenceAirtableIds: [],
-        titleFrFr: 'Bonjour',
-        titleEnUs: 'Hello',
+        title_i18n: {
+          fr: 'Bonjour',
+          en: 'Hello',
+        },
         frameworkId: 'recFramework0',
       });
       expect(attachmentDatasource.filterByChallengeId).to.not.have.been.called;

@@ -119,8 +119,10 @@ function _mockRichAirtableContent() {
     id: 'area1',
     competenceIds: ['competence11', 'competence12'],
     competenceAirtableIds: ['competence11', 'competence12'],
-    titleFrFr: 'area1 titleFrFr',
-    titleEnUs: 'area1 titleEnUs',
+    title_i18n: {
+      fr: 'area1 titleFrFr',
+      en: 'area1 titleEnUs',
+    },
     code: 'area1 code',
     name: 'area1 name',
     color: 'area1 color',
@@ -130,8 +132,10 @@ function _mockRichAirtableContent() {
     id: 'area2',
     competenceIds: ['competence21'],
     competenceAirtableIds: ['competence21'],
-    titleFrFr: 'area2 titleFrFr',
-    titleEnUs: 'area2 titleEnUs',
+    title_i18n: {
+      fr: 'area2 titleFrFr',
+      en: 'area2 titleEnUs',
+    },
     code: 'area2 code',
     name: 'area2 name',
     color: 'area2 color',
@@ -140,12 +144,14 @@ function _mockRichAirtableContent() {
   const airtableCompetence11 = airtableBuilder.factory.buildCompetence({
     id: 'competence11',
     index: 'competence11 index',
-    name: 'competence11 name',
-    nameFrFr: 'competence11 nameFrFr',
-    nameEnUs: 'competence11 nameEnUs',
-    description: 'competence11 description',
-    descriptionFrFr: 'competence11 descriptionFrFr',
-    descriptionEnUs: 'competence11 descriptionEnUs',
+    name_i18n: {
+      fr: 'competence11 nameFrFr',
+      en: 'competence11 nameEnUs',
+    },
+    description_i18n: {
+      fr: 'competence11 descriptionFrFr',
+      en: 'competence11 descriptionEnUs',
+    },
     areaId: 'area1',
     skillIds: ['skill11111', 'skill11112'],
     thematicIds: ['thematic111', 'thematic112'],
@@ -155,12 +161,14 @@ function _mockRichAirtableContent() {
   const airtableCompetence12 = airtableBuilder.factory.buildCompetence({
     id: 'competence12',
     index: 'competence12 index',
-    name: 'competence12 name',
-    nameFrFr: 'competence12 nameFrFr',
-    nameEnUs: 'competence12 nameEnUs',
-    description: 'competence12 description',
-    descriptionFrFr: 'competence12 descriptionFrFr',
-    descriptionEnUs: 'competence12 descriptionEnUs',
+    name_i18n: {
+      fr: 'competence12 nameFrFr',
+      en: 'competence12 nameEnUs',
+    },
+    description_i18n: {
+      fr: 'competence12 descriptionFrFr',
+      en: 'competence12 descriptionEnUs',
+    },
     areaId: 'area1',
     skillIds: ['skill12121'],
     thematicIds: ['thematic121'],
@@ -170,12 +178,14 @@ function _mockRichAirtableContent() {
   const airtableCompetence21 = airtableBuilder.factory.buildCompetence({
     id: 'competence21',
     index: 'competence21 index',
-    name: 'competence21 name',
-    nameFrFr: 'competence21 nameFrFr',
-    nameEnUs: 'competence21 nameEnUs',
-    description: 'competence21 description',
-    descriptionFrFr: 'competence21 descriptionFrFr',
-    descriptionEnUs: 'competence21 descriptionEnUs',
+    name_i18n: {
+      fr: 'competence21 nameFrFr',
+      en: 'competence21 nameEnUs',
+    },
+    description_i18n: {
+      fr: 'competence21 descriptionFrFr',
+      en: 'competence21 descriptionEnUs',
+    },
     areaId: 'area2',
     skillIds: ['skill21111'],
     thematicIds: ['thematic211'],
@@ -184,32 +194,40 @@ function _mockRichAirtableContent() {
   });
   const airtableThematic111 = airtableBuilder.factory.buildThematic({
     id: 'thematic111',
-    name: 'thematic111 name',
-    nameEnUs: 'thematic111 nameEnUs',
+    name_i18n: {
+      fr: 'thematic111 name',
+      en: 'thematic111 nameEnUs',
+    },
     competenceId: 'competence11',
     tubeIds: ['tube1111'],
     index: 'thematic111 index',
   });
   const airtableThematic112 = airtableBuilder.factory.buildThematic({
     id: 'thematic112',
-    name: 'thematic112 name',
-    nameEnUs: 'thematic112 nameEnUs',
+    name_i18n: {
+      fr: 'thematic112 name',
+      en: 'thematic112 nameEnUs',
+    },
     competenceId: 'competence11',
     tubeIds: ['tube1121'],
     index: 'thematic112 index',
   });
   const airtableThematic121 = airtableBuilder.factory.buildThematic({
     id: 'thematic121',
-    name: 'thematic121 name',
-    nameEnUs: 'thematic121 nameEnUs',
+    name_i18n: {
+      fr: 'thematic121 name',
+      en: 'thematic121 nameEnUs',
+    },
     competenceId: 'competence12',
     tubeIds: ['tube1211', 'tube1212'],
     index: 'thematic121 index',
   });
   const airtableThematic211 = airtableBuilder.factory.buildThematic({
     id: 'thematic211',
-    name: 'thematic211 name',
-    nameEnUs: 'thematic211 nameEnUs',
+    name_i18n: {
+      fr: 'thematic211 name',
+      en: 'thematic211 nameEnUs',
+    },
     competenceId: 'competence21',
     tubeIds: ['tube2111'],
     index: 'thematic211 index',
@@ -219,10 +237,14 @@ function _mockRichAirtableContent() {
     name: 'tube1111 name',
     title: 'tube1111 title',
     description: 'tube1111 description',
-    practicalTitleFrFr: 'tube1111 practicalTitleFrFr',
-    practicalTitleEnUs: 'tube1111 practicalTitleEnUs',
-    practicalDescriptionFrFr: 'tube1111 practicalDescriptionFrFr',
-    practicalDescriptionEnUs: 'tube1111 practicalDescriptionEnUs',
+    practicalTitle_i18n: {
+      fr: 'tube1111 practicalTitleFrFr',
+      en: 'tube1111 practicalTitleEnUs',
+    },
+    practicalDescription_i18n: {
+      fr: 'tube1111 practicalDescriptionFrFr',
+      en: 'tube1111 practicalDescriptionEnUs',
+    },
     competenceId: 'competence11',
   });
   const airtableTube1121 = airtableBuilder.factory.buildTube({
@@ -230,10 +252,14 @@ function _mockRichAirtableContent() {
     name: 'tube1121 name',
     title: 'tube1121 title',
     description: 'tube1121 description',
-    practicalTitleFrFr: 'tube1121 practicalTitleFrFr',
-    practicalTitleEnUs: 'tube1121 practicalTitleEnUs',
-    practicalDescriptionFrFr: 'tube1121 practicalDescriptionFrFr',
-    practicalDescriptionEnUs: 'tube1121 practicalDescriptionEnUs',
+    practicalTitle_i18n: {
+      fr: 'tube1121 practicalTitleFrFr',
+      en: 'tube1121 practicalTitleEnUs',
+    },
+    practicalDescription_i18n: {
+      fr: 'tube1121 practicalDescriptionFrFr',
+      en: 'tube1121 practicalDescriptionEnUs',
+    },
     competenceId: 'competence11',
   });
   const airtableTube1211 = airtableBuilder.factory.buildTube({
@@ -241,10 +267,14 @@ function _mockRichAirtableContent() {
     name: 'tube1211 name',
     title: 'tube1211 title',
     description: 'tube1211 description',
-    practicalTitleFrFr: 'tube1211 practicalTitleFrFr',
-    practicalTitleEnUs: 'tube1211 practicalTitleEnUs',
-    practicalDescriptionFrFr: 'tube1211 practicalDescriptionFrFr',
-    practicalDescriptionEnUs: 'tube1211 practicalDescriptionEnUs',
+    practicalTitle_i18n: {
+      fr: 'tube1211 practicalTitleFrFr',
+      en: 'tube1211 practicalTitleEnUs',
+    },
+    practicalDescription_i18n: {
+      fr: 'tube1211 practicalDescriptionFrFr',
+      en: 'tube1211 practicalDescriptionEnUs',
+    },
     competenceId: 'competence12',
   });
   const airtableTube1212 = airtableBuilder.factory.buildTube({
@@ -252,10 +282,14 @@ function _mockRichAirtableContent() {
     name: 'tube1212 name',
     title: 'tube1212 title',
     description: 'tube1212 description',
-    practicalTitleFrFr: 'tube1212 practicalTitleFrFr',
-    practicalTitleEnUs: 'tube1212 practicalTitleEnUs',
-    practicalDescriptionFrFr: 'tube1212 practicalDescriptionFrFr',
-    practicalDescriptionEnUs: 'tube1212 practicalDescriptionEnUs',
+    practicalTitle_i18n: {
+      fr: 'tube1212 practicalTitleFrFr',
+      en: 'tube1212 practicalTitleEnUs',
+    },
+    practicalDescription_i18n: {
+      fr: 'tube1212 practicalDescriptionFrFr',
+      en: 'tube1212 practicalDescriptionEnUs',
+    },
     competenceId: 'competence12',
   });
   const airtableTube2111 = airtableBuilder.factory.buildTube({
@@ -263,17 +297,23 @@ function _mockRichAirtableContent() {
     name: 'tube2111 name',
     title: 'tube2111 title',
     description: 'tube2111 description',
-    practicalTitleFrFr: 'tube2111 practicalTitleFrFr',
-    practicalTitleEnUs: 'tube2111 practicalTitleEnUs',
-    practicalDescriptionFrFr: 'tube2111 practicalDescriptionFrFr',
-    practicalDescriptionEnUs: 'tube2111 practicalDescriptionEnUs',
+    practicalTitle_i18n: {
+      fr: 'tube2111 practicalTitleFrFr',
+      en: 'tube2111 practicalTitleEnUs',
+    },
+    practicalDescription_i18n: {
+      fr: 'tube2111 practicalDescriptionFrFr',
+      en: 'tube2111 practicalDescriptionEnUs',
+    },
     competenceId: 'competence21',
   });
   const airtableSkill11111 = airtableBuilder.factory.buildSkill({
     id: 'skill11111',
     name: 'skill11111 name',
-    hintFrFr: 'skill11111 hintFrFr',
-    hintEnUs: 'skill11111 hintEnUs',
+    hint_i18n: {
+      fr: 'skill11111 hintFrFr',
+      en: 'skill11111 hintEnUs',
+    },
     hintStatus: 'skill11111 hintStatus',
     tutorialIds: ['tutorial2'],
     learningMoreTutorialIds: ['tutorial1'],
@@ -289,8 +329,10 @@ function _mockRichAirtableContent() {
   const airtableSkill11112 = airtableBuilder.factory.buildSkill({
     id: 'skill11112',
     name: 'skill11112 name',
-    hintFrFr: 'skill11112 hintFrFr',
-    hintEnUs: 'skill11112 hintEnUs',
+    hint_i18n: {
+      fr: 'skill11112 hintFrFr',
+      en: 'skill11112 hintEnUs',
+    },
     hintStatus: 'skill11112 hintStatus',
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -306,8 +348,10 @@ function _mockRichAirtableContent() {
   const airtableSkill12121 = airtableBuilder.factory.buildSkill({
     id: 'skill12121',
     name: 'skill12121 name',
-    hintFrFr: 'skill12121 hintFrFr',
-    hintEnUs: 'skill12121 hintEnUs',
+    hint_i18n: {
+      fr: 'skill12121 hintFrFr',
+      en: 'skill12121 hintEnUs',
+    },
     hintStatus: 'skill12121 hintStatus',
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -323,8 +367,10 @@ function _mockRichAirtableContent() {
   const airtableSkill21111 = airtableBuilder.factory.buildSkill({
     id: 'skill21111',
     name: 'skill21111 name',
-    hintFrFr: 'skill21111 hintFrFr',
-    hintEnUs: 'skill21111 hintEnUs',
+    hint_i18n: {
+      fr: 'skill21111 hintFrFr',
+      en: 'skill21111 hintEnUs',
+    },
     hintStatus: 'skill21111 hintStatus',
     tutorialIds: [],
     learningMoreTutorialIds: [],
@@ -635,8 +681,10 @@ function _getRichCurrentContentDTO() {
       'competence11',
       'competence12',
     ],
-    titleFrFr: 'area1 titleFrFr',
-    titleEnUs: 'area1 titleEnUs',
+    title_i18n: {
+      fr: 'area1 titleFrFr',
+      en: 'area1 titleEnUs',
+    },
     code: 'area1 code',
     name: 'area1 name',
     color: 'area1 color',
@@ -649,8 +697,10 @@ function _getRichCurrentContentDTO() {
     competenceAirtableIds: [
       'competence21',
     ],
-    titleFrFr: 'area2 titleFrFr',
-    titleEnUs: 'area2 titleEnUs',
+    title_i18n: {
+      fr: 'area2 titleFrFr',
+      en: 'area2 titleEnUs',
+    },
     code: 'area2 code',
     name: 'area2 name',
     color: 'area2 color',
@@ -660,12 +710,14 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence11',
       index: 'competence11 index',
-      name: 'competence11 name',
-      nameFrFr: 'competence11 nameFrFr',
-      nameEnUs: 'competence11 nameEnUs',
-      description: 'competence11 description',
-      descriptionFrFr: 'competence11 descriptionFrFr',
-      descriptionEnUs: 'competence11 descriptionEnUs',
+      name_i18n: {
+        fr: 'competence11 nameFrFr',
+        en: 'competence11 nameEnUs',
+      },
+      description_i18n: {
+        fr: 'competence11 descriptionFrFr',
+        en: 'competence11 descriptionEnUs',
+      },
       areaId: 'area1',
       skillIds: [
         'skill11111',
@@ -680,12 +732,14 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence12',
       index: 'competence12 index',
-      name: 'competence12 name',
-      nameFrFr: 'competence12 nameFrFr',
-      nameEnUs: 'competence12 nameEnUs',
-      description: 'competence12 description',
-      descriptionFrFr: 'competence12 descriptionFrFr',
-      descriptionEnUs: 'competence12 descriptionEnUs',
+      name_i18n: {
+        fr: 'competence12 nameFrFr',
+        en: 'competence12 nameEnUs',
+      },
+      description_i18n: {
+        fr: 'competence12 descriptionFrFr',
+        en: 'competence12 descriptionEnUs',
+      },
       areaId: 'area1',
       skillIds: [
         'skill12121',
@@ -698,12 +752,14 @@ function _getRichCurrentContentDTO() {
     {
       id: 'competence21',
       index: 'competence21 index',
-      name: 'competence21 name',
-      nameFrFr: 'competence21 nameFrFr',
-      nameEnUs: 'competence21 nameEnUs',
-      description: 'competence21 description',
-      descriptionFrFr: 'competence21 descriptionFrFr',
-      descriptionEnUs: 'competence21 descriptionEnUs',
+      name_i18n: {
+        fr: 'competence21 nameFrFr',
+        en: 'competence21 nameEnUs',
+      },
+      description_i18n: {
+        fr: 'competence21 descriptionFrFr',
+        en: 'competence21 descriptionEnUs',
+      },
       areaId: 'area2',
       skillIds: [
         'skill21111',
@@ -717,8 +773,10 @@ function _getRichCurrentContentDTO() {
   const expectedThematicDTOs = [
     {
       id: 'thematic111',
-      name: 'thematic111 name',
-      nameEnUs: 'thematic111 nameEnUs',
+      name_i18n: {
+        fr: 'thematic111 name',
+        en: 'thematic111 nameEnUs',
+      },
       competenceId: 'competence11',
       tubeIds: [
         'tube1111',
@@ -727,8 +785,10 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'thematic112',
-      name: 'thematic112 name',
-      nameEnUs: 'thematic112 nameEnUs',
+      name_i18n: {
+        fr: 'thematic112 name',
+        en: 'thematic112 nameEnUs',
+      },
       competenceId: 'competence11',
       tubeIds: [
         'tube1121',
@@ -737,8 +797,10 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'thematic121',
-      name: 'thematic121 name',
-      nameEnUs: 'thematic121 nameEnUs',
+      name_i18n: {
+        fr: 'thematic121 name',
+        en: 'thematic121 nameEnUs',
+      },
       competenceId: 'competence12',
       tubeIds: [
         'tube1211',
@@ -748,8 +810,10 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'thematic211',
-      name: 'thematic211 name',
-      nameEnUs: 'thematic211 nameEnUs',
+      name_i18n: {
+        fr: 'thematic211 name',
+        en: 'thematic211 nameEnUs',
+      },
       competenceId: 'competence21',
       tubeIds: [
         'tube2111',
@@ -763,10 +827,14 @@ function _getRichCurrentContentDTO() {
       name: 'tube1111 name',
       title: 'tube1111 title',
       description: 'tube1111 description',
-      practicalTitleFrFr: 'tube1111 practicalTitleFrFr',
-      practicalTitleEnUs: 'tube1111 practicalTitleEnUs',
-      practicalDescriptionFrFr: 'tube1111 practicalDescriptionFrFr',
-      practicalDescriptionEnUs: 'tube1111 practicalDescriptionEnUs',
+      practicalTitle_i18n: {
+        fr: 'tube1111 practicalTitleFrFr',
+        en: 'tube1111 practicalTitleEnUs',
+      },
+      practicalDescription_i18n: {
+        fr: 'tube1111 practicalDescriptionFrFr',
+        en: 'tube1111 practicalDescriptionEnUs',
+      },
       competenceId: 'competence11',
       isMobileCompliant: false,
       isTabletCompliant: false,
@@ -778,10 +846,14 @@ function _getRichCurrentContentDTO() {
       name: 'tube1121 name',
       title: 'tube1121 title',
       description: 'tube1121 description',
-      practicalTitleFrFr: 'tube1121 practicalTitleFrFr',
-      practicalTitleEnUs: 'tube1121 practicalTitleEnUs',
-      practicalDescriptionFrFr: 'tube1121 practicalDescriptionFrFr',
-      practicalDescriptionEnUs: 'tube1121 practicalDescriptionEnUs',
+      practicalTitle_i18n: {
+        fr: 'tube1121 practicalTitleFrFr',
+        en: 'tube1121 practicalTitleEnUs',
+      },
+      practicalDescription_i18n: {
+        fr: 'tube1121 practicalDescriptionFrFr',
+        en: 'tube1121 practicalDescriptionEnUs',
+      },
       competenceId: 'competence11',
       isMobileCompliant: false,
       isTabletCompliant: false,
@@ -793,10 +865,14 @@ function _getRichCurrentContentDTO() {
       name: 'tube1211 name',
       title: 'tube1211 title',
       description: 'tube1211 description',
-      practicalTitleFrFr: 'tube1211 practicalTitleFrFr',
-      practicalTitleEnUs: 'tube1211 practicalTitleEnUs',
-      practicalDescriptionFrFr: 'tube1211 practicalDescriptionFrFr',
-      practicalDescriptionEnUs: 'tube1211 practicalDescriptionEnUs',
+      practicalTitle_i18n: {
+        fr: 'tube1211 practicalTitleFrFr',
+        en: 'tube1211 practicalTitleEnUs',
+      },
+      practicalDescription_i18n: {
+        fr: 'tube1211 practicalDescriptionFrFr',
+        en: 'tube1211 practicalDescriptionEnUs',
+      },
       competenceId: 'competence12',
       isMobileCompliant: false,
       isTabletCompliant: false,
@@ -808,10 +884,14 @@ function _getRichCurrentContentDTO() {
       name: 'tube1212 name',
       title: 'tube1212 title',
       description: 'tube1212 description',
-      practicalTitleFrFr: 'tube1212 practicalTitleFrFr',
-      practicalTitleEnUs: 'tube1212 practicalTitleEnUs',
-      practicalDescriptionFrFr: 'tube1212 practicalDescriptionFrFr',
-      practicalDescriptionEnUs: 'tube1212 practicalDescriptionEnUs',
+      practicalTitle_i18n: {
+        fr: 'tube1212 practicalTitleFrFr',
+        en: 'tube1212 practicalTitleEnUs',
+      },
+      practicalDescription_i18n: {
+        fr: 'tube1212 practicalDescriptionFrFr',
+        en: 'tube1212 practicalDescriptionEnUs',
+      },
       competenceId: 'competence12',
       isMobileCompliant: true,
       isTabletCompliant: false,
@@ -823,10 +903,14 @@ function _getRichCurrentContentDTO() {
       name: 'tube2111 name',
       title: 'tube2111 title',
       description: 'tube2111 description',
-      practicalTitleFrFr: 'tube2111 practicalTitleFrFr',
-      practicalTitleEnUs: 'tube2111 practicalTitleEnUs',
-      practicalDescriptionFrFr: 'tube2111 practicalDescriptionFrFr',
-      practicalDescriptionEnUs: 'tube2111 practicalDescriptionEnUs',
+      practicalTitle_i18n: {
+        fr: 'tube2111 practicalTitleFrFr',
+        en: 'tube2111 practicalTitleEnUs',
+      },
+      practicalDescription_i18n: {
+        fr : 'tube2111 practicalDescriptionFrFr',
+        en: 'tube2111 practicalDescriptionEnUs',
+      },
       competenceId: 'competence21',
       isMobileCompliant: false,
       isTabletCompliant: true,
@@ -838,8 +922,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'skill11111',
       name: 'skill11111 name',
-      hintFrFr: 'skill11111 hintFrFr',
-      hintEnUs: 'skill11111 hintEnUs',
+      hint_i18n: {
+        fr: 'skill11111 hintFrFr',
+        en: 'skill11111 hintEnUs',
+      },
       hintStatus: 'skill11111 hintStatus',
       tutorialIds: ['tutorial2'],
       learningMoreTutorialIds: ['tutorial1'],
@@ -853,8 +939,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'skill11112',
       name: 'skill11112 name',
-      hintFrFr: 'skill11112 hintFrFr',
-      hintEnUs: 'skill11112 hintEnUs',
+      hint_i18n: {
+        fr: 'skill11112 hintFrFr',
+        en: 'skill11112 hintEnUs',
+      },
       hintStatus: 'skill11112 hintStatus',
       learningMoreTutorialIds: [],
       tutorialIds: [],
@@ -868,8 +956,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'skill12121',
       name: 'skill12121 name',
-      hintFrFr: 'skill12121 hintFrFr',
-      hintEnUs: 'skill12121 hintEnUs',
+      hint_i18n: {
+        fr: 'skill12121 hintFrFr',
+        en: 'skill12121 hintEnUs',
+      },
       hintStatus: 'skill12121 hintStatus',
       tutorialIds: [],
       learningMoreTutorialIds: [],
@@ -883,8 +973,10 @@ function _getRichCurrentContentDTO() {
     {
       id: 'skill21111',
       name: 'skill21111 name',
-      hintFrFr: 'skill21111 hintFrFr',
-      hintEnUs: 'skill21111 hintEnUs',
+      hint_i18n: {
+        fr: 'skill21111 hintFrFr',
+        en: 'skill21111 hintEnUs',
+      },
       hintStatus: 'skill21111 hintStatus',
       tutorialIds: [],
       learningMoreTutorialIds: [],

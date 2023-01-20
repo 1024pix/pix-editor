@@ -2,16 +2,17 @@ const ThematicForRelease = require('../../../../lib/domain/models/ThematicForRel
 
 const buildThematicForRelease = function({
   id = 'recFvllz2Ckz',
-  name = 'Nom de la thématique',
-  nameEnUs = 'Thematic\'s name',
+  name_i18n = {
+    fr: 'Nom de la thématique',
+    en: 'Thematic\'s name',
+  },
   competenceId = 'recCompetence0',
   tubeIds = ['recTube0'],
   index = 0,
 } = {}) {
   return new ThematicForRelease({
     id,
-    name,
-    nameEnUs,
+    name_i18n,
     competenceId,
     tubeIds,
     index,

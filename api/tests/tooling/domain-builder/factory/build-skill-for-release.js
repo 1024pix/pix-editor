@@ -3,8 +3,10 @@ const SkillForRelease = require('../../../../lib/domain/models/SkillForRelease')
 const buildSkillForRelease = function({
   id = 'recTIddrkopID28Ep',
   name = '@accesDonnées1',
-  hintFrFr = 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
-  hintEnUs = 'Can we geo-locate a rabbit on the ice floe?',
+  hint_i18n = {
+    fr: 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
+    en: 'Can we geo-locate a rabbit on the ice floe?',
+  },
   hintStatus = 'Validé',
   tutorialIds = ['receomyzL0AmpMFGw'],
   learningMoreTutorialIds = ['recQbjXNAPsVJthXh', 'rec3DkUX0a6RNi2Hz'],
@@ -20,8 +22,7 @@ const buildSkillForRelease = function({
   return new SkillForRelease({
     id,
     name,
-    hintFrFr,
-    hintEnUs,
+    hint_i18n,
     hintStatus,
     tutorialIds,
     learningMoreTutorialIds,
