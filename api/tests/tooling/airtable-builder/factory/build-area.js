@@ -2,12 +2,11 @@ const buildArea = function buildArea({
   id,
   competenceIds,
   competenceAirtableIds,
-  titleFrFr,
-  titleEnUs,
   code,
   name,
   color,
   frameworkId,
+  title_i18n: { fr: titleFrFr, en: titleEnUs },
 } = {}) {
   return {
     id,

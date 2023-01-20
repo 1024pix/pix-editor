@@ -17,8 +17,10 @@ describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {
         competenceAirtableIds: ['recChallenge0'],
         code: '1',
         name: '1. Information et données',
-        titleFrFr: 'Information et données',
-        titleEnUs: 'Information and data',
+        title_i18n: {
+          fr: 'Information et données',
+          en: 'Information and data',
+        },
         color: 'jaffa',
         frameworkId: 'recFramework0'
       });

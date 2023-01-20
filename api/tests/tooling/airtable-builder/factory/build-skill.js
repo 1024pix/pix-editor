@@ -1,8 +1,10 @@
 const buildSkill = function buildSkill({
   id,
   name,
-  hintFrFr,
-  hintEnUs,
+  hint_i18n: {
+    fr: hintFrFr,
+    en: hintEnUs,
+  },
   hintStatus,
   tutorialIds,
   learningMoreTutorialIds,

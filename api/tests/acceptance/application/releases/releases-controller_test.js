@@ -16,7 +16,6 @@ const {
 } = airtableBuilder.factory;
 
 async function mockCurrentContent() {
-
   const expectedCurrentContent = {
     frameworks: [{
       id: 'recFramework0',
@@ -26,8 +25,10 @@ async function mockCurrentContent() {
       id: 'recArea0',
       name: 'Nom du Domaine',
       code: '1',
-      titleFrFr: 'Titre du Domaine - fr',
-      titleEnUs: 'Titre du Domaine - en',
+      title_i18n: {
+        fr: 'Titre du Domaine - fr',
+        en: 'Titre du Domaine - en',
+      },
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
       color: 'jaffa',
@@ -36,21 +37,25 @@ async function mockCurrentContent() {
     competences: [{
       id: 'recCompetence0',
       index: '1.1',
-      name: 'Nom de la Compétence',
-      nameFrFr: 'Nom de la Compétence - fr',
-      nameEnUs: 'Nom de la Compétence - en',
+      name_i18n: {
+        fr: 'Nom de la Compétence - fr',
+        en: 'Nom de la Compétence - en',
+      },
       areaId: '1',
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
-      description: 'Description de la compétence',
-      descriptionFrFr: 'Description de la compétence - fr',
-      descriptionEnUs: 'Description de la compétence - en',
+      description_i18n: {
+        fr: 'Description de la compétence - fr',
+        en: 'Description de la compétence - en',
+      }
     }],
     thematics: [{
       id: 'recThematic0',
-      name: 'Nom',
-      nameEnUs: 'name',
+      name_i18n: {
+        fr: 'Nom',
+        en: 'name',
+      },
       competenceId: 'recCompetence0',
       tubeIds: ['recTube0'],
       index: 0
@@ -60,10 +65,14 @@ async function mockCurrentContent() {
       name: 'Nom du Tube',
       title: 'Titre du Tube',
       description: 'Description du Tube',
-      practicalTitleFrFr: 'Titre pratique du Tube - fr',
-      practicalTitleEnUs: 'Titre pratique du Tube - en',
-      practicalDescriptionFrFr: 'Description pratique du Tube - fr',
-      practicalDescriptionEnUs: 'Description pratique du Tube - en',
+      practicalTitle_i18n: {
+        fr: 'Titre pratique du Tube - fr',
+        en: 'Titre pratique du Tube - en',
+      },
+      practicalDescription_i18n: {
+        fr: 'Description pratique du Tube - fr',
+        en: 'Description pratique du Tube - en',
+      },
       competenceId: 'recCompetence0',
       thematicId: 'recThematic0',
       skillIds: ['recSkill0'],
@@ -73,8 +82,10 @@ async function mockCurrentContent() {
     skills: [{
       id: 'recSkill0',
       name: 'Nom de l‘Acquis',
-      hintFrFr: 'Indice - fr',
-      hintEnUs: 'Indice - en',
+      hint_i18n: {
+        fr: 'Indice - fr',
+        en: 'Indice - en',
+      },
       hintStatus: 'Statut de l‘indice',
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],
@@ -144,7 +155,6 @@ async function mockCurrentContent() {
     type: 'attachment',
     challengeId: 'recChallenge0',
   }];
-
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
@@ -171,8 +181,6 @@ async function mockContentForRelease() {
       id: 'recArea0',
       name: 'Nom du Domaine',
       code: '1',
-      titleFrFr: 'Titre du Domaine - fr',
-      titleEnUs: 'Titre du Domaine - en',
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
       color: 'jaffa',
@@ -185,16 +193,10 @@ async function mockContentForRelease() {
     competences: [{
       id: 'recCompetence0',
       index: '1.1',
-      name: 'Nom de la Compétence',
-      nameFrFr: 'Nom de la Compétence - fr',
-      nameEnUs: 'Nom de la Compétence - en',
       areaId: '1',
       origin: 'Pix',
       skillIds: ['recSkill0'],
       thematicIds: ['recThematic0'],
-      description: 'Description de la compétence',
-      descriptionFrFr: 'Description de la compétence - fr',
-      descriptionEnUs: 'Description de la compétence - en',
       name_i18n: {
         en: 'Nom de la Compétence - en',
         fr: 'Nom de la Compétence - fr',
@@ -206,8 +208,6 @@ async function mockContentForRelease() {
     }],
     thematics: [{
       id: 'recThematic0',
-      name: 'Nom',
-      nameEnUs: 'name',
       competenceId: 'recCompetence0',
       tubeIds: ['recTube0'],
       index: 0,
@@ -221,10 +221,6 @@ async function mockContentForRelease() {
       name: 'Nom du Tube',
       title: 'Titre du Tube',
       description: 'Description du Tube',
-      practicalTitleFrFr: 'Titre pratique du Tube - fr',
-      practicalTitleEnUs: 'Titre pratique du Tube - en',
-      practicalDescriptionFrFr: 'Description pratique du Tube - fr',
-      practicalDescriptionEnUs: 'Description pratique du Tube - en',
       competenceId: 'recCompetence0',
       thematicId: 'recThematic0',
       skillIds: ['recSkill0'],
@@ -242,8 +238,6 @@ async function mockContentForRelease() {
     skills: [{
       id: 'recSkill0',
       name: 'Nom de l‘Acquis',
-      hintFrFr: 'Indice - fr',
-      hintEnUs: 'Indice - en',
       hintStatus: 'Statut de l‘indice',
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],

@@ -10,8 +10,10 @@ describe('Unit | Domain | Content', () => {
         code: 'codeAreaA',
         name: 'nameAreaA',
         color: 'colorAreaA',
-        titleFrFr: 'Information et données',
-        titleEnUs: 'Information and data',
+        title_i18n: {
+          fr: 'Information et données',
+          en: 'Information and data',
+        },
         competenceIds: ['recCompA', 'recCompB'],
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
@@ -19,23 +21,29 @@ describe('Unit | Domain | Content', () => {
       const competenceAirtable = domainBuilder.buildCompetenceAirtableDataObject({
         id: 'recCompetenceA',
         name: 'nameCompetenceA',
-        nameFrFr: 'nameFrCompetenceA',
-        nameEnUs: 'nameEnCompetenceA',
+        name_i18n: {
+          fr: 'nameFrCompetenceA',
+          en: 'nameEnCompetenceA',
+        },
         index: '1.2',
         areaId: 'recAreaA',
         origin: 'Pix',
         skillIds: [],
         thematicIds: [],
         description: 'descriptionCompetenceA',
-        descriptionFrFr: 'descriptionFrCompetenceA',
-        descriptionEnUs: 'descriptionEnCompetenceA',
+        description_i18n: {
+          fr: 'descriptionFrCompetenceA',
+          en: 'descriptionEnCompetenceA',
+        },
         fullName: '1.2 nameCompetenceA',
       });
       const skillAirtable = domainBuilder.buildSkillAirtableDataObject({
         id: 'recSkillA',
         name: 'nameSkillA',
-        hintFrFr: 'hintFr',
-        hintEnUs: 'hintEn',
+        hint_i18n: {
+          fr: 'hintFr',
+          en: 'hintEn',
+        },
         hintStatus: 'hintStatusA',
         tutorialIds: ['tutorialId1'],
         learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
@@ -53,10 +61,14 @@ describe('Unit | Domain | Content', () => {
         name: 'nameTubeA',
         title: 'titleTubeA',
         description: 'descriptionTubeA',
-        practicalTitleFrFr: 'practicalTitleFr',
-        practicalTitleEnUs: 'practicalTitleEn',
-        practicalDescriptionFrFr: 'practicalDescriptionFr',
-        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        practicalTitle_i18n: {
+          fr: 'practicalTitleFr',
+          en: 'practicalTitleEn',
+        },
+        practicalDescription_i18n: {
+          fr: 'practicalDescriptionFr',
+          en: 'practicalDescriptionEn',
+        },
         competenceId: 'recCompetence1',
       });
       const tutorialAirtable = domainBuilder.buildTutorialAirtableDataObject({
@@ -72,8 +84,10 @@ describe('Unit | Domain | Content', () => {
       });
       const thematicAirtable = domainBuilder.buildThematicAirtableDataObject({
         id: 'recThematic1',
-        name: 'Nom de la thématique',
-        nameEnUs: 'Name of the thematic',
+        name_i18n: {
+          fr: 'Nom de la thématique',
+          en: 'Name of the thematic',
+        },
         competenceId: 'recCompetence0',
         tubeIds: ['recTube0'],
         index: 0,
@@ -143,8 +157,10 @@ describe('Unit | Domain | Content', () => {
         code: 'codeAreaA',
         name: 'nameAreaA',
         color: 'colorAreaA',
-        titleFrFr: 'Information et données',
-        titleEnUs: 'Information and data',
+        title_i18n: {
+          fr: 'Information et données',
+          en: 'Information and data',
+        },
         competenceIds: ['recCompA', 'recCompB'],
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
@@ -152,22 +168,28 @@ describe('Unit | Domain | Content', () => {
       const expectedCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'recCompetenceA',
         name: 'nameCompetenceA',
-        nameFrFr: 'nameFrCompetenceA',
-        nameEnUs: 'nameEnCompetenceA',
+        name_i18n: {
+          fr: 'nameFrCompetenceA',
+          en: 'nameEnCompetenceA',
+        },
         index: '1.2',
         areaId: 'recAreaA',
         origin: 'Pix',
         skillIds: [],
         thematicIds: [],
         description: 'descriptionCompetenceA',
-        descriptionFrFr: 'descriptionFrCompetenceA',
-        descriptionEnUs: 'descriptionEnCompetenceA',
+        description_i18n: {
+          fr: 'descriptionFrCompetenceA',
+          en: 'descriptionEnCompetenceA',
+        },
       });
       const expectedSkill = domainBuilder.buildSkillForRelease({
         id: 'recSkillA',
         name: 'nameSkillA',
-        hintFrFr: 'hintFr',
-        hintEnUs: 'hintEn',
+        hint_i18n: {
+          fr: 'hintFr',
+          en: 'hintEn',
+        },
         hintStatus: 'hintStatusA',
         tutorialIds: ['tutorialId1'],
         learningMoreTutorialIds: ['learningMoreTutorialId1', 'learningMoreTutorialId2'],
@@ -185,10 +207,14 @@ describe('Unit | Domain | Content', () => {
         name: 'nameTubeA',
         title: 'titleTubeA',
         description: 'descriptionTubeA',
-        practicalTitleFrFr: 'practicalTitleFr',
-        practicalTitleEnUs: 'practicalTitleEn',
-        practicalDescriptionFrFr: 'practicalDescriptionFr',
-        practicalDescriptionEnUs: 'practicalDescriptionEn',
+        practicalTitle_i18n: {
+          fr: 'practicalTitleFr',
+          en: 'practicalTitleEn',
+        },
+        practicalDescription_i18n: {
+          fr: 'practicalDescriptionFr',
+          en: 'practicalDescriptionEn',
+        },
         competenceId: 'recCompetence1',
         thematicId: 'recThematic1',
         skillIds: ['recSkillA'],
@@ -206,8 +232,10 @@ describe('Unit | Domain | Content', () => {
       });
       const expectedThematic = domainBuilder.buildThematicForRelease({
         id: 'recThematic1',
-        name: 'Nom de la thématique',
-        nameEnUs: 'Name of the thematic',
+        name_i18n: {
+          fr: 'Nom de la thématique',
+          en: 'Name of the thematic',
+        },
         competenceId: 'recCompetence0',
         tubeIds: ['recTube0'],
         index: 0,
@@ -263,6 +291,7 @@ describe('Unit | Domain | Content', () => {
         thematics: [expectedThematic],
         frameworks: [expectedFramework],
       });
+
       expect(contentForRelease).to.deepEqualInstance(expectedContentForRelease);
     });
   });
