@@ -74,6 +74,7 @@ module.exports = (function() {
       redisUrl: process.env.REDIS_URL,
       createReleaseTime: process.env.CREATE_RELEASE_TIME,
       attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
+      startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB)
     },
 
     database: {

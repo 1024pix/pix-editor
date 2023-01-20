@@ -13,7 +13,9 @@ module.exports = async function(job) {
       await learningContentNotification.notifyReleaseCreationSuccess(new SlackNotifier(config.notifications.slack.webhookUrl));
     }
     logger.info(`Periodic release created with id ${releaseId}`);
-    checkUrlsJob.start();
+    if (config.scheduledJobs.startCheckUrlJob) {
+      checkUrlsJob.start();
+    }
     return releaseId;
   } catch (error) {
     if (_isSlackNotificationGloballyEnabled()) {
