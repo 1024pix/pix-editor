@@ -2,20 +2,15 @@
 
 const createServer = require('../server');
 const logger = require('../lib/infrastructure/logger');
-const { queue: checkUrlQueue } = require('../lib/infrastructure/scheduled-jobs/check-urls-job');
-const releaseJob = require('../lib/infrastructure/scheduled-jobs/release-job');
 const { disconnect } = require('../db/knex-database-connection');
-
 const validateEnvironmentVariables = require('../lib/infrastructure/validate-environement-variables');
+
 validateEnvironmentVariables();
 
 const start = async () => {
   try {
     const server = await createServer();
     await server.start();
-
-    releaseJob.schedule();
-
     logger.info('Server running at %s', server.info.uri);
   } catch (err) {
     logger.error(err);
@@ -24,11 +19,9 @@ const start = async () => {
 };
 
 async function exitOnSignal(signal) {
-  logger.info(`Received signal ${signal}. Closing DB connections and queues before exiting.`);
+  logger.info(`Received signal ${signal}. Closing DB connections before exiting.`);
   try {
     await disconnect();
-    await checkUrlQueue.close();
-    await releaseJob.queue.close();
     process.exit(0);
   } catch(err) {
     logger.error(err);
