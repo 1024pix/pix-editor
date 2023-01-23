@@ -34,6 +34,7 @@ module.exports = (function() {
       enabled: isFeatureEnabled(process.env.LOG_ENABLED),
       colorEnabled: (process.env.NODE_ENV === 'development'),
       logLevel: (process.env.LOG_LEVEL || 'info'),
+      logOpsEvent: isFeatureEnabled(process.env.LOG_OPS_EVENT),
       emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
       prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT)
     },
