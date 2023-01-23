@@ -3,7 +3,8 @@ const config = require('../../config');
 const logger = require('../logger');
 
 const queue = createQueue('create-release-queue');
-queue.process(__dirname + '/release-job-processor.js');
+const processFile = __dirname + '/release-job-processor.js';
+queue.process(process.env.NODE_ENV === 'test' ? require(processFile) : processFile);
 
 const releaseJobOptions = {
   attempts: config.scheduledJobs.attempts,
