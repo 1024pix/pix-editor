@@ -1,5 +1,11 @@
 
 
+## v3.75.1 (23/01/2023)
+
+
+### :building_construction: Tech
+- [#85](https://github.com/1024pix/pix-editor/pull/85) [TECH] Déplace la création de release dans un process dédié
+
 ## v3.75.0 (23/01/2023)
 
 
