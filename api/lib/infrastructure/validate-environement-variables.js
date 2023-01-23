@@ -1,7 +1,10 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
-  OPS_EVENT_EACH_SECONDS: Joi.number().integer().min(1).optional()
+  OPS_EVENT_EACH_SECONDS: Joi.number().integer().min(1).optional(),
+  CREATE_RELEASE_TIME: Joi.string().optional(),
+  CREATE_RELEASE_ATTEMPTS: Joi.number().integer().min(1).optional(),
+
 }).options({ allowUnknown: true });
 
 const validateEnvironmentVariables = function() {

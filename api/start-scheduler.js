@@ -1,8 +1,10 @@
 const releaseJob = require('./lib/infrastructure/scheduled-jobs/release-job');
 const logger = require('./lib/infrastructure/logger');
 const { queue: checkUrlQueue } = require('./lib/infrastructure/scheduled-jobs/check-urls-job');
+const validateEnvironmentVariables = require('./lib/infrastructure/validate-environement-variables');
 
 const main = async () => {
+  validateEnvironmentVariables();
   try {
     releaseJob.schedule();
     logger.info('Scheduler has been started');
