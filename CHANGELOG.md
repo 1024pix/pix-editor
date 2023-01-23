@@ -1,5 +1,14 @@
 
 
+## v3.75.0 (23/01/2023)
+
+
+### :bug: Correction
+- [#82](https://github.com/1024pix/pix-editor/pull/82) [BUGFIX] Réparer la génération du fichier pdf de présentation du référentiel (PIX-6781).
+
+### :coffee: Autre
+- [#77](https://github.com/1024pix/pix-editor/pull/77) [CLEANUP] Supprime la compatibilité avec l'ancien format pour les textes traduits
+
 ## v3.74.0 (27/12/2022)
 
 
