@@ -1,7 +1,7 @@
 const { expect, sinon } = require('../../../test-helper');
 const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
 const Release = require('../../../../lib/domain/models/Release');
-const releaseJob = require('../../../../lib/infrastructure/scheduled-jobs/release-job');
+const releaseJobProcessor = require('../../../../lib/infrastructure/scheduled-jobs/release-job-processor');
 const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
 const logger = require('../../../../lib/infrastructure/logger');
 const SlackNotifier = require('../../../../lib/infrastructure/notifications/SlackNotifier');
@@ -18,7 +18,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
       sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
 
       // when
-      await releaseJob.createRelease({ data: {} });
+      await releaseJobProcessor({ data: {} });
 
       // then
       expect(releaseRepository.create).to.have.been.called;
@@ -35,7 +35,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should return the persisted release ID', async () => {
         // when
-        const releaseId = await releaseJob.createRelease({ data: {} });
+        const releaseId = await releaseJobProcessor({ data: {} });
 
         // then
         expect(releaseId).to.exist;
@@ -47,7 +47,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         const successLogStub = sinon.stub(logger, 'info');
 
         //when
-        await releaseJob.createRelease({ data: {} });
+        await releaseJobProcessor({ data: {} });
 
         //then
         expect(successLogStub).to.have.been.called;
@@ -58,7 +58,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
-        await releaseJob.createRelease({ data: { slackNotification: true } });
+        await releaseJobProcessor({ data: { slackNotification: true } });
 
         // then
         expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
@@ -69,7 +69,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(config.notifications.slack, 'enable').value(false);
 
         // When
-        await releaseJob.createRelease({ data: { slackNotification: true } });
+        await releaseJobProcessor({ data: { slackNotification: true } });
 
         // Then
         expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
@@ -80,7 +80,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(config.notifications.slack, 'enable').value(true);
 
         // When
-        await releaseJob.createRelease({ data: { slackNotification: false } });
+        await releaseJobProcessor({ data: { slackNotification: false } });
 
         // Then
         expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
@@ -99,7 +99,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         const errorLogStub = sinon.stub(logger, 'error');
 
         // when
-        await releaseJob.createRelease({ data: {} });
+        await releaseJobProcessor({ data: {} });
 
         // then
         expect(errorLogStub).to.have.been.called;
@@ -110,7 +110,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
-        await releaseJob.createRelease({ data: { slackNotification: false } });
+        await releaseJobProcessor({ data: { slackNotification: false } });
 
         // then
         expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error', new SlackNotifier('http://webook.url'));
@@ -121,7 +121,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         sinon.stub(config.notifications.slack, 'enable').value(false);
 
         // When
-        await releaseJob.createRelease({ data: {} });
+        await releaseJobProcessor({ data: {} });
 
         // Then
         expect(learningContentNotification.notifyReleaseCreationFailure).to.not.have.been.called;
