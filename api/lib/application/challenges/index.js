@@ -11,6 +11,7 @@ const attachmentDatasource = require('../../infrastructure/datasources/airtable/
 const challengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
 const pixApiClient = require('../../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
+const { validateChallenge } = require('../../domain/usecases');
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -101,6 +102,24 @@ exports.register = async function(server) {
           const updatedChallenge = await challengeRepository.update(challenge);
           await _refreshCache(updatedChallenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));
+        },
+      },
+    },
+    {
+      method: 'PATCH',
+      path: '/api/challenges/{id}/validate',
+      config: {
+        //auth: false,
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+          }),
+        },
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: async function(request, h) {
+          const challengeId = request.params.id;
+          await validateChallenge({ challengeId, alternativeIdsToValidate: [], changelogTxt: '' });
+          return h.response();
         },
       },
     },
