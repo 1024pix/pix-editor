@@ -4,10 +4,14 @@ const airtableSettings = require('../config').airtable;
 const logger = require('./logger');
 
 const LIMIT_UPDATE_RECORDS_SIZE = 10;
+const BASES = {
+  LEARNING_CONTENT: 'learningContent',
+  CHANGELOG: 'changelog',
+};
 
-function _airtableClient(base = 'learningContent') {
-  if (base === 'learningContent') return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
-  else if (base === 'changelog') return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.editorBase);
+function _airtableClient(base = BASES.LEARNING_CONTENT) {
+  if (base === BASES.LEARNING_CONTENT) return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
+  else if (base === BASES.CHANGELOG) return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.editorBase);
   throw new Error(`Unknown Airtable base ${base}`);
 }
 
@@ -59,4 +63,5 @@ module.exports = {
   createRecord,
   updateRecord,
   updateRecords,
+  BASES,
 };

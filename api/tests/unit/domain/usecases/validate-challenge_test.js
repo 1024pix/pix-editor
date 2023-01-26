@@ -1,14 +1,23 @@
-const { expect, domainBuilder, catchErr, sinon } = require('../../../test-helper');
+const { expect, domainBuilder, catchErr, sinon, MockDate } = require('../../../test-helper');
 const { validateChallenge } = require('../../../../lib/domain/usecases');
 
 describe('Unit | Usecase | validate-challenge', function() {
+  let changelogRepositoryStub;
   let tubeForEditorRepositoryStub;
 
   beforeEach(function() {
+    changelogRepositoryStub = {
+      save: sinon.stub(),
+    };
     tubeForEditorRepositoryStub = {
       getByChallengeId: sinon.stub(),
       save: sinon.stub(),
     };
+    MockDate.set(new Date('2021-10-29T03:05:00.000Z'));
+  });
+
+  afterEach(function() {
+    MockDate.reset();
   });
 
   context('error cases', function() {
@@ -23,6 +32,7 @@ describe('Unit | Usecase | validate-challenge', function() {
         const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
         const error = await catchErr(validateChallenge)({
           validateChallengeCommand,
+          changelogRepository: changelogRepositoryStub,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -46,6 +56,7 @@ describe('Unit | Usecase | validate-challenge', function() {
         const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
         const error = await catchErr(validateChallenge)({
           validateChallengeCommand,
+          changelogRepository: changelogRepositoryStub,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -70,6 +81,7 @@ describe('Unit | Usecase | validate-challenge', function() {
           const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
             validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -96,6 +108,7 @@ describe('Unit | Usecase | validate-challenge', function() {
           const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
             validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -119,6 +132,7 @@ describe('Unit | Usecase | validate-challenge', function() {
           const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
             validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -278,11 +292,37 @@ describe('Unit | Usecase | validate-challenge', function() {
       const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '' };
       await validateChallenge({
         validateChallengeCommand,
+        changelogRepository: changelogRepositoryStub,
         tubeForEditorRepository: tubeForEditorRepositoryStub,
       });
 
       // then
       expect(tubeForEditorRepositoryStub.save).to.have.been.calledWithExactly(tube);
+    });
+
+    it('should log a challenge validation changelog entry', async function() {
+      // given
+      const challengeToValidateId = 'activeSkill_validatedCollection_draftAlternative';
+      tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
+      tubeForEditorRepositoryStub.save.resolves();
+      changelogRepositoryStub.save.resolves();
+
+      // when
+      const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: 'Coucou', author: 'ROX' };
+      await validateChallenge({
+        validateChallengeCommand,
+        changelogRepository: changelogRepositoryStub,
+        tubeForEditorRepository: tubeForEditorRepositoryStub,
+      });
+
+      // then
+      expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
+        text: 'Coucou',
+        recordId: 'activeSkill_validatedCollection_draftAlternative',
+        author: 'ROX',
+        createdAt: '2021-10-29T03:05:00.000Z',
+        elementType: 'épreuve',
+      });
     });
 
     context('alternative', function() {
@@ -296,6 +336,7 @@ describe('Unit | Usecase | validate-challenge', function() {
         const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '' };
         await validateChallenge({
           validateChallengeCommand,
+          changelogRepository: changelogRepositoryStub,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -344,6 +385,7 @@ describe('Unit | Usecase | validate-challenge', function() {
           const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [draftAlternativeToValidateId], changelog: '' };
           await validateChallenge({
             validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -390,6 +432,7 @@ describe('Unit | Usecase | validate-challenge', function() {
           const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [draftAlternativeToValidateId], changelog: '' };
           await validateChallenge({
             validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 

@@ -2,6 +2,7 @@ const infraErrors = require('../lib/infrastructure/errors');
 const chai = require('chai');
 const expect = chai.expect;
 const _ = require('lodash');
+const MockDate = require('mockdate');
 chai.use(require('chai-as-promised'));
 chai.use(require('chai-sorted'));
 const sinon = require('sinon');
@@ -141,6 +142,7 @@ module.exports = {
   generateAuthorizationHeader,
   hFake,
   knex,
+  MockDate,
   sinon,
   streamToPromise,
   testErr: new Error('Fake Error'),
