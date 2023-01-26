@@ -5,45 +5,47 @@ const logger = require('./logger');
 
 const LIMIT_UPDATE_RECORDS_SIZE = 10;
 
-function _airtableClient() {
-  return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
+function _airtableClient(base = 'learningContent') {
+  if (base === 'learningContent') return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
+  else if (base === 'changelog') return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.editorBase);
+  throw new Error(`Unknown Airtable base ${base}`);
 }
 
-function findRecords(tableName, options = {}) {
+function findRecords(tableName, options = {}, base) {
   logger.info({ tableName }, 'Querying Airtable');
-  return _airtableClient()
+  return _airtableClient(base)
     .table(tableName)
     .select(options)
     .all();
 }
 
-async function findRecord(tableName, options = {}) {
+async function findRecord(tableName, options = {}, base) {
   logger.info({ tableName }, 'Querying Airtable for one record');
-  const records = await _airtableClient()
+  const records = await _airtableClient(base)
     .table(tableName)
     .select({ ...options, maxRecords: 1 })
     .all();
   return records.length > 0 ? records : null;
 }
 
-async function createRecord(tableName, body) {
-  const records = await _airtableClient()
+async function createRecord(tableName, body, base) {
+  const records = await _airtableClient(base)
     .table(tableName)
     .create([body]);
   return records[0];
 }
 
-async function updateRecord(tableName, body) {
-  const records = await _airtableClient()
+async function updateRecord(tableName, body, base) {
+  const records = await _airtableClient(base)
     .table(tableName)
     .update([body]);
   return records[0];
 }
 
-async function updateRecords(tableName, body) {
+async function updateRecords(tableName, body, base) {
   const updatedRecords = [];
   for (const chunkRecords of _.chunk(body, LIMIT_UPDATE_RECORDS_SIZE)) {
-    const updatedChunkRecords = await _airtableClient()
+    const updatedChunkRecords = await _airtableClient(base)
       .table(tableName)
       .update(chunkRecords);
     updatedRecords.push(updatedChunkRecords);
