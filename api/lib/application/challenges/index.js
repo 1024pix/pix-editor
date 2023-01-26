@@ -109,16 +109,26 @@ exports.register = async function(server) {
       method: 'PATCH',
       path: '/api/challenges/{id}/validate',
       config: {
-        //auth: false,
         validate: {
           params: Joi.object({
             id: challengeIdType,
+          }),
+          payload: Joi.object({
+            author: Joi.string().required(),
+            changelog: Joi.string().required(),
+            alternativeIdsToValidate: Joi.array().items(Joi.string()),
           }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challengeId = request.params.id;
-          await validateChallenge({ challengeId, alternativeIdsToValidate: [], changelogTxt: '' });
+          const validateChallengeCommand = {
+            challengeId: request.params.id,
+            alternativeIdsToValidate: request.payload.data['alternativeIdsToValidate'],
+            author: request.payload.data['author'],
+            changelog: request.payload.data['changelog'],
+          };
+          await validateChallenge({ validateChallengeCommand });
           return h.response();
         },
       },
