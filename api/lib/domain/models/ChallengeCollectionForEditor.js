@@ -33,6 +33,7 @@ module.exports = class ChallengeCollectionForEditor {
       for (const challenge of this._challenges) {
         if (challenge.id === challengeToValidate.id) challenge.validate();
         else if (alternativeIdsToValidate.includes(challenge.id)) challenge.validate();
+        // TODO : should i add check - alternatives belong to proto ?
       }
     } else {
       const prototypeChallenge = this.findPrototypeChallenge();

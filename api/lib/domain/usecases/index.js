@@ -9,6 +9,7 @@ function _injectDependencies(toBeInjected, dependenciesToInject) {
 }
 
 const dependencies = {
+  changelogRepository: require('../../infrastructure/repositories/changelog-repository'),
   tubeForEditorRepository: require('../../infrastructure/repositories/tube-for-editor-repository'),
 };
 
