@@ -20,10 +20,9 @@ describe('Unit | Usecase | validate-challenge', function() {
         tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
 
         // when
+        const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
         const error = await catchErr(validateChallenge)({
-          challengeId: errorChallengeId,
-          alternativeIdsToValidate: [],
-          changelogTxt: '',
+          validateChallengeCommand,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -44,10 +43,9 @@ describe('Unit | Usecase | validate-challenge', function() {
         tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
 
         // when
+        const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
         const error = await catchErr(validateChallenge)({
-          challengeId: errorChallengeId,
-          alternativeIdsToValidate: [],
-          changelogTxt: '',
+          validateChallengeCommand,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -69,10 +67,9 @@ describe('Unit | Usecase | validate-challenge', function() {
           tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
 
           // when
+          const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
-            challengeId: errorChallengeId,
-            alternativeIdsToValidate: [],
-            changelogTxt: '',
+            validateChallengeCommand,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -96,10 +93,9 @@ describe('Unit | Usecase | validate-challenge', function() {
           tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
 
           // when
+          const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
-            challengeId: errorChallengeId,
-            alternativeIdsToValidate: [],
-            changelogTxt: '',
+            validateChallengeCommand,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -120,10 +116,9 @@ describe('Unit | Usecase | validate-challenge', function() {
           tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
 
           // when
+          const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: [], changelog: '' };
           const error = await catchErr(validateChallenge)({
-            challengeId: errorChallengeId,
-            alternativeIdsToValidate: [],
-            changelogTxt: '',
+            validateChallengeCommand,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -280,10 +275,9 @@ describe('Unit | Usecase | validate-challenge', function() {
       tubeForEditorRepositoryStub.save.resolves();
 
       // when
+      const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '' };
       await validateChallenge({
-        challengeId: challengeToValidateId,
-        alternativeIdsToValidate: [],
-        changelogTxt: '',
+        validateChallengeCommand,
         tubeForEditorRepository: tubeForEditorRepositoryStub,
       });
 
@@ -299,10 +293,9 @@ describe('Unit | Usecase | validate-challenge', function() {
         tubeForEditorRepositoryStub.save.withArgs(tube).resolves();
 
         // when
+        const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '' };
         await validateChallenge({
-          challengeId: challengeToValidateId,
-          alternativeIdsToValidate: [],
-          changelogTxt: '',
+          validateChallengeCommand,
           tubeForEditorRepository: tubeForEditorRepositoryStub,
         });
 
@@ -348,10 +341,9 @@ describe('Unit | Usecase | validate-challenge', function() {
           tubeForEditorRepositoryStub.save.withArgs(tube).resolves();
 
           // when
+          const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [draftAlternativeToValidateId], changelog: '' };
           await validateChallenge({
-            challengeId: challengeToValidateId,
-            alternativeIdsToValidate: [draftAlternativeToValidateId],
-            changelogTxt: '',
+            validateChallengeCommand,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
@@ -395,10 +387,9 @@ describe('Unit | Usecase | validate-challenge', function() {
           tubeForEditorRepositoryStub.save.withArgs(tube).resolves();
 
           // when
+          const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [draftAlternativeToValidateId], changelog: '' };
           await validateChallenge({
-            challengeId: challengeToValidateId,
-            alternativeIdsToValidate: [draftAlternativeToValidateId],
-            changelogTxt: '',
+            validateChallengeCommand,
             tubeForEditorRepository: tubeForEditorRepositoryStub,
           });
 
