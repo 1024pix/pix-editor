@@ -30,10 +30,17 @@ module.exports = class ChallengeCollectionForEditor {
   validateChallenge(challengeId, alternativeIdsToValidate) {
     const challengeToValidate = this.findChallenge(challengeId);
     if (challengeToValidate.isPrototype) {
+      const alternativeIds = [...alternativeIdsToValidate];
       for (const challenge of this._challenges) {
         if (challenge.id === challengeToValidate.id) challenge.validate();
-        else if (alternativeIdsToValidate.includes(challenge.id)) challenge.validate();
-        // TODO : should i add check - alternatives belong to proto ?
+        else if (alternativeIds.includes(challenge.id)) {
+          alternativeIds.splice(alternativeIds.indexOf(challenge.id), 1);
+          challenge.validate();
+        }
+      }
+      if (alternativeIds.length > 0) {
+        const printIds = alternativeIds.map((id) => `"${id}"`).join(', ');
+        throw new Error(`Cannot validate challenge "${challengeId}": challenges with ids (${printIds}) are not alternatives of this prototype.`);
       }
     } else {
       const prototypeChallenge = this.findPrototypeChallenge();
