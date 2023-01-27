@@ -18,6 +18,14 @@ module.exports = class TubeForEditor {
     return this._skills.find((skill) => skill.level === level && skill.isActive);
   }
 
+  findChallenge(challengeId) {
+    for (const skill of this._skills) {
+      const challenge = skill.findChallenge(challengeId);
+      if (challenge) return challenge;
+    }
+    return null;
+  }
+
   toDTO() {
     return {
       id: this._id,

@@ -300,31 +300,6 @@ describe('Unit | Usecase | validate-challenge', function() {
       expect(tubeForEditorRepositoryStub.save).to.have.been.calledWithExactly(tube);
     });
 
-    it('should log a challenge validation changelog entry', async function() {
-      // given
-      const challengeToValidateId = 'activeSkill_validatedCollection_draftAlternative';
-      tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
-      tubeForEditorRepositoryStub.save.resolves();
-      changelogRepositoryStub.save.resolves();
-
-      // when
-      const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: 'Coucou', author: 'ROX' };
-      await validateChallenge({
-        validateChallengeCommand,
-        changelogRepository: changelogRepositoryStub,
-        tubeForEditorRepository: tubeForEditorRepositoryStub,
-      });
-
-      // then
-      expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
-        text: 'Coucou',
-        recordId: 'activeSkill_validatedCollection_draftAlternative',
-        author: 'ROX',
-        createdAt: '2021-10-29T03:05:00.000Z',
-        elementType: 'épreuve',
-      });
-    });
-
     context('alternative', function() {
       it('should only validate the challenge', async function() {
         // given
@@ -370,9 +345,117 @@ describe('Unit | Usecase | validate-challenge', function() {
         expect(draftSkill.isDraft).to.be.true;
         expect(otherLevelActiveSkill.isActive).to.be.true;
       });
+      context('changelog', function() {
+        context('when no text is provided', function() {
+          it('should log a challenge alternative validation changelog entry with default message', async function() {
+            // given
+            const challengeToValidateId = 'activeSkill_validatedCollection_draftAlternative';
+            tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
+            tubeForEditorRepositoryStub.save.resolves();
+            changelogRepositoryStub.save.resolves();
+
+            // when
+            const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '', author: 'ROX' };
+            await validateChallenge({
+              validateChallengeCommand,
+              changelogRepository: changelogRepositoryStub,
+              tubeForEditorRepository: tubeForEditorRepositoryStub,
+            });
+
+            // then
+            expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
+              text: 'Mise en production de la déclinaison',
+              recordId: 'activeSkill_validatedCollection_draftAlternative',
+              author: 'ROX',
+              createdAt: '2021-10-29T03:05:00.000Z',
+              elementType: 'épreuve',
+            });
+          });
+        });
+        context('when a text is provided', function() {
+          it('should log a challenge alternative validation changelog entry with default message', async function() {
+            // given
+            const challengeToValidateId = 'activeSkill_validatedCollection_draftAlternative';
+            tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
+            tubeForEditorRepositoryStub.save.resolves();
+            changelogRepositoryStub.save.resolves();
+
+            // when
+            const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: 'Salut les zamis', author: 'ROX' };
+            await validateChallenge({
+              validateChallengeCommand,
+              changelogRepository: changelogRepositoryStub,
+              tubeForEditorRepository: tubeForEditorRepositoryStub,
+            });
+
+            // then
+            expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
+              text: 'Salut les zamis',
+              recordId: 'activeSkill_validatedCollection_draftAlternative',
+              author: 'ROX',
+              createdAt: '2021-10-29T03:05:00.000Z',
+              elementType: 'épreuve',
+            });
+          });
+        });
+      });
     });
 
     context('prototype', function() {
+      context('changelog', function() {
+        context('when no text is provided', function() {
+          it('should log a challenge prototype validation changelog entry with default message', async function() {
+            // given
+            const challengeToValidateId = 'activeSkill_draftCollection_draftProto';
+            tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
+            tubeForEditorRepositoryStub.save.resolves();
+            changelogRepositoryStub.save.resolves();
+
+            // when
+            const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: '', author: 'ROX' };
+            await validateChallenge({
+              validateChallengeCommand,
+              changelogRepository: changelogRepositoryStub,
+              tubeForEditorRepository: tubeForEditorRepositoryStub,
+            });
+
+            // then
+            expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
+              text: 'Mise en production du prototype',
+              recordId: 'activeSkill_draftCollection_draftProto',
+              author: 'ROX',
+              createdAt: '2021-10-29T03:05:00.000Z',
+              elementType: 'épreuve',
+            });
+          });
+        });
+        context('when a text is provided', function() {
+          it('should log a challenge prototype validation changelog entry with default message', async function() {
+            // given
+            const challengeToValidateId = 'activeSkill_draftCollection_draftProto';
+            tubeForEditorRepositoryStub.getByChallengeId.withArgs(challengeToValidateId).resolves(tube);
+            tubeForEditorRepositoryStub.save.resolves();
+            changelogRepositoryStub.save.resolves();
+
+            // when
+            const validateChallengeCommand = { challengeId: challengeToValidateId, alternativeIdsToValidate: [], changelog: 'Salut les zamis', author: 'ROX' };
+            await validateChallenge({
+              validateChallengeCommand,
+              changelogRepository: changelogRepositoryStub,
+              tubeForEditorRepository: tubeForEditorRepositoryStub,
+            });
+
+            // then
+            expect(changelogRepositoryStub.save).to.have.been.calledWithExactly({
+              text: 'Salut les zamis',
+              recordId: 'activeSkill_draftCollection_draftProto',
+              author: 'ROX',
+              createdAt: '2021-10-29T03:05:00.000Z',
+              elementType: 'épreuve',
+            });
+          });
+        });
+      });
       context('when the prototype belongs to the same skill as the one currently active', function() {
         it('should validate prototype and draft alternatives given as parameter, and archive proto and alternatives that used to be the validate ones', async function() {
           // given
