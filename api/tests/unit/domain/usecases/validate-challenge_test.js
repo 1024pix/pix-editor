@@ -90,6 +90,31 @@ describe('Unit | Usecase | validate-challenge', function() {
           expect(error.message).to.equal('Cannot validate challenge "challengeToValidateId": challenge already validated.');
         });
       });
+      context('when some alternatives to validate do not belong to prototype', function() {
+        it('should throw an Error', async function() {
+          // given
+          const challenge = domainBuilder.buildChallengeForEditor.draftPrototype({ id: errorChallengeId });
+          const alt1 = domainBuilder.buildChallengeForEditor.draftAlternative({ id: 'alt1' });
+          const alt2 = domainBuilder.buildChallengeForEditor.draftAlternative({ id: 'alt2' });
+          const challengeCollection = domainBuilder.buildChallengeCollectionForEditor({ challenges: [challenge, alt1, alt2] });
+          const skill = domainBuilder.buildSkillForEditor.active({ challengeCollections: [challengeCollection] });
+          const tube = domainBuilder.buildTubeForEditor({ skills: [skill] });
+          tubeForEditorRepositoryStub.getByChallengeId.withArgs(errorChallengeId).resolves(tube);
+          tubeForEditorRepositoryStub.save.rejects(new Error('"tubeForEditorRepositoryStub.save" should not be called'));
+
+          // when
+          const validateChallengeCommand = { challengeId: errorChallengeId, alternativeIdsToValidate: ['alt2', 'imaginaryAlt'], changelog: '' };
+          const error = await catchErr(validateChallenge)({
+            validateChallengeCommand,
+            changelogRepository: changelogRepositoryStub,
+            tubeForEditorRepository: tubeForEditorRepositoryStub,
+          });
+
+          // then
+          expect(error).to.be.instanceOf(Error);
+          expect(error.message).to.equal('Cannot validate challenge "challengeToValidateId": challenges with ids ("imaginaryAlt") are not alternatives of this prototype.');
+        });
+      });
     });
 
     context('alternative', function() {
