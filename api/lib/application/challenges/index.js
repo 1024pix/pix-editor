@@ -113,20 +113,17 @@ exports.register = async function(server) {
           params: Joi.object({
             id: challengeIdType,
           }),
-          payload: Joi.object({
-            author: Joi.string().required(), // TODO : should I retrieve user trigram from token ?
-            changelog: Joi.string().required(),
-            alternativeIdsToValidate: Joi.array().items(Joi.string()),
-          }),
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
+          console.log(request.payload);
           const validateChallengeCommand = {
             challengeId: request.params.id,
-            alternativeIdsToValidate: request.payload.data['alternativeIdsToValidate'],
-            author: request.payload.data['author'],
-            changelog: request.payload.data['changelog'],
+            alternativeIdsToValidate: request.payload['alternativeIdsToValidate'],
+            author: request.payload['author'],
+            changelog: request.payload['changelog'],
           };
+          console.log(validateChallengeCommand);
           await validateChallenge({ validateChallengeCommand });
           return h.response();
         },
