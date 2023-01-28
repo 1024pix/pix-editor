@@ -13,7 +13,7 @@
           <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
           <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
               {{#if this.mayValidate}}
-                <button class="ui button validate item"  {{on "click" (fn this.validate dd)}} type="button">
+                <button class="ui button validate item"  {{on "click" (fn this.validate_v2 dd)}} type="button">
                   <i class="checkmark icon"></i>
                   {{t 'common.validate'}}
                 </button>

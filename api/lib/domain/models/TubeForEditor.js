@@ -11,7 +11,7 @@ module.exports = class TubeForEditor {
     const skill = this._skills.find((skill) => skill.hasChallenge(challengeId));
     const currentActiveSkillForLevel = this.findCurrentActiveSkillForLevel(skill.level);
     skill.validateChallenge(challengeId, alternativeIdsToValidate);
-    if (currentActiveSkillForLevel.id !== skill.id) currentActiveSkillForLevel.archive();
+    if (currentActiveSkillForLevel && currentActiveSkillForLevel?.id !== skill.id) currentActiveSkillForLevel.archive();
   }
 
   findCurrentActiveSkillForLevel(level) {

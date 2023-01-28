@@ -269,6 +269,24 @@ export default class SingleController extends Controller {
   }
 
   @action
+  async validate_v2(dropdown) {
+    if (dropdown) {
+      dropdown.actions.close();
+    }
+    try {
+      this.loader.start();
+      await this.confirm.ask('Mise en production', 'Êtes-vous sûr de vouloir mettre l\'épreuve en production ?');
+      await this.challenge.save({ adapterOptions: { validate: { author: 'MOI', changelog: 'coucou', alternativeIdsToValidate: [] } } });
+      // forcer un refresh sur tout le tube
+    } catch (error) {
+      console.log(error);
+      this._message('Mise en production abandonnée');
+    } finally {
+      this.loader.stop();
+    }
+  }
+
+  @action
   async archive(dropdown) {
     if (dropdown) {
       dropdown.actions.close();
