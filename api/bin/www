@@ -4,6 +4,7 @@ const createServer = require('../server');
 const logger = require('../lib/infrastructure/logger');
 const { queue: checkUrlQueue } = require('../lib/infrastructure/scheduled-jobs/check-urls-job');
 const releaseJob = require('../lib/infrastructure/scheduled-jobs/release-job');
+const compareDatabasesJob = require('../lib/infrastructure/scheduled-jobs/compare-databases-job');
 const { disconnect } = require('../db/knex-database-connection');
 
 const validateEnvironmentVariables = require('../lib/infrastructure/validate-environement-variables');
@@ -15,6 +16,7 @@ const start = async () => {
     await server.start();
 
     releaseJob.schedule();
+    compareDatabasesJob.schedule();
 
     logger.info('Server running at %s', server.info.uri);
   } catch (err) {
