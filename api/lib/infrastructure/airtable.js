@@ -14,6 +14,15 @@ function findRecords(tableName, options = {}) {
     .all();
 }
 
+async function findRecord(tableName, options = {}) {
+  logger.info({ tableName }, 'Querying Airtable for one record');
+  const records = await _airtableClient()
+    .table(tableName)
+    .select({ ...options, maxRecords: 1 })
+    .all();
+  return records.length > 0 ? records[0] : null;
+}
+
 async function createRecord(tableName, body) {
   const records = await _airtableClient()
     .table(tableName)
@@ -30,6 +39,7 @@ async function updateRecord(tableName, body) {
 
 module.exports = {
   findRecords,
+  findRecord,
   createRecord,
   updateRecord,
 };
