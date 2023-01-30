@@ -1,4 +1,4 @@
-// j'ai pas tout compris qui dépend de qui pour les tags : acquis et tutos
+// TODO check fields indeed copied in PG / init script
 module.exports = {
   'airtable_frameworks': [
     'Nom',
@@ -58,7 +58,7 @@ module.exports = {
     'Competences',
     'Competences (id persistant)',
     'Acquis', // Refresh when touching skills
-    'Thematiques',
+    'Thematique',
     'Index',
   ],
   'airtable_skills': [

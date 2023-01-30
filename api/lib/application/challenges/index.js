@@ -12,6 +12,9 @@ const challengeTransformer = require('../../infrastructure/transformers/challeng
 const pixApiClient = require('../../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
 
+const challengeDatasource = require('../../infrastructure/datasources/airtable/challenge-datasource');
+const challengeProxyRepository = require('../../infrastructure/repositories/proxy-pg/challenge-proxy-repository');
+
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
   const params = _.defaults(paramsParsed, { filter: {}, page: { size: 100 } });
@@ -82,6 +85,12 @@ exports.register = async function(server) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
           await _refreshCache(createdChallenge);
+          try {
+            const airtableChallenge = challengeDatasource.toAirTableObject(createdChallenge);
+            await challengeProxyRepository.createRecord(airtableChallenge);
+          } catch (err) {
+            logger.error(err);
+          }
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -100,6 +109,12 @@ exports.register = async function(server) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await challengeRepository.update(challenge);
           await _refreshCache(updatedChallenge);
+          try {
+            const airtableChallenge = challengeDatasource.toAirTableObject(updatedChallenge);
+            await challengeProxyRepository.updateRecord(airtableChallenge);
+          } catch (err) {
+            logger.error(err);
+          }
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },
