@@ -66,7 +66,27 @@ exports.register = async function(server) {
 
 exports.name = 'airtable-proxy';
 
+const proxyRepositoryByAirtableTable = {
+  'Referentiel': require('../infrastructure/repositories/proxy-pg/framework-proxy-repository'),
+  'Domaines': require('../infrastructure/repositories/proxy-pg/area-proxy-repository'),
+  'Competences': require('../infrastructure/repositories/proxy-pg/competence-proxy-repository'),
+  'Thematiques': require('../infrastructure/repositories/proxy-pg/thematic-proxy-repository'),
+  'Tubes': require('../infrastructure/repositories/proxy-pg/tube-proxy-repository'),
+  'Acquis': require('../infrastructure/repositories/proxy-pg/skill-proxy-repository'),
+  'Epreuves': require('../infrastructure/repositories/proxy-pg/challenge-proxy-repository'),
+  'Tags': require('../infrastructure/repositories/proxy-pg/tag-proxy-repository'),
+  'Tutoriels': require('../infrastructure/repositories/proxy-pg/tutorial-proxy-repository'),
+  'Attachments': require('../infrastructure/repositories/proxy-pg/attachment-proxy-repository'),
+};
+
 async function _proxyRequestToAirtable(request, h, airtableBase) {
+  const table = request.params.path.split('/')[0];
+  const httpMethod = request.method.toUpperCase();
+  const proxyRepository = proxyRepositoryByAirtableTable[table];
+  if (!proxyRepository) logger.info(`No proxy repository found for Airtable table "${table}"`);
+  if (proxyRepository && httpMethod === 'DELETE') {
+    // TODO handle "about to delete"
+  }
   const response = await axios.request(`${AIRTABLE_BASE_URL}/${airtableBase}/${request.params.path}`,
     { headers: { 'Authorization': `Bearer ${config.airtable.apiKey}`, 'Content-Type': 'application/json' },
       params: request.query,
@@ -74,5 +94,18 @@ async function _proxyRequestToAirtable(request, h, airtableBase) {
       data: request.payload ? request.payload : {},
       validateStatus: () => true
     });
+  try {
+    if (proxyRepository) {
+      if (httpMethod === 'POST') {
+        await proxyRepository.createRecord(response.data);
+      } else if (httpMethod === 'PATCH') {
+        await proxyRepository.updateRecord(response.data);
+      } else if (httpMethod === 'DELETE') {
+        await proxyRepository.deleteRecord(response.data);
+      }
+    }
+  } catch (err) {
+    logger.error(err);
+  }
   return h.response(response.data).code(response.status);
 }
