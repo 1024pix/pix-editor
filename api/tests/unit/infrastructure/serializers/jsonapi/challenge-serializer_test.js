@@ -42,7 +42,8 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             area: 'France',
             'auto-reply': false,
             focusable: false,
-            'updated-at': '2021-10-04'
+            'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z',
           },
           relationships: {
             skill: {
@@ -114,6 +115,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             focusable: false,
             competenceId: 'recsvLz0W2ShyfD63',
             'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z',
           },
           relationships: {
             skill: {

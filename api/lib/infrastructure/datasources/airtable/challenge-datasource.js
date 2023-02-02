@@ -102,7 +102,8 @@ module.exports = datasource.extend({
       area: airtableRecord.get('Géographie'),
       delta: parseFloat(airtableRecord.get('Difficulté calculée')),
       alpha: parseFloat(airtableRecord.get('Discrimination calculée')),
-      updatedAt: airtableRecord.get('updated_at')
+      updatedAt: airtableRecord.get('updated_at'),
+      validatedAt: airtableRecord.get('validated_at'),
     };
   },
 
@@ -141,6 +142,7 @@ module.exports = datasource.extend({
         'Responsive': model.responsive,
         'Géographie': model.area,
         'files': model.files,
+        'validated_at': model.validatedAt,
       }
     };
     if (model.airtableId) {

@@ -36,6 +36,7 @@ export default class ChallengeModel extends Model {
   @attr autoReply;
   @attr focusable;
   @attr('date') updatedAt;
+  @attr('date') validatedAt;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
@@ -220,6 +221,7 @@ export default class ChallengeModel extends Model {
 
   validate() {
     this.status = 'validé';
+    this.validatedAt = new Date();
     return this.save();
   }
 
