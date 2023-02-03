@@ -136,7 +136,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z'
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
             },
             relationships: {
               skill: {
@@ -228,7 +229,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z'
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
             },
             relationships: {
               skill: {
@@ -283,7 +285,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z'
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
             },
             relationships: {
               skill: {
@@ -437,7 +440,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
-            'validated-at': '2023-02-02T14:17:30.820Z'
+            'validated-at': '2023-02-02T14:17:30.820Z',
+            'archived-at': '2023-03-03T10:47:05.555Z',
           },
           relationships: {
             skill: {
@@ -550,7 +554,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z'
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
             },
             relationships: {
               skill: {
@@ -612,7 +617,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
-            'validated-at': '2023-02-02T14:17:30.820Z'
+            'validated-at': '2023-02-02T14:17:30.820Z',
+            'archived-at': '2023-03-03T10:47:05.555Z',
           },
           relationships: {
             skill: {
@@ -712,6 +718,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'validated-at': challenge.validatedAt,
+              'archived-at': challenge.archivedAt,
             },
             relationships: {
               skill: {
@@ -798,7 +805,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
-              'validated-at': '2023-02-02T14:17:30.820Z'
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
             },
             relationships: {
               skill: {
@@ -860,7 +868,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
-            'validated-at': '2023-02-02T14:17:30.820Z'
+            'validated-at': '2023-02-02T14:17:30.820Z',
+            'archived-at': '2023-03-03T10:47:05.555Z',
           },
           relationships: {
             skill: {

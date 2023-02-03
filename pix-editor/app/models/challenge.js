@@ -37,6 +37,7 @@ export default class ChallengeModel extends Model {
   @attr focusable;
   @attr('date') updatedAt;
   @attr('date') validatedAt;
+  @attr('date') archivedAt;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
@@ -211,6 +212,7 @@ export default class ChallengeModel extends Model {
 
   archive() {
     this.status = 'archivé';
+    this.archivedAt = new Date();
     return this.save();
   }
 

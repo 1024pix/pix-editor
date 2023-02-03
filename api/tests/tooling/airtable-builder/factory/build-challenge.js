@@ -39,6 +39,7 @@ const buildChallenge = function buildChallenge({
   alpha,
   updatedAt,
   validatedAt,
+  archivedAt,
 }) {
   return {
     id: airtableId,
@@ -83,6 +84,7 @@ const buildChallenge = function buildChallenge({
       'Discrimination calculée': alpha ? alpha.toString() : '',
       'updated_at': updatedAt,
       'validated_at': validatedAt,
+      'archived_at': archivedAt,
     },
   };
 };
