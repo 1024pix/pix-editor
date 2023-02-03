@@ -136,6 +136,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z'
             },
             relationships: {
               skill: {
@@ -227,6 +228,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z'
             },
             relationships: {
               skill: {
@@ -281,6 +283,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z'
             },
             relationships: {
               skill: {
@@ -434,6 +437,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z'
           },
           relationships: {
             skill: {
@@ -546,6 +550,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z'
             },
             relationships: {
               skill: {
@@ -607,6 +612,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z'
           },
           relationships: {
             skill: {
@@ -705,6 +711,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               area: challenge.area,
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
+              'validated-at': challenge.validatedAt,
             },
             relationships: {
               skill: {
@@ -719,11 +726,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
 
       // Then
+      expect(response).to.have.property('statusCode', 201);
       expect(attachmentsScope.isDone()).to.be.true;
       expect(apiTokenScope.isDone()).to.be.true;
       expect(airtableCall.isDone()).to.be.true;
       expect(apiCacheScope.isDone()).to.be.true;
-      expect(response.statusCode).to.equal(201);
     });
   });
 
@@ -791,6 +798,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z'
             },
             relationships: {
               skill: {
@@ -852,6 +860,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z'
           },
           relationships: {
             skill: {
