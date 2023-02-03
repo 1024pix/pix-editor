@@ -104,6 +104,7 @@ module.exports = datasource.extend({
       alpha: parseFloat(airtableRecord.get('Discrimination calculée')),
       updatedAt: airtableRecord.get('updated_at'),
       validatedAt: airtableRecord.get('validated_at'),
+      archivedAt: airtableRecord.get('archived_at'),
     };
   },
 
@@ -143,6 +144,7 @@ module.exports = datasource.extend({
         'Géographie': model.area,
         'files': model.files,
         'validated_at': model.validatedAt,
+        'archived_at': model.archivedAt,
       }
     };
     if (model.airtableId) {
