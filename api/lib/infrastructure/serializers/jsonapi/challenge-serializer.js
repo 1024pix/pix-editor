@@ -39,6 +39,7 @@ module.exports = {
         'skill',
         'files',
         'updatedAt',
+        'validatedAt',
       ],
       typeForAttribute(attribute) {
         if (attribute === 'files') return 'attachments';

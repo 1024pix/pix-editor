@@ -38,6 +38,7 @@ const buildChallenge = function buildChallenge({
   delta,
   alpha,
   updatedAt,
+  validatedAt,
 }) {
   return {
     id: airtableId,
@@ -81,6 +82,7 @@ const buildChallenge = function buildChallenge({
       'Difficulté calculée': delta ? delta.toString() : '',
       'Discrimination calculée': alpha ? alpha.toString() : '',
       'updated_at': updatedAt,
+      'validated_at': validatedAt,
     },
   };
 };
