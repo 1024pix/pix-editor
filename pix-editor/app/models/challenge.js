@@ -38,6 +38,7 @@ export default class ChallengeModel extends Model {
   @attr('date') updatedAt;
   @attr('date') validatedAt;
   @attr('date') archivedAt;
+  @attr('date') madeObsoleteAt;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
@@ -218,6 +219,7 @@ export default class ChallengeModel extends Model {
 
   obsolete() {
     this.status = 'périmé';
+    this.madeObsoleteAt = new Date();
     return this.save();
   }
 
