@@ -40,6 +40,7 @@ module.exports = function buildChallengeAirtableDataObject({
   updatedAt = '2021-10-04',
   validatedAt = '2023-02-02T14:17:30.820Z',
   archivedAt = '2023-03-03T10:47:05.555Z',
+  madeObsoleteAt = '2023-04-04T10:47:05.555Z',
 } = {}) {
 
   return {
@@ -84,5 +85,6 @@ module.exports = function buildChallengeAirtableDataObject({
     updatedAt,
     validatedAt,
     archivedAt,
+    madeObsoleteAt,
   };
 };
