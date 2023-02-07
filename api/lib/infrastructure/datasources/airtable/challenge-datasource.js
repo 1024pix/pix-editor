@@ -105,6 +105,7 @@ module.exports = datasource.extend({
       updatedAt: airtableRecord.get('updated_at'),
       validatedAt: airtableRecord.get('validated_at'),
       archivedAt: airtableRecord.get('archived_at'),
+      madeObsoleteAt: airtableRecord.get('made_obsolete_at'),
     };
   },
 
@@ -145,6 +146,7 @@ module.exports = datasource.extend({
         'files': model.files,
         'validated_at': model.validatedAt,
         'archived_at': model.archivedAt,
+        'made_obsolete_at': model.madeObsoleteAt,
       }
     };
     if (model.airtableId) {
