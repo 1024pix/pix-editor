@@ -40,6 +40,7 @@ const buildChallenge = function buildChallenge({
   updatedAt,
   validatedAt,
   archivedAt,
+  madeObsoleteAt,
 }) {
   return {
     id: airtableId,
@@ -85,6 +86,7 @@ const buildChallenge = function buildChallenge({
       'updated_at': updatedAt,
       'validated_at': validatedAt,
       'archived_at': archivedAt,
+      'made_obsolete_at': madeObsoleteAt,
     },
   };
 };
