@@ -94,6 +94,17 @@ exports.register = async function(server) {
           params: Joi.object({
             id: challengeIdType,
           }),
+          payload: Joi.object({
+            data: {
+              type: 'challenges',
+              attributes: {
+                locales: Joi.required(),
+              },
+            },
+          }),
+          options: {
+            allowUnknown: true,
+          },
         },
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {

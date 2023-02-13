@@ -899,5 +899,28 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
       });
     });
+    it('should return 400 error on invalid request', async () => {
+      // Given
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/challenges/challengeBidon',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'challenges',
+            id: 'challengeBidon',
+            attributes: {
+              'nimportequoi': 'par exemple'
+            },
+          },
+        },
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(400);
+    });
   });
 });
