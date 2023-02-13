@@ -108,6 +108,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       delete airtableChallenge.fields['Difficulté calculée'];
       delete airtableChallenge.fields['Discrimination calculée'];
       delete airtableChallenge.fields['updated_at'];
+      delete airtableChallenge.fields['created_at'];
     }
 
     it('should serialize a challenge to an airtable object', () => {

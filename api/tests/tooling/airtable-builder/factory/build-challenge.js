@@ -41,6 +41,7 @@ const buildChallenge = function buildChallenge({
   validatedAt,
   archivedAt,
   madeObsoleteAt,
+  createdAt = '1986-14-07',
 }) {
   return {
     id: airtableId,
@@ -87,6 +88,7 @@ const buildChallenge = function buildChallenge({
       'validated_at': validatedAt,
       'archived_at': archivedAt,
       'made_obsolete_at': madeObsoleteAt,
+      'created_at': createdAt,
     },
   };
 };
