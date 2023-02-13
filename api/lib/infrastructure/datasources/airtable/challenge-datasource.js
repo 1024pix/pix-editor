@@ -49,6 +49,10 @@ module.exports = datasource.extend({
     'Difficulté calculée',
     'Discrimination calculée',
     'updated_at',
+    'created_at',
+    'validated_at',
+    'archived_at',
+    'made_obsolete_at'
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -106,6 +110,7 @@ module.exports = datasource.extend({
       validatedAt: airtableRecord.get('validated_at'),
       archivedAt: airtableRecord.get('archived_at'),
       madeObsoleteAt: airtableRecord.get('made_obsolete_at'),
+      createdAt: airtableRecord.get('created_at'),
     };
   },
 

@@ -43,6 +43,10 @@ const challengeAirtableFields = [
   'Difficulté calculée',
   'Discrimination calculée',
   'updated_at',
+  'created_at',
+  'validated_at',
+  'archived_at',
+  'made_obsolete_at'
 ];
 
 describe('Acceptance | Controller | challenges-controller', () => {
@@ -56,6 +60,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     delete body.fields['Discrimination calculée'];
     delete body.fields['Difficulté calculée'];
     delete body.fields['updated_at'];
+    delete body.fields['created_at'];
     if (deleteId) {
       delete body.id;
     }

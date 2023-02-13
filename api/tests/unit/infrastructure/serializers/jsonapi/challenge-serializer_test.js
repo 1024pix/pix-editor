@@ -117,6 +117,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             focusable: false,
             competenceId: 'recsvLz0W2ShyfD63',
             'updated-at': '2021-10-04',
+            'created-at': '1986-07-14',
             'validated-at': '2023-02-02T14:17:30.820Z',
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
