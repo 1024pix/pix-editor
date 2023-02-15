@@ -17,6 +17,8 @@
     "lint:fix": "npm-run-all --aggregate-output --continue-on-error --parallel lint:*:fix",
     "lint:hbs": "ember-template-lint .",
     "lint:hbs:fix": "ember-template-lint . --fix",
+    "lint:scss": "stylelint app/styles/*.scss",
+    "lint:scss:fix": "npm run lint:scss -- --fix",
     "lint:js": "eslint . --cache",
     "preinstall": "npx check-engine",
     "lint:js:fix": "eslint . --fix",
@@ -26,6 +28,7 @@
   },
   "devDependencies": {
     "@1024pix/pix-ui": "^13.0.0",
+    "@1024pix/stylelint-config": "^1.0.1",
     "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.8.1",
@@ -87,7 +90,10 @@
     "qunit": "^2.19.3",
     "qunit-dom": "^2.0.0",
     "sass": "^1.56.1",
-    "sinon": "^15.0.0"
+    "sinon": "^15.0.0",
+    "stylelint": "^14.16.1",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-standard-scss": "^6.1.0"
   },
   "engines": {
     "node": "14.17.x",
