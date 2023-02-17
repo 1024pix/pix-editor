@@ -1,5 +1,19 @@
 
 
+## v3.76.0 (17/02/2023)
+
+
+### :rocket: Amélioration
+- [#90](https://github.com/1024pix/pix-editor/pull/90) [FEATURE] Ajouter la date de péremption d'une épreuve (PIX-7022)
+- [#89](https://github.com/1024pix/pix-editor/pull/89) [FEATURE] Ajouter la date d'archivage dans Airtable à l'archivage d'une épreuve (PIX-6543)
+- [#88](https://github.com/1024pix/pix-editor/pull/88) [FEATURE] Ajouter la date de validation d'une épreuve dans la table d'Airtable "Epreuves" (PIX-6541)
+
+### :building_construction: Tech
+- [#93](https://github.com/1024pix/pix-editor/pull/93) [TECH] Exposer les nouveaux champs de Airtable depuis LCMS (PIX-7121).
+- [#94](https://github.com/1024pix/pix-editor/pull/94) [TECH] Mise en place de Stylelint
+- [#91](https://github.com/1024pix/pix-editor/pull/91) [TECH] Récupérer les dates de : mise en production, archivage et obsolescence des épreuves en se basant sur le Changelog et les releases (PIX-5210)
+- [#83](https://github.com/1024pix/pix-editor/pull/83) [TECH] Ne pas lancer le check des URL lors de la création d'une release en dehors de l'environnement de production (PIX-6878).
+
 ## v3.75.1 (23/01/2023)
 
 
