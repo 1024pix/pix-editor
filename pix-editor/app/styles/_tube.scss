@@ -1,5 +1,6 @@
 .tube-header {
   @extend .challenge-header;
+
   &.suggested,
   &.prevalidated,
   &.validated_no_test,
