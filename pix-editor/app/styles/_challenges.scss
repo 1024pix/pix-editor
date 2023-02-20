@@ -67,22 +67,22 @@ img.clickable {
 }
 
 .dropdown-content-challenge {
-    & > .item {
-      font-size: 16px !important;
-      padding: .7em 1.4em;
-      margin: 0;
-      border-radius: 0;
+  & > .item {
+    font-size: 16px !important;
+    padding: .7em 1.4em;
+    margin: 0;
+    border-radius: 0;
 
-      &.validate {
-        color: $production-color !important;
-        background-color: $production-background-color !important;
-      }
-
-      &.archive {
-        color: $archived-color !important;
-        background-color: $archived-background-color !important;
-      }
+    &.validate {
+      color: $production-color !important;
+      background-color: $production-background-color !important;
     }
+
+    &.archive {
+      color: $archived-color !important;
+      background-color: $archived-background-color !important;
+    }
+  }
 
 }
 
