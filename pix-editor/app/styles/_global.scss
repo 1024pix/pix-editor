@@ -1,29 +1,29 @@
-$challenge-background-color:#fcfd9f;
+$challenge-background-color: #fcfd9f;
 $skill-background-color: #d5e8fd;
-$production-background-color:#00ff00;
-$production-color:#000000;
-$draft-color:#000000;
-$validated-background-color:#00ff00/*#08cf08*/;
-$validated-color:#000000;
-$validated-no-test-background-color:#00ff00;
-$validated-no-test-color:#000000;
-$prevalidated-background-color:#00ff00/*#aaFFaa*/;
-$prevalidated-color:#000000;
-$suggested-background-color:#9ceaf7;
-$suggested-color:#0a1b53;
-$archived-background-color:#6b686d;
-$archived-color:#ffffff;
+$production-background-color: #00ff00;
+$production-color: #000000;
+$draft-color: #000000;
+$validated-background-color: #00ff00/*#08cf08*/;
+$validated-color: #000000;
+$validated-no-test-background-color: #00ff00;
+$validated-no-test-color: #000000;
+$prevalidated-background-color: #00ff00/*#aaFFaa*/;
+$prevalidated-color: #000000;
+$suggested-background-color: #9ceaf7;
+$suggested-color: #0a1b53;
+$archived-background-color: #6b686d;
+$archived-color: #ffffff;
 $deleted-background-color: #c13b3b;
 $deleted-color: #1f0101;
-$to-be-submitted-background-color:#ffc851;
-$to-be-submitted-color:#000000;
-$need-work-background-color:#ff51e8;
-$need-work-color:#000000;
-$na-background-color:#eceaea;
-$na-color:#3e7726;
-$production-alternative-color:#085508;/* #0000ff; */
-$draft-alternative-color:#1083ce;
-$alternative-count-color:#c48807;
+$to-be-submitted-background-color: #ffc851;
+$to-be-submitted-color: #000000;
+$need-work-background-color: #ff51e8;
+$need-work-color: #000000;
+$na-background-color: #eceaea;
+$na-color: #3e7726;
+$production-alternative-color: #085508;/* #0000ff; */
+$draft-alternative-color: #1083ce;
+$alternative-count-color: #c48807;
 
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
   height: 100%;
