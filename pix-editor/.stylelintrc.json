@@ -11,7 +11,6 @@
     "no-duplicate-selectors": null,
     "number-max-precision": null,
     "scss/at-extend-no-missing-placeholder": null,
-    "scss/double-slash-comment-whitespace-inside": null,
     "selector-id-pattern": null,
     "selector-pseudo-element-colon-notation": null,
     "shorthand-property-no-redundant-values": null
