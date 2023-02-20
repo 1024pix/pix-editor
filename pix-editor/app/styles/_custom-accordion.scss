@@ -1,14 +1,14 @@
 .a11y-accordion {
   &-item {
-    .a11y-accordion-header__trigger{
-      &>i{
+    .a11y-accordion-header__trigger {
+      &>i {
         transform: rotate(-90deg);
       }
     }
 
     &--is-expanded {
-      .a11y-accordion-header__trigger{
-        &>i{
+      .a11y-accordion-header__trigger {
+        &>i {
           transform: rotate(0);
           transition: all .3s;
         }
