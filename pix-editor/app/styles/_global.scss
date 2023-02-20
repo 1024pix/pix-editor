@@ -35,6 +35,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 .application {
   background-color: #ffffff;
+
   .pusher {
     display: flex;
     flex-direction: row;
@@ -98,6 +99,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     &.tabular {
       border-bottom-width: 0;
       padding-left: 5px;
+
      .item {
         padding-top: 0.528571em;
         margin-top: 0.4em;
@@ -172,6 +174,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
 }
+
 .main-title {
   box-sizing: border-box;
   padding: 0 10px;
@@ -194,12 +197,14 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       border: none;
       box-shadow: none;
       min-height: 0;
+
       .ui.button {
         padding-top: 7px;
         padding-bottom: 0;
         background-color: transparent;
         box-shadow: none;
         border: none;
+
         i {
           color: #ffffff;
         }
@@ -237,6 +242,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 .ui.disabled.dropdown {
   opacity: 1;
+
   i.icon {
     display: none;
   }
@@ -248,9 +254,11 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   background: url("/assets/images/elephant_v2.png") center center no-repeat;
   background-size: contain;
 }
+
 footer.ui.attached.header {
   background: rgb(52, 152, 219) !important;
   color: white;
+
   p {
     position: relative;
     left: -198px;

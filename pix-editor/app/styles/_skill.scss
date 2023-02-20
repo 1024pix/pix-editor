@@ -32,13 +32,16 @@
       background: $validated-background-color !important;
       color: #2f2f2f !important;
     }
+
     &.suggested {
       background: $suggested-background-color !important;
       color: #2f2f2f !important;
     }
+
     &.archived {
       background: $archived-background-color !important;
     }
+
     &.deleted {
       background: $deleted-background-color !important;
     }
