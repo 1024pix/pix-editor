@@ -59,7 +59,7 @@
     "googleapis": "^88.2.0",
     "hapi-pino": "^8.4.0",
     "hapi-sentry": "^3.2.0",
-    "joi": "^17.4.2",
+    "joi": "^17.8.3",
     "jsonapi-serializer": "3.6.7",
     "knex": "^2.0.0",
     "lodash": "^4.17.21",
