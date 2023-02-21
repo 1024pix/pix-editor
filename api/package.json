@@ -48,7 +48,7 @@
     "@hapi/inert": "^6.0.5",
     "@hapi/vision": "^6.1.0",
     "@sentry/node": "^6.13.2",
-    "adminjs": "^6.1.2",
+    "adminjs": "^6.8.6",
     "airtable": "^0.11.1",
     "axios": "^0.23.0",
     "axios-cookiejar-support": "^2.0.3",
@@ -70,7 +70,7 @@
     "pino": "^6.13.3",
     "prom-client": "^14.0.0",
     "qs": "^6.10.1",
-    "sequelize": "^6.6.2",
+    "sequelize": "^6.29.0",
     "showdown": "^1.9.1",
     "tough-cookie": "^4.0.0",
     "url-regex-safe": "^2.0.2"
