@@ -27,6 +27,7 @@ $ember-power-select-disabled-background-color: #f9f9f9;
     transform-origin: top center;
     transform: scale(1, 0);
   }
+
   100% {
     opacity: 1;
     transform-origin: top center;
@@ -73,7 +74,6 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   }
 
   .sub-trigger, .item {
-
     font-size: 16px;
     padding: 5px;
 

@@ -67,23 +67,22 @@ img.clickable {
 }
 
 .dropdown-content-challenge {
-    & > .item {
+  & > .item {
+    font-size: 16px !important;
+    padding: .7em 1.4em;
+    margin: 0;
+    border-radius: 0;
 
-      font-size: 16px !important;
-      padding: .7em 1.4em;
-      margin:0;
-      border-radius:0;
-
-      &.validate {
-        color: $production-color !important;
-        background-color: $production-background-color !important;
-      }
-
-      &.archive {
-        color: $archived-color !important;
-        background-color: $archived-background-color !important;
-      }
+    &.validate {
+      color: $production-color !important;
+      background-color: $production-background-color !important;
     }
+
+    &.archive {
+      color: $archived-color !important;
+      background-color: $archived-background-color !important;
+    }
+  }
 
 }
 
@@ -154,7 +153,7 @@ img.clickable {
     }
 
     .ember-basic-dropdown-content .ui.button {
-      margin:0;
+      margin: 0;
     }
   }
 
@@ -222,8 +221,9 @@ img.clickable {
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      margin : 0;
-      padding:10px;
+      margin: 0;
+      padding: 10px;
+
       label {
         margin-top: 5px;
       }
@@ -287,7 +287,7 @@ img.clickable {
   color: #d02181;
 }
 
-.challenge_languages{
+.challenge_languages {
   display: flex;
   justify-content: center;
 }
