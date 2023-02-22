@@ -82,38 +82,39 @@
       cursor: pointer;
     }
   }
-.a11y-accordion-list {
-  font-size: .9rem;
+
+  .a11y-accordion-list {
+    font-size: .9rem;
 
 
-  .a11y-accordion {
-    &-header {
-      &__trigger {
-        cursor: pointer;
-        padding: .5rem 0;
-        color: white;
+    .a11y-accordion {
+      &-header {
+        &__trigger {
+          cursor: pointer;
+          padding: .5rem 0;
+          color: white;
 
-        &:hover {
-          background: rgba(0, 0, 0, 0.08);
+          &:hover {
+            background: rgba(0, 0, 0, 0.08);
+          }
+        }
+      }
+    }
+
+    .a11y-accordion-panel-content {
+      background: rgba(0, 0, 0, 0.08);
+
+      .item {
+        padding: .8rem;
+
+        &:hover, &.active, &.active:hover {
+          background: rgba(0, 0, 0, 0.08) !important;
         }
       }
     }
   }
 
-  .a11y-accordion-panel-content {
-    background: rgba(0, 0, 0, 0.08);
-
-    .item {
-      padding: .8rem;
-
-      &:hover, &.active, &.active:hover {
-        background: rgba(0, 0, 0, 0.08) !important;
-      }
-    }
-  }
-}
-
-  /*.title.AccordionToggle {
+  /* .title.AccordionToggle {
     display: flex;
 
     &:hover {
@@ -141,7 +142,7 @@
         }
       }
     }
-  }*/
+  } */
 
   .ui.menu {
     background: transparent;
