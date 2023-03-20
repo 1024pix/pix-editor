@@ -1,16 +1,20 @@
 ---
-version: 2.0
+version: 2.1
+
+orbs:
+  browser-tools: circleci/browser-tools@1.4.1
 
 jobs:
   pix-editor-test:
     docker:
-      - image: circleci/node:14.17.6-browsers
+      - image: cimg/node:16.19.1-browsers
         environment:
           JOBS: 2
     working_directory: ~/pix-editor/pix-editor
     steps:
       - attach_workspace:
           at: ~/pix-editor
+      - browser-tools/install-browser-tools
       - run: cat package*.json > cachekey
       - restore_cache:
           keys:
@@ -30,7 +34,7 @@ jobs:
 
   checkout:
     docker:
-      - image: circleci/node:14.17.6
+      - image: cimg/node:16.19.1
     working_directory: ~/pix-editor
     steps:
       - checkout
@@ -41,12 +45,12 @@ jobs:
 
   api_build_and_test:
     docker:
-      - image: circleci/node:14.17.6
+      - image: cimg/node:16.19.1
       - image: postgres:13.3-alpine
         environment:
           POSTGRES_USER: circleci
           POSTGRES_HOST_AUTH_METHOD: trust
-      - image: circleci/redis:6.0.10-alpine
+      - image: redis:6.0.10-alpine
     working_directory: ~/pix-editor/api
     steps:
       - attach_workspace:
@@ -69,7 +73,7 @@ jobs:
 
   scripts_test:
     docker:
-      - image: circleci/node:14.17.6
+      - image: cimg/node:16.19.1
     working_directory: ~/pix-editor/scripts
     steps:
       - attach_workspace:
@@ -90,16 +94,17 @@ jobs:
 
   e2e_test:
     docker:
-      - image: cypress/browsers:node14.17.0-chrome91-ff89
+      - image: cimg/node:16.19.1-browsers
       - image: postgres:13.3-alpine
         environment:
           POSTGRES_USER: circleci
           POSTGRES_HOST_AUTH_METHOD: trust
-      - image: circleci/redis:6.0.10-alpine
+      - image: redis:6.0.10-alpine
     working_directory: ~/pix-editor/end-to-end-tests
     steps:
       - attach_workspace:
           at: ~/pix-editor
+      - browser-tools/install-browser-tools
       - run: cat package*.json > cachekey
       - restore_cache:
           keys:
