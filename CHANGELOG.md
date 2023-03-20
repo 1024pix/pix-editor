@@ -1,5 +1,15 @@
 
 
+## v3.77.0 (20/03/2023)
+
+
+### :rocket: Amélioration
+- [#97](https://github.com/1024pix/pix-editor/pull/97) [FEATURE] Add default selected value on geographic field (PIX-3590)
+- [#96](https://github.com/1024pix/pix-editor/pull/96) [FEATURE] Mise à jour des dépendances
+
+### :building_construction: Tech
+- [#95](https://github.com/1024pix/pix-editor/pull/95) [TECH] Active des règles de lint SCSS d'espacement
+
 ## v3.76.0 (17/02/2023)
 
 
