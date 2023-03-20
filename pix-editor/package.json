@@ -96,8 +96,8 @@
     "stylelint-config-standard-scss": "^6.1.0"
   },
   "engines": {
-    "node": "14.17.x",
-    "npm": "6.14.x"
+    "node": "16.19.x",
+    "npm": "8.19.x"
   },
   "ember": {
     "edition": "octane"
