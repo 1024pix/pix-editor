@@ -5,7 +5,6 @@ const {
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsSolutionFromChallenge,
-  findUrlsSolutionToDisplayFromChallenge,
   findUrlsFromChallenges,
   getLiveChallenges,
   findUrlsFromTutorials
@@ -108,28 +107,6 @@ describe('Check urls from release', function() {
     });
   });
 
-  describe('#findUrlsSolutionToDisplayFromChallenge', function() {
-    it('should not find url solution to display from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        solutionToDisplay: 'solution to display',
-      };
-      const urls = findUrlsSolutionToDisplayFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url solution to display from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        solutionToDisplay: 'solution to display [link](https://example.com/)',
-      };
-      const urls = findUrlsSolutionToDisplayFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
-
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', function() {
       const release = {
@@ -159,13 +136,6 @@ describe('Check urls from release', function() {
           proposals: 'proposals [link](https://example.fr/)',
           skillId: undefined,
           status: 'validé',
-        },
-        {
-          id: 'challenge3',
-          instruction: 'instructions',
-          solutionToDisplay: 'solution to display https://solutionToDisplay_example.org/',
-          skillId: 'skill2',
-          status: 'validé',
         }
       ];
 
@@ -174,7 +144,6 @@ describe('Check urls from release', function() {
         { id: '@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
         { id: '@mySkill1;challenge1;validé', url: 'https://solution_example.net/' },
         { id: ';challenge2;validé', url: 'https://example.fr/' },
-        { id: '@mySkill2;challenge3;validé', url: 'https://solutionToDisplay_example.org/' },
       ];
 
       const urls = findUrlsFromChallenges(challenges, release);
