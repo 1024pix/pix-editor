@@ -19,6 +19,10 @@ function findUrlsProposalsFromChallenge(challenge) {
   return findUrlsInMarkdown(challenge.proposals || '');
 }
 
+function findUrlsSolutionFromChallenge(challenge) {
+  return findUrlsInMarkdown(challenge.solution || '');
+}
+
 function cleanUrl(url) {
   const index = url.indexOf('</');
   if (index >= 0) {
@@ -61,7 +65,8 @@ function findUrlsFromChallenges(challenges, release) {
   return challenges.flatMap((challenge) => {
     const functions = [
       findUrlsInstructionFromChallenge,
-      findUrlsProposalsFromChallenge
+      findUrlsProposalsFromChallenge,
+      findUrlsSolutionFromChallenge
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
@@ -177,6 +182,7 @@ module.exports = {
   findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
+  findUrlsSolutionFromChallenge,
   findUrlsFromChallenges,
   findUrlsFromTutorials,
 };
