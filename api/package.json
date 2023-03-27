@@ -39,7 +39,7 @@
   "author": "GIP Pix",
   "license": "ISC",
   "dependencies": {
-    "@adminjs/hapi": "^6.0.2",
+    "@adminjs/hapi": "^6.0.3",
     "@adminjs/sequelize": "^3.0.0",
     "@hapi/basic": "^7.0.0",
     "@hapi/boom": "^10.0.0",
