@@ -56,7 +56,6 @@
     "ember-cli-showdown": "^6.0.1",
     "ember-cli-sri": "^2.1.1",
     "ember-cli-terser": "^4.0.2",
-    "ember-cli-update": "^1.0.1",
     "ember-data": "~3.26.0",
     "ember-decorators": "^6.1.1",
     "ember-export-application-global": "^2.0.1",
