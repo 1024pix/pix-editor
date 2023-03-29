@@ -55,7 +55,7 @@ export default class ChallengeForm extends Component {
       case 'QCM':
         return '- réponse 1<br>- réponse 2<br>- ...';
       case 'QROC':
-        return 'Texte : ${nomVariable}<br>Select: ${nomVariable#placeholder options=["option1","option2","option3"]}<br><br><u>Indices</u><br><b>1. dans le champ de saisie</b><br>Texte : ${nomVariable#indice}<br>Date : JJ/MM/AAAA<br>Pour un placeholder :<br>${nomVariable#JJ/MM/AAAA} <br>Pour un aria-label :<br>${nomVariable§Date de création}<b><br><br>2. Après le champ de saisie</b><br>Pour indiquer l\'unité de mesure par exemple&nbsp;: <br>Texte : ${nomVariable} Ko';
+        return 'Texte : ${nomVariable}<br>Texte avec valeur par défaut : ${nomVariable value="ma valeur par défaut"}<br>Select: ${nomVariable#placeholder options=["option1","option2","option3"]}<br><br><u>Indices</u><br><b>1. dans le champ de saisie</b><br>Texte : ${nomVariable#indice}<br>Date : JJ/MM/AAAA<br>Pour un placeholder :<br>${nomVariable#JJ/MM/AAAA} <br>Pour un aria-label :<br>${nomVariable§Date de création}<br><b>2. Après le champ de saisie</b><br>Pour indiquer l\'unité de mesure par exemple&nbsp;: <br>Texte : ${nomVariable} Ko';
       case 'QROCM-ind':
         return 'Texte1: ${nomVariable1}<br>Texte2: ${nomVariable2}<br>Select: ${nomVariable3#placeholder options=["option1","option2","option3"]}<br><b>Info en plus : </b><br>Pour un placeholder :<br>${nomVariable#JJ/MM/AAAA} <br>Pour un aria-label :<br>${nomVariable§Date de création}';
       case 'QROCM-dep':
