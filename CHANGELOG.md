@@ -1,5 +1,15 @@
 
 
+## v3.78.0 (31/03/2023)
+
+
+### :rocket: Amélioration
+- [#98](https://github.com/1024pix/pix-editor/pull/98) [FEATURE] Mise a jour de la doc de rédaction de proposition sur pix éditor (PIX-7520).
+
+### :building_construction: Tech
+- [#99](https://github.com/1024pix/pix-editor/pull/99) [TECH] Vérifier la validités des liens contenu dans les bonnes réponses des épreuves (PIX-6190).
+- [#100](https://github.com/1024pix/pix-editor/pull/100) [TECH] Passage à node 16
+
 ## v3.77.0 (20/03/2023)
 
 
