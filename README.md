@@ -18,7 +18,6 @@ Installation
 
 Les instructions d'installation et de configuration des applications Pix Editor et LCMS API, sont disponibles depuis le fichier [INSTALL.md](INSTALL.md).
 
-
 Licence
 -------
 
