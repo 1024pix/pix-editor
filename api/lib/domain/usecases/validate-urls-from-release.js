@@ -52,6 +52,28 @@ function findUrlsInMarkdown(value) {
   return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
+function findCompetenceNameFromChallenge(challenge, release) {
+  const skill = release.skills.find(({ id }) => challenge.skillId === id);
+  if (!skill) return '';
+  return findCompetenceNameFromSkill(skill, release);
+}
+
+function findCompetencesNameFromTutorial(tutorial, release) {
+  const skills = release.skills.filter((skill) => {
+    return skill.tutorialIds.includes(tutorial.id) ||
+      skill.learningMoreTutorialIds.includes(tutorial.id);
+  });
+  const competenceNames =  _.uniq(skills.map((skill) => skill ? findCompetenceNameFromSkill(skill, release) : ''));
+  return competenceNames.join(' ');
+}
+
+function findCompetenceNameFromSkill(skill, release) {
+  const tube = release.tubes.find(({ id }) => skill.tubeId === id);
+  if (!tube) return '';
+  const competence = release.competences.find(({ id }) => tube.competenceId === id);
+  return competence?.name_i18n.fr || '';
+}
+
 function findSkillsNameFromChallenge(challenge, release) {
   const skills = release.skills.filter(({ id }) => challenge.skillId === id);
   return skills.map((s) => s.name).join(' ');
@@ -76,7 +98,7 @@ function findUrlsFromChallenges(challenges, release) {
     const urls = functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: [findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status].join(';'), url };
+        return { id: [findCompetenceNameFromChallenge(challenge, release), findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status].join(';'), url };
       });
 
     return _.uniqBy(urls, 'url');
@@ -85,7 +107,7 @@ function findUrlsFromChallenges(challenges, release) {
 
 function findUrlsFromTutorials(tutorials, release) {
   return tutorials.map((tutorial) => {
-    return { id: [findSkillsNameFromTutorial(tutorial, release), tutorial.id].join(';'), url: tutorial.link };
+    return { id: [findCompetencesNameFromTutorial(tutorial, release), findSkillsNameFromTutorial(tutorial, release), tutorial.id].join(';'), url: tutorial.link };
   });
 }
 
