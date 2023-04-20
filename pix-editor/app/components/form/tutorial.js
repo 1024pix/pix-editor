@@ -39,9 +39,9 @@ export default class TutorialForm extends Component {
 
   @action
   getSearchSourceResults(query) {
-    const queryLowerCase = query.toLowerCase();
+    const queryLowerCaseWithEscapedQuote = query.toLowerCase().replaceAll('\'', '\\\'');
     return this.store.query('tutorial', {
-      filterByFormula: `FIND('${queryLowerCase}', LOWER(source))`,
+      filterByFormula: `FIND('${queryLowerCaseWithEscapedQuote}', LOWER(source))`,
       maxRecords: 4,
       sort: [{ field: 'Source', direction: 'asc' }]
     })
