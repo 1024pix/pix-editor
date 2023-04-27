@@ -133,13 +133,29 @@ describe('Check urls from release', function() {
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', function() {
       const release = {
+        competences: [
+          {
+            id: 'competence1',
+            name_i18n: {
+              fr: 'competence 1.1'
+            }
+          }
+        ],
+        tubes: [
+          {
+            id: 'tube1',
+            competenceId: 'competence1'
+          }
+        ],
         skills: [
           {
             id: 'skill1',
+            tubeId: 'tube1',
             name: '@mySkill1'
           },
           {
             id: 'skill2',
+            tubeId: 'tube1',
             name: '@mySkill2'
           }
         ]
@@ -170,11 +186,11 @@ describe('Check urls from release', function() {
       ];
 
       const expectedOutput = [
-        { id: '@mySkill1;challenge1;validé', url: 'https://example.net/' },
-        { id: '@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
-        { id: '@mySkill1;challenge1;validé', url: 'https://solution_example.net/' },
-        { id: ';challenge2;validé', url: 'https://example.fr/' },
-        { id: '@mySkill2;challenge3;validé', url: 'https://solutionToDisplay_example.org/' },
+        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://example.net/' },
+        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
+        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://solution_example.net/' },
+        { id: ';;challenge2;validé', url: 'https://example.fr/' },
+        { id: 'competence 1.1;@mySkill2;challenge3;validé', url: 'https://solutionToDisplay_example.org/' },
       ];
 
       const urls = findUrlsFromChallenges(challenges, release);
@@ -223,14 +239,40 @@ describe('Check urls from release', function() {
   describe('#findUrlsFromTutorials', function() {
     it('should find urls from tutorials', function() {
       const release = {
+        competences: [
+          {
+            id: 'competence1',
+            name_i18n: {
+              fr: 'competence 1.1'
+            }
+          },
+          {
+            id: 'competence2',
+            name_i18n: {
+              fr: 'competence 1.2'
+            }
+          }
+        ],
+        tubes: [
+          {
+            id: 'tube1',
+            competenceId: 'competence1'
+          },
+          {
+            id: 'tube2',
+            competenceId: 'competence2'
+          }
+        ],
         skills: [
           {
             name: '@mySkill1',
+            tubeId: 'tube1',
             tutorialIds: ['tutorial1', 'tutorial3'],
             learningMoreTutorialIds: [],
           },
           {
             name: '@mySkill2',
+            tubeId: 'tube2',
             tutorialIds: [],
             learningMoreTutorialIds: ['tutorial3'],
           },
@@ -253,15 +295,15 @@ describe('Check urls from release', function() {
 
       const expectedOutput = [
         {
-          id: '@mySkill1;tutorial1',
+          id: 'competence 1.1;@mySkill1;tutorial1',
           url: 'https://example.net/'
         },
         {
-          id: ';tutorial2',
+          id: ';;tutorial2',
           url: 'https://example.net/'
         },
         {
-          id: '@mySkill1 @mySkill2;tutorial3',
+          id: 'competence 1.1 competence 1.2;@mySkill1 @mySkill2;tutorial3',
           url: 'https://example.net/'
         }
       ];
