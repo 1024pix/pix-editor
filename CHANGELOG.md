@@ -1,5 +1,18 @@
 
 
+## v3.79.0 (04/05/2023)
+
+
+### :rocket: Amélioration
+- [#104](https://github.com/1024pix/pix-editor/pull/104) [FEATURE] Ajouté le nom de la compétence dans le résultat du check des URL (PIX-6042).
+
+### :building_construction: Tech
+- [#105](https://github.com/1024pix/pix-editor/pull/105) [TECH] Corriger l'ajout d'une source contenant une apostrophe (PIX-7819) 
+- [#101](https://github.com/1024pix/pix-editor/pull/101) [TECH] Renseigner la bonne version de node dans le fichier .nvmrc
+
+### :bug: Correction
+- [#103](https://github.com/1024pix/pix-editor/pull/103) [BUGFIX] Les logs système ne sont pas désactivables
+
 ## v3.78.0 (31/03/2023)
 
 
