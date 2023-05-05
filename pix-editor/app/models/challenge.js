@@ -39,6 +39,7 @@ export default class ChallengeModel extends Model {
   @attr('date') validatedAt;
   @attr('date') archivedAt;
   @attr('date') madeObsoleteAt;
+  @attr('boolean') shuffled;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
