@@ -6,7 +6,7 @@ function localPostgresEnv(database) {
     client: 'postgresql',
     connection: database.url,
     pool: {
-      min: 1,
+      min: database.poolMinSize,
       max: database.poolMaxSize,
     },
     migrations: {
@@ -30,7 +30,7 @@ module.exports = {
     client: 'postgresql',
     connection: database.url,
     pool: {
-      min: 1,
+      min: database.poolMinSize,
       max: database.poolMaxSize,
     },
     migrations: {
@@ -47,7 +47,7 @@ module.exports = {
     client: 'postgresql',
     connection: database.url,
     pool: {
-      min: 1,
+      min: database.poolMinSize,
       max: database.poolMaxSize,
     },
     migrations: {
