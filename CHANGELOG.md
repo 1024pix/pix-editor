@@ -1,5 +1,11 @@
 
 
+## v3.80.0 (09/05/2023)
+
+
+### :building_construction: Tech
+- [#106](https://github.com/1024pix/pix-editor/pull/106) [TECH] Configurer le pool minimal de connexion à 0
+
 ## v3.79.0 (04/05/2023)
 
 
