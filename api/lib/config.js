@@ -80,6 +80,7 @@ module.exports = (function() {
 
     database: {
       url: process.env.DATABASE_URL,
+      poolMinSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE, 0),
       poolMaxSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE, 4),
       asyncStackTraceEnabled: isFeatureEnabled(process.env.KNEX_ASYNC_STACKTRACE_ENABLED),
       sslEnabled: isFeatureEnabled(process.env.DATABASE_SSL_ENABLED),
