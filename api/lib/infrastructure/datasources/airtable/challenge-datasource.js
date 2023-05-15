@@ -52,7 +52,8 @@ module.exports = datasource.extend({
     'created_at',
     'validated_at',
     'archived_at',
-    'made_obsolete_at'
+    'made_obsolete_at',
+    'shuffled',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -111,6 +112,7 @@ module.exports = datasource.extend({
       archivedAt: airtableRecord.get('archived_at'),
       madeObsoleteAt: airtableRecord.get('made_obsolete_at'),
       createdAt: airtableRecord.get('created_at'),
+      shuffled: airtableRecord.get('shuffled'),
     };
   },
 
@@ -152,6 +154,7 @@ module.exports = datasource.extend({
         'validated_at': model.validatedAt,
         'archived_at': model.archivedAt,
         'made_obsolete_at': model.madeObsoleteAt,
+        'shuffled': model.shuffled,
       }
     };
     if (model.airtableId) {

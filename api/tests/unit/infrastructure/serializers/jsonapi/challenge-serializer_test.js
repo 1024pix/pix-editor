@@ -46,6 +46,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'validated-at': '2023-02-02T14:17:30.820Z',
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
+            shuffled: false,
           },
           relationships: {
             skill: {
@@ -121,6 +122,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'validated-at': '2023-02-02T14:17:30.820Z',
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
+            'shuffled': false,
           },
           relationships: {
             skill: {
