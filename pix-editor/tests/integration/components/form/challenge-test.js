@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, find, findAll, render } from '@ember/test-helpers';
+import { click, find, findAll, render, settled } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -53,6 +53,10 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
+
+    // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
+    await new Promise(resolve => setTimeout(resolve, 200));
+    await settled();
   });
 
   test('it should display autochecked checkbox if challenge type is `QCU`', async function(assert) {
@@ -73,5 +77,9 @@ module('Integration | Component | challenge-form', function(hooks) {
     // Then
     assert.dom('[data-test-checkbox-shuffle]').exists();
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
+
+    // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
+    await new Promise(resolve => setTimeout(resolve, 200));
+    await settled();
   });
 });
