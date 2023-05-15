@@ -41,7 +41,8 @@ module.exports = {
         'updatedAt',
         'validatedAt',
         'archivedAt',
-        'madeObsoleteAt'
+        'madeObsoleteAt',
+        'shuffled',
       ],
       typeForAttribute(attribute) {
         if (attribute === 'files') return 'attachments';

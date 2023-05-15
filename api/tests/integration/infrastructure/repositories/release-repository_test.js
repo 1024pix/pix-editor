@@ -423,6 +423,7 @@ function _mockRichAirtableContent() {
     delta: 1.1,
     alpha: 2.2,
     updatedAt: 'challenge121211 updatedAt',
+    shuffled: false,
   });
   const airtableChallenge121212 = airtableBuilder.factory.buildChallenge({
     id: 'challenge121212',
@@ -464,6 +465,7 @@ function _mockRichAirtableContent() {
     delta: 123,
     alpha: 456,
     updatedAt: 'challenge121212 updatedAt',
+    shuffled: true,
   });
   const airtableChallenge211111 = airtableBuilder.factory.buildChallenge({
     id: 'challenge211111',
@@ -505,6 +507,7 @@ function _mockRichAirtableContent() {
     delta: 100,
     alpha: 200,
     updatedAt: 'challenge211111 updatedAt',
+    shuffled: false,
   });
   const airtableChallenge211112 = airtableBuilder.factory.buildChallenge({
     id: 'challenge211112',
@@ -546,6 +549,7 @@ function _mockRichAirtableContent() {
     delta: 100,
     alpha: 200,
     updatedAt: 'challenge211112 updatedAt',
+    shuffled: false,
   });
   const airtableChallenge211113 = airtableBuilder.factory.buildChallenge({
     id: 'challenge211113',
@@ -587,6 +591,7 @@ function _mockRichAirtableContent() {
     delta: 100,
     alpha: 200,
     updatedAt: 'challenge211113 updatedAt',
+    shuffled: false,
   });
   const airtableTutorial1 = airtableBuilder.factory.buildTutorial({
     id: 'tutorial1',
@@ -1018,6 +1023,7 @@ function _getRichCurrentContentDTO() {
       attachments: ['attachment1 url', 'attachment2 url'],
       illustrationUrl: null,
       illustrationAlt: null,
+      shuffled: false,
     },
     {
       id: 'challenge121212',
@@ -1047,6 +1053,7 @@ function _getRichCurrentContentDTO() {
       alpha: 456,
       illustrationUrl: null,
       illustrationAlt: null,
+      shuffled: true,
     },
     {
       id: 'challenge211111',
@@ -1077,6 +1084,7 @@ function _getRichCurrentContentDTO() {
       attachments: ['attachment3 url'],
       illustrationUrl: null,
       illustrationAlt: null,
+      shuffled: false,
     },
     {
       id: 'challenge211112',
@@ -1106,6 +1114,7 @@ function _getRichCurrentContentDTO() {
       alpha: 200,
       illustrationUrl: null,
       illustrationAlt: null,
+      shuffled: false,
     },
     {
       id: 'challenge211113',
@@ -1135,6 +1144,7 @@ function _getRichCurrentContentDTO() {
       alpha: 200,
       illustrationUrl: null,
       illustrationAlt: null,
+      shuffled: false,
     },
   ];
   const expectedCourseDTOs = [

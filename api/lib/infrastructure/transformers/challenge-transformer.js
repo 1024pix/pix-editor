@@ -38,6 +38,7 @@ function _filterChallengeFields(challenge) {
     't3Status',
     'timer',
     'type',
+    'shuffled',
   ];
 
   return _.pick(challenge, fieldsToInclude);

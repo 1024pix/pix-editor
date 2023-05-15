@@ -29,6 +29,7 @@ module.exports = function buildChallengeForRelease({
   attachments,
   illustrationAlt = 'alt illu',
   illustrationUrl = 'url illu',
+  shuffled = false,
 } = {}) {
 
   return new ChallengeForRelease({
@@ -60,5 +61,6 @@ module.exports = function buildChallengeForRelease({
     attachments,
     illustrationAlt,
     illustrationUrl,
+    shuffled,
   });
 };
