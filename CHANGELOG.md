@@ -1,5 +1,11 @@
 
 
+## v3.81.0 (16/05/2023)
+
+
+### :rocket: Amélioration
+- [#107](https://github.com/1024pix/pix-editor/pull/107) [FEATURE] Permettre de choisir si on veut afficher aléatoirement les options des QCU/QCM (PIX-7737)
+
 ## v3.80.0 (09/05/2023)
 
 
