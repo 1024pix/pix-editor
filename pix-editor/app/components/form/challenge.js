@@ -97,6 +97,17 @@ export default class ChallengeForm extends Component {
     }
   }
 
+  get typeIsQCUOrQCM() {
+    const type = this.args.challenge.type;
+    switch (type) {
+      case 'QCU':
+      case 'QCM':
+        return true;
+      default:
+        return false;
+    }
+  }
+
   get isAutoReply() {
     return this.args.challenge.autoReply;
   }
@@ -112,6 +123,11 @@ export default class ChallengeForm extends Component {
 
   @action
   setChallengeType({ value }) {
+    this.args.challenge.type = value;
+    this.args.challenge.autoReply = false;
+    this.args.challenge.format = null;
+    this.args.challenge.shuffled = false;
+
     if (value === 'autoReply') {
       this.args.challenge.type = 'QROC';
       this.args.challenge.autoReply = true;
@@ -120,10 +136,10 @@ export default class ChallengeForm extends Component {
       this.args.challenge.t1Status = null;
       this.args.challenge.t2Status = null;
       this.args.challenge.t3Status = null;
-    } else {
-      this.args.challenge.type = value;
-      this.args.challenge.autoReply = false;
-      this.args.challenge.format = null;
+    }
+
+    if (['QCU', 'QCM'].includes(value)) {
+      this.args.challenge.shuffled = true;
     }
   }
 

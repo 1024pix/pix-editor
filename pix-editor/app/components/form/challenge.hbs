@@ -32,6 +32,15 @@
       @options={{this.options.types}}
       @edition={{@edition}}
       @setValue={{this.setChallengeType}}
+      data-test-select-type
+    />
+  {{/if}}
+  {{#if this.typeIsQCUOrQCM}}
+    <Field::Checkbox
+      @label="Afficher aléatoirement l'ordre des propositions"
+      @checked={{@challenge.shuffled}}
+      @disabled={{not @edition}}
+      data-test-checkbox-shuffle
     />
   {{/if}}
   {{#if (and this.typeIsQROCOrQROCMInd (not this.isAutoReply))}}
@@ -63,7 +72,11 @@
     data-test-answers-field
   />
   {{#if (and @challenge.isTextBased (not this.isAutoReply))}}
-    <div id="toleranceField" data-test-tolerence-fields class="field {{if @edition '' 'disabled'}}">
+    <div
+      id="toleranceField"
+      data-test-tolerence-fields
+      class="field {{if @edition '' 'disabled'}}"
+    >
       <label>Tolérance</label>
       <div class="three fields">
         <div class="field">
@@ -74,7 +87,11 @@
           />
         </div>
         <div class="field">
-          <Field::Checkbox @label="T2 (ponctuation)" @checked={{@challenge.t2Status}} @disabled={{not @edition}} />
+          <Field::Checkbox
+            @label="T2 (ponctuation)"
+            @checked={{@challenge.t2Status}}
+            @disabled={{not @edition}}
+          />
         </div>
         <div class="field">
           <Field::Checkbox
@@ -113,7 +130,11 @@
     data-test-file-input-illustration
   />
   {{#if @challenge.illustration}}
-    <Field::Textarea @value={{@challenge.illustration.alt}} @title="Texte alternatif" @edition={{@edition}} />
+    <Field::Textarea
+      @value={{@challenge.illustration.alt}}
+      @title="Texte alternatif"
+      @edition={{@edition}}
+    />
   {{/if}}
   <Field::Files
     @title="Pièces jointes"
@@ -124,9 +145,22 @@
     @removeAttachment={{this.removeAttachment}}
     data-test-file-input-attachment
   />
-  <Field::Input @title="Embed" @value={{@challenge.embedURL}} @edition={{@edition}} @label="URL" />
-  <Field::Input @value={{@challenge.embedHeight}} @edition={{@edition}} @label="Hauteur" />
-  <Field::Input @value={{@challenge.embedTitle}} @edition={{@edition}} @label="Titre" />
+  <Field::Input
+    @title="Embed"
+    @value={{@challenge.embedURL}}
+    @edition={{@edition}}
+    @label="URL"
+  />
+  <Field::Input
+    @value={{@challenge.embedHeight}}
+    @edition={{@edition}}
+    @label="Hauteur"
+  />
+  <Field::Input
+    @value={{@challenge.embedTitle}}
+    @edition={{@edition}}
+    @label="Titre"
+  />
   {{#if @challenge.isPrototype}}
     <Field::Select
       @title="Type pédagogie"
@@ -146,13 +180,21 @@
     />
   {{/if}}
   <div class="field {{if @edition '' 'disabled'}}">
-    <Field::Checkbox @label="Timer" @checked={{@challenge.timerOn}} @disabled={{not @edition}} />
+    <Field::Checkbox
+      @label="Timer"
+      @checked={{@challenge.timerOn}}
+      @disabled={{not @edition}}
+    />
     {{#if @challenge.timer}}
       <Field::Input @value={{@challenge.timer}} @edition={{@edition}} />
     {{/if}}
   </div>
   <div class="field {{if @edition '' 'disabled'}}">
-    <Field::Checkbox @label="Focus" @checked={{@challenge.focusable}} @disabled={{not @edition}} />
+    <Field::Checkbox
+      @label="Focus"
+      @checked={{@challenge.focusable}}
+      @disabled={{not @edition}}
+    />
   </div>
   {{#if @challenge.isDraft}}
     <Field::Quality @edition={{@edition}} @challenge={{@challenge}} />
