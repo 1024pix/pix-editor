@@ -39,6 +39,7 @@
     "@glimmer/tracking": "^1.1.2",
     "@sentry/ember": "^7.22.0",
     "babel-eslint": "^10.1.0",
+    "base-x": "^4.0.0",
     "broccoli-asset-rev": "^3.0.0",
     "ember-a11y-accordion": "^2.0.2",
     "ember-aria-tabs": "^6.0.2",
@@ -101,7 +102,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    "@samwen/base62-util": "^1.0.4",
     "acorn": "^8.8.1",
     "canvg": "^4.0.1",
     "file-saver": "2.0.5",
