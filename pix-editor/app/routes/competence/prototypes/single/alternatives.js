@@ -11,13 +11,6 @@ export default class AlternativesRoute extends AuthenticatedRoute {
     controller.maximizeRight(false);
   }
 
-  renderTemplate() {
-    this.render('competence/prototypes/single/alternatives', {
-      into: 'competence',
-      outlet: 'mainRight'
-    });
-  }
-
   resetController(controller) {
     controller.rightMaximized = false;
   }
