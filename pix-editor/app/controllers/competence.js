@@ -23,6 +23,7 @@ export default class CompetenceController extends Controller {
   @tracked sortingPopInApproveAction = null;
   @tracked sortingPopInCancelAction = null;
   @tracked sortingModel;
+  @tracked mainRightSlot = null;
 
   @service router;
   @service config;
@@ -254,5 +255,10 @@ export default class CompetenceController extends Controller {
   _cancelSorting(models) {
     models.forEach(model => model.rollbackAttributes());
     this.displaySortingPopIn = false;
+  }
+
+  @action
+  setMainRightSlot(element) {
+    this.mainRightSlot = element;
   }
 }
