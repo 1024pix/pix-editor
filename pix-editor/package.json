@@ -71,7 +71,7 @@
     "ember-resolver": "^8.0.2",
     "ember-sortable": "^3.0.0",
     "ember-source": "^4.8.3",
-    "ember-table": "^3.3.1",
+    "ember-table": "^5.0.4",
     "ember-template-lint": "^5.0.2",
     "ember-test-selectors": "^6.0.0",
     "ember-tooltips": "^3.6.0",
