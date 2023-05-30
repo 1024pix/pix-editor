@@ -1,5 +1,4 @@
 import RESTSerializer from '@ember-data/serializer/rest';
-import { assign } from '@ember/polyfills';
 import { pluralize } from 'ember-inflector';
 
 export default class AirtableSerializer extends RESTSerializer {
@@ -21,7 +20,7 @@ export default class AirtableSerializer extends RESTSerializer {
       delete payload.offset;
 
       payload[modelNamePlural].forEach((record) => {
-        assign(record, record.fields);
+        Object.assign(record, record.fields);
         delete record.fields;
         record.created = record.createdTime;
         delete record.createdTime;
