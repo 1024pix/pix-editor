@@ -13,16 +13,11 @@
     {{/if}}
   {{/if}}
   {{#if @edition}}
-    <FileUpload @name="illustration" @accept="image/*" @onFileAdd={{this.add}}>
-    {{!-- template-lint-disable link-href-attributes  --}}
-      <a class="ui button">
-        {{#if @value}}
-          Remplacer l'image...
-        {{else}}
-          Choisir une image...
-        {{/if}}
-      </a>
-    {{!-- template-lint-enable link-href-attributes  --}}
-    </FileUpload>
+    {{#let (file-queue name="illustration" onFileAdded=this.add) as |queue|}}
+      <label>
+        Choisir une image...
+        <input type="file" accept="image/*" {{queue.selectFile}}>
+      </label>
+    {{/let}}
   {{/if}}
 </div>

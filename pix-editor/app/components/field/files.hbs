@@ -11,13 +11,12 @@
     {{/each}}
   {{/if}}
   {{#if @edition}}
-    <FileUpload @name="files" @onFileAdd={{this.add}}>
-      {{!-- template-lint-disable link-href-attributes  --}}
-      <a class="ui button">
+    {{#let (file-queue name="files" onFileAdded=this.add) as |queue|}}
+      <label>
         Ajouter un fichier...
-      </a>
-      {{!-- template-lint-enable link-href-attributes  --}}
-    </FileUpload>
+        <input type="file" {{queue.selectFile}}>
+      </label>
+    {{/let}}
     {{#if @value.length}}
       <div class="ui input">
           <label class="label-input" for="name">Nom :</label>
