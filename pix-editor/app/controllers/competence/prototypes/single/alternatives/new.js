@@ -17,10 +17,10 @@ export default class NewController extends Alternative {
 
   @action
   cancelEdit() {
-    this.store.deleteRecord(this.challenge);
     this.edition = false;
     this._message('Création annulée');
     this.parentController.send('closeChildComponent');
+    this.store.deleteRecord(this.challenge);
   }
 
   @action

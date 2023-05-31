@@ -20,10 +20,10 @@ export default class CompetenceManagementNewController extends Controller {
 
   @action
   cancelEdit() {
-    this.store.deleteRecord(this.competence);
     this.edition = false;
     this.notify.message('Création de la compétence annulée');
     this.router.transitionTo('index');
+    this.store.deleteRecord(this.competence);
   }
 
   @action

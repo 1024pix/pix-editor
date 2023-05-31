@@ -20,9 +20,9 @@ export default class AreaManagementNewController extends Controller {
 
   @action
   cancelEdit() {
-    this.store.deleteRecord(this.area);
     this.notify.message('Création du domaine annulé');
     this.router.transitionTo('index');
+    this.store.deleteRecord(this.area);
   }
 
   @action
