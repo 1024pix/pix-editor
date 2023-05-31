@@ -35,9 +35,9 @@ export default class CompetenceThemesNewController extends CompetenceThemesSingl
 
   @action
   cancelEdit() {
-    this.store.deleteRecord(this.theme);
     this.edition = false;
     this.notify.message('Création annulée');
     this.parentController.send('closeChildComponent');
+    this.store.deleteRecord(this.theme);
   }
 }
