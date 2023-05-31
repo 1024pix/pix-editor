@@ -1,7 +1,7 @@
 <EmberTable as |t|>
   <t.head
     @columns={{this.headers}}
-    @widthConstraint={{'eq-container'}}
+    @widthConstraint={{'gte-container'}}
     @resizeMode={{'fluid'}}
     @onUpdateSorts={{this.sortBy}}
     @sortFunction={{this.sort}}
