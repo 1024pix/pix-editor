@@ -1,4 +1,3 @@
-import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import AuthenticatedRoute from '../authenticated';
 
@@ -21,20 +20,6 @@ export default class AreaManagementNewRoute extends AuthenticatedRoute {
   async afterModel(model) {
     if (model) {
       this.currentData.setFramework(model.framework);
-    }
-  }
-
-  @action
-  async willTransition(transition) {
-    const controller = this.controllerFor('area-management.new');
-    const modelHasDirtyAttributes = controller.area.get('hasDirtyAttributes');
-    if (modelHasDirtyAttributes && !confirm('Êtes-vous sûr de vouloir abandonner la création en cours ?')) {
-      transition.abort();
-    } else if (modelHasDirtyAttributes) {
-      controller.store.deleteRecord(controller.area);
-      return true;
-    } else {
-      return true;
     }
   }
 }
