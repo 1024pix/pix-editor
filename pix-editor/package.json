@@ -11,6 +11,7 @@
   },
   "repository": "",
   "scripts": {
+    "clean": "rm -rf tmp dist node_modules",
     "build": "ember build --environment=production",
     "build:production": "ember build -prod",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
