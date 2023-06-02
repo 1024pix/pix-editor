@@ -45,11 +45,11 @@ export default class NewController extends Tube {
 
   @action
   async cancelEdit() {
-    const theme = await this.tube.get('theme');
-    theme.rollbackAttributes();
-    this.store.deleteRecord(this.tube);
     this.edition = false;
     this.notify.message('Création annulée');
     this.parentController.send('closeChildComponent');
+    const theme = await this.tube.get('theme');
+    theme.rollbackAttributes();
+    this.store.deleteRecord(this.tube);
   }
 }

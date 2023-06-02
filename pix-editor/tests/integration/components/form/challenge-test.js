@@ -55,7 +55,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
 
     // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 400));
     await settled();
   });
 
@@ -79,7 +79,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
 
     // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, 400));
     await settled();
   });
 });

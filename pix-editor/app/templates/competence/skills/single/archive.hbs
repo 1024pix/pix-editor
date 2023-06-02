@@ -1,17 +1,21 @@
-<div class="main-title  {{if this.config.lite "lite" ""}}">
-  <h1 class="ui header">
-  <div class="ui right floated menu">
-    <LinkTo @route="competence.skills.single" class="ui button icon item"><i class="icon window close"></i></LinkTo>
-  </div>
-      Anciennes épreuves de {{this.skill.name}} ({{this.skill.id}})
-  </h1>
-</div>
-{{#unless this.rightMaximized}}
-  <div class="ui attached segment competence {{this.size}}">
-    <List::Archive @list={{this.challengeList}} />
-  </div>
-  <div class="ui borderless bottom attached labelled icon menu">
-    <div class="item competence-info"><div>Prototypes : {{this.prototypesCount}}</div><div>Déclinaisons : {{this.alternativesCount}}</div></div>
-  </div>
-{{/unless}}
-{{outlet}}
+{{#if this.competenceController.mainRightSlot}}
+  {{#in-element this.competenceController.mainRightSlot}}
+    <div class="main-title  {{if this.config.lite "lite" ""}}">
+      <h1 class="ui header">
+      <div class="ui right floated menu">
+        <LinkTo @route="competence.skills.single" class="ui button icon item"><i class="icon window close"></i></LinkTo>
+      </div>
+          Anciennes épreuves de {{this.skill.name}} ({{this.skill.id}})
+      </h1>
+    </div>
+    {{#unless this.rightMaximized}}
+      <div class="ui attached segment competence {{this.size}}">
+        <List::Archive @list={{this.challengeList}} />
+      </div>
+      <div class="ui borderless bottom attached labelled icon menu">
+        <div class="item competence-info"><div>Prototypes : {{this.prototypesCount}}</div><div>Déclinaisons : {{this.alternativesCount}}</div></div>
+      </div>
+    {{/unless}}
+    {{outlet}}
+  {{/in-element}}
+{{/if}}

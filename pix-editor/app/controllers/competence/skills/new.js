@@ -23,10 +23,10 @@ export default class NewController extends Skill {
   
   @action
   cancelEdit() {
-    this.store.deleteRecord(this.skill);
     this.edition = false;
     this.notify.message('Création annulée');
     this.parentController.send('closeChildComponent');
+    this.store.deleteRecord(this.skill);
   }
 
   @action
