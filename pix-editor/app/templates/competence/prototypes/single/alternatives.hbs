@@ -1,23 +1,27 @@
-<div class="main-title  {{if this.config.lite "lite" ""}}">
-  <h1 class="ui header">
-  <div class="ui right floated menu">
-    <LinkTo @route="competence.prototypes.single" @model={{this.challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
-  </div>
-      Déclinaisons de {{this.challenge.skillName}}
+{{#if this.competenceController.mainRightSlot}}
+  {{#in-element this.competenceController.mainRightSlot}}
+    <div class="main-title  {{if this.config.lite "lite" ""}}">
+      <h1 class="ui header">
+      <div class="ui right floated menu">
+        <LinkTo @route="competence.prototypes.single" @model={{this.challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
+      </div>
+          Déclinaisons de {{this.challenge.skillName}}
 
-  </h1>
-</div>
-{{#unless this.rightMaximized}}
-  <div class="ui attached segment competence {{this.size}}">
-    <List::Alternatives @list={{this.challenge.alternatives}} />
-  </div>
-  <div class="ui borderless bottom attached labelled icon menu">
-    <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
-    {{#if this.mayCreateAlternative}}
-      <button class="ui button right item" {{on "click" this.newAlternative}} type="button">
-        <i class="plus square outline icon" data-test-new-alternative-action></i> Nouvelle déclinaison
-      </button>
-    {{/if}}
-  </div>
-{{/unless}}
-{{outlet}}
+      </h1>
+    </div>
+    {{#unless this.rightMaximized}}
+      <div class="ui attached segment competence {{this.size}}">
+        <List::Alternatives @list={{this.challenge.alternatives}} />
+      </div>
+      <div class="ui borderless bottom attached labelled icon menu">
+        <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>
+        {{#if this.mayCreateAlternative}}
+          <button class="ui button right item" {{on "click" this.newAlternative}} type="button">
+            <i class="plus square outline icon" data-test-new-alternative-action></i> Nouvelle déclinaison
+          </button>
+        {{/if}}
+      </div>
+    {{/unless}}
+    {{outlet}}
+  {{/in-element}}
+{{/if}}

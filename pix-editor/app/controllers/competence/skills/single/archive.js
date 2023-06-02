@@ -1,10 +1,12 @@
-import Controller from '@ember/controller';
+import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { action } from '@ember/object';
 
 export default class CompetenceSkillsSingleArchiveController extends Controller {
-  
+
+  @controller('competence') competenceController;
+
   get skill() {
     return this.model;
   }

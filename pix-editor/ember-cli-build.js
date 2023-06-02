@@ -6,8 +6,10 @@ module.exports = function(defaults) {
   const app = new EmberApp(defaults, {
     autoImport: {
       webpack: {
-        node : {
-          crypto: 'empty'
+        resolve: {
+          fallback: {
+            crypto: false,
+          }
         }
       }
     }

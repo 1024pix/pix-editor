@@ -43,9 +43,7 @@
   {{outlet}}
 </div>
 {{#if this.twoColumns}}
-<div class="main-right">
-  {{outlet "mainRight"}}
-</div>
+<div class="main-right" {{did-insert this.setMainRightSlot}}></div>
 {{/if}}
 {{#if this.displaySortingPopIn}}
   <PopIn::Sorting @title={{this.sortingPopInTitle}}
