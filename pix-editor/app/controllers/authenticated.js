@@ -37,7 +37,7 @@ export default class ApplicationController extends Controller {
   }
 
   get menuOpen() {
-    if (this.router.currentRouteName === 'authenticated' || this.lockedMenu) {
+    if (this.router.currentRouteName === 'authenticated.index' || this.lockedMenu) {
       return true;
     } else {
       return this._menuOpen;
@@ -49,7 +49,7 @@ export default class ApplicationController extends Controller {
   }
 
   get isIndex() {
-    return (this.router.currentRouteName === 'authenticated');
+    return (this.router.currentRouteName === 'authenticated.index');
   }
 
   showMessage(content, positive) {

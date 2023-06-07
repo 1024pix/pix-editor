@@ -15,7 +15,6 @@ export default class LoginController extends Controller {
     this.isErrorMessagePresent = false;
     try {
       await this.session.authenticate("authenticator:custom", this.apiKey);
-      // todo faire la transition vers authenticated (ou pas ?)
     } catch (error) {
       this.isErrorMessagePresent = true;
       this.errorMessage = 'La clé saisie n\'a pas pu être validée ou n\'est pas valide. Vérifiez votre connexion, votre saisie ou contactez l\'équipe de développement.';

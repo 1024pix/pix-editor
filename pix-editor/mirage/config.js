@@ -1,4 +1,4 @@
-import Mirage, { createServer, discoverEmberDataModels, applyEmberDataSerializers } from 'ember-cli-mirage';
+import { createServer, discoverEmberDataModels, applyEmberDataSerializers } from 'ember-cli-mirage';
 import { getDsSerializers, getDsModels } from 'ember-cli-mirage/ember-data';
 
 export function makeServer(config) {
@@ -16,8 +16,8 @@ function routes() {
 
   this.namespace = 'api';
 
-  this.get('/users/me', ({ users }, request) => _response(request, users.first()));
-  this.get('/config', ({ configs }, request) => _response(request, configs.first()));
+  this.get('/users/me', ({ users }) => users.first());
+  this.get('/config', ({ configs }) => configs.first());
 
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
@@ -26,11 +26,11 @@ function routes() {
     return _serializeModel(createdAttachment, 'attachment');
   });
 
-  this.get('/airtable/content/Referentiel', (schema, request) => {
+  this.get('/airtable/content/Referentiel', (schema) => {
     const records = schema.frameworks.all().models.map((framework) => {
       return _serializeModel(framework, 'framework');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.post('/airtable/content/Referentiel', (schema, request) => {
@@ -40,11 +40,11 @@ function routes() {
     return _serializeModel(createdFramework, 'framework');
   });
 
-  this.get('/airtable/content/Domaines', (schema, request) => {
+  this.get('/airtable/content/Domaines', (schema) => {
     const records = schema.areas.all().models.map((area) => {
       return _serializeModel(area, 'area');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.get('/airtable/content/Domaines/:id', (schema, request) => {
@@ -59,11 +59,11 @@ function routes() {
     return _serializeModel(createdArea, 'area');
   });
 
-  this.get('/airtable/content/Competences', (schema, request) => {
+  this.get('/airtable/content/Competences', (schema) => {
     const records = schema.competences.all().models.map((competence) => {
       return _serializeModel(competence, 'competence');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.get('/airtable/content/Competences/:id', (schema, request) => {
@@ -91,11 +91,11 @@ function routes() {
     return _serializeModel(theme, 'theme');
   });
 
-  this.get('/airtable/content/Thematiques', (schema, request) => {
+  this.get('/airtable/content/Thematiques', (schema) => {
     const records = schema.themes.all().models.map(theme => {
       return _serializeModel(theme, 'theme');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.post('/airtable/content/Thematiques', (schema, request) => {
@@ -110,11 +110,11 @@ function routes() {
     return _serializeModel(tube, 'tube');
   });
 
-  this.get('/airtable/content/Tubes', (schema, request) => {
+  this.get('/airtable/content/Tubes', (schema) => {
     const records = schema.tubes.all().models.map(tube => {
       return _serializeModel(tube, 'tube');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.post('/airtable/content/Tubes', (schema, request) => {
@@ -129,11 +129,11 @@ function routes() {
     return _serializeModel(skill, 'skill');
   });
 
-  this.get('/airtable/content/Acquis', (schema, request) => {
+  this.get('/airtable/content/Acquis', (schema) => {
     const records = schema.skills.all().models.map((skill) => {
       return _serializeModel(skill, 'skill');
     });
-    return _response(request, { records });
+    return { records };
   });
 
   this.post('/airtable/content/Acquis', (schema, request) => {
@@ -214,17 +214,6 @@ function routes() {
     return challenge;
   });
 }
-
-function _response(request, responseData) {
-  return _isRequestAuthorized(request) ? responseData : unauthorizedErrorResponse;
-}
-
-function _isRequestAuthorized(request) {
-  const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
-  return apiKey === 'Bearer valid-api-key';
-}
-
-const unauthorizedErrorResponse = new Mirage.Response(401);
 
 function _serializeModel(instance, modelName) {
   const serializer = new (getDsSerializers()[modelName]);

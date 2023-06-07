@@ -7,16 +7,13 @@ export default class AuthenticatedRoute extends Route {
   @service currentData;
   @service store;
 
-  async beforeModel(transition) {
+  beforeModel(transition) {
     this.session.requireAuthentication(transition, 'login');
-    await this.config.load();
-
-    if (transition.isAborted) {
-      return;
-    }
+    if (transition.isAborted) return;
   }
 
   async model() {
+    await this.config.load();
     return this.store.findAll("framework");
   }
 
