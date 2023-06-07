@@ -3,13 +3,20 @@ import { inject as service } from '@ember/service';
 
 export default class CustomAuthenticator extends Base {
   @service store;
+  @service session;
 
-  restore() {
-    return this.store.queryRecord('user', { me: true });
+  async restore() {
+    // TODO récup depuis le storage ? stocker correctement dans storage ?
+    const apiKey = this.session.data.authenticated.apiKey;
+    return this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
   }
 
   async authenticate(apiKey) {
     await this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
     return { apiKey };
+  }
+
+  async invalidate() {
+    console.log('invalidate');
   }
 }

@@ -5,9 +5,6 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 
 export default class ApplicationController extends Controller {
-  displayConfig = false;
-  displayChangelog = false;
-  popinImageSrc = '';
   confirmCallback = null;
 
   @tracked confirmTitle = '';
@@ -26,6 +23,7 @@ export default class ApplicationController extends Controller {
   @service confirm;
   @service store;
   @service window;
+  @service session;
 
   messages = A([]);
 
@@ -136,5 +134,12 @@ export default class ApplicationController extends Controller {
     if (this._menuOpen) {
       this._menuOpen = false;
     }
+  }
+
+  @action
+  logout() {
+    console.log('login out');
+    this.session.invalidate();
+    return this.router.transitionTo('authenticated');
   }
 }

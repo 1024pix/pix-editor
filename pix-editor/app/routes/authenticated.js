@@ -8,6 +8,7 @@ export default class AuthenticatedRoute extends Route {
   @service store;
 
   beforeModel(transition) {
+    console.log('authenticated beforemodel');
     this.session.requireAuthentication(transition, 'login');
     if (transition.isAborted) return;
   }
