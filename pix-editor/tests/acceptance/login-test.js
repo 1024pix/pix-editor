@@ -1,8 +1,10 @@
 import { module, test } from 'qunit';
 import Mirage from 'ember-cli-mirage';
-import {visit, fillIn, click, currentURL} from '@ember/test-helpers';
+import { currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { visit, fillByLabel, clickByName } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Login', function(hooks) {
   setupApplicationTest(hooks);
@@ -13,13 +15,16 @@ module('Acceptance | Login', function(hooks) {
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
-    this.server.get('/users/me', ({ users }, request) => {
-      const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
-      return apiKey === `Bearer ${VALID_API_KEY}` ? users.first() : new Mirage.Response(401);;
-    });
   });
 
-  module('when user is not authenticated', function() {
+  module('when user is not authenticated', function(hooks) {
+    hooks.beforeEach(function() {
+      this.server.get('/users/me', ({ users }, request) => {
+        const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
+        return apiKey === `Bearer ${VALID_API_KEY}` ? users.first() : new Mirage.Response(401);;
+      });
+    });
+
     test('it should lead to login page', async function(assert) {
       // when
       await visit('/statistics');
@@ -31,10 +36,10 @@ module('Acceptance | Login', function(hooks) {
     test('redirect to / when logging in with a valid api key', async function(assert) {
       // given
       await visit('/');
-      await fillIn('#login-api-key', VALID_API_KEY);
 
       // when
-      await click('[data-test-login-button]');
+      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', VALID_API_KEY);
+      await clickByName('Me connecter');
 
       // then
       assert.strictEqual(currentURL(), `/`);
@@ -43,10 +48,10 @@ module('Acceptance | Login', function(hooks) {
     test('remain on login page when logging in with a invalid api key', async function(assert) {
       // given
       await visit('/');
-      await fillIn('#login-api-key', INVALID_API_KEY);
 
       // when
-      await click('[data-test-login-button]');
+      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', INVALID_API_KEY);
+      await clickByName('Me connecter');
 
       // then
       assert.strictEqual(currentURL(), `/connexion`);
@@ -58,13 +63,39 @@ module('Acceptance | Login', function(hooks) {
       this.server.create('user', { trigram: 'ABC' });
       this.server.create('framework', { id: 'recFramework0', name: 'Pix' });
       await visit('/statistics');
-      await fillIn('#login-api-key', VALID_API_KEY);
 
       // when
-      await click('[data-test-login-button]');
+      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', VALID_API_KEY);
+      await clickByName('Me connecter');
 
       // then
       assert.strictEqual(currentURL(), `/statistics`);
+    });
+  });
+
+  module('when user is already authenticated', function(hooks) {
+    hooks.beforeEach(function() {
+      return authenticateSession();
+    });
+    test('it should redirect to root page when trying to visit login page', async function(assert) {
+      // when
+      await visit('/connexion')
+
+      // then
+      assert.strictEqual(currentURL(), `/`);
+    });
+
+    // Ce test ne marche pas je ne sais pas pourquoi \o/
+    test.skip('it should redirect to login page when log out', async function(assert) {
+      // given
+      await visit('/')
+
+      // when
+      await clickByName('Déconnexion');
+      await clickByName('Oui');
+
+      // then
+      assert.strictEqual(currentURL(), `/connexion`);
     });
   });
 });

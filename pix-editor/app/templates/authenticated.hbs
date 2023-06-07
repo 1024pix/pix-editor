@@ -41,7 +41,7 @@
     </div>
   </div>
   {{#if this.displayLogout}}
-    <PopIn::Logout @onDeny={{this.closeLogout}} @class="popin-logout"/>
+    <PopIn::Logout @onDeny={{this.closeLogout}} @onConfirm={{this.logout}} @class="popin-logout"/>
   {{/if}}
   {{#if this.displayConfirm}}
     <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} />
