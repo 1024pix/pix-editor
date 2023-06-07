@@ -2,21 +2,20 @@ import { module, test } from 'qunit';
 import { visit, currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
-import { mockAuthService } from '../mock-auth';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | Search', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let apiKey, store;
+  let store;
 
   hooks.beforeEach(function () {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
-    apiKey = 'valid-api-key';
-    mockAuthService.call(this, apiKey);
-    this.server.create('user', { apiKey, trigram: 'ABC' });
+    this.server.create('user', { trigram: 'ABC' });
 
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
+    return authenticateSession();
   });
 
   test('it should create a new framework', async function(assert) {

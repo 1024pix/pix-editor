@@ -48,6 +48,10 @@ module.exports = function(environment) {
     sentry: {
       enabled: _isFeatureEnabled(process.env.SENTRY_ENABLED),
     },
+
+    'ember-simple-auth': {
+      routeAfterAuthentication: 'authenticated',
+    },
   };
 
   if (environment === 'development') {
