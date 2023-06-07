@@ -97,7 +97,7 @@ export default class SidebarNavigationComponent extends Component {
       });
       this.notify.message('Référentiel créé');
       this.displayNewFrameworkPopIn = false;
-      router.transitionTo('index');
+      router.transitionTo('authenticated');
     } catch (error) {
       Sentry.captureException(error);
       console.log(error);

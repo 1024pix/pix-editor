@@ -60,7 +60,7 @@ export default class SidebarSearchComponent extends Component {
     const route = this.routeModel;
     const router = this.router;
     this.args.close();
-    if (route === 'skill') {
+    if (route === 'authenticated.skill') {
       router.transitionTo(route, item.name);
     } else {
       router.transitionTo(route, item.id);

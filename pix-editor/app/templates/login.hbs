@@ -1,0 +1,21 @@
+<div>
+  <form action="submit" class="ui form">
+    <div class="field">
+      <label>Pour vous identifier, merci de saisir votre clé personnelle.</label>
+      <div class="ui input">
+        <Input id="login-api-key" @value={{this.apiKey}} />
+      </div>
+      {{#if this.isErrorMessagePresent}}
+        <div class="ui negative message" id="login-form-error-message">
+          {{this.errorMessage}}
+        </div>
+      {{/if}}
+    </div>
+    <PixButton data-test-login-button
+               @type="submit"
+               @triggerAction={{this.authenticate}}
+    >
+      Me connecter
+    </PixButton>
+  </form>
+</div>

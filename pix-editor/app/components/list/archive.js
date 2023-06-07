@@ -40,7 +40,7 @@ export default class ArchiveList extends SortedList {
 
   @action
   selectRow(row) {
-    this.router.transitionTo('competence.skills.single.archive.single', row);
+    this.router.transitionTo('authenticated.competence.skills.single.archive.single', row);
   }
 
 }

@@ -2,11 +2,10 @@ import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
-
 export default class ConfigService extends Service {
-
   @service store;
   @service access;
+  @service intl;
 
   @tracked author;
   @tracked accessLevel;
@@ -31,6 +30,7 @@ export default class ConfigService extends Service {
     this.storagePost = config.storagePost;
     this.storageBucket = config.storageBucket;
     this.localeToLanguageMap = config.localeToLanguageMap;
+    this.intl.setLocale(["fr"]);
 
     Sentry.setUser({ userName: this.author });
   }
