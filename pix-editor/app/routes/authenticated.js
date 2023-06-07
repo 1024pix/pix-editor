@@ -14,26 +14,25 @@ export default class AuthenticatedRoute extends Route {
 
   async model() {
     await this.config.load();
-    return this.store.findAll("framework");
-  }
-
-  async afterModel(model) {
-    if (model) {
+    const frameworks = await this.store.findAll("framework");
+    if (frameworks) {
       const areas = [];
-      for (const framework of model.toArray()) {
+      for (const framework of frameworks.toArray()) {
         const frameworkAreas = await framework.areas;
         areas.push(...frameworkAreas.toArray());
       }
       this.currentData.setAreas(areas);
-      this.currentData.setFrameworks(model);
-      const pixFramework = model.find((framework) => framework.name === "Pix");
+      this.currentData.setFrameworks(frameworks);
+      const pixFramework = frameworks.find((framework) => framework.name === "Pix");
       this.currentData.setFramework(pixFramework);
       const areasFromFramework = await Promise.all(
-        model.map((framework) => framework.areas)
+        frameworks.map((framework) => framework.areas)
       );
-      return areasFromFramework.map((areas) =>
+      areasFromFramework.map((areas) =>
         areas.map((area) => area.competences)
       );
     }
+    return frameworks;
   }
+
 }
