@@ -2,7 +2,7 @@ import ApplicationAdapter from './application';
 
 export default class UserAdapter extends ApplicationAdapter {
   get headers() {
-    if(this.apiKeyForAuthenticationTrial) {
+    if (this.apiKeyForAuthenticationTrial) {
       return { 'Authorization' : `Bearer ${this.apiKeyForAuthenticationTrial}` };
     }
     return super.headers;

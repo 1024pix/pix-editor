@@ -14,7 +14,7 @@ export default class AuthenticatedRoute extends Route {
 
   async model() {
     await this.config.load();
-    const frameworks = await this.store.findAll("framework");
+    const frameworks = await this.store.findAll('framework');
     if (frameworks) {
       const areas = [];
       for (const framework of frameworks.toArray()) {
@@ -23,7 +23,7 @@ export default class AuthenticatedRoute extends Route {
       }
       this.currentData.setAreas(areas);
       this.currentData.setFrameworks(frameworks);
-      const pixFramework = frameworks.find((framework) => framework.name === "Pix");
+      const pixFramework = frameworks.find((framework) => framework.name === 'Pix');
       this.currentData.setFramework(pixFramework);
       const areasFromFramework = await Promise.all(
         frameworks.map((framework) => framework.areas)

@@ -9,7 +9,7 @@ module('Unit | Service | storage', function(hooks) {
   hooks.beforeEach(function() {
     class sessionServiceStub extends Service {
       get data() {
-        return { authenticated: { apiKey: 'someApiKey'}};
+        return { authenticated: { apiKey: 'someApiKey' } };
       }
     }
     this.owner.register('service:session', sessionServiceStub);
