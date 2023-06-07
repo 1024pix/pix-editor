@@ -15,8 +15,4 @@ export default class CustomAuthenticator extends Base {
     await this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
     return { apiKey };
   }
-
-  async invalidate() {
-    console.log('invalidate');
-  }
 }

@@ -94,7 +94,7 @@ module('unit | Component | sidebar/navigation', function(hooks) {
       });
       assert.ok(notifyMessageStub.calledWith('Référentiel créé'));
       assert.notOk(component.displayNewFrameworkPopIn);
-      assert.ok(transitionToStub.calledWith('index'));
+      assert.ok(transitionToStub.calledWith('authenticated'));
     });
 
     test('it should catch an error if save framework failed', async function(assert) {

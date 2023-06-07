@@ -34,7 +34,7 @@ module('Unit | Controller | competence-management/single', function(hooks) {
       rollbackAttributes: rollbackAttributesStub
     };
 
-    controller = this.owner.lookup('controller:competence-management/single');
+    controller = this.owner.lookup('controller:authenticated.competence-management/single');
     controller.model = competence;
 
   });

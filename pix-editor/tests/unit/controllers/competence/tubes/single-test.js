@@ -37,7 +37,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
       name: 'TubeName',
     });
 
-    controller = this.owner.lookup('controller:competence/tubes/single');
+    controller = this.owner.lookup('controller:authenticated.competence/tubes/single');
     controller.model = tube;
 
   });
@@ -179,7 +179,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
       assert.ok(saveStub.calledOnce);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyMessageStub.calledWith('Tube mis à jour'));
-      assert.ok(transitionToRouteStub.calledWith('competence.tubes.single', newCompetence, controller.model));
+      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', newCompetence, controller.model));
       assert.deepEqual(competence, newCompetence);
       assert.deepEqual(theme, newTheme);
     });

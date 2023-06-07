@@ -47,7 +47,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     }
     this.owner.register('service:store', StoreService);
 
-    controller = this.owner.lookup('controller:competence/tubes/new');
+    controller = this.owner.lookup('controller:authenticated.competence/tubes/new');
 
     themeRollbackAttributesStub = sinon.stub();
     controller.model = EmberObject.create({
@@ -94,7 +94,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyMessageStub.calledWith('Tube créé'));
-    assert.ok(transitionToRouteStub.calledWith('competence.tubes.single', { name:'Competence' }, controller.model));
+    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', { name:'Competence' }, controller.model));
   });
 
   test('it should catch an error if save action failed', async function (assert) {

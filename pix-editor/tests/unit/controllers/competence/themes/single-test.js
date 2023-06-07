@@ -34,7 +34,7 @@ module('Unit | Controller | competence/themes/single', function(hooks) {
       rollbackAttributes: rollbackAttributesStub
     };
 
-    controller = this.owner.lookup('controller:competence/themes/single');
+    controller = this.owner.lookup('controller:authenticated.competence/themes/single');
     controller.model = theme;
 
   });
