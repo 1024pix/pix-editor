@@ -96,7 +96,7 @@ module('Unit | Controller | target-profile', function (hooks) {
     };
     area1.framework = framework;
     area2.framework = framework;
-    controller = this.owner.lookup('controller:target-profile');
+    controller = this.owner.lookup('controller:authenticated.target-profile');
   });
 
   test('it should set tube-level arguments for production tube', function (assert) {

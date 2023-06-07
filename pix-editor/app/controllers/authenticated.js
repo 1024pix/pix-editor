@@ -138,8 +138,6 @@ export default class ApplicationController extends Controller {
 
   @action
   logout() {
-    console.log('login out');
     this.session.invalidate();
-    return this.router.transitionTo('authenticated');
   }
 }

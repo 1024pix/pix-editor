@@ -36,7 +36,7 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
 
     this.owner.register('service:store', StoreService);
 
-    controller = this.owner.lookup('controller:competence/themes/new');
+    controller = this.owner.lookup('controller:authenticated.competence/themes/new');
     controller.model = {} ;
     controller.edition = true;
   });

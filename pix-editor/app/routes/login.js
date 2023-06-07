@@ -5,7 +5,6 @@ export default class LoginRoute extends Route {
   @service session;
 
   beforeModel() {
-    console.log('login route');
     this.session.prohibitAuthentication("authenticated");
   }
 }
