@@ -1,5 +1,5 @@
 <td class="skill-cell workbench">
-  <LinkTo @route="competence.prototypes.list" @models={{array @tube.id @skill.id}} class="skill-cell__link">
+  <LinkTo @route="authenticated.competence.prototypes.list" @models={{array @tube.id @skill.id}} class="skill-cell__link">
     {{@skill.name}}
     <div class="workbench__status">
       {{#if this.hasDraftPrototypes}}

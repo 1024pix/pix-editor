@@ -33,7 +33,7 @@ export default class PrototypesList extends SortedList {
 
   @action
   selectRow(row) {
-    this.router.transitionTo('competence.prototypes.single', row);
+    this.router.transitionTo('authenticated.competence.prototypes.single', row);
   }
 
 }
