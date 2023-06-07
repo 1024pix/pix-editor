@@ -30,7 +30,7 @@ export default class ConfigService extends Service {
     this.storagePost = config.storagePost;
     this.storageBucket = config.storageBucket;
     this.localeToLanguageMap = config.localeToLanguageMap;
-    this.intl.setLocale(["fr"]);
+    this.intl.setLocale(['fr']);
 
     Sentry.setUser({ userName: this.author });
   }
