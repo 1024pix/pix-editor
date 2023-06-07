@@ -5,14 +5,18 @@ export default class CustomAuthenticator extends Base {
   @service store;
   @service session;
 
-  async restore() {
-    // TODO récup depuis le storage ? stocker correctement dans storage ?
-    const apiKey = this.session.data.authenticated.apiKey;
-    return this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
+  async restore({ apiKey }) {
+    await this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
+    return { apiKey };
   }
 
   async authenticate(apiKey) {
     await this.store.queryRecord('user', { me: true, apiKeyForAuthenticationTrial: apiKey });
+    sessionStorage.setItem('apiKey', apiKey);
     return { apiKey };
+  }
+
+  async invalidate() {
+    sessionStorage.setItem('apiKey', null);
   }
 }
