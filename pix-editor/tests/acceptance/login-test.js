@@ -59,8 +59,6 @@ module('Acceptance | Login', function(hooks) {
 
     test('redirect to the page the user initially intended to visit', async function(assert) {
       // given
-      this.server.create('config', 'default');
-      this.server.create('user', { trigram: 'ABC' });
       this.server.create('framework', { id: 'recFramework0', name: 'Pix' });
       await visit('/statistics');
 
@@ -83,19 +81,6 @@ module('Acceptance | Login', function(hooks) {
 
       // then
       assert.strictEqual(currentURL(), '/');
-    });
-
-    // Ce test ne marche pas je ne sais pas pourquoi \o/
-    test.skip('it should redirect to login page when log out', async function(assert) {
-      // given
-      await visit('/');
-
-      // when
-      await clickByName('Déconnexion');
-      await clickByName('Oui');
-
-      // then
-      assert.strictEqual(currentURL(), '/connexion');
     });
   });
 });
