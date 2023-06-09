@@ -1,35 +1,44 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import EmberObject from '@ember/object';
 
 module('Unit | Service | current-data', function(hooks) {
   setupTest(hooks);
   let service, pixFramework, pixFranceFramework, pixArea, pixFranceArea, competence, prototype;
 
   hooks.beforeEach(function() {
+    const store = this.owner.lookup('service:store');
+
     // Given
-    prototype = EmberObject.create({
+    prototype = store.createRecord('challenge',{
       id: 'prototype'
     });
-    competence = EmberObject.create({
+
+    competence = store.createRecord('competence',{
       id: 'competence'
     });
-    pixFranceArea = EmberObject.create({
-      id: 'pixFranceArea'
+
+    pixFranceArea = store.createRecord('area',{
+      id: 'pixFranceArea',
+      code: 1,
     });
-    pixArea = EmberObject.create({
-      id: 'pixArea'
+
+    pixArea = store.createRecord('area',{
+      id: 'pixArea',
+      code: 2,
     });
-    pixFranceFramework = EmberObject.create({
+
+    pixFranceFramework = store.createRecord('framework', {
       id: 'pixFranceFramework',
       name: 'France',
       areas: [pixFranceArea]
     });
-    pixFramework = EmberObject.create({
+
+    pixFramework = store.createRecord('framework', {
       id: 'pixFramework',
       name: 'Pix',
       areas: [pixArea]
     });
+
     service = this.owner.lookup('service:current-data');
     service.setFrameworks([pixFramework, pixFranceFramework]);
     service.setFramework(pixFramework);
@@ -65,6 +74,7 @@ module('Unit | Service | current-data', function(hooks) {
   test('it should return areas of set framework when have no argument ', async function(assert) {
     // when
     const areas = service.getAreas();
+
     // then
     assert.deepEqual(areas, [pixArea]);
   });
