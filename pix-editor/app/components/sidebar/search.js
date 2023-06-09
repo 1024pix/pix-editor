@@ -13,7 +13,7 @@ export default class SidebarSearchComponent extends Component {
   async getSearchResults(query) {
     query = query.trim();
     if (query.startsWith('@')) {
-      this.routeModel = 'skill';
+      this.routeModel = 'authenticated.skill';
       const skills = await this.store.query('skill', {
         filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
         maxRecords: 20,
@@ -28,7 +28,7 @@ export default class SidebarSearchComponent extends Component {
         version: skill.version
       }));
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
-      this.routeModel = 'challenge';
+      this.routeModel = 'authenticated.challenge';
       const challenges = await this.store.query('challenge', {
         filter: {
           ids: [query],
@@ -39,7 +39,7 @@ export default class SidebarSearchComponent extends Component {
         id: challenge.id
       }));
     } else {
-      this.routeModel = 'challenge';
+      this.routeModel = 'authenticated.challenge';
       const challenges = await this.store.query('challenge', {
         filter: {
           search: query.toLowerCase(),
@@ -60,7 +60,7 @@ export default class SidebarSearchComponent extends Component {
     const route = this.routeModel;
     const router = this.router;
     this.args.close();
-    if (route === 'skill') {
+    if (route === 'authenticated.skill') {
       router.transitionTo(route, item.name);
     } else {
       router.transitionTo(route, item.id);

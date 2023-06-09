@@ -28,7 +28,7 @@ module('Unit | Controller | competence', function(hooks) {
 
     this.owner.register('service:loader', LoaderService);
 
-    controller = this.owner.lookup('controller:competence');
+    controller = this.owner.lookup('controller:authenticated.competence');
   });
 
   test('it should save sorting', async function(assert) {

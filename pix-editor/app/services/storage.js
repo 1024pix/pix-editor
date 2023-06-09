@@ -6,7 +6,7 @@ export default class StorageService extends Service {
 
   @service config;
   @service filePath;
-  @service auth;
+  @service session;
 
   async uploadFile({ file, filename, date = Date, isAttachment = false }) {
     filename = filename || file.name;
@@ -90,7 +90,7 @@ export default class StorageService extends Service {
       }
       const response = await fetchFn('/api/file-storage-token', {
         method: 'POST',
-        headers: { 'Authorization': `Bearer ${this.auth.key}` }
+        headers: { 'Authorization': `Bearer ${this.session.data.authenticated.apiKey}` }
       });
       if (!response.ok) {
         console.error('could not get storage token');

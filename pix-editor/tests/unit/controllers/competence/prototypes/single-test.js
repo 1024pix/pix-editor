@@ -12,7 +12,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
   hooks.beforeEach(function () {
     //given
-    controller = this.owner.lookup('controller:competence/prototypes/single');
+    controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
 
     startStub = sinon.stub();
     stopStub = sinon.stub();
@@ -440,7 +440,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       loaderServiceStub = { start: sinon.stub() };
 
-      controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
       controller.storage = storageServiceStub;
       controller.loader = loaderServiceStub;
       controller.store = storeServiceStub;
@@ -480,7 +480,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         ]
       });
 
-      controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
       controller.store = storeServiceStub;
     });
 
@@ -507,7 +507,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       loaderServiceStub = { start: sinon.stub() };
 
-      controller = this.owner.lookup('controller:competence/prototypes/single');
+      controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
       controller.loader = loaderServiceStub;
       controller.store = storeServiceStub;
 

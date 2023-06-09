@@ -15,7 +15,7 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
       skill;
 
     hooks.beforeEach(function() {
-      controller = this.owner.lookup('controller:competence/prototypes/new');
+      controller = this.owner.lookup('controller:authenticated.competence/prototypes/new');
       messageStub = sinon.stub();
       controller._message = messageStub;
 

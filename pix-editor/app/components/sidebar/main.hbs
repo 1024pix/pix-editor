@@ -5,16 +5,16 @@
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @areas={{this.areas}} @close={{@close}}/>
   <div class="secondary-links">
     {{#if this.mayGenerateTargetProfile}}
-      <LinkTo data-test-target-profile-link @route="target-profile" {{on "click" @close}}>
+      <LinkTo data-test-target-profile-link @route="authenticated.target-profile" {{on "click" @close}}>
         <i class="crosshairs icon"></i> Générateur de profil cible
       </LinkTo>
     {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>
-    <LinkTo @route="statistics" {{on "click" @close}}>
+    <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
       <i class="chart bar icon"></i> Statistiques
     </LinkTo>
     <div class="secondary-links">
-      <LinkTo data-test-link-to-event-log @route="events-log"><i class="book icon"></i> Journal</LinkTo>
+      <LinkTo data-test-link-to-event-log @route="authenticated.events-log"><i class="book icon"></i> Journal</LinkTo>
     </div>
   </div>
   <div class="ui labelled icon menu">

@@ -1,7 +1,7 @@
 {{#if (and this.mayCreateTube this.hasNoTubes)}}
   <tr>
     <td data-test-theme-cell class="theme-cell create-tube">
-        <LinkTo @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+        <LinkTo @route="authenticated.competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
         <div class="ui mini basic icon buttons tube-management">
           <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
             <i class="plus square outline icon"></i>
@@ -16,7 +16,7 @@
       {{#if (eq index 0)}}
         <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell {{if this.mayCreateTube 'create-tube'}}">
           {{#if (eq @section 'skills')}}
-            <LinkTo data-test-theme-managment @route="competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
+            <LinkTo data-test-theme-managment @route="authenticated.competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
           {{else}}
             {{@theme.name}}
           {{/if}}

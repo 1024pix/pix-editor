@@ -14,7 +14,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       error = notifyErrorStub;
     }
     this.owner.register('service:notify', NotifyService);
-    controller = this.owner.lookup('controller:competence-management/new');
+    controller = this.owner.lookup('controller:authenticated.competence-management/new');
     controller.edition = true;
     transitionToRouteStub = sinon.stub();
     controller.router.transitionTo = transitionToRouteStub;
@@ -45,7 +45,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     assert.notOk(controller.edition);
     assert.ok(deleteRecordStub.calledWith(competence));
     assert.ok(notifyMessageStub.calledWith('Création de la compétence annulée'));
-    assert.ok(transitionToRouteStub.calledWith('index'));
+    assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
   module('#save', function(hooks) {
@@ -84,7 +84,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
       assert.ok(createWorkbenchStub.calledOnce);
       assert.ok(notifyMessageStub.getCall(0).args, ['Atelier créé']);
-      assert.ok(transitionToRouteStub.calledWith('competence.skills', controller.model.competence,  { queryParams: { view: 'workbench' } }));
+      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence,  { queryParams: { view: 'workbench' } }));
     });
 
     test('it should throw an error if saving failed', async function(assert) {

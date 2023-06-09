@@ -6,7 +6,7 @@ module('Unit | Controller | competence/i18n/single', function(hooks) {
 
   test('it should return an array of each language include in skill with a activatedChallenge associated', function(assert) {
     //given
-    const controller = this.owner.lookup('controller:competence/i18n/single');
+    const controller = this.owner.lookup('controller:authenticated.competence/i18n/single');
     const languagesAndAlternativesCount = new Map();
     languagesAndAlternativesCount.set('Anglais',2);
     languagesAndAlternativesCount.set('Franco Français',2);
