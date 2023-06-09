@@ -44,7 +44,7 @@ export default class CurrentDataService extends Service {
 
   getAreas(filteredBySource = true) {
     if (filteredBySource && this._framework) {
-      return this._framework.areas;
+      return this._framework.sortedAreas;
     }
     return this._areas;
   }

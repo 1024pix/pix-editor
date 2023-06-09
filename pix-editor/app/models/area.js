@@ -5,7 +5,7 @@ export default class AreaModel extends Model {
   @attr pixId;
   @attr titleFrFr;
   @attr titleEnUs;
-  @attr code;
+  @attr('number') code;
 
   @hasMany('competence') competences;
   @belongsTo('framework') framework;
