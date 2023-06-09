@@ -16,7 +16,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
     }
     this.owner.register('service:notify', NotifyService);
 
-    controller = this.owner.lookup('controller:area-management/new');
+    controller = this.owner.lookup('controller:authenticated.area-management/new');
     transitionToRouteStub = sinon.stub();
     controller.router.transitionTo = transitionToRouteStub;
     area = {
@@ -42,7 +42,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
     // then
     assert.ok(deleteRecordStub.calledWith(area));
     assert.ok(notifyMessageStub.calledWith('Création du domaine annulé'));
-    assert.ok(transitionToRouteStub.calledWith('index'));
+    assert.ok(transitionToRouteStub.calledWith('authenticated'));
   });
 
   module('#save', function(hooks) {
@@ -79,7 +79,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
       assert.deepEqual(controller.area, expectedArea);
       assert.ok(loaderStopStub.calledOnce);
       assert.ok(notifyMessageStub.calledWith('Domaine créé'));
-      assert.ok(transitionToRouteStub.calledWith('index'));
+      assert.ok(transitionToRouteStub.calledWith('authenticated'));
     });
 
     test('it should throw an error if saving failed', async function(assert) {

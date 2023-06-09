@@ -26,6 +26,6 @@ export default class ListSkillsComponent extends SortedList {
 
   @action
   selectRow(skill) {
-    this.router.transitionTo('competence.skills.single', skill);
+    this.router.transitionTo('authenticated.competence.skills.single', skill);
   }
 }

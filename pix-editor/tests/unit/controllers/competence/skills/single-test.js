@@ -11,7 +11,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
   const author = 'DEV';
 
   hooks.beforeEach(function() {
-    controller = this.owner.lookup('controller:competence/skills/single');
+    controller = this.owner.lookup('controller:authenticated.competence/skills/single');
     changelogEntryService = this.owner.lookup('service:ChangelogEntry');
     class ConfigService extends Service {
       constructor() {

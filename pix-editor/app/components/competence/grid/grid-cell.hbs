@@ -10,7 +10,7 @@
   <Competence::Grid::CellSkill @skill={{@skill}} @languageFilter={{@languageFilter}}/>
 {{else if (eq this.cellType "add-skill")}}
   <td>
-    <LinkTo @route="competence.skills.new" @models={{array @tube.id @index}} class="add-skill">
+    <LinkTo @route="authenticated.competence.skills.new" @models={{array @tube.id @index}} class="add-skill">
     <i class="icon plus circle"></i></LinkTo>
   </td>
 {{else if (eq this.cellType "quality")}}

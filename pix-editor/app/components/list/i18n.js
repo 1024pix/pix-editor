@@ -24,6 +24,6 @@ export default class I18n extends SortedList {
   @action
   selectRow() {
     const productionPrototype = this.args.skill.productionPrototype;
-    this.router.transitionTo('competence.prototypes.single.alternatives', productionPrototype);
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives', productionPrototype);
   }
 }

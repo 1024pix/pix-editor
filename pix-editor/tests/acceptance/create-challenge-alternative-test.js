@@ -5,20 +5,17 @@ import { selectFiles } from 'ember-file-upload/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import sinon from 'sinon';
-import { mockAuthService } from '../mock-auth';
+import { authenticateSession } from 'ember-simple-auth/test-support';
 
 module('Acceptance | Controller | Create alternative challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
-  let apiKey;
   let challenge;
   let skill;
 
   hooks.beforeEach(function() {
     this.server.create('config', 'default');
-    apiKey = 'valid-api-key';
-    mockAuthService.call(this, apiKey);
-    this.server.create('user', { apiKey, trigram: 'ABC' });
+    this.server.create('user', { trigram: 'ABC' });
 
     challenge = this.server.create('challenge', { id: 'recChallenge1' });
     skill = this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
@@ -27,6 +24,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
+    return authenticateSession();
   });
 
   test('create a challenge alternative', async function(assert) {
