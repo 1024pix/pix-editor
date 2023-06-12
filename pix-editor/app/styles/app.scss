@@ -1,3 +1,6 @@
+@charset "utf-8";
+
+@import 'pix-design-tokens';
 @import 'global';
 @import 'sidebar';
 @import 'competence';
@@ -19,6 +22,8 @@
 @import 'events-log';
 @import 'mde';
 @import 'popin';
+@import 'pages/login';
+@import 'components/login-form';
 
 // ember-power-select
 @import 'custom-select';
