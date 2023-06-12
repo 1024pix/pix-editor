@@ -3,6 +3,20 @@
   height: auto;
 }
 
-.pix-modal__overlay {
-  z-index: 100;
+.pix-modal {
+  &__footer {
+    display: flex;
+    flex-direction: column;
+    gap: $pix-spacing-s;
+    margin-bottom: $pix-spacing-s;
+
+    @include device-is('tablet') {
+      flex-flow: row wrap;
+      justify-content: flex-end;
+    }
+  }
+
+  &__overlay {
+    z-index: 100;
+  }
 }
