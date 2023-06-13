@@ -16,7 +16,10 @@ const logger = createLogger({
 
 const enableShuffledOnChallenges = async ({ airtableClient }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
-  logger.debug(excludedSkillIds);
+  
+  const challengesToBeShuffled = await listChallengesToBeShuffled({ airtableClient, excludedSkillIds });
+
+  logger.info(`${challengesToBeShuffled.length} to be shuffled`);
 };
 
 /**
@@ -46,6 +49,33 @@ async function readExcludes({ airtableClient }) {
     }
     return hasSkillId;
   }).flatMap(({ skillIds }) => skillIds);
+}
+
+/**
+ * @param {{
+ *   airtableClient: Airtable.Base
+ *   excludedSkillIds: string[]
+ * }} config
+ */
+async function listChallengesToBeShuffled({ airtableClient, excludedSkillIds }) {
+  let airtableChallenges = await airtableClient.table('Epreuves').select({
+    fields: ['Acquix', 'shuffled'],
+    filterByFormula: 'OR({Type d\'épreuve} = \'QCU\', {Type d\'épreuve} = \'QCM\')',
+  }).all();
+
+  let prevLength = airtableChallenges.length;
+  airtableChallenges = airtableChallenges.filter(
+    (challenge) => challenge.get('Acquix')?.every((skillId) => !excludedSkillIds.includes(skillId) ?? true)
+  );
+  logger.info(`Excluded ${prevLength - airtableChallenges.length} from a total of ${prevLength} QCU/QCM challenges`);
+
+  prevLength = airtableChallenges.length;
+  airtableChallenges = airtableChallenges.filter(
+    (challenge) => !challenge.get('shuffled')
+  );
+  logger.info(`${prevLength - airtableChallenges.length} of ${prevLength} challenges are already shuffled`);
+
+  return airtableChallenges;
 }
 
 function createAirtableClient({ apiKey, base }) {
