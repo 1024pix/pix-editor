@@ -1,11 +1,22 @@
 const Airtable = require('airtable');
 const { resolve } = require('path');
 const { performance } = require('perf_hooks');
+const { createLogger, format, transports } = require('winston');
 const { readFile, utils: xlsxUtils } = require('xlsx');
+
+const logger = createLogger({
+  format: format.combine(
+    format.colorize(),
+    format.simple(),
+  ),
+  transports: [
+    new transports.Console(),
+  ]
+});
 
 const enableShuffledOnChallenges = async ({ airtableClient }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
-  console.log(excludedSkillIds);
+  logger.debug(excludedSkillIds);
 };
 
 /**
@@ -31,7 +42,7 @@ async function readExcludes({ airtableClient }) {
   }).filter((exclude) => {
     const hasSkillId = exclude.skillIds.length > 0;
     if (!hasSkillId) {
-      console.error(`Skill "${exclude.skillName}" from excludes not found in Airtable`);
+      logger.error(`Skill "${exclude.skillName}" from excludes not found in Airtable`);
     }
     return hasSkillId;
   }).flatMap(({ skillIds }) => skillIds);
@@ -49,7 +60,7 @@ async function main() {
     AIRTABLE_BASE: airtableBase,
   } = process.env;
 
-  console.log(`Script ${__filename} has started`, {
+  logger.info(`Script ${__filename} has started`, {
     airtableApiKey,
     airtableBase,
   });
@@ -59,7 +70,7 @@ async function main() {
 
   const endTime = performance.now();
   const duration = Math.round(endTime - startTime);
-  console.log(`Script has ended: took ${duration} milliseconds`);
+  logger.info(`Script has ended: took ${duration} milliseconds`);
 }
 
 (async () => {
@@ -68,7 +79,7 @@ async function main() {
     try {
       await main();
     } catch (error) {
-      console.error(error);
+      logger.error(error);
       process.exitCode = 1;
     }
   }
