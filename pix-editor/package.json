@@ -11,6 +11,7 @@
   },
   "repository": "",
   "scripts": {
+    "clean": "rm -rf tmp dist node_modules",
     "build": "ember build --environment=production",
     "build:production": "ember build -prod",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel 'lint:!(fix)'",
@@ -28,7 +29,7 @@
   },
   "devDependencies": {
     "@1024pix/ember-testing-library": "^0.6.2",
-    "@1024pix/pix-ui": "^13.0.0",
+    "@1024pix/pix-ui": "^35.0.0",
     "@1024pix/stylelint-config": "^1.0.1",
     "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.0.0",

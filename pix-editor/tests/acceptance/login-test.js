@@ -38,8 +38,8 @@ module('Acceptance | Login', function(hooks) {
       await visit('/');
 
       // when
-      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', VALID_API_KEY);
-      await clickByName('Me connecter');
+      await fillByLabel('* Clé API', VALID_API_KEY);
+      await clickByName('Se connecter');
 
       // then
       assert.strictEqual(currentURL(), '/');
@@ -50,8 +50,8 @@ module('Acceptance | Login', function(hooks) {
       await visit('/');
 
       // when
-      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', INVALID_API_KEY);
-      await clickByName('Me connecter');
+      await fillByLabel('* Clé API', INVALID_API_KEY);
+      await clickByName('Se connecter');
 
       // then
       assert.strictEqual(currentURL(), '/connexion');
@@ -63,8 +63,8 @@ module('Acceptance | Login', function(hooks) {
       await visit('/statistics');
 
       // when
-      await fillByLabel('Pour vous identifier, merci de saisir votre clé personnelle.', VALID_API_KEY);
-      await clickByName('Me connecter');
+      await fillByLabel('* Clé API', VALID_API_KEY);
+      await clickByName('Se connecter');
 
       // then
       assert.strictEqual(currentURL(), '/statistics');
