@@ -1,0 +1,36 @@
+<div class="login">
+
+  <header class="login__header">
+    <img src="/assets/images/elephant_login.svg" alt="Pix Editor" />
+
+    <h1 class="login-header__title">Connectez-vous</h1>
+
+    <p class="login-header__information paragraph">
+      Pour vous identifier, merci de saisir votre clé personnelle.
+    </p>
+  </header>
+
+  <main class="login__main">
+
+    <form class="login-main__form" {{on "submit" this.logInClicked}}>
+
+      <PixInput
+        @id="login-api-key"
+        name="login"
+        @label="Clé API"
+        @requiredLabel="Champ obligatoire"
+        {{on "input" this.setApiKey}}
+      />
+
+      {{#if this.isErrorMessagePresent}}
+        <div class="ui negative message" id="login-form-error-message">
+          <p>{{this.errorMessage}}</p>
+        </div>
+      {{/if}}
+
+      <PixButton @type="submit">
+        Se connecter
+      </PixButton>
+    </form>
+  </main>
+</div>
