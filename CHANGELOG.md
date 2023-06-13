@@ -1,5 +1,16 @@
 
 
+## v3.82.0 (13/06/2023)
+
+
+### :rocket: Amélioration
+- [#111](https://github.com/1024pix/pix-editor/pull/111) [FEATURE] Afficher les domaines ordonnés par code (PIX-8216).
+
+### :building_construction: Tech
+- [#109](https://github.com/1024pix/pix-editor/pull/109) [TECH] Mettre à jour PixUi à la version v35.0.0.
+- [#110](https://github.com/1024pix/pix-editor/pull/110) [TECH] Mettre en place ember-simple-auth sur PixEditor (PIX-8232).
+- [#108](https://github.com/1024pix/pix-editor/pull/108) [TECH] Mise à jour ember v4 (PIX-8190).
+
 ## v3.81.0 (16/05/2023)
 
 
