@@ -17,4 +17,3 @@ exports.register = async function(server) {
 };
 
 exports.name = 'static-api';
-
