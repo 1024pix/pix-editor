@@ -22,6 +22,7 @@ module.exports = (function() {
     hapi: {
       options: {},
       enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
+      publicDir: 'public/',
     },
 
     airtable: {
@@ -104,6 +105,7 @@ module.exports = (function() {
 
   if (process.env.NODE_ENV === 'test') {
     config.port = 0;
+    config.hapi.publicDir = 'tests/public-tests/';
 
     config.airtable.apiKey = 'airtableApiKeyValue';
     config.airtable.base = 'airtableBaseValue';

@@ -1,3 +1,5 @@
+const config = require('../../config');
+
 exports.register = async function(server) {
   server.route([
     {
@@ -8,7 +10,7 @@ exports.register = async function(server) {
       },
       handler: {
         directory: {
-          path: 'public/pix-editor',
+          path: `${config.hapi.publicDir}/pix-editor`,
           redirectToSlash: true
         }
       }
