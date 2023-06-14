@@ -2,7 +2,7 @@ const Airtable = require('airtable');
 const { resolve } = require('path');
 const { performance } = require('perf_hooks');
 const { createLogger, format, transports } = require('winston');
-const { readFile, utils: xlsxUtils } = require('xlsx');
+const { readFile, utils: xlsxUtils, writeFileXLSX } = require('xlsx');
 
 const logger = createLogger({
   format: format.combine(
@@ -14,12 +14,16 @@ const logger = createLogger({
   ]
 });
 
-const enableShuffledOnChallenges = async ({ airtableClient }) => {
+const enableShuffledOnChallenges = async ({ airtableClient, dryRun }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
   
   const challengesToBeShuffled = await listChallengesToBeShuffled({ airtableClient, excludedSkillIds });
 
-  logger.info(`${challengesToBeShuffled.length} to be shuffled`);
+  if (!dryRun) {
+    // FIXME
+  }
+
+  _writeReport(challengesToBeShuffled);
 };
 
 /**
@@ -78,6 +82,19 @@ async function listChallengesToBeShuffled({ airtableClient, excludedSkillIds }) 
   return airtableChallenges;
 }
 
+function _writeReport(challenges) {
+  const wb = xlsxUtils.book_new();
+
+  const ws = xlsxUtils.aoa_to_sheet([
+    ['ID Épreuve'],
+    ...challenges.map((challenge) => [challenge.getId()]),
+  ]);
+
+  xlsxUtils.book_append_sheet(wb, ws, 'Challenges');
+
+  writeFileXLSX(wb, resolve(__dirname, 'report.xlsx'));
+}
+
 function createAirtableClient({ apiKey, base }) {
   return new Airtable({ apiKey }).base(base);
 }
@@ -90,13 +107,16 @@ async function main() {
     AIRTABLE_BASE: airtableBase,
   } = process.env;
 
+  const dryRun = process.env.DRY_RUN !== 'false';
+
   logger.info(`Script ${__filename} has started`, {
     airtableApiKey,
     airtableBase,
+    dryRun,
   });
 
   const airtableClient = createAirtableClient({ apiKey: airtableApiKey, base: airtableBase });
-  await enableShuffledOnChallenges({ airtableClient });
+  await enableShuffledOnChallenges({ airtableClient, dryRun });
 
   const endTime = performance.now();
   const duration = Math.round(endTime - startTime);
