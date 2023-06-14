@@ -14,16 +14,16 @@ const logger = createLogger({
   ]
 });
 
-const enableShuffledOnChallenges = async ({ airtableClient, dryRun }) => {
+const enableShuffledOnChallenges = async ({ airtableClient, dryRun, sample }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
   
-  const challengesToBeShuffled = await listChallengesToBeShuffled({ airtableClient, excludedSkillIds });
+  const challenges = await _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, sample });
 
   if (!dryRun) {
-    // FIXME
+    await _shuffleChallenges(challenges, { airtableClient });
   }
 
-  _writeReport(challengesToBeShuffled);
+  _writeReport(challenges);
 };
 
 /**
@@ -43,7 +43,7 @@ async function readExcludes({ airtableClient }) {
     return {
       skillIds: airtableSkills.filter(
         (skill) => skillName.localeCompare(skill.get('Nom'), 'fr', { sensitivity: 'base' }) === 0
-      ).map((skill) => skill.getId()),
+      ).map((skill) => skill.id),
       skillName,
     };
   }).filter((exclude) => {
@@ -59,13 +59,20 @@ async function readExcludes({ airtableClient }) {
  * @param {{
  *   airtableClient: Airtable.Base
  *   excludedSkillIds: string[]
+ *   sample: boolean
  * }} config
  */
-async function listChallengesToBeShuffled({ airtableClient, excludedSkillIds }) {
-  let airtableChallenges = await airtableClient.table('Epreuves').select({
+async function _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, sample }) {
+  const queryParams = {
     fields: ['Acquix', 'shuffled'],
     filterByFormula: 'OR({Type d\'épreuve} = \'QCU\', {Type d\'épreuve} = \'QCM\')',
-  }).all();
+  };
+
+  if (sample) {
+    queryParams.maxRecords = 100;
+  }
+
+  let airtableChallenges = await airtableClient.table('Epreuves').select(queryParams).all();
 
   let prevLength = airtableChallenges.length;
   airtableChallenges = airtableChallenges.filter(
@@ -82,12 +89,35 @@ async function listChallengesToBeShuffled({ airtableClient, excludedSkillIds }) 
   return airtableChallenges;
 }
 
+/**
+ * @param challenges {Airtable.Records<Airtable.FieldSet>}
+ * @param {{
+ *   airtableClient: Airtable.Base
+ * }} config
+ */
+async function _shuffleChallenges(challenges, { airtableClient }) {
+  for (const chunk of chunks(challenges, 10)) {
+    await airtableClient.table('Epreuves').update(chunk.map((challenge) => ({
+      id: challenge.id,
+      fields: {
+        shuffled: true,
+      },
+    })));
+  }
+}
+
+function* chunks(array, chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
+    yield array.slice(i, i + chunkSize);
+  }
+}
+
 function _writeReport(challenges) {
   const wb = xlsxUtils.book_new();
 
   const ws = xlsxUtils.aoa_to_sheet([
     ['ID Épreuve'],
-    ...challenges.map((challenge) => [challenge.getId()]),
+    ...challenges.map((challenge) => [challenge.id]),
   ]);
 
   xlsxUtils.book_append_sheet(wb, ws, 'Challenges');
@@ -108,6 +138,9 @@ async function main() {
   } = process.env;
 
   const dryRun = process.env.DRY_RUN !== 'false';
+  const sample = process.env.SAMPLE === 'true';
+
+  if (!dryRun && sample) throw new Error('SAMPLE=true must not be used with DRY_RUN=false');
 
   logger.info(`Script ${__filename} has started`, {
     airtableApiKey,
@@ -116,7 +149,7 @@ async function main() {
   });
 
   const airtableClient = createAirtableClient({ apiKey: airtableApiKey, base: airtableBase });
-  await enableShuffledOnChallenges({ airtableClient, dryRun });
+  await enableShuffledOnChallenges({ airtableClient, dryRun, sample });
 
   const endTime = performance.now();
   const duration = Math.round(endTime - startTime);
