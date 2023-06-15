@@ -124,11 +124,11 @@
     @imageSrc={{this.popinImageSrc}}
     @close={{this.closeIllustration}}/>
 {{/if}}
-{{#if this.displayChangeLog}}
-  <PopIn::Changelog
-          @onApprove={{this.changelogApprove}}
-          @defaultValue={{this.changelogDefault}} />
-{{/if}}
+<PopIn::Changelog
+  @onApprove={{this.changelogApprove}}
+  @defaultValue={{this.changelogDefault}}
+  @showModal={{this.displayChangeLog}}
+/>
 {{#if this.displayConfirmLog}}
   <PopIn::ConfirmLog
     @title={{t 'common.confirm-log.save'}}
