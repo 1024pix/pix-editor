@@ -40,9 +40,12 @@
       {{/if}}
     </div>
   </div>
-  {{#if this.displayLogout}}
-    <PopIn::Logout @onDeny={{this.closeLogout}} @onConfirm={{this.logout}} @class="popin-logout"/>
-  {{/if}}
+  <PopIn::Logout
+    @onDeny={{this.closeLogout}}
+    @onConfirm={{this.logout}}
+    @showModal={{this.displayLogout}}
+    @class="popin-logout"
+  />
   {{#if this.displayConfirm}}
     <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} />
   {{/if}}
