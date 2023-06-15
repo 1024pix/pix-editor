@@ -65,7 +65,7 @@ async function readExcludes({ airtableClient }) {
 async function _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, sample }) {
   const queryParams = {
     fields: ['Acquix', 'shuffled'],
-    filterByFormula: 'AND(OR({Type d\'épreuve} = \'QCU\', {Type d\'épreuve} = \'QCM\'), {Statut} != \'périmé\')',
+    filterByFormula: 'AND(OR({Type d\'épreuve} = \'QCU\', {Type d\'épreuve} = \'QCM\'), OR({Statut} = \'validé\', {Statut} = \'archivé\'))',
   };
 
   if (sample) {
