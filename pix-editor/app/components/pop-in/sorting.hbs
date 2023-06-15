@@ -1,7 +1,7 @@
 <PixModal data-test-sorting-pop-in-title
-          @title={{@title}}
-          @onCloseButtonClick={{fn @onDeny @model}}
-          @showModal={{true}}
+          @title={{this.title}}
+          @onCloseButtonClick={{fn this.onDeny @model}}
+          @showModal={{@showModal}}
 >
   <:content>
     <div data-test-sorting-pop-in-content class="sortable-content">
@@ -18,13 +18,13 @@
     <PixButton data-test-sorting-pop-in-deny
                @backgroundColor="transparent-light"
                @isBorderVisible={{true}}
-               @triggerAction={{fn @onDeny @model}}
+               @triggerAction={{fn this.onDeny @model}}
     >
       <i class="remove icon" ></i>
       {{t 'common.cancel'}}
     </PixButton>
     <PixButton data-test-sorting-pop-in-approve
-               @triggerAction={{fn @onApprove @model}}
+               @triggerAction={{fn this.onApprove @model}}
     >
       <i class="checkmark icon" ></i>
       Ok
