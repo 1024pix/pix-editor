@@ -6,7 +6,7 @@ export default class PopInNewFrameworkComponent extends Component {
 
   get hasEmptyMandatoryField() {
     const framework = this.args.framework;
-    return this._fieldIsEmpty(framework.name);
+    return this._fieldIsEmpty(framework?.name);
   }
 
   _fieldIsEmpty(field) {
