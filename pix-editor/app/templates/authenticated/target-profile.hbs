@@ -102,7 +102,9 @@
   <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}
                       @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
 {{/if}}
-{{#if this.displayThresholdCalculation}}
-  <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}}
-                               @model={{this.areas}}/>
-{{/if}}
+<PopIn::ThresholdCalculation
+  @title="Paliers indicatifs"
+  @close={{this.closeThresholdCalculation}}
+  @model={{this.areas}}
+  @showModal={{this.displayThresholdCalculation}}
+/>
