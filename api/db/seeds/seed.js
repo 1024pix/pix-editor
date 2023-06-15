@@ -1,8 +1,8 @@
 const DatabaseBuilder = require('../../tests/tooling/database-builder/database-builder');
+const staticCoursesBuilder = require('./data/static-courses.js');
 
 exports.seed = (knex) => {
   const databaseBuilder = new DatabaseBuilder({ knex });
-
   databaseBuilder.factory.buildUser({
     trigram: 'DEV',
     name: 'Utilisateur pour le développement',
@@ -23,6 +23,8 @@ exports.seed = (knex) => {
     access: 'readpixonly',
     apiKey: process.env.REVIEW_APP_READ_PIX_ONLY_USER_API_KEY || readPixOnlyUserApiKey,
   });
+
+  staticCoursesBuilder(databaseBuilder);
 
   return databaseBuilder.commit();
 };
