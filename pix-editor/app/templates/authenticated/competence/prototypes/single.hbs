@@ -114,11 +114,11 @@
   {{/if}}
 </div>
 </div>
-{{#if this.displayChallengeLog}}
-  <PopIn::ChallengeLog
-    @challenge={{this.challenge}}
-    @close={{this.closeChallengeLog}} />
-{{/if}}
+<PopIn::ChallengeLog
+  @challenge={{this.challenge}}
+  @close={{this.closeChallengeLog}}
+  @showModal={{this.displayChallengeLog}}
+/>
 {{#if this.displayImage}}
   <PopIn::Image
     @imageSrc={{this.popinImageSrc}}
