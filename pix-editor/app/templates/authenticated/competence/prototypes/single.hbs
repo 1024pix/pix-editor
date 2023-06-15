@@ -119,11 +119,11 @@
   @close={{this.closeChallengeLog}}
   @showModal={{this.displayChallengeLog}}
 />
-{{#if this.displayImage}}
-  <PopIn::Image
-    @imageSrc={{this.popinImageSrc}}
-    @close={{this.closeIllustration}}/>
-{{/if}}
+<PopIn::Image
+  @imageSrc={{this.popinImageSrc}}
+  @close={{this.closeIllustration}}
+  @showModal={{this.displayImage}}
+/>
 <PopIn::Changelog
   @onApprove={{this.changelogApprove}}
   @defaultValue={{this.changelogDefault}}
