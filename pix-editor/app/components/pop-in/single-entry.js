@@ -13,6 +13,10 @@ export default class PopinSingleEntry extends Component {
     }
   }
 
+  get title() {
+    return this.args.title ? this.args.title : 'no_single_entry_title';
+  }
+
   @action
   validate(e) {
     e.preventDefault();
