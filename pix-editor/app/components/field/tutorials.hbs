@@ -86,7 +86,8 @@
     </div>
   {{/if}}
 </div>
-{{#if this.displayTutorialPopin}}
-  <PopIn::Tutorial @tutorial={{this.tutorial}} @close={{this.closeTutorialPopin}}
-                   @saveTutorial={{this.saveTutorial}}/>
-{{/if}}
+<PopIn::Tutorial @tutorial={{this.tutorial}}
+                 @close={{this.closeTutorialPopin}}
+                 @saveTutorial={{this.saveTutorial}}
+                 @showModal={{this.displayTutorialPopin}}
+/>
