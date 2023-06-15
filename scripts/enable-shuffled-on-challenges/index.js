@@ -96,6 +96,8 @@ async function _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, s
  * }} config
  */
 async function _shuffleChallenges(challenges, { airtableClient }) {
+  let updatedCount = 0;
+
   for (const chunk of chunks(challenges, 10)) {
     await airtableClient.table('Epreuves').update(chunk.map((challenge) => ({
       id: challenge.id,
@@ -103,6 +105,9 @@ async function _shuffleChallenges(challenges, { airtableClient }) {
         shuffled: true,
       },
     })));
+
+    updatedCount += chunk.length;
+    logger.info(`${Math.round(updatedCount / challenges.length * 100)}% ${updatedCount} challenges updated out of ${challenges.length}`);
   }
 }
 
