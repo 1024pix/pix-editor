@@ -98,10 +98,13 @@
                   @close={{this.closeTubeLevel}}
                   @showModal={{this.displayTubeLevel}}
 />
-{{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}
-                      @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
-{{/if}}
+<PopIn::SingleEntry
+  @title={{this.singleEntryPopInTitle}}
+  @label={{this.singleEntryPopInLabel}}
+  @setValue={{this.singleEntryPopInAction}}
+  @close={{this.closeSingleEntry}}
+  @showModal={{this.displaySingleEntry}}
+/>
 <PopIn::ThresholdCalculation
   @title="Paliers indicatifs"
   @close={{this.closeThresholdCalculation}}
