@@ -88,16 +88,16 @@
     <Input @type="file" id="target-profile__open-file" {{on "change" this.openFile}} />
   </div>
 </div>
-{{#if this.displayTubeLevel}}
-  <PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
-                    @clearTube={{this.clearTubeAction}}
-                    @skills= {{this.tubeSkills}}
-                    @level={{this.selectedTubeLevel}}
-                    @selectedSkills={{this.selectedTubeSkills}}
-                    @tube={{this.selectedTube}}
-                    @isThematicResultMode={{this.isThematicResultMode}}
-                    @close={{this.closeTubeLevel}}/>
-{{/if}}
+<PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
+                  @clearTube={{this.clearTubeAction}}
+                  @skills= {{this.tubeSkills}}
+                  @level={{this.selectedTubeLevel}}
+                  @selectedSkills={{this.selectedTubeSkills}}
+                  @tube={{this.selectedTube}}
+                  @isThematicResultMode={{this.isThematicResultMode}}
+                  @close={{this.closeTubeLevel}}
+                  @showModal={{this.displayTubeLevel}}
+/>
 {{#if this.displaySingleEntry}}
   <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}
                       @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
