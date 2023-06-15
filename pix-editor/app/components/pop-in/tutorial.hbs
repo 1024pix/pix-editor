@@ -1,23 +1,25 @@
 <PixModal @title="Créer un tutoriel"
           @onCloseButtonClick={{@close}}
-          @showModal={{true}}
+          @showModal={{@showModal}}
 >
   <:content>
+  {{#if @tutorial}}
     <Form::Tutorial @tutorial={{@tutorial}} />
+  {{/if}}
   </:content>
   <:footer>
-    <PixButton @backgroundColor="transparent-light"
-               @isBorderVisible={{true}}
-               @triggerAction={{@close}}
-    >
-      {{t 'common.cancel'}}
-    </PixButton>
-    <PixButton data-test-save-tutorial-button
-               @triggerAction={{@saveTutorial}}
-               @isDisabled={{this.hasEmptyMandatoryField}}
-    >
-      Enregistrer
-      <i class="save icon"></i>
-    </PixButton>
+      <PixButton @backgroundColor="transparent-light"
+                 @isBorderVisible={{true}}
+                 @triggerAction={{@close}}
+      >
+        {{t 'common.cancel'}}
+      </PixButton>
+      <PixButton data-test-save-tutorial-button
+                 @triggerAction={{@saveTutorial}}
+                 @isDisabled={{this.hasEmptyMandatoryField}}
+      >
+        Enregistrer
+        <i class="save icon"></i>
+      </PixButton>
   </:footer>
 </PixModal>
