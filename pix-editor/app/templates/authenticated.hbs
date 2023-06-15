@@ -46,7 +46,11 @@
     @showModal={{this.displayLogout}}
     @class="popin-logout"
   />
-  {{#if this.displayConfirm}}
-    <PopIn::Confirm @title={{this.confirmTitle}} @content={{this.confirmContent}} @onApprove={{this.confirmApprove}} @onDeny={{this.confirmDeny}} />
-  {{/if}}
+  <PopIn::Confirm
+    @title={{this.confirmTitle}}
+    @content={{this.confirmContent}}
+    @onApprove={{this.confirmApprove}}
+    @onDeny={{this.confirmDeny}}
+    @showModal={{this.displayConfirm}}
+  />
 </div>
