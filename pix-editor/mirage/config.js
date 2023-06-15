@@ -162,6 +162,15 @@ function routes() {
     };
   });
 
+  this.get('/airtable/changelog/Notes', (schema) => {
+    schema.notes.create();
+    schema.notes.create();
+    const records = schema.notes.all().models.map((note) => {
+      return _serializeModel(note, 'note');
+    });
+    return { records };
+  });
+
   this.post('/airtable/changelog/Notes', (schema, request) => {
     const notePayload = JSON.parse(request.requestBody);
     const note = _deserializePayload(notePayload, 'note');

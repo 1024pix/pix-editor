@@ -1,7 +1,7 @@
 <PixModal
-  @title='Journal de {{@challenge.skillNames}}'
+  @title={{this.title}}
   @onCloseButtonClick={{this.close}}
-  @showModal={{true}}
+  @showModal={{@showModal}}
 >
   <:content>
     {{#if this.list}}
