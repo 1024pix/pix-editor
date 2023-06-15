@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fast-csv/parse": "^4.3.6",
     "@samwen/base62-util": "^1.0.4",
     "@types/pg": "^8.6.6",
     "@types/pg-cursor": "^2.7.0",
@@ -28,10 +29,11 @@
     "progress": "2.0.3",
     "sinon": "9.2.4",
     "sinon-chai": "^3.5.0",
-    "variable-diff": "2.0.2"
+    "variable-diff": "2.0.2",
+    "winston": "^3.9.0",
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {
-    "@fast-csv/parse": "^4.3.6",
     "eslint": "^7.32.0",
     "eslint-plugin-mocha": "^9.0.0",
     "nock": "^13.0.10"
