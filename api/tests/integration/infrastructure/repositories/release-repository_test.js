@@ -97,6 +97,16 @@ describe('Integration | Repository | release-repository', function() {
 
     beforeEach(function() {
       _mockRichAirtableContent();
+      databaseBuilder.factory.buildStaticCourse({
+        id: 'course1PG',
+        name: 'course1PG name',
+        description: 'course1PG description',
+        challengeIds: 'challenge121212,challenge211113',
+        imageUrl: 'course1PG/image.png',
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2020-01-02'),
+      });
+      return databaseBuilder.commit();
     });
 
     it('should return current content as DTO', async function() {
@@ -1163,6 +1173,14 @@ function _getRichCurrentContentDTO() {
       competences: ['competence12', 'competence21'],
       challenges: ['challenge211111', 'challenge121211'],
       imageUrl: 'course2 imageUrl',
+    },
+    {
+      id: 'course1PG',
+      name: 'course1PG name',
+      description: 'course1PG description',
+      competences: ['competence12', 'competence21'],
+      challenges: ['challenge121212', 'challenge211113'],
+      imageUrl: 'course1PG/image.png',
     },
   ];
   const expectedTutorialDTOs = [
