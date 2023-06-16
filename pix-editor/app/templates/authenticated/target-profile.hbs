@@ -88,21 +88,26 @@
     <Input @type="file" id="target-profile__open-file" {{on "change" this.openFile}} />
   </div>
 </div>
-{{#if this.displayTubeLevel}}
-  <PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
-                    @clearTube={{this.clearTubeAction}}
-                    @skills= {{this.tubeSkills}}
-                    @level={{this.selectedTubeLevel}}
-                    @selectedSkills={{this.selectedTubeSkills}}
-                    @tube={{this.selectedTube}}
-                    @isThematicResultMode={{this.isThematicResultMode}}
-                    @close={{this.closeTubeLevel}}/>
-{{/if}}
-{{#if this.displaySingleEntry}}
-  <PopIn::SingleEntry @title={{this.singleEntryPopInTitle}} @label={{this.singleEntryPopInLabel}}
-                      @setValue={{this.singleEntryPopInAction}} @close={{this.closeSingleEntry}} />
-{{/if}}
-{{#if this.displayThresholdCalculation}}
-  <PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeThresholdCalculation}}
-                               @model={{this.areas}}/>
-{{/if}}
+<PopIn::TubeLevel @setTubeLevel={{this.setTubeAction}}
+                  @clearTube={{this.clearTubeAction}}
+                  @skills= {{this.tubeSkills}}
+                  @level={{this.selectedTubeLevel}}
+                  @selectedSkills={{this.selectedTubeSkills}}
+                  @tube={{this.selectedTube}}
+                  @isThematicResultMode={{this.isThematicResultMode}}
+                  @close={{this.closeTubeLevel}}
+                  @showModal={{this.displayTubeLevel}}
+/>
+<PopIn::SingleEntry
+  @title={{this.singleEntryPopInTitle}}
+  @label={{this.singleEntryPopInLabel}}
+  @setValue={{this.singleEntryPopInAction}}
+  @close={{this.closeSingleEntry}}
+  @showModal={{this.displaySingleEntry}}
+/>
+<PopIn::ThresholdCalculation
+  @title="Paliers indicatifs"
+  @close={{this.closeThresholdCalculation}}
+  @model={{this.areas}}
+  @showModal={{this.displayThresholdCalculation}}
+/>

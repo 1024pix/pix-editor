@@ -4,6 +4,10 @@ import { action } from '@ember/object';
 
 export default class PopinTubeLevel extends Component {
 
+  get title() {
+    return this.args.tube?.name || 'no_tube';
+  }
+
   get skillsAndSelectedStatus() {
     const skills = this.args.skills;
     const selected = this.args.selectedSkills;

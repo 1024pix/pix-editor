@@ -93,32 +93,30 @@
     {{/if}}
   </div>
 </div>
-{{#if this.displaySelectLocation}}
-  <PopIn::SelectLocation
-          @onChange={{this.duplicateToLocation}}
-          @title={{concat "Destination de la copie de " this.skillName}}
-          @selectTubeLevel={{true}}
-          @tube={{this.skill.tube}}
-          @level={{this.skill.level}}
-          @selectEmptyLevels={{true}}
-          @isSkillLocation={{true}}
-          @close={{this.closeSelectLocation}}
-  />
-{{/if}}
+<PopIn::SelectLocation
+        @onChange={{this.duplicateToLocation}}
+        @title={{concat "Destination de la copie de " this.skillName}}
+        @selectTubeLevel={{true}}
+        @tube={{this.skill.tube}}
+        @level={{this.skill.level}}
+        @selectEmptyLevels={{true}}
+        @isSkillLocation={{true}}
+        @close={{this.closeSelectLocation}}
+        @showModal={{this.displaySelectLocation}}
+/>
 {{#if this.displayChangeLog}}
   <PopIn::Changelog
           @onApprove={{this.approveChangelog}}
           @defaultValue={{this.changelogText}} />
 {{/if}}
-{{#if this.displayConfirmLog}}
-  <PopIn::ConfirmLog
-    @title={{t 'common.confirm-log.save'}}
-    @onApprove={{this.saveSkillCallBack}}
-    @defaultValue={{this.defaultSaveChangelog}}
-    @inputId="changelog-message"
-    @onDeny={{this.closeComfirmLogPopin}}
-    @content={{t 'common.confirm-log.content'}}
-    @label={{t 'common.confirm-log.label'}}
-  />
-{{/if}}
+<PopIn::ConfirmLog
+  @title={{t 'common.confirm-log.save'}}
+  @onApprove={{this.saveSkillCallBack}}
+  @defaultValue={{this.defaultSaveChangelog}}
+  @inputId="changelog-message"
+  @onDeny={{this.closeComfirmLogPopin}}
+  @content={{t 'common.confirm-log.content'}}
+  @label={{t 'common.confirm-log.label'}}
+  @showModal={{this.displayConfirmLog}}
+/>
 {{outlet}}

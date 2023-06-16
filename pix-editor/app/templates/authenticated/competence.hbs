@@ -45,9 +45,10 @@
 {{#if this.twoColumns}}
 <div class="main-right" {{did-insert this.setMainRightSlot}}></div>
 {{/if}}
-{{#if this.displaySortingPopIn}}
-  <PopIn::Sorting @title={{this.sortingPopInTitle}}
-                  @model={{this.sortingModel}}
-                  @onApprove={{this.sortingPopInApproveAction}}
-                  @onDeny={{this.sortingPopInCancelAction}}/>
-{{/if}}
+<PopIn::Sorting
+  @title={{this.sortingPopInTitle}}
+  @model={{this.sortingModel}}
+  @onApprove={{this.sortingPopInApproveAction}}
+  @onDeny={{this.sortingPopInCancelAction}}
+  @showModal={{this.displaySortingPopIn}}
+/>

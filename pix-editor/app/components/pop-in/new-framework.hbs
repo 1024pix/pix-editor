@@ -1,12 +1,14 @@
 <PixModal
   @title="Créer un référentiel"
   @onCloseButtonClick={{@close}}
-  @showModal={{true}}
+  @showModal={{@showModal}}
 >
   <:content>
-    <form action="" class="ui form" {{on "submit" this.saveOnSubmit}}>
-      <Field::Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom"/>
-    </form>
+    {{#if @framework}}
+      <form action="" class="ui form" {{on "submit" this.saveOnSubmit}}>
+        <Field::Input data-test-framework-name-input @value={{@framework.name}} @edition={{true}} @title="Nom"/>
+      </form>
+    {{/if}}
   </:content>
   <:footer>
     <PixButton @backgroundColor="transparent-light"

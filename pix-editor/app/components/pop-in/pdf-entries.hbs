@@ -1,7 +1,7 @@
 <PixModal
   @title={{t 'target_profile.pdf_export.title'}}
   @onCloseButtonClick={{this.closeModal}}
-  @showModal={{true}}
+  @showModal={{@showModal}}
 >
   <:content>
     <form class="ui form" {{on "submit" this.validate}}>

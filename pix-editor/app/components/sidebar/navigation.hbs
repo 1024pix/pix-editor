@@ -24,6 +24,9 @@
       <LinkTo data-test-add-area @route="authenticated.area-management.new" @model={{this.framework.id}} class="item" {{on "click" @close}}><i class="plus square icon"></i>Ajouter un domaine</LinkTo>
     {{/if}}
 </AccordionList>
-{{#if this.displayNewFrameworkPopIn}}
-  <PopIn::NewFramework @framework={{this.newFramework}} @close={{this.closeNewFrameworkPopIn}} @save={{this.saveFramework}}/>
-{{/if}}
+<PopIn::NewFramework
+  @framework={{this.newFramework}}
+  @close={{this.closeNewFrameworkPopIn}}
+  @save={{this.saveFramework}}
+  @showModal={{this.displayNewFrameworkPopIn}}
+/>
