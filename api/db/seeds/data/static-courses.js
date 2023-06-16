@@ -4,5 +4,6 @@ module.exports = function(databaseBuilder) {
     name: 'Static Course 1',
     description: 'Static Course 1 description',
     challengeIds: 'challenge1NQqfx9mYKUQEO,challengeTYFrFy5EGYEet,challenge1rSPsnisQ8ft4W',
+    imageUrl: 'some/image/url'
   });
 };
