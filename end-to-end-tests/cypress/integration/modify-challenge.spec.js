@@ -12,7 +12,7 @@ context('Modifying challenge', () => {
     cy.contains('1.1').click()
     cy.contains('@eval2').click();
     cy.contains('Modifier').click();
-    cy.contains('Enregistrer').click();
+    cy.get('[data-test-save-challenge-button]').click();
     cy.intercept('PATCH', '/api/*/**').as('route');
 
     // when
