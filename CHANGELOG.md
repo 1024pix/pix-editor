@@ -1,5 +1,16 @@
 
 
+## v3.82.1 (16/06/2023)
+
+
+### :rocket: Amélioration
+- [#112](https://github.com/1024pix/pix-editor/pull/112) [FEATURE] Reprise de données pour afficher aléatoirement les anciens QCU/QCM (PIX-7876).
+- [#114](https://github.com/1024pix/pix-editor/pull/114) [FEATURE] Créer la table des tests statiques (PIX-7792).
+- [#113](https://github.com/1024pix/pix-editor/pull/113) [FEATURE] Renvoit le fichier index.html en cas de 404 (PIX-8350).
+
+### :bug: Correction
+- [#115](https://github.com/1024pix/pix-editor/pull/115) [BUGFIX] Le focus sur les modales est défaillant depuis la mise à jour de PixUi (PIX-8351).
+
 ## v3.82.0 (13/06/2023)
 
 
