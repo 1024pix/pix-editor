@@ -11,6 +11,7 @@ const attachmentDatasource = require('../../infrastructure/datasources/airtable/
 const challengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
 const pixApiClient = require('../../infrastructure/pix-api-client');
 const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
+const config = require('../../config');
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -24,6 +25,8 @@ function _parseQueryParams(search) {
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
 async function _refreshCache(challenge) {
+  if (config.pixEditor.newPreview) return;
+
   try {
     const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
     const learningContent = {
