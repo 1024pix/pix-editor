@@ -55,6 +55,7 @@ module.exports = (function() {
       storagePost: process.env.STORAGE_POST,
       storageBucket: process.env.STORAGE_BUCKET,
       localeToLanguageMap: LOCALE_TO_LANGUAGE_MAP,
+      newPreview: isFeatureEnabled(process.env.NEW_PREVIEW),
     },
 
     storage: {

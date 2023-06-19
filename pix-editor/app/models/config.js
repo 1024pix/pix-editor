@@ -9,4 +9,5 @@ export default class ConfigModel extends Model {
   @attr storagePost;
   @attr storageBucket;
   @attr localeToLanguageMap;
+  @attr newPreview;
 }
