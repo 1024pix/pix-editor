@@ -13,6 +13,16 @@ module.exports = {
       );
     });
   },
+
+  async post({ payload, url }) {
+    return _callAPIWithRetry((token) => {
+      return axios.post(
+        `${config.pixApi.baseUrl}${url}`,
+        payload,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+    });
+  },
 };
 
 async function _callAPIWithRetry(fn, renewToken = false) {
