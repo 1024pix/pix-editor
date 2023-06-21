@@ -5,11 +5,12 @@ function buildStaticCourse({
   name,
   description,
   challengeIds,
+  imageUrl,
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
 
-  const values = { id, name, description, challengeIds, createdAt, updatedAt };
+  const values = { id, name, description, challengeIds, imageUrl, createdAt, updatedAt };
 
   return databaseBuffer.pushInsertable({
     tableName: 'static_courses',

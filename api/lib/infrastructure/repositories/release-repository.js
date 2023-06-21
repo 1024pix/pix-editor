@@ -90,10 +90,18 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
+  const airtableChallenges = await challengeDatasource.list();
+  const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
+    _getCurrentContentFromAirtable(airtableChallenges),
+    _getCurrentContentFromPG(airtableChallenges),
+  ]);
+  return _mergeContents(currentContentFromAirtable, currentContentFromPG);
+}
+
+async function _getCurrentContentFromAirtable(challenges) {
   const [
     areas,
     attachments,
-    challenges,
     competences,
     courses,
     frameworks,
@@ -104,7 +112,6 @@ async function _getCurrentContent() {
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
-    challengeDatasource.list(),
     competenceDatasource.list(),
     courseDatasource.list(),
     frameworkDatasource.list(),
@@ -132,4 +139,31 @@ async function _getCurrentContent() {
     courses: filteredCourses,
     tutorials: filteredTutorials,
   };
+}
+
+async function _getCurrentContentFromPG(airtableChallenges) {
+  const staticCoursesDTO = await knex('static_courses')
+    .select(['id', 'name', 'description', 'challengeIds', 'imageUrl'])
+    .orderBy('id');
+  return {
+    courses: staticCoursesDTO.map(({ id, name, description, challengeIds, imageUrl }) => {
+      const challenges = challengeIds.replaceAll(' ', '').split(',');
+      const competences = challenges.map((challengeId) => {
+        return airtableChallenges.find((airtableChallenge) => airtableChallenge.id === challengeId).competenceId;
+      });
+      return {
+        id,
+        name,
+        description,
+        challenges,
+        competences,
+        imageUrl,
+      };
+    }),
+  };
+}
+
+function _mergeContents(contentFromAirtable, contentFromPG) {
+  contentFromAirtable.courses = [...contentFromAirtable.courses, ...contentFromPG.courses];
+  return contentFromAirtable;
 }
