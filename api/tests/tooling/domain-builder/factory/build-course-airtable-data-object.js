@@ -5,6 +5,8 @@ module.exports = function buildCourseAirtableDataObject(
     description = 'Programmer niveau 1 et 2',
     imageUrl = 'https://dl.airtable.com/otNiedKYSTBmoAPdyIk2_woman-163426_1920.jpg',
     name = '3.4 niveau 1 et 2',
+    adaptive = false,
+    createdAt = new Date('2021-01-01'),
     // relationships
     challenges = [
       'recs9uvUWKQ4HDzw6',
@@ -17,7 +19,6 @@ module.exports = function buildCourseAirtableDataObject(
       'rec3XmZPwLagZl7Ku',
     ],
     competences = ['rec8116cdd76088af'],
-    adaptive = false,
   } = {}) {
   return {
     id,
@@ -26,6 +27,7 @@ module.exports = function buildCourseAirtableDataObject(
     imageUrl,
     name,
     adaptive,
+    createdAt,
     // relations
     challenges,
     competences,
