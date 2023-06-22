@@ -8,4 +8,5 @@ module.exports = [
   require('./application/file-storage-token'),
   require('./application/challenges'),
   require('./application/databases'),
+  require('./application/static-courses'),
 ];

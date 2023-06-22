@@ -15,6 +15,7 @@ module.exports = datasource.extend({
     'Épreuves (id persistant)',
     'Image',
     'Adaptatif ?',
+    'created_at',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -22,7 +23,7 @@ module.exports = datasource.extend({
     if (airtableRecord.get('Image')) {
       imageUrl = airtableRecord.get('Image')[0].url;
     }
-
+    
     return {
       id: airtableRecord.get('id persistant'),
       name: airtableRecord.get('Nom'),
@@ -31,6 +32,7 @@ module.exports = datasource.extend({
       challenges: _.reverse(airtableRecord.get('Épreuves (id persistant)')),
       imageUrl,
       adaptive: Boolean(airtableRecord.get('Adaptatif ?')),
+      createdAt: new Date(airtableRecord.get('created_at')),
     };
   },
 });

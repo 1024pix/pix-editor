@@ -6,6 +6,7 @@ module.exports = function buildCourse({
   challenges,
   imageUrl,
   adaptive,
+  createdAt = new Date('2021-01-01')
 } = {}) {
 
   return {
@@ -18,6 +19,7 @@ module.exports = function buildCourse({
       'Épreuves (id persistant)': challenges,
       'Competence (id persistant)': competences,
       'Adaptatif ?': adaptive,
+      'created_at': createdAt.toISOString(),
     },
   };
 };

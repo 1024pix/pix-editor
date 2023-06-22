@@ -18,6 +18,7 @@ module.exports = function buildCourseAirtableDataObject(
     ],
     competences = ['rec8116cdd76088af'],
     adaptive = false,
+    createdAt = new Date('2021-01-01'),
   } = {}) {
   return {
     id,
@@ -25,8 +26,9 @@ module.exports = function buildCourseAirtableDataObject(
     description,
     imageUrl,
     name,
-    adaptive,
+    createdAt,
     // relations
+    adaptive,
     challenges,
     competences,
   };

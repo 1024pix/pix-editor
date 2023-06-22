@@ -1,5 +1,5 @@
 module.exports = function buildCompetence({
-  id,
+  id = 'competenceid1',
   index,
   name_i18n: { fr: nameFrFr, en: nameEnUs },
   description_i18n: { fr: descriptionFrFr, en: descriptionEnUs },
@@ -8,7 +8,7 @@ module.exports = function buildCompetence({
   thematicIds,
   origin,
   fullName,
-}) {
+} = {}) {
   return {
     id,
     'fields': {

@@ -24,6 +24,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | CourseDatasource', () 
             }
           ],
           'Adaptatif ?': 'true',
+          'created_at': '2022-01-04T09:00:05.000Z'
         },
       });
 
@@ -39,6 +40,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | CourseDatasource', () 
         imageUrl: 'https://example.org/course.png',
         challenges: ['recChallenge2', 'recChallenge1'],
         adaptive: true,
+        createdAt: new Date('2022-01-04T09:00:05Z'),
       };
 
       expect(course).to.deep.equal(expectedCourse);
