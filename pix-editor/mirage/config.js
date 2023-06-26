@@ -1,5 +1,6 @@
-import { createServer, discoverEmberDataModels, applyEmberDataSerializers } from 'ember-cli-mirage';
-import { getDsSerializers, getDsModels } from 'ember-cli-mirage/ember-data';
+import { applyEmberDataSerializers, createServer, discoverEmberDataModels } from 'ember-cli-mirage';
+import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
+import slice from 'lodash/slice';
 
 export function makeServer(config) {
   const finalConfig = {
@@ -222,6 +223,24 @@ function routes() {
 
     return challenge;
   });
+
+  this.get('/static-course-summaries', function(schema, request) {
+    const queryParams = request.queryParams;
+    const allStaticCourseSummaries = schema.staticCourseSummaries.all().models;
+    const rowCount = allStaticCourseSummaries.length;
+
+    const pagination = _getPaginationFromQueryParams(queryParams);
+    const paginatedStaticCourseSummaries = _applyPagination(allStaticCourseSummaries, pagination);
+
+    const json = this.serialize({ modelName: 'static-course-summary', models: paginatedStaticCourseSummaries }, 'static-course-summary');
+    json.meta = {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      rowCount,
+      pageCount: Math.ceil(rowCount / pagination.pageSize),
+    };
+    return json;
+  });
 }
 
 function _serializeModel(instance, modelName) {
@@ -262,4 +281,18 @@ function _deserializePayload(payload, modelName) {
   }
   payload.id = payload.fields[serializer.primaryKey];
   return payload;
+}
+
+function _getPaginationFromQueryParams(queryParams) {
+  return {
+    pageSize: parseInt(queryParams['page[size]']) || 10,
+    page: parseInt(queryParams['page[number]']) || 1,
+  };
+}
+
+function _applyPagination(data, { page, pageSize }) {
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+
+  return slice(data, start, end);
 }
