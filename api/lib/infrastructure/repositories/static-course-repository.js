@@ -4,8 +4,8 @@ const StaticCourse = require('../../domain/models/StaticCourse');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 
 module.exports = {
-
-  async findStaticCourses() {
+  // TODO: when double read will be removed, move pagination process into knex
+  async findStaticCourses({ page }) {
     const staticCoursesFromPG = await knex('static_courses')
       .select('id', 'name', 'createdAt', 'challengeIds');
 
@@ -15,7 +15,7 @@ module.exports = {
         id: staticCourseFromAirtable.id,
         name: staticCourseFromAirtable.name,
         createdAt: staticCourseFromAirtable.createdAt,
-        challengeIds: staticCourseFromAirtable.challenges,
+        challengeIds: staticCourseFromAirtable.challenges || [],
       });
     });
 
@@ -28,7 +28,13 @@ module.exports = {
       });
     });
 
-    const staticCourses = staticCoursesFirstBatch.concat(staticCoursesSecondBatch);
-    return _.orderBy(staticCourses, 'createdAt', 'desc');
+    const rowCount = staticCoursesFirstBatch.length + staticCoursesSecondBatch.length;
+    const meta = { page: page.number, pageSize: page.size, pageCount: Math.ceil(rowCount / page.size), rowCount };
+    const results = _.chain(staticCoursesFirstBatch)
+      .concat(staticCoursesSecondBatch)
+      .orderBy('createdAt', 'desc')
+      .chunk(page.size)
+      .nth(page.number - 1).value() || [];
+    return { results, meta };
   },
 };
