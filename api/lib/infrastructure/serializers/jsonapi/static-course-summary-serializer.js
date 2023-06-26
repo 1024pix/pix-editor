@@ -1,7 +1,7 @@
 const { Serializer } = require('jsonapi-serializer');
 
 module.exports = {
-  serialize(staticCourse) {
+  serializeFromPaginatedStaticCourses(staticCourse, meta) {
 
     return new Serializer('static-course-summaries', {
       attributes: [
@@ -16,7 +16,8 @@ module.exports = {
           createdAt: staticCourse.createdAt,
           challengeCount: staticCourse.challengeCount(),
         };
-      }
+      },
+      meta,
     }).serialize(staticCourse);
   },
 

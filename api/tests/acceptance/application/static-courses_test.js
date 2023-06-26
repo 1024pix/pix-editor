@@ -24,7 +24,7 @@ describe('Acceptance | API | static course summaries', () => {
       const airtableStaticCourse1 = airtableBuilder.factory.buildCourse({
         id: 'courseid3',
         name: 'static course 3',
-        challenges: [],
+        challenges: null,
         createdAt: new Date('2021-01-02'),
       });
 
@@ -43,11 +43,12 @@ describe('Acceptance | API | static course summaries', () => {
       const response = await server.inject({
         method: 'GET',
         url: '/api/static-course-summaries',
-        headers: generateAuthorizationHeader(user)
+        headers: generateAuthorizationHeader(user),
       });
 
       // Then
       expect(response.statusCode).to.equal(200);
+      expect(response.result.meta).to.deep.equal({ page: 1, pageSize: 10, rowCount: 4, pageCount: 1 });
       expect(response.result.data).to.deep.equal([
         {
           type: 'static-course-summaries',
