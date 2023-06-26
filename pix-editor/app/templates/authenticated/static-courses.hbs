@@ -1,0 +1,38 @@
+<div class="main-left">
+  <div class="ui main-title">
+    <h1 class="ui left floated header">Tests Statiques</h1>
+  </div>
+  <div class="panel">
+    <table class="">
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Epreuves</th>
+        <th>Créé le</th>
+        <th>Prévisualisation</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each this.model as |staticCourseSummary|}}
+        <tr>
+          <td>{{staticCourseSummary.name}}</td>
+          <td>{{staticCourseSummary.challengeCount}}</td>
+          <td>{{dayjs-format staticCourseSummary.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
+          <td>
+            <PixButton @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}}>COPIERCOLLER</PixButton>
+            <a
+              href="{{staticCourseSummary.previewURL}}"
+              target="_blank"
+              rel="noopener noreferrer"
+            >OEIL</a>
+          </td>
+        </tr>
+      {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  <PixPagination
+    @pagination={{this.model.meta}}
+  />
+</div>
