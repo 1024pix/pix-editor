@@ -49,9 +49,14 @@
     {{/unless}}
     <div class="right menu">
       {{#unless this.isThematicResultMode}}
-        <button class="ui button" {{on "click" this.showThresholdCalculation}} type="button">
-          <i class="calculator icon"></i>Paliers indicatifs
-        </button>
+        <PixButton
+          @triggerAction={{this.showThresholdCalculation}}
+          @backgroundColor="transparent-light"
+          @iconBefore="calculator"
+          @prefixIconBefore="fas"
+        >
+          Paliers indicatifs
+        </PixButton>
       {{/unless}}
       <button class="ui button" {{on "click" this.getGenerateTitleOrThematicResultTitle}} type="button">
         <i class="download icon"></i>Identifiants

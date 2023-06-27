@@ -9,6 +9,7 @@ module.exports = function () {
       'award',
       'book',
       'bullhorn',
+      'calculator',
       'chevron-down',
       'chevron-up',
       'crown',
