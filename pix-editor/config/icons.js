@@ -26,6 +26,7 @@ module.exports = function () {
       'flask',
       'floppy-disk',
       'folder-open',
+      'table-cells',
       'hourglass-half',
       'info-circle',
       'link',

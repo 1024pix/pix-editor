@@ -1,8 +1,12 @@
 <div class="ui borderless bottom attached labelled icon menu{{this.skillClass}}">
   {{#if this.displayWorkbenchViews}}
-    <button class={{concat "ui button item" (if (eq @view "workbench") " active" "")}} {{on "click" (fn @selectView "workbench")}} type="button">
-      <i class="grid layout icon"></i>
-    </button>
+    <PixButton
+      @triggerAction={{fn @selectView "workbench"}}
+      @backgroundColor="{{if (eq @view "workbench") "grey" "transparent-light"}}"
+      @iconBefore="table-cells"
+      @prefixIconBefore="fas"
+    >
+    </PixButton>
     <button class={{concat "ui button item" (if (eq @view "workbench-list") " active" "")}} {{on "click" (fn @selectView "workbench-list")}} type="button">
       <i class="align justify icon"></i>
     </button>
