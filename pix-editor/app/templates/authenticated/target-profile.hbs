@@ -38,9 +38,14 @@
       >
         Ouvrir
       </PixButton>
-      <button class="ui button left" {{on "click" this.getSaveTitle}} type="button">
-        <i class="save icon"></i>Enregistrer
-      </button>
+      <PixButton
+        @triggerAction={{this.getSaveTitle}}
+        @backgroundColor="transparent-light"
+        @iconBefore="floppy-disk"
+        @prefixIconBefore="fas"
+      >
+        Enregistrer
+      </PixButton>
     {{/unless}}
     <div class="right menu">
       {{#unless this.isThematicResultMode}}
