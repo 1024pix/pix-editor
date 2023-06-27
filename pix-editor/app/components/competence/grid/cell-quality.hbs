@@ -13,7 +13,11 @@
         <span>{{this.qualityIndication}}</span>
       </div>
       {{#if this.classTutorial}}
-        <i class="lab icon {{this.classTutorial}}"></i>
+        <FaIcon
+          @icon="flask"
+          @prefix="fas"
+          class="{{this.classTutorial}}"
+        />
       {{/if}}
       {{#if @skill.productionPrototype.timer }}
         <i class="time icon"></i>

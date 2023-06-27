@@ -22,6 +22,7 @@ module.exports = function () {
       'exclamation-circle',
       'external-link-alt',
       'file-pdf',
+      'flask',
       'floppy-disk',
       'folder-open',
       'hourglass-half',
