@@ -3,9 +3,9 @@
     <h1 class="ui left floated header">Tests Statiques</h1>
   </div>
   <div class="panel">
-    <table class="">
+    <table class="table">
       <thead>
-      <tr>
+      <tr class="table-header">
         <th>Nom</th>
         <th>Epreuves</th>
         <th>Créé le</th>
@@ -18,21 +18,24 @@
           <td>{{staticCourseSummary.name}}</td>
           <td>{{staticCourseSummary.challengeCount}}</td>
           <td>{{dayjs-format staticCourseSummary.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
-          <td>
-            <PixButton @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}}>COPIERCOLLER</PixButton>
+          <td class="table-preview">
+            <PixIconButton @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}} @icon="copy" @iconPrefix="far" @ariaLabel="copier le lien vers la preview" class="icon">COPIERCOLLER</PixIconButton>
             <a
               href="{{staticCourseSummary.previewURL}}"
               target="_blank"
               rel="noopener noreferrer"
-            >OEIL</a>
+            >
+            <span class="icon">
+              <FaIcon @icon="eye" @prefix="fas"/>
+            </span>
+            </a>
           </td>
         </tr>
       {{/each}}
       </tbody>
     </table>
+    <PixPagination
+      @pagination={{this.model.meta}}
+    />
   </div>
-
-  <PixPagination
-    @pagination={{this.model.meta}}
-  />
 </div>
