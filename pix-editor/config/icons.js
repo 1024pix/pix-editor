@@ -12,6 +12,7 @@ module.exports = function () {
       'calculator',
       'chevron-down',
       'chevron-up',
+      'code',
       'crown',
       'download',
       'ellipsis-v',

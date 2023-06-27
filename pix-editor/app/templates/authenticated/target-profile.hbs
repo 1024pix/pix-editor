@@ -67,9 +67,14 @@
         Identifiants
       </PixButton>
       {{#unless this.isThematicResultMode}}
-        <button class="ui button" {{on "click" this.getProfileId}} type="button">
-          <i class="code icon"></i>CSV
-        </button>
+        <PixButton
+          @triggerAction={{this.getProfileId}}
+          @backgroundColor="transparent-light"
+          @iconBefore="code"
+          @prefixIconBefore="fas"
+        >
+          CSV
+        </PixButton>
         <TargetProfile::PdfExport @model={{this.areas}}/>
       {{/unless}}
 
