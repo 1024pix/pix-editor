@@ -1,6 +1,11 @@
-<button class="ui button" {{on "click" this.export}} type="button">
-  <i class="pdf file icon"></i>PDF
-</button>
+<PixButton
+  @triggerAction={{this.export}}
+  @backgroundColor="transparent-light"
+  @iconBefore="file-pdf"
+  @prefixIconBefore="fas"
+>
+  PDF
+</PixButton>
 <PopIn::PdfEntries
   @validateAction={{this.generatePDF}}
   @close={{this.closeTitleInput}}
