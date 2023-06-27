@@ -20,7 +20,10 @@
         />
       {{/if}}
       {{#if @skill.productionPrototype.timer }}
-        <i class="time icon"></i>
+        <FaIcon
+          @icon="clock"
+          @prefix="fas"
+        />
       {{/if}}
       {{#if (and (not this.classTutorial) (not @skill.productionPrototype.timer))}}
         <br>
