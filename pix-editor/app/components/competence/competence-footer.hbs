@@ -7,9 +7,13 @@
       @prefixIconBefore="fas"
     >
     </PixButton>
-    <button class={{concat "ui button item" (if (eq @view "workbench-list") " active" "")}} {{on "click" (fn @selectView "workbench-list")}} type="button">
-      <i class="align justify icon"></i>
-    </button>
+    <PixButton
+      @triggerAction={{fn @selectView "workbench-list"}}
+      @backgroundColor="{{if (eq @view "workbench") "transparent-light" "grey"}}"
+      @iconBefore="align-justify"
+      @prefixIconBefore="fas"
+    >
+    </PixButton>
   {{/if}}
   {{#if this.mayCreateTheme}}
     <button class="ui button left item" {{on "click" @newTheme}} type="button">
