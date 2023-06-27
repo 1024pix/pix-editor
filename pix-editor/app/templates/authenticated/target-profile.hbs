@@ -30,9 +30,14 @@
   </div>
   <div class="ui top attached borderless labelled icon menu">
     {{#unless this.isThematicResultMode}}
-      <button class="ui button first left" {{on "click" this.load}} type="button">
-        <i class="folder open icon"></i>Ouvrir
-      </button>
+      <PixButton
+        @triggerAction={{this.load}}
+        @backgroundColor="transparent-light"
+        @iconBefore="folder-open"
+        @prefixIconBefore="fas"
+      >
+        Ouvrir
+      </PixButton>
       <button class="ui button left" {{on "click" this.getSaveTitle}} type="button">
         <i class="save icon"></i>Enregistrer
       </button>
