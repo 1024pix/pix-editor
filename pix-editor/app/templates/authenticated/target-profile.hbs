@@ -58,9 +58,14 @@
           Paliers indicatifs
         </PixButton>
       {{/unless}}
-      <button class="ui button" {{on "click" this.getGenerateTitleOrThematicResultTitle}} type="button">
-        <i class="download icon"></i>Identifiants
-      </button>
+      <PixButton
+        @triggerAction={{this.getGenerateTitleOrThematicResultTitle}}
+        @backgroundColor="transparent-light"
+        @iconBefore="download"
+        @prefixIconBefore="fas"
+      >
+        Identifiants
+      </PixButton>
       {{#unless this.isThematicResultMode}}
         <button class="ui button" {{on "click" this.getProfileId}} type="button">
           <i class="code icon"></i>CSV

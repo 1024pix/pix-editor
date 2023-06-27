@@ -13,6 +13,7 @@ module.exports = function () {
       'chevron-down',
       'chevron-up',
       'crown',
+      'download',
       'ellipsis-v',
       'eye',
       'eye-slash',
