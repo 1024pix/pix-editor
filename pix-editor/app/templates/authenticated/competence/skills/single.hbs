@@ -104,11 +104,11 @@
         @close={{this.closeSelectLocation}}
         @showModal={{this.displaySelectLocation}}
 />
-{{#if this.displayChangeLog}}
-  <PopIn::Changelog
-          @onApprove={{this.approveChangelog}}
-          @defaultValue={{this.changelogText}} />
-{{/if}}
+<PopIn::Changelog
+  @onApprove={{this.approveChangelog}}
+  @defaultValue={{this.changelogText}}
+  @showModal={{this.displayChangeLog}}
+/>
 <PopIn::ConfirmLog
   @title={{t 'common.confirm-log.save'}}
   @onApprove={{this.saveSkillCallBack}}
