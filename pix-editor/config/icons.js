@@ -6,6 +6,7 @@ module.exports = function () {
       'arrow-down',
       'arrow-left',
       'arrow-right',
+      'arrow-right-from-bracket',
       'arrow-up',
       'award',
       'bars',

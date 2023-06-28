@@ -30,7 +30,15 @@
     </div>
   </div>
   <div class="ui labelled icon menu">
-    <button class="ui button item" type="button" {{on "click" @openLogout}}><i class="logout icon"></i>Déconnexion</button>
+    <PixButton
+      @triggerAction={{@openLogout}}
+      @backgroundColor="blue"
+      @iconAfter="arrow-right-from-bracket"
+      @prefixIconAfter="fas"
+      class="button-with-white-icon"
+    >
+      Déconnexion
+    </PixButton>
     <div class="right item">
       {{#if this.author}}
         {{this.author}} -
