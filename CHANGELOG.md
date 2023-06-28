@@ -1,5 +1,14 @@
 
 
+## v3.83.0 (28/06/2023)
+
+
+### :building_construction: Tech
+- [#116](https://github.com/1024pix/pix-editor/pull/116) [TECH] Mettre en place la double lecture de tests statiques lors de la création de la release (PIX-8383).
+
+### :bug: Correction
+- [#118](https://github.com/1024pix/pix-editor/pull/118) [BUGFIX] La "Duplication vers" d'un acquis pour le passer d'un sujet à un autre ne fonctionne pas (PIX-8485).
+
 ## v3.82.1 (16/06/2023)
 
 
