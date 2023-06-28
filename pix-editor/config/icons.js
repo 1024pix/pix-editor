@@ -12,6 +12,7 @@ module.exports = function () {
       'book',
       'bullhorn',
       'calculator',
+      'chart-column',
       'chevron-down',
       'chevron-up',
       'clock',

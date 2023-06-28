@@ -15,7 +15,10 @@
     {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>
     <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
-      <i class="chart bar icon"></i> Statistiques
+      <FaIcon
+        @icon="chart-column"
+        @prefix="fas"
+      /> Statistiques
     </LinkTo>
     <div class="secondary-links">
       <LinkTo data-test-link-to-event-log @route="authenticated.events-log"><i class="book icon"></i> Journal</LinkTo>
