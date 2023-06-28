@@ -43,6 +43,7 @@ module.exports = function () {
       'question-circle',
       'search',
       'share',
+      'share-from-square',
       'share-square',
       'slash',
       'sheet-plastic',
