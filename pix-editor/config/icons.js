@@ -8,6 +8,7 @@ module.exports = function () {
       'arrow-right',
       'arrow-up',
       'award',
+      'bars',
       'book',
       'bullhorn',
       'calculator',

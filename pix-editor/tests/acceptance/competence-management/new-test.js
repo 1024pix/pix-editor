@@ -1,9 +1,10 @@
 import { module, test } from 'qunit';
-import { currentURL, visit, fillIn, click, find, findAll } from '@ember/test-helpers';
+import { click, currentURL, fillIn, find, findAll, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
+import { clickByName } from '@1024pix/ember-testing-library';
 
 module('Acceptance | competence-management/single', function(hooks) {
 
@@ -75,7 +76,7 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // when
     await visit('/competence-management/new/recArea1');
-    await click(find('.bars.icon'));
+    await clickByName('Basculer le menu');
     await click(find('[data-test-area-item]'));
     await click(find('[data-test-competence-item]'));
 

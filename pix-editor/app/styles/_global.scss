@@ -29,6 +29,12 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   height: 100%;
 }
 
+.button-with-white-icon {
+  > svg {
+    color: #FFFFFF;
+  }
+}
+
 .waiting {
   height: 100%;
 }
