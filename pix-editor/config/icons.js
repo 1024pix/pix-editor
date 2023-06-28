@@ -17,6 +17,7 @@ module.exports = function () {
       'chevron-down',
       'chevron-up',
       'clock',
+      'circle-info',
       'code',
       'crosshairs',
       'crown',
