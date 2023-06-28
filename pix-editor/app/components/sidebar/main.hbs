@@ -7,7 +7,10 @@
     <LinkTo @route="authenticated.static-courses"><FaIcon @icon="sheet-plastic" @prefix="fas"></FaIcon> Tests statiques</LinkTo>
     {{#if this.mayGenerateTargetProfile}}
       <LinkTo data-test-target-profile-link @route="authenticated.target-profile" {{on "click" @close}}>
-        <i class="crosshairs icon"></i> Générateur de profil cible
+        <FaIcon
+          @icon="crosshairs"
+          @prefix="fas"
+        /> Générateur de profil cible
       </LinkTo>
     {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>

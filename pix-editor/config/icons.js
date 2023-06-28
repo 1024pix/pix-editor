@@ -16,6 +16,7 @@ module.exports = function () {
       'chevron-up',
       'clock',
       'code',
+      'crosshairs',
       'crown',
       'download',
       'ellipsis-v',
