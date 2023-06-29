@@ -2,10 +2,16 @@
   <div class="ui main-title">
     <h1 class="ui left floated header">Tests Statiques</h1>
   </div>
-  <div class="panel">
-    <table class="table">
+  <div class="panel-table-v2">
+    <table class="content-text content-text--small">
+      <colgroup class="table__column">
+        <col class="table__column--wide" />
+        <col class="table__column--small" />
+        <col class="table__column--small" />
+        <col class="table__column--small" />
+      </colgroup>
       <thead>
-      <tr class="table-header">
+      <tr>
         <th>Nom</th>
         <th>Epreuves</th>
         <th>Créé le</th>
@@ -14,28 +20,25 @@
       </thead>
       <tbody>
       {{#each this.model as |staticCourseSummary|}}
-        <tr>
-          <td>{{staticCourseSummary.name}}</td>
+    <tr class="tr--clickable">
+      <td>{{staticCourseSummary.name}}</td>
           <td>{{staticCourseSummary.challengeCount}}</td>
           <td>{{dayjs-format staticCourseSummary.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
-          <td class="table-preview">
+          <td class="actions">
             <PixIconButton @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}} @icon="copy" @iconPrefix="far" @ariaLabel="copier le lien vers la preview" class="icon">COPIERCOLLER</PixIconButton>
             <a
               href="{{staticCourseSummary.previewURL}}"
               target="_blank"
               rel="noopener noreferrer"
-            >
-            <span class="icon">
-              <FaIcon @icon="eye" @prefix="fas"/>
-            </span>
+            ><FaIcon @icon="eye" @prefix="fas"/>
             </a>
           </td>
         </tr>
       {{/each}}
       </tbody>
     </table>
-    <PixPagination
-      @pagination={{this.model.meta}}
-    />
   </div>
+  <PixPagination
+    @pagination={{this.model.meta}}
+  />
 </div>
