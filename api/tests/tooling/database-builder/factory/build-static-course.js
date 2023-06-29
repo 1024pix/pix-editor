@@ -4,7 +4,7 @@ function buildStaticCourse({
   id = 'staticCourseABC123',
   name = 'Mon super test statique',
   description = 'Ma super description de test statique',
-  challengeIds = ['challengeABC', 'challengeDEF'],
+  challengeIds = 'challengeABC, challengeDEF',
   imageUrl = 'ma/super/image.png',
   createdAt = new Date('2010-01-04'),
   updatedAt = new Date('2010-01-11'),

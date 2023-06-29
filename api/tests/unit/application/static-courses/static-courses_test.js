@@ -3,11 +3,11 @@ const staticCourseController = require('../../../../lib/application/static-cours
 const staticCourseRepository = require('../../../../lib/infrastructure/repositories/static-course-repository');
 
 describe('Unit | Controller | static courses controller', () => {
-  describe('#findStaticCourseSummaries', function() {
+  describe('#findSummaries', function() {
     describe('pagination normalization', function() {
       let stub;
       beforeEach(function() {
-        stub = sinon.stub(staticCourseRepository, 'findStaticCourses');
+        stub = sinon.stub(staticCourseRepository, 'findSummaries');
         stub.resolves({ results: [], meta: {} });
       });
 
@@ -16,7 +16,7 @@ describe('Unit | Controller | static courses controller', () => {
         const request = { query: { 'page[size]': 5, 'page[number]': 3 } };
 
         // when
-        await staticCourseController.findStaticCourseSummaries(request, hFake);
+        await staticCourseController.findSummaries(request, hFake);
 
         // then
         expect(stub).to.have.been.calledWithExactly({ page: { number: 3, size: 5 } });
@@ -30,10 +30,10 @@ describe('Unit | Controller | static courses controller', () => {
         const request3 = { query: { 'page[size]': null, 'page[number]': 3 } };
 
         // when
-        await staticCourseController.findStaticCourseSummaries(request0, hFake);
-        await staticCourseController.findStaticCourseSummaries(request1, hFake);
-        await staticCourseController.findStaticCourseSummaries(request2, hFake);
-        await staticCourseController.findStaticCourseSummaries(request3, hFake);
+        await staticCourseController.findSummaries(request0, hFake);
+        await staticCourseController.findSummaries(request1, hFake);
+        await staticCourseController.findSummaries(request2, hFake);
+        await staticCourseController.findSummaries(request3, hFake);
 
         // then
         expect(stub.getCall(0)).to.have.been.calledWithExactly({ page: { number: 3, size: 10 } });
@@ -48,8 +48,8 @@ describe('Unit | Controller | static courses controller', () => {
         const request1 = { query: { 'page[size]': 101, 'page[number]': 3 } };
 
         // when
-        await staticCourseController.findStaticCourseSummaries(request0, hFake);
-        await staticCourseController.findStaticCourseSummaries(request1, hFake);
+        await staticCourseController.findSummaries(request0, hFake);
+        await staticCourseController.findSummaries(request1, hFake);
 
         // then
         expect(stub.getCall(0)).to.have.been.calledWithExactly({ page: { number: 3, size: 100 } });
@@ -64,10 +64,10 @@ describe('Unit | Controller | static courses controller', () => {
         const request3 = { query: { 'page[size]': 5, 'page[number]': null } };
 
         // when
-        await staticCourseController.findStaticCourseSummaries(request0, hFake);
-        await staticCourseController.findStaticCourseSummaries(request1, hFake);
-        await staticCourseController.findStaticCourseSummaries(request2, hFake);
-        await staticCourseController.findStaticCourseSummaries(request3, hFake);
+        await staticCourseController.findSummaries(request0, hFake);
+        await staticCourseController.findSummaries(request1, hFake);
+        await staticCourseController.findSummaries(request2, hFake);
+        await staticCourseController.findSummaries(request3, hFake);
 
         // then
         expect(stub.getCall(0)).to.have.been.calledWithExactly({ page: { number: 1, size: 5 } });

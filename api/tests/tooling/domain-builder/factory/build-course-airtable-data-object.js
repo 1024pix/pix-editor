@@ -7,6 +7,7 @@ module.exports = function buildCourseAirtableDataObject(
     name = '3.4 niveau 1 et 2',
     adaptive = false,
     createdAt = new Date('2021-01-01'),
+    updatedAt = new Date('2021-01-02'),
     // relationships
     challenges = [
       'recs9uvUWKQ4HDzw6',
@@ -28,6 +29,7 @@ module.exports = function buildCourseAirtableDataObject(
     name,
     adaptive,
     createdAt,
+    updatedAt,
     // relations
     challenges,
     competences,

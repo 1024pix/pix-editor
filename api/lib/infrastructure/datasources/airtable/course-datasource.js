@@ -16,6 +16,7 @@ module.exports = datasource.extend({
     'Image',
     'Adaptatif ?',
     'created_at',
+    'updated_at',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -23,7 +24,7 @@ module.exports = datasource.extend({
     if (airtableRecord.get('Image')) {
       imageUrl = airtableRecord.get('Image')[0].url;
     }
-    
+
     return {
       id: airtableRecord.get('id persistant'),
       name: airtableRecord.get('Nom'),
@@ -33,6 +34,7 @@ module.exports = datasource.extend({
       imageUrl,
       adaptive: Boolean(airtableRecord.get('Adaptatif ?')),
       createdAt: new Date(airtableRecord.get('created_at')),
+      updatedAt: new Date(airtableRecord.get('updated_at')),
     };
   },
 });

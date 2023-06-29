@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const staticCourseRepository = require('../../infrastructure/repositories/static-course-repository');
-const staticCourseSummarySerializer = require('../../infrastructure/serializers/jsonapi/static-course-summary-serializer');
+const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const { extractParameters } = require('../../infrastructure/utils/query-params-utils');
 const DEFAULT_PAGE = {
   number: 1,
@@ -9,11 +9,17 @@ const DEFAULT_PAGE = {
 };
 
 module.exports = {
-  async findStaticCourseSummaries(request, h) {
+  async findSummaries(request, h) {
     const { page } = extractParameters(request.query);
-    const { results: staticCourses, meta } = await staticCourseRepository.findStaticCourses({ page: _normalizePage(page) });
-    return h.response(staticCourseSummarySerializer.serializeFromPaginatedStaticCourses(staticCourses, meta));
+    const { results: staticCourseSummaries, meta } = await staticCourseRepository.findSummaries({ page: _normalizePage(page) });
+    return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
   },
+
+  async get(request, h) {
+    const staticCourseId = request.params.id;
+    const staticCourse = await staticCourseRepository.get(staticCourseId);
+    return h.response(staticCourseSerializer.serialize(staticCourse));
+  }
 };
 
 function _normalizePage(page) {
