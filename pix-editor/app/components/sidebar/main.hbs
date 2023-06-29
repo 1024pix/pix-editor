@@ -4,7 +4,7 @@
   <Sidebar::Search @displaySearch={{this.maySearch}} @close={{@close}} />
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @areas={{this.areas}} @close={{@close}}/>
   <div class="secondary-links">
-    <LinkTo @route="authenticated.static-courses"><i class="book icon"></i> Tests statiques</LinkTo>
+    <LinkTo @route="authenticated.static-courses"><FaIcon @icon="sheet-plastic" @prefix="fas"></FaIcon> Tests statiques</LinkTo>
     {{#if this.mayGenerateTargetProfile}}
       <LinkTo data-test-target-profile-link @route="authenticated.target-profile" {{on "click" @close}}>
         <i class="crosshairs icon"></i> Générateur de profil cible
