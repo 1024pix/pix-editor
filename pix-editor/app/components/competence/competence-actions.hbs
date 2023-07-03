@@ -33,9 +33,14 @@
         <div data-test-select-draft-view class="item proposal {{if (eq @view "draft") "active" ""}}"  {{on "click" (fn @selectView "draft")}}>En construction</div>
       </div>
       {{#if (eq @view "production")}}
-        <button class="ui button left item" type="button" {{on "click" @shareSkills}}>
-          <i class="share square icon"></i> Exporter
-        </button>
+        <PixButton
+          @triggerAction={{@shareSkills}}
+          @backgroundColor="transparent-light"
+          @iconBefore="share-from-square"
+          @prefixIconBefore="fas"
+        >
+          Exporter
+        </PixButton>
       {{/if}}
     {{else if (eq @section "challenges")}}
       <div class="ui top attached tabular menu">
