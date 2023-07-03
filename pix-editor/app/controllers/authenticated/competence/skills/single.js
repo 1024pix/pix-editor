@@ -8,16 +8,24 @@ export default class SingleController extends Controller {
 
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = this.intl.t('skill.changelog.update-message');
-
   @tracked edition = false;
   @tracked displaySelectLocation = false;
   @tracked displayChangeLog = false;
   @tracked changelogText = '';
   @tracked displayConfirmLog = false;
-
   @controller('authenticated.competence')
   parentController;
+  @service access;
+  @service changelogEntry;
+  @service config;
+  @service confirm;
+  @service intl;
+  defaultSaveChangelog = this.intl.t('skill.changelog.update-message');
+  @service loader;
+  @service notify;
+  @service router;
+  @service storage;
+  @service store;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -26,17 +34,6 @@ export default class SingleController extends Controller {
   get skill() {
     return this.model;
   }
-
-  @service access;
-  @service changelogEntry;
-  @service config;
-  @service confirm;
-  @service intl;
-  @service loader;
-  @service notify;
-  @service router;
-  @service storage;
-  @service store;
 
   get skillName() {
     return `${this.skill.pixId} (${this.skill.name})`;
@@ -353,4 +350,6 @@ export default class SingleController extends Controller {
     return entry.save()
       .then(() => challenge);
   }
+
+  nullFn() {}
 }

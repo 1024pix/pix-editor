@@ -3,32 +3,57 @@
     <div class="ui left menu">
       {{#unless this.edition}}
         {{#if this.mayDuplicate}}
-          <button data-test-duplicate-skill-action class="ui icon button" {{on "click" this.duplicateSkill}} type="button" title="Dupliquer vers"><i
-                  class="icon copy"></i></button>
+          <PixButton
+            @triggerAction={{this.duplicateSkill}}
+            @backgroundColor="transparent-light"
+            @iconBefore="copy"
+            @prefixIconBefore="fas"
+          >
+            Dupliquer vers
+          </PixButton>
         {{/if}}
-        <LinkTo class="ui button icon item"
-                title="Liste des versions"
-                @route="authenticated.competence.skills.list"
-                @models={{array this.skill.tube.id this.skill.level}}>
-          <i class="clone icon"></i>&nbsp;v{{this.skill.version}}
-        </LinkTo>
+        <PixButtonLink
+          @backgroundColor="transparent-light"
+          @route="authenticated.competence.skills.list"
+          @model={{array this.skill.tube.id this.skill.level}}
+          class="button-link-with-icon"
+        >
+          <FaIcon
+            @icon="code-branch"
+            @prefix="fas"></FaIcon> Liste des versions (v{{this.skill.version}})
+        </PixButtonLink>
         {{#if (or this.mayArchive this.mayObsolete)}}
           <BasicDropdown title="Actions" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
             <dd.Trigger>
-              <button class="ui icon button item" type="button"><i class="bolt icon"></i></button>
+              <PixButton
+                @triggerAction={{this.nullFn}}
+                @backgroundColor="transparent-light"
+                @iconBefore="bolt"
+                @prefixIconBefore="fas"
+              >
+                Actions
+              </PixButton>
             </dd.Trigger>
             <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
               {{#if this.mayArchive}}
-                <button class="ui button archive item"  {{on "click" (fn this.archiveSkill dd)}} type="button">
-                  <i class="archive icon"></i>
+                <PixButton
+                  @triggerAction={{fn this.archiveSkill dd}}
+                  @backgroundColor="transparent-light"
+                  @iconBefore="box-archive"
+                  @prefixIconBefore="fas"
+                >
                   {{t 'competence.skills.archive'}}
-                </button>
+                </PixButton>
               {{/if}}
               {{#if this.mayObsolete}}
-                <button class="ui button delete item"  {{on "click" (fn this.obsoleteSkill dd)}} type="button">
-                  <i class="trash alternate icon"></i>
+                <PixButton
+                  @triggerAction={{fn this.obsoleteSkill dd}}
+                  @backgroundColor="transparent-light"
+                  @iconBefore="trash"
+                  @prefixIconBefore="fas"
+                >
                   {{t 'competence.skills.obsolete'}}
-                </button>
+                </PixButton>
               {{/if}}
             </dd.Content>
           </BasicDropdown>
@@ -41,13 +66,23 @@
     </div>
     <div class="ui right menu">
       {{#if this.maximized}}
-        <button class="ui icon button" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i>
-        </button>
+        <PixIconButton
+          @triggerAction={{this.minimize}}
+          @icon="window-minimize"
+          @iconPrefix="fas"
+          @ariaLabel="Minimiser la fenêtre des acquis"/>
       {{else}}
-        <button class="ui icon button" {{on "click" this.maximize}} type="button"><i
-                class="window maximize outline icon"></i></button>
+        <PixIconButton
+          @triggerAction={{this.maximize}}
+          @icon="window-maximize"
+          @iconPrefix="fas"
+          @ariaLabel="Maximiser la fenêtre des acquis"/>
       {{/if}}
-      <button class="ui icon button" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
+      <PixIconButton
+        @triggerAction={{this.close}}
+        @icon="rectangle-xmark"
+        @iconPrefix="fas"
+        @ariaLabel="Fermer la fenêtre des acquis"/>
     </div>
   </div>
 </div>
