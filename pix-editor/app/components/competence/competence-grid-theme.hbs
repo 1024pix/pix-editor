@@ -3,9 +3,12 @@
     <td data-test-theme-cell class="theme-cell create-tube">
         <LinkTo @route="authenticated.competence.themes.single" @model={{@theme}}>{{@theme.name}}</LinkTo>
         <div class="ui mini basic icon buttons tube-management">
-          <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
-            <i class="plus square outline icon"></i>
-          </button>
+          <PixIconButton
+            @triggerAction={{fn @newTube @theme}}
+            @icon="square-plus"
+            @iconPrefix="fas"
+            @size="small"
+            @ariaLabel="Nouveau tube"/>
         </div>
     </td>
     <td data-test-empty-row colspan="8" class="empty-row"></td>
@@ -22,12 +25,19 @@
           {{/if}}
           {{#if this.mayCreateTube}}
             <div class="ui mini basic icon buttons tube-management">
-              <button data-test-add-tube class="ui icon button" {{on "click" (fn @newTube @theme)}} title="Nouveau tube" type="button">
-                <i class="plus square outline icon"></i>
-              </button>
-              <button data-test-sort-tube class="ui icon button" {{on "click" (fn @displaySortTubesPopIn @theme.tubes)}} title="Trier les Tubes" type="button">
-                <i class="exchange icon rotate-90"></i>
-              </button>
+              <PixIconButton
+                @triggerAction={{fn @newTube @theme}}
+                @icon="square-plus"
+                @iconPrefix="fas"
+                @size="small"
+                @ariaLabel="Nouveau tube"/>
+              <PixIconButton
+                @triggerAction={{fn @displaySortTubesPopIn @theme.tubes}}
+                @icon="arrow-right-arrow-left"
+                @iconPrefix="fas"
+                @size="small"
+                class="button-with-rotated-icon-90"
+                @ariaLabel="Trier les tubes"/>
             </div>
           {{/if}}
         </td>
