@@ -24,6 +24,8 @@
 @import 'popin';
 @import 'pages/login';
 @import 'components/login-form';
+@import 'shadows';
+@import './authenticated/static-courses';
 
 // ember-power-select
 @import 'custom-select';

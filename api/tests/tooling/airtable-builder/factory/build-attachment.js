@@ -1,10 +1,10 @@
 const buildAttachment = function buildAttachment({
-  id,
-  alt,
-  type,
-  url,
-  challengeId,
-}) {
+  id = 'attid1',
+  alt = 'alt',
+  type = 'image/png',
+  url = 'url/to/attachment',
+  challengeId = 'challid1',
+} = {}) {
 
   return {
     id,

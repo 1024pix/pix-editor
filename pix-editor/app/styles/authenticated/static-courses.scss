@@ -1,0 +1,153 @@
+.panel-table-v2 {
+  border-radius: 4px;
+  border: none;
+  box-shadow: $shadow-base;
+  background-color: $pix-neutral-0;
+  overflow: auto;
+
+  table {
+    height: 100%;
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border-spacing: 0;
+    table-layout: fixed;
+    box-sizing: border-box;
+  }
+
+  thead {
+    width: 100%;
+    color: $pix-neutral-100;
+
+    th {
+      font-family: $font-roboto;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+
+  tbody {
+    color: $pix-neutral-60;
+
+    tr {
+      &:focus-within,
+      &:hover {
+        background-color: $pix-neutral-15;
+      }
+    }
+
+    tr.tr--clickable {
+      cursor: pointer;
+
+      &:hover,
+      &:focus,
+      &:active {
+        color: $pix-neutral-100;
+        background-color: $pix-neutral-10;
+        transition: 0.25s ease;
+      }
+    }
+
+    .row--not-clickable {
+      cursor: auto;
+      background-color: white;
+    }
+
+    th.th--clickable {
+      background-color: white;
+
+      &:hover {
+        background-color: $pix-neutral-15;
+      }
+    }
+
+    td {
+      font-family: $font-roboto;
+      font-size: 0.875rem;
+      font-weight: 400;
+      color: $pix-neutral-80;
+      position: relative;
+
+      &.ellipsis {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      > a {
+        color: $pix-neutral-80;
+        text-decoration: none;
+
+        &:hover,
+        &:focus,
+        &:active {
+          color: $pix-neutral-80;
+        }
+      }
+    }
+  }
+
+  tr {
+    width: 100%;
+    height: 60px;
+    border-top: 1px solid $pix-neutral-15;
+  }
+
+  td,
+  th {
+    text-align: left;
+    padding-left: 24px;
+  }
+
+  th::first-letter {
+    text-transform: capitalize;
+  }
+
+  .table__column {
+    width: 16%;
+
+    col {
+      min-width: 100px;
+    }
+
+    &--small {
+      width: 6%;
+      max-width: 150px;
+    }
+
+    &--wide {
+      width: 25%;
+    }
+
+    &--highlight {
+      color: $pix-neutral-80;
+    }
+  }
+}
+
+.content-text {
+  color: #505f79;
+  font-family: $font-roboto;
+  font-size: 1rem;
+
+  &--small {
+    font-size: 0.8125rem;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  margin: auto;
+
+  a {
+    padding: 8px 10px;
+    border-radius: 50%;
+
+    &:hover {
+      background-color: $pix-neutral-20;
+    }
+  }
+}

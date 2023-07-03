@@ -31,6 +31,7 @@ module.exports = function () {
       'share',
       'share-square',
       'slash',
+      'sheet-plastic',
       'star',
       'tablet-alt',
       'times',

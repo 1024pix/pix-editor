@@ -1,5 +1,5 @@
 const buildChallenge = function buildChallenge({
-  id,
+  id = 'challid1',
   instruction,
   proposals,
   type,
@@ -20,7 +20,7 @@ const buildChallenge = function buildChallenge({
   autoReply,
   locales,
   alternativeInstruction,
-  airtableId,
+  airtableId = 'chalairtableid',
   skills,
   genealogy,
   pedagogy,
@@ -43,7 +43,7 @@ const buildChallenge = function buildChallenge({
   madeObsoleteAt,
   createdAt = '1986-14-07',
   shuffled,
-}) {
+} = {}) {
   return {
     id: airtableId,
     'fields': {

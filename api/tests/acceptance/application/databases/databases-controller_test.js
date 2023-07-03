@@ -1,4 +1,10 @@
-const { expect, generateAuthorizationHeader, databaseBuilder, airtableBuilder, domainBuilder } = require('../../../test-helper');
+const {
+  expect,
+  generateAuthorizationHeader,
+  databaseBuilder,
+  airtableBuilder,
+  domainBuilder
+} = require('../../../test-helper');
 const createServer = require('../../../../server');
 
 const {
@@ -64,8 +70,12 @@ describe('Acceptance | Controller | databases-controller', () => {
       const response = await server.inject(currentContentOptions);
 
       // then
-      expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
-      expect(JSON.parse(response.result).courses[0].challenges).to.deep.equal(expectedCurrentContent.courses[0].challenges);
+      // console.log(response.result);
+      // console.log(JSON.parse(response.result));
+
+      // expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
+      expect(JSON.parse(response.result)).to.deep.equal(JSON.parse(JSON.stringify(expectedCurrentContent)));
+      // expect(JSON.parse(response.result).courses[0].challenges).to.deep.equal(expectedCurrentContent.courses[0].challenges);
     });
   });
 

@@ -15,6 +15,7 @@ module.exports = {
   buildRelease: require('./build-release'),
   buildSkillForRelease: require('./build-skill-for-release'),
   buildSkillAirtableDataObject: require('./build-skill-airtable-data-object'),
+  buildStaticCourse: require('./build-static-course'),
   buildThematicForRelease: require('./build-thematic-for-release'),
   buildThematicAirtableDataObject: require('./build-thematic-airtable-data-object'),
   buildTubeForRelease: require('./build-tube-for-release'),
