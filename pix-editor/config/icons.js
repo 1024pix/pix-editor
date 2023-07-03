@@ -55,6 +55,7 @@ module.exports = function () {
       'share',
       'share-from-square',
       'share-square',
+      'shuffle',
       'slash',
       'sheet-plastic',
       'square-plus',
