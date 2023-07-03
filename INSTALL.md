@@ -6,7 +6,7 @@ Installation
 Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 * [Git](http://git-scm.com/) (2.6.4)
-* [Node.js](http://nodejs.org/) (v14.17.x) et NPM (6.14.x)
+* [Node.js](http://nodejs.org/) (v16.19.x) et NPM (8.19.x)
 * [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
 
 > ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
@@ -14,6 +14,20 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 ### Airtable
 
 Pix Editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
+
+Une fois la base dupliquée, utilisez un compte nominatif, pour genere un personal access token
+Naviguer dans votre "developer hub"
+Generer un access token avec les droits suivant :
+```
+data.records:read
+
+data.records:write
+
+schema.bases:read
+
+schema.bases:write
+```
+et donner l'acces a la base qui contient votre schema dupliqué
 
 ## Instructions
 
@@ -32,7 +46,15 @@ cp api/sample.env api/.env
 
 Remplir les valeurs des variables dans le fichier `.env` (cf. section [Configuration](#configuration)).
 
+
+
+
 **3/ Installer les dépendances**
+
+Se placer sur la bonne version de Node en utilisant nvm
+```
+nvm use
+```
 
 Depuis la racine du projet :
 ```bash
