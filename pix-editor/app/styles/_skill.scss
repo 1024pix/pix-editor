@@ -65,6 +65,10 @@
 
 .ui.menu.skill-menu {
   @extend %challenge-menu;
+
+  > button {
+    margin-top: 8px;
+  }
 }
 
 .skill-details {

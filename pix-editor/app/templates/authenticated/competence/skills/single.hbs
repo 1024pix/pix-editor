@@ -92,38 +92,68 @@
   </div>
   <div class="ui vertical compact labeled icon menu skill-menu">
     {{#if this.edition}}
-      <button class="ui button important-action item" {{on "click" this.save}} type="button">
-        <i class="save icon"></i>
+      <PixButton
+        @triggerAction={{this.save}}
+        @backgroundColor="transparent-light"
+        @iconBefore="floppy-disk"
+        @prefixIconBefore="fas"
+      >
         Enregistrer
-      </button>
-      <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
-        <i class="ban icon"></i>
+      </PixButton>
+      <PixButton
+        @triggerAction={{this.cancelEdit}}
+        @backgroundColor="transparent-light"
+        @iconBefore="ban"
+        @prefixIconBefore="fas"
+      >
         Annuler
-      </button>
+      </PixButton>
     {{else}}
       {{#if this.skill.productionPrototype}}
-        <a class="ui button item" href={{this.previewPrototypeUrl}} target="_blank" rel="noopener noreferrer">
-          <i class="eye icon"></i>
-          Prévisualiser
-        </a>
+        <PixButtonLink
+          @href={{this.previewPrototypeUrl}}
+          target="_blank"
+          rel="noopener noreferrer"
+          @backgroundColor="transparent-light"
+          class="button-link-with-icon"
+        >
+          <FaIcon
+            @icon="eye"
+            @prefix="fas"></FaIcon> Prévisualiser
+        </PixButtonLink>
       {{/if}}
       {{#if this.mayEdit}}
-        <button class="ui button item" {{on "click" this.edit}} type="button">
-          <i class="edit icon"></i>
+        <PixButton
+          @triggerAction={{this.edit}}
+          @backgroundColor="transparent-light"
+          @iconBefore="pen-to-square"
+          @prefixIconBefore="fas"
+        >
           Modifier
-        </button>
+        </PixButton>
       {{/if}}
       {{#if this.mayAccessAirtable}}
-        <a class="ui button item" href={{this.airtableUrl}} target="_blank"  rel="noopener noreferrer">
-          <i class="table icon"></i>
-          Airtable
-        </a>
+        <PixButtonLink
+          @href={{this.airtableUrl}}
+          target="_blank"
+          rel="noopener noreferrer"
+          @backgroundColor="transparent-light"
+          class="button-link-with-icon"
+        >
+          <FaIcon
+            @icon="table-cells-large"
+            @prefix="fas"></FaIcon> Airtable
+        </PixButtonLink>
       {{/if}}
       {{#unless this.skill.isLive}}
-        <button class="ui button item" {{on "click" this.displayChallenges}} type="button">
-          <i class="archive icon"></i>
+        <PixButton
+          @triggerAction={{this.displayChallenges}}
+          @backgroundColor="transparent-light"
+          @iconBefore="archive"
+          @prefixIconBefore="fas"
+        >
           Épreuves &gt;&gt;
-        </button>
+        </PixButton>
       {{/unless}}
     {{/if}}
   </div>
