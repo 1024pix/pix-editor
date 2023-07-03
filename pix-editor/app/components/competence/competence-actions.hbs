@@ -70,7 +70,12 @@
       </div>
     {{/if}}
   {{/unless}}
-  <button class="ui button right item" {{on "click" (fn @refresh true)}} type="button">
-    <i class="sync alternate icon"></i> Actualiser
-  </button>
+  <PixButton
+    @triggerAction={{fn @refresh true}}
+    @backgroundColor="transparent-light"
+    @iconBefore="arrows-rotate"
+    @prefixIconBefore="fas"
+  >
+    Actualiser
+  </PixButton>
 </div>
