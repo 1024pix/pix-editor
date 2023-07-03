@@ -12,6 +12,7 @@
         <Field::Input data-test-competence-title-input @value={{this.competence.title}} @edition={{this.edition}} @label="Titre"/>
         <Field::Textarea @title="Description :" @value={{this.competence.description}} @edition={{this.edition}} />
         <div class="ui raised segment">
+          {{!-- TODO --}}
           <i class="flag gb uk"></i>
           <Field::Input @value={{this.competence.titleEn}} @edition={{this.edition}} @label="Titre (en)"/>
           <Field::Textarea @title="Description (en) :" @value={{this.competence.descriptionEn}} @edition={{this.edition}} />
@@ -23,20 +24,32 @@
     </div>
     <div class="ui vertical compact labeled icon menu competence-management__menu">
       {{#if this.mayEdit}}
-        <button data-test-edit-button class="ui button item" {{on "click" this.edit}} type="button">
-          <i class="edit icon"></i>
+        <PixButton
+          @triggerAction={{this.edit}}
+          @backgroundColor="transparent-light"
+          @iconBefore="pen-to-square"
+          @prefixIconBefore="fas"
+        >
           Modifier
-        </button>
+        </PixButton>
       {{/if}}
       {{#if this.edition}}
-        <button data-test-save-button class="ui button item important-action" {{on "click" this.save}} type="button">
-          <i class="save icon"></i>
+        <PixButton
+          @triggerAction={{this.save}}
+          @backgroundColor="transparent-light"
+          @iconBefore="floppy-disk"
+          @prefixIconBefore="fas"
+        >
           Enregistrer
-        </button>
-        <button data-test-cancel-button class="ui button item" {{on "click" this.cancelEdit}} type="button">
-          <i class="ban icon"></i>
+        </PixButton>
+        <PixButton
+          @triggerAction={{this.cancelEdit}}
+          @backgroundColor="transparent-light"
+          @iconBefore="ban"
+          @prefixIconBefore="fas"
+        >
           Annuler
-        </button>
+        </PixButton>
       {{/if}}
     </div>
   </div>
