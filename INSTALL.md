@@ -11,10 +11,12 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 ### Airtable
 
-Pix Editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
+Pix Editor utilise [Airtable](https://airtable.com/). 
+La structure de la base peut être fournie en contactant l'équipe de développement.
 
-Une fois la base dupliquée, utilisez un compte nominatif pour générer un personal access token
-Naviguer dans votre "developer hub"
+Une fois la base dupliquée, utilisez un compte nominatif, pour générer un personal access token.
+
+Naviguer dans votre "developer hub".
 Générer un access token avec les droits suivant :
 ```
 data.records:read
@@ -22,8 +24,8 @@ data.records:write
 schema.bases:read
 schema.bases:write
 ```
-Donner l'accès a la base qui contient votre schema dupliqué
-
+Donner l'accès à la base qui contient votre schéma dupliqué.
+Une fois la base dupliquée, utilisez un compte nominatif pour générer un personal access token.
 
 ## Récupérer le code source
 
@@ -38,17 +40,18 @@ Initialiser la configuration à partir du template :
 cp api/sample.env api/.env
 ```
 
-Modifier la configuration en modifiant le fichier`.env`:
-- renseigner les variables obligatoires, illustrées d'un 🔴 
-- prendre connaissance des autres et les modifier si besoin
+Modifier la configuration en modifiant le fichier `.env`:
+- renseigner les variables obligatoires, illustrées d'un 🔴 ;
+- prendre connaissance des autres et les modifier si besoin.
 
 ## Installer les dépendances
 
-Se placer sur la bonne version de Node en utilisant nvm
+Se placer sur la bonne version de Node en utilisant nvm:
 ```
 nvm use
 ```
-Depuis la racine du projet :
+
+Puis, depuis la racine du projet :
 ```bash
 (cd api && npm ci)
 (cd pix-editor && npm ci)
@@ -56,7 +59,7 @@ Depuis la racine du projet :
 
 ## Base de données et cache
 
-Lancer, configurer et initialiser la base de données
+Lancer, configurer et initialiser la base de données :
 ```bash
 docker-compose up -d
 (cd api && npm run db:reset)
@@ -75,11 +78,13 @@ Dans un second processus ou terminal, toujours depuis le répertoire racine :
 ```
 
 ## Accéder à l'application
-Récupérer l'un des 2 token de connexion disponible dans [le fichier de seeds](./api/db/seeds/seed.js) (cf. `adminUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
 
-Accéder à [l'IHM](http://localhost:4300)
-Renseigner el token de connexion et vérifier que la page d'accueil s'affiche.
+Récupérer l'un des 2 tokens de connexion disponibles dans [le fichier de seeds](./api/db/seeds/seed.js) :
+- `defaultEditorUserApiKey` : rôle éditeur;
+- `adminUserApiKey` : rôle administrateur.
 
+Accéder à [l'IHM](http://localhost:4300).
+Renseigner le token de connexion et vérifier que la page d'accueil s'affiche.
 
 > ⚠️ Si vous parvenez à vous authentifier, mais qu'une page blanche s'affiche, cela signifie très probablement que votre schéma de base Airtable est différent de celui utilisé pour le projet Pix. 
 > Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
