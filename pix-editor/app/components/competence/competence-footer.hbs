@@ -40,8 +40,13 @@
     <div class="item competence-info"><div class="competence-info">Tubes : {{@competence.tubeCount}}</div><div class="competence-info">Acquix : {{@competence.skillCount}}</div></div>
   {{/if}}
   {{#if this.mayCreatePrototype}}
-      <button class="ui button right item" {{on "click" @newPrototype}} type="button">
-          <i class="plus square outline icon" data-test-create-new-challenge></i> Nouveau prototype
-      </button>
+    <PixButton
+      @triggerAction={{@newPrototype}}
+      @backgroundColor="transparent-light"
+      @iconBefore="square-plus"
+      @prefixIconBefore="fas"
+    >
+      Nouveau prototype
+    </PixButton>
   {{/if}}
 </div>
