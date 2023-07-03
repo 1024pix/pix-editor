@@ -5,7 +5,6 @@ import { tracked } from '@glimmer/tracking';
 import Sentry from '@sentry/ember';
 
 export default class SingleController extends Controller {
-
   wasMaximized = false;
   changelogCallback = null;
   @tracked edition = false;
@@ -65,7 +64,7 @@ export default class SingleController extends Controller {
   }
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.tableSkills}/${this.skill.id}`;
+    return `${this.config.airtableUrl}/${this.config.tableSkills}/${this.skill.id}`;
   }
 
   @action

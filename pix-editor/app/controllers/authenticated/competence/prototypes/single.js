@@ -8,9 +8,7 @@ import yaml from 'js-yaml';
 export default class SingleController extends Controller {
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   elementClass = 'prototype-challenge';
-
   @tracked edition = false;
   @tracked displayAlternativeInstructionsField = false;
   @tracked displaySolutionToDisplayField = false;
@@ -23,7 +21,6 @@ export default class SingleController extends Controller {
   @tracked copyOperation = false;
   @tracked changelogDefault = '';
   @tracked displayConfirmLog = false;
-
   @service access;
   @service changelogEntry;
   @service config;
@@ -31,11 +28,14 @@ export default class SingleController extends Controller {
   @service currentData;
   @service filePath;
   @service intl;
+  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   @service loader;
   @service notify;
   @service router;
   @service storage
   @service store;
+  @controller('authenticated.competence')
+  parentController
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -44,9 +44,6 @@ export default class SingleController extends Controller {
   get challenge() {
     return this.model;
   }
-
-  @controller('authenticated.competence')
-  parentController
 
   get challengeTitle() {
     if (this.creation) {
@@ -109,7 +106,7 @@ export default class SingleController extends Controller {
 
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.tableChallenges}/${ this.challenge.id}`;
+    return `${this.config.airtableUrl}/${this.config.tableChallenges}/${ this.challenge.id}`;
   }
 
   get lastUpdatedAtISO() {

@@ -11,23 +11,21 @@ export default class SingleController extends Controller {
 
   creation = false;
   wasMaximized = false;
-
-  get tube() {
-    return this.model;
-  }
-
   @controller('authenticated.competence')
   parentController;
-
-  get maximized() {
-    return this.parentController.leftMaximized;
-  }
-
   @service access;
   @service config;
   @service loader;
   @service notify;
   @service router;
+
+  get tube() {
+    return this.model;
+  }
+
+  get maximized() {
+    return this.parentController.leftMaximized;
+  }
 
   get mayAccessAirtable() {
     return this.access.mayAccessAirtable();
@@ -49,7 +47,7 @@ export default class SingleController extends Controller {
   }
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.tableTubes}/${this.tube.id}`;
+    return `${this.config.airtableUrl}/${this.config.tableTubes}/${this.tube.id}`;
   }
 
   @action
