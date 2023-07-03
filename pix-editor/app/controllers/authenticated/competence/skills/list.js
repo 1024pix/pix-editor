@@ -11,8 +11,8 @@ export default class CompetenceHistoryListController extends Controller {
   @service currentData;
   @service router;
 
-  get firstSkill() {
-    return this.model.sortedSkills[0];
+  get skillName() {
+    return this.model.sortedSkills[0].name;
   }
 
   get mayCreateSkill() {
