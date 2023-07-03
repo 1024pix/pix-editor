@@ -35,6 +35,12 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 }
 
+.button-with-rotated-icon-90 {
+   > svg {
+     transform: rotate(-90deg);
+   }
+ }
+
 .waiting {
   height: 100%;
 }

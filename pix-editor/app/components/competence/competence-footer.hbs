@@ -16,13 +16,23 @@
     </PixButton>
   {{/if}}
   {{#if this.mayCreateTheme}}
-    <button class="ui button left item" {{on "click" @newTheme}} type="button">
-      <i class="plus square outline icon"></i> Nouvelle Thématique
-    </button>
-
-    <button class="ui button left item" {{on "click" @displaySortThemesPopIn}} type="button">
-      <i class="exchange icon rotate-90"></i> Trier les Thématiques
-    </button>
+    <PixButton
+      @triggerAction={{@newTheme}}
+      @backgroundColor="transparent-light"
+      @iconBefore="square-plus"
+      @prefixIconBefore="fas"
+    >
+      Nouvelle Thématique
+    </PixButton>
+    <PixButton
+      @triggerAction={{@displaySortThemesPopIn}}
+      @backgroundColor="transparent-light"
+      @iconBefore="arrow-right-arrow-left"
+      @prefixIconBefore="fas"
+      class="button-with-rotated-icon-90"
+    >
+      Trier les Thématiques
+    </PixButton>
   {{/if}}
   {{#if this.displayProductionStats}}
     <div class="item competence-info"><div class="competence-info">Tubes : {{@competence.productionTubeCount}}</div><div class="competence-info">Acquix : {{@competence.productionSkillCount}}</div></div>
