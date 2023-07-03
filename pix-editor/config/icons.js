@@ -54,8 +54,10 @@ module.exports = function () {
       'star',
       'tablet-alt',
       'times',
-      'users',
       'trash-alt',
+      'users',
+      'window-minimize',
+      'window-maximize',
     ],
     'free-regular-svg-icons': ['check-circle', 'copy', 'trash-alt'],
   };
