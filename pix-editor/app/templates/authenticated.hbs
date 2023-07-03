@@ -30,6 +30,7 @@
             <div data-test-main-message class={{concat "ui floating message " (if message.positive "positive" "warning")}}
                  id={{message.id}}>
               <p>
+                {{!-- TODO la notif ne marche plus --}}
                 {{#if message.positive}}
                   <i class="check icon"></i>
                 {{else}}
