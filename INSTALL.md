@@ -1,5 +1,3 @@
-Installation
-------------
 
 ## Prérequis
 
@@ -17,58 +15,54 @@ Pix Editor utilise [Airtable](https://airtable.com/). La structure de la base pe
 
 Une fois la base dupliquée, utilisez un compte nominatif, pour genere un personal access token
 Naviguer dans votre "developer hub"
-Generer un access token avec les droits suivant :
+Générer un access token avec les droits suivant :
 ```
 data.records:read
-
 data.records:write
-
 schema.bases:read
-
 schema.bases:write
 ```
-et donner l'accès a la base qui contient votre schema dupliqué
+Donner l'accès a la base qui contient votre schema dupliqué
 
-## Instructions
 
-**1/ Récupérer le code source**
+## Récupérer le code source
 
 ```bash
 git clone git@github.com:1024pix/pix-editor.git && cd pix-editor
 ```
 
-**2/ Créer un fichier .env**
+## Initialiser la configuration (fichier `.env`)
 
-Copier le fichier `sample.env` situé à la racine du projet et le renommer en .env:
+Initialiser la configuration à partir du template :
 ```bash
 cp api/sample.env api/.env
 ```
 
-Remplir les valeurs des variables dans le fichier `.env` (cf. section [Configuration](#configuration)).
+Modifier la configuration en modifiant le fichier`.env`:
+- renseigner les variables obligatoires, illustrées d'un 🔴 
+- prendre connaissance des autres et les modifier si besoin
 
-
-
-
-**3/ Installer les dépendances**
+## Installer les dépendances
 
 Se placer sur la bonne version de Node en utilisant nvm
 ```
 nvm use
 ```
-
 Depuis la racine du projet :
 ```bash
 (cd api && npm ci)
 (cd pix-editor && npm ci)
 ```
 
-**4/ Lancer, configurer et initialiser la base de données**
+## Base de données et cache
+
+Lancer, configurer et initialiser la base de données
 ```bash
 docker-compose up -d
 (cd api && npm run db:reset)
 ```
 
-**5/ Lancer l'application**
+## Lancer l'application
 
 Dans un premier processus ou terminal, depuis le répertoire racine :
 ```bash
@@ -80,19 +74,14 @@ Dans un second processus ou terminal, toujours depuis le répertoire racine :
 (cd pix-editor && npm start)
 ```
 
-**6/ Accéder à l'application**
+## Accéder à l'application
+Récupérer l'un des 2 token de connexion disponible dans [le fichier de seeds](./api/db/seeds/seed.js) (cf. `adminUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
 
-[L'API](http://localhost:3002) tourne en local sur le port 3002.
-[L'application Pix-Editor](http://localhost:4300) sur le port 4300.
+Accéder à [l'IHM](http://localhost:4300)
+Renseigner el token de connexion et vérifier que la page d'accueil s'affiche.
 
-> ℹ️ Par défaut, et en local, utiliser l'un des 2 jetons renseignés dans [le fichier de seeds](./api/db/seeds/seed.js) (cf. `adminUserApiKey` [admin] et `defaultEditorUserApiKey` [éditeur]) pour s'authentifier dans l'interface de connexion.
 
-> ⚠️ Si vous parvenez à vous authentifier, mais qu'une page blanche s'affiche, cela signifie très probablement que votre schéma de base Airtable est différent de celui utilisé pour le projet Pix. Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
+> ⚠️ Si vous parvenez à vous authentifier, mais qu'une page blanche s'affiche, cela signifie très probablement que votre schéma de base Airtable est différent de celui utilisé pour le projet Pix. 
+> Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
 
-## Configuration
 
-La description et le format attendu de chaque option/variable est documentée dans le fichier `sample.env`.
-
-Dans le fichier `sample.env` :
-- toutes les variables requises pour un fonctionnement optimal (100%) sont décommentées
-- malgré cela, seules les variables non renseignées illustrées d'un 🔴 sont absolument nécessaires pour un fonctionnement dégradé / partiel, permettant d'avoir un rendu en lecture globale.
