@@ -1,11 +1,12 @@
 import { module, test } from 'qunit';
-import { visit, findAll, click, find } from '@ember/test-helpers';
+import { click, find, findAll, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { clickByName } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Create-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -45,10 +46,10 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
     await click(find('.workbench'));
-    await click(find('[data-test-create-new-challenge]'));
+    await clickByName('Nouveau prototype');
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
-    await click(find('[data-test-save-challenge-button]'));
+    await clickByName('Enregistrer');
 
     const store = this.owner.lookup('service:store');
 

@@ -1,8 +1,9 @@
 import { module, test } from 'qunit';
-import { currentURL, visit, click, find, findAll } from '@ember/test-helpers';
+import { click, currentURL, find, findAll, visit } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { clickByName } from '@1024pix/ember-testing-library';
 
 module('Acceptance | single', function(hooks) {
   setupApplicationTest(hooks);
@@ -26,7 +27,7 @@ module('Acceptance | single', function(hooks) {
 
   test('close single', async function(assert) {
     await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
-    await click(find('.icon.window.close'));
+    await clickByName('Fermer la fenêtre des acquis');
 
     assert.equal(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
@@ -39,7 +40,7 @@ module('Acceptance | single', function(hooks) {
 
       // when
       await visit(`/competence/${competence1.id}/skills/${skill1.id}?leftMaximized=true&view=workbench`);
-      await click(find('[data-test-duplicate-skill-action]'));
+      await clickByName('Dupliquer vers');
       await click(find('[data-test-select-level] .ember-basic-dropdown-trigger'));
       await click(findAll('.ember-power-select-options li')[SKILL_LEVEL_CHOOSE - 1]);
       await click(find('[data-test-move-action]'));

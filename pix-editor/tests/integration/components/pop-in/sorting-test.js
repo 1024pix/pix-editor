@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { click, render, findAll } from '@ember/test-helpers';
-import { drag }  from 'ember-sortable/test-support/helpers';
+import { click, findAll, render } from '@ember/test-helpers';
+import { drag } from 'ember-sortable/test-support/helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
 import sinon from 'sinon';

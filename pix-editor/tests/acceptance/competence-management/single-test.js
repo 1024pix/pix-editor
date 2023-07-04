@@ -35,9 +35,9 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // when
     await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
+    await clickByName('Modifier');
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-save-button]'));
+    await clickByName('Enregistrer');
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
@@ -51,9 +51,9 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // when
     await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
+    await clickByName('Modifier');
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-cancel-button]'));
+    await clickByName('Annuler');
 
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
@@ -68,7 +68,7 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // when
     await visit('/competence-management/recCompetence1.1');
-    await click(find('[data-test-edit-button]'));
+    await clickByName('Modifier');
     await clickByName('Basculer le menu');
     await click(find('[data-test-area-item]'));
     await click(find('[data-test-competence-item]'));

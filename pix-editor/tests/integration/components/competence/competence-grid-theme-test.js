@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
 import { setupRenderingTest } from 'ember-qunit';
-import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
 import sinon from 'sinon';
+import { render } from '@1024pix/ember-testing-library';
 
 module('Integration | Component | competence/competence-grid-theme', function (hooks) {
 
@@ -111,15 +111,14 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       this.set('section', 'skills');
 
       // when
-      await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
+      const screen = await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
                                                          @view={{this.view}}
                                                          @newTube={{this.newTube}}
                                                          @displaySortTubesPopIn={{this.displaySortTubesPopIn}}
                                                          @theme={{this.theme}}/>`);
       // then
-      assert.dom('[data-test-add-tube]').exists();
-      assert.dom('[data-test-sort-tube]').exists();
-
+      assert.dom(screen.getByRole('button', { name: 'Nouveau tube' })).exists();
+      assert.dom(screen.getByRole('button', { name: 'Trier les tubes' })).exists();
     });
   });
 
@@ -172,14 +171,14 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       this.set('section', 'skills');
 
       // when
-      await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
+      const screen = await render(hbs`<Competence::CompetenceGridTheme  @section={{this.section}}
                                                          @view={{this.view}}
                                                          @newTube={{this.newTube}}
                                                          @theme={{this.theme}}/>`);
       // then
       assert.dom('[data-test-theme-cell] a').hasText('Theme');
       assert.dom('[data-test-empty-row]').exists();
-      assert.dom('[data-test-add-tube]').exists();
+      assert.dom(screen.getByRole('button', { name: 'Nouveau tube' })).exists();
     });
   });
 });

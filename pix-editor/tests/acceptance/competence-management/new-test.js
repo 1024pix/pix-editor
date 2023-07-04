@@ -6,7 +6,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import sinon from 'sinon';
 import { clickByName } from '@1024pix/ember-testing-library';
 
-module('Acceptance | competence-management/single', function(hooks) {
+module('Acceptance | competence-management/new', function(hooks) {
 
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -42,7 +42,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     await click(find('[data-test-area-item]'));
     await click(find('[data-test-add-competence]'));
     await fillIn('[data-test-competence-title-input] input', newCompetenceTitle);
-    await click(find('[data-test-save-button]'));
+    await clickByName('Enregistrer');
 
     // then
     const area = await store.peekRecord('area', 'recArea1');
@@ -62,7 +62,7 @@ module('Acceptance | competence-management/single', function(hooks) {
   test('it should cancel creation', async function(assert) {
     // when
     await visit('/competence-management/new/recArea1');
-    await click(find('[data-test-cancel-button]'));
+    await clickByName('Annuler');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Création de la compétence annulée');
