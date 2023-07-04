@@ -13,7 +13,7 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 Pix Editor utilise [Airtable](https://airtable.com/). La structure de la base peut être fournie en contactant l'équipe de développement.
 
-Une fois la base dupliquée, utilisez un compte nominatif, pour genere un personal access token
+Une fois la base dupliquée, utilisez un compte nominatif pour générer un personal access token
 Naviguer dans votre "developer hub"
 Générer un access token avec les droits suivant :
 ```
