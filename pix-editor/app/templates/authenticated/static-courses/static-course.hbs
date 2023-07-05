@@ -20,7 +20,8 @@
           @triggerAction={{fn this.copyStaticCoursePreviewUrl this.model}}
           @iconBefore="copy"
           @prefixIconBefore="far"
-          @backgroundColor="grey"
+          @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
         >
           Copier le lien
         </PixButton>
@@ -29,6 +30,7 @@
           target="_blank"
           rel="noopener noreferrer"
           @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
         >
           <FaIcon
             @icon="eye"

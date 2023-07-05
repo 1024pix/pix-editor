@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { currentURL } from '@ember/test-helpers';
+import { click, currentURL } from '@ember/test-helpers';
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Static Courses', function(hooks) {
@@ -67,7 +67,7 @@ module('Acceptance | Static Courses', function(hooks) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
-      await clickByName('Premier test statique');
+      await click(screen.getAllByRole('cell')[0]);
 
       // then
       assert.strictEqual(currentURL(), '/static-courses/courseA');
@@ -107,7 +107,7 @@ module('Acceptance | Static Courses', function(hooks) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
-      await clickByName('Premier test statique');
+      await click(screen.getAllByRole('cell')[0]);
       await clickByName('Retour');
 
       // then
