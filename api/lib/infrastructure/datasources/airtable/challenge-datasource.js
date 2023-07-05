@@ -181,6 +181,15 @@ module.exports = datasource.extend({
       maxRecords: 1,
     });
     return this.fromAirTableObject(airtableRawObjects[0]);
+  },
+
+  async getAllIdsIn(challengeIds) {
+    const options = {
+      fields: ['id persistant'],
+      filterByFormula: 'OR(' + challengeIds.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
+    };
+    const airtableRawObjects = await airtable.findRecords(this.tableName, options);
+    return airtableRawObjects.map((airtableRawObject) => airtableRawObject.get('id persistant'));
   }
 });
 

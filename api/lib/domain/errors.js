@@ -24,8 +24,15 @@ class UserNotFoundError extends NotFoundError {
   }
 }
 
+class InvalidStaticCourseCreationError extends DomainError {
+  constructor(reasons) {
+    super(reasons.join('\n'));
+  }
+}
+
 module.exports = {
   DomainError,
+  InvalidStaticCourseCreationError,
   NotFoundError,
   UserNotFoundError,
 };

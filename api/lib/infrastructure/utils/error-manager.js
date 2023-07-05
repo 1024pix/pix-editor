@@ -20,6 +20,9 @@ function _mapToInfrastructureError(error) {
   if (error instanceof DomainErrors.UserNotFoundError) {
     return new InfraErrors.NotFoundError(error.message);
   }
+  if (error instanceof DomainErrors.InvalidStaticCourseCreationError) {
+    return new InfraErrors.BadRequestError(error.message);
+  }
 
   return new InfraErrors.InfrastructureError(error.message);
 }

@@ -18,4 +18,8 @@ module.exports = {
   update(challenge) {
     return challengesDataSource.update(challenge);
   },
+
+  async getAllIdsIn(challengeIds) {
+    return challengesDataSource.getAllIdsIn(challengeIds);
+  }
 };

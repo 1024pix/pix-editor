@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const { knex } = require('../../../db/knex-database-connection');
-const ChallengeSummary = require('../../domain/models/ChallengeSummary');
-const StaticCourse = require('../../domain/models/StaticCourse');
-const StaticCourseSummary = require('../../domain/models/StaticCourseSummary');
+const ChallengeSummary = require('../../domain/readmodels/ChallengeSummary');
+const StaticCourse = require('../../domain/readmodels/StaticCourse');
+const StaticCourseSummary = require('../../domain/readmodels/StaticCourseSummary');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
 const skillDatasource = require('../datasources/airtable/skill-datasource');
@@ -10,6 +10,7 @@ const skillDatasource = require('../datasources/airtable/skill-datasource');
 module.exports = {
   findSummaries,
   get,
+  save,
 };
 
 // TODO: when double read will be removed, move pagination process into knex
@@ -77,6 +78,21 @@ async function get(id) {
     });
   }
   return null;
+}
+
+async function save(staticCourseForCreation) {
+  const staticCourseDTO = staticCourseForCreation.toDTO();
+  const serializedStaticCourseForDB = {
+    id: staticCourseDTO.id,
+    name: staticCourseDTO.name,
+    description: staticCourseDTO.description,
+    challengeIds: staticCourseDTO.challengeIds.join(','),
+    createdAt: staticCourseDTO.createdAt,
+    updatedAt: staticCourseDTO.updatedAt,
+  };
+  await knex('static_courses')
+    .insert(serializedStaticCourseForDB);
+  return serializedStaticCourseForDB.id;
 }
 
 async function findChallengeSummaries(challengeIds) {
