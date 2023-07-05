@@ -1,107 +1,105 @@
-<div class="page">
-  <header class="page-header">
-    <div class="page-title">
-      <h1>{{this.model.name}}</h1>
-    </div>
-  </header>
-  <main class="page-body">
-    <section class="page-section">
-      <Card class="card-information" @title="1. Informations">
-        <ul>
-          <li><span class="bold">Nom : </span>{{this.model.name}}</li>
-          <li>
-            <span class="bold">Description : </span>
-            {{this.model.description}}
-          </li>
-          <li><span class="bold">Crée le : </span>{{dayjs-format this.model.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
-          <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
-        </ul>
-        <div class="card-information--actions">
-          <PixButton
-            @triggerAction={{fn this.copyStaticCoursePreviewUrl this.model}}
-            @iconBefore="copy"
-            @prefixIconBefore="far"
-            @backgroundColor="grey"
-          >
-            Copier le lien
-          </PixButton>
-          <PixButtonLink
-            @href={{this.model.previewURL}}
-            target="_blank"
-            rel="noopener noreferrer"
-            @backgroundColor="transparent-light"
-          >
-            <FaIcon
-              @icon="eye"
-              @prefix="fas"></FaIcon> Prévisualiser
-          </PixButtonLink>
-        </div>
-      </Card>
-      <Card @title="2. Liste des épreuves">
-        <div class="panel-table-v2">
-          <table class="content-text content-text--small">
-            <colgroup class="table__column">
-              <col class="table__column--tiny" />
-              <col class="table__column--small" />
-              <col class="table__column--wide" />
-              <col class="table__column--small" />
-              <col class="table__column--small" />
-              <col class="table__column--small" />
-            </colgroup>
-            <thead>
-            <tr>
-              <th>#</th>
-              <th>ID</th>
-              <th>Consigne</th>
-              <th>Acquis</th>
-              <th>Statut</th>
-            </tr>
-            </thead>
-            <tbody>
-            {{#each this.model.sortedChallengeSummaries as |challengeSummary|}}
-              <tr>
-                <td>{{challengeSummary.index}}</td>
-                <td>{{challengeSummary.id}}</td>
-                <td class="ellipsis">{{challengeSummary.instruction}}</td>
-                <td>{{challengeSummary.skillName}}</td>
-                <td>
-                  {{#if (eq challengeSummary.status "validé")}}
-                    <PixTag
-                      @color="green-light"
-                    >{{challengeSummary.status}}</PixTag>
-                  {{else if (eq challengeSummary.status "proposé")}}
-                    <PixTag
-                      @color="blue-light"
-                    >{{challengeSummary.status}}</PixTag>
-                  {{else if (eq challengeSummary.status "archivé")}}
-                    <PixTag
-                      @color="grey-light"
-                    >{{challengeSummary.status}}</PixTag>
-                  {{else if (eq challengeSummary.status "périmé")}}
-                    <PixTag
-                      @color="orange-light"
-                    >{{challengeSummary.status}}</PixTag>
-                  {{else}}
-                    <PixTag
-                      @color="purple-light"
-                    >{{challengeSummary.status}}</PixTag>
-                  {{/if}}
-                </td>
-              </tr>
-            {{/each}}
-            </tbody>
-          </table>
-        </div>
-      </Card>
-      <div class="page-actions">
-        <PixButtonLink
-          @backgroundColor="transparent-light"
-          @route="authenticated.static-courses.list"
-          @isBorderVisible={{true}}
+<header class="page-header">
+  <div class="page-title">
+    <h1>{{this.model.name}}</h1>
+  </div>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Card class="static-course-details__card-information" @title="1. Informations">
+      <ul>
+        <li><span class="bold">Nom : </span>{{this.model.name}}</li>
+        <li>
+          <span class="bold">Description : </span>
+          {{this.model.description}}
+        </li>
+        <li><span class="bold">Crée le : </span>{{dayjs-format this.model.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
+        <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
+      </ul>
+      <div class="static-course-details__card-information--actions">
+        <PixButton
+          @triggerAction={{fn this.copyStaticCoursePreviewUrl this.model}}
+          @iconBefore="copy"
+          @prefixIconBefore="far"
+          @backgroundColor="grey"
         >
-          Retour
+          Copier le lien
+        </PixButton>
+        <PixButtonLink
+          @href={{this.model.previewURL}}
+          target="_blank"
+          rel="noopener noreferrer"
+          @backgroundColor="transparent-light"
+        >
+          <FaIcon
+            @icon="eye"
+            @prefix="fas"></FaIcon> Prévisualiser
         </PixButtonLink>
       </div>
-    </section>
-  </main>
-</div>
+    </Card>
+    <Card @title="2. Liste des épreuves">
+      <div class="panel-table-v2">
+        <table class="content-text content-text--small">
+          <colgroup class="table__column">
+            <col class="table__column--tiny" />
+            <col class="table__column--small" />
+            <col class="table__column--wide" />
+            <col class="table__column--small" />
+            <col class="table__column--small" />
+            <col class="table__column--small" />
+          </colgroup>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Consigne</th>
+            <th>Acquis</th>
+            <th>Statut</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#each this.model.sortedChallengeSummaries as |challengeSummary|}}
+            <tr>
+              <td>{{challengeSummary.index}}</td>
+              <td>{{challengeSummary.id}}</td>
+              <td class="ellipsis">{{challengeSummary.instruction}}</td>
+              <td>{{challengeSummary.skillName}}</td>
+              <td>
+                {{#if (eq challengeSummary.status "validé")}}
+                  <PixTag
+                    @color="green-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "proposé")}}
+                  <PixTag
+                    @color="blue-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "archivé")}}
+                  <PixTag
+                    @color="grey-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "périmé")}}
+                  <PixTag
+                    @color="orange-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else}}
+                  <PixTag
+                    @color="purple-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+    <div class="page-actions">
+      <PixButtonLink
+        @backgroundColor="transparent-light"
+        @route="authenticated.static-courses.list"
+        @isBorderVisible={{true}}
+      >
+        Retour
+      </PixButtonLink>
+    </div>
+  </section>
+</main>

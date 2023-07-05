@@ -1,0 +1,70 @@
+.page {
+  background-color: $pix-neutral-15;
+
+  .page-header {
+    background: $pix-neutral-0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 20px;
+    border-bottom: 1px solid $pix-neutral-20;
+    top: 0;
+    left: 80px;
+    right: 0;
+    min-height: 60px;
+    z-index: 4;
+    margin: 0;
+
+    .page-title {
+      font-weight: 500;
+      font-size: 1rem;
+
+      a {
+        color: $pix-primary;
+      }
+
+      h1 {
+        display: inline;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+    }
+  }
+
+  .page-body {
+    inset: 60px 0 0 80px;
+    padding: 10px;
+
+    .page-section {
+      background: $pix-neutral-0;
+      border-radius: 5px;
+      padding: 32px;
+      margin-bottom: 10px;
+
+      &__header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      &__title {
+        font-size: 1.2rem;
+        font-weight: 600;
+
+        &--sub {
+          margin-bottom: $pix-spacing-s;
+        }
+      }
+
+      &__content {
+        margin-bottom: 10px;
+      }
+    }
+  }
+
+  .page-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+}

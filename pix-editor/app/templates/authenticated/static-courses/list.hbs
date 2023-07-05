@@ -1,24 +1,27 @@
-<div class="main-left">
-  <div class="ui main-title">
-    <h1 class="ui left floated header">Tests Statiques</h1>
+<header class="page-header">
+  <div class="page-title">
+    <h1>Tests Statiques</h1>
   </div>
-  <div class="panel-table-v2">
-    <table class="content-text content-text--small">
-      <colgroup class="table__column">
-        <col class="table__column--wide" />
-        <col class="table__column--small" />
-        <col class="table__column--small" />
-        <col class="table__column--small" />
-      </colgroup>
-      <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Epreuves</th>
-        <th>Créé le</th>
-        <th>Prévisualisation</th>
-      </tr>
-      </thead>
-      <tbody>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <div class="panel-table-v2">
+      <table class="content-text content-text--small">
+        <colgroup class="table__column">
+          <col class="table__column--wide" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+        </colgroup>
+        <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Epreuves</th>
+          <th>Créé le</th>
+          <th>Prévisualisation</th>
+        </tr>
+        </thead>
+        <tbody>
         {{#each this.model as |staticCourseSummary|}}
           <tr class="tr--clickable" {{on "click" (fn this.goToStaticCourseDetails staticCourseSummary.id)}}>
             <td>
@@ -39,10 +42,13 @@
             </td>
           </tr>
         {{/each}}
-      </tbody>
-    </table>
-  </div>
-  <PixPagination
-    @pagination={{this.model.meta}}
-  />
-</div>
+        </tbody>
+      </table>
+    </div>
+    <div class="static-course-list__pagination">
+      <PixPagination
+        @pagination={{this.model.meta}}
+      />
+    </div>
+  </section>
+</main>

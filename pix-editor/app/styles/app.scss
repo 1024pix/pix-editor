@@ -28,6 +28,9 @@
 @import 'authenticated/static-courses/static-course';
 @import 'components/card';
 @import 'components/login-form';
+@import 'globals/global';
+@import 'globals/page';
+@import 'globals/table';
 
 // ember-power-select
 @import 'custom-select';
