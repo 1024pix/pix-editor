@@ -23,9 +23,11 @@
 @import 'mde';
 @import 'popin';
 @import 'pages/login';
-@import 'components/login-form';
 @import 'shadows';
-@import './authenticated/static-courses';
+@import 'authenticated/static-courses/list';
+@import 'authenticated/static-courses/static-course';
+@import 'components/card';
+@import 'components/login-form';
 
 // ember-power-select
 @import 'custom-select';
