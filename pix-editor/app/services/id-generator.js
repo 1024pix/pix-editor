@@ -2,6 +2,8 @@ import Service from '@ember/service';
 import random from 'js-crypto-random';
 import basex from 'base-x';
 
+// TODO : put code in one place
+// duplicated in api side
 const BASE62 = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 const base62_encode = basex(BASE62).encode;
 
