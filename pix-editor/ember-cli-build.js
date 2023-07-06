@@ -7,15 +7,6 @@ module.exports = function(defaults) {
     sassOptions: {
       includePaths: ['node_modules/@1024pix/pix-ui/addon/styles'],
     },
-    autoImport: {
-      webpack: {
-        resolve: {
-          fallback: {
-            crypto: false,
-          }
-        }
-      }
-    }
 
     // Add options here
     /*babel: {
@@ -95,5 +86,20 @@ module.exports = function(defaults) {
     ]
   });
 
-  return app.toTree();
+  const { Webpack } = require('@embroider/webpack');
+
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticModifiers: true,
+    packagerOptions: {
+      webpackConfig: {
+        resolve: {
+          fallback: {
+            crypto: false,
+          },
+        },
+      },
+    },
+  });
 };
