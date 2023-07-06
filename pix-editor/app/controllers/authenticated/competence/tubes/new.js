@@ -1,7 +1,7 @@
 import Tube from './single';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import Sentry from '@sentry/ember';
+import * as Sentry from '@sentry/ember';
 
 export default class NewController extends Tube {
   queryParams = ['themeId'];

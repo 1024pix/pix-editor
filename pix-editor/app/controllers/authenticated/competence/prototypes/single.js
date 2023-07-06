@@ -2,7 +2,7 @@ import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
-import Sentry from '@sentry/ember';
+import * as Sentry from '@sentry/ember';
 import yaml from 'js-yaml';
 
 export default class SingleController extends Controller {

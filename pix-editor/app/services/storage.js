@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import fetch from 'fetch';
-import Sentry from '@sentry/ember';
+import * as Sentry from '@sentry/ember';
 
 export default class StorageService extends Service {
 
