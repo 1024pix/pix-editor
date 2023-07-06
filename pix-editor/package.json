@@ -34,6 +34,9 @@
     "@ember/jquery": "^2.0.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/test-helpers": "^2.8.1",
+    "@embroider/compat": "2.1",
+    "@embroider/core": "2.1",
+    "@embroider/webpack": "2.1",
     "@fortawesome/ember-fontawesome": "^0.4.3",
     "@fortawesome/free-regular-svg-icons": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
@@ -108,7 +111,8 @@
     "stylelint": "^14.16.1",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard-scss": "^6.1.0",
-    "tracked-built-ins": "^3.1.1"
+    "tracked-built-ins": "^3.1.1",
+    "webpack": "^5.88.1"
   },
   "engines": {
     "node": "16.19.x",
