@@ -31,6 +31,7 @@
           rel="noopener noreferrer"
           @backgroundColor="transparent-light"
           @isBorderVisible={{true}}
+          class="pix-button-link-with-icon"
         >
           <FaIcon
             @icon="eye"
@@ -61,7 +62,7 @@
           <tbody>
           {{#each this.model.sortedChallengeSummaries as |challengeSummary|}}
             <tr>
-              <td>{{challengeSummary.index}}</td>
+              <td>{{challengeSummary.indexForDisplay}}</td>
               <td>{{challengeSummary.id}}</td>
               <td class="ellipsis">{{challengeSummary.instruction}}</td>
               <td>{{challengeSummary.skillName}}</td>

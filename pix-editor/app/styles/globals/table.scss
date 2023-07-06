@@ -72,6 +72,7 @@
       &.ellipsis {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
       &.actions {
@@ -112,6 +113,7 @@
 
   td,
   th {
+    word-wrap: break-word;
     text-align: left;
     padding-left: 24px;
   }
