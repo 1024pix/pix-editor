@@ -90,3 +90,10 @@ Renseigner le token de connexion et vérifier que la page d'accueil s'affiche.
 > Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
 
 
+## Créer un utilisateur
+
+```postgres-sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+INSERT INTO users (name, trigram, "apiKey", access) VALUES ('Compte de service', 'ADM',  uuid_generate_v1(), 'admin');
+select "apiKey" from users where trigram = 'ADM';
+```
