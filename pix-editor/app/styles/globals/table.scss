@@ -72,6 +72,24 @@
       &.ellipsis {
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &.actions {
+         display: flex;
+         flex-direction: row;
+         align-items: center;
+         height: 100%;
+         margin: auto;
+
+         a {
+           padding: 8px 10px;
+           border-radius: 50%;
+
+           &:hover {
+             background-color: $pix-neutral-20;
+           }
+         }
       }
 
       > a {
@@ -95,6 +113,7 @@
 
   td,
   th {
+    word-wrap: break-word;
     text-align: left;
     padding-left: 24px;
   }
@@ -110,8 +129,13 @@
       min-width: 100px;
     }
 
+    &--tiny {
+      width: 3%;
+      max-width: 100px;
+    }
+
     &--small {
-      width: 6%;
+      width: 8%;
       max-width: 150px;
     }
 
@@ -132,22 +156,5 @@
 
   &--small {
     font-size: 0.8125rem;
-  }
-}
-
-.actions {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-  margin: auto;
-
-  a {
-    padding: 8px 10px;
-    border-radius: 50%;
-
-    &:hover {
-      background-color: $pix-neutral-20;
-    }
   }
 }

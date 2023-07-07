@@ -57,6 +57,9 @@ Router.map(function () {
     this.route('area-management', function () {
       this.route('new', { path: 'new/:framework_id' });
     });
-    this.route('static-courses');
+    this.route('static-courses', function() {
+      this.route('list', { path: '/' });
+      this.route('static-course', { path: '/:static_course_id' });
+    });
   });
 });

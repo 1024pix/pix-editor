@@ -241,6 +241,8 @@ function routes() {
     };
     return json;
   });
+  
+  this.get('/static-courses/:id');
 }
 
 function _serializeModel(instance, modelName) {

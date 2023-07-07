@@ -1,0 +1,12 @@
+.static-course-details__card-information {
+  &--actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 16px;
+  }
+
+  li {
+    margin-top: 8px;
+  }
+}

@@ -5,7 +5,14 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/static-course-summaries',
       config: {
-        handler: staticCourseController.findStaticCourseSummaries,
+        handler: staticCourseController.findSummaries,
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/static-courses/{id}',
+      config: {
+        handler: staticCourseController.get,
       },
     }
   ]);

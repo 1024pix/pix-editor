@@ -2,16 +2,16 @@ module.exports = class StaticCourse {
   constructor({
     id,
     name,
-    challengeIds,
+    description,
+    challengeSummaries,
     createdAt,
+    updatedAt,
   }) {
     this.id = id;
-    this.createdAt = createdAt;
     this.name = name;
-    this.challengeIds = challengeIds;
-  }
-
-  challengeCount() {
-    return this.challengeIds.length;
+    this.description = description;
+    this.challengeSummaries = challengeSummaries;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 };
