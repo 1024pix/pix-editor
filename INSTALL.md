@@ -97,3 +97,39 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 INSERT INTO users (name, trigram, "apiKey", access) VALUES ('Compte de service', 'ADM',  uuid_generate_v1(), 'admin');
 select "apiKey" from users where trigram = 'ADM';
 ```
+
+Vous obtenez un token, ici  `b00d647e-1cb2-11ee-adb2-0242ac11003e`
+
+
+## Activer les attachments (image, fichier) 
+
+### OVH
+
+Créer un bucket Swift sur OVH (les buckets S3 ne sont pas supportés)
+
+Lui ajouter la métadonnée permettant d'honorer la politique CORS, en ligne de commande uniquement
+https://help.ovhcloud.com/csm/fr-public-cloud-storage-pcs-cors?id=kb_article_view&sysparm_article=KB0047095
+
+Exemple sur le bucket `lcms-attachments-swift`
+```shell
+swift post -H 'X-Container-Meta-Access-Control-Allow-Origin: *' lcms-attachments-swift
+swift stat lcms-attachments-swift
+```
+
+Vérifier
+```
+Container: lcms-attachments-swift
+(..)
+Sync Key: Meta Access-Control-Allow-Origin: *
+(..)
+```
+
+Configurer l'API via les variables d'environnement
+```dotenv
+STORAGE_POST=
+STORAGE_TENANT=
+STORAGE_USER=
+STORAGE_PASSWORD=
+STORAGE_AUTH=
+STORAGE_BUCKET=
+```
