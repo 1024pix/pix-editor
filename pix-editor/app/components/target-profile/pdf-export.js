@@ -4,13 +4,13 @@ import 'jspdf-autotable';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { Canvg, presets } from 'canvg';
-import { firstPageBackground, area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, pixLogoWhite } from 'pdf-assets.js';
-import 'AmpleSoft-bold.js';
-import 'AmpleSoft-normal.js';
-import 'Roboto-normal.js';
-import 'Roboto-condensed.js';
-import 'Roboto-condensedBold.js';
-import 'Roboto-condensedLight.js';
+import { firstPageBackground, area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, pixLogoWhite } from '../../vendor/pdf-assets.js';
+import '../../vendor/AmpleSoft-bold.js';
+import '../../vendor/AmpleSoft-normal.js';
+import '../../vendor/Roboto-normal.js';
+import '../../vendor/Roboto-condensed.js';
+import '../../vendor/Roboto-condensedBold.js';
+import '../../vendor/Roboto-condensedLight.js';
 
 const legalMentionByLanguage = {
   en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',
