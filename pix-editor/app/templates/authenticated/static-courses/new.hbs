@@ -1,0 +1,65 @@
+<header class="page-header">
+  <h1 class="page-title">Création d'un test</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <form {{on "submit" this.createStaticCourse}} class="form">
+      <Card class="new-static-course-form-field" @title="1. Informations">
+        <PixInput
+          @id="static-course-name"
+          @label="Nom"
+          @errorMessage="{{this.name.errorMessage}}"
+          @requiredLabel="{{this.name.errorMessage}}"
+          @validationStatus={{this.name.state}}
+          {{on "keyup" this.updateName}}
+          {{on "focusout" this.validateName}}
+          class="form-field"
+        />
+        <PixTextarea
+          @id="static-course-description"
+          @label="Description à usage interne"
+          @maxlength="1000"
+          {{on "keyup" this.updateDescription}}
+          class="form-field"
+        />
+      </Card>
+      <Card class="new-static-course-form-card" @title="2. Sélection des épreuves">
+        <span class="form-field">
+          Renseignez les IDs que vous souhaitez ajouter à votre test statique. Un ID par ligne dans l'ordre souhaité.
+        </span>
+        <PixTextarea
+          @id="static-course-challenges"
+          @label="Épreuves"
+          @maxlength="1000"
+          rows="20"
+          @errorMessage="{{if this.challengeIds.isError this.challengeIds.errorMessage ''}}"
+          {{on "keyup" this.updateChallengeIds}}
+          {{on "focusout" this.validateChallengeIds}}
+          class="form-field"
+        />
+      </Card>
+      <div class="form-error">
+        {{#each this.errorMessages as |errorMessage|}}
+          {{errorMessage}}<br/>
+        {{/each}}
+      </div>
+      <div class="page-actions">
+        <PixButtonLink
+          @backgroundColor="transparent-light"
+          @route="authenticated.static-courses.list"
+          @isBorderVisible={{true}}
+        >
+          Annuler
+        </PixButtonLink>
+        <PixButton
+          @backgroundColor="blue"
+          @type="submit"
+          @isDisabled={{this.isFormInvalid}}
+          @isLoading={{this.isSubmitting}}
+        >
+          Créer le test statique
+        </PixButton>
+      </div>
+    </form>
+  </section>
+</main>

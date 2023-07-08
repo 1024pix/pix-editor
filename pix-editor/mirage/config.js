@@ -241,8 +241,18 @@ function routes() {
     };
     return json;
   });
-  
+
   this.get('/static-courses/:id');
+
+  this.post('/static-courses', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    return schema.create('static-course', {
+      id: 'newStaticCourseId',
+      name: attributes.name,
+      description: attributes.description,
+      challengeSummaryIds: attributes['challenge-ids'],
+    });
+  });
 }
 
 function _serializeModel(instance, modelName) {

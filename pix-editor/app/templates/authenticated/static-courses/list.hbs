@@ -1,7 +1,17 @@
 <header class="page-header">
-  <div class="page-title">
-    <h1>Tests Statiques</h1>
-  </div>
+    <h1 class="page-title">Tests Statiques</h1>
+    <div class="page-actions">
+      <PixButtonLink
+        @backgroundColor="blue"
+        @route="authenticated.static-courses.new"
+        @iconBefore="plus"
+        class="pix-button-link-with-icon white-font"
+      >
+        <FaIcon
+          @icon="plus"
+          @prefix="fas"></FaIcon>Créer un nouveau test
+      </PixButtonLink>
+    </div>
 </header>
 <main class="page-body">
   <section class="page-section">

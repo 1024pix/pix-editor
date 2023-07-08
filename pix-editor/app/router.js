@@ -59,6 +59,7 @@ Router.map(function () {
     });
     this.route('static-courses', function() {
       this.route('list', { path: '/' });
+      this.route('new');
       this.route('static-course', { path: '/:static_course_id' });
     });
   });
