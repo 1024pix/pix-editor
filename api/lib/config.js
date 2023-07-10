@@ -48,6 +48,7 @@ module.exports = (function() {
 
     pixEditor: {
       airtableUrl: process.env.AIRTABLE_URL,
+      airtableBase: process.env.AIRTABLE_BASE,
       tableChallenges: process.env.TABLE_CHALLENGES,
       tableSkills: process.env.TABLE_SKILLS,
       tableTubes: process.env.TABLE_TUBES,
