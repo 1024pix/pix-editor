@@ -12,9 +12,10 @@ export default class StaticCoursesRoute extends Route {
   };
 
   @service store;
+  @service access;
 
-  model(params) {
-    return this.store.query(
+  async model(params) {
+    const staticCourseSummaries = await this.store.query(
       'static-course-summary',
       {
         page: {
@@ -24,6 +25,10 @@ export default class StaticCoursesRoute extends Route {
       },
       { reload: true }
     );
+    return {
+      staticCourseSummaries,
+      mayCreateStaticCourse: this.access.mayCreateOrEditStaticCourse(),
+    };
   }
 
   resetController(controller, isExiting) {
