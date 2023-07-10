@@ -1,5 +1,11 @@
 
 
+## v3.85.0 (10/07/2023)
+
+
+### :rocket: Amélioration
+- [#125](https://github.com/1024pix/pix-editor/pull/125) [FEATURE] Empêcher les utilisateurs avec un rôle "readpixonly" d'accéder aux fonctionnalités liées aux tests statiques (PIX-8589).
+
 ## v3.84.0 (10/07/2023)
 
 
