@@ -17,6 +17,10 @@ export default class SidebarMain extends Component {
     return this.currentData.getAreas();
   }
 
+  get mayAccessStaticCourses() {
+    return this.access.mayAccessStaticCourses();
+  }
+
   get mayGenerateTargetProfile() {
     return this.access.isReadOnly();
   }

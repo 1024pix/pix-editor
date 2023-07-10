@@ -24,6 +24,13 @@ exports.seed = (knex) => {
     apiKey: process.env.REVIEW_APP_READ_PIX_ONLY_USER_API_KEY || readPixOnlyUserApiKey,
   });
 
+  databaseBuilder.factory.buildUser({
+    trigram: 'LOL',
+    name: 'Lecteur TOUT pour le développement',
+    access: 'readonly',
+    apiKey: process.env.REVIEW_APP_READ_ONLY_USER_API_KEY || readOnlyUserApiKey,
+  });
+
   staticCoursesBuilder(databaseBuilder);
 
   return databaseBuilder.commit();
@@ -32,3 +39,4 @@ exports.seed = (knex) => {
 const adminUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
 const defaultEditorUserApiKey = !process.env.REVIEW_APP && 'adaf3eee-09dc-4f9a-a504-ff92e74c9d0f';
 const readPixOnlyUserApiKey = !process.env.REVIEW_APP && '09ae36c4-11e1-4212-ae51-e5719d142f57';
+const readOnlyUserApiKey = !process.env.REVIEW_APP && '3b234506-e31e-45eb-a56e-17f64f31ca1b';
