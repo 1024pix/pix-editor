@@ -1,5 +1,12 @@
 
 
+## v3.84.0 (10/07/2023)
+
+
+### :rocket: Amélioration
+- [#121](https://github.com/1024pix/pix-editor/pull/121) [FEATURE] Pouvoir voir le détail d'un test statique sur PixEditor (PIX-7796).
+- [#117](https://github.com/1024pix/pix-editor/pull/117) [FEATURE] Pouvoir voir la liste paginée des tests statiques sur PixEditor (PIX-7795).
+
 ## v3.83.0 (28/06/2023)
 
 
