@@ -13,18 +13,16 @@
           @validationStatus={{this.name.state}}
           {{on "keyup" this.updateName}}
           {{on "focusout" this.validateName}}
-          class="form-field"
         />
         <PixTextarea
           @id="static-course-description"
           @label="Description à usage interne"
           @maxlength="1000"
           {{on "keyup" this.updateDescription}}
-          class="form-field"
         />
       </Card>
       <Card class="new-static-course-form-card" @title="2. Sélection des épreuves">
-        <span class="form-field">
+        <span>
           Renseignez les IDs que vous souhaitez ajouter à votre test statique. Un ID par ligne dans l'ordre souhaité.
         </span>
         <PixTextarea
@@ -35,7 +33,6 @@
           @errorMessage="{{if this.challengeIds.isError this.challengeIds.errorMessage ''}}"
           {{on "keyup" this.updateChallengeIds}}
           {{on "focusout" this.validateChallengeIds}}
-          class="form-field"
         />
       </Card>
       <div class="form-error">
