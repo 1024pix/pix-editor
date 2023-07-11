@@ -21,14 +21,17 @@ async function findReadSummaries({ page }) {
     .select('id', 'name', 'createdAt', 'challengeIds');
 
   const staticCoursesFromAirtable = await courseDatasource.list();
-  const staticCoursesSummariesFirstBatch = staticCoursesFromAirtable.map((staticCourseFromAirtable) => {
-    return new StaticCourseSummary_Read({
-      id: staticCourseFromAirtable.id,
-      name: staticCourseFromAirtable.name,
-      createdAt: staticCourseFromAirtable.createdAt,
-      challengeCount: (staticCourseFromAirtable.challenges || []).length,
+  const staticCourseIdsFromPG = staticCoursesFromPG.map(({ id }) => id);
+  const staticCoursesSummariesFirstBatch = staticCoursesFromAirtable
+    .filter((staticCourseFromAirtable) => !staticCourseIdsFromPG.includes(staticCourseFromAirtable.id))
+    .map((staticCourseFromAirtable) => {
+      return new StaticCourseSummary_Read({
+        id: staticCourseFromAirtable.id,
+        name: staticCourseFromAirtable.name,
+        createdAt: staticCourseFromAirtable.createdAt,
+        challengeCount: (staticCourseFromAirtable.challenges || []).length,
+      });
     });
-  });
 
   const staticCoursesSummariesSecondBatch = staticCoursesFromPG.map((staticCourse) => {
     return new StaticCourseSummary_Read({
