@@ -5,7 +5,7 @@ const challengeDatasource = require('../../../../lib/infrastructure/datasources/
 const skillDatasource = require('../../../../lib/infrastructure/datasources/airtable/skill-datasource');
 
 describe('Integration | Repository | static-course-repository', function() {
-  describe('#findSummaries', function() {
+  describe('#findReadSummaries', function() {
     describe('pagination', function() {
       beforeEach(function() {
         // 4 Static courses PG with even dates
@@ -36,7 +36,7 @@ describe('Integration | Repository | static-course-repository', function() {
         const page = { number: 2, size: 3 };
 
         // when
-        const { results: actualStaticCourseSummaries, meta } = await staticCourseRepository.findSummaries({ page });
+        const { results: actualStaticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ page });
 
         // then
         const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
@@ -54,7 +54,7 @@ describe('Integration | Repository | static-course-repository', function() {
         const page = { number: 5, size: 3 };
 
         // when
-        const { results: actualStaticCourseSummaries, meta } = await staticCourseRepository.findSummaries({ page });
+        const { results: actualStaticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ page });
 
         // then
         expect(actualStaticCourseSummaries).to.be.deep.equal([]);
@@ -68,7 +68,7 @@ describe('Integration | Repository | static-course-repository', function() {
     });
   });
 
-  describe('#get', function() {
+  describe('#getRead', function() {
     context('when the static course is in PG', function() {
       it('should return the static course', async function() {
         //given
@@ -99,7 +99,7 @@ describe('Integration | Repository | static-course-repository', function() {
         await databaseBuilder.commit();
 
         //when
-        const staticCourse = await staticCourseRepository.get('rec123');
+        const staticCourse = await staticCourseRepository.getRead('rec123');
 
         //then
         expect(staticCourse.id).to.equal('rec123');
@@ -137,7 +137,7 @@ describe('Integration | Repository | static-course-repository', function() {
         ]);
 
         //when
-        const staticCourse = await staticCourseRepository.get('rec123');
+        const staticCourse = await staticCourseRepository.getRead('rec123');
 
         //then
         expect(staticCourse.id).to.equal('rec123');
@@ -155,7 +155,7 @@ describe('Integration | Repository | static-course-repository', function() {
         stubFilterCourseDatasource.withArgs({ filter: { ids: ['rec789'] } }).resolves([]);
 
         //when
-        const staticCourse = await staticCourseRepository.get('rec789');
+        const staticCourse = await staticCourseRepository.getRead('rec789');
         //then
         expect(staticCourse).to.be.null;
       });

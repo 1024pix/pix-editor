@@ -1,26 +1,28 @@
 const _ = require('lodash');
 const { knex } = require('../../../db/knex-database-connection');
-const ChallengeSummary = require('../../domain/readmodels/ChallengeSummary');
-const StaticCourse = require('../../domain/readmodels/StaticCourse');
-const StaticCourseSummary = require('../../domain/readmodels/StaticCourseSummary');
+const ChallengeSummary_Read = require('../../domain/readmodels/ChallengeSummary');
+const StaticCourse_Read = require('../../domain/readmodels/StaticCourse');
+const StaticCourseSummary_Read = require('../../domain/readmodels/StaticCourseSummary');
+const StaticCourse = require('../../domain/models/StaticCourse');
 const courseDatasource = require('../datasources/airtable/course-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
 const skillDatasource = require('../datasources/airtable/skill-datasource');
 
 module.exports = {
-  findSummaries,
+  findReadSummaries,
+  getRead,
   get,
   save,
 };
 
 // TODO: when double read will be removed, move pagination process into knex
-async function findSummaries({ page }) {
+async function findReadSummaries({ page }) {
   const staticCoursesFromPG = await knex('static_courses')
     .select('id', 'name', 'createdAt', 'challengeIds');
 
   const staticCoursesFromAirtable = await courseDatasource.list();
   const staticCoursesSummariesFirstBatch = staticCoursesFromAirtable.map((staticCourseFromAirtable) => {
-    return new StaticCourseSummary({
+    return new StaticCourseSummary_Read({
       id: staticCourseFromAirtable.id,
       name: staticCourseFromAirtable.name,
       createdAt: staticCourseFromAirtable.createdAt,
@@ -29,7 +31,7 @@ async function findSummaries({ page }) {
   });
 
   const staticCoursesSummariesSecondBatch = staticCoursesFromPG.map((staticCourse) => {
-    return new StaticCourseSummary({
+    return new StaticCourseSummary_Read({
       id: staticCourse.id,
       name: staticCourse.name,
       createdAt: staticCourse.createdAt,
@@ -47,7 +49,7 @@ async function findSummaries({ page }) {
   return { results, meta };
 }
 
-async function get(id) {
+async function getRead(id) {
   const staticCourseFromPG = await knex('static_courses')
     .select('*')
     .where('id', id)
@@ -55,7 +57,7 @@ async function get(id) {
   if (staticCourseFromPG) {
     const challengeIds = staticCourseFromPG.challengeIds.split(',');
     const challengeSummaries = await findChallengeSummaries(challengeIds);
-    return new StaticCourse({
+    return new StaticCourse_Read({
       id: staticCourseFromPG.id,
       name: staticCourseFromPG.name,
       description: staticCourseFromPG.description,
@@ -68,7 +70,7 @@ async function get(id) {
   if (staticCourseFromAirtable) {
     const challengeIds = staticCourseFromAirtable.challenges || [];
     const challengeSummaries = await findChallengeSummaries(challengeIds);
-    return new StaticCourse({
+    return new StaticCourse_Read({
       id: staticCourseFromAirtable.id,
       name: staticCourseFromAirtable.name || null,
       description: staticCourseFromAirtable.description || null,
@@ -77,6 +79,38 @@ async function get(id) {
       challengeSummaries,
     });
   }
+  return null;
+}
+
+async function get(id) {
+  const staticCourseFromPG = await knex('static_courses')
+    .select('*')
+    .where('id', id)
+    .first();
+  if (staticCourseFromPG) {
+    return new StaticCourse({
+      id: staticCourseFromPG.id,
+      name: staticCourseFromPG.name,
+      description: staticCourseFromPG.description,
+      challengeIds: staticCourseFromPG.challengeIds.split(','),
+      createdAt: staticCourseFromPG.createdAt,
+      updatedAt: staticCourseFromPG.updatedAt,
+    });
+  }
+
+  const [staticCourseFromAirtable] = await courseDatasource.filter({ filter: { ids: [id] } });
+  if (staticCourseFromAirtable) {
+    const challengeIds = staticCourseFromAirtable.challenges || [];
+    return new StaticCourse({
+      id: staticCourseFromAirtable.id,
+      name: staticCourseFromAirtable.name || null,
+      description: staticCourseFromAirtable.description || null,
+      challengeIds,
+      createdAt: staticCourseFromAirtable.createdAt,
+      updatedAt: staticCourseFromAirtable.updatedAt,
+    });
+  }
+
   return null;
 }
 
@@ -91,7 +125,9 @@ async function save(staticCourseForCreation) {
     updatedAt: staticCourseDTO.updatedAt,
   };
   await knex('static_courses')
-    .insert(serializedStaticCourseForDB);
+    .insert(serializedStaticCourseForDB)
+    .onConflict('id')
+    .merge();
   return serializedStaticCourseForDB.id;
 }
 
@@ -102,7 +138,7 @@ async function findChallengeSummaries(challengeIds) {
   return challengeIds.map((challengeId) => {
     const challengeFromAirtable = challengesFromAirtable.find((challengeFromAirtable) => challengeId === challengeFromAirtable.id);
     const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challengeFromAirtable.skillId);
-    return new ChallengeSummary({
+    return new ChallengeSummary_Read({
       id: challengeFromAirtable.id,
       instruction: challengeFromAirtable.instruction || '',
       skillName: correspondingSkill?.name || '',

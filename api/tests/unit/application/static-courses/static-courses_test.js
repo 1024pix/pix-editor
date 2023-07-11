@@ -3,14 +3,14 @@ const staticCourseController = require('../../../../lib/application/static-cours
 const challengeRepository = require('../../../../lib/infrastructure/repositories/challenge-repository');
 const staticCourseRepository = require('../../../../lib/infrastructure/repositories/static-course-repository');
 const idGenerator = require('../../../../lib/infrastructure/utils/id-generator');
-const { InvalidStaticCourseCreationError } = require('../../../../lib/domain/errors');
+const { InvalidStaticCourseCreationOrUpdateError } = require('../../../../lib/domain/errors');
 
 describe('Unit | Controller | static courses controller', function() {
   describe('findSummaries', function() {
     describe('pagination normalization', function() {
       let stub;
       beforeEach(function() {
-        stub = sinon.stub(staticCourseRepository, 'findSummaries');
+        stub = sinon.stub(staticCourseRepository, 'findReadSummaries');
         stub.resolves({ results: [], meta: {} });
       });
 
@@ -83,7 +83,7 @@ describe('Unit | Controller | static courses controller', function() {
   describe('create', function() {
 
     describe('creationCommand normalization', function() {
-      let saveStub, getStub, getAllIdsInStub, generateNewIdStub, clock;
+      let saveStub, getReadStub, getAllIdsInStub, generateNewIdStub, clock;
 
       beforeEach(function() {
         clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
@@ -91,8 +91,8 @@ describe('Unit | Controller | static courses controller', function() {
         getAllIdsInStub.resolves(['chalA']);
         saveStub = sinon.stub(staticCourseRepository, 'save');
         saveStub.resolves('course123');
-        getStub = sinon.stub(staticCourseRepository, 'get');
-        getStub.resolves({});
+        getReadStub = sinon.stub(staticCourseRepository, 'getRead');
+        getReadStub.resolves({});
         generateNewIdStub = sinon.stub(idGenerator, 'generateNewId');
         generateNewIdStub.returns('courseDEF456');
       });
@@ -113,7 +113,7 @@ describe('Unit | Controller | static courses controller', function() {
         await staticCourseController.create(request, hFake);
 
         // then
-        const expectedStaticCourseForCreation = domainBuilder.buildStaticCourse({
+        const expectedStaticCourse = domainBuilder.buildStaticCourse({
           id: 'courseDEF456',
           name: 'some valid name',
           description: 'some valid description',
@@ -121,7 +121,7 @@ describe('Unit | Controller | static courses controller', function() {
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
-        expect(saveStub).to.have.been.calledWithExactly(expectedStaticCourseForCreation);
+        expect(saveStub).to.have.been.calledWithExactly(expectedStaticCourse);
       });
 
       it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
@@ -147,11 +147,11 @@ describe('Unit | Controller | static courses controller', function() {
         const error2 = await catchErr(staticCourseController.create)(request2, hFake);
 
         // then
-        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error0.message).to.equal('Invalid or empty "name"');
-        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error1.message).to.equal('Invalid or empty "name"');
-        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error2.message).to.equal('Invalid or empty "name"');
         expect(saveStub).to.not.have.been.called;
       });
@@ -179,7 +179,7 @@ describe('Unit | Controller | static courses controller', function() {
         await staticCourseController.create(request2, hFake);
 
         // then
-        const expectedStaticCourseForCreation = domainBuilder.buildStaticCourse({
+        const expectedStaticCourse = domainBuilder.buildStaticCourse({
           id: 'courseDEF456',
           name: 'some valid name',
           description: '',
@@ -187,9 +187,9 @@ describe('Unit | Controller | static courses controller', function() {
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
-        expect(saveStub.getCall(0)).to.have.been.calledWithExactly(expectedStaticCourseForCreation);
-        expect(saveStub.getCall(1)).to.have.been.calledWithExactly(expectedStaticCourseForCreation);
-        expect(saveStub.getCall(2)).to.have.been.calledWithExactly(expectedStaticCourseForCreation);
+        expect(saveStub.getCall(0)).to.have.been.calledWithExactly(expectedStaticCourse);
+        expect(saveStub.getCall(1)).to.have.been.calledWithExactly(expectedStaticCourse);
+        expect(saveStub.getCall(2)).to.have.been.calledWithExactly(expectedStaticCourse);
       });
 
       it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
@@ -221,13 +221,191 @@ describe('Unit | Controller | static courses controller', function() {
         const error3 = await catchErr(staticCourseController.create)(request3, hFake);
 
         // then
-        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error0.message).to.equal('No challenges provided');
-        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error1.message).to.equal('No challenges provided');
-        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error2.message).to.equal('No challenges provided');
-        expect(error3).to.be.instanceOf(InvalidStaticCourseCreationError);
+        expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error3.message).to.equal('No challenges provided');
+        expect(saveStub).to.not.have.been.called;
+      });
+    });
+  });
+  describe('update', function() {
+
+    describe('updateCommand normalization', function() {
+      let saveStub, getReadStub, getAllIdsInStub, getStub, clock;
+
+      beforeEach(function() {
+        clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+        getAllIdsInStub = sinon.stub(challengeRepository, 'getAllIdsIn');
+        getAllIdsInStub.resolves(['chalA']);
+        saveStub = sinon.stub(staticCourseRepository, 'save');
+        saveStub.resolves();
+        getStub = sinon.stub(staticCourseRepository, 'get');
+        getStub.resolves(domainBuilder.buildStaticCourse({
+          id: 'someCourseId',
+          createdAt: new Date('2020-01-01T00:00:01Z'),
+        }));
+        getReadStub = sinon.stub(staticCourseRepository, 'getRead');
+        getReadStub.resolves({});
+      });
+
+      afterEach(function() {
+        clock.restore();
+      });
+
+      it('should pass along update command from attributes when all is valid', async function() {
+        // given
+        const request = {
+          payload: { data: { attributes: {
+            name: 'some valid name  ',
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+
+        // when
+        await staticCourseController.update(request, hFake);
+
+        // then
+        const expectedStaticCourse = domainBuilder.buildStaticCourse({
+          id: 'someCourseId',
+          name: 'some valid name',
+          description: 'some valid description',
+          challengeIds: ['chalA'],
+          createdAt: new Date('2020-01-01T00:00:01Z'),
+          updatedAt: new Date('2021-10-29T03:04:00Z'),
+        });
+        expect(saveStub).to.have.been.calledWithExactly(expectedStaticCourse);
+      });
+
+      it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
+        // given
+        const request0 = {
+          payload: { data: { attributes: {
+            name: null,
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+        const request1 = {
+          payload: { data: { attributes: {
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+        const request2 = {
+          payload: { data: { attributes: {
+            name: 123,
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+
+        // when
+        const error0 = await catchErr(staticCourseController.update)(request0, hFake);
+        const error1 = await catchErr(staticCourseController.update)(request1, hFake);
+        const error2 = await catchErr(staticCourseController.update)(request2, hFake);
+
+        // then
+        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error0.message).to.equal('Invalid or empty "name"');
+        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error1.message).to.equal('Invalid or empty "name"');
+        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error2.message).to.equal('Invalid or empty "name"');
+        expect(saveStub).to.not.have.been.called;
+      });
+
+      it('should normalize description to an empty string when not a string', async function() {
+        // given
+        const request0 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: null,
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+        const request1 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+        const request2 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 123,
+            'challenge-ids': ['chalA'],
+          } } },
+          params: { id: 'someCourseId' } };
+
+        // when
+        await staticCourseController.update(request0, hFake);
+        await staticCourseController.update(request1, hFake);
+        await staticCourseController.update(request2, hFake);
+
+        // then
+        const expectedStaticCourse = domainBuilder.buildStaticCourse({
+          id: 'someCourseId',
+          name: 'some valid name',
+          description: '',
+          challengeIds: ['chalA'],
+          createdAt: new Date('2020-01-01T00:00:01Z'),
+          updatedAt: new Date('2021-10-29T03:04:00Z'),
+        });
+        expect(saveStub.getCall(0)).to.have.been.calledWithExactly(expectedStaticCourse);
+        expect(saveStub.getCall(1)).to.have.been.calledWithExactly(expectedStaticCourse);
+        expect(saveStub.getCall(2)).to.have.been.calledWithExactly(expectedStaticCourse);
+      });
+
+      it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
+        // given
+        const request0 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: 'coucou',
+          } } },
+          params: { id: 'someCourseId' } };
+        const request1 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: null,
+          } } },
+          params: { id: 'someCourseId' } };
+        const request2 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+          } } },
+          params: { id: 'someCourseId' } };
+        const request3 = {
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: 123,
+          } } },
+          params: { id: 'someCourseId' } };
+
+        // when
+        const error0 = await catchErr(staticCourseController.update)(request0, hFake);
+        const error1 = await catchErr(staticCourseController.update)(request1, hFake);
+        const error2 = await catchErr(staticCourseController.update)(request2, hFake);
+        const error3 = await catchErr(staticCourseController.update)(request3, hFake);
+
+        // then
+        expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error0.message).to.equal('No challenges provided');
+        expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error1.message).to.equal('No challenges provided');
+        expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
+        expect(error2.message).to.equal('No challenges provided');
+        expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
         expect(error3.message).to.equal('No challenges provided');
         expect(saveStub).to.not.have.been.called;
       });

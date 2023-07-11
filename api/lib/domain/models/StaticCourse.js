@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const CommandResult = require('../CommandResult');
 
-module.exports = class StaticCourseForCreation {
+module.exports = class StaticCourse {
   constructor({
     id,
     name,
@@ -34,7 +34,27 @@ module.exports = class StaticCourseForCreation {
     if (failureReasons.length > 0) {
       return CommandResult.Failure({ value: null, failureReasons });
     }
-    const staticCourse = new StaticCourseForCreation({ ...attributes, id: idGenerator('course') });
+    const staticCourse = new StaticCourse({ ...attributes, id: idGenerator('course') });
+    return CommandResult.Success({ value: staticCourse });
+  }
+
+  update({ updateCommand, allChallengeIds }) {
+    const failureReasons = [];
+    const timestamp = new Date();
+    const attributes = {
+      id: this.id,
+      name: updateCommand.name.trim(),
+      description: updateCommand.description.trim(),
+      challengeIds: updateCommand.challengeIds.map((challengeId) => challengeId.trim()),
+      createdAt: this.createdAt,
+      updatedAt: timestamp,
+    };
+    checkName(attributes.name, failureReasons);
+    checkChallengeIds(attributes.challengeIds, allChallengeIds, failureReasons);
+    if (failureReasons.length > 0) {
+      return CommandResult.Failure({ value: null, failureReasons });
+    }
+    const staticCourse = new StaticCourse(attributes);
     return CommandResult.Success({ value: staticCourse });
   }
 
