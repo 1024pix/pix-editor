@@ -10,6 +10,7 @@ export default class ConfigService extends Service {
   @tracked author;
   @tracked accessLevel;
   @tracked airtableUrl;
+  @tracked airtableBase;
   @tracked tableChallenges;
   @tracked tableSkills;
   @tracked tableTubes;
@@ -24,6 +25,7 @@ export default class ConfigService extends Service {
     this.author = currentUser.trigram;
     this.accessLevel = this.access.getLevel(currentUser.access);
     this.airtableUrl = config.airtableUrl;
+    this.airtableBase = config.airtableBase;
     this.tableChallenges = config.tableChallenges;
     this.tableSkills = config.tableSkills;
     this.tableTubes = config.tableTubes;
