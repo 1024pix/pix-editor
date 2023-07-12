@@ -1,17 +1,25 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class AreaModel extends Model {
   @attr({ readonly: true }) name;
   @attr pixId;
   @attr titleFrFr;
   @attr titleEnUs;
-  @attr('number') code;
+  @attr() code;
 
   @hasMany('competence') competences;
   @belongsTo('framework') framework;
 
   get sortedCompetences() {
-    return this.competences.sortBy('code');
+    return this.competences
+      .toArray()
+      .sort((competenceA, competenceB) => {
+        const [domainCodeA, competenceCodeA] = competenceA.code.split('.');
+        const [domainCodeB, competenceCodeB] = competenceB.code.split('.');
+        if (parseInt(domainCodeA) === parseInt(domainCodeB))
+          return parseInt(competenceCodeA) > parseInt(competenceCodeB);
+        return parseInt(domainCodeA) > parseInt(domainCodeB);
+      });
   }
 
   get productionTubeCount() {
