@@ -5,7 +5,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { currentURL } from '@ember/test-helpers';
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Static Courses', function(hooks) {
+module('Acceptance | Static Courses | List', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 

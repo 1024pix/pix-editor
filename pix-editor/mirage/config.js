@@ -253,6 +253,17 @@ function routes() {
       challengeSummaryIds: attributes['challenge-ids'],
     });
   });
+
+  this.put('/static-courses/:id', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const staticCourse = schema.staticCourses.find(request.params.id);
+    staticCourse.update({
+      name: attributes.name,
+      description: attributes.description,
+      challengeSummaryIds: attributes['challenge-ids'],
+    });
+    return staticCourse;
+  });
 }
 
 function _serializeModel(instance, modelName) {

@@ -15,4 +15,11 @@ export default class StaticCourseModel extends Model {
   get sortedChallengeSummaries() {
     return this.challengeSummaries.sortBy('index');
   }
+
+  // TODO : i hate this approach pls help
+  get challengeIdsAsStringWithBreakLines() {
+    return this.sortedChallengeSummaries.toArray()
+      .map((challengeSummary) => challengeSummary.id)
+      .join('\n');
+  }
 }

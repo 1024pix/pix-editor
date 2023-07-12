@@ -2,10 +2,10 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { currentURL, find, triggerEvent } from '@ember/test-helpers';
+import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
 import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Static Courses | Creation', function(hooks) {
+module('Acceptance | Static Courses | Edition', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -53,7 +53,7 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access creation form', async function(assert) {
+    test('should prevent user from being able to access edition form', async function(assert) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -73,47 +73,45 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       return authenticateSession();
     });
 
-    test('should create a static course', async function(assert) {
+    test('should edit the static course', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
-      await clickByName('Créer un nouveau test');
+      await click(screen.getAllByRole('cell')[0]);
+      await click(screen.getAllByText('Éditer le test statique')[0]);
 
       // when
-      await fillByLabel('* Nom du test statique', 'Mon nouveau test statique');
-      await fillByLabel('Description à usage interne', 'Une super description pour mon nouveau test');
+      await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
-      await triggerEvent(find('#static-course-name'), 'keyup', '');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
-      await clickByName('Créer le test statique');
+      await clickByName('Enregistrer');
 
       // then
-      assert.strictEqual(currentURL(), '/static-courses/newStaticCourseId');
-      const [nameItem, descriptionItem] = screen.getAllByRole('listitem');
-      const removeWhitespacesFnc = (str) => str
-        .trim()
-        .replace(/\s{2,}/g, '')
-        .replace(/\s?:\s?/g, ':');
-      assert.strictEqual(removeWhitespacesFnc(nameItem.textContent), 'Nom:Mon nouveau test statique');
-      assert.strictEqual(removeWhitespacesFnc(descriptionItem.textContent), 'Description:Une super description pour mon nouveau test');
+      assert.strictEqual(currentURL(), '/static-courses/courseA');
+      assert.dom(screen.getByText('Ma nouvelle description toute jolie')).exists();
+      assert.dom(screen.getByText('chalA')).exists();
+      assert.dom(screen.getByText('chalC')).exists();
+      assert.dom(screen.queryByText('chalB')).doesNotExist();
     });
 
-    test('should cancel static course creation', async function(assert) {
+    test('should cancel static course edition', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
-      await clickByName('Créer un nouveau test');
+      await click(screen.getAllByRole('cell')[0]);
+      await click(screen.getAllByText('Éditer le test statique')[0]);
 
       // when
-      await fillByLabel('* Nom du test statique', 'Mon nouveau test statique');
-      await fillByLabel('Description à usage interne', 'Une super description');
+      await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
+      await triggerEvent(find('#static-course-description'), 'keyup', '');
+      await triggerEvent(find('#static-course-challenges'), 'keyup', '');
       await clickByName('Annuler');
 
       // then
-      assert.strictEqual(currentURL(), '/static-courses');
-      assert.dom(screen.queryByText('Mon nouveau test statique')).doesNotExist();
+      assert.strictEqual(currentURL(), '/static-courses/courseA');
+      assert.dom(screen.queryByText('Ma nouvelle description toute jolie')).doesNotExist();
     });
   });
 });

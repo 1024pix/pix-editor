@@ -24,6 +24,7 @@ module.exports = function () {
       'link',
       'minus',
       'mobile-alt',
+      'pen',
       'percent',
       'plus',
       'power-off',
