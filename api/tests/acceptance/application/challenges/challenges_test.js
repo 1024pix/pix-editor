@@ -173,7 +173,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const challenge1 = domainBuilder.buildChallengeAirtableDataObject({ id: '1' });
       const challenge2 = domainBuilder.buildChallengeAirtableDataObject({ id: '2' });
       const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
+        .get('/v0/airtableDatabaseIdValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
@@ -324,7 +324,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     it('should search challenges', async () => {
       // Given
       const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
+        .get('/v0/airtableDatabaseIdValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
@@ -352,7 +352,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should search challenges with limit',  async() => {
       const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
+        .get('/v0/airtableDatabaseIdValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
@@ -391,7 +391,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallengeId1' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
+        .get('/v0/airtableDatabaseIdValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
@@ -480,7 +480,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return a 404 error when the challenge doesn\'t exist', async () => {
       const airtableCall = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Epreuves')
+        .get('/v0/airtableDatabaseIdValue/Epreuves')
         .query({
           fields: {
             '': challengeAirtableFields,
@@ -520,7 +520,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const expectedBody = { records: [expectedBodyChallenge] };
 
       const airtableCall = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+        .post('/v0/airtableDatabaseIdValue/Epreuves/?', expectedBody)
         .reply(
           200,
           { records: [airtableBuilder.factory.buildChallenge(challenge)] }
@@ -671,7 +671,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const token = 'not-a-real-token';
 
       const attachmentsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
+        .get('/v0/airtableDatabaseIdValue/Attachments')
         .query({ filterByFormula: '{challengeId persistant} = \'recChallengeId\'' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [] });
@@ -687,7 +687,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .reply(200);
 
       const airtableCall = nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+        .post('/v0/airtableDatabaseIdValue/Epreuves/?', expectedBody)
         .reply(
           200,
           { records: [airtableBuilder.factory.buildChallenge(challenge)] }
@@ -776,7 +776,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const expectedBody = { records: [expectedBodyChallenge] };
 
       const airtableCall = nock('https://api.airtable.com')
-        .patch('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+        .patch('/v0/airtableDatabaseIdValue/Epreuves/?', expectedBody)
         .reply(
           200,
           { records: [airtableChallenge] }

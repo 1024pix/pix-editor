@@ -23,7 +23,7 @@ exports.register = async function(server) {
           }
         }],
         handler: async function(request, h) {
-          const response = await _proxyRequestToAirtable(request, h, config.airtable.base);
+          const response = await _proxyRequestToAirtable(request, h, config.airtable.databaseId);
           if (
             (request.method === 'post' || request.method === 'patch')
             && response.statusCode >= 200
@@ -57,7 +57,7 @@ exports.register = async function(server) {
           }
         }],
         handler: async function(request, h) {
-          return _proxyRequestToAirtable(request, h, config.airtable.editorBase);
+          return _proxyRequestToAirtable(request, h, config.airtable.editorDatabaseId);
         }
       },
     }

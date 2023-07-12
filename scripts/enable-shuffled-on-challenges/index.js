@@ -16,7 +16,7 @@ const logger = createLogger({
 
 const enableShuffledOnChallenges = async ({ airtableClient, dryRun, sample }) => {
   const excludedSkillIds = await readExcludes({ airtableClient });
-  
+
   const challenges = await _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, sample });
 
   if (!dryRun) {
@@ -28,7 +28,7 @@ const enableShuffledOnChallenges = async ({ airtableClient, dryRun, sample }) =>
 
 /**
  * @param {{
- *   airtableClient: Airtable.Base
+ *   airtableClient: airtable.databaseId
  * }} config
  */
 async function readExcludes({ airtableClient }) {
@@ -57,7 +57,7 @@ async function readExcludes({ airtableClient }) {
 
 /**
  * @param {{
- *   airtableClient: Airtable.Base
+ *   airtableClient: airtable.databaseId
  *   excludedSkillIds: string[]
  *   sample: boolean
  * }} config
@@ -92,7 +92,7 @@ async function _listChallengesToBeShuffled({ airtableClient, excludedSkillIds, s
 /**
  * @param challenges {Airtable.Records<Airtable.FieldSet>}
  * @param {{
- *   airtableClient: Airtable.Base
+ *   airtableClient: airtable.databaseId
  * }} config
  */
 async function _shuffleChallenges(challenges, { airtableClient }) {
@@ -139,7 +139,7 @@ async function main() {
 
   const {
     AIRTABLE_API_KEY: airtableApiKey,
-    AIRTABLE_BASE: airtableBase,
+    AIRTABLE_DATABASE_ID: airtableDatabaseId,
   } = process.env;
 
   const dryRun = process.env.DRY_RUN !== 'false';
@@ -149,11 +149,11 @@ async function main() {
 
   logger.info(`Script ${__filename} has started`, {
     airtableApiKey,
-    airtableBase,
+    airtableDatabaseId,
     dryRun,
   });
 
-  const airtableClient = createAirtableClient({ apiKey: airtableApiKey, base: airtableBase });
+  const airtableClient = createAirtableClient({ apiKey: airtableApiKey, base: airtableDatabaseId });
   await enableShuffledOnChallenges({ airtableClient, dryRun, sample });
 
   const endTime = performance.now();

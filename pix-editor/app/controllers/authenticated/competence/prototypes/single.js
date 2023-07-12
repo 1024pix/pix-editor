@@ -109,7 +109,7 @@ export default class SingleController extends Controller {
 
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${ this.challenge.airtableId}`;
+    return `${this.config.airtableUrl}${this.config.airtableDatabaseId}/${this.config.tableChallenges}/${ this.challenge.airtableId}`;
   }
 
   get lastUpdatedAtISO() {

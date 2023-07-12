@@ -3,7 +3,7 @@ const airtableSettings = require('../config').airtable;
 const logger = require('./logger');
 
 function _airtableClient() {
-  return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
+  return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.databaseId);
 }
 
 function findRecords(tableName, options = {}) {

@@ -27,8 +27,8 @@ module.exports = (function() {
 
     airtable: {
       apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
-      base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
-      editorBase: process.env.AIRTABLE_EDITOR_BASE,
+      databaseId: process.env.CYPRESS_AIRTABLE_DATABASE_ID || process.env.AIRTABLE_DATABASE_ID,
+      editorDatabaseId: process.env.AIRTABLE_EDITOR_DATABASE_ID,
     },
 
     logging: {
@@ -48,7 +48,7 @@ module.exports = (function() {
 
     pixEditor: {
       airtableUrl: process.env.AIRTABLE_URL,
-      airtableBase: process.env.AIRTABLE_BASE,
+      airtableDatabaseId: process.env.AIRTABLE_DATABASE_ID,
       tableChallenges: process.env.TABLE_CHALLENGES,
       tableSkills: process.env.TABLE_SKILLS,
       tableTubes: process.env.TABLE_TUBES,
@@ -109,8 +109,8 @@ module.exports = (function() {
     config.hapi.publicDir = 'tests/public-tests/';
 
     config.airtable.apiKey = 'airtableApiKeyValue';
-    config.airtable.base = 'airtableBaseValue';
-    config.airtable.editorBase = 'airtableEditorBaseValue';
+    config.airtable.databaseId = 'airtableDatabaseIdValue';
+    config.airtable.editorDatabaseId = 'airtableEditorBaseValue';
 
     config.logging.enabled = false;
 

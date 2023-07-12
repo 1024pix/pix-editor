@@ -52,7 +52,7 @@ async function main() {
 function createAirtableClient() {
   return new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  }).base(process.env.AIRTABLE_DATABASE_ID);
 }
 
 function getBaseSkills(table) {

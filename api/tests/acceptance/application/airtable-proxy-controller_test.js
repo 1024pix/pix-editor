@@ -24,7 +24,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         // Given
         const user = await createReadonlyUser();
         nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/Competences?key=value')
+          .get('/v0/airtableDatabaseIdValue/Competences?key=value')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, 'ok');
         const server = await createServer();
@@ -45,7 +45,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         // Given
         const user = await createAdminUser();
         nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Epreuves?key=value', { param: 'value' })
+          .post('/v0/airtableDatabaseIdValue/Epreuves?key=value', { param: 'value' })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .matchHeader('content-type', 'application/json')
           .reply(200, 'ok');
@@ -71,7 +71,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
         // Given
         const user = await createAdminUser();
         nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Epreuves?key=value', { param: 'value' })
+          .post('/v0/airtableDatabaseIdValue/Epreuves?key=value', { param: 'value' })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .matchHeader('content-type', 'application/json')
           .reply(401, 'Unauthorized');

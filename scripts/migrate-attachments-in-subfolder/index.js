@@ -15,7 +15,7 @@ module.exports = {
 function getBaseAttachments() {
   const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  }).base(process.env.AIRTABLE_DATABASE_ID);
 
   return base('Attachments');
 }

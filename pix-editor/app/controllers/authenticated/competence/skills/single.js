@@ -68,7 +68,7 @@ export default class SingleController extends Controller {
   }
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableSkills}/${this.skill.id}`;
+    return `${this.config.airtableUrl}${this.config.airtableDatabaseId}/${this.config.tableSkills}/${this.skill.id}`;
   }
 
   @action

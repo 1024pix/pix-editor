@@ -2,7 +2,7 @@ import Model, { attr } from '@ember-data/model';
 
 export default class ConfigModel extends Model {
   @attr airtableUrl;
-  @attr airtableBase;
+  @attr airtableDatabaseId;
   @attr tableChallenges;
   @attr tableSkills;
   @attr tableTubes;

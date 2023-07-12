@@ -29,7 +29,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(200);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableDatabaseIdValue/Competences', competence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, competence);
       const server = await createServer();
@@ -61,7 +61,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(400);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableDatabaseIdValue/Competences', competence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, competence);
       const server = await createServer();
@@ -88,7 +88,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(400);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableDatabaseIdValue/Competences', competence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, competence);
       const server = await createServer();
@@ -137,12 +137,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       };
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Epreuves', challenge)
+        .post('/v0/airtableDatabaseIdValue/Epreuves', challenge)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, challenge);
 
       const attachmentsScope = nock('https://api.airtable.com')
-        .get('/v0/airtableBaseValue/Attachments')
+        .get('/v0/airtableDatabaseIdValue/Attachments')
         .query({ filterByFormula: '{challengeId persistant} = \'recChallenge\'' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [attachment] });

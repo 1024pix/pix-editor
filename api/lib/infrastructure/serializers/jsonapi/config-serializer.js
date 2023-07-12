@@ -5,7 +5,7 @@ module.exports = {
     return new Serializer('config', {
       attributes: [
         'airtableUrl',
-        'airtableBase',
+        'airtableDatabaseId',
         'tableChallenges',
         'tableSkills',
         'tableTubes',

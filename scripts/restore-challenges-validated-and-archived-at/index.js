@@ -9,11 +9,11 @@ function getStatus(status) {
     'pré-validé': 'validé',
   }[status] ?? status;
 }
-    
+
 (async function() {
   const client = new Client({ connectionString: process.env.DATABASE_URL });
   let cursor;
-      
+
   try {
     await client.connect();
     const result = await client.query('SELECT "createdAt" FROM releases ORDER BY "createdAt" limit 1');
@@ -111,7 +111,7 @@ async function _parseChangelog(oldestReleaseDate) {
 
   const changelogAirtableClient = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
-  }).base(process.env.AIRTABLE_EDITOR_BASE);
+  }).base(process.env.AIRTABLE_EDITOR_DATABASE_ID);
 
   console.log(`reading all changelogs older than ${oldestReleaseDate} from Airtable changelog base...`);
   const allChangelogs = await changelogAirtableClient.table('Notes').select({
@@ -186,7 +186,7 @@ async function _updateAirtable(challengesInfo) {
 
   const airtableClient =  new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
-  }).base(process.env.AIRTABLE_BASE);
+  }).base(process.env.AIRTABLE_DATABASE_ID);
 
   console.log('reading all challenges from Airtable...');
   const allChallenges = await airtableClient.table('Epreuves').select({

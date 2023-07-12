@@ -11,7 +11,7 @@ LCMS_API_URL=http://localhost:3002/api
 ```
 
 2. Côté LCMS, indiquer la base Airtable 
-   souhaitée dans le .env via `AIRTABLE_API_KEY` et `AIRTABLE_BASE`.
+   souhaitée dans le .env via `AIRTABLE_API_KEY` et `AIRTABLE_DATABASE_ID`.
    S'assurer que les autres variables d'environnement **requises** dans le fichier `sample.env` soient aussi renseignées.
    
 3. Côté LCMS, démarrer les containers docker et initialiser la base de données:

@@ -5,7 +5,7 @@
 // To run the script:
 // > cd scripts
 // > npm ci
-// > AIRTABLE_API_KEY=XXX AIRTABLE_BASE=XXXX node populate-alpha-and-delta-column/
+// > AIRTABLE_API_KEY=XXX AIRTABLE_DATABASE_ID=XXXX node populate-alpha-and-delta-column/
 
 const _ = require('lodash');
 const fs = require('fs');
@@ -88,7 +88,7 @@ async function updateRecords(base, data) {
 function getBaseChallenges() {
   const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY
-  }).base(process.env.AIRTABLE_BASE);
+  }).base(process.env.AIRTABLE_DATABASE_ID);
 
   return base('Epreuves');
 }
