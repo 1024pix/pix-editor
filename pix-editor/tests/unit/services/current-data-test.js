@@ -19,12 +19,12 @@ module('Unit | Service | current-data', function(hooks) {
 
     pixFranceArea = store.createRecord('area',{
       id: 'pixFranceArea',
-      code: 1,
+      code: '1',
     });
 
     pixArea = store.createRecord('area',{
       id: 'pixArea',
-      code: 2,
+      code: '2',
     });
 
     pixFranceFramework = store.createRecord('framework', {
