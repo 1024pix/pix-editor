@@ -6,7 +6,7 @@ export default class StaticCoursesController extends Controller {
   @service router;
 
   @action
-  async copyStaticCoursePreviewUrl(staticCourse) {
-    await navigator.clipboard.writeText(staticCourse.previewURL);
+  copyStaticCoursePreviewUrl(staticCourse) {
+    navigator.clipboard.writeText(staticCourse.previewURL);
   }
 }
