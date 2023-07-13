@@ -14,15 +14,11 @@ Vous devez au préalable avoir correctement installé les logiciels suivants :
 Pix Editor utilise [Airtable](https://airtable.com/). 
 La structure de la base peut être fournie en contactant l'équipe de développement.
 
-Une fois la base dupliquée, utilisez un compte nominatif, pour générer un personal access token.
-
 Naviguer dans votre "developer hub".
 Générer un access token avec les droits suivant :
 ```
 data.records:read
 data.records:write
-schema.bases:read
-schema.bases:write
 ```
 Donner l'accès à la base qui contient votre schéma dupliqué.
 Une fois la base dupliquée, utilisez un compte nominatif pour générer un personal access token.
@@ -46,7 +42,7 @@ Modifier la configuration en modifiant le fichier `.env`:
 
 ## Installer les dépendances
 
-Se placer sur la bonne version de Node en utilisant nvm:
+Se placer sur la bonne version de Node en utilisant nvm :
 ```
 nvm use
 ```
@@ -85,10 +81,6 @@ Récupérer l'un des 2 tokens de connexion disponibles dans [le fichier de seeds
 
 Accéder à [l'IHM](http://localhost:4300).
 Renseigner le token de connexion et vérifier que la page d'accueil s'affiche.
-
-> ⚠️ Si vous parvenez à vous authentifier, mais qu'une page blanche s'affiche, cela signifie très probablement que votre schéma de base Airtable est différent de celui utilisé pour le projet Pix. 
-> Nous vous invitons à vous rapprocher de l'équipe support via [le centre d'aide](support.pix.fr) de Pix.
-
 
 ## Créer un utilisateur
 
