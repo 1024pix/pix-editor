@@ -158,6 +158,10 @@ export default class AccessService extends Service {
     return level >= READ_ONLY;
   }
 
+  mayCreateOrEditStaticCourse() {
+    return this.isEditor();
+  }
+
   isReadOnly() {
     const level = this.config.accessLevel;
     return level >= READ_ONLY;

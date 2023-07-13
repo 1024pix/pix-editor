@@ -1,16 +1,19 @@
 const StaticCourse = require('../../../../lib/domain/models/StaticCourse');
 
 module.exports = function buildStaticCourse({
-  id = 'static-course-id',
+  id = 'courseABC123',
   name = 'static course name',
+  description = 'static course description',
   challengeIds = ['challengeid-1', 'challengeid-2'],
   createdAt = new Date(),
+  updatedAt = new Date(),
 } = {}) {
-
   return new StaticCourse({
     id,
     name,
+    description,
     challengeIds,
-    createdAt
+    createdAt,
+    updatedAt,
   });
 };

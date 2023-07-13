@@ -1,7 +1,31 @@
 <header class="page-header">
-  <div class="page-title">
-    <h1>Tests Statiques</h1>
-  </div>
+    <h1 class="page-title">Tests Statiques</h1>
+    <div class="page-actions">
+      <PixTooltip
+        @id='create-static-course-tooltip'
+        @position="bottom-left"
+        @hide={{this.model.mayCreateStaticCourse}}
+      >
+        <:triggerElement>
+          <PixButtonLink
+            @backgroundColor="blue"
+            @route="authenticated.static-courses.new"
+            @iconBefore="plus"
+            @isDisabled={{not this.model.mayCreateStaticCourse}}
+            aria-describedby='create-static-course-tooltip'
+            class="pix-button-link-with-icon white-font"
+          >
+            <FaIcon
+              @icon="plus"
+              @prefix="fas"></FaIcon>Créer un nouveau test
+          </PixButtonLink>
+        </:triggerElement>
+
+        <:tooltip>
+          Vous n'avez pas les droits suffisants pour créer un test statique.
+        </:tooltip>
+      </PixTooltip>
+    </div>
 </header>
 <main class="page-body">
   <section class="page-section">
@@ -22,7 +46,7 @@
         </tr>
         </thead>
         <tbody>
-        {{#each this.model as |staticCourseSummary|}}
+        {{#each this.model.staticCourseSummaries as |staticCourseSummary|}}
           <tr class="tr--clickable">
             <td {{on "click" (fn this.goToStaticCourseDetails staticCourseSummary.id)}}>
               {{staticCourseSummary.name}}
@@ -45,7 +69,7 @@
     </div>
     <div class="static-course-list__pagination">
       <PixPagination
-        @pagination={{this.model.meta}}
+        @pagination={{this.model.staticCourseSummaries.meta}}
       />
     </div>
   </section>

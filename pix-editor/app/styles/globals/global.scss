@@ -2,6 +2,17 @@
   font-weight: bold;
 }
 
+.white-font {
+  color: $pix-neutral-0 !important;
+}
+
+.form-error {
+  width: 100%;
+  color: $pix-error-70;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
 .pix-button-link-with-icon {
   > svg {
     margin-right: 8px;
