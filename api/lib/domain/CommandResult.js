@@ -4,18 +4,18 @@ const COMMAND_RESULT_STATES = {
 };
 
 class CommandResult {
-  constructor({ state, value, failureReasons }) {
+  constructor({ state, value, error }) {
     this.state = state;
     this.value = value;
-    this.failureReasons = failureReasons;
+    this.error = error;
   }
 
   static Success({ value }) {
-    return new CommandResult({ state: COMMAND_RESULT_STATES.SUCCESS, value, failureReasons: [] });
+    return new CommandResult({ state: COMMAND_RESULT_STATES.SUCCESS, value, error: null });
   }
 
-  static Failure({ value, failureReasons }) {
-    return new CommandResult({ state: COMMAND_RESULT_STATES.FAILURE, value, failureReasons });
+  static Failure({ value, error }) {
+    return new CommandResult({ state: COMMAND_RESULT_STATES.FAILURE, value, error });
   }
 
   isSuccess() {

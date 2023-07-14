@@ -25,8 +25,25 @@ class UserNotFoundError extends NotFoundError {
 }
 
 class InvalidStaticCourseCreationOrUpdateError extends DomainError {
-  constructor(reasons) {
-    super(reasons.join('\n'));
+  constructor() {
+    super('Static course validation error at creation or update');
+    this.errors = [];
+  }
+
+  hasErrors() {
+    return this.errors.length > 0;
+  }
+
+  addMandatoryFieldError({ field }) {
+    this.errors.push({ field, code: 'MANDATORY_FIELD' });
+  }
+
+  addUnknownResourcesError({ field, unknownResources }) {
+    this.errors.push({ field, data: unknownResources, code: 'UNKNOWN_RESOURCES' });
+  }
+
+  addDuplicatesForbiddenError({ field, duplicates }) {
+    this.errors.push({ field, data: duplicates, code: 'DUPLICATES_FORBIDDEN' });
   }
 }
 

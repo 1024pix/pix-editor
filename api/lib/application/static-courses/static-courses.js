@@ -5,7 +5,7 @@ const staticCourseRepository = require('../../infrastructure/repositories/static
 const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const idGenerator = require('../../infrastructure/utils/id-generator');
 const StaticCourse = require('../../domain/models/StaticCourse');
-const { InvalidStaticCourseCreationOrUpdateError, NotFoundError } = require('../../domain/errors');
+const { NotFoundError } = require('../../domain/errors');
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -41,7 +41,7 @@ async function create(request, h) {
     idGenerator: idGenerator.generateNewId,
   });
   if (commandResult.isFailure()) {
-    throw new InvalidStaticCourseCreationOrUpdateError(commandResult.failureReasons);
+    throw commandResult.error;
   }
   const staticCourseId = await staticCourseRepository.save(commandResult.value);
   const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
@@ -61,7 +61,7 @@ async function update(request, h) {
     allChallengeIds,
   });
   if (commandResult.isFailure()) {
-    throw new InvalidStaticCourseCreationOrUpdateError(commandResult.failureReasons);
+    throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
   const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);

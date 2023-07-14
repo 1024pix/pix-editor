@@ -148,11 +148,11 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.message).to.equal('Invalid or empty "name"');
+        expect(error0.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.message).to.equal('Invalid or empty "name"');
+        expect(error1.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.message).to.equal('Invalid or empty "name"');
+        expect(error2.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(saveStub).to.not.have.been.called;
       });
 
@@ -222,13 +222,13 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.message).to.equal('No challenges provided');
+        expect(error0.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.message).to.equal('No challenges provided');
+        expect(error1.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.message).to.equal('No challenges provided');
+        expect(error2.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error3.message).to.equal('No challenges provided');
+        expect(error3.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(saveStub).to.not.have.been.called;
       });
     });
@@ -312,11 +312,11 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.message).to.equal('Invalid or empty "name"');
+        expect(error0.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.message).to.equal('Invalid or empty "name"');
+        expect(error1.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.message).to.equal('Invalid or empty "name"');
+        expect(error2.errors[0]).to.deep.equal({ field: 'name', code: 'MANDATORY_FIELD' });
         expect(saveStub).to.not.have.been.called;
       });
 
@@ -400,13 +400,13 @@ describe('Unit | Controller | static courses controller', function() {
 
         // then
         expect(error0).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error0.message).to.equal('No challenges provided');
+        expect(error0.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error1).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error1.message).to.equal('No challenges provided');
+        expect(error1.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error2).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error2.message).to.equal('No challenges provided');
+        expect(error2.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(error3).to.be.instanceOf(InvalidStaticCourseCreationOrUpdateError);
-        expect(error3.message).to.equal('No challenges provided');
+        expect(error3.errors[0]).to.deep.equal({ field: 'challengeIds', code: 'MANDATORY_FIELD' });
         expect(saveStub).to.not.have.been.called;
       });
     });

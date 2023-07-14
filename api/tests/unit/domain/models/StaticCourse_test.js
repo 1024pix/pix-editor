@@ -83,8 +83,8 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.failureReasons).to.deepEqualArray([
-            'Invalid or empty "name"',
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'name' },
           ]);
         });
       });
@@ -107,8 +107,8 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.failureReasons).to.deepEqualArray([
-            'Following challenges do not exist : "xchalLOL", "chalDEFF"',
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
           ]);
         });
 
@@ -129,8 +129,8 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.failureReasons).to.deepEqualArray([
-            'Following challenges appear more than once : "chalJKF", "chalABC"',
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
           ]);
         });
 
@@ -151,8 +151,8 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.failureReasons).to.deepEqualArray([
-            'No challenges provided',
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'challengeIds' },
           ]);
         });
       });
@@ -176,10 +176,10 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.failureReasons).to.have.members([
-            'Following challenges do not exist : "xchalLOL", "chalDEFF"',
-            'Invalid or empty "name"',
-            'Following challenges appear more than once : "chalGHI"',
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'name' },
+            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
           ]);
         });
       });
@@ -271,8 +271,8 @@ describe('Unit | Domain | StaticCourse', function() {
             // then
             expect(commandResult.isFailure()).to.be.true;
             expect(commandResult.value).to.be.null;
-            expect(commandResult.failureReasons).to.deepEqualArray([
-              'Invalid or empty "name"',
+            expect(commandResult.error.errors).to.deepEqualArray([
+              { code: 'MANDATORY_FIELD', field: 'name' },
             ]);
           });
         });
@@ -294,8 +294,8 @@ describe('Unit | Domain | StaticCourse', function() {
             // then
             expect(commandResult.isFailure()).to.be.true;
             expect(commandResult.value).to.be.null;
-            expect(commandResult.failureReasons).to.deepEqualArray([
-              'Following challenges do not exist : "xchalLOL", "chalDEFF"',
+            expect(commandResult.error.errors).to.deepEqualArray([
+              { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
             ]);
           });
 
@@ -315,8 +315,8 @@ describe('Unit | Domain | StaticCourse', function() {
             // then
             expect(commandResult.isFailure()).to.be.true;
             expect(commandResult.value).to.be.null;
-            expect(commandResult.failureReasons).to.deepEqualArray([
-              'Following challenges appear more than once : "chalJKF", "chalABC"',
+            expect(commandResult.error.errors).to.deepEqualArray([
+              { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
             ]);
           });
 
@@ -336,8 +336,8 @@ describe('Unit | Domain | StaticCourse', function() {
             // then
             expect(commandResult.isFailure()).to.be.true;
             expect(commandResult.value).to.be.null;
-            expect(commandResult.failureReasons).to.deepEqualArray([
-              'No challenges provided',
+            expect(commandResult.error.errors).to.deepEqualArray([
+              { code: 'MANDATORY_FIELD', field: 'challengeIds' },
             ]);
           });
         });
@@ -360,10 +360,10 @@ describe('Unit | Domain | StaticCourse', function() {
             // then
             expect(commandResult.isFailure()).to.be.true;
             expect(commandResult.value).to.be.null;
-            expect(commandResult.failureReasons).to.have.members([
-              'Following challenges do not exist : "xchalLOL", "chalDEFF"',
-              'Invalid or empty "name"',
-              'Following challenges appear more than once : "chalGHI"',
+            expect(commandResult.error.errors).to.deepEqualArray([
+              { code: 'MANDATORY_FIELD', field: 'name' },
+              { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+              { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
             ]);
           });
         });
