@@ -6,7 +6,7 @@
     <Form::StaticCourse
       @initialName={{this.model.name}}
       @initialDescription={{this.model.description}}
-      @initialChallengeIds={{this.model.challengeIdsAsStringWithBreakLines}}
+      @initialChallengeIds={{this.challengeIdsAsStringWithBreakLines}}
       @cancelButtonText="Annuler"
       @onFormCancelled={{this.goBackToDetails}}
       @submitButtonText="Enregistrer"

@@ -24,6 +24,12 @@ export default class EditStaticCourseController extends Controller {
   async goBackToDetails() {
     this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.id);
   }
+
+  get challengeIdsAsStringWithBreakLines() {
+    return this.model.sortedChallengeSummaries.toArray()
+      .map((challengeSummary) => challengeSummary.id)
+      .join('\n');
+  }
 }
 
 function _cleanErrors(errors) {
