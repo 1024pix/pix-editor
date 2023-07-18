@@ -36,7 +36,7 @@ async function findReadSummaries({ page }) {
   const staticCoursesSummariesSecondBatch = staticCoursesFromPG.map((staticCourse) => {
     return new StaticCourseSummary_Read({
       id: staticCourse.id,
-      name: staticCourse.name,
+      name: staticCourse.name || '',
       createdAt: staticCourse.createdAt,
       challengeCount: staticCourse.challengeIds.split(',').length,
     });
@@ -75,8 +75,8 @@ async function getRead(id) {
     const challengeSummaries = await findChallengeSummaries(challengeIds);
     return new StaticCourse_Read({
       id: staticCourseFromAirtable.id,
-      name: staticCourseFromAirtable.name || null,
-      description: staticCourseFromAirtable.description || null,
+      name: staticCourseFromAirtable.name || '',
+      description: staticCourseFromAirtable.description || '',
       createdAt: staticCourseFromAirtable.createdAt,
       updatedAt: staticCourseFromAirtable.updatedAt,
       challengeSummaries,
@@ -106,8 +106,8 @@ async function get(id) {
     const challengeIds = staticCourseFromAirtable.challenges || [];
     return new StaticCourse({
       id: staticCourseFromAirtable.id,
-      name: staticCourseFromAirtable.name || null,
-      description: staticCourseFromAirtable.description || null,
+      name: staticCourseFromAirtable.name || '',
+      description: staticCourseFromAirtable.description || '',
       challengeIds,
       createdAt: staticCourseFromAirtable.createdAt,
       updatedAt: staticCourseFromAirtable.updatedAt,
