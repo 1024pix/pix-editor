@@ -27,8 +27,8 @@ module.exports = (function() {
 
     airtable: {
       apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
-      databaseId: process.env.CYPRESS_AIRTABLE_DATABASE_ID || process.env.AIRTABLE_DATABASE_ID,
-      editorDatabaseId: process.env.AIRTABLE_EDITOR_DATABASE_ID,
+      databaseId: process.env.CYPRESS_AIRTABLE_DATABASE_ID || process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_DATABASE_ID || process.env.AIRTABLE_BASE,
+      editorDatabaseId: process.env.AIRTABLE_EDITOR_DATABASE_ID || process.env.AIRTABLE_EDITOR_BASE,
     },
 
     logging: {
