@@ -24,7 +24,15 @@ exports.register = async function(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: staticCourseController.create,
       },
-    }
+    },
+    {
+      method: 'PUT',
+      path: '/api/static-courses/{id}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: staticCourseController.update,
+      },
+    },
   ]);
 };
 

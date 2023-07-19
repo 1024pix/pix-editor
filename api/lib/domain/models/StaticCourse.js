@@ -1,7 +1,8 @@
 const _ = require('lodash');
 const CommandResult = require('../CommandResult');
+const { InvalidStaticCourseCreationOrUpdateError } = require('../errors');
 
-module.exports = class StaticCourseForCreation {
+module.exports = class StaticCourse {
   constructor({
     id,
     name,
@@ -20,7 +21,6 @@ module.exports = class StaticCourseForCreation {
 
   // idGenerator : (prefix: string) => string
   static buildFromCreationCommand({ creationCommand, allChallengeIds, idGenerator }) {
-    const failureReasons = [];
     const timestamp = new Date();
     const attributes = {
       name: creationCommand.name.trim(),
@@ -29,12 +29,29 @@ module.exports = class StaticCourseForCreation {
       createdAt: timestamp,
       updatedAt: timestamp,
     };
-    checkName(attributes.name, failureReasons);
-    checkChallengeIds(attributes.challengeIds, allChallengeIds, failureReasons);
-    if (failureReasons.length > 0) {
-      return CommandResult.Failure({ value: null, failureReasons });
+    const validationError = validateAttributes(attributes, allChallengeIds);
+    if (validationError.hasErrors()) {
+      return CommandResult.Failure({ value: null, error: validationError });
     }
-    const staticCourse = new StaticCourseForCreation({ ...attributes, id: idGenerator('course') });
+    const staticCourse = new StaticCourse({ ...attributes, id: idGenerator('course') });
+    return CommandResult.Success({ value: staticCourse });
+  }
+
+  update({ updateCommand, allChallengeIds }) {
+    const timestamp = new Date();
+    const attributes = {
+      id: this.id,
+      name: updateCommand.name.trim(),
+      description: updateCommand.description.trim(),
+      challengeIds: updateCommand.challengeIds.map((challengeId) => challengeId.trim()),
+      createdAt: this.createdAt,
+      updatedAt: timestamp,
+    };
+    const validationError = validateAttributes(attributes, allChallengeIds);
+    if (validationError.hasErrors()) {
+      return CommandResult.Failure({ value: null, error: validationError });
+    }
+    const staticCourse = new StaticCourse(attributes);
     return CommandResult.Success({ value: staticCourse });
   }
 
@@ -50,31 +67,38 @@ module.exports = class StaticCourseForCreation {
   }
 };
 
-function checkName(name, failureReasons) {
+function validateAttributes({ name, challengeIds }, allChallengeIds) {
+  const validationError = new InvalidStaticCourseCreationOrUpdateError();
+  checkName(name, validationError);
+  checkChallengeIds(challengeIds, allChallengeIds, validationError);
+  return validationError;
+}
+
+function checkName(name, validationError) {
   if (name.length === 0) {
-    failureReasons.push('Invalid or empty "name"');
+    validationError.addMandatoryFieldError({ field: 'name' });
   }
 }
 
-function checkChallengeIds(challengeIds, allChallengeIds, failureReasons) {
+function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
   if (challengeIds.length === 0) {
-    failureReasons.push('No challenges provided');
+    validationError.addMandatoryFieldError({ field: 'challengeIds' });
     return;
   }
 
-  const notFoundChallenges = _.difference(challengeIds, allChallengeIds);
-  if (notFoundChallenges.length > 0) {
-    failureReasons.push(`Following challenges do not exist : ${notFoundChallenges.map((id) => `"${id}"`).join(', ')}`);
+  const notFoundChallengeIds = _.difference(challengeIds, allChallengeIds);
+  if (notFoundChallengeIds.length > 0) {
+    validationError.addUnknownResourcesError({ field: 'challengeIds', unknownResources: notFoundChallengeIds });
   }
 
   const challengeOccurrencesMap = _.countBy(challengeIds);
-  const duplicateChallenges = [];
+  const duplicateChallengeIds = [];
   for (const [challengeId, occurrences] of Object.entries(challengeOccurrencesMap)) {
     if (occurrences > 1) {
-      duplicateChallenges.push(challengeId);
+      duplicateChallengeIds.push(challengeId);
     }
   }
-  if (duplicateChallenges.length > 0) {
-    failureReasons.push(`Following challenges appear more than once : ${duplicateChallenges.map((id) => `"${id}"`).join(', ')}`);
+  if (duplicateChallengeIds.length > 0) {
+    validationError.addDuplicatesForbiddenError({ field: 'challengeIds', duplicates: duplicateChallengeIds });
   }
 }

@@ -2,18 +2,16 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 
-export default class NewStaticCourseController extends Controller {
+export default class EditStaticCourseController extends Controller {
   @service store;
   @service router;
 
   @action
-  async createStaticCourse(formData) {
-    const staticCourse = this.store.createRecord('static-course');
+  async editStaticCourse(formData) {
     try {
-      await staticCourse.save({ adapterOptions: formData });
-      this.router.transitionTo('authenticated.static-courses.static-course.details', staticCourse.id);
+      await this.model.save({ adapterOptions: formData });
+      this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.id);
     } catch (err) {
-      staticCourse.deleteRecord();
       const knownErrors = err?.errors;
       const finalErrors = knownErrors
         ? _cleanErrors(knownErrors)
@@ -23,8 +21,14 @@ export default class NewStaticCourseController extends Controller {
   }
 
   @action
-  async goBackToList() {
-    this.router.transitionTo('authenticated.static-courses.list');
+  async goBackToDetails() {
+    this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.id);
+  }
+
+  get challengeIdsAsStringWithBreakLines() {
+    return this.model.sortedChallengeSummaries.toArray()
+      .map((challengeSummary) => challengeSummary.id)
+      .join('\n');
   }
 }
 

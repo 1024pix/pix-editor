@@ -1,0 +1,16 @@
+<header class="page-header">
+  <h1 class="page-title">Édition du test statique</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Form::StaticCourse
+      @initialName={{this.model.name}}
+      @initialDescription={{this.model.description}}
+      @initialChallengeIds={{this.challengeIdsAsStringWithBreakLines}}
+      @cancelButtonText="Annuler"
+      @onFormCancelled={{this.goBackToDetails}}
+      @submitButtonText="Enregistrer"
+      @onFormSubmitted={{this.editStaticCourse}}
+    />
+  </section>
+</main>

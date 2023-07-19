@@ -5,7 +5,7 @@ const staticCourseRepository = require('../../infrastructure/repositories/static
 const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const idGenerator = require('../../infrastructure/utils/id-generator');
 const StaticCourse = require('../../domain/models/StaticCourse');
-const { InvalidStaticCourseCreationError } = require('../../domain/errors');
+const { NotFoundError } = require('../../domain/errors');
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -17,22 +17,23 @@ module.exports = {
   findSummaries,
   get,
   create,
+  update,
 };
 
 async function findSummaries(request, h) {
   const { page } = extractParameters(request.query);
-  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findSummaries({ page: normalizePage(page) });
+  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ page: normalizePage(page) });
   return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
 }
 
 async function get(request, h) {
   const staticCourseId = request.params.id;
-  const staticCourse = await staticCourseRepository.get(staticCourseId);
+  const staticCourse = await staticCourseRepository.getRead(staticCourseId);
   return h.response(staticCourseSerializer.serialize(staticCourse));
 }
 
 async function create(request, h) {
-  const creationCommand = normalizeCreationCommand(request.payload.data.attributes);
+  const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
   const allChallengeIds = await challengeRepository.getAllIdsIn(creationCommand.challengeIds);
   const commandResult = StaticCourse.buildFromCreationCommand({
     creationCommand,
@@ -40,11 +41,31 @@ async function create(request, h) {
     idGenerator: idGenerator.generateNewId,
   });
   if (commandResult.isFailure()) {
-    throw new InvalidStaticCourseCreationError(commandResult.failureReasons);
+    throw commandResult.error;
   }
   const staticCourseId = await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.get(staticCourseId);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel)).created();
+}
+
+async function update(request, h) {
+  const staticCourseId = request.params.id;
+  const updateCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
+  const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
+  const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
+  if (!staticCourseToUpdate) {
+    throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
+  }
+  const commandResult = staticCourseToUpdate.update({
+    updateCommand,
+    allChallengeIds,
+  });
+  if (commandResult.isFailure()) {
+    throw commandResult.error;
+  }
+  await staticCourseRepository.save(commandResult.value);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
 function normalizePage(page) {
@@ -54,7 +75,7 @@ function normalizePage(page) {
   };
 }
 
-function normalizeCreationCommand(attrs) {
+function normalizeCreationOrUpdateCommand(attrs) {
   return {
     name: _.isString(attrs.name) ? attrs.name : '',
     description: _.isString(attrs.description) ? attrs.description : '',

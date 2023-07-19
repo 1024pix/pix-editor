@@ -13,6 +13,6 @@ export default class StaticCoursesController extends Controller {
   @action
   async goToStaticCourseDetails(staticCourseId, event) {
     event.preventDefault();
-    this.router.transitionTo('authenticated.static-courses.static-course', staticCourseId);
+    this.router.transitionTo('authenticated.static-courses.static-course.details', staticCourseId);
   }
 }
