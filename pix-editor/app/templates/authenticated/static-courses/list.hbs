@@ -1,30 +1,31 @@
 <header class="page-header">
-    <h1 class="page-title">Tests Statiques</h1>
-    <div class="page-actions">
-      <PixTooltip
-        @id='create-static-course-tooltip'
-        @position="bottom-left"
-        @hide={{this.model.mayCreateStaticCourse}}
-      >
-        <:triggerElement>
-          <PixButtonLink
-            @backgroundColor="blue"
-            @route="authenticated.static-courses.new"
-            @isDisabled={{not this.model.mayCreateStaticCourse}}
-            aria-describedby='create-static-course-tooltip'
-            class="pix-button-link-with-icon white-font"
-          >
-            <FaIcon
-              @icon="plus"
-              @prefix="fas"></FaIcon>Créer un nouveau test
-          </PixButtonLink>
-        </:triggerElement>
+  <h1 class="page-title">Tests Statiques</h1>
+  <div class="page-actions">
+    <PixTooltip
+      @id='create-static-course-tooltip'
+      @position="bottom-left"
+      @hide={{this.model.mayCreateStaticCourse}}
+    >
+      <:triggerElement>
+        <PixButtonLink
+          @backgroundColor="blue"
+          @route="authenticated.static-courses.new"
+          @isDisabled={{not this.model.mayCreateStaticCourse}}
+          aria-describedby='create-static-course-tooltip'
+          class="pix-button-link-with-icon white-font"
+        >
+          <FaIcon
+            @icon="plus"
+            @prefix="fas"></FaIcon>
+          Créer un nouveau test
+        </PixButtonLink>
+      </:triggerElement>
 
-        <:tooltip>
-          Vous n'avez pas les droits suffisants pour créer un test statique.
-        </:tooltip>
-      </PixTooltip>
-    </div>
+      <:tooltip>
+        Vous n'avez pas les droits suffisants pour créer un test statique.
+      </:tooltip>
+    </PixTooltip>
+  </div>
 </header>
 <main class="page-body">
   <section class="page-section">
@@ -53,13 +54,42 @@
             <td {{on "click" (fn this.goToStaticCourseDetails staticCourseSummary.id)}}>{{staticCourseSummary.challengeCount}}</td>
             <td {{on "click" (fn this.goToStaticCourseDetails staticCourseSummary.id)}}>{{dayjs-format staticCourseSummary.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
             <td class="actions">
-              <PixIconButton @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}} @icon="copy" @iconPrefix="far" @ariaLabel="copier le lien vers la preview" class="icon">COPIERCOLLER</PixIconButton>
-              <a
-                href="{{staticCourseSummary.previewURL}}"
-                target="_blank"
-                rel="noopener noreferrer"
-              ><FaIcon @icon="eye" @prefix="fas"/>
-              </a>
+              <PixTooltip
+                @id='copy-static-course-link-tooltip'
+                @position="top"
+                @isInline={{true}}
+              >
+                <:triggerElement>
+                  <PixIconButton
+                    @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}}
+                    @icon="copy"
+                    @iconPrefix="far"
+                    @ariaLabel="copier le lien vers la preview"
+                    class="icon"
+                    aria-describedby='copy-static-course-link-tooltip'
+                  >COPIERCOLLER
+                  </PixIconButton>
+                </:triggerElement>
+                <:tooltip>Copier l’URL d’accès au test</:tooltip>
+              </PixTooltip>
+              <PixTooltip
+                @id='open-static-course-link-tooltip'
+                @position="top"
+                @isInline={{true}}
+              >
+                <:triggerElement>
+                  <a
+                    href="{{staticCourseSummary.previewURL}}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-describedby='open-static-course-link-tooltip'
+                  >
+                    <FaIcon @icon="eye" @prefix="fas"/>
+                  </a>
+                </:triggerElement>
+                <:tooltip>Accéder au test</:tooltip>
+              </PixTooltip>
+
             </td>
           </tr>
         {{/each}}
