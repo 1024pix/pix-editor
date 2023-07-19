@@ -5,12 +5,14 @@ import { inject as service } from '@ember/service';
 export default class NewStaticCourseController extends Controller {
   @service store;
   @service router;
+  @service notifications;
 
   @action
   async createStaticCourse(formData) {
     const staticCourse = this.store.createRecord('static-course');
     try {
       await staticCourse.save({ adapterOptions: formData });
+      this.notifications.success('Test statique créé avec succès.');
       this.router.transitionTo('authenticated.static-courses.static-course.details', staticCourse.id);
     } catch (err) {
       staticCourse.deleteRecord();
