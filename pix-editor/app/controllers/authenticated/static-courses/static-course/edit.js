@@ -20,6 +20,7 @@ export default class EditStaticCourseController extends Controller {
       this.notifications.success('Test statique modifié avec succès.');
       this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.id);
     } catch (err) {
+      await this.notifications.error('Une erreur est survenue lors de la modification du test statique.');
       const knownErrors = err?.errors;
       const finalErrors = knownErrors
         ? _cleanErrors(knownErrors)

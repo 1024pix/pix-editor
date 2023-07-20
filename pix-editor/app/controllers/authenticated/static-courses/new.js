@@ -16,6 +16,7 @@ export default class NewStaticCourseController extends Controller {
       this.router.transitionTo('authenticated.static-courses.static-course.details', staticCourse.id);
     } catch (err) {
       staticCourse.deleteRecord();
+      await this.notifications.error('Une erreur est survenue lors de la création du test statique.');
       const knownErrors = err?.errors;
       const finalErrors = knownErrors
         ? _cleanErrors(knownErrors)
