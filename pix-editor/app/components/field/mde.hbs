@@ -15,7 +15,7 @@
     {{@title}}
   </label>
   {{#if @edition}}
-    <TuiEditor data-test-tui-editor @value={{@value}} @onChange={{@setValue}} />
+    <TuiEditor data-test-tui-editor @value={{@value}} @onChange={{@setValue}} @usageStatistics={{false}} />
   {{else}}
     <div data-test-markdow-to-html class="mde-preview">
       <MarkdownToHtml @markdown={{@value}} />
