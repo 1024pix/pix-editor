@@ -16,7 +16,7 @@
     "@types/pg": "^8.6.6",
     "@types/pg-cursor": "^2.7.0",
     "airtable": "0.11.1",
-    "axios": "^0.21.1",
+    "axios": "^0.27.0",
     "bluebird": "^3.7.2",
     "chai": "4.2.0",
     "hasha": "^5.2.2",
