@@ -21,7 +21,7 @@
     "lint:scss": "stylelint app/styles/*.scss",
     "lint:scss:fix": "npm run lint:scss -- --fix",
     "lint:js": "eslint . --cache",
-    "preinstall": "npx check-engine && {git config core.hooksPath .githooks || true;}",
+    "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve --proxy http://localhost:3002",
     "test": "npm-run-all lint test:*",
