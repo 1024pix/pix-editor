@@ -20,7 +20,7 @@
         <li><span class="bold">Nom : </span>{{this.model.staticCourse.name}}</li>
         <li>
           <span class="bold">Description : </span>
-          {{this.model.staticCourse.description}}
+          <div class="static-course-details__description">{{this.model.staticCourse.description}}</div>
         </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
         <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>

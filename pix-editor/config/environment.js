@@ -4,7 +4,7 @@ function _isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
 }
 
-module.exports = function(environment) {
+module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'pixeditor',
     environment,
@@ -26,8 +26,12 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-      version:require('../package.json').version,
-      MAX_CONCURRENT_AJAX_CALLS: _getEnvironmentVariableAsNumber({ environmentVariableName: 'MAX_CONCURRENT_AJAX_CALLS', defaultValue: 4, minValue: 1 }),
+      version: require('../package.json').version,
+      MAX_CONCURRENT_AJAX_CALLS: _getEnvironmentVariableAsNumber({
+        environmentVariableName: 'MAX_CONCURRENT_AJAX_CALLS',
+        defaultValue: 4,
+        minValue: 1
+      }),
     },
 
     fontawesome: {
@@ -39,7 +43,11 @@ module.exports = function(environment) {
       sentry: {
         dsn: process.env.SENTRY_DSN,
         environment: (process.env.SENTRY_ENVIRONMENT || 'development'),
-        maxBreadcrumbs: _getEnvironmentVariableAsNumber({ environmentVariable: process.env.SENTRY_MAX_BREADCRUMBS, defaultValue: 100, minValue: 100 }),
+        maxBreadcrumbs: _getEnvironmentVariableAsNumber({
+          environmentVariable: process.env.SENTRY_MAX_BREADCRUMBS,
+          defaultValue: 100,
+          minValue: 100
+        }),
         debug: _isFeatureEnabled(process.env.SENTRY_DEBUG),
         release: `v${process.env.npm_package_version}`,
       },
@@ -52,6 +60,10 @@ module.exports = function(environment) {
     'ember-simple-auth': {
       routeAfterAuthentication: 'authenticated',
     },
+
+    'ember-cli-notifications': {
+      autoClear: true
+    }
   };
 
   if (environment === 'development') {
