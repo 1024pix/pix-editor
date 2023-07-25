@@ -9,122 +9,119 @@
     >
       <FaIcon
         @icon="pen"
-        @prefix="fas"></FaIcon>
-      Éditer le test statique
+        @prefix="fas"></FaIcon>Éditer le test statique
     </PixButtonLink>
   </div>
 </header>
 <main class="page-body">
-  <Card class="static-course-details__card-information" @title="1. Informations">
-    <ul>
-      <li><span class="bold">Nom : </span>{{this.model.staticCourse.name}}</li>
-      <li>
-        <span class="bold">Description : </span>
-        {{this.model.staticCourse.description}}
-      </li>
-      <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY"
-                                                             allow-empty=true}}</li>
-      <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt
-                                                                           "DD/MM/YYYY" allow-empty=true}}</li>
-    </ul>
-    <div class="static-course-details__card-information--actions">
-      <PixButton
-        @triggerAction={{fn this.copyStaticCoursePreviewUrl this.model.staticCourse}}
-        @iconBefore="copy"
-        @prefixIconBefore="far"
+  <section class="page-section">
+    <Card class="static-course-details__card-information" @title="1. Informations">
+      <ul>
+        <li><span class="bold">Nom : </span>{{this.model.staticCourse.name}}</li>
+        <li>
+          <span class="bold">Description : </span>
+          <div class="static-course-details__description">{{this.model.staticCourse.description}}</div>
+        </li>
+        <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
+        <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
+      </ul>
+      <div class="static-course-details__card-information--actions">
+        <PixButton
+          @triggerAction={{fn this.copyStaticCoursePreviewUrl this.model.staticCourse}}
+          @iconBefore="copy"
+          @prefixIconBefore="far"
+          @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
+        >
+          Copier le lien
+        </PixButton>
+        <PixButtonLink
+          @href={{this.model.staticCourse.previewURL}}
+          target="_blank"
+          rel="noopener noreferrer"
+          @backgroundColor="transparent-light"
+          @isBorderVisible={{true}}
+          class="pix-button-link-with-icon"
+        >
+          <FaIcon
+            @icon="eye"
+            @prefix="fas"></FaIcon> Prévisualiser
+        </PixButtonLink>
+      </div>
+    </Card>
+    <Card @title="2. Liste des épreuves">
+      <div class="panel-table-v2">
+        <table class="content-text content-text--small">
+          <colgroup class="table__column">
+            <col class="table__column--tiny" />
+            <col class="table__column--small" />
+            <col class="table__column--wide" />
+            <col class="table__column--small" />
+            <col class="table__column--small" />
+          </colgroup>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>ID</th>
+            <th>Consigne</th>
+            <th>Acquis</th>
+            <th>Statut</th>
+          </tr>
+          </thead>
+          <tbody>
+          {{#each this.model.staticCourse.sortedChallengeSummaries as |challengeSummary|}}
+            <tr>
+              <td>{{challengeSummary.indexForDisplay}}</td>
+              <td>{{challengeSummary.id}}</td>
+              <td class="ellipsis">{{challengeSummary.instruction}}</td>
+              <td>{{challengeSummary.skillName}}</td>
+              <td>
+                {{#if (eq challengeSummary.status "validé")}}
+                  <PixTag
+                    @color="green-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "proposé")}}
+                  <PixTag
+                    @color="blue-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "archivé")}}
+                  <PixTag
+                    @color="grey-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else if (eq challengeSummary.status "périmé")}}
+                  <PixTag
+                    @color="orange-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{else}}
+                  <PixTag
+                    @color="purple-light"
+                  >{{challengeSummary.status}}</PixTag>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </Card>
+    <div class="page-actions">
+      <PixButtonLink
         @backgroundColor="transparent-light"
+        @route="authenticated.static-courses.list"
         @isBorderVisible={{true}}
       >
-        Copier le lien
-      </PixButton>
+        Retour
+      </PixButtonLink>
       <PixButtonLink
-        @href={{this.model.staticCourse.previewURL}}
-        target="_blank"
-        rel="noopener noreferrer"
-        @backgroundColor="transparent-light"
-        @isBorderVisible={{true}}
-        class="pix-button-link-with-icon"
+        @backgroundColor="blue"
+        @route="authenticated.static-courses.static-course.edit"
+        @isDisabled={{not this.model.mayEditStaticCourse}}
+        class="pix-button-link-with-icon white-font"
       >
         <FaIcon
-          @icon="eye"
-          @prefix="fas"></FaIcon>
-        Prévisualiser
+          @icon="pen"
+          @prefix="fas"></FaIcon>Éditer le test statique
       </PixButtonLink>
     </div>
-  </Card>
-  <Card @title="2. Liste des épreuves">
-    <div class="panel-table-v2">
-      <table class="content-text content-text--small">
-        <colgroup class="table__column">
-          <col class="table__column--tiny"/>
-          <col class="table__column--small"/>
-          <col class="table__column--wide"/>
-          <col class="table__column--small"/>
-          <col class="table__column--small"/>
-        </colgroup>
-        <thead>
-        <tr>
-          <th>#</th>
-          <th>ID</th>
-          <th>Consigne</th>
-          <th>Acquis</th>
-          <th>Statut</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#each this.model.staticCourse.sortedChallengeSummaries as |challengeSummary|}}
-          <tr>
-            <td>{{challengeSummary.indexForDisplay}}</td>
-            <td>{{challengeSummary.id}}</td>
-            <td class="ellipsis">{{challengeSummary.instruction}}</td>
-            <td>{{challengeSummary.skillName}}</td>
-            <td>
-              {{#if (eq challengeSummary.status "validé")}}
-                <PixTag
-                  @color="green-light"
-                >{{challengeSummary.status}}</PixTag>
-              {{else if (eq challengeSummary.status "proposé")}}
-                <PixTag
-                  @color="blue-light"
-                >{{challengeSummary.status}}</PixTag>
-              {{else if (eq challengeSummary.status "archivé")}}
-                <PixTag
-                  @color="grey-light"
-                >{{challengeSummary.status}}</PixTag>
-              {{else if (eq challengeSummary.status "périmé")}}
-                <PixTag
-                  @color="orange-light"
-                >{{challengeSummary.status}}</PixTag>
-              {{else}}
-                <PixTag
-                  @color="purple-light"
-                >{{challengeSummary.status}}</PixTag>
-              {{/if}}
-            </td>
-          </tr>
-        {{/each}}
-        </tbody>
-      </table>
-    </div>
-  </Card>
-  <div class="page-actions">
-    <PixButtonLink
-      @backgroundColor="transparent-light"
-      @route="authenticated.static-courses.list"
-      @isBorderVisible={{true}}
-    >
-      Retour
-    </PixButtonLink>
-    <PixButtonLink
-      @backgroundColor="blue"
-      @route="authenticated.static-courses.static-course.edit"
-      @isDisabled={{not this.model.mayEditStaticCourse}}
-      class="pix-button-link-with-icon white-font"
-    >
-      <FaIcon
-        @icon="pen"
-        @prefix="fas"></FaIcon>
-      Éditer le test statique
-    </PixButtonLink>
-  </div>
+  </section>
 </main>
