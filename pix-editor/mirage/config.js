@@ -1,8 +1,9 @@
-import { applyEmberDataSerializers, createServer, discoverEmberDataModels } from 'ember-cli-mirage';
+import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
+import { createServer } from 'miragejs';
 import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
 import slice from 'lodash/slice';
 
-export function makeServer(config) {
+export default function makeServer(config) {
   const finalConfig = {
     ...config,
     models: { ...discoverEmberDataModels(), ...config.models },

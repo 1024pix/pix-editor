@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import Mirage from 'ember-cli-mirage';
+import { Response } from 'miragejs/dist/mirage-esm';
 import { currentURL } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
@@ -19,9 +19,10 @@ module('Acceptance | Login', function(hooks) {
 
   module('when user is not authenticated', function(hooks) {
     hooks.beforeEach(function() {
+      // FIXME move this in mirage's configuration and remove direct dependency on miragejs
       this.server.get('/users/me', ({ users }, request) => {
         const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
-        return apiKey === `Bearer ${VALID_API_KEY}` ? users.first() : new Mirage.Response(401);
+        return apiKey === `Bearer ${VALID_API_KEY}` ? users.first() : new Response(401);
       });
     });
 

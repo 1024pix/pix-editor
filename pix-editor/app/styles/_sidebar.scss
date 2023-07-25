@@ -114,36 +114,6 @@
     }
   }
 
-  /* .title.AccordionToggle {
-    display: flex;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.08);
-    }
-
-    span {
-      display: block;
-    }
-  }
-
-  .accordion {
-    .is-active {
-      .liquid-container {
-        background: #2c90d2;
-        margin-bottom: 8px;
-      }
-
-      a.item {
-        white-space: nowrap;
-        border: none;
-
-        &:hover, &.active, &.active:hover {
-          background: rgba(0, 0, 0, 0.08);
-        }
-      }
-    }
-  } */
-
   .ui.menu {
     background: transparent;
     border: none;

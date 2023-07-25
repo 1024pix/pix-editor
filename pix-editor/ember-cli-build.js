@@ -7,15 +7,6 @@ module.exports = function(defaults) {
     sassOptions: {
       includePaths: ['node_modules/@1024pix/pix-ui/addon/styles'],
     },
-    autoImport: {
-      webpack: {
-        resolve: {
-          fallback: {
-            crypto: false,
-          }
-        }
-      }
-    }
 
     // Add options here
     /*babel: {
@@ -53,47 +44,20 @@ module.exports = function(defaults) {
     destDir: 'assets/themes/default/assets/images'
   });
 
-  app.import('vendor/AmpleSoft-normal.js', {
-    using: [
-      { transformation: 'es6', as: 'AmpleSoft-normal.js' }
-    ]
-  });
+  const { Webpack } = require('@embroider/webpack');
 
-  app.import('vendor/AmpleSoft-bold.js', {
-    using: [
-      { transformation: 'es6', as: 'AmpleSoft-bold.js' }
-    ]
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    staticAddonTestSupportTrees: true,
+    staticAddonTrees: true,
+    staticModifiers: true,
+    packagerOptions: {
+      webpackConfig: {
+        resolve: {
+          fallback: {
+            crypto: false,
+          },
+        },
+      },
+    },
   });
-
-  app.import('vendor/Roboto-normal.js', {
-    using: [
-      { transformation: 'es6', as: 'Roboto-normal.js' }
-    ]
-  });
-
-  app.import('vendor/Roboto-condensed.js', {
-    using: [
-      { transformation: 'es6', as: 'Roboto-condensed.js' }
-    ]
-  });
-
-  app.import('vendor/Roboto-condensedBold.js', {
-    using: [
-      { transformation: 'es6', as: 'Roboto-condensedBold.js' }
-    ]
-  });
-
-  app.import('vendor/Roboto-condensedLight.js', {
-    using: [
-      { transformation: 'es6', as: 'Roboto-condensedLight.js' }
-    ]
-  });
-
-  app.import('vendor/pdf-assets.js', {
-    using: [
-      { transformation: 'es6', as: 'pdf-assets.js' }
-    ]
-  });
-
-  return app.toTree();
 };

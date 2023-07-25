@@ -2,7 +2,7 @@ import Prototype from './single';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
-import Sentry from '@sentry/ember';
+import * as Sentry from '@sentry/ember';
 
 export default class NewController extends Prototype {
 
