@@ -15,7 +15,8 @@
     "start": "cd api && npm start",
     "build": "cd pix-editor && npm run build -- --output-path=../api/public/pix-editor",
     "scalingo-post-ra-creation": "cd api && npm run scalingo-post-ra-creation",
-    "postdeploy": "cd api && npm run postdeploy"
+    "postdeploy": "cd api && npm run postdeploy",
+    "preinstall": "npx check-engine && {git config core.hooksPath .githooks || true;}"
   },
   "repository": {
     "type": "git",
