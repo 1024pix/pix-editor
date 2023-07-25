@@ -73,7 +73,6 @@
     "ember-maybe-import-regenerator": "^1.0.0",
     "ember-modal-dialog": "^4.0.1",
     "ember-modifier": "^4.1.0",
-    "ember-page-title": "^7.0.0",
     "ember-power-select": "^7.0.0",
     "ember-qunit": "^5.1.4",
     "ember-resolver": "^8.0.2",
