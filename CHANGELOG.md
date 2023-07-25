@@ -1,5 +1,27 @@
 
 
+## v3.86.0 (25/07/2023)
+
+
+### :rocket: Amélioration
+- [#127](https://github.com/1024pix/pix-editor/pull/127) [FEATURE] Pouvoir modifier un test statique existant (PIX-7797).
+- [#123](https://github.com/1024pix/pix-editor/pull/123) [FEATURE] Pouvoir créer un nouveau test statique (PIX-3635).
+
+### :building_construction: Tech
+- [#124](https://github.com/1024pix/pix-editor/pull/124) [TECH] Migration vers embroider.
+- [#134](https://github.com/1024pix/pix-editor/pull/134) [TECH] Désactivation de google analytics dans TUI editor.
+- [#133](https://github.com/1024pix/pix-editor/pull/133) [TECH] Réparer CircleCI (Fail sur Install ChromeDriver).
+
+### :bug: Correction
+- [#131](https://github.com/1024pix/pix-editor/pull/131) [BUGFIX] design des pages de tests statiques revu (PIX-8586).
+- [#128](https://github.com/1024pix/pix-editor/pull/128) [BUGFIX] L'utilisateur ne pouvait plus créer de domaine (PIX-8612).
+- [#126](https://github.com/1024pix/pix-editor/pull/126) [BUGFIX] Le lien de PixEditor vers Airtable est invalide.
+
+### :coffee: Autre
+- [#136](https://github.com/1024pix/pix-editor/pull/136) [BUMP] Update dependency qs to v6.10.3 [SECURITY].
+- [#137](https://github.com/1024pix/pix-editor/pull/137) [BUMP] Update dependency tough-cookie to v4.1.3 [SECURITY].
+- [#135](https://github.com/1024pix/pix-editor/pull/135) Configure Renovate.
+
 ## v3.85.0 (10/07/2023)
 
 
