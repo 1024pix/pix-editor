@@ -18,7 +18,7 @@
     "airtable": "0.11.1",
     "axios": "^0.27.0",
     "bluebird": "^3.7.2",
-    "chai": "4.2.0",
+    "chai": "4.3.7",
     "hasha": "^5.2.2",
     "js-crypto-random": "^1.0.2",
     "lodash": "4.17.21",
