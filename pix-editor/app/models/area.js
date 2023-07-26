@@ -17,8 +17,8 @@ export default class AreaModel extends Model {
         const [domainCodeA, competenceCodeA] = competenceA.code.split('.');
         const [domainCodeB, competenceCodeB] = competenceB.code.split('.');
         if (parseInt(domainCodeA) === parseInt(domainCodeB))
-          return parseInt(competenceCodeA) > parseInt(competenceCodeB);
-        return parseInt(domainCodeA) > parseInt(domainCodeB);
+          return parseInt(competenceCodeA) - parseInt(competenceCodeB);
+        return parseInt(domainCodeA) - parseInt(domainCodeB);
       });
   }
 
