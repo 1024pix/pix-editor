@@ -1,5 +1,25 @@
 
 
+## v3.86.1 (26/07/2023)
+
+
+### :building_construction: Tech
+- [#132](https://github.com/1024pix/pix-editor/pull/132) [TECH] Prévenir le commit de secrets (PIX-8664).
+
+### :bug: Correction
+- [#154](https://github.com/1024pix/pix-editor/pull/154) [BUGFIX] Réordonner l'affichage des compétences (PIX-8760).
+
+### :coffee: Autre
+- [#150](https://github.com/1024pix/pix-editor/pull/150) [BUMP] Update dependency eslint to v7.32.0.
+- [#151](https://github.com/1024pix/pix-editor/pull/151) [BUMP] Update dependency nodemon to v3 (api).
+- [#148](https://github.com/1024pix/pix-editor/pull/148) [BUMP] Update dependency cypress to v6.9.1 (end-to-end-tests).
+- [#147](https://github.com/1024pix/pix-editor/pull/147) [BUMP] Update dependency chai to v4.3.7 (scripts).
+- [#144](https://github.com/1024pix/pix-editor/pull/144) [BUMP] Update dependency axios to ^0.27.0 (scripts).
+- [#145](https://github.com/1024pix/pix-editor/pull/145) [BUMP] Lock file maintenance (api).
+- [#146](https://github.com/1024pix/pix-editor/pull/146) [BUMP] Update browser-tools orb to v1.4.2 (.circleci).
+- [#139](https://github.com/1024pix/pix-editor/pull/139) [BUMP] Update dependency @1024pix/ember-testing-library to ^0.7.0 (pix-editor).
+- [#143](https://github.com/1024pix/pix-editor/pull/143) [BUMP] Update dependency axios to ^0.27.0 (api).
+
 ## v3.86.0 (25/07/2023)
 
 

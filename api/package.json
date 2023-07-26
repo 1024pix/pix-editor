@@ -1,6 +1,6 @@
 {
   "name": "learning-content-api",
-  "version": "3.86.0",
+  "version": "3.86.1",
   "description": "API permettant d'interagir avec le référentiel de contenu Pix",
   "engines": {
     "node": "16.19.x",
