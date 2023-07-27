@@ -105,8 +105,7 @@
     "webpack": "^5.88.1"
   },
   "engines": {
-    "node": "16.20.x",
-    "npm": "8.19.x"
+    "node": "^16.20.1"
   },
   "ember": {
     "edition": "octane"
