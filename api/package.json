@@ -80,7 +80,7 @@
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "chai-sorted": "^0.2.0",
-    "eslint": "^7.32.0",
+    "eslint": "^8.0.0",
     "eslint-plugin-mocha": "^9.0.0",
     "flush-write-stream": "^2.0.0",
     "mocha": "^9.1.2",
