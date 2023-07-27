@@ -6,7 +6,7 @@ import { tracked } from '@glimmer/tracking';
 export default class ListController extends Controller {
 
   @controller('authenticated.competence')
-  parentController;
+    parentController;
 
   @service access;
   @service config;

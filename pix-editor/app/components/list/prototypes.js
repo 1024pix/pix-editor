@@ -29,7 +29,7 @@ export default class PrototypesList extends SortedList {
     'instruction':'string',
     'type':'string',
     'status':'string'
-  }
+  };
 
   @action
   selectRow(row) {

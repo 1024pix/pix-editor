@@ -43,10 +43,6 @@ export default class PopinChallengeLog extends Component {
     }
   }
 
-  get changelogEntries() {
-    return this.changelogEntries;
-  }
-
   get ownCount() {
     return this.ownNotes.length;
   }

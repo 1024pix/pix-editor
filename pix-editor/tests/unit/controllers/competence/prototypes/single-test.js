@@ -24,12 +24,12 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
     errorStub = sinon.stub();
     class NotifyService extends Service {
-      error = errorStub
+      error = errorStub;
     }
     this.owner.register('service:notify', NotifyService);
 
     class ConfirmService extends Service {
-      ask = sinon.stub().resolves()
+      ask = sinon.stub().resolves();
     }
     this.owner.register('service:confirm', ConfirmService);
     messageStub = sinon.stub();

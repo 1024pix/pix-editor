@@ -22,7 +22,7 @@ export default class CompetenceThemesSingleController extends Controller {
   }
 
   @controller('authenticated.competence')
-  parentController;
+    parentController;
 
   get mayEdit() {
     return this.access.mayEditSkills();

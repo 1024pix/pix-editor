@@ -4,7 +4,7 @@ import Route from '@ember/routing/route';
 
 export default class SingleRoute extends Route {
 
-  @service currentData
+  @service currentData;
   @service router;
   @service store;
 

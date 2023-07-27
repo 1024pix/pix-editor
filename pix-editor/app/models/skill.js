@@ -20,16 +20,16 @@ export default class SkillModel extends Model {
   @attr('number') version;
 
   @belongsTo('tube')
-  tube;
+    tube;
 
   @hasMany('challenge', { readOnly: true })
-  challenges;
+    challenges;
 
   @hasMany('tutorial')
-  tutoSolution;
+    tutoSolution;
 
   @hasMany('tutorial')
-  tutoMore;
+    tutoMore;
 
   @service('store') myStore;
   @service idGenerator;

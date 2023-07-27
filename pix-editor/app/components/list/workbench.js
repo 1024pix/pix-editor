@@ -30,7 +30,7 @@ export default class CompetencesList extends SortedList {
     'instruction':'string',
     'type':'string',
     'status':'string'
-  }
+  };
 
   @action
   selectRow(row) {

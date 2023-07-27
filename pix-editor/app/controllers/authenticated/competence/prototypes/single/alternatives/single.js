@@ -7,7 +7,7 @@ export default class SingleController extends PrototypeController {
   elementClass = 'alternative-challenge';
 
   @controller('authenticated.competence.prototypes.single.alternatives')
-  parentController;
+    parentController;
 
   get maximized() {
     return this.parentController.rightMaximized;

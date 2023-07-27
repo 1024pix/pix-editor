@@ -4,7 +4,7 @@ import { action } from '@ember/object';
 export default class CompetenceI18nSingleController extends Controller {
 
   @controller('authenticated.competence')
-  parentController;
+    parentController;
 
   get isMaximized() {
     return this.parentController.leftMaximized;

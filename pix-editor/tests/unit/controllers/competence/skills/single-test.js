@@ -18,7 +18,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
         super(...arguments);
         this.author = author;
       }
-      ask = sinon.stub().resolves()
+      ask = sinon.stub().resolves();
     }
     this.owner.unregister('service:Config');
     this.owner.register('service:Config',ConfigService);

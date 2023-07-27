@@ -5,7 +5,7 @@ import { inject as service } from '@ember/service';
 export default class CompetenceHistoryListController extends Controller {
 
   @controller('authenticated.competence')
-  parentController;
+    parentController;
 
   @service access;
   @service currentData;
