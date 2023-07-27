@@ -11,7 +11,9 @@ describe('Integration | Repository | release-repository', function() {
     it('should save current content as a new release', async function() {
       // Given
       const currentContent = { some: 'property' };
-      const fakeGetCurrentContent = async function() { return currentContent; };
+      const fakeGetCurrentContent = async function() {
+        return currentContent;
+      };
 
       // When
       await releaseRepository.create(fakeGetCurrentContent);
@@ -24,8 +26,20 @@ describe('Integration | Repository | release-repository', function() {
 
     it('should return the saved release ID', async function() {
       // Given
-      const currentContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
-      const fakeGetCurrentContent = async function() { return currentContentDTO; };
+      const currentContentDTO = {
+        areas: [],
+        challenges: [],
+        competences: [],
+        courses: [],
+        frameworks: [],
+        skills: [],
+        thematics: [],
+        tubes: [],
+        tutorials: []
+      };
+      const fakeGetCurrentContent = async function() {
+        return currentContentDTO;
+      };
 
       // When
       const releaseId = await releaseRepository.create(fakeGetCurrentContent);
@@ -39,10 +53,28 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getLatestRelease', function() {
     it('should return content of newest created release', async function() {
       // Given
-      const newestReleaseContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+      const newestReleaseContentDTO = {
+        areas: [],
+        challenges: [],
+        competences: [],
+        courses: [],
+        frameworks: [],
+        skills: [],
+        thematics: [],
+        tubes: [],
+        tutorials: []
+      };
       const oldestReleaseContentDTO = { some: 'old-property' };
-      databaseBuilder.factory.buildRelease({ id: 1, createdAt: new Date('2021-02-02'), content: newestReleaseContentDTO });
-      databaseBuilder.factory.buildRelease({ id: 2, createdAt: new Date('2020-01-01'), content: oldestReleaseContentDTO });
+      databaseBuilder.factory.buildRelease({
+        id: 1,
+        createdAt: new Date('2021-02-02'),
+        content: newestReleaseContentDTO
+      });
+      databaseBuilder.factory.buildRelease({
+        id: 2,
+        createdAt: new Date('2020-01-01'),
+        content: oldestReleaseContentDTO
+      });
       await databaseBuilder.commit();
 
       // When
@@ -50,7 +82,11 @@ describe('Integration | Repository | release-repository', function() {
 
       // Then
       const expectedContent = domainBuilder.buildContentForRelease(newestReleaseContentDTO);
-      const expectedRelease = domainBuilder.buildDomainRelease({ id: 1, createdAt: new Date('2021-02-02'), content: expectedContent });
+      const expectedRelease = domainBuilder.buildDomainRelease({
+        id: 1,
+        createdAt: new Date('2021-02-02'),
+        content: expectedContent
+      });
       expect(latestRelease).to.deepEqualInstance(expectedRelease);
     });
   });
@@ -59,10 +95,28 @@ describe('Integration | Repository | release-repository', function() {
     it('should return content of given release', async function() {
       // Given
       const otherReleaseContentDTO = { some: 'property' };
-      const expectedReleaseContentDTO = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+      const expectedReleaseContentDTO = {
+        areas: [],
+        challenges: [],
+        competences: [],
+        courses: [],
+        frameworks: [],
+        skills: [],
+        thematics: [],
+        tubes: [],
+        tutorials: []
+      };
 
-      databaseBuilder.factory.buildRelease({ id: 11, createdAt: new Date('2021-01-01'), content: otherReleaseContentDTO });
-      databaseBuilder.factory.buildRelease({ id: 12, createdAt: new Date('2020-01-01'), content: expectedReleaseContentDTO });
+      databaseBuilder.factory.buildRelease({
+        id: 11,
+        createdAt: new Date('2021-01-01'),
+        content: otherReleaseContentDTO
+      });
+      databaseBuilder.factory.buildRelease({
+        id: 12,
+        createdAt: new Date('2020-01-01'),
+        content: expectedReleaseContentDTO
+      });
       await databaseBuilder.commit();
 
       // When
@@ -70,7 +124,11 @@ describe('Integration | Repository | release-repository', function() {
 
       // Then
       const expectedContent = domainBuilder.buildContentForRelease(expectedReleaseContentDTO);
-      const expectedRelease = domainBuilder.buildDomainRelease({ id: 12, createdAt: new Date('2020-01-01'), content: expectedContent });
+      const expectedRelease = domainBuilder.buildDomainRelease({
+        id: 12,
+        createdAt: new Date('2020-01-01'),
+        content: expectedContent
+      });
       expect(givenRelease).to.deepEqualInstance(expectedRelease);
     });
 
@@ -79,7 +137,11 @@ describe('Integration | Repository | release-repository', function() {
         // Given
         _mockRichAirtableContent();
         const richCurrentContentDTO = _getRichCurrentContentDTO();
-        databaseBuilder.factory.buildRelease({ id: 1, createdAt: new Date('2021-01-01'), content: richCurrentContentDTO });
+        databaseBuilder.factory.buildRelease({
+          id: 1,
+          createdAt: new Date('2021-01-01'),
+          content: richCurrentContentDTO
+        });
         await databaseBuilder.commit();
 
         // When
@@ -87,7 +149,11 @@ describe('Integration | Repository | release-repository', function() {
 
         // Then
         const expectedContent = domainBuilder.buildContentForRelease(richCurrentContentDTO);
-        const expectedRelease = domainBuilder.buildDomainRelease({ id: 1, createdAt: new Date('2021-01-01'), content: expectedContent });
+        const expectedRelease = domainBuilder.buildDomainRelease({
+          id: 1,
+          createdAt: new Date('2021-01-01'),
+          content: expectedContent
+        });
         expect(givenRelease).to.deepEqualInstance(expectedRelease);
       });
     });
@@ -625,24 +691,6 @@ function _mockRichAirtableContent() {
     tutorialForSkills: 'tutorial2 tutorialForSkills',
     furtherInformation: 'tutorial2 furtherInformation',
   });
-  const airtableCourse1 = airtableBuilder.factory.buildCourse({
-    id: 'course1',
-    name: 'course1 name',
-    description: 'course1 description',
-    competences: ['competence12'],
-    challenges: ['challenge121211'],
-    imageUrl: 'course1 imageUrl',
-    adaptive: 'course1 adaptive',
-  });
-  const airtableCourse2 = airtableBuilder.factory.buildCourse({
-    id: 'course2',
-    name: 'course2 name',
-    description: 'course2 description',
-    competences: ['competence12', 'competence21'],
-    challenges: ['challenge121211', 'challenge211111'],
-    imageUrl: 'course2 imageUrl',
-    adaptive: 'course2 adaptive',
-  });
   const airtableAttachment1 = airtableBuilder.factory.buildAttachment({
     id: 'attachment1',
     alt: 'attachment1 alt',
@@ -674,7 +722,7 @@ function _mockRichAirtableContent() {
     skills: [airtableSkill11111, airtableSkill11112, airtableSkill12121, airtableSkill21111],
     challenges: [airtableChallenge121211, airtableChallenge121212, airtableChallenge211111, airtableChallenge211112, airtableChallenge211113],
     tutorials: [airtableTutorial1, airtableTutorial2],
-    courses: [airtableCourse1, airtableCourse2],
+    // courses: [airtableCourse1, airtableCourse2],
     attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3],
   });
 }
@@ -923,7 +971,7 @@ function _getRichCurrentContentDTO() {
         en: 'tube2111 practicalTitleEnUs',
       },
       practicalDescription_i18n: {
-        fr : 'tube2111 practicalDescriptionFrFr',
+        fr: 'tube2111 practicalDescriptionFrFr',
         en: 'tube2111 practicalDescriptionEnUs',
       },
       competenceId: 'competence21',
@@ -1158,22 +1206,22 @@ function _getRichCurrentContentDTO() {
     },
   ];
   const expectedCourseDTOs = [
-    {
-      id: 'course1',
-      name: 'course1 name',
-      description: 'course1 description',
-      competences: ['competence12'],
-      challenges: [ 'challenge121211'],
-      imageUrl: 'course1 imageUrl',
-    },
-    {
-      id: 'course2',
-      name: 'course2 name',
-      description: 'course2 description',
-      competences: ['competence12', 'competence21'],
-      challenges: ['challenge211111', 'challenge121211'],
-      imageUrl: 'course2 imageUrl',
-    },
+    // {
+    //   id: 'course1',
+    //   name: 'course1 name',
+    //   description: 'course1 description',
+    //   competences: ['competence12'],
+    //   challenges: ['challenge121211'],
+    //   imageUrl: 'course1 imageUrl',
+    // },
+    // {
+    //   id: 'course2',
+    //   name: 'course2 name',
+    //   description: 'course2 description',
+    //   competences: ['competence12', 'competence21'],
+    //   challenges: ['challenge211111', 'challenge121211'],
+    //   imageUrl: 'course2 imageUrl',
+    // },
     {
       id: 'course1PG',
       name: 'course1PG name',

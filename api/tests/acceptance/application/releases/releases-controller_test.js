@@ -1,4 +1,11 @@
-const { expect, airtableBuilder, databaseBuilder, generateAuthorizationHeader, sinon, knex } = require('../../../test-helper');
+const {
+  expect,
+  airtableBuilder,
+  databaseBuilder,
+  generateAuthorizationHeader,
+  sinon,
+  knex
+} = require('../../../test-helper');
 const createServer = require('../../../../server');
 const axios = require('axios');
 
@@ -7,7 +14,6 @@ const {
   buildAttachment,
   buildChallenge,
   buildCompetence,
-  buildCourse,
   buildFramework,
   buildSkill,
   buildThematic,
@@ -160,13 +166,21 @@ async function mockCurrentContent() {
     attachments: attachments.map(buildAttachment),
     challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    courses: [buildCourse(expectedCurrentContent.courses[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: expectedCurrentContent.thematics.map(buildThematic),
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
+
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'recCourse0',
+    name: 'Nom du Course',
+    description: 'Description du Course',
+    challengeIds: 'recChallenge0',
+    imageUrl: 'Image du Course',
+  });
+  await databaseBuilder.commit();
 
   return expectedCurrentContent;
 }
@@ -317,7 +331,6 @@ async function mockContentForRelease() {
     attachments: attachments.map(buildAttachment),
     challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
-    courses: [buildCourse(expectedCurrentContent.courses[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     thematics: expectedCurrentContent.thematics.map(buildThematic),
@@ -325,6 +338,14 @@ async function mockContentForRelease() {
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
   });
 
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'recCourse0',
+    name: 'Nom du Course',
+    description: 'Description du Course',
+    challengeIds: 'recChallenge0',
+    imageUrl: 'Image du Course',
+  });
+  await databaseBuilder.commit();
   return expectedCurrentContent;
 }
 
@@ -363,7 +384,6 @@ describe('Acceptance | Controller | release-controller', () => {
         airtableBuilder.mockList({ tableName: 'Tubes' }).returns().activate(500);
         airtableBuilder.mockList({ tableName: 'Acquis' }).returns().activate(500);
         airtableBuilder.mockList({ tableName: 'Epreuves' }).returns().activate(500);
-        airtableBuilder.mockList({ tableName: 'Tests' }).returns().activate(500);
         airtableBuilder.mockList({ tableName: 'Tutoriels' }).returns().activate(500);
 
         const server = await createServer();
@@ -390,8 +410,30 @@ describe('Acceptance | Controller | release-controller', () => {
 
       it('should return latest release of learning content', async () => {
         // Given
-        const expectedLatestRelease = databaseBuilder.factory.buildRelease({ content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] } });
-        const expectedContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+        const expectedLatestRelease = databaseBuilder.factory.buildRelease({
+          content: {
+            areas: [],
+            challenges: [],
+            competences: [],
+            courses: [],
+            frameworks: [],
+            skills: [],
+            thematics: [],
+            tubes: [],
+            tutorials: []
+          }
+        });
+        const expectedContent = {
+          areas: [],
+          challenges: [],
+          competences: [],
+          courses: [],
+          frameworks: [],
+          skills: [],
+          thematics: [],
+          tubes: [],
+          tutorials: []
+        };
         await databaseBuilder.commit();
 
         const server = await createServer();
@@ -473,10 +515,38 @@ describe('Acceptance | Controller | release-controller', () => {
     context('nominal case', () => {
       it('should return release specified by id', async () => {
         // Given
-        const expectedRelease = databaseBuilder.factory.buildRelease({ id: 42, content: { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] }, createdAt: new Date('2021-01-01') });
-        databaseBuilder.factory.buildRelease({ id: 43, content: { some: 'other-release' }, createdAt: new Date('2022-01-01') });
+        const expectedRelease = databaseBuilder.factory.buildRelease({
+          id: 42,
+          content: {
+            areas: [],
+            challenges: [],
+            competences: [],
+            courses: [],
+            frameworks: [],
+            skills: [],
+            thematics: [],
+            tubes: [],
+            tutorials: []
+          },
+          createdAt: new Date('2021-01-01')
+        });
+        databaseBuilder.factory.buildRelease({
+          id: 43,
+          content: { some: 'other-release' },
+          createdAt: new Date('2022-01-01')
+        });
 
-        const expectedContent = { areas: [], challenges: [], competences: [], courses: [], frameworks: [], skills: [], thematics: [], tubes: [], tutorials: [] };
+        const expectedContent = {
+          areas: [],
+          challenges: [],
+          competences: [],
+          courses: [],
+          frameworks: [],
+          skills: [],
+          thematics: [],
+          tubes: [],
+          tutorials: []
+        };
 
         await databaseBuilder.commit();
 

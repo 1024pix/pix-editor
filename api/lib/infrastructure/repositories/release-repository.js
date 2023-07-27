@@ -2,7 +2,6 @@ const areaDatasource = require('../datasources/airtable/area-datasource');
 const attachmentDatasource = require('../datasources/airtable/attachment-datasource');
 const challengeDatasource = require('../datasources/airtable/challenge-datasource');
 const competenceDatasource = require('../datasources/airtable/competence-datasource');
-const courseDatasource = require('../datasources/airtable/course-datasource');
 const frameworkDatasource = require('../datasources/airtable/framework-datasource');
 const skillDatasource = require('../datasources/airtable/skill-datasource');
 const thematicDatasource = require('../datasources/airtable/thematic-datasource');
@@ -12,7 +11,6 @@ const airtableSerializer = require('../serializers/airtable-serializer');
 const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
 const tubeTransformer = require('../transformers/tube-transformer');
-const courseTransformer = require('../transformers/course-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
 const Release = require('../../domain/models/Release');
@@ -21,7 +19,9 @@ const Content = require('../../domain/models/Content');
 const { knex } = require('../../../db/knex-database-connection');
 
 module.exports = {
-  getCurrentContent() { return _getCurrentContent(); },
+  getCurrentContent() {
+    return _getCurrentContent();
+  },
 
   async create(getCurrentContent = _getCurrentContent) {
     const content = await getCurrentContent();
@@ -95,7 +95,10 @@ async function _getCurrentContent() {
     _getCurrentContentFromAirtable(airtableChallenges),
     _getCurrentContentFromPG(airtableChallenges),
   ]);
-  return _mergeContents(currentContentFromAirtable, currentContentFromPG);
+  return {
+    ...currentContentFromAirtable,
+    ...currentContentFromPG
+  };
 }
 
 async function _getCurrentContentFromAirtable(challenges) {
@@ -103,7 +106,6 @@ async function _getCurrentContentFromAirtable(challenges) {
     areas,
     attachments,
     competences,
-    courses,
     frameworks,
     skills,
     thematics,
@@ -113,7 +115,6 @@ async function _getCurrentContentFromAirtable(challenges) {
     areaDatasource.list(),
     attachmentDatasource.list(),
     competenceDatasource.list(),
-    courseDatasource.list(),
     frameworkDatasource.list(),
     skillDatasource.list(),
     thematicDatasource.list(),
@@ -125,7 +126,6 @@ async function _getCurrentContentFromAirtable(challenges) {
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
-  const filteredCourses = courseTransformer.filterCoursesFields(courses);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
 
   return {
@@ -136,7 +136,6 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubes: transformedTubes,
     skills: filteredSkills,
     challenges: transformedChallenges,
-    courses: filteredCourses,
     tutorials: filteredTutorials,
   };
 }
@@ -161,9 +160,4 @@ async function _getCurrentContentFromPG(airtableChallenges) {
       };
     }),
   };
-}
-
-function _mergeContents(contentFromAirtable, contentFromPG) {
-  contentFromAirtable.courses = [...contentFromAirtable.courses, ...contentFromPG.courses];
-  return contentFromAirtable;
 }

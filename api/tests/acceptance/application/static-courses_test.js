@@ -1,4 +1,11 @@
-const { expect, databaseBuilder, generateAuthorizationHeader, airtableBuilder, knex, sinon } = require('../../test-helper');
+const {
+  expect,
+  databaseBuilder,
+  generateAuthorizationHeader,
+  airtableBuilder,
+  knex,
+  sinon
+} = require('../../test-helper');
 const createServer = require('../../../server');
 const challengeRepository = require('../../../lib/infrastructure/repositories/challenge-repository');
 
@@ -22,24 +29,8 @@ describe('Acceptance | API | static courses', function() {
         createdAt: new Date('2021-01-03'),
       });
 
-      const airtableStaticCourse1 = airtableBuilder.factory.buildCourse({
-        id: 'courseid3',
-        name: 'static course 3',
-        challenges: null,
-        createdAt: new Date('2021-01-02'),
-      });
-
-      const airtableStaticCourse2 = airtableBuilder.factory.buildCourse({
-        id: 'courseid4',
-        name: 'static course 4',
-        challenges: ['challengeid4'],
-        createdAt: new Date('2021-01-04'),
-      });
       await databaseBuilder.commit();
 
-      airtableBuilder.mockLists({
-        courses: [airtableStaticCourse1, airtableStaticCourse2]
-      });
       // When
       const response = await server.inject({
         method: 'GET',
@@ -49,17 +40,8 @@ describe('Acceptance | API | static courses', function() {
 
       // Then
       expect(response.statusCode).to.equal(200);
-      expect(response.result.meta).to.deep.equal({ page: 1, pageSize: 10, rowCount: 4, pageCount: 1 });
+      expect(response.result.meta).to.deep.equal({ page: 1, pageSize: 10, rowCount: 2, pageCount: 1 });
       expect(response.result.data).to.deep.equal([
-        {
-          type: 'static-course-summaries',
-          id: 'courseid4',
-          attributes: {
-            name: 'static course 4',
-            'created-at': new Date('2021-01-04'),
-            'challenge-count': 1
-          },
-        },
         {
           type: 'static-course-summaries',
           id: 'courseid2',
@@ -67,15 +49,6 @@ describe('Acceptance | API | static courses', function() {
             name: 'static course 2',
             'created-at': new Date('2021-01-03'),
             'challenge-count': 3
-          },
-        },
-        {
-          type: 'static-course-summaries',
-          id: 'courseid3',
-          attributes: {
-            name: 'static course 3',
-            'created-at': new Date('2021-01-02'),
-            'challenge-count': 0
           },
         },
         {
@@ -281,7 +254,7 @@ describe('Acceptance | API | static courses', function() {
       });
 
       // then
-      const [ staticCourseId ] = await knex('static_courses').pluck('id');
+      const [staticCourseId] = await knex('static_courses').pluck('id');
       expect(response.statusCode).to.equal(201);
       expect(response.result).to.deep.equal({
         data: {

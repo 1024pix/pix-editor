@@ -4,7 +4,6 @@ const tubeDatasource = require('../../infrastructure/datasources/airtable/tube-d
 const skillDatasource = require('../../infrastructure/datasources/airtable/skill-datasource');
 const challengeDatasource = require('../../infrastructure/datasources/airtable/challenge-datasource');
 const tutorialDatasource = require('../../infrastructure/datasources/airtable/tutorial-datasource');
-const courseDatasource = require('../../infrastructure/datasources/airtable/course-datasource');
 const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
 const thematicDatasource = require('../../infrastructure/datasources/airtable/thematic-datasource');
 
@@ -16,7 +15,6 @@ async function getAirtableContent() {
     skills,
     challenges,
     tutorials,
-    courses,
     attachments,
     thematics,
   ] = await Promise.all([
@@ -26,7 +24,6 @@ async function getAirtableContent() {
     skillDatasource.list(),
     challengeDatasource.list(),
     tutorialDatasource.list(),
-    courseDatasource.list(),
     attachmentDatasource.list(),
     thematicDatasource.list(),
   ]);
@@ -38,7 +35,6 @@ async function getAirtableContent() {
     skills,
     challenges,
     tutorials,
-    courses,
     attachments,
     thematics,
   };

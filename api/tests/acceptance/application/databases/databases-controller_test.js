@@ -14,7 +14,6 @@ const {
   buildSkill,
   buildChallenge,
   buildTutorial,
-  buildCourse,
   buildAttachment,
   buildThematic,
 } = airtableBuilder.factory;
@@ -29,7 +28,6 @@ function mockCurrentContent() {
     challenges: [domainBuilder.buildChallengeAirtableDataObject()],
     tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
     thematics: [domainBuilder.buildThematicAirtableDataObject()],
-    courses: [domainBuilder.buildCourseAirtableDataObject({ challenges: ['recChallenge0'] })],
   };
 
   airtableBuilder.mockLists({
@@ -40,7 +38,6 @@ function mockCurrentContent() {
     challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    courses: [buildCourse(expectedCurrentContent.courses[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
   });
 

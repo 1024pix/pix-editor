@@ -1,11 +1,10 @@
-module.exports = function buildCourseAirtableDataObject(
+module.exports = function buildCoursePostgresDataObject(
   {
     id = 'recPBOj7JzBcgXEtO',
     // attributes
     description = 'Programmer niveau 1 et 2',
     imageUrl = 'https://dl.airtable.com/otNiedKYSTBmoAPdyIk2_woman-163426_1920.jpg',
     name = '3.4 niveau 1 et 2',
-    adaptive = false,
     createdAt = new Date('2021-01-01'),
     updatedAt = new Date('2021-01-02'),
     // relationships
@@ -27,7 +26,6 @@ module.exports = function buildCourseAirtableDataObject(
     description,
     imageUrl,
     name,
-    adaptive,
     createdAt,
     updatedAt,
     // relations
