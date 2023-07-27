@@ -22,7 +22,7 @@
     "hasha": "^5.2.2",
     "js-crypto-random": "^1.0.2",
     "lodash": "4.17.21",
-    "mocha": "8.2.1",
+    "mocha": "8.4.0",
     "p-limit": "3.1.0",
     "pg": "^8.9.0",
     "pg-cursor": "^2.8.0",
