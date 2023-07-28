@@ -99,7 +99,7 @@
     "sass": "^1.56.1",
     "semantic-ui-css": "^2.5.0",
     "sinon": "^15.0.0",
-    "stylelint": "^14.16.1",
+    "stylelint": "^15.0.0",
     "stylelint-config-prettier": "^9.0.5",
     "stylelint-config-standard-scss": "^6.1.0",
     "tracked-built-ins": "^3.1.1",
