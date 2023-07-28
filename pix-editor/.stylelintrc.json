@@ -1,10 +1,10 @@
 {
-  "extends": ["@1024pix/stylelint-config"],
+  "extends": [
+    "@1024pix/stylelint-config"
+  ],
   "rules": {
     "alpha-value-notation": null,
     "color-function-notation": null,
-    "color-hex-case": null,
-    "color-hex-length": null,
     "font-family-no-missing-generic-family-keyword": null,
     "no-descending-specificity": null,
     "no-duplicate-selectors": null,
