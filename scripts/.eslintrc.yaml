@@ -4,6 +4,3 @@ extends:
 
 globals:
   include: true
-
-rules:
-  mocha/no-hooks-for-single-case: off
