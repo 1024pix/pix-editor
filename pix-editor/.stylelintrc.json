@@ -1,17 +1,14 @@
 {
-  "extends": ["@1024pix/stylelint-config"],
+  "extends": [
+    "@1024pix/stylelint-config"
+  ],
   "rules": {
     "alpha-value-notation": null,
     "color-function-notation": null,
-    "color-hex-case": null,
-    "color-hex-length": null,
     "font-family-no-missing-generic-family-keyword": null,
     "no-descending-specificity": null,
-    "no-duplicate-selectors": null,
     "number-max-precision": null,
     "scss/at-extend-no-missing-placeholder": null,
-    "selector-id-pattern": null,
-    "selector-pseudo-element-colon-notation": null,
-    "shorthand-property-no-redundant-values": null
+    "selector-id-pattern": null
   }
 }

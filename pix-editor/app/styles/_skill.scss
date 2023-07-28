@@ -79,7 +79,7 @@
     padding: .8em 1.14em;
     border-bottom: solid 1px rgba(34, 36, 38, .1);
 
-    &.ember-power-select-option[aria-current=true] .search-description {
+    &.ember-power-select-option[aria-current="true"] .search-description {
       color: lightgrey;
     }
 

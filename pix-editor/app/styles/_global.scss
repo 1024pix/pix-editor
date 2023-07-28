@@ -54,25 +54,6 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 }
 
-.main {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  position: relative;
-  min-width: 0;
-
-  .messages {
-    position: absolute;
-    right: 5px;
-    top: 5px;
-  }
-
-  .ui.message {
-    z-index: 3;
-  }
-
-}
-
 .hidden {
   display: none !important;
 }
@@ -91,6 +72,21 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .main {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  position: relative;
+  min-width: 0;
+
+  .messages {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
+
+  .ui.message {
+    z-index: 3;
+  }
 
   .ui[class*="top attached"].menu {
     margin: 0;

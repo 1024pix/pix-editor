@@ -30,7 +30,7 @@
   "devDependencies": {
     "@1024pix/ember-testing-library": "^0.7.0",
     "@1024pix/pix-ui": "^38.0.0",
-    "@1024pix/stylelint-config": "^1.0.1",
+    "@1024pix/stylelint-config": "^3.0.0",
     "@babel/eslint-parser": "^7.22.9",
     "@babel/plugin-proposal-decorators": "^7.22.7",
     "@ember/optional-features": "^2.0.0",
@@ -99,9 +99,8 @@
     "sass": "^1.56.1",
     "semantic-ui-css": "^2.5.0",
     "sinon": "^15.0.0",
-    "stylelint": "^14.16.1",
-    "stylelint-config-prettier": "^9.0.5",
-    "stylelint-config-standard-scss": "^6.1.0",
+    "stylelint": "^15.0.0",
+    "stylelint-config-standard-scss": "^10.0.0",
     "tracked-built-ins": "^3.1.1",
     "webpack": "^5.88.1"
   },

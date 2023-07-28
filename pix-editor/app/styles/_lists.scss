@@ -37,7 +37,7 @@
 
       .et-sort-indicator {
 
-        &:before {
+        &::before {
           font-family: Icons;
           display: inline-block;
           border: none;
@@ -46,7 +46,7 @@
           content: '\f0d7';
         }
 
-        &.is-ascending:before {
+        &.is-ascending::before {
           content: '\f0d8';
         }
       }
@@ -83,7 +83,7 @@
     }
 
     tr.is-selected td {
-      background-color: #ffc;
+      background-color: #ffffcc;
     }
   }
 }
