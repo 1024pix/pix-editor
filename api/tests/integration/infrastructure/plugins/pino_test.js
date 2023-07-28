@@ -87,7 +87,7 @@ describe('Integration | Infrastructure | plugins | pino', function() {
         // then
         expect(response.statusCode).to.equal(200);
         expect(messages).to.have.lengthOf(1);
-        expect(messages[0].msg).to.equal('request completed');
+        expect(messages[0].msg).to.match(/^\[response\] /);
         expect(messages[0].req.route).to.be.undefined;
         expect(messages[0].req.user_id).to.be.undefined;
         expect(messages[0].req.metrics).to.be.undefined;
@@ -123,7 +123,7 @@ describe('Integration | Infrastructure | plugins | pino', function() {
         // then
         expect(response.statusCode).to.equal(200);
         expect(messages).to.have.lengthOf(1);
-        expect(messages[0].msg).to.equal('request completed');
+        expect(messages[0].msg).to.match(/^\[response\] /);
         expect(messages[0].req.route).to.equal('/');
         expect(messages[0].req.user_id).to.equal(user.id);
         expect(messages[0].req.metrics).to.deep.equal({ knexQueryCount: 1 });
