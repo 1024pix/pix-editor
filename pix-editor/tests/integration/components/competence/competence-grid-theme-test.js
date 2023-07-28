@@ -100,7 +100,7 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       // given
       const mayCreateTubeStub = sinon.stub().returns(true);
       class Access extends Service {
-        mayCreateTube = mayCreateTubeStub
+        mayCreateTube = mayCreateTubeStub;
       }
       this.owner.register('service:access', Access);
       const newTube = sinon.stub();
@@ -144,7 +144,7 @@ module('Integration | Component | competence/competence-grid-theme', function (h
         // given
         const mayCreateTubeStub = sinon.stub().returns(false);
         class Access extends Service {
-          mayCreateTube = mayCreateTubeStub
+          mayCreateTube = mayCreateTubeStub;
         }
         this.owner.register('service:access', Access);
         this.set('view', item.view);
@@ -163,7 +163,7 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       // given
       const mayCreateTubeStub = sinon.stub().returns(true);
       class Access extends Service {
-        mayCreateTube = mayCreateTubeStub
+        mayCreateTube = mayCreateTubeStub;
       }
       this.owner.register('service:access', Access);
       const newTube = sinon.stub();

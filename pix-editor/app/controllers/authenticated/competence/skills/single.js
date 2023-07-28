@@ -17,7 +17,7 @@ export default class SingleController extends Controller {
   @tracked displayConfirmLog = false;
 
   @controller('authenticated.competence')
-  parentController;
+    parentController;
 
   get maximized() {
     return this.parentController.leftMaximized;

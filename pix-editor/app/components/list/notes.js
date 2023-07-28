@@ -8,7 +8,7 @@ export default class NoteList extends SortedList {
       type:'date',
       field:'createdAt'
     }
-  }
+  };
 
   get headers() {
     const headers = [{

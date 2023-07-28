@@ -7,5 +7,5 @@ export default class Quality extends Component {
     'accessibility2':['RAS','OK','KO'],
     'responsive':['Tablette', 'Smartphone', 'Tablette/Smartphone', 'Non'],
     'spoil':['Non Sp', 'Difficilement Sp', 'Facilement Sp']
-  }
+  };
 }

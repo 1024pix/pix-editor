@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 
 export default class NoteModel extends Model {
 
-  @service changelogEntry
+  @service changelogEntry;
 
   @attr text;
   @attr recordId;

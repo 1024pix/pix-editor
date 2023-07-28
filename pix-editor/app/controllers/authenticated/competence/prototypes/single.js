@@ -34,7 +34,7 @@ export default class SingleController extends Controller {
   @service loader;
   @service notify;
   @service router;
-  @service storage
+  @service storage;
   @service store;
 
   get maximized() {
@@ -46,7 +46,7 @@ export default class SingleController extends Controller {
   }
 
   @controller('authenticated.competence')
-  parentController
+    parentController;
 
   get challengeTitle() {
     if (this.creation) {

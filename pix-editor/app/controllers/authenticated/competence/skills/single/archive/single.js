@@ -7,7 +7,7 @@ export default class SingleController extends PrototypeController {
   elementClass = 'archive-challenge';
 
   @controller('authenticated.competence.skills.single.archive')
-  parentController;
+    parentController;
 
   get maximized() {
     return this.parentController.rightMaximized;
