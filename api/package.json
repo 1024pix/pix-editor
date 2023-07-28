@@ -36,7 +36,7 @@
     "scalingo-post-ra-creation": "npm run postdeploy && npm run db:seed"
   },
   "author": "GIP Pix",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@adminjs/hapi": "^6.0.3",
     "@adminjs/sequelize": "^3.0.0",
