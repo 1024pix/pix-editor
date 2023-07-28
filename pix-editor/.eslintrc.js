@@ -52,8 +52,10 @@ module.exports = {
         'blueprints/*/index.js',
         'config/**/*.js',
         'lib/*/index.js',
+        'playwright.config.js',
         'scripts/*.js',
-        'server/**/*.js'
+        'server/**/*.js',
+        'tests/e2e/**/*.js'
       ],
       parserOptions: {
         sourceType: 'script'
