@@ -55,7 +55,7 @@
     "blipp": "4.0.2",
     "bull": "^4.10.4",
     "dotenv": "^16.0.0",
-    "faker": "^5.5.3",
+    "faker": "^6.0.0",
     "googleapis": "^123.0.0",
     "hapi-pino": "^8.4.0",
     "hapi-sentry": "^4.0.0-0",
