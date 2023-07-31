@@ -48,7 +48,7 @@
     "base-x": "^4.0.0",
     "canvg": "^4.0.1",
     "ember-a11y-accordion": "^3.0.0",
-    "ember-aria-tabs": "^6.0.2",
+    "ember-aria-tabs": "^7.0.0",
     "ember-auto-import": "^2.6.3",
     "ember-cli": "^4.12.1",
     "ember-cli-app-version": "^6.0.0",
