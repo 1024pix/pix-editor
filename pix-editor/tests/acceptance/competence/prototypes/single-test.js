@@ -46,6 +46,6 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     //then
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
     assert.dom('[data-test-main-message]').hasText('Changement d\'acquis effectué pour le prototype');
-    assert.equal(challenge.skill.get('id'), 'recSkill2');
+    assert.strictEqual(challenge.skill.get('id'), 'recSkill2');
   });
 });

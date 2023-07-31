@@ -127,7 +127,7 @@ module('Integration | Component | pop-in/threshold-calculation', function (hooks
     await render(hbs`<PopIn::ThresholdCalculation @title="Paliers indicatifs" @close={{this.closeAction}} @model={{this.areas}}/>`);
 
     //then
-    assert.equal(this.element.querySelectorAll('tr').length, 10);
+    assert.strictEqual(this.element.querySelectorAll('tr').length, 10);
     assert.dom(this.element.querySelector('[data-test-selectedSkillsCount]')).hasText(`${selectedSkillsCount}`);
   });
 });

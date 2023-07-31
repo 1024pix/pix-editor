@@ -162,7 +162,7 @@ module('Integration | Component | field/toggle-field', function(hooks) {
 
       // then
       assert.ok(setDisplayFieldStub.calledWith(false));
-      assert.equal(this.modelData.someField, '');
+      assert.strictEqual(this.modelData.someField, '');
       assert.ok(confirmAskStub.calledWith('Suppression', 'Êtes-vous sûr de vouloir supprimer le champ ?'));
     });
   });

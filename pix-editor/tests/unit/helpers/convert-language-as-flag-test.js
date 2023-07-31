@@ -17,7 +17,7 @@ module('Unit | Helpers | convert language as flag', function () {
       const result = convertLanguageAsFlag([item.language]);
 
       // then
-      assert.equal(result, item.expected);
+      assert.strictEqual(result, item.expected);
     });
   });
 });

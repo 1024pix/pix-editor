@@ -21,8 +21,8 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     // when
     await render(hbs`<Competence::Grid::CellI18n @skill={{this.skill}}/>`);
     // then
-    assert.equal(this.element.querySelector('.skill-i18n-name').innerText.trim(), 'skillName');
+    assert.strictEqual(this.element.querySelector('.skill-i18n-name').innerText.trim(), 'skillName');
 
-    assert.equal(this.element.querySelectorAll('.flag').length, 3);
+    assert.strictEqual(this.element.querySelectorAll('.flag').length, 3);
   });
 });

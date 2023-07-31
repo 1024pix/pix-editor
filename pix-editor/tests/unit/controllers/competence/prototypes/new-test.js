@@ -49,7 +49,7 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
       await controller._setVersion(newPrototype1_2);
 
       // then
-      assert.equal(newPrototype1_2.version, 2);
+      assert.strictEqual(newPrototype1_2.version, 2);
       assert.ok(messageStub.calledOnce);
       assert.ok(messageStub.calledWith('Nouvelle version : 2', true));
       assert.ok(savePrototypeStub.calledOnce);
@@ -63,7 +63,7 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
       await controller._setVersion(newPrototype1_2);
 
       // then
-      assert.equal(newPrototype1_2.version, undefined);
+      assert.strictEqual(newPrototype1_2.version, undefined);
       assert.notOk(messageStub.calledOnce);
       assert.notOk(savePrototypeStub.calledOnce);
     });

@@ -20,7 +20,7 @@ module('Unit | Service | ajax-queue', function(hooks) {
       const actualValue = await ajaxQueueService.add(async () => { return expectedValue; });
 
       // then
-      assert.equal(actualValue, expectedValue);
+      assert.strictEqual(actualValue, expectedValue);
     });
 
     test('should execute concurrently as many jobs as indicated in settings file', async function(assert) {
@@ -42,7 +42,7 @@ module('Unit | Service | ajax-queue', function(hooks) {
       await ajaxQueueService.add(job);
 
       // then
-      assert.equal(maxCounter, maxJobsInQueue);
+      assert.strictEqual(maxCounter, maxJobsInQueue);
     });
   });
 });

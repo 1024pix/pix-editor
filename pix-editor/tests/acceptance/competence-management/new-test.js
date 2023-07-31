@@ -55,7 +55,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     assert.ok(workbenchSkill);
     assert.dom(findAll('[data-test-main-message]')[0]).hasText('Compétence créée');
     assert.dom(findAll('[data-test-main-message]')[1]).hasText('Atelier créé');
-    assert.equal(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
+    assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 
   test('it should cancel creation', async function(assert) {
@@ -65,7 +65,7 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Création de la compétence annulée');
-    assert.equal(currentURL(), '/');
+    assert.strictEqual(currentURL(), '/');
   });
 
   test('it should prevent transition', async function(assert) {
@@ -80,6 +80,6 @@ module('Acceptance | competence-management/single', function(hooks) {
     await click(find('[data-test-competence-item]'));
 
     // then
-    assert.equal(currentURL(), '/competence-management/new/recArea1');
+    assert.strictEqual(currentURL(), '/competence-management/new/recArea1');
   });
 });

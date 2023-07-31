@@ -32,6 +32,6 @@ module('Integration | Component | list/events-log', function(hooks) {
     await render(hbs`<List::EventsLog @list={{this.skillLogs}}/>`);
 
     //then
-    assert.equal(findAll('[data-test-skillLog]').length, skillLogs.length);
+    assert.strictEqual(findAll('[data-test-skillLog]').length, skillLogs.length);
   });
 });

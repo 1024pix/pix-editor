@@ -15,6 +15,6 @@ module('Integration | Component | field/copy', function(hooks) {
 
     await render(hbs`<Field::Copy @value={{this.value}} @onCopied={{this.onCopied}}/>`);
 
-    assert.equal(this.element.querySelector('textarea').value.trim(), 'to be copied');
+    assert.strictEqual(this.element.querySelector('textarea').value.trim(), 'to be copied');
   });
 });

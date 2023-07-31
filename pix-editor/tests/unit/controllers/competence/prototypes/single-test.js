@@ -197,9 +197,9 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._archivePreviousPrototype(proposalPrototype2_2);
 
         //then
-        assert.equal(validatePrototype2_1.status, 'archivé');
-        assert.equal(validateChallenge2_1.status, 'archivé');
-        assert.equal(proposalChallenge2_2.status, 'périmé');
+        assert.strictEqual(validatePrototype2_1.status, 'archivé');
+        assert.strictEqual(validateChallenge2_1.status, 'archivé');
+        assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
       test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
@@ -207,11 +207,11 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._archiveOtherActiveSkillVersion(proposalPrototype1_1);
 
         //then
-        assert.equal(skill2.status, 'archivé');
-        assert.equal(validatePrototype2_1.status, 'archivé');
-        assert.equal(validateChallenge2_1.status, 'archivé');
-        assert.equal(proposalPrototype2_2.status, 'périmé');
-        assert.equal(proposalChallenge2_2.status, 'périmé');
+        assert.strictEqual(skill2.status, 'archivé');
+        assert.strictEqual(validatePrototype2_1.status, 'archivé');
+        assert.strictEqual(validateChallenge2_1.status, 'archivé');
+        assert.strictEqual(proposalPrototype2_2.status, 'périmé');
+        assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
       test('it should validate skill', async function (assert) {
@@ -222,7 +222,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._checkSkillValidation(proposalPrototype1_1);
 
         //then
-        assert.equal(skill1.status, 'actif');
+        assert.strictEqual(skill1.status, 'actif');
       });
 
       test('it should validate alternatives', async function (assert) {
@@ -233,7 +233,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._validateAlternatives(proposalPrototype1_1);
 
         //then
-        assert.equal(proposalChallenge1_1.status, 'validé');
+        assert.strictEqual(proposalChallenge1_1.status, 'validé');
       });
     });
 
@@ -243,7 +243,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._archiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
-        assert.equal(skill2.status, 'en construction');
+        assert.strictEqual(skill2.status, 'en construction');
       });
       test('it should archive the current active skill if there is no proposal prototype', async function(assert) {
         // given
@@ -253,22 +253,22 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._archiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
-        assert.equal(skill2.status, 'archivé');
+        assert.strictEqual(skill2.status, 'archivé');
       });
       test('it should not change the skill status if is not a production prototype', async function(assert) {
         // when
         await controller._archiveOrDeactivateSkill(proposalPrototype2_2);
 
         // then
-        assert.equal(skill2.status, 'actif');
-        assert.equal(skill1.status, 'en construction');
+        assert.strictEqual(skill2.status, 'actif');
+        assert.strictEqual(skill1.status, 'en construction');
       });
       test('it should archive alternatives', async function(assert) {
         // when
         await controller._archiveAlternatives(validatePrototype2_1);
 
         // then
-        assert.equal(validateChallenge2_1.status, 'archivé');
+        assert.strictEqual(validateChallenge2_1.status, 'archivé');
       });
     });
 
@@ -278,14 +278,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._obsoleteAlternatives(validatePrototype2_1);
 
         // then
-        assert.equal(validateChallenge2_1.status, 'périmé');
+        assert.strictEqual(validateChallenge2_1.status, 'périmé');
       });
       test('it should deactivate the current active skill if there is proposal prototype', async function(assert) {
         // when
         await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
-        assert.equal(skill2.status, 'en construction');
+        assert.strictEqual(skill2.status, 'en construction');
       });
       test('it should archive the current active skill if there is archive prototype', async function(assert) {
         // given
@@ -295,7 +295,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
-        assert.equal(skill2.status, 'archivé');
+        assert.strictEqual(skill2.status, 'archivé');
       });
       test('it should delete the current active skill if there is no archive or proposal prototype', async function(assert) {
         // given
@@ -305,15 +305,15 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         await controller._obsoleteArchiveOrDeactivateSkill(validatePrototype2_1);
 
         // then
-        assert.equal(skill2.status, 'périmé');
+        assert.strictEqual(skill2.status, 'périmé');
       });
       test('it should not change the skill status if is not a production prototype', async function(assert) {
         // when
         await controller._obsoleteArchiveOrDeactivateSkill(proposalPrototype2_2);
 
         // then
-        assert.equal(skill2.status, 'actif');
-        assert.equal(skill1.status, 'en construction');
+        assert.strictEqual(skill2.status, 'actif');
+        assert.strictEqual(skill1.status, 'en construction');
       });
     });
 
@@ -334,10 +334,10 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.ok(messageStub.calledTwice);
         assert.ok(messageStub.getCalls()[0].calledWith('Changement d\'acquis effectué pour la déclinaison n°1'));
         assert.ok(messageStub.getCalls()[1].calledWith('Changement d\'acquis effectué pour le prototype'));
-        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
-        assert.equal(proposalChallenge1_1.skill.get('id'), skill2.id);
-        assert.equal(proposalChallenge1_1.version, 3);
-        assert.equal(proposalChallenge1_1.version, 3);
+        assert.strictEqual(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.strictEqual(proposalChallenge1_1.skill.get('id'), skill2.id);
+        assert.strictEqual(proposalChallenge1_1.version, 3);
+        assert.strictEqual(proposalChallenge1_1.version, 3);
       });
     });
   });

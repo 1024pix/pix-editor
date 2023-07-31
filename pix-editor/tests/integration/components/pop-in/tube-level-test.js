@@ -71,7 +71,7 @@ module('Integration | Component | popin-tube-level', function (hooks) {
     // then
     const skillsList = this.element.querySelectorAll('.levels .level');
     skillsList.forEach((node, i) => {
-      assert.equal(node.textContent.trim(), expectedResult[i]);
+      assert.strictEqual(node.textContent.trim(), expectedResult[i]);
     });
   });
 
@@ -82,9 +82,9 @@ module('Integration | Component | popin-tube-level', function (hooks) {
 
     // then
     const skillsList = this.element.querySelectorAll('.levels .level.selected');
-    assert.equal(skillsList.length, expectedResult.length);
+    assert.strictEqual(skillsList.length, expectedResult.length);
     skillsList.forEach((node, i) => {
-      assert.equal(node.textContent.trim(), expectedResult[i]);
+      assert.strictEqual(node.textContent.trim(), expectedResult[i]);
     });
   });
 

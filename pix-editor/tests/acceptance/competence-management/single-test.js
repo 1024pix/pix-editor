@@ -41,7 +41,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
     assert.dom('[data-test-main-message]').hasText('Compétence mise à jour');
-    assert.equal(competence.title, 'Nouveau titre');
+    assert.strictEqual(competence.title, 'Nouveau titre');
   });
 
   test('it should cancel edit', async function(assert) {
@@ -57,7 +57,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     // then
     const competence = await store.peekRecord('competence', 'recCompetence1.1');
     assert.dom('[data-test-main-message]').hasText('Modification annulée');
-    assert.equal(competence.title, 'Titre');
+    assert.strictEqual(competence.title, 'Titre');
   });
 
   test('it should prevent transition on edition', async function(assert) {
@@ -73,6 +73,6 @@ module('Acceptance | competence-management/single', function(hooks) {
     await click(find('[data-test-competence-item]'));
 
     // then
-    assert.equal(currentURL(), '/competence-management/recCompetence1.1');
+    assert.strictEqual(currentURL(), '/competence-management/recCompetence1.1');
   });
 });

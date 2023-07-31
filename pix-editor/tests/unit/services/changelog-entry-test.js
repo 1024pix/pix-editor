@@ -16,7 +16,7 @@ module('Unit | Service | changelog-entry', function(hooks) {
 
     //then
     keys.forEach((key,index) => {
-      assert.equal(service[key],expectedResults[index]);
+      assert.strictEqual(service[key], expectedResults[index]);
     });
   });
 });
