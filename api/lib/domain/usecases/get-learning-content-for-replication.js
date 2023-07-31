@@ -6,8 +6,9 @@ const challengeDatasource = require('../../infrastructure/datasources/airtable/c
 const tutorialDatasource = require('../../infrastructure/datasources/airtable/tutorial-datasource');
 const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
 const thematicDatasource = require('../../infrastructure/datasources/airtable/thematic-datasource');
+const { knex } = require('../../../db/knex-database-connection');
 
-async function getAirtableContent() {
+async function getLearningContentForReplication() {
   const [
     areas,
     competences,
@@ -17,6 +18,7 @@ async function getAirtableContent() {
     tutorials,
     attachments,
     thematics,
+    courses,
   ] = await Promise.all([
     areaDatasource.list(),
     competenceDatasource.list(),
@@ -26,6 +28,7 @@ async function getAirtableContent() {
     tutorialDatasource.list(),
     attachmentDatasource.list(),
     thematicDatasource.list(),
+    _getLearningContentForReplicationFromPG(),
   ]);
 
   return {
@@ -37,9 +40,16 @@ async function getAirtableContent() {
     tutorials,
     attachments,
     thematics,
+    courses
   };
 }
 
+async function _getLearningContentForReplicationFromPG() {
+  return knex('static_courses')
+    .select(['id', 'name'])
+    .orderBy('id');
+}
+
 module.exports = {
-  getAirtableContent,
+  getLearningContentForReplication: getLearningContentForReplication,
 };

@@ -7,6 +7,6 @@ module.exports = [
   require('./application/releases'),
   require('./application/file-storage-token'),
   require('./application/challenges'),
-  require('./application/databases'),
+  require('./application/replication-data'),
   require('./application/static-courses'),
 ];

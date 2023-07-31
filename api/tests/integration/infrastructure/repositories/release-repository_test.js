@@ -722,7 +722,6 @@ function _mockRichAirtableContent() {
     skills: [airtableSkill11111, airtableSkill11112, airtableSkill12121, airtableSkill21111],
     challenges: [airtableChallenge121211, airtableChallenge121212, airtableChallenge211111, airtableChallenge211112, airtableChallenge211113],
     tutorials: [airtableTutorial1, airtableTutorial2],
-    // courses: [airtableCourse1, airtableCourse2],
     attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3],
   });
 }
@@ -1206,22 +1205,6 @@ function _getRichCurrentContentDTO() {
     },
   ];
   const expectedCourseDTOs = [
-    // {
-    //   id: 'course1',
-    //   name: 'course1 name',
-    //   description: 'course1 description',
-    //   competences: ['competence12'],
-    //   challenges: ['challenge121211'],
-    //   imageUrl: 'course1 imageUrl',
-    // },
-    // {
-    //   id: 'course2',
-    //   name: 'course2 name',
-    //   description: 'course2 description',
-    //   competences: ['competence12', 'competence21'],
-    //   challenges: ['challenge211111', 'challenge121211'],
-    //   imageUrl: 'course2 imageUrl',
-    // },
     {
       id: 'course1PG',
       name: 'course1PG name',
