@@ -83,7 +83,7 @@ module('Unit | Model | theme', function(hooks) {
 
     // then
     tubes.forEach((tube, index) => {
-      assert.equal(tube.name, expectedSortedTube[index]);
+      assert.strictEqual(tube.name, expectedSortedTube[index]);
     });
   });
 
@@ -92,7 +92,7 @@ module('Unit | Model | theme', function(hooks) {
     const selectedProductionTubeLength = theme.selectedProductionTubeLength;
 
     // then
-    assert.equal(selectedProductionTubeLength, 1);
+    assert.strictEqual(selectedProductionTubeLength, 1);
   });
 
   module('#hasSelectedProductionTube', function () {

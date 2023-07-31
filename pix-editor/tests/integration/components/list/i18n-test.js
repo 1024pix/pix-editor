@@ -42,7 +42,7 @@ module('Integration | Component | list/i18n', function(hooks) {
     await render(hbs`<List::I18n @list={{this.challengesByLanguages}} @skill={{this.skill}}/>`);
 
     // then
-    assert.equal(this.element.querySelectorAll('.challenge-prototype').length, 3);
+    assert.strictEqual(this.element.querySelectorAll('.challenge-prototype').length, 3);
     assert.dom(this.element.querySelectorAll('.challenge-prototype td:nth-child(1)')[0]).hasText('Some instructions 1');
     assert.dom(this.element.querySelectorAll('.challenge-prototype td:nth-child(3)')[0]).hasText('10');
   });

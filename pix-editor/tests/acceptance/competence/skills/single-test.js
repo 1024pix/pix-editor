@@ -28,7 +28,7 @@ module('Acceptance | single', function(hooks) {
     await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
     await click(find('.icon.window.close'));
 
-    assert.equal(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
+    assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
 
   module('#duplicateToLocation', function() {
@@ -49,8 +49,8 @@ module('Acceptance | single', function(hooks) {
       const newSkill = tube.rawSkills.find(skill => skill.level === SKILL_LEVEL_CHOOSE);
       // then
       assert.ok(newSkill);
-      assert.equal(newSkill.challenges.length, 2);
-      assert.equal(currentURL(), `/competence/${competence1.id}/skills/${newSkill.id}?leftMaximized=true&view=workbench`);
+      assert.strictEqual(newSkill.challenges.length, 2);
+      assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills/${newSkill.id}?leftMaximized=true&view=workbench`);
     });
   });
 });

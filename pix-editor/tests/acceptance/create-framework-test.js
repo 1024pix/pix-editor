@@ -33,7 +33,7 @@ module('Acceptance | Search', function(hooks) {
     const frameworks = await store.findAll('framework');
     assert.ok(frameworks.find(framework => framework.name === newFrameworkName));
     assert.dom(find('[data-test-main-message]')).hasText('Référentiel créé');
-    assert.equal(currentURL(), '/');
+    assert.strictEqual(currentURL(), '/');
   });
 
 });

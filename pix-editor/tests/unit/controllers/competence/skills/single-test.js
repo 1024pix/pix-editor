@@ -130,8 +130,8 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
 
     // then
     const duplicateToLocationArgs = transitionToRouteStub.getCall(0).args[2];
-    assert.equal(duplicateToLocationArgs.level, 'level');
-    assert.equal(duplicateToLocationArgs.tube, newTube);
+    assert.strictEqual(duplicateToLocationArgs.level, 'level');
+    assert.strictEqual(duplicateToLocationArgs.tube, newTube);
   });
 
   test('it should clone only validated and draft challenges', async function (assert) {
@@ -183,9 +183,9 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const result = await controller._duplicateLiveChallenges(skill);
 
     // then
-    assert.equal(result.length, 2);
-    assert.equal(result[0].name, 'validatedChallenge');
-    assert.equal(result[1].name, 'draftChallenge');
+    assert.strictEqual(result.length, 2);
+    assert.strictEqual(result[0].name, 'validatedChallenge');
+    assert.strictEqual(result[1].name, 'draftChallenge');
   });
 
   test('it should duplicate challenge and attachments', async function (assert) {
@@ -225,10 +225,10 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const newChallenges = await controller._duplicateLiveChallenges(skill);
 
     // then
-    assert.equal(newChallenges.length, 1);
-    assert.equal(newChallenges[0].name, 'validatedChallenge');
-    assert.equal(newChallenges[0].files.length, 1);
-    assert.equal(newChallenges[0].files.firstObject.url, 'data:2,');
+    assert.strictEqual(newChallenges.length, 1);
+    assert.strictEqual(newChallenges[0].name, 'validatedChallenge');
+    assert.strictEqual(newChallenges[0].files.length, 1);
+    assert.strictEqual(newChallenges[0].files.firstObject.url, 'data:2,');
     assert.ok(challenge.save.calledOnce);
     assert.ok(attachment.save.calledOnce);
   });

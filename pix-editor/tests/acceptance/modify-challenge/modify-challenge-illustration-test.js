@@ -102,7 +102,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
-    assert.equal(attachments.length, 0);
+    assert.strictEqual(attachments.length, 0);
     assert.ok(attachments.every(record => !record.isDeleted));
   });
 
@@ -150,7 +150,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every(record => !record.isModified));
-    assert.equal(newIllustration.url, 'data:,');
+    assert.strictEqual(newIllustration.url, 'data:,');
   });
 
   test('delete and upload a new illustration', async function(assert) {
@@ -197,7 +197,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every(record => !record.isModified));
-    assert.equal(newIllustration.url, 'data:,');
+    assert.strictEqual(newIllustration.url, 'data:,');
   });
 
 });

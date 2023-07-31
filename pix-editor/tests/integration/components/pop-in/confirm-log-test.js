@@ -32,7 +32,7 @@ module('Integration | Component | popin-confirm-log', function(hooks) {
     // then
     assert.dom('.pix-modal').exists();
     assert.ok(approveActionStub.calledOnce);
-    assert.equal(approveActionStub.getCall(0).args[0], null);
+    assert.strictEqual(approveActionStub.getCall(0).args[0], null);
   });
 
   test('it saves with changelog', async function(assert) {
@@ -43,7 +43,7 @@ module('Integration | Component | popin-confirm-log', function(hooks) {
     // then
     assert.dom('.pix-modal').exists();
     assert.ok(approveActionStub.calledOnce);
-    assert.equal(approveActionStub.getCall(0).args[0], 'Mise à jour du prototype');
+    assert.strictEqual(approveActionStub.getCall(0).args[0], 'Mise à jour du prototype');
   });
 
   test('it should cancel', async function(assert) {

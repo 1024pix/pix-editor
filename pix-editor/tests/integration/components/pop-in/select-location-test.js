@@ -312,7 +312,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       const options = findAll('.ember-power-select-options li');
 
       // then
-      assert.equal(options.length, 8);
+      assert.strictEqual(options.length, 8);
       options.forEach((option, i) => {
         assert.dom(option).hasText(`${expectedOptionsResult[i]}`);
       });

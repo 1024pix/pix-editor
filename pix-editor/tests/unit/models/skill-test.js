@@ -47,7 +47,7 @@ module('Unit | Model | skill', function(hooks) {
     const languagesAndAlternativesCount = skill.languagesAndAlternativesCount;
 
     // then
-    assert.equal(languagesAndAlternativesCount.get('Anglais'),2);
+    assert.strictEqual(languagesAndAlternativesCount.get('Anglais'),2);
   });
 
   test('it should return an array of unique language sorted', function(assert) {
@@ -98,15 +98,15 @@ module('Unit | Model | skill', function(hooks) {
     const tubeField = await clonedSkill.get('tube');
 
     // then
-    assert.equal(clonedSkill.level, null);
-    assert.equal(clonedSkill.competence, null);
-    assert.equal(tubeField, null);
+    assert.strictEqual(clonedSkill.level, undefined);
+    assert.strictEqual(clonedSkill.competence, undefined);
+    assert.strictEqual(tubeField, null);
 
-    assert.equal(clonedSkill.challenges.length, 0);
-    assert.equal(clonedSkill.status, 'en construction');
-    assert.equal(clonedSkill.pixId, 'generatedId');
+    assert.strictEqual(clonedSkill.challenges.length, 0);
+    assert.strictEqual(clonedSkill.status, 'en construction');
+    assert.strictEqual(clonedSkill.pixId, 'generatedId');
 
-    assert.equal(clonedSkill.tutoSolution.length, 1);
-    assert.equal(clonedSkill.tutoMore.length, 2);
+    assert.strictEqual(clonedSkill.tutoSolution.length, 1);
+    assert.strictEqual(clonedSkill.tutoMore.length, 2);
   });
 });

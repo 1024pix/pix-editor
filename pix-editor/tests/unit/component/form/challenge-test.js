@@ -71,7 +71,7 @@ module('unit | Component | form/challenge', function(hooks) {
 
     // then
     assert.ok(deleteRecordStub.calledOnce);
-    assert.equal(alternativeText, 'alternative text');
+    assert.strictEqual(alternativeText, 'alternative text');
   });
 
   test('it should add attachment', async function(assert) {

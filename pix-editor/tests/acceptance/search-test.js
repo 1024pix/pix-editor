@@ -35,7 +35,7 @@ module('Acceptance | Search', function(hooks) {
     await click(find('[data-test-sidebar-search] li'));
 
     // then
-    assert.equal(currentURL(), expectedUrl);
+    assert.strictEqual(currentURL(), expectedUrl);
   });
 
   test('search a challenge by challenge id', async function(assert) {
@@ -51,7 +51,7 @@ module('Acceptance | Search', function(hooks) {
     await click(find('[data-test-sidebar-search] li'));
 
     // then
-    assert.equal(currentURL(), expectedUrl);
+    assert.strictEqual(currentURL(), expectedUrl);
   });
 
   test('search a challenge by text', async function(assert) {
@@ -67,6 +67,6 @@ module('Acceptance | Search', function(hooks) {
     await click(find('[data-test-sidebar-search] li'));
 
     // then
-    assert.equal(currentURL(), expectedUrl);
+    assert.strictEqual(currentURL(), expectedUrl);
   });
 });

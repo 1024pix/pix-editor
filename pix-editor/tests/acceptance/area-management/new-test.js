@@ -38,7 +38,7 @@ module('Acceptance | area-management/new', function(hooks) {
     const framework = await store.peekRecord('framework', 'recFramework1');
     assert.ok(framework.areas.find(area => area.titleFrFr === newAreaTitle));
     assert.dom(find('[data-test-main-message]')).hasText('Domaine créé');
-    assert.equal(currentURL(), '/');
+    assert.strictEqual(currentURL(), '/');
   });
 
   test('it should cancel creation', async function(assert) {
@@ -49,6 +49,6 @@ module('Acceptance | area-management/new', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Création du domaine annulé');
-    assert.equal(currentURL(), '/');
+    assert.strictEqual(currentURL(), '/');
   });
 });

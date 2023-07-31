@@ -124,7 +124,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       controller.displayTubeLevel];
 
     tubeLevelArguments.forEach((value, i) => {
-      assert.equal(value, expectedResult[i]);
+      assert.strictEqual(value, expectedResult[i]);
     });
   });
 
@@ -257,7 +257,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       const result = controller._determineFileType(data);
 
       // then
-      assert.equal(result, 'orga');
+      assert.strictEqual(result, 'orga');
     });
 
     test('should return editor when the file is an array of objects', function(assert) {
@@ -268,7 +268,7 @@ module('Unit | Controller | target-profile', function (hooks) {
       const result = controller._determineFileType(data);
 
       // then
-      assert.equal(result, 'editor');
+      assert.strictEqual(result, 'editor');
     });
   });
 

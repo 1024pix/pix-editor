@@ -86,7 +86,7 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.ok(storageServiceStub.cloneFile.calledOnce);
     assert.deepEqual(storageServiceStub.cloneFile.args[0], ['data:1,']);
     assert.notOk(clonedAttachment.isNew);
-    assert.equal(clonedAttachment.url, 'data:2,');
+    assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
   test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
@@ -117,6 +117,6 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
 
     // then
     assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
-    assert.equal(storageServiceStub.cloneFile.callCount, 1);
+    assert.strictEqual(storageServiceStub.cloneFile.callCount, 1);
   });
 });

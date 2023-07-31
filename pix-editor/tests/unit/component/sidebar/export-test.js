@@ -112,7 +112,7 @@ module('unit | Component | sidebar/export', function(hooks) {
     const csvContent = component._buildCSVContent(areas);
 
     // then
-    assert.equal(csvContent, expectedCsvContent);
+    assert.strictEqual(csvContent, expectedCsvContent);
   });
 
   test('it should format CSV string', function(assert) {
@@ -124,7 +124,7 @@ module('unit | Component | sidebar/export', function(hooks) {
     const result = component._formatCSVString(string);
 
     // then
-    assert.equal(result, expectedResult);
+    assert.strictEqual(result, expectedResult);
   });
 
   module('#export', function(hooks) {
@@ -164,7 +164,7 @@ module('unit | Component | sidebar/export', function(hooks) {
       // then
       assert.ok(loaderStartStub.calledWith('Récupération des sujets'));
       assert.ok(buildCSVContentStub.calledWith(areas));
-      assert.equal(saveAsStub.getCall(0).args[0], 'content');
+      assert.strictEqual(saveAsStub.getCall(0).args[0], 'content');
       assert.ok(notifyMessageStub.calledWith('Sujets exportés'));
       assert.ok(loaderStopStub.calledOnce);
     });

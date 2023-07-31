@@ -154,12 +154,12 @@ module('Unit | Model | tube', function(hooks) {
     const nextSkillVersion = tube.getNextSkillVersion(skillRecord2.level);
 
     // then
-    assert.equal(nextSkillVersion, 2);
+    assert.strictEqual(nextSkillVersion, 2);
   });
 
   module('#productionSkills', function() {
     test('returns validated skills in the tube', function(assert) {
-      assert.equal(tube.productionSkillCount, 3);
+      assert.strictEqual(tube.productionSkillCount, 3);
       assert.deepEqual(tube.productionSkills, [skillRecord1, skillRecord3, skillRecord4]);
       assert.ok(tube.hasProductionSkills);
     });

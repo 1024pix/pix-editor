@@ -33,7 +33,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       const result = component._getTranslatedField(keys, language, model);
 
       // then
-      assert.equal(result, 'English name');
+      assert.strictEqual(result, 'English name');
     });
 
     test('it should get the french field if language is `fr`', async function(assert) {
@@ -44,7 +44,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       const result = component._getTranslatedField(keys, language, model);
 
       // then
-      assert.equal(result, 'French name');
+      assert.strictEqual(result, 'French name');
     });
   });
 });

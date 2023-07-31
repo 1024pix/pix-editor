@@ -26,7 +26,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       const result = component.cellType;
 
       // then
-      assert.equal(result, 'skill-draft');
+      assert.strictEqual(result, 'skill-draft');
     });
     test('it should return `empty` if there isn\'t skill', function(assert) {
       // given
@@ -36,7 +36,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       const result = component.cellType;
 
       // then
-      assert.equal(result, 'empty');
+      assert.strictEqual(result, 'empty');
     });
 
     test('it should return `add-skill` if user may edit skill', function(assert) {
@@ -56,7 +56,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       const result = component.cellType;
 
       // then
-      assert.equal(result, 'add-skill');
+      assert.strictEqual(result, 'add-skill');
     });
   });
 });

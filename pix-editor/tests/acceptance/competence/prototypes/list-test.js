@@ -62,7 +62,7 @@ module('Acceptance | competence/prototypes/list', function () {
 
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
-      assert.equal(tabs.length, expectedResult.length);
+      assert.strictEqual(tabs.length, expectedResult.length);
       tabs.forEach((tab, index)=>{
         assert.dom(tab).hasText(expectedResult[index]);
       });
@@ -94,7 +94,7 @@ module('Acceptance | competence/prototypes/list', function () {
       await later(this, async () => {}, 100);
 
       //then
-      assert.equal(currentURL().indexOf(expectedResult), 0);
+      assert.strictEqual(currentURL().indexOf(expectedResult), 0);
     });
   });
 });

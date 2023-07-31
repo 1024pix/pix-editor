@@ -52,12 +52,12 @@ module('Unit | Model | challenge', function(hooks) {
       const clonedChallenge = await challenge.duplicate();
 
       // then
-      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.id, 'generatedId');
-      assert.equal(clonedChallenge.airtableId, null);
-      assert.equal(clonedChallenge.status, 'proposé');
-      assert.equal(clonedChallenge.author, 'NEW');
-      assert.equal(clonedChallenge.version, null);
+      assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge');
+      assert.strictEqual(clonedChallenge.id, 'generatedId');
+      assert.strictEqual(clonedChallenge.airtableId, undefined);
+      assert.strictEqual(clonedChallenge.status, 'proposé');
+      assert.deepEqual(clonedChallenge.author, ['NEW']);
+      assert.strictEqual(clonedChallenge.version, undefined);
       assert.ok(clonedChallenge.skill);
     });
 
@@ -69,11 +69,11 @@ module('Unit | Model | challenge', function(hooks) {
       const clonedChallenge = await challenge.duplicate();
 
       // then
-      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.id, 'generatedId');
-      assert.equal(clonedChallenge.status, 'proposé');
-      assert.equal(clonedChallenge.author, 'NEW');
-      assert.equal(clonedChallenge.alternativeVersion, null);
+      assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge');
+      assert.strictEqual(clonedChallenge.id, 'generatedId');
+      assert.strictEqual(clonedChallenge.status, 'proposé');
+      assert.deepEqual(clonedChallenge.author, ['NEW']);
+      assert.strictEqual(clonedChallenge.alternativeVersion, undefined);
       assert.ok(clonedChallenge.skill);
     });
 
@@ -86,8 +86,8 @@ module('Unit | Model | challenge', function(hooks) {
       const clonedChallenge = await challenge.duplicate();
 
       // then
-      assert.equal(clonedChallenge.files.length, 1);
-      assert.equal(illustration.url, clonedChallenge.files.firstObject.url);
+      assert.strictEqual(clonedChallenge.files.length, 1);
+      assert.strictEqual(illustration.url, clonedChallenge.files.firstObject.url);
       assert.notEqual(illustration.id, clonedChallenge.files.firstObject.id);
       assert.ok(clonedChallenge.files.firstObject.cloneBeforeSave);
     });
@@ -103,10 +103,10 @@ module('Unit | Model | challenge', function(hooks) {
       const skill = await clonedChallenge.skill;
 
       // then
-      assert.equal(clonedChallenge.constructor.modelName, 'challenge');
-      assert.equal(clonedChallenge.id, 'generatedId');
-      assert.equal(clonedChallenge.airtableId, null);
-      assert.equal(clonedChallenge.status, 'proposé');
+      assert.strictEqual(clonedChallenge.constructor.modelName, 'challenge');
+      assert.strictEqual(clonedChallenge.id, 'generatedId');
+      assert.strictEqual(clonedChallenge.airtableId, undefined);
+      assert.strictEqual(clonedChallenge.status, 'proposé');
       assert.notOk(skill);
     });
 
@@ -119,8 +119,8 @@ module('Unit | Model | challenge', function(hooks) {
       const clonedChallenge = await challenge.copyForDifferentSkill();
 
       // then
-      assert.equal(clonedChallenge.files.length, 1);
-      assert.equal(illustration.url, clonedChallenge.files.firstObject.url);
+      assert.strictEqual(clonedChallenge.files.length, 1);
+      assert.strictEqual(illustration.url, clonedChallenge.files.firstObject.url);
       assert.notEqual(illustration.id, clonedChallenge.files.firstObject.id);
       assert.ok(clonedChallenge.files.firstObject.cloneBeforeSave);
     });

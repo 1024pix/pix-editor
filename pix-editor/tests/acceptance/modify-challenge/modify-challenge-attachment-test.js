@@ -62,7 +62,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every(record => !record.isNew));
-    assert.equal(attachments.length, 1);
+    assert.strictEqual(attachments.length, 1);
   });
 
   test('delete attachment', async function(assert) {
@@ -96,7 +96,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
-    assert.equal(attachments.length, 0);
+    assert.strictEqual(attachments.length, 0);
     assert.ok(attachments.every(record => !record.isDeleted));
   });
 
@@ -129,7 +129,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
 
     // then
     assert.dom('[data-test-main-message]').hasText('Modification annulée');
-    assert.equal(attachments.length, 1);
+    assert.strictEqual(attachments.length, 1);
     assert.ok(attachments.every(record => !record.isDeleted));
   });
 });
