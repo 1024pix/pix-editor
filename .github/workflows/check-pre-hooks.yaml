@@ -1,0 +1,38 @@
+name: Check if somes git hooks are present
+
+on:
+  # eslint-disable-next-line yml/no-empty-mapping-value
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check-git-hooks:
+    name: Check git hooks
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+        with:
+          sparse-checkout: |
+            .githooks
+
+      - name: Check if `pre-commit` hook is present and executable
+        run: |
+          test -f .githooks/pre-commit && \
+          test -x .githooks/pre-commit
+
+      - name: Set env
+        uses: sergeysova/jq-action@v2
+        with:
+         cmd: |
+          echo "PREINSTALL_SCRIPT=$(jq '.scripts.preinstall' package.json -r)" >> $GITHUB_ENV
+
+      - name: Check if `pre-commit` hook is install with npm on preinstall step
+        run: |
+          echo "${PREINSTALL_SCRIPT}" | grep 'core.hooksPath' && \
+          echo "${PREINSTALL_SCRIPT}" | grep '.githooks'
