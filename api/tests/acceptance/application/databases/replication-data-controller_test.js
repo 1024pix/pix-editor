@@ -14,12 +14,11 @@ const {
   buildSkill,
   buildChallenge,
   buildTutorial,
-  buildCourse,
   buildAttachment,
   buildThematic,
 } = airtableBuilder.factory;
 
-function mockCurrentContent() {
+async function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaAirtableDataObject()],
@@ -29,7 +28,14 @@ function mockCurrentContent() {
     challenges: [domainBuilder.buildChallengeAirtableDataObject()],
     tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
     thematics: [domainBuilder.buildThematicAirtableDataObject()],
-    courses: [domainBuilder.buildCourseAirtableDataObject({ challenges: ['recChallenge0'] })],
+    courses: [{
+      id: 'recCourse1',
+      name: 'nameCourse1',
+    },
+    {
+      id: 'recCourse2',
+      name: 'nameCourse2',
+    }],
   };
 
   airtableBuilder.mockLists({
@@ -40,14 +46,31 @@ function mockCurrentContent() {
     challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    courses: [buildCourse(expectedCurrentContent.courses[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
   });
+
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'recCourse2',
+    name: 'nameCourse2',
+    description: 'Description du Course',
+    challengeIds: 'recChallenge0',
+    imageUrl: 'Image du Course',
+  });
+
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'recCourse1',
+    name: 'nameCourse1',
+    description: 'Description du Course',
+    challengeIds: 'recChallenge0',
+    imageUrl: 'Image du Course',
+  });
+
+  await databaseBuilder.commit();
 
   return expectedCurrentContent;
 }
 
-describe('Acceptance | Controller | databases-controller', () => {
+describe('Acceptance | Controller | replication-data-controller', () => {
 
   let user;
 
@@ -56,13 +79,13 @@ describe('Acceptance | Controller | databases-controller', () => {
     await databaseBuilder.commit();
   });
 
-  describe('GET /api/databases/airtable', function() {
-    it('should return data from Airtable', async function() {
-      const expectedCurrentContent = mockCurrentContent();
+  describe('GET /api/replication-data', function() {
+    it('should return data for replication', async function() {
+      const expectedCurrentContent = await mockCurrentContent();
       const server = await createServer();
       const currentContentOptions = {
         method: 'GET',
-        url: '/api/databases/airtable',
+        url: '/api/replication-data',
         headers: generateAuthorizationHeader(user),
       };
 

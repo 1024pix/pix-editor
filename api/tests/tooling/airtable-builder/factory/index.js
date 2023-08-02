@@ -3,7 +3,6 @@ module.exports = {
   buildAttachment: require('./build-attachment'),
   buildChallenge: require('./build-challenge'),
   buildCompetence: require('./build-competence'),
-  buildCourse: require('./build-course'),
   buildFramework: require('./build-framework'),
   buildSkill: require('./build-skill'),
   buildThematic: require('./build-thematic'),

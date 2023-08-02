@@ -92,7 +92,7 @@ describe('Unit | Domain | Content', () => {
         tubeIds: ['recTube0'],
         index: 0,
       });
-      const courseAirtable = domainBuilder.buildCourseAirtableDataObject({
+      const coursePostgres = domainBuilder.buildCoursePostgresDataObject({
         id: 'recCourse1',
         description: 'descriptionCourse1',
         imageUrl: 'http://www.example.com/this-is-an-example.jpg',
@@ -140,7 +140,7 @@ describe('Unit | Domain | Content', () => {
         areas: [areaAirtable],
         competences: [competenceAirtable],
         challenges: [challengeAirtable],
-        courses: [courseAirtable],
+        courses: [coursePostgres],
         skills: [skillAirtable],
         tubes: [tubeAirtable],
         tutorials: [tutorialAirtable],

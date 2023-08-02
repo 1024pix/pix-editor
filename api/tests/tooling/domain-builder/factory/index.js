@@ -8,7 +8,7 @@ module.exports = {
   buildCompetenceAirtableDataObject: require('./build-competence-airtable-data-object'),
   buildContentForRelease: require('./build-content-for-release'),
   buildCourseForRelease: require('./build-course-for-release'),
-  buildCourseAirtableDataObject: require('./build-course-airtable-data-object'),
+  buildCoursePostgresDataObject: require('./build-course-postgres-data-object'),
   buildDomainRelease: require('./build-real-release'),
   buildFrameworkForRelease: require('./build-framework-for-release'),
   buildFrameworkAirtableDataObject: require('./build-framework-airtable-data-object'),
