@@ -1,19 +1,19 @@
 .sortable-content {
   ul {
-    list-style: none;
     width: 75%;
     margin: 50px auto;
     padding: 0;
+    list-style: none;
 
     li {
       position: relative;
+      z-index: 1;
       display: flex;
       justify-content: space-between;
       width: 100%;
       margin: 5px;
       padding: 10px 0;
       background: $skill-background-color;
-      z-index: 1;
       cursor: grab;
 
       &.is-dragging {

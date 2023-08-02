@@ -2,9 +2,9 @@
   .skill-mode {
     float: right;
     margin-top: 2px;
+    color: rgba(255, 255, 255, 0.5);
     font-weight: normal;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.5);
 
     &.active {
       color: #ffffff;
@@ -23,19 +23,19 @@
   &.suggested,
   &.archived,
   &.deleted {
-    background: $skill-background-color !important;
     color: #2f2f2f !important;
+    background: $skill-background-color !important;
   }
 
   .circular {
     &.validated {
-      background: $validated-background-color !important;
       color: #2f2f2f !important;
+      background: $validated-background-color !important;
     }
 
     &.suggested {
-      background: $suggested-background-color !important;
       color: #2f2f2f !important;
+      background: $suggested-background-color !important;
     }
 
     &.archived {
@@ -53,8 +53,8 @@
   }
 
   .ember-basic-dropdown-content .ui.button {
-    color: #000000 !important;
     margin: 0;
+    color: #000000 !important;
   }
 
 }

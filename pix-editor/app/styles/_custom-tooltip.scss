@@ -1,18 +1,18 @@
 .custom-tooltip {
-  background-color: white;
+  z-index: 10;
+  padding: 10px;
   color: black;
+  line-height: 1.4em;
   text-align: left;
   text-shadow: none;
+  background-color: white;
   border-radius: 5px;
-  padding: 10px;
   box-shadow: 1px 1px 4px rgba(0, 0, 0, .5);
-  line-height: 1.4em;
-  z-index: 10;
 
   &.large {
     width: 75vw;
-    max-width: 1050px;
     min-width: 150px;
+    max-width: 1050px;
   }
 
   .ember-tooltip-arrow {
@@ -20,12 +20,12 @@
   }
 
   .custom-arrow {
+    z-index: -1;
     display: block;
     width: 10px;
     height: 10px;
     background-color: white;
-    transform: rotate(45deg);
-    z-index: -1;
     border: none;
+    transform: rotate(45deg);
   }
 }

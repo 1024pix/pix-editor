@@ -83,8 +83,8 @@
 
   .ui.form {
     .field.disabled, .field.disabled label {
-      pointer-events: auto;
       opacity: 1;
+      pointer-events: auto;
     }
 
     .field.disabled textarea, .field.disabled .selection {
