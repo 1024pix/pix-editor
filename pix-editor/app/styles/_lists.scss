@@ -1,9 +1,9 @@
 .skill-tab {
   &__status {
     display: inline-block;
-    margin-left: .5em;
     width: 1em;
     height: 1em;
+    margin-left: .5em;
     border-radius: 50%;
 
     &.validated {
@@ -29,20 +29,20 @@
 
   table {
     th {
-      background-color: #F9FAFB;
-      border-left: 1px solid rgba(34, 36, 38, .1);
-      border-bottom: 1px solid rgba(34, 36, 38, .1);
       padding: 10px;
       text-align: left;
+      background-color: #F9FAFB;
+      border-bottom: 1px solid rgba(34, 36, 38, .1);
+      border-left: 1px solid rgba(34, 36, 38, .1);
 
       .et-sort-indicator {
 
         &::before {
-          font-family: Icons;
           display: inline-block;
-          border: none;
-          line-height: 1;
           color: #b9b9b9;
+          font-family: Icons;
+          line-height: 1;
+          border: none;
           content: '\f0d7';
         }
 
@@ -53,32 +53,32 @@
     }
 
     td {
-      border-left: 1px solid rgba(34, 36, 38, .1);
-      border-bottom: 1px solid rgba(34, 36, 38, .1);
       padding: 10px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
+      border-bottom: 1px solid rgba(34, 36, 38, .1);
+      border-left: 1px solid rgba(34, 36, 38, .1);
       cursor: pointer;
 
       &.suggested {
-        background-color: $suggested-background-color !important;
         color: $suggested-color;
+        background-color: $suggested-background-color !important;
       }
 
       &.validated {
-        background-color: $validated-background-color !important;
         color: $validated-color;
+        background-color: $validated-background-color !important;
       }
 
       &.archived {
-        background-color: $archived-background-color !important;
         color: $archived-color;
+        background-color: $archived-background-color !important;
       }
 
       &.deleted {
-        background-color: $deleted-background-color !important;
         color: $deleted-color;
+        background-color: $deleted-background-color !important;
       }
     }
 

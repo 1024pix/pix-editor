@@ -14,24 +14,24 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 
 .field {
   .ember-power-select-trigger {
-    padding: 0;
     display: flex;
     align-items: center;
     height: 37px;
+    padding: 0;
   }
 }
 
 @keyframes drop-effect {
   0% {
-    opacity: 0;
-    transform-origin: top center;
     transform: scale(1, 0);
+    transform-origin: top center;
+    opacity: 0;
   }
 
   100% {
-    opacity: 1;
-    transform-origin: top center;
     transform: scale(1);
+    transform-origin: top center;
+    opacity: 1;
   }
 }
 
@@ -74,8 +74,8 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   }
 
   .sub-trigger, .item {
-    font-size: 16px;
     padding: 5px;
+    font-size: 16px;
 
     &:hover {
       background: rgba(50, 170, 220, .1);
@@ -90,8 +90,8 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 
 .custom-trigger {
   position: absolute;
-  right: 2px;
   top: 4px;
+  right: 2px;
   color: grey;
 }
 
@@ -102,9 +102,9 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 
     &__status {
       display: inline-block;
-      margin-left: .5em;
       width: 1em;
       height: 1em;
+      margin-left: .5em;
       border-radius: 50%;
 
       &.active {

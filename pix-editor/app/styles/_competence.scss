@@ -10,8 +10,8 @@
 
   .ember-power-select-trigger {
     color: white;
-    border-color: white;
     background: transparent;
+    border-color: white;
 
     .ember-power-select-status-icon {
       border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
@@ -36,19 +36,19 @@
 }
 
 .competence {
-  flex: 1 1 0;
-  overflow: hidden;
   display: flex;
+  flex: 1 1 0;
   flex-direction: column;
   justify-content: stretch;
+  overflow: hidden;
 
   &.half {
     max-height: 30%;
   }
 
   .table {
-    margin: 0;
     box-sizing: border-box;
+    margin: 0;
     border: none;
   }
 
@@ -56,14 +56,14 @@
 
 .competence-grid {
   height: 100%;
-  overflow: scroll;
   min-height: 0;
+  overflow: scroll;
 }
 
 .ui.table.tubes.definition {
+  margin-top: -1px;
   font-size: 15px;
   border-radius: 0;
-  margin-top: -1px;
 
   td {
     box-sizing: border-box;
@@ -85,9 +85,9 @@
 
         .tube-management {
           position: absolute;
+          bottom: 5px;
           display: flex;
           width: calc(100% - 15px);
-          bottom: 5px;
           border: none;
         }
       }
@@ -96,10 +96,10 @@
 
     &.tube-cell {
       width: 160px;
-      border-left: 1px solid rgba(34, 36, 38, 0.15);
       padding-left: 10px;
-      background: rgba(0, 0, 0, 0.03);
       font-weight: bold;
+      background: rgba(0, 0, 0, 0.03);
+      border-left: 1px solid rgba(34, 36, 38, 0.15);
 
     }
 
@@ -135,13 +135,13 @@
           color: red !important;
 
           &::after {
-            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(146, 146, 55, 0.3);
+            content: '';
           }
         }
 
@@ -160,18 +160,18 @@
             }
 
             &.archived-prototype {
-              background: $archived-background-color;
               color: white;
+              background: $archived-background-color;
             }
 
             &.obsolete-prototype {
-              background: $deleted-background-color;
               color: white;
+              background: $deleted-background-color;
             }
 
             &.not-declinable {
-              background: white;
               color: black;
+              background: white;
             }
           }
         }
@@ -196,13 +196,13 @@
           color: red !important;
 
           &::after {
-            content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: rgba(124, 144, 167, 0.3);
+            content: '';
           }
         }
 
@@ -260,13 +260,13 @@
             }
 
             &.archive-skill {
-              background: $archived-background-color;
               color: white;
+              background: $archived-background-color;
             }
 
             &.obsolete-skill {
-              background: $deleted-background-color;
               color: white;
+              background: $deleted-background-color;
             }
           }
         }
@@ -286,8 +286,8 @@
         }
 
         .flags {
-          background: rgba(255, 255, 255, .7);
           margin: 5px;
+          background: rgba(255, 255, 255, .7);
 
           > i.flag {
             box-shadow: grey 0 0 2px;
@@ -299,13 +299,13 @@
         padding: 0;
 
         .quality {
-          padding: 5px;
           height: 100%;
+          padding: 5px;
           cursor: pointer;
 
           &.bad-quality {
-            background: #EA2700;
             color: white;
+            background: #EA2700;
           }
 
           &.medium-quality {
@@ -367,8 +367,8 @@
 .quality-indication-details {
   tr {
     &:nth-child(even) {
-      background: #FFA300;
       color: white;
+      background: #FFA300;
     }
 
     &:nth-child(odd) {
@@ -377,8 +377,8 @@
 
     td {
       padding: 5px;
-      background: transparent !important;
       color: inherit !important;
+      background: transparent !important;
 
       &:nth-child(2) {
         text-align: center;
@@ -433,14 +433,14 @@
   position: relative;
 
   &::after {
-    content: ".fr";
     position: absolute;
-    font-size: 10px;
-    font-style: normal;
-    font-weight: bold;
     top: 0;
     left: 3px;
     color: black;
+    font-weight: bold;
+    font-size: 10px;
+    font-style: normal;
+    content: ".fr";
   }
 }
 

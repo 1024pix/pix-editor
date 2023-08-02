@@ -45,8 +45,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .ui.menu.main-menu {
-  border-radius: 0;
   border-right: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0;
 
   .ui.icon.button {
     color: #ffffff;
@@ -63,8 +63,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .CodeMirror {
-  min-height: 100px;
   height: 100px;
+  min-height: 100px;
 }
 
 .CodeMirror-scroll {
@@ -72,16 +72,16 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .main {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
   position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: row;
   min-width: 0;
 
   .messages {
     position: absolute;
-    right: 5px;
     top: 5px;
+    right: 5px;
   }
 
   .ui.message {
@@ -93,14 +93,14 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     border-radius: 0;
 
     &.tabular {
-      border-bottom-width: 0;
       padding-left: 5px;
+      border-bottom-width: 0;
 
       .item {
-        padding-top: 0.528571em;
         margin-top: 0.4em;
-        cursor: pointer;
+        padding-top: 0.528571em;
         color: #777777;
+        cursor: pointer;
 
         &.active {
           background-color: #F9FAFB;
@@ -130,9 +130,9 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .ui.attached {
 
     &.menu:not(.tabular) {
+      background-color: #F9FAFB;
       border: none;
       border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-      background-color: #F9FAFB;
     }
 
     .ui.button.item.left.first {
@@ -140,8 +140,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     }
 
     + .ui.attached.menu:not(.top) {
-      border-top: 1px solid rgba(34, 36, 38, 0.15);
       display: flex;
+      border-top: 1px solid rgba(34, 36, 38, 0.15);
 
       .item.competence-info {
         flex: 1;
@@ -152,20 +152,20 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
     &.segment {
       margin: 0;
-      border: none;
       padding: 0;
+      border: none;
     }
   }
 
   .main-left,
   .main-right {
-    flex: 1;
     display: flex;
+    flex: 1;
     flex-direction: column;
     justify-content: flex-start;
     box-sizing: border-box;
-    overflow: hidden;
     min-width: 0;
+    overflow: hidden;
     border-left: 10px solid #dfe1e4;
   }
 
@@ -174,32 +174,32 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 .main-title {
   box-sizing: border-box;
   padding: 0 10px;
-  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
   background-color: #3498db;
+  border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
   &.lite {
     background-color: #7C0E6A;
   }
 
   h1.ui.header {
-    font-size: 20px;
-    font-weight: normal;
     margin: 0;
     padding: 6px 0;
     color: #FFFFFF;
+    font-weight: normal;
+    font-size: 20px;
 
     .ui.right.floated.menu {
+      min-height: 0;
       background: transparent;
       border: none;
       box-shadow: none;
-      min-height: 0;
 
       .ui.button {
         padding-top: 7px;
         padding-bottom: 0;
         background-color: transparent;
-        box-shadow: none;
         border: none;
+        box-shadow: none;
 
         i {
           color: #ffffff;
@@ -209,12 +209,12 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .ui.selection.dropdown {
-    min-height: 0;
+    width: 150px;
+    min-width: 0;
     height: auto;
+    min-height: 0;
     margin: 2px 0;
     padding: 8px 40px 8px 8px;
-    min-width: 0;
-    width: 150px;
   }
 
 }
@@ -252,8 +252,8 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 footer.ui.attached.header {
-  background: rgb(52, 152, 219) !important;
   color: white;
+  background: rgb(52, 152, 219) !important;
 
   p {
     position: relative;
@@ -262,9 +262,9 @@ footer.ui.attached.header {
 }
 
 .ui.button {
+  color: #000000;
   font-weight: normal;
   background-color: transparent;
-  color: #000000;
 
   &:hover, &:focus {
     background-color: rgba(0, 0, 0, 0.03);
@@ -283,10 +283,10 @@ footer.ui.attached.header {
   position: absolute;
   width: 1px;
   height: 1px;
-  padding: 0;
   margin: -1px;
+  padding: 0;
   overflow: hidden;
-  clip: rect(0,0,0,0);
   border: 0;
+  clip: rect(0,0,0,0);
 }
 
