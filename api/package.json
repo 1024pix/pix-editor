@@ -3,7 +3,7 @@
   "version": "3.86.1",
   "description": "API permettant d'interagir avec le référentiel de contenu Pix",
   "engines": {
-    "node": "^16.20.1"
+    "node": "^v18.17.0"
   },
   "directories": {
     "doc": "docs",
