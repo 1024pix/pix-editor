@@ -9,7 +9,7 @@
     "lint": "eslint ."
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "dependencies": {
     "@fast-csv/parse": "^4.3.6",
     "@samwen/base62-util": "^1.0.4",

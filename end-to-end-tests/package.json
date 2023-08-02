@@ -13,7 +13,7 @@
     "db:initialize": "cd ../api && npm run db:prepare"
   },
   "author": "",
-  "license": "ISC",
+  "license": "AGPL-3.0-or-later",
   "devDependencies": {
     "cypress": "7.7.0"
   }
