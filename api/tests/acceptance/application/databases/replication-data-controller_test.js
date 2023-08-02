@@ -31,6 +31,10 @@ async function mockCurrentContent() {
     courses: [{
       id: 'recCourse1',
       name: 'nameCourse1',
+    },
+    {
+      id: 'recCourse2',
+      name: 'nameCourse2',
     }],
   };
 
@@ -43,6 +47,14 @@ async function mockCurrentContent() {
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
+  });
+
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'recCourse2',
+    name: 'nameCourse2',
+    description: 'Description du Course',
+    challengeIds: 'recChallenge0',
+    imageUrl: 'Image du Course',
   });
 
   databaseBuilder.factory.buildStaticCourse({

@@ -1,13 +1,9 @@
 module.exports = function buildCoursePostgresDataObject(
   {
     id = 'recPBOj7JzBcgXEtO',
-    // attributes
     description = 'Programmer niveau 1 et 2',
     imageUrl = 'https://dl.airtable.com/otNiedKYSTBmoAPdyIk2_woman-163426_1920.jpg',
     name = '3.4 niveau 1 et 2',
-    createdAt = new Date('2021-01-01'),
-    updatedAt = new Date('2021-01-02'),
-    // relationships
     challenges = [
       'recs9uvUWKQ4HDzw6',
       'recj8n1giB5f1It04',
@@ -22,13 +18,9 @@ module.exports = function buildCoursePostgresDataObject(
   } = {}) {
   return {
     id,
-    // attributes
     description,
     imageUrl,
     name,
-    createdAt,
-    updatedAt,
-    // relations
     challenges,
     competences,
   };

@@ -28,7 +28,7 @@ async function getLearningContentForReplication() {
     tutorialDatasource.list(),
     attachmentDatasource.list(),
     thematicDatasource.list(),
-    _getLearningContentForReplicationFromPG(),
+    _getCoursesFromPGForReplication(),
   ]);
 
   return {
@@ -44,7 +44,7 @@ async function getLearningContentForReplication() {
   };
 }
 
-async function _getLearningContentForReplicationFromPG() {
+async function _getCoursesFromPGForReplication() {
   return knex('static_courses')
     .select(['id', 'name'])
     .orderBy('id');
