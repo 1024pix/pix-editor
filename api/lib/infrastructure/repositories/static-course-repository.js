@@ -18,7 +18,7 @@ async function findReadSummaries({ page }) {
   const rowCount = await knex('static_courses').count('* as count').first();
 
   const staticCourses = await knex('static_courses')
-    .select('id', 'name', 'createdAt', 'challengeIds')
+    .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
     .orderBy('createdAt', 'desc')
     .offset((page.number - 1) * page.size).limit(page.size);
 
@@ -28,6 +28,7 @@ async function findReadSummaries({ page }) {
       name: staticCourse.name || '',
       createdAt: staticCourse.createdAt,
       challengeCount: staticCourse.challengeIds.split(',').length,
+      isActive: staticCourse.isActive,
     });
   });
 
@@ -53,6 +54,7 @@ async function getRead(id) {
       id: staticCourse.id,
       name: staticCourse.name,
       description: staticCourse.description,
+      isActive: staticCourse.isActive,
       createdAt: staticCourse.createdAt,
       updatedAt: staticCourse.updatedAt,
       challengeSummaries,

@@ -4,6 +4,7 @@ module.exports = class StaticCourse {
     name,
     description,
     challengeSummaries,
+    isActive,
     createdAt,
     updatedAt,
   }) {
@@ -11,6 +12,7 @@ module.exports = class StaticCourse {
     this.name = name;
     this.description = description;
     this.challengeSummaries = challengeSummaries;
+    this.isActive = isActive;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

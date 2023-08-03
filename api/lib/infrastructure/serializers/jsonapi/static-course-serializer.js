@@ -7,6 +7,7 @@ module.exports = {
         'name',
         'createdAt',
         'challengeCount',
+        'isActive',
       ],
       meta,
     }).serialize(staticCourseSummary);
@@ -17,6 +18,7 @@ module.exports = {
       attributes: [
         'name',
         'description',
+        'isActive',
         'createdAt',
         'updatedAt',
         'challengeSummaries',
