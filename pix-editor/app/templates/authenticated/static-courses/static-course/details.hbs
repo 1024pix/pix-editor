@@ -22,6 +22,11 @@
           <span class="bold">Description : </span>
           <div class="static-course-details__description">{{this.model.staticCourse.description}}</div>
         </li>
+        <li><span class="bold">Statut du test : </span>
+          <PixTag @color="{{if this.model.staticCourse.isActive "green-light" "grey-light"}}">
+            {{if this.model.staticCourse.isActive "Actif" "Inactif"}}
+          </PixTag>
+        </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
         <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>

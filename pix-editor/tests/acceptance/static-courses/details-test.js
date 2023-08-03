@@ -39,6 +39,7 @@ module('Acceptance | Static Courses | Details', function(hooks) {
       id: 'courseA',
       name: 'Premier test statique',
       description: 'Ma super description',
+      isActive: true,
       createdAt: new Date('2021-01-01'),
       updatedAt: new Date('2021-02-02'),
       challengeSummaries,
@@ -57,13 +58,14 @@ module('Acceptance | Static Courses | Details', function(hooks) {
     // then
     assert.strictEqual(currentURL(), '/static-courses/courseA');
     // information section
-    const [nameItem, descriptionItem, createdAtItem, updatedAtItem] = screen.getAllByRole('listitem');
+    const [nameItem, descriptionItem, statusItem, createdAtItem, updatedAtItem] = screen.getAllByRole('listitem');
     const removeWhitespacesFnc = (str) => str
       .trim()
       .replace(/\s{2,}/g, '')
       .replace(/\s?:\s?/g, ':');
     assert.strictEqual(removeWhitespacesFnc(nameItem.textContent), 'Nom:Premier test statique');
     assert.strictEqual(removeWhitespacesFnc(descriptionItem.textContent), 'Description:Ma super description');
+    assert.strictEqual(removeWhitespacesFnc(statusItem.textContent), 'Statut du test:Actif');
     assert.strictEqual(removeWhitespacesFnc(createdAtItem.textContent), 'Crée le:01/01/2021');
     assert.strictEqual(removeWhitespacesFnc(updatedAtItem.textContent), 'Dernière modification:02/02/2021');
     // challenges section
