@@ -8,4 +8,14 @@ module.exports = function(databaseBuilder) {
     createdAt: new Date(),
     isActive: true,
   });
+
+  databaseBuilder.factory.buildStaticCourse({
+    id: 'courseABC123CoCo',
+    name: 'Static Course 2',
+    description: 'Static Course 2 description',
+    challengeIds: 'challenge1NQqfx9mYKUQEO',
+    imageUrl: 'some/image/url',
+    createdAt: new Date('2021-01-01'),
+    isActive: false,
+  });
 };
