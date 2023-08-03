@@ -6,5 +6,6 @@ module.exports = function(databaseBuilder) {
     challengeIds: 'challenge1NQqfx9mYKUQEO,challengeTYFrFy5EGYEet,challenge1rSPsnisQ8ft4W',
     imageUrl: 'some/image/url',
     createdAt: new Date(),
+    isActive: true,
   });
 };

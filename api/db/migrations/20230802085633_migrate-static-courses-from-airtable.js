@@ -5,6 +5,7 @@ const Airtable = require('airtable');
  * @returns { Promise<void> }
  */
 exports.up = async function(knex) {
+  if (process.env.NODE_ENV !== 'production') return;
   const airtableClient = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
   }).base(process.env.AIRTABLE_BASE);
@@ -17,8 +18,8 @@ exports.up = async function(knex) {
 
   const filteredStaticCourses = allStaticCourses
     .filter((course) => course.fields['Nom'] != null
-      && course.fields['Nb d\'épreuves'] !== 0
-      && course.fields['Épreuves (id persistant)'].toString().length <= 1000
+        && course.fields['Nb d\'épreuves'] !== 0
+        && course.fields['Épreuves (id persistant)'].toString().length <= 1000
     );
   console.log(filteredStaticCourses.length);
 

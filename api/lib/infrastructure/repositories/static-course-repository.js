@@ -72,6 +72,7 @@ async function get(id) {
       name: staticCourse.name,
       description: staticCourse.description,
       challengeIds: staticCourse.challengeIds.split(','),
+      isActive: staticCourse.isActive,
       createdAt: staticCourse.createdAt,
       updatedAt: staticCourse.updatedAt,
     });
@@ -86,6 +87,7 @@ async function save(staticCourseForCreation) {
     name: staticCourseDTO.name,
     description: staticCourseDTO.description,
     challengeIds: staticCourseDTO.challengeIds.join(','),
+    isActive: staticCourseDTO.isActive,
     createdAt: staticCourseDTO.createdAt,
     updatedAt: staticCourseDTO.updatedAt,
   };
