@@ -8,12 +8,14 @@ module.exports = class StaticCourse {
     name,
     description,
     challengeIds,
+    isActive,
     createdAt,
     updatedAt,
   }) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.isActive = isActive;
     this.challengeIds = challengeIds;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -33,7 +35,7 @@ module.exports = class StaticCourse {
     if (validationError.hasErrors()) {
       return CommandResult.Failure({ value: null, error: validationError });
     }
-    const staticCourse = new StaticCourse({ ...attributes, id: idGenerator('course') });
+    const staticCourse = new StaticCourse({ ...attributes, id: idGenerator('course'), isActive: true });
     return CommandResult.Success({ value: staticCourse });
   }
 
@@ -43,6 +45,7 @@ module.exports = class StaticCourse {
       id: this.id,
       name: updateCommand.name.trim(),
       description: updateCommand.description.trim(),
+      isActive: this.isActive,
       challengeIds: updateCommand.challengeIds.map((challengeId) => challengeId.trim()),
       createdAt: this.createdAt,
       updatedAt: timestamp,
@@ -61,6 +64,7 @@ module.exports = class StaticCourse {
       name: this.name,
       description: this.description,
       challengeIds: this.challengeIds,
+      isActive: this.isActive,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };

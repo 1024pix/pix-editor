@@ -36,6 +36,7 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
+          isActive: true,
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -58,6 +59,7 @@ describe('Unit | Domain | StaticCourse', function() {
           id: 'courseABC123',
           name: 'some valid name',
           description: '',
+          isActive: true,
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
@@ -202,6 +204,7 @@ describe('Unit | Domain | StaticCourse', function() {
         name: 'old name',
         description: 'old description',
         challengeIds: ['chalDEF ', ' chalJKF'],
+        isActive: false,
         createdAt: new Date('2021-00-00T09:00:00Z'),
         updatedAt: new Date('2021-00-00T09:00:00Z'),
       });
@@ -226,6 +229,7 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
+          isActive: false,
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -247,6 +251,7 @@ describe('Unit | Domain | StaticCourse', function() {
           id: 'myAwesomeCourse66',
           name: 'some valid name',
           description: '',
+          isActive: false,
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
