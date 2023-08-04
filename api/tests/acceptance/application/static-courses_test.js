@@ -20,6 +20,7 @@ describe('Acceptance | API | static courses', function() {
         name: 'static course 1',
         challengeIds: 'challengeid1,challengeid2',
         createdAt: new Date('2021-01-01'),
+        isActive: true,
       });
 
       databaseBuilder.factory.buildStaticCourse({
@@ -27,6 +28,7 @@ describe('Acceptance | API | static courses', function() {
         name: 'static course 2',
         challengeIds: 'challengeid3,challengeid4,challengeid5',
         createdAt: new Date('2021-01-03'),
+        isActive: false,
       });
 
       await databaseBuilder.commit();
@@ -48,7 +50,8 @@ describe('Acceptance | API | static courses', function() {
           attributes: {
             name: 'static course 2',
             'created-at': new Date('2021-01-03'),
-            'challenge-count': 3
+            'challenge-count': 3,
+            'is-active': false,
           },
         },
         {
@@ -57,7 +60,8 @@ describe('Acceptance | API | static courses', function() {
           attributes: {
             name: 'static course 1',
             'created-at': new Date('2021-01-01'),
-            'challenge-count': 2
+            'challenge-count': 2,
+            'is-active': true,
           },
         }
       ]);
@@ -76,6 +80,7 @@ describe('Acceptance | API | static courses', function() {
         challengeIds: 'challengeid1,challengeid2',
         createdAt: new Date('2021-01-01'),
         updatedAt: new Date('2021-02-02'),
+        isActive: true,
       });
       await databaseBuilder.commit();
       const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
@@ -123,6 +128,7 @@ describe('Acceptance | API | static courses', function() {
             description: 'static course description',
             'created-at': new Date('2021-01-01'),
             'updated-at': new Date('2021-02-02'),
+            'is-active': true,
           },
           relationships: {
             'challenge-summaries': {
@@ -265,6 +271,7 @@ describe('Acceptance | API | static courses', function() {
             description: 'static course description',
             'created-at': new Date('2021-10-29T03:04:00Z'),
             'updated-at': new Date('2021-10-29T03:04:00Z'),
+            'is-active': true,
           },
           relationships: {
             'challenge-summaries': {
@@ -322,6 +329,7 @@ describe('Acceptance | API | static courses', function() {
         name: 'some old name',
         description: 'some old description',
         challengeIds: ['challengeid2', 'challengeid3', 'challengeid4'],
+        isActive: false,
         createdAt: new Date('2020-01-01T00:00:10Z'),
         updatedAt: new Date('2020-01-01T00:00:10Z'),
       });
@@ -415,6 +423,7 @@ describe('Acceptance | API | static courses', function() {
             description: 'static course description',
             'created-at': new Date('2020-01-01T00:00:10Z'),
             'updated-at': new Date('2021-10-29T03:04:00Z'),
+            'is-active': false,
           },
           relationships: {
             'challenge-summaries': {
