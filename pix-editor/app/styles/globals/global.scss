@@ -18,3 +18,16 @@
     margin-right: 8px;
   }
 }
+
+.disabled-link-with-icon {
+  pointer-events: none;
+  > svg {
+    color: $pix-neutral-30;
+  }
+}
+
+.disabled-tooltip-content {
+  > span {
+    cursor: not-allowed;
+  }
+}
