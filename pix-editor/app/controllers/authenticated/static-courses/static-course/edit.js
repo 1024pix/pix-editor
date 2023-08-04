@@ -16,7 +16,7 @@ export default class EditStaticCourseController extends Controller {
   @action
   async editStaticCourse(formData) {
     try {
-      await this.model.save({ adapterOptions: formData });
+      await this.model.save({ adapterOptions: { ...formData, action: 'update' } });
       this.notifications.success('Test statique modifié avec succès.');
       this.router.transitionTo('authenticated.static-courses.static-course.details', this.model.id);
     } catch (err) {

@@ -375,4 +375,72 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
   });
+
+  context('deactivate', function() {
+    let clock;
+
+    beforeEach(function() {
+      clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+    });
+
+    afterEach(function() {
+      clock.restore();
+    });
+
+    it('should make the static course inactive when it is active', function() {
+      // given
+      const activeStaticCourse = domainBuilder.buildStaticCourse({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        isActive: true,
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-00-00T09:00:00Z'),
+      });
+
+      // when
+      const commandResult = activeStaticCourse.deactivate();
+
+      // then
+      expect(commandResult.isSuccess()).to.be.true;
+      expect(commandResult.value.toDTO()).to.deep.equal({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        isActive: false,
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-10-29T03:04:00Z'),
+      });
+    });
+
+    it('should let the static course inactive when it is already inactive', function() {
+      // given
+      const inactiveStaticCourse = domainBuilder.buildStaticCourse({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        isActive: false,
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-00-00T09:00:00Z'),
+      });
+
+      // when
+      const commandResult = inactiveStaticCourse.deactivate();
+
+      // then
+      expect(commandResult.isSuccess()).to.be.true;
+      expect(commandResult.value.toDTO()).to.deep.equal({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        isActive: false,
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-10-29T03:04:00Z'),
+      });
+    });
+  });
 });

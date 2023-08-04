@@ -9,9 +9,17 @@ export default class StaticCourseAdapter extends ApplicationAdapter {
   }
 
   updateRecord(store, type, snapshot) {
-    const payload = preparePayloadForCreateAndUpdate(this.serialize(snapshot), snapshot.adapterOptions);
-    const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'updateRecord');
-    return this.ajax(url, 'PUT', { data: payload });
+    const action = snapshot.adapterOptions.action;
+    if (action === 'update') {
+      const payload = preparePayloadForCreateAndUpdate(this.serialize(snapshot), snapshot.adapterOptions);
+      const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'updateRecord');
+      return this.ajax(url, 'PUT', { data: payload });
+    }
+    if (action === 'deactivate') {
+      const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'updateRecord');
+      return this.ajax(`${url}/deactivate`, 'PUT');
+    }
+    return super.updateRecord(store, type, snapshot);
   }
 }
 

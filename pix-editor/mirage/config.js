@@ -265,6 +265,14 @@ function routes() {
     });
     return staticCourse;
   });
+
+  this.put('/static-courses/:id/deactivate', function(schema, request) {
+    const staticCourse = schema.staticCourses.find(request.params.id);
+    staticCourse.update({
+      isActive: false,
+    });
+    return staticCourse;
+  });
 }
 
 function _serializeModel(instance, modelName) {
