@@ -24,6 +24,12 @@ class UserNotFoundError extends NotFoundError {
   }
 }
 
+class StaticCourseIsInactiveError extends DomainError {
+  constructor(message = 'Opération impossible sur un test statique inactif.') {
+    super(message);
+  }
+}
+
 class InvalidStaticCourseCreationOrUpdateError extends DomainError {
   constructor() {
     super('Static course validation error at creation or update');
@@ -51,5 +57,6 @@ module.exports = {
   DomainError,
   InvalidStaticCourseCreationOrUpdateError,
   NotFoundError,
+  StaticCourseIsInactiveError,
   UserNotFoundError,
 };
