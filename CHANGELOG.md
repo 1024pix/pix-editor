@@ -1,5 +1,67 @@
 
 
+## v3.87.0 (08/08/2023)
+
+
+### :rocket: Amélioration
+- [#227](https://github.com/1024pix/pix-editor/pull/227) [FEATURE] Afficher le statut du test statique sur la liste des tests statiques et sur la page de détails d'un test statique (PIX-8643).
+- [#226](https://github.com/1024pix/pix-editor/pull/226) [FEATURE] Faire en sorte qu'un test statique nouvellement créé soit actif par défaut (PIX-8567).
+- [#170](https://github.com/1024pix/pix-editor/pull/170) [FEATURE] Migrer les tests statiques de Airtable vers Postgres (PIX-7793).
+
+### :building_construction: Tech
+- [#172](https://github.com/1024pix/pix-editor/pull/172) [TECH] Correction du champ license des package.json.
+- [#215](https://github.com/1024pix/pix-editor/pull/215) [TECH] Ajout d'un script pour peupler les champs alpha et delta des challenges à partir d'un CSV.
+- [#206](https://github.com/1024pix/pix-editor/pull/206) [TECH] Spécifie les version de ember-source et d'ember-data qui fonctionnent.
+- [#167](https://github.com/1024pix/pix-editor/pull/167) [TECH] :green_heart: Déclarer les environnements CircleCI dans des executors.
+- [#155](https://github.com/1024pix/pix-editor/pull/155) [TECH] Upgrade embroider en v3.
+
+### :arrow_up: Montée de version
+- [#230](https://github.com/1024pix/pix-editor/pull/230) [BUMP] Update dependency @fortawesome/ember-fontawesome to v1 (pix-editor).
+- [#229](https://github.com/1024pix/pix-editor/pull/229) [BUMP] Update redis to v7 (major).
+- [#222](https://github.com/1024pix/pix-editor/pull/222) [BUMP] Update dependency ember-resolver to v11 (pix-editor).
+- [#208](https://github.com/1024pix/pix-editor/pull/208) [BUMP] Update dependency ember-source to ~4.12.0 (pix-editor).
+- [#219](https://github.com/1024pix/pix-editor/pull/219) [BUMP] Update dependency cypress to v9 (end-to-end-tests).
+- [#220](https://github.com/1024pix/pix-editor/pull/220) [BUMP] Update dependency ember-cli to v5 (pix-editor).
+- [#197](https://github.com/1024pix/pix-editor/pull/197) [BUMP] Update dependency @1024pix/stylelint-config to v4 (pix-editor).
+- [#218](https://github.com/1024pix/pix-editor/pull/218) [BUMP] Update dependency cypress to v8 (end-to-end-tests).
+- [#216](https://github.com/1024pix/pix-editor/pull/216) [BUMP] Update dependency node to v18.
+- [#211](https://github.com/1024pix/pix-editor/pull/211) [BUMP] Update dependency cypress to v7 (end-to-end-tests).
+- [#214](https://github.com/1024pix/pix-editor/pull/214) [BUMP] Update dependency ember-resolver to v10 (pix-editor).
+- [#213](https://github.com/1024pix/pix-editor/pull/213) [BUMP] Update dependency ember-aria-tabs to v7 (pix-editor).
+- [#212](https://github.com/1024pix/pix-editor/pull/212) [BUMP] Update dependency ember-a11y-accordion to v3 (pix-editor).
+- [#209](https://github.com/1024pix/pix-editor/pull/209) [BUMP] Lock file maintenance (pix-editor).
+- [#205](https://github.com/1024pix/pix-editor/pull/205) [BUMP] Update dependency ember-resolver to v9 (pix-editor).
+- [#204](https://github.com/1024pix/pix-editor/pull/204) [BUMP] Update dependency eslint-plugin-qunit to v7 (pix-editor).
+- [#203](https://github.com/1024pix/pix-editor/pull/203) [BUMP] Update dependency ember-qunit to v6 (pix-editor).
+- [#199](https://github.com/1024pix/pix-editor/pull/199) [BUMP] Update dependency p-map to v6 (api).
+- [#196](https://github.com/1024pix/pix-editor/pull/196) [BUMP] Update dependency url-regex-safe to v3 (api).
+- [#191](https://github.com/1024pix/pix-editor/pull/191) [BUMP] Update dependency axios-cookiejar-support to v4 (api).
+- [#190](https://github.com/1024pix/pix-editor/pull/190) [BUMP] Update dependency stylelint to v15 (pix-editor).
+- [#189](https://github.com/1024pix/pix-editor/pull/189) [BUMP] Update dependency axios to v1 (scripts).
+- [#188](https://github.com/1024pix/pix-editor/pull/188) [BUMP] Update dependency axios to v1 (api).
+- [#187](https://github.com/1024pix/pix-editor/pull/187) [BUMP] Update dependency faker to v6 (api).
+- [#183](https://github.com/1024pix/pix-editor/pull/183) [BUMP] Update dependency eslint-plugin-mocha to v10 (scripts).
+- [#182](https://github.com/1024pix/pix-editor/pull/182) [BUMP] Update dependency eslint-plugin-mocha to v10 (api).
+- [#181](https://github.com/1024pix/pix-editor/pull/181) [BUMP] Update dependency mocha to v10 (scripts).
+- [#180](https://github.com/1024pix/pix-editor/pull/180) [BUMP] Update dependency mocha to v10 (api).
+- [#177](https://github.com/1024pix/pix-editor/pull/177) [BUMP] Update dependency @1024pix/pix-ui to v38 (pix-editor).
+- [#176](https://github.com/1024pix/pix-editor/pull/176) [BUMP] Update dependency pino to v8 (api).
+- [#160](https://github.com/1024pix/pix-editor/pull/160) [BUMP] Update dependency sinon to v15 (scripts).
+- [#161](https://github.com/1024pix/pix-editor/pull/161) [BUMP] Update dependency eslint to v8.
+- [#142](https://github.com/1024pix/pix-editor/pull/142) [BUMP] Update dependency airtable to v0.12.1 (scripts).
+- [#163](https://github.com/1024pix/pix-editor/pull/163) [BUMP] Update dependency googleapis to v123 (api).
+- [#140](https://github.com/1024pix/pix-editor/pull/140) [BUMP] Update dependency airtable to ^0.12.0 (api).
+- [#169](https://github.com/1024pix/pix-editor/pull/169) [BUMP] Update dependency node to v16.20.1.
+- [#168](https://github.com/1024pix/pix-editor/pull/168) [BUMP] Lock file maintenance (dossier racine).
+- [#166](https://github.com/1024pix/pix-editor/pull/166) [BUMP] Update dependency p-queue to v7 (pix-editor).
+- [#164](https://github.com/1024pix/pix-editor/pull/164) [BUMP] Update dependency ember-cli-showdown to v7 (pix-editor).
+- [#162](https://github.com/1024pix/pix-editor/pull/162) [BUMP] Update dependency ember-cli-app-version to v6 (pix-editor).
+- [#159](https://github.com/1024pix/pix-editor/pull/159) [BUMP] Update dependency sinon to v15 (api).
+- [#158](https://github.com/1024pix/pix-editor/pull/158) [BUMP] Update browser-tools orb to v1.4.3 (.circleci).
+- [#157](https://github.com/1024pix/pix-editor/pull/157) [BUMP] Update dependency dotenv to v16 (api).
+- [#152](https://github.com/1024pix/pix-editor/pull/152) [BUMP] Update dependency mocha to v8.4.0 (scripts).
+- [#156](https://github.com/1024pix/pix-editor/pull/156) [BUMP] Update dependency showdown to v2 (api).
+
 ## v3.86.1 (26/07/2023)
 
 
