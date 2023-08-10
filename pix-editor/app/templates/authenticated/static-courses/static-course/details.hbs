@@ -4,13 +4,21 @@
     <PixButtonLink
       @backgroundColor="blue"
       @route="authenticated.static-courses.static-course.edit"
-      @isDisabled={{not this.model.mayEditStaticCourse}}
+      @isDisabled={{not this.canEditStaticCourse}}
       class="pix-button-link-with-icon white-font"
     >
       <FaIcon
         @icon="pen"
         @prefix="fas"></FaIcon>Éditer le test statique
     </PixButtonLink>
+    <PixButton
+      @backgroundColor="grey"
+      @isBorderVisible={{true}}
+      @triggerAction={{this.showDeactivationModal}}
+      @isDisabled={{not this.canDeactivateStaticCourse}}
+    >
+      Désactiver
+    </PixButton>
   </div>
 </header>
 <main class="page-body">
@@ -37,16 +45,18 @@
           @prefixIconBefore="far"
           @backgroundColor="transparent-light"
           @isBorderVisible={{true}}
+          @isDisabled={{not this.model.staticCourse.isActive}}
         >
           Copier le lien
         </PixButton>
         <PixButtonLink
-          @href={{this.model.staticCourse.previewURL}}
-          target="_blank"
+          @href={{if this.model.staticCourse.isActive this.model.staticCourse.previewURL "#"}}
+          target={{if this.model.staticCourse.isActive "_blank" "_self"}}
           rel="noopener noreferrer"
           @backgroundColor="transparent-light"
           @isBorderVisible={{true}}
           class="pix-button-link-with-icon"
+          @isDisabled={{not this.model.staticCourse.isActive}}
         >
           <FaIcon
             @icon="eye"
@@ -120,7 +130,7 @@
       <PixButtonLink
         @backgroundColor="blue"
         @route="authenticated.static-courses.static-course.edit"
-        @isDisabled={{not this.model.mayEditStaticCourse}}
+        @isDisabled={{not this.canEditStaticCourse}}
         class="pix-button-link-with-icon white-font"
       >
         <FaIcon
@@ -130,3 +140,29 @@
     </div>
   </section>
 </main>
+<PixModal
+  @title="Désactivation"
+  @onCloseButtonClick={{this.closeDeactivationModal}}
+  @showModal={{this.shouldDisplayDeactivationModal}}
+>
+  <:content>
+    <p data-test-logout-message >
+      Êtes-vous sûr de vouloir désactiver le test statique <b>{{this.model.staticCourse.name}}</b> ?<br/>
+      Cette action est irréversible et il ne sera alors plus possible d’utiliser ce test.
+    </p>
+  </:content>
+  <:footer>
+    <PixButton data-test-logout-cancel-button
+               @backgroundColor="transparent-light"
+               @isBorderVisible={{true}}
+               @triggerAction={{this.closeDeactivationModal}}
+    >
+      Non
+    </PixButton>
+    <PixButton data-test-logout-ok-button
+               @triggerAction={{this.deactivateStaticCourse}}
+    >
+      Oui
+    </PixButton>
+  </:footer>
+</PixModal>

@@ -14,7 +14,23 @@
 }
 
 .pix-button-link-with-icon {
+  &:hover{
+    color: $pix-neutral-90;
+  }
   > svg {
     margin-right: 8px;
+  }
+}
+
+.disabled-link-with-icon {
+  pointer-events: none;
+  > svg {
+    color: $pix-neutral-30;
+  }
+}
+
+.disabled-tooltip-content {
+  > span {
+    cursor: not-allowed;
   }
 }

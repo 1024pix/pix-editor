@@ -35,6 +35,9 @@ function _mapToInfrastructureError(error) {
   if (error instanceof DomainErrors.UserNotFoundError) {
     return new InfraErrors.NotFoundError(error.message);
   }
+  if (error instanceof DomainErrors.StaticCourseIsInactiveError) {
+    return new InfraErrors.ConflictError(error.message);
+  }
 
   return new InfraErrors.InfrastructureError(error.message);
 }

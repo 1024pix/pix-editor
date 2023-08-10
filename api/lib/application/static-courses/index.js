@@ -33,6 +33,14 @@ exports.register = async function(server) {
         handler: staticCourseController.update,
       },
     },
+    {
+      method: 'PUT',
+      path: '/api/static-courses/{id}/deactivate',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: staticCourseController.deactivate,
+      },
+    },
   ]);
 };
 

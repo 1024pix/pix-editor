@@ -2,10 +2,10 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { click } from '@ember/test-helpers';
+import { clickByName, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Static Courses | Edition', function(hooks) {
+module('Acceptance | Static Courses | Deactivation', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let staticCourse, staticCourseSummary;
@@ -57,23 +57,15 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access edition form through action button', async function(assert) {
+    test('should prevent user from being able to deactivate static course', async function(assert) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
       await click(screen.getAllByRole('cell')[0]);
-      await click(screen.getAllByText('Éditer le test statique')[0]);
 
       // then
-      assert.strictEqual(currentURL(), '/static-courses/courseA');
-    });
-
-    test('should prevent user from being able to access edition form through URL', async function(assert) {
-      // when
-      await visit('/static-courses/courseA/edit');
-
-      // then
-      assert.strictEqual(currentURL(), '/static-courses');
+      const button = screen.getByText('Désactiver');
+      assert.dom(button).isDisabled();
     });
   });
 
@@ -96,64 +88,28 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
         const screen = await visit('/');
         await clickByName('Tests statiques');
         await click(screen.getAllByRole('cell')[0]);
-        await click(screen.getAllByText('Éditer le test statique')[0]);
 
         // then
-        assert.strictEqual(currentURL(), '/static-courses/courseA');
-      });
-
-      test('should not be able to edit the static course by navigating directly to the edition page', async function(assert) {
-        // given
-        staticCourseSummary.update({ isActive: false });
-        staticCourse.update({ isActive: false });
-
-        // when
-        await visit('/static-courses/courseA/edit');
-
-        // then
-        assert.strictEqual(currentURL(), '/static-courses/courseA');
+        const button = screen.getByText('Désactiver');
+        assert.dom(button).isDisabled();
       });
     });
 
-    test('should edit the static course', async function(assert) {
+    test('should deactivate the static course', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
       await click(screen.getAllByRole('cell')[0]);
-      await click(screen.getAllByText('Éditer le test statique')[0]);
 
       // when
-      await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
-      await fillByLabel('IDs des épreuves', 'chalA\nchalC');
-      await triggerEvent(find('#static-course-description'), 'keyup', '');
-      await triggerEvent(find('#static-course-challenges'), 'keyup', '');
-      await clickByName('Enregistrer');
+      await clickByName('Désactiver');
+      await screen.findByRole('dialog');
+      await clickByName('Oui');
 
       // then
-      assert.strictEqual(currentURL(), '/static-courses/courseA');
-      assert.dom(screen.getByText('Ma nouvelle description toute jolie')).exists();
-      assert.dom(screen.getByText('chalA')).exists();
-      assert.dom(screen.getByText('chalC')).exists();
-      assert.dom(screen.queryByText('chalB')).doesNotExist();
-    });
-
-    test('should cancel static course edition', async function(assert) {
-      // given
-      const screen = await visit('/');
-      await clickByName('Tests statiques');
-      await click(screen.getAllByRole('cell')[0]);
-      await click(screen.getAllByText('Éditer le test statique')[0]);
-
-      // when
-      await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
-      await fillByLabel('IDs des épreuves', 'chalA\nchalC');
-      await triggerEvent(find('#static-course-description'), 'keyup', '');
-      await triggerEvent(find('#static-course-challenges'), 'keyup', '');
-      await clickByName('Annuler');
-
-      // then
-      assert.strictEqual(currentURL(), '/static-courses/courseA');
-      assert.dom(screen.queryByText('Ma nouvelle description toute jolie')).doesNotExist();
+      const button = screen.getByText('Désactiver');
+      assert.dom(button).isDisabled();
+      assert.dom(screen.getByText('Inactif')).exists();
     });
   });
 });

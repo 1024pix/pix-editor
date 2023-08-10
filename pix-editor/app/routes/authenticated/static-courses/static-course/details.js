@@ -7,9 +7,10 @@ export default class StaticCoursesRoute extends Route {
 
   model() {
     const staticCourse = this.modelFor('authenticated.static-courses.static-course');
+    const userMayEditStaticCourse = this.access.mayCreateOrEditStaticCourse();
     return {
       staticCourse,
-      mayEditStaticCourse: this.access.mayCreateOrEditStaticCourse(),
+      userMayEditStaticCourse,
     };
   }
 }

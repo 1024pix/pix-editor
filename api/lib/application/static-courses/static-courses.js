@@ -5,7 +5,7 @@ const staticCourseRepository = require('../../infrastructure/repositories/static
 const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const idGenerator = require('../../infrastructure/utils/id-generator');
 const StaticCourse = require('../../domain/models/StaticCourse');
-const { NotFoundError } = require('../../domain/errors');
+const { NotFoundError, StaticCourseIsInactiveError } = require('../../domain/errors');
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -18,6 +18,7 @@ module.exports = {
   get,
   create,
   update,
+  deactivate,
 };
 
 async function findSummaries(request, h) {
@@ -51,15 +52,33 @@ async function create(request, h) {
 async function update(request, h) {
   const staticCourseId = request.params.id;
   const updateCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
-  const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
+  if (!staticCourseToUpdate.isActive) {
+    throw new StaticCourseIsInactiveError();
+  }
+  const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
     allChallengeIds,
   });
+  if (commandResult.isFailure()) {
+    throw commandResult.error;
+  }
+  await staticCourseRepository.save(commandResult.value);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
+}
+
+async function deactivate(request, h) {
+  const staticCourseId = request.params.id;
+  const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
+  if (!staticCourseToUpdate) {
+    throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
+  }
+  const commandResult = staticCourseToUpdate.deactivate();
   if (commandResult.isFailure()) {
     throw commandResult.error;
   }

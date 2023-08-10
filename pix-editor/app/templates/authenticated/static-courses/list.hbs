@@ -39,13 +39,13 @@
           <col class="table__column--small" />
         </colgroup>
         <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Epreuves</th>
-          <th>Créé le</th>
-          <th>Statut</th>
-          <th>Prévisualisation</th>
-        </tr>
+          <tr>
+            <th>Nom</th>
+            <th>Epreuves</th>
+            <th>Créé le</th>
+            <th>Statut</th>
+            <th>Prévisualisation</th>
+          </tr>
         </thead>
         <tbody>
         {{#each this.model.staticCourseSummaries as |staticCourseSummary|}}
@@ -65,6 +65,7 @@
                 @id='copy-static-course-link-tooltip'
                 @position="top"
                 @isInline={{true}}
+                @hide={{not staticCourseSummary.isActive}}
               >
                 <:triggerElement>
                   <PixIconButton
@@ -74,7 +75,8 @@
                     @ariaLabel="copier le lien vers la preview"
                     class="icon"
                     aria-describedby='copy-static-course-link-tooltip'
-                  >COPIERCOLLER
+                    disabled={{not staticCourseSummary.isActive}}
+                  >
                   </PixIconButton>
                 </:triggerElement>
                 <:tooltip>Copier l’URL d’accès au test</:tooltip>
@@ -83,6 +85,8 @@
                 @id='open-static-course-link-tooltip'
                 @position="top"
                 @isInline={{true}}
+                @hide={{not staticCourseSummary.isActive}}
+                class="{{if staticCourseSummary.isActive "" "disabled-tooltip-content"}}"
               >
                 <:triggerElement>
                   <a
@@ -90,6 +94,7 @@
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-describedby='open-static-course-link-tooltip'
+                    class="{{if staticCourseSummary.isActive "" "disabled-link-with-icon"}}"
                   >
                     <FaIcon @icon="eye" @prefix="fas"/>
                   </a>

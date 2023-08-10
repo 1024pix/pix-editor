@@ -10,6 +10,8 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function() {
+    const notifications = this.owner.lookup('service:notifications');
+    notifications.setDefaultClearDuration(50);
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01') });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01') });
 
