@@ -3,6 +3,7 @@ module.exports = class CourseForRelease {
     id,
     name,
     description,
+    isActive,
     competences,
     challenges,
     imageUrl,
@@ -10,6 +11,7 @@ module.exports = class CourseForRelease {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.isActive = isActive;
     this.competences = competences;
     this.challenges = challenges;
     this.imageUrl = imageUrl;
