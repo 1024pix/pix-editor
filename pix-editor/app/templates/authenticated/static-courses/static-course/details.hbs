@@ -34,6 +34,9 @@
           <PixTag @color="{{if this.model.staticCourse.isActive "green-light" "grey-light"}}">
             {{if this.model.staticCourse.isActive "Actif" "Inactif"}}
           </PixTag>
+          {{#if this.model.staticCourse.deactivationReason}}
+            (Motif: {{this.model.staticCourse.deactivationReason}})
+          {{/if}}
         </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.staticCourse.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
         <li><span class="bold">Dernière modification : </span>{{dayjs-format this.model.staticCourse.updatedAt "DD/MM/YYYY" allow-empty=true}}</li>
@@ -159,7 +162,13 @@
   <:content>
     <p data-test-logout-message >
       Êtes-vous sûr de vouloir désactiver le test statique <b>{{this.model.staticCourse.name}}</b> ?<br/>
-      Cette action est irréversible et il ne sera alors plus possible d’utiliser ce test.
+      Cette action est irréversible et il ne sera alors plus possible d’utiliser ce test.<br/>
+      <PixInput
+        @id="deactivationReason"
+        @label="Raison de désactivation (facultatif)"
+        @value={{this.deactivationReason}}
+        {{on "input" this.setDeactivationReason}}
+      />
     </p>
   </:content>
   <:footer>

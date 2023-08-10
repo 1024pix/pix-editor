@@ -3,7 +3,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click } from '@ember/test-helpers';
-import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Static Courses | Deactivation', function(hooks) {
   setupApplicationTest(hooks);
@@ -104,12 +104,14 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
       // when
       await clickByName('Désactiver');
       await screen.findByRole('dialog');
+      await fillByLabel('Raison de désactivation (facultatif)', 'c comme ca');
       await clickByName('Oui');
 
       // then
       const button = screen.getByText('Désactiver');
       assert.dom(button).isDisabled();
       assert.dom(screen.getByText('Inactif')).exists();
+      assert.dom(screen.getByText('(Motif: c comme ca)')).exists();
     });
   });
 });
