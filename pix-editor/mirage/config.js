@@ -227,7 +227,16 @@ function routes() {
 
   this.get('/static-course-summaries', function(schema, request) {
     const queryParams = request.queryParams;
-    const allStaticCourseSummaries = schema.staticCourseSummaries.all().models;
+    const {
+      'filter[isActive]': isActiveFilter,
+    } = queryParams;
+    let allStaticCourseSummaries;
+    if (isActiveFilter === '') {
+      allStaticCourseSummaries = schema.staticCourseSummaries.all().models;
+    } else {
+      const isActive = isActiveFilter === 'true';
+      allStaticCourseSummaries = schema.staticCourseSummaries.where({ isActive }).models;
+    }
     const rowCount = allStaticCourseSummaries.length;
 
     const pagination = _getPaginationFromQueryParams(queryParams);

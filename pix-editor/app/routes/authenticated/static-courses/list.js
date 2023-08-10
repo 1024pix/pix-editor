@@ -9,6 +9,9 @@ export default class StaticCoursesRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
+    isActive: {
+      refreshModel: true,
+    },
   };
 
   @service store;
@@ -22,6 +25,9 @@ export default class StaticCoursesRoute extends Route {
           number: params.pageNumber,
           size: params.pageSize,
         },
+        filter: {
+          isActive: params.isActive,
+        },
       },
       { reload: true }
     );
@@ -29,12 +35,5 @@ export default class StaticCoursesRoute extends Route {
       staticCourseSummaries,
       mayCreateStaticCourse: this.access.mayCreateOrEditStaticCourse(),
     };
-  }
-
-  resetController(controller, isExiting) {
-    if (isExiting) {
-      controller.pageNumber = 1;
-      controller.pageSize = 10;
-    }
   }
 }

@@ -14,7 +14,7 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     staticCourseSummary = this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01'), isActive: true });
-    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01'), isActive: true, });
+    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01'), isActive: true });
 
     const challengeSummaries = [];
     challengeSummaries.push(this.server.create('challenge-summary', {
@@ -87,6 +87,7 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
         // when
         const screen = await visit('/');
         await clickByName('Tests statiques');
+        await click(await screen.findByRole('button', { name: 'Statut' }));
         await click(screen.getAllByRole('cell')[0]);
 
         // then
