@@ -1,5 +1,14 @@
 
 
+## v3.88.0 (10/08/2023)
+
+
+### :rocket: Amélioration
+- [#228](https://github.com/1024pix/pix-editor/pull/228) [FEATURE] Pouvoir désactiver un test statique (PIX-7798).
+
+### :bug: Correction
+- [#231](https://github.com/1024pix/pix-editor/pull/231) [BUGFIX]  Inverser l'ordre des challenges des tests statiques(PIX-8898).
+
 ## v3.87.0 (08/08/2023)
 
 
