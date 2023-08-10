@@ -11,6 +11,8 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
   let staticCourse, staticCourseSummary;
 
   hooks.beforeEach(function() {
+    const notifications = this.owner.lookup('service:notifications');
+    notifications.setDefaultClearDuration(50);
     staticCourseSummary = this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01'), isActive: true });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01'), isActive: true, });
 
