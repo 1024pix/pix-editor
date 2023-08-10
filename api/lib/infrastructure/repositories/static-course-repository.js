@@ -113,6 +113,7 @@ async function findChallengeSummaries(challengeIds) {
       skillName: correspondingSkill?.name || '',
       status: challengeFromAirtable.status,
       index: challengeIds.indexOf(challengeFromAirtable.id),
+      previewUrl: challengeFromAirtable.preview,
     });
   });
 }

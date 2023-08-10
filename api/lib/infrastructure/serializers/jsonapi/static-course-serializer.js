@@ -26,7 +26,7 @@ module.exports = {
       challengeSummaries: {
         ref: 'id',
         included: true,
-        attributes: ['instruction', 'skillName', 'status', 'index'],
+        attributes: ['instruction', 'skillName', 'status', 'index', 'previewUrl'],
       },
       typeForAttribute(attribute) {
         if (attribute === 'challengeSummaries') return 'challenge-summaries';

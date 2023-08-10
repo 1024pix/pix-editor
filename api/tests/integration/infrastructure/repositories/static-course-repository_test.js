@@ -77,12 +77,14 @@ describe('Integration | Repository | static-course-repository', function() {
           instruction: 'instructionA',
           status: 'A',
           skillId: 'skillA',
+          preview: 'site/challenges/challengeA',
         }),
         domainBuilder.buildChallengeAirtableDataObject({
           id: 'challengeB',
           instruction: 'instructionB',
           status: 'B',
           skillId: 'skillB',
+          preview: 'site/challenges/challengeB',
         }),
       ];
       const stubFilterChallengeDatasource = sinon.stub(challengeDatasource, 'filter');
@@ -99,7 +101,6 @@ describe('Integration | Repository | static-course-repository', function() {
       //then
       expect(staticCourse.id).to.equal('rec123');
     });
-
   });
 });
 
