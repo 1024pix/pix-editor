@@ -96,6 +96,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
           'created-at': new Date('2020-01-01T00:00:10Z'),
           'updated-at': new Date('2021-10-29T03:04:00Z'),
           'is-active': false,
+          'deactivation-reason': '',
         },
         relationships: {
           'challenge-summaries': {

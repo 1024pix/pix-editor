@@ -55,6 +55,7 @@ async function getRead(id) {
       name: staticCourse.name,
       description: staticCourse.description,
       isActive: staticCourse.isActive,
+      deactivationReason: staticCourse.deactivationReason || '',
       createdAt: staticCourse.createdAt,
       updatedAt: staticCourse.updatedAt,
       challengeSummaries,

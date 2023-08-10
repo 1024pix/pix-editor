@@ -18,7 +18,8 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       challengeIds: 'challengeid1,challengeid2',
       createdAt: new Date('2021-01-01'),
       updatedAt: new Date('2021-02-02'),
-      isActive: true,
+      isActive: false,
+      deactivationReason: 'Les fruits c genial',
     });
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
@@ -68,7 +69,8 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
           description: 'static course description',
           'created-at': new Date('2021-01-01'),
           'updated-at': new Date('2021-02-02'),
-          'is-active': true,
+          'is-active': false,
+          'deactivation-reason': 'Les fruits c genial',
         },
         relationships: {
           'challenge-summaries': {

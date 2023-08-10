@@ -19,6 +19,7 @@ module.exports = {
         'name',
         'description',
         'isActive',
+        'deactivationReason',
         'createdAt',
         'updatedAt',
         'challengeSummaries',
