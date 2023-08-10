@@ -37,6 +37,7 @@ describe('Unit | Domain | StaticCourse', function() {
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           isActive: true,
+          deactivationReason: '',
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -60,6 +61,7 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: '',
           isActive: true,
+          deactivationReason: '',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
@@ -205,6 +207,7 @@ describe('Unit | Domain | StaticCourse', function() {
         description: 'old description',
         challengeIds: ['chalDEF ', ' chalJKF'],
         isActive: false,
+        deactivationReason: 'some reason',
         createdAt: new Date('2021-00-00T09:00:00Z'),
         updatedAt: new Date('2021-00-00T09:00:00Z'),
       });
@@ -230,6 +233,7 @@ describe('Unit | Domain | StaticCourse', function() {
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           isActive: false,
+          deactivationReason: 'some reason',
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -252,6 +256,7 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: '',
           isActive: false,
+          deactivationReason: 'some reason',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
@@ -389,6 +394,7 @@ describe('Unit | Domain | StaticCourse', function() {
 
     it('should make the static course inactive when it is active', function() {
       // given
+      const deactivationCommand = { reason: 'On en a un mieux' };
       const activeStaticCourse = domainBuilder.buildStaticCourse({
         id: 'myAwesomeCourse66',
         name: 'name',
@@ -400,7 +406,7 @@ describe('Unit | Domain | StaticCourse', function() {
       });
 
       // when
-      const commandResult = activeStaticCourse.deactivate();
+      const commandResult = activeStaticCourse.deactivate(deactivationCommand);
 
       // then
       expect(commandResult.isSuccess()).to.be.true;
@@ -410,6 +416,7 @@ describe('Unit | Domain | StaticCourse', function() {
         description: 'description',
         challengeIds: ['chalABC ', 'chalDEF'],
         isActive: false,
+        deactivationReason: 'On en a un mieux',
         createdAt: new Date('2021-00-00T09:00:00Z'),
         updatedAt: new Date('2021-10-29T03:04:00Z'),
       });
@@ -417,6 +424,7 @@ describe('Unit | Domain | StaticCourse', function() {
 
     it('should let the static course inactive when it is already inactive', function() {
       // given
+      const deactivationCommand = { reason: '' };
       const inactiveStaticCourse = domainBuilder.buildStaticCourse({
         id: 'myAwesomeCourse66',
         name: 'name',
@@ -428,7 +436,7 @@ describe('Unit | Domain | StaticCourse', function() {
       });
 
       // when
-      const commandResult = inactiveStaticCourse.deactivate();
+      const commandResult = inactiveStaticCourse.deactivate(deactivationCommand);
 
       // then
       expect(commandResult.isSuccess()).to.be.true;
@@ -438,6 +446,7 @@ describe('Unit | Domain | StaticCourse', function() {
         description: 'description',
         challengeIds: ['chalABC ', 'chalDEF'],
         isActive: false,
+        deactivationReason: '',
         createdAt: new Date('2021-00-00T09:00:00Z'),
         updatedAt: new Date('2021-10-29T03:04:00Z'),
       });

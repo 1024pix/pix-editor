@@ -74,11 +74,12 @@ async function update(request, h) {
 
 async function deactivate(request, h) {
   const staticCourseId = request.params.id;
+  const deactivationCommand = normalizeDeactivationCommand(request.payload.data.attributes);
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  const commandResult = staticCourseToUpdate.deactivate();
+  const commandResult = staticCourseToUpdate.deactivate(deactivationCommand);
   if (commandResult.isFailure()) {
     throw commandResult.error;
   }
@@ -99,5 +100,11 @@ function normalizeCreationOrUpdateCommand(attrs) {
     name: _.isString(attrs.name) ? attrs.name : '',
     description: _.isString(attrs.description) ? attrs.description : '',
     challengeIds: _.isArray(attrs['challenge-ids']) ? attrs['challenge-ids'] : [],
+  };
+}
+
+function normalizeDeactivationCommand(attrs) {
+  return {
+    reason: _.isString(attrs.reason) ? attrs.reason : '',
   };
 }

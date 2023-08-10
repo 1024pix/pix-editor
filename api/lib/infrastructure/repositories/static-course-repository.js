@@ -91,6 +91,7 @@ async function save(staticCourseForCreation) {
     description: staticCourseDTO.description,
     challengeIds: staticCourseDTO.challengeIds.join(','),
     isActive: staticCourseDTO.isActive,
+    deactivationReason: staticCourseDTO.deactivationReason,
     createdAt: staticCourseDTO.createdAt,
     updatedAt: staticCourseDTO.updatedAt,
   };
