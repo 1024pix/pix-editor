@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const CommandResult = require('../CommandResult');
-const { InvalidStaticCourseCreationOrUpdateError } = require('../errors');
+const { InvalidStaticCourseCreationOrUpdateError, StaticCourseIsInactiveError } = require('../errors');
 
 module.exports = class StaticCourse {
   constructor({
@@ -42,6 +42,9 @@ module.exports = class StaticCourse {
   }
 
   update({ updateCommand, allChallengeIds }) {
+    if (!this.isActive) {
+      return CommandResult.Failure({ value: null, error: new StaticCourseIsInactiveError() });
+    }
     const timestamp = new Date();
     const attributes = {
       id: this.id,

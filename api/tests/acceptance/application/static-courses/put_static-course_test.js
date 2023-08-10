@@ -11,7 +11,8 @@ const challengeRepository = require('../../../../lib/infrastructure/repositories
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function() {
   let user, clock;
-  const staticCourseId = 'myAwesomeCourse66';
+  const activeCourseId = 'myAwesomeCourse66';
+  const inactiveCourseId = 'myLameCourse66';
 
   beforeEach(async function() {
     clock = sinon.useFakeTimers({
@@ -20,11 +21,21 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
     user = databaseBuilder.factory.buildAdminUser();
     databaseBuilder.factory.buildStaticCourse({
-      id: staticCourseId,
+      id: activeCourseId,
       name: 'some old name',
       description: 'some old description',
       challengeIds: 'challengeid2,challengeid3,challengeid4',
       isActive: true,
+      createdAt: new Date('2020-01-01T00:00:10Z'),
+      updatedAt: new Date('2020-01-01T00:00:10Z'),
+    });
+    databaseBuilder.factory.buildStaticCourse({
+      id: inactiveCourseId,
+      name: 'some inactive name',
+      description: 'some inactive description',
+      challengeIds: 'challengeid2,challengeid3,challengeid4',
+      isActive: false,
+      deactivationReason: 'because i wanted to',
       createdAt: new Date('2020-01-01T00:00:10Z'),
       updatedAt: new Date('2020-01-01T00:00:10Z'),
     });
@@ -106,7 +117,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     const server = await createServer();
     const response = await server.inject({
       method: 'PUT',
-      url: `/api/static-courses/${staticCourseId}`,
+      url: `/api/static-courses/${activeCourseId}`,
       headers: generateAuthorizationHeader(user),
       payload,
     });
@@ -116,7 +127,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     expect(response.result).to.deep.equal({
       data: {
         type: 'static-courses',
-        id: staticCourseId,
+        id: activeCourseId,
         attributes: {
           name: 'static course 1',
           description: 'static course description',
@@ -165,5 +176,30 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
         }
       ],
     });
+  });
+
+  it('return a 409 HTTP status code when static course is inactive', async function() {
+    // given
+    const payload = {
+      data: {
+        attributes: {
+          name: 'static course 1',
+          description: 'static course description',
+          'challenge-ids': ['challengeid3', 'challengeid1'],
+        },
+      },
+    };
+
+    // when
+    const server = await createServer();
+    const response = await server.inject({
+      method: 'PUT',
+      url: `/api/static-courses/${inactiveCourseId}`,
+      headers: generateAuthorizationHeader(user),
+      payload,
+    });
+
+    // then
+    expect(response.statusCode).to.equal(409);
   });
 });

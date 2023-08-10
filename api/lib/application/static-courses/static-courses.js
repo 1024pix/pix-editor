@@ -5,7 +5,7 @@ const staticCourseRepository = require('../../infrastructure/repositories/static
 const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const idGenerator = require('../../infrastructure/utils/id-generator');
 const StaticCourse = require('../../domain/models/StaticCourse');
-const { NotFoundError, StaticCourseIsInactiveError } = require('../../domain/errors');
+const { NotFoundError } = require('../../domain/errors');
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -55,9 +55,6 @@ async function update(request, h) {
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
-  }
-  if (!staticCourseToUpdate.isActive) {
-    throw new StaticCourseIsInactiveError();
   }
   const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
   const commandResult = staticCourseToUpdate.update({
