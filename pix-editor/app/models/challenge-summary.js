@@ -5,6 +5,7 @@ export default class ChallengeSummaryModel extends Model {
   @attr skillName;
   @attr status;
   @attr index;
+  @attr previewUrl;
 
   get indexForDisplay() {
     return this.index + 1;
