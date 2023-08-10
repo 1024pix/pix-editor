@@ -14,10 +14,13 @@ module.exports = {
   save,
 };
 
-async function findReadSummaries({ page }) {
+async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
     .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
     .orderBy('createdAt', 'desc');
+  if (filter.isActive !== null) {
+    query.where('isActive', filter.isActive);
+  }
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {

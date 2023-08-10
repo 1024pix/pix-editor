@@ -22,8 +22,8 @@ module.exports = {
 };
 
 async function findSummaries(request, h) {
-  const { page } = extractParameters(request.query);
-  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ page: normalizePage(page) });
+  const { filter, page } = extractParameters(request.query);
+  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ filter: normalizeFilter(filter), page: normalizePage(page) });
   return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
 }
 
@@ -89,6 +89,23 @@ function normalizePage(page) {
   return {
     number: _.isInteger(page.number) && Math.sign(page.number) === 1 ? page.number : DEFAULT_PAGE.number,
     size: _.isInteger(page.size) && Math.sign(page.size) === 1 ? Math.min(page.size, DEFAULT_PAGE.maxSize) : DEFAULT_PAGE.size,
+  };
+}
+
+function normalizeFilter(filter) {
+  let isActive;
+  if (filter.isActive === undefined)
+    isActive = null;
+  else if (_.isString(filter.isActive)) {
+    const trimmedValueFromFilter = filter.isActive.trim().toLowerCase();
+    if (trimmedValueFromFilter === '') isActive = null;
+    else isActive = trimmedValueFromFilter === 'true';
+  } else {
+    isActive = false;
+  }
+
+  return {
+    isActive,
   };
 }
 
