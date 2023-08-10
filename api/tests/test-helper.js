@@ -132,6 +132,25 @@ global.chaiErr = function globalErr(fn, val) {
   throw new chai.AssertionError('Expected an error');
 };
 
+chai.use(function(chai) {
+  const Assertion = chai.Assertion;
+
+  Assertion.addMethod('exactlyContainInOrder', function(expectedElements) {
+    const errorMessage = `expect [${this._obj}] to exactly contain in order [${expectedElements}]`;
+
+    new Assertion(this._obj, errorMessage).to.deep.equal(expectedElements);
+  });
+});
+
+chai.use(function(chai) {
+  const Assertion = chai.Assertion;
+
+  Assertion.addMethod('exactlyContain', function(expectedElements) {
+    const errorMessage = `expect [${this._obj}] to exactly contain [${expectedElements}]`;
+    new Assertion(this._obj, errorMessage).to.deep.have.members(expectedElements);
+  });
+});
+
 module.exports = {
   airtableBuilder,
   catchErr,
