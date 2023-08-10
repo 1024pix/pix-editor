@@ -39,6 +39,7 @@ module.exports = {
     'space-infix-ops':'error',
     'object-curly-spacing':['error', 'always'],
     'ember/no-controller-access-in-routes': ['error', { 'allowControllerFor': true }],
+    'qunit/require-expect': ['error', 'except-simple'],
   },
   overrides: [
     // node files
