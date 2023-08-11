@@ -1,5 +1,17 @@
 
 
+## v3.89.0 (11/08/2023)
+
+
+### :rocket: Amélioration
+- [#232](https://github.com/1024pix/pix-editor/pull/232) [FEATURE] Ajouter l'information de statut d'un test statique dans la release afin que cette information puisse être exploitée côté Pix (PIX-8900).
+
+### :arrow_up: Montée de version
+- [#236](https://github.com/1024pix/pix-editor/pull/236) [BUMP] Update dependency eslint to v8.46.0.
+- [#237](https://github.com/1024pix/pix-editor/pull/237) [BUMP] Update dependency @1024pix/pix-ui to v39 (pix-editor).
+- [#223](https://github.com/1024pix/pix-editor/pull/223) [BUMP] Update dependency ember-sortable to v5 (pix-editor).
+- [#225](https://github.com/1024pix/pix-editor/pull/225) [BUMP] Update dependency eslint-plugin-qunit to v8 (pix-editor).
+
 ## v3.88.0 (10/08/2023)
 
 
