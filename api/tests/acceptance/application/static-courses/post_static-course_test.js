@@ -24,6 +24,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       instruction: 'instruction for challengeid1',
       skillId: 'skillid1',
       status: 'status for challengeid1',
+      preview: 'site/challenges/challengeid1',
     });
     const airtableSkill1 = airtableBuilder.factory.buildSkill({
       id: 'skillid1',
@@ -35,6 +36,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       instruction: 'instruction for challengeid2',
       skillId: 'skillid2',
       status: 'status for challengeid2',
+      preview: 'site/challenges/challengeid2',
     });
     const airtableSkill2 = airtableBuilder.factory.buildSkill({
       id: 'skillid2',
@@ -46,6 +48,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       instruction: 'instruction for challengeid3',
       skillId: 'skillid3',
       status: 'status for challengeid3',
+      preview: 'site/challenges/challengeid3',
     });
     const airtableSkill3 = airtableBuilder.factory.buildSkill({
       id: 'skillid3',
@@ -57,6 +60,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       instruction: 'instruction for challengeid4',
       skillId: 'skillid4',
       status: 'status for challengeid4',
+      preview: 'site/challenges/challengeid4',
     });
     const airtableSkill4 = airtableBuilder.factory.buildSkill({
       id: 'skillid4',
@@ -135,6 +139,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
             status: 'status for challengeid3',
+            'preview-url': 'site/challenges/challengeid3',
           },
         },
         {
@@ -145,6 +150,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
+            'preview-url': 'site/challenges/challengeid1',
           },
         }
       ],

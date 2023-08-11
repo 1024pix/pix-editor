@@ -5,11 +5,13 @@ module.exports = class ChallengeSummary {
     skillName,
     status,
     index,
+    previewUrl,
   }) {
     this.id = id;
     this.instruction = instruction;
     this.skillName = skillName;
     this.status = status;
     this.index = index;
+    this.previewUrl = previewUrl;
   }
 };

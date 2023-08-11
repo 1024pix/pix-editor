@@ -26,6 +26,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       instruction: 'instruction for challengeid1',
       skillId: 'skillid1',
       status: 'status for challengeid1',
+      preview: 'site/challenges/challengeid1',
     });
     const airtableSkill1 = airtableBuilder.factory.buildSkill({
       id: 'skillid1',
@@ -37,6 +38,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       instruction: 'instruction for challengeid2',
       skillId: 'skillid2',
       status: 'status for challengeid2',
+      preview: 'site/challenges/challengeid2',
     });
     const airtableSkill2 = airtableBuilder.factory.buildSkill({
       id: 'skillid2',
@@ -92,6 +94,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
+            'preview-url': 'site/challenges/challengeid1',
           },
         },
         {
@@ -102,6 +105,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid2',
             'skill-name': '@skillid2',
             status: 'status for challengeid2',
+            'preview-url': 'site/challenges/challengeid2',
           },
         }
       ],

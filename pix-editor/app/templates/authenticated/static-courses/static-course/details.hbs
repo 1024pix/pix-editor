@@ -73,6 +73,7 @@
             <col class="table__column--wide" />
             <col class="table__column--small" />
             <col class="table__column--small" />
+            <col class="table__column--small" />
           </colgroup>
           <thead>
           <tr>
@@ -81,6 +82,7 @@
             <th>Consigne</th>
             <th>Acquis</th>
             <th>Statut</th>
+            <th>Prévisualisation</th>
           </tr>
           </thead>
           <tbody>
@@ -112,6 +114,15 @@
                     @color="purple-light"
                   >{{challengeSummary.status}}</PixTag>
                 {{/if}}
+              </td>
+              <td>
+                <a
+                  href="{{challengeSummary.previewUrl}}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <FaIcon @icon="eye" @prefix="fas"/>
+                </a>
               </td>
             </tr>
           {{/each}}
