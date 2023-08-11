@@ -142,10 +142,10 @@ async function _getCurrentContentFromAirtable(challenges) {
 
 async function _getCurrentContentFromPG(airtableChallenges) {
   const staticCoursesDTO = await knex('static_courses')
-    .select(['id', 'name', 'description', 'challengeIds', 'imageUrl'])
+    .select(['id', 'name', 'description', 'isActive', 'challengeIds', 'imageUrl'])
     .orderBy('id');
   return {
-    courses: staticCoursesDTO.map(({ id, name, description, challengeIds, imageUrl }) => {
+    courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds, imageUrl }) => {
       const challenges = challengeIds.replaceAll(' ', '').split(',');
       const competences = challenges.map((challengeId) => {
         return airtableChallenges.find((airtableChallenge) => airtableChallenge.id === challengeId).competenceId;
@@ -154,6 +154,7 @@ async function _getCurrentContentFromPG(airtableChallenges) {
         id,
         name,
         description,
+        isActive,
         challenges,
         competences,
         imageUrl,

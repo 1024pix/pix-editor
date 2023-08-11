@@ -145,6 +145,7 @@ async function mockCurrentContent() {
       id: 'recCourse0',
       name: 'Nom du Course',
       description: 'Description du Course',
+      isActive: true,
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
       imageUrl: 'Image du Course',
@@ -177,6 +178,7 @@ async function mockCurrentContent() {
     id: 'recCourse0',
     name: 'Nom du Course',
     description: 'Description du Course',
+    isActive: true,
     challengeIds: 'recChallenge0',
     imageUrl: 'Image du Course',
   });
@@ -309,6 +311,7 @@ async function mockContentForRelease() {
       id: 'recCourse0',
       name: 'Nom du Course',
       description: 'Description du Course',
+      isActive: true,
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
       imageUrl: 'Image du Course',
@@ -342,6 +345,7 @@ async function mockContentForRelease() {
     id: 'recCourse0',
     name: 'Nom du Course',
     description: 'Description du Course',
+    isActive: true,
     challengeIds: 'recChallenge0',
     imageUrl: 'Image du Course',
   });
