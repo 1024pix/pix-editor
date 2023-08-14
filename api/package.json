@@ -56,7 +56,7 @@
     "bull": "^4.10.4",
     "dotenv": "^16.0.0",
     "googleapis": "^123.0.0",
-    "hapi-pino": "^8.4.0",
+    "hapi-pino": "^9.0.0",
     "hapi-sentry": "^4.0.0-0",
     "joi": "^17.8.3",
     "js-crypto-random": "^1.0.4",
