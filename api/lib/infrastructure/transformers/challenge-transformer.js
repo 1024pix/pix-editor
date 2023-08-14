@@ -39,6 +39,7 @@ function _filterChallengeFields(challenge) {
     'timer',
     'type',
     'shuffled',
+    'alternativeVersion'
   ];
 
   return _.pick(challenge, fieldsToInclude);

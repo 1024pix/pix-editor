@@ -1082,6 +1082,7 @@ function _getRichCurrentContentDTO() {
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
+      alternativeVersion: 'challenge121211 alternativeVersion',
     },
     {
       id: 'challenge121212',
@@ -1112,6 +1113,7 @@ function _getRichCurrentContentDTO() {
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: true,
+      alternativeVersion: 'challenge121212 alternativeVersion',
     },
     {
       id: 'challenge211111',
@@ -1143,6 +1145,7 @@ function _getRichCurrentContentDTO() {
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
+      alternativeVersion: 'challenge211111 alternativeVersion',
     },
     {
       id: 'challenge211112',
@@ -1173,6 +1176,7 @@ function _getRichCurrentContentDTO() {
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
+      alternativeVersion: 'challenge211112 alternativeVersion',
     },
     {
       id: 'challenge211113',
@@ -1203,6 +1207,7 @@ function _getRichCurrentContentDTO() {
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
+      alternativeVersion: 'challenge211113 alternativeVersion',
     },
   ];
   const expectedCourseDTOs = [

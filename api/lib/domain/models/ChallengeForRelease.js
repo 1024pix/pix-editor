@@ -29,6 +29,7 @@ module.exports = class ChallengeForRelease {
     illustrationAlt,
     illustrationUrl,
     shuffled,
+    alternativeVersion
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -59,5 +60,6 @@ module.exports = class ChallengeForRelease {
     this.illustrationAlt = illustrationAlt;
     this.illustrationUrl = illustrationUrl;
     this.shuffled = shuffled;
+    this.alternativeVersion = alternativeVersion;
   }
 };
