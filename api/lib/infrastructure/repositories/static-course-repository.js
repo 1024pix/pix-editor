@@ -1,4 +1,5 @@
 const { knex } = require('../../../db/knex-database-connection');
+const { fetchPage } = require('../utils/knex-utils');
 const ChallengeSummary_Read = require('../../domain/readmodels/ChallengeSummary');
 const StaticCourse_Read = require('../../domain/readmodels/StaticCourse');
 const StaticCourseSummary_Read = require('../../domain/readmodels/StaticCourseSummary');
@@ -13,14 +14,14 @@ module.exports = {
   save,
 };
 
-async function findReadSummaries({ page }) {
-
-  const rowCount = await knex('static_courses').count('* as count').first();
-
-  const staticCourses = await knex('static_courses')
+async function findReadSummaries({ filter, page }) {
+  const query = knex('static_courses')
     .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
-    .orderBy('createdAt', 'desc')
-    .offset((page.number - 1) * page.size).limit(page.size);
+    .orderBy('createdAt', 'desc');
+  if (filter.isActive !== null) {
+    query.where('isActive', filter.isActive);
+  }
+  const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
     return new StaticCourseSummary_Read({
@@ -32,14 +33,7 @@ async function findReadSummaries({ page }) {
     });
   });
 
-  const meta = {
-    page: page.number,
-    pageSize: page.size,
-    pageCount: Math.ceil(rowCount.count / page.size),
-    rowCount: rowCount.count
-  };
-
-  return { results: staticCoursesSummaries, meta };
+  return { results: staticCoursesSummaries, meta: pagination };
 }
 
 async function getRead(id) {

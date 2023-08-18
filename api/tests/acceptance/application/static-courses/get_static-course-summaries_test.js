@@ -17,7 +17,6 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
       createdAt: new Date('2021-01-01'),
       isActive: true,
     });
-
     databaseBuilder.factory.buildStaticCourse({
       id: 'courseid2',
       name: 'static course 2',
@@ -25,7 +24,6 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
       createdAt: new Date('2021-01-03'),
       isActive: false,
     });
-
     await databaseBuilder.commit();
 
     // When

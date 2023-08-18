@@ -10,8 +10,8 @@ module('Acceptance | Static Courses | Details', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function() {
-    this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01') });
-    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01') });
+    this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', isActive: true, challengeCount: 3, createdAt: new Date('2020-01-01') });
+    this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', isActive: true, challengeCount: 10, createdAt: new Date('2019-01-01') });
 
     const challengeSummaries = [];
     challengeSummaries.push(this.server.create('challenge-summary', {
