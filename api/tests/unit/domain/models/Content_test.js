@@ -126,6 +126,7 @@ describe('Unit | Domain | Content', () => {
         alpha: 0.5,
         responsive: 'Smartphone',
         genealogy: 'Prototype 1',
+        alternativeVersion: 6,
       });
       challengeAirtable.attachments = ['some_url'];
       challengeAirtable.illustrationUrl = null;
@@ -277,6 +278,7 @@ describe('Unit | Domain | Content', () => {
         attachments: ['some_url'],
         illustrationAlt: null,
         illustrationUrl: null,
+        alternativeVersion: 6,
       });
       const expectedFramework = domainBuilder.buildFrameworkForRelease({ id: 'recFramework', name: 'le framework' });
 
