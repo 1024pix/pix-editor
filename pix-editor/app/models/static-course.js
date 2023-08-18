@@ -11,7 +11,7 @@ export default class StaticCourseModel extends Model {
   @hasMany('challenge-summary') challengeSummaries;
 
   get previewURL() {
-    return `https://app.recette.pix.fr/courses/${this.id}`;
+    return `https://app.pix.fr/courses/${this.id}`;
   }
 
   get sortedChallengeSummaries() {
