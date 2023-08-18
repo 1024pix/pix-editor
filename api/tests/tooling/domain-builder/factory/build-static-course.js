@@ -6,6 +6,7 @@ module.exports = function buildStaticCourse({
   description = 'static course description',
   challengeIds = ['challengeid-1', 'challengeid-2'],
   isActive = true,
+  deactivationReason = '',
   createdAt = new Date(),
   updatedAt = new Date(),
 } = {}) {
@@ -15,6 +16,7 @@ module.exports = function buildStaticCourse({
     description,
     challengeIds,
     isActive,
+    deactivationReason,
     createdAt,
     updatedAt,
   });

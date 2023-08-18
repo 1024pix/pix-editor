@@ -1,5 +1,6 @@
 const { expect, sinon, domainBuilder } = require('../../../test-helper');
 const StaticCourse = require('../../../../lib/domain/models/StaticCourse');
+const { StaticCourseIsInactiveError } = require('../../../../lib/domain/errors');
 
 describe('Unit | Domain | StaticCourse', function() {
   context('static buildFromCreationCommand', function() {
@@ -37,6 +38,7 @@ describe('Unit | Domain | StaticCourse', function() {
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           isActive: true,
+          deactivationReason: '',
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -60,6 +62,7 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: '',
           isActive: true,
+          deactivationReason: '',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-10-29T03:04:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
@@ -204,7 +207,8 @@ describe('Unit | Domain | StaticCourse', function() {
         name: 'old name',
         description: 'old description',
         challengeIds: ['chalDEF ', ' chalJKF'],
-        isActive: false,
+        isActive: true,
+        deactivationReason: 'some reason',
         createdAt: new Date('2021-00-00T09:00:00Z'),
         updatedAt: new Date('2021-00-00T09:00:00Z'),
       });
@@ -229,7 +233,8 @@ describe('Unit | Domain | StaticCourse', function() {
           name: 'some valid name',
           description: 'some valid description',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
-          isActive: false,
+          isActive: true,
+          deactivationReason: 'some reason',
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
@@ -251,196 +256,226 @@ describe('Unit | Domain | StaticCourse', function() {
           id: 'myAwesomeCourse66',
           name: 'some valid name',
           description: '',
-          isActive: false,
+          isActive: true,
+          deactivationReason: 'some reason',
           challengeIds: ['chalGHI', 'chalABC', 'chalJKF'],
           createdAt: new Date('2021-00-00T09:00:00Z'),
           updatedAt: new Date('2021-10-29T03:04:00Z'),
         });
       });
 
-      context('invalid commands', function() {
-        context('when name is invalid', function() {
-          it('should return a failed CommandResult', function() {
-            // given
-            const invalidUpdateCommand = {
-              ...validUpdateCommand,
-              name: '',
-            };
-
-            // when
-            const commandResult = staticCourseToUpdate.update({
-              updateCommand: invalidUpdateCommand,
-              allChallengeIds,
-            });
-
-            // then
-            expect(commandResult.isFailure()).to.be.true;
-            expect(commandResult.value).to.be.null;
-            expect(commandResult.error.errors).to.deepEqualArray([
-              { code: 'MANDATORY_FIELD', field: 'name' },
-            ]);
-          });
+      it('should return a failed CommandResult when static course is inactive', function() {
+        // given
+        const inactiveStaticCourse = domainBuilder.buildStaticCourse({
+          id: 'myAwesomeCourse66',
+          name: 'old name',
+          description: 'old description',
+          challengeIds: ['chalDEF ', ' chalJKF'],
+          isActive: false,
+          deactivationReason: 'some reason',
+          createdAt: new Date('2021-00-00T09:00:00Z'),
+          updatedAt: new Date('2021-00-00T09:00:00Z'),
         });
 
-        context('when challengeIds is invalid', function() {
-          it('should create an invalid StaticCourse when at least one challenge does not exist', function() {
-            // given
-            const invalidUpdateCommand = {
-              ...validUpdateCommand,
-              challengeIds: ['chalABC', 'xchalLOL', 'chalGHI', 'chalDEFF'],
-            };
-
-            // when
-            const commandResult = staticCourseToUpdate.update({
-              updateCommand: invalidUpdateCommand,
-              allChallengeIds,
-            });
-
-            // then
-            expect(commandResult.isFailure()).to.be.true;
-            expect(commandResult.value).to.be.null;
-            expect(commandResult.error.errors).to.deepEqualArray([
-              { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
-            ]);
-          });
-
-          it('should create an invalid StaticCourse when at least one challenge appears more than once', function() {
-            // given
-            const invalidUpdateCommand = {
-              ...validUpdateCommand,
-              challengeIds: ['chalJKF', 'chalABC', 'chalGHI', 'chalJKF', 'chalABC'],
-            };
-
-            // when
-            const commandResult = staticCourseToUpdate.update({
-              updateCommand: invalidUpdateCommand,
-              allChallengeIds,
-            });
-
-            // then
-            expect(commandResult.isFailure()).to.be.true;
-            expect(commandResult.value).to.be.null;
-            expect(commandResult.error.errors).to.deepEqualArray([
-              { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
-            ]);
-          });
-
-          it('should create an invalid StaticCourse when no challenges are provided', function() {
-            // given
-            const invalidUpdateCommand = {
-              ...validUpdateCommand,
-              challengeIds: [],
-            };
-
-            // when
-            const commandResult = staticCourseToUpdate.update({
-              updateCommand: invalidUpdateCommand,
-              allChallengeIds,
-            });
-
-            // then
-            expect(commandResult.isFailure()).to.be.true;
-            expect(commandResult.value).to.be.null;
-            expect(commandResult.error.errors).to.deepEqualArray([
-              { code: 'MANDATORY_FIELD', field: 'challengeIds' },
-            ]);
-          });
+        // when
+        const commandResult = inactiveStaticCourse.update({
+          updateCommand: validUpdateCommand,
+          allChallengeIds,
         });
 
-        context('when static course is invalid for several reasons', function() {
-          it('should create an invalid StaticCourse with all reasons why it is', function() {
-            // given
-            const invalidUpdateCommand = {
-              ...validUpdateCommand,
-              name: '',
-              challengeIds: ['chalABC', 'xchalLOL', 'chalGHI', 'chalDEFF', 'chalGHI'],
-            };
+        // then
+        expect(commandResult.isFailure()).to.be.true;
+        expect(commandResult.value).to.be.null;
+        expect(commandResult.error).to.be.instanceOf(StaticCourseIsInactiveError);
+      });
+    });
 
-            // when
-            const commandResult = staticCourseToUpdate.update({
-              updateCommand: invalidUpdateCommand,
-              allChallengeIds,
-            });
+    context('invalid commands', function() {
+      context('when name is invalid', function() {
+        it('should return a failed CommandResult', function() {
+          // given
+          const invalidUpdateCommand = {
+            ...validUpdateCommand,
+            name: '',
+          };
 
-            // then
-            expect(commandResult.isFailure()).to.be.true;
-            expect(commandResult.value).to.be.null;
-            expect(commandResult.error.errors).to.deepEqualArray([
-              { code: 'MANDATORY_FIELD', field: 'name' },
-              { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
-              { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
-            ]);
+          // when
+          const commandResult = staticCourseToUpdate.update({
+            updateCommand: invalidUpdateCommand,
+            allChallengeIds,
           });
+
+          // then
+          expect(commandResult.isFailure()).to.be.true;
+          expect(commandResult.value).to.be.null;
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'name' },
+          ]);
+        });
+      });
+
+      context('when challengeIds is invalid', function() {
+        it('should create an invalid StaticCourse when at least one challenge does not exist', function() {
+          // given
+          const invalidUpdateCommand = {
+            ...validUpdateCommand,
+            challengeIds: ['chalABC', 'xchalLOL', 'chalGHI', 'chalDEFF'],
+          };
+
+          // when
+          const commandResult = staticCourseToUpdate.update({
+            updateCommand: invalidUpdateCommand,
+            allChallengeIds,
+          });
+
+          // then
+          expect(commandResult.isFailure()).to.be.true;
+          expect(commandResult.value).to.be.null;
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+          ]);
+        });
+
+        it('should create an invalid StaticCourse when at least one challenge appears more than once', function() {
+          // given
+          const invalidUpdateCommand = {
+            ...validUpdateCommand,
+            challengeIds: ['chalJKF', 'chalABC', 'chalGHI', 'chalJKF', 'chalABC'],
+          };
+
+          // when
+          const commandResult = staticCourseToUpdate.update({
+            updateCommand: invalidUpdateCommand,
+            allChallengeIds,
+          });
+
+          // then
+          expect(commandResult.isFailure()).to.be.true;
+          expect(commandResult.value).to.be.null;
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
+          ]);
+        });
+
+        it('should create an invalid StaticCourse when no challenges are provided', function() {
+          // given
+          const invalidUpdateCommand = {
+            ...validUpdateCommand,
+            challengeIds: [],
+          };
+
+          // when
+          const commandResult = staticCourseToUpdate.update({
+            updateCommand: invalidUpdateCommand,
+            allChallengeIds,
+          });
+
+          // then
+          expect(commandResult.isFailure()).to.be.true;
+          expect(commandResult.value).to.be.null;
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'challengeIds' },
+          ]);
+        });
+      });
+
+      context('when static course is invalid for several reasons', function() {
+        it('should create an invalid StaticCourse with all reasons why it is', function() {
+          // given
+          const invalidUpdateCommand = {
+            ...validUpdateCommand,
+            name: '',
+            challengeIds: ['chalABC', 'xchalLOL', 'chalGHI', 'chalDEFF', 'chalGHI'],
+          };
+
+          // when
+          const commandResult = staticCourseToUpdate.update({
+            updateCommand: invalidUpdateCommand,
+            allChallengeIds,
+          });
+
+          // then
+          expect(commandResult.isFailure()).to.be.true;
+          expect(commandResult.value).to.be.null;
+          expect(commandResult.error.errors).to.deepEqualArray([
+            { code: 'MANDATORY_FIELD', field: 'name' },
+            { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
+            { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
+          ]);
         });
       });
     });
   });
+});
 
-  context('deactivate', function() {
-    let clock;
+context('deactivate', function() {
+  let clock;
 
-    beforeEach(function() {
-      clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+  beforeEach(function() {
+    clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+  });
+
+  afterEach(function() {
+    clock.restore();
+  });
+
+  it('should make the static course inactive when it is active', function() {
+    // given
+    const deactivationCommand = { reason: 'On en a un mieux' };
+    const activeStaticCourse = domainBuilder.buildStaticCourse({
+      id: 'myAwesomeCourse66',
+      name: 'name',
+      description: 'description',
+      challengeIds: ['chalABC ', 'chalDEF'],
+      isActive: true,
+      createdAt: new Date('2021-00-00T09:00:00Z'),
+      updatedAt: new Date('2021-00-00T09:00:00Z'),
     });
 
-    afterEach(function() {
-      clock.restore();
+    // when
+    const commandResult = activeStaticCourse.deactivate(deactivationCommand);
+
+    // then
+    expect(commandResult.isSuccess()).to.be.true;
+    expect(commandResult.value.toDTO()).to.deep.equal({
+      id: 'myAwesomeCourse66',
+      name: 'name',
+      description: 'description',
+      challengeIds: ['chalABC ', 'chalDEF'],
+      isActive: false,
+      deactivationReason: 'On en a un mieux',
+      createdAt: new Date('2021-00-00T09:00:00Z'),
+      updatedAt: new Date('2021-10-29T03:04:00Z'),
+    });
+  });
+
+  it('should let the static course inactive when it is already inactive', function() {
+    // given
+    const deactivationCommand = { reason: '' };
+    const inactiveStaticCourse = domainBuilder.buildStaticCourse({
+      id: 'myAwesomeCourse66',
+      name: 'name',
+      description: 'description',
+      challengeIds: ['chalABC ', 'chalDEF'],
+      isActive: false,
+      createdAt: new Date('2021-00-00T09:00:00Z'),
+      updatedAt: new Date('2021-00-00T09:00:00Z'),
     });
 
-    it('should make the static course inactive when it is active', function() {
-      // given
-      const activeStaticCourse = domainBuilder.buildStaticCourse({
-        id: 'myAwesomeCourse66',
-        name: 'name',
-        description: 'description',
-        challengeIds: ['chalABC ', 'chalDEF'],
-        isActive: true,
-        createdAt: new Date('2021-00-00T09:00:00Z'),
-        updatedAt: new Date('2021-00-00T09:00:00Z'),
-      });
+    // when
+    const commandResult = inactiveStaticCourse.deactivate(deactivationCommand);
 
-      // when
-      const commandResult = activeStaticCourse.deactivate();
-
-      // then
-      expect(commandResult.isSuccess()).to.be.true;
-      expect(commandResult.value.toDTO()).to.deep.equal({
-        id: 'myAwesomeCourse66',
-        name: 'name',
-        description: 'description',
-        challengeIds: ['chalABC ', 'chalDEF'],
-        isActive: false,
-        createdAt: new Date('2021-00-00T09:00:00Z'),
-        updatedAt: new Date('2021-10-29T03:04:00Z'),
-      });
-    });
-
-    it('should let the static course inactive when it is already inactive', function() {
-      // given
-      const inactiveStaticCourse = domainBuilder.buildStaticCourse({
-        id: 'myAwesomeCourse66',
-        name: 'name',
-        description: 'description',
-        challengeIds: ['chalABC ', 'chalDEF'],
-        isActive: false,
-        createdAt: new Date('2021-00-00T09:00:00Z'),
-        updatedAt: new Date('2021-00-00T09:00:00Z'),
-      });
-
-      // when
-      const commandResult = inactiveStaticCourse.deactivate();
-
-      // then
-      expect(commandResult.isSuccess()).to.be.true;
-      expect(commandResult.value.toDTO()).to.deep.equal({
-        id: 'myAwesomeCourse66',
-        name: 'name',
-        description: 'description',
-        challengeIds: ['chalABC ', 'chalDEF'],
-        isActive: false,
-        createdAt: new Date('2021-00-00T09:00:00Z'),
-        updatedAt: new Date('2021-10-29T03:04:00Z'),
-      });
+    // then
+    expect(commandResult.isSuccess()).to.be.true;
+    expect(commandResult.value.toDTO()).to.deep.equal({
+      id: 'myAwesomeCourse66',
+      name: 'name',
+      description: 'description',
+      challengeIds: ['chalABC ', 'chalDEF'],
+      isActive: false,
+      deactivationReason: '',
+      createdAt: new Date('2021-00-00T09:00:00Z'),
+      updatedAt: new Date('2021-10-29T03:04:00Z'),
     });
   });
 });

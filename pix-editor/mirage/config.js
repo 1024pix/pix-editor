@@ -267,9 +267,11 @@ function routes() {
   });
 
   this.put('/static-courses/:id/deactivate', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
       isActive: false,
+      deactivationReason: attributes.reason,
     });
     return staticCourse;
   });

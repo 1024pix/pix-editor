@@ -114,6 +114,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
           'created-at': new Date('2021-10-29T03:04:00Z'),
           'updated-at': new Date('2021-10-29T03:04:00Z'),
           'is-active': true,
+          'deactivation-reason': '',
         },
         relationships: {
           'challenge-summaries': {

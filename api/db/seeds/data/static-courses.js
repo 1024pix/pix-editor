@@ -17,5 +17,6 @@ module.exports = function(databaseBuilder) {
     imageUrl: 'some/image/url',
     createdAt: new Date('2021-01-01'),
     isActive: false,
+    deactivationReason: 'Les épreuves sont trop faciles',
   });
 };

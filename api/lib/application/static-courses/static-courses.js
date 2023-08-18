@@ -5,7 +5,7 @@ const staticCourseRepository = require('../../infrastructure/repositories/static
 const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
 const idGenerator = require('../../infrastructure/utils/id-generator');
 const StaticCourse = require('../../domain/models/StaticCourse');
-const { NotFoundError, StaticCourseIsInactiveError } = require('../../domain/errors');
+const { NotFoundError } = require('../../domain/errors');
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -56,9 +56,6 @@ async function update(request, h) {
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  if (!staticCourseToUpdate.isActive) {
-    throw new StaticCourseIsInactiveError();
-  }
   const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
@@ -74,11 +71,12 @@ async function update(request, h) {
 
 async function deactivate(request, h) {
   const staticCourseId = request.params.id;
+  const deactivationCommand = normalizeDeactivationCommand(request.payload.data.attributes);
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  const commandResult = staticCourseToUpdate.deactivate();
+  const commandResult = staticCourseToUpdate.deactivate(deactivationCommand);
   if (commandResult.isFailure()) {
     throw commandResult.error;
   }
@@ -99,5 +97,11 @@ function normalizeCreationOrUpdateCommand(attrs) {
     name: _.isString(attrs.name) ? attrs.name : '',
     description: _.isString(attrs.description) ? attrs.description : '',
     challengeIds: _.isArray(attrs['challenge-ids']) ? attrs['challenge-ids'] : [],
+  };
+}
+
+function normalizeDeactivationCommand(attrs) {
+  return {
+    reason: _.isString(attrs.reason) ? attrs.reason : '',
   };
 }

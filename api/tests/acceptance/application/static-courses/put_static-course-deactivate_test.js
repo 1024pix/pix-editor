@@ -76,12 +76,22 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
   });
 
   it('deactivates and returns the static course', async function() {
+    // given
+    const payload = {
+      data: {
+        attributes: {
+          reason: 'je le veux',
+        },
+      },
+    };
+
     // when
     const server = await createServer();
     const response = await server.inject({
       method: 'PUT',
       url: `/api/static-courses/${staticCourseId}/deactivate`,
       headers: generateAuthorizationHeader(user),
+      payload,
     });
 
     // then
@@ -96,6 +106,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
           'created-at': new Date('2020-01-01T00:00:10Z'),
           'updated-at': new Date('2021-10-29T03:04:00Z'),
           'is-active': false,
+          'deactivation-reason': 'je le veux',
         },
         relationships: {
           'challenge-summaries': {

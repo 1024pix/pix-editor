@@ -4,6 +4,7 @@ export default class StaticCourseModel extends Model {
   @attr name;
   @attr description;
   @attr isActive;
+  @attr deactivationReason;
   @attr createdAt;
   @attr updatedAt;
 
