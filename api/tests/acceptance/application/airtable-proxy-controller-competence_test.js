@@ -19,7 +19,11 @@ describe('Acceptance | Controller | airtable-proxy-controller | create translati
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
       competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
-        id: 'recCompetence',
+        id: 'mon_id_persistant',
+        name_i18n: {
+          fr: 'Pouet',
+          en: 'Toot'
+        }
       });
       competence =
         airtableBuilder.factory.buildCompetence(competenceDataObject);
@@ -45,9 +49,10 @@ describe('Acceptance | Controller | airtable-proxy-controller | create translati
 
         // Then
         expect(response.statusCode).to.equal(200);
-        expect(response.result).to.equal('ok');
-        const [{ count }] = await knex('translations').count();
-        expect(count).to.equal(1);
+        const translations = await knex('translations').select('key', 'lang', 'value');
+        expect(translations.length).to.equal(2);
+        expect(translations[0]).to.deep.equal({ key: 'competence.mon_id_persistant.title', lang: 'fr', value: 'Pouet' });
+        expect(translations[1]).to.deep.equal({ key: 'competence.mon_id_persistant.title', lang: 'en', value: 'Toot' });
       });
     });
   });
