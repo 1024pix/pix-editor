@@ -29,17 +29,7 @@ exports.register = async function(server) {
             && response.statusCode >= 200
             && response.statusCode < 300
           ) {
-            try {
-              const tableName = request.params.path.split('/')[0];
-              const { updatedRecord, model } = await releaseRepository.serializeEntity({
-                entity: response.source,
-                type: tableName,
-              });
-              await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
-            } catch (err) {
-              logger.error(err);
-              Sentry.captureException(err);
-            }
+            await _updateStagingPixApiCache(request, response);
           }
           return response;
         }
@@ -75,4 +65,18 @@ async function _proxyRequestToAirtable(request, h, airtableBase) {
       validateStatus: () => true
     });
   return h.response(response.data).code(response.status);
+}
+
+async function _updateStagingPixApiCache(request, response) {
+  try {
+    const tableName = request.params.path.split('/')[0];
+    const { updatedRecord, model } = await releaseRepository.serializeEntity({
+      entity: response.source,
+      type: tableName,
+    });
+    await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+  }
 }
