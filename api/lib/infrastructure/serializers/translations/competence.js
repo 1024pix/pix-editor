@@ -3,17 +3,23 @@ module.exports = {
     const translations = [];
     const id = competence['id persistant'];
     const locales = [
-      { airtable: 'fr-fr', locale: 'fr' },
-      { airtable: 'en-us', locale: 'en' },
+      { airtableLocale: 'fr-fr', locale: 'fr' },
+      { airtableLocale: 'en-us', locale: 'en' },
     ];
-    locales.forEach(({ airtable, locale }) => {
-      if (competence[`Titre ${airtable}`]) {
-        translations.push({
-          key: `competence.${id}.title`,
-          value: competence[`Titre ${airtable}`],
-          lang: locale
-        });
-      }
+    const competenceFields = [
+      { airtableField: 'Titre', field: 'title' },
+      { airtableField: 'Description', field: 'description' }
+    ];
+    locales.forEach(({ airtableLocale, locale }) => {
+      competenceFields.forEach(({ airtableField, field }) => {
+        if (competence[`${airtableField} ${airtableLocale}`]) {
+          translations.push({
+            key: `competence.${id}.${field}`,
+            value: competence[`${airtableField} ${airtableLocale}`],
+            lang: locale
+          });
+        }
+      });
     });
     return translations;
   }

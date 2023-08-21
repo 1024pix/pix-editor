@@ -8,11 +8,15 @@ describe('Unit | Infrastructure | Serializers | Translations | Competence', () =
       const translations = serialize({
         'id persistant': 'test',
         'Titre fr-fr': 'titre fr-fr',
-        'Titre en-us': 'title en-us'
+        'Titre en-us': 'title en-us',
+        'Description fr-fr': 'description en français',
+        'Description en-us': 'english description',
       });
       expect(translations).to.deep.equal([
         { key: 'competence.test.title', lang: 'fr', value: 'titre fr-fr' },
-        { key: 'competence.test.title', lang: 'en', value: 'title en-us' }
+        { key: 'competence.test.description', lang: 'fr', value: 'description en français' },
+        { key: 'competence.test.title', lang: 'en', value: 'title en-us' },
+        { key: 'competence.test.description', lang: 'en', value: 'english description' },
       ]);
     });
 
