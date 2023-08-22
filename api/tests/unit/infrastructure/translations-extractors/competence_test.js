@@ -1,11 +1,11 @@
-const { expect } = require('../../../../test-helper');
-const { serialize } = require('../../../../../lib/infrastructure/serializers/translations/competence');
+const { expect } = require('../../../test-helper');
+const { extractTranslations } = require('../../../../lib/infrastructure/translations-extractors/competence');
 
-describe('Unit | Infrastructure | Serializers | Translations | Competence', () => {
-  describe('#serialize', () => {
+describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
+  describe('#extractTranslations', () => {
 
-    it('should return the list of translated fields', () => {
-      const translations = serialize({
+    it('should return the list of translations', () => {
+      const translations = extractTranslations({
         'id persistant': 'test',
         'Titre fr-fr': 'titre fr-fr',
         'Titre en-us': 'title en-us',
@@ -20,8 +20,8 @@ describe('Unit | Infrastructure | Serializers | Translations | Competence', () =
       ]);
     });
 
-    it('should return only the fields translated', () => {
-      const translations = serialize({
+    it('should return translations only for field w/ values', () => {
+      const translations = extractTranslations({
         'id persistant': 'test',
         'Titre fr-fr': 'titre fr-fr'
       });

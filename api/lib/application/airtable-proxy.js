@@ -7,7 +7,7 @@ const updatedRecordNotifier = require('../infrastructure/event-notifier/updated-
 const logger = require('../infrastructure/logger');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
 const securityPreHandlers = require('./security-pre-handlers');
-const translationsSerializers = require('../infrastructure/serializers/translations');
+const translationsExtractors = require('../infrastructure/translations-extractors');
 const translationRepository = require('../infrastructure/repositories/translation-repository');
 
 exports.register = async function(server) {
@@ -32,7 +32,7 @@ exports.register = async function(server) {
             && response.statusCode < 300
           ) {
             const tableName = request.params.path.split('/')[0];
-            const translations = translationsSerializers[tableName]?.serialize(request.payload.fields) ?? [];
+            const translations = translationsExtractors[tableName]?.extractTranslations(request.payload.fields) ?? [];
             await translationRepository.save(translations);
             await _updateStagingPixApiCache(request, response);
           }
