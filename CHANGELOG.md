@@ -1,5 +1,17 @@
 
 
+## v3.90.0 (22/08/2023)
+
+
+### :rocket: Amélioration
+- [#243](https://github.com/1024pix/pix-editor/pull/243) [FEATURE] Faire que le lien vers le test statique soit dirigé vers l'environnement de production (PIX-8949).
+- [#235](https://github.com/1024pix/pix-editor/pull/235) [FEATURE] N'afficher que les tests statiques actifs par défaut et permettre à l'utilisateur de pouvoir tous les afficher (PIX-8648).
+- [#234](https://github.com/1024pix/pix-editor/pull/234) [FEATURE] Pouvoir renseigner un commentaire lors de la désactivation d'un test statique et écrire ce commentaire à côté du statut (PIX-8647).
+- [#233](https://github.com/1024pix/pix-editor/pull/233) [FEATURE] Ajouter un lien de prévisualisation de l'épreuve dans la liste des épreuves sur la page de détails d'un test statique (PIX-8515).
+
+### :building_construction: Tech
+- [#240](https://github.com/1024pix/pix-editor/pull/240) [TECH] Récupérer la déclinaison du challenge (PIX-7702).
+
 ## v3.89.0 (11/08/2023)
 
 
