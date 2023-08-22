@@ -7,7 +7,7 @@ exports.up = function(knex) {
   function table(t) {
     t.increments('id').primary();
     t.string('key').notNullable();
-    t.string('lang').notNullable();
+    t.string('locale').notNullable();
     t.string('value').notNullable();
   }
 

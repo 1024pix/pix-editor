@@ -53,12 +53,12 @@ describe('Acceptance | Controller | airtable-proxy-controller | create translati
 
         // Then
         expect(response.statusCode).to.equal(200);
-        const translations = await knex('translations').select('key', 'lang', 'value');
+        const translations = await knex('translations').select('key', 'locale', 'value');
         expect(translations.length).to.equal(4);
-        expect(translations[0]).to.deep.equal({ key: 'competence.mon_id_persistant.title', lang: 'fr', value: 'Pouet' });
-        expect(translations[1]).to.deep.equal({ key: 'competence.mon_id_persistant.description', lang: 'fr', value: 'C\'est le bruit d\'un klaxon' });
-        expect(translations[2]).to.deep.equal({ key: 'competence.mon_id_persistant.title', lang: 'en', value: 'Toot' });
-        expect(translations[3]).to.deep.equal({ key: 'competence.mon_id_persistant.description', lang: 'en', value: 'It is the sound of a klaxon' });
+        expect(translations[0]).to.deep.equal({ key: 'competence.mon_id_persistant.title', locale: 'fr', value: 'Pouet' });
+        expect(translations[1]).to.deep.equal({ key: 'competence.mon_id_persistant.description', locale: 'fr', value: 'C\'est le bruit d\'un klaxon' });
+        expect(translations[2]).to.deep.equal({ key: 'competence.mon_id_persistant.title', locale: 'en', value: 'Toot' });
+        expect(translations[3]).to.deep.equal({ key: 'competence.mon_id_persistant.description', locale: 'en', value: 'It is the sound of a klaxon' });
       });
     });
   });

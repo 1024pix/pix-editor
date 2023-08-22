@@ -13,10 +13,10 @@ describe('Unit | Infrastructure | Serializers | Translations | Competence', () =
         'Description en-us': 'english description',
       });
       expect(translations).to.deep.equal([
-        { key: 'competence.test.title', lang: 'fr', value: 'titre fr-fr' },
-        { key: 'competence.test.description', lang: 'fr', value: 'description en français' },
-        { key: 'competence.test.title', lang: 'en', value: 'title en-us' },
-        { key: 'competence.test.description', lang: 'en', value: 'english description' },
+        { key: 'competence.test.title', locale: 'fr', value: 'titre fr-fr' },
+        { key: 'competence.test.description', locale: 'fr', value: 'description en français' },
+        { key: 'competence.test.title', locale: 'en', value: 'title en-us' },
+        { key: 'competence.test.description', locale: 'en', value: 'english description' },
       ]);
     });
 
@@ -26,7 +26,7 @@ describe('Unit | Infrastructure | Serializers | Translations | Competence', () =
         'Titre fr-fr': 'titre fr-fr'
       });
       expect(translations).to.deep.equal([
-        { key: 'competence.test.title', lang: 'fr', value: 'titre fr-fr' },
+        { key: 'competence.test.title', locale: 'fr', value: 'titre fr-fr' },
       ]);
     });
   });

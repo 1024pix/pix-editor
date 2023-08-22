@@ -4,10 +4,10 @@ module.exports = {
   save,
 };
 
-async function save({ key, value, lang }) {
+async function save({ key, value, locale }) {
   const serializedTranslationForDB = {
     key,
-    lang,
+    locale,
     value,
   };
   await knex('translations')

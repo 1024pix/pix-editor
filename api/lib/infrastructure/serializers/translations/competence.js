@@ -16,7 +16,7 @@ module.exports = {
           translations.push({
             key: `competence.${id}.${field}`,
             value: competence[`${airtableField} ${airtableLocale}`],
-            lang: locale
+            locale
           });
         }
       });
