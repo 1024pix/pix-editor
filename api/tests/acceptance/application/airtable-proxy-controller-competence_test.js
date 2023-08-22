@@ -15,6 +15,10 @@ describe('Acceptance | Controller | airtable-proxy-controller | create translati
     nock('https://api.test.pix.fr').patch(/.*/).reply(200);
   });
 
+  afterEach(() => {
+    expect(nock.isDone()).to.be.true;
+  });
+
   describe('POST /api/airtable/content/Competences', () => {
     let competenceDataObject;
     let competence;
