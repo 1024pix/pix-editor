@@ -65,6 +65,18 @@
             @icon="eye"
             @prefix="fas"></FaIcon> Prévisualiser
         </PixButtonLink>
+        <PixTooltip
+          @id="info-preview-links-tooltip"
+          @position="right"
+          @isWide={{true}}
+        >
+          <:triggerElement>
+            <FaIcon @icon="circle-info" aria-describedby="'info-preview-links-tooltip"></FaIcon>
+          </:triggerElement>
+          <:tooltip>
+            Le test statique sera accessible à compter du lendemain de sa création / mise à jour. Si besoin d’accéder au test d’ici-là, recharger le cache de la recette depuis l’application PixAdmin puis “copier le lien” du test et remplacer la partie de l’URL “app.pix” par “app.recette.pix”.
+          </:tooltip>
+        </PixTooltip>
       </div>
     </Card>
     <Card @title="2. Liste des épreuves">

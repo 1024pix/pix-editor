@@ -7,6 +7,6 @@ export default class StaticCourseSummaryModel extends Model {
   @attr createdAt;
 
   get previewURL() {
-    return `https://app.recette.pix.fr/courses/${this.id}`;
+    return `https://app.pix.fr/courses/${this.id}`;
   }
 }
