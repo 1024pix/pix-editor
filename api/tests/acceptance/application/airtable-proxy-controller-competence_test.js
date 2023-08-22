@@ -33,6 +33,10 @@ describe('Acceptance | Controller | airtable-proxy-controller | create translati
         airtableBuilder.factory.buildCompetence(competenceDataObject);
     });
 
+    afterEach(function() {
+      return knex('translations').truncate();
+    });
+
     describe('nominal cases', () => {
       it('should proxy request to airtable and add translations to the PG table', async () => {
         // Given

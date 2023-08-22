@@ -5,10 +5,10 @@ const TABLE_NAME = 'translations';
  */
 exports.up = function(knex) {
   function table(t) {
-    t.increments('id').primary();
     t.string('key').notNullable();
     t.string('locale').notNullable();
     t.string('value').notNullable();
+    t.primary(['key', 'locale']);
   }
 
   return knex.schema
