@@ -4,14 +4,9 @@ module.exports = {
   save,
 };
 
-async function save({ key, value, locale }) {
-  const serializedTranslationForDB = {
-    key,
-    locale,
-    value,
-  };
-  await knex('translations')
-    .insert(serializedTranslationForDB);
-
-  return serializedTranslationForDB.id;
+async function save(translations) {
+  if (translations.length > 0) {
+    return knex('translations')
+      .insert(translations);
+  }
 }

@@ -33,9 +33,7 @@ exports.register = async function(server) {
           ) {
             const tableName = request.params.path.split('/')[0];
             const translations = translationsSerializers[tableName]?.serialize(request.payload.fields) ?? [];
-            for (const translation of translations) {
-              await translationRepository.save(translation);
-            }
+            await translationRepository.save(translations);
             await _updateStagingPixApiCache(request, response);
           }
           return response;
