@@ -6,8 +6,8 @@ const TABLE_NAME = 'translations';
 exports.up = function(knex) {
   function table(t) {
     t.string('key').notNullable();
-    t.string('locale').notNullable();
-    t.string('value').notNullable();
+    t.string('locale', 16).notNullable();
+    t.text('value').notNullable();
     t.primary(['key', 'locale']);
   }
 
