@@ -7,6 +7,8 @@ const updatedRecordNotifier = require('../infrastructure/event-notifier/updated-
 const logger = require('../infrastructure/logger');
 const releaseRepository = require('../infrastructure/repositories/release-repository');
 const securityPreHandlers = require('./security-pre-handlers');
+const translationsExtractors = require('../infrastructure/translations-extractors');
+const translationRepository = require('../infrastructure/repositories/translation-repository');
 
 exports.register = async function(server) {
   server.route([
@@ -29,17 +31,10 @@ exports.register = async function(server) {
             && response.statusCode >= 200
             && response.statusCode < 300
           ) {
-            try {
-              const tableName = request.params.path.split('/')[0];
-              const { updatedRecord, model } = await releaseRepository.serializeEntity({
-                entity: response.source,
-                type: tableName,
-              });
-              await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
-            } catch (err) {
-              logger.error(err);
-              Sentry.captureException(err);
-            }
+            const tableName = request.params.path.split('/')[0];
+            const translations = translationsExtractors[tableName]?.extractTranslations(request.payload.fields) ?? [];
+            await translationRepository.save(translations);
+            await _updateStagingPixApiCache(request, response);
           }
           return response;
         }
@@ -75,4 +70,18 @@ async function _proxyRequestToAirtable(request, h, airtableBase) {
       validateStatus: () => true
     });
   return h.response(response.data).code(response.status);
+}
+
+async function _updateStagingPixApiCache(request, response) {
+  try {
+    const tableName = request.params.path.split('/')[0];
+    const { updatedRecord, model } = await releaseRepository.serializeEntity({
+      entity: response.source,
+      type: tableName,
+    });
+    await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
+  } catch (err) {
+    logger.error(err);
+    Sentry.captureException(err);
+  }
 }

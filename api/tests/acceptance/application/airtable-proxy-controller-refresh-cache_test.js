@@ -1,8 +1,19 @@
 const nock = require('nock');
-const { expect, databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } = require('../../test-helper');
+const {
+  airtableBuilder,
+  databaseBuilder,
+  domainBuilder,
+  expect,
+  generateAuthorizationHeader,
+  knex,
+} = require('../../test-helper');
 const createServer = require('../../../server');
 
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
+
+  afterEach(function() {
+    return knex('translations').truncate();
+  });
 
   describe('POST /api/airtable/content/Competences', () => {
     let competenceDataObject;
