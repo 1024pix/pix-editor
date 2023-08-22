@@ -7,6 +7,8 @@ module.exports = {
 async function save(translations) {
   if (translations.length > 0) {
     return knex('translations')
-      .insert(translations);
+      .insert(translations)
+      .onConflict(['key', 'locale'])
+      .merge();
   }
 }
