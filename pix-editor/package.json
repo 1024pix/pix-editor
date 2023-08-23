@@ -82,7 +82,7 @@
     "ember-tui-editor": "^3.0.10",
     "eslint": "8.47.0",
     "eslint-plugin-ember": "^11.2.1",
-    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-n": "^16.0.2",
     "eslint-plugin-qunit": "^8.0.0",
     "file-saver": "2.0.5",
     "js-crypto-random": "^1.0.4",
