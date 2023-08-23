@@ -1,5 +1,19 @@
 
 
+## v3.91.0 (23/08/2023)
+
+
+### :rocket: Amélioration
+- [#246](https://github.com/1024pix/pix-editor/pull/246) [FEATURE] Stocker les traductions d'une nouvelle compétence (PIX-8687).
+
+### :arrow_up: Montée de version
+- [#252](https://github.com/1024pix/pix-editor/pull/252) [BUMP] Lock file maintenance (api).
+- [#250](https://github.com/1024pix/pix-editor/pull/250) [BUMP] Update dependency googleapis to v125 (api).
+- [#251](https://github.com/1024pix/pix-editor/pull/251) [BUMP] Update dependency url-regex-safe to v4 (api).
+- [#248](https://github.com/1024pix/pix-editor/pull/248) [BUMP] Update dependency googleapis to v124 (api).
+- [#244](https://github.com/1024pix/pix-editor/pull/244) [BUMP] Update dependency node to v18.17.1.
+- [#245](https://github.com/1024pix/pix-editor/pull/245) [BUMP] Update dependency eslint to v8.47.0.
+
 ## v3.90.0 (22/08/2023)
 
 
