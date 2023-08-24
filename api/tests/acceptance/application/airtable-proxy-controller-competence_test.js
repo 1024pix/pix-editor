@@ -226,7 +226,6 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
     });
 
     describe('nominal cases', () => {
-      // eslint-disable-next-line mocha/no-exclusive-tests
       it('should proxy request to airtable and read translations to the PG table', async () => {
         // Given
         const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
@@ -257,6 +256,72 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
         // Then
         expect(response.statusCode).to.equal(200);
         expect(response.result).to.deep.equal({ records: [expectedCompetence] });
+      });
+    });
+  });
+
+  describe('GET /api/airtable/content/Competences/id', () => {
+    let competenceDataObject;
+    let competence;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+
+      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+        id: 'mon_id_persistant',
+        name_i18n: {
+          fr: 'Pouet',
+          en: 'Toot'
+        }
+      });
+      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+
+      databaseBuilder.factory.buildTranslation({
+        locale: 'fr',
+        key: 'competence.mon_id_persistant.title',
+        value: 'Prout'
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale: 'en',
+        key: 'competence.mon_id_persistant.title',
+        value: 'Fart'
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    describe('nominal case', () => {
+      it('should proxy request to airtable and read translations to the PG table', async () => {
+        // Given
+        const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+          id: 'mon_id_persistant',
+          name_i18n: {
+            fr: 'Prout',
+            en: 'Fart'
+          },
+          description_i18n: {
+            fr: null,
+            en: null
+          }
+        });
+        const expectedCompetence = airtableBuilder.factory.buildCompetence(expectedCompetenceDataObject);
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Competences/recId')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, competence);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/airtable/content/Competences/recId',
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal(expectedCompetence);
       });
     });
   });

@@ -1,4 +1,4 @@
-const prefix = 'competence';
+const prefix = 'competence.';
 
 const locales = [
   { airtableLocale: 'fr-fr', locale: 'fr' },
@@ -32,7 +32,7 @@ module.exports = {
     } of localizedFields) {
       const translation = translations.find(
         (translation) =>
-          translation.key === `${prefix}.${id}.${field}` &&
+          translation.key === `${prefix}${id}.${field}` &&
           translation.locale === locale
       );
 
@@ -40,6 +40,7 @@ module.exports = {
         translation?.value ?? null;
     }
   },
+  prefix,
 };
 
 function* translationsExtractor(competence) {
@@ -54,7 +55,7 @@ function* translationsExtractor(competence) {
     if (!competence[`${airtableField} ${airtableLocale}`]) return;
 
     yield {
-      key: `${prefix}.${id}.${field}`,
+      key: `${prefix}${id}.${field}`,
       value: competence[`${airtableField} ${airtableLocale}`],
       locale,
     };
