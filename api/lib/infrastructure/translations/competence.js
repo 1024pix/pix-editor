@@ -18,10 +18,10 @@ const localizedFields = locales.flatMap((locale) =>
 );
 
 module.exports = {
-  extractTranslations(competence) {
+  extract(competence) {
     return Array.from(translationsExtractor(competence));
   },
-  hydrateTranslations(competence, translations) {
+  hydrate(competence, translations) {
     const id = competence['id persistant'];
 
     for (const {

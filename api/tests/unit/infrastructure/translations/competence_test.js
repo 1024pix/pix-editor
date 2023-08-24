@@ -1,11 +1,11 @@
 const { expect } = require('../../../test-helper');
 const {
-  extractTranslations,
-  hydrateTranslations,
-} = require('../../../../lib/infrastructure/translations-extractors/competence');
+  extract,
+  hydrate,
+} = require('../../../../lib/infrastructure/translations/competence');
 
-describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
-  describe('#extractTranslations', () => {
+describe('Unit | Infrastructure | Competence translations', () => {
+  describe('#extract', () => {
     it('should return the list of translations', () => {
       // given
       const competence = {
@@ -17,7 +17,7 @@ describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
       };
 
       // when
-      const translations = extractTranslations(competence);
+      const translations = extract(competence);
 
       // then
       expect(translations).to.deep.equal([
@@ -44,7 +44,7 @@ describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
       };
 
       // when
-      const translations = extractTranslations(competence);
+      const translations = extract(competence);
 
       // then
       expect(translations).to.deep.equal([
@@ -53,7 +53,7 @@ describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
     });
   });
 
-  describe('#hydrateTranslations', () => {
+  describe('#hydrate', () => {
     it('should set translated fields into the object', () => {
       // given
       const competence = {
@@ -77,7 +77,7 @@ describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
       ];
 
       // when
-      hydrateTranslations(competence, translations);
+      hydrate(competence, translations);
 
       // then
       expect(competence).to.deep.equal({
@@ -106,7 +106,7 @@ describe('Unit | Infrastructure | Translations Extractors | Competence', () => {
       ];
 
       // when
-      hydrateTranslations(competence, translations);
+      hydrate(competence, translations);
 
       // then
       expect(competence).to.deep.equal({
