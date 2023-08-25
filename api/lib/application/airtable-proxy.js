@@ -35,18 +35,18 @@ exports.register = async function(server) {
             if (response.data.records) {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
               response.data.records.forEach((entity) => {
-                tableTranslations.hydrate(entity.fields, translations) ;
+                tableTranslations.hydrateToAirtableObject(entity.fields, translations) ;
               });
             } else {
               const id = response.data.fields['id persistant'];
               const translations = await translationRepository.listByPrefix(`${tableTranslations.prefix}${id}.`);
-              tableTranslations.hydrate(response.data.fields, translations) ;
+              tableTranslations.hydrateToAirtableObject(response.data.fields, translations) ;
             }
           }
 
           if ((request.method === 'post' || request.method === 'patch') && _isResponseOK(response)) {
             if (tableTranslations) {
-              const translations = tableTranslations.extract(request.payload.fields) ?? [];
+              const translations = tableTranslations.extractFromAirtableObject(request.payload.fields) ?? [];
               await translationRepository.save(translations);
             }
 

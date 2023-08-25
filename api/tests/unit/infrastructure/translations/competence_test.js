@@ -1,7 +1,7 @@
 const { expect } = require('../../../test-helper');
 const {
-  extract,
-  hydrate,
+  extractFromAirtableObject,
+  hydrateToAirtableObject,
 } = require('../../../../lib/infrastructure/translations/competence');
 
 describe('Unit | Infrastructure | Competence translations', () => {
@@ -17,7 +17,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
       };
 
       // when
-      const translations = extract(competence);
+      const translations = extractFromAirtableObject(competence);
 
       // then
       expect(translations).to.deep.equal([
@@ -44,7 +44,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
       };
 
       // when
-      const translations = extract(competence);
+      const translations = extractFromAirtableObject(competence);
 
       // then
       expect(translations).to.deep.equal([
@@ -77,7 +77,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
       ];
 
       // when
-      hydrate(competence, translations);
+      hydrateToAirtableObject(competence, translations);
 
       // then
       expect(competence).to.deep.equal({
@@ -106,7 +106,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
       ];
 
       // when
-      hydrate(competence, translations);
+      hydrateToAirtableObject(competence, translations);
 
       // then
       expect(competence).to.deep.equal({
