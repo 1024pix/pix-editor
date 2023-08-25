@@ -68,7 +68,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
         const translations = await knex('translations').select('key', 'locale', 'value');
         expect(translations.length).to.equal(4);
         expect(translations[0]).to.deep.equal({
-          key: 'competence.mon_id_persistant.title',
+          key: 'competence.mon_id_persistant.name',
           locale: 'fr',
           value: 'Pouet'
         });
@@ -78,7 +78,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
           value: 'C\'est le bruit d\'un klaxon'
         });
         expect(translations[2]).to.deep.equal({
-          key: 'competence.mon_id_persistant.title',
+          key: 'competence.mon_id_persistant.name',
           locale: 'en',
           value: 'Toot'
         });
@@ -114,12 +114,12 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Pouet'
       });
       databaseBuilder.factory.buildTranslation({
         locale: 'en',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Toot'
       });
       databaseBuilder.factory.buildTranslation({
@@ -159,7 +159,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
         const translations = await knex('translations').select('key', 'locale', 'value');
         expect(translations.length).to.equal(4);
         expect(translations[0]).to.deep.equal({
-          key: 'competence.mon_id_persistant.title',
+          key: 'competence.mon_id_persistant.name',
           locale: 'fr',
           value: 'AAA'
         });
@@ -169,7 +169,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
           value: 'CCCCCCCCCCCCCCCC'
         });
         expect(translations[2]).to.deep.equal({
-          key: 'competence.mon_id_persistant.title',
+          key: 'competence.mon_id_persistant.name',
           locale: 'en',
           value: 'BBB'
         });
@@ -213,12 +213,12 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Prout'
       });
       databaseBuilder.factory.buildTranslation({
         locale: 'en',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Fart'
       });
 
@@ -279,12 +279,12 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Prout'
       });
       databaseBuilder.factory.buildTranslation({
         locale: 'en',
-        key: 'competence.mon_id_persistant.title',
+        key: 'competence.mon_id_persistant.name',
         value: 'Fart'
       });
 

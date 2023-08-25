@@ -6,7 +6,7 @@ const locales = [
 ];
 
 const fields = [
-  { airtableField: 'Titre', field: 'title' },
+  { airtableField: 'Titre', field: 'name' },
   { airtableField: 'Description', field: 'description' },
 ];
 

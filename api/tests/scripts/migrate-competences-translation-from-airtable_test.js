@@ -49,12 +49,12 @@ describe('Migrate translation from airtable', function() {
         value: 'Description'
       },
       {
-        key: 'competence.competenceid1.title',
+        key: 'competence.competenceid1.name',
         locale: 'en',
         value: 'Hello'
       },
       {
-        key: 'competence.competenceid1.title',
+        key: 'competence.competenceid1.name',
         locale: 'fr',
         value: 'Bonjour'
       },

@@ -21,13 +21,13 @@ describe('Unit | Infrastructure | Competence translations', () => {
 
       // then
       expect(translations).to.deep.equal([
-        { key: 'competence.test.title', locale: 'fr', value: 'titre fr-fr' },
+        { key: 'competence.test.name', locale: 'fr', value: 'titre fr-fr' },
         {
           key: 'competence.test.description',
           locale: 'fr',
           value: 'description en français',
         },
-        { key: 'competence.test.title', locale: 'en', value: 'title en-us' },
+        { key: 'competence.test.name', locale: 'en', value: 'title en-us' },
         {
           key: 'competence.test.description',
           locale: 'en',
@@ -48,7 +48,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
 
       // then
       expect(translations).to.deep.equal([
-        { key: 'competence.test.title', locale: 'fr', value: 'titre fr-fr' },
+        { key: 'competence.test.name', locale: 'fr', value: 'titre fr-fr' },
       ]);
     });
   });
@@ -62,13 +62,13 @@ describe('Unit | Infrastructure | Competence translations', () => {
         otherField: 'foo',
       };
       const translations = [
-        { key: 'competence.test.title', locale: 'fr', value: 'titre fr-fr' },
+        { key: 'competence.test.name', locale: 'fr', value: 'titre fr-fr' },
         {
           key: 'competence.test.description',
           locale: 'fr',
           value: 'description en français',
         },
-        { key: 'competence.test.title', locale: 'en', value: 'title en-us' },
+        { key: 'competence.test.name', locale: 'en', value: 'title en-us' },
         {
           key: 'competence.test.description',
           locale: 'en',
@@ -97,7 +97,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
         'Titre fr-fr': 'titre fr-fr initial',
       };
       const translations = [
-        { key: 'competence.test.title', locale: 'en', value: 'title en-us' },
+        { key: 'competence.test.name', locale: 'en', value: 'title en-us' },
         {
           key: 'competence.test.description',
           locale: 'en',
