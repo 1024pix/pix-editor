@@ -12,7 +12,6 @@ const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
 const tubeTransformer = require('../transformers/tube-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
-const translationRepository = require('./translation-repository');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
@@ -50,7 +49,7 @@ module.exports = {
     return _toDomain(release[0]);
   },
 
-  async serializeEntity({ entity, type }) {
+  async serializeEntity({ type, entity, translations }) {
     const { updatedRecord, model } = airtableSerializer.serialize({
       airtableObject: entity,
       tableName: type
@@ -76,11 +75,7 @@ module.exports = {
       return { updatedRecord: challenge, model };
     }
 
-    const tableTranslations = tablesTranslations[type];
-    if (tableTranslations) {
-      const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
-      tableTranslations.hydrateReleaseObject(updatedRecord, translations);
-    }
+    tablesTranslations[type]?.hydrateReleaseObject(updatedRecord, translations);
 
     return { updatedRecord, model };
   },
