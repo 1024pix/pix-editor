@@ -1,5 +1,14 @@
 
 
+## v3.92.0 (25/08/2023)
+
+
+### :rocket: Amélioration
+- [#255](https://github.com/1024pix/pix-editor/pull/255) [FEATURE] Récupérer et sauvegarder les traductions des compétences depuis airtable (PIX-8705).
+
+### :arrow_up: Montée de version
+- [#256](https://github.com/1024pix/pix-editor/pull/256) [BUMP] Lock file maintenance (pix-editor).
+
 ## v3.91.0 (23/08/2023)
 
 
