@@ -2,6 +2,7 @@ const { knex } = require('../../../db/knex-database-connection');
 
 module.exports = {
   save,
+  listByPrefix
 };
 
 async function save(translations) {
@@ -11,4 +12,10 @@ async function save(translations) {
       .onConflict(['key', 'locale'])
       .merge();
   }
+}
+
+async function listByPrefix(prefix) {
+  return knex('translations')
+    .select()
+    .whereLike('key', `${prefix}%`);
 }

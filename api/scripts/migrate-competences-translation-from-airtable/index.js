@@ -1,5 +1,5 @@
 const Airtable = require('airtable');
-const extractor = require('../../lib/infrastructure/translations-extractors/competence');
+const competenceTranslations = require('../../lib/infrastructure/translations/competence');
 const translationsRepository = require('../../lib/infrastructure/repositories/translation-repository');
 
 async function main() {
@@ -22,7 +22,7 @@ async function main() {
       .all();
 
     const translations = allCompetences.flatMap((competence) =>
-      extractor.extractTranslations(competence.fields)
+      competenceTranslations.extract(competence.fields)
     );
 
     await translationsRepository.save(translations);
