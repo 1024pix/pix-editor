@@ -40,6 +40,19 @@ module.exports = {
         translation?.value ?? null;
     }
   },
+  hydrateReleaseObject(competence, translations) {
+    for (const { field } of fields) {
+      competence[`${field}_i18n`] = {};
+      for (const { locale } of locales) {
+        const translation = translations.find(
+          (translation) =>
+            translation.key === `${prefix}${competence.id}.${field}` &&
+            translation.locale === locale
+        );
+        competence[`${field}_i18n`][locale] = translation?.value ?? null;
+      }
+    }
+  },
   prefix,
 };
 
