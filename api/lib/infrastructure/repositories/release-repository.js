@@ -12,11 +12,13 @@ const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
 const tubeTransformer = require('../transformers/tube-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
+const translationRepository = require('./translation-repository');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
 
 const { knex } = require('../../../db/knex-database-connection');
+const tablesTranslations = require('../translations');
 
 module.exports = {
   getCurrentContent() {
@@ -72,6 +74,12 @@ module.exports = {
       const challenge = transformChallenge(updatedRecord);
 
       return { updatedRecord: challenge, model };
+    }
+
+    const tableTranslations = tablesTranslations[type];
+    if (tableTranslations) {
+      const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
+      tableTranslations.hydrateReleaseObject(updatedRecord, translations);
     }
 
     return { updatedRecord, model };
