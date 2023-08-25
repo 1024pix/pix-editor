@@ -182,6 +182,28 @@ async function mockCurrentContent() {
     challengeIds: 'recChallenge0',
     imageUrl: 'Image du Course',
   });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].name_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].name_i18n.en,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].description_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+
   await databaseBuilder.commit();
 
   return expectedCurrentContent;
@@ -349,6 +371,28 @@ async function mockContentForRelease() {
     challengeIds: 'recChallenge0',
     imageUrl: 'Image du Course',
   });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].name_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].name_i18n.en,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].description_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+
   await databaseBuilder.commit();
   return expectedCurrentContent;
 }
