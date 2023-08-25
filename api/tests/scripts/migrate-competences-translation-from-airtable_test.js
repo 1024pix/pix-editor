@@ -1,13 +1,21 @@
 const { expect, airtableBuilder, knex } = require('../test-helper');
+const Airtable = require('airtable');
 const nock = require('nock');
 
-const { main } = require('../../scripts/migrate-competences-translation-from-airtable');
+const { migrateCompetencesTranslationFromAirtable } = require('../../scripts/migrate-competences-translation-from-airtable');
 
 describe('Migrate translation from airtable', function() {
+
+  let airtableClient;
+
+  beforeEach(() => {
+    airtableClient = new Airtable({
+      apiKey: 'airtableApiKeyValue',
+    }).base('airtableBaseValue');
+  });
+
   it('fills translations table', async function() {
     // given
-    process.env.AIRTABLE_API_KEY = 'airtableApiKeyValue';
-    process.env.AIRTABLE_BASE = 'airtableBaseValue';
     const competence = airtableBuilder.factory.buildCompetence({
       index: 1,
       name_i18n: {
@@ -28,7 +36,7 @@ describe('Migrate translation from airtable', function() {
       .reply(200, { records: competences });
 
     // when
-    await main();
+    await migrateCompetencesTranslationFromAirtable({ airtableClient });
 
     // then
     const translations = await knex('translations').select().orderBy([{
