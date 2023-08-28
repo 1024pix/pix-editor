@@ -112,6 +112,7 @@ module.exports = (function() {
     config.airtable.apiKey = 'airtableApiKeyValue';
     config.airtable.base = 'airtableBaseValue';
     config.airtable.editorBase = 'airtableEditorBaseValue';
+    config.airtable.saveTranslations = false;
 
     config.logging.enabled = false;
 
