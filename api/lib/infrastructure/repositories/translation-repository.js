@@ -1,4 +1,6 @@
 const { knex } = require('../../../db/knex-database-connection');
+const config = require('../../config');
+const translationDatasource = require('../datasources/airtable/translation-datasource');
 
 module.exports = {
   save,
@@ -7,12 +9,18 @@ module.exports = {
 };
 
 async function save(translations) {
-  if (translations.length > 0) {
-    return knex('translations')
-      .insert(translations)
-      .onConflict(['key', 'locale'])
-      .merge();
+  if (translations.length === 0) return [];
+
+  const savedTranslations = await knex('translations')
+    .insert(translations)
+    .onConflict(['key', 'locale'])
+    .merge();
+
+  if (config.airtable.saveTranslations) {
+    await translationDatasource.upsert(translations);
   }
+
+  return savedTranslations;
 }
 
 async function listByPrefix(prefix) {

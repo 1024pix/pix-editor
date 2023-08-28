@@ -49,7 +49,7 @@
     "@hapi/vision": "^7.0.0",
     "@sentry/node": "^7.39.0",
     "adminjs": "^6.8.6",
-    "airtable": "^0.12.0",
+    "airtable": "^0.12.2",
     "axios": "^1.0.0",
     "axios-cookiejar-support": "^4.0.0",
     "base-x": "^4.0.0",

@@ -29,6 +29,7 @@ module.exports = (function() {
       apiKey: process.env.CYPRESS_AIRTABLE_API_KEY || process.env.AIRTABLE_API_KEY,
       base: process.env.CYPRESS_AIRTABLE_BASE || process.env.AIRTABLE_BASE,
       editorBase: process.env.AIRTABLE_EDITOR_BASE,
+      saveTranslations: process.env.AIRTABLE_SAVE_TRANSLATIONS === 'true',
     },
 
     logging: {

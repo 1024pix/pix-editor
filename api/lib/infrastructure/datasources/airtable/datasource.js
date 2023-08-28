@@ -37,6 +37,12 @@ const _DatasourcePrototype = {
     const airtableRawObject = await airtable.updateRecord(this.tableName, airtableRequestBody);
     return this.fromAirTableObject(airtableRawObject);
   },
+
+  async upsert(models) {
+    const airtableRecords = models.map((model) => this.toAirTableObject(model));
+    const airtableRawObjects = await airtable.upsertRecords(this.tableName, airtableRecords, this.fieldsToMergeOn);
+    return airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject));
+  }
 };
 
 module.exports = {
