@@ -2,7 +2,8 @@ const { knex } = require('../../../db/knex-database-connection');
 
 module.exports = {
   save,
-  listByPrefix
+  listByPrefix,
+  list,
 };
 
 async function save(translations) {
@@ -18,4 +19,8 @@ async function listByPrefix(prefix) {
   return knex('translations')
     .select()
     .whereLike('key', `${prefix}%`);
+}
+
+async function list() {
+  return knex('translations').select();
 }

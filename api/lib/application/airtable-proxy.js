@@ -35,22 +35,23 @@ exports.register = async function(server) {
             if (response.data.records) {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
               response.data.records.forEach((entity) => {
-                tableTranslations.hydrate(entity.fields, translations) ;
+                tableTranslations.hydrateToAirtableObject(entity.fields, translations) ;
               });
             } else {
               const id = response.data.fields['id persistant'];
               const translations = await translationRepository.listByPrefix(`${tableTranslations.prefix}${id}.`);
-              tableTranslations.hydrate(response.data.fields, translations) ;
+              tableTranslations.hydrateToAirtableObject(response.data.fields, translations) ;
             }
           }
 
           if ((request.method === 'post' || request.method === 'patch') && _isResponseOK(response)) {
+            let translations;
             if (tableTranslations) {
-              const translations = tableTranslations.extract(request.payload.fields) ?? [];
+              translations = tableTranslations.extractFromAirtableObject(request.payload.fields) ?? [];
               await translationRepository.save(translations);
             }
 
-            await _updateStagingPixApiCache(tableName, response.data);
+            await _updateStagingPixApiCache(tableName, response.data, translations);
           }
 
           return h.response(response.data).code(response.status);
@@ -89,11 +90,12 @@ async function _proxyRequestToAirtable(request, airtableBase) {
     });
 }
 
-async function _updateStagingPixApiCache(type, entity) {
+async function _updateStagingPixApiCache(type, entity, translations) {
   try {
     const { updatedRecord, model } = await releaseRepository.serializeEntity({
-      entity,
       type,
+      entity,
+      translations,
     });
     await updatedRecordNotifier.notify({ updatedRecord, model, pixApiClient });
   } catch (err) {

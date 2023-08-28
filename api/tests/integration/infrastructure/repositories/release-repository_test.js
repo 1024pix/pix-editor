@@ -162,7 +162,39 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      _mockRichAirtableContent();
+      const { competences } = _mockRichAirtableContent();
+
+      for (const competence of competences) {
+        if (competence.name_i18n?.fr) {
+          databaseBuilder.factory.buildTranslation({
+            key: `competence.${competence.id}.name`,
+            locale: 'fr',
+            value: competence.name_i18n.fr,
+          });
+        }
+        if (competence.name_i18n?.en) {
+          databaseBuilder.factory.buildTranslation({
+            key: `competence.${competence.id}.name`,
+            locale: 'en',
+            value: competence.name_i18n.en,
+          });
+        }
+        if (competence.description_i18n?.fr) {
+          databaseBuilder.factory.buildTranslation({
+            key: `competence.${competence.id}.description`,
+            locale: 'fr',
+            value: competence.description_i18n.fr,
+          });
+        }
+        if (competence.description_i18n?.en) {
+          databaseBuilder.factory.buildTranslation({
+            key: `competence.${competence.id}.description`,
+            locale: 'en',
+            value: competence.description_i18n.en,
+          });
+        }
+      }
+
       databaseBuilder.factory.buildStaticCourse({
         id: 'course1PG',
         name: 'course1PG name',
@@ -218,7 +250,7 @@ function _mockRichAirtableContent() {
     color: 'area2 color',
     frameworkId: 'frameworkA',
   });
-  const airtableCompetence11 = airtableBuilder.factory.buildCompetence({
+  const competence11 = {
     id: 'competence11',
     index: 'competence11 index',
     name_i18n: {
@@ -234,8 +266,9 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic111', 'thematic112'],
     origin: 'FrameworkA',
     fullName: 'competence11 fullName',
-  });
-  const airtableCompetence12 = airtableBuilder.factory.buildCompetence({
+  };
+  const airtableCompetence11 = airtableBuilder.factory.buildCompetence(competence11);
+  const competence12 = {
     id: 'competence12',
     index: 'competence12 index',
     name_i18n: {
@@ -251,8 +284,9 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic121'],
     origin: 'FrameworkA',
     fullName: 'competence12 fullName',
-  });
-  const airtableCompetence21 = airtableBuilder.factory.buildCompetence({
+  };
+  const airtableCompetence12 = airtableBuilder.factory.buildCompetence(competence12);
+  const competence21 = {
     id: 'competence21',
     index: 'competence21 index',
     name_i18n: {
@@ -268,7 +302,8 @@ function _mockRichAirtableContent() {
     thematicIds: ['thematic211'],
     origin: 'FrameworkA',
     fullName: 'competence21 fullName',
-  });
+  };
+  const airtableCompetence21 = airtableBuilder.factory.buildCompetence(competence21);
   const airtableThematic111 = airtableBuilder.factory.buildThematic({
     id: 'thematic111',
     name_i18n: {
@@ -725,6 +760,10 @@ function _mockRichAirtableContent() {
     tutorials: [airtableTutorial1, airtableTutorial2],
     attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3],
   });
+
+  return {
+    competences: [competence11, competence12, competence21],
+  };
 }
 
 function _getRichCurrentContentDTO() {

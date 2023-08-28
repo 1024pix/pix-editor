@@ -7,12 +7,15 @@ const skillDatasource = require('../datasources/airtable/skill-datasource');
 const thematicDatasource = require('../datasources/airtable/thematic-datasource');
 const tubeDatasource = require('../datasources/airtable/tube-datasource');
 const tutorialDatasource = require('../datasources/airtable/tutorial-datasource');
+const translationRepository = require('./translation-repository');
 const airtableSerializer = require('../serializers/airtable-serializer');
 const challengeTransformer = require('../transformers/challenge-transformer');
 const competenceTransformer = require('../transformers/competence-transformer');
 const tubeTransformer = require('../transformers/tube-transformer');
 const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
+const tablesTranslations = require('../translations');
+const competenceTranslations = require('../translations/competence');
 const Release = require('../../domain/models/Release');
 const Content = require('../../domain/models/Content');
 
@@ -48,7 +51,7 @@ module.exports = {
     return _toDomain(release[0]);
   },
 
-  async serializeEntity({ entity, type }) {
+  async serializeEntity({ type, entity, translations }) {
     const { updatedRecord, model } = airtableSerializer.serialize({
       airtableObject: entity,
       tableName: type
@@ -73,6 +76,8 @@ module.exports = {
 
       return { updatedRecord: challenge, model };
     }
+
+    tablesTranslations[type]?.hydrateReleaseObject(updatedRecord, translations);
 
     return { updatedRecord, model };
   },
@@ -111,6 +116,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes,
     tutorials,
+    translations,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
@@ -120,6 +126,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematicDatasource.list(),
     tubeDatasource.list(),
     tutorialDatasource.list(),
+    translationRepository.list(),
   ]);
   const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
   const transformedChallenges = challenges.map(transformChallenge);
@@ -127,6 +134,8 @@ async function _getCurrentContentFromAirtable(challenges) {
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
+
+  filteredCompetences.forEach((competence) => competenceTranslations.hydrateReleaseObject(competence, translations));
 
   return {
     frameworks,

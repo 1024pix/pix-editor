@@ -18,10 +18,10 @@ const localizedFields = locales.flatMap((locale) =>
 );
 
 module.exports = {
-  extract(competence) {
+  extractFromAirtableObject(competence) {
     return Array.from(translationsExtractor(competence));
   },
-  hydrate(competence, translations) {
+  hydrateToAirtableObject(competence, translations) {
     const id = competence['id persistant'];
 
     for (const {
@@ -38,6 +38,19 @@ module.exports = {
 
       competence[`${airtableField} ${airtableLocale}`] =
         translation?.value ?? null;
+    }
+  },
+  hydrateReleaseObject(competence, translations) {
+    for (const { field } of fields) {
+      competence[`${field}_i18n`] = {};
+      for (const { locale } of locales) {
+        const translation = translations.find(
+          (translation) =>
+            translation.key === `${prefix}${competence.id}.${field}` &&
+            translation.locale === locale
+        );
+        competence[`${field}_i18n`][locale] = translation?.value ?? null;
+      }
     }
   },
   prefix,

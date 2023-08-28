@@ -22,7 +22,7 @@ async function main() {
       .all();
 
     const translations = allCompetences.flatMap((competence) =>
-      competenceTranslations.extract(competence.fields)
+      competenceTranslations.extractFromAirtableObject(competence.fields)
     );
 
     await translationsRepository.save(translations);

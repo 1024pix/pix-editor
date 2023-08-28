@@ -506,7 +506,7 @@
 
 
 ### :rocket: Enhancement
-- [#16](https://github.com/1024pix/pix-editor/pull/16) [FEATURE] Ajout de contexte sur l'extract des URLs du référentiel (PIX-4154)
+- [#16](https://github.com/1024pix/pix-editor/pull/16) [FEATURE] Ajout de contexte sur l'extractFromAirtable des URLs du référentiel (PIX-4154)
 
 ### :bug: Bug fix
 - [#17](https://github.com/1024pix/pix-editor/pull/17) [BUGFIX] Corrige la concurrence de vérifications des URLs
