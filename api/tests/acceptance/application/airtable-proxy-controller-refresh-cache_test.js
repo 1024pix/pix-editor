@@ -3,6 +3,7 @@ const {
   airtableBuilder,
   databaseBuilder,
   domainBuilder,
+  inputOutputDataBuilder,
   expect,
   generateAuthorizationHeader,
   knex,
@@ -20,8 +21,9 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
   });
 
   describe('POST /api/airtable/content/Competences', () => {
-    let competenceDataObject;
-    let competence;
+    let expectedCompetence;
+    let competenceToRefresh;
+    let airtableRawCompetence;
     const token = 'dummy-pix-api-token';
 
     let user;
@@ -34,8 +36,20 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
 
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
-      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+      const competence = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
+      airtableRawCompetence = airtableBuilder.factory.buildCompetence(competence);
+      expectedCompetence = {
+        ...competence,
+        name_i18n: {
+          fr: 'vive la baguette',
+          en: 'The baguette!',
+        },
+        description_i18n: {
+          fr: null,
+          en: null,
+        },
+      };
+      competenceToRefresh = inputOutputDataBuilder.factory.buildCompetence(expectedCompetence);
     });
 
     it('should refresh cache of updated record in pix api', async () => {
@@ -45,14 +59,14 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
         .reply(200, { 'access_token': token });
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/competences/recCompetence', competenceDataObject)
+        .patch('/api/cache/competences/recCompetence', expectedCompetence)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableBaseValue/Competences', airtableRawCompetence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, competence);
+        .reply(200, airtableRawCompetence);
       const server = await createServer();
 
       // When
@@ -60,12 +74,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         method: 'POST',
         url: '/api/airtable/content/Competences',
         headers: generateAuthorizationHeader(user),
-        payload: competence,
+        payload: competenceToRefresh,
       });
 
       // Then
       expect(response.statusCode).to.equal(200);
-      expect(response.result).to.deep.equal(competence);
+      expect(response.result).to.deep.equal(competenceToRefresh);
       apiCacheScope.done();
     });
 
@@ -77,14 +91,14 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(200, { 'access_token': token });
 
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/competences/recCompetence', competenceDataObject)
+        .patch('/api/cache/competences/recCompetence', expectedCompetence)
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(400);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableBaseValue/Competences', airtableRawCompetence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, competence);
+        .reply(200, airtableRawCompetence);
       const server = await createServer();
 
       // When
@@ -92,12 +106,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         method: 'POST',
         url: '/api/airtable/content/Competences',
         headers: generateAuthorizationHeader(user),
-        payload: competence,
+        payload: competenceToRefresh,
       });
 
       // Then
       expect(response.statusCode).to.equal(200);
-      expect(response.result).to.deep.equal(competence);
+      expect(response.result).to.deep.equal(competenceToRefresh);
       apiCacheScope.done();
     });
 
@@ -109,9 +123,9 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         .reply(400);
 
       nock('https://api.airtable.com')
-        .post('/v0/airtableBaseValue/Competences', competence)
+        .post('/v0/airtableBaseValue/Competences', airtableRawCompetence)
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, competence);
+        .reply(200, airtableRawCompetence);
       const server = await createServer();
 
       // When
@@ -119,12 +133,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
         method: 'POST',
         url: '/api/airtable/content/Competences',
         headers: generateAuthorizationHeader(user),
-        payload: competence,
+        payload: competenceToRefresh,
       });
 
       // Then
       expect(response.statusCode).to.equal(200);
-      expect(response.result).to.deep.equal(competence);
+      expect(response.result).to.deep.equal(competenceToRefresh);
       apiTokenScope.done();
     });
   });

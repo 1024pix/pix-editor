@@ -40,6 +40,14 @@ module.exports = {
         translation?.value ?? null;
     }
   },
+  dehydrateAirtableObject(competence) {
+    for (const {
+      airtableLocale,
+      airtableField,
+    } of localizedFields) {
+      delete competence[`${airtableField} ${airtableLocale}`];
+    }
+  },
   hydrateReleaseObject(competence, translations) {
     for (const { field } of fields) {
       competence[`${field}_i18n`] = {};
