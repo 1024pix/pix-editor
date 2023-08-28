@@ -1,7 +1,8 @@
 const DatabaseBuilder = require('../../tests/tooling/database-builder/database-builder');
 const staticCoursesBuilder = require('./data/static-courses.js');
+const translationsBuilder = require('./data/translations');
 
-exports.seed = (knex) => {
+exports.seed = async (knex) => {
   const databaseBuilder = new DatabaseBuilder({ knex });
   databaseBuilder.factory.buildUser({
     trigram: 'DEV',
@@ -32,6 +33,8 @@ exports.seed = (knex) => {
   });
 
   staticCoursesBuilder(databaseBuilder);
+
+  await translationsBuilder(databaseBuilder);
 
   return databaseBuilder.commit();
 };

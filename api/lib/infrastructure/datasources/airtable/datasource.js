@@ -40,10 +40,20 @@ const _DatasourcePrototype = {
 
   async upsert(models) {
     const airtableRecords = models.map((model) => this.toAirTableObject(model));
-    const airtableRawObjects = await airtable.upsertRecords(this.tableName, airtableRecords, this.fieldsToMergeOn);
-    return airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject));
+    const allAirtableRawObjects = [];
+    for (const chunk of chunks(airtableRecords, 10)) {
+      const airtableRawObjects = await airtable.upsertRecords(this.tableName, chunk, this.fieldsToMergeOn);
+      allAirtableRawObjects.push(...airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject)));
+    }
+    return allAirtableRawObjects;
   }
 };
+
+function* chunks(array, chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
+    yield array.slice(i, i + chunkSize);
+  }
+}
 
 module.exports = {
 
