@@ -13,14 +13,20 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
   beforeEach(() => {
     nock('https://api.test.pix.fr').post(/.*/).reply(200);
     nock('https://api.test.pix.fr').patch(/.*/).reply(200);
+
+    nock('https://api.airtable.com')
+      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .optionally()
+      .reply(404);
   });
 
-  afterEach(() => {
-    expect(nock.isDone()).to.be.true;
-  });
-
-  afterEach(function() {
-    return knex('translations').truncate();
+  afterEach(async () => {
+    try {
+      expect(nock.isDone()).to.be.true;
+    } finally {
+      await knex('translations').truncate();
+    }
   });
 
   describe('POST /api/airtable/content/Competences', () => {

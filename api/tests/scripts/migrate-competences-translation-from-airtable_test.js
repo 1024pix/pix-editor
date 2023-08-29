@@ -9,6 +9,12 @@ describe('Migrate translation from airtable', function() {
   let airtableClient;
 
   beforeEach(() => {
+    nock('https://api.airtable.com')
+      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .optionally()
+      .reply(404);
+
     airtableClient = new Airtable({
       apiKey: 'airtableApiKeyValue',
     }).base('airtableBaseValue');

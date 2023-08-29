@@ -1,12 +1,15 @@
 const { knex } = require('../../../db/knex-database-connection');
-const config = require('../../config');
 const translationDatasource = require('../datasources/airtable/translation-datasource');
 
 module.exports = {
   save,
   listByPrefix,
   list,
+  checkIfShouldDuplicateToAirtable,
 };
+
+let _shouldDuplicateToAirtable;
+let _shouldDuplicateToAirtablePromise;
 
 async function save(translations) {
   if (translations.length === 0) return [];
@@ -16,7 +19,11 @@ async function save(translations) {
     .onConflict(['key', 'locale'])
     .merge();
 
-  if (config.airtable.saveTranslations) {
+  if (_shouldDuplicateToAirtable == null && _shouldDuplicateToAirtablePromise == null) {
+    await checkIfShouldDuplicateToAirtable();
+  }
+
+  if (_shouldDuplicateToAirtable) {
     await translationDatasource.upsert(translations);
   }
 
@@ -31,4 +38,9 @@ async function listByPrefix(prefix) {
 
 async function list() {
   return knex('translations').select();
+}
+
+async function checkIfShouldDuplicateToAirtable() {
+  _shouldDuplicateToAirtablePromise = translationDatasource.exists();
+  _shouldDuplicateToAirtable = await _shouldDuplicateToAirtablePromise;
 }

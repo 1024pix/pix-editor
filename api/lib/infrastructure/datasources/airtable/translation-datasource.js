@@ -6,6 +6,8 @@ module.exports = datasource.extend({
 
   tableName: 'translations',
 
+  sortField: 'key_locale',
+
   usedFields: [
     'key',
     'locale',
@@ -34,4 +36,16 @@ module.exports = datasource.extend({
       },
     };
   },
+
+  async exists() {
+    try {
+      await this.list({ page: { size: 1 } });
+      return true;
+    } catch (err) {
+      if (err.statusCode === 404) {
+        return false;
+      }
+      throw err;
+    }
+  }
 });

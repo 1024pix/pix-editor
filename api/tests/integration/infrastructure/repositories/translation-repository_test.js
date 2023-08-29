@@ -1,21 +1,22 @@
 const { expect, knex } = require('../../../test-helper');
 const translationRepository = require('../../../../lib/infrastructure/repositories/translation-repository');
-const config = require('../../../../lib/config');
 const nock = require('nock');
 
 describe('Integration | Repository | translation-repository', function() {
 
+  beforeEach(async function() {
+    await _setShouldDuplicateToAirtable(true);
+  });
+
   afterEach(async function() {
     await knex('translations').delete();
-    config.airtable.saveTranslations = false;
+    await _setShouldDuplicateToAirtable(false);
   });
 
   context('#save', function() {
 
-    it('should save translations to airtable when AIRTABLE_SAVE_TRANSLATIONS is true', async function() {
+    it('should save translations to airtable when Airtable has a translations table', async function() {
       // given
-      config.airtable.saveTranslations = true;
-
       nock('https://api.airtable.com')
         .patch('/v0/airtableBaseValue/translations/?', {
           records: [
@@ -46,3 +47,18 @@ describe('Integration | Repository | translation-repository', function() {
   });
 });
 
+async function _setShouldDuplicateToAirtable(value) {
+  if (value) {
+    nock('https://api.airtable.com')
+      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .reply(200, { records: [] });
+  } else {
+    nock('https://api.airtable.com')
+      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .reply(404);
+  }
+
+  await translationRepository.checkIfShouldDuplicateToAirtable();
+}

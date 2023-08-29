@@ -1,8 +1,6 @@
 const Airtable = require('airtable');
 
 module.exports = async function(databaseBuilder) {
-  if (process.env.AIRTABLE_SAVE_TRANSLATIONS !== 'true') return;
-
   const {
     AIRTABLE_API_KEY: airtableApiKey,
     AIRTABLE_BASE: airtableBase,
@@ -10,7 +8,16 @@ module.exports = async function(databaseBuilder) {
 
   const airtableClient = new Airtable({ apiKey: airtableApiKey }).base(airtableBase);
 
-  const airtableTranslations = await airtableClient.table('translations').select().all();
+  let airtableTranslations;
+  try {
+    airtableTranslations = await airtableClient.table('translations').select().all();
+  } catch (err) {
+    if (err.statusCode === 404) {
+      console.log('Skipping translations seeding: did not find translations table in Airtable');
+      return;
+    }
+    throw err;
+  }
 
   const translations = airtableTranslations.map((translation) => {
     return {
