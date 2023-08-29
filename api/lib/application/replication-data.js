@@ -7,7 +7,7 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/databases/airtable',
       config: {
-        handler: function() {
+        handler: async function() {
           return promiseStreamer(usecase.getLearningContentForReplication());
         },
       },
@@ -16,7 +16,7 @@ exports.register = async function(server) {
       method: 'GET',
       path: '/api/replication-data',
       config: {
-        handler: function() {
+        handler: async function() {
           return promiseStreamer(usecase.getLearningContentForReplication());
         },
       },

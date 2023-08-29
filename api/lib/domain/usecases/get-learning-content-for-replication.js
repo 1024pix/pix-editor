@@ -6,9 +6,13 @@ const challengeDatasource = require('../../infrastructure/datasources/airtable/c
 const tutorialDatasource = require('../../infrastructure/datasources/airtable/tutorial-datasource');
 const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
 const thematicDatasource = require('../../infrastructure/datasources/airtable/thematic-datasource');
+const tablesTranslations = require('../../infrastructure/translations');
+const translationRepository = require('../../infrastructure/repositories/translation-repository');
 const { knex } = require('../../../db/knex-database-connection');
 
-async function getLearningContentForReplication() {
+async function getLearningContentForReplication(dependencies = { translationRepository }) {
+  const { translationRepository } = dependencies;
+
   const [
     areas,
     competences,
@@ -30,6 +34,13 @@ async function getLearningContentForReplication() {
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
   ]);
+
+  const translations = await translationRepository.list();
+
+  competences.forEach((competence) => {
+    const tableTranslations = tablesTranslations['Competences'];
+    tableTranslations.hydrateReleaseObject(competence, translations);
+  });
 
   return {
     areas,
