@@ -45,3 +45,4 @@ pix-editor/app/config-private-test.js
 /pix-editor/test-results/
 /pix-editor/playwright-report/
 /pix-editor/playwright/.cache/
+*.storageState.json
