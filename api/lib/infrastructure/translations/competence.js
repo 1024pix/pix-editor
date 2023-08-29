@@ -65,7 +65,7 @@ function* translationsExtractor(competence) {
     airtableField,
     field,
   } of localizedFields) {
-    if (!competence[`${airtableField} ${airtableLocale}`]) return;
+    if (!competence[`${airtableField} ${airtableLocale}`]) continue;
 
     yield {
       key: `${prefix}${id}.${field}`,
