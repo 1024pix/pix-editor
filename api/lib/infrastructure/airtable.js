@@ -28,8 +28,20 @@ async function updateRecord(tableName, body) {
   return records[0];
 }
 
+async function upsertRecords(tableName, records, fieldsToMergeOn) {
+  return _airtableClient().table(tableName).update(
+    records,
+    {
+      performUpsert: {
+        fieldsToMergeOn,
+      },
+    },
+  );
+}
+
 module.exports = {
   findRecords,
   createRecord,
   updateRecord,
+  upsertRecords,
 };

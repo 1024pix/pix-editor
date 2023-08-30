@@ -37,7 +37,23 @@ const _DatasourcePrototype = {
     const airtableRawObject = await airtable.updateRecord(this.tableName, airtableRequestBody);
     return this.fromAirTableObject(airtableRawObject);
   },
+
+  async upsert(models) {
+    const airtableRecords = models.map((model) => this.toAirTableObject(model));
+    const allAirtableRawObjects = [];
+    for (const chunk of chunks(airtableRecords, 10)) {
+      const airtableRawObjects = await airtable.upsertRecords(this.tableName, chunk, this.fieldsToMergeOn);
+      allAirtableRawObjects.push(...airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject)));
+    }
+    return allAirtableRawObjects;
+  }
 };
+
+function* chunks(array, chunkSize) {
+  for (let i = 0; i < array.length; i += chunkSize) {
+    yield array.slice(i, i + chunkSize);
+  }
+}
 
 module.exports = {
 

@@ -11,8 +11,12 @@ const createServer = require('../../../server');
 
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
 
-  afterEach(function() {
-    return knex('translations').truncate();
+  afterEach(async function() {
+    try {
+      expect(nock.isDone()).to.be.true;
+    } finally {
+      await knex('translations').truncate();
+    }
   });
 
   describe('POST /api/airtable/content/Competences', () => {
@@ -22,6 +26,12 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
 
     let user;
     beforeEach(async function() {
+      nock('https://api.airtable.com')
+        .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .optionally()
+        .reply(404);
+
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
       competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
