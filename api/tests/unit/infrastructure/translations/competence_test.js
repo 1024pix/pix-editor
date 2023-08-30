@@ -43,6 +43,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
         const competence = {
           'id persistant': 'test',
           'Titre fr-fr': 'titre fr-fr',
+          'Titre en-us': 'titre en-us',
         };
 
         // when
@@ -51,6 +52,7 @@ describe('Unit | Infrastructure | Competence translations', () => {
         // then
         expect(translations).to.deep.equal([
           { key: 'competence.test.name', locale: 'fr', value: 'titre fr-fr' },
+          { key: 'competence.test.name', locale: 'en', value: 'titre en-us' },
         ]);
       });
     });
@@ -195,6 +197,5 @@ describe('Unit | Infrastructure | Competence translations', () => {
         });
       });
     });
-
   });
 });
