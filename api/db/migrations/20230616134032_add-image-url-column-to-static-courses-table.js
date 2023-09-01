@@ -5,7 +5,7 @@ const IMAGE_URL_COLUMN = 'imageUrl';
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
+export function up(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
     table.string(IMAGE_URL_COLUMN);
   });
@@ -15,7 +15,7 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
+export function down(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
     table.dropColumn(IMAGE_URL_COLUMN);
   });

@@ -1,8 +1,8 @@
-const { Client } = require('pg');
+import pg from 'pg';
 
-class PgClient {
+export class PgClient {
   constructor(databaseUrl) {
-    this.client = new Client(databaseUrl);
+    this.client = new pg.Client(databaseUrl);
     this.client.connect();
   }
 
@@ -20,5 +20,3 @@ class PgClient {
       });
   }
 }
-
-module.exports = PgClient;

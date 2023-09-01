@@ -1,6 +1,6 @@
-const StaticCourse = require('../../../../lib/domain/models/StaticCourse');
+import { StaticCourse } from '../../../../lib/domain/models/StaticCourse.js';
 
-module.exports = function buildStaticCourse({
+export function buildStaticCourse({
   id = 'courseABC123',
   name = 'static course name',
   description = 'static course description',
@@ -20,4 +20,4 @@ module.exports = function buildStaticCourse({
     createdAt,
     updatedAt,
   });
-};
+}

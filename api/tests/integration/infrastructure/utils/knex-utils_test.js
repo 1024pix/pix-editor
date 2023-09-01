@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const { expect, databaseBuilder, knex } = require('../../../test-helper');
-const { fetchPage } = require('../../../../lib/infrastructure/utils/knex-utils');
+import _ from 'lodash';
+import { expect, databaseBuilder, knex } from '../../../test-helper.js';
+import { fetchPage } from '../../../../lib/infrastructure/utils/knex-utils.js';
 
 describe('Integration | Infrastructure | Utils | Knex utils', function() {
   context('fetchPage', function() {

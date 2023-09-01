@@ -1,11 +1,11 @@
-const { expect, sinon } = require('../../../test-helper');
-const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
-const Release = require('../../../../lib/domain/models/release/Release');
-const releaseJobProcessor = require('../../../../lib/infrastructure/scheduled-jobs/release-job-processor');
-const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
-const logger = require('../../../../lib/infrastructure/logger');
-const SlackNotifier = require('../../../../lib/infrastructure/notifications/SlackNotifier');
-const config = require('../../../../lib/config');
+import { expect, sinon } from '../../../test-helper.js';
+import { releaseRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { Release } from '../../../../lib/domain/models/release/Release.js';
+import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.cjs';
+import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
+import { logger } from '../../../../lib/infrastructure/logger.js';
+import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
+import * as config from '../../../../lib/config.js';
 
 describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 

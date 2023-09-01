@@ -1,16 +1,18 @@
-const areaDatasource = require('../../infrastructure/datasources/airtable/area-datasource');
-const competenceDatasource = require('../../infrastructure/datasources/airtable/competence-datasource');
-const tubeDatasource = require('../../infrastructure/datasources/airtable/tube-datasource');
-const skillDatasource = require('../../infrastructure/datasources/airtable/skill-datasource');
-const challengeDatasource = require('../../infrastructure/datasources/airtable/challenge-datasource');
-const tutorialDatasource = require('../../infrastructure/datasources/airtable/tutorial-datasource');
-const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
-const thematicDatasource = require('../../infrastructure/datasources/airtable/thematic-datasource');
-const tablesTranslations = require('../../infrastructure/translations');
-const translationRepository = require('../../infrastructure/repositories/translation-repository');
-const { knex } = require('../../../db/knex-database-connection');
+import {
+  areaDatasource,
+  attachmentDatasource,
+  challengeDatasource,
+  competenceDatasource,
+  skillDatasource,
+  thematicDatasource,
+  tubeDatasource,
+  tutorialDatasource,
+} from '../../infrastructure/datasources/airtable/index.js';
+import * as tablesTranslations from '../../infrastructure/translations/index.js';
+import { translationRepository } from '../../infrastructure/repositories/index.js';
+import { knex } from '../../../db/knex-database-connection.js';
 
-async function getLearningContentForReplication(dependencies = { translationRepository }) {
+export async function getLearningContentForReplication(dependencies = { translationRepository }) {
   const { translationRepository } = dependencies;
 
   const [
@@ -61,6 +63,3 @@ async function _getCoursesFromPGForReplication() {
     .orderBy('id');
 }
 
-module.exports = {
-  getLearningContentForReplication: getLearningContentForReplication,
-};

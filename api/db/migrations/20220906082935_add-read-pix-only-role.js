@@ -1,6 +1,6 @@
 const TABLE_NAME = 'users';
 
-exports.up = function(knex) {
+export function up(knex) {
   return knex.schema.raw(`
     ALTER TABLE "users"
     DROP CONSTRAINT "users_access_check",
@@ -9,7 +9,7 @@ exports.up = function(knex) {
   `);
 };
 
-exports.down = async function(knex) {
+export async function down(knex) {
   await knex(TABLE_NAME).update({
     access: 'readonly'
   }).where('access', 'readpixonly');

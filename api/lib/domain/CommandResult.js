@@ -3,7 +3,7 @@ const COMMAND_RESULT_STATES = {
   FAILURE: 'FAILURE',
 };
 
-class CommandResult {
+export class CommandResult {
   constructor({ state, value, error }) {
     this.state = state;
     this.value = value;
@@ -26,5 +26,3 @@ class CommandResult {
     return this.state === COMMAND_RESULT_STATES.FAILURE;
   }
 }
-
-module.exports = CommandResult;

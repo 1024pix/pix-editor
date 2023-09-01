@@ -1,8 +1,8 @@
-const DatabaseBuilder = require('../../tests/tooling/database-builder/database-builder');
-const staticCoursesBuilder = require('./data/static-courses.js');
-const translationsBuilder = require('./data/translations');
+import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
+import { staticCoursesBuilder } from './data/static-courses.js';
+import { translationsBuilder } from './data/translations.js';
 
-exports.seed = async (knex) => {
+export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
   databaseBuilder.factory.buildUser({
     trigram: 'DEV',

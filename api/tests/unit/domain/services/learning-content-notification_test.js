@@ -1,5 +1,5 @@
-const { expect, sinon } = require('../../../test-helper');
-const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
+import { expect, sinon } from '../../../test-helper.js';
+import { notifyReleaseCreationFailure, notifyReleaseCreationSuccess } from '../../../../lib/domain/services/learning-content-notification.js';
 
 describe('Unit | Domain | Services | learning-content-notification', function() {
 
@@ -10,7 +10,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
         send: sinon.stub().resolves(),
       };
 
-      await learningContentNotification.notifyReleaseCreationSuccess(slackNotifier);
+      await notifyReleaseCreationSuccess(slackNotifier);
 
       const expectedBlocks = {
         attachments: [
@@ -36,7 +36,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
       const errorMessage = 'Some network error occurred';
 
       // when
-      await learningContentNotification.notifyReleaseCreationFailure(errorMessage, slackNotifier);
+      await notifyReleaseCreationFailure(errorMessage, slackNotifier);
 
       // then
       const expectedBlocks = {

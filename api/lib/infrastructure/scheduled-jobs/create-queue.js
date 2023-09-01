@@ -1,7 +1,7 @@
-const logger = require('../logger');
-const Sentry = require('@sentry/node');
-const Queue = require('bull');
-const config = require('../../config');
+import { logger } from '../logger.js';
+import Sentry from '@sentry/node';
+import Queue from 'bull';
+import * as config from '../../config.js';
 
 const queueError = (queueName, err, ...messages) => {
   logger.error(err, queueName, ...messages);
@@ -11,7 +11,7 @@ const queueMessage = (queueName, message) => {
   logger.info(queueName + ': ' + message);
 };
 
-module.exports = function createQueue(queueName) {
+export function createQueue(queueName) {
   const queue = new Queue(queueName, config.scheduledJobs.redisUrl);
   queue.on('error', (err, additionalError) => queueError(queueName, err, 'Queue error', additionalError));
   queue.on('failed', (job, err) => queueError(queueName, err, `Job ${job.id} failed`));
@@ -26,4 +26,4 @@ module.exports = function createQueue(queueName) {
   queue.on('removed', () => queueMessage(queueName, 'A job has been removed'));
 
   return queue;
-};
+}

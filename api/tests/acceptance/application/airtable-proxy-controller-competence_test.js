@@ -1,5 +1,5 @@
-const nock = require('nock');
-const {
+import nock from 'nock';
+import {
   airtableBuilder,
   inputOutputDataBuilder,
   expect,
@@ -7,8 +7,8 @@ const {
   domainBuilder,
   generateAuthorizationHeader,
   knex,
-} = require('../../test-helper');
-const createServer = require('../../../server');
+} from '../../test-helper.js';
+import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller | create competence translations', () => {
   beforeEach(() => {

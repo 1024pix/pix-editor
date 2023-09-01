@@ -1,6 +1,6 @@
 const INITIAL_ID = 100000;
 
-module.exports = {
+export const databaseBuffer = {
   objectsToInsert: [],
   tablesToDelete: [],
   nextId: INITIAL_ID,

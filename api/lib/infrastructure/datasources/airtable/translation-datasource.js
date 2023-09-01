@@ -1,7 +1,7 @@
-const datasource = require('./datasource');
-const logger = require('../../logger');
+import { datasource } from './datasource.js';
+import { logger } from '../../logger.js';
 
-module.exports = datasource.extend({
+export const translationDatasource = datasource.extend({
 
   modelName: 'Translation',
 

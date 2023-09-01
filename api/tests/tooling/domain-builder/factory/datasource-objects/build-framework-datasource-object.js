@@ -1,4 +1,4 @@
-module.exports = function buildFrameworkDatasourceObject({
+export function buildFrameworkDatasourceObject({
   id = 'framework123',
   name = 'Un référentiel',
 } = {}) {
@@ -6,4 +6,4 @@ module.exports = function buildFrameworkDatasourceObject({
     id,
     name,
   };
-};
+}

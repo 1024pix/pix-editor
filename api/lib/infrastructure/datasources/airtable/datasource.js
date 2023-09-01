@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const airtable = require('../../airtable');
+import _ from 'lodash';
+import * as airtable from '../../airtable.js';
 
 const _DatasourcePrototype = {
   path() {
@@ -55,7 +55,7 @@ function* chunks(array, chunkSize) {
   }
 }
 
-module.exports = {
+export const datasource = {
 
   extend(props) {
     props.sortField = props.sortField || 'id persistant';

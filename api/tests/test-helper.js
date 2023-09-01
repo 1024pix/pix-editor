@@ -1,15 +1,26 @@
-const infraErrors = require('../lib/infrastructure/errors');
-const chai = require('chai');
-const expect = chai.expect;
-const _ = require('lodash');
-chai.use(require('chai-as-promised'));
-chai.use(require('chai-sorted'));
-const sinon = require('sinon');
-chai.use(require('sinon-chai'));
-const customChaiHelpers = require('./tooling/chai-custom-helpers/index');
+import * as infraErrors from '../lib/infrastructure/errors.js';
+import chai from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+import chaiSorted from 'chai-sorted';
+import sinonChai from 'sinon-chai';
+import _ from 'lodash';
+import * as customChaiHelpers from './tooling/chai-custom-helpers/index.js';
+import { cache } from '../lib/infrastructure/cache.js';
+import nock from 'nock';
+import { DatabaseBuilder } from './tooling/database-builder/database-builder.js';
+import { AirtableBuilder } from './tooling/airtable-builder/airtable-builder.js';
+import { InputOutputDataBuilder }  from './tooling/input-output-data-builder/input-output-data-builder.js';
+import { knex } from '../db/knex-database-connection.js';
+
+import * as sinon from 'sinon';
+export { sinon };
+
+chai.use(chaiAsPromised);
+chai.use(chaiSorted);
+chai.use(sinonChai);
 _.each(customChaiHelpers, chai.use);
-const cache = require('../lib/infrastructure/cache');
-const nock = require('nock');
+
+export { expect } from 'chai';
 
 afterEach(async () => {
   airtableBuilder.cleanAll();
@@ -20,18 +31,16 @@ afterEach(async () => {
 });
 
 // Knex
-const { knex } = require('../db/knex-database-connection');
+export { knex };
 
 // Input Data Builder
-const InputOutputDataBuilder = require('./tooling/input-output-data-builder/input-output-data-builder');
-const inputOutputDataBuilder = new InputOutputDataBuilder();
+export const inputOutputDataBuilder = new InputOutputDataBuilder();
 
 // DatabaseBuilder
-const DatabaseBuilder = require('./tooling/database-builder/database-builder');
-const databaseBuilder = new DatabaseBuilder({ knex });
+export const databaseBuilder = new DatabaseBuilder({ knex });
 
 // Hapi
-const hFake = {
+export const hFake = {
   response(source) {
     return {
       source,
@@ -74,7 +83,7 @@ const hFake = {
   continue: Symbol('continue'),
 };
 
-function catchErr(promiseFn, ctx) {
+export function catchErr(promiseFn, ctx) {
   return async (...args) => {
     try {
       await promiseFn.call(ctx, ...args);
@@ -85,7 +94,7 @@ function catchErr(promiseFn, ctx) {
   };
 }
 
-function streamToPromise(stream) {
+export function streamToPromise(stream) {
   return new Promise((resolve, reject) => {
     let totalData = '';
     stream.on('data', (data) => {
@@ -102,10 +111,9 @@ function streamToPromise(stream) {
 nock.disableNetConnect();
 
 // airtableBuilder
-const AirtableBuilder = require('./tooling/airtable-builder/airtable-builder');
-const airtableBuilder = new AirtableBuilder({ nock });
+export const airtableBuilder = new AirtableBuilder({ nock });
 
-function generateAuthorizationHeader(user) {
+export function generateAuthorizationHeader(user) {
   return { authorization: `Bearer ${user.apiKey}` };
 }
 
@@ -155,18 +163,7 @@ chai.use(function(chai) {
   });
 });
 
-module.exports = {
-  airtableBuilder,
-  catchErr,
-  inputOutputDataBuilder,
-  databaseBuilder,
-  domainBuilder: require('./tooling/domain-builder/factory'),
-  expect,
-  generateAuthorizationHeader,
-  hFake,
-  knex,
-  sinon,
-  streamToPromise,
-  testErr: new Error('Fake Error'),
-  testInfraNotFoundErr: new infraErrors.NotFoundError('Fake infra NotFoundError'),
-};
+export { domainBuilder } from './tooling/domain-builder/domain-builder.js';
+
+export const testErr = new Error('Fake Error');
+export const testInfraNotFoundErr = new infraErrors.NotFoundError('Fake infra NotFoundError');

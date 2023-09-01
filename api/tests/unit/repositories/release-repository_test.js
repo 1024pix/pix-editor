@@ -1,7 +1,6 @@
-const { expect, domainBuilder, airtableBuilder, sinon } = require('../../test-helper');
-const challengeDatasource = require('../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const attachmentDatasource = require('../../../lib/infrastructure/datasources/airtable/attachment-datasource');
-const releaseRepository = require('../../../lib/infrastructure/repositories/release-repository');
+import { expect, domainBuilder, airtableBuilder, sinon } from '../../test-helper.js';
+import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
+import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
@@ -42,7 +41,7 @@ describe('Unit | Repository | release-repository', () => {
 
       sinon.stub(attachmentDatasource, 'filterByChallengeId').withArgs('recChallenge').resolves([attachment]);
 
-      const { updatedRecord, model } = await releaseRepository.serializeEntity({ entity, type });
+      const { updatedRecord, model } = await serializeEntity({ entity, type });
 
       expect(updatedRecord.illustrationUrl).to.equal('http://example.com/test');
       expect(model).to.equal('challenges');
@@ -66,7 +65,7 @@ describe('Unit | Repository | release-repository', () => {
       sinon.stub(attachmentDatasource, 'filterByChallengeId');
       sinon.stub(challengeDatasource, 'filterById');
 
-      const { updatedRecord, model } = await releaseRepository.serializeEntity({ entity, type });
+      const { updatedRecord, model } = await serializeEntity({ entity, type });
 
       expect(updatedRecord).to.deep.equal({
         id: '1',
@@ -136,7 +135,7 @@ describe('Unit | Repository | release-repository', () => {
       sinon.stub(challengeDatasource, 'filterById').withArgs('recChallenge').resolves(challenge);
       sinon.stub(attachmentDatasource, 'filterByChallengeId').withArgs('recChallenge').resolves(attachmentRecords);
 
-      const { updatedRecord, model } = await releaseRepository.serializeEntity({ entity, type });
+      const { updatedRecord, model } = await serializeEntity({ entity, type });
 
       expect(updatedRecord.illustrationUrl).to.equal('http://example.com/test');
       expect(updatedRecord.illustrationAlt).to.equal('texte alternatif à l\'image');

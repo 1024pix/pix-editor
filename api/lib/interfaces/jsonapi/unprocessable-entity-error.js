@@ -1,5 +1,7 @@
-const _ = require('lodash');
-const JSONAPIError = require('jsonapi-serializer').Error;
+import _ from 'lodash';
+import JsonapiSerializer from 'jsonapi-serializer';
+
+const { Error: JSONAPIError } = JsonapiSerializer;
 
 function _formatAttribute({ attribute, message }) {
   return {
@@ -31,6 +33,6 @@ function _formatInvalidAttribute({ attribute, message }) {
   return _formatAttribute({ attribute, message });
 }
 
-module.exports = (invalidAttributes) => {
+export function unprocessableEntityError(invalidAttributes) {
   return new JSONAPIError(invalidAttributes.map(_formatInvalidAttribute));
-};
+}

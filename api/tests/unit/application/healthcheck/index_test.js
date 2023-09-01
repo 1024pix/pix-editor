@@ -1,7 +1,7 @@
-const { expect, sinon } = require('../../../test-helper');
-const Hapi = require('@hapi/hapi');
-const healthcheckController = require('../../../../lib/application/healthcheck/healthcheck-controller');
-const route = require('../../../../lib/application/healthcheck');
+import { expect, sinon } from '../../../test-helper.js';
+import Hapi from '@hapi/hapi';
+import * as healthcheckController from '../../../../lib/application/healthcheck/healthcheck-controller.js';
+import * as route from '../../../../lib/application/healthcheck/index.js';
 
 describe('Unit | Router | HealthcheckRouter', function() {
   let server;

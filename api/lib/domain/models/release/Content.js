@@ -1,14 +1,14 @@
-const AreaForRelease = require('./AreaForRelease');
-const ChallengeForRelease = require('./ChallengeForRelease');
-const CompetenceForRelease = require('./CompetenceForRelease');
-const CourseForRelease = require('./CourseForRelease');
-const FrameworkForRelease = require('./FrameworkForRelease');
-const SkillForRelease = require('./SkillForRelease');
-const ThematicForRelease = require('./ThematicForRelease');
-const TubeForRelease = require('./TubeForRelease');
-const TutorialForRelease = require('./TutorialForRelease');
+import { AreaForRelease } from './AreaForRelease.js';
+import { ChallengeForRelease } from './ChallengeForRelease.js';
+import { CompetenceForRelease } from './CompetenceForRelease.js';
+import { CourseForRelease } from './CourseForRelease.js';
+import { FrameworkForRelease } from './FrameworkForRelease.js';
+import { SkillForRelease } from './SkillForRelease.js';
+import { ThematicForRelease } from './ThematicForRelease.js';
+import { TubeForRelease } from './TubeForRelease.js';
+import { TutorialForRelease } from './TutorialForRelease.js';
 
-module.exports = class Content {
+export class Content {
   constructor({
     areas,
     challenges,
@@ -55,4 +55,4 @@ module.exports = class Content {
 
     return content;
   }
-};
+}

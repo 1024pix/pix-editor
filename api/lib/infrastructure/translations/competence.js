@@ -1,6 +1,6 @@
-const Translation = require('../../domain/models/Translation');
+import { Translation } from '../../domain/models/index.js';
 
-const prefix = 'competence.';
+export const prefix = 'competence.';
 
 const locales = [
   { airtableLocale: 'fr-fr', locale: 'fr' },
@@ -19,56 +19,56 @@ const localizedFields = locales.flatMap((locale) =>
   }))
 );
 
-module.exports = {
-  extractFromAirtableObject(competence) {
-    const id = competence['id persistant'];
-    return localizedFields
-      .filter(({ airtableField, airtableLocale }) => competence[`${airtableField} ${airtableLocale}`])
-      .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
-        key: `${prefix}${id}.${field}`,
-        value: competence[`${airtableField} ${airtableLocale}`],
-        locale,
-      }));
-  },
-  hydrateToAirtableObject(competence, translations) {
-    const id = competence['id persistant'];
-
-    for (const {
-      airtableLocale,
+export function extractFromAirtableObject(competence) {
+  const id = competence['id persistant'];
+  return localizedFields
+    .filter(({ airtableField, airtableLocale }) => competence[`${airtableField} ${airtableLocale}`])
+    .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
+      key: `${prefix}${id}.${field}`,
+      value: competence[`${airtableField} ${airtableLocale}`],
       locale,
-      airtableField,
-      field,
-    } of localizedFields) {
+    }));
+}
+
+export function hydrateToAirtableObject(competence, translations) {
+  const id = competence['id persistant'];
+
+  for (const {
+    airtableLocale,
+    locale,
+    airtableField,
+    field,
+  } of localizedFields) {
+    const translation = translations.find(
+      (translation) =>
+        translation.key === `${prefix}${id}.${field}` &&
+        translation.locale === locale
+    );
+
+    competence[`${airtableField} ${airtableLocale}`] =
+      translation?.value ?? null;
+  }
+}
+
+export function dehydrateAirtableObject(competence) {
+  for (const {
+    airtableLocale,
+    airtableField,
+  } of localizedFields) {
+    delete competence[`${airtableField} ${airtableLocale}`];
+  }
+}
+
+export function hydrateReleaseObject(competence, translations) {
+  for (const { field } of fields) {
+    competence[`${field}_i18n`] = {};
+    for (const { locale } of locales) {
       const translation = translations.find(
         (translation) =>
-          translation.key === `${prefix}${id}.${field}` &&
+          translation.key === `${prefix}${competence.id}.${field}` &&
           translation.locale === locale
       );
-
-      competence[`${airtableField} ${airtableLocale}`] =
-        translation?.value ?? null;
+      competence[`${field}_i18n`][locale] = translation?.value ?? null;
     }
-  },
-  dehydrateAirtableObject(competence) {
-    for (const {
-      airtableLocale,
-      airtableField,
-    } of localizedFields) {
-      delete competence[`${airtableField} ${airtableLocale}`];
-    }
-  },
-  hydrateReleaseObject(competence, translations) {
-    for (const { field } of fields) {
-      competence[`${field}_i18n`] = {};
-      for (const { locale } of locales) {
-        const translation = translations.find(
-          (translation) =>
-            translation.key === `${prefix}${competence.id}.${field}` &&
-            translation.locale === locale
-        );
-        competence[`${field}_i18n`][locale] = translation?.value ?? null;
-      }
-    }
-  },
-  prefix,
-};
+  }
+}

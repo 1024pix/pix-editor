@@ -1,6 +1,9 @@
-const JSONAPISerializer = require('jsonapi-serializer').Serializer;
+import JsonapiSerializer from 'jsonapi-serializer';
 
-module.exports = () => {
-  const object = new JSONAPISerializer('', {});
-  return object.serialize(null);
-};
+const { Serializer  } = JsonapiSerializer;
+
+const serializer = new Serializer('', {});
+
+export function emptyDataResponse() {
+  return serializer.serialize(null);
+}

@@ -1,10 +1,6 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = {
-  createChallengeTransformer
-};
-
-function createChallengeTransformer({ attachments }) {
+export function createChallengeTransformer({ attachments }) {
   return (challenge) => _filterChallengeFields(_addAttachmentsToChallenge({ attachments }, challenge));
 }
 

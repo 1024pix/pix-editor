@@ -1,10 +1,10 @@
-const { expect } = require('../../../test-helper');
-const {
+import { expect } from '../../../test-helper.js';
+import {
   extractFromAirtableObject,
   hydrateReleaseObject,
   hydrateToAirtableObject,
   dehydrateAirtableObject
-} = require('../../../../lib/infrastructure/translations/competence');
+} from '../../../../lib/infrastructure/translations/competence.js';
 
 describe('Unit | Infrastructure | Competence translations', () => {
   describe('#extractFromAirtableObject', () => {

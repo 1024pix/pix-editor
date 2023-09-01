@@ -1,4 +1,4 @@
-module.exports = function buildThematicDatasourceObject(
+export function buildThematicDatasourceObject(
   {
     id = 'recFvllz2Ckz',
     name_i18n = {
@@ -16,4 +16,4 @@ module.exports = function buildThematicDatasourceObject(
     tubeIds,
     index,
   };
-};
+}

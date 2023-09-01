@@ -1,16 +1,16 @@
-class DomainError extends Error {
+export class DomainError extends Error {
   constructor(message) {
     super(message);
   }
 }
 
-class NotFoundError extends DomainError {
+export class NotFoundError extends DomainError {
   constructor(message = 'Erreur, ressource introuvable.') {
     super(message);
   }
 }
 
-class UserNotFoundError extends NotFoundError {
+export class UserNotFoundError extends NotFoundError {
   constructor(message = 'Ce compte est introuvable.') {
     super(message);
   }
@@ -24,13 +24,13 @@ class UserNotFoundError extends NotFoundError {
   }
 }
 
-class StaticCourseIsInactiveError extends DomainError {
+export class StaticCourseIsInactiveError extends DomainError {
   constructor(message = 'Opération impossible sur un test statique inactif.') {
     super(message);
   }
 }
 
-class InvalidStaticCourseCreationOrUpdateError extends DomainError {
+export class InvalidStaticCourseCreationOrUpdateError extends DomainError {
   constructor() {
     super('Static course validation error at creation or update');
     this.errors = [];
@@ -52,11 +52,3 @@ class InvalidStaticCourseCreationOrUpdateError extends DomainError {
     this.errors.push({ field, data: duplicates, code: 'DUPLICATES_FORBIDDEN' });
   }
 }
-
-module.exports = {
-  DomainError,
-  InvalidStaticCourseCreationOrUpdateError,
-  NotFoundError,
-  StaticCourseIsInactiveError,
-  UserNotFoundError,
-};

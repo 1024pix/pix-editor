@@ -1,5 +1,5 @@
-const { expect, domainBuilder } = require('../../../../test-helper');
-const Content = require('../../../../../lib/domain/models/release/Content');
+import { expect, domainBuilder } from '../../../../test-helper.js';
+import { Content } from '../../../../../lib/domain/models/release/Content.js';
 
 describe('Unit | Domain | Content', () => {
   describe('#buildForRelease', () => {

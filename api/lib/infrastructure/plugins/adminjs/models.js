@@ -1,9 +1,9 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const { database } = require('../../../config');
+import { Sequelize, DataTypes } from 'sequelize';
+import { database } from '../../../config.js';
 
 const sequelize = new Sequelize(database.url);
 
-const User = sequelize.define(
+export const User = sequelize.define(
   'user',
   {
     name: {
@@ -24,7 +24,7 @@ const User = sequelize.define(
   {}
 );
 
-const Release = sequelize.define(
+export const Release = sequelize.define(
   'release',
   {
     createdAt: {
@@ -35,8 +35,3 @@ const Release = sequelize.define(
     timestamps: false,
   }
 );
-
-module.exports = {
-  User,
-  Release,
-};

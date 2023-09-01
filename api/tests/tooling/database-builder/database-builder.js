@@ -1,9 +1,9 @@
-const databaseBuffer = require('./database-buffer');
-const factory = require('./factory/index');
-const knexDatabaseConnection = require('../../../db/knex-database-connection');
-const _ = require('lodash');
+import { databaseBuffer } from './database-buffer.js';
+import * as factory from './factory/index.js';
+import { emptyAllTables, listTablesByDependencyOrderDesc } from '../../../db/knex-database-connection.js';
+import _ from 'lodash';
 
-module.exports = class DatabaseBuilder {
+export class DatabaseBuilder {
   constructor({ knex }) {
     this.knex = knex;
     this.databaseBuffer = databaseBuffer;
@@ -15,7 +15,7 @@ module.exports = class DatabaseBuilder {
   async commit() {
     if (this.isFirstCommit) {
       this.isFirstCommit = false;
-      await knexDatabaseConnection.emptyAllTables();
+      await emptyAllTables();
       await this._initTablesOrderedByDependencyWithDirtinessMap();
     }
     const trx = await this.knex.transaction();
@@ -41,7 +41,7 @@ module.exports = class DatabaseBuilder {
   }
 
   async _initTablesOrderedByDependencyWithDirtinessMap() {
-    const dependencyOrderedTables = await knexDatabaseConnection.listTablesByDependencyOrderDesc();
+    const dependencyOrderedTables = await listTablesByDependencyOrderDesc();
     this.tablesOrderedByDependencyWithDirtinessMap = _.map(dependencyOrderedTables, (table) => {
       return {
         table,
@@ -65,4 +65,4 @@ module.exports = class DatabaseBuilder {
       table.isDirty = false;
     });
   }
-};
+}

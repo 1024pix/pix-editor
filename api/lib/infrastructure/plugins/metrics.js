@@ -1,5 +1,5 @@
-const client = require('prom-client');
-const os = require('os');
+import client from 'prom-client';
+import os from 'node:os';
 
 client.register.clear(); // XXX test:watch force us to clean the registry
 
@@ -20,7 +20,7 @@ const metrics = {
   }
 };
 
-const Metrics = {
+export const Metrics = {
   name: 'metrics-plugin',
 
   reset() {
@@ -59,5 +59,3 @@ const Metrics = {
 
   prometheusClient: client.register,
 };
-
-module.exports = Metrics;

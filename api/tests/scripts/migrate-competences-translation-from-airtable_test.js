@@ -1,8 +1,8 @@
-const { expect, airtableBuilder, knex } = require('../test-helper');
-const Airtable = require('airtable');
-const nock = require('nock');
+import { expect, airtableBuilder, knex } from '../test-helper.js';
+import Airtable from 'airtable';
+import nock from 'nock';
 
-const { migrateCompetencesTranslationFromAirtable } = require('../../scripts/migrate-competences-translation-from-airtable');
+import { migrateCompetencesTranslationFromAirtable } from '../../scripts/migrate-competences-translation-from-airtable/index.js';
 
 describe('Migrate translation from airtable', function() {
 

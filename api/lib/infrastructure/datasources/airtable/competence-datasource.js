@@ -1,6 +1,6 @@
-const datasource = require('./datasource');
+import { datasource } from './datasource.js';
 
-module.exports = datasource.extend({
+export const competenceDatasource = datasource.extend({
 
   modelName: 'Competence',
 
@@ -26,4 +26,3 @@ module.exports = datasource.extend({
     };
   },
 });
-

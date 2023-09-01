@@ -1,6 +1,6 @@
-const { expect, knex } = require('../../../test-helper');
-const translationRepository = require('../../../../lib/infrastructure/repositories/translation-repository');
-const nock = require('nock');
+import { expect, knex } from '../../../test-helper.js';
+import { checkIfShouldDuplicateToAirtable, save } from '../../../../lib/infrastructure/repositories/translation-repository.js';
+import nock from 'nock';
 
 describe('Integration | Repository | translation-repository', function() {
 
@@ -39,7 +39,7 @@ describe('Integration | Repository | translation-repository', function() {
         .reply(200, { records: [] });
 
       // when
-      await translationRepository.save([{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }]);
+      await save([{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }]);
 
       // then
       expect(nock.isDone()).to.be.true;
@@ -60,5 +60,5 @@ async function _setShouldDuplicateToAirtable(value) {
       .reply(404);
   }
 
-  await translationRepository.checkIfShouldDuplicateToAirtable();
+  await checkIfShouldDuplicateToAirtable();
 }

@@ -1,8 +1,9 @@
-const { expect, domainBuilder, airtableBuilder, sinon } = require('../../../../test-helper');
-const challengeDatasource = require('../../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const airtable = require('../../../../../lib/infrastructure/airtable');
-const airtableClient = require('airtable');
-const AirtableRecord = require('airtable').Record;
+import { expect, domainBuilder, airtableBuilder, sinon } from '../../../../test-helper.js';
+import { challengeDatasource } from '../../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
+import * as airtable from '../../../../../lib/infrastructure/airtable.js';
+import airtableLib from 'airtable';
+
+const { Record: AirtableRecord } = airtableLib;
 
 describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', () => {
   describe('#fromAirTableObject', () => {
@@ -175,7 +176,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         skills: [],
         attachments: [],
       });
-      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+      const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
 
       sinon.stub(airtable, 'findRecords')
         .withArgs('Epreuves', { filterByFormula: '{id persistant} = \'recChallenge\'', maxRecords: 1 })
@@ -195,7 +196,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         skills: [],
         attachments: [],
       });
-      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+      const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
 
       sinon.stub(airtable, 'findRecords')
         .resolves([ challengeRecord ]);

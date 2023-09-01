@@ -1,6 +1,6 @@
 const TABLE_NAME = 'users';
 
-exports.up = (knex) => {
+export function up(knex) {
 
   function table(t) {
 
@@ -17,7 +17,7 @@ exports.up = (knex) => {
     .createTable(TABLE_NAME, table);
 };
 
-exports.down = (knex) => {
+export function down(knex) {
 
   return knex.schema
     .dropTable(TABLE_NAME);

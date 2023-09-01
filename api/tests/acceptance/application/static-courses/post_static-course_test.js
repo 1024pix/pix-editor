@@ -1,13 +1,13 @@
-const {
+import {
   expect,
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
   knex,
   sinon
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
-const challengeRepository = require('../../../../lib/infrastructure/repositories/challenge-repository');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
+import { challengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Acceptance | API | static courses | POST /api/static-courses', function() {
   let user, clock;

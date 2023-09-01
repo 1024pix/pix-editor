@@ -1,10 +1,9 @@
-const { validateUrlsFromRelease } = require('../../domain/usecases/validate-urls-from-release');
-const logger = require('../../infrastructure/logger');
-const { disconnect } = require('../../../db/knex-database-connection');
-const releaseRepository = require('../../infrastructure/repositories/release-repository');
-const urlErrorRepository = require('../../infrastructure/repositories/url-error-repository');
+const { validateUrlsFromRelease } = await import('../../domain/usecases/validate-urls-from-release.js');
+const { logger } = await import('../logger.js');
+const { disconnect } = await import('../../../db/knex-database-connection.js');
+const { releaseRepository, urlErrorRepository } = await import('../repositories/index.js');
 
-module.exports = function() {
+module.exports = function checkUrlsJobProcessor() {
   return validateUrlsFromRelease({ releaseRepository, urlErrorRepository });
 };
 

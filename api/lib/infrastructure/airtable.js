@@ -1,12 +1,12 @@
-const Airtable = require('airtable');
-const airtableSettings = require('../config').airtable;
-const logger = require('./logger');
+import Airtable from 'airtable';
+import * as config from '../config.js';
+import { logger } from './logger.js';
 
 function _airtableClient() {
-  return new Airtable({ apiKey: airtableSettings.apiKey }).base(airtableSettings.base);
+  return new Airtable({ apiKey: config.airtable.apiKey }).base(config.airtable.base);
 }
 
-function findRecords(tableName, options = {}) {
+export function findRecords(tableName, options = {}) {
   logger.info({ tableName }, 'Querying Airtable');
   return _airtableClient()
     .table(tableName)
@@ -14,21 +14,21 @@ function findRecords(tableName, options = {}) {
     .all();
 }
 
-async function createRecord(tableName, body) {
+export async function createRecord(tableName, body) {
   const records = await _airtableClient()
     .table(tableName)
     .create([body]);
   return records[0];
 }
 
-async function updateRecord(tableName, body) {
+export async function updateRecord(tableName, body) {
   const records = await _airtableClient()
     .table(tableName)
     .update([body]);
   return records[0];
 }
 
-async function upsertRecords(tableName, records, fieldsToMergeOn) {
+export async function upsertRecords(tableName, records, fieldsToMergeOn) {
   return _airtableClient().table(tableName).update(
     records,
     {
@@ -38,10 +38,3 @@ async function upsertRecords(tableName, records, fieldsToMergeOn) {
     },
   );
 }
-
-module.exports = {
-  findRecords,
-  createRecord,
-  updateRecord,
-  upsertRecords,
-};

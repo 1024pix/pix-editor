@@ -1,6 +1,6 @@
-const CompetenceForRelease = require('../../../../lib/domain/models/release/CompetenceForRelease');
+import { CompetenceForRelease } from '../../../../lib/domain/models/release/CompetenceForRelease.js';
 
-const buildCompetenceForRelease = function({
+export function buildCompetenceForRelease({
   id = 'recCompetence1',
   name = 'nameCompetence1',
   name_i18n = { fr: 'nameFrCompetence1', en: 'nameUsCompetence1' },
@@ -24,6 +24,4 @@ const buildCompetenceForRelease = function({
     thematicIds,
     origin,
   });
-};
-
-module.exports = buildCompetenceForRelease;
+}

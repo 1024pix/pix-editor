@@ -1,6 +1,6 @@
-const { PassThrough } = require('stream');
-const { expect, streamToPromise } = require('../../../test-helper');
-const { promiseStreamer } = require('../../../../lib/infrastructure/utils/promise-streamer');
+import { PassThrough } from 'stream';
+import { expect, streamToPromise } from '../../../test-helper.js';
+import { promiseStreamer } from '../../../../lib/infrastructure/utils/promise-streamer.js';
 
 describe('Unit | Infrastructure | Utils | Promise Streamer', () => {
   it('write the result of the promise in a writable stream', async () => {

@@ -1,6 +1,6 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-function filterTutorialsFields(tutorials) {
+export function filterTutorialsFields(tutorials) {
   const fieldsToInclude = [
     'id',
     'duration',
@@ -12,7 +12,3 @@ function filterTutorialsFields(tutorials) {
   ];
   return tutorials.map((tutorial) => _.pick(tutorial, fieldsToInclude));
 }
-
-module.exports = {
-  filterTutorialsFields,
-};

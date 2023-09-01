@@ -1,6 +1,6 @@
-const SkillForRelease = require('../../../../lib/domain/models/release/SkillForRelease');
+import { SkillForRelease } from '../../../../lib/domain/models/release/SkillForRelease.js';
 
-const buildSkillForRelease = function({
+export function buildSkillForRelease({
   id = 'recTIddrkopID28Ep',
   name = '@accesDonnées1',
   hint_i18n = {
@@ -35,6 +35,4 @@ const buildSkillForRelease = function({
     internationalisation,
     version,
   });
-};
-
-module.exports = buildSkillForRelease;
+}

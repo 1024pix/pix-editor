@@ -1,3 +1,1 @@
-module.exports = {
-  Competences: require('./competence'),
-};
+export * as Competences from './competence.js';

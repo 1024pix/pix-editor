@@ -1,7 +1,7 @@
-const nock = require('nock');
-const { expect, sinon } = require('../../test-helper');
-const pixApiClient = require('../../../lib/infrastructure/pix-api-client');
-const cache = require('../../../lib/infrastructure/cache');
+import nock from 'nock';
+import { expect, sinon } from '../../test-helper.js';
+import * as pixApiClient from '../../../lib/infrastructure/pix-api-client.js';
+import { cache } from '../../../lib/infrastructure/cache.js';
 
 describe('Unit | Infrastructure | PIX API Client', () => {
 

@@ -1,4 +1,4 @@
-const buildFramework = function buildFramework({
+export function buildFramework({
   id,
   name,
 } = {}) {
@@ -8,6 +8,4 @@ const buildFramework = function buildFramework({
       'Nom': name,
     },
   };
-};
-
-module.exports = buildFramework;
+}

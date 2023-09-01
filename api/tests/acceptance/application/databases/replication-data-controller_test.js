@@ -1,11 +1,11 @@
-const {
+import {
   expect,
   generateAuthorizationHeader,
   databaseBuilder,
   airtableBuilder,
   domainBuilder
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 const {
   buildArea,

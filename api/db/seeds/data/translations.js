@@ -1,6 +1,6 @@
-const Airtable = require('airtable');
+import Airtable from 'airtable';
 
-module.exports = async function(databaseBuilder) {
+export async function translationsBuilder(databaseBuilder) {
   const {
     AIRTABLE_API_KEY: airtableApiKey,
     AIRTABLE_BASE: airtableBase,

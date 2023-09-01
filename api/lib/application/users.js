@@ -1,6 +1,6 @@
-const userSerializer = require('../infrastructure/serializers/jsonapi/user-serializer');
+import { userSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -13,7 +13,7 @@ exports.register = async function(server) {
       },
     },
   ]);
-};
+}
 
-exports.name = 'users-api';
+export const name = 'users-api';
 

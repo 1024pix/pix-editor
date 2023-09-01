@@ -1,11 +1,11 @@
-const SlackNotifier = require('../../../../lib/infrastructure/notifications/SlackNotifier');
-const { expect, sinon } = require('../../../test-helper');
-const axios = require('axios');
+import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
+import { expect, sinon } from '../../../test-helper.js';
+import axios from 'axios';
 
 describe('Unit | Infrastructure | SlackNotifier', function() {
   describe('#constructor', function() {
     it('should throw an error when webhookUrl is not defined', function() {
-      
+
       // when
       try {
         new SlackNotifier(null);
@@ -15,14 +15,14 @@ describe('Unit | Infrastructure | SlackNotifier', function() {
         expect(e.message).to.equal('WebhookURL is required');
       }
     });
-  
+
     it('should be an instance of slack notifier', function() {
       // given
       const webhookUrl = 'http://webhook.url/test';
-  
+
       // when
       const slacknotifier = new SlackNotifier(webhookUrl);
-  
+
       // then
       expect(slacknotifier).to.be.instanceOf(SlackNotifier);
       expect(slacknotifier.webhookUrl).to.equal(webhookUrl);

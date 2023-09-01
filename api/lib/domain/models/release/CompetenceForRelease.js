@@ -1,4 +1,4 @@
-module.exports = class CompetenceForRelease {
+export class CompetenceForRelease {
   constructor({
     id,
     name_i18n,
@@ -18,4 +18,4 @@ module.exports = class CompetenceForRelease {
     this.name_i18n = name_i18n;
     this.description_i18n = description_i18n;
   }
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function(chai, _utils) {
+export function deepEqualInstance(chai, _utils) {
   chai.Assertion.addMethod('deepEqualInstance', function(referenceInstance) {
     const assertedInstance = this._obj;
 

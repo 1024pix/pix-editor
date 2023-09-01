@@ -1,9 +1,5 @@
-const securityPreHandlers = require('../application/security-pre-handlers');
+import * as securityPreHandlers from '../application/security-pre-handlers.js';
 
-module.exports = {
-
-  scheme() {
-    return { authenticate: (request, h) => securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, h) };
-  }
-
-};
+export function scheme() {
+  return { authenticate: (request, h) => securityPreHandlers.checkUserIsAuthenticatedViaBearer(request, h) };
+}

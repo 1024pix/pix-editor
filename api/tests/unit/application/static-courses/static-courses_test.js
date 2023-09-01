@@ -1,9 +1,8 @@
-const { expect, sinon, hFake, domainBuilder, catchErr } = require('../../../test-helper');
-const staticCourseController = require('../../../../lib/application/static-courses/static-courses');
-const challengeRepository = require('../../../../lib/infrastructure/repositories/challenge-repository');
-const staticCourseRepository = require('../../../../lib/infrastructure/repositories/static-course-repository');
-const idGenerator = require('../../../../lib/infrastructure/utils/id-generator');
-const { InvalidStaticCourseCreationOrUpdateError } = require('../../../../lib/domain/errors');
+import { expect, sinon, hFake, domainBuilder, catchErr } from '../../../test-helper.js';
+import * as staticCourseController from '../../../../lib/application/static-courses/static-courses.js';
+import { challengeRepository, staticCourseRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
+import { InvalidStaticCourseCreationOrUpdateError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Controller | static courses controller', function() {
   describe('findSummaries', function() {

@@ -1,7 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
 
-const { expect, sinon } = require('../../test-helper');
-const fileStorageTokenRepository = require('../../../lib/infrastructure/repositories/file-storage-token-repository');
+import { expect, sinon } from '../../test-helper.js';
+import { create } from '../../../lib/infrastructure/repositories/file-storage-token-repository.js';
 
 describe('Unit | Repository | file-storage-token-repository', () => {
   describe('#create', () => {
@@ -14,7 +14,7 @@ describe('Unit | Repository | file-storage-token-repository', () => {
           },
         },
       });
-      const token = await fileStorageTokenRepository.create();
+      const token = await create();
 
       const expectedPayload = {
         'auth': {

@@ -1,5 +1,5 @@
-const { expect, domainBuilder, airtableBuilder } = require('../../../test-helper');
-const airtableSerializer = require('../../../../lib/infrastructure/serializers/airtable-serializer');
+import { expect, domainBuilder, airtableBuilder } from '../../../test-helper.js';
+import { serialize } from '../../../../lib/infrastructure/serializers/airtable-serializer.js';
 
 describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {
   describe('#serialize', () => {
@@ -27,7 +27,7 @@ describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {
       const tableName = 'Domaines';
 
       // when
-      const { updatedRecord, model } = airtableSerializer.serialize({ airtableObject, tableName });
+      const { updatedRecord, model } = serialize({ airtableObject, tableName });
 
       // then
       expect(updatedRecord).to.deep.equal(expectedArea);

@@ -1,16 +1,16 @@
-const axios = require('axios');
-const Sentry = require('@sentry/node');
-const config = require('../config');
-const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
-const pixApiClient = require('../infrastructure/pix-api-client');
-const updatedRecordNotifier = require('../infrastructure/event-notifier/updated-record-notifier');
-const logger = require('../infrastructure/logger');
-const releaseRepository = require('../infrastructure/repositories/release-repository');
-const securityPreHandlers = require('./security-pre-handlers');
-const tablesTranslations = require('../infrastructure/translations');
-const translationRepository = require('../infrastructure/repositories/translation-repository');
+import axios from 'axios';
+import Sentry from '@sentry/node';
+import * as config from '../config.js';
+import * as pixApiClient from '../infrastructure/pix-api-client.js';
+import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
+import { logger } from '../infrastructure/logger.js';
+import { releaseRepository, translationRepository } from '../infrastructure/repositories/index.js';
+import * as securityPreHandlers from './security-pre-handlers.js';
+import * as tablesTranslations from '../infrastructure/translations/index.js';
 
-exports.register = async function(server) {
+const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
+
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -107,9 +107,9 @@ exports.register = async function(server) {
       },
     }
   ]);
-};
+}
 
-exports.name = 'airtable-proxy';
+export const name = 'airtable-proxy';
 
 async function _proxyRequestToAirtable(request, airtableBase) {
   return axios.request(`${AIRTABLE_BASE_URL}/${airtableBase}/${request.params.path}`,

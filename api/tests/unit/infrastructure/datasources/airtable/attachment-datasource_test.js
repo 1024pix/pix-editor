@@ -1,7 +1,7 @@
-const { expect, airtableBuilder, sinon } = require('../../../../test-helper');
-const attachmentDatasource = require('../../../../../lib/infrastructure/datasources/airtable/attachment-datasource');
-const airtable = require('../../../../../lib/infrastructure/airtable');
-const airtableClient = require('airtable');
+import { expect, airtableBuilder, sinon } from '../../../../test-helper.js';
+import { attachmentDatasource } from '../../../../../lib/infrastructure/datasources/airtable/attachment-datasource.js';
+import * as airtable from '../../../../../lib/infrastructure/airtable.js';
+import airtableClient from 'airtable';
 
 describe('Unit | Infrastructure | Datasource | Airtable | AttachmentDatasource', () => {
 

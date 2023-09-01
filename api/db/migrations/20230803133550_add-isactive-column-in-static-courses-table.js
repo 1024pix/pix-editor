@@ -5,7 +5,7 @@ const IS_ACTIVE_COLUMN = 'isActive';
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function(knex) {
+export async function up(knex) {
   await knex.schema.table(TABLE_NAME, function(table) {
     table.boolean(IS_ACTIVE_COLUMN).notNullable().defaultTo(true);
   });
@@ -16,7 +16,7 @@ exports.up = async function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
+export function down(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
     table.dropColumn(IS_ACTIVE_COLUMN);
   });

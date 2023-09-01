@@ -1,11 +1,17 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
-const fs = require('fs');
-const { performance } = require('perf_hooks');
-const { disconnect } = require('../../db/knex-database-connection');
-const releaseRepository = require('../../lib/infrastructure/repositories/release-repository');
-const logger = require('../../lib/infrastructure/logger');
-const argv = require('yargs/yargs')(process.argv.slice(2))
+import fs from 'node:fs';
+import { performance } from 'node:perf_hooks';
+import { fileURLToPath } from 'node:url';
+import { disconnect } from '../../db/knex-database-connection.js';
+import { releaseRepository } from '../../lib/infrastructure/repositories/index.js';
+import { logger } from '../../lib/infrastructure/logger.js';
+import yargs from 'yargs/yargs';
+
+const __filename = fileURLToPath(import.meta.url);
+const isLaunchedFromCommandLine = process.argv[1] === __filename;
+
+const argv = yargs(process.argv.slice(2))
   .version(false)
   .usage('Usage: $0 [options]')
   .option('file', {
@@ -26,7 +32,7 @@ const argv = require('yargs/yargs')(process.argv.slice(2))
   .alias('h', 'help')
   .argv;
 
-const getLatestRelease = async ({ shouldCreateRelease, destFile }) => {
+async function getLatestRelease({ shouldCreateRelease, destFile }) {
   if (shouldCreateRelease) {
     logger.info('Creating release...');
     await releaseRepository.create();
@@ -37,9 +43,9 @@ const getLatestRelease = async ({ shouldCreateRelease, destFile }) => {
   fs.writeFileSync(destFile, JSON.stringify(release));
   logger.info('Latest release fetched.');
   return true;
-};
+}
 
-const isLaunchedFromCommandLine = require.main === module;
+export { getLatestRelease as printLatestRelease };
 
 async function main() {
   const startTime = performance.now();
@@ -64,5 +70,3 @@ async function main() {
     }
   }
 })();
-
-module.exports = { printLatestRelease: getLatestRelease };

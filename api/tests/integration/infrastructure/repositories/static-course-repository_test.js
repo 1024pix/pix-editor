@@ -1,7 +1,6 @@
-const { expect, databaseBuilder, domainBuilder, sinon } = require('../../../test-helper');
-const staticCourseRepository = require('../../../../lib/infrastructure/repositories/static-course-repository');
-const challengeDatasource = require('../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const skillDatasource = require('../../../../lib/infrastructure/datasources/airtable/skill-datasource');
+import { expect, databaseBuilder, domainBuilder, sinon } from '../../../test-helper.js';
+import { findReadSummaries, getRead } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
+import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Integration | Repository | static-course-repository', function() {
   context('#findReadSummaries', function() {
@@ -31,7 +30,7 @@ describe('Integration | Repository | static-course-repository', function() {
             const {
               results: actualStaticCourseSummaries,
               meta
-            } = await staticCourseRepository.findReadSummaries({ filter, page });
+            } = await findReadSummaries({ filter, page });
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
@@ -52,7 +51,7 @@ describe('Integration | Repository | static-course-repository', function() {
             const {
               results: actualStaticCourseSummaries,
               meta
-            } = await staticCourseRepository.findReadSummaries({ filter, page });
+            } = await findReadSummaries({ filter, page });
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
@@ -73,7 +72,7 @@ describe('Integration | Repository | static-course-repository', function() {
             const {
               results: actualStaticCourseSummaries,
               meta
-            } = await staticCourseRepository.findReadSummaries({ filter, page });
+            } = await findReadSummaries({ filter, page });
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
@@ -110,7 +109,7 @@ describe('Integration | Repository | static-course-repository', function() {
             const {
               results: actualStaticCourseSummaries,
               meta
-            } = await staticCourseRepository.findReadSummaries({ filter, page });
+            } = await findReadSummaries({ filter, page });
 
             // then
             expect(actualStaticCourseSummaries).to.be.deep.equal([]);
@@ -158,7 +157,7 @@ describe('Integration | Repository | static-course-repository', function() {
       await databaseBuilder.commit();
 
       //when
-      const staticCourse = await staticCourseRepository.getRead('rec123');
+      const staticCourse = await getRead('rec123');
 
       //then
       expect(staticCourse.id).to.equal('rec123');

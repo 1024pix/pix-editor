@@ -1,6 +1,6 @@
-const { expect, sinon, domainBuilder } = require('../../../test-helper');
-const StaticCourse = require('../../../../lib/domain/models/StaticCourse');
-const { StaticCourseIsInactiveError } = require('../../../../lib/domain/errors');
+import { expect, sinon, domainBuilder } from '../../../test-helper.js';
+import { StaticCourse } from '../../../../lib/domain/models/StaticCourse.js';
+import { StaticCourseIsInactiveError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | StaticCourse', function() {
   context('static buildFromCreationCommand', function() {

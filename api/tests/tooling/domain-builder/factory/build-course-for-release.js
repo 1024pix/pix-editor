@@ -1,6 +1,6 @@
-const CourseForRelease = require('../../../../lib/domain/models/release/CourseForRelease');
+import { CourseForRelease } from '../../../../lib/domain/models/release/CourseForRelease.js';
 
-module.exports = function buildCourseForRelease({
+export function buildCourseForRelease({
   id = 'recPBOj7JzBcgXEtO',
   description = 'Programmer niveau 1 et 2',
   name = '3.4 niveau 1 et 2',
@@ -14,4 +14,4 @@ module.exports = function buildCourseForRelease({
     challenges,
     competences,
   });
-};
+}

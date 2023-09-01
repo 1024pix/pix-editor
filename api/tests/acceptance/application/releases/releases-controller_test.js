@@ -1,13 +1,13 @@
-const {
+import {
   expect,
   airtableBuilder,
   databaseBuilder,
   generateAuthorizationHeader,
   sinon,
   knex
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
-const axios = require('axios');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
+import axios from 'axios';
 
 const {
   buildArea,

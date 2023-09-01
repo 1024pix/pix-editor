@@ -1,12 +1,12 @@
-const SlackNotifier = require('../notifications/SlackNotifier');
-const checkUrlsJob = require('./check-urls-job');
-const config = require('../../config');
-const learningContentNotification = require('../../domain/services/learning-content-notification');
-const logger = require('../../infrastructure/logger');
-const releaseRepository = require('../repositories/release-repository.js');
-const { disconnect } = require('../../../db/knex-database-connection');
+const { SlackNotifier } = await import('../notifications/SlackNotifier.js');
+const checkUrlsJob = await import('./check-urls-job.js');
+const config = await import('../../config.js');
+const learningContentNotification = await import('../../domain/services/learning-content-notification.js');
+const { logger } = await import('../logger.js');
+const { releaseRepository } = await import('../repositories/index.js');
+const { disconnect } = await import('../../../db/knex-database-connection.js');
 
-module.exports = async function(job) {
+module.exports = async function releaseJobProcessor(job) {
   try {
     const releaseId = await releaseRepository.create();
     if (_isSlackNotificationGloballyEnabled() && job.data.slackNotification === true) {

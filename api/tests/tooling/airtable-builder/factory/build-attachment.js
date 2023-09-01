@@ -1,4 +1,4 @@
-const buildAttachment = function buildAttachment({
+export function buildAttachment({
   id = 'attid1',
   alt = 'alt',
   type = 'image/png',
@@ -16,7 +16,4 @@ const buildAttachment = function buildAttachment({
       'type': type,
     },
   };
-};
-
-module.exports = buildAttachment;
-
+}

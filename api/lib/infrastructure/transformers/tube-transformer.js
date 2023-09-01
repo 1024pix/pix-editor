@@ -1,7 +1,7 @@
 const VALIDATED_CHALLENGE = 'validé';
 const PROTOTYPE_CHALLENGE = 'Prototype 1';
 
-function transform({ tubes, skills, challenges, thematics }) {
+export function transform({ tubes, skills, challenges, thematics }) {
   tubes.forEach((tube) => {
     _addLinks({ tube, skills, thematics });
     _addDeviceCompliance({ tube, skills, challenges });
@@ -45,7 +45,3 @@ function _isChallengeSmartphoneCompliant(challenge) {
 function _isChallengeTabletCompliant(challenge) {
   return challenge.responsive?.includes('Tablet');
 }
-
-module.exports = {
-  transform,
-};

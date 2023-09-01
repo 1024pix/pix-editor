@@ -1,4 +1,4 @@
-module.exports = function buildThematic(
+export function buildThematic(
   {
     id,
     name_i18n: {
@@ -19,4 +19,4 @@ module.exports = function buildThematic(
       'Index': index
     },
   };
-};
+}

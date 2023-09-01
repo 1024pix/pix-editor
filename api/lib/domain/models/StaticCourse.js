@@ -1,8 +1,8 @@
-const _ = require('lodash');
-const CommandResult = require('../CommandResult');
-const { InvalidStaticCourseCreationOrUpdateError, StaticCourseIsInactiveError } = require('../errors');
+import _ from 'lodash';
+import { CommandResult } from '../CommandResult.js';
+import { InvalidStaticCourseCreationOrUpdateError, StaticCourseIsInactiveError } from '../errors.js';
 
-module.exports = class StaticCourse {
+export class StaticCourse {
   constructor({
     id,
     name,
@@ -93,7 +93,7 @@ module.exports = class StaticCourse {
       updatedAt: this.updatedAt,
     };
   }
-};
+}
 
 function validateAttributes({ name, challengeIds }, allChallengeIds) {
   const validationError = new InvalidStaticCourseCreationOrUpdateError();

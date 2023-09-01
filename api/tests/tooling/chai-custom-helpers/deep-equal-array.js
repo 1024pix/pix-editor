@@ -1,4 +1,4 @@
-module.exports = function(chai, _utils) {
+export function deepEqualArray(chai, _utils) {
   chai.Assertion.addMethod('deepEqualArray', function(referenceArray) {
     const assertedArray = this._obj;
 

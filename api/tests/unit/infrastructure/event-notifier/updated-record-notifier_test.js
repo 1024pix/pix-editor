@@ -1,5 +1,5 @@
-const { expect, domainBuilder, sinon } = require('../../../test-helper');
-const updatedRecordNotifier = require('../../../../lib/infrastructure/event-notifier/updated-record-notifier');
+import { expect, domainBuilder, sinon } from '../../../test-helper.js';
+import { notify } from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 
 describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () => {
 
@@ -12,7 +12,7 @@ describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () =
       const pixApiClient = { request: sinon.stub() };
 
       // when
-      await updatedRecordNotifier.notify({ pixApiClient, updatedRecord, model });
+      await notify({ pixApiClient, updatedRecord, model });
 
       // then
       expect(pixApiClient.request).to.have.been.calledWith({ payload: updatedRecord, url: `/api/cache/${model}/${updatedRecord.id}` });

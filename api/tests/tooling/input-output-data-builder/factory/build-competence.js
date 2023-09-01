@@ -1,4 +1,4 @@
-module.exports = function buildCompetence({
+export function buildCompetence({
   id = 'competenceid1',
   index,
   name_i18n: { fr: nameFrFr, en: nameEnUs },
@@ -23,4 +23,4 @@ module.exports = function buildCompetence({
       'Description en-us': descriptionEnUs,
     },
   };
-};
+}

@@ -1,4 +1,4 @@
-module.exports = function buildCoursePostgresDataObject(
+export function buildCoursePostgresDataObject(
   {
     id = 'recPBOj7JzBcgXEtO',
     description = 'Programmer niveau 1 et 2',
@@ -22,4 +22,4 @@ module.exports = function buildCoursePostgresDataObject(
     challenges,
     competences,
   };
-};
+}

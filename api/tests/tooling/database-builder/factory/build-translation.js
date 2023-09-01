@@ -1,9 +1,9 @@
-const databaseBuffer = require('../database-buffer');
+import { databaseBuffer } from '../database-buffer.js';
 
-module.exports = function buildTranslation({ key, locale, value } = {}) {
+export function buildTranslation({ key, locale, value } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'translations',
     autoId: false,
     values: { key, locale, value },
   });
-};
+}

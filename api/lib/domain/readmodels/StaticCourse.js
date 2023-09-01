@@ -1,4 +1,4 @@
-module.exports = class StaticCourse {
+export class StaticCourse {
   constructor({
     id,
     name,
@@ -18,4 +18,4 @@ module.exports = class StaticCourse {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
-};
+}

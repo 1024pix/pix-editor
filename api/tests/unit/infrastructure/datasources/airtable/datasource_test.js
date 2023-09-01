@@ -1,10 +1,10 @@
-const { expect, sinon } = require('../../../../test-helper');
-const dataSource = require('../../../../../lib/infrastructure/datasources/airtable/datasource');
-const airtable = require('../../../../../lib/infrastructure/airtable');
+import { expect, sinon } from '../../../../test-helper.js';
+import { datasource } from '../../../../../lib/infrastructure/datasources/airtable/datasource.js';
+import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 
 describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
-  const someDatasource = dataSource.extend({
+  const someDatasource = datasource.extend({
 
     modelName: 'AirtableModel',
 

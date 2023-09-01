@@ -1,12 +1,12 @@
-const {
+import {
   expect,
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
   knex,
   sinon
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
   let user, clock;

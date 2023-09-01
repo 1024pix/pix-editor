@@ -1,7 +1,7 @@
-const { expect, databaseBuilder, catchErr } = require('../../../test-helper');
-const userRepository = require('../../../../lib/infrastructure/repositories/user-repository');
-const User = require('../../../../lib/domain/models/User');
-const { UserNotFoundError } = require('../../../../lib/domain/errors');
+import { expect, databaseBuilder, catchErr } from '../../../test-helper.js';
+import { findByApiKey } from '../../../../lib/infrastructure/repositories/user-repository.js';
+import { User } from '../../../../lib/domain/models/User.js';
+import { UserNotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Integration | Repository | user-repository', function() {
   describe('#findByApiKey', function() {
@@ -21,7 +21,7 @@ describe('Integration | Repository | user-repository', function() {
       await databaseBuilder.commit();
 
       // When
-      const user = await userRepository.findByApiKey(apiKey);
+      const user = await findByApiKey(apiKey);
 
       // Then
       expect(user).to.be.an.instanceOf(User);
@@ -37,12 +37,10 @@ describe('Integration | Repository | user-repository', function() {
       const apiKey = '00000000-0000-0000-0000-000000000000';
 
       // When
-      const error = await catchErr(userRepository.findByApiKey)(apiKey);
+      const error = await catchErr(findByApiKey)(apiKey);
 
       // Then
       expect(error).to.be.instanceOf(UserNotFoundError);
     });
   });
-
 });
-

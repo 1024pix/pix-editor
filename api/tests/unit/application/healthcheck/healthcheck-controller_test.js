@@ -1,6 +1,6 @@
-const { expect, hFake } = require('../../../test-helper');
+import { expect, hFake } from '../../../test-helper.js';
 
-const healthcheckController = require('../../../../lib/application/healthcheck/healthcheck-controller');
+import * as healthcheckController from '../../../../lib/application/healthcheck/healthcheck-controller.js';
 
 describe('Unit | Controller | healthcheckController', () => {
 

@@ -1,5 +1,5 @@
-const { expect, domainBuilder } = require('../../../test-helper');
-const { filterSkillsFields } = require('../../../../lib/infrastructure/transformers/skill-transformer');
+import { expect, domainBuilder } from '../../../test-helper.js';
+import { filterSkillsFields } from '../../../../lib/infrastructure/transformers/skill-transformer.js';
 
 describe('Unit | Infrastructure | skill-transformer', function() {
 

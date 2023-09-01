@@ -1,13 +1,9 @@
-const userRepository = require('../infrastructure/repositories/user-repository');
-const JSONAPIError = require('jsonapi-serializer').Error;
+import { userRepository } from '../infrastructure/repositories/index.js';
+import JsonapiSerializer from 'jsonapi-serializer';
 
-module.exports = {
-  checkUserIsAuthenticatedViaBearer,
-  checkUserIsAuthenticatedViaBasicAndAdmin,
-  checkUserHasWriteAccess,
-};
+const { Error: JSONAPIError } = JsonapiSerializer;
 
-async function checkUserIsAuthenticatedViaBearer(request, h) {
+export async function checkUserIsAuthenticatedViaBearer(request, h) {
   if (!request.headers.authorization) {
     return _replyWithAuthenticationError(h);
   }
@@ -20,7 +16,7 @@ async function checkUserIsAuthenticatedViaBearer(request, h) {
   }
 }
 
-async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
+export async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
   try {
     const user = await userRepository.findByApiKey(username);
     if (user.access !== 'admin') {
@@ -32,7 +28,7 @@ async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
   }
 }
 
-async function checkUserHasWriteAccess(request, h) {
+export async function checkUserHasWriteAccess(request, h) {
   const authenticatedUser = request.auth.credentials.user;
   if (authenticatedUser.access === 'readonly') {
     return _replyForbiddenError(h);

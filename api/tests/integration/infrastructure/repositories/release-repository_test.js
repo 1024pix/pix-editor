@@ -1,5 +1,5 @@
-const { expect, databaseBuilder, knex, domainBuilder, airtableBuilder } = require('../../../test-helper');
-const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
+import { expect, databaseBuilder, knex, domainBuilder, airtableBuilder } from '../../../test-helper.js';
+import { create, getLatestRelease, getRelease, getCurrentContent } from '../../../../lib/infrastructure/repositories/release-repository.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -16,7 +16,7 @@ describe('Integration | Repository | release-repository', function() {
       };
 
       // When
-      await releaseRepository.create(fakeGetCurrentContent);
+      await create(fakeGetCurrentContent);
 
       // Then
       const releasesInDb = await knex('releases');
@@ -42,7 +42,7 @@ describe('Integration | Repository | release-repository', function() {
       };
 
       // When
-      const releaseId = await releaseRepository.create(fakeGetCurrentContent);
+      const releaseId = await create(fakeGetCurrentContent);
 
       // Then
       const [releasesInDbId] = await knex('releases').pluck('id');
@@ -78,7 +78,7 @@ describe('Integration | Repository | release-repository', function() {
       await databaseBuilder.commit();
 
       // When
-      const latestRelease = await releaseRepository.getLatestRelease();
+      const latestRelease = await getLatestRelease();
 
       // Then
       const expectedContent = domainBuilder.buildContentForRelease(newestReleaseContentDTO);
@@ -120,7 +120,7 @@ describe('Integration | Repository | release-repository', function() {
       await databaseBuilder.commit();
 
       // When
-      const givenRelease = await releaseRepository.getRelease(12);
+      const givenRelease = await getRelease(12);
 
       // Then
       const expectedContent = domainBuilder.buildContentForRelease(expectedReleaseContentDTO);
@@ -145,7 +145,7 @@ describe('Integration | Repository | release-repository', function() {
         await databaseBuilder.commit();
 
         // When
-        const givenRelease = await releaseRepository.getRelease(1);
+        const givenRelease = await getRelease(1);
 
         // Then
         const expectedContent = domainBuilder.buildContentForRelease(richCurrentContentDTO);
@@ -209,7 +209,7 @@ describe('Integration | Repository | release-repository', function() {
 
     it('should return current content as DTO', async function() {
       // When
-      const currentContentDTO = await releaseRepository.getCurrentContent();
+      const currentContentDTO = await getCurrentContent();
 
       // Then
       const expectedReleaseContentDTO = _getRichCurrentContentDTO();

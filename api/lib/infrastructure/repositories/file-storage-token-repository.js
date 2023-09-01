@@ -1,7 +1,7 @@
-const axios = require('axios');
-const config = require('../../config');
+import axios from 'axios';
+import * as config from '../../config.js';
 
-async function create() {
+export async function create() {
   const payload = {
     'auth': {
       'identity': {
@@ -28,7 +28,3 @@ async function create() {
     expiresAt: response.data.token.expires_at,
   };
 }
-
-module.exports = {
-  create
-};

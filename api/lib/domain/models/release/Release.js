@@ -1,4 +1,4 @@
-module.exports = class Release {
+export class Release {
   constructor({
     id,
     content,
@@ -8,4 +8,4 @@ module.exports = class Release {
     this.createdAt = createdAt;
     this.content = content;
   }
-};
+}

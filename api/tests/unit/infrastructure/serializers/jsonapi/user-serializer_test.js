@@ -1,6 +1,6 @@
-const { expect } = require('../../../../test-helper');
-const User = require('../../../../../lib/domain/models/User');
-const serializer = require('../../../../../lib/infrastructure/serializers/jsonapi/user-serializer');
+import { expect } from '../../../../test-helper.js';
+import { User } from '../../../../../lib/domain/models/User.js';
+import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/user-serializer.js';
 
 describe('Unit | Serializer | JSONAPI | user-serializer', () => {
   describe('#serialize', () => {
@@ -22,7 +22,7 @@ describe('Unit | Serializer | JSONAPI | user-serializer', () => {
       };
 
       // When
-      const json = serializer.serialize(user);
+      const json = serialize(user);
 
       // Then
       expect(json).to.deep.equal(expectedSerializedUser);

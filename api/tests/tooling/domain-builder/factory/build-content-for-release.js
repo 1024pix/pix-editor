@@ -1,6 +1,6 @@
-const Content = require('../../../../lib/domain/models/release/Content');
+import { Content } from '../../../../lib/domain/models/release/Content.js';
 
-module.exports = function buildContentForRelease({
+export function buildContentForRelease({
   areas = [],
   challenges = [],
   competences = [],
@@ -22,4 +22,4 @@ module.exports = function buildContentForRelease({
     tubes,
     tutorials,
   });
-};
+}

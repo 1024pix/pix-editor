@@ -1,6 +1,6 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = function(chai, _utils) {
+export function deepEqualInstanceOmitting(chai, _utils) {
   chai.Assertion.addMethod('deepEqualInstanceOmitting', function(referenceInstance, omittedAttributes) {
     const assertedInstance = this._obj;
 

@@ -1,9 +1,9 @@
-const { expect, hFake } = require ('../../../test-helper');
-const {
+import { expect, hFake } from '../../../test-helper.js';
+import {
   InvalidStaticCourseCreationOrUpdateError,
   StaticCourseIsInactiveError,
-} = require('../../../../lib/domain/errors');
-const { send } = require('../../../../lib/infrastructure/utils/error-manager');
+} from '../../../../lib/domain/errors.js';
+import { send } from '../../../../lib/infrastructure/utils/error-manager.js';
 
 describe('Unit | Infrastructure | ErrorManager', function() {
   describe('#send', function() {

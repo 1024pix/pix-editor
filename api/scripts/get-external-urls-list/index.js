@@ -1,8 +1,11 @@
-require('dotenv').config({ path: __dirname + '/../../.env' });
-const _ = require('lodash');
-const { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } = require('../../lib/domain/usecases/validate-urls-from-release');
-const releaseRepository = require('../../lib/infrastructure/repositories/release-repository');
-const { disconnect } = require('../../db/knex-database-connection');
+import { fileURLToPath } from 'node:url';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+import * as dotenv from 'dotenv';
+dotenv.config({ path: __dirname + '/../../.env' });
+import _ from 'lodash';
+import { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } from '../../lib/domain/usecases/validate-urls-from-release.js';
+import { releaseRepository } from '../../lib/infrastructure/repositories/index.js';
+import { disconnect } from '../../db/knex-database-connection.js';
 
 async function getExternalUrlsList() {
   const release = (await releaseRepository.getLatestRelease()).content;

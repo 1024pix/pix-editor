@@ -1,6 +1,8 @@
-const { expect, domainBuilder, airtableBuilder } = require('../../../../test-helper');
-const competenceDatasource = require('../../../../../lib/infrastructure/datasources/airtable/competence-datasource');
-const AirtableRecord = require('airtable').Record;
+import { expect, domainBuilder, airtableBuilder } from '../../../../test-helper.js';
+import { competenceDatasource } from '../../../../../lib/infrastructure/datasources/airtable/competence-datasource.js';
+import airtable from 'airtable';
+
+const { Record: AirtableRecord } = airtable;
 
 describe('Unit | Infrastructure | Datasource | Airtable | CompetenceDatasource', () => {
 

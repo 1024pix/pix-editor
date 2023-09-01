@@ -1,4 +1,4 @@
-module.exports = function buildSkillDatasourceObject(
+export function buildSkillDatasourceObject(
   {
     id = 'recTIddrkopID28Ep',
     name = '@accesDonnées1',
@@ -34,4 +34,4 @@ module.exports = function buildSkillDatasourceObject(
     internationalisation,
     version,
   };
-};
+}

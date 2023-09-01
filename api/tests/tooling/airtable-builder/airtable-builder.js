@@ -1,7 +1,7 @@
-const factory = require('./factory/index');
-const AirtableMockRoute = require('./airtable-mock-route');
+import * as factory from './factory/index.js';
+import { AirtableMockRoute } from './airtable-mock-route.js';
 
-module.exports = class AirtableBuilder {
+export class AirtableBuilder {
   constructor({ nock }) {
     this.nockScope = nock('https://api.airtable.com').persist();
     this.nock = nock;
@@ -71,4 +71,4 @@ module.exports = class AirtableBuilder {
       .activate();
   }
 
-};
+}

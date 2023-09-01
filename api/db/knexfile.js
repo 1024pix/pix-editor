@@ -1,13 +1,16 @@
-require('dotenv').config({ path: `${__dirname}/../.env` });
-const { database } = require('../lib/config');
+import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+import * as dotenv from 'dotenv';
+dotenv.config({ path: resolve(__dirname, '../.env') });
 
-function localPostgresEnv(database) {
+function localPostgresEnv(databaseUrl) {
   return {
     client: 'postgresql',
-    connection: database.url,
+    connection: databaseUrl,
     pool: {
-      min: database.poolMinSize,
-      max: database.poolMaxSize,
+      min: parseInt(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE) || 1,
+      max: parseInt(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE) || 4,
     },
     migrations: {
       tableName: 'knex_migrations',
@@ -16,48 +19,45 @@ function localPostgresEnv(database) {
     seeds: {
       directory: './seeds',
     },
-    asyncStackTraces: database.asyncStackTraceEnabled,
+    asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
   };
 }
 
-module.exports = {
+export const development = localPostgresEnv(process.env.DATABASE_URL);
 
-  development: localPostgresEnv(database),
+export const test = localPostgresEnv(process.env.TEST_DATABASE_URL);
 
-  test: localPostgresEnv(database),
-
-  staging: {
-    client: 'postgresql',
-    connection: database.url,
-    pool: {
-      min: database.poolMinSize,
-      max: database.poolMaxSize,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-      directory: './migrations',
-    },
-    seeds: {
-      directory: './seeds',
-    },
-    asyncStackTraces: database.asyncStackTraceEnabled,
+export const staging = {
+  client: 'postgresql',
+  connection: process.env.DATABASE_URL,
+  pool: {
+    min: parseInt(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE) || 1,
+    max: parseInt(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE) || 4,
   },
-
-  production: {
-    client: 'postgresql',
-    connection: database.url,
-    pool: {
-      min: database.poolMinSize,
-      max: database.poolMaxSize,
-    },
-    migrations: {
-      tableName: 'knex_migrations',
-      directory: './migrations',
-    },
-    seeds: {
-      directory: './seeds',
-    },
-    ssl: database.sslEnabled,
-    asyncStackTraces: database.asyncStackTraceEnabled,
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: './migrations',
   },
+  seeds: {
+    directory: './seeds',
+  },
+  asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
+};
+
+export const production = {
+  client: 'postgresql',
+  connection: process.env.DATABASE_URL,
+  pool: {
+    min: parseInt(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE) || 1,
+    max: parseInt(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE) || 4,
+  },
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: './migrations',
+  },
+  seeds: {
+    directory: './seeds',
+  },
+  ssl: process.env.DATABASE_SSL_ENABLED === 'true',
+  asyncStackTraces: process.env.KNEX_ASYNC_STACKTRACE_ENABLED !== 'false',
 };

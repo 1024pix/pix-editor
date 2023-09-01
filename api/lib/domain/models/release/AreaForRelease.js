@@ -1,4 +1,4 @@
-module.exports = class AreaForRelease {
+export class AreaForRelease {
   constructor({
     id,
     code,
@@ -18,4 +18,4 @@ module.exports = class AreaForRelease {
     this.color = color;
     this.frameworkId = frameworkId;
   }
-};
+}
