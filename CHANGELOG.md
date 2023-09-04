@@ -1,5 +1,28 @@
 
 
+## v3.93.0 (04/09/2023)
+
+
+### :rocket: Amélioration
+- [#265](https://github.com/1024pix/pix-editor/pull/265) [FEATURE] Adapter les seeds pour insérer les traductions dans la base PG (PIX-8986).
+- [#263](https://github.com/1024pix/pix-editor/pull/263) [FEATURE] Renseigner les traductions de Compétences pour la réplication via la table PG `translations`(PIX-8973).
+- [#260](https://github.com/1024pix/pix-editor/pull/260) [FEATURE] Adapter la release pour insérer les translations de PG (PIX-8706).
+- [#257](https://github.com/1024pix/pix-editor/pull/257) [FEATURE] Permettre d'afficher dans PixEditor les traductions d'une compétence (PIX-8686).
+
+### :building_construction: Tech
+- [#254](https://github.com/1024pix/pix-editor/pull/254) [TECH] Utiliser eslint-plugin-n plutôt que eslint-plugin-node.
+
+### :bug: Correction
+- [#267](https://github.com/1024pix/pix-editor/pull/267) [BUGFIX] Erreur quand on vérifie la table translation (Airtable) avec un PAT (PIX-9033).
+- [#266](https://github.com/1024pix/pix-editor/pull/266) [BUGFIX] Problème d'enregistrement de compétence incomplète lorsque la description n'est pas renseignée (PIX-9026).
+- [#261](https://github.com/1024pix/pix-editor/pull/261) [BUGFIX] Ne pas appeler `process.exit` dans les tests (PIX-9015).
+- [#259](https://github.com/1024pix/pix-editor/pull/259) [BUGFIX] Changer le suffixe des traductions des compétences.
+
+### :arrow_up: Montée de version
+- [#264](https://github.com/1024pix/pix-editor/pull/264) [BUMP] Update dependency ember-simple-auth to v6 (pix-editor).
+- [#258](https://github.com/1024pix/pix-editor/pull/258) [BUMP] Update dependency googleapis to v126 (api).
+- [#262](https://github.com/1024pix/pix-editor/pull/262) [BUMP] Update dependency ember-cli-babel to v8 (pix-editor).
+
 ## v3.92.0 (25/08/2023)
 
 
