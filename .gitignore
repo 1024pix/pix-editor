@@ -40,3 +40,9 @@ pix-editor/app/config-private-test.js
 
 # MACOS
 .DS_Store
+
+# Playwright
+/pix-editor/test-results/
+/pix-editor/playwright-report/
+/pix-editor/playwright/.cache/
+*.storageState.json

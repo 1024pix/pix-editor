@@ -53,7 +53,15 @@ executors:
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: redis:7.0.12-alpine
     resource_class: medium
-
+  playwright-redis-postgres-docker:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.37.1-focal
+      - image: postgres:14.6-alpine
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_HOST_AUTH_METHOD: trust
+      - image: redis:6.2.7-alpine
+    resource_class: medium
 
 jobs:
   pix-editor-test:
@@ -133,69 +141,69 @@ jobs:
             npm test
 
   e2e_test:
-    executor: node-browsers-redis-postgres-docker
-    working_directory: ~/pix-editor/end-to-end-tests
+    executor: playwright-redis-postgres-docker
+    working_directory: ~/pix-editor/pix-editor
     steps:
       - attach_workspace:
           at: ~/pix-editor
-      - run: cat package*.json > cachekey
+
+      - run:
+          name: Compute cachekey for npm
+          working_directory: ~/pix-editor
+          command: cat pix-editor/package*.json api/package*.json > cachekey
       - restore_cache:
+          name: Restore npm cache
           keys:
-            - v7-e2e-npm-{{ checksum "cachekey" }}
-      - run: npm ci
+            - v8-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
+
+      - run:
+          name: Install Pix Editor
+          command: npm ci
+
+      - run:
+          name: Start Pix Editor
+          environment:
+            JOBS: 2
+          background: true
+          command: npm start
+
+      - run:
+          name: Install Pix Editor API
+          working_directory: ~/pix-editor/api
+          command: npm ci
+
       - save_cache:
-          key: v7-e2e-npm-{{ checksum "cachekey" }}
+          name: Save npm cache
+          key: v8-e2e-npm-{{ checksum "~/pix-editor/cachekey" }}
           paths:
             - ~/.npm
 
       - run:
-          working_directory: ~/pix-editor/api
-          command: cat package*.json > cachekey
-      - restore_cache:
-          keys:
-            - v7-api-npm-{{ checksum "~/pix-editor/api/cachekey" }}
-      - run:
-          working_directory: ~/pix-editor/api
-          environment:
-            DATABASE_URL: 'postgres://circleci@localhost:5432/circleci'
-          command: npm ci
-
-      - run:
-          working_directory: ~/pix-editor/pix-editor
-          command: cat package*.json > cachekey
-      - restore_cache:
-          keys:
-            - v7-pix-editor-npm-{{ checksum "~/pix-editor/pix-editor/cachekey" }}
-      - run:
-          environment:
-            JOBS: 1
-          working_directory: ~/pix-editor/pix-editor
-          command: npm ci
-
-      - run:
+          name: Install and start Pix Editor API
           working_directory: ~/pix-editor/api
           environment:
             DATABASE_URL: 'postgres://circleci@localhost:5432/circleci'
           background: true
-          command: npm start
+          command: npm run db:reset && npm start
 
       - run:
-          working_directory: ~/pix-editor/pix-editor
-          environment:
-            JOBS: 1
-          background: true
-          command: npm start
+          name: Wait for Pix Editor API to be ready...
+          command: curl --fail --ipv4 --retry 6 --retry-connrefused --retry-delay 10 --silent http://localhost:3002/api > /dev/null
 
       - run:
-          environment:
-            DATABASE_URL: 'postgres://circleci@localhost:5432/circleci'
-          command: |
-            wget --retry-connrefused -T 60 -qO- http://localhost:4300
-            wget --retry-connrefused -T 60 -qO- http://localhost:3002/api
-            npm run cy:run:ci
+          name: Wait for Pix Editor to be ready...
+          command: curl --fail --ipv4 --retry 6 --retry-connrefused --retry-delay 10 --silent http://localhost:4300/api > /dev/null
 
+      - run:
+          name: Run E2E tests
+          environment:
+            PLAYWRIGHT_JUNIT_OUTPUT_NAME: e2e-junit-results.xml
+          command: npx playwright test --reporter=junit
+
+      - store_test_results:
+          path: e2e-junit-results.xml
       - store_artifacts:
-          path: cypress/screenshots
+          path: test-results/
 
 workflows:
   version: 2
