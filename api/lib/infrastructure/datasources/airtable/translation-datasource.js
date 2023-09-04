@@ -1,4 +1,5 @@
 const datasource = require('./datasource');
+const logger = require('../../logger');
 
 module.exports = datasource.extend({
 
@@ -42,10 +43,12 @@ module.exports = datasource.extend({
       await this.list({ page: { size: 1 } });
       return true;
     } catch (err) {
-      if (err.statusCode === 404) {
-        return false;
+      // When using API key, Airtable returns status code 404 if table doesn't exist
+      // When using personal access token, Airtable returns status code 403 if table doesn't exist
+      if (err.statusCode !== 403 || err.statusCode !== 404) {
+        logger.error(err, 'Error while checking for Airtable translations table');
       }
-      throw err;
+      return false;
     }
   }
 });
