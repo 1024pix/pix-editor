@@ -1,11 +1,12 @@
 const Airtable = require('airtable');
+const TESTS_TABLE_IN_AIRTABLE_EXISTS = false;
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
 exports.up = async function(knex) {
-  if (process.env.NODE_ENV !== 'production') return;
+  if (process.env.NODE_ENV !== 'production' || !TESTS_TABLE_IN_AIRTABLE_EXISTS) return;
   const airtableClient = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
   }).base(process.env.AIRTABLE_BASE);
