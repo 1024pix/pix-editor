@@ -45,7 +45,7 @@ module.exports = datasource.extend({
     } catch (err) {
       // When using API key, Airtable returns status code 404 if table doesn't exist
       // When using personal access token, Airtable returns status code 403 if table doesn't exist
-      if (err.statusCode !== 403 || err.statusCode !== 404) {
+      if (err.statusCode !== 403 && err.statusCode !== 404) {
         logger.error(err, 'Error while checking for Airtable translations table');
       }
       return false;
