@@ -4,7 +4,6 @@ module.exports = function(databaseBuilder) {
     name: 'Static Course 1',
     description: 'Static Course 1 description',
     challengeIds: 'challenge1NQqfx9mYKUQEO,challengeTYFrFy5EGYEet,challenge1rSPsnisQ8ft4W',
-    imageUrl: 'some/image/url',
     createdAt: new Date(),
     isActive: true,
   });
@@ -14,7 +13,6 @@ module.exports = function(databaseBuilder) {
     name: 'Static Course 2',
     description: 'Static Course 2 description',
     challengeIds: 'challenge1NQqfx9mYKUQEO',
-    imageUrl: 'some/image/url',
     createdAt: new Date('2021-01-01'),
     isActive: false,
     deactivationReason: 'Les épreuves sont trop faciles',

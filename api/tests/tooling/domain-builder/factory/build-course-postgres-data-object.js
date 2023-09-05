@@ -2,7 +2,6 @@ module.exports = function buildCoursePostgresDataObject(
   {
     id = 'recPBOj7JzBcgXEtO',
     description = 'Programmer niveau 1 et 2',
-    imageUrl = 'https://dl.airtable.com/otNiedKYSTBmoAPdyIk2_woman-163426_1920.jpg',
     name = '3.4 niveau 1 et 2',
     challenges = [
       'recs9uvUWKQ4HDzw6',
@@ -19,7 +18,6 @@ module.exports = function buildCoursePostgresDataObject(
   return {
     id,
     description,
-    imageUrl,
     name,
     challenges,
     competences,

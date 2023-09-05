@@ -54,7 +54,6 @@ async function mockCurrentContent() {
     name: 'nameCourse2',
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
-    imageUrl: 'Image du Course',
   });
 
   databaseBuilder.factory.buildStaticCourse({
@@ -62,7 +61,6 @@ async function mockCurrentContent() {
     name: 'nameCourse1',
     description: 'Description du Course',
     challengeIds: 'recChallenge0',
-    imageUrl: 'Image du Course',
   });
 
   await databaseBuilder.commit();

@@ -201,7 +201,6 @@ describe('Integration | Repository | release-repository', function() {
         description: 'course1PG description',
         isActive: false,
         challengeIds: 'challenge121212,challenge211113',
-        imageUrl: 'course1PG/image.png',
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2020-01-02'),
       });
@@ -1257,7 +1256,6 @@ function _getRichCurrentContentDTO() {
       isActive: false,
       competences: ['competence12', 'competence21'],
       challenges: ['challenge121212', 'challenge211113'],
-      imageUrl: 'course1PG/image.png',
     },
   ];
   const expectedTutorialDTOs = [
