@@ -22,7 +22,16 @@ async function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaAirtableDataObject()],
-    competences: [domainBuilder.buildCompetenceAirtableDataObject()],
+    competences: [domainBuilder.buildCompetenceForRelease({
+      name_i18n: {
+        fr: 'Français',
+        en: 'English',
+      },
+      description_i18n: {
+        fr: 'Description française',
+        en: 'Description anglaise',
+      }
+    })],
     tubes: [domainBuilder.buildTubeAirtableDataObject()],
     skills: [domainBuilder.buildSkillAirtableDataObject()],
     challenges: [domainBuilder.buildChallengeAirtableDataObject()],

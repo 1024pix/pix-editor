@@ -22,6 +22,10 @@ afterEach(async () => {
 // Knex
 const { knex } = require('../db/knex-database-connection');
 
+// Input Data Builder
+const InputOutputDataBuilder = require('./tooling/input-output-data-builder/input-output-data-builder');
+const inputOutputDataBuilder = new InputOutputDataBuilder();
+
 // DatabaseBuilder
 const DatabaseBuilder = require('./tooling/database-builder/database-builder');
 const databaseBuilder = new DatabaseBuilder({ knex });
@@ -154,6 +158,7 @@ chai.use(function(chai) {
 module.exports = {
   airtableBuilder,
   catchErr,
+  inputOutputDataBuilder,
   databaseBuilder,
   domainBuilder: require('./tooling/domain-builder/factory'),
   expect,

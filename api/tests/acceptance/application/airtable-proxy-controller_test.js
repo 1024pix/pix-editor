@@ -1,5 +1,12 @@
 const nock = require('nock');
-const { expect, airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } = require('../../test-helper');
+const {
+  expect,
+  airtableBuilder,
+  databaseBuilder,
+  inputOutputDataBuilder,
+  domainBuilder,
+  generateAuthorizationHeader
+} = require('../../test-helper');
 const createServer = require('../../../server');
 
 describe('Acceptance | Controller | airtable-proxy-controller', () => {
@@ -23,7 +30,10 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
       it('should proxy request to airtable', async () => {
         // Given
         const user = await createReadonlyUser();
-        const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+        const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject();
+        const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+        const inputOutputCompetence = inputOutputDataBuilder.factory.buildCompetence({
+          ...competenceDataObject,
           name_i18n: {
             en: null,
             fr: null,
@@ -33,7 +43,6 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
             fr: null,
           },
         });
-        const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Competences?key=value')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -49,7 +58,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
 
         // Then
         expect(response.statusCode).to.equal(200);
-        expect(response.result).to.deep.equal(competence);
+        expect(response.result).to.deep.equal(inputOutputCompetence);
       });
 
       it('should proxy post request to airtable', async () => {

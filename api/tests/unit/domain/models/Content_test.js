@@ -18,24 +18,15 @@ describe('Unit | Domain | Content', () => {
         competenceAirtableIds: ['recAirCompA', 'recAirCompB'],
         frameworkId: 'recFrameworkA',
       });
-      const competenceAirtable = domainBuilder.buildCompetenceAirtableDataObject({
+      const competenceAirtable = domainBuilder.buildCompetenceForRelease({
         id: 'recCompetenceA',
         name: 'nameCompetenceA',
-        name_i18n: {
-          fr: 'nameFrCompetenceA',
-          en: 'nameEnCompetenceA',
-        },
         index: '1.2',
         areaId: 'recAreaA',
         origin: 'Pix',
         skillIds: [],
         thematicIds: [],
         description: 'descriptionCompetenceA',
-        description_i18n: {
-          fr: 'descriptionFrCompetenceA',
-          en: 'descriptionEnCompetenceA',
-        },
-        fullName: '1.2 nameCompetenceA',
       });
       const skillAirtable = domainBuilder.buildSkillAirtableDataObject({
         id: 'recSkillA',
@@ -168,20 +159,12 @@ describe('Unit | Domain | Content', () => {
       const expectedCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'recCompetenceA',
         name: 'nameCompetenceA',
-        name_i18n: {
-          fr: 'nameFrCompetenceA',
-          en: 'nameEnCompetenceA',
-        },
         index: '1.2',
         areaId: 'recAreaA',
         origin: 'Pix',
         skillIds: [],
         thematicIds: [],
         description: 'descriptionCompetenceA',
-        description_i18n: {
-          fr: 'descriptionFrCompetenceA',
-          en: 'descriptionEnCompetenceA',
-        },
       });
       const expectedSkill = domainBuilder.buildSkillForRelease({
         id: 'recSkillA',

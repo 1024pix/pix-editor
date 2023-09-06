@@ -1,6 +1,7 @@
 const nock = require('nock');
 const {
   airtableBuilder,
+  inputOutputDataBuilder,
   expect,
   databaseBuilder,
   domainBuilder,
@@ -30,35 +31,35 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
   });
 
   describe('POST /api/airtable/content/Competences', () => {
-    let competenceDataObject;
-    let competence;
+    let airtableRawCompetence;
+    let competenceToSave;
     let user;
 
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
-        id: 'mon_id_persistant',
+      const competence = domainBuilder.buildCompetenceAirtableDataObject({ id: 'mon_id_persistant' });
+      airtableRawCompetence = airtableBuilder.factory.buildCompetence(competence);
+      competenceToSave = inputOutputDataBuilder.factory.buildCompetence({
+        ... competence,
         name_i18n: {
           fr: 'Pouet',
           en: 'Toot'
         },
         description_i18n: {
           fr: 'C\'est le bruit d\'un klaxon',
-          en: 'It is the sound of a klaxon'
-        }
+          en: 'It is the sound of a klaxon',
+        },
       });
-      competence =
-        airtableBuilder.factory.buildCompetence(competenceDataObject);
     });
 
     describe('nominal cases', () => {
       it('should proxy request to airtable and add translations to the PG table', async () => {
         // Given
         nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Competences', competence)
+          .post('/v0/airtableBaseValue/Competences', airtableRawCompetence)
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, competence);
+          .reply(200, airtableRawCompetence);
         const server = await createServer();
 
         // When
@@ -66,7 +67,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
           method: 'POST',
           url: '/api/airtable/content/Competences',
           headers: generateAuthorizationHeader(user),
-          payload: competence,
+          payload: competenceToSave,
         });
 
         // Then
@@ -98,15 +99,19 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
   });
 
   describe('PATCH /api/airtable/content/Competences/id_airtable', () => {
-    let competenceDataObject;
+    let airtableRawCompetence;
     let competence;
     let user;
 
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
 
-      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+      const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
         id: 'mon_id_persistant',
+      });
+      airtableRawCompetence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+      competence = inputOutputDataBuilder.factory.buildCompetence({
+        ...competenceDataObject,
         name_i18n: {
           fr: 'AAA',
           en: 'BBB',
@@ -116,7 +121,6 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
           en: 'DDDDDDDDDDDDDDDD',
         },
       });
-      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
@@ -147,9 +151,9 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
       it('should proxy request to airtable and update translations to the PG table', async () => {
         // Given
         nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/Competences/id_airtable', competence)
+          .patch('/v0/airtableBaseValue/Competences/id_airtable', airtableRawCompetence)
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, competence);
+          .reply(200, airtableRawCompetence);
         const server = await createServer();
 
         // When
@@ -210,12 +214,14 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
 
       competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
         id: 'mon_id_persistant',
+      });
+      competence = inputOutputDataBuilder.factory.buildCompetence({
+        ...competenceDataObject,
         name_i18n: {
           fr: 'Pouet',
-          en: 'Toot'
-        }
+          en: 'Toot',
+        },
       });
-      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
@@ -235,17 +241,19 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
       it('should proxy request to airtable and read translations to the PG table', async () => {
         // Given
         const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
-          id: 'mon_id_persistant',
+          id: 'mon_id_persistant'
+        });
+        const expectedCompetence = inputOutputDataBuilder.factory.buildCompetence({
+          ...expectedCompetenceDataObject,
           name_i18n: {
             fr: 'Prout',
             en: 'Fart'
           },
           description_i18n: {
             fr: null,
-            en: null
-          }
+            en: null,
+          },
         });
-        const expectedCompetence = airtableBuilder.factory.buildCompetence(expectedCompetenceDataObject);
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Competences')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -276,12 +284,14 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
 
       competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
         id: 'mon_id_persistant',
+      });
+      competence = inputOutputDataBuilder.factory.buildCompetence({
+        ...competenceDataObject,
         name_i18n: {
           fr: 'Pouet',
-          en: 'Toot'
-        }
+          en: 'Toot',
+        },
       });
-      competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
@@ -302,6 +312,9 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
         // Given
         const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
           id: 'mon_id_persistant',
+        });
+        const expectedCompetence = inputOutputDataBuilder.factory.buildCompetence({
+          ...expectedCompetenceDataObject,
           name_i18n: {
             fr: 'Prout',
             en: 'Fart'
@@ -311,7 +324,6 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
             en: null
           }
         });
-        const expectedCompetence = airtableBuilder.factory.buildCompetence(expectedCompetenceDataObject);
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Competences/recId')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')

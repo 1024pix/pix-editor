@@ -13,25 +13,16 @@ const translationRepository = require('../infrastructure/repositories/translatio
 exports.register = async function(server) {
   server.route([
     {
-      method: ['GET', 'POST', 'PATCH', 'DELETE'],
+      method: 'GET',
       path: '/api/airtable/content/{path*}',
       config: {
-        pre: [{
-          method: (request, h) => {
-            if (request.method !== 'get') {
-              return securityPreHandlers.checkUserHasWriteAccess(request, h);
-            }
-            return h.response(true);
-          }
-        }],
         handler: async function(request, h) {
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
-
           const tableName = request.params.path.split('/')[0];
           const tableTranslations = tablesTranslations[tableName];
 
-          if (request.method === 'get' && _isResponseOK(response) && tableTranslations) {
+          const response = await _proxyRequestToAirtable(request, config.airtable.base);
 
+          if (_isResponseOK(response) && tableTranslations) {
             if (response.data.records) {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
               response.data.records.forEach((entity) => {
@@ -40,20 +31,60 @@ exports.register = async function(server) {
             } else {
               const id = response.data.fields['id persistant'];
               const translations = await translationRepository.listByPrefix(`${tableTranslations.prefix}${id}.`);
-              tableTranslations.hydrateToAirtableObject(response.data.fields, translations) ;
+              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
             }
           }
 
-          if ((request.method === 'post' || request.method === 'patch') && _isResponseOK(response)) {
-            let translations;
-            if (tableTranslations) {
-              translations = tableTranslations.extractFromAirtableObject(request.payload.fields) ?? [];
+          return h.response(response.data).code(response.status);
+        }
+      },
+    },
+    {
+      method: ['POST', 'PATCH'],
+      path: '/api/airtable/content/{path*}',
+      config: {
+        pre: [{
+          method: (request, h) => {
+            return securityPreHandlers.checkUserHasWriteAccess(request, h);
+          }
+        }],
+        handler: async function(request, h) {
+          const tableName = request.params.path.split('/')[0];
+          const tableTranslations = tablesTranslations[tableName];
+
+          let translations;
+          if (tableTranslations) {
+            translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
+            tableTranslations.dehydrateAirtableObject(request.payload?.fields);
+          }
+
+          const response = await _proxyRequestToAirtable(request, config.airtable.base);
+
+          if (_isResponseOK(response)) {
+            if (translations) {
               await translationRepository.save(translations);
+
+              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
             }
 
             await _updateStagingPixApiCache(tableName, response.data, translations);
           }
 
+          return h.response(response.data).code(response.status);
+        }
+      },
+    },
+    {
+      method: 'DELETE',
+      path: '/api/airtable/content/{path*}',
+      config: {
+        pre: [{
+          method: (request, h) => {
+            return securityPreHandlers.checkUserHasWriteAccess(request, h);
+          }
+        }],
+        handler: async function(request, h) {
+          const response = await _proxyRequestToAirtable(request, config.airtable.base);
           return h.response(response.data).code(response.status);
         }
       },

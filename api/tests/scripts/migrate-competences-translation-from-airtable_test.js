@@ -24,15 +24,11 @@ describe('Migrate translation from airtable', function() {
     // given
     const competence = airtableBuilder.factory.buildCompetence({
       index: 1,
-      name_i18n: {
-        fr: 'Bonjour',
-        en: 'Hello',
-      },
-      description_i18n: {
-        fr: 'Description',
-        en: 'Describe',
-      },
     });
+    competence.fields['Titre fr-fr'] = 'Bonjour';
+    competence.fields['Description fr-fr'] = 'Description';
+    competence.fields['Titre en-us'] = 'Hello';
+    competence.fields['Description en-us'] = 'Describe';
     const competences = [competence];
 
     nock('https://api.airtable.com')
