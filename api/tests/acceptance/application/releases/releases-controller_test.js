@@ -148,7 +148,6 @@ async function mockCurrentContent() {
       isActive: true,
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
-      imageUrl: 'Image du Course',
     }],
   };
 
@@ -180,7 +179,6 @@ async function mockCurrentContent() {
     description: 'Description du Course',
     isActive: true,
     challengeIds: 'recChallenge0',
-    imageUrl: 'Image du Course',
   });
 
   databaseBuilder.factory.buildTranslation({
@@ -336,7 +334,6 @@ async function mockContentForRelease() {
       isActive: true,
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
-      imageUrl: 'Image du Course',
     }],
   };
 

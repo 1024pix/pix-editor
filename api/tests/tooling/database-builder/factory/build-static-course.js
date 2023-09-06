@@ -5,14 +5,13 @@ function buildStaticCourse({
   name = 'Mon super test statique',
   description = 'Ma super description de test statique',
   challengeIds = 'challengeABC, challengeDEF',
-  imageUrl = 'ma/super/image.png',
   isActive = true,
   deactivationReason = '',
   createdAt = new Date('2010-01-04'),
   updatedAt = new Date('2010-01-11'),
 } = {}) {
 
-  const values = { id, name, description, deactivationReason, challengeIds, imageUrl, createdAt, updatedAt, isActive };
+  const values = { id, name, description, deactivationReason, challengeIds, createdAt, updatedAt, isActive };
 
   return databaseBuffer.pushInsertable({
     tableName: 'static_courses',

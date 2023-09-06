@@ -95,7 +95,6 @@ describe('Unit | Domain | Content', () => {
       const coursePostgres = domainBuilder.buildCoursePostgresDataObject({
         id: 'recCourse1',
         description: 'descriptionCourse1',
-        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
         name: 'nameCourse1',
         challenges: ['recChallengeId1'],
         competences: ['recCompetenceId1'],
@@ -244,7 +243,6 @@ describe('Unit | Domain | Content', () => {
       const expectedCourse = domainBuilder.buildCourseForRelease({
         id: 'recCourse1',
         description: 'descriptionCourse1',
-        imageUrl: 'http://www.example.com/this-is-an-example.jpg',
         name: 'nameCourse1',
         challenges: ['recChallengeId1'],
         competences: ['recCompetenceId1'],
