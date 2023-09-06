@@ -4,7 +4,7 @@
 Vous devez au préalable avoir correctement installé les logiciels suivants :
 
 * [Git](http://git-scm.com/) (2.6.4)
-* [Node.js](http://nodejs.org/) (v16.19.x) et NPM (8.19.x)
+* [Node.js](http://nodejs.org/) et npm, dans une version compatible avec la spécification du nœud `engine` du fichier [package.json](./api/package.json)
 * [Docker](https://docs.docker.com/get-started/) (19.03.5) avec [Docker Compose](https://docs.docker.com/compose/install/)
 
 > ⚠️ Les versions indiquées sont celles utilisées et préconisées par l'équipe de développement. Il est possible que l'application fonctionne avec des versions différentes.
