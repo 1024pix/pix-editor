@@ -7,7 +7,6 @@ module.exports = function buildCompetence({
   skillIds,
   thematicIds,
   origin,
-  fullName,
 } = {}) {
   return {
     id,
@@ -22,7 +21,6 @@ module.exports = function buildCompetence({
       'Origine2': [origin],
       'Description fr-fr': descriptionFrFr,
       'Description en-us': descriptionEnUs,
-      'Référence': fullName,
     },
   };
 };

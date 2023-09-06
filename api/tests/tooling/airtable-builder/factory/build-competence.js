@@ -5,7 +5,6 @@ module.exports = function buildCompetence({
   skillIds,
   thematicIds,
   origin,
-  fullName,
 } = {}) {
   return {
     id,
@@ -16,7 +15,6 @@ module.exports = function buildCompetence({
       'Acquis (via Tubes) (id persistant)': skillIds,
       'Thematiques': thematicIds,
       'Origine2': [origin],
-      'Référence': fullName,
     },
   };
 };

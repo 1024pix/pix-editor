@@ -27,7 +27,6 @@ describe('Unit | Domain | Content', () => {
         skillIds: [],
         thematicIds: [],
         description: 'descriptionCompetenceA',
-        fullName: '1.2 nameCompetenceA',
       });
       const skillAirtable = domainBuilder.buildSkillAirtableDataObject({
         id: 'recSkillA',

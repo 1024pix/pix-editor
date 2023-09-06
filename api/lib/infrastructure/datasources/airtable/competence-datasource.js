@@ -13,7 +13,6 @@ module.exports = datasource.extend({
     'Acquis (via Tubes) (id persistant)',
     'Thematiques',
     'Origine2',
-    'Référence',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -24,9 +23,7 @@ module.exports = datasource.extend({
       skillIds: airtableRecord.get('Acquis (via Tubes) (id persistant)') || [],
       thematicIds: airtableRecord.get('Thematiques') || [],
       origin: airtableRecord.get('Origine2')[0],
-      fullName: airtableRecord.get('Référence'),
     };
   },
-
 });
 
