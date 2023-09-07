@@ -1,7 +1,7 @@
 const AdminJS = require('adminjs');
 const AdminJSPlugin = require('@adminjs/hapi').default;
 const AdminJSSequelize = require('@adminjs/sequelize');
-const { User, Release } = require('../../models');
+const { User, Release } = require('./models');
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
