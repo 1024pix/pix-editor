@@ -1,4 +1,4 @@
-const Content = require('../../../../lib/domain/models/Content');
+const Content = require('../../../../lib/domain/models/release/Content');
 
 module.exports = function buildContentForRelease({
   areas = [],

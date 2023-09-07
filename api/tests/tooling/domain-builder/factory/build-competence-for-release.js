@@ -1,4 +1,4 @@
-const CompetenceForRelease = require('../../../../lib/domain/models/CompetenceForRelease');
+const CompetenceForRelease = require('../../../../lib/domain/models/release/CompetenceForRelease');
 
 const buildCompetenceForRelease = function({
   id = 'recCompetence1',

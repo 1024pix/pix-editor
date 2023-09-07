@@ -1,4 +1,4 @@
-const AreaForRelease = require('../../../../lib/domain/models/AreaForRelease');
+const AreaForRelease = require('../../../../lib/domain/models/release/AreaForRelease');
 
 const buildAreaForRelease = function({
   id = 'recArea1',

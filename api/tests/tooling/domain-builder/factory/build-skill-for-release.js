@@ -1,4 +1,4 @@
-const SkillForRelease = require('../../../../lib/domain/models/SkillForRelease');
+const SkillForRelease = require('../../../../lib/domain/models/release/SkillForRelease');
 
 const buildSkillForRelease = function({
   id = 'recTIddrkopID28Ep',

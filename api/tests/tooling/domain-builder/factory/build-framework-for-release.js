@@ -1,4 +1,4 @@
-const FrameworkForRelease = require('../../../../lib/domain/models/FrameworkForRelease');
+const FrameworkForRelease = require('../../../../lib/domain/models/release/FrameworkForRelease');
 
 module.exports = function buildFrameworkForRelease(
   {
