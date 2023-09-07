@@ -1,4 +1,4 @@
-module.exports = function buildThematicAirtableDataObject(
+module.exports = function buildThematicDatasourceObject(
   {
     id = 'recFvllz2Ckz',
     name_i18n = {

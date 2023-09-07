@@ -7,7 +7,7 @@ describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () =
 
     it('should call the webhook when a record is updated', async () => {
       // given
-      const updatedRecord = domainBuilder.buildAreaAirtableDataObject();
+      const updatedRecord = domainBuilder.buildAreaDatasourceObject();
       const model = 'Model';
       const pixApiClient = { request: sinon.stub() };
 

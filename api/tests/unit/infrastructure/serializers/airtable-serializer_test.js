@@ -6,7 +6,7 @@ describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {
 
     it('should create a Area from the AirtableRecord', () => {
       // given
-      const expectedArea = domainBuilder.buildAreaAirtableDataObject();
+      const expectedArea = domainBuilder.buildAreaDatasourceObject();
       const airtableObject = airtableBuilder.factory.buildArea({
         id: 'recvoGdo7z2z7pXWa',
         competenceIds: [

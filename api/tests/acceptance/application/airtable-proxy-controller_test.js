@@ -30,7 +30,7 @@ describe('Acceptance | Controller | airtable-proxy-controller', () => {
       it('should proxy request to airtable', async () => {
         // Given
         const user = await createReadonlyUser();
-        const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject();
+        const competenceDataObject = domainBuilder.buildCompetenceDatasourceObject();
         const competence = airtableBuilder.factory.buildCompetence(competenceDataObject);
         const inputOutputCompetence = inputOutputDataBuilder.factory.buildCompetence({
           ...competenceDataObject,

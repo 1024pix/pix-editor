@@ -9,7 +9,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should create a Challenge from the AirtableRecord', () => {
       // given
-      const expectedChallenge = domainBuilder.buildChallengeAirtableDataObject();
+      const expectedChallenge = domainBuilder.buildChallengeDatasourceObject();
       const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
       const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
 
@@ -22,7 +22,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should deal with a missing timer', () => {
       // given
-      const expectedChallenge = domainBuilder.buildChallengeAirtableDataObject();
+      const expectedChallenge = domainBuilder.buildChallengeDatasourceObject();
       expectedChallenge.timer = undefined;
       const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
       const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
@@ -36,7 +36,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should deal with a missing competences', () => {
       // given
-      const expectedChallenge = domainBuilder.buildChallengeAirtableDataObject();
+      const expectedChallenge = domainBuilder.buildChallengeDatasourceObject();
       expectedChallenge.competenceId = undefined;
       const airtableChallenge = airtableBuilder.factory.buildChallenge(expectedChallenge);
       const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
@@ -113,7 +113,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should serialize a challenge to an airtable object', () => {
       // given
-      const createdChallenge = domainBuilder.buildChallengeAirtableDataObject({ locales: ['fr-fr'] });
+      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ locales: ['fr-fr'] });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(createdChallenge);
       _removeReadonlyFields(airtableChallenge);
 
@@ -126,7 +126,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should transform boolean to `activer/désactiver` for t1, t2 and t3',() => {
       // given
-      const createdChallenge = domainBuilder.buildChallengeAirtableDataObject({ t1Status: true, t2Status: false, t3Status: null });
+      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ t1Status: true, t2Status: false, t3Status: null });
 
       // when
       const challenge = challengeDatasource.toAirTableObject(createdChallenge);
@@ -142,7 +142,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       const locales = ['de', 'en', 'es', 'it', 'fr', 'fr-fr', 'pt'];
 
       const expectedLanguages = ['Allemand', 'Anglais', 'Espagnol', 'Italie', 'Francophone', 'Franco Français', 'Portugais'];
-      const createdChallenge = domainBuilder.buildChallengeAirtableDataObject({ locales });
+      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ locales });
 
       // when
       const challenge = challengeDatasource.toAirTableObject(createdChallenge);
@@ -155,7 +155,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       // given
       const locales = ['fr-be'];
 
-      const createdChallenge = domainBuilder.buildChallengeAirtableDataObject({ locales });
+      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ locales });
 
       // when
       const toThrow = function() {

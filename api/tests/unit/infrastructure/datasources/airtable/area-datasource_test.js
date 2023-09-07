@@ -8,10 +8,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | AreaDatasource', () =>
 
     it('should create a Area from the AirtableRecord', () => {
       // given
-      const expectedArea = domainBuilder.buildAreaAirtableDataObject();
+      const expectedArea = domainBuilder.buildAreaDatasourceObject();
       const airtableArea = airtableBuilder.factory.buildArea(expectedArea);
       const areaRecord = new AirtableRecord('Domaines', airtableArea.id, airtableArea);
-      
+
       // when
       const area = areaDatasource.fromAirTableObject(areaRecord);
 

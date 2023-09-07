@@ -4,7 +4,7 @@ const { filterSkillsFields } = require('../../../../lib/infrastructure/transform
 describe('Unit | Infrastructure | skill-transformer', function() {
 
   it('should only keep useful fields', function() {
-    const airtableSkills = [domainBuilder.buildSkillAirtableDataObject()];
+    const airtableSkills = [domainBuilder.buildSkillDatasourceObject()];
 
     const skills = filterSkillsFields(airtableSkills);
 

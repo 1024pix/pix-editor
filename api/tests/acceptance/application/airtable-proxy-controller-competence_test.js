@@ -38,7 +38,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-      const competence = domainBuilder.buildCompetenceAirtableDataObject({ id: 'mon_id_persistant' });
+      const competence = domainBuilder.buildCompetenceDatasourceObject({ id: 'mon_id_persistant' });
       airtableRawCompetence = airtableBuilder.factory.buildCompetence(competence);
       competenceToSave = inputOutputDataBuilder.factory.buildCompetence({
         ... competence,
@@ -106,7 +106,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
 
-      const competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+      const competenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
         id: 'mon_id_persistant',
       });
       airtableRawCompetence = airtableBuilder.factory.buildCompetence(competenceDataObject);
@@ -212,7 +212,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
 
-      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+      competenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
         id: 'mon_id_persistant',
       });
       competence = inputOutputDataBuilder.factory.buildCompetence({
@@ -240,7 +240,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
     describe('nominal cases', () => {
       it('should proxy request to airtable and read translations to the PG table', async () => {
         // Given
-        const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+        const expectedCompetenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
           id: 'mon_id_persistant'
         });
         const expectedCompetence = inputOutputDataBuilder.factory.buildCompetence({
@@ -282,7 +282,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
 
-      competenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+      competenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
         id: 'mon_id_persistant',
       });
       competence = inputOutputDataBuilder.factory.buildCompetence({
@@ -310,7 +310,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve compete
     describe('nominal case', () => {
       it('should proxy request to airtable and read translations to the PG table', async () => {
         // Given
-        const expectedCompetenceDataObject = domainBuilder.buildCompetenceAirtableDataObject({
+        const expectedCompetenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
           id: 'mon_id_persistant',
         });
         const expectedCompetence = inputOutputDataBuilder.factory.buildCompetence({

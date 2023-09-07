@@ -77,7 +77,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return challenges', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'my id' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id' });
 
       const airtableChallenges = [
         airtableBuilder.factory.buildChallenge(challenge),
@@ -170,8 +170,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should filter challenges by id', async () => {
       // Given
-      const challenge1 = domainBuilder.buildChallengeAirtableDataObject({ id: '1' });
-      const challenge2 = domainBuilder.buildChallengeAirtableDataObject({ id: '2' });
+      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1' });
+      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2' });
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -388,7 +388,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return given challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallengeId1' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId1' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
@@ -515,7 +515,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should create a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'challengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId' });
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
 
@@ -660,7 +660,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should invalidate the cache on the PIX API', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId' });
       const expectedChallengeRelease = JSON.parse(JSON.stringify(domainBuilder.buildChallengeForRelease({
         ...challenge,
         illustrationUrl: null,
@@ -770,7 +770,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should update a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge);
       const expectedBody = { records: [expectedBodyChallenge] };

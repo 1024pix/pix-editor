@@ -5,7 +5,7 @@ describe('Unit | Domain | Content', () => {
   describe('#buildForRelease', () => {
     let data;
     beforeEach(function() {
-      const areaAirtable = domainBuilder.buildAreaAirtableDataObject({
+      const areaAirtable = domainBuilder.buildAreaDatasourceObject({
         id: 'recAreaA',
         code: 'codeAreaA',
         name: 'nameAreaA',
@@ -28,7 +28,7 @@ describe('Unit | Domain | Content', () => {
         thematicIds: [],
         description: 'descriptionCompetenceA',
       });
-      const skillAirtable = domainBuilder.buildSkillAirtableDataObject({
+      const skillAirtable = domainBuilder.buildSkillDatasourceObject({
         id: 'recSkillA',
         name: 'nameSkillA',
         hint_i18n: {
@@ -47,7 +47,7 @@ describe('Unit | Domain | Content', () => {
         internationalisation: 'Monde',
         version: 2,
       });
-      const tubeAirtable = domainBuilder.buildTubeAirtableDataObject({
+      const tubeAirtable = domainBuilder.buildTubeDatasourceObject({
         id: 'recTubeA',
         name: 'nameTubeA',
         title: 'titleTubeA',
@@ -62,7 +62,7 @@ describe('Unit | Domain | Content', () => {
         },
         competenceId: 'recCompetence1',
       });
-      const tutorialAirtable = domainBuilder.buildTutorialAirtableDataObject({
+      const tutorialAirtable = domainBuilder.buildTutorialDatasourceObject({
         id: 'recTutorialA',
         duration: '00:03:31',
         format: 'vidéo',
@@ -73,7 +73,7 @@ describe('Unit | Domain | Content', () => {
         tutorialForSkills: ['skillId1'],
         furtherInformation: ['skillId2'],
       });
-      const thematicAirtable = domainBuilder.buildThematicAirtableDataObject({
+      const thematicAirtable = domainBuilder.buildThematicDatasourceObject({
         id: 'recThematic1',
         name_i18n: {
           fr: 'Nom de la thématique',
@@ -90,7 +90,7 @@ describe('Unit | Domain | Content', () => {
         challenges: ['recChallengeId1'],
         competences: ['recCompetenceId1'],
       });
-      const challengeAirtable = domainBuilder.buildChallengeAirtableDataObject({
+      const challengeAirtable = domainBuilder.buildChallengeDatasourceObject({
         id: 'recChallengeA',
         instruction: 'instructionChallengeA',
         alternativeInstruction: 'alternativeInstructionChallengeA',
@@ -121,7 +121,7 @@ describe('Unit | Domain | Content', () => {
       challengeAirtable.attachments = ['some_url'];
       challengeAirtable.illustrationUrl = null;
       challengeAirtable.illustrationAlt = null;
-      const frameworkAirtable = domainBuilder.buildFrameworkAirtableDataObject({
+      const frameworkAirtable = domainBuilder.buildFrameworkDatasourceObject({
         id: 'recFramework',
         name: 'le framework',
       });

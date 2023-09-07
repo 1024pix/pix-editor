@@ -1,4 +1,4 @@
-module.exports = function buildTubeAirtableDataObject(
+module.exports = function buildTubeDatasourceObject(
   {
     id = 'recTIddrkopID23Fp',
     name = '@Moteur',

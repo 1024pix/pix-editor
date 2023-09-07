@@ -5,7 +5,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a Challenge', () => {
       // Given
-      const challenge = domainBuilder.buildChallengeAirtableDataObject();
+      const challenge = domainBuilder.buildChallengeDatasourceObject();
       const expectedSerializedChallenge = {
         data: {
           type: 'challenges',
@@ -76,7 +76,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#deserialize', () => {
     it('should deserialize a Challenge', async () => {
       // Given
-      const expectedDeserializedChallenge = domainBuilder.buildChallengeAirtableDataObject();
+      const expectedDeserializedChallenge = domainBuilder.buildChallengeDatasourceObject();
       delete expectedDeserializedChallenge.skillId;
       delete expectedDeserializedChallenge.delta;
       delete expectedDeserializedChallenge.alpha;

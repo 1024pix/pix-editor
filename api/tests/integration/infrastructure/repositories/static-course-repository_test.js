@@ -134,14 +134,14 @@ describe('Integration | Repository | static-course-repository', function() {
         challengeIds: 'challengeA,challengeB',
       });
       const airtableChallenges = [
-        domainBuilder.buildChallengeAirtableDataObject({
+        domainBuilder.buildChallengeDatasourceObject({
           id: 'challengeA',
           instruction: 'instructionA',
           status: 'A',
           skillId: 'skillA',
           preview: 'site/challenges/challengeA',
         }),
-        domainBuilder.buildChallengeAirtableDataObject({
+        domainBuilder.buildChallengeDatasourceObject({
           id: 'challengeB',
           instruction: 'instructionB',
           status: 'B',

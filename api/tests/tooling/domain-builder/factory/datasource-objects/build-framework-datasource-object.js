@@ -1,4 +1,4 @@
-module.exports = function buildFrameworkAirtableDataObject({
+module.exports = function buildFrameworkDatasourceObject({
   id = 'framework123',
   name = 'Un référentiel',
 } = {}) {
