@@ -1,4 +1,4 @@
-const Release = require('../../../../lib/domain/models/Release');
+const Release = require('../../../../lib/domain/models/release/Release');
 const buildContentForRelease = require('./build-content-for-release');
 
 module.exports = function buildRelease({

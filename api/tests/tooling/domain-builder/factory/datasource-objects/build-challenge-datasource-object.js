@@ -1,4 +1,4 @@
-module.exports = function buildChallengeAirtableDataObject({
+module.exports = function buildChallengeDatasourceObject({
   id = 'persistant id',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',

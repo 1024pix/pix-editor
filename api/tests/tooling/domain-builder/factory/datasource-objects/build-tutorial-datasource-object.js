@@ -1,4 +1,4 @@
-module.exports = function buildTutorialAirtableDataObject(
+module.exports = function buildTutorialDatasourceObject(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',

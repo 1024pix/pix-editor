@@ -1,4 +1,4 @@
-module.exports = function buildAreaAirtableDataObject({
+module.exports = function buildAreaDatasourceObject({
   id = 'recvoGdo7z2z7pXWa',
   code = '1',
   name = '1. Information et données',

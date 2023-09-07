@@ -21,7 +21,7 @@ const {
 async function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
-    areas: [domainBuilder.buildAreaAirtableDataObject()],
+    areas: [domainBuilder.buildAreaDatasourceObject()],
     competences: [domainBuilder.buildCompetenceForRelease({
       name_i18n: {
         fr: 'Français',
@@ -32,11 +32,11 @@ async function mockCurrentContent() {
         en: 'Description anglaise',
       }
     })],
-    tubes: [domainBuilder.buildTubeAirtableDataObject()],
-    skills: [domainBuilder.buildSkillAirtableDataObject()],
-    challenges: [domainBuilder.buildChallengeAirtableDataObject()],
-    tutorials: [domainBuilder.buildTutorialAirtableDataObject()],
-    thematics: [domainBuilder.buildThematicAirtableDataObject()],
+    tubes: [domainBuilder.buildTubeDatasourceObject()],
+    skills: [domainBuilder.buildSkillDatasourceObject()],
+    challenges: [domainBuilder.buildChallengeDatasourceObject()],
+    tutorials: [domainBuilder.buildTutorialDatasourceObject()],
+    thematics: [domainBuilder.buildThematicDatasourceObject()],
     courses: [{
       id: 'recCourse1',
       name: 'nameCourse1',

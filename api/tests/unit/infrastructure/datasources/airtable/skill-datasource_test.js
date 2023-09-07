@@ -8,7 +8,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () =
 
     it('should create a Skill from the AirtableRecord', () => {
       // given
-      const expectedSkill = domainBuilder.buildSkillAirtableDataObject();
+      const expectedSkill = domainBuilder.buildSkillDatasourceObject();
       const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
       const skillRecord = new AirtableRecord('Acquis', airtableSkill.id, airtableSkill);
 

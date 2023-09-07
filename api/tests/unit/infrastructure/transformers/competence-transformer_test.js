@@ -4,7 +4,7 @@ const { filterCompetencesFields } = require('../../../../lib/infrastructure/tran
 describe('Unit | Infrastructure | competence-transformer', function() {
 
   it('should only keep useful fields', function() {
-    const airtableCompetences = [domainBuilder.buildCompetenceAirtableDataObject()];
+    const airtableCompetences = [domainBuilder.buildCompetenceDatasourceObject()];
 
     const competences = filterCompetencesFields(airtableCompetences);
 

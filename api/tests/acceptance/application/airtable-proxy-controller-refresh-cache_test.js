@@ -36,7 +36,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
 
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-      const competence = domainBuilder.buildCompetenceAirtableDataObject({ id: 'recCompetence' });
+      const competence = domainBuilder.buildCompetenceDatasourceObject({ id: 'recCompetence' });
       airtableRawCompetence = airtableBuilder.factory.buildCompetence(competence);
       expectedCompetence = {
         ...competence,
@@ -144,7 +144,7 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
   });
 
   describe('POST /api/airtable/content/Epreuves', () => {
-    const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
+    const challengeDataObject = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge' });
     const challenge = airtableBuilder.factory.buildChallenge(challengeDataObject);
     const expectedChallenge = domainBuilder.buildChallengeForRelease(challengeDataObject);
     const attachment = airtableBuilder.factory.buildAttachment({

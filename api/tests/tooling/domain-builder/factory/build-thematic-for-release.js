@@ -1,4 +1,4 @@
-const ThematicForRelease = require('../../../../lib/domain/models/ThematicForRelease');
+const ThematicForRelease = require('../../../../lib/domain/models/release/ThematicForRelease');
 
 const buildThematicForRelease = function({
   id = 'recFvllz2Ckz',

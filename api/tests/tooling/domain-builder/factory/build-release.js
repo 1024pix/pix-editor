@@ -1,10 +1,10 @@
-const buildArea = require('./build-area-airtable-data-object');
-const buildCompetence = require('./build-competence-airtable-data-object');
-const buildChallenge = require('./build-challenge-airtable-data-object');
-const buildTube = require('./build-tube-airtable-data-object');
+const buildArea = require('./datasource-objects/build-area-datasource-object');
+const buildCompetence = require('./datasource-objects/build-competence-datasource-object');
+const buildChallenge = require('./datasource-objects/build-challenge-datasource-object');
+const buildTube = require('./datasource-objects/build-tube-datasource-object');
 const buildCourse = require('./build-course-postgres-data-object');
-const buildSkill = require('./build-skill-airtable-data-object');
-const buildTutorial = require('./build-tutorial-airtable-data-object');
+const buildSkill = require('./datasource-objects/build-skill-datasource-object');
+const buildTutorial = require('./datasource-objects/build-tutorial-datasource-object');
 
 module.exports = function buildRelease() {
   const area = buildArea({

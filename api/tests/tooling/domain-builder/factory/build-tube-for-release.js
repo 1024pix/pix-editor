@@ -1,4 +1,4 @@
-const TubeForRelease = require('../../../../lib/domain/models/TubeForRelease');
+const TubeForRelease = require('../../../../lib/domain/models/release/TubeForRelease');
 
 const buildTubeForRelease = function({
   id = 'recTIddrkopID23Fp',

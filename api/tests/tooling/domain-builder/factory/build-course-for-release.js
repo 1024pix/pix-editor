@@ -1,4 +1,4 @@
-const CourseForRelease = require('../../../../lib/domain/models/CourseForRelease');
+const CourseForRelease = require('../../../../lib/domain/models/release/CourseForRelease');
 
 module.exports = function buildCourseForRelease({
   id = 'recPBOj7JzBcgXEtO',

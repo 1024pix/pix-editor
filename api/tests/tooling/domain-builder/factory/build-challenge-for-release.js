@@ -1,4 +1,4 @@
-const ChallengeForRelease = require('../../../../lib/domain/models/ChallengeForRelease');
+const ChallengeForRelease = require('../../../../lib/domain/models/release/ChallengeForRelease');
 
 module.exports = function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',

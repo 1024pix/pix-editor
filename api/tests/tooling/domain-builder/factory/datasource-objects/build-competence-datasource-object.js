@@ -1,4 +1,4 @@
-module.exports = function buildCompetenceAirtableDataObject({
+module.exports = function buildCompetenceDataSourceObject({
   id = 'recsvLz0W2ShyfD63',
   index = '1.1',
   areaId = 'recvoGdo7z2z7pXWa',

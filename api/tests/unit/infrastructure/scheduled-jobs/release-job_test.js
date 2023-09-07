@@ -1,6 +1,6 @@
 const { expect, sinon } = require('../../../test-helper');
 const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
-const Release = require('../../../../lib/domain/models/Release');
+const Release = require('../../../../lib/domain/models/release/Release');
 const releaseJobProcessor = require('../../../../lib/infrastructure/scheduled-jobs/release-job-processor');
 const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
 const logger = require('../../../../lib/infrastructure/logger');

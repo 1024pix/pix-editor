@@ -16,8 +16,8 @@ const skillTransformer = require('../transformers/skill-transformer');
 const tutorialTransformer = require('../transformers/tutorial-transformer');
 const tablesTranslations = require('../translations');
 const competenceTranslations = require('../translations/competence');
-const Release = require('../../domain/models/Release');
-const Content = require('../../domain/models/Content');
+const Release = require('../../domain/models/release/Release');
+const Content = require('../../domain/models/release/Content');
 
 const { knex } = require('../../../db/knex-database-connection');
 

@@ -1,3 +1,5 @@
+const Translation = require('../../domain/models/Translation');
+
 const prefix = 'competence.';
 
 const locales = [
@@ -19,7 +21,14 @@ const localizedFields = locales.flatMap((locale) =>
 
 module.exports = {
   extractFromAirtableObject(competence) {
-    return Array.from(translationsExtractor(competence));
+    const id = competence['id persistant'];
+    return localizedFields
+      .filter(({ airtableField, airtableLocale }) => competence[`${airtableField} ${airtableLocale}`])
+      .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
+        key: `${prefix}${id}.${field}`,
+        value: competence[`${airtableField} ${airtableLocale}`],
+        locale,
+      }));
   },
   hydrateToAirtableObject(competence, translations) {
     const id = competence['id persistant'];
@@ -63,22 +72,3 @@ module.exports = {
   },
   prefix,
 };
-
-function* translationsExtractor(competence) {
-  const id = competence['id persistant'];
-
-  for (const {
-    airtableLocale,
-    locale,
-    airtableField,
-    field,
-  } of localizedFields) {
-    if (!competence[`${airtableField} ${airtableLocale}`]) continue;
-
-    yield {
-      key: `${prefix}${id}.${field}`,
-      value: competence[`${airtableField} ${airtableLocale}`],
-      locale,
-    };
-  }
-}

@@ -6,7 +6,7 @@ const releaseRepository = require('../../../lib/infrastructure/repositories/rele
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
     it('serialize a challenge and fetch attachments', async () => {
-      const challengeDataObject = domainBuilder.buildChallengeAirtableDataObject({ id: 'recChallenge' });
+      const challengeDataObject = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge' });
       const entity = airtableBuilder.factory.buildChallenge({
         id: 'recChallenge',
         instruction: challengeDataObject.instruction,
@@ -110,7 +110,7 @@ describe('Unit | Repository | release-repository', () => {
         }),
       ];
 
-      const challenge = domainBuilder.buildChallengeAirtableDataObject({
+      const challenge = domainBuilder.buildChallengeDatasourceObject({
         id: 'recChallenge',
         instruction : 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
         alternativeInstruction : '',

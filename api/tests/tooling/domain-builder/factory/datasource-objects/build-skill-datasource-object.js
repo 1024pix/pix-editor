@@ -1,4 +1,4 @@
-module.exports = function buildSkillAirtableDataObject(
+module.exports = function buildSkillDatasourceObject(
   {
     id = 'recTIddrkopID28Ep',
     name = '@accesDonnées1',

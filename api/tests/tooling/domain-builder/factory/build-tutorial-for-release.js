@@ -1,4 +1,4 @@
-const TutorialForRelease = require('../../../../lib/domain/models/TutorialForRelease');
+const TutorialForRelease = require('../../../../lib/domain/models/release/TutorialForRelease');
 
 module.exports = function buildTutorialForRelease(
   {
