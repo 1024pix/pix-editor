@@ -1,4 +1,5 @@
-import { expect, domainBuilder, sinon } from '../../../test-helper.js';
+import { describe, expect, it, vi } from 'vitest';
+import { domainBuilder } from '../../../test-helper.js';
 import { notify } from '../../../../lib/infrastructure/event-notifier/updated-record-notifier.js';
 
 describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () => {
@@ -9,13 +10,13 @@ describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () =
       // given
       const updatedRecord = domainBuilder.buildAreaDatasourceObject();
       const model = 'Model';
-      const pixApiClient = { request: sinon.stub() };
+      const pixApiClient = { request: vi.fn() };
 
       // when
       await notify({ pixApiClient, updatedRecord, model });
 
       // then
-      expect(pixApiClient.request).to.have.been.calledWith({ payload: updatedRecord, url: `/api/cache/${model}/${updatedRecord.id}` });
+      expect(pixApiClient.request).toHaveBeenCalledWith({ payload: updatedRecord, url: `/api/cache/${model}/${updatedRecord.id}` });
     });
   });
 

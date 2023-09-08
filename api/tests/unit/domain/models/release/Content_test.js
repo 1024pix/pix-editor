@@ -1,4 +1,5 @@
-import { expect, domainBuilder } from '../../../../test-helper.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
 import { Content } from '../../../../../lib/domain/models/release/Content.js';
 
 describe('Unit | Domain | Content', () => {
@@ -275,7 +276,7 @@ describe('Unit | Domain | Content', () => {
         frameworks: [expectedFramework],
       });
 
-      expect(contentForRelease).to.deepEqualInstance(expectedContentForRelease);
+      expect(contentForRelease).toEqualInstance(expectedContentForRelease);
     });
   });
 });

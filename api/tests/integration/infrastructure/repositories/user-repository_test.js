@@ -1,4 +1,5 @@
-import { expect, databaseBuilder, catchErr } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, catchErr } from '../../../test-helper.js';
 import { findByApiKey } from '../../../../lib/infrastructure/repositories/user-repository.js';
 import { User } from '../../../../lib/domain/models/User.js';
 import { UserNotFoundError } from '../../../../lib/domain/errors.js';

@@ -1,5 +1,5 @@
+import { describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import { expect, sinon } from '../../test-helper.js';
 import * as pixApiClient from '../../../lib/infrastructure/pix-api-client.js';
 import { cache } from '../../../lib/infrastructure/cache.js';
 
@@ -11,7 +11,11 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         // given
         const payload = 'payload';
         const token = 'token';
-        sinon.stub(cache, 'get').withArgs('pix-api-token').returns(token);
+        vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
+          if (spyKey === 'pix-api-token') {
+            return token;
+          }
+        });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -30,7 +34,11 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const payload = 'payload';
         const token = 'token';
         const newToken = 'myNewToken';
-        sinon.stub(cache, 'get').withArgs('pix-api-token').returns(token);
+        vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
+          if (spyKey === 'pix-api-token') {
+            return token;
+          }
+        });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -61,7 +69,11 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         const payload = 'payload';
         const token = 'token';
         const newToken = 'myNewToken';
-        sinon.stub(cache, 'get').withArgs('pix-api-token').returns(token);
+        vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
+          if (spyKey === 'pix-api-token') {
+            return token;
+          }
+        });
 
         const firstRequestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -98,7 +110,11 @@ describe('Unit | Infrastructure | PIX API Client', () => {
       it('should authenticate', async () => {
         const payload = 'payload';
         const token = 'token';
-        sinon.stub(cache, 'get').withArgs('pix-api-token').returns(null);
+        vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
+          if (spyKey === 'pix-api-token') {
+            return null;
+          }
+        });
 
         const requestInterceptor = nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -121,8 +137,12 @@ describe('Unit | Infrastructure | PIX API Client', () => {
       it('should store token in cache', async () => {
         const payload = 'payload';
         const token = 'token';
-        sinon.stub(cache, 'get').withArgs('pix-api-token').returns(null);
-        sinon.stub(cache, 'set').withArgs('pix-api-token');
+        vi.spyOn(cache, 'get').mockImplementation((spyKey) => {
+          if (spyKey === 'pix-api-token') {
+            return null;
+          }
+        });
+        vi.spyOn(cache, 'set');
 
         nock('https://api.test.pix.fr')
           .patch('/api/cache/model/id', payload)
@@ -138,7 +158,7 @@ describe('Unit | Infrastructure | PIX API Client', () => {
         await pixApiClient.request({ url: '/api/cache/model/id', payload });
 
         // then
-        expect(cache.set).to.have.been.called;
+        expect(cache.set).toHaveBeenCalled();
       });
     });
 

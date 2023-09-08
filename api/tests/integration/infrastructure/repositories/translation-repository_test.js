@@ -1,4 +1,5 @@
-import { expect, knex } from '../../../test-helper.js';
+import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
+import { knex } from '../../../test-helper.js';
 import { checkIfShouldDuplicateToAirtable, save } from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
 

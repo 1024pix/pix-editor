@@ -1,4 +1,4 @@
-import { expect } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
 import {
   extractFromAirtableObject,
   hydrateReleaseObject,

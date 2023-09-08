@@ -1,9 +1,8 @@
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import {
-  expect,
   airtableBuilder,
   databaseBuilder,
   generateAuthorizationHeader,
-  sinon,
   knex
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
@@ -502,7 +501,7 @@ describe('Acceptance | Controller | release-controller', () => {
   describe('POST /releases - Creates the release', () => {
 
     beforeEach(function() {
-      sinon.stub(axios, 'post').resolves();
+      vi.spyOn(axios, 'post').mockResolvedValue();
     });
 
     afterEach(function() {

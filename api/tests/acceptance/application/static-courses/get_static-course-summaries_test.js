@@ -1,5 +1,5 @@
+import { describe, expect, it } from 'vitest';
 import {
-  expect,
   databaseBuilder,
   generateAuthorizationHeader,
 } from '../../../test-helper.js';

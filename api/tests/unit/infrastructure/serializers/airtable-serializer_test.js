@@ -1,4 +1,5 @@
-import { expect, domainBuilder, airtableBuilder } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { domainBuilder, airtableBuilder } from '../../../test-helper.js';
 import { serialize } from '../../../../lib/infrastructure/serializers/airtable-serializer.js';
 
 describe('Unit | Infrastructure | Serializers | Airtable Serializer', () => {

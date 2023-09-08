@@ -1,4 +1,5 @@
-import { expect, hFake } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { hFake } from '../../../test-helper.js';
 import {
   InvalidStaticCourseCreationOrUpdateError,
   StaticCourseIsInactiveError,

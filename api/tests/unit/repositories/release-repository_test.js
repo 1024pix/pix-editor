@@ -1,4 +1,5 @@
-import { expect, domainBuilder, airtableBuilder, sinon } from '../../test-helper.js';
+import { describe, expect, it, vi } from 'vitest';
+import { domainBuilder, airtableBuilder } from '../../test-helper.js';
 import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 
@@ -39,7 +40,9 @@ describe('Unit | Repository | release-repository', () => {
       });
       const type = 'Epreuves';
 
-      sinon.stub(attachmentDatasource, 'filterByChallengeId').withArgs('recChallenge').resolves([attachment]);
+      vi.spyOn(attachmentDatasource, 'filterByChallengeId').mockImplementation(async (spyId) => {
+        if (spyId === 'recChallenge') return [attachment];
+      });
 
       const { updatedRecord, model } = await serializeEntity({ entity, type });
 
@@ -62,8 +65,8 @@ describe('Unit | Repository | release-repository', () => {
         frameworkId: 'recFramework0',
       });
       const type = 'Domaines';
-      sinon.stub(attachmentDatasource, 'filterByChallengeId');
-      sinon.stub(challengeDatasource, 'filterById');
+      vi.spyOn(attachmentDatasource, 'filterByChallengeId');
+      vi.spyOn(challengeDatasource, 'filterById');
 
       const { updatedRecord, model } = await serializeEntity({ entity, type });
 
@@ -80,8 +83,8 @@ describe('Unit | Repository | release-repository', () => {
         },
         frameworkId: 'recFramework0',
       });
-      expect(attachmentDatasource.filterByChallengeId).to.not.have.been.called;
-      expect(challengeDatasource.filterById).to.not.have.been.called;
+      expect(attachmentDatasource.filterByChallengeId).not.toHaveBeenCalled();
+      expect(challengeDatasource.filterById).not.toHaveBeenCalled();
       expect(model).to.equal('areas');
     });
 
@@ -132,8 +135,12 @@ describe('Unit | Repository | release-repository', () => {
       });
       const type = 'Attachments';
 
-      sinon.stub(challengeDatasource, 'filterById').withArgs('recChallenge').resolves(challenge);
-      sinon.stub(attachmentDatasource, 'filterByChallengeId').withArgs('recChallenge').resolves(attachmentRecords);
+      vi.spyOn(challengeDatasource, 'filterById').mockImplementation(async (spyId) => {
+        if (spyId === 'recChallenge') return challenge;
+      });
+      vi.spyOn(attachmentDatasource, 'filterByChallengeId').mockImplementation(async (spyId) => {
+        if (spyId === 'recChallenge') return attachmentRecords;
+      });
 
       const { updatedRecord, model } = await serializeEntity({ entity, type });
 

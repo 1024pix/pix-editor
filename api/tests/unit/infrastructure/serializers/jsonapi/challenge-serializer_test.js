@@ -1,4 +1,5 @@
-import { expect, domainBuilder } from '../../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
 import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {

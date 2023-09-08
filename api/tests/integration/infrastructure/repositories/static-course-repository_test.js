@@ -1,4 +1,5 @@
-import { expect, databaseBuilder, domainBuilder, sinon } from '../../../test-helper.js';
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { findReadSummaries, getRead } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
 import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
@@ -34,7 +35,7 @@ describe('Integration | Repository | static-course-repository', function() {
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
-            expect(actualStaticCourseSummaryIds).to.deepEqualArray(['courseId3', 'courseId2', 'courseId1', 'courseId0']);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId2', 'courseId1', 'courseId0']);
             expect(meta).to.deep.equal({
               page: 1,
               pageSize: 20,
@@ -55,7 +56,7 @@ describe('Integration | Repository | static-course-repository', function() {
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
-            expect(actualStaticCourseSummaryIds).to.deepEqualArray(['courseId2', 'courseId0']);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId2', 'courseId0']);
             expect(meta).to.deep.equal({
               page: 1,
               pageSize: 20,
@@ -76,7 +77,7 @@ describe('Integration | Repository | static-course-repository', function() {
 
             // then
             const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
-            expect(actualStaticCourseSummaryIds).to.deepEqualArray(['courseId3', 'courseId1']);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId1']);
             expect(meta).to.deep.equal({
               page: 1,
               pageSize: 20,
@@ -148,10 +149,8 @@ describe('Integration | Repository | static-course-repository', function() {
           preview: 'site/challenges/challengeB',
         }),
       ];
-      const stubFilterChallengeDatasource = sinon.stub(challengeDatasource, 'filter');
-      stubFilterChallengeDatasource.withArgs({ filter: { ids: ['challengeA', 'challengeB'] } }).resolves(airtableChallenges);
-      const stubFilterSkillDatasource = sinon.stub(skillDatasource, 'filter');
-      stubFilterSkillDatasource.withArgs({ filter: { ids: ['skillA', 'skillB'] } }).resolves([
+      const stubFilterChallengeDatasource = vi.spyOn(challengeDatasource, 'filter').mockResolvedValue(airtableChallenges);
+      const stubFilterSkillDatasource = vi.spyOn(skillDatasource, 'filter').mockResolvedValue([
         { id: 'skillA', name: '@skillA' }, { id: 'skillB', name: '@skillB' }
       ]);
       await databaseBuilder.commit();
@@ -161,6 +160,8 @@ describe('Integration | Repository | static-course-repository', function() {
 
       //then
       expect(staticCourse.id).to.equal('rec123');
+      expect(stubFilterChallengeDatasource).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
+      expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });
     });
   });
 });

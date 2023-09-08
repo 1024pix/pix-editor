@@ -1,10 +1,11 @@
-import { expect, sinon, domainBuilder } from '../../../test-helper.js';
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import { domainBuilder } from '../../../test-helper.js';
 import { StaticCourse } from '../../../../lib/domain/models/StaticCourse.js';
 import { StaticCourseIsInactiveError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Domain | StaticCourse', function() {
   context('static buildFromCreationCommand', function() {
-    let clock, validCreationCommand, idGenerator;
+    let validCreationCommand, idGenerator;
     const allChallengeIds = ['chalABC', 'chalDEF', 'chalGHI', 'chalJKF'];
 
     beforeEach(function() {
@@ -13,12 +14,14 @@ describe('Unit | Domain | StaticCourse', function() {
         description: '  some valid description',
         challengeIds: ['chalGHI ', ' chalABC', 'chalJKF'],
       };
-      clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+      vi.useFakeTimers({
+        now: new Date('2021-10-29T03:04:00Z'),
+      });
       idGenerator = (prefix) => `${prefix}ABC123`;
     });
 
     afterEach(function() {
-      clock.restore();
+      vi.useRealTimers();
     });
 
     context('valid commands', function() {
@@ -88,7 +91,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'name' },
           ]);
         });
@@ -112,7 +115,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
           ]);
         });
@@ -134,7 +137,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
           ]);
         });
@@ -156,7 +159,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'challengeIds' },
           ]);
         });
@@ -181,7 +184,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'name' },
             { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
             { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
@@ -192,7 +195,7 @@ describe('Unit | Domain | StaticCourse', function() {
   });
 
   context('update', function() {
-    let clock, validUpdateCommand, staticCourseToUpdate;
+    let validUpdateCommand, staticCourseToUpdate;
     const allChallengeIds = ['chalABC', 'chalDEF', 'chalGHI', 'chalJKF'];
 
     beforeEach(function() {
@@ -201,7 +204,9 @@ describe('Unit | Domain | StaticCourse', function() {
         description: '  some valid description',
         challengeIds: ['chalGHI ', ' chalABC', 'chalJKF'],
       };
-      clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+      vi.useFakeTimers({
+        now: new Date('2021-10-29T03:04:00Z'),
+      });
       staticCourseToUpdate = domainBuilder.buildStaticCourse({
         id: 'myAwesomeCourse66',
         name: 'old name',
@@ -215,7 +220,7 @@ describe('Unit | Domain | StaticCourse', function() {
     });
 
     afterEach(function() {
-      clock.restore();
+      vi.useRealTimers();
     });
 
     context('valid commands', function() {
@@ -308,7 +313,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'name' },
           ]);
         });
@@ -331,7 +336,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
           ]);
         });
@@ -352,7 +357,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalJKF', 'chalABC'] },
           ]);
         });
@@ -373,7 +378,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'challengeIds' },
           ]);
         });
@@ -397,7 +402,7 @@ describe('Unit | Domain | StaticCourse', function() {
           // then
           expect(commandResult.isFailure()).to.be.true;
           expect(commandResult.value).to.be.null;
-          expect(commandResult.error.errors).to.deepEqualArray([
+          expect(commandResult.error.errors).toEqual([
             { code: 'MANDATORY_FIELD', field: 'name' },
             { code: 'UNKNOWN_RESOURCES', field: 'challengeIds', data: ['xchalLOL', 'chalDEFF'] },
             { code: 'DUPLICATES_FORBIDDEN', field: 'challengeIds', data: ['chalGHI'] },
@@ -409,14 +414,14 @@ describe('Unit | Domain | StaticCourse', function() {
 });
 
 context('deactivate', function() {
-  let clock;
-
   beforeEach(function() {
-    clock = sinon.useFakeTimers(new Date('2021-10-29T03:04:00Z'));
+    vi.useFakeTimers({
+      now: new Date('2021-10-29T03:04:00Z'),
+    });
   });
 
   afterEach(function() {
-    clock.restore();
+    vi.useRealTimers();
   });
 
   it('should make the static course inactive when it is active', function() {

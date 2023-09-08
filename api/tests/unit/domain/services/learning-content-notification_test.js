@@ -1,4 +1,4 @@
-import { expect, sinon } from '../../../test-helper.js';
+import { describe, expect, it, vi } from 'vitest';
 import { notifyReleaseCreationFailure, notifyReleaseCreationSuccess } from '../../../../lib/domain/services/learning-content-notification.js';
 
 describe('Unit | Domain | Services | learning-content-notification', function() {
@@ -7,7 +7,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
 
     it('should send a success message with given Slack notifier', async function() {
       const slackNotifier = {
-        send: sinon.stub().resolves(),
+        send: vi.fn().mockResolvedValue(),
       };
 
       await notifyReleaseCreationSuccess(slackNotifier);
@@ -22,7 +22,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
           }
         ]
       };
-      expect(slackNotifier.send).to.have.been.calledWithExactly(expectedBlocks);
+      expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
 
@@ -31,7 +31,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
     it('should send a failure message with given Slack notifier', async function() {
       // given
       const slackNotifier = {
-        send: sinon.stub().resolves(),
+        send: vi.fn().mockResolvedValue(),
       };
       const errorMessage = 'Some network error occurred';
 
@@ -56,7 +56,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
           }
         ]
       };
-      expect(slackNotifier.send).to.have.been.calledWithExactly(expectedBlocks);
+      expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
 

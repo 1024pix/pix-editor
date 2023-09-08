@@ -1,4 +1,5 @@
-import { expect, databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { beforeEach, describe, describe as context, expect, it } from 'vitest';
+import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | config', () => {

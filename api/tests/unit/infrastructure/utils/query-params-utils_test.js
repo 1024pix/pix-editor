@@ -1,4 +1,4 @@
-import { expect } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
 import { extractParameters } from '../../../../lib/infrastructure/utils/query-params-utils.js';
 
 describe('Unit | Utils | Query Params Utils', function() {

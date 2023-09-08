@@ -1,19 +1,18 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  expect,
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
   knex,
-  sinon
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import { challengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Acceptance | API | static courses | POST /api/static-courses', function() {
-  let user, clock;
+  let user;
 
   beforeEach(async function() {
-    clock = sinon.useFakeTimers({
+    vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
     });
@@ -71,12 +70,12 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       challenges: [airtableChallenge1, airtableChallenge2, airtableChallenge3, airtableChallenge4],
       skills: [airtableSkill1, airtableSkill2, airtableSkill3, airtableSkill4],
     });
-    const getAllIdsInStub = sinon.stub(challengeRepository, 'getAllIdsIn');
-    getAllIdsInStub.resolves(['challengeid1', 'challengeid2', 'challengeid3', 'challengeid4']);
+    vi.spyOn(challengeRepository, 'getAllIdsIn')
+      .mockResolvedValue(['challengeid1', 'challengeid2', 'challengeid3', 'challengeid4']);
   });
 
   afterEach(function() {
-    clock.restore();
+    vi.useRealTimers();
     return knex('static_courses').delete();
   });
 

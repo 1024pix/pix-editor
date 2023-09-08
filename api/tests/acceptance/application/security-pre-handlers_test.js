@@ -1,4 +1,4 @@
-import { expect } from '../../test-helper.js';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { createServer } from '../../../server.js';
 
 describe('Acceptance | Application | SecurityPreHandlers', () => {

@@ -1,5 +1,6 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import airtable from 'airtable';
-import { airtableBuilder, expect } from '../../test-helper.js';
+import { airtableBuilder } from '../../test-helper.js';
 import { findRecords } from '../../../lib/infrastructure/airtable.js';
 
 const { Record: AirtableRecord } = airtable;

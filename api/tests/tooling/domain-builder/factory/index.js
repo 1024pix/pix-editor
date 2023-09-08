@@ -8,7 +8,7 @@ export * from './datasource-objects/build-competence-datasource-object.js';
 export * from './build-content-for-release.js';
 export * from './build-course-for-release.js';
 export * from './build-course-postgres-data-object.js';
-export * from './build-real-release.js';
+export * from './build-domain-release.js';
 export * from './build-framework-for-release.js';
 export * from './datasource-objects/build-framework-datasource-object.js';
 export * from './build-release.js';

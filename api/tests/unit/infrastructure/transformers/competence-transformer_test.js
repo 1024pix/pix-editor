@@ -1,4 +1,5 @@
-import { expect, domainBuilder } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../test-helper.js';
 import { filterCompetencesFields } from '../../../../lib/infrastructure/transformers/competence-transformer.js';
 
 describe('Unit | Infrastructure | competence-transformer', function() {

@@ -1,4 +1,4 @@
-import { expect } from '../../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
 import { User } from '../../../../../lib/domain/models/User.js';
 import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/user-serializer.js';
 

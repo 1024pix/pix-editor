@@ -1,4 +1,5 @@
-import { expect, databaseBuilder, knex, domainBuilder, airtableBuilder } from '../../../test-helper.js';
+import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
+import { databaseBuilder, knex, domainBuilder, airtableBuilder } from '../../../test-helper.js';
 import { create, getLatestRelease, getRelease, getCurrentContent } from '../../../../lib/infrastructure/repositories/release-repository.js';
 
 describe('Integration | Repository | release-repository', function() {
@@ -87,7 +88,7 @@ describe('Integration | Repository | release-repository', function() {
         createdAt: new Date('2021-02-02'),
         content: expectedContent
       });
-      expect(latestRelease).to.deepEqualInstance(expectedRelease);
+      expect(latestRelease).toEqualInstance(expectedRelease);
     });
   });
 
@@ -129,7 +130,7 @@ describe('Integration | Repository | release-repository', function() {
         createdAt: new Date('2020-01-01'),
         content: expectedContent
       });
-      expect(givenRelease).to.deepEqualInstance(expectedRelease);
+      expect(givenRelease).toEqualInstance(expectedRelease);
     });
 
     context('with a rich and realistic content', function() {
@@ -154,7 +155,7 @@ describe('Integration | Repository | release-repository', function() {
           createdAt: new Date('2021-01-01'),
           content: expectedContent
         });
-        expect(givenRelease).to.deepEqualInstance(expectedRelease);
+        expect(givenRelease).toEqualInstance(expectedRelease);
       });
     });
   });

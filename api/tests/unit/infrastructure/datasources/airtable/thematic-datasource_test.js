@@ -1,4 +1,5 @@
-import { expect, domainBuilder, airtableBuilder } from '../../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
+import { domainBuilder, airtableBuilder } from '../../../../test-helper.js';
 import { thematicDatasource } from '../../../../../lib/infrastructure/datasources/airtable/thematic-datasource.js';
 import airtable from 'airtable';
 

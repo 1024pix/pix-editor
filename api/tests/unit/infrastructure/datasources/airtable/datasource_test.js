@@ -1,4 +1,4 @@
-import { expect, sinon } from '../../../../test-helper.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { datasource } from '../../../../../lib/infrastructure/datasources/airtable/datasource.js';
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 
@@ -23,7 +23,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
   describe('#list', () => {
 
     beforeEach(() => {
-      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation(async (tableName, options) => {
         return [{ id: 1, tableName, ...options }];
       });
     });
@@ -60,7 +60,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     it('should fetch records of a given type and given ids', async () => {
       // given
-      sinon.stub(airtable, 'findRecords').callsFake(async (tableName, options) => {
+      vi.spyOn(airtable, 'findRecords').mockImplementation(async (tableName, options) => {
         const returnValue = [{ id: 1, tableName, ...options }];
         return returnValue;
       });
@@ -69,7 +69,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
       await someDatasource.filter({ filter: { ids: ['1', '2'] } });
 
       // then
-      expect(airtable.findRecords).to.have.been.calledWith(
+      expect(airtable.findRecords).toHaveBeenCalledWith(
         'Airtable_table',
         {
           fields: ['Shi', 'Foo', 'Me'],
@@ -83,7 +83,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
 
     it('should create record', async () => {
       // given
-      sinon.stub(airtable, 'createRecord').callsFake(async (tableName, options) => {
+      vi.spyOn(airtable, 'createRecord').mockImplementation(async (tableName, options) => {
         const returnValue = { id: 1, tableName, ...options };
         return returnValue;
       });

@@ -1,6 +1,7 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
-import { expect, databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } from '../../../test-helper.js';
+import {  databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 const challengeAirtableFields = [

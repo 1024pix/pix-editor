@@ -1,4 +1,5 @@
-import { expect, airtableBuilder, knex } from '../test-helper.js';
+import { beforeEach, describe, expect, it } from 'vitest';
+import { airtableBuilder, knex } from '../test-helper.js';
 import Airtable from 'airtable';
 import nock from 'nock';
 

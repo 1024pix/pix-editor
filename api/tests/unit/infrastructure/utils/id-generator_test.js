@@ -1,4 +1,4 @@
-import { expect } from '../../../test-helper.js';
+import { describe, expect, it } from 'vitest';
 import { generateNewId } from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Unit | Infrastructure | Utils | Id Generator', function() {

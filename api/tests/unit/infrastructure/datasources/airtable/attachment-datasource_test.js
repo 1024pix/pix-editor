@@ -1,4 +1,5 @@
-import { expect, airtableBuilder, sinon } from '../../../../test-helper.js';
+import { describe, expect, it, vi } from 'vitest';
+import { airtableBuilder } from '../../../../test-helper.js';
 import { attachmentDatasource } from '../../../../../lib/infrastructure/datasources/airtable/attachment-datasource.js';
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 import airtableClient from 'airtable';
@@ -13,14 +14,14 @@ describe('Unit | Infrastructure | Datasource | Airtable | AttachmentDatasource',
       });
       const attachmentRecord = new airtableClient.Record('Attachments', attachment.id, attachment);
 
-      sinon.stub(airtable, 'findRecords')
-        .withArgs('Attachments', { filterByFormula: '{challengeId persistant} = \'recChallenge\'' })
-        .resolves([attachmentRecord]);
+      const airtableFindRecordsSpy = vi.spyOn(airtable, 'findRecords')
+        .mockResolvedValue([attachmentRecord]);
 
       const newAttachments = await attachmentDatasource.filterByChallengeId('recChallenge');
 
       expect(newAttachments[0].id).to.equal('recAttachment');
       expect(newAttachments).to.have.length(1);
+      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Attachments', { filterByFormula: '{challengeId persistant} = \'recChallenge\'' });
     });
   });
 });

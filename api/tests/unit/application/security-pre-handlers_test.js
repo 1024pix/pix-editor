@@ -1,4 +1,5 @@
-import { expect, sinon, hFake } from '../../test-helper.js';
+import { describe, describe as context, expect, it, vi } from 'vitest';
+import { hFake } from '../../test-helper.js';
 import { checkUserHasWriteAccess, checkUserIsAuthenticatedViaBasicAndAdmin, checkUserIsAuthenticatedViaBearer } from '../../../lib/application/security-pre-handlers.js';
 import { userRepository } from '../../../lib/infrastructure/repositories/index.js';
 import { User } from '../../../lib/domain/models/User.js';
@@ -22,7 +23,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
           apiKey,
           access: 'admin',
         });
-        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) return authenticatedUser;
+        });
 
         // when
         const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
@@ -52,7 +55,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         const authorizationHeader = `Bearer ${apiKey}`;
         const request = { headers: { authorization: authorizationHeader } };
 
-        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).rejects(new UserNotFoundError());
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) throw new UserNotFoundError();
+        });
 
         // when
         const response = await checkUserIsAuthenticatedViaBearer(request, hFake);
@@ -78,7 +83,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
           apiKey,
           access: 'admin',
         });
-        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) return authenticatedUser;
+        });
 
         // when
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
@@ -95,7 +102,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         // given
         const apiKey = 'invalid.api.key';
 
-        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).rejects();
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) throw new Error();
+        });
 
         // when
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
@@ -114,7 +123,9 @@ describe('Unit | Application | SecurityPreHandlers', () => {
           apiKey,
           access: 'readonly',
         });
-        sinon.stub(userRepository, 'findByApiKey').withArgs(apiKey).resolves(authenticatedUser);
+        vi.spyOn(userRepository, 'findByApiKey').mockImplementation(async (spyApiKey) => {
+          if (spyApiKey === apiKey) return authenticatedUser;
+        });
 
         // when
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
