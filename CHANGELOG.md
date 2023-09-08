@@ -1,5 +1,28 @@
 
 
+## v3.94.0 (08/09/2023)
+
+
+### :rocket: Amélioration
+- [#271](https://github.com/1024pix/pix-editor/pull/271) [FEATURE] Supprimer l'usage des traductions de compétence de Airtable (PIX-9013).
+
+### :building_construction: Tech
+- [#277](https://github.com/1024pix/pix-editor/pull/277) [TECH] Refactorisation des builders et modèles domaines de l'API (PIX-9124).
+- [#122](https://github.com/1024pix/pix-editor/pull/122) [TECH] Clarifier la procédure d'installation.
+- [#275](https://github.com/1024pix/pix-editor/pull/275) [TECH] Supprimer la colonne "imageUrl" de la table des tests statiques, attribut non utilisé (PIX-9080).
+- [#200](https://github.com/1024pix/pix-editor/pull/200) [TECH] Remplacer Cypress par Playwright (PIX-9025).
+
+### :bug: Correction
+- [#274](https://github.com/1024pix/pix-editor/pull/274) [BUGFIX] Logs d'erreur à tort lors de l'enregistrement de traductions (PIX-9077).
+
+### :arrow_up: Montée de version
+- [#276](https://github.com/1024pix/pix-editor/pull/276) [BUMP] Update dependency p-queue to v7.4.0 (pix-editor).
+- [#273](https://github.com/1024pix/pix-editor/pull/273) [BUMP] Update redis Docker tag to v7.
+- [#270](https://github.com/1024pix/pix-editor/pull/270) [BUMP] Lock file maintenance (dossier racine).
+- [#268](https://github.com/1024pix/pix-editor/pull/268) [BUMP] Update browser-tools orb to v1.4.4 (.circleci).
+- [#272](https://github.com/1024pix/pix-editor/pull/272) [BUMP] Update dependency eslint to v8.48.0.
+- [#269](https://github.com/1024pix/pix-editor/pull/269) [BUMP] Lock file maintenance (api).
+
 ## v3.93.0 (04/09/2023)
 
 
