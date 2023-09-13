@@ -71,6 +71,7 @@
     "oppsy": "https://github.com/1024pix/oppsy#main",
     "p-map": "^6.0.0",
     "pg": "^8.9.0",
+    "pg-query-stream": "^4.5.3",
     "pino": "^8.0.0",
     "pino-pretty": "^10.2.0",
     "prom-client": "^14.0.0",
