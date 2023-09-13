@@ -1,11 +1,16 @@
-export default async function register(server) {
+import { PassThrough } from 'node:stream';
+import { exportTranslations } from '../domain/usecases/export-translations';
+
+export async function register(server) {
   server.route([
     {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
-        handler: function(request, h) {
-          return h.response('ok');
+        handler: function(_, h) {
+          const stream = new PassThrough();
+          exportTranslations(stream);
+          return h.response(stream).header('Content-type', 'text/csv');
         }
       },
     },

@@ -1,5 +1,6 @@
-import { expect, databaseBuilder, generateAuthorizationHeader } from '../../test-helper';
-import createServer from '../../../server';
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper';
+import { createServer } from '../../../server';
 
 describe('Acceptance | Controller | translations-controller', () => {
 
@@ -27,6 +28,8 @@ describe('Acceptance | Controller | translations-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(200);
+      expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
+      expect(response.payload).to.equal('key,locale,value\nsome-key,fr-fr,La clé !');
     });
 
   });
