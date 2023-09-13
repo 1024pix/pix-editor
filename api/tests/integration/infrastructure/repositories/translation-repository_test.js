@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import { knex } from '../../../test-helper.js';
+import { knex, databaseBuilder, streamToPromiseArray } from '../../../test-helper.js';
 import { checkIfShouldDuplicateToAirtable, save } from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
+import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { Translation } from '../../../../lib/domain/models/Translation';
 
 describe('Integration | Repository | translation-repository', function() {
 
@@ -44,6 +46,30 @@ describe('Integration | Repository | translation-repository', function() {
 
       // then
       expect(nock.isDone()).to.be.true;
+    });
+  });
+
+  context('#streamList', function() {
+    it('should stream a list', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'some.key',
+        locale: 'fr',
+        value: 'Bonjour, la mif'
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const stream = translationRepository.streamList();
+      const result = await streamToPromiseArray(stream);
+
+      // then
+      expect(result).to.deep.equal([
+        new Translation({
+          key: 'some.key',
+          locale: 'fr',
+          value: 'Bonjour, la mif'
+        })]);
     });
   });
 });

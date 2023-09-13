@@ -8,26 +8,35 @@ import {
 
 describe('Unit | Domain | Usecases | export-translations', function() {
   it('write the translations as a csv to a stream', async function() {
+    const streamListStream = new PassThrough({
+      readableObjectMode: true,
+      writableObjectMode: true,
+    });
+    function writeTranslationStream() {
+      streamListStream.write(new Translation({
+        key: 'some.key',
+        locale: 'fr',
+        value: 'Bonjour'
+      }));
+      streamListStream.write(new Translation({
+        key: 'some.key',
+        locale: 'en',
+        value: 'Hello,'
+      }));
+      streamListStream.end();
+    }
     const translationRepository = {
-      list() {
-        return [
-          new Translation({
-            key: 'some.key',
-            locale: 'fr',
-            value: 'Bonjour'
-          }),
-          new Translation({
-            key: 'some.key',
-            locale: 'en',
-            value: 'Hello,'
-          }),
-        ];
+      streamList() {
+        return streamListStream;
       }
     };
     const stream = new PassThrough();
     const promise = streamToPromise(stream);
-    await exportTranslations(stream, { translationRepository });
-    const result =  await promise;
+
+    exportTranslations(stream, { translationRepository });
+    writeTranslationStream();
+
+    const result = await promise;
     expect(result).to.equal('key,locale,value\nsome.key,fr,Bonjour\nsome.key,en,"Hello,"');
   });
 });
