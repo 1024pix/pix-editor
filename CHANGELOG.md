@@ -1,5 +1,23 @@
 
 
+## v3.95.0 (14/09/2023)
+
+
+### :building_construction: Tech
+- [#278](https://github.com/1024pix/pix-editor/pull/278) [TECH] Migration API PixEditor en ESM (PIX-9135).
+
+### :arrow_up: Montée de version
+- [#289](https://github.com/1024pix/pix-editor/pull/289) [BUMP] Update dependency @adminjs/hapi to v7 (api).
+- [#283](https://github.com/1024pix/pix-editor/pull/283) [BUMP] Update dependency @1024pix/ember-testing-library to ^0.8.0 (pix-editor).
+- [#284](https://github.com/1024pix/pix-editor/pull/284) [BUMP] Update browser-tools orb to v1.4.5 (.circleci).
+- [#279](https://github.com/1024pix/pix-editor/pull/279) [BUMP] Update dependency p-queue to v7.4.1 (pix-editor).
+- [#281](https://github.com/1024pix/pix-editor/pull/281) [BUMP] Update dependency stylelint-config-standard-scss to v11 (pix-editor).
+- [#280](https://github.com/1024pix/pix-editor/pull/280) [BUMP] Update dependency ember-truth-helpers to v4 (pix-editor).
+
+### :coffee: Autre
+- [#287](https://github.com/1024pix/pix-editor/pull/287) [DOC] ADR "Choix d'un framework de test backend" (PIX-9155).
+- [#285](https://github.com/1024pix/pix-editor/pull/285) [DOC] ADR "Modulariser le code NodeJS" (PIX-9154).
+
 ## v3.94.0 (08/09/2023)
 
 
