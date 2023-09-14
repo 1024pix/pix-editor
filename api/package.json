@@ -41,7 +41,7 @@
   "author": "GIP Pix",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
-    "@adminjs/hapi": "^7.0.0",
+    "@1024pix/adminjs-hapijs": "^7.0.1",
     "@adminjs/sequelize": "^4.0.0",
     "@hapi/boom": "^10.0.0",
     "@hapi/cookie": "^12.0.0",
