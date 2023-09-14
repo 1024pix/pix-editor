@@ -1,5 +1,5 @@
 import { PassThrough } from 'node:stream';
-import { exportTranslations } from '../domain/usecases/export-translations';
+import { exportTranslations } from '../domain/usecases/export-translations.js';
 
 export async function register(server) {
   server.route([
