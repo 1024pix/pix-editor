@@ -27,7 +27,7 @@
     "lint:fix": "eslint .js,.cjs lib tests --fix",
     "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
     "start": "node index.js",
-    "start:watch": "nodemon --signal SIGTERM index.js",
+    "start:watch": "nodemon --ext js,cjs,json,jsx --signal SIGTERM index.js",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
     "test:api": "NODE_ENV=test vitest run",
     "test:api:unit": "NODE_ENV=test vitest run tests/unit/",
