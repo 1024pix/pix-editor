@@ -50,7 +50,7 @@
     "@hapi/inert": "^7.0.0",
     "@hapi/vision": "^7.0.0",
     "@sentry/node": "^7.39.0",
-    "adminjs": "^6.8.6",
+    "adminjs": "^7.2.1",
     "airtable": "^0.12.2",
     "axios": "^1.0.0",
     "axios-cookiejar-support": "^4.0.0",
