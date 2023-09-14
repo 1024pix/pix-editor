@@ -1,6 +1,5 @@
 import * as config from './lib/config.js';
 import Hapi from '@hapi/hapi';
-import HapiBasic from '@hapi/basic';
 import Oppsy from 'oppsy';
 
 import { catchDomainAndInfrastructureErrors } from './lib/infrastructure/utils/pre-response-utils.js';
@@ -36,8 +35,6 @@ export async function createServer() {
   server.auth.scheme('api-token', security.scheme);
   server.auth.strategy('default', 'api-token');
   server.auth.default('default');
-  await server.register(HapiBasic);
-  server.auth.strategy('simple', 'basic', { validate: (request, username) => securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(username) });
 
   const configuration = [].concat(plugins, routes);
 
@@ -46,7 +43,7 @@ export async function createServer() {
   await server.register(configuration);
 
   return server;
-};
+}
 
 const enableOpsMetrics = async function(server) {
 

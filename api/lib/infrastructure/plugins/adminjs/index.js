@@ -1,6 +1,7 @@
 import { AdminJS, ComponentLoader } from 'adminjs';
 import AdminJSSequelize from '@adminjs/sequelize';
 import { User, Release, Translations } from './models.js';
+import { checkUserIsAuthenticatedViaBasicAndAdmin } from '../../../application/security-pre-handlers.js';
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
@@ -64,7 +65,7 @@ export const options = {
     strategy: 'session',
     cookiePassword: process.env.ADMIN_COOKIE_PASSWORD || 'very-long-password-for-tests-only',
     cookieName: 'adminCookie',
-    authenticate: (email, password) => ({ email, password }),
+    authenticate: (email) => checkUserIsAuthenticatedViaBasicAndAdmin(email),
   },
 };
 

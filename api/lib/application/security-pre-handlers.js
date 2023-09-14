@@ -22,9 +22,9 @@ export async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
     if (user.access !== 'admin') {
       throw new Error('not an admin');
     }
-    return { isValid: true, credentials: { user } };
+    return { email: username };
   } catch (error) {
-    return { isValid: false };
+    return false;
   }
 }
 
