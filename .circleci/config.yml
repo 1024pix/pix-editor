@@ -55,7 +55,7 @@ executors:
     resource_class: medium
   playwright-redis-postgres-docker:
     docker:
-      - image: mcr.microsoft.com/playwright:v1.37.1-focal
+      - image: mcr.microsoft.com/playwright:v1.38.0-focal
       - image: postgres:14.6-alpine
         environment:
           POSTGRES_USER: circleci
