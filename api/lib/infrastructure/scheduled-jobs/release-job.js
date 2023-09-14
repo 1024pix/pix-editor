@@ -6,13 +6,14 @@ import { fileURLToPath } from 'node:url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const queue = createQueue('create-release-queue');
-const processFile = __dirname + '/release-job-processor.cjs';
+const cjsFile = __dirname + '/release-job-processor.cjs';
+const esmFile = __dirname + '/release-job-processor.js';
 if (process.env.NODE_ENV === 'test') {
-  import(processFile).then((module) => {
+  import(esmFile).then((module) => {
     queue.process(module.default);
   });
 } else {
-  queue.process(processFile);
+  queue.process(cjsFile);
 }
 
 const releaseJobOptions = {

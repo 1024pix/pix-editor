@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { releaseRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { Release } from '../../../../lib/domain/models/release/Release.js';
-import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.cjs';
+import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
 import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';

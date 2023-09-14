@@ -5,13 +5,14 @@ import { fileURLToPath } from 'node:url';
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export const queue = createQueue('check-urls-queue');
-const processFile = __dirname + '/check-urls-job-processor.cjs';
+const cjsFile = __dirname + '/check-urls-job-processor.cjs';
+const esmFile = __dirname + '/check-urls-job-processor.js';
 if (process.env.NODE_ENV === 'test') {
-  import(processFile).then((module) => {
+  import(esmFile).then((module) => {
     queue.process(module.default);
   });
 } else {
-  queue.process(processFile);
+  queue.process(cjsFile);
 }
 
 const checkUrlsJobOptions = {
