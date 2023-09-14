@@ -1,4 +1,4 @@
-module.exports = function buildAttachment({
+export function buildAttachment({
   id = 'attachmentId',
   url = 'http://',
   alt = 'alt text',
@@ -13,4 +13,4 @@ module.exports = function buildAttachment({
     type,
     challengeId,
   };
-};
+}

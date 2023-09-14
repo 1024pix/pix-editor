@@ -1,4 +1,4 @@
-class InfrastructureError extends Error {
+export class InfrastructureError extends Error {
   constructor(message) {
     super(message);
     this.title = 'Internal Server Error';
@@ -6,7 +6,7 @@ class InfrastructureError extends Error {
   }
 }
 
-class UnprocessableEntityError extends InfrastructureError {
+export class UnprocessableEntityError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Unprocessable entity';
@@ -14,7 +14,7 @@ class UnprocessableEntityError extends InfrastructureError {
   }
 }
 
-class PreconditionFailedError extends InfrastructureError {
+export class PreconditionFailedError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Precondition Failed';
@@ -22,7 +22,7 @@ class PreconditionFailedError extends InfrastructureError {
   }
 }
 
-class ConflictError extends InfrastructureError {
+export class ConflictError extends InfrastructureError {
   constructor(message = 'Conflict between request and server state.') {
     super(message);
     this.title = 'Conflict';
@@ -30,7 +30,7 @@ class ConflictError extends InfrastructureError {
   }
 }
 
-class MissingQueryParamError extends InfrastructureError {
+export class MissingQueryParamError extends InfrastructureError {
   constructor(missingParamName) {
     const message = `Missing ${missingParamName} query parameter.`;
     super(message);
@@ -39,7 +39,7 @@ class MissingQueryParamError extends InfrastructureError {
   }
 }
 
-class NotFoundError extends InfrastructureError {
+export class NotFoundError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Not Found';
@@ -47,7 +47,7 @@ class NotFoundError extends InfrastructureError {
   }
 }
 
-class UnauthorizedError extends InfrastructureError {
+export class UnauthorizedError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Unauthorized';
@@ -55,7 +55,7 @@ class UnauthorizedError extends InfrastructureError {
   }
 }
 
-class ForbiddenError extends InfrastructureError {
+export class ForbiddenError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Forbidden';
@@ -63,22 +63,10 @@ class ForbiddenError extends InfrastructureError {
   }
 }
 
-class BadRequestError extends InfrastructureError {
+export class BadRequestError extends InfrastructureError {
   constructor(message) {
     super(message);
     this.title = 'Bad Request';
     this.status = 400;
   }
 }
-
-module.exports = {
-  UnprocessableEntityError,
-  BadRequestError,
-  ConflictError,
-  ForbiddenError,
-  InfrastructureError,
-  MissingQueryParamError,
-  NotFoundError,
-  UnauthorizedError,
-  PreconditionFailedError,
-};

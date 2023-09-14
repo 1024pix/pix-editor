@@ -1,10 +1,10 @@
-const Boom = require('@hapi/boom');
-const releaseRepository = require('../infrastructure/repositories/release-repository');
-const { queue: createReleaseQueue } = require('../infrastructure/scheduled-jobs/release-job');
-const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
-const securityPreHandlers = require('./security-pre-handlers');
+import Boom from '@hapi/boom';
+import { releaseRepository } from '../infrastructure/repositories/index.js';
+import { queue as createReleaseQueue } from '../infrastructure/scheduled-jobs/release-job.js';
+import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
+import * as securityPreHandlers from './security-pre-handlers.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -57,6 +57,6 @@ exports.register = async function(server) {
       },
     },
   ]);
-};
+}
 
-exports.name = 'releases-api';
+export const name = 'releases-api';

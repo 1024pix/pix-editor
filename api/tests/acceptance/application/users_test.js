@@ -1,5 +1,6 @@
-const { expect, databaseBuilder, generateAuthorizationHeader } = require('../../test-helper');
-const createServer = require('../../../server');
+import { describe, expect, it } from 'vitest';
+import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | users-controller', () => {
 

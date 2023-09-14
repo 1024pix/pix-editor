@@ -4,4 +4,4 @@ postdeploy: npm run postdeploy
 # see https://github.com/1024pix/pix/pull/796
 # and https://github.com/npm/npm/issues/4603
 # for more information
-web: cd api && exec node bin/www
+web: cd api && exec node index.js

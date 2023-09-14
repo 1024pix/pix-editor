@@ -1,11 +1,11 @@
-const { expect, sinon } = require('../../../test-helper');
-const releaseRepository = require('../../../../lib/infrastructure/repositories/release-repository');
-const Release = require('../../../../lib/domain/models/release/Release');
-const releaseJobProcessor = require('../../../../lib/infrastructure/scheduled-jobs/release-job-processor');
-const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
-const logger = require('../../../../lib/infrastructure/logger');
-const SlackNotifier = require('../../../../lib/infrastructure/notifications/SlackNotifier');
-const config = require('../../../../lib/config');
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { releaseRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { Release } from '../../../../lib/domain/models/release/Release.js';
+import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
+import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
+import { logger } from '../../../../lib/infrastructure/logger.js';
+import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
+import * as config from '../../../../lib/config.js';
 
 describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
@@ -14,14 +14,14 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
     it('should create and persist a new Release in data repository', async () => {
       // given
-      sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedRelease);
-      sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
+      vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedRelease);
+      vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
 
       // when
       await releaseJobProcessor({ data: {} });
 
       // then
-      expect(releaseRepository.create).to.have.been.called;
+      expect(releaseRepository.create).toHaveBeenCalled();
     });
 
     describe('when release creation succeeded', () => {
@@ -29,8 +29,8 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
       const resolvedCreatedReleaseId = 1;
 
       beforeEach(() => {
-        sinon.stub(releaseRepository, 'create').resolves(resolvedCreatedReleaseId);
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationSuccess').resolves();
+        vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedReleaseId);
+        vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
       });
 
       it('should return the persisted release ID', async () => {
@@ -44,87 +44,87 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
       it('should log the success', async () => {
         //given
-        const successLogStub = sinon.stub(logger, 'info');
+        const successLogStub = vi.spyOn(logger, 'info');
 
         //when
         await releaseJobProcessor({ data: {} });
 
         //then
-        expect(successLogStub).to.have.been.called;
+        expect(successLogStub).toHaveBeenCalled();
       });
 
       it('should send a Slack success notification if slack notification is enabled', async () => {
         // given
-        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
         await releaseJobProcessor({ data: { slackNotification: true } });
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.have.been.calledWith(new SlackNotifier('http://webook.url'));
+        expect(learningContentNotification.notifyReleaseCreationSuccess).toHaveBeenCalledWith(new SlackNotifier('http://webook.url'));
       });
 
       it('should not send a slack success notification if slack notification is is globally disabled', async function() {
         // given
-        sinon.stub(config.notifications.slack, 'enable').value(false);
+        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
 
         // When
         await releaseJobProcessor({ data: { slackNotification: true } });
 
         // Then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
+        expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
       it('should not send a slack success notification if slack notification is locally disabled', async function() {
         // given
-        sinon.stub(config.notifications.slack, 'enable').value(true);
+        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(true);
 
         // When
         await releaseJobProcessor({ data: { slackNotification: false } });
 
         // Then
-        expect(learningContentNotification.notifyReleaseCreationSuccess).to.not.have.been.called;
+        expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
     });
 
     describe('when release creation failed', () => {
 
       beforeEach(() => {
-        sinon.stub(releaseRepository, 'create').throws(new Error('Network error'));
-        sinon.stub(learningContentNotification, 'notifyReleaseCreationFailure').resolves();
+        vi.spyOn(releaseRepository, 'create').mockRejectedValue(new Error('Network error'));
+        vi.spyOn(learningContentNotification, 'notifyReleaseCreationFailure').mockResolvedValue();
       });
 
       it('should log the error', async () => {
         // given
-        const errorLogStub = sinon.stub(logger, 'error');
+        const errorLogStub = vi.spyOn(logger, 'error');
 
         // when
         await releaseJobProcessor({ data: {} });
 
         // then
-        expect(errorLogStub).to.have.been.called;
+        expect(errorLogStub).toHaveBeenCalled();
       });
 
       it('should send a Slack notification with error message if Slack notification is enabled', async () => {
         // given
-        sinon.stub(config.notifications, 'slack').value({ webhookUrl: 'http://webook.url', enable: true });
+        vi.spyOn(config.notifications, 'slack', 'get').mockReturnValue({ webhookUrl: 'http://webook.url', enable: true });
 
         // when
         await releaseJobProcessor({ data: { slackNotification: false } });
 
         // then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.have.been.calledWith('Network error', new SlackNotifier('http://webook.url'));
+        expect(learningContentNotification.notifyReleaseCreationFailure).toHaveBeenCalledWith('Network error', new SlackNotifier('http://webook.url'));
       });
 
       it('should not send a slack failure notification if Slack notification is disabled', async function() {
         // given
-        sinon.stub(config.notifications.slack, 'enable').value(false);
+        vi.spyOn(config.notifications.slack, 'enable', 'get').mockReturnValue(false);
 
         // When
         await releaseJobProcessor({ data: {} });
 
         // Then
-        expect(learningContentNotification.notifyReleaseCreationFailure).to.not.have.been.called;
+        expect(learningContentNotification.notifyReleaseCreationFailure).not.toHaveBeenCalled();
       });
     });
   });

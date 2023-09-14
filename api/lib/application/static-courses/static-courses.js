@@ -1,11 +1,10 @@
-const _ = require('lodash');
-const { extractParameters } = require('../../infrastructure/utils/query-params-utils');
-const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
-const staticCourseRepository = require('../../infrastructure/repositories/static-course-repository');
-const staticCourseSerializer = require('../../infrastructure/serializers/jsonapi/static-course-serializer');
-const idGenerator = require('../../infrastructure/utils/id-generator');
-const StaticCourse = require('../../domain/models/StaticCourse');
-const { NotFoundError } = require('../../domain/errors');
+import _ from 'lodash';
+import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
+import { challengeRepository, staticCourseRepository } from '../../infrastructure/repositories/index.js';
+import { staticCourseSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import * as idGenerator from '../../infrastructure/utils/id-generator.js';
+import { StaticCourse } from '../../domain/models/index.js';
+import { NotFoundError } from '../../domain/errors.js';
 
 const DEFAULT_PAGE = {
   number: 1,
@@ -13,27 +12,19 @@ const DEFAULT_PAGE = {
   maxSize: 100,
 };
 
-module.exports = {
-  findSummaries,
-  get,
-  create,
-  update,
-  deactivate,
-};
-
-async function findSummaries(request, h) {
+export async function findSummaries(request, h) {
   const { filter, page } = extractParameters(request.query);
   const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ filter: normalizeFilter(filter), page: normalizePage(page) });
   return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
 }
 
-async function get(request, h) {
+export async function get(request, h) {
   const staticCourseId = request.params.id;
   const staticCourse = await staticCourseRepository.getRead(staticCourseId);
   return h.response(staticCourseSerializer.serialize(staticCourse));
 }
 
-async function create(request, h) {
+export async function create(request, h) {
   const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
   const allChallengeIds = await challengeRepository.getAllIdsIn(creationCommand.challengeIds);
   const commandResult = StaticCourse.buildFromCreationCommand({
@@ -49,7 +40,7 @@ async function create(request, h) {
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel)).created();
 }
 
-async function update(request, h) {
+export async function update(request, h) {
   const staticCourseId = request.params.id;
   const updateCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
@@ -69,7 +60,7 @@ async function update(request, h) {
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
-async function deactivate(request, h) {
+export async function deactivate(request, h) {
   const staticCourseId = request.params.id;
   const deactivationCommand = normalizeDeactivationCommand(request.payload.data.attributes);
   const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);

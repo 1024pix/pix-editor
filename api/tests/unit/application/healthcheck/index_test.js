@@ -1,19 +1,19 @@
-const { expect, sinon } = require('../../../test-helper');
-const Hapi = require('@hapi/hapi');
-const healthcheckController = require('../../../../lib/application/healthcheck/healthcheck-controller');
-const route = require('../../../../lib/application/healthcheck');
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import Hapi from '@hapi/hapi';
+import * as healthcheckController from '../../../../lib/application/healthcheck/healthcheck-controller.js';
+import * as route from '../../../../lib/application/healthcheck/index.js';
 
 describe('Unit | Router | HealthcheckRouter', function() {
   let server;
 
   beforeEach(function() {
-    server = this.server = Hapi.server();
+    server = Hapi.server();
   });
 
   describe('GET /api', function() {
 
     beforeEach(function() {
-      sinon.stub(healthcheckController, 'get').returns('ok');
+      vi.spyOn(healthcheckController, 'get').mockReturnValue('ok');
       return server.register(route);
     });
 

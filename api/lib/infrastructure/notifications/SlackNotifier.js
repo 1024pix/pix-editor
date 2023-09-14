@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-class SlackNotifier {
+export class SlackNotifier {
   constructor(webhookUrl) {
     if (!webhookUrl) {
       throw new Error('WebhookURL is required');
@@ -11,7 +11,4 @@ class SlackNotifier {
   send(blocks) {
     return axios.post(this.webhookUrl, blocks, { headers: { 'content-type': 'application/json' } });
   }
-
 }
-
-module.exports = SlackNotifier;

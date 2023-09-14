@@ -2,6 +2,8 @@
   "name": "learning-content-api",
   "version": "3.94.0",
   "description": "API permettant d'interagir avec le référentiel de contenu Pix",
+  "type": "module",
+  "main": "index.js",
   "engines": {
     "node": "^v18.17.1"
   },
@@ -21,17 +23,17 @@
     "db:seed": "knex --knexfile db/knexfile.js seed:run",
     "db:reset": "npm run db:prepare && npm run db:seed",
     "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
-    "lint": "eslint lib tests",
-    "lint:fix": "eslint lib tests --fix",
+    "lint": "eslint --ext .js,.cjs lib tests",
+    "lint:fix": "eslint .js,.cjs lib tests --fix",
     "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
-    "start": "node bin/www",
-    "start:watch": "nodemon --signal SIGTERM bin/www",
+    "start": "node index.js",
+    "start:watch": "nodemon --signal SIGTERM index.js",
     "test": "NODE_ENV=test npm run db:prepare && npm run test:api",
-    "test:api": "NODE_ENV=test mocha --recursive --exit --reporter dot tests",
-    "test:api:unit": "env NODE_ENV=test mocha --recursive --exit --reporter dot tests/unit",
-    "test:api:scripts": "env NODE_ENV=test mocha --recursive --exit --reporter dot tests/scripts",
-    "test:api:debug": "NODE_ENV=test mocha --inspect-brk=9229 --recursive --exit --reporter dot tests",
-    "test:api:watch": "NODE_ENV=test mocha --recursive tests --watch --reporter dot",
+    "test:api": "NODE_ENV=test vitest run",
+    "test:api:unit": "NODE_ENV=test vitest run tests/unit/",
+    "test:api:scripts": "NODE_ENV=test vitest run tests/scripts/",
+    "test:api:debug": "NODE_ENV=test vitest run --inspect-brk=9229",
+    "test:api:watch": "NODE_ENV=test vitest",
     "test:lint": "npm test && npm run lint",
     "postdeploy": "npm run db:migrate",
     "scalingo-post-ra-creation": "npm run postdeploy && npm run db:seed"
@@ -78,19 +80,16 @@
     "url-regex-safe": "^4.0.0"
   },
   "devDependencies": {
-    "chai": "^4.3.4",
-    "chai-as-promised": "^7.1.1",
-    "chai-sorted": "^0.2.0",
+    "@babel/eslint-parser": "^7.22.15",
+    "@babel/plugin-syntax-import-assertions": "^7.22.5",
     "eslint": "^8.0.0",
     "eslint-plugin-mocha": "^10.0.0",
     "flush-write-stream": "^2.0.0",
-    "mocha": "^10.0.0",
     "nock": "^13.1.3",
     "nodemon": "^3.0.0",
     "nyc": "15.1.0",
-    "sinon": "^15.0.0",
-    "sinon-chai": "^3.7.0",
     "split2": "^4.1.0",
+    "vitest": "^0.34.3",
     "yargs": "^17.7.2"
   }
 }

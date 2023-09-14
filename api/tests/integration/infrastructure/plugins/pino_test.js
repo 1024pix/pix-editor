@@ -1,11 +1,12 @@
-const split = require('split2');
-const writeStream = require('flush-write-stream');
-const Hapi = require('@hapi/hapi');
-const config = require('../../../../lib/config');
-const { expect, generateAuthorizationHeader, sinon, databaseBuilder } = require('../../../test-helper');
-const pinoPlugin = require('../../../../lib/infrastructure/plugins/pino');
-const monitoringTools = require('../../../../lib/infrastructure/monitoring-tools');
-const security = require('../../../../lib/infrastructure/security');
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import split from 'split2';
+import writeStream from 'flush-write-stream';
+import Hapi from '@hapi/hapi';
+import * as config from '../../../../lib/config.js';
+import { generateAuthorizationHeader, databaseBuilder } from '../../../test-helper.js';
+import * as pinoPlugin from '../../../../lib/infrastructure/plugins/pino.js';
+import * as monitoringTools from '../../../../lib/infrastructure/monitoring-tools.js';
+import * as security from '../../../../lib/infrastructure/security.js';
 
 function sink(func) {
   const result = split(JSON.parse);
@@ -59,7 +60,10 @@ describe('Integration | Infrastructure | plugins | pino', function() {
   describe('Ensure that datadog configured log format is what we send', function() {
     context('with request monitoring disabled', function() {
       beforeEach(function() {
-        sinon.stub(config.hapi, 'enableRequestMonitoring').value(false);
+        vi.spyOn(config, 'hapi', 'get').mockReturnValue({
+          ...config.hapi,
+          enableRequestMonitoring: false,
+        });
         monitoringTools.installHapiHook();
       });
 
@@ -96,7 +100,10 @@ describe('Integration | Infrastructure | plugins | pino', function() {
 
     context('with request monitoring enabled', function() {
       beforeEach(function() {
-        sinon.stub(config.hapi, 'enableRequestMonitoring').value(true);
+        vi.spyOn(config, 'hapi', 'get').mockReturnValue({
+          ...config.hapi,
+          enableRequestMonitoring: true,
+        });
         monitoringTools.installHapiHook();
       });
 

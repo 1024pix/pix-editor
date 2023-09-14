@@ -1,4 +1,4 @@
-module.exports = class FrameworkForRelease {
+export class FrameworkForRelease {
   constructor({
     id,
     name,
@@ -6,4 +6,4 @@ module.exports = class FrameworkForRelease {
     this.id = id;
     this.name = name;
   }
-};
+}

@@ -1,6 +1,6 @@
-const databaseBuffer = require('../database-buffer');
+import { databaseBuffer } from '../database-buffer.js';
 
-function buildStaticCourse({
+export function buildStaticCourse({
   id = 'staticCourseABC123',
   name = 'Mon super test statique',
   description = 'Ma super description de test statique',
@@ -18,6 +18,3 @@ function buildStaticCourse({
     values,
   });
 }
-
-module.exports = buildStaticCourse;
-

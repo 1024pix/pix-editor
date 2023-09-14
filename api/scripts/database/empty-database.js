@@ -1,7 +1,7 @@
-const knexDatabaseConnection = require('../../db/knex-database-connection');
+import { emptyAllTables } from '../../db/knex-database-connection.js';
 
 console.log('Emptying all tables...');
-knexDatabaseConnection.emptyAllTables()
+emptyAllTables()
   .then(() => {
     console.log('Done!');
     process.exit(0);

@@ -1,12 +1,12 @@
-const axios = require('axios');
+import axios from 'axios';
 
-const { expect, sinon } = require('../../test-helper');
-const fileStorageTokenRepository = require('../../../lib/infrastructure/repositories/file-storage-token-repository');
+import { describe, expect, it, vi } from 'vitest';
+import { create } from '../../../lib/infrastructure/repositories/file-storage-token-repository.js';
 
 describe('Unit | Repository | file-storage-token-repository', () => {
   describe('#create', () => {
     it('call axios', async function() {
-      sinon.stub(axios, 'post').resolves({
+      vi.spyOn(axios, 'post').mockResolvedValue({
         headers: { 'x-subject-token': '123' },
         data: {
           token: {
@@ -14,7 +14,7 @@ describe('Unit | Repository | file-storage-token-repository', () => {
           },
         },
       });
-      const token = await fileStorageTokenRepository.create();
+      const token = await create();
 
       const expectedPayload = {
         'auth': {
@@ -36,7 +36,7 @@ describe('Unit | Repository | file-storage-token-repository', () => {
           }
         }
       };
-      expect(axios.post).to.have.been.calledWith('https://storage.auth.example.net/api/auth', expectedPayload);
+      expect(axios.post).toHaveBeenCalledWith('https://storage.auth.example.net/api/auth', expectedPayload);
       expect(token).to.deep.equal({
         value: '123',
         expiresAt: '2021-03-23Z00:00:00'

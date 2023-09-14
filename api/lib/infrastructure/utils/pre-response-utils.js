@@ -1,9 +1,9 @@
-const errorManager = require('./error-manager');
-const { DomainError } = require('../../domain/errors');
-const { InfrastructureError } = require('../errors');
-const config = require('../../config');
+import * as errorManager from './error-manager.js';
+import { DomainError } from '../../domain/errors.js';
+import { InfrastructureError } from '../errors.js';
+import * as config from '../../config.js';
 
-function catchDomainAndInfrastructureErrors(request, h) {
+export function catchDomainAndInfrastructureErrors(request, h) {
   const response = request.response;
 
   if (response instanceof DomainError || response instanceof InfrastructureError) {
@@ -19,7 +19,3 @@ function catchDomainAndInfrastructureErrors(request, h) {
 
   return h.continue;
 }
-
-module.exports = {
-  catchDomainAndInfrastructureErrors,
-};

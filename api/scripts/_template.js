@@ -1,11 +1,17 @@
-const dotenv = require('dotenv');
+import dotenv from 'dotenv';
 dotenv.config();
-const { performance } = require('perf_hooks');
-const { knex, disconnect } = require('../db/knex-database-connection');
-const logger = require('../lib/infrastructure/logger');
-const argv = require('yargs/yargs')(process.argv.slice(2)).version(false).argv;
+import { performance } from 'node:perf_hooks';
+import { fileURLToPath } from 'node:url';
+import { knex, disconnect } from '../db/knex-database-connection.js';
+import { logger } from '../lib/infrastructure/logger.js';
+import yargs from 'yargs/yargs'
 
-const doSomething = async ({ throwError }) => {
+const __filename = fileURLToPath(import.meta.url);
+const isLaunchedFromCommandLine = process.argv[1] === __filename;
+
+const argv = yargs(process.argv.slice(2)).version(false).argv;
+
+export async function doSomething({ throwError }) {
   if (throwError) {
     throw new Error('An error occurred');
   }
@@ -13,8 +19,6 @@ const doSomething = async ({ throwError }) => {
   const data = await knex.select('id').from('releases').first();
   return data;
 };
-
-const isLaunchedFromCommandLine = require.main === module;
 
 async function main() {
   const startTime = performance.now();
@@ -37,5 +41,3 @@ async function main() {
     }
   }
 })();
-
-module.exports = { doSomething };

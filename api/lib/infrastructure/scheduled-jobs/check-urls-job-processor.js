@@ -1,12 +1,11 @@
-const { validateUrlsFromRelease } = require('../../domain/usecases/validate-urls-from-release');
-const logger = require('../../infrastructure/logger');
-const { disconnect } = require('../../../db/knex-database-connection');
-const releaseRepository = require('../../infrastructure/repositories/release-repository');
-const urlErrorRepository = require('../../infrastructure/repositories/url-error-repository');
+import { validateUrlsFromRelease } from '../../domain/usecases/validate-urls-from-release.js';
+import { logger } from '../logger.js';
+import { disconnect } from '../../../db/knex-database-connection.js';
+import { releaseRepository, urlErrorRepository } from '../repositories/index.js';
 
-module.exports = function() {
+export default function checkUrlsJobProcessor() {
   return validateUrlsFromRelease({ releaseRepository, urlErrorRepository });
-};
+}
 
 async function exitOnSignal(signal) {
   logger.info(`Processor received signal ${signal}. Closing DB connections before exiting.`);

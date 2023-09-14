@@ -1,10 +1,10 @@
-const {
-  expect,
+import { describe, expect, it } from 'vitest';
+import {
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | GET /api/static-courses/{id}', function() {
   it('Return the static course', async function() {

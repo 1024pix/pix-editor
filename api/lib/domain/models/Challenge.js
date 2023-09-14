@@ -1,4 +1,4 @@
-module.exports = class Challenge {
+export class Challenge {
   constructor({
     id,
     instruction,
@@ -84,4 +84,4 @@ module.exports = class Challenge {
     this.illustrationUrl = illustrationUrl;
     this.attachments = attachments;
   }
-};
+}

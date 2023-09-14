@@ -1,4 +1,4 @@
-module.exports = class ThematicForRelease {
+export class ThematicForRelease {
   constructor({
     id,
     name_i18n,
@@ -12,4 +12,4 @@ module.exports = class ThematicForRelease {
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
   }
-};
+}

@@ -1,12 +1,12 @@
-const _ = require('lodash');
-const { Error: JSONAPIError } = require('jsonapi-serializer');
-const DomainErrors = require('../../domain/errors');
-const InfraErrors = require('../errors');
-const errorSerializer = require('../serializers/jsonapi/error-serializer');
+import _ from 'lodash';
+import JsonapiSerializer from 'jsonapi-serializer';
+import * as DomainErrors from '../../domain/errors.js';
+import * as InfraErrors from '../errors.js';
+import { errorSerializer } from '../serializers/jsonapi/index.js';
 
-module.exports = { send };
+const { Error: JSONAPIError } = JsonapiSerializer;
 
-function send(h, error) {
+export function send(h, error) {
   if (error instanceof DomainErrors.InvalidStaticCourseCreationOrUpdateError) {
     const jsonApiError = new JSONAPIError(
       error.errors.map((err) => ({

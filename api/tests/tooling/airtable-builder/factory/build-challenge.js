@@ -1,4 +1,4 @@
-const buildChallenge = function buildChallenge({
+export function buildChallenge({
   id = 'challid1',
   instruction,
   proposals,
@@ -93,7 +93,7 @@ const buildChallenge = function buildChallenge({
       'shuffled': shuffled,
     },
   };
-};
+}
 
 function _convertStatusFromBoolToString(status) {
   return status ? 'Activé' : 'Désactivé';
@@ -112,5 +112,3 @@ function _convertLocalesToLanguages(locales) {
     }
   });
 }
-
-module.exports = buildChallenge;

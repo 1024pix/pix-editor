@@ -1,4 +1,4 @@
-class User {
+export class User {
   constructor({
     id,
     name,
@@ -17,5 +17,3 @@ class User {
     this.updatedAt = updatedAt;
   }
 }
-
-module.exports = User;

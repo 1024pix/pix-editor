@@ -1,4 +1,4 @@
-module.exports = class SkillForRelease {
+export class SkillForRelease {
   constructor({
     id,
     name,
@@ -27,4 +27,4 @@ module.exports = class SkillForRelease {
 
     this.hint_i18n = hint_i18n;
   }
-};
+}

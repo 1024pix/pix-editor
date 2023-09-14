@@ -1,4 +1,4 @@
-module.exports = class Translation {
+export class Translation {
   constructor({
     key,
     locale,
@@ -8,4 +8,4 @@ module.exports = class Translation {
     this.locale = locale;
     this.value = value;
   }
-};
+}

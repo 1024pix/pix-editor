@@ -1,6 +1,7 @@
-const nock = require('nock');
-const { expect, databaseBuilder, generateAuthorizationHeader } = require('../../test-helper');
-const createServer = require('../../../server');
+import { describe, describe as context, expect, it } from 'vitest';
+import nock from 'nock';
+import { databaseBuilder, generateAuthorizationHeader } from '../../test-helper.js';
+import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller-changelog', () => {
   describe('PATCH /api/airtable/changelog/Notes', () => {

@@ -1,11 +1,14 @@
-const AdminJS = require('adminjs');
-const AdminJSPlugin = require('@adminjs/hapi').default;
-const AdminJSSequelize = require('@adminjs/sequelize');
-const { User, Release } = require('./models');
+import AdminJS from 'adminjs';
+import AdminJSSequelize from '@adminjs/sequelize';
+import { User, Release } from './models.js';
+import AdminJSHapi from '@adminjs/hapi';
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
-const adminJSOptions = {
+// HACK: to be removed after upgrading to adminjs v7
+export const plugin = AdminJSHapi.default ?? AdminJSHapi;
+
+export const options = {
   resources: [
     {
       resource: User,
@@ -41,9 +44,4 @@ const adminJSOptions = {
     Release,
   ],
   auth: { strategy: 'simple' },
-};
-
-module.exports = {
-  plugin: AdminJSPlugin,
-  options: adminJSOptions,
 };

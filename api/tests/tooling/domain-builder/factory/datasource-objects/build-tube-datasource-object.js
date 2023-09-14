@@ -1,4 +1,4 @@
-module.exports = function buildTubeDatasourceObject(
+export function buildTubeDatasourceObject(
   {
     id = 'recTIddrkopID23Fp',
     name = '@Moteur',
@@ -23,4 +23,4 @@ module.exports = function buildTubeDatasourceObject(
     practicalDescription_i18n,
     competenceId,
   };
-};
+}

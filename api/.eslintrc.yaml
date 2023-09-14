@@ -2,3 +2,13 @@ extends: '../.eslintrc.yaml'
 
 globals:
   include: true
+
+parser: '@babel/eslint-parser'
+
+parserOptions:
+  requireConfigFile: false
+  sourceType: module
+  importAssertions: true
+  babelOptions:
+    plugins:
+      - '@babel/plugin-syntax-import-assertions'

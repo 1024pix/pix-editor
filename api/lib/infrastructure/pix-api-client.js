@@ -1,19 +1,17 @@
-const axios = require('axios');
-const qs = require('qs');
-const cache = require('./cache');
-const config = require('../config');
+import axios from 'axios';
+import qs from 'qs';
+import { cache } from './cache.js';
+import * as config from '../config.js';
 
-module.exports = {
-  async request({ payload, url }) {
-    return _callAPIWithRetry((token) => {
-      return axios.patch(
-        `${config.pixApi.baseUrl}${url}`,
-        payload,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-    });
-  },
-};
+export async function request({ payload, url }) {
+  return _callAPIWithRetry((token) => {
+    return axios.patch(
+      `${config.pixApi.baseUrl}${url}`,
+      payload,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+  });
+}
 
 async function _callAPIWithRetry(fn, renewToken = false) {
   const token = await _getToken(renewToken);

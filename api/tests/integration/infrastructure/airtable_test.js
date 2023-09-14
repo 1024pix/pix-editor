@@ -1,6 +1,9 @@
-const AirtableRecord = require('airtable').Record;
-const { airtableBuilder, expect } = require('../../test-helper');
-const airtable = require('../../../lib/infrastructure/airtable');
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import airtable from 'airtable';
+import { airtableBuilder } from '../../test-helper.js';
+import { findRecords } from '../../../lib/infrastructure/airtable.js';
+
+const { Record: AirtableRecord } = airtable;
 
 function assertAirtableRecordToEqualExpectedJson(actualRecord, expectedRecordJson) {
   expect(actualRecord).to.be.an.instanceOf(AirtableRecord);
@@ -65,7 +68,7 @@ describe('Integration | Infrastructure | airtable', () => {
 
     it('should query for records', async () => {
       // when
-      const records = await airtable.findRecords(tableName);
+      const records = await findRecords(tableName);
 
       // then
       records.forEach((record, index) => {
@@ -76,7 +79,7 @@ describe('Integration | Infrastructure | airtable', () => {
 
     it('should allow query for records with specific fields', async () => {
       // when
-      const records = await airtable.findRecords(tableName, { fields: ['titi', 'toto'] });
+      const records = await findRecords(tableName, { fields: ['titi', 'toto'] });
 
       // then
       records.forEach((record, index) => {

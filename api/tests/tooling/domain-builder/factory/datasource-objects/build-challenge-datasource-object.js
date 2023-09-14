@@ -1,4 +1,4 @@
-module.exports = function buildChallengeDatasourceObject({
+export function buildChallengeDatasourceObject({
   id = 'persistant id',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',
@@ -90,4 +90,4 @@ module.exports = function buildChallengeDatasourceObject({
     madeObsoleteAt,
     shuffled,
   };
-};
+}

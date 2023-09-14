@@ -1,5 +1,5 @@
-const { expect, sinon } = require('../../../test-helper');
-const learningContentNotification = require('../../../../lib/domain/services/learning-content-notification');
+import { describe, expect, it, vi } from 'vitest';
+import { notifyReleaseCreationFailure, notifyReleaseCreationSuccess } from '../../../../lib/domain/services/learning-content-notification.js';
 
 describe('Unit | Domain | Services | learning-content-notification', function() {
 
@@ -7,10 +7,10 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
 
     it('should send a success message with given Slack notifier', async function() {
       const slackNotifier = {
-        send: sinon.stub().resolves(),
+        send: vi.fn().mockResolvedValue(),
       };
 
-      await learningContentNotification.notifyReleaseCreationSuccess(slackNotifier);
+      await notifyReleaseCreationSuccess(slackNotifier);
 
       const expectedBlocks = {
         attachments: [
@@ -22,7 +22,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
           }
         ]
       };
-      expect(slackNotifier.send).to.have.been.calledWithExactly(expectedBlocks);
+      expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
 
@@ -31,12 +31,12 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
     it('should send a failure message with given Slack notifier', async function() {
       // given
       const slackNotifier = {
-        send: sinon.stub().resolves(),
+        send: vi.fn().mockResolvedValue(),
       };
       const errorMessage = 'Some network error occurred';
 
       // when
-      await learningContentNotification.notifyReleaseCreationFailure(errorMessage, slackNotifier);
+      await notifyReleaseCreationFailure(errorMessage, slackNotifier);
 
       // then
       const expectedBlocks = {
@@ -56,7 +56,7 @@ describe('Unit | Domain | Services | learning-content-notification', function() 
           }
         ]
       };
-      expect(slackNotifier.send).to.have.been.calledWithExactly(expectedBlocks);
+      expect(slackNotifier.send).toHaveBeenCalledWith(expectedBlocks);
     });
   });
 

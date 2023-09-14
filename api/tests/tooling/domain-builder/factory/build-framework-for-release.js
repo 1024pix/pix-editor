@@ -1,6 +1,6 @@
-const FrameworkForRelease = require('../../../../lib/domain/models/release/FrameworkForRelease');
+import { FrameworkForRelease } from '../../../../lib/domain/models/release/FrameworkForRelease.js';
 
-module.exports = function buildFrameworkForRelease(
+export function buildFrameworkForRelease(
   {
     id = 'recFvllz2Ckz',
     name = 'Nom du referentiel'
@@ -9,4 +9,4 @@ module.exports = function buildFrameworkForRelease(
     id,
     name
   });
-};
+}

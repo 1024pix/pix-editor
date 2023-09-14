@@ -1,19 +1,19 @@
-const serializer = require('../infrastructure/serializers/jsonapi/config-serializer');
-const config = require('../config');
+import { configSerializer } from '../infrastructure/serializers/jsonapi/index.js';
+import * as config from '../config.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
       path: '/api/config',
       config: {
         handler: function() {
-          return serializer.serialize(config.pixEditor);
+          return configSerializer.serialize(config.pixEditor);
         },
       }
     },
   ]);
-};
+}
 
-exports.name = 'config-api';
+export const name = 'config-api';
 

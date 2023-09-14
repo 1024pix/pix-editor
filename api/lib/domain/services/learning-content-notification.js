@@ -1,4 +1,4 @@
-function notifyReleaseCreationSuccess(slackNotifier) {
+export function notifyReleaseCreationSuccess(slackNotifier) {
   const blocks = {
     attachments: [
       {
@@ -12,7 +12,7 @@ function notifyReleaseCreationSuccess(slackNotifier) {
   return slackNotifier.send(blocks);
 }
 
-function notifyReleaseCreationFailure(errorMessage, slackNotifier) {
+export function notifyReleaseCreationFailure(errorMessage, slackNotifier) {
   const blocks = {
     attachments: [
       {
@@ -32,9 +32,3 @@ function notifyReleaseCreationFailure(errorMessage, slackNotifier) {
   };
   return slackNotifier.send(blocks);
 }
-
-module.exports = {
-  notifyReleaseCreationSuccess,
-  notifyReleaseCreationFailure,
-};
-

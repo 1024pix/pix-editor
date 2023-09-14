@@ -1,6 +1,6 @@
-const config = require('../../config');
+import * as config from '../../config.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -16,6 +16,6 @@ exports.register = async function(server) {
       }
     }
   ]);
-};
+}
 
-exports.name = 'static-api';
+export const name = 'static-api';

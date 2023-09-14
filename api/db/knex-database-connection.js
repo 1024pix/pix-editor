@@ -1,11 +1,15 @@
-const types = require('pg').types;
+import pg from 'pg';
+import Knex from 'knex'
+import _ from 'lodash';
+import * as knexConfigs from './knexfile.js';
+import { environment } from '../lib/config.js';
 
 /*
 By default, node-postgres casts a DATE value (PostgreSQL type) as a Date Object (JS type).
 But, when dealing with dates with no time (such as birthdate for example), we want to
 deal with a 'YYYY-MM-DD' string.
 */
-types.setTypeParser(types.builtins.DATE, (value) => value);
+pg.types.setTypeParser(pg.types.builtins.DATE, (value) => value);
 
 /*
 The method Bookshelf.Model.count(), used with PostgreSQL, can sometimes returns a BIGINT.
@@ -17,15 +21,10 @@ Links :
 - problem: https://github.com/bookshelf/bookshelf/issues/1275
 - solution: https://github.com/brianc/node-pg-types
  */
-types.setTypeParser(types.builtins.INT8, (value) => parseInt(value));
-
-const _ = require('lodash');
-
-const knexConfigs = require('./knexfile');
-const { environment } = require('../lib/config');
+pg.types.setTypeParser(pg.types.builtins.INT8, (value) => parseInt(value));
 
 const knexConfig = knexConfigs[environment];
-const knex = require('knex')(knexConfig);
+export const knex = Knex(knexConfig);
 
 const _databaseName = knex.client.database();
 
@@ -34,7 +33,7 @@ const _dbSpecificQueries = {
   emptyTableQuery: 'TRUNCATE ',
 };
 
-async function listAllTableNames() {
+export async function listAllTableNames() {
   const bindings = [_databaseName];
   const query = _dbSpecificQueries.listTablesQuery;
 
@@ -44,7 +43,7 @@ async function listAllTableNames() {
   return _.map(rows, 'table_name');
 }
 
-async function emptyAllTables() {
+export async function emptyAllTables() {
   const tableNames = await listAllTableNames();
   const tablesToDelete = _.without(tableNames,
     'knex_migrations',
@@ -59,7 +58,7 @@ async function emptyAllTables() {
   return knex.raw(`${query}${tables}`);
 }
 
-async function listTablesByDependencyOrderDesc() {
+export async function listTablesByDependencyOrderDesc() {
   // See this link : https://stackoverflow.com/questions/51279588/sort-tables-in-order-of-dependency-postgres
   const resultSet = await knex.raw('with recursive fk_tree as ( ' +
     'select t.oid as reloid, ' +
@@ -95,14 +94,6 @@ async function listTablesByDependencyOrderDesc() {
   return _.map(resultSet.rows, 'table_name');
 }
 
-async function disconnect() {
+export async function disconnect() {
   return knex.destroy();
 }
-
-module.exports = {
-  knex,
-  disconnect,
-  listAllTableNames,
-  emptyAllTables,
-  listTablesByDependencyOrderDesc,
-};

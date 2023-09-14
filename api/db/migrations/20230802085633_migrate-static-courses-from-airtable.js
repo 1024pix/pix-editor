@@ -1,11 +1,11 @@
-const Airtable = require('airtable');
+import Airtable from 'airtable';
 const TESTS_TABLE_IN_AIRTABLE_EXISTS = false;
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function(knex) {
+export async function up(knex) {
   if (process.env.NODE_ENV !== 'production' || !TESTS_TABLE_IN_AIRTABLE_EXISTS) return;
   const airtableClient = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY,
@@ -42,6 +42,6 @@ exports.up = async function(knex) {
 /**
  * @returns { Promise<void> }
  */
-exports.down = function() {
+export function down() {
   console.log('No rollback possible, sorry!');
 };

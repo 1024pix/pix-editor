@@ -1,4 +1,4 @@
-module.exports = function buildTutorial({
+export function buildTutorial({
   id,
   title,
   format,
@@ -24,4 +24,4 @@ module.exports = function buildTutorial({
       'En savoir plus': furtherInformation,
     },
   };
-};
+}

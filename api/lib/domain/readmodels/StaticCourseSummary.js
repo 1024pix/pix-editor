@@ -1,4 +1,4 @@
-module.exports = class StaticCourseSummary {
+export class StaticCourseSummary {
   constructor({
     id,
     name,
@@ -12,4 +12,4 @@ module.exports = class StaticCourseSummary {
     this.isActive = isActive;
     this.createdAt = createdAt;
   }
-};
+}

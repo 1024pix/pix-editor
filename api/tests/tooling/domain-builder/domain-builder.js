@@ -1,1 +1,1 @@
-module.exports = require('./factory');
+export * as domainBuilder from './factory/index.js';

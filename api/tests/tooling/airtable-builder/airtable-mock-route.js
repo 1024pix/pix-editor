@@ -3,7 +3,7 @@ const ROUTE_TYPE = {
   LIST: 'list',
 };
 
-class AirtableMockRoute {
+export class AirtableMockRoute {
 
   constructor({ routeType, tableName, nockScope }) {
     this.routeType = routeType;
@@ -43,8 +43,6 @@ class AirtableMockRoute {
 }
 
 AirtableMockRoute.ROUTE_TYPE = ROUTE_TYPE;
-
-module.exports = AirtableMockRoute;
 
 function generateUrlForRouteType({ routeType, tableName, returnBody }) {
   const url = `/v0/airtableBaseValue/${tableName}`;

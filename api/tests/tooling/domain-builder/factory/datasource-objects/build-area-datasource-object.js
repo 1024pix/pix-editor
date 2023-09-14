@@ -1,4 +1,4 @@
-module.exports = function buildAreaDatasourceObject({
+export function buildAreaDatasourceObject({
   id = 'recvoGdo7z2z7pXWa',
   code = '1',
   name = '1. Information et données',
@@ -28,4 +28,4 @@ module.exports = function buildAreaDatasourceObject({
     color,
     frameworkId,
   };
-};
+}

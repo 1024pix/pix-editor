@@ -1,16 +1,16 @@
-const qs = require('qs');
-const Boom = require('@hapi/boom');
-const _ = require('lodash');
-const Joi = require('joi');
-const Sentry = require('@sentry/node');
-const logger = require('../../infrastructure/logger');
-const challengeRepository = require('../../infrastructure/repositories/challenge-repository');
-const challengeSerializer = require('../../infrastructure/serializers/jsonapi/challenge-serializer');
-const securityPreHandlers = require('../security-pre-handlers');
-const attachmentDatasource = require('../../infrastructure/datasources/airtable/attachment-datasource');
-const challengeTransformer = require('../../infrastructure/transformers/challenge-transformer');
-const pixApiClient = require('../../infrastructure/pix-api-client');
-const updatedRecordNotifier = require('../../infrastructure/event-notifier/updated-record-notifier');
+import qs from 'qs';
+import Boom from '@hapi/boom';
+import _ from 'lodash';
+import Joi from 'joi';
+import Sentry from '@sentry/node';
+import { logger } from '../../infrastructure/logger.js';
+import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
+import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
+import { challengeTransformer } from '../../infrastructure/transformers/index.js';
+import * as pixApiClient from '../../infrastructure/pix-api-client.js';
+import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -41,7 +41,7 @@ async function _refreshCache(challenge) {
   }
 }
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -105,6 +105,6 @@ exports.register = async function(server) {
       },
     },
   ]);
-};
+}
 
-exports.name = 'challenges';
+export const name = 'challenges';

@@ -1,103 +1,91 @@
-const settings = require('../config');
-const { get, set, update } = require('lodash');
-const logger = require('../infrastructure/logger');
+import * as config from '../config.js';
+import _ from 'lodash';
+import { logger } from '../infrastructure/logger.js';
+import HapiRequest from '@hapi/hapi/lib/request.js';
 
-const { AsyncLocalStorage } = require('async_hooks');
+import { AsyncLocalStorage } from 'node:async_hooks';
+
 const asyncLocalStorage = new AsyncLocalStorage();
 
-function logInfoWithCorrelationIds(data) {
-  if (settings.hapi.enableRequestMonitoring) {
+export function logInfoWithCorrelationIds(data) {
+  if (config.hapi.enableRequestMonitoring) {
     const context = asyncLocalStorage.getStore();
-    const request = get(context, 'request');
+    const request = _.get(context, 'request');
     logger.info({
       user_id: extractUserIdFromRequest(request),
-      request_id: `${get(request, 'info.id', '-')}`,
-      ...get(data, 'metrics', {}),
-    }, get(data, 'message', '-'));
+      request_id: `${_.get(request, 'info.id', '-')}`,
+      ..._.get(data, 'metrics', {}),
+    }, _.get(data, 'message', '-'));
   } else {
     logger.info({
-      ...get(data, 'metrics', {}),
-    }, get(data, 'message', '-'));
+      ..._.get(data, 'metrics', {}),
+    }, _.get(data, 'message', '-'));
   }
 }
 
-function logErrorWithCorrelationIds(error) {
-  if (settings.hapi.enableRequestMonitoring) {
+export function logErrorWithCorrelationIds(error) {
+  if (config.hapi.enableRequestMonitoring) {
     const context = asyncLocalStorage.getStore();
-    const request = get(context, 'request');
+    const request = _.get(context, 'request');
     logger.error({
       user_id: extractUserIdFromRequest(request),
-      request_id: `${get(request, 'info.id', '-')}`,
+      request_id: `${_.get(request, 'info.id', '-')}`,
     }, error);
   } else {
     logger.error(error);
   }
 }
 
-function extractUserIdFromRequest(request) {
-  return get(request, 'auth.credentials.user.id', ('-'));
+export function extractUserIdFromRequest(request) {
+  return _.get(request, 'auth.credentials.user.id', ('-'));
 }
 
-function getInContext(path, value) {
+export function getInContext(path, value) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
-  return get(store, path, value);
+  return _.get(store, path, value);
 }
 
-function setInContext(path, value) {
+export function setInContext(path, value) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
-  set(store, path, value);
+  _.set(store, path, value);
 }
 
-function incrementInContext(path) {
+export function incrementInContext(path) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
-  update(store, path, (v) => (v) ? (v + 1) : 1);
+  _.update(store, path, (v) => (v) ? (v + 1) : 1);
 }
 
-function getContext() {
+export function getContext() {
   return asyncLocalStorage.getStore();
 }
 
-function pushInContext(path, value) {
+export function pushInContext(path, value) {
   const store = asyncLocalStorage.getStore();
   if (!store) return;
-  let array = get(store, path);
+  let array = _.get(store, path);
   if (!array) {
     array = [value];
-    set(store, path, array);
+    _.set(store, path, array);
   } else {
     array.push(value);
   }
 }
 
-function installHapiHook() {
-  if (!settings.hapi.enableRequestMonitoring) return;
+export function installHapiHook() {
+  if (!config.hapi.enableRequestMonitoring) return;
 
-  const Request = require('@hapi/hapi/lib/request');
-
-  const originalMethod = Request.prototype._execute;
+  const originalMethod = HapiRequest.prototype._execute;
 
   if (!originalMethod) {
     throw new Error('Hapi method Request.prototype._execute not found while patch');
   }
 
-  Request.prototype._execute = function(...args) {
+  HapiRequest.prototype._execute = function(...args) {
     const request = this;
     const context = { request };
     return asyncLocalStorage.run(context, () => originalMethod.call(request, args));
   };
 }
-
-module.exports = {
-  extractUserIdFromRequest,
-  getContext,
-  getInContext,
-  incrementInContext,
-  installHapiHook,
-  logErrorWithCorrelationIds,
-  logInfoWithCorrelationIds,
-  pushInContext,
-  setInContext,
-};

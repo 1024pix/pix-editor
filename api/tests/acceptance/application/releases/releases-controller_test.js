@@ -1,13 +1,12 @@
-const {
-  expect,
+import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import {
   airtableBuilder,
   databaseBuilder,
   generateAuthorizationHeader,
-  sinon,
   knex
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
-const axios = require('axios');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
+import axios from 'axios';
 
 const {
   buildArea,
@@ -502,7 +501,7 @@ describe('Acceptance | Controller | release-controller', () => {
   describe('POST /releases - Creates the release', () => {
 
     beforeEach(function() {
-      sinon.stub(axios, 'post').resolves();
+      vi.spyOn(axios, 'post').mockResolvedValue();
     });
 
     afterEach(function() {

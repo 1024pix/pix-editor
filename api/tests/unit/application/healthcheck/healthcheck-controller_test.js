@@ -1,13 +1,14 @@
-const { expect, hFake } = require('../../../test-helper');
+import { describe, expect, it } from 'vitest';
+import { hFake } from '../../../test-helper.js';
 
-const healthcheckController = require('../../../../lib/application/healthcheck/healthcheck-controller');
+import * as healthcheckController from '../../../../lib/application/healthcheck/healthcheck-controller.js';
 
 describe('Unit | Controller | healthcheckController', () => {
 
   describe('#get', () => {
     it('should reply with the API description', async function() {
       // when
-      const response = await healthcheckController.get(null, hFake);
+      const response = healthcheckController.get(null, hFake);
 
       // then
       expect(response).to.include.keys('name', 'version', 'description');

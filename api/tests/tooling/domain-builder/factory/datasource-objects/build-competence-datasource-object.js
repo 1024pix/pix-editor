@@ -1,4 +1,4 @@
-module.exports = function buildCompetenceDataSourceObject({
+export function buildCompetenceDatasourceObject({
   id = 'recsvLz0W2ShyfD63',
   index = '1.1',
   areaId = 'recvoGdo7z2z7pXWa',
@@ -25,4 +25,4 @@ module.exports = function buildCompetenceDataSourceObject({
     skillIds,
     thematicIds,
   };
-};
+}

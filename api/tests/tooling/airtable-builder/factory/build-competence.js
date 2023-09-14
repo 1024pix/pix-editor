@@ -1,4 +1,4 @@
-module.exports = function buildCompetence({
+export function buildCompetence({
   id = 'competenceid1',
   index,
   areaId,
@@ -17,4 +17,4 @@ module.exports = function buildCompetence({
       'Origine2': [origin],
     },
   };
-};
+}

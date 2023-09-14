@@ -1,6 +1,5 @@
-const chai = require('chai');
-const expect = chai.expect;
-const {
+import { describe, expect, it } from 'vitest';
+import {
   findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
@@ -9,7 +8,7 @@ const {
   findUrlsFromChallenges,
   getLiveChallenges,
   findUrlsFromTutorials
-} = require('../../../../lib/domain/usecases/validate-urls-from-release');
+} from '../../../../lib/domain/usecases/validate-urls-from-release.js';
 
 describe('Check urls from release', function() {
   describe('#findUrlsInMarkdown', function() {

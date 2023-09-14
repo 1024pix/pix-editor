@@ -1,4 +1,4 @@
-const { knex } = require('../../../db/knex-database-connection');
+import { knex } from '../../../db/knex-database-connection.js';
 
 /**
  * Paginate a knex query with given page parameters
@@ -7,10 +7,10 @@ const { knex } = require('../../../db/knex-database-connection');
  * @param {Number} page.number - the page number to retrieve
  * @param {Number} page.size - the size of the page
  */
-const fetchPage = async (
+export async function fetchPage(
   queryBuilder,
   { number, size },
-) => {
+) {
   const page = number < 1 ? 1 : number;
   const offset = (page - 1) * size;
 
@@ -29,6 +29,4 @@ const fetchPage = async (
       pageCount: Math.ceil(rowCount / size),
     },
   };
-};
-
-module.exports = { fetchPage };
+}

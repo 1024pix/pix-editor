@@ -1,6 +1,6 @@
-const TubeForRelease = require('../../../../lib/domain/models/release/TubeForRelease');
+import { TubeForRelease } from '../../../../lib/domain/models/release/TubeForRelease.js';
 
-const buildTubeForRelease = function({
+export function buildTubeForRelease({
   id = 'recTIddrkopID23Fp',
   name = '@Moteur',
   title = 'Moteur de recherche',
@@ -28,6 +28,4 @@ const buildTubeForRelease = function({
     thematicId,
     skillIds,
   });
-};
-
-module.exports = buildTubeForRelease;
+}

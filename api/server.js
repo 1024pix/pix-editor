@@ -1,21 +1,19 @@
-// As early as possible in your application, require and configure dotenv.
-// https://www.npmjs.com/package/dotenv#usage
-require('dotenv').config();
-const Hapi = require('@hapi/hapi');
-const Oppsy = require('oppsy');
+import * as config from './lib/config.js';
+import Hapi from '@hapi/hapi';
+import HapiBasic from '@hapi/basic';
+import Oppsy from 'oppsy';
 
-const preResponseUtils = require('./lib/infrastructure/utils/pre-response-utils');
+import { catchDomainAndInfrastructureErrors } from './lib/infrastructure/utils/pre-response-utils.js';
 
-const routes = require('./lib/routes');
-const plugins = require('./lib/infrastructure/plugins');
-const config = require('./lib/config');
-const security = require('./lib/infrastructure/security');
-const securityPreHandlers = require('./lib/application/security-pre-handlers');
-const monitoringTools = require('./lib/infrastructure/monitoring-tools');
+import { routes } from './lib/routes.js';
+import { plugins } from './lib/infrastructure/plugins/index.js';
+import * as security from './lib/infrastructure/security.js';
+import * as securityPreHandlers from './lib/application/security-pre-handlers.js';
+import * as monitoringTools from './lib/infrastructure/monitoring-tools.js';
 
 monitoringTools.installHapiHook();
 
-const createServer = async () => {
+export async function createServer() {
 
   const server = new Hapi.server({
     routes: {
@@ -33,12 +31,12 @@ const createServer = async () => {
     }
   });
 
-  server.ext('onPreResponse', preResponseUtils.catchDomainAndInfrastructureErrors);
+  server.ext('onPreResponse', catchDomainAndInfrastructureErrors);
 
   server.auth.scheme('api-token', security.scheme);
   server.auth.strategy('default', 'api-token');
   server.auth.default('default');
-  await server.register(require('@hapi/basic'));
+  await server.register(HapiBasic);
   server.auth.strategy('simple', 'basic', { validate: (request, username) => securityPreHandlers.checkUserIsAuthenticatedViaBasicAndAdmin(username) });
 
   const configuration = [].concat(plugins, routes);
@@ -61,4 +59,3 @@ const enableOpsMetrics = async function(server) {
   oppsy.start(config.logging.emitOpsEventEachSeconds * 1000);
 
 };
-module.exports = createServer;

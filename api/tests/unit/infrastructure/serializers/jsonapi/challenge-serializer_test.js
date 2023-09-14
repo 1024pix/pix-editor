@@ -1,5 +1,6 @@
-const { expect, domainBuilder } = require('../../../../test-helper');
-const serializer = require('../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer');
+import { describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
+import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
@@ -66,7 +67,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       };
 
       // When
-      const json = serializer.serialize(challenge);
+      const json = serialize(challenge);
 
       // Then
       expect(json).to.deep.equal(expectedSerializedChallenge);
@@ -142,7 +143,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       };
 
       // When
-      const challenge = await serializer.deserialize(json);
+      const challenge = await deserialize(json);
 
       // Then
       expect(challenge).to.deep.equal(expectedDeserializedChallenge);
@@ -164,7 +165,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       };
 
       // When
-      const challenge = await serializer.deserialize(json);
+      const challenge = await deserialize(json);
 
       // Then
       expect(challenge.skills).to.deep.equal([]);

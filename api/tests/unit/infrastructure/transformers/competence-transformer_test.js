@@ -1,5 +1,6 @@
-const { expect, domainBuilder } = require('../../../test-helper');
-const { filterCompetencesFields } = require('../../../../lib/infrastructure/transformers/competence-transformer');
+import { describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../test-helper.js';
+import { filterCompetencesFields } from '../../../../lib/infrastructure/transformers/competence-transformer.js';
 
 describe('Unit | Infrastructure | competence-transformer', function() {
 

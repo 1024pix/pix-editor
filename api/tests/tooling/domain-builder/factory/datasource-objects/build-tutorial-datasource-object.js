@@ -1,4 +1,4 @@
-module.exports = function buildTutorialDatasourceObject(
+export function buildTutorialDatasourceObject(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',
@@ -21,4 +21,4 @@ module.exports = function buildTutorialDatasourceObject(
     tutorialForSkills,
     furtherInformation,
   };
-};
+}

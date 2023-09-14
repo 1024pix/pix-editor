@@ -1,9 +1,9 @@
-const Boom = require('@hapi/boom');
+import Boom from '@hapi/boom';
 
-const securityPreHandlers = require('../security-pre-handlers');
-const fileStorageTokenRepository = require('../../infrastructure/repositories/file-storage-token-repository');
+import * as securityPreHandlers from '../security-pre-handlers.js';
+import { fileStorageTokenRepository } from '../../infrastructure/repositories/index.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'POST',
@@ -23,6 +23,6 @@ exports.register = async function(server) {
       }
     },
   ]);
-};
+}
 
-exports.name = 'file-storage-token-api';
+export const name = 'file-storage-token-api';

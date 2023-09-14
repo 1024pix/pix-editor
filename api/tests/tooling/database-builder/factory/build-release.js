@@ -1,6 +1,6 @@
-const databaseBuffer = require('../database-buffer');
+import { databaseBuffer } from '../database-buffer.js';
 
-module.exports = function buildRelease({
+export function buildRelease({
   id,
   content,
   createdAt = new Date(),
@@ -12,5 +12,5 @@ module.exports = function buildRelease({
     tableName: 'releases',
     values,
   });
-};
+}
 

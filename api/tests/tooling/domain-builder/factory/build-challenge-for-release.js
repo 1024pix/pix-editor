@@ -1,6 +1,6 @@
-const ChallengeForRelease = require('../../../../lib/domain/models/release/ChallengeForRelease');
+import { ChallengeForRelease } from '../../../../lib/domain/models/release/ChallengeForRelease.js';
 
-module.exports = function buildChallengeForRelease({
+export function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',
@@ -65,4 +65,4 @@ module.exports = function buildChallengeForRelease({
     shuffled,
     alternativeVersion
   });
-};
+}

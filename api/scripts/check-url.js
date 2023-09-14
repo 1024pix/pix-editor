@@ -1,4 +1,4 @@
-const { checkUrl } = require('../lib/domain/usecases/validate-urls-from-release');
+import { checkUrl } from '../lib/domain/usecases/validate-urls-from-release.js';
 
 async function main(url) {
   console.log('checking', url);

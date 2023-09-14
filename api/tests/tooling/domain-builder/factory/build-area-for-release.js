@@ -1,6 +1,6 @@
-const AreaForRelease = require('../../../../lib/domain/models/release/AreaForRelease');
+import { AreaForRelease } from '../../../../lib/domain/models/release/AreaForRelease.js';
 
-const buildAreaForRelease = function({
+export function buildAreaForRelease({
   id = 'recArea1',
   name = 'nameArea1',
   code = 'codeArea1',
@@ -20,6 +20,4 @@ const buildAreaForRelease = function({
     color,
     frameworkId,
   });
-};
-
-module.exports = buildAreaForRelease;
+}

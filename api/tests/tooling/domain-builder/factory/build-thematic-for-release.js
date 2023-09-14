@@ -1,6 +1,6 @@
-const ThematicForRelease = require('../../../../lib/domain/models/release/ThematicForRelease');
+import { ThematicForRelease } from '../../../../lib/domain/models/release/ThematicForRelease.js';
 
-const buildThematicForRelease = function({
+export function buildThematicForRelease({
   id = 'recFvllz2Ckz',
   name_i18n = {
     fr: 'Nom de la thématique',
@@ -17,6 +17,4 @@ const buildThematicForRelease = function({
     tubeIds,
     index,
   });
-};
-
-module.exports = buildThematicForRelease;
+}

@@ -1,6 +1,6 @@
-const TutorialForRelease = require('../../../../lib/domain/models/release/TutorialForRelease');
+import { TutorialForRelease } from '../../../../lib/domain/models/release/TutorialForRelease.js';
 
-module.exports = function buildTutorialForRelease(
+export function buildTutorialForRelease(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',
@@ -23,4 +23,4 @@ module.exports = function buildTutorialForRelease(
     tutorialForSkills,
     furtherInformation,
   });
-};
+}

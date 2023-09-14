@@ -1,14 +1,14 @@
-const { promiseStreamer } = require('../infrastructure/utils/promise-streamer');
-const usecase = require('../domain/usecases/get-learning-content-for-replication');
+import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
+import { getLearningContentForReplication } from '../domain/usecases/get-learning-content-for-replication.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
       path: '/api/databases/airtable',
       config: {
         handler: async function() {
-          return promiseStreamer(usecase.getLearningContentForReplication());
+          return promiseStreamer(getLearningContentForReplication());
         },
       },
     },
@@ -17,11 +17,11 @@ exports.register = async function(server) {
       path: '/api/replication-data',
       config: {
         handler: async function() {
-          return promiseStreamer(usecase.getLearningContentForReplication());
+          return promiseStreamer(getLearningContentForReplication());
         },
       },
     },
   ]);
-};
+}
 
-exports.name = 'databases-api';
+export const name = 'databases-api';

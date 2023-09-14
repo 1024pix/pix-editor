@@ -1,5 +1,6 @@
-const { expect, domainBuilder } = require('../../../../test-helper');
-const Content = require('../../../../../lib/domain/models/release/Content');
+import { beforeEach, describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../../test-helper.js';
+import { Content } from '../../../../../lib/domain/models/release/Content.js';
 
 describe('Unit | Domain | Content', () => {
   describe('#buildForRelease', () => {
@@ -275,7 +276,7 @@ describe('Unit | Domain | Content', () => {
         frameworks: [expectedFramework],
       });
 
-      expect(contentForRelease).to.deepEqualInstance(expectedContentForRelease);
+      expect(contentForRelease).toEqualInstance(expectedContentForRelease);
     });
   });
 });

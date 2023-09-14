@@ -1,9 +1,11 @@
-const JSONAPIError = require('jsonapi-serializer').Error;
+import JsonapiSerializer from 'jsonapi-serializer';
 
-module.exports = (errorMessage) => {
+const { Error: JSONAPIError } = JsonapiSerializer;
+
+export function internalError(errorMessage) {
   return new JSONAPIError({
     status: '500',
     title: 'Internal Server Error',
     detail: errorMessage
   });
-};
+}

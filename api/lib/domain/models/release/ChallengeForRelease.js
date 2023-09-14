@@ -1,4 +1,4 @@
-module.exports = class ChallengeForRelease {
+export class ChallengeForRelease {
   constructor({
     id,
     instruction,
@@ -62,4 +62,4 @@ module.exports = class ChallengeForRelease {
     this.shuffled = shuffled;
     this.alternativeVersion = alternativeVersion;
   }
-};
+}

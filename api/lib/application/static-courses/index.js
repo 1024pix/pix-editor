@@ -1,7 +1,7 @@
-const staticCourseController = require('./static-courses');
-const securityPreHandlers = require('../security-pre-handlers');
+import * as staticCourseController from './static-courses.js';
+import * as securityPreHandlers from '../security-pre-handlers.js';
 
-exports.register = async function(server) {
+export async function register(server) {
   server.route([
     {
       method: 'GET',
@@ -42,6 +42,6 @@ exports.register = async function(server) {
       },
     },
   ]);
-};
+}
 
-exports.name = 'static-courses-api';
+export const name = 'static-courses-api';

@@ -1,20 +1,14 @@
-const { knex } = require('../../../db/knex-database-connection');
-const { fetchPage } = require('../utils/knex-utils');
-const ChallengeSummary_Read = require('../../domain/readmodels/ChallengeSummary');
-const StaticCourse_Read = require('../../domain/readmodels/StaticCourse');
-const StaticCourseSummary_Read = require('../../domain/readmodels/StaticCourseSummary');
-const StaticCourse = require('../../domain/models/StaticCourse');
-const challengeDatasource = require('../datasources/airtable/challenge-datasource');
-const skillDatasource = require('../datasources/airtable/skill-datasource');
+import { knex } from '../../../db/knex-database-connection.js';
+import { fetchPage } from '../utils/knex-utils.js';
+import {
+  ChallengeSummary as ChallengeSummary_Read,
+  StaticCourse as StaticCourse_Read,
+  StaticCourseSummary as StaticCourseSummary_Read,
+} from '../../domain/readmodels/index.js';
+import { StaticCourse } from '../../domain/models/index.js';
+import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 
-module.exports = {
-  findReadSummaries,
-  getRead,
-  get,
-  save,
-};
-
-async function findReadSummaries({ filter, page }) {
+export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
     .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
     .orderBy('createdAt', 'desc');
@@ -36,7 +30,7 @@ async function findReadSummaries({ filter, page }) {
   return { results: staticCoursesSummaries, meta: pagination };
 }
 
-async function getRead(id) {
+export async function getRead(id) {
   const staticCourse = await knex('static_courses')
     .select('*')
     .where('id', id)
@@ -58,7 +52,7 @@ async function getRead(id) {
   return null;
 }
 
-async function get(id) {
+export async function get(id) {
   const staticCourse = await knex('static_courses')
     .select('*')
     .where('id', id)
@@ -77,7 +71,7 @@ async function get(id) {
   return null;
 }
 
-async function save(staticCourseForCreation) {
+export async function save(staticCourseForCreation) {
   const staticCourseDTO = staticCourseForCreation.toDTO();
   const serializedStaticCourseForDB = {
     id: staticCourseDTO.id,

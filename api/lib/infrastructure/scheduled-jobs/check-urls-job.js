@@ -1,9 +1,19 @@
-const createQueue = require('./create-queue');
-const config = require('../../config');
+import { createQueue } from './create-queue.js';
+import * as config from '../../config.js';
+import { fileURLToPath } from 'node:url';
 
-const queue = createQueue('check-urls-queue');
-const processFile = __dirname + '/check-urls-job-processor.js';
-queue.process(process.env.NODE_ENV === 'test' ? require(processFile) : processFile);
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
+
+export const queue = createQueue('check-urls-queue');
+const cjsFile = __dirname + '/check-urls-job-processor.cjs';
+const esmFile = __dirname + '/check-urls-job-processor.js';
+if (process.env.NODE_ENV === 'test') {
+  import(esmFile).then((module) => {
+    queue.process(module.default);
+  });
+} else {
+  queue.process(cjsFile);
+}
 
 const checkUrlsJobOptions = {
   attempts: config.scheduledJobs.attempts,
@@ -12,11 +22,6 @@ const checkUrlsJobOptions = {
   removeOnFail: 1,
 };
 
-function start() {
+export function start() {
   queue.add({}, checkUrlsJobOptions);
 }
-
-module.exports = {
-  queue,
-  start,
-};

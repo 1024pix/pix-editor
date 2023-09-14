@@ -1,7 +1,6 @@
-const { expect } = require('../../../test-helper');
-const challengeRepository = require('../../../../lib/infrastructure/repositories/challenge-repository');
-const challengesDataSource = require('../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const sinon = require('sinon');
+import { describe, expect, it, vi } from 'vitest';
+import { create, filter } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 
 describe('Unit | Repository | challenge-repository', () => {
 
@@ -9,48 +8,48 @@ describe('Unit | Repository | challenge-repository', () => {
     describe('when ids are specified', () => {
       it('should return challenges with given ids',  async () => {
         // given
-        sinon.stub(challengesDataSource, 'filter').resolves([{},{}]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter({ filter: { ids: ['1', '2'] } });
+        const challenges = await filter({ filter: { ids: ['1', '2'] } });
 
         // then
         expect(challenges.length).equal(2);
-        expect(challengesDataSource.filter).to.be.calledWith({ filter: { ids: ['1', '2'] } });
+        expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
       });
     });
 
     describe('when ids and search are not specified', () => {
       it('should return all challenges',  async () => {
         // given
-        sinon.stub(challengesDataSource, 'filter').resolves([{},{}]);
-        sinon.stub(challengesDataSource, 'list').resolves([{},{}]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{},{}]);
+        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter({ page: { size: 20 } });
+        const challenges = await filter({ page: { size: 20 } });
 
         // then
         expect(challenges.length).equal(2);
-        expect(challengesDataSource.filter).to.be.not.called;
-        expect(challengesDataSource.list).to.be.calledWith({ page: { size: 20 } });
+        expect(challengeDatasource.filter).not.toHaveBeenCalled();
+        expect(challengeDatasource.list).toHaveBeenCalledWith({ page: { size: 20 } });
       });
     });
 
     describe('when search is specified', () => {
       it('should search challenges according to filters',  async () => {
         // given
-        sinon.stub(challengesDataSource, 'filter').resolves([{},{}]);
-        sinon.stub(challengesDataSource, 'list').resolves([{},{}]);
-        sinon.stub(challengesDataSource, 'search').resolves([{},{}]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{},{}]);
+        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{},{}]);
+        vi.spyOn(challengeDatasource, 'search').mockResolvedValue([{},{}]);
 
         // when
-        const challenges = await challengeRepository.filter({ filter: { search: 'toto' } });
+        const challenges = await filter({ filter: { search: 'toto' } });
 
         // then
         expect(challenges.length).equal(2);
-        expect(challengesDataSource.filter).to.be.not.called;
-        expect(challengesDataSource.list).to.be.not.called;
-        expect(challengesDataSource.search).to.be.calledWith({ filter: { search: 'toto' } });
+        expect(challengeDatasource.filter).not.toHaveBeenCalled();
+        expect(challengeDatasource.list).not.toHaveBeenCalled();
+        expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto' } });
       });
     });
   });
@@ -59,13 +58,13 @@ describe('Unit | Repository | challenge-repository', () => {
     it('should call the datasource', async() => {
       // given
       const createdChallenge = 'new challenge';
-      sinon.stub(challengesDataSource, 'create').resolves(createdChallenge);
+      vi.spyOn(challengeDatasource, 'create').mockResolvedValue(createdChallenge);
 
       // when
-      const challenge = await challengeRepository.create({ id: 'created-challenge-id' });
+      const challenge = await create({ id: 'created-challenge-id' });
 
       // then
-      expect(challengesDataSource.create).to.be.calledWith({ id: 'created-challenge-id' });
+      expect(challengeDatasource.create).toHaveBeenCalledWith({ id: 'created-challenge-id' });
       expect(challenge).to.deep.equal(createdChallenge);
     });
   });

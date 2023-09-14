@@ -1,4 +1,4 @@
-module.exports = function buildTube({
+export function buildTube({
   id,
   name,
   title,
@@ -28,4 +28,4 @@ module.exports = function buildTube({
       'Competences (id persistant)': [competenceId],
     },
   };
-};
+}

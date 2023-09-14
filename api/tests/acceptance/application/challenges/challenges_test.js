@@ -1,7 +1,8 @@
-const nock = require('nock');
-const _ = require('lodash');
-const { expect, databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } = require('../../../test-helper');
-const createServer = require('../../../../server');
+import { beforeEach, describe, expect, it } from 'vitest';
+import nock from 'nock';
+import _ from 'lodash';
+import {  databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 const challengeAirtableFields = [
   'id persistant',

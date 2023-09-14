@@ -1,6 +1,7 @@
-const _ = require('lodash');
-const { expect, databaseBuilder, knex } = require('../../../test-helper');
-const { fetchPage } = require('../../../../lib/infrastructure/utils/knex-utils');
+import { describe, describe as context, expect, it } from 'vitest';
+import _ from 'lodash';
+import { databaseBuilder, knex } from '../../../test-helper.js';
+import { fetchPage } from '../../../../lib/infrastructure/utils/knex-utils.js';
 
 describe('Integration | Infrastructure | Utils | Knex utils', function() {
   context('fetchPage', function() {
@@ -17,7 +18,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
 
       // then
       expect(results).to.have.lengthOf(2);
-      expect(results.map((result) => result.name)).exactlyContainInOrder(['c', 'd']);
+      expect(results.map((result) => result.name)).toEqual(['c', 'd']);
       expect(pagination).to.deep.equal({
         page: 2,
         pageSize: 2,
@@ -40,7 +41,7 @@ describe('Integration | Infrastructure | Utils | Knex utils', function() {
 
       // then
       expect(results).to.have.lengthOf(2);
-      expect(results.map((result) => result.name)).exactlyContain(['DoublonA', 'DoublonB']);
+      expect(results.map((result) => result.name)).to.deep.have.members(['DoublonA', 'DoublonB']);
       expect(pagination.rowCount).to.equal(2);
     });
 

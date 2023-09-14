@@ -1,4 +1,4 @@
-const buildSkill = function buildSkill({
+export function buildSkill({
   id,
   name,
   hint_i18n: {
@@ -38,6 +38,4 @@ const buildSkill = function buildSkill({
       'Version': version,
     },
   };
-};
-
-module.exports = buildSkill;
+}

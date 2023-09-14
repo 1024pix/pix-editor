@@ -1,16 +1,19 @@
-const config = require('../../config');
-const Blipp = require('blipp');
-const Inert = require('@hapi/inert');
-const Vision = require('@hapi/vision');
+import Blipp from 'blipp';
+import Inert from '@hapi/inert';
+import Vision from '@hapi/vision';
 
-const plugins = [
-  require('./metrics'),
+import * as config from '../../config.js';
+import * as Adminjs from './adminjs/index.js';
+import { Metrics } from './metrics.js';
+import * as Pino from './pino.js';
+import * as Sentry from './sentry.js';
+
+export const plugins = [
+  Metrics,
   Inert,
   Vision,
   Blipp,
-  require('./adminjs'),
-  require('./pino'),
-  ...(config.sentry.enabled ? [require('./sentry')] : []),
+  Adminjs,
+  Pino,
+  ...(config.sentry.enabled ? [Sentry] : []),
 ];
-
-module.exports = plugins;

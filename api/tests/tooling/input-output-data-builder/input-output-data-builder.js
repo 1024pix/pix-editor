@@ -1,9 +1,7 @@
+import * as factory from './factory/index.js';
 
-const factory = require('./factory/index');
-
-module.exports = class InputOutputDataBuilder {
+export class InputOutputDataBuilder {
   constructor() {
     this.factory = factory;
   }
-};
-
+}

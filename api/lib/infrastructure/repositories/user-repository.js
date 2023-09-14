@@ -1,8 +1,8 @@
-const User = require('../../domain/models/User');
-const { knex } = require('../../../db/knex-database-connection');
-const { UserNotFoundError } = require('../../domain/errors');
+import { User } from '../../domain/models/index.js';
+import { knex } from '../../../db/knex-database-connection.js';
+import { UserNotFoundError } from '../../domain/errors.js';
 
-async function findByApiKey(apiKey) {
+export async function findByApiKey(apiKey) {
   const user = await knex('users').where('apiKey', apiKey).first();
   if (!user) {
     throw new UserNotFoundError();
@@ -17,7 +17,3 @@ async function findByApiKey(apiKey) {
     updatedAt: user.updatedAt
   });
 }
-
-module.exports = {
-  findByApiKey
-};

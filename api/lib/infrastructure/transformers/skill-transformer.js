@@ -1,6 +1,6 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-function filterSkillsFields(skills) {
+export function filterSkillsFields(skills) {
   const fieldsToInclude = [
     'id',
     'name',
@@ -17,7 +17,3 @@ function filterSkillsFields(skills) {
   ];
   return skills.map((skill) => _.pick(skill, fieldsToInclude));
 }
-
-module.exports = {
-  filterSkillsFields
-};

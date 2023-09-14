@@ -1,11 +1,11 @@
-const {
-  expect,
+import { beforeEach, describe, expect, it } from 'vitest';
+import {
   generateAuthorizationHeader,
   databaseBuilder,
   airtableBuilder,
   domainBuilder
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 const {
   buildArea,

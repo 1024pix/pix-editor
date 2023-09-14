@@ -1,13 +1,13 @@
-const nock = require('nock');
-const {
-  expect,
+import { describe, expect, it } from 'vitest';
+import nock from 'nock';
+import {
   airtableBuilder,
   databaseBuilder,
   inputOutputDataBuilder,
   domainBuilder,
   generateAuthorizationHeader
-} = require('../../test-helper');
-const createServer = require('../../../server');
+} from '../../test-helper.js';
+import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller', () => {
 

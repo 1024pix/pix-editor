@@ -1,9 +1,11 @@
-const { Serializer } = require('jsonapi-serializer');
+import JsonapiSerializer from 'jsonapi-serializer';
 
-module.exports = {
-  serialize(user) {
-    return new Serializer('user', {
-      attributes: ['name', 'trigram', 'createdAt', 'updatedAt', 'access'],
-    }).serialize(user);
-  }
-};
+const { Serializer } = JsonapiSerializer;
+
+const serializer = new Serializer('user', {
+  attributes: ['name', 'trigram', 'createdAt', 'updatedAt', 'access'],
+});
+
+export function serialize(user) {
+  return serializer.serialize(user);
+}

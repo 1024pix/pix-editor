@@ -1,7 +1,5 @@
-class AirtableResourceNotFound extends Error {
+export class AirtableResourceNotFound extends Error {
   constructor() {
     super();
   }
 }
-
-module.exports = AirtableResourceNotFound;

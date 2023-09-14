@@ -1,4 +1,4 @@
-module.exports = function(databaseBuilder) {
+export function staticCoursesBuilder(databaseBuilder) {
   databaseBuilder.factory.buildStaticCourse({
     id: 'courseFr0mS33d5',
     name: 'Static Course 1',

@@ -1,7 +1,8 @@
-const { google } = require('googleapis');
+import { google } from 'googleapis';
+import { logger } from '../logger.js';
+import * as config from '../../config.js';
+
 const sheets = google.sheets('v4');
-const logger = require('../logger');
-const config = require('../../config');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -57,15 +58,10 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   }
 }
 
-function updateChallenges(dataToUpload) {
+export function updateChallenges(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.challengesSheetName);
 }
 
-function updateTutorials(dataToUpload) {
+export function updateTutorials(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.tutorialsSheetName);
 }
-
-module.exports = {
-  updateChallenges,
-  updateTutorials
-};

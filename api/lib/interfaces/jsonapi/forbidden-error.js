@@ -1,9 +1,11 @@
-const JSONAPIError = require('jsonapi-serializer').Error;
+import JsonapiSerializer from 'jsonapi-serializer';
 
-module.exports = (errorMessage) => {
+const { Error: JSONAPIError } = JsonapiSerializer;
+
+export function forbiddenError(errorMessage) {
   return new JSONAPIError({
     status: '403',
     title: 'Forbidden Error',
     detail: errorMessage
   });
-};
+}

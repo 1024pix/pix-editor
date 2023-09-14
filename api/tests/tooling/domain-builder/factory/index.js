@@ -1,25 +1,23 @@
-module.exports = {
-  buildAreaForRelease: require('./build-area-for-release'),
-  buildAreaDatasourceObject: require('./datasource-objects/build-area-datasource-object'),
-  buildAttachment: require('./build-attachment'),
-  buildChallengeDatasourceObject: require('./datasource-objects/build-challenge-datasource-object'),
-  buildChallengeForRelease: require('./build-challenge-for-release'),
-  buildCompetenceForRelease: require('./build-competence-for-release'),
-  buildCompetenceDatasourceObject: require('./datasource-objects/build-competence-datasource-object'),
-  buildContentForRelease: require('./build-content-for-release'),
-  buildCourseForRelease: require('./build-course-for-release'),
-  buildCoursePostgresDataObject: require('./build-course-postgres-data-object'),
-  buildDomainRelease: require('./build-real-release'),
-  buildFrameworkForRelease: require('./build-framework-for-release'),
-  buildFrameworkDatasourceObject: require('./datasource-objects/build-framework-datasource-object'),
-  buildRelease: require('./build-release'),
-  buildSkillForRelease: require('./build-skill-for-release'),
-  buildSkillDatasourceObject: require('./datasource-objects/build-skill-datasource-object'),
-  buildStaticCourse: require('./build-static-course'),
-  buildThematicForRelease: require('./build-thematic-for-release'),
-  buildThematicDatasourceObject: require('./datasource-objects/build-thematic-datasource-object'),
-  buildTubeForRelease: require('./build-tube-for-release'),
-  buildTubeDatasourceObject: require('./datasource-objects/build-tube-datasource-object'),
-  buildTutorialForRelease: require('./build-tutorial-for-release'),
-  buildTutorialDatasourceObject: require('./datasource-objects/build-tutorial-datasource-object'),
-};
+export * from './build-area-for-release.js';
+export * from './datasource-objects/build-area-datasource-object.js';
+export * from './build-attachment.js';
+export * from './datasource-objects/build-challenge-datasource-object.js';
+export * from './build-challenge-for-release.js';
+export * from './build-competence-for-release.js';
+export * from './datasource-objects/build-competence-datasource-object.js';
+export * from './build-content-for-release.js';
+export * from './build-course-for-release.js';
+export * from './build-course-postgres-data-object.js';
+export * from './build-domain-release.js';
+export * from './build-framework-for-release.js';
+export * from './datasource-objects/build-framework-datasource-object.js';
+export * from './build-release.js';
+export * from './build-skill-for-release.js';
+export * from './datasource-objects/build-skill-datasource-object.js';
+export * from './build-static-course.js';
+export * from './build-thematic-for-release.js';
+export * from './datasource-objects/build-thematic-datasource-object.js';
+export * from './build-tube-for-release.js';
+export * from './datasource-objects/build-tube-datasource-object.js';
+export * from './build-tutorial-for-release.js';
+export * from './datasource-objects/build-tutorial-datasource-object.js';

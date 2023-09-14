@@ -1,9 +1,13 @@
-const Airtable = require('airtable');
-const competenceTranslations = require('../../lib/infrastructure/translations/competence');
-const translationsRepository = require('../../lib/infrastructure/repositories/translation-repository');
-const { disconnect } = require('../../db/knex-database-connection');
+import { fileURLToPath } from 'node:url';
+import Airtable from 'airtable';
+import * as competenceTranslations from '../../lib/infrastructure/translations/competence.js';
+import { translationRepository } from '../../lib/infrastructure/repositories/index.js';
+import { disconnect } from '../../db/knex-database-connection.js';
 
-async function migrateCompetencesTranslationFromAirtable({ airtableClient }) {
+const __filename = fileURLToPath(import.meta.url);
+const isLaunchedFromCommandLine = process.argv[1] === __filename;
+
+export async function migrateCompetencesTranslationFromAirtable({ airtableClient }) {
   const allCompetences = await airtableClient
     .table('Competences')
     .select({
@@ -21,10 +25,8 @@ async function migrateCompetencesTranslationFromAirtable({ airtableClient }) {
     competenceTranslations.extractFromAirtableObject(competence.fields)
   );
 
-  await translationsRepository.save(translations);
+  await translationRepository.save(translations);
 }
-
-const isLaunchedFromCommandLine = require.main === module;
 
 async function main() {
   if (!isLaunchedFromCommandLine) return;
@@ -44,7 +46,3 @@ async function main() {
 }
 
 main();
-
-module.exports = {
-  migrateCompetencesTranslationFromAirtable,
-};

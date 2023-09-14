@@ -1,19 +1,18 @@
-const {
-  expect,
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import {
   databaseBuilder,
   generateAuthorizationHeader,
   airtableBuilder,
   knex,
-  sinon
-} = require('../../../test-helper');
-const createServer = require('../../../../server');
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
-  let user, clock;
+  let user;
   const staticCourseId = 'myAwesomeCourse66';
 
   beforeEach(async function() {
-    clock = sinon.useFakeTimers({
+    vi.useFakeTimers({
       now: new Date('2021-10-29T03:04:00Z'),
       toFake: ['Date'],
     });
@@ -71,7 +70,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
   });
 
   afterEach(function() {
-    clock.restore();
+    vi.useRealTimers();
     return knex('static_courses').delete();
   });
 

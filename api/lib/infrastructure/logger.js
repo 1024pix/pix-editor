@@ -1,26 +1,24 @@
-const pino = require('pino');
-const settings = require('../config');
+import pino from 'pino';
+import * as config from '../config.js';
+import pretty from 'pino-pretty';
 
 const nullDestination = { write() {} };
 
 let destination = pino.destination();
 
-if (settings.logging.prettyPrint) {
-  const pretty = require('pino-pretty');
+if (config.logging.prettyPrint) {
   destination = pretty({
     colorize: true
   });
 }
 
-const logger = pino(
+export const logger = pino(
   {
-    level: settings.logging.logLevel,
+    level: config.logging.logLevel,
     redact: ['req.headers.authorization'],
   },
-  settings.logging.enabled ? destination : nullDestination
+  config.logging.enabled ? destination : nullDestination
 );
 
 logger.debug('DEBUG logs enabled');
 logger.trace('TRACE logs enabled');
-
-module.exports = logger;

@@ -1,3 +1,1 @@
-module.exports = {
-  buildCompetence: require('./build-competence'),
-};
+export * from './build-competence.js';

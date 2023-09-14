@@ -1,12 +1,12 @@
-const buildArea = require('./datasource-objects/build-area-datasource-object');
-const buildCompetence = require('./datasource-objects/build-competence-datasource-object');
-const buildChallenge = require('./datasource-objects/build-challenge-datasource-object');
-const buildTube = require('./datasource-objects/build-tube-datasource-object');
-const buildCourse = require('./build-course-postgres-data-object');
-const buildSkill = require('./datasource-objects/build-skill-datasource-object');
-const buildTutorial = require('./datasource-objects/build-tutorial-datasource-object');
+import { buildAreaDatasourceObject as buildArea } from './datasource-objects/build-area-datasource-object.js';
+import { buildCompetenceDatasourceObject as buildCompetence } from './datasource-objects/build-competence-datasource-object.js';
+import { buildChallengeDatasourceObject as buildChallenge } from './datasource-objects/build-challenge-datasource-object.js';
+import { buildTubeDatasourceObject as buildTube } from './datasource-objects/build-tube-datasource-object.js';
+import { buildCoursePostgresDataObject as buildCourse } from './build-course-postgres-data-object.js';
+import { buildSkillDatasourceObject as buildSkill } from './datasource-objects/build-skill-datasource-object.js';
+import { buildTutorialDatasourceObject as buildTutorial } from './datasource-objects/build-tutorial-datasource-object.js';
 
-module.exports = function buildRelease() {
+export function buildRelease() {
   const area = buildArea({
     code: '1',
     color: 'jaffa',
@@ -32,4 +32,4 @@ module.exports = function buildRelease() {
     skills: [buildSkill()],
     tutorials: [buildTutorial()],
   };
-};
+}

@@ -1,8 +1,10 @@
-const { expect, domainBuilder, airtableBuilder, sinon } = require('../../../../test-helper');
-const challengeDatasource = require('../../../../../lib/infrastructure/datasources/airtable/challenge-datasource');
-const airtable = require('../../../../../lib/infrastructure/airtable');
-const airtableClient = require('airtable');
-const AirtableRecord = require('airtable').Record;
+import { describe, expect, it, vi } from 'vitest';
+import { domainBuilder, airtableBuilder } from '../../../../test-helper.js';
+import { challengeDatasource } from '../../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
+import * as airtable from '../../../../../lib/infrastructure/airtable.js';
+import airtableLib from 'airtable';
+
+const { Record: AirtableRecord } = airtableLib;
 
 describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', () => {
   describe('#fromAirTableObject', () => {
@@ -175,15 +177,15 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         skills: [],
         attachments: [],
       });
-      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+      const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
 
-      sinon.stub(airtable, 'findRecords')
-        .withArgs('Epreuves', { filterByFormula: '{id persistant} = \'recChallenge\'', maxRecords: 1 })
-        .resolves([challengeRecord]);
+      const airtableFindRecordsSpy = vi.spyOn(airtable, 'findRecords')
+        .mockResolvedValue([challengeRecord]);
 
       const newChallenge = await challengeDatasource.filterById('recChallenge');
 
       expect(newChallenge.id).to.equal('recChallenge');
+      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', { filterByFormula: '{id persistant} = \'recChallenge\'', maxRecords: 1 });
     });
   });
 
@@ -195,27 +197,27 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         skills: [],
         attachments: [],
       });
-      const challengeRecord = new airtableClient.Record('Epreuves', challenge.id, challenge);
+      const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
 
-      sinon.stub(airtable, 'findRecords')
-        .resolves([ challengeRecord ]);
+      vi.spyOn(airtable, 'findRecords')
+        .mockResolvedValue([ challengeRecord ]);
 
       challengeDatasource.usedFields = Symbol('used fields');
       const challenges = await challengeDatasource.search({ filter: { search: 'query term' } });
 
-      expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
     });
 
     it('should escape the query', async () => {
-      sinon.stub(airtable, 'findRecords')
-        .resolves([]);
+      vi.spyOn(airtable, 'findRecords')
+        .mockResolvedValue([]);
 
       challengeDatasource.usedFields = Symbol('used fields');
       await challengeDatasource.search({ filter: { search: 'query \' term' } });
 
-      expect(airtable.findRecords).to.be.calledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query \\\' term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query \\\' term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
     });
   });
 });

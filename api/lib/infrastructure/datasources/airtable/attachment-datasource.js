@@ -1,7 +1,7 @@
-const datasource = require('./datasource');
-const airtable = require('../../airtable');
+import { datasource } from './datasource.js';
+import { findRecords } from '../../airtable.js';
 
-module.exports = datasource.extend({
+export const attachmentDatasource = datasource.extend({
 
   modelName: 'Attachment',
 
@@ -32,7 +32,7 @@ module.exports = datasource.extend({
   },
 
   async filterByChallengeId(challengeId) {
-    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+    const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula : `{challengeId persistant} = '${challengeId}'`,
     });
     return airtableRawObjects.map(this.fromAirTableObject);

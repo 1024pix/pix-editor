@@ -1,4 +1,4 @@
-const buildArea = function buildArea({
+export function buildArea({
   id,
   competenceIds,
   competenceAirtableIds,
@@ -22,6 +22,4 @@ const buildArea = function buildArea({
       'Referentiel': [frameworkId],
     },
   };
-};
-
-module.exports = buildArea;
+}

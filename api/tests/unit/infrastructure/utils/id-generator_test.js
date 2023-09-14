@@ -1,5 +1,5 @@
-const { expect } = require('../../../test-helper');
-const { generateNewId } = require('../../../../lib/infrastructure/utils/id-generator');
+import { describe, expect, it } from 'vitest';
+import { generateNewId } from '../../../../lib/infrastructure/utils/id-generator.js';
 
 describe('Unit | Infrastructure | Utils | Id Generator', function() {
 

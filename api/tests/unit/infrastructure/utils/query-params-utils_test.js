@@ -1,5 +1,5 @@
-const { expect } = require('../../../test-helper');
-const { extractParameters } = require('../../../../lib/infrastructure/utils/query-params-utils');
+import { describe, expect, it } from 'vitest';
+import { extractParameters } from '../../../../lib/infrastructure/utils/query-params-utils.js';
 
 describe('Unit | Utils | Query Params Utils', function() {
   describe('#extractParameters', function() {

@@ -1,11 +1,9 @@
-module.exports = {
-  buildArea: require('./build-area'),
-  buildAttachment: require('./build-attachment'),
-  buildChallenge: require('./build-challenge'),
-  buildCompetence: require('./build-competence'),
-  buildFramework: require('./build-framework'),
-  buildSkill: require('./build-skill'),
-  buildThematic: require('./build-thematic'),
-  buildTube: require('./build-tube'),
-  buildTutorial: require('./build-tutorial'),
-};
+export * from './build-area.js';
+export * from './build-attachment.js';
+export * from './build-challenge.js';
+export * from './build-competence.js';
+export * from './build-framework.js';
+export * from './build-skill.js';
+export * from './build-thematic.js';
+export * from './build-tube.js';
+export * from './build-tutorial.js';

@@ -1,10 +1,8 @@
-const _ = require('lodash');
-
-module.exports = { extractParameters };
+import _ from 'lodash';
 
 // query example: 'filter[organizationId]=4&page[size]=30$page[number]=3&sort=createdAt[desc]&include=user'
 // Warning: there is not any order between sort parameters
-function extractParameters(query) {
+export function extractParameters(query) {
   return {
     filter: _extractFilter(query),
     page: _extractPage(query),
