@@ -62,7 +62,7 @@ export const options = {
   ],
   auth: {
     strategy: 'session',
-    cookiePassword: process.env.ADMIN_COOKIE_PASSWORD,
+    cookiePassword: process.env.ADMIN_COOKIE_PASSWORD || 'very-long-password-for-tests-only',
     cookieName: 'adminCookie',
     authenticate: (email, password) => ({ email, password }),
   },
