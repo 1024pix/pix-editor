@@ -1,5 +1,11 @@
 
 
+## v3.95.1 (15/09/2023)
+
+
+### :bug: Correction
+- [#293](https://github.com/1024pix/pix-editor/pull/293) [BUGFIX] Corriger les jobs planifiés avec le passage à ESM.
+
 ## v3.95.0 (14/09/2023)
 
 
