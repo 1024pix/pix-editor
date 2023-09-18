@@ -9,7 +9,7 @@ export { default as plugin } from '@1024pix/adminjs-hapijs';
 
 const componentLoader = new ComponentLoader();
 const Components = {
-  ExportComponent: componentLoader.add('ExportComponent', './components/ExportComponent.jsx'),
+  ImportExportComponent: componentLoader.add('ImportExportComponent', './components/ImportExportComponent.jsx'),
 };
 
 export const options = {
@@ -56,9 +56,9 @@ export const options = {
       resource: Translations,
       options: {
         actions: {
-          export: {
+          importExport: {
             actionType: 'resource',
-            component: Components.ExportComponent,
+            component: Components.ImportExportComponent,
           },
         },
       },
