@@ -70,5 +70,66 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
     });
 
+    it('should fail when the file is not a CSV', async () => {
+      // Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildTranslation({
+        key: 'some-key',
+        locale: 'fr-fr',
+        value: 'La clé !'
+      });
+      await databaseBuilder.commit();
+      const formData = new FormData();
+      formData.append('file', 'Helloworld', 'test.json');
+
+      const server = await createServer();
+      const putTranslationsOptions = {
+        method: 'PATCH',
+        url: '/api/translations.csv',
+        headers: {
+          ...generateAuthorizationHeader(user),
+          ...formData.getHeaders(),
+        },
+        payload: formData.getBuffer()
+      };
+
+      // When
+      const response = await server.inject(putTranslationsOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('should fail when there are more than one file', async () => {
+      // Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildTranslation({
+        key: 'some-key',
+        locale: 'fr-fr',
+        value: 'La clé !'
+      });
+      await databaseBuilder.commit();
+      const formData = new FormData();
+      formData.append('file', 'key,locale,value\nsome-key,fr-fr,plop', 'test1.csv');
+      formData.append('file', 'key,locale,value\nsome-key2,fr-fr,plop again', 'test2.csv');
+
+      const server = await createServer();
+      const putTranslationsOptions = {
+        method: 'PATCH',
+        url: '/api/translations.csv',
+        headers: {
+          ...generateAuthorizationHeader(user),
+          ...formData.getHeaders(),
+        },
+        payload: formData.getBuffer()
+      };
+
+      // When
+      const response = await server.inject(putTranslationsOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(400);
+    });
+
   });
 });
