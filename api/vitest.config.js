@@ -6,5 +6,8 @@ export default defineConfig({
     reporters: 'dot',
     restoreMocks: true,
     singleThread: true,
+    deps: {
+      interopDefault: false,
+    }
   },
 });
