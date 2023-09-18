@@ -1,5 +1,14 @@
 
 
+## v3.96.0 (18/09/2023)
+
+
+### :rocket: Amélioration
+- [#282](https://github.com/1024pix/pix-editor/pull/282) [FEATURE] Exporter les traductions depuis l'interface d'admin (PIX-8977).
+
+### :arrow_up: Montée de version
+- [#294](https://github.com/1024pix/pix-editor/pull/294) [BUMP] Update dependency eslint to v8.49.0.
+
 ## v3.95.1 (15/09/2023)
 
 
