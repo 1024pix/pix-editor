@@ -73,7 +73,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
 
     context('Successful case', () => {
 
-      it('should allow access to resource - with "credentials" property filled with authenticated user - when the request contains the authorization header with a valid api key', async () => {
+      it('should allow access to resource - returning apiKey as email - when the request contains the authorization header with a valid api key', async () => {
       // given
         const apiKey = 'valid.api.key';
         const authenticatedUser = new User({
@@ -91,7 +91,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
 
         // then
-        expect(response).to.deep.equal({ isValid: true, credentials: { user: authenticatedUser } });
+        expect(response).to.deep.equal({ email: apiKey });
       });
 
     });
@@ -110,7 +110,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
 
         // then
-        expect(response).to.be.deep.equal({ isValid: false });
+        expect(response).to.be.false;
       });
 
       it('should disallow access to resource when the user is not an admin', async () => {
@@ -131,7 +131,7 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         const response = await checkUserIsAuthenticatedViaBasicAndAdmin(apiKey);
 
         // then
-        expect(response).to.deep.equal({ isValid: false });
+        expect(response).to.deep.equal(false);
       });
     });
   });

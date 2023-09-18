@@ -35,3 +35,24 @@ export const Release = sequelize.define(
     timestamps: false,
   }
 );
+
+export const Translations = sequelize.define(
+  'translation',
+  {
+    key: {
+      type: DataTypes.TEXT,
+      primaryKey: true,
+    },
+    locale : {
+      type: DataTypes.TEXT,
+      primaryKey: true,
+    },
+    value: {
+      type: DataTypes.TEXT,
+    },
+  },
+  {
+    timestamps: false,
+  },
+);
+

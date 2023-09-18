@@ -1,14 +1,19 @@
-import AdminJS from 'adminjs';
+import { AdminJS, ComponentLoader } from 'adminjs';
 import AdminJSSequelize from '@adminjs/sequelize';
-import { User, Release } from './models.js';
-import AdminJSHapi from '@adminjs/hapi';
+import { User, Release, Translations } from './models.js';
+import { checkUserIsAuthenticatedViaBasicAndAdmin } from '../../../application/security-pre-handlers.js';
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
-// HACK: to be removed after upgrading to adminjs v7
-export const plugin = AdminJSHapi.default ?? AdminJSHapi;
+export { default as plugin } from '@1024pix/adminjs-hapijs';
+
+const componentLoader = new ComponentLoader();
+const Components = {
+  ExportComponent: componentLoader.add('ExportComponent', './components/ExportComponent.jsx'),
+};
 
 export const options = {
+  componentLoader,
   resources: [
     {
       resource: User,
@@ -41,7 +46,26 @@ export const options = {
         },
       },
     },
-    Release,
+    {
+      resource: Release,
+    },
+    {
+      resource: Translations,
+      options: {
+        actions: {
+          export: {
+            actionType: 'resource',
+            component: Components.ExportComponent,
+          },
+        },
+      },
+    },
   ],
-  auth: { strategy: 'simple' },
+  auth: {
+    strategy: 'session',
+    cookiePassword: process.env.ADMIN_COOKIE_PASSWORD || 'very-long-password-for-tests-only',
+    cookieName: 'adminCookie',
+    authenticate: (email) => checkUserIsAuthenticatedViaBasicAndAdmin(email),
+  },
 };
+

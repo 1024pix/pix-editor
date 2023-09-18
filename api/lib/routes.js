@@ -8,6 +8,7 @@ import * as replicationDataRoute from './application/replication-data.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticRoute from './application/static/index.js';
 import * as usersRoute from './application/users.js';
+import * as translationsRoute from './application/translations.js';
 
 export const routes = [
   airtableProxyRoute,
@@ -20,4 +21,5 @@ export const routes = [
   staticCoursesRoute,
   staticRoute,
   usersRoute,
+  translationsRoute,
 ];

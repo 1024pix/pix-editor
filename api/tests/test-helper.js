@@ -79,14 +79,20 @@ export function catchErr(promiseFn, ctx) {
   };
 }
 
-export function streamToPromise(stream) {
+export async function streamToPromise(stream) {
+  return streamToPromiseArray(stream).then((array) => {
+    return array.join('');
+  });
+}
+
+export function streamToPromiseArray(stream) {
   return new Promise((resolve, reject) => {
-    let totalData = '';
+    const result = [];
     stream.on('data', (data) => {
-      totalData += data;
+      result.push(data);
     });
     stream.on('end', () => {
-      resolve(totalData);
+      resolve(result);
     });
     stream.on('error', reject);
   });
