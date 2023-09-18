@@ -35,7 +35,7 @@ const ImportExportComponent = () => {
       const importData = new FormData();
       importData.append('file', file, file?.name);
 
-      await axios.put('/api/translations.csv',
+      await axios.patch('/api/translations.csv',
         importData,
         {
           headers: {
