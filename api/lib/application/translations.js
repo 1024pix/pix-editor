@@ -1,9 +1,8 @@
 import { PassThrough } from 'node:stream';
 import { exportTranslations } from '../domain/usecases/export-translations.js';
 import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
-import { Dispenser } from '@hapi/pez';
-import Content from '@hapi/content';
 import Boom from '@hapi/boom';
+import fs from "node:fs";
 
 export async function register(server) {
   server.route([
@@ -23,33 +22,21 @@ export async function register(server) {
       path: '/api/translations.csv',
       config: {
         payload: {
-          multipart: false,
-          output: 'stream',
-          parse: false,
+          multipart: true,
+          output: 'file',
         },
         handler: async function(request, h) {
-          const contentType = Content.type(request.headers['content-type']);
+          if (Array.isArray(request.payload.file)) {
+            return Boom.badRequest('Too many files');
+          }
           try {
-            await new Promise((resolve, reject) => {
-              const stream = request.payload.pipe(new Dispenser({ boundary: contentType.boundary }));
-              stream.on('part', async (partStream) => {
-                if (partStream.name !== 'file') return;
-                try {
-                  await importTranslations(partStream);
-                } catch (error) {
-                  reject(error);
-                }
-              });
-              stream.on('error', reject);
-              stream.on('close', resolve);
-            });
-            // FIXME check if part with name file was found
+            const stream = fs.createReadStream(request.payload.file.path);
+            await importTranslations(stream);
           } catch (error) {
             if (error instanceof InvalidFileError) {
               return Boom.badRequest('Invalid CSV file');
             }
           }
-
           return h.response();
         }
       },
