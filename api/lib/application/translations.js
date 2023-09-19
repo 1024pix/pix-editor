@@ -1,8 +1,8 @@
 import { PassThrough } from 'node:stream';
+import fs from 'node:fs';
+import Boom from '@hapi/boom';
 import { exportTranslations } from '../domain/usecases/export-translations.js';
 import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
-import Boom from '@hapi/boom';
-import fs from "node:fs";
 
 export async function register(server) {
   server.route([
@@ -25,23 +25,29 @@ export async function register(server) {
           multipart: true,
           output: 'file',
         },
-        handler: async function(request, h) {
-          if (Array.isArray(request.payload.file)) {
-            return Boom.badRequest('Too many files');
-          }
-          try {
-            const stream = fs.createReadStream(request.payload.file.path);
-            await importTranslations(stream);
-          } catch (error) {
-            if (error instanceof InvalidFileError) {
-              return Boom.badRequest('Invalid CSV file');
-            }
-          }
-          return h.response();
-        }
+        handler: importTranslationsHandler
       },
     },
   ]);
+}
+
+export async function importTranslationsHandler(request, h) {
+  if (Array.isArray(request.payload.file)) {
+    return Boom.badRequest('Too many files');
+  }
+  if (!request.payload.file) {
+    return Boom.badRequest('No file provided');
+  }
+  try {
+    const stream = fs.createReadStream(request.payload.file.path);
+    await importTranslations(stream);
+  } catch (error) {
+    if (error instanceof InvalidFileError) {
+      return Boom.badRequest('Invalid CSV file');
+    }
+    throw error;
+  }
+  return h.response();
 }
 
 export const name = 'translations-api';
