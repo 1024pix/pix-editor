@@ -29,6 +29,7 @@ export async function updateRecord(tableName, body) {
 }
 
 export async function upsertRecords(tableName, records, fieldsToMergeOn) {
+  logger.info({ tableName }, 'Upserting Airtable');
   return _airtableClient().table(tableName).update(
     records,
     {

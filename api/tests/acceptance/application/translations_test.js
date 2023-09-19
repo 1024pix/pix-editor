@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import FormData from 'form-data';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper';
 import { createServer } from '../../../server';
@@ -36,6 +36,10 @@ describe('Acceptance | Controller | translations-controller', () => {
   });
 
   describe('PATCH /translations.csv - import translations from a CSV file', () => {
+
+    afterEach(async() => {
+      await knex('translations').delete();
+    });
 
     it('should update the translations', async () => {
       // Given
@@ -129,6 +133,59 @@ describe('Acceptance | Controller | translations-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(400);
+    });
+
+    it('should return 4xx when there is no file', async () => {
+      // Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+      const formData = new FormData();
+
+      const server = await createServer();
+      const putTranslationsOptions = {
+        method: 'PATCH',
+        url: '/api/translations.csv',
+        headers: {
+          ...generateAuthorizationHeader(user),
+          ...formData.getHeaders(),
+        },
+        payload: formData.getBuffer()
+      };
+
+      // When
+      const response = await server.inject(putTranslationsOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(400);
+    });
+
+    it('should not import parts with a name different than file', async () => {
+      // Given
+      const user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+      const formData = new FormData();
+      formData.append('file', 'key,locale,value\nsome-key,fr-fr,plop', 'test.csv');
+      formData.append('not-file', 'key,locale,value\nsome-other-key,fr-fr,plop', 'test.csv');
+
+      const server = await createServer();
+      const putTranslationsOptions = {
+        method: 'PATCH',
+        url: '/api/translations.csv',
+        headers: {
+          ...generateAuthorizationHeader(user),
+          ...formData.getHeaders(),
+        },
+        payload: formData.getBuffer()
+      };
+
+      // When
+      const response = await server.inject(putTranslationsOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(204);
+
+      expect(await knex('translations').count()).to.deep.equal([{ count: 1 }]);
+      expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
     });
 
   });

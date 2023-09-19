@@ -33,6 +33,7 @@ export async function register(server) {
             await new Promise((resolve, reject) => {
               const stream = request.payload.pipe(new Dispenser({ boundary: contentType.boundary }));
               stream.on('part', async (partStream) => {
+                if (partStream.name !== 'file') return;
                 try {
                   await importTranslations(partStream);
                 } catch (error) {
@@ -40,8 +41,9 @@ export async function register(server) {
                 }
               });
               stream.on('error', reject);
-              stream.on('end', resolve);
+              stream.on('close', resolve);
             });
+            // FIXME check if part with name file was found
           } catch (error) {
             if (error instanceof InvalidFileError) {
               return Boom.badRequest('Invalid CSV file');
