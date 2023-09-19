@@ -13,6 +13,9 @@ const Components = {
 };
 
 export const options = {
+  branding: {
+    companyName: 'Pix Editor',
+  },
   componentLoader,
   resources: [
     {
