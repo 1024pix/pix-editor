@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
@@ -8,7 +8,7 @@ import sinon from 'sinon';
 
 module('Integration | Component | competence/competence-grid-theme', function (hooks) {
 
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
 
   module('if theme have tube', function (hooks) {
     hooks.beforeEach(function () {

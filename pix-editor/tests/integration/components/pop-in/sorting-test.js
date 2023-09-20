@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, findAll, render } from '@ember/test-helpers';
 import { drag } from 'ember-sortable/test-support';
 import { hbs } from 'ember-cli-htmlbars';
@@ -7,7 +7,7 @@ import EmberObject from '@ember/object';
 import sinon from 'sinon';
 
 module('Integration | Component | pop-in/sorting', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let modelToSort1, modelToSort2, modelToSort3, approveActionStub, denyActionStub;
 
   hooks.beforeEach(function () {

@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | pop-in/threshold-calculation', function (hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   test('it display a list of selected skills count by level', async function (assert) {
     //given
     const tube1SelectedSkills = [

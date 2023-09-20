@@ -1,11 +1,11 @@
 import sinon from 'sinon';
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | pop-in/pdf-entries', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let callBackActionStub, closeTitleInputStub;
 
   hooks.beforeEach(async function() {

@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, find, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
@@ -7,7 +7,7 @@ import sinon from 'sinon';
 import EmberObject from '@ember/object';
 
 module('Integration | Component | field/toggle-field', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let setDisplayFieldStub;
   let confirmAskStub;
   hooks.beforeEach(function () {

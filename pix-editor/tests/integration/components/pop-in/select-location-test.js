@@ -1,12 +1,12 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, render, findAll } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import Service from '@ember/service';
 import sinon from 'sinon';
 
 module('Integration | Component | popin-select-location', function (hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let framework1, framework2,
     area1_1, area1_2,
     competence1_1_1, competence1_2_1, competence1_2_2,

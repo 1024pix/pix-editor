@@ -1,7 +1,7 @@
-import setupIntl from './setup-intl';
+import { setupIntl } from 'ember-intl/test-support';
 import { setupRenderingTest } from 'ember-qunit';
 
-export default function setupIntlRenderingTest(hooks) {
+export function setupIntlRenderingTest(hooks) {
   setupRenderingTest(hooks);
-  setupIntl(hooks);
+  setupIntl(hooks, 'fr');
 }

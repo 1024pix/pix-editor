@@ -1,11 +1,11 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render, click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import sinon from 'sinon';
 
 module('Integration | Component | popin-confirm-log', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let approveActionStub, denyActionStub;
   hooks.beforeEach(async function () {
     // given

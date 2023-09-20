@@ -1,12 +1,12 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import sinon  from 'sinon';
 
 module('Integration | Component | sidebar/navigation', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   module('#isAdmin', function(hooks) {
     let areas, frameworks, pixFramework, pixFranceFramework;
 

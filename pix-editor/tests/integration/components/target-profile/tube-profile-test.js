@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
 
 module('Integration | Component | target-profile/competence-thematic-result', function (hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let tube;
   hooks.beforeEach(async function () {
     //given
