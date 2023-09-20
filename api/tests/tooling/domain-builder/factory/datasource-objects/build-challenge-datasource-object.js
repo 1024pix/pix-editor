@@ -43,6 +43,7 @@ export function buildChallengeDatasourceObject({
   archivedAt = '2023-03-03T10:47:05.555Z',
   madeObsoleteAt = '2023-04-04T10:47:05.555Z',
   shuffled = false,
+  contextualizedFields = ['instruction', 'illustration'],
 } = {}) {
   return {
     id,
@@ -89,5 +90,6 @@ export function buildChallengeDatasourceObject({
     archivedAt,
     madeObsoleteAt,
     shuffled,
+    contextualizedFields,
   };
 }
