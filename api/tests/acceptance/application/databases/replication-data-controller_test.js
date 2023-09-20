@@ -72,6 +72,27 @@ async function mockCurrentContent() {
     challengeIds: 'recChallenge0',
   });
 
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].name_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].name_i18n.en,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'fr',
+    value: expectedCurrentContent.competences[0].description_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+    locale: 'en',
+    value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+
   await databaseBuilder.commit();
 
   return expectedCurrentContent;
@@ -90,28 +111,6 @@ describe('Acceptance | Controller | replication-data-controller', () => {
     it('should return data for replication', async function() {
       const expectedCurrentContent = await mockCurrentContent();
 
-      databaseBuilder.factory.buildTranslation({
-        key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-        locale: 'fr',
-        value: expectedCurrentContent.competences[0].name_i18n.fr,
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-        locale: 'en',
-        value: expectedCurrentContent.competences[0].name_i18n.en,
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-        locale: 'fr',
-        value: expectedCurrentContent.competences[0].description_i18n.fr,
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-        locale: 'en',
-        value: expectedCurrentContent.competences[0].description_i18n.en,
-      });
-
-      await databaseBuilder.commit();
       const server = await createServer();
       const currentContentOptions = {
         method: 'GET',
@@ -123,7 +122,7 @@ describe('Acceptance | Controller | replication-data-controller', () => {
       const response = await server.inject(currentContentOptions);
 
       // then
-      expect(JSON.parse(response.result)).to.deep.equal(JSON.parse(JSON.stringify(expectedCurrentContent)));
+      expect(JSON.parse(response.result)).to.deep.equal(expectedCurrentContent);
     });
   });
 });
