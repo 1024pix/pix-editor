@@ -1,11 +1,11 @@
 import { module, test } from 'qunit';
-import { setupRenderingTest } from 'ember-qunit';
 import { click, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import sinon from 'sinon';
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence/competence-actions', function(hooks) {
-  setupRenderingTest(hooks);
+  setupIntlRenderingTest(hooks);
   let selectViewStub;
 
   hooks.beforeEach(function () {

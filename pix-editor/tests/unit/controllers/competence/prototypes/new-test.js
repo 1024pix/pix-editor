@@ -1,7 +1,6 @@
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-
-import setupIntlRenderingTest from '../../../../setup-intl-rendering';
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Unit | Controller | competence/prototypes/new', function(hooks) {
   setupIntlRenderingTest(hooks);

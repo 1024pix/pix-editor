@@ -3,8 +3,7 @@ import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import EmberObject from '@ember/object';
-
-import setupIntlRenderingTest from '../../../../setup-intl-rendering';
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Unit | Controller | competence/prototypes/single', function (hooks) {
   setupIntlRenderingTest(hooks);
