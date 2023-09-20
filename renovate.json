@@ -2,5 +2,14 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "local>1024pix/renovate-config"
+ ],
+  "packageRules": [
+    {
+      "matchPackagePatterns": [
+        "^@playwright/test$"
+      ],
+    "additionalBranchPrefix": "",
+    "commitMessageSuffix": ""
+   }
   ]
 }
