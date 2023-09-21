@@ -43,6 +43,7 @@ export function buildChallenge({
   madeObsoleteAt,
   createdAt = '1986-14-07',
   shuffled,
+  contextualizedFields,
 } = {}) {
   return {
     id: airtableId,
@@ -91,6 +92,7 @@ export function buildChallenge({
       'made_obsolete_at': madeObsoleteAt,
       'created_at': createdAt,
       'shuffled': shuffled,
+      'contextualizedFields': contextualizedFields,
     },
   };
 }

@@ -40,6 +40,7 @@ export default class ChallengeModel extends Model {
   @attr('date') archivedAt;
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
+  @attr ({ defaultValue: function() { return []; } }) contextualizedFields;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;

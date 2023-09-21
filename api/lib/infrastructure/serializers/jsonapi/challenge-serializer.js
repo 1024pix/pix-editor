@@ -42,6 +42,7 @@ const serializer = new Serializer('challenges', {
     'archivedAt',
     'madeObsoleteAt',
     'shuffled',
+    'contextualizedFields',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'files') return 'attachments';

@@ -31,6 +31,7 @@ export default Factory.extend({
   area: 'area',
   autoReply: 'autoReply',
   files: null,
-  updatedAt: '2021-10-02T14:00:00.000Z'
+  updatedAt: '2021-10-02T14:00:00.000Z',
+  contextualizedFields() { return ['illustration', 'instruction']; },
 });
 

@@ -224,6 +224,18 @@
         />
       </div>
     </div>
+    {{#if @challenge.isPrototype}}
+      <div class="field">
+        <Field::Select
+          @title="Champs contextualisés"
+          @value={{this.contextualizedFields}}
+          @edition={{@edition}}
+          @multiple={{true}}
+          @options={{this.options.contextualizedFields}}
+          @setValue={{this.setContextualizedFields}}
+        />
+      </div>
+    {{/if}}
   </div>
   {{#unless @edition}}
     <Field::Input @value={{@challenge.id}} @title="Id" @edition={{false}} />
