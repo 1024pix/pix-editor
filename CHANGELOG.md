@@ -1,5 +1,22 @@
 
 
+## v3.97.0 (21/09/2023)
+
+
+### :rocket: Amélioration
+- [#306](https://github.com/1024pix/pix-editor/pull/306) [FEATURE] Ajout des options "lien externe" et "indice" dans la liste des champs à contextualiser d'une épreuve (PIX-9287).
+- [#302](https://github.com/1024pix/pix-editor/pull/302) [FEATURE] Ajout d'un champ dans les prototypes des épreuves pour sélectionner les champs à contextualiser (PIX-9287).
+- [#298](https://github.com/1024pix/pix-editor/pull/298) [FEATURE] Pouvoir importer les traductions dans AdminJS (PIX-8978).
+- [#296](https://github.com/1024pix/pix-editor/pull/296) [FEATURE] Personnaliser le titre de la page d'adminjs.
+
+### :arrow_up: Montée de version
+- [#304](https://github.com/1024pix/pix-editor/pull/304) [BUMP] Update dependency sinon to v16 (scripts).
+- [#303](https://github.com/1024pix/pix-editor/pull/303) [BUMP] Update dependency sinon to v16 (pix-editor).
+- [#305](https://github.com/1024pix/pix-editor/pull/305) [BUMP] Update browser-tools orb to v1.4.6 (.circleci).
+- [#299](https://github.com/1024pix/pix-editor/pull/299) [BUMP] Update dependency ember-intl to v6 (pix-editor).
+- [#297](https://github.com/1024pix/pix-editor/pull/297) [BUMP] Update dependency @1024pix/pix-ui to v40 (pix-editor).
+- [#300](https://github.com/1024pix/pix-editor/pull/300) [BUMP] Update dependency @fortawesome/ember-fontawesome to v2 (pix-editor).
+
 ## v3.96.0 (18/09/2023)
 
 
