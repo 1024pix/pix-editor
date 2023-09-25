@@ -99,7 +99,7 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const updatedChallenge = await challengeRepository.update(challenge);
+          const updatedChallenge = await usecases.updateChallenge(challenge);
           await _refreshCache(updatedChallenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },

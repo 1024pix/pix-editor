@@ -1,6 +1,9 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { knex, databaseBuilder, streamToPromiseArray } from '../../../test-helper.js';
-import { checkIfShouldDuplicateToAirtable, save } from '../../../../lib/infrastructure/repositories/translation-repository.js';
+import {
+  checkIfShouldDuplicateToAirtable,
+  save
+} from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { Translation } from '../../../../lib/domain/models/Translation';
@@ -70,6 +73,26 @@ describe('Integration | Repository | translation-repository', function() {
           locale: 'fr',
           value: 'Bonjour, la mif'
         })]);
+    });
+  });
+
+  context('#deleteByKeyPrefix', function() {
+    it('should delete translations where key starts with given string', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'some.key',
+        locale: 'fr',
+        value: 'Bonjour, la mif'
+      });
+      await databaseBuilder.commit();
+
+      const keyToDelete = 'some';
+
+      // when
+      await translationRepository.deleteByKeyPrefix(keyToDelete);
+
+      // then
+      expect(await knex('translations').count()).to.deep.equal([{ count: 0 }]);
     });
   });
 });
