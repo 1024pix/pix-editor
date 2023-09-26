@@ -2,6 +2,7 @@ export * from './build-area-for-release.js';
 export * from './datasource-objects/build-area-datasource-object.js';
 export * from './build-attachment.js';
 export * from './datasource-objects/build-challenge-datasource-object.js';
+export * from './build-challenge.js';
 export * from './build-challenge-for-release.js';
 export * from './build-competence-for-release.js';
 export * from './datasource-objects/build-competence-datasource-object.js';

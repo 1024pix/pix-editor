@@ -16,5 +16,6 @@ describe('Unit | Domain | Usecases | create-challenge', () => {
 
       expect(createdChallenge).to.deep.equal(expectedCreatedChallenge);
     });
+
   });
 });
