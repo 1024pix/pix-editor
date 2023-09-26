@@ -54,8 +54,13 @@ executors:
       - image: redis:7.0.12-alpine
     resource_class: medium
   playwright-redis-postgres-docker:
+    parameters:
+      playwright-version:
+        # renovate datasource=npm depName=@playwright/test
+        default: 1.37.1
+        type: string
     docker:
-      - image: mcr.microsoft.com/playwright:v1.37.1-focal
+      - image: mcr.microsoft.com/playwright:v<<parameters.playwright-version>>-focal
       - image: postgres:14.6-alpine
         environment:
           POSTGRES_USER: circleci
