@@ -11,7 +11,8 @@ const fields = [
 ];
 
 function getPrimaryLocaleFromChallenge(locales) {
-  return locales.sort()[0];
+  const defaultLocale = 'fr';
+  return locales.sort()[0] ?? defaultLocale;
 }
 
 export function extractFromChallenge(challenge) {
