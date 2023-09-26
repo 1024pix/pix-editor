@@ -671,14 +671,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
         },
       });
       const { count } = await knex('translations').count().first();
-      expect(count).equal(5);
+      expect(count).equal(4);
       const translations = await knex('translations').select().orderBy('key');
       expect(translations).to.deep.equal([
-        {
-          key: 'challenge.challengeId.alternativeInstruction',
-          locale: 'fr',
-          value: ''
-        },
         {
           key: 'challenge.challengeId.instruction',
           locale: 'fr',

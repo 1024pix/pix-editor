@@ -10,15 +10,20 @@ const fields = [
   { airtableField: 'Bonnes réponses à afficher', field: 'solutionToDisplay' },
 ];
 
-export function extractFromChallenge(challenge) {
-  const locale = challenge.locales[0];
-  const id = challenge.id;
-  return fields.map(({ field }) => {
-    return new Translation({
-      key: `${prefix}${id}.${field}`,
-      locale: locale,
-      value: challenge[field],
-    });
-  });
+function getPrimaryLocaleFromChallenge(locales) {
+  return locales.sort()[0];
 }
 
+export function extractFromChallenge(challenge) {
+  const locale = getPrimaryLocaleFromChallenge(challenge.locales);
+  const id = challenge.id;
+  return fields
+    .filter(({ field }) => challenge[field])
+    .map(({ field }) => {
+      return new Translation({
+        key: `${prefix}${id}.${field}`,
+        locale: locale,
+        value: challenge[field],
+      });
+    });
+}
