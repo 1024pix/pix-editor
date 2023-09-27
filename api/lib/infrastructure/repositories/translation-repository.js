@@ -57,3 +57,9 @@ export async function checkIfShouldDuplicateToAirtable() {
 function _toDomain(dto) {
   return new Translation(dto);
 }
+
+export async function deleteByKeyPrefix(prefix) {
+  await knex('translations')
+    .whereLike('key', `${prefix}%`)
+    .delete();
+}

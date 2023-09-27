@@ -1,7 +1,13 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
-import {  databaseBuilder, domainBuilder, generateAuthorizationHeader, airtableBuilder } from '../../../test-helper.js';
+import {
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  airtableBuilder,
+  knex
+} from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 const challengeAirtableFields = [
@@ -138,7 +144,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               accessibility1: 'OK',
               accessibility2: 'RAS',
               spoil: 'Non Sp',
-              responsive:  'non',
+              responsive: 'non',
               locales: [],
               area: 'France',
               'auto-reply': false,
@@ -234,7 +240,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               accessibility1: 'OK',
               accessibility2: 'RAS',
               spoil: 'Non Sp',
-              responsive:  'non',
+              responsive: 'non',
               locales: [],
               area: 'France',
               'auto-reply': false,
@@ -293,7 +299,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               accessibility1: 'OK',
               accessibility2: 'RAS',
               spoil: 'Non Sp',
-              responsive:  'non',
+              responsive: 'non',
               locales: [],
               area: 'France',
               'auto-reply': false,
@@ -355,7 +361,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(response.result).to.deep.equal({ data: [] });
     });
 
-    it('should search challenges with limit',  async() => {
+    it('should search challenges with limit', async () => {
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -451,7 +457,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             accessibility1: 'OK',
             accessibility2: 'RAS',
             spoil: 'Non Sp',
-            responsive:  'non',
+            responsive: 'non',
             locales: [],
             area: 'France',
             'auto-reply': false,
@@ -518,10 +524,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
     });
+    afterEach(async function() {
+      await knex('translations').truncate();
+    });
 
     it('should create a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] });
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
 
@@ -634,8 +643,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             accessibility1: 'OK',
             accessibility2: 'RAS',
             spoil: 'Non Sp',
-            responsive:  'non',
-            locales: [],
+            responsive: 'non',
+            locales: ['fr'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -664,11 +673,37 @@ describe('Acceptance | Controller | challenges-controller', () => {
           }
         },
       });
+      const { count } = await knex('translations').count().first();
+      expect(count).equal(4);
+      const translations = await knex('translations').select().orderBy('key');
+      expect(translations).to.deep.equal([
+        {
+          key: 'challenge.challengeId.instruction',
+          locale: 'fr',
+          value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?'
+        },
+        {
+          key: 'challenge.challengeId.proposals',
+          locale: 'fr',
+          value: '- 1\n- 2\n- 3\n- 4\n- 5'
+        },
+        {
+          key: 'challenge.challengeId.solution',
+          locale: 'fr',
+          value: '1, 5'
+        },
+        {
+          key: 'challenge.challengeId.solutionToDisplay',
+          locale: 'fr',
+          value: '1'
+        }
+      ]);
+
     });
 
     it('should invalidate the cache on the PIX API', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
       const expectedChallengeRelease = JSON.parse(JSON.stringify(domainBuilder.buildChallengeForRelease({
         ...challenge,
         illustrationUrl: null,
@@ -774,12 +809,33 @@ describe('Acceptance | Controller | challenges-controller', () => {
     let user;
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
-      await databaseBuilder.commit();
     });
 
     it('should update a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId.instruction',
+        locale: 'fr',
+        value: 'Ancienne valeur de l\'instruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId.solution',
+        locale: 'fr',
+        value: challenge.solution,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId.solutionToDisplay',
+        locale: 'fr',
+        value: challenge.solutionToDisplay,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId.proposals',
+        locale: 'fr',
+        value: challenge.proposals,
+      });
+      await databaseBuilder.commit();
+
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge);
       const expectedBody = { records: [expectedBodyChallenge] };
@@ -894,8 +950,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             accessibility1: 'OK',
             accessibility2: 'RAS',
             spoil: 'Non Sp',
-            responsive:  'non',
-            locales: [],
+            responsive: 'non',
+            locales: ['fr'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -924,6 +980,29 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         },
       });
+      expect(await knex('translations').count()).to.deep.equal([{ count: 4 }]);
+      expect(await knex('translations').orderBy('key').select()).to.deep.equal([
+        {
+          key: 'challenge.recChallengeId.instruction',
+          locale: 'fr',
+          value: challenge.instruction,
+        },
+        {
+          key: 'challenge.recChallengeId.proposals',
+          locale: 'fr',
+          value: challenge.proposals,
+        },
+        {
+          key: 'challenge.recChallengeId.solution',
+          locale: 'fr',
+          value: challenge.solution,
+        },
+        {
+          key: 'challenge.recChallengeId.solutionToDisplay',
+          locale: 'fr',
+          value: challenge.solutionToDisplay,
+        },
+      ]);
     });
   });
 });

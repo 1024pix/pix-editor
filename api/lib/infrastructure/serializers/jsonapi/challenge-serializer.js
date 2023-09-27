@@ -1,4 +1,5 @@
 import JsonapiSerializer from 'jsonapi-serializer';
+import { Challenge } from '../../../domain/models/Challenge.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 
@@ -89,7 +90,7 @@ const deserializer = new Deserializer({
 export function deserialize(challenge) {
   return new Promise((resolve, reject) => {
     deserializer.deserialize(challenge, (err, challenges) => {
-      return err ? reject(err) : resolve(challenges);
+      return err ? reject(err) : resolve(new Challenge(challenges));
     });
   });
 }

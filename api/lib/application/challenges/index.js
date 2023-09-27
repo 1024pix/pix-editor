@@ -11,6 +11,7 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { challengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
+import * as usecases from '../../domain/usecases/index.js';
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -80,7 +81,7 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const createdChallenge = await challengeRepository.create(challenge);
+          const createdChallenge = await usecases.createChallenge(challenge);
           await _refreshCache(createdChallenge);
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
@@ -98,7 +99,7 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
-          const updatedChallenge = await challengeRepository.update(challenge);
+          const updatedChallenge = await usecases.updateChallenge(challenge);
           await _refreshCache(updatedChallenge);
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },

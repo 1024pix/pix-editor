@@ -11,7 +11,6 @@ export class Challenge {
     t3Status,
     status,
     skills,
-    skillId,
     embedUrl,
     embedTitle,
     embedHeight,
@@ -36,11 +35,13 @@ export class Challenge {
     spoil,
     responsive,
     area,
-    delta,
-    alpha,
-    illustrationAlt,
-    illustrationUrl,
-    attachments,
+    updatedAt,
+    validatedAt,
+    archivedAt,
+    madeObsoleteAt,
+    createdAt,
+    shuffled,
+    contextualizedFields,
   } = {}) {
     this.id = id;
     this.instruction = instruction;
@@ -53,7 +54,6 @@ export class Challenge {
     this.t3Status = t3Status;
     this.status = status;
     this.skills = skills;
-    this.skillId = skillId;
     this.embedUrl = embedUrl;
     this.embedTitle = embedTitle;
     this.embedHeight = embedHeight;
@@ -62,7 +62,7 @@ export class Challenge {
     this.format = format;
     this.files = files;
     this.autoReply = autoReply;
-    this.locales = locales;
+    this.locales = locales?.length === 0 ? ['fr'] : locales;
     this.alternativeInstruction = alternativeInstruction;
     this.focusable = focusable;
     this.airtableId = airtableId;
@@ -78,10 +78,12 @@ export class Challenge {
     this.spoil = spoil;
     this.responsive = responsive;
     this.area = area;
-    this.delta = delta;
-    this.alpha = alpha;
-    this.illustrationAlt = illustrationAlt;
-    this.illustrationUrl = illustrationUrl;
-    this.attachments = attachments;
+    this.updatedAt = updatedAt;
+    this.validatedAt = validatedAt;
+    this.archivedAt = archivedAt;
+    this.madeObsoleteAt = madeObsoleteAt;
+    this.createdAt = createdAt;
+    this.shuffled = shuffled;
+    this.contextualizedFields = contextualizedFields;
   }
 }
