@@ -43,7 +43,19 @@ describe('Migrate translation from airtable', function() {
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Epreuves')
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .query(true)
+      .query({
+        fields: {
+          '': [
+            'id persistant',
+            'Consigne',
+            'Consigne alternative',
+            'Propositions',
+            'Bonnes réponses',
+            'Bonnes réponses à afficher',
+            'Langues',
+          ]
+        }
+      })
       .reply(200, { records: challenges });
 
     // when

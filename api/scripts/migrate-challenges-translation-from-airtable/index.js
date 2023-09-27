@@ -21,6 +21,7 @@ export async function migrateChallengesTranslationFromAirtable({ airtableClient 
         'Propositions',
         'Bonnes réponses',
         'Bonnes réponses à afficher',
+        'Langues',
       ],
     })
     .all();
