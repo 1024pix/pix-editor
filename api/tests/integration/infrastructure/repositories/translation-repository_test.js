@@ -10,45 +10,54 @@ import { Translation } from '../../../../lib/domain/models/Translation';
 
 describe('Integration | Repository | translation-repository', function() {
 
-  beforeEach(async function() {
-    await _setShouldDuplicateToAirtable(true);
-  });
-
   afterEach(async function() {
     await knex('translations').delete();
-    await _setShouldDuplicateToAirtable(false);
   });
 
   context('#save', function() {
 
-    it('should save translations to airtable when Airtable has a translations table', async function() {
-      // given
-      nock('https://api.airtable.com')
-        .patch('/v0/airtableBaseValue/translations/?', {
-          records: [
-            {
-              fields: {
-                key: 'entity.recordid.key',
-                locale: 'fr',
-                value: 'translationValue'
+    context('when Airtable has a translations table', () => {
+      beforeEach(async function() {
+        await _setShouldDuplicateToAirtable(true);
+      });
+
+      afterEach(async function() {
+        await _setShouldDuplicateToAirtable(false);
+      });
+
+      it('should save translations to airtable', async function() {
+        // given
+        nock('https://api.airtable.com')
+          .patch('/v0/airtableBaseValue/translations/?', {
+            records: [
+              {
+                fields: {
+                  key: 'entity.recordid.key',
+                  locale: 'fr',
+                  value: 'translationValue'
+                }
               }
+            ],
+            performUpsert: {
+              fieldsToMergeOn: [
+                'key',
+                'locale'
+              ]
             }
-          ],
-          performUpsert: {
-            fieldsToMergeOn: [
-              'key',
-              'locale'
-            ]
-          }
-        })
-        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-        .reply(200, { records: [] });
+          })
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [] });
 
-      // when
-      await save([{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }]);
+        // when
+        await save([{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }]);
 
-      // then
-      expect(nock.isDone()).to.be.true;
+        // then
+        expect(nock.isDone()).to.be.true;
+      });
+
+      afterEach(async function() {
+        await _setShouldDuplicateToAirtable(false);
+      });
     });
   });
 
@@ -80,19 +89,71 @@ describe('Integration | Repository | translation-repository', function() {
     it('should delete translations where key starts with given string', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
-        key: 'some.key',
+        key: 'some.prefix.key',
         locale: 'fr',
         value: 'Bonjour, la mif'
       });
       await databaseBuilder.commit();
 
-      const keyToDelete = 'some';
+      const prefixToDelete = 'some.prefix.';
 
       // when
-      await translationRepository.deleteByKeyPrefix(keyToDelete);
+      await translationRepository.deleteByKeyPrefix(prefixToDelete);
 
       // then
       expect(await knex('translations').count()).to.deep.equal([{ count: 0 }]);
+    });
+
+    context('when Airtable has a translations table', () => {
+      beforeEach(async function() {
+        await _setShouldDuplicateToAirtable(true);
+      });
+
+      afterEach(async function() {
+        await _setShouldDuplicateToAirtable(false);
+      });
+
+      it('should delete keys in Airtable', async() => {
+        // given
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/translations?fields%5B%5D=key&fields%5B%5D=locale&fields%5B%5D=value&filterByFormula=REGEX_MATCH(key%2C+%22%5Esome%5C.prefix%5C.%22)')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [
+            {
+              id: 'recTranslation1',
+              fields: {
+                key: 'some.prefix.key',
+                locale: 'fr',
+                value: 'Bonjour, la mif',
+              },
+            },
+            {
+              id: 'recTranslation2',
+              fields: {
+                key: 'some.prefix.key',
+                locale: 'en',
+                value: 'Hello, the fim',
+              },
+            },
+          ] });
+
+        nock('https://api.airtable.com')
+          .delete('/v0/airtableBaseValue/translations?records%5B%5D=recTranslation1&records%5B%5D=recTranslation2')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, {
+            records: [
+              { id: 'recTranslation1', deleted: true },
+              { id: 'recTranslation2', deleted: true },
+            ],
+          });
+
+        const prefixToDelete = 'some.prefix.';
+
+        // when
+        await translationRepository.deleteByKeyPrefix(prefixToDelete);
+
+        expect(nock.isDone()).toBe(true);
+      });
     });
   });
 });

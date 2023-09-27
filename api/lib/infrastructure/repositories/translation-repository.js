@@ -62,4 +62,16 @@ export async function deleteByKeyPrefix(prefix) {
   await knex('translations')
     .whereLike('key', `${prefix}%`)
     .delete();
+
+  if (_shouldDuplicateToAirtable == null && _shouldDuplicateToAirtablePromise == null) {
+    await checkIfShouldDuplicateToAirtable();
+  }
+
+  if (_shouldDuplicateToAirtable) {
+    const records = await translationDatasource.filter({ filter: {
+      formula: `REGEX_MATCH(key, "^${prefix.replace(/(\.)/g, '\\$1')}")`,
+    } });
+    const recordIds = records.map(({ airtableId }) => airtableId);
+    await translationDatasource.delete(recordIds);
+  }
 }

@@ -25,6 +25,7 @@ export const translationDatasource = datasource.extend({
       key: airtableRecord.get('key'),
       locale: airtableRecord.get('locale'),
       value: airtableRecord.get('value'),
+      airtableId: airtableRecord.id,
     };
   },
 

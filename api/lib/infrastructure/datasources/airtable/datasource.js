@@ -15,12 +15,15 @@ const _DatasourcePrototype = {
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 
-  async filter({ filter: { ids } }) {
+  async filter({ filter: { ids, formula } }) {
+    const filterByFormula = ids ? (
+      'OR(' + ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
+    ) : formula;
     const airtableRawObjects = await airtable.findRecords(
       this.tableName,
       {
         fields: this.usedFields,
-        filterByFormula: 'OR(' + ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
+        filterByFormula,
       },
     );
     return airtableRawObjects.map(this.fromAirTableObject);
@@ -46,7 +49,11 @@ const _DatasourcePrototype = {
       allAirtableRawObjects.push(...airtableRawObjects.map((airtableRawObject) => this.fromAirTableObject(airtableRawObject)));
     }
     return allAirtableRawObjects;
-  }
+  },
+
+  async delete(ids) {
+    return airtable.deleteRecords(this.tableName, ids);
+  },
 };
 
 function* chunks(array, chunkSize) {

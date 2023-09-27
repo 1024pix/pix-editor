@@ -39,3 +39,8 @@ export async function upsertRecords(tableName, records, fieldsToMergeOn) {
     },
   );
 }
+
+export async function deleteRecords(tableName, recordIds) {
+  logger.info({ tableName }, 'Deleting Airtable');
+  return _airtableClient().table(tableName).destroy(recordIds);
+}
