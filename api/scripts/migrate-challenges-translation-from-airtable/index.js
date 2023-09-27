@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import Airtable from 'airtable';
+import _ from 'lodash';
 import * as challengeTranslations from '../../lib/infrastructure/translations/challenge.js';
 import { translationRepository } from '../../lib/infrastructure/repositories/index.js';
 import { disconnect } from '../../db/knex-database-connection.js';
@@ -29,7 +30,9 @@ export async function migrateChallengesTranslationFromAirtable({ airtableClient 
     return challengeTranslations.extractFromChallenge(challengeModel);
   });
 
-  await translationRepository.save(translations);
+  for (const translationsChunk of _.chunk(translations, 5000)) {
+    await translationRepository.save(translationsChunk);
+  }
 }
 
 async function main() {
