@@ -1,13 +1,16 @@
+import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 
 export async function filter(params = {}) {
+  let challengeDtos;
   if (params.filter && params.filter.ids) {
-    return challengeDatasource.filter(params);
+    challengeDtos = await challengeDatasource.filter(params);
+  } else if (params.filter && params.filter.search) {
+    challengeDtos = await challengeDatasource.search(params);
+  } else {
+    challengeDtos = await challengeDatasource.list(params);
   }
-  if (params.filter && params.filter.search) {
-    return challengeDatasource.search(params);
-  }
-  return challengeDatasource.list(params);
+  return challengeDtos.map(toDomain);
 }
 
 export function create(challenge) {
@@ -19,5 +22,10 @@ export function update(challenge) {
 }
 
 export async function getAllIdsIn(challengeIds) {
-  return challengeDatasource.getAllIdsIn(challengeIds);
+  const challengeDtos = await challengeDatasource.getAllIdsIn(challengeIds);
+  return challengeDtos.map(toDomain);
+}
+
+function toDomain(challengeDto) {
+  return new Challenge(challengeDto);
 }
