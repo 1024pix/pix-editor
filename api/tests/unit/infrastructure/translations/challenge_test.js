@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { extractFromChallenge } from '../../../../lib/infrastructure/translations/challenge.js';
+
+import { extractFromChallenge, prefixFor } from '../../../../lib/infrastructure/translations/challenge.js';
 import { Challenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Infrastructure | Challenge translations', () => {
@@ -85,4 +86,18 @@ describe('Unit | Infrastructure | Challenge translations', () => {
     });
   });
 
+  describe('#prefixFor', () => {
+    it('should return prefix for challenge fields keys', () => {
+      // given
+      const challenge = new Challenge({
+        id: 'recTestChallenge',
+      });
+
+      // when
+      const prefix = prefixFor(challenge);
+
+      // then
+      expect(prefix).toBe('challenge.recTestChallenge.');
+    });
+  });
 });

@@ -29,8 +29,7 @@ export async function register(server) {
                 tableTranslations.hydrateToAirtableObject(entity.fields, translations) ;
               });
             } else {
-              const id = response.data.fields['id persistant'];
-              const translations = await translationRepository.listByPrefix(`${tableTranslations.prefix}${id}.`);
+              const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
               tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
             }
           }
@@ -62,6 +61,10 @@ export async function register(server) {
 
           if (_isResponseOK(response)) {
             if (translations) {
+              if (request.method === 'patch') {
+                await translationRepository.deleteByKeyPrefix(tableTranslations.prefixFor(response.data.fields));
+              }
+
               await translationRepository.save(translations);
 
               tableTranslations.hydrateToAirtableObject(response.data.fields, translations);

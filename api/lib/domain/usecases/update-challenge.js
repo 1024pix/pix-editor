@@ -4,7 +4,7 @@ import * as challengeTranslations from '../../infrastructure/translations/challe
 export async function updateChallenge(challenge, dependencies = { challengeRepository, translationRepository }) {
   const translations = challengeTranslations.extractFromChallenge(challenge);
   const updatedChallenge = dependencies.challengeRepository.update(challenge);
-  await dependencies.translationRepository.deleteByKeyPrefix(`${challengeTranslations.prefix}${challenge.id}.`);
+  await dependencies.translationRepository.deleteByKeyPrefix(challengeTranslations.prefixFor(challenge));
   await dependencies.translationRepository.save(translations);
 
   return updatedChallenge;
