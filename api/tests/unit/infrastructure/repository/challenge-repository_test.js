@@ -40,8 +40,27 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges[1].instruction).to.equal('instruction 2');
         expect(challenges[1].proposals).to.equal('proposals 2');
         expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
-        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.1.');
-        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.');
+        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.1.', { transaction: expect.anything() });
+        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.', { transaction: expect.anything() });
+      });
+
+      it('should return challenges with empty fields when have no translation',  async () => {
+        // given
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1 }]);
+        vi.spyOn(translationRepository, 'listByPrefix')
+          .mockResolvedValueOnce([{
+            key: 'challenge.1.proposals',
+            value: 'proposals',
+            locale: 'fr'
+          }]);
+
+        // when
+        const challenges = await filter({ filter: { ids: ['1'] } });
+
+        // then
+        expect(challenges.length).equal(1);
+        expect(challenges[0].instruction).to.equal('');
+        expect(challenges[0].proposals).to.equal('proposals');
       });
     });
 

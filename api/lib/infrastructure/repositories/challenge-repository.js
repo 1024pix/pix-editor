@@ -1,3 +1,4 @@
+import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
@@ -11,10 +12,12 @@ export async function filter(params = {}) {
   } else {
     challengeDtos = await challengeDatasource.list(params);
   }
-  return Promise.all(challengeDtos.map(async (challengeDto) => {
-    const translations = await translationRepository.listByPrefix(`challenge.${challengeDto.id}.`);
-    return toDomain(challengeDto, translations);
-  }));
+  return knex.transaction(async (transaction) => {
+    return Promise.all(challengeDtos.map(async (challengeDto) => {
+      const translations = await translationRepository.listByPrefix(`challenge.${challengeDto.id}.`, { transaction });
+      return toDomain(challengeDto, translations);
+    }));
+  }, { readOnly: true });
 }
 
 export function create(challenge) {
