@@ -116,7 +116,17 @@ describe('Integration | Repository | translation-repository', function() {
       it('should delete keys in Airtable', async() => {
         // given
         nock('https://api.airtable.com')
-          .get('/v0/airtableBaseValue/translations?fields%5B%5D=key&fields%5B%5D=locale&fields%5B%5D=value&filterByFormula=REGEX_MATCH(key%2C+%22%5Esome%5C.prefix%5C.%22)')
+          .get('/v0/airtableBaseValue/translations')
+          .query({
+            fields: {
+              '': [
+                'key',
+                'locale',
+                'value',
+              ],
+            },
+            filterByFormula: 'REGEX_MATCH(key, "^some\\.prefix\\.")',
+          })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, { records: [
             {
@@ -138,7 +148,15 @@ describe('Integration | Repository | translation-repository', function() {
           ] });
 
         nock('https://api.airtable.com')
-          .delete('/v0/airtableBaseValue/translations?records%5B%5D=recTranslation1&records%5B%5D=recTranslation2')
+          .delete('/v0/airtableBaseValue/translations')
+          .query({
+            records: {
+              '': [
+                'recTranslation1',
+                'recTranslation2',
+              ]
+            }
+          })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, {
             records: [
