@@ -2,6 +2,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
+import { getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
 
 export async function filter(params = {}) {
   let challengeDtos;
@@ -15,7 +16,9 @@ export async function filter(params = {}) {
   return knex.transaction(async (transaction) => {
     return Promise.all(challengeDtos.map(async (challengeDto) => {
       const translations = await translationRepository.listByPrefix(`challenge.${challengeDto.id}.`, { transaction });
-      return toDomain(challengeDto, translations);
+      const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+      const filteredTranslations = translations.filter(({ locale }) => locale === challengeLocale);
+      return toDomain(challengeDto, filteredTranslations);
     }));
   }, { readOnly: true });
 }
