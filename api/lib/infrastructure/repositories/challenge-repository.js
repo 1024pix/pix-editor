@@ -1,5 +1,6 @@
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
+import { translationRepository } from './index.js';
 
 export async function filter(params = {}) {
   let challengeDtos;
@@ -10,7 +11,10 @@ export async function filter(params = {}) {
   } else {
     challengeDtos = await challengeDatasource.list(params);
   }
-  return challengeDtos.map(toDomain);
+  return Promise.all(challengeDtos.map(async (challengeDto) => {
+    const translations = await translationRepository.listByPrefix(`challenge.${challengeDto.id}.`);
+    return toDomain(challengeDto, translations);
+  }));
 }
 
 export function create(challenge) {
@@ -26,6 +30,10 @@ export async function getAllIdsIn(challengeIds) {
   return challengeDtos.map(toDomain);
 }
 
-function toDomain(challengeDto) {
-  return new Challenge(challengeDto);
+function toDomain(challengeDto, translations) {
+  const formattedTranslations = translations.map(({ key, value }) => [ key.split('.').at(-1), value ]);
+  return new Challenge({
+    ...challengeDto,
+    ...Object.fromEntries(formattedTranslations),
+  });
 }
