@@ -1,5 +1,25 @@
 
 
+## v3.98.0 (28/09/2023)
+
+
+### :rocket: Amélioration
+- [#319](https://github.com/1024pix/pix-editor/pull/319) [FEATURE] Suppression des translations dans PG et Airtable (PIX-9441).
+- [#318](https://github.com/1024pix/pix-editor/pull/318) [FEATURE] Importer les traductions des épreuves dans PG depuis Airtable (PIX-9416).
+- [#315](https://github.com/1024pix/pix-editor/pull/315) [FEATURE] Ajouter les champs traduisible dans la base PG lors de la création et de la modification d'une épreuve (PIX-9295).
+
+### :building_construction: Tech
+- [#291](https://github.com/1024pix/pix-editor/pull/291) [TECH] CircleCI: Lier la version de l'executor Playwright à celle de la dépendance avec Renovate.
+
+### :arrow_up: Montée de version
+- [#317](https://github.com/1024pix/pix-editor/pull/317) [BUMP] Lock file maintenance (pix-editor).
+- [#316](https://github.com/1024pix/pix-editor/pull/316) [BUMP] Update dependency @playwright/test to v1.38.1.
+- [#313](https://github.com/1024pix/pix-editor/pull/313) [BUMP] Lock file maintenance (pix-editor).
+- [#314](https://github.com/1024pix/pix-editor/pull/314) [BUMP] Update dependency @1024pix/stylelint-config to v5 (pix-editor).
+- [#312](https://github.com/1024pix/pix-editor/pull/312) [BUMP] Lock file maintenance (api).
+- [#311](https://github.com/1024pix/pix-editor/pull/311) [BUMP] Update dependency jsonapi-serializer to v3.6.9 (api).
+- [#308](https://github.com/1024pix/pix-editor/pull/308) [BUMP] Update dependency jsonapi-serializer to v3.6.8 (api).
+
 ## v3.97.0 (21/09/2023)
 
 
