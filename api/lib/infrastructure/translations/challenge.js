@@ -16,14 +16,17 @@ function getPrimaryLocaleFromChallenge(locales) {
 
 export function extractFromChallenge(challenge) {
   const locale = getPrimaryLocaleFromChallenge(challenge.locales);
-  const id = challenge.id;
   return fields
     .filter((field) => challenge[field])
     .map((field) => {
       return new Translation({
-        key: `${prefix}${id}.${field}`,
+        key: `${prefixFor(challenge)}${field}`,
         locale: locale,
         value: challenge[field],
       });
     });
+}
+
+export function prefixFor(challenge) {
+  return `${prefix}${challenge.id}.`;
 }

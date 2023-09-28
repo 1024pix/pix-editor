@@ -16,7 +16,7 @@ describe('Unit | Domain | Usecases | update-challenge', () => {
       const updatedChallenge = await updateChallenge(challenge, { translationRepository, challengeRepository });
 
       expect(updatedChallenge).to.deep.equal(expectedUpdatedChallenge);
-      expect(translationRepository.deleteByKeyPrefix).toHaveBeenCalledWith('challenge.recChallengeId');
+      expect(translationRepository.deleteByKeyPrefix).toHaveBeenCalledWith('challenge.recChallengeId.');
     });
   });
 });

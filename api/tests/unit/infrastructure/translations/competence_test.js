@@ -3,7 +3,8 @@ import {
   extractFromAirtableObject,
   hydrateReleaseObject,
   hydrateToAirtableObject,
-  dehydrateAirtableObject
+  dehydrateAirtableObject,
+  prefixFor,
 } from '../../../../lib/infrastructure/translations/competence.js';
 
 describe('Unit | Infrastructure | Competence translations', () => {
@@ -214,6 +215,21 @@ describe('Unit | Infrastructure | Competence translations', () => {
         },
         otherField: 'foo',
       });
+    });
+  });
+
+  describe('#prefixFor', () => {
+    it('should return the prefix for competence fields keys', () => {
+      // given
+      const competence = {
+        'id persistant': 'recCompetence123',
+      };
+
+      // when
+      const prefix = prefixFor(competence);
+
+      // then
+      expect(prefix).toBe('competence.recCompetence123.');
     });
   });
 });

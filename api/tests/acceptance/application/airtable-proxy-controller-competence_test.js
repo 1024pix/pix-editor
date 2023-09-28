@@ -190,8 +190,55 @@ describe('Acceptance | Controller | airtable-proxy-controller | create competenc
         });
       });
     });
-  });
 
+    describe('when some fields are emptied', () => {
+      it('should delete translation keys', async () => {
+        // Given
+        const competenceDataObject = domainBuilder.buildCompetenceDatasourceObject({
+          id: 'mon_id_persistant',
+        });
+        airtableRawCompetence = airtableBuilder.factory.buildCompetence(competenceDataObject);
+        competence = inputOutputDataBuilder.factory.buildCompetence({
+          ...competenceDataObject,
+          name_i18n: {
+            fr: 'AAA',
+          },
+          description_i18n: {
+            fr: 'CCCCCCCCCCCCCCCC',
+          },
+        });
+
+        nock('https://api.airtable.com')
+          .patch('/v0/airtableBaseValue/Competences/id_airtable', airtableRawCompetence)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableRawCompetence);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/airtable/content/Competences/id_airtable',
+          headers: generateAuthorizationHeader(user),
+          payload: competence,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const translations = await knex('translations').select('key', 'locale', 'value');
+        expect(translations.length).to.equal(2);
+        expect(translations[0]).to.deep.equal({
+          key: 'competence.mon_id_persistant.name',
+          locale: 'fr',
+          value: 'AAA'
+        });
+        expect(translations[1]).to.deep.equal({
+          key: 'competence.mon_id_persistant.description',
+          locale: 'fr',
+          value: 'CCCCCCCCCCCCCCCC'
+        });
+      });
+    });
+  });
 });
 
 describe('Acceptance | Controller | airtable-proxy-controller | retrieve competence translations', () => {
