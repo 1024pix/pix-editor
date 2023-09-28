@@ -29,7 +29,7 @@ export async function updateRecord(tableName, body) {
 }
 
 export async function upsertRecords(tableName, records, fieldsToMergeOn) {
-  logger.info({ tableName }, 'Upserting Airtable');
+  logger.info({ tableName }, 'Upserting redords in Airtable');
   return _airtableClient().table(tableName).update(
     records,
     {
@@ -41,6 +41,6 @@ export async function upsertRecords(tableName, records, fieldsToMergeOn) {
 }
 
 export async function deleteRecords(tableName, recordIds) {
-  logger.info({ tableName }, 'Deleting Airtable');
+  logger.info({ tableName }, 'Deleting records in Airtable');
   return _airtableClient().table(tableName).destroy(recordIds);
 }
