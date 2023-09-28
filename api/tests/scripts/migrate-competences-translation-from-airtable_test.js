@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, afterEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, knex } from '../test-helper.js';
 import Airtable from 'airtable';
 import nock from 'nock';
@@ -19,6 +19,10 @@ describe('Migrate translation from airtable', function() {
     airtableClient = new Airtable({
       apiKey: 'airtableApiKeyValue',
     }).base('airtableBaseValue');
+  });
+
+  afterEach(async () => {
+    await knex('translations').truncate();
   });
 
   it('fills translations table', async function() {
