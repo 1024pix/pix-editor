@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "engines": {
-    "node": "^v18.17.1"
+    "node": "^18.18.0"
   },
   "directories": {
     "doc": "docs",
