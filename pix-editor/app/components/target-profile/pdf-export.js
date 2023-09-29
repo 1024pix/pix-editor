@@ -4,6 +4,7 @@ import 'jspdf-autotable';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { Canvg, presets } from 'canvg';
+import { isEmpty } from 'lodash';
 import { firstPageBackground, area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, pixLogoWhite } from '../../vendor/pdf-assets.js';
 import '../../vendor/AmpleSoft-bold.js';
 import '../../vendor/AmpleSoft-normal.js';
@@ -31,6 +32,8 @@ const lightGrey = [250, 250, 250];
 const grey = [240, 240, 240];
 const colors = [[241, 161, 65], [87, 200, 132], [18, 163, 255], [255, 63, 148], [87, 77, 166], [56, 138, 255]];
 const areaGradient = [area1bg, area2bg, area3bg, area4bg, area5bg, area6bg];
+
+const defaultLanguage = 'fr';
 
 function createOffscreenCanvas(width, height) {
   let canvas;
@@ -356,8 +359,8 @@ export default class TargetProfilePdfExportComponent extends Component {
   }
 
   _getTranslatedField(keys, language, model) {
-    const modelKey = keys[language];
-    return model[modelKey];
+    const translatedField = model[keys[language]];
+    return isEmpty(translatedField?.trim()) ? `${model[keys[defaultLanguage]]} [English version coming soon]` : translatedField;
   }
 
   _getCenteredX(pdf, text) {
