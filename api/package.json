@@ -24,7 +24,7 @@
     "db:reset": "npm run db:prepare && npm run db:seed",
     "db:rollback:latest": "knex --knexfile db/knexfile.js migrate:down",
     "lint": "eslint --ext .js,.cjs lib tests",
-    "lint:fix": "eslint .js,.cjs lib tests --fix",
+    "lint:fix": "eslint --ext .js,.cjs lib tests --fix",
     "preinstall": "npx check-engine && git config core.hooksPath .githooks || true",
     "start": "node index.js",
     "start:watch": "nodemon --ext js,cjs,json,jsx --signal SIGTERM index.js",

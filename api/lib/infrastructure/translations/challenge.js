@@ -10,7 +10,7 @@ const fields = [
   'solutionToDisplay',
 ];
 
-function getPrimaryLocaleFromChallenge(locales) {
+export function getPrimaryLocaleFromChallenge(locales) {
   return locales.sort()[0];
 }
 

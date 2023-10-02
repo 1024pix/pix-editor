@@ -23,8 +23,8 @@ export async function save(translations) {
   }
 }
 
-export async function listByPrefix(prefix) {
-  const translationDtos = await knex('translations')
+export async function listByPrefix(prefix, { transaction = knex } = {}) {
+  const translationDtos = await transaction('translations')
     .select()
     .whereLike('key', `${prefix}%`);
   return translationDtos.map(_toDomain);
