@@ -1,5 +1,17 @@
 
 
+## v3.99.0 (02/10/2023)
+
+
+### :rocket: Amélioration
+- [#321](https://github.com/1024pix/pix-editor/pull/321) [FEATURE] Lire les champs d'épreuves traduits depuis la base de donnée PG (PIX-9447) .
+
+### :bug: Correction
+- [#320](https://github.com/1024pix/pix-editor/pull/320) [BUGFIX] Traductions manquantes dans l'export PDF en anglais (PIX-7858).
+
+### :arrow_up: Montée de version
+- [#322](https://github.com/1024pix/pix-editor/pull/322) [BUMP] Update dependency eslint to v8.50.0.
+
 ## v3.98.0 (28/09/2023)
 
 
