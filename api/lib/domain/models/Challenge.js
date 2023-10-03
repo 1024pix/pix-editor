@@ -42,6 +42,9 @@ export class Challenge {
     createdAt,
     shuffled,
     contextualizedFields,
+    alpha,
+    delta,
+    skillId,
   } = {}) {
     this.id = id;
     this.instruction = instruction;
@@ -85,5 +88,8 @@ export class Challenge {
     this.createdAt = createdAt;
     this.shuffled = shuffled;
     this.contextualizedFields = contextualizedFields;
+    this.alpha = alpha;
+    this.delta = delta;
+    this.skillId = skillId;
   }
 }

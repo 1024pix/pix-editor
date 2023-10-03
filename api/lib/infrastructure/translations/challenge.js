@@ -11,7 +11,7 @@ const fields = [
 ];
 
 export function getPrimaryLocaleFromChallenge(locales) {
-  return locales.sort()[0];
+  return [...locales].sort()[0];
 }
 
 export function extractFromChallenge(challenge) {

@@ -10,6 +10,7 @@ import {
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
+import * as challengeRepository from './challenge-repository.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   challengeTransformer,
@@ -96,10 +97,10 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
-  const airtableChallenges = await challengeDatasource.list();
+  const challenges = await challengeRepository.filter();
   const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
-    _getCurrentContentFromAirtable(airtableChallenges),
-    _getCurrentContentFromPG(airtableChallenges),
+    _getCurrentContentFromAirtable(challenges),
+    _getCurrentContentFromPG(challenges),
   ]);
   return {
     ...currentContentFromAirtable,
