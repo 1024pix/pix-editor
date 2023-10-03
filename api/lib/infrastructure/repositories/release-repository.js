@@ -97,7 +97,7 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
-  const challenges = await challengeRepository.filter();
+  const challenges = await challengeRepository.list();
   const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
     _getCurrentContentFromAirtable(challenges),
     _getCurrentContentFromPG(challenges),
