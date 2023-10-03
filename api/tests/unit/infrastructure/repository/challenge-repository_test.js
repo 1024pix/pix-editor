@@ -1,9 +1,46 @@
 import { describe, expect, it, vi } from 'vitest';
-import { create, filter } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { create, filter, list } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Unit | Repository | challenge-repository', () => {
+
+  describe('#list', () => {
+    it('should return all challenges',  async () => {
+      // given
+      vi.spyOn(translationRepository, 'listByPrefix')
+        .mockResolvedValueOnce([{
+          key: 'challenge.1.instruction',
+          value: 'instruction',
+          locale: 'fr'
+        },{
+          key: 'challenge.1.proposals',
+          value: 'proposals',
+          locale: 'fr'
+        }, {
+          key: 'challenge.2.instruction',
+          value: 'instruction 2',
+          locale: 'fr'
+        },{
+          key: 'challenge.2.proposals',
+          value: 'proposals 2',
+          locale: 'fr'
+        }]);
+      vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [] },{ id: 2, locales: [] }]);
+
+      // when
+      const challenges = await list();
+
+      // then
+      expect(challenges.length).equal(2);
+      expect(challengeDatasource.list).toHaveBeenCalled();
+      expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.');
+      expect(challenges[0].instruction).to.equal('instruction');
+      expect(challenges[0].proposals).to.equal('proposals');
+      expect(challenges[1].instruction).to.equal('instruction 2');
+      expect(challenges[1].proposals).to.equal('proposals 2');
+    });
+  });
 
   describe('#filter', () => {
     describe('when ids are specified', () => {
