@@ -4,15 +4,18 @@ import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
 import { getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
 
-export async function filter(params = {}) {
-  let challengeDtos;
+function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
-    challengeDtos = await challengeDatasource.filter(params);
-  } else if (params.filter && params.filter.search) {
-    challengeDtos = await challengeDatasource.search(params);
-  } else {
-    challengeDtos = await challengeDatasource.list(params);
+    return challengeDatasource.filter(params);
   }
+  if (params.filter && params.filter.search) {
+    return challengeDatasource.search(params);
+  }
+  return challengeDatasource.list(params);
+}
+
+export async function filter(params = {}) {
+  let challengeDtos = await _getChallengesFromParams(params);
   return knex.transaction(async (transaction) => {
     return Promise.all(challengeDtos.map(async (challengeDto) => {
       const translations = await translationRepository.listByPrefix(`challenge.${challengeDto.id}.`, { transaction });
