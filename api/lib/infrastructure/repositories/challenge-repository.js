@@ -27,7 +27,7 @@ export async function list() {
 }
 
 export async function filter(params = {}) {
-  let challengeDtos = await _getChallengesFromParams(params);
+  const challengeDtos = await _getChallengesFromParams(params);
   return knex.transaction(async (transaction) => {
     return Promise.all(challengeDtos.map(async (challengeDto) => {
       const translations = await translationRepository.listByPrefix(prefixFor(challengeDto), { transaction });
