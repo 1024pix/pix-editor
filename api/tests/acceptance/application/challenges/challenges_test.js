@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
 import {
@@ -9,6 +9,7 @@ import {
   knex
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import * as config from '../../../../lib/config.js';
 
 const challengeAirtableFields = [
   'id persistant',
@@ -802,6 +803,90 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(apiTokenScope.isDone()).to.be.true;
       expect(airtableCall.isDone()).to.be.true;
       expect(apiCacheScope.isDone()).to.be.true;
+    });
+
+    describe('when no base URL is defined for Pix API', () => {
+      beforeEach(() => {
+        vi.spyOn(config.pixApi, 'baseUrl', 'get').mockReturnValue(undefined);
+      });
+
+      it('should NOT invalidate the cache on the PIX API', async () => {
+        // Given
+        const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
+        const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
+        const expectedBody = { records: [expectedBodyChallenge] };
+
+        const airtableCall = nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+          .reply(
+            200,
+            { records: [airtableBuilder.factory.buildChallenge(challenge)] }
+          );
+        const server = await createServer();
+
+        // when
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/challenges',
+          headers: generateAuthorizationHeader(user),
+          payload: {
+            data: {
+              type: 'challenges',
+              id: challenge.id,
+              attributes: {
+                instruction: challenge.instruction,
+                'alternative-instruction': challenge.alternativeInstruction,
+                type: challenge.type,
+                format: challenge.format,
+                proposals: challenge.proposals,
+                solution: challenge.solution,
+                'solution-to-display': challenge.solutionToDisplay,
+                't1-status': challenge.t1Status,
+                't2-status': challenge.t2Status,
+                't3-status': challenge.t3Status,
+                pedagogy: challenge.pedagogy,
+                author: challenge.author,
+                declinable: challenge.declinable,
+                version: challenge.version,
+                genealogy: challenge.genealogy,
+                status: challenge.status,
+                preview: challenge.preview,
+                timer: challenge.timer,
+                'embed-url': challenge.embedUrl,
+                'embed-title': challenge.embedTitle,
+                'embed-height': challenge.embedHeight,
+                'alternative-version': challenge.alternativeVersion,
+                accessibility1: challenge.accessibility1,
+                accessibility2: challenge.accessibility2,
+                spoil: challenge.spoil,
+                responsive: challenge.responsive,
+                locales: challenge.locales,
+                files: challenge.files,
+                area: challenge.area,
+                'auto-reply': challenge.autoReply,
+                focusable: challenge.focusable,
+                'validated-at': challenge.validatedAt,
+                'archived-at': challenge.archivedAt,
+                'made-obsolete-at': challenge.madeObsoleteAt,
+                shuffled: false,
+                'contextualized-fields': ['instruction', 'illustration'],
+              },
+              relationships: {
+                skill: {
+                  data: {
+                    type: 'skills',
+                    id: challenge.skills[0],
+                  }
+                },
+              },
+            },
+          },
+        });
+
+        // Then
+        expect(response).to.have.property('statusCode', 201);
+        expect(airtableCall.isDone()).to.be.true;
+      });
     });
   });
 

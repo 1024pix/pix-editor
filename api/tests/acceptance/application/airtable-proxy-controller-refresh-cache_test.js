@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import {
   airtableBuilder,
@@ -9,6 +9,7 @@ import {
   knex,
 } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
+import * as config from '../../../lib/config.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', () => {
 
@@ -141,6 +142,33 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       expect(response.result).to.deep.equal(competenceToRefresh);
       apiTokenScope.done();
     });
+
+    describe('when no base URL is defined for Pix API', () => {
+      beforeEach(() => {
+        vi.spyOn(config.pixApi, 'baseUrl', 'get').mockReturnValue(undefined);
+      });
+
+      it('should return 200 and NOT refresh cache', async () => {
+        // Given
+        nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Competences', airtableRawCompetence)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableRawCompetence);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/airtable/content/Competences',
+          headers: generateAuthorizationHeader(user),
+          payload: competenceToRefresh,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal(competenceToRefresh);
+      });
+    });
   });
 
   describe('POST /api/airtable/content/Epreuves', () => {
@@ -208,6 +236,33 @@ describe('Acceptance | Controller | airtable-proxy-controller-refresh-cache', ()
       attachmentsScope.done();
       apiCacheScope.done();
     });
-  });
 
+    describe('when no base URL is defined for Pix API', () => {
+      beforeEach(() => {
+        vi.spyOn(config.pixApi, 'baseUrl', 'get').mockReturnValue(undefined);
+      });
+
+      it('should refresh cache of updated record in pix api', async () => {
+        // Given
+        nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Epreuves', challenge)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, challenge);
+
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/airtable/content/Epreuves',
+          headers: generateAuthorizationHeader(user),
+          payload: challenge,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal(challenge);
+      });
+    });
+  });
 });

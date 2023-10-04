@@ -2,6 +2,7 @@ import axios from 'axios';
 import qs from 'qs';
 import { cache } from './cache.js';
 import * as config from '../config.js';
+import { logger } from './logger.js';
 
 export async function request({ payload, url }) {
   return _callAPIWithRetry((token) => {
@@ -11,6 +12,16 @@ export async function request({ payload, url }) {
       { headers: { Authorization: `Bearer ${token}` } }
     );
   });
+}
+
+export function isPixApiCachePatchingEnabled() {
+  const enabled = config.pixApi.baseUrl !== undefined;
+
+  if (!enabled) {
+    logger.info('No base URL defined for Pix API, LCMS cache patching is disabled');
+  }
+
+  return enabled;
 }
 
 async function _callAPIWithRetry(fn, renewToken = false) {

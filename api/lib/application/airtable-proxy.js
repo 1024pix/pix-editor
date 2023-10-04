@@ -125,6 +125,8 @@ async function _proxyRequestToAirtable(request, airtableBase) {
 }
 
 async function _updateStagingPixApiCache(type, entity, translations) {
+  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
+
   try {
     const { updatedRecord, model } = await releaseRepository.serializeEntity({
       type,
