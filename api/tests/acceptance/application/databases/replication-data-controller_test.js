@@ -34,7 +34,9 @@ async function mockCurrentContent() {
     })],
     tubes: [domainBuilder.buildTubeDatasourceObject()],
     skills: [domainBuilder.buildSkillDatasourceObject()],
-    challenges: [domainBuilder.buildChallengeDatasourceObject()],
+    challenges: [domainBuilder.buildChallengeDatasourceObject({
+      locales: ['fr'],
+    })],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematicDatasourceObject()],
     courses: [{
@@ -91,6 +93,32 @@ async function mockCurrentContent() {
     key: `competence.${expectedCurrentContent.competences[0].id}.description`,
     locale: 'en',
     value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].instruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].alternativeInstruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].proposals,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].solution,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].solutionToDisplay,
   });
 
   await databaseBuilder.commit();
