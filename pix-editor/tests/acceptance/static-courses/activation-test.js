@@ -5,7 +5,7 @@ import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click } from '@ember/test-helpers';
 import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Static Courses | Deactivation', function(hooks) {
+module('Acceptance | Static Courses | Activation', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let staticCourse, staticCourseSummary;
@@ -78,8 +78,7 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
     });
 
     module('when static course is inactive', function() {
-
-      test('should not be able to edit the static course through the action button', async function(assert) {
+      test('should reactivate the static course', async function(assert) {
         // given
         staticCourseSummary.update({ isActive: false });
         staticCourse.update({ isActive: false });
@@ -89,30 +88,32 @@ module('Acceptance | Static Courses | Deactivation', function(hooks) {
         await clickByName('Tests statiques');
         await click(await screen.findByRole('button', { name: 'Statut' }));
         await click(screen.getAllByRole('cell')[0]);
+        await clickByName('Réactiver');
+        await screen.findByRole('dialog');
+        await clickByName('Oui');
 
         // then
-        const button = screen.getByText('Désactiver');
-        assert.dom(button).isDisabled();
+        assert.dom(screen.getByText('Actif')).exists();
       });
     });
 
-    test('should deactivate the static course', async function(assert) {
-      // given
-      const screen = await visit('/');
-      await clickByName('Tests statiques');
-      await click(screen.getAllByRole('cell')[0]);
+    module('when static course is active', function() {
+      test('should deactivate the static course', async function(assert) {
+        // given
+        const screen = await visit('/');
+        await clickByName('Tests statiques');
+        await click(screen.getAllByRole('cell')[0]);
 
-      // when
-      await clickByName('Désactiver');
-      await screen.findByRole('dialog');
-      await fillByLabel('Raison de désactivation (facultatif)', 'c comme ca');
-      await clickByName('Oui');
+        // when
+        await clickByName('Désactiver');
+        await screen.findByRole('dialog');
+        await fillByLabel('Raison de désactivation (facultatif)', 'c comme ca');
+        await clickByName('Oui');
 
-      // then
-      const button = screen.getByText('Désactiver');
-      assert.dom(button).isDisabled();
-      assert.dom(screen.getByText('Inactif')).exists();
-      assert.dom(screen.getByText('(Motif: c comme ca)')).exists();
+        // then
+        assert.dom(screen.getByText('Inactif')).exists();
+        assert.dom(screen.getByText('(Motif: c comme ca)')).exists();
+      });
     });
   });
 });
