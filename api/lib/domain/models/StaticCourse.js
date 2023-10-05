@@ -81,6 +81,22 @@ export class StaticCourse {
     return CommandResult.Success({ value: staticCourse });
   }
 
+  reactivate() {
+    const timestamp = new Date();
+
+    const attributes = {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      isActive: true,
+      challengeIds: this.challengeIds,
+      createdAt: this.createdAt,
+      updatedAt: timestamp,
+    };
+    const staticCourse = new StaticCourse(attributes);
+    return CommandResult.Success({ value: staticCourse });
+  }
+
   toDTO() {
     return {
       id: this.id,

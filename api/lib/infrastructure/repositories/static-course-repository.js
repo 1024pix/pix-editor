@@ -64,6 +64,7 @@ export async function get(id) {
       description: staticCourse.description,
       challengeIds: staticCourse.challengeIds.split(','),
       isActive: staticCourse.isActive,
+      deactivationReason: staticCourse.deactivationReason,
       createdAt: staticCourse.createdAt,
       updatedAt: staticCourse.updatedAt,
     });
