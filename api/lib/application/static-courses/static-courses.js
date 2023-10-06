@@ -76,6 +76,21 @@ export async function deactivate(request, h) {
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
+export async function reactivate(request, h) {
+  const staticCourseId = request.params.id;
+  const staticCourseToUpdate = await staticCourseRepository.get(staticCourseId);
+  if (!staticCourseToUpdate) {
+    throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
+  }
+  const commandResult = staticCourseToUpdate.reactivate();
+  if (commandResult.isFailure()) {
+    throw commandResult.error;
+  }
+  await staticCourseRepository.save(commandResult.value);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
+}
+
 function normalizePage(page) {
   return {
     number: _.isInteger(page.number) && Math.sign(page.number) === 1 ? page.number : DEFAULT_PAGE.number,

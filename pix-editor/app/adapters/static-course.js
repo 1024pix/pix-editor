@@ -20,6 +20,10 @@ export default class StaticCourseAdapter extends ApplicationAdapter {
       const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'updateRecord');
       return this.ajax(`${url}/deactivate`, 'PUT', { data: payload });
     }
+    if (action === 'reactivate') {
+      const url = this.buildURL(type.modelName, snapshot.id, snapshot, 'updateRecord');
+      return this.ajax(`${url}/reactivate`, 'PUT');
+    }
     return super.updateRecord(store, type, snapshot);
   }
 }

@@ -14,10 +14,14 @@
     <PixButton
       @backgroundColor="grey"
       @isBorderVisible={{true}}
-      @triggerAction={{this.showDeactivationModal}}
-      @isDisabled={{not this.canDeactivateStaticCourse}}
+      @triggerAction={{this.showActivationModal}}
+      @isDisabled={{not this.canDeactivateOrReactivateStaticCourse}}
     >
-      Désactiver
+      {{#if this.model.staticCourse.isActive}}
+        Désactiver
+      {{else}}
+        Réactiver
+      {{/if}}
     </PixButton>
   </div>
 </header>
@@ -172,9 +176,8 @@
   @showModal={{this.shouldDisplayDeactivationModal}}
 >
   <:content>
-    <p data-test-logout-message >
+    <p>
       Êtes-vous sûr de vouloir désactiver le test statique <b>{{this.model.staticCourse.name}}</b> ?<br/>
-      Cette action est irréversible et il ne sera alors plus possible d’utiliser ce test.<br/>
       <PixInput
         @id="deactivationReason"
         @label="Raison de désactivation (facultatif)"
@@ -184,16 +187,37 @@
     </p>
   </:content>
   <:footer>
-    <PixButton data-test-logout-cancel-button
-               @backgroundColor="transparent-light"
-               @isBorderVisible={{true}}
-               @triggerAction={{this.closeDeactivationModal}}
+    <PixButton
+      @backgroundColor="transparent-light"
+      @isBorderVisible={{true}}
+      @triggerAction={{this.closeDeactivationModal}}
     >
       Non
     </PixButton>
-    <PixButton data-test-logout-ok-button
-               @triggerAction={{this.deactivateStaticCourse}}
+    <PixButton @triggerAction={{this.deactivateStaticCourse}}>
+      Oui
+    </PixButton>
+  </:footer>
+</PixModal>
+<PixModal
+  @title="Réactivation"
+  @onCloseButtonClick={{this.closeReactivationModal}}
+  @showModal={{this.shouldDisplayReactivationModal}}
+>
+  <:content>
+    <p>
+      Êtes-vous sûr de vouloir réactiver le test statique <b>{{this.model.staticCourse.name}}</b> ?
+    </p>
+  </:content>
+  <:footer>
+    <PixButton
+      @backgroundColor="transparent-light"
+      @isBorderVisible={{true}}
+      @triggerAction={{this.closeReactivationModal}}
     >
+      Non
+    </PixButton>
+    <PixButton @triggerAction={{this.reactivateStaticCourse}}>
       Oui
     </PixButton>
   </:footer>
