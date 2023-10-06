@@ -6,7 +6,6 @@ import {
   knex,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { challengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Acceptance | API | static courses | POST /api/static-courses', function() {
   let user;
@@ -70,8 +69,6 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       challenges: [airtableChallenge1, airtableChallenge2, airtableChallenge3, airtableChallenge4],
       skills: [airtableSkill1, airtableSkill2, airtableSkill3, airtableSkill4],
     });
-    vi.spyOn(challengeRepository, 'getAllIdsIn')
-      .mockResolvedValue(['challengeid1', 'challengeid2', 'challengeid3', 'challengeid4']);
   });
 
   afterEach(function() {
