@@ -1,5 +1,20 @@
 
 
+## v3.100.0 (06/10/2023)
+
+
+### :rocket: Amélioration
+- [#328](https://github.com/1024pix/pix-editor/pull/328) [FEATURE] Permettre de réactiver un test statique (PIX-9362).
+- [#323](https://github.com/1024pix/pix-editor/pull/323) [FEATURE] Épreuves : Alimenter la release avec la table translations (PIX-9518).
+
+### :building_construction: Tech
+- [#325](https://github.com/1024pix/pix-editor/pull/325) [TECH] Ne pas patcher le cache LCMS en RA/Intégration (PIX-9504).
+
+### :bug: Correction
+- [#326](https://github.com/1024pix/pix-editor/pull/326) [BUGFIX] Problème chargement de la vue Acquis après modif d'un sujet (PIX-9455).
+- [#327](https://github.com/1024pix/pix-editor/pull/327) [BUGFIX] Bouton Actualiser KO sur la page d'une compétence (PIX-9520).
+- [#329](https://github.com/1024pix/pix-editor/pull/329) [BUGFIX] Impossible de créer/modifier un test statique (PIX-9523).
+
 ## v3.99.0 (02/10/2023)
 
 
