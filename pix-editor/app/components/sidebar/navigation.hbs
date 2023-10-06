@@ -11,10 +11,27 @@
         <accordionItem.panel>
           <div class="content">
             {{#each area.sortedCompetences as |competence|}}
-              <LinkTo data-test-competence-item @route="authenticated.competence" @model={{competence.id}} class="item" {{on "click" @close}}>{{competence.name}}</LinkTo>
+              <LinkTo
+                data-test-competence-item
+                @route="authenticated.competence"
+                @model={{competence.id}}
+                class="item"
+                @query={{hash leftMaximized=false}}
+                {{on "click" @close}}
+              >
+                {{competence.name}}
+              </LinkTo>
             {{/each}}
             {{#if this.mayCreateCompetence}}
-              <LinkTo data-test-add-competence @route="authenticated.competence-management.new" @model={{area.id}} class="item" {{on "click" @close}}><i class="plus square icon"></i>Ajouter une compétence</LinkTo>
+              <LinkTo
+                data-test-add-competence
+                @route="authenticated.competence-management.new"
+                @model={{area.id}}
+                class="item"
+                {{on "click" @close}}
+              >
+                <i class="plus square icon"></i>Ajouter une compétence
+              </LinkTo>
             {{/if}}
           </div>
         </accordionItem.panel>
