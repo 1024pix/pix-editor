@@ -18,21 +18,15 @@ export default class CompetenceRoute extends Route {
     this.currentData.setFramework(framework);
     if (model.needsRefresh) {
       const themes = await model.hasMany('rawThemes').reload();
-      const getTubes = themes.map(theme => theme.hasMany('rawTubes').reload());
-      const tubes = await Promise.all(getTubes);
-      const getSkills = tubes.map(tube => tube.hasMany('rawSkills').reload()).flat();
-      const skills = await Promise.all(getSkills);
-      const getChallenges = skills.map(skill => skill.hasMany('challenges').reload()).flat();
-      await Promise.all(getChallenges);
+      const themesTubes = await Promise.all(themes.map(theme => theme.hasMany('rawTubes').reload()));
+      const tubesSkills = await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.hasMany('rawSkills').reload())));
+      await Promise.all(tubesSkills.flatMap(skills => skills.map(skill => skill.hasMany('challenges').reload())));
       model.needsRefresh = false;
     } else {
       const themes = await model.rawThemes;
-      const getTubes = themes.map(theme => theme.rawTubes);
-      const tubesSet = await Promise.all(getTubes);
-      const getSkills = tubesSet.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
-      const skillsSet = await Promise.all(getSkills);
-      const getChallenges = skillsSet.map(skills => skills.map(skill => skill.challenges)).flat();
-      await Promise.all(getChallenges);
+      const themesTubes = await Promise.all(themes.map(theme => theme.rawTubes));
+      const skillsStubes = await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.rawSkills)));
+      await Promise.all(skillsStubes.flatMap(skills => skills.map(skill => skill.challenges)));
     }
   }
 
