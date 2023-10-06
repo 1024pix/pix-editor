@@ -47,8 +47,7 @@ export function update(challenge) {
 }
 
 export async function getAllIdsIn(challengeIds) {
-  const challengeDtos = await challengeDatasource.getAllIdsIn(challengeIds);
-  return challengeDtos.map(toDomain);
+  return challengeDatasource.getAllIdsIn(challengeIds);
 }
 
 function toDomain(challengeDto, translations) {
