@@ -15,27 +15,17 @@ function _getChallengesFromParams(params) {
 }
 
 export async function list() {
-  const [challenges, translations] = await Promise.all([
+  const [challengeDtos, translations] = await Promise.all([
     challengeDatasource.list(),
     translationRepository.listByPrefix(prefix),
   ]);
-  return challenges.map((challengeDto) => {
-    const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
-    const filteredTranslations = translations.filter(({ key, locale }) => key.startsWith(prefixFor(challengeDto)) && locale === challengeLocale);
-    return toDomain(challengeDto, filteredTranslations);
-  });
+  return toDomainList(challengeDtos, translations);
 }
 
 export async function filter(params = {}) {
   const challengeDtos = await _getChallengesFromParams(params);
-  return knex.transaction(async (transaction) => {
-    return Promise.all(challengeDtos.map(async (challengeDto) => {
-      const translations = await translationRepository.listByPrefix(prefixFor(challengeDto), { transaction });
-      const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
-      const filteredTranslations = translations.filter(({ locale }) => locale === challengeLocale);
-      return toDomain(challengeDto, filteredTranslations);
-    }));
-  }, { readOnly: true });
+  const translations = await loadTranslationsForChallenges(challengeDtos);
+  return toDomainList(challengeDtos, translations);
 }
 
 export function create(challenge) {
@@ -50,8 +40,27 @@ export async function getAllIdsIn(challengeIds) {
   return challengeDatasource.getAllIdsIn(challengeIds);
 }
 
+async function loadTranslationsForChallenges(challengeDtos) {
+  return knex.transaction(async (transaction) => {
+    const challengesTranslations = await Promise.all(challengeDtos.map(
+      (challengeDto) => translationRepository.listByPrefix(prefixFor(challengeDto), { transaction })
+    ));
+    return challengesTranslations.flat();
+  }, { readOnly: true });
+}
+
+function toDomainList(challengeDtos, translations) {
+  return challengeDtos.map((challengeDto) => {
+    const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+    const filteredTranslations = translations.filter(
+      ({ key, locale }) => key.startsWith(prefixFor(challengeDto)) && locale === challengeLocale
+    );
+    return toDomain(challengeDto, filteredTranslations);
+  });
+}
+
 function toDomain(challengeDto, translations) {
-  const formattedTranslations = translations.map(({ key, value }) => [ key.split('.').at(-1), value ]);
+  const formattedTranslations = translations.map(({ key, value }) => [key.split('.').at(-1), value]);
   return new Challenge({
     ...challengeDto,
     ...Object.fromEntries(formattedTranslations),
