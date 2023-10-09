@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
@@ -50,11 +51,11 @@ async function loadTranslationsForChallenges(challengeDtos) {
 }
 
 function toDomainList(challengeDtos, translations) {
+  const translationsByLocaleAndChallengeId = _.groupBy(translations, ({ locale, key }) => `${locale}:${key.split('.')[1]}`);
+
   return challengeDtos.map((challengeDto) => {
     const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
-    const filteredTranslations = translations.filter(
-      ({ key, locale }) => key.startsWith(prefixFor(challengeDto)) && locale === challengeLocale
-    );
+    const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
     return toDomain(challengeDto, filteredTranslations);
   });
 }

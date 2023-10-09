@@ -20,13 +20,12 @@ export function promiseStreamer(promise, writableStream = getWritableStream()) {
   }, 1000);
   promise.then((data) => {
     writableStream.write(JSON.stringify(data));
-    clearInterval(timer);
-    writableStream.end();
   }).catch((error) => {
     logger.error(error);
     Sentry.captureException(error);
-    clearInterval(timer);
     writableStream.write('error');
+  }).finally(() => {
+    clearInterval(timer);
     writableStream.end();
   });
   return writableStream;
