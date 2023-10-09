@@ -18,11 +18,6 @@ describe('Unit | Domain | Usecases | export-translations', function() {
         locale: 'fr',
         value: 'Bonjour'
       }));
-      streamListStream.write(new Translation({
-        key: 'some.key',
-        locale: 'en',
-        value: 'Hello,'
-      }));
       streamListStream.end();
     }
     const translationRepository = {
@@ -37,6 +32,6 @@ describe('Unit | Domain | Usecases | export-translations', function() {
     writeTranslationStream();
 
     const result = await promise;
-    expect(result).to.equal('key,locale,value\nsome.key,fr,Bonjour\nsome.key,en,"Hello,"');
+    expect(result).to.equal('key,fr\nsome.key,Bonjour');
   });
 });

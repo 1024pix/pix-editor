@@ -5,5 +5,12 @@ export async function exportTranslations(stream, dependencies = { translationRep
   const translationsStream = dependencies.translationRepository.streamList();
   const csvStream = csv.format({ headers: true });
   csvStream.pipe(stream);
-  translationsStream.pipe(csvStream);
+  translationsStream
+    .map(({ key, value }) => {
+      return {
+        key,
+        fr: value,
+      }
+    })
+    .pipe(csvStream);
 }
