@@ -53,17 +53,10 @@ async function loadTranslationsForChallenges(challengeDtos) {
 function toDomainList(challengeDtos, translations) {
   const translationsByLocaleAndChallengeId = _.groupBy(translations, ({ locale, key }) => `${locale}:${key.split('.')[1]}`);
 
-  return new Promise(async (resolve) => {
-    const challenges = [];
-    for (const chunkChallenges of _(challengeDtos).chunk(1000)) {
-      challenges.push(...chunkChallenges.map((challengeDto) => {
-        const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
-        const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
-        return toDomain(challengeDto, filteredTranslations);
-      }));
-      await new Promise((resolve) => setTimeout(resolve, 200));
-    }
-    resolve(challenges);
+  return challengeDtos.map((challengeDto) => {
+    const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+    const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
+    return toDomain(challengeDto, filteredTranslations);
   });
 }
 
