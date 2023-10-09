@@ -62,8 +62,13 @@ describe('Integration | Repository | translation-repository', function() {
   });
 
   context('#streamList', function() {
-    it('should stream a list', async function() {
+    it('should stream a list of translations of given locale', async function() {
       // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'some.key',
+        locale: 'fr-fr',
+        value: 'Bonjour, la mif de France'
+      });
       databaseBuilder.factory.buildTranslation({
         key: 'some.key',
         locale: 'fr',
@@ -72,7 +77,7 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const stream = translationRepository.streamList();
+      const stream = translationRepository.streamList({ locale: 'fr' });
       const result = await streamToPromiseArray(stream);
 
       // then
