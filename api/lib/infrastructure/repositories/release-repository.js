@@ -128,7 +128,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematicDatasource.list(),
     tubeDatasource.list(),
     tutorialDatasource.list(),
-    translationRepository.list(),
+    translationRepository.listByPrefix(competenceTranslations.prefix),
   ]);
   const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
   const transformedChallenges = challenges.map(transformChallenge);
