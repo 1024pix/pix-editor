@@ -34,7 +34,7 @@ describe('Acceptance | Controller | translations-controller', () => {
             fr: 'Nom de la Compétence - fr',
             en: 'Nom de la Compétence - en',
           },
-          areaId: '1',
+          areaId: 'recArea0',
           origin: 'Pix',
           skillIds: ['recSkill0'],
           thematicIds: ['recThematic0'],
@@ -141,15 +141,15 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
       const [headers, ...payload] = response.payload.split('\n');
       payload.sort();
-      expect(headers).to.equal('key,fr,tag');
+      expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"@acquis1" "@acquis" "1.1" "1" "Nom du referentiel"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"@acquis1" "@acquis" "1.1" "1" "Nom du referentiel"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"@acquis1" "@acquis" "1.1" "1" "Nom du referentiel"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"@acquis1" "@acquis" "1.1" "1" "Nom du referentiel"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"@acquis1" "@acquis" "1.1" "1" "Nom du referentiel"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"1.1" "1" "Nom du referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"1.1" "1" "Nom du referentiel"',
+        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.instruction,Consigne du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.proposals,Propositions du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"1.1,1,Nom du referentiel"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"1.1,1,Nom du referentiel"',
       ]);
     });
 
