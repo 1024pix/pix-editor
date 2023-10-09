@@ -139,7 +139,13 @@ describe('Acceptance | Controller | translations-controller', () => {
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
-      expect(response.payload).to.equal('key,fr\nsome-key,La clé de la France !');
+
+      expect(response.payload).to.equal(`key,fr
+challenge.recChallenge0.instruction,Consigne du Challenge
+challenge.recChallenge0.alternativeInstruction,Consigne alternative
+challenge.recChallenge0.proposals,Propositions du Challenge
+challenge.recChallenge0.solution,Bonnes réponses du Challenge
+challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher`);
     });
 
   });
