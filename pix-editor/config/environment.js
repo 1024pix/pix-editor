@@ -62,8 +62,12 @@ module.exports = function (environment) {
     },
 
     'ember-cli-notifications': {
-      autoClear: true
-    }
+      autoClear: true,
+    },
+
+    'ember-cli-mirage': {
+      usingProxy: true,
+    },
   };
 
   if (environment === 'development') {
