@@ -10,4 +10,8 @@ export default class CompetenceGridCellI18nComponent extends Component {
       return { language, flag: convertLanguageAsFlag([language]) };
     });
   }
+
+  get loadingChallenges() {
+    return this.args.skill.challenges.isPending;
+  }
 }

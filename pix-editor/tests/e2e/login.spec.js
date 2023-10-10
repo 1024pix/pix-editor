@@ -19,7 +19,7 @@ test.describe('Login', () => {
       await page.getByRole('textbox', { name: 'Clé API' }).fill('8d03a893-3967-4501-9dc4-e0aa6c6dc442');
       await page.getByRole('button', { name: 'Se connecter' }).click();
 
-      await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 10000 });
       await expect(page.getByText(/DEV\s+-\s+Version\s+\d+\.\d+\.\d+/)).toBeVisible();
     });
 
@@ -43,7 +43,7 @@ test.describe('Login', () => {
       await page.getByRole('textbox', { name: 'Clé API' }).fill('adaf3eee-09dc-4f9a-a504-ff92e74c9d0f');
       await page.getByRole('button', { name: 'Se connecter' }).click();
 
-      await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 15000 });
+      await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 10000 });
       await expect(page.getByText(/EDI\s+-\s+Version\s+\d+\.\d+\.\d+/)).toBeVisible();
     });
   });

@@ -20,13 +20,12 @@ export default class CompetenceRoute extends Route {
       const themes = await model.hasMany('rawThemes').reload();
       const themesTubes = await Promise.all(themes.map(theme => theme.hasMany('rawTubes').reload()));
       const tubesSkills = await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.hasMany('rawSkills').reload())));
-      await Promise.all(tubesSkills.flatMap(skills => skills.map(skill => skill.hasMany('challenges').reload())));
+      Promise.all(tubesSkills.flatMap(skills => skills.map(skill => skill.hasMany('challenges').reload()))).catch(console.error);
       model.needsRefresh = false;
     } else {
       const themes = await model.rawThemes;
       const themesTubes = await Promise.all(themes.map(theme => theme.rawTubes));
-      const skillsStubes = await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.rawSkills)));
-      await Promise.all(skillsStubes.flatMap(skills => skills.map(skill => skill.challenges)));
+      await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.rawSkills)));
     }
   }
 

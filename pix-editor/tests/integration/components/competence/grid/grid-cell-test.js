@@ -20,7 +20,7 @@ module('Integration | Component | competence/grid/grid-cell', function (hooks) {
       productionPrototypes: [challenge],
       validatedChallenges: [challenge],
       languages: ['Francophone'],
-
+      challenges: [challenge],
     };
     this.set('section', section);
     this.set('skill', skill);

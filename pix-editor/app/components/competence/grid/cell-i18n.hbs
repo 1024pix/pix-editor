@@ -4,9 +4,13 @@
       {{@skill.name}}
     </div>
     <div class="flags">
-      {{#each this.languagesAndFlags as |languageAndFlag| }}
-        <i class="{{languageAndFlag.flag}} flag" title="{{languageAndFlag.language}}"></i>
-      {{/each}}
+      {{#if this.loadingChallenges}}
+        <span class="loading">...</span>
+      {{else}}
+        {{#each this.languagesAndFlags as |languageAndFlag| }}
+          <i class="{{languageAndFlag.flag}} flag" title="{{languageAndFlag.language}}"></i>
+        {{/each}}
+      {{/if}}
     </div>
   </LinkTo>
 </td>

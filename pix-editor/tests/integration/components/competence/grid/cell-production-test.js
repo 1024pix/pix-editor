@@ -34,8 +34,9 @@ module('Integration | Component | competence/grid/cell-production', function(hoo
         id: 'challenge6',
         locales: ['Francophone', 'Franco Français'],
         productionAlternatives: [challenge1, challenge2, challenge3],
-        draftAlternatives: [challenge4, challenge5]
-      }
+        draftAlternatives: [challenge4, challenge5],
+      },
+      challenges: [challenge1, challenge2, challenge3, challenge4, challenge5],
     });
   });
 

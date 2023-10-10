@@ -3,14 +3,19 @@ import Component from '@glimmer/component';
 export default class CellProduction extends Component {
 
   get productionChallengesFilteredByLanguage() {
+    if (this.loadingChallenges) return null;
     const productionAlternatives = this.args.skill.productionPrototype.productionAlternatives;
     const productionChallenges = [...productionAlternatives, this.args.skill.productionPrototype];
     return this._filterChallengesByLanguage(productionChallenges);
   }
 
   get draftAlternativesFilteredByLanguage() {
-    const draftAlternatives = this.args.skill.productionPrototype.draftAlternatives;
-    return this._filterChallengesByLanguage(draftAlternatives);
+    if (this.loadingChallenges) return null;
+    return this._filterChallengesByLanguage(this.args.skill.productionPrototype.draftAlternatives);
+  }
+
+  get loadingChallenges() {
+    return this.args.skill.challenges.isPending;
   }
 
   _filterChallengesByLanguage(challenges) {
@@ -25,7 +30,7 @@ export default class CellProduction extends Component {
   }
 
   get alertCSS() {
-    if (this.productionChallengesFilteredByLanguage > 0) {
+    if (this.loadingChallenges || this.productionChallengesFilteredByLanguage > 0) {
       return '';
     }
     if (this.draftAlternativesFilteredByLanguage > 0) {
