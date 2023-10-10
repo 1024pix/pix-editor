@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { PassThrough } from 'node:stream';
 import { streamToPromise } from '../../../test-helper';
 import { Translation } from '../../../../lib/domain/models/Translation';
@@ -18,17 +18,12 @@ describe('Unit | Domain | Usecases | export-translations', function() {
         locale: 'fr',
         value: 'Bonjour'
       }));
-      streamListStream.write(new Translation({
-        key: 'some.key',
-        locale: 'en',
-        value: 'Hello,'
-      }));
       streamListStream.end();
     }
     const translationRepository = {
-      streamList() {
+      streamList: vi.fn(() => {
         return streamListStream;
-      }
+      })
     };
     const stream = new PassThrough();
     const promise = streamToPromise(stream);
@@ -37,6 +32,7 @@ describe('Unit | Domain | Usecases | export-translations', function() {
     writeTranslationStream();
 
     const result = await promise;
-    expect(result).to.equal('key,locale,value\nsome.key,fr,Bonjour\nsome.key,en,"Hello,"');
+    expect(result).to.equal('key,fr\nsome.key,Bonjour');
+    expect(translationRepository.streamList).toHaveBeenCalledWith({ locale: 'fr' });
   });
 });

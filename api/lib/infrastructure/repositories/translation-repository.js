@@ -35,8 +35,8 @@ export async function list() {
   return translationDtos.map(_toDomain);
 }
 
-export function streamList() {
-  const stream = knex('translations').select().stream();
+export function streamList({ locale }) {
+  const stream = knex('translations').select().where({ locale }).stream();
 
   const toDomainTransform = new Transform({
     writableObjectMode: true,

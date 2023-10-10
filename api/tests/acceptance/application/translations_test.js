@@ -15,6 +15,11 @@ describe('Acceptance | Controller | translations-controller', () => {
         locale: 'fr-fr',
         value: 'La clé !'
       });
+      databaseBuilder.factory.buildTranslation({
+        key: 'some-key',
+        locale: 'fr',
+        value: 'La clé de la France !'
+      });
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -30,7 +35,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
-      expect(response.payload).to.equal('key,locale,value\nsome-key,fr-fr,La clé !');
+      expect(response.payload).to.equal('key,fr\nsome-key,La clé de la France !');
     });
 
   });
