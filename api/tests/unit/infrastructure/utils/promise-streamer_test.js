@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { PassThrough } from 'stream';
+import { PassThrough } from 'node:stream';
 import { streamToPromise } from '../../../test-helper.js';
 import { promiseStreamer } from '../../../../lib/infrastructure/utils/promise-streamer.js';
 
