@@ -3,6 +3,7 @@ import csv from 'fast-csv';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import { extractFromReleaseObject } from '../../infrastructure/translations/competence.js';
+import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 
 export async function exportTranslations(stream, dependencies = { releaseRepository }) {
   const release = await dependencies.releaseRepository.getLatestRelease();
@@ -46,8 +47,7 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
     .filter(({ translation }) => translation.locale === 'fr')
     .map(extractTags);
 
-  challengesStream.pipe(csvStream);
-  competencesStream.pipe(csvStream);
+  mergeStreams(competencesStream, challengesStream).pipe(csvStream);
 }
 
 function extractTagsFromChallenge(challenge, releaseContent) {
