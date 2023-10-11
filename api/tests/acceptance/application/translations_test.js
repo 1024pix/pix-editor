@@ -143,13 +143,13 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"@acquis1,@acquis,1.1,1,Nom du referentiel"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"1.1,1,Nom du referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.instruction,Consigne du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.proposals,Propositions du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"compétence,1.1,1,Nom du referentiel"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"compétence,1.1,1,Nom du referentiel"',
       ]);
     });
 

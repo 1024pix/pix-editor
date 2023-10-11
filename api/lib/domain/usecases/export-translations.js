@@ -9,10 +9,10 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
   const csvStream = csv.format({ headers: true });
   csvStream.pipe(stream);
 
-  function extractTagsFromObject(extractTagsFn, releaseContent) {
+  function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
     return (object) => {
       return {
-        tags: extractTagsFn(object, releaseContent),
+        tags: [typeTag, ...extractTagsFn(object, releaseContent)],
         object,
       };
     };
@@ -36,12 +36,12 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
 
   const challengesStream = Readable.from(release.content.challenges)
     .filter((challenge) => challenge.locales.includes('fr'))
-    .map(extractTagsFromObject(extractTagsFromChallenge, release.content))
+    .map(extractTagsFromObject(extractTagsFromChallenge, release.content, 'épreuve'))
     .flatMap(extractTranslationsFromObject(extractFromChallenge))
     .map(extractTags);
 
   const competencesStream = Readable.from(release.content.competences)
-    .map(extractTagsFromObject(extractTagsFromCompetence, release.content))
+    .map(extractTagsFromObject(extractTagsFromCompetence, release.content, 'compétence'))
     .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
     .filter(({ translation }) => translation.locale === 'fr')
     .map(extractTags);
