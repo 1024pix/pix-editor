@@ -1,7 +1,9 @@
 import { PassThrough } from 'node:stream';
 
 export function mergeStreams(...inputStreams) {
-  const stream = new PassThrough();
+  const stream = new PassThrough({
+    objectMode: inputStreams[0].readableObjectMode,
+  });
 
   const promises = inputStreams.map((inputStream) => {
     return new Promise((resolve, reject) => {

@@ -40,4 +40,23 @@ describe('Unit | Infrastructure | Utils | Merge Stream', () => {
     // then
     await expect(promise).rejects.toBe('my error');
   });
+
+  it('supports object mode', async () => {
+    // given
+    const writableStream1 = new PassThrough({ objectMode:true });
+    const writableStream2 = new PassThrough({ objectMode:true });
+    const promise = streamToPromise(mergeStreams(writableStream1, writableStream2));
+
+    // when
+    writableStream1.write({ [Symbol.toStringTag]: 'plop' });
+    writableStream1.end();
+
+    setTimeout(() => {
+      writableStream2.write({ [Symbol.toStringTag]: 'plop2' });
+      writableStream2.end();
+    }, 200);
+
+    // then
+    await expect(promise).resolves.toBe('[object plop][object plop2]');
+  });
 });
