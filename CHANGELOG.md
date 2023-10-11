@@ -1,5 +1,21 @@
 
 
+## v3.101.0 (11/10/2023)
+
+
+### :rocket: Amélioration
+- [#333](https://github.com/1024pix/pix-editor/pull/333) [FEATURE] Exporter les traductions au format CSV compatible avec Phrase (PIX-9538).
+
+### :building_construction: Tech
+- [#330](https://github.com/1024pix/pix-editor/pull/330) [TECH] Améliorer le temps de chargement initial du frontend (PIX-9527).
+
+### :arrow_up: Montée de version
+- [#332](https://github.com/1024pix/pix-editor/pull/332) [BUMP] Lock file maintenance (pix-editor).
+- [#331](https://github.com/1024pix/pix-editor/pull/331) [BUMP] Lock file maintenance (api).
+
+### :coffee: Autre
+- [#324](https://github.com/1024pix/pix-editor/pull/324)  [FEATURE] Alimenter la réplication avec la table translations (PIX-9519).
+
 ## v3.100.0 (06/10/2023)
 
 
