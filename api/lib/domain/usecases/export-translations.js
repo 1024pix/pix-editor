@@ -59,14 +59,26 @@ function extractTagsFromChallenge(challenge, releaseContent) {
   const skill = releaseContent.skills.find(({ id }) => {
     return id === challenge.skillId;
   });
+  return [
+    ...extractTagsFromSkill(skill, releaseContent),
+  ];
+}
+
+function extractTagsFromSkill(skill, releaseContent) {
   const tube = releaseContent.tubes.find(({ id }) => {
     return id === skill.tubeId;
   });
+  return [
+    skill.name,
+    ...extractTagsFromTube(tube, releaseContent),
+  ];
+}
+
+function extractTagsFromTube(tube, releaseContent) {
   const competence = releaseContent.competences.find(({ id }) => {
     return id === tube.competenceId;
   });
   return [
-    skill.name,
     tube.name,
     ...extractTagsFromCompetence(competence, releaseContent),
   ];
@@ -76,12 +88,18 @@ function extractTagsFromCompetence(competence, releaseContent) {
   const area = releaseContent.areas.find(({ id }) => {
     return id === competence.areaId;
   });
+  return [
+    competence.index,
+    ...extractTagsFromArea(area, releaseContent),
+  ];
+}
+
+function extractTagsFromArea(area, releaseContent) {
   const framework = releaseContent.frameworks.find(({ id }) => {
     return id === area.frameworkId;
   });
   return [
-    competence.index,
     area.code,
-    framework.name
+    framework.name,
   ];
 }
