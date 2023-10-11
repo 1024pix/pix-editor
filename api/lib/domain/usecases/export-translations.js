@@ -56,6 +56,7 @@ function extractTagsFromChallenge(challenge, releaseContent) {
   });
   return [
     ...extractTagsFromSkill(skill, releaseContent),
+    challenge.status,
   ];
 }
 
