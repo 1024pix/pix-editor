@@ -9,47 +9,42 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
   const csvStream = csv.format({ headers: true });
   csvStream.pipe(stream);
 
+  function extractTagsFromObject(extractTagsFn, releaseContent) {
+    return (object) => {
+      return {
+        tags: extractTagsFn(object, releaseContent),
+        object,
+      };
+    };
+  }
+
+  function extractTags({ tags, translation: { key, value }}) {
+    return {
+      key,
+      fr: value,
+      tags: tags.join(),
+    };
+  }
+
+  function extractTranslationsFromObject(extractFn) {
+    return ({ tags, object }) => {
+      return extractFn(object).map((translation) => {
+        return { tags, translation };
+      });
+    }
+  }
+
   const challengesStream = Readable.from(release.content.challenges)
         .filter((challenge) => challenge.locales.includes('fr'))
-        .map((challenge) => {
-          return {
-            tags: extractTagsFromChallenge(challenge, release.content),
-            challenge
-          }
-        })
-        .flatMap(({ tags, challenge }) => {
-          return extractFromChallenge(challenge).map((translation) => {
-            return { tags, translation };
-          });
-        })
-        .map(({ tags, translation: { key, value } }) => {
-          return {
-            key,
-            fr: value,
-            tags: tags.join(),
-          };
-        });
+        .map(extractTagsFromObject(extractTagsFromChallenge, release.content))
+        .flatMap(extractTranslationsFromObject(extractFromChallenge))
+        .map(extractTags);
 
   const competencesStream = Readable.from(release.content.competences)
-        .map((competence) => {
-          return {
-            tags: extractTagsFromCompetence(competence, release.content),
-            competence
-          }
-        })
-        .flatMap(({ tags, competence }) => {
-          return extractFromReleaseObject(competence).map((translation) => {
-            return { tags, translation };
-          });
-        })
+        .map(extractTagsFromObject(extractTagsFromCompetence, release.content))
+        .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
         .filter(({ translation }) => translation.locale === 'fr')
-        .map(({ tags, translation: { key, value }}) => {
-          return {
-            key,
-            fr: value,
-            tags: tags.join()
-          };
-        });
+        .map(extractTags);
 
   challengesStream.pipe(csvStream);
   competencesStream.pipe(csvStream);
