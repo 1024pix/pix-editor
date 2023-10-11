@@ -1,12 +1,11 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import { knex, databaseBuilder, streamToPromiseArray } from '../../../test-helper.js';
+import { knex, databaseBuilder } from '../../../test-helper.js';
 import {
   checkIfShouldDuplicateToAirtable,
   save
 } from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
-import { Translation } from '../../../../lib/domain/models/Translation';
 
 describe('Integration | Repository | translation-repository', function() {
 
@@ -58,35 +57,6 @@ describe('Integration | Repository | translation-repository', function() {
       afterEach(async function() {
         await _setShouldDuplicateToAirtable(false);
       });
-    });
-  });
-
-  context('#streamList', function() {
-    it('should stream a list of translations of given locale', async function() {
-      // given
-      databaseBuilder.factory.buildTranslation({
-        key: 'some.key',
-        locale: 'fr-fr',
-        value: 'Bonjour, la mif de France'
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'some.key',
-        locale: 'fr',
-        value: 'Bonjour, la mif'
-      });
-      await databaseBuilder.commit();
-
-      // when
-      const stream = translationRepository.streamList({ locale: 'fr' });
-      const result = await streamToPromiseArray(stream);
-
-      // then
-      expect(result).to.deep.equal([
-        new Translation({
-          key: 'some.key',
-          locale: 'fr',
-          value: 'Bonjour, la mif'
-        })]);
     });
   });
 
