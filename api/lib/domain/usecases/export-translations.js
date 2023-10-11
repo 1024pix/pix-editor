@@ -61,6 +61,7 @@ function extractTagsFromChallenge(challenge, releaseContent) {
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
+  if (skill === undefined) return [];
   const tube = releaseContent.tubes.find(({ id }) => {
     return id === skill.tubeId;
   });
