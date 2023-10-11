@@ -6,6 +6,10 @@ export default class CellWorkbench extends Component {
     return this.args.skills.map(skill => skill.prototypes).flat();
   }
 
+  get loadingChallenges() {
+    return this.args.skills.some(skill => skill.challenges.isPending);
+  }
+
   get validatedPrototype() {
     return this.prototypes.find(prototype => prototype.isValidated);
   }

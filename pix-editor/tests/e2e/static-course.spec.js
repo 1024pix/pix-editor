@@ -6,7 +6,7 @@ test.describe('Tests statiques', () => {
 
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 15000 });
+    await expect(page.getByRole('heading', { name: 'Pix Editor' })).toBeVisible({ timeout: 10000 });
   });
 
   test('accéder au détail d\'un test statique', async function({ page }) {

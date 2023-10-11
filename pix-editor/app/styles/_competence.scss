@@ -113,8 +113,11 @@
       .skill-cell__link {
         color: black;
         cursor: pointer;
-      }
 
+        &.disabled {
+          cursor: not-allowed;
+        }
+      }
 
       &.production {
         &.warning {
@@ -172,6 +175,10 @@
             &.not-declinable {
               color: black;
               background: white;
+            }
+
+            &.loading {
+              height: 25px;
             }
           }
         }
@@ -314,6 +321,10 @@
 
           &.good-quality {
             background: #0DC600;
+          }
+
+          &.loading {
+            background-color: #aaaaaa;
           }
 
           .half-tutorial {

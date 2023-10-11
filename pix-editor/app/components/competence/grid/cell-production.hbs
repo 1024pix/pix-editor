@@ -1,13 +1,23 @@
 <td data-test-skill-cell class="skill-cell production {{this.alertCSS}}">
-  <LinkTo data-test-skill-cell-link @route={{@link}} @model={{@skill.productionPrototype}} class="skill-cell__link">
+  <LinkTo
+    data-test-skill-cell-link
+    @route={{@link}}
+    @model={{@skill.productionPrototype}}
+    class="skill-cell__link"
+    @disabled={{this.loadingChallenges}}
+  >
     {{@skill.name}}
     <div class="alternative">
-      <span data-test-production-alternative-length class="production" title="Nombre d'épreuves en production">{{this.productionChallengesFilteredByLanguage}}</span>
-      {{#if this.draftAlternativesFilteredByLanguage}}
-        <span data-test-draft-alternative-length class="draft" title="Nombre d'épreuves en cours de construction">({{this.draftAlternativesFilteredByLanguage}})</span>
-      {{/if}}
-      {{#if @skill.productionPrototype.notDeclinable}}
-        <span class="not-declinable">NR</span>
+      {{#if this.loadingChallenges}}
+        ...
+      {{else}}
+        <span data-test-production-alternative-length class="production" title="Nombre d'épreuves en production">{{this.productionChallengesFilteredByLanguage}}</span>
+        {{#if this.draftAlternativesFilteredByLanguage}}
+          <span data-test-draft-alternative-length class="draft" title="Nombre d'épreuves en cours de construction">({{this.draftAlternativesFilteredByLanguage}})</span>
+        {{/if}}
+        {{#if @skill.productionPrototype.notDeclinable}}
+          <span class="not-declinable">NR</span>
+        {{/if}}
       {{/if}}
     </div>
   </LinkTo>

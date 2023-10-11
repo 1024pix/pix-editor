@@ -13,7 +13,8 @@ module('Integration | Component | competence/grid/cell-i18n', function(hooks) {
     const skill = {
       id: 'rec123456',
       name: 'skillName',
-      languages: ['Anglais','Franco Français','Francophone']
+      languages: ['Anglais','Franco Français','Francophone'],
+      challenges: [],
     };
     this.set('section', section);
     this.set('skill', skill);

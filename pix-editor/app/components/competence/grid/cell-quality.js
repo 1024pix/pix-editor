@@ -4,6 +4,7 @@ import { htmlSafe } from '@ember/template';
 export default class CellQuality extends Component {
 
   get qualityIndication() {
+    if (this.loadingChallenges) return null;
     const productionPrototype = this.args.skill.productionPrototype;
     const allWeight = 19;
     const spoil = this._spoilWeight(productionPrototype.spoil);
@@ -16,7 +17,14 @@ export default class CellQuality extends Component {
     return Math.round(result * 100);
   }
 
+  get loadingChallenges() {
+    return this.args.skill.challenges.isPending;
+  }
+
   get qualityClassColor() {
+    if (this.loadingChallenges) {
+      return 'quality loading';
+    }
     const qualityIndication = this.qualityIndication;
     if (qualityIndication < 50) {
       return 'quality bad-quality';

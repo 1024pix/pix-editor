@@ -11,7 +11,8 @@ module('Integration | Component | quality-view', function(hooks) {
     const skill = {
       productionPrototype: {},
       tutoSolution: [],
-      tutoMore: []
+      tutoMore: [],
+      challenges: [],
     };
 
     this.skill = skill;
