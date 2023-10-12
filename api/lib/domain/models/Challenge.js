@@ -45,6 +45,7 @@ export class Challenge {
     alpha,
     delta,
     skillId,
+    translations,
   } = {}) {
     this.id = id;
     this.instruction = instruction;
@@ -91,5 +92,6 @@ export class Challenge {
     this.alpha = alpha;
     this.delta = delta;
     this.skillId = skillId;
+    this.translations = translations;
   }
 }

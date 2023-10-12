@@ -1,6 +1,11 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { databaseBuilder, knex, domainBuilder, airtableBuilder } from '../../../test-helper.js';
-import { create, getLatestRelease, getRelease, getCurrentContent } from '../../../../lib/infrastructure/repositories/release-repository.js';
+import {
+  create,
+  getLatestRelease,
+  getRelease,
+  getCurrentContent
+} from '../../../../lib/infrastructure/repositories/release-repository.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -163,7 +168,7 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      const { competences } = _mockRichAirtableContent();
+      const { competences, challenges } = _mockRichAirtableContent();
 
       for (const competence of competences) {
         if (competence.name_i18n?.fr) {
@@ -192,6 +197,37 @@ describe('Integration | Repository | release-repository', function() {
             key: `competence.${competence.id}.description`,
             locale: 'en',
             value: competence.description_i18n.en,
+          });
+        }
+      }
+
+      for (const challenge of challenges) {
+        const locales = Object.keys(challenge.translations);
+        for (const locale of locales) {
+          databaseBuilder.factory.buildTranslation({
+            key: `challenge.${challenge.id}.instruction`,
+            locale,
+            value: challenge.translations[locale].instruction,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `challenge.${challenge.id}.alternativeInstruction`,
+            locale,
+            value: challenge.translations[locale].alternativeInstruction,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `challenge.${challenge.id}.proposals`,
+            locale,
+            value: challenge.translations[locale].proposals,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `challenge.${challenge.id}.solution`,
+            locale,
+            value: challenge.translations[locale].solution,
+          });
+          databaseBuilder.factory.buildTranslation({
+            key: `challenge.${challenge.id}.solutionToDisplay`,
+            locale,
+            value: challenge.translations[locale].solutionToDisplay,
           });
         }
       }
@@ -492,8 +528,17 @@ function _mockRichAirtableContent() {
     internationalisation: 'skill21111 internationalisation',
     version: 'skill21111 version',
   });
-  const airtableChallenge121211 = airtableBuilder.factory.buildChallenge({
+  const challenge121211 = {
     id: 'challenge121211',
+    translations: {
+      'fr-fr': {
+        instruction: 'challenge121211 instruction',
+        proposals: 'challenge121211 proposals',
+        solution: 'challenge121211 solution',
+        solutionToDisplay: 'challenge121211 solutionToDisplay',
+        alternativeInstruction: 'challenge121211 alternativeInstruction',
+      },
+    },
     instruction: 'challenge121211 instruction',
     proposals: 'challenge121211 proposals',
     type: 'challenge121211 type',
@@ -533,9 +578,19 @@ function _mockRichAirtableContent() {
     alpha: 2.2,
     updatedAt: 'challenge121211 updatedAt',
     shuffled: false,
-  });
-  const airtableChallenge121212 = airtableBuilder.factory.buildChallenge({
+  };
+  const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
+  const challenge121212 = {
     id: 'challenge121212',
+    translations: {
+      en: {
+        instruction: 'challenge121212 instruction',
+        proposals: 'challenge121212 proposals',
+        solution: 'challenge121212 solution',
+        solutionToDisplay: 'challenge121212 solutionToDisplay',
+        alternativeInstruction: 'challenge121212 alternativeInstruction',
+      },
+    },
     instruction: 'challenge121212 instruction',
     proposals: 'challenge121212 proposals',
     type: 'challenge121212 type',
@@ -575,9 +630,19 @@ function _mockRichAirtableContent() {
     alpha: 456,
     updatedAt: 'challenge121212 updatedAt',
     shuffled: true,
-  });
-  const airtableChallenge211111 = airtableBuilder.factory.buildChallenge({
+  };
+  const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
+  const challenge211111 = {
     id: 'challenge211111',
+    translations: {
+      fr: {
+        instruction: 'challenge211111 instruction',
+        proposals: 'challenge211111 proposals',
+        solution: 'challenge211111 solution',
+        solutionToDisplay: 'challenge211111 solutionToDisplay',
+        alternativeInstruction: 'challenge211111 alternativeInstruction',
+      },
+    },
     instruction: 'challenge211111 instruction',
     proposals: 'challenge211111 proposals',
     type: 'challenge211111 type',
@@ -617,9 +682,19 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: 'challenge211111 updatedAt',
     shuffled: false,
-  });
-  const airtableChallenge211112 = airtableBuilder.factory.buildChallenge({
+  };
+  const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
+  const challenge211112 = {
     id: 'challenge211112',
+    translations: {
+      fr: {
+        instruction: 'challenge211112 instruction',
+        proposals: 'challenge211112 proposals',
+        solution: 'challenge211112 solution',
+        solutionToDisplay: 'challenge211112 solutionToDisplay',
+        alternativeInstruction: 'challenge211112 alternativeInstruction',
+      },
+    },
     instruction: 'challenge211112 instruction',
     proposals: 'challenge211112 proposals',
     type: 'challenge211112 type',
@@ -659,9 +734,19 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: 'challenge211112 updatedAt',
     shuffled: false,
-  });
-  const airtableChallenge211113 = airtableBuilder.factory.buildChallenge({
+  };
+  const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
+  const challenge211113 = {
     id: 'challenge211113',
+    translations: {
+      'fr': {
+        instruction: 'challenge211113 instruction',
+        proposals: 'challenge211113 proposals',
+        solution: 'challenge211113 solution',
+        solutionToDisplay: 'challenge211113 solutionToDisplay',
+        alternativeInstruction: 'challenge211113 alternativeInstruction',
+      },
+    },
     instruction: 'challenge211113 instruction',
     proposals: 'challenge211113 proposals',
     type: 'challenge211113 type',
@@ -701,7 +786,8 @@ function _mockRichAirtableContent() {
     alpha: 200,
     updatedAt: 'challenge211113 updatedAt',
     shuffled: false,
-  });
+  };
+  const airtableChallenge211113 = airtableBuilder.factory.buildChallenge(challenge211113);
   const airtableTutorial1 = airtableBuilder.factory.buildTutorial({
     id: 'tutorial1',
     title: 'tutorial1 title',
@@ -760,6 +846,7 @@ function _mockRichAirtableContent() {
 
   return {
     competences: [competence11, competence12, competence21],
+    challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
   };
 }
 
@@ -1090,6 +1177,15 @@ function _getRichCurrentContentDTO() {
   const expectedChallengeDTOs = [
     {
       id: 'challenge121211',
+      translations: {
+        'fr-fr': {
+          instruction: 'challenge121211 instruction',
+          proposals: 'challenge121211 proposals',
+          solution: 'challenge121211 solution',
+          solutionToDisplay: 'challenge121211 solutionToDisplay',
+          alternativeInstruction: 'challenge121211 alternativeInstruction',
+        },
+      },
       instruction: 'challenge121211 instruction',
       proposals: 'challenge121211 proposals',
       type: 'challenge121211 type',
@@ -1122,6 +1218,15 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge121212',
+      translations: {
+        en: {
+          instruction: 'challenge121212 instruction',
+          proposals: 'challenge121212 proposals',
+          solution: 'challenge121212 solution',
+          solutionToDisplay: 'challenge121212 solutionToDisplay',
+          alternativeInstruction: 'challenge121212 alternativeInstruction',
+        },
+      },
       instruction: 'challenge121212 instruction',
       proposals: 'challenge121212 proposals',
       type: 'challenge121212 type',
@@ -1153,6 +1258,15 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211111',
+      translations: {
+        'fr': {
+          instruction: 'challenge211111 instruction',
+          proposals: 'challenge211111 proposals',
+          solution: 'challenge211111 solution',
+          solutionToDisplay: 'challenge211111 solutionToDisplay',
+          alternativeInstruction: 'challenge211111 alternativeInstruction',
+        },
+      },
       instruction: 'challenge211111 instruction',
       proposals: 'challenge211111 proposals',
       type: 'challenge211111 type',
@@ -1185,6 +1299,15 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211112',
+      translations: {
+        'fr': {
+          instruction: 'challenge211112 instruction',
+          proposals: 'challenge211112 proposals',
+          solution: 'challenge211112 solution',
+          solutionToDisplay: 'challenge211112 solutionToDisplay',
+          alternativeInstruction: 'challenge211112 alternativeInstruction',
+        },
+      },
       instruction: 'challenge211112 instruction',
       proposals: 'challenge211112 proposals',
       type: 'challenge211112 type',
@@ -1216,6 +1339,15 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211113',
+      translations: {
+        'fr': {
+          instruction: 'challenge211113 instruction',
+          proposals: 'challenge211113 proposals',
+          solution: 'challenge211113 solution',
+          solutionToDisplay: 'challenge211113 solutionToDisplay',
+          alternativeInstruction: 'challenge211113 alternativeInstruction',
+        },
+      },
       instruction: 'challenge211113 instruction',
       proposals: 'challenge211113 proposals',
       type: 'challenge211113 type',
