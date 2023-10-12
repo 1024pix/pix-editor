@@ -7,96 +7,89 @@ import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 
 export async function exportTranslations(stream, dependencies = { releaseRepository }) {
   const release = await dependencies.releaseRepository.getLatestRelease();
-  const csvStream = csv.format({ headers: true });
-  csvStream.pipe(stream);
 
-  function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
-    return (object) => {
-      return {
-        tags: [typeTag, ...extractTagsFn(object, releaseContent)],
-        object,
-      };
-    };
-  }
-
-  function extractTags({ tags, translation: { key, value } }) {
-    return {
-      key,
-      fr: value,
-      tags: tags.join(),
-    };
-  }
-
-  function extractTranslationsFromObject(extractFn) {
-    return ({ tags, object }) => {
-      return extractFn(object).map((translation) => {
-        return { tags, translation };
-      });
-    };
-  }
+  const releaseContent = Object.fromEntries(
+    Object.entries(release.content)
+      .map(([collection, entities]) => [
+        collection,
+        Object.fromEntries(entities.map((entity) => [entity.id, entity])),
+      ]),
+  );
 
   const challengesStream = Readable.from(release.content.challenges)
     .filter((challenge) => challenge.locales.includes('fr'))
-    .map(extractTagsFromObject(extractTagsFromChallenge, release.content, 'épreuve'))
+    .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'épreuve'))
     .flatMap(extractTranslationsFromObject(extractFromChallenge))
     .map(extractTags);
 
   const competencesStream = Readable.from(release.content.competences)
-    .map(extractTagsFromObject(extractTagsFromCompetence, release.content, 'compétence'))
+    .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'compétence'))
     .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
     .filter(({ translation }) => translation.locale === 'fr')
     .map(extractTags);
 
+  const csvStream = csv.format({ headers: true });
+  csvStream.pipe(stream);
   mergeStreams(competencesStream, challengesStream).pipe(csvStream);
 }
 
+function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
+  return (object) => {
+    return {
+      tags: [typeTag, ...extractTagsFn(object, releaseContent)],
+      object,
+    };
+  };
+}
+
+function extractTags({ tags, translation: { key, value } }) {
+  return {
+    key,
+    fr: value,
+    tags: tags.join(),
+  };
+}
+
+function extractTranslationsFromObject(extractFn) {
+  return ({ tags, object }) => {
+    return extractFn(object).map((translation) => {
+      return { tags, translation };
+    });
+  };
+}
+
 function extractTagsFromChallenge(challenge, releaseContent) {
-  const skill = releaseContent.skills.find(({ id }) => {
-    return id === challenge.skillId;
-  });
   return [
-    ...extractTagsFromSkill(skill, releaseContent),
+    ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
     challenge.status,
   ];
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
   if (skill === undefined) return [];
-  const tube = releaseContent.tubes.find(({ id }) => {
-    return id === skill.tubeId;
-  });
   return [
     skill.name,
-    ...extractTagsFromTube(tube, releaseContent),
+    ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent),
   ];
 }
 
 function extractTagsFromTube(tube, releaseContent) {
-  const competence = releaseContent.competences.find(({ id }) => {
-    return id === tube.competenceId;
-  });
   return [
     tube.name,
-    ...extractTagsFromCompetence(competence, releaseContent),
+    ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
   ];
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
-  const area = releaseContent.areas.find(({ id }) => {
-    return id === competence.areaId;
-  });
   return [
     competence.index,
-    ...extractTagsFromArea(area, releaseContent),
+    ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent),
   ];
 }
 
 function extractTagsFromArea(area, releaseContent) {
-  const framework = releaseContent.frameworks.find(({ id }) => {
-    return id === area.frameworkId;
-  });
   return [
     area.code,
-    framework.name,
+    releaseContent.frameworks[area.frameworkId].name,
   ];
 }
