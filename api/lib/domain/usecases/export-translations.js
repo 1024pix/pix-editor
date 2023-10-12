@@ -21,13 +21,13 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
     .filter((challenge) => challenge.locales.includes('fr'))
     .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'épreuve'))
     .flatMap(extractTranslationsFromObject(extractFromChallenge))
-    .map(extractTags);
+    .map(translationAndTagsToCSVLine);
 
   const competencesStream = Readable.from(release.content.competences)
     .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'compétence'))
     .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
     .filter(({ translation }) => translation.locale === 'fr')
-    .map(extractTags);
+    .map(translationAndTagsToCSVLine);
 
   pipeline(
     mergeStreams(competencesStream, challengesStream),
@@ -48,7 +48,7 @@ function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
   };
 }
 
-function extractTags({ tags, translation: { key, value } }) {
+function translationAndTagsToCSVLine({ translation: { key, value }, tags }) {
   return {
     key,
     fr: value,
