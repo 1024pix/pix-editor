@@ -61,9 +61,15 @@ function toDomainList(challengeDtos, translations) {
 }
 
 function toDomain(challengeDto, translations) {
-  const formattedTranslations = translations.map(({ key, value }) => [key.split('.').at(-1), value]);
+  const translatedFields = Object.fromEntries(
+    translations.map(({ key, value }) => [key.split('.').at(-1), value]),
+  );
+  const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
   return new Challenge({
     ...challengeDto,
-    ...Object.fromEntries(formattedTranslations),
+    ...translatedFields,
+    translations: {
+      [challengeLocale] : translatedFields
+    }
   });
 }

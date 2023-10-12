@@ -35,7 +35,8 @@ function _filterChallengeFields(challenge) {
     'timer',
     'type',
     'shuffled',
-    'alternativeVersion'
+    'alternativeVersion',
+    'translations',
   ];
 
   return _.pick(challenge, fieldsToInclude);

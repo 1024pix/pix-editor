@@ -103,11 +103,20 @@ async function mockCurrentContent() {
     }],
     challenges: [{
       id: 'recChallenge0',
-      instruction: 'Consigne du Challenge',
-      proposals: 'Propositions du Challenge',
+      instruction: 'Consigne du Challenge - fr-fr',
+      proposals: 'Propositions du Challenge - fr-fr',
+      translations: {
+        'fr-fr': {
+          instruction: 'Consigne du Challenge - fr-fr',
+          proposals: 'Propositions du Challenge - fr-fr',
+          solution: 'Bonnes réponses du Challenge - fr-fr',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
+          alternativeInstruction: 'Consigne alternative - fr-fr',
+        }
+      },
       type: 'Type d\'épreuve',
-      solution: 'Bonnes réponses du Challenge',
-      solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+      solution: 'Bonnes réponses du Challenge - fr-fr',
+      solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
       t1Status: false,
       t2Status: true,
       t3Status: false,
@@ -124,7 +133,7 @@ async function mockCurrentContent() {
       format: 'mots',
       autoReply: false,
       locales: ['fr-fr'],
-      alternativeInstruction: 'Consigne alternative',
+      alternativeInstruction: 'Consigne alternative - fr-fr',
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
@@ -199,6 +208,31 @@ async function mockCurrentContent() {
     key: `competence.${expectedCurrentContent.competences[0].id}.description`,
     locale: 'en',
     value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].instruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].alternativeInstruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].proposals,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solution,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solutionToDisplay,
   });
 
   await databaseBuilder.commit();
@@ -289,11 +323,20 @@ async function mockContentForRelease() {
     }],
     challenges: [{
       id: 'recChallenge0',
-      instruction: 'Consigne du Challenge',
-      proposals: 'Propositions du Challenge',
+      instruction: 'Consigne du Challenge - fr-fr',
+      proposals: 'Propositions du Challenge - fr-fr',
+      translations: {
+        'fr-fr': {
+          instruction: 'Consigne du Challenge - fr-fr',
+          proposals: 'Propositions du Challenge - fr-fr',
+          solution: 'Bonnes réponses du Challenge - fr-fr',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
+          alternativeInstruction: 'Consigne alternative - fr-fr',
+        }
+      },
       type: 'Type d\'épreuve',
-      solution: 'Bonnes réponses du Challenge',
-      solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+      solution: 'Bonnes réponses du Challenge - fr-fr',
+      solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
       t1Status: false,
       t2Status: true,
       t3Status: false,
@@ -307,7 +350,7 @@ async function mockContentForRelease() {
       format: 'mots',
       autoReply: false,
       locales: ['fr-fr'],
-      alternativeInstruction: 'Consigne alternative',
+      alternativeInstruction: 'Consigne alternative - fr-fr',
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
@@ -387,6 +430,31 @@ async function mockContentForRelease() {
     key: `competence.${expectedCurrentContent.competences[0].id}.description`,
     locale: 'en',
     value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].instruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].alternativeInstruction,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].proposals,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solution,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solutionToDisplay,
   });
 
   await databaseBuilder.commit();
