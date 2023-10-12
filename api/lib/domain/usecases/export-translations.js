@@ -1,9 +1,10 @@
-import { Readable } from 'node:stream';
+import { Readable, pipeline } from 'node:stream';
 import csv from 'fast-csv';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import { extractFromReleaseObject } from '../../infrastructure/translations/competence.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
+import { logger } from '../../infrastructure/logger.js';
 
 export async function exportTranslations(stream, dependencies = { releaseRepository }) {
   const release = await dependencies.releaseRepository.getLatestRelease();
@@ -28,9 +29,14 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
     .filter(({ translation }) => translation.locale === 'fr')
     .map(extractTags);
 
-  const csvStream = csv.format({ headers: true });
-  csvStream.pipe(stream);
-  mergeStreams(competencesStream, challengesStream).pipe(csvStream);
+  pipeline(
+    mergeStreams(competencesStream, challengesStream),
+    csv.format({ headers: true }),
+    stream,
+    (error) => {
+      logger.error({ error }, 'Error while exporting translations from release');
+    },
+  );
 }
 
 function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {

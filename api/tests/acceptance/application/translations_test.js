@@ -153,7 +153,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       ]);
     });
 
-    it('Should still export csv file even with an empty tubeId' , async () => {
+    it('should still export csv file even when a challenge has no skill' , async () => {
       // Given
       const user = databaseBuilder.factory.buildAdminUser();
       const releaseContent = {
@@ -297,6 +297,80 @@ describe('Acceptance | Controller | translations-controller', () => {
         'competence.recCompetence0.description,Description de la compétence - fr,"compétence,1.1,1,Nom du referentiel"',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"compétence,1.1,1,Nom du referentiel"',
       ]);
+    });
+
+    describe('when an error occurs during streaming', () => {
+      it('should manage unexpected errors' , async () => {
+        // Given
+        const user = databaseBuilder.factory.buildAdminUser();
+        const releaseContent = {
+          skills: [{
+            id: 'recSkill0',
+            name: '@acquis1',
+            hint_i18n: {
+              fr: 'Indice - fr',
+              en: 'Indice - en',
+            },
+            hintStatus: 'Statut de l‘indice',
+            tutorialIds: ['recTutorial0'],
+            learningMoreTutorialIds: ['recTutorial1'],
+            pixValue: 8,
+            competenceId: 'recCompetence0',
+            status: 'validé',
+            tubeId: 'recTube0',
+            version: 1,
+            level: 1,
+          }],
+          challenges: [{
+            id: 'recChallenge0',
+            instruction: 'Consigne du Challenge',
+            proposals: 'Propositions du Challenge',
+            type: 'Type d\'épreuve',
+            solution: 'Bonnes réponses du Challenge',
+            solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+            t1Status: false,
+            t2Status: true,
+            t3Status: false,
+            status: 'validé',
+            skillId: 'recSkill0',
+            embedUrl: 'Embed URL',
+            embedTitle: 'Embed title',
+            embedHeight: 'Embed height',
+            timer: 12,
+            illustrationUrl: 'url de l‘illustration',
+            attachments: ['url de la pièce jointe'],
+            competenceId: 'recCompetence0',
+            illustrationAlt: 'Texte alternatif illustration',
+            format: 'mots',
+            autoReply: false,
+            locales: ['fr'],
+            alternativeInstruction: 'Consigne alternative',
+            focusable: false,
+            delta: 0.5,
+            alpha: 0.9,
+            responsive: ['Smartphone'],
+            genealogy: 'Prototype 1',
+          }],
+        };
+        databaseBuilder.factory.buildRelease({
+          content: releaseContent
+        });
+
+        await databaseBuilder.commit();
+
+        const server = await createServer();
+        const getTranslationsOptions = {
+          method: 'GET',
+          url: '/api/translations.csv',
+          headers: generateAuthorizationHeader(user)
+        };
+
+        // When
+        const response = server.inject(getTranslationsOptions);
+
+        // Then
+        await expect(response).rejects.toHaveProperty('isBoom', true);
+      });
     });
   });
 
