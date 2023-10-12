@@ -19,7 +19,6 @@ const {
 } = airtableBuilder.factory;
 
 async function mockCurrentContent() {
-  const challenge = domainBuilder.buildChallengeDatasourceObject({ locales: ['fr'], });
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaDatasourceObject()],
@@ -35,18 +34,7 @@ async function mockCurrentContent() {
     })],
     tubes: [domainBuilder.buildTubeDatasourceObject()],
     skills: [domainBuilder.buildSkillDatasourceObject()],
-    challenges: [{
-      ...challenge,
-      translations: {
-        fr: {
-          instruction: challenge.instruction,
-          alternativeInstruction: challenge.alternativeInstruction,
-          proposals: challenge.proposals,
-          solution: challenge.solution,
-          solutionToDisplay: challenge.solutionToDisplay,
-        }
-      }
-    }],
+    challenges: [domainBuilder.buildChallenge()],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematicDatasourceObject()],
     courses: [{
@@ -108,27 +96,27 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].instruction,
+    value: expectedCurrentContent.challenges[0].translations.fr.instruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].alternativeInstruction,
+    value: expectedCurrentContent.challenges[0].translations.fr.alternativeInstruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].proposals,
+    value: expectedCurrentContent.challenges[0].translations.fr.proposals,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].solution,
+    value: expectedCurrentContent.challenges[0].translations.fr.solution,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].solutionToDisplay,
+    value: expectedCurrentContent.challenges[0].translations.fr.solutionToDisplay,
   });
 
   await databaseBuilder.commit();

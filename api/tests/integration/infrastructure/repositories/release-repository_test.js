@@ -171,65 +171,55 @@ describe('Integration | Repository | release-repository', function() {
       const { competences, challenges } = _mockRichAirtableContent();
 
       for (const competence of competences) {
-        if (competence.name_i18n?.fr) {
-          databaseBuilder.factory.buildTranslation({
-            key: `competence.${competence.id}.name`,
-            locale: 'fr',
-            value: competence.name_i18n.fr,
-          });
-        }
-        if (competence.name_i18n?.en) {
-          databaseBuilder.factory.buildTranslation({
-            key: `competence.${competence.id}.name`,
-            locale: 'en',
-            value: competence.name_i18n.en,
-          });
-        }
-        if (competence.description_i18n?.fr) {
-          databaseBuilder.factory.buildTranslation({
-            key: `competence.${competence.id}.description`,
-            locale: 'fr',
-            value: competence.description_i18n.fr,
-          });
-        }
-        if (competence.description_i18n?.en) {
-          databaseBuilder.factory.buildTranslation({
-            key: `competence.${competence.id}.description`,
-            locale: 'en',
-            value: competence.description_i18n.en,
-          });
-        }
+        databaseBuilder.factory.buildTranslation({
+          key: `competence.${competence.id}.name`,
+          locale: 'fr',
+          value: `${competence.id} nameFrFr`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `competence.${competence.id}.name`,
+          locale: 'en',
+          value: `${competence.id} nameEnUs`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `competence.${competence.id}.description`,
+          locale: 'fr',
+          value: `${competence.id} descriptionFrFr`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `competence.${competence.id}.description`,
+          locale: 'en',
+          value: `${competence.id} descriptionEnUs`,
+        });
       }
 
       for (const challenge of challenges) {
-        const locales = Object.keys(challenge.translations);
-        for (const locale of locales) {
-          databaseBuilder.factory.buildTranslation({
-            key: `challenge.${challenge.id}.instruction`,
-            locale,
-            value: challenge.translations[locale].instruction,
-          });
-          databaseBuilder.factory.buildTranslation({
-            key: `challenge.${challenge.id}.alternativeInstruction`,
-            locale,
-            value: challenge.translations[locale].alternativeInstruction,
-          });
-          databaseBuilder.factory.buildTranslation({
-            key: `challenge.${challenge.id}.proposals`,
-            locale,
-            value: challenge.translations[locale].proposals,
-          });
-          databaseBuilder.factory.buildTranslation({
-            key: `challenge.${challenge.id}.solution`,
-            locale,
-            value: challenge.translations[locale].solution,
-          });
-          databaseBuilder.factory.buildTranslation({
-            key: `challenge.${challenge.id}.solutionToDisplay`,
-            locale,
-            value: challenge.translations[locale].solutionToDisplay,
-          });
-        }
+        const locale = challenge.locales[0];
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.instruction`,
+          locale,
+          value: `${challenge.id} instruction`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.alternativeInstruction`,
+          locale,
+          value: `${challenge.id} alternativeInstruction`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.proposals`,
+          locale,
+          value: `${challenge.id} proposals`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solution`,
+          locale,
+          value: `${challenge.id} solution`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `challenge.${challenge.id}.solutionToDisplay`,
+          locale,
+          value: `${challenge.id} solutionToDisplay`,
+        });
       }
 
       databaseBuilder.factory.buildStaticCourse({
@@ -306,14 +296,6 @@ function _mockRichAirtableContent() {
   const competence12 = {
     id: 'competence12',
     index: 'competence12 index',
-    name_i18n: {
-      fr: 'competence12 nameFrFr',
-      en: 'competence12 nameEnUs',
-    },
-    description_i18n: {
-      fr: 'competence12 descriptionFrFr',
-      en: 'competence12 descriptionEnUs',
-    },
     areaId: 'area1',
     skillIds: ['skill12121'],
     thematicIds: ['thematic121'],
@@ -323,14 +305,6 @@ function _mockRichAirtableContent() {
   const competence21 = {
     id: 'competence21',
     index: 'competence21 index',
-    name_i18n: {
-      fr: 'competence21 nameFrFr',
-      en: 'competence21 nameEnUs',
-    },
-    description_i18n: {
-      fr: 'competence21 descriptionFrFr',
-      en: 'competence21 descriptionEnUs',
-    },
     areaId: 'area2',
     skillIds: ['skill21111'],
     thematicIds: ['thematic211'],
@@ -530,20 +504,7 @@ function _mockRichAirtableContent() {
   });
   const challenge121211 = {
     id: 'challenge121211',
-    translations: {
-      'fr-fr': {
-        instruction: 'challenge121211 instruction',
-        proposals: 'challenge121211 proposals',
-        solution: 'challenge121211 solution',
-        solutionToDisplay: 'challenge121211 solutionToDisplay',
-        alternativeInstruction: 'challenge121211 alternativeInstruction',
-      },
-    },
-    instruction: 'challenge121211 instruction',
-    proposals: 'challenge121211 proposals',
     type: 'challenge121211 type',
-    solution: 'challenge121211 solution',
-    solutionToDisplay: 'challenge121211 solutionToDisplay',
     t1Status: 'challenge121211 t1Status',
     t2Status: 'challenge121211 t2Status',
     t3Status: 'challenge121211 t3Status',
@@ -558,7 +519,6 @@ function _mockRichAirtableContent() {
     files: 'challenge121211 files',
     autoReply: 'challenge121211 autoReply',
     locales: ['fr-fr'],
-    alternativeInstruction: 'challenge121211 alternativeInstruction',
     airtableId: 'challenge121211',
     skills: 'challenge121211 skills',
     genealogy: 'Prototype 1',
@@ -582,20 +542,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
   const challenge121212 = {
     id: 'challenge121212',
-    translations: {
-      en: {
-        instruction: 'challenge121212 instruction',
-        proposals: 'challenge121212 proposals',
-        solution: 'challenge121212 solution',
-        solutionToDisplay: 'challenge121212 solutionToDisplay',
-        alternativeInstruction: 'challenge121212 alternativeInstruction',
-      },
-    },
-    instruction: 'challenge121212 instruction',
-    proposals: 'challenge121212 proposals',
     type: 'challenge121212 type',
-    solution: 'challenge121212 solution',
-    solutionToDisplay: 'challenge121212 solutionToDisplay',
     t1Status: 'challenge121212 t1Status',
     t2Status: 'challenge121212 t2Status',
     t3Status: 'challenge121212 t3Status',
@@ -610,7 +557,6 @@ function _mockRichAirtableContent() {
     files: 'challenge121212 files',
     autoReply: 'challenge121212 autoReply',
     locales: ['en'],
-    alternativeInstruction: 'challenge121212 alternativeInstruction',
     airtableId: 'challenge121212',
     skills: 'challenge121212 skills',
     genealogy: 'Prototype 1',
@@ -634,20 +580,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
   const challenge211111 = {
     id: 'challenge211111',
-    translations: {
-      fr: {
-        instruction: 'challenge211111 instruction',
-        proposals: 'challenge211111 proposals',
-        solution: 'challenge211111 solution',
-        solutionToDisplay: 'challenge211111 solutionToDisplay',
-        alternativeInstruction: 'challenge211111 alternativeInstruction',
-      },
-    },
-    instruction: 'challenge211111 instruction',
-    proposals: 'challenge211111 proposals',
     type: 'challenge211111 type',
-    solution: 'challenge211111 solution',
-    solutionToDisplay: 'challenge211111 solutionToDisplay',
     t1Status: 'challenge211111 t1Status',
     t2Status: 'challenge211111 t2Status',
     t3Status: 'challenge211111 t3Status',
@@ -662,7 +595,6 @@ function _mockRichAirtableContent() {
     files: 'challenge211111 files',
     autoReply: 'challenge211111 autoReply',
     locales: ['fr'],
-    alternativeInstruction: 'challenge211111 alternativeInstruction',
     airtableId: 'challenge211111',
     skills: 'challenge211111 skills',
     genealogy: 'Prototype 1',
@@ -686,20 +618,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
   const challenge211112 = {
     id: 'challenge211112',
-    translations: {
-      fr: {
-        instruction: 'challenge211112 instruction',
-        proposals: 'challenge211112 proposals',
-        solution: 'challenge211112 solution',
-        solutionToDisplay: 'challenge211112 solutionToDisplay',
-        alternativeInstruction: 'challenge211112 alternativeInstruction',
-      },
-    },
-    instruction: 'challenge211112 instruction',
-    proposals: 'challenge211112 proposals',
     type: 'challenge211112 type',
-    solution: 'challenge211112 solution',
-    solutionToDisplay: 'challenge211112 solutionToDisplay',
     t1Status: 'challenge211112 t1Status',
     t2Status: 'challenge211112 t2Status',
     t3Status: 'challenge211112 t3Status',
@@ -714,7 +633,6 @@ function _mockRichAirtableContent() {
     files: 'challenge211112 files',
     autoReply: 'challenge211112 autoReply',
     locales: ['fr'],
-    alternativeInstruction: 'challenge211112 alternativeInstruction',
     airtableId: 'challenge211112',
     skills: 'challenge211112 skills',
     genealogy: 'Prototype 1',
@@ -738,20 +656,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
   const challenge211113 = {
     id: 'challenge211113',
-    translations: {
-      fr: {
-        instruction: 'challenge211113 instruction',
-        proposals: 'challenge211113 proposals',
-        solution: 'challenge211113 solution',
-        solutionToDisplay: 'challenge211113 solutionToDisplay',
-        alternativeInstruction: 'challenge211113 alternativeInstruction',
-      },
-    },
-    instruction: 'challenge211113 instruction',
-    proposals: 'challenge211113 proposals',
     type: 'challenge211113 type',
-    solution: 'challenge211113 solution',
-    solutionToDisplay: 'challenge211113 solutionToDisplay',
     t1Status: 'challenge211113 t1Status',
     t2Status: 'challenge211113 t2Status',
     t3Status: 'challenge211113 t3Status',
@@ -766,7 +671,6 @@ function _mockRichAirtableContent() {
     files: 'challenge211113 files',
     autoReply: 'challenge211113 autoReply',
     locales: ['fr'],
-    alternativeInstruction: 'challenge211113 alternativeInstruction',
     airtableId: 'challenge211113',
     skills: 'challenge211113 skills',
     genealogy: 'NOT_Prototype 1',

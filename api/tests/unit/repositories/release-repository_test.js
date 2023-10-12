@@ -9,12 +9,7 @@ describe('Unit | Repository | release-repository', () => {
       const challengeDataObject = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge' });
       const entity = airtableBuilder.factory.buildChallenge({
         id: 'recChallenge',
-        instruction: challengeDataObject.instruction,
-        alternativeInstruction: challengeDataObject.alternativeInstruction,
-        proposals: challengeDataObject.proposals,
         type: challengeDataObject.type,
-        solution: challengeDataObject.solution,
-        solutionToDisplay: challengeDataObject.solutionToDisplay,
         t1Status: challengeDataObject.t1Status,
         t2Status: challengeDataObject.t2Status,
         t3Status: challengeDataObject.t3Status,
@@ -114,12 +109,7 @@ describe('Unit | Repository | release-repository', () => {
 
       const challenge = domainBuilder.buildChallengeDatasourceObject({
         id: 'recChallenge',
-        instruction : 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-        alternativeInstruction : '',
-        proposals : '- 1\n- 2\n- 3\n- 4\n- 5',
         type : 'QCM',
-        solution : '1, 5',
-        solutionToDisplay : '1',
         t1Status : 'Activé',
         t2Status : 'Désactivé',
         t3Status : 'Activé',

@@ -6,7 +6,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a Challenge', () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject();
+      const challenge = domainBuilder.buildChallenge();
       const expectedSerializedChallenge = {
         data: {
           type: 'challenges',
@@ -39,7 +39,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             accessibility2: 'RAS',
             spoil: 'Non Sp',
             responsive:  'non',
-            locales: [],
+            locales: ['fr'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -78,7 +78,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#deserialize', () => {
     it('should deserialize a Challenge', async () => {
       // Given
-      const expectedDeserializedChallenge = domainBuilder.buildChallenge();
+      const expectedDeserializedChallenge = domainBuilder.buildChallenge(undefined, ['alpha', 'delta', 'skillId']);
       const json = {
         data: {
           type: 'challenges',

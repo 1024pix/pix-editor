@@ -1,4 +1,5 @@
-import { Challenge } from '../../../../lib/domain/models/Challenge.js';
+import _ from 'lodash';
+import { Challenge } from '../../../../lib/domain/models/index.js';
 
 export function buildChallenge({
   id = 'persistant id',
@@ -43,8 +44,11 @@ export function buildChallenge({
   madeObsoleteAt = '2023-04-04T10:47:05.555Z',
   shuffled = false,
   contextualizedFields = ['instruction', 'illustration'],
-} = {}) {
-  return new Challenge({
+  skillId = 'recSkillId',
+  alpha = 0.5,
+  delta = 0.2,
+} = {}, fieldsToOmit = []) {
+  const data = {
     id,
     type,
     t1Status,
@@ -91,5 +95,9 @@ export function buildChallenge({
         solutionToDisplay,
       },
     },
-  });
+    skillId,
+    alpha,
+    delta,
+  };
+  return new Challenge(_.omit(data, fieldsToOmit));
 }

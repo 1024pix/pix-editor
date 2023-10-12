@@ -15,11 +15,7 @@ const challengeAirtableFields = [
   'id persistant',
   'Compétences (via tube) (id persistant)',
   'Timer',
-  'Consigne',
-  'Propositions',
   'Type d\'épreuve',
-  'Bonnes réponses',
-  'Bonnes réponses à afficher',
   'T1 - Espaces, casse & accents',
   'T2 - Ponctuation',
   'T3 - Distance d\'édition',
@@ -32,7 +28,6 @@ const challengeAirtableFields = [
   'files',
   'Réponse automatique',
   'Langues',
-  'Consigne alternative',
   'Focalisée',
   'Record ID',
   'Acquix',
@@ -638,7 +633,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should create a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] });
+      const challenge = {
+        ...domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] }),
+        instruction: 'consigne',
+        alternativeInstruction: 'consigne alternative',
+        solution: 'solution',
+        solutionToDisplay: 'solution à afficher',
+        proposals: 'propositions',
+      };
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
 
@@ -726,13 +728,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: 'challengeId',
           attributes: {
             'airtable-id': challenge.airtableId,
-            instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-            'alternative-instruction': '',
+            instruction: 'consigne',
+            'alternative-instruction': 'consigne alternative',
             type: 'QCM',
             format: 'mots',
-            proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
-            solution: '1, 5',
-            'solution-to-display': '1',
+            proposals: 'propositions',
+            solution: 'solution',
+            'solution-to-display': 'solution à afficher',
             't1-status': true,
             't2-status': false,
             't3-status': true,
@@ -781,29 +783,32 @@ describe('Acceptance | Controller | challenges-controller', () => {
           }
         },
       });
-      const { count } = await knex('translations').count().first();
-      expect(count).equal(4);
       const translations = await knex('translations').select().orderBy('key');
       expect(translations).to.deep.equal([
         {
+          key: 'challenge.challengeId.alternativeInstruction',
+          locale: 'fr',
+          value: 'consigne alternative'
+        },
+        {
           key: 'challenge.challengeId.instruction',
           locale: 'fr',
-          value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?'
+          value: 'consigne'
         },
         {
           key: 'challenge.challengeId.proposals',
           locale: 'fr',
-          value: '- 1\n- 2\n- 3\n- 4\n- 5'
+          value: 'propositions'
         },
         {
           key: 'challenge.challengeId.solution',
           locale: 'fr',
-          value: '1, 5'
+          value: 'solution'
         },
         {
           key: 'challenge.challengeId.solutionToDisplay',
           locale: 'fr',
-          value: '1'
+          value: 'solution à afficher'
         }
       ]);
 
@@ -811,7 +816,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should invalidate the cache on the PIX API', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
+      const challenge = {
+        ...domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] }),
+        instruction: 'consigne',
+        alternativeInstruction: 'consigne alternative',
+        solution: 'solution',
+        solutionToDisplay: 'solution à afficher',
+        proposals: 'propositions',
+      };
       const expectedChallengeRelease = domainBuilder.buildChallengeForRelease({
         ...challenge,
         illustrationUrl: null,
@@ -819,6 +831,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         translations: {
           fr: {
             instruction: challenge.instruction,
+            alternativeInstruction: challenge.alternativeInstruction,
             proposals: challenge.proposals,
             solution: challenge.solution,
             solutionToDisplay: challenge.solutionToDisplay,
@@ -1013,11 +1026,23 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should update a challenge', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
+      const challenge = {
+        ...domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] }),
+        instruction: 'consigne',
+        alternativeInstruction: 'consigne alternative',
+        solution: 'solution',
+        solutionToDisplay: 'solution à afficher',
+        proposals: 'propositions',
+      };
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId.instruction',
         locale: 'fr',
         value: 'Ancienne valeur de l\'instruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId.alternativeInstruction',
+        locale: 'fr',
+        value: challenge.alternativeInstruction,
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId.solution',
@@ -1125,13 +1150,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: 'recChallengeId',
           attributes: {
             'airtable-id': challenge.airtableId,
-            instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-            'alternative-instruction': '',
+            instruction: 'consigne',
+            'alternative-instruction': 'consigne alternative',
             type: 'QCM',
             format: 'mots',
-            proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
-            solution: '1, 5',
-            'solution-to-display': '1',
+            proposals: 'propositions',
+            solution: 'solution',
+            'solution-to-display': 'solution à afficher',
             't1-status': true,
             't2-status': false,
             't3-status': true,
@@ -1180,8 +1205,12 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         },
       });
-      expect(await knex('translations').count()).to.deep.equal([{ count: 4 }]);
-      expect(await knex('translations').orderBy('key').select()).to.deep.equal([
+      await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
+        {
+          key: 'challenge.recChallengeId.alternativeInstruction',
+          locale: 'fr',
+          value: challenge.alternativeInstruction,
+        },
         {
           key: 'challenge.recChallengeId.instruction',
           locale: 'fr',

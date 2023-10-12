@@ -16,9 +16,7 @@ export function buildRelease() {
   });
   const competence = buildCompetence({
     id: 'recsvLz0W2ShyfD63',
-    name: 'Mener une recherche et une veille d’information',
     index: '1.1',
-    description: '1.1 Mener une recherche et une veille d’information',
     skillIds: [],
     area
   });
@@ -26,7 +24,7 @@ export function buildRelease() {
   return {
     areas: [area],
     competences: [competence],
-    challenges: [buildChallenge()],
+    challenges: [buildChallenge()], // FIXME datasource object?!
     tubes: [buildTube()],
     courses: [buildCourse()],
     skills: [buildSkill()],
