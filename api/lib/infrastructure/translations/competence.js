@@ -74,3 +74,13 @@ export function prefixFor(competence) {
   const id = competence['id persistant'];
   return `${prefix}${id}.`;
 }
+
+export function extractFromReleaseObject(competence) {
+  return localizedFields
+    .filter(({ field, locale }) => competence[`${field}_i18n`][locale])
+    .map(({ field, locale }) => new Translation({
+      key: `${prefix}${competence.id}.${field}`,
+      value: competence[`${field}_i18n`][locale],
+      locale,
+    }));
+}

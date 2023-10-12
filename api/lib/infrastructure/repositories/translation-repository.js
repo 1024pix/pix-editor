@@ -1,4 +1,3 @@
-import { Transform } from 'node:stream';
 import { knex } from '../../../db/knex-database-connection.js';
 import { translationDatasource } from '../datasources/airtable/index.js';
 import { Translation } from '../../domain/models/index.js';
@@ -33,20 +32,6 @@ export async function listByPrefix(prefix, { transaction = knex } = {}) {
 export async function list() {
   const translationDtos = await knex('translations').select();
   return translationDtos.map(_toDomain);
-}
-
-export function streamList({ locale }) {
-  const stream = knex('translations').select().where({ locale }).stream();
-
-  const toDomainTransform = new Transform({
-    writableObjectMode: true,
-    readableObjectMode: true,
-    transform(translation, _, callback) {
-      callback(null, _toDomain(translation));
-    },
-  });
-
-  return stream.pipe(toDomainTransform);
 }
 
 export async function checkIfShouldDuplicateToAirtable() {
