@@ -102,6 +102,33 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .returns(airtableChallenges)
         .activate();
 
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.instruction',
+        locale: 'fr',
+        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.alternativeInstruction',
+        locale: 'fr',
+        value: 'Débrouille toi',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.solution',
+        locale: 'fr',
+        value: '1, 5',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.solutionToDisplay',
+        locale: 'fr',
+        value: '1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.proposals',
+        locale: 'fr',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
+      });
+      await databaseBuilder.commit();
+
       const server = await createServer();
 
       // When
@@ -121,7 +148,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             attributes: {
               'airtable-id': challenge.airtableId,
               instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-              'alternative-instruction': '',
+              'alternative-instruction': 'Débrouille toi',
               type: 'QCM',
               format: 'mots',
               proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
@@ -196,6 +223,59 @@ describe('Acceptance | Controller | challenges-controller', () => {
             airtableBuilder.factory.buildChallenge(challenge2),
           ]
         });
+
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.instruction',
+        locale: 'fr',
+        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.alternativeInstruction',
+        locale: 'fr',
+        value: 'Débrouille toi',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.solution',
+        locale: 'fr',
+        value: '1, 5',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.solutionToDisplay',
+        locale: 'fr',
+        value: '1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.proposals',
+        locale: 'fr',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.instruction',
+        locale: 'fr',
+        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.alternativeInstruction',
+        locale: 'fr',
+        value: 'Débrouille toi encore',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.solution',
+        locale: 'fr',
+        value: '1, 5',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.solutionToDisplay',
+        locale: 'fr',
+        value: '1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.proposals',
+        locale: 'fr',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
+      });
+      await databaseBuilder.commit();
+
       const server = await createServer();
 
       // When
@@ -217,7 +297,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             attributes: {
               'airtable-id': challenge1.airtableId,
               instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-              'alternative-instruction': '',
+              'alternative-instruction': 'Débrouille toi',
               type: 'QCM',
               format: 'mots',
               proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
@@ -276,7 +356,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             attributes: {
               'airtable-id': challenge2.airtableId,
               instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-              'alternative-instruction': '',
+              'alternative-instruction': 'Débrouille toi encore',
               type: 'QCM',
               format: 'mots',
               proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
@@ -416,6 +496,33 @@ describe('Acceptance | Controller | challenges-controller', () => {
           ]
         });
 
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.instruction',
+        locale: 'fr',
+        value: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.alternativeInstruction',
+        locale: 'fr',
+        value: 'Débrouille toi',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.solution',
+        locale: 'fr',
+        value: '1, 5',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.solutionToDisplay',
+        locale: 'fr',
+        value: '1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.proposals',
+        locale: 'fr',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
+      });
+      await databaseBuilder.commit();
+
       const server = await createServer();
 
       // When
@@ -434,7 +541,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           attributes: {
             'airtable-id': challenge.airtableId,
             instruction: 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
-            'alternative-instruction': '',
+            'alternative-instruction': 'Débrouille toi',
             type: 'QCM',
             format: 'mots',
             proposals: '- 1\n- 2\n- 3\n- 4\n- 5',
