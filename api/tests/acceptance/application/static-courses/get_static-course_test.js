@@ -21,13 +21,23 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       isActive: false,
       deactivationReason: 'Les fruits c genial',
     });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid1.instruction',
+      locale: 'fr',
+      value: 'instruction for challengeid1',
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid2.instruction',
+      locale: 'fr',
+      value: 'instruction for challengeid2',
+    });
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid1',
-      instruction: 'instruction for challengeid1',
       skillId: 'skillid1',
       status: 'status for challengeid1',
       preview: 'site/challenges/challengeid1',
+      locales: ['fr'],
     });
     const airtableSkill1 = airtableBuilder.factory.buildSkill({
       id: 'skillid1',
@@ -36,10 +46,10 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
     });
     const airtableChallenge2 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid2',
-      instruction: 'instruction for challengeid2',
       skillId: 'skillid2',
       status: 'status for challengeid2',
       preview: 'site/challenges/challengeid2',
+      locales: ['fr'],
     });
     const airtableSkill2 = airtableBuilder.factory.buildSkill({
       id: 'skillid2',

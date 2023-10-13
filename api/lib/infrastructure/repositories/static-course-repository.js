@@ -6,7 +6,8 @@ import {
   StaticCourseSummary as StaticCourseSummary_Read,
 } from '../../domain/readmodels/index.js';
 import { StaticCourse } from '../../domain/models/index.js';
-import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
+import { skillDatasource } from '../datasources/airtable/index.js';
+import * as challengeRepository from './challenge-repository.js';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
@@ -92,7 +93,7 @@ export async function save(staticCourseForCreation) {
 }
 
 async function findChallengeSummaries(challengeIds) {
-  const challengesFromAirtable = await challengeDatasource.filter({ filter: { ids: challengeIds } });
+  const challengesFromAirtable = await challengeRepository.filter({ filter: { ids: challengeIds } });
   const skillIds = challengesFromAirtable.map(({ skillId }) => skillId);
   const skillsFromAirtable = await skillDatasource.filter({ filter: { ids: skillIds } });
   return challengeIds.map((challengeId) => {
