@@ -1,4 +1,4 @@
-import { Translation } from '../../domain/models/index.js';
+import { Challenge, Translation } from '../../domain/models/index.js';
 
 export const prefix = 'challenge.';
 
@@ -10,12 +10,8 @@ const fields = [
   'solutionToDisplay',
 ];
 
-export function getPrimaryLocaleFromChallenge(locales) {
-  return [...locales].sort()[0];
-}
-
 export function extractFromChallenge(challenge) {
-  const locale = getPrimaryLocaleFromChallenge(challenge.locales);
+  const locale = Challenge.getPrimaryLocale(challenge.locales);
   return fields
     .filter((field) => challenge[field])
     .map((field) => {

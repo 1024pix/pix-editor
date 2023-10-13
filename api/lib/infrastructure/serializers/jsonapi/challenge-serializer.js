@@ -83,7 +83,7 @@ const deserializer = new Deserializer({
   transform({ skill, instruction, alternativeInstruction, proposals, solution, solutionToDisplay, ...challenge }) {
     challenge.skills = skill ? [skill] : [];
     challenge.translations = {
-      [Challenge.localeFor(challenge.locales)]: {
+      [Challenge.getPrimaryLocale(challenge.locales)]: {
         instruction,
         alternativeInstruction,
         proposals,

@@ -83,7 +83,7 @@ export function buildChallenge({
     shuffled,
     contextualizedFields,
     translations: {
-      [Challenge.localeFor(locales)]: {
+      [Challenge.getPrimaryLocale(locales)]: {
         instruction,
         alternativeInstruction,
         proposals,

@@ -96,7 +96,7 @@ export class Challenge {
     return [...locales].sort();
   }
 
-  static localeFor(locales) {
+  static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }
 }

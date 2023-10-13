@@ -3,7 +3,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
-import { prefix, prefixFor, getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
+import { prefix, prefixFor } from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -63,7 +63,7 @@ function toDomainList(challengeDtos, translations) {
   }) => `${locale}:${key.split('.')[1]}`);
 
   return challengeDtos.map((challengeDto) => {
-    const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+    const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
     const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
     return toDomain(challengeDto, filteredTranslations);
   });
@@ -73,7 +73,7 @@ function toDomain(challengeDto, translations) {
   const translatedFields = Object.fromEntries([
     ...translations.map(({ key, value }) => [key.split('.').at(-1), value]),
   ]);
-  const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+  const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
   return new Challenge({
     ...challengeDto,
     translations: {
