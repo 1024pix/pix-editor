@@ -1,11 +1,7 @@
 export class Challenge {
   constructor({
     id,
-    instruction = '',
-    proposals = '',
     type,
-    solution = '',
-    solutionToDisplay = '',
     t1Status,
     t2Status,
     t3Status,
@@ -20,7 +16,6 @@ export class Challenge {
     files,
     autoReply,
     locales,
-    alternativeInstruction = '',
     focusable,
     airtableId,
     genealogy,
@@ -48,11 +43,7 @@ export class Challenge {
     translations,
   } = {}) {
     this.id = id;
-    this.instruction = instruction;
-    this.proposals = proposals;
     this.type = type;
-    this.solution = solution;
-    this.solutionToDisplay = solutionToDisplay;
     this.t1Status = t1Status;
     this.t2Status = t2Status;
     this.t3Status = t3Status;
@@ -66,8 +57,7 @@ export class Challenge {
     this.format = format;
     this.files = files;
     this.autoReply = autoReply;
-    this.locales = locales?.length === 0 ? ['fr'] : locales;
-    this.alternativeInstruction = alternativeInstruction;
+    this.locales = Challenge.defaultLocales(locales);
     this.focusable = focusable;
     this.airtableId = airtableId;
     this.genealogy = genealogy;
@@ -93,5 +83,20 @@ export class Challenge {
     this.delta = delta;
     this.skillId = skillId;
     this.translations = translations;
+
+    this.instruction = this.translations[this.locales[0]].instruction ?? '';
+    this.alternativeInstruction = this.translations[this.locales[0]].alternativeInstruction ?? '';
+    this.proposals = this.translations[this.locales[0]].proposals ?? '';
+    this.solution = this.translations[this.locales[0]].solution ?? '';
+    this.solutionToDisplay = this.translations[this.locales[0]].solutionToDisplay ?? '';
+  }
+
+  static defaultLocales(locales) {
+    if (locales == undefined || locales.length === 0) return ['fr'];
+    return [...locales].sort();
+  }
+
+  static localeFor(locales) {
+    return Challenge.defaultLocales(locales)[0];
   }
 }

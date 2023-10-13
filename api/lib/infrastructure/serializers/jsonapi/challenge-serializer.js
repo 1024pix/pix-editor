@@ -80,9 +80,17 @@ const deserializer = new Deserializer({
       return attachment.id;
     },
   },
-  transform(challenge) {
-    challenge.skills = challenge.skill ? [challenge.skill] : [];
-    delete challenge.skill;
+  transform({ skill, instruction, alternativeInstruction, proposals, solution, solutionToDisplay, ...challenge }) {
+    challenge.skills = skill ? [skill] : [];
+    challenge.translations = {
+      [Challenge.localeFor(challenge.locales)]: {
+        instruction,
+        alternativeInstruction,
+        proposals,
+        solution,
+        solutionToDisplay,
+      },
+    };
     return challenge;
   }
 });

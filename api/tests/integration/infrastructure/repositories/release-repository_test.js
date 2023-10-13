@@ -609,7 +609,7 @@ function _mockRichAirtableContent() {
     format: 'challenge121212 format',
     files: 'challenge121212 files',
     autoReply: 'challenge121212 autoReply',
-    locales: ['fr-fr', 'en'],
+    locales: ['en'],
     alternativeInstruction: 'challenge121212 alternativeInstruction',
     airtableId: 'challenge121212',
     skills: 'challenge121212 skills',
@@ -739,7 +739,7 @@ function _mockRichAirtableContent() {
   const challenge211113 = {
     id: 'challenge211113',
     translations: {
-      'fr': {
+      fr: {
         instruction: 'challenge211113 instruction',
         proposals: 'challenge211113 proposals',
         solution: 'challenge211113 solution',
@@ -1244,7 +1244,7 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence12',
       format: 'challenge121212 format',
       autoReply: true,
-      locales: ['fr-fr', 'en'],
+      locales: ['en'],
       alternativeInstruction: 'challenge121212 alternativeInstruction',
       genealogy: 'Prototype 1',
       responsive: ['Smartphone'],
@@ -1259,7 +1259,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'challenge211111',
       translations: {
-        'fr': {
+        fr: {
           instruction: 'challenge211111 instruction',
           proposals: 'challenge211111 proposals',
           solution: 'challenge211111 solution',

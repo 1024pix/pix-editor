@@ -4,7 +4,6 @@ import _ from 'lodash';
 import * as challengeTranslations from '../../lib/infrastructure/translations/challenge.js';
 import { translationRepository } from '../../lib/infrastructure/repositories/index.js';
 import { disconnect } from '../../db/knex-database-connection.js';
-import { Challenge } from '../../lib/domain/models/index.js';
 import { LOCALE_TO_LANGUAGE_MAP } from '../../lib/domain/constants.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +26,7 @@ export async function migrateChallengesTranslationFromAirtable({ airtableClient 
     .all();
 
   const translations = allChallenges.flatMap((challenge) => {
-    const challengeModel = new Challenge({
+    return challengeTranslations.extractFromChallenge({
       id: challenge.get('id persistant'),
       instruction: challenge.get('Consigne'),
       alternativeInstruction: challenge.get('Consigne alternative'),
@@ -36,7 +35,6 @@ export async function migrateChallengesTranslationFromAirtable({ airtableClient 
       solutionToDisplay: challenge.get('Bonnes réponses à afficher'),
       locales: _convertLanguagesToLocales(challenge.get('Langues')),
     });
-    return challengeTranslations.extractFromChallenge(challengeModel);
   });
 
   for (const translationsChunk of _.chunk(translations, 5000)) {

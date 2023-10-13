@@ -3,7 +3,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
-import { fields as translatableFields, prefix, prefixFor, getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
+import { prefix, prefixFor, getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -71,13 +71,11 @@ function toDomainList(challengeDtos, translations) {
 
 function toDomain(challengeDto, translations) {
   const translatedFields = Object.fromEntries([
-    ...translatableFields.map((field) => [field, undefined]),
     ...translations.map(({ key, value }) => [key.split('.').at(-1), value]),
   ]);
   const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
   return new Challenge({
     ...challengeDto,
-    ...translatedFields,
     translations: {
       [challengeLocale]: translatedFields
     }
