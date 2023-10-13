@@ -1,5 +1,5 @@
 import { beforeEach, afterEach, describe, expect, it } from 'vitest';
-import { airtableBuilder, knex } from '../test-helper.js';
+import { knex } from '../test-helper.js';
 import Airtable from 'airtable';
 import nock from 'nock';
 import {
@@ -28,15 +28,18 @@ describe('Migrate translation from airtable', function() {
 
   it('fills translations table', async function() {
     // given
-    const challenge = airtableBuilder.factory.buildChallenge({
-      id: 'challengeid1',
-      instruction: 'instruction',
-      alternativeInstruction: 'alternativeInstruction',
-      proposals: 'proposals',
-      solution: 'solution',
-      solutionToDisplay: 'solutionToDisplay',
-      locales: ['fr-fr']
-    });
+    const challenge = {
+      id: 'airtableChallengeId',
+      fields: {
+        'id persistant': 'challengeid1',
+        Consigne: 'instruction',
+        'Consigne alternative': 'alternativeInstruction',
+        Propositions: 'proposals',
+        'Bonnes réponses': 'solution',
+        'Bonnes réponses à afficher': 'solutionToDisplay',
+        Langues: ['Franco Français'],
+      }
+    };
 
     const challenges = [challenge];
 
