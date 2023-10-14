@@ -65,7 +65,7 @@
     "joi": "^17.8.3",
     "js-crypto-random": "^1.0.4",
     "jsonapi-serializer": "3.6.9",
-    "knex": "^2.0.0",
+    "knex": "^3.0.0",
     "lodash": "^4.17.21",
     "node-cache": "^5.1.2",
     "oppsy": "https://github.com/1024pix/oppsy#main",
