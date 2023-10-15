@@ -812,11 +812,19 @@ describe('Acceptance | Controller | challenges-controller', () => {
     it('should invalidate the cache on the PIX API', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] });
-      const expectedChallengeRelease = JSON.parse(JSON.stringify(domainBuilder.buildChallengeForRelease({
+      const expectedChallengeRelease = domainBuilder.buildChallengeForRelease({
         ...challenge,
         illustrationUrl: null,
         illustrationAlt: null,
-      })));
+        translations: {
+          fr: {
+            instruction: challenge.instruction,
+            proposals: challenge.proposals,
+            solution: challenge.solution,
+            solutionToDisplay: challenge.solutionToDisplay,
+          },
+        },
+      });
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
       const token = 'not-a-real-token';
@@ -833,7 +841,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         .reply(200, { 'access_token': token });
 
       const apiCacheScope = nock('https://api.test.pix.fr')
-        .patch('/api/cache/challenges/recChallengeId', expectedChallengeRelease)
+        .patch('/api/cache/challenges/recChallengeId', { ...expectedChallengeRelease }) // avoid comparing object prototype
         .matchHeader('Authorization', `Bearer ${token}`)
         .reply(200);
 
