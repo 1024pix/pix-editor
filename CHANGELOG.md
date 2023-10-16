@@ -1,5 +1,22 @@
 
 
+## v3.102.0 (16/10/2023)
+
+
+### :rocket: Amélioration
+- [#339](https://github.com/1024pix/pix-editor/pull/339) [FEATURE] Modifier la release et la réplication pour supporter l'ancien et le nouveau format des données traduisibles des épreuves (PIX-9315).
+- [#338](https://github.com/1024pix/pix-editor/pull/338) [FEATURE] Tagguer les données exportées vers Phrase (PIX-9559).
+
+### :building_construction: Tech
+- [#334](https://github.com/1024pix/pix-editor/pull/334) [TECH] Chargement des épreuves en lazy (PIX-9586).
+
+### :arrow_up: Montée de version
+- [#341](https://github.com/1024pix/pix-editor/pull/341) [BUMP] Update dependency knex to v3 (api).
+- [#336](https://github.com/1024pix/pix-editor/pull/336) [BUMP] Update dependency eslint to v8.51.0.
+
+### :coffee: Autre
+- [#337](https://github.com/1024pix/pix-editor/pull/337) [CLEANUP] Supprime le plugin Metrics.
+
 ## v3.101.0 (11/10/2023)
 
 
