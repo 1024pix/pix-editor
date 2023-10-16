@@ -169,7 +169,7 @@ export const challengeDatasource = datasource.extend({
   async search(params) {
     const options = {
       fields: this.usedFields,
-      filterByFormula : `AND(FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != 'archive')`
+      filterByFormula: `FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE({Embed URL})))`
     };
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;
@@ -180,12 +180,13 @@ export const challengeDatasource = datasource.extend({
 
   async filterById(id) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula : `{id persistant} = '${id}'`,
+      filterByFormula: `{id persistant} = '${id}'`,
       maxRecords: 1,
     });
     return this.fromAirTableObject(airtableRawObjects[0]);
   },
 
+  // OR('recChallenge1' = {id persistant}, 'recChallenge2' = {id persistant}, FIND('toto', LOWER(CONCATENATE({Embed URL})))
   async getAllIdsIn(challengeIds) {
     const options = {
       fields: ['id persistant'],

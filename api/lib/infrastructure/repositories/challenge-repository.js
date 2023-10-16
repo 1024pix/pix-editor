@@ -5,11 +5,16 @@ import { challengeDatasource } from '../datasources/airtable/index.js';
 import { translationRepository } from './index.js';
 import { prefix, prefixFor, getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
 
-function _getChallengesFromParams(params) {
+async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
     return challengeDatasource.filter(params);
   }
   if (params.filter && params.filter.search) {
+    params.filter.ids = await translationRepository.search({
+      entity: 'challenge',
+      fields: ['instruction', 'proposals'],
+      search: params.filter.search
+    });
     return challengeDatasource.search(params);
   }
   return challengeDatasource.list(params);
@@ -51,7 +56,10 @@ async function loadTranslationsForChallenges(challengeDtos) {
 }
 
 function toDomainList(challengeDtos, translations) {
-  const translationsByLocaleAndChallengeId = _.groupBy(translations, ({ locale, key }) => `${locale}:${key.split('.')[1]}`);
+  const translationsByLocaleAndChallengeId = _.groupBy(translations, ({
+    locale,
+    key
+  }) => `${locale}:${key.split('.')[1]}`);
 
   return challengeDtos.map((challengeDto) => {
     const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
@@ -69,7 +77,7 @@ function toDomain(challengeDto, translations) {
     ...challengeDto,
     ...translatedFields,
     translations: {
-      [challengeLocale] : translatedFields
+      [challengeLocale]: translatedFields
     }
   });
 }

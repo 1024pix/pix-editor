@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, describe as context, expect, it } from
 import { knex, databaseBuilder } from '../../../test-helper.js';
 import {
   checkIfShouldDuplicateToAirtable,
-  save
+  save, search
 } from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
@@ -88,7 +88,7 @@ describe('Integration | Repository | translation-repository', function() {
         await _setShouldDuplicateToAirtable(false);
       });
 
-      it('should delete keys in Airtable', async() => {
+      it('should delete keys in Airtable', async () => {
         // given
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/translations')
@@ -103,24 +103,26 @@ describe('Integration | Repository | translation-repository', function() {
             filterByFormula: 'REGEX_MATCH(key, "^some\\.prefix\\.")',
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [
-            {
-              id: 'recTranslation1',
-              fields: {
-                key: 'some.prefix.key',
-                locale: 'fr',
-                value: 'Bonjour, la mif',
+          .reply(200, {
+            records: [
+              {
+                id: 'recTranslation1',
+                fields: {
+                  key: 'some.prefix.key',
+                  locale: 'fr',
+                  value: 'Bonjour, la mif',
+                },
               },
-            },
-            {
-              id: 'recTranslation2',
-              fields: {
-                key: 'some.prefix.key',
-                locale: 'en',
-                value: 'Hello, the fim',
+              {
+                id: 'recTranslation2',
+                fields: {
+                  key: 'some.prefix.key',
+                  locale: 'en',
+                  value: 'Hello, the fim',
+                },
               },
-            },
-          ] });
+            ]
+          });
 
         nock('https://api.airtable.com')
           .delete('/v0/airtableBaseValue/translations')
@@ -147,6 +149,84 @@ describe('Integration | Repository | translation-repository', function() {
 
         expect(nock.isDone()).toBe(true);
       });
+    });
+  });
+  context('#search', function() {
+    it('should search for fields in entities', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId2.key',
+        locale: 'fr',
+        value: 'coco'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId2.key2',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      await databaseBuilder.commit();
+      // when
+      const entityIds = await search({
+        entity: 'entity',
+        fields: ['key'],
+        search: 'coucou'
+      });
+
+      // then
+      expect(entityIds).to.deep.equal(['entityId1']);
+    });
+
+    it('should return distinct entity ids', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key2',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      await databaseBuilder.commit();
+      // when
+      const entityIds = await search({
+        entity: 'entity',
+        fields: ['key', 'key2'],
+        search: 'coucou'
+      });
+
+      // then
+      expect(entityIds).to.deep.equal(['entityId1']);
+    });
+
+    it('should return entity ids sorted alphabetically', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId2.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      await databaseBuilder.commit();
+      // when
+      const entityIds = await search({
+        entity: 'entity',
+        fields: ['key'],
+        search: 'coucou'
+      });
+
+      // then
+      expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
     });
   });
 });
