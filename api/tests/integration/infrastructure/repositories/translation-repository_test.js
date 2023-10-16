@@ -151,6 +151,7 @@ describe('Integration | Repository | translation-repository', function() {
       });
     });
   });
+
   context('#search', function() {
     it('should search for fields in entities', async function() {
       // given
@@ -227,6 +228,32 @@ describe('Integration | Repository | translation-repository', function() {
 
       // then
       expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
+    });
+
+    it('should return a limited number of ids', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId2.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const entityIds = await search({
+        entity: 'entity',
+        fields: ['key'],
+        search: 'coucou',
+        limit: 1,
+      });
+
+      // then
+      expect(entityIds).to.deep.equal(['entityId1']);
     });
   });
 });

@@ -13,7 +13,8 @@ async function _getChallengesFromParams(params) {
     params.filter.ids = await translationRepository.search({
       entity: 'challenge',
       fields: ['instruction', 'proposals'],
-      search: params.filter.search
+      search: params.filter.search,
+      limit: params.page?.size,
     });
     return challengeDatasource.search(params);
   }

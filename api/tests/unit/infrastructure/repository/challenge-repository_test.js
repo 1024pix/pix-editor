@@ -144,7 +144,7 @@ describe('Unit | Repository | challenge-repository', () => {
         vi.spyOn(translationRepository, 'search').mockResolvedValueOnce(['challengeId1']);
 
         // when
-        const challenges = await filter({ filter: { search: 'toto' } });
+        const challenges = await filter({ filter: { search: 'toto' }, page: { size: 'limit' } });
 
         // then
         expect(challenges.length).equal(2);
@@ -153,10 +153,11 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(translationRepository.search).toHaveBeenCalledWith({
           entity: 'challenge',
           fields: ['instruction', 'proposals'],
-          search: 'toto'
+          search: 'toto',
+          limit: 'limit',
         });
 
-        expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto', ids: ['challengeId1'] } });
+        expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto', ids: ['challengeId1'] }, page: { size: 'limit' } });
       });
     });
   });

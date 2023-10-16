@@ -35,14 +35,20 @@ export async function list() {
   return translationDtos.map(_toDomain);
 }
 
-export async function search({ entity, fields, search }) {
-  const keys = await knex('translations').pluck('key')
+export async function search({ entity, fields, search, limit }) {
+  const query = knex('translations')
+    .pluck('key')
     .whereLike('value', `%${search}%`)
     .andWhere(function() {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);
       }
-    }).orderBy('key');
+    })
+    .orderBy('key');
+
+  if (limit) query.limit(limit);
+
+  const keys = await query;
 
   return _.sortedUniq(keys.map((key) => {
     return key.split('.')[1];
