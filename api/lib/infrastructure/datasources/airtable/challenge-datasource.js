@@ -171,6 +171,9 @@ export const challengeDatasource = datasource.extend({
       fields: this.usedFields,
       filterByFormula: `FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE({Embed URL})))`
     };
+    if (params.filter.ids && params.filter.ids.length > 0) {
+      options.filterByFormula = 'OR(' + options.filterByFormula + ', ' + params.filter.ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')';
+    }
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;
     }
@@ -186,7 +189,6 @@ export const challengeDatasource = datasource.extend({
     return this.fromAirTableObject(airtableRawObjects[0]);
   },
 
-  // OR('recChallenge1' = {id persistant}, 'recChallenge2' = {id persistant}, FIND('toto', LOWER(CONCATENATE({Embed URL})))
   async getAllIdsIn(challengeIds) {
     const options = {
       fields: ['id persistant'],

@@ -342,7 +342,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             '': challengeAirtableFields,
           },
           maxRecords: 100,
-          filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')',
+          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
         })
         .reply(200, {
           records: []
@@ -369,7 +369,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')',
+          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
           maxRecords: 20,
         })
         .reply(200, {
