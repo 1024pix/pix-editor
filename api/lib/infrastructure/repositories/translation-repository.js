@@ -38,7 +38,7 @@ export async function list() {
 export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
     .pluck('key')
-    .whereLike('value', `%${escapeWildcardCharacters(search)}%`)
+    .whereILike('value', `%${escapeWildcardCharacters(search)}%`)
     .andWhere(function() {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);

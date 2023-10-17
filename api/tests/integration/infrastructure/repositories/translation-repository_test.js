@@ -2,7 +2,8 @@ import { afterEach, beforeEach, describe, describe as context, expect, it } from
 import { knex, databaseBuilder } from '../../../test-helper.js';
 import {
   checkIfShouldDuplicateToAirtable,
-  save, search
+  save,
+  search,
 } from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
@@ -254,6 +255,32 @@ describe('Integration | Repository | translation-repository', function() {
 
       // then
       expect(entityIds).to.deep.equal(['entityId1']);
+    });
+
+    it('should perform a case-insensitive search', async function() {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId1.key',
+        locale: 'fr',
+        value: 'Coucou'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.entityId2.key',
+        locale: 'fr',
+        value: 'coucou'
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const entityIds = await search({
+        entity: 'entity',
+        fields: ['key'],
+        search: 'coucou',
+        limit: 2,
+      });
+
+      // then
+      expect(entityIds).to.deep.equal(['entityId1', 'entityId2']);
     });
 
     describe('when search string contains wildcard characters', () => {
