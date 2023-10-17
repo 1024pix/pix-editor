@@ -6,14 +6,14 @@ import { translationRepository } from '../../../../lib/infrastructure/repositori
 describe('Unit | Repository | challenge-repository', () => {
 
   describe('#list', () => {
-    it('should return all challenges',  async () => {
+    it('should return all challenges', async () => {
       // given
       vi.spyOn(translationRepository, 'listByPrefix')
         .mockResolvedValueOnce([{
           key: 'challenge.1.instruction',
           value: 'instruction',
           locale: 'fr'
-        },{
+        }, {
           key: 'challenge.1.proposals',
           value: 'proposals',
           locale: 'fr'
@@ -21,12 +21,12 @@ describe('Unit | Repository | challenge-repository', () => {
           key: 'challenge.2.instruction',
           value: 'instruction 2',
           locale: 'fr'
-        },{
+        }, {
           key: 'challenge.2.proposals',
           value: 'proposals 2',
           locale: 'fr'
         }]);
-      vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [] },{ id: 2, locales: [] }]);
+      vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [] }, { id: 2, locales: [] }]);
 
       // when
       const challenges = await list();
@@ -44,15 +44,15 @@ describe('Unit | Repository | challenge-repository', () => {
 
   describe('#filter', () => {
     describe('when ids are specified', () => {
-      it('should return challenges with given ids',  async () => {
+      it('should return challenges with given ids', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [] },{ id: 2, locales: [] }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [] }, { id: 2, locales: [] }]);
         vi.spyOn(translationRepository, 'listByPrefix')
           .mockResolvedValueOnce([{
             key: 'challenge.1.instruction',
             value: 'instruction',
             locale: 'fr'
-          },{
+          }, {
             key: 'challenge.1.proposals',
             value: 'proposals',
             locale: 'fr'
@@ -61,7 +61,7 @@ describe('Unit | Repository | challenge-repository', () => {
             key: 'challenge.2.instruction',
             value: 'instruction 2',
             locale: 'fr'
-          },{
+          }, {
             key: 'challenge.2.proposals',
             value: 'proposals 2',
             locale: 'fr'
@@ -81,7 +81,7 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.', { transaction: expect.anything() });
       });
 
-      it('should return challenges with empty fields when have no translation',  async () => {
+      it('should return challenges with empty fields when have no translation', async () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [] }]);
         vi.spyOn(translationRepository, 'listByPrefix')
@@ -120,10 +120,10 @@ describe('Unit | Repository | challenge-repository', () => {
     });
 
     describe('when ids and search are not specified', () => {
-      it('should return all challenges',  async () => {
+      it('should return all challenges', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{},{}]);
-        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ locales: [] },{ locales: [] }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{}, {}]);
+        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ locales: [] }, { locales: [] }]);
 
         // when
         const challenges = await filter({ page: { size: 20 } });
@@ -136,26 +136,34 @@ describe('Unit | Repository | challenge-repository', () => {
     });
 
     describe('when search is specified', () => {
-      it('should search challenges according to filters',  async () => {
+      it('should search challenges according to filters', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{},{}]);
-        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{},{}]);
-        vi.spyOn(challengeDatasource, 'search').mockResolvedValue([{ locales: [] },{ locales: [] }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{}, {}]);
+        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{}, {}]);
+        vi.spyOn(challengeDatasource, 'search').mockResolvedValue([{ locales: [] }, { locales: [] }]);
+        vi.spyOn(translationRepository, 'search').mockResolvedValueOnce(['challengeId1']);
 
         // when
-        const challenges = await filter({ filter: { search: 'toto' } });
+        const challenges = await filter({ filter: { search: 'toto' }, page: { size: 'limit' } });
 
         // then
         expect(challenges.length).equal(2);
         expect(challengeDatasource.filter).not.toHaveBeenCalled();
         expect(challengeDatasource.list).not.toHaveBeenCalled();
-        expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto' } });
+        expect(translationRepository.search).toHaveBeenCalledWith({
+          entity: 'challenge',
+          fields: ['instruction', 'proposals'],
+          search: 'toto',
+          limit: 'limit',
+        });
+
+        expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto', ids: ['challengeId1'] }, page: { size: 'limit' } });
       });
     });
   });
 
   describe('#create', () => {
-    it('should call the datasource', async() => {
+    it('should call the datasource', async () => {
       // given
       const createdChallenge = 'new challenge';
       vi.spyOn(challengeDatasource, 'create').mockResolvedValue(createdChallenge);

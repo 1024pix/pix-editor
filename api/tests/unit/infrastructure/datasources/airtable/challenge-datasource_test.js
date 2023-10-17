@@ -52,7 +52,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
     it('should convert Airtable t1, t2, t3 status to boolean', () => {
       // given
-      const airtableChallenge = airtableBuilder.factory.buildChallenge({ t1Status: true, t2Status: false, t3Status: true });
+      const airtableChallenge = airtableBuilder.factory.buildChallenge({
+        t1Status: true,
+        t2Status: false,
+        t3Status: true
+      });
       const challengeRecord = new AirtableRecord('Epreuves', airtableChallenge.id, airtableChallenge);
 
       // when
@@ -126,9 +130,13 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       expect(challenge).to.deep.equal(airtableChallenge);
     });
 
-    it('should transform boolean to `activer/désactiver` for t1, t2 and t3',() => {
+    it('should transform boolean to `activer/désactiver` for t1, t2 and t3', () => {
       // given
-      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ t1Status: true, t2Status: false, t3Status: null });
+      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({
+        t1Status: true,
+        t2Status: false,
+        t3Status: null
+      });
 
       // when
       const challenge = challengeDatasource.toAirTableObject(createdChallenge);
@@ -185,12 +193,15 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       const newChallenge = await challengeDatasource.filterById('recChallenge');
 
       expect(newChallenge.id).to.equal('recChallenge');
-      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', { filterByFormula: '{id persistant} = \'recChallenge\'', maxRecords: 1 });
+      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', {
+        filterByFormula: '{id persistant} = \'recChallenge\'',
+        maxRecords: 1
+      });
     });
   });
 
   describe('#search', () => {
-    it('should search challenges with a query',  async () => {
+    it('should search challenges with a query', async () => {
       const challenge = airtableBuilder.factory.buildChallenge({
         id: 'recChallenge',
         skillIds: [],
@@ -200,12 +211,42 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
 
       vi.spyOn(airtable, 'findRecords')
-        .mockResolvedValue([ challengeRecord ]);
+        .mockResolvedValue([challengeRecord]);
 
       challengeDatasource.usedFields = Symbol('used fields');
-      const challenges = await challengeDatasource.search({ filter: { search: 'query term' } });
+      const challenges = await challengeDatasource.search({
+        filter: { search: 'query term', ids: [] },
+      });
 
-      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
+        fields: challengeDatasource.usedFields,
+        filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))'
+      });
+      expect(challenges.length).to.equal(1);
+      expect(challenges[0].id).to.equal('recChallenge');
+    });
+
+    it('should search challenges with a query or in ids', async () => {
+      const challenge = airtableBuilder.factory.buildChallenge({
+        id: 'recChallenge',
+        skillIds: [],
+        skills: [],
+        attachments: [],
+      });
+      const challengeRecord = new AirtableRecord('Epreuves', challenge.id, challenge);
+
+      vi.spyOn(airtable, 'findRecords')
+        .mockResolvedValue([challengeRecord]);
+
+      challengeDatasource.usedFields = Symbol('used fields');
+      const challenges = await challengeDatasource.search({
+        filter: { search: 'query term', ids: ['challengeId1'] },
+      });
+
+      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
+        fields: challengeDatasource.usedFields,
+        filterByFormula: 'OR(FIND(\'query term\', LOWER(CONCATENATE({Embed URL}))), \'challengeId1\' = {id persistant})'
+      });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
     });
@@ -217,7 +258,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       challengeDatasource.usedFields = Symbol('used fields');
       await challengeDatasource.search({ filter: { search: 'query \' term' } });
 
-      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', { fields: challengeDatasource.usedFields, filterByFormula: 'AND(FIND(\'query \\\' term\', LOWER(CONCATENATE(Consigne,Propositions,{Embed URL}))) , Statut != \'archive\')' });
+      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
+        fields: challengeDatasource.usedFields,
+        filterByFormula: 'FIND(\'query \\\' term\', LOWER(CONCATENATE({Embed URL})))'
+      });
     });
   });
 });
