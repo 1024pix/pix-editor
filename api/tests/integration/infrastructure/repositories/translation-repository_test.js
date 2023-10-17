@@ -255,6 +255,58 @@ describe('Integration | Repository | translation-repository', function() {
       // then
       expect(entityIds).to.deep.equal(['entityId1']);
     });
+
+    describe('when search string contains wildcard characters', () => {
+
+      beforeEach(async () => {
+        databaseBuilder.factory.buildTranslation({
+          key: 'entity.entityId1.key',
+          locale: 'fr',
+          value: 'aaa N_n aaa',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'entity.entityId2.key',
+          locale: 'fr',
+          value: 'On est sur de nous à 80% à peu près',
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: 'entity.entityId3.key',
+          locale: 'fr',
+          value: 'aaa Non aaa',
+        });
+        await databaseBuilder.commit();
+      });
+
+      it('should escape % character', async () => {
+        // given
+        const searchString = '%';
+
+        // when
+        const entityIds = await search({
+          entity: 'entity',
+          fields: ['key'],
+          search: searchString,
+        });
+
+        // then
+        expect(entityIds).to.deep.equal(['entityId2']);
+      });
+
+      it('should escape _ character', async () => {
+        // given
+        const searchString = 'N_n';
+
+        // when
+        const entityIds = await search({
+          entity: 'entity',
+          fields: ['key'],
+          search: searchString,
+        });
+
+        // then
+        expect(entityIds).to.deep.equal(['entityId1']);
+      });
+    });
   });
 });
 

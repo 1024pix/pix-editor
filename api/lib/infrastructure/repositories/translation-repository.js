@@ -38,7 +38,7 @@ export async function list() {
 export async function search({ entity, fields, search, limit }) {
   const query = knex('translations')
     .pluck('key')
-    .whereLike('value', `%${search}%`)
+    .whereLike('value', `%${escapeWildcardCharacters(search)}%`)
     .andWhere(function() {
       for (const field of fields) {
         this.orWhereLike('key', `${entity}.%.${field}`);
@@ -53,6 +53,10 @@ export async function search({ entity, fields, search, limit }) {
   return _.sortedUniq(keys.map((key) => {
     return key.split('.')[1];
   }));
+}
+
+function escapeWildcardCharacters(s) {
+  return s.replace(/(%|_)/g, '\\$1');
 }
 
 export async function checkIfShouldDuplicateToAirtable() {
