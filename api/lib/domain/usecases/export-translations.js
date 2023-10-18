@@ -78,28 +78,28 @@ function extractTagsFromChallenge(challenge, releaseContent) {
 function extractTagsFromSkill(skill, releaseContent) {
   if (skill === undefined) return [];
   return [
-    toTag(skill.name),
+    toTag(`acquis${skill.name}`),
     ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent),
   ];
 }
 
 function extractTagsFromTube(tube, releaseContent) {
   return [
-    toTag(tube.name),
+    toTag(`sujet${tube.name}`),
     ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
   ];
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
   return [
-    toTag(competence.index),
+    toTag(`competence-${competence.index}`),
     ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent),
   ];
 }
 
 function extractTagsFromArea(area, releaseContent) {
   return [
-    toTag(area.code),
-    toTag(releaseContent.frameworks[area.frameworkId].name),
+    toTag(`domaine-${area.code}`),
+    toTag(`referentiel-${releaseContent.frameworks[area.frameworkId].name}`),
   ];
 }
