@@ -1,5 +1,6 @@
 import { Readable, pipeline } from 'node:stream';
 import csv from 'fast-csv';
+import _ from 'lodash';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import { extractFromReleaseObject } from '../../infrastructure/translations/competence.js';
@@ -40,7 +41,7 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
 }
 
 function toTag(tagName) {
-  return tagName.replaceAll('é', 'e').replaceAll(' ', '_').replaceAll('@', '-');
+  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '-');
 }
 
 function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
