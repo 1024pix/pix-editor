@@ -38,24 +38,24 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     const airtableChallenges = [
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid2',
-        instruction: 'instruction for challengeid2',
         skillId: airtableSkills[0].id,
         status: 'status for challengeid2',
         preview: 'site/challenges/challengeid2',
+        locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid3',
-        instruction: 'instruction for challengeid3',
         skillId: airtableSkills[1].id,
         status: 'status for challengeid3',
         preview: 'site/challenges/challengeid3',
+        locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid4',
-        instruction: 'instruction for challengeid4',
         skillId: airtableSkills[2].id,
         status: 'status for challengeid4',
         preview: 'site/challenges/challengeid4',
+        locales: ['fr'],
       }),
     ];
 
@@ -74,6 +74,21 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
       deactivationReason: 'because',
       createdAt: new Date('2020-01-01T00:00:10Z'),
       updatedAt: new Date('2020-01-02T00:00:10Z'),
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid2.instruction',
+      locale: 'fr',
+      value: 'instruction for challengeid2',
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid3.instruction',
+      locale: 'fr',
+      value: 'instruction for challengeid3',
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid4.instruction',
+      locale: 'fr',
+      value: 'instruction for challengeid4',
     });
     await databaseBuilder.commit();
   });

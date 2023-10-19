@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
-import { translationRepository } from './index.js';
-import { prefix, prefixFor, getPrimaryLocaleFromChallenge } from '../translations/challenge.js';
+import * as translationRepository from './translation-repository.js';
+import { extractFromChallenge as extractTranslationsFromChallenge, prefix, prefixFor } from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -35,12 +35,19 @@ export async function filter(params = {}) {
   return toDomainList(challengeDtos, translations);
 }
 
-export function create(challenge) {
-  return challengeDatasource.create(challenge);
+export async function create(challenge) {
+  const createdChallengeDto = await challengeDatasource.create(challenge);
+  const translations = extractTranslationsFromChallenge(challenge);
+  await translationRepository.save(translations);
+  return toDomain(createdChallengeDto, translations);
 }
 
-export function update(challenge) {
-  return challengeDatasource.update(challenge);
+export async function update(challenge) {
+  const updatedChallengeDto = await challengeDatasource.update(challenge);
+  const translations = extractTranslationsFromChallenge(challenge);
+  await translationRepository.deleteByKeyPrefix(prefixFor(challenge));
+  await translationRepository.save(translations);
+  return toDomain(updatedChallengeDto, translations);
 }
 
 export async function getAllIdsIn(challengeIds) {
@@ -63,20 +70,19 @@ function toDomainList(challengeDtos, translations) {
   }) => `${locale}:${key.split('.')[1]}`);
 
   return challengeDtos.map((challengeDto) => {
-    const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+    const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
     const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
     return toDomain(challengeDto, filteredTranslations);
   });
 }
 
 function toDomain(challengeDto, translations) {
-  const translatedFields = Object.fromEntries(
-    translations.map(({ key, value }) => [key.split('.').at(-1), value]),
-  );
-  const challengeLocale = getPrimaryLocaleFromChallenge(challengeDto.locales) ?? 'fr';
+  const translatedFields = Object.fromEntries([
+    ...translations.map(({ key, value }) => [key.split('.').at(-1), value]),
+  ]);
+  const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
   return new Challenge({
     ...challengeDto,
-    ...translatedFields,
     translations: {
       [challengeLocale]: translatedFields
     }

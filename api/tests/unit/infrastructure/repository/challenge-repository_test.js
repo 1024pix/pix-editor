@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { create, filter, list } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { filter, list } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
@@ -161,20 +161,4 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
-
-  describe('#create', () => {
-    it('should call the datasource', async () => {
-      // given
-      const createdChallenge = 'new challenge';
-      vi.spyOn(challengeDatasource, 'create').mockResolvedValue(createdChallenge);
-
-      // when
-      const challenge = await create({ id: 'created-challenge-id' });
-
-      // then
-      expect(challengeDatasource.create).toHaveBeenCalledWith({ id: 'created-challenge-id' });
-      expect(challenge).to.deep.equal(createdChallenge);
-    });
-  });
 });
-

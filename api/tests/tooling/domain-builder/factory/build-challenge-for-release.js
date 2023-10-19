@@ -30,7 +30,8 @@ export function buildChallengeForRelease({
   illustrationAlt = 'alt illu',
   illustrationUrl = 'url illu',
   shuffled = false,
-  alternativeVersion = 2
+  alternativeVersion = 2,
+  translations,
 } = {}) {
 
   return new ChallengeForRelease({
@@ -63,6 +64,7 @@ export function buildChallengeForRelease({
     illustrationAlt,
     illustrationUrl,
     shuffled,
-    alternativeVersion
+    alternativeVersion,
+    translations,
   });
 }

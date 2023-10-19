@@ -9,11 +9,15 @@ describe('Unit | Infrastructure | Challenge translations', () => {
     it('should extract translations from challenge', () => {
       const challenge = new Challenge({
         id: 'test',
-        instruction: 'consigne en français',
-        alternativeInstruction: 'consigne alternative en français',
-        proposals: 'propositions en français',
-        solution: 'bonnes réponses en français',
-        solutionToDisplay: 'bonnes réponses à afficher en français',
+        translations: {
+          fr: {
+            instruction: 'consigne en français',
+            alternativeInstruction: 'consigne alternative en français',
+            proposals: 'propositions en français',
+            solution: 'bonnes réponses en français',
+            solutionToDisplay: 'bonnes réponses à afficher en français',
+          }
+        },
         locales: ['fr'],
       });
       const translations = extractFromChallenge(challenge);
@@ -37,11 +41,15 @@ describe('Unit | Infrastructure | Challenge translations', () => {
     it('should extract the correct locale from the challenge', () => {
       const challenge = new Challenge({
         id: 'test',
-        instruction: 'consigne en français',
-        alternativeInstruction: 'consigne alternative en français',
-        proposals: 'propositions en français',
-        solution: 'bonnes réponses en français',
-        solutionToDisplay: 'bonnes réponses à afficher en français',
+        translations: {
+          fr: {
+            instruction: 'consigne en français',
+            alternativeInstruction: 'consigne alternative en français',
+            proposals: 'propositions en français',
+            solution: 'bonnes réponses en français',
+            solutionToDisplay: 'bonnes réponses à afficher en français',
+          }
+        },
         locales: ['fr-fr', 'fr'],
       });
       const translations = extractFromChallenge(challenge);
@@ -65,11 +73,15 @@ describe('Unit | Infrastructure | Challenge translations', () => {
     it('should filter empty translations from challenge', () => {
       const challenge = new Challenge({
         id: 'test',
-        instruction: 'consigne en français',
-        alternativeInstruction: '',
-        proposals: 'propositions en français',
-        solution: 'bonnes réponses en français',
-        solutionToDisplay: 'bonnes réponses à afficher en français',
+        translations: {
+          fr: {
+            instruction: 'consigne en français',
+            alternativeInstruction: '',
+            proposals: 'propositions en français',
+            solution: 'bonnes réponses en français',
+            solutionToDisplay: 'bonnes réponses à afficher en français',
+          }
+        },
         locales: ['fr'],
       });
       const translations = extractFromChallenge(challenge);
@@ -91,6 +103,7 @@ describe('Unit | Infrastructure | Challenge translations', () => {
       // given
       const challenge = new Challenge({
         id: 'recTestChallenge',
+        translations: { fr: {} },
       });
 
       // when
