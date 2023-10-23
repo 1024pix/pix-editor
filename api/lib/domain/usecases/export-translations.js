@@ -1,5 +1,6 @@
 import { Readable, pipeline } from 'node:stream';
 import csv from 'fast-csv';
+import _ from 'lodash';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import { extractFromReleaseObject } from '../../infrastructure/translations/competence.js';
@@ -19,12 +20,12 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
 
   const challengesStream = Readable.from(release.content.challenges)
     .filter((challenge) => challenge.locales.includes('fr'))
-    .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'épreuve'))
+    .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'epreuve'))
     .flatMap(extractTranslationsFromObject(extractFromChallenge))
     .map(translationAndTagsToCSVLine);
 
   const competencesStream = Readable.from(release.content.competences)
-    .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'compétence'))
+    .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'competence'))
     .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
     .filter(({ translation }) => translation.locale === 'fr')
     .map(translationAndTagsToCSVLine);
@@ -37,6 +38,10 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
+}
+
+function toTag(tagName) {
+  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '-');
 }
 
 function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
@@ -67,35 +72,35 @@ function extractTranslationsFromObject(extractFn) {
 function extractTagsFromChallenge(challenge, releaseContent) {
   return [
     ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
-    challenge.status,
+    toTag(challenge.status),
   ];
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
   if (skill === undefined) return [];
   return [
-    skill.name,
+    toTag(`acquis${skill.name}`),
     ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent),
   ];
 }
 
 function extractTagsFromTube(tube, releaseContent) {
   return [
-    tube.name,
+    toTag(`sujet${tube.name}`),
     ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
   ];
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
   return [
-    competence.index,
+    toTag(`competence-${competence.index}`),
     ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent),
   ];
 }
 
 function extractTagsFromArea(area, releaseContent) {
   return [
-    area.code,
-    releaseContent.frameworks[area.frameworkId].name,
+    toTag(`domaine-${area.code}`),
+    toTag(`referentiel-${releaseContent.frameworks[area.frameworkId].name}`),
   ];
 }

@@ -143,13 +143,13 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel,validé"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel,validé"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel,validé"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel,validé"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"épreuve,@acquis1,@acquis,1.1,1,Nom du referentiel,validé"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"compétence,1.1,1,Nom du referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"compétence,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,acquis-acquis1,sujet-acquis,competence-1.1,domaine-1,referentiel-Nom_du_referentiel,valide"',
+        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,acquis-acquis1,sujet-acquis,competence-1.1,domaine-1,referentiel-Nom_du_referentiel,valide"',
+        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,acquis-acquis1,sujet-acquis,competence-1.1,domaine-1,referentiel-Nom_du_referentiel,valide"',
+        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,acquis-acquis1,sujet-acquis,competence-1.1,domaine-1,referentiel-Nom_du_referentiel,valide"',
+        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,acquis-acquis1,sujet-acquis,competence-1.1,domaine-1,referentiel-Nom_du_referentiel,valide"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"competence,competence-1.1,domaine-1,referentiel-Nom_du_referentiel"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,competence-1.1,domaine-1,referentiel-Nom_du_referentiel"',
       ]);
     });
 
@@ -289,13 +289,13 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"épreuve,validé"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"épreuve,validé"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"épreuve,validé"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"épreuve,validé"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"épreuve,validé"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"compétence,1.1,1,Nom du referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"compétence,1.1,1,Nom du referentiel"',
+        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,valide"',
+        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,valide"',
+        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,valide"',
+        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,valide"',
+        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,valide"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"competence,competence-1.1,domaine-1,referentiel-Nom_du_referentiel"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,competence-1.1,domaine-1,referentiel-Nom_du_referentiel"',
       ]);
     });
 
