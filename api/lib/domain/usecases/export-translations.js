@@ -47,11 +47,10 @@ function toTag(tagName) {
 function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
   return (object) => {
     const hierarchyTags = extractTagsFn(object, releaseContent).reverse();
-    const tags = [];
-    while (hierarchyTags.length > 0) {
-      tags.push(hierarchyTags.join('-'));
-      hierarchyTags.pop();
-    }
+    const tags = hierarchyTags.map((_, index) => {
+      return hierarchyTags.slice(0,hierarchyTags.length - index).join('-');
+    });
+
     return {
       tags: [typeTag, ...tags],
       object,
