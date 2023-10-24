@@ -76,7 +76,10 @@ function extractTranslationsFromObject(extractFn) {
 }
 
 function extractTagsFromChallenge(challenge, releaseContent) {
-  return extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent);
+  return [
+    toTag(challenge.status),
+    ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
+  ];
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
