@@ -38,8 +38,7 @@
 
 .target-profile {
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow: hidden scroll;
 
   #target-profile__open-file {
     display: none;
