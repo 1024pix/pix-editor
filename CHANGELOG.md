@@ -1,5 +1,27 @@
 
 
+## v3.103.0 (24/10/2023)
+
+
+### :rocket: Amélioration
+- [#340](https://github.com/1024pix/pix-editor/pull/340) [FEATURE] Renommer puis supprimer d'airtable les colonnes traduisibles des épreuves (PIX-9317).
+- [#343](https://github.com/1024pix/pix-editor/pull/343) [FEATURE] Faire la recherche d'épreuve à partir des traductions (PIX-9659).
+
+### :bug: Correction
+- [#345](https://github.com/1024pix/pix-editor/pull/345) [BUGFIX] Corrige le noms des tags a l'export.
+
+### :arrow_up: Montée de version
+- [#350](https://github.com/1024pix/pix-editor/pull/350) [BUMP] Update dependency @1024pix/ember-testing-library to ^0.9.0 (pix-editor).
+- [#349](https://github.com/1024pix/pix-editor/pull/349) [BUMP] Update dependency node to v18.18.2.
+- [#342](https://github.com/1024pix/pix-editor/pull/342) [BUMP] Update node.
+- [#347](https://github.com/1024pix/pix-editor/pull/347) [BUMP] Update dependency @playwright/test to v1.39.0.
+- [#346](https://github.com/1024pix/pix-editor/pull/346) [BUMP] Update dependency googleapis to v127 (api).
+- [#348](https://github.com/1024pix/pix-editor/pull/348) [BUMP] Update dependency qunit-dom to v3 (pix-editor).
+- [#344](https://github.com/1024pix/pix-editor/pull/344) [BUMP] Lock file maintenance (api).
+
+### :coffee: Autre
+- [#352](https://github.com/1024pix/pix-editor/pull/352) Revert "[BUMP] Update dependency node to v18.18.2".
+
 ## v3.102.0 (16/10/2023)
 
 
