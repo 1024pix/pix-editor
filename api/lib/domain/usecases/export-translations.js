@@ -41,13 +41,18 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
 }
 
 function toTag(tagName) {
-  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '-');
+  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '');
 }
 
 function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
   return (object) => {
+    const hierarchyTags = extractTagsFn(object, releaseContent).reverse();
+    const tags = hierarchyTags.map((_, index) => {
+      return hierarchyTags.slice(0,hierarchyTags.length - index).join('-');
+    });
+
     return {
-      tags: [typeTag, ...extractTagsFn(object, releaseContent)],
+      tags: [typeTag, ...tags],
       object,
     };
   };
@@ -71,36 +76,36 @@ function extractTranslationsFromObject(extractFn) {
 
 function extractTagsFromChallenge(challenge, releaseContent) {
   return [
-    ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
     toTag(challenge.status),
+    ...extractTagsFromSkill(releaseContent.skills[challenge.skillId], releaseContent),
   ];
 }
 
 function extractTagsFromSkill(skill, releaseContent) {
   if (skill === undefined) return [];
   return [
-    toTag(`acquis${skill.name}`),
+    toTag(skill.name),
     ...extractTagsFromTube(releaseContent.tubes[skill.tubeId], releaseContent),
   ];
 }
 
 function extractTagsFromTube(tube, releaseContent) {
   return [
-    toTag(`sujet${tube.name}`),
+    toTag(tube.name),
     ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
   ];
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
   return [
-    toTag(`competence-${competence.index}`),
+    toTag(competence.index),
     ...extractTagsFromArea(releaseContent.areas[competence.areaId], releaseContent),
   ];
 }
 
 function extractTagsFromArea(area, releaseContent) {
   return [
-    toTag(`domaine-${area.code}`),
-    toTag(`referentiel-${releaseContent.frameworks[area.frameworkId].name}`),
+    toTag(area.code),
+    toTag(releaseContent.frameworks[area.frameworkId].name),
   ];
 }
