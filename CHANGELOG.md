@@ -1,5 +1,14 @@
 
 
+## v3.104.0 (25/10/2023)
+
+
+### :rocket: Amélioration
+- [#354](https://github.com/1024pix/pix-editor/pull/354) [FEATURE] Adapter les noms des tags pour pouvoir utiliser les filtres de Phrase (PIX-9752).
+
+### :arrow_up: Montée de version
+- [#355](https://github.com/1024pix/pix-editor/pull/355) [BUMP] Lock file maintenance (pix-editor).
+
 ## v3.103.0 (24/10/2023)
 
 
