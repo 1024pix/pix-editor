@@ -1,5 +1,11 @@
 
 
+## v3.104.1 (26/10/2023)
+
+
+### :bug: Correction
+- [#357](https://github.com/1024pix/pix-editor/pull/357) [BUGFIX] Patch du challenge quand on modifie l'illustration (PIX-9770).
+
 ## v3.104.0 (25/10/2023)
 
 
