@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { domainBuilder, airtableBuilder } from '../../test-helper.js';
 import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
+import { challengeRepository } from '../../../lib/infrastructure/repositories/index.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
@@ -107,7 +108,7 @@ describe('Unit | Repository | release-repository', () => {
         }),
       ];
 
-      const challenge = domainBuilder.buildChallengeDatasourceObject({
+      const challenge = domainBuilder.buildChallenge({
         id: 'recChallenge',
         type : 'QCM',
         t1Status : 'Activé',
@@ -125,8 +126,8 @@ describe('Unit | Repository | release-repository', () => {
       });
       const type = 'Attachments';
 
-      vi.spyOn(challengeDatasource, 'filterById').mockImplementation(async (spyId) => {
-        if (spyId === 'recChallenge') return challenge;
+      vi.spyOn(challengeRepository, 'filter').mockImplementation(async ({ filter: { ids } }) => {
+        if (ids.length === 1 && ids[0] === 'recChallenge') return [challenge];
       });
       vi.spyOn(attachmentDatasource, 'filterByChallengeId').mockImplementation(async (spyId) => {
         if (spyId === 'recChallenge') return attachmentRecords;
