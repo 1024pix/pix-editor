@@ -51,3 +51,17 @@ export function prefixFor(skill) {
   return `${prefix}${id}.`;
 }
 
+export function hydrateReleaseObject(skill, translations) {
+  for (const { field } of fields) {
+    skill[`${field}_i18n`] = {};
+    for (const { locale } of locales) {
+      const translation = translations.find(
+        (translation) =>
+          translation.key === `${prefix}${skill.id}.${field}` &&
+          translation.locale === locale
+      );
+      skill[`${field}_i18n`][locale] = translation?.value ?? null;
+    }
+  }
+}
+

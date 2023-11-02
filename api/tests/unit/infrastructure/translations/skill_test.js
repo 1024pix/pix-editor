@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   extractFromAirtableObject,
   hydrateToAirtableObject,
+  hydrateReleaseObject,
   prefixFor,
 } from '../../../../lib/infrastructure/translations/skill.js';
 
@@ -97,6 +98,61 @@ describe('Unit | Infrastructure | Skill translations', () => {
         'id persistant': 'test',
         'Indice fr-fr': 'indice fr-fr',
         'Indice en-us': null,
+      });
+    });
+  });
+
+  describe('#hydrateReleaseObject', () => {
+    it('should set translated fields into the object', () => {
+      // given
+      const skill = {
+        id: 'test',
+        otherField: 'foo',
+      };
+      const translations = [
+        { key: 'skill.test.hint', locale: 'fr', value: 'indice fr-fr' },
+        {
+          key: 'skill.test.hint',
+          locale: 'en',
+          value: 'hint en-us',
+        },
+      ];
+
+      // when
+      hydrateReleaseObject(skill, translations);
+
+      // then
+      expect(skill).to.deep.equal({
+        id: 'test',
+        hint_i18n: {
+          fr: 'indice fr-fr',
+          en: 'hint en-us',
+        },
+        otherField: 'foo',
+      });
+    });
+
+    it('should set null value for missing translations', () => {
+      // given
+      const skill = {
+        id: 'test',
+        otherField: 'foo',
+      };
+      const translations = [
+        { key: 'skill.test.hint', locale: 'en', value: 'my english hint' },
+      ];
+
+      // when
+      hydrateReleaseObject(skill, translations);
+
+      // then
+      expect(skill).to.deep.equal({
+        id: 'test',
+        hint_i18n: {
+          fr: null,
+          en: 'my english hint',
+        },
+        otherField: 'foo',
       });
     });
   });
