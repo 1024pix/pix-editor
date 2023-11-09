@@ -191,3 +191,146 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
     });
   });
 });
+
+describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill translations', () => {
+
+  afterEach(() => {
+    expect(nock.isDone()).to.be.true;
+  });
+
+  afterEach(function() {
+    return knex('translations').truncate();
+  });
+
+  describe('GET /api/airtable/content/Acquis', () => {
+    let skillDataObject;
+    let skill;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+
+      skillDataObject = domainBuilder.buildSkillDatasourceObject({
+        id: 'mon_id_persistant',
+      });
+      skill = inputOutputDataBuilder.factory.buildSkill({
+        ...skillDataObject,
+        hint_i18n: {
+          fr: 'CCC',
+          en: 'DDD',
+        }
+      });
+
+      databaseBuilder.factory.buildTranslation({
+        locale: 'fr',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'AAA'
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale: 'en',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'BBB'
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    describe('nominal cases', () => {
+      it('should proxy request to airtable and read translations from the PG table', async () => {
+        // Given
+        const expectedSkillDataObject = domainBuilder.buildSkillDatasourceObject({
+          id: 'mon_id_persistant'
+        });
+        const expectedSkill = inputOutputDataBuilder.factory.buildSkill({
+          ...expectedSkillDataObject,
+          hint_i18n: {
+            fr: 'AAA',
+            en: 'BBB',
+          }
+        });
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [skill] });
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/airtable/content/Acquis',
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal({ records: [expectedSkill] });
+      });
+    });
+  });
+
+  describe('GET /api/airtable/content/Acquis/id', () => {
+    let skillDataObject;
+    let skill;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+
+      skillDataObject = domainBuilder.buildSkillDatasourceObject({
+        id: 'mon_id_persistant',
+      });
+      skill = inputOutputDataBuilder.factory.buildSkill({
+        ...skillDataObject,
+        hint_i18n: {
+          fr: 'Pouet',
+          en: 'Toot',
+        },
+      });
+
+      databaseBuilder.factory.buildTranslation({
+        locale: 'fr',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'Prout'
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale: 'en',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'Fart'
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    describe('nominal case', () => {
+      it('should proxy request to airtable and read translations from the PG table', async () => {
+        // Given
+        const expectedSkillDataObject = domainBuilder.buildSkillDatasourceObject({
+          id: 'mon_id_persistant',
+        });
+        const expectedSkill = inputOutputDataBuilder.factory.buildSkill({
+          ...expectedSkillDataObject,
+          hint_i18n: {
+            fr: 'Prout',
+            en: 'Fart'
+          },
+        });
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis/recId')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, skill);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/airtable/content/Acquis/recId',
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal(expectedSkill);
+      });
+    });
+  });
+});

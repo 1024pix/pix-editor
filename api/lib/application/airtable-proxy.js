@@ -9,7 +9,7 @@ import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
-const tablesTranslationsForReading = ['Competences'];
+const tablesTranslationsForReading = ['Competences', 'Acquis'];
 const tablesTranslationsForWriting = ['Competences', 'Acquis'];
 
 export async function register(server) {
