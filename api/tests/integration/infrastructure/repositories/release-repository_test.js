@@ -168,7 +168,7 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      const { competences, challenges } = _mockRichAirtableContent();
+      const { competences, challenges, skills } = _mockRichAirtableContent();
 
       for (const competence of competences) {
         databaseBuilder.factory.buildTranslation({
@@ -219,6 +219,19 @@ describe('Integration | Repository | release-repository', function() {
           key: `challenge.${challenge.id}.solutionToDisplay`,
           locale,
           value: `${challenge.id} solutionToDisplay`,
+        });
+      }
+
+      for (const skill of skills) {
+        databaseBuilder.factory.buildTranslation({
+          key: `skill.${skill.id}.hint`,
+          locale: 'fr',
+          value: `${skill.id} fr indice`,
+        });
+        databaseBuilder.factory.buildTranslation({
+          key: `skill.${skill.id}.hint`,
+          locale: 'en',
+          value: `${skill.id} en hint`,
         });
       }
 
@@ -426,7 +439,7 @@ function _mockRichAirtableContent() {
     },
     competenceId: 'competence21',
   });
-  const airtableSkill11111 = airtableBuilder.factory.buildSkill({
+  const skill11111 = {
     id: 'skill11111',
     name: 'skill11111 name',
     hint_i18n: {
@@ -444,8 +457,9 @@ function _mockRichAirtableContent() {
     level: 4,
     internationalisation: 'skill11111 internationalisation',
     version: 'skill11111 version',
-  });
-  const airtableSkill11112 = airtableBuilder.factory.buildSkill({
+  };
+  const airtableSkill11111 = airtableBuilder.factory.buildSkill(skill11111);
+  const skill11112 = {
     id: 'skill11112',
     name: 'skill11112 name',
     hint_i18n: {
@@ -463,8 +477,9 @@ function _mockRichAirtableContent() {
     level: 3,
     internationalisation: 'skill11112 internationalisation',
     version: 'skill11112 version',
-  });
-  const airtableSkill12121 = airtableBuilder.factory.buildSkill({
+  };
+  const airtableSkill11112 = airtableBuilder.factory.buildSkill(skill11112);
+  const skill12121 = {
     id: 'skill12121',
     name: 'skill12121 name',
     hint_i18n: {
@@ -482,8 +497,9 @@ function _mockRichAirtableContent() {
     level: 2,
     internationalisation: 'skill12121 internationalisation',
     version: 'skill12121 version',
-  });
-  const airtableSkill21111 = airtableBuilder.factory.buildSkill({
+  };
+  const airtableSkill12121 = airtableBuilder.factory.buildSkill(skill12121);
+  const skill21111 = {
     id: 'skill21111',
     name: 'skill21111 name',
     hint_i18n: {
@@ -501,7 +517,8 @@ function _mockRichAirtableContent() {
     level: 1,
     internationalisation: 'skill21111 internationalisation',
     version: 'skill21111 version',
-  });
+  };
+  const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
   const challenge121211 = {
     id: 'challenge121211',
     type: 'challenge121211 type',
@@ -751,6 +768,7 @@ function _mockRichAirtableContent() {
   return {
     competences: [competence11, competence12, competence21],
     challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
+    skills: [skill11111, skill11112, skill12121, skill21111],
   };
 }
 
@@ -1013,8 +1031,8 @@ function _getRichCurrentContentDTO() {
       id: 'skill11111',
       name: 'skill11111 name',
       hint_i18n: {
-        fr: 'skill11111 hintFrFr',
-        en: 'skill11111 hintEnUs',
+        fr: 'skill11111 fr indice',
+        en: 'skill11111 en hint',
       },
       hintStatus: 'skill11111 hintStatus',
       tutorialIds: ['tutorial2'],
@@ -1030,8 +1048,8 @@ function _getRichCurrentContentDTO() {
       id: 'skill11112',
       name: 'skill11112 name',
       hint_i18n: {
-        fr: 'skill11112 hintFrFr',
-        en: 'skill11112 hintEnUs',
+        fr: 'skill11112 fr indice',
+        en: 'skill11112 en hint',
       },
       hintStatus: 'skill11112 hintStatus',
       learningMoreTutorialIds: [],
@@ -1047,8 +1065,8 @@ function _getRichCurrentContentDTO() {
       id: 'skill12121',
       name: 'skill12121 name',
       hint_i18n: {
-        fr: 'skill12121 hintFrFr',
-        en: 'skill12121 hintEnUs',
+        fr: 'skill12121 fr indice',
+        en: 'skill12121 en hint',
       },
       hintStatus: 'skill12121 hintStatus',
       tutorialIds: [],
@@ -1064,8 +1082,8 @@ function _getRichCurrentContentDTO() {
       id: 'skill21111',
       name: 'skill21111 name',
       hint_i18n: {
-        fr: 'skill21111 hintFrFr',
-        en: 'skill21111 hintEnUs',
+        fr: 'skill21111 fr indice',
+        en: 'skill21111 en hint',
       },
       hintStatus: 'skill21111 hintStatus',
       tutorialIds: [],

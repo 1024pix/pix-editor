@@ -24,6 +24,7 @@ import * as competenceTranslations from '../translations/competence.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
+import * as skillTranslations from "../translations/skill.js";
 
 export function getCurrentContent() {
   return _getCurrentContent();
@@ -118,7 +119,8 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes,
     tutorials,
-    translations,
+    translationsForCompetence,
+    translationsForSkill,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
@@ -129,6 +131,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubeDatasource.list(),
     tutorialDatasource.list(),
     translationRepository.listByPrefix(competenceTranslations.prefix),
+    translationRepository.listByPrefix(skillTranslations.prefix),
   ]);
   const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
   const transformedChallenges = challenges.map(transformChallenge);
@@ -137,7 +140,8 @@ async function _getCurrentContentFromAirtable(challenges) {
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
 
-  filteredCompetences.forEach((competence) => competenceTranslations.hydrateReleaseObject(competence, translations));
+  filteredCompetences.forEach((competence) => competenceTranslations.hydrateReleaseObject(competence, translationsForCompetence));
+  filteredSkills.forEach((skill) => skillTranslations.hydrateReleaseObject(skill, translationsForSkill));
 
   return {
     frameworks,
