@@ -5,7 +5,7 @@ import { checkUserIsAuthenticatedViaBasicAndAdmin } from '../../../application/s
 
 AdminJS.registerAdapter(AdminJSSequelize);
 
-export { default as plugin } from '@1024pix/adminjs-hapijs';
+export { default as plugin } from '@adminjs/hapi';
 
 const componentLoader = new ComponentLoader();
 const Components = {
