@@ -80,7 +80,7 @@ export async function serializeEntity({ type, entity, translations }) {
     return { updatedRecord: challenge, model };
   }
 
-  tablesTranslations[type]?.hydrateReleaseObject(updatedRecord, translations);
+  tablesTranslations[type]?.hydrateReleaseObject?.(updatedRecord, translations);
 
   return { updatedRecord, model };
 }

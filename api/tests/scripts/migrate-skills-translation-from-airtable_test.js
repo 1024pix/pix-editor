@@ -36,13 +36,12 @@ describe('Migrate translation from airtable', function() {
         en: 'clue',
       }
     });
-    const skills = [skill];
 
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Acquis')
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
       .query(true)
-      .reply(200, { records: skills });
+      .reply(200, { records: [skill] });
 
     // when
     await migrateSkillsTranslationFromAirtable({ airtableClient });

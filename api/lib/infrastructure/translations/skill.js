@@ -46,16 +46,8 @@ export function hydrateToAirtableObject(skill, translations) {
   }
 }
 
-export function dehydrateAirtableObject() {
-}
-
-export function hydrateReleaseObject() {
-}
-
 export function prefixFor(skill) {
   const id = skill['id persistant'];
   return `${prefix}${id}.`;
 }
 
-export function extractFromReleaseObject() {
-}
