@@ -1,0 +1,193 @@
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import nock from 'nock';
+import {
+  airtableBuilder,
+  inputOutputDataBuilder,
+  databaseBuilder,
+  domainBuilder,
+  generateAuthorizationHeader,
+  knex,
+} from '../../test-helper.js';
+import { createServer } from '../../../server.js';
+
+describe('Acceptance | Controller | airtable-proxy-controller | create skill translations', () => {
+  beforeEach(() => {
+    nock('https://api.test.pix.fr').post(/.*/).reply(200);
+    nock('https://api.test.pix.fr').patch(/.*/).reply(200);
+
+    nock('https://api.airtable.com')
+      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .optionally()
+      .reply(404);
+  });
+
+  afterEach(async () => {
+    try {
+      expect(nock.isDone()).to.be.true;
+    } finally {
+      await knex('translations').truncate();
+    }
+  });
+
+  describe('POST /api/airtable/content/Acquis', () => {
+    let airtableRawSkill;
+    let skillToSave;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+      await databaseBuilder.commit();
+      const skill = domainBuilder.buildSkillDatasourceObject({ id: 'mon_id_persistant' });
+      airtableRawSkill = airtableBuilder.factory.buildSkill(skill);
+      skillToSave = inputOutputDataBuilder.factory.buildSkill({
+        ...skill
+      });
+    });
+
+    describe('nominal cases', () => {
+      it('should proxy request to airtable and add translations to the PG table', async () => {
+        // Given
+        nock('https://api.airtable.com')
+          .post('/v0/airtableBaseValue/Acquis', airtableRawSkill)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, airtableRawSkill);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'POST',
+          url: '/api/airtable/content/Acquis',
+          headers: generateAuthorizationHeader(user),
+          payload: skillToSave,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const translations = await knex('translations').select().orderBy([{
+          column: 'key',
+          order: 'asc'
+        }, { column: 'locale', order: 'asc' }]);
+
+        expect(translations).to.deep.equal([{
+          key: 'skill.mon_id_persistant.hint',
+          locale: 'en',
+          value: 'Can we geo-locate a rabbit on the ice floe?'
+        }, {
+          key: 'skill.mon_id_persistant.hint',
+          locale: 'fr',
+          value: 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?'
+        }]);
+      });
+    });
+  });
+
+  describe('PATCH /api/airtable/content/Acquis/id_airtable', () => {
+    let skillToUpdate;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+
+      const skillDataObject = domainBuilder.buildSkillDatasourceObject({
+        id: 'mon_id_persistant',
+      });
+      skillToUpdate = inputOutputDataBuilder.factory.buildSkill({
+        ...skillDataObject,
+        hint_i18n: {
+          fr: 'AAA',
+          en: 'BBB',
+        }
+      });
+
+      databaseBuilder.factory.buildTranslation({
+        locale: 'fr',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'Pouet'
+      });
+      databaseBuilder.factory.buildTranslation({
+        locale: 'en',
+        key: 'skill.mon_id_persistant.hint',
+        value: 'Toot'
+      });
+
+      await databaseBuilder.commit();
+
+    });
+
+    describe('nominal cases', () => {
+      it('should proxy request to airtable and update translations to the PG table', async () => {
+        // Given
+        nock('https://api.airtable.com')
+          .patch('/v0/airtableBaseValue/Acquis/id_airtable', skillToUpdate)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, skillToUpdate);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/airtable/content/Acquis/id_airtable',
+          headers: generateAuthorizationHeader(user),
+          payload: skillToUpdate,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const translations = await knex('translations').select().orderBy([{
+          column: 'key',
+          order: 'asc'
+        }, { column: 'locale', order: 'asc' }]);
+
+        expect(translations).to.deep.equal([{
+          key: 'skill.mon_id_persistant.hint',
+          locale: 'en',
+          value: 'BBB'
+        }, {
+          key: 'skill.mon_id_persistant.hint',
+          locale: 'fr',
+          value: 'AAA'
+        }]);
+      });
+    });
+
+    describe('when some fields are emptied', () => {
+      it('should delete translation keys', async () => {
+        // Given
+        const skillDataObject = domainBuilder.buildSkillDatasourceObject({
+          id: 'mon_id_persistant',
+        });
+        skillToUpdate = inputOutputDataBuilder.factory.buildSkill({
+          ...skillDataObject,
+          hint_i18n: {
+            fr: 'AAA',
+          },
+        });
+
+        nock('https://api.airtable.com')
+          .patch('/v0/airtableBaseValue/Acquis/id_airtable', skillToUpdate)
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, skillToUpdate);
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'PATCH',
+          url: '/api/airtable/content/Acquis/id_airtable',
+          headers: generateAuthorizationHeader(user),
+          payload: skillToUpdate,
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        const translations = await knex('translations').select('key', 'locale', 'value');
+        expect(translations.length).to.equal(1);
+        expect(translations[0]).to.deep.equal({
+          key: 'skill.mon_id_persistant.hint',
+          locale: 'fr',
+          value: 'AAA'
+        });
+      });
+    });
+  });
+});
