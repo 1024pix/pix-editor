@@ -1,4 +1,4 @@
-import { Translation } from '../../domain/models/index.js';
+import * as translationUtils from './utils.js';
 
 export const prefix = 'competence.';
 
@@ -12,75 +12,16 @@ const fields = [
   { airtableField: 'Description', field: 'description' },
 ];
 
-const localizedFields = locales.flatMap((locale) =>
-  fields.map((field) => ({
-    ...locale,
-    ...field,
-  }))
-);
+const localizedFields = translationUtils.buildLocalizedFields(locales, fields);
 
-export function extractFromAirtableObject(competence) {
-  return localizedFields
-    .filter(({ airtableField, airtableLocale }) => competence[`${airtableField} ${airtableLocale}`])
-    .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
-      key: `${prefixFor(competence)}${field}`,
-      value: competence[`${airtableField} ${airtableLocale}`],
-      locale,
-    }));
-}
+export const extractFromAirtableObject = translationUtils.extractFromAirtableObject({ localizedFields, prefix });
 
-export function hydrateToAirtableObject(competence, translations) {
-  for (const {
-    airtableLocale,
-    locale,
-    airtableField,
-    field,
-  } of localizedFields) {
-    const translation = translations.find(
-      (translation) =>
-        translation.key === `${prefixFor(competence)}${field}` &&
-        translation.locale === locale
-    );
+export const hydrateToAirtableObject = translationUtils.hydrateToAirtableObject({ localizedFields, prefix });
 
-    competence[`${airtableField} ${airtableLocale}`] =
-      translation?.value ?? null;
-  }
-}
+export const dehydrateAirtableObject = translationUtils.dehydrateAirtableObject({ localizedFields });
 
-export function dehydrateAirtableObject(competence) {
-  for (const {
-    airtableLocale,
-    airtableField,
-  } of localizedFields) {
-    delete competence[`${airtableField} ${airtableLocale}`];
-  }
-}
+export const hydrateReleaseObject = translationUtils.hydrateReleaseObject({ fields, locales, prefix });
 
-export function hydrateReleaseObject(competence, translations) {
-  for (const { field } of fields) {
-    competence[`${field}_i18n`] = {};
-    for (const { locale } of locales) {
-      const translation = translations.find(
-        (translation) =>
-          translation.key === `${prefix}${competence.id}.${field}` &&
-          translation.locale === locale
-      );
-      competence[`${field}_i18n`][locale] = translation?.value ?? null;
-    }
-  }
-}
+export const extractFromReleaseObject = translationUtils.extractFromReleaseObject({ localizedFields, prefix });
 
-export function prefixFor(competence) {
-  const id = competence['id persistant'];
-  return `${prefix}${id}.`;
-}
-
-export function extractFromReleaseObject(competence) {
-  return localizedFields
-    .filter(({ field, locale }) => competence[`${field}_i18n`][locale])
-    .map(({ field, locale }) => new Translation({
-      key: `${prefix}${competence.id}.${field}`,
-      value: competence[`${field}_i18n`][locale],
-      locale,
-    }));
-}
+export const prefixFor = translationUtils.prefixFor({ prefix, idField: 'id persistant' });

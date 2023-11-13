@@ -1,4 +1,4 @@
-import { Translation } from '../../domain/models/index.js';
+import * as translationUtils from './utils.js';
 
 export const prefix = 'skill.';
 
@@ -11,43 +11,11 @@ const fields = [
   { airtableField: 'Indice', field: 'hint' },
 ];
 
-const localizedFields = locales.flatMap((locale) =>
-  fields.map((field) => ({
-    ...locale,
-    ...field,
-  }))
-);
+const localizedFields = translationUtils.buildLocalizedFields(locales, fields);
 
-export function extractFromAirtableObject(skill) {
-  return localizedFields
-    .filter(({ airtableField, airtableLocale }) => skill[`${airtableField} ${airtableLocale}`])
-    .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
-      key: `${prefixFor(skill)}${field}`,
-      value: skill[`${airtableField} ${airtableLocale}`],
-      locale,
-    }));
-}
+export const extractFromAirtableObject = translationUtils.extractFromAirtableObject({ localizedFields, prefix });
 
-export function hydrateToAirtableObject(skill, translations) {
-  for (const {
-    airtableLocale,
-    locale,
-    airtableField,
-    field,
-  } of localizedFields) {
-    const translation = translations.find(
-      (translation) =>
-        translation.key === `${prefixFor(skill)}${field}` &&
-        translation.locale === locale
-    );
+export const hydrateToAirtableObject = translationUtils.hydrateToAirtableObject({ localizedFields, prefix });
 
-    skill[`${airtableField} ${airtableLocale}`] =
-      translation?.value ?? null;
-  }
-}
-
-export function prefixFor(skill) {
-  const id = skill['id persistant'];
-  return `${prefix}${id}.`;
-}
+export const prefixFor = translationUtils.prefixFor({ prefix, idField: 'id persistant' });
 
