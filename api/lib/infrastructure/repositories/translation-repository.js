@@ -30,6 +30,17 @@ export async function listByPrefix(prefix, { transaction = knex } = {}) {
   return translationDtos.map(_toDomain);
 }
 
+export async function listByPrefixes(prefixes, { transaction = knex } = {}) {
+  if (prefixes.length === 0) return [];
+  const queryBuilder = transaction('translations')
+    .whereLike('key', `${prefixes[0]}%`);
+  for (const prefix of prefixes.slice(1)) {
+    queryBuilder.orWhereLike('key', `${prefix}%`);
+  }
+  const translationDtos = await queryBuilder.select().orderBy('key');
+  return translationDtos.map(_toDomain);
+}
+
 export async function list() {
   const translationDtos = await knex('translations').select();
   return translationDtos.map(_toDomain);

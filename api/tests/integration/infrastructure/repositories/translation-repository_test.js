@@ -335,6 +335,71 @@ describe('Integration | Repository | translation-repository', function() {
       });
     });
   });
+
+  context('#listByPrefixes', function() {
+    beforeEach(async function() {
+      databaseBuilder.factory.buildTranslation({
+        key: 'prefixa.key',
+        locale: 'fr',
+        value: 'prefixa'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'prefixb.key',
+        locale: 'fr',
+        value: 'prefixb'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'prefixc.key',
+        locale: 'fr',
+        value: 'prefixc'
+      });
+      await databaseBuilder.commit();
+
+    });
+    context('when no prefixes are specified', () => {
+      it('should return empty translations', async () => {
+        // when
+        const translations = await translationRepository.listByPrefixes([]);
+
+        //then
+        expect(translations).toEqual([]);
+      });
+    });
+
+    context('when one prefix is specified', () => {
+      it('should return translations of this prefix', async () => {
+        // when
+        const translations = await translationRepository.listByPrefixes(['prefixa']);
+
+        //then
+        expect(translations).toEqual([{
+          key: 'prefixa.key',
+          locale: 'fr',
+          value: 'prefixa'
+        }]);
+      });
+    });
+
+    context('when multiple prefixes are specified', () => {
+      it('should return translations of all prefixes', async () => {
+        // when
+        const translations = await translationRepository.listByPrefixes(['prefixa', 'prefixc']);
+
+        //then
+        expect(translations).toEqual([{
+          key: 'prefixa.key',
+          locale: 'fr',
+          value: 'prefixa'
+        },
+        {
+          key: 'prefixc.key',
+          locale: 'fr',
+          value: 'prefixc'
+        }
+        ]);
+      });
+    });
+  });
 });
 
 async function _setShouldDuplicateToAirtable(value) {
