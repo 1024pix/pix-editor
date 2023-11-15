@@ -21,6 +21,7 @@ import {
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
 import * as competenceTranslations from '../translations/competence.js';
+import { Challenge } from '../../domain/models/Challenge.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
@@ -132,6 +133,20 @@ async function _getCurrentContentFromAirtable(challenges) {
   ]);
   const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
   const transformedChallenges = challenges.map(transformChallenge);
+  const localizedChallenges = transformedChallenges.flatMap((challenge) => {
+    const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
+    return Object.keys(challenge.translations).map((locale) => {
+      const isPrimaryLocale = primaryLocale === locale;
+      const localizedChallenge = {
+        ...challenge,
+        ...challenge.translations[locale],
+        id: isPrimaryLocale ? challenge.id : `${challenge.id}-${locale}`,
+        locales: isPrimaryLocale ? challenge.locales : [locale],
+      };
+      delete localizedChallenge.translations;
+      return localizedChallenge;
+    });
+  });
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
@@ -146,7 +161,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes: transformedTubes,
     skills: filteredSkills,
-    challenges: transformedChallenges,
+    challenges: localizedChallenges,
     tutorials: filteredTutorials,
   };
 }
