@@ -26,7 +26,7 @@ export async function register(server) {
             if (response.data.records) {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
               response.data.records.forEach((entity) => {
-                tableTranslations.hydrateToAirtableObject(entity.fields, translations) ;
+                tableTranslations.hydrateToAirtableObject(entity.fields, translations);
               });
             } else {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
@@ -54,7 +54,7 @@ export async function register(server) {
           let translations;
           if (tableTranslations) {
             translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
-            tableTranslations.dehydrateAirtableObject(request.payload?.fields);
+            tableTranslations.dehydrateAirtableObject?.(request.payload?.fields);
           }
 
           const response = await _proxyRequestToAirtable(request, config.airtable.base);
@@ -116,7 +116,8 @@ export const name = 'airtable-proxy';
 
 async function _proxyRequestToAirtable(request, airtableBase) {
   return axios.request(`${AIRTABLE_BASE_URL}/${airtableBase}/${request.params.path}`,
-    { headers: { 'Authorization': `Bearer ${config.airtable.apiKey}`, 'Content-Type': 'application/json' },
+    {
+      headers: { 'Authorization': `Bearer ${config.airtable.apiKey}`, 'Content-Type': 'application/json' },
       params: request.query,
       method: request.method,
       data: request.payload ? request.payload : {},
