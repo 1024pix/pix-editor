@@ -21,7 +21,6 @@ import {
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
 import * as competenceTranslations from '../translations/competence.js';
-import { Challenge } from '../../domain/models/Challenge.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
@@ -68,17 +67,6 @@ export async function serializeEntity({ type, entity, translations }) {
     const challenge = transformChallenge(rawChallenge);
 
     return { updatedRecord: challenge, model: challengeDatasource.path() };
-  }
-
-  if (model === challengeDatasource.path()) {
-    const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.id);
-    const learningContent = {
-      attachments,
-    };
-    const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
-    const challenge = transformChallenge(updatedRecord);
-
-    return { updatedRecord: challenge, model };
   }
 
   tablesTranslations[type]?.hydrateReleaseObject?.(updatedRecord, translations);
@@ -131,22 +119,8 @@ async function _getCurrentContentFromAirtable(challenges) {
     tutorialDatasource.list(),
     translationRepository.listByPrefix(competenceTranslations.prefix),
   ]);
-  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
-  const transformedChallenges = challenges.map(transformChallenge);
-  const localizedChallenges = transformedChallenges.flatMap((challenge) => {
-    const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
-    return Object.keys(challenge.translations).map((locale) => {
-      const isPrimaryLocale = primaryLocale === locale;
-      const localizedChallenge = {
-        ...challenge,
-        ...challenge.translations[locale],
-        id: isPrimaryLocale ? challenge.id : `${challenge.id}-${locale}`,
-        locales: isPrimaryLocale ? challenge.locales : [locale],
-      };
-      delete localizedChallenge.translations;
-      return localizedChallenge;
-    });
-  });
+  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, withLocalizedChallenges: true });
+  const transformedChallenges = challenges.flatMap(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
@@ -161,7 +135,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes: transformedTubes,
     skills: filteredSkills,
-    challenges: localizedChallenges,
+    challenges: transformedChallenges,
     tutorials: filteredTutorials,
   };
 }

@@ -1,7 +1,38 @@
 import _ from 'lodash';
+import { Challenge } from '../../domain/models/Challenge.js';
 
-export function createChallengeTransformer({ attachments }) {
-  return (challenge) => _filterChallengeFields(_addAttachmentsToChallenge({ attachments }, challenge));
+export function createChallengeTransformer({ attachments, withLocalizedChallenges = false }) {
+  if (withLocalizedChallenges) {
+    return _.flow(
+      _addAttachmentsToChallenge({ attachments }),
+      _localizeChallenge,
+      _filterChallengesFields,
+    );
+  }
+
+  return _.flow(
+    _addAttachmentsToChallenge({ attachments }),
+    _filterChallengeFields,
+  );
+}
+
+function _localizeChallenge(challenge) {
+  const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
+  return Object.keys(challenge.translations ?? {}).map((locale) => {
+    const isPrimaryLocale = primaryLocale === locale;
+    const localizedChallenge = {
+      ...challenge,
+      ...challenge.translations[locale],
+      id: isPrimaryLocale ? challenge.id : `${challenge.id}-${locale}`,
+      locales: isPrimaryLocale ? challenge.locales : [locale],
+    };
+    delete localizedChallenge.translations;
+    return localizedChallenge;
+  });
+}
+
+function _filterChallengesFields(challenges) {
+  return challenges.map(_filterChallengeFields);
 }
 
 function _filterChallengeFields(challenge) {
@@ -42,6 +73,15 @@ function _filterChallengeFields(challenge) {
   return _.pick(challenge, fieldsToInclude);
 }
 
+function _addAttachmentsToChallenge({ attachments }) {
+  return (challenge) => {
+    const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
+    const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
+    challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
+    return newChallenge;
+  };
+}
+
 function _assignAttachmentToChallenge(challenge, attachment) {
   if (attachment.type === 'illustration') {
     challenge.illustrationAlt = attachment.alt;
@@ -52,12 +92,4 @@ function _assignAttachmentToChallenge(challenge, attachment) {
     }
     challenge.attachments.push(attachment.url);
   }
-}
-
-function _addAttachmentsToChallenge({ attachments }, challenge) {
-  const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
-  const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
-  challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
-
-  return newChallenge;
 }
