@@ -9,6 +9,8 @@ import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
+const tablesTranslationsForReading = ['Competences'];
+const tablesTranslationsForWriting = ['Competences', 'Acquis'];
 
 export async function register(server) {
   server.route([
@@ -18,11 +20,10 @@ export async function register(server) {
       config: {
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const tableTranslations = tablesTranslations[tableName];
-
           const response = await _proxyRequestToAirtable(request, config.airtable.base);
 
-          if (_isResponseOK(response) && tableTranslations) {
+          if (_isResponseOK(response) && tablesTranslationsForReading.includes(tableName)) {
+            const tableTranslations = tablesTranslations[tableName];
             if (response.data.records) {
               const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
               response.data.records.forEach((entity) => {
@@ -52,7 +53,7 @@ export async function register(server) {
           const tableTranslations = tablesTranslations[tableName];
 
           let translations;
-          if (tableTranslations) {
+          if (tablesTranslationsForWriting.includes(tableName) && tableTranslations) {
             translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
             tableTranslations.dehydrateAirtableObject?.(request.payload?.fields);
           }
