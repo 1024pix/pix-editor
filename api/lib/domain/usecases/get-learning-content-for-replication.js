@@ -10,6 +10,7 @@ import {
 import * as competenceTranslations from '../../infrastructure/translations/competence.js';
 import { challengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import * as skillTranslations from '../../infrastructure/translations/skill.js';
 
 export async function getLearningContentForReplication(dependencies = { translationRepository }) {
   const { translationRepository } = dependencies;
@@ -35,11 +36,15 @@ export async function getLearningContentForReplication(dependencies = { translat
     attachmentDatasource.list(),
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
-    translationRepository.listByPrefix(competenceTranslations.prefix),
+    translationRepository.listByPrefixes([competenceTranslations.prefix, skillTranslations.prefix]),
   ]);
 
   competences.forEach((competence) => {
     competenceTranslations.hydrateReleaseObject(competence, translations);
+  });
+
+  skills.forEach((skill) => {
+    skillTranslations.hydrateReleaseObject(skill, translations);
   });
 
   return {
