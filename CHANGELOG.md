@@ -1,5 +1,32 @@
 
 
+## v3.105.0 (16/11/2023)
+
+
+### :rocket: Amélioration
+- [#370](https://github.com/1024pix/pix-editor/pull/370) [FEATURE] Ecrire dans PG les traductions des Acquis (PIX-9399) .
+
+### :building_construction: Tech
+- [#372](https://github.com/1024pix/pix-editor/pull/372) [TECH] Utilise la version officielle de @adminjs/hapijs.
+- [#358](https://github.com/1024pix/pix-editor/pull/358) [TECH] Spécifier le buildpack utilisé par Scalingo.
+
+### :bug: Correction
+- [#377](https://github.com/1024pix/pix-editor/pull/377) [BUGFIX] Les traductions des acquis sont lues depuis PG avant que la table soit remplie .
+
+### :arrow_up: Montée de version
+- [#373](https://github.com/1024pix/pix-editor/pull/373) [BUMP] Update dependency eslint to v8.53.0.
+- [#367](https://github.com/1024pix/pix-editor/pull/367) [BUMP] Update dependency @1024pix/ember-testing-library to v1 (pix-editor).
+- [#365](https://github.com/1024pix/pix-editor/pull/365) [BUMP] Lock file maintenance (pix-editor).
+- [#364](https://github.com/1024pix/pix-editor/pull/364) [BUMP] Lock file maintenance (api).
+- [#366](https://github.com/1024pix/pix-editor/pull/366) [BUMP] Lock file maintenance (scripts).
+- [#363](https://github.com/1024pix/pix-editor/pull/363) [BUMP] Update dependency node to v20.9.0.
+- [#351](https://github.com/1024pix/pix-editor/pull/351) [BUMP] Update dependency node to v20.
+- [#362](https://github.com/1024pix/pix-editor/pull/362) [BUMP] Update dependency sinon to v17 (scripts).
+- [#359](https://github.com/1024pix/pix-editor/pull/359) [BUMP] Update dependency googleapis to v128 (api).
+- [#361](https://github.com/1024pix/pix-editor/pull/361) [BUMP] Update dependency eslint to v8.52.0.
+- [#353](https://github.com/1024pix/pix-editor/pull/353) [BUMP] Update dependency node to v18.18.2.
+- [#360](https://github.com/1024pix/pix-editor/pull/360) [BUMP] Update dependency sinon to v17 (pix-editor).
+
 ## v3.104.1 (26/10/2023)
 
 
