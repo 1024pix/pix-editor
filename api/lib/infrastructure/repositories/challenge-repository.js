@@ -64,27 +64,23 @@ async function loadTranslationsForChallenges(challengeDtos) {
 }
 
 function toDomainList(challengeDtos, translations) {
-  const translationsByLocaleAndChallengeId = _.groupBy(translations, ({
-    locale,
-    key
-  }) => `${locale}:${key.split('.')[1]}`);
+  const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
 
   return challengeDtos.map((challengeDto) => {
-    const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
-    const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
-    return toDomain(challengeDto, filteredTranslations);
+    const challengeTranslations = translationsByChallengeId[challengeDto.id] ?? [];
+    return toDomain(challengeDto, challengeTranslations);
   });
 }
 
-function toDomain(challengeDto, translations) {
-  const translatedFields = Object.fromEntries([
-    ...translations.map(({ key, value }) => [key.split('.').at(-1), value]),
-  ]);
-  const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
+function toDomain(challengeDto, challengeTranslations) {
+  const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
+  const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
+    return Object.fromEntries([
+      ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
+    ]);
+  });
   return new Challenge({
     ...challengeDto,
-    translations: {
-      [challengeLocale]: translatedFields
-    }
+    translations,
   });
 }
