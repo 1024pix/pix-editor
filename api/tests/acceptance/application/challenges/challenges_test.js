@@ -828,15 +828,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         ...challenge,
         illustrationUrl: null,
         illustrationAlt: null,
-        translations: {
-          fr: {
-            instruction: challenge.instruction,
-            alternativeInstruction: challenge.alternativeInstruction,
-            proposals: challenge.proposals,
-            solution: challenge.solution,
-            solutionToDisplay: challenge.solutionToDisplay,
-          },
-        },
       });
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };

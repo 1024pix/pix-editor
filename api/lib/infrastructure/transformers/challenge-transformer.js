@@ -24,14 +24,12 @@ function _localizeChallenge({ localizedChallenges }) {
       .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
       .map(({ locale, id }) => {
         const isPrimaryLocale = primaryLocale === locale;
-        const localizedChallenge = {
+        return  {
           ...challenge,
           ...challenge.translations[locale],
           id,
           locales: isPrimaryLocale ? challenge.locales : [locale],
         };
-        delete localizedChallenge.translations;
-        return localizedChallenge;
       });
   };
 
@@ -73,7 +71,6 @@ function _filterChallengeFields(challenge) {
     'type',
     'shuffled',
     'alternativeVersion',
-    'translations',
   ];
 
   return _.pick(challenge, fieldsToInclude);
