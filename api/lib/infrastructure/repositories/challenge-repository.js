@@ -3,6 +3,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
+import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { extractFromChallenge as extractTranslationsFromChallenge, prefix, prefixFor } from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
@@ -39,6 +40,7 @@ export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save(translations);
+  await localizedChallengeRepository.create({ id: challenge.id, challengeId: challenge.id, locale: challenge.primaryLocale });
   return toDomain(createdChallengeDto, translations);
 }
 

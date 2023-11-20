@@ -629,6 +629,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
     afterEach(async function() {
       await knex('translations').truncate();
+      await knex('localized_challenges').truncate();
     });
 
     it('should create a challenge', async () => {
@@ -783,6 +784,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
           }
         },
       });
+      const localizedChallenges = await knex('localized_challenges').select();
+      expect(localizedChallenges).to.deep.equal([
+        {
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        }
+      ])
       const translations = await knex('translations').select().orderBy('key');
       expect(translations).to.deep.equal([
         {

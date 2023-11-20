@@ -99,4 +99,8 @@ export class Challenge {
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }
+
+  get primaryLocale() {
+    return this.locales[0];
+  }
 }
