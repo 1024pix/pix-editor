@@ -9,8 +9,11 @@ import {
   tubeDatasource,
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
-import * as translationRepository from './translation-repository.js';
-import * as challengeRepository from './challenge-repository.js';
+import {
+  challengeRepository,
+  translationRepository,
+  localizedChallengeRepository,
+} from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   challengeTransformer,
@@ -108,6 +111,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubes,
     tutorials,
     translations,
+    localizedChallenges,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
@@ -118,8 +122,9 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubeDatasource.list(),
     tutorialDatasource.list(),
     translationRepository.listByPrefix(competenceTranslations.prefix),
+    localizedChallengeRepository.list(),
   ]);
-  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, withLocalizedChallenges: true });
+  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenges });
   const transformedChallenges = challenges.flatMap(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);

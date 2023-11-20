@@ -220,6 +220,12 @@ describe('Integration | Repository | release-repository', function() {
           locale,
           value: `${challenge.id} solutionToDisplay`,
         });
+
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: challenge.id,
+          challengeId: challenge.id,
+          locale,
+        });
       }
 
       const otherLocale = 'nl-be';
@@ -248,6 +254,12 @@ describe('Integration | Repository | release-repository', function() {
         key: `challenge.${challengeWithTranslation.id}.solutionToDisplay`,
         locale: otherLocale,
         value: `${challengeWithTranslation.id} solutionToDisplay ${otherLocale}`,
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge129803721984',
+        challengeId: challengeWithTranslation.id,
+        locale: otherLocale,
       });
 
       databaseBuilder.factory.buildStaticCourse({
@@ -1140,7 +1152,7 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121211 alternativeVersion',
     },
     {
-      id: 'challenge121211-nl-be',
+      id: 'challenge129803721984',
       instruction: 'challenge121211 instruction nl-be',
       proposals: 'challenge121211 proposals nl-be',
       type: 'challenge121211 type',

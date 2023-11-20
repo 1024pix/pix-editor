@@ -226,6 +226,12 @@ async function mockCurrentContent() {
     value: expectedCurrentContent.challenges[0].solutionToDisplay,
   });
 
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: expectedCurrentContent.challenges[0].id,
+    challengeId: expectedCurrentContent.challenges[0].id,
+    locale: 'fr-fr',
+  });
+
   await databaseBuilder.commit();
 
   return expectedCurrentContent;
@@ -437,6 +443,12 @@ async function mockContentForRelease() {
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
     locale: 'fr-fr',
     value: expectedCurrentContent.challenges[0].solutionToDisplay,
+  });
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: expectedCurrentContent.challenges[0].id,
+    challengeId: expectedCurrentContent.challenges[0].id,
+    locale: 'fr-fr',
   });
 
   await databaseBuilder.commit();
