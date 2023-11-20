@@ -1,5 +1,11 @@
 
 
+## v3.106.0 (20/11/2023)
+
+
+### :rocket: Amélioration
+- [#371](https://github.com/1024pix/pix-editor/pull/371) [FEATURE] Lire les traductions des acquis côté front (PIX-9401).
+
 ## v3.105.0 (16/11/2023)
 
 
