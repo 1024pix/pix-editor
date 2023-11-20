@@ -19,7 +19,7 @@
     "axios": "^1.0.0",
     "bluebird": "^3.7.2",
     "chai": "^4.3.7",
-    "hasha": "^5.2.2",
+    "hasha": "^6.0.0",
     "js-crypto-random": "^1.0.2",
     "lodash": "^4.17.21",
     "mocha": "^10.0.0",
