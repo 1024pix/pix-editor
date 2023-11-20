@@ -6,12 +6,8 @@ export async function list() {
   return localizedChallengeDtos.map(_toDomain);
 }
 
-export async function create({ id, challengeId, locale }) {
-  await knex('localized_challenges').insert({
-    id,
-    challengeId,
-    locale,
-  });
+export async function create(...localizedChallenges) {
+  await knex('localized_challenges').insert(localizedChallenges);
 }
 
 function _toDomain(dto) {

@@ -1,3 +1,5 @@
+import { convertLocalesToLanguages } from '../../../../lib/domain/services/convert-locales.js';
+
 export function buildChallenge({
   id = 'challid1',
   type,
@@ -56,7 +58,7 @@ export function buildChallenge({
       'Acquix (id persistant)': [skillId],
       'Format': format,
       'files': files,
-      'Langues': _convertLocalesToLanguages(locales || []),
+      'Langues': convertLocalesToLanguages(locales || []),
       'Réponse automatique': autoReply,
       'Compétences (via tube) (id persistant)': [competenceId],
       'Record ID': airtableId,
@@ -89,18 +91,4 @@ export function buildChallenge({
 
 function _convertStatusFromBoolToString(status) {
   return status ? 'Activé' : 'Désactivé';
-}
-
-function _convertLocalesToLanguages(locales) {
-  return locales.map((locale) => {
-    if (locale === 'fr') {
-      return 'Francophone';
-    }
-    if (locale === 'fr-fr') {
-      return 'Franco Français';
-    }
-    if (locale === 'en') {
-      return 'Anglais';
-    }
-  });
 }
