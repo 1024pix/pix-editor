@@ -7,6 +7,11 @@ import { disconnect } from '../../db/knex-database-connection.js';
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 export async function fillLocalizedChallenges({ airtableClient }) {
+  const localizedChallenges = await fetchLocalizedChallenges({ airtableClient })
+  await localizedChallengeRepository.create(...localizedChallenges);
+}
+
+export async function fetchLocalizedChallenges({ airtableClient }) {
   const allChallenges = await airtableClient
     .table('Epreuves')
     .select({
@@ -17,7 +22,7 @@ export async function fillLocalizedChallenges({ airtableClient }) {
     })
     .all();
 
-  const localizedChallenges = allChallenges.map((challenge) => {
+  return allChallenges.map((challenge) => {
     const locale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const idPersistant = challenge.get('id persistant');
     return {
@@ -26,7 +31,6 @@ export async function fillLocalizedChallenges({ airtableClient }) {
       locale,
     };
   });
-  await localizedChallengeRepository.create(...localizedChallenges);
 }
 
 async function main() {
