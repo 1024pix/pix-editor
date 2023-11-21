@@ -2,7 +2,7 @@ import { LOCALE_TO_LANGUAGE_MAP } from '../constants.js';
 import _ from 'lodash';
 
 export function convertLanguagesToLocales(languages) {
-  return languages.map((language) => convertLanguageToLocale(language));
+  return languages?.map((language) => convertLanguageToLocale(language));
 }
 
 export function convertLanguageToLocale(language) {

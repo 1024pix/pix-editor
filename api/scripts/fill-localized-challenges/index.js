@@ -1,34 +1,32 @@
 import { localizedChallengeRepository } from '../../lib/infrastructure/repositories/index.js';
 import { convertLanguagesToLocales } from '../../lib/domain/services/convert-locales.js';
-import {fileURLToPath} from "node:url";
-import Airtable from "airtable";
-import {disconnect} from "../../db/knex-database-connection.js";
-import {migrateSkillsTranslationFromAirtable} from "../migrate-skills-translation-from-airtable/index.js";
+import { fileURLToPath } from 'node:url';
+import Airtable from 'airtable';
+import { disconnect } from '../../db/knex-database-connection.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 export async function fillLocalizedChallenges({ airtableClient }) {
   const allChallenges = await airtableClient
-        .table('Epreuves')
-        .select({
-          fields: [
-            'id persistant',
-            'Langues',
-          ],
-        })
-        .all();
+    .table('Epreuves')
+    .select({
+      fields: [
+        'id persistant',
+        'Langues',
+      ],
+    })
+    .all();
 
-  for (const challenge of allChallenges) {
-    const locale = convertLanguagesToLocales(challenge.get('Langues')).sort()[0];
+  const localizedChallenges = allChallenges.map((challenge) => {
+    const locale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const idPersistant = challenge.get('id persistant');
-    await localizedChallengeRepository.create([
-      {
-        id: idPersistant,
-        challengeId: idPersistant,
-        locale,
-      }
-    ]);
-  }
+    return {
+      id: idPersistant,
+      challengeId: idPersistant,
+      locale,
+    };
+  });
+  await localizedChallengeRepository.create(...localizedChallenges);
 }
 
 async function main() {
