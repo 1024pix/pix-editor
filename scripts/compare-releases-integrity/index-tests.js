@@ -1,8 +1,8 @@
-const chai = require('chai');
-const { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } = require('.');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
-const nock = require('nock');
+import chai from 'chai';
+import { replaceAttachmentsUrlByChecksum, compareReleases, remoteChecksumComputer } from './index.js';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
+import nock from 'nock';
 chai.use(sinonChai);
 const expect = chai.expect;
 

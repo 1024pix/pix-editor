@@ -1,14 +1,14 @@
-const _ = require('lodash');
-const fs = require('fs');
-const Airtable = require('airtable');
-const random = require('js-crypto-random');
-const { base62_encode } =  require('@samwen/base62-util');
-const { parseString } = require('@fast-csv/parse');
-const axios = require('axios');
-const getToken = require('../common/token');
-const ProgressBar = require('progress');
-const bluebird = require('bluebird');
-const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
+import _ from 'lodash';
+import fs from 'fs';
+import Airtable from 'airtable';
+import random from 'js-crypto-random';
+import { base62_encode } from '@samwen/base62-util';
+import { parseString } from '@fast-csv/parse';
+import axios from 'axios';
+import getToken from '../common/token.js';
+import ProgressBar from 'progress';
+import bluebird from 'bluebird';
+import { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } from './airtable-fields.js';
 
 async function main() {
   const csv = fs.readFileSync('./skillToFocus.csv', 'utf-8');
@@ -83,7 +83,7 @@ function getRows(csvData) {
   });
 }
 
-async function findSkill(base, persistentId) {
+export async function findSkill(base, persistentId) {
   const foundSkills = await base.select({
     fields: USEFUL_SKILL_FIELDS,
     filterByFormula: `{id persistant} = '${persistentId}'`,
@@ -92,7 +92,7 @@ async function findSkill(base, persistentId) {
   return foundSkills[0];
 }
 
-async function duplicateSkill(base, idGenerator, skill) {
+export async function duplicateSkill(base, idGenerator, skill) {
   const createdSkills = await base.create([{
     fields: {
       ...skill.fields,
@@ -104,14 +104,14 @@ async function duplicateSkill(base, idGenerator, skill) {
   return createdSkills[0];
 }
 
-async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
+export async function findChallengesFromASkill(base, sourceSkillIdPersistent) {
   return base.select({
     fields: USEFUL_CHALLENGE_FIELDS,
     filterByFormula: `AND(FIND('${sourceSkillIdPersistent}', ARRAYJOIN({Acquix (id persistant)})), {Statut} = 'validé'))`,
   }).all();
 }
 
-async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId, clock = Date) {
+export async function cloneAttachmentsFromAChallenge(base, token, challengePersistentId, clock = Date) {
   const attachments = await base.select({
     fields: [
       'filename',
@@ -163,7 +163,7 @@ async function cloneFile(token, originalUrl, randomString, filename, clock = Dat
   return newUrl;
 }
 
-function prepareNewChallenge(challenge, destinationSkillId, newAttachmentsId, idGenerator) {
+export function prepareNewChallenge(challenge, destinationSkillId, newAttachmentsId, idGenerator) {
   return {
     fields: {
       ...challenge.fields,
@@ -181,11 +181,11 @@ function idGenerator(prefix) {
   return `${prefix}${randomBase62}`;
 }
 
-function archiveSkill(base, skill) {
+export function archiveSkill(base, skill) {
   return changeSkillStatus(base, skill, 'archivé');
 }
 
-function activateSkill(base, skill) {
+export function activateSkill(base, skill) {
   return changeSkillStatus(base, skill, 'actif');
 }
 
@@ -200,7 +200,7 @@ function changeSkillStatus(base, skill, status) {
   return base.update([updatedSkill]);
 }
 
-function archiveChallenges(base, challenges) {
+export function archiveChallenges(base, challenges) {
   const archivedChallenges = challenges.map((challenge) => {
     return {
       id: challenge.getId(),
@@ -213,11 +213,11 @@ function archiveChallenges(base, challenges) {
   return bulkUpdate(base, archivedChallenges);
 }
 
-async function bulkCreate(base, records) {
+export async function bulkCreate(base, records) {
   return bulkOnBase(base, 'create', records);
 }
 
-async function bulkUpdate(base, records) {
+export async function bulkUpdate(base, records) {
   const uniqRecords = _.uniqBy(records,'id');
   return bulkOnBase(base, 'update', uniqRecords);
 }
@@ -236,17 +236,4 @@ async function bulkOnBase(base, method, records) {
 
 if (process.env.NODE_ENV !== 'test') {
   main();
-} else {
-  module.exports = {
-    archiveChallenges,
-    archiveSkill,
-    activateSkill,
-    bulkCreate,
-    bulkUpdate,
-    cloneAttachmentsFromAChallenge,
-    duplicateSkill,
-    findChallengesFromASkill,
-    findSkill,
-    prepareNewChallenge,
-  };
 }

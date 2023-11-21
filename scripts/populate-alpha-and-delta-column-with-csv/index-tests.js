@@ -1,11 +1,12 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const expect = chai.expect;
-const AirtableRecord = require('airtable').Record;
-const _ = require('lodash');
-const { parseData, findAirtableIds, updateRecords } = require('.');
+import _ from 'lodash';
+import { parseData, findAirtableIds, updateRecords } from './index.js';
+import airtable from 'airtable';
+const { Record: AirtableRecord } = airtable;
 
 describe('Populate alpha and delta column', function() {
   describe('#parseData', function() {

@@ -1,11 +1,7 @@
-const axios = require('axios');
-const pLimit = require('p-limit');
+import axios from 'axios';
+import pLimit from 'p-limit';
 const limit = pLimit(300);
-const getToken = require('../common/token');
-
-module.exports = {
-  setHeadersToAttachments,
-};
+import getToken from '../common/token.js';
 
 function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
@@ -13,7 +9,7 @@ function main() {
   setHeadersToAttachments(attachments);
 }
 
-async function setHeadersToAttachments(attachments) {
+export async function setHeadersToAttachments(attachments) {
   const token = await getToken();
   let count = 0;
 

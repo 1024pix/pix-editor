@@ -1,8 +1,8 @@
-const Airtable = require('airtable');
-const { resolve } = require('path');
-const { performance } = require('perf_hooks');
-const { createLogger, format, transports } = require('winston');
-const { readFile, utils: xlsxUtils, writeFileXLSX } = require('xlsx');
+import Airtable from 'airtable';
+import { resolve } from 'path';
+import { performance } from 'perf_hooks';
+import { createLogger, format, transports } from 'winston';
+import { readFile, utils as xlsxUtils, writeFileXLSX } from 'xlsx';
 
 const logger = createLogger({
   format: format.combine(
@@ -173,6 +173,6 @@ async function main() {
   }
 })();
 
-module.exports = {
+export default {
   enableShuffledOnChallenges,
 };

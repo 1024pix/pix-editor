@@ -1,11 +1,12 @@
-const chai = require('chai');
-const { shouldBeMigrated, cloneFile, updateRecord } = require('./index.js');
-const sinon = require('sinon');
-const AirtableRecord = require('airtable').Record;
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import { shouldBeMigrated, cloneFile, updateRecord } from './index.js';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const expect = chai.expect;
-const nock = require('nock');
+import nock from 'nock';
+import airtable from 'airtable';
+const { Record: AirtableRecord } = airtable;
 
 describe('Migrate attachments in subfolder', function() {
 

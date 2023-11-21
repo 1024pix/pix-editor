@@ -1,13 +1,15 @@
-const chai = require('chai');
-const sinon = require('sinon');
-const sinonChai = require('sinon-chai');
+import chai from 'chai';
+import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const expect = chai.expect;
-const nock = require('nock');
-const AirtableRecord = require('airtable').Record;
-const _ = require('lodash');
-const { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } = require('./airtable-fields');
-const {
+import nock from 'nock';
+import airtable from 'airtable';
+const { Record: AirtableRecord } = airtable;
+import _ from 'lodash';
+import { USEFUL_SKILL_FIELDS, USEFUL_CHALLENGE_FIELDS } from './airtable-fields.js';
+
+import {
   bulkCreate,
   bulkUpdate,
   findSkill,
@@ -18,7 +20,7 @@ const {
   archiveChallenges,
   archiveSkill,
   activateSkill,
-} = require('.');
+} from './index.js';
 
 describe('Copy skills and set challenges as focusable', function() {
   describe('#findSkill', function() {

@@ -1,7 +1,7 @@
-const { Client } = require('pg');
-const Cursor = require('pg-cursor');
-const Airtable = require('airtable');
-const _ = require('lodash');
+import { Client } from 'pg';
+import Cursor from 'pg-cursor';
+import Airtable from 'airtable';
+import _ from 'lodash';
 
 function getStatus(status) {
   return {
@@ -9,7 +9,7 @@ function getStatus(status) {
     'pré-validé': 'validé',
   }[status] ?? status;
 }
-    
+
 (async function() {
   const client = new Client({ connectionString: process.env.DATABASE_URL });
   let cursor;

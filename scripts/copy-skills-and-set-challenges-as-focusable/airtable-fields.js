@@ -1,4 +1,4 @@
-const USEFUL_SKILL_FIELDS = [
+export const USEFUL_SKILL_FIELDS = [
   'id persistant',
   'Indice',
   'Indice fr-fr',
@@ -16,7 +16,7 @@ const USEFUL_SKILL_FIELDS = [
   'Version'
 ];
 
-const USEFUL_CHALLENGE_FIELDS = [
+export const USEFUL_CHALLENGE_FIELDS = [
   'id persistant',
   'Timer',
   'Consigne',
@@ -51,8 +51,3 @@ const USEFUL_CHALLENGE_FIELDS = [
   'Responsive',
   'Géographie',
 ];
-
-module.exports = {
-  USEFUL_SKILL_FIELDS,
-  USEFUL_CHALLENGE_FIELDS,
-};
