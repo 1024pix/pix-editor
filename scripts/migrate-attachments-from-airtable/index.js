@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { readJSONFile } from '../common/read-json-file.js';
 
 export function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
-  const challenges = require(backupBaseFolder + 'Epreuves.json');
+  const challenges = readJSONFile(backupBaseFolder, 'Epreuves.json');
   const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl: process.env.BUCKET_BASE_URL });
   if (process.argv.includes('--rename-files')) {
     renameChallengesAttachments(challenges, backupBaseFolder);

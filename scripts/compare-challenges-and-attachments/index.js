@@ -2,18 +2,13 @@ import _ from 'lodash';
 import axios from 'axios';
 import hasha from 'hasha';
 import pLimit from 'p-limit';
-import fs from 'fs/promises';
+import { readJSONFile } from '../common/read-json-file.js';
 const limit = pLimit(300);
 
-async function readJSONFile(filename) {
-  const backupBaseFolder = process.env.BACKUP_BASE_FOLDER || import.meta.url;
-  const fileUrl = new URL(backupBaseFolder, filename);
-  return JSON.parse(await fs.readFile(fileUrl, 'utf-8'));
-}
-
 async function main() {
-  const challenges = readJSONFile('Epreuves.json');
-  const attachments = readJSONFile('Attachments.json');
+  const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
+  const challenges = readJSONFile(backupBaseFolder, 'Epreuves.json');
+  const attachments = readJSONFile(backupBaseFolder, 'Attachments.json');
   let challengeCount = 0;
   const promises = challenges.map(async (challenge) => {
     await limit(async () => {

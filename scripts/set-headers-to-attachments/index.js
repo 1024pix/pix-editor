@@ -2,10 +2,11 @@ import axios from 'axios';
 import pLimit from 'p-limit';
 const limit = pLimit(300);
 import getToken from '../common/token.js';
+import { readJSONFile } from '../common/read-json-file.js';
 
 function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
-  const attachments = require(backupBaseFolder + 'Attachments.json');
+  const attachments = readJSONFile(backupBaseFolder, 'Attachments.json');
   setHeadersToAttachments(attachments);
 }
 
