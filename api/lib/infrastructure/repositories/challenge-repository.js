@@ -40,7 +40,7 @@ export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save(translations);
-  await localizedChallengeRepository.create({ id: challenge.id, challengeId: challenge.id, locale: challenge.primaryLocale });
+  await localizedChallengeRepository.create([{ id: challenge.id, challengeId: challenge.id, locale: challenge.primaryLocale }]);
   return toDomain(createdChallengeDto, translations);
 }
 

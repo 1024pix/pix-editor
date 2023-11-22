@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 export async function fillLocalizedChallenges({ airtableClient }) {
   const localizedChallenges = await fetchLocalizedChallenges({ airtableClient })
-  await localizedChallengeRepository.create(...localizedChallenges);
+  await localizedChallengeRepository.create(localizedChallenges);
 }
 
 export async function fetchLocalizedChallenges({ airtableClient }) {

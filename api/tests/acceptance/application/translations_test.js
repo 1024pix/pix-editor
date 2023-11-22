@@ -411,6 +411,8 @@ describe('Acceptance | Controller | translations-controller', () => {
 
       expect(await knex('translations').count()).to.deep.equal([{ count: 1 }]);
       expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
+
+      // FIXME expect localized challenges when there are challenge translations
     });
 
     it('should fail when the file is not a CSV', async () => {
