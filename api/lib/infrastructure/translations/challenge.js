@@ -2,7 +2,7 @@ import { Challenge, Translation } from '../../domain/models/index.js';
 
 export const prefix = 'challenge.';
 
-const fields = [
+export const fields = [
   'instruction',
   'alternativeInstruction',
   'proposals',

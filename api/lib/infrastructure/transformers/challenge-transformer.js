@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Challenge } from '../../domain/models/Challenge.js';
+import { fields as challengeLocalizedFields } from '../../infrastructure/translations/challenge.js';
 
 export function createChallengeTransformer({ attachments, localizedChallenges }) {
 
@@ -24,8 +25,13 @@ function _localizeChallenge({ localizedChallenges }) {
       .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
       .map(({ locale, id }) => {
         const isPrimaryLocale = primaryLocale === locale;
-        return  {
+        const clearedLocalizedFields = challengeLocalizedFields.reduce((acc, field) => {
+          acc[field] = '';
+          return acc;
+        }, {});
+        return {
           ...challenge,
+          ...clearedLocalizedFields,
           ...challenge.translations[locale],
           id,
           locales: isPrimaryLocale ? challenge.locales : [locale],

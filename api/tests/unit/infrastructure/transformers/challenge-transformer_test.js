@@ -33,6 +33,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             fr: {
               instruction: 'Consigne',
               alternativeInstruction: 'Consigne alternative',
+              proposals: 'Propositions',
             },
             en: {
               instruction: 'English instructions',
@@ -54,6 +55,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             locales: ['fr', 'fr-fr'],
             instruction: 'Consigne',
             alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
           }),
           _buildReleaseChallenge({
             ...challenge,
@@ -61,6 +63,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             locales: ['en'],
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',
+            proposals: '',
           })
         ]);
       });
