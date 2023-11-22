@@ -1,4 +1,4 @@
-import * as translationUtils from './utils.js';
+import { buildTranslationsUtils } from './utils.js';
 
 export const prefix = 'skill.';
 
@@ -11,11 +11,10 @@ const fields = [
   { airtableField: 'Indice', field: 'hint' },
 ];
 
-const localizedFields = translationUtils.buildLocalizedFields(locales, fields);
+const idField = 'id persistant';
 
-export const extractFromAirtableObject = translationUtils.extractFromAirtableObject({ localizedFields, prefix });
-
-export const hydrateToAirtableObject = translationUtils.hydrateToAirtableObject({ localizedFields, prefix });
-
-export const prefixFor = translationUtils.prefixFor({ prefix, idField: 'id persistant' });
-
+export const {
+  extractFromAirtableObject,
+  hydrateToAirtableObject,
+  prefixFor,
+} = buildTranslationsUtils({ locales, fields, prefix, idField });

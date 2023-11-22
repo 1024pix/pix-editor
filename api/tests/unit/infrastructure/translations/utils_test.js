@@ -1,12 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 
-import {
-  extractFromAirtableObject,
-  hydrateReleaseObject,
-  hydrateToAirtableObject,
-  dehydrateAirtableObject,
-  prefixFor, extractFromReleaseObject,
-} from '../../../../lib/infrastructure/translations/utils.js';
+import { buildTranslationsUtils } from '../../../../lib/infrastructure/translations/utils.js';
 
 describe('Unit | Infrastructure | Entity translations', () => {
   const fields = [
@@ -19,20 +13,20 @@ describe('Unit | Infrastructure | Entity translations', () => {
     { airtableLocale: 'en-us', locale: 'en' },
   ];
 
-  const localizedFields = [
-    { airtableField: 'Attribut', field: 'attribute', airtableLocale: 'fr-fr', locale: 'fr' },
-    { airtableField: 'Attribut', field: 'attribute', airtableLocale: 'en-us', locale: 'en' },
-    { airtableField: 'Attribut2', field: 'attribute2', airtableLocale: 'fr-fr', locale: 'fr' },
-    { airtableField: 'Attribut2', field: 'attribute2', airtableLocale: 'en-us', locale: 'en' },
-  ];
-
   const prefix = 'entity.';
+  const idField = 'mon id';
+
+  let translationsUtils;
+
+  beforeEach(() => {
+    translationsUtils = buildTranslationsUtils({ fields, locales, prefix, idField });
+  });
 
   describe('#extractFromAirtableObject', () => {
     it('should return the list of translations', () => {
       // given
       const entity = {
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr',
         'Attribut en-us': 'value en-us',
         'Attribut2 fr-fr': 'value2 fr-fr',
@@ -40,13 +34,13 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = extractFromAirtableObject({ localizedFields, prefix })(entity);
+      const translations = translationsUtils.extractFromAirtableObject(entity);
 
       // then
       expect(translations).to.deep.equal([
         { key: 'entity.test.attribute', locale: 'fr', value: 'value fr-fr' },
-        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
         { key: 'entity.test.attribute2', locale: 'fr', value: 'value2 fr-fr' },
+        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
         { key: 'entity.test.attribute2', locale: 'en', value: 'value2 en-us' },
       ]);
     });
@@ -54,13 +48,13 @@ describe('Unit | Infrastructure | Entity translations', () => {
     it('should return translations only for field w/ values', () => {
       // given
       const entity = {
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr',
         'Attribut en-us': 'value en-us',
       };
 
       // when
-      const translations = extractFromAirtableObject({ localizedFields, prefix })(entity);
+      const translations = translationsUtils.extractFromAirtableObject(entity);
 
       // then
       expect(translations).to.deep.equal([
@@ -74,7 +68,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
     it('should set translated fields into the object', () => {
       // given
       const entity = {
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
         otherField: 'foo',
       };
@@ -94,11 +88,11 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      hydrateToAirtableObject({ localizedFields, prefix })(entity, translations);
+      translationsUtils.hydrateToAirtableObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr',
         'Attribut en-us': 'value en-us',
         'Attribut2 fr-fr': 'value2 fr-fr',
@@ -110,7 +104,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
     it('should set null value for missing translations', () => {
       // given
       const entity = {
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
       };
       const translations = [
@@ -123,11 +117,11 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      hydrateToAirtableObject({ localizedFields, prefix })(entity, translations);
+      translationsUtils.hydrateToAirtableObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': null,
         'Attribut en-us': 'value en-us',
         'Attribut2 fr-fr': null,
@@ -140,18 +134,18 @@ describe('Unit | Infrastructure | Entity translations', () => {
     it('should set translated fields into the object', () => {
       // given
       const entity = {
-        'id persistant': 'test',
+        'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
         'Attribut2 fr-fr': 'value2 fr-fr initial',
         otherField: 'foo',
       };
 
       // when
-      dehydrateAirtableObject({ localizedFields })(entity);
+      translationsUtils.dehydrateAirtableObject(entity);
 
       // then
       expect(entity).to.deep.equal({
-        'id persistant': 'test',
+        'mon id': 'test',
         otherField: 'foo',
       });
     });
@@ -180,7 +174,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      hydrateReleaseObject({ fields, locales, prefix })(entity, translations);
+      translationsUtils.hydrateReleaseObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({
@@ -213,7 +207,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      hydrateReleaseObject({ fields, locales, prefix })(entity, translations);
+      translationsUtils.hydrateReleaseObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({
@@ -239,7 +233,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const entityPrefix = prefixFor({ prefix, idField: 'mon id' })(entity);
+      const entityPrefix = translationsUtils.prefixFor(entity);
 
       // then
       expect(entityPrefix).toBe('entity.rec123.');
@@ -263,24 +257,23 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = extractFromReleaseObject({ localizedFields, prefix })(entity);
+      const translations = translationsUtils.extractFromReleaseObject(entity);
 
       // then
       expect(translations).to.deep.equal([
         { key: 'entity.test.attribute', locale: 'fr', value: 'value fr-fr' },
-        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
         {
           key: 'entity.test.attribute2',
           locale: 'fr',
           value: 'value2 fr-fr',
         },
+        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
         {
           key: 'entity.test.attribute2',
           locale: 'en',
           value: 'value2 en-us',
         },
       ]);
-
     });
   });
 });
