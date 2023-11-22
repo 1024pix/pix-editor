@@ -1,6 +1,5 @@
 import { datasource } from './datasource.js';
 import { findRecords } from '../../airtable.js';
-import { LOCALE_TO_LANGUAGE_MAP } from '../../../domain/constants.js';
 import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
 export const challengeDatasource = datasource.extend({

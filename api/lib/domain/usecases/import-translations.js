@@ -1,7 +1,7 @@
 import { translationRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
-import {LocalizedChallenge, Translation} from '../models/index.js';
+import { LocalizedChallenge, Translation } from '../models/index.js';
 import { parseStream } from 'fast-csv';
-import fp from 'lodash/fp';
+import fp from 'lodash/fp.js';
 export class InvalidFileError extends Error {}
 
 export function importTranslations(csvStream, dependencies = { translationRepository, localizedChallengeRepository }) {
@@ -22,7 +22,6 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         }
 
         const challengesLocales = extractChallengesLocales(translations);
-
         await dependencies.localizedChallengeRepository.create(challengesLocales);
 
         await dependencies.translationRepository.save(translations);
@@ -40,7 +39,7 @@ const extractChallengesLocales = fp.flow(
     return new LocalizedChallenge({
       challengeId: challengeTranslation.key.split('.')[1],
       locale: challengeTranslation.locale,
-    })
+    });
   }),
   fp.uniqBy(['locale', 'challengeId']),
 );

@@ -47,15 +47,15 @@ export function buildChallenge({
   skillId = 'recSkillId',
   alpha = 0.5,
   delta = 0.2,
-   translations= {
-     [Challenge.getPrimaryLocale(locales)]: {
-       instruction,
-       alternativeInstruction,
-       proposals,
-       solution,
-       solutionToDisplay,
-     },
-   },
+  translations = {
+    [Challenge.getPrimaryLocale(locales)]: {
+      instruction,
+      alternativeInstruction,
+      proposals,
+      solution,
+      solutionToDisplay,
+    },
+  },
 } = {}, fieldsToOmit = []) {
   const data = {
     id,

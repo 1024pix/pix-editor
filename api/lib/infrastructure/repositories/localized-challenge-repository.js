@@ -17,8 +17,8 @@ export async function create(localizedChallenges = [], generateId = _generateId)
   }
   const localizedChallengesWithId = localizedChallenges.map((localizedChallenge) => {
     return {
-      id: localizedChallenge.id ?? generateId(),
       ...localizedChallenge,
+      id: localizedChallenge.id ?? generateId(),
     };
   });
   await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore() ;

@@ -791,7 +791,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           challengeId: 'challengeId',
           locale: 'fr',
         }
-      ])
+      ]);
       const translations = await knex('translations').select().orderBy('key');
       expect(translations).to.deep.equal([
         {

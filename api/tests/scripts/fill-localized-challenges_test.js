@@ -6,7 +6,7 @@ import {
   fillLocalizedChallenges
 } from '../../scripts/fill-localized-challenges/index.js';
 
-describe.only('Fill localized challenges from airtable', function() {
+describe('Fill localized challenges from airtable', function() {
 
   let airtableClient;
 

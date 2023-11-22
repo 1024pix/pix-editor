@@ -18,7 +18,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
     translationRepository = {
       save: vi.fn(),
     };
-  })
+  });
 
   it('should write in database translation from CSV', async () => {
     // when
