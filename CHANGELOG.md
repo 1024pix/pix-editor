@@ -1,5 +1,21 @@
 
 
+## v3.107.0 (23/11/2023)
+
+
+### :rocket: Amélioration
+- [#378](https://github.com/1024pix/pix-editor/pull/378) [FEATURE] Ajouter les épreuves localisées dans la release (PIX-10017).
+
+### :building_construction: Tech
+- [#375](https://github.com/1024pix/pix-editor/pull/375) [TECH] Mutualiser les outils de traduction dans translation utils (PIX-10083).
+- [#383](https://github.com/1024pix/pix-editor/pull/383) [TECH] Mettre à jour playwright.
+- [#382](https://github.com/1024pix/pix-editor/pull/382) [TECH] Migre les scripts vers ESModules.
+
+### :arrow_up: Montée de version
+- [#385](https://github.com/1024pix/pix-editor/pull/385) [BUMP] Update dependency hasha to v6 (scripts).
+- [#386](https://github.com/1024pix/pix-editor/pull/386) [BUMP] Update dependency p-limit to v4 (scripts).
+- [#368](https://github.com/1024pix/pix-editor/pull/368) [BUMP] Update dependency @1024pix/pix-ui to v41 (pix-editor).
+
 ## v3.106.0 (20/11/2023)
 
 
