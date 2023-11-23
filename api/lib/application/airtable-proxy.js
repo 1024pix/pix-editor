@@ -4,7 +4,7 @@ import * as config from '../config.js';
 import * as pixApiClient from '../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
 import { logger } from '../infrastructure/logger.js';
-import { releaseRepository, translationRepository } from '../infrastructure/repositories/index.js';
+import { releaseRepository } from '../infrastructure/repositories/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
 import * as usecases from '../domain/usecases/index.js';
@@ -43,31 +43,11 @@ export async function register(server) {
           const tableName = request.params.path.split('/')[0];
           const tableTranslations = getTableTranslations(tableName);
 
-          let translations;
-          if (tableTranslations.writeToPgEnabled) {
-            translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
-          }
-
-          if (tableTranslations.writeToAirtableDisabled) {
-            tableTranslations.dehydrateAirtableObject(request.payload?.fields);
-          }
-
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
-
-          if (_isResponseOK(response)) {
-            if (tableTranslations.writeToPgEnabled) {
-              if (request.method === 'patch') {
-                await translationRepository.deleteByKeyPrefix(tableTranslations.prefixFor(response.data.fields));
-              }
-              await translationRepository.save(translations);
-            }
-
-            if (tableTranslations.readFromPgEnabled) {
-              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
-            }
-
-            await _updateStagingPixApiCache(tableName, response.data, translations);
-          }
+          const response = await usecases.proxyWriteRequestToAirtable(request, config.airtable.base, tableName, {
+            proxyRequestToAirtable: _proxyRequestToAirtable,
+            tableTranslations,
+            updateStagingPixApiCache: _updateStagingPixApiCache,
+          });
 
           return h.response(response.data).code(response.status);
         }
@@ -135,10 +115,6 @@ async function _updateStagingPixApiCache(type, entity, translations) {
     logger.error(err);
     Sentry.captureException(err);
   }
-}
-
-function _isResponseOK(response) {
-  return response.status >= 200 && response.status < 300;
 }
 
 function getTableTranslations(tableName) {
