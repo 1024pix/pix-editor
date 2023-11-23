@@ -629,6 +629,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
     afterEach(async function() {
       await knex('translations').truncate();
+      await knex('localized_challenges').truncate();
     });
 
     it('should create a challenge', async () => {
@@ -783,6 +784,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
           }
         },
       });
+      const localizedChallenges = await knex('localized_challenges').select();
+      expect(localizedChallenges).to.deep.equal([
+        {
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          locale: 'fr',
+        }
+      ]);
       const translations = await knex('translations').select().orderBy('key');
       expect(translations).to.deep.equal([
         {
@@ -828,15 +837,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         ...challenge,
         illustrationUrl: null,
         illustrationAlt: null,
-        translations: {
-          fr: {
-            instruction: challenge.instruction,
-            alternativeInstruction: challenge.alternativeInstruction,
-            proposals: challenge.proposals,
-            solution: challenge.solution,
-            solutionToDisplay: challenge.solutionToDisplay,
-          },
-        },
       });
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };

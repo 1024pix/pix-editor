@@ -6,47 +6,7 @@ import { challengeRepository } from '../../../lib/infrastructure/repositories/in
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
-    it('serialize a challenge and fetch attachments', async () => {
-      const challengeDataObject = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge' });
-      const entity = airtableBuilder.factory.buildChallenge({
-        id: 'recChallenge',
-        type: challengeDataObject.type,
-        t1Status: challengeDataObject.t1Status,
-        t2Status: challengeDataObject.t2Status,
-        t3Status: challengeDataObject.t3Status,
-        status: challengeDataObject.status,
-        skillId: challengeDataObject.skillId,
-        timer: challengeDataObject.timer,
-        illustrationUrl: challengeDataObject.illustrationUrl,
-        attachments: challengeDataObject.attachments || [],
-        competenceId: challengeDataObject.competenceId,
-        embedUrl: challengeDataObject.embedUrl,
-        embedTitle: challengeDataObject.embedTitle,
-        embedHeight: challengeDataObject.embedHeight,
-        illustrationAlt: challengeDataObject.illustrationAlt,
-        format: challengeDataObject.format,
-        autoReply: challengeDataObject.autoReply,
-      });
-      const attachment = domainBuilder.buildAttachment({
-        id: '1',
-        alt: '',
-        type: 'illustration',
-        url: 'http://example.com/test',
-        challengeId: 'recChallenge',
-      });
-      const type = 'Epreuves';
-
-      vi.spyOn(attachmentDatasource, 'filterByChallengeId').mockImplementation(async (spyId) => {
-        if (spyId === 'recChallenge') return [attachment];
-      });
-
-      const { updatedRecord, model } = await serializeEntity({ entity, type });
-
-      expect(updatedRecord.illustrationUrl).to.equal('http://example.com/test');
-      expect(model).to.equal('challenges');
-    });
-
-    it('serialize an area', async () => {
+    it('serializes an area', async () => {
       const entity = airtableBuilder.factory.buildArea({
         id: '1',
         code: 1,
@@ -84,7 +44,7 @@ describe('Unit | Repository | release-repository', () => {
       expect(model).to.equal('areas');
     });
 
-    it('serialize attachment', async () => {
+    it('serializes attachment', async () => {
       const entity = airtableBuilder.factory.buildAttachment({
         id: 'recAttachment',
         alt: 'texte alternatif à l\'image',

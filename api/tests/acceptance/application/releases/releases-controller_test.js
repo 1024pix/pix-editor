@@ -105,15 +105,6 @@ async function mockCurrentContent() {
       id: 'recChallenge0',
       instruction: 'Consigne du Challenge - fr-fr',
       proposals: 'Propositions du Challenge - fr-fr',
-      translations: {
-        'fr-fr': {
-          instruction: 'Consigne du Challenge - fr-fr',
-          proposals: 'Propositions du Challenge - fr-fr',
-          solution: 'Bonnes réponses du Challenge - fr-fr',
-          solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
-          alternativeInstruction: 'Consigne alternative - fr-fr',
-        }
-      },
       type: 'Type d\'épreuve',
       solution: 'Bonnes réponses du Challenge - fr-fr',
       solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
@@ -212,27 +203,33 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].instruction,
+    value: expectedCurrentContent.challenges[0].instruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].alternativeInstruction,
+    value: expectedCurrentContent.challenges[0].alternativeInstruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].proposals,
+    value: expectedCurrentContent.challenges[0].proposals,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solution,
+    value: expectedCurrentContent.challenges[0].solution,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solutionToDisplay,
+    value: expectedCurrentContent.challenges[0].solutionToDisplay,
+  });
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: expectedCurrentContent.challenges[0].id,
+    challengeId: expectedCurrentContent.challenges[0].id,
+    locale: 'fr-fr',
   });
 
   await databaseBuilder.commit();
@@ -325,15 +322,6 @@ async function mockContentForRelease() {
       id: 'recChallenge0',
       instruction: 'Consigne du Challenge - fr-fr',
       proposals: 'Propositions du Challenge - fr-fr',
-      translations: {
-        'fr-fr': {
-          instruction: 'Consigne du Challenge - fr-fr',
-          proposals: 'Propositions du Challenge - fr-fr',
-          solution: 'Bonnes réponses du Challenge - fr-fr',
-          solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
-          alternativeInstruction: 'Consigne alternative - fr-fr',
-        }
-      },
       type: 'Type d\'épreuve',
       solution: 'Bonnes réponses du Challenge - fr-fr',
       solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
@@ -434,27 +422,33 @@ async function mockContentForRelease() {
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].instruction,
+    value: expectedCurrentContent.challenges[0].instruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].alternativeInstruction,
+    value: expectedCurrentContent.challenges[0].alternativeInstruction,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].proposals,
+    value: expectedCurrentContent.challenges[0].proposals,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solution,
+    value: expectedCurrentContent.challenges[0].solution,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
     locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].translations['fr-fr'].solutionToDisplay,
+    value: expectedCurrentContent.challenges[0].solutionToDisplay,
+  });
+
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: expectedCurrentContent.challenges[0].id,
+    challengeId: expectedCurrentContent.challenges[0].id,
+    locale: 'fr-fr',
   });
 
   await databaseBuilder.commit();

@@ -1,7 +1,48 @@
 import _ from 'lodash';
+import { Challenge } from '../../domain/models/Challenge.js';
+import { fields as challengeLocalizedFields } from '../../infrastructure/translations/challenge.js';
 
-export function createChallengeTransformer({ attachments }) {
-  return (challenge) => _filterChallengeFields(_addAttachmentsToChallenge({ attachments }, challenge));
+export function createChallengeTransformer({ attachments, localizedChallenges }) {
+
+  if (localizedChallenges) {
+    return _.flow(
+      _addAttachmentsToChallenge({ attachments }),
+      _localizeChallenge({ localizedChallenges }),
+      _filterChallengesFields,
+    );
+  }
+
+  return _.flow(
+    _addAttachmentsToChallenge({ attachments }),
+    _filterChallengeFields,
+  );
+}
+
+function _localizeChallenge({ localizedChallenges }) {
+  return (challenge) => {
+    const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
+    return localizedChallenges
+      .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
+      .map(({ locale, id }) => {
+        const isPrimaryLocale = primaryLocale === locale;
+        const clearedLocalizedFields = challengeLocalizedFields.reduce((acc, field) => {
+          acc[field] = '';
+          return acc;
+        }, {});
+        return {
+          ...challenge,
+          ...clearedLocalizedFields,
+          ...challenge.translations[locale],
+          id,
+          locales: isPrimaryLocale ? challenge.locales : [locale],
+        };
+      });
+  };
+
+}
+
+function _filterChallengesFields(challenges) {
+  return challenges.map(_filterChallengeFields);
 }
 
 function _filterChallengeFields(challenge) {
@@ -36,10 +77,18 @@ function _filterChallengeFields(challenge) {
     'type',
     'shuffled',
     'alternativeVersion',
-    'translations',
   ];
 
   return _.pick(challenge, fieldsToInclude);
+}
+
+function _addAttachmentsToChallenge({ attachments }) {
+  return (challenge) => {
+    const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
+    const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
+    challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
+    return newChallenge;
+  };
 }
 
 function _assignAttachmentToChallenge(challenge, attachment) {
@@ -52,12 +101,4 @@ function _assignAttachmentToChallenge(challenge, attachment) {
     }
     challenge.attachments.push(attachment.url);
   }
-}
-
-function _addAttachmentsToChallenge({ attachments }, challenge) {
-  const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
-  const challengeAttachments = attachments.filter((attachment) => attachment.challengeId === newChallenge.id);
-  challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
-
-  return newChallenge;
 }

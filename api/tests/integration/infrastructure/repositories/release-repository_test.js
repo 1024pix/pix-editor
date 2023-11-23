@@ -220,7 +220,47 @@ describe('Integration | Repository | release-repository', function() {
           locale,
           value: `${challenge.id} solutionToDisplay`,
         });
+
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: challenge.id,
+          challengeId: challenge.id,
+          locale,
+        });
       }
+
+      const otherLocale = 'nl-be';
+      const challengeWithTranslation = challenges[0];
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeWithTranslation.id}.instruction`,
+        locale: otherLocale,
+        value: `${challengeWithTranslation.id} instruction ${otherLocale}`,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeWithTranslation.id}.alternativeInstruction`,
+        locale: otherLocale,
+        value: `${challengeWithTranslation.id} alternativeInstruction ${otherLocale}`,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeWithTranslation.id}.proposals`,
+        locale: otherLocale,
+        value: `${challengeWithTranslation.id} proposals ${otherLocale}`,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeWithTranslation.id}.solution`,
+        locale: otherLocale,
+        value: `${challengeWithTranslation.id} solution ${otherLocale}`,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeWithTranslation.id}.solutionToDisplay`,
+        locale: otherLocale,
+        value: `${challengeWithTranslation.id} solutionToDisplay ${otherLocale}`,
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge129803721984',
+        challengeId: challengeWithTranslation.id,
+        locale: otherLocale,
+      });
 
       databaseBuilder.factory.buildStaticCourse({
         id: 'course1PG',
@@ -594,7 +634,7 @@ function _mockRichAirtableContent() {
     format: 'challenge211111 format',
     files: 'challenge211111 files',
     autoReply: 'challenge211111 autoReply',
-    locales: ['fr'],
+    locales: ['fr', 'fr-fr'],
     airtableId: 'challenge211111',
     skills: 'challenge211111 skills',
     genealogy: 'Prototype 1',
@@ -1081,15 +1121,6 @@ function _getRichCurrentContentDTO() {
   const expectedChallengeDTOs = [
     {
       id: 'challenge121211',
-      translations: {
-        'fr-fr': {
-          instruction: 'challenge121211 instruction',
-          proposals: 'challenge121211 proposals',
-          solution: 'challenge121211 solution',
-          solutionToDisplay: 'challenge121211 solutionToDisplay',
-          alternativeInstruction: 'challenge121211 alternativeInstruction',
-        },
-      },
       instruction: 'challenge121211 instruction',
       proposals: 'challenge121211 proposals',
       type: 'challenge121211 type',
@@ -1121,16 +1152,39 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121211 alternativeVersion',
     },
     {
+      id: 'challenge129803721984',
+      instruction: 'challenge121211 instruction nl-be',
+      proposals: 'challenge121211 proposals nl-be',
+      type: 'challenge121211 type',
+      solution: 'challenge121211 solution nl-be',
+      solutionToDisplay: 'challenge121211 solutionToDisplay nl-be',
+      t1Status: true,
+      t2Status: true,
+      t3Status: true,
+      status: 'validé',
+      skillId: 'skill12121',
+      embedUrl: 'challenge121211 embedUrl',
+      embedTitle: 'challenge121211 embedTitle',
+      embedHeight: 'challenge121211 embedHeight',
+      timer: 1,
+      competenceId: 'competence12',
+      format: 'challenge121211 format',
+      autoReply: true,
+      locales: ['nl-be'],
+      alternativeInstruction: 'challenge121211 alternativeInstruction nl-be',
+      genealogy: 'Prototype 1',
+      responsive: ['Smartphone', 'Tablet'],
+      focusable: 'challenge121211 focusable',
+      delta: 1.1,
+      alpha: 2.2,
+      attachments: ['attachment1 url', 'attachment2 url'],
+      illustrationUrl: null,
+      illustrationAlt: null,
+      shuffled: false,
+      alternativeVersion: 'challenge121211 alternativeVersion',
+    },
+    {
       id: 'challenge121212',
-      translations: {
-        en: {
-          instruction: 'challenge121212 instruction',
-          proposals: 'challenge121212 proposals',
-          solution: 'challenge121212 solution',
-          solutionToDisplay: 'challenge121212 solutionToDisplay',
-          alternativeInstruction: 'challenge121212 alternativeInstruction',
-        },
-      },
       instruction: 'challenge121212 instruction',
       proposals: 'challenge121212 proposals',
       type: 'challenge121212 type',
@@ -1162,15 +1216,6 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211111',
-      translations: {
-        fr: {
-          instruction: 'challenge211111 instruction',
-          proposals: 'challenge211111 proposals',
-          solution: 'challenge211111 solution',
-          solutionToDisplay: 'challenge211111 solutionToDisplay',
-          alternativeInstruction: 'challenge211111 alternativeInstruction',
-        },
-      },
       instruction: 'challenge211111 instruction',
       proposals: 'challenge211111 proposals',
       type: 'challenge211111 type',
@@ -1188,7 +1233,7 @@ function _getRichCurrentContentDTO() {
       competenceId: 'competence21',
       format: 'challenge211111 format',
       autoReply: true,
-      locales: ['fr'],
+      locales: ['fr', 'fr-fr'],
       alternativeInstruction: 'challenge211111 alternativeInstruction',
       genealogy: 'Prototype 1',
       responsive: ['Tablet'],
@@ -1203,15 +1248,6 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211112',
-      translations: {
-        'fr': {
-          instruction: 'challenge211112 instruction',
-          proposals: 'challenge211112 proposals',
-          solution: 'challenge211112 solution',
-          solutionToDisplay: 'challenge211112 solutionToDisplay',
-          alternativeInstruction: 'challenge211112 alternativeInstruction',
-        },
-      },
       instruction: 'challenge211112 instruction',
       proposals: 'challenge211112 proposals',
       type: 'challenge211112 type',
@@ -1243,15 +1279,6 @@ function _getRichCurrentContentDTO() {
     },
     {
       id: 'challenge211113',
-      translations: {
-        'fr': {
-          instruction: 'challenge211113 instruction',
-          proposals: 'challenge211113 proposals',
-          solution: 'challenge211113 solution',
-          solutionToDisplay: 'challenge211113 solutionToDisplay',
-          alternativeInstruction: 'challenge211113 alternativeInstruction',
-        },
-      },
       instruction: 'challenge211113 instruction',
       proposals: 'challenge211113 proposals',
       type: 'challenge211113 type',

@@ -84,11 +84,11 @@ export class Challenge {
     this.skillId = skillId;
     this.translations = translations;
 
-    this.instruction = this.translations[this.locales[0]].instruction ?? '';
-    this.alternativeInstruction = this.translations[this.locales[0]].alternativeInstruction ?? '';
-    this.proposals = this.translations[this.locales[0]].proposals ?? '';
-    this.solution = this.translations[this.locales[0]].solution ?? '';
-    this.solutionToDisplay = this.translations[this.locales[0]].solutionToDisplay ?? '';
+    this.instruction = this.translations[this.locales[0]]?.instruction ?? '';
+    this.alternativeInstruction = this.translations[this.locales[0]]?.alternativeInstruction ?? '';
+    this.proposals = this.translations[this.locales[0]]?.proposals ?? '';
+    this.solution = this.translations[this.locales[0]]?.solution ?? '';
+    this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
   }
 
   static defaultLocales(locales) {
@@ -98,5 +98,9 @@ export class Challenge {
 
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
+  }
+
+  get primaryLocale() {
+    return this.locales[0];
   }
 }

@@ -1,7 +1,6 @@
 import { datasource } from './datasource.js';
 import { findRecords } from '../../airtable.js';
-import { LOCALE_TO_LANGUAGE_MAP } from '../../../domain/constants.js';
-import _ from 'lodash';
+import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
 export const challengeDatasource = datasource.extend({
 
@@ -81,7 +80,7 @@ export const challengeDatasource = datasource.extend({
       format: airtableRecord.get('Format') || 'mots',
       files: airtableRecord.get('files'),
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
-      locales: _convertLanguagesToLocales(airtableRecord.get('Langues') || []),
+      locales: convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       focusable: airtableRecord.get('Focalisée'),
       airtableId: airtableRecord.get('Record ID'),
       genealogy: airtableRecord.get('Généalogie'),
@@ -123,7 +122,7 @@ export const challengeDatasource = datasource.extend({
         'Timer': model.timer,
         'Format': model.format,
         'Réponse automatique': model.autoReply,
-        'Langues': _convertLocalesToLanguages(model.locales),
+        'Langues': convertLocalesToLanguages(model.locales),
         'Focalisée': model.focusable,
         'Acquix': model.skills,
         'Généalogie': model.genealogy,
@@ -197,30 +196,4 @@ function _convertBooleanToAirtableValue(value) {
 
 function _convertAirtableValueToBoolean(value) {
   return value === 'Activé';
-}
-
-function _convertLanguagesToLocales(languages) {
-  return languages.map((language) => _convertLanguageToLocale(language));
-}
-
-function _convertLanguageToLocale(language) {
-  const locale = _.findKey(LOCALE_TO_LANGUAGE_MAP, (lang) => language === lang);
-  if (!locale) {
-    throw new Error('Langue inconnue');
-  }
-
-  return locale;
-}
-
-function _convertLocalesToLanguages(locales) {
-  return locales.map((locale) => _convertLocaleToLanguage(locale));
-}
-
-function _convertLocaleToLanguage(locale) {
-  const language = LOCALE_TO_LANGUAGE_MAP[locale];
-  if (!language) {
-    throw new Error('Locale inconnue');
-  }
-
-  return language;
 }

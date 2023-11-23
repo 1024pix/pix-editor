@@ -3,6 +3,7 @@ import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
+import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import { extractFromChallenge as extractTranslationsFromChallenge, prefix, prefixFor } from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
@@ -39,6 +40,7 @@ export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save(translations);
+  await localizedChallengeRepository.create([{ id: challenge.id, challengeId: challenge.id, locale: challenge.primaryLocale }]);
   return toDomain(createdChallengeDto, translations);
 }
 
@@ -64,27 +66,23 @@ async function loadTranslationsForChallenges(challengeDtos) {
 }
 
 function toDomainList(challengeDtos, translations) {
-  const translationsByLocaleAndChallengeId = _.groupBy(translations, ({
-    locale,
-    key
-  }) => `${locale}:${key.split('.')[1]}`);
+  const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
 
   return challengeDtos.map((challengeDto) => {
-    const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
-    const filteredTranslations = translationsByLocaleAndChallengeId[`${challengeLocale}:${challengeDto.id}`] ?? [];
-    return toDomain(challengeDto, filteredTranslations);
+    const challengeTranslations = translationsByChallengeId[challengeDto.id] ?? [];
+    return toDomain(challengeDto, challengeTranslations);
   });
 }
 
-function toDomain(challengeDto, translations) {
-  const translatedFields = Object.fromEntries([
-    ...translations.map(({ key, value }) => [key.split('.').at(-1), value]),
-  ]);
-  const challengeLocale = Challenge.getPrimaryLocale(challengeDto.locales) ?? 'fr';
+function toDomain(challengeDto, challengeTranslations) {
+  const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
+  const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
+    return Object.fromEntries([
+      ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
+    ]);
+  });
   return new Challenge({
     ...challengeDto,
-    translations: {
-      [challengeLocale]: translatedFields
-    }
+    translations,
   });
 }

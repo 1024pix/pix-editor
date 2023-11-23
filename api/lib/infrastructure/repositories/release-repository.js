@@ -9,8 +9,11 @@ import {
   tubeDatasource,
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
-import * as translationRepository from './translation-repository.js';
-import * as challengeRepository from './challenge-repository.js';
+import {
+  challengeRepository,
+  translationRepository,
+  localizedChallengeRepository,
+} from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
   challengeTransformer,
@@ -69,17 +72,6 @@ export async function serializeEntity({ type, entity, translations }) {
     return { updatedRecord: challenge, model: challengeDatasource.path() };
   }
 
-  if (model === challengeDatasource.path()) {
-    const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.id);
-    const learningContent = {
-      attachments,
-    };
-    const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
-    const challenge = transformChallenge(updatedRecord);
-
-    return { updatedRecord: challenge, model };
-  }
-
   tablesTranslations[type]?.hydrateReleaseObject?.(updatedRecord, translations);
 
   return { updatedRecord, model };
@@ -119,6 +111,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubes,
     tutorials,
     translations,
+    localizedChallenges,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
@@ -129,9 +122,10 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubeDatasource.list(),
     tutorialDatasource.list(),
     translationRepository.listByPrefix(competenceTranslations.prefix),
+    localizedChallengeRepository.list(),
   ]);
-  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
-  const transformedChallenges = challenges.map(transformChallenge);
+  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenges });
+  const transformedChallenges = challenges.flatMap(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);

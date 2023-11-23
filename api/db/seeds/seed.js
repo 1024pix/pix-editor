@@ -1,4 +1,5 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
+import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { translationsBuilder } from './data/translations.js';
 
@@ -31,6 +32,8 @@ export async function seed(knex) {
     access: 'readonly',
     apiKey: process.env.REVIEW_APP_READ_ONLY_USER_API_KEY || readOnlyUserApiKey,
   });
+
+  await localizedChallengesBuilder(databaseBuilder);
 
   staticCoursesBuilder(databaseBuilder);
 

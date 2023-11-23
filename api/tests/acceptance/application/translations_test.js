@@ -388,9 +388,15 @@ describe('Acceptance | Controller | translations-controller', () => {
         locale: 'fr-fr',
         value: 'La clé !'
       });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        locale: 'fr',
+      });
+
       await databaseBuilder.commit();
       const formData = new FormData();
-      formData.append('file', 'key,locale,value\nsome-key,fr-fr,plop', 'test.csv');
+      formData.append('file', 'key,locale,value\nsome-key,fr-fr,plop\nchallenge.challengeId.key,en,blip', 'test.csv');
 
       const server = await createServer();
       const putTranslationsOptions = {
@@ -407,10 +413,16 @@ describe('Acceptance | Controller | translations-controller', () => {
       const response = await server.inject(putTranslationsOptions);
 
       // Then
+      const expectedLocalizedChallenge = await knex('localized_challenges')
+        .where({ locale: 'en' })
+        .select(['challengeId', 'locale'])
+        .first();
       expect(response.statusCode).to.equal(204);
-
-      expect(await knex('translations').count()).to.deep.equal([{ count: 1 }]);
+      expect(await knex('translations').count()).to.deep.equal([{ count: 2 }]);
       expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
+      expect(await knex('localized_challenges').count()).to.deep.equal([{ count: 2 }]);
+      expect(expectedLocalizedChallenge).to.deep.equal({ challengeId: 'challengeId', locale: 'en' });
+
     });
 
     it('should fail when the file is not a CSV', async () => {
