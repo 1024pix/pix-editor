@@ -1,4 +1,4 @@
-const { knex } = require('../../api/db/knex-database-connection');
+import { knex } from '../../api/db/knex-database-connection';
 
 (async function() {
   const staticCourses = await knex('static_courses')

@@ -1,17 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { readJSONFile } from '../common/read-json-file.js';
 
-module.exports = {
-  main,
-  attachmentUrl,
-  challengeAttachmentsToCsv,
-  challengesAttachmentsToCsv,
-  renameFileToImport,
-};
-
-function main() {
+export function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
-  const challenges = require(backupBaseFolder + 'Epreuves.json');
+  const challenges = readJSONFile(backupBaseFolder, 'Epreuves.json');
   const csv = challengesAttachmentsToCsv(challenges, { bucketBaseUrl: process.env.BUCKET_BASE_URL });
   if (process.argv.includes('--rename-files')) {
     renameChallengesAttachments(challenges, backupBaseFolder);
@@ -19,7 +12,7 @@ function main() {
   fs.writeFileSync(backupBaseFolder + 'challenges.csv', csv);
 }
 
-function challengesAttachmentsToCsv(challenges, { bucketBaseUrl }) {
+export function challengesAttachmentsToCsv(challenges, { bucketBaseUrl }) {
   const headers = 'id,filename,size,alt,url,mimeType,type,challengeId';
   const lines = challenges.map((challenge) => challengeAttachmentsToCsv(challenge, { bucketBaseUrl })).filter((line) => line !== '');
   return headers + '\n' + lines.join('\n');
@@ -30,7 +23,7 @@ function renameChallengesAttachments(challenges, backupBaseFolder) {
   challenges.forEach((challenge) => renameFileToImport(challenge, (oldFilename, newFilename) => fs.copyFileSync(folder + oldFilename, folder + newFilename)));
 }
 
-function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
+export function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
   const { fields } = challenge;
   const id = fields['Record ID'];
   const csv = [];
@@ -80,7 +73,7 @@ function challengeAttachmentsToCsv(challenge, { bucketBaseUrl }) {
   return csv.join('\n');
 }
 
-function attachmentUrl({ challengeId, filename, type, bucketBaseUrl }) {
+export function attachmentUrl({ challengeId, filename, type, bucketBaseUrl }) {
   const encodedFilename = encodeURIComponent(newFilename({ challengeId, filename, type }));
   return `${bucketBaseUrl}${encodedFilename}`;
 }
@@ -100,7 +93,7 @@ function escapeField(field) {
   return field.replace(/"/g, '""');
 }
 
-function renameFileToImport(challenge, renameFile) {
+export function renameFileToImport(challenge, renameFile) {
   const { fields } = challenge;
   const challengeId = fields['Record ID'];
 

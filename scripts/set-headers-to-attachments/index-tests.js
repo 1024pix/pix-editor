@@ -1,5 +1,5 @@
-const { setHeadersToAttachments } = require('.');
-const nock = require('nock');
+import { setHeadersToAttachments } from './index.js';
+import nock from 'nock';
 
 describe('Set headers to attachments', function() {
   it('set header Content-Disposition only to type attachments', async function() {

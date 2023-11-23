@@ -1,6 +1,6 @@
-const axios = require('axios');
+import axios from 'axios';
 
-module.exports = async function getToken() {
+export default async function getToken() {
   const data = {
     'auth': {
       'identity': {
@@ -27,4 +27,4 @@ module.exports = async function getToken() {
   });
 
   return response.headers['x-subject-token'];
-};
+}

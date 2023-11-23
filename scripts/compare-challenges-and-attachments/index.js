@@ -1,17 +1,14 @@
-const _ = require('lodash');
-const axios = require('axios');
-const hasha = require('hasha');
-const pLimit = require('p-limit');
+import _ from 'lodash';
+import axios from 'axios';
+import hasha from 'hasha';
+import pLimit from 'p-limit';
+import { readJSONFile } from '../common/read-json-file.js';
 const limit = pLimit(300);
-
-module.exports = {
-  checkChallengeAttachments,
-};
 
 async function main() {
   const backupBaseFolder = process.env.BACKUP_BASE_FOLDER;
-  const challenges = require(backupBaseFolder + 'Epreuves.json');
-  const attachments = require(backupBaseFolder + 'Attachments.json');
+  const challenges = readJSONFile(backupBaseFolder, 'Epreuves.json');
+  const attachments = readJSONFile(backupBaseFolder, 'Attachments.json');
   let challengeCount = 0;
   const promises = challenges.map(async (challenge) => {
     await limit(async () => {
@@ -27,7 +24,7 @@ async function main() {
   await Promise.all(promises);
 }
 
-async function checkChallengeAttachments(challenge, attachments, remoteChecksumComputer) {
+export async function checkChallengeAttachments(challenge, attachments, remoteChecksumComputer) {
   const challengeAttachments = attachments.filter(({ fields }) => {
     const challengeId = fields.challengeId;
     return challengeId && challengeId[0] === challenge.fields['Record ID'];

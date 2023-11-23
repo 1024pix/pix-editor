@@ -1,5 +1,5 @@
-const { Client } = require('pg');
-const Airtable = require('airtable');
+import { Client } from 'pg';
+import Airtable from 'airtable';
 
 (async function() {
   const client = new Client({ connectionString: process.env.DATABASE_URL });

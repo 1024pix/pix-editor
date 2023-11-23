@@ -6,11 +6,12 @@
 // > npm ci
 // > AIRTABLE_API_KEY=XXX AIRTABLE_BASE=XXXX node populate-alpha-and-delta-column-with-csv/
 
-const _ = require('lodash');
-const fs = require('fs');
-const Airtable = require('airtable');
-const { parseString } = require('@fast-csv/parse');
-const ProgressBar = require('progress');
+import _ from 'lodash';
+
+import fs from 'fs';
+import Airtable from 'airtable';
+import { parseString } from '@fast-csv/parse';
+import ProgressBar from 'progress';
 
 const HEADERS_MAPPING = {
   items: 'id',
@@ -18,7 +19,7 @@ const HEADERS_MAPPING = {
   discriminants: 'alpha',
 };
 
-function parseData(csvData) {
+export function parseData(csvData) {
   return new Promise((resolve, reject) => {
     const result = [];
 
@@ -34,7 +35,7 @@ function parseData(csvData) {
   });
 }
 
-async function findAirtableIds(base, challengesWithPersistentIds) {
+export async function findAirtableIds(base, challengesWithPersistentIds) {
   const challengesWithPersistentIdsWithChunk = _.chunk(challengesWithPersistentIds, 100);
   const promises = challengesWithPersistentIdsWithChunk.map((chunk) => {
     return base
@@ -55,7 +56,7 @@ async function findAirtableIds(base, challengesWithPersistentIds) {
   });
 }
 
-async function updateRecords(base, data) {
+export async function updateRecords(base, data) {
   const payloadWithoutLimit = data.map(({ id, alpha, delta }) => {
     return {
       id,
@@ -104,9 +105,3 @@ async function main() {
 if (process.env.NODE_ENV !== 'test') {
   main();
 }
-
-module.exports = {
-  parseData,
-  findAirtableIds,
-  updateRecords,
-};

@@ -4,3 +4,9 @@ extends:
 
 globals:
   include: true
+
+
+parserOptions:
+  requireConfigFile: false
+  sourceType: module
+  importAssertions: true

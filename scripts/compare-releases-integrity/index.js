@@ -1,16 +1,10 @@
-const axios = require('axios');
-const _ = require('lodash');
-const hasha = require('hasha');
-const pLimit = require('p-limit');
+import axios from 'axios';
+import _ from 'lodash';
+import hasha from 'hasha';
+import pLimit from 'p-limit';
 const limit = pLimit(100);
-const ProgressBar = require('progress');
-const diff = require('variable-diff');
-
-module.exports = {
-  compareReleases,
-  replaceAttachmentsUrlByChecksum,
-  remoteChecksumComputer,
-};
+import ProgressBar from 'progress';
+import diff from 'variable-diff';
 
 async function main() {
   const baseUrl1 = process.env.URL1;
@@ -42,7 +36,7 @@ function replaceAttachmentsWithProgress(challenges, remoteChecksumComputer) {
   }));
 }
 
-async function compareReleases({ url: urlLeft, token: tokenLeft }, { url: urlRight, token: tokenRight }, remoteChecksumComputer) {
+export async function compareReleases({ url: urlLeft, token: tokenLeft }, { url: urlRight, token: tokenRight }, remoteChecksumComputer) {
   const challengesLeft = await getRelease(urlLeft, tokenLeft);
   const challengesRight = await getRelease(urlRight, tokenRight);
 
@@ -75,7 +69,7 @@ async function getRelease(url, token) {
   return challenges;
 }
 
-async function replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer) {
+export async function replaceAttachmentsUrlByChecksum(challenge, remoteChecksumComputer) {
   if (challenge.illustrationUrl) {
     challenge.illustrationUrl = await remoteChecksumComputer(challenge.illustrationUrl);
   }
@@ -99,7 +93,7 @@ function sanitizeText(text) {
   return '';
 }
 
-async function remoteChecksumComputer(url) {
+export async function remoteChecksumComputer(url) {
   try {
     const response = await axios({
       url,

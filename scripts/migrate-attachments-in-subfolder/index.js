@@ -1,16 +1,9 @@
-const Airtable = require('airtable');
-const axios = require('axios');
-const getToken = require('../common/token');
-const ProgressBar = require('progress');
-const pLimit = require('p-limit');
+import Airtable from 'airtable';
+import axios from 'axios';
+import getToken from '../common/token.js';
+import ProgressBar from 'progress';
+import pLimit from 'p-limit';
 const limit = pLimit(10);
-
-module.exports = {
-  main,
-  shouldBeMigrated,
-  cloneFile,
-  updateRecord,
-};
 
 function getBaseAttachments() {
   const base = new Airtable({
@@ -34,11 +27,11 @@ function eachRecord(callback) {
   });
 }
 
-function shouldBeMigrated(record) {
+export function shouldBeMigrated(record) {
   return !record.get('url').endsWith('/' + encodeURIComponent(record.get('filename')));
 }
 
-async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
+export async function cloneFile(token, originalUrl, randomString, filename, clock = Date) {
   const parsedUrl = new URL(originalUrl);
   const newUrl = parsedUrl.protocol + '//' + parsedUrl.hostname + '/' + randomString + clock.now() + '/' + encodeURIComponent(filename);
 
@@ -58,7 +51,7 @@ async function cloneFile(token, originalUrl, randomString, filename, clock = Dat
   return newUrl;
 }
 
-async function updateRecord(base, id, url) {
+export async function updateRecord(base, id, url) {
   return new Promise((resolve, reject) => {
     base.update([
       {
@@ -74,7 +67,7 @@ async function updateRecord(base, id, url) {
   });
 }
 
-async function main() {
+export async function main() {
   const bar = new ProgressBar('[:bar] :percent', {
     total: 10000,
     width: 50,
