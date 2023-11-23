@@ -7,6 +7,7 @@ import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, translationRepository } from '../infrastructure/repositories/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
+import * as usecases from '../domain/usecases/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
 
@@ -18,22 +19,12 @@ export async function register(server) {
       config: {
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
+          const tableTranslations = getTableTranslations(tableName);
 
-          if (_isResponseOK(response)) {
-            const tableTranslations = getTableTranslations(tableName);
-            if (tableTranslations.readFromPgEnabled) {
-              if (response.data.records) {
-                const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
-                response.data.records.forEach((entity) => {
-                  tableTranslations.hydrateToAirtableObject(entity.fields, translations);
-                });
-              } else {
-                const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
-                tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
-              }
-            }
-          }
+          const response = await usecases.proxyReadRequestToAirtable(request, config.airtable.base, {
+            tableTranslations,
+            proxyRequestToAirtable: _proxyRequestToAirtable,
+          });
 
           return h.response(response.data).code(response.status);
         }
