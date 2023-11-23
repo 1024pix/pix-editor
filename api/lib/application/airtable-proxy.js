@@ -19,7 +19,7 @@ export async function register(server) {
       config: {
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const tableTranslations = getTableTranslations(tableName);
+          const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
           const response = await usecases.proxyReadRequestToAirtable(request, config.airtable.base, {
             tableTranslations,
@@ -41,7 +41,7 @@ export async function register(server) {
         }],
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const tableTranslations = getTableTranslations(tableName);
+          const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
           const response = await usecases.proxyWriteRequestToAirtable(request, config.airtable.base, tableName, {
             proxyRequestToAirtable: _proxyRequestToAirtable,
@@ -117,7 +117,7 @@ async function _updateStagingPixApiCache(type, entity, translations) {
   }
 }
 
-function getTableTranslations(tableName) {
+export function getTableTranslations(tablesTranslations, tableName) {
   const tableTranslations = tablesTranslations[tableName];
 
   const writeToPgEnabled = tableTranslations?.extractFromAirtableObject !== undefined;
