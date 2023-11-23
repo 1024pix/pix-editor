@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-import hasha from 'hasha';
+import { hash } from 'hasha';
 import pLimit from 'p-limit';
 const limit = pLimit(100);
 import ProgressBar from 'progress';
@@ -100,7 +100,7 @@ export async function remoteChecksumComputer(url) {
       method: 'GET',
       responseType: 'stream',
     });
-    return hasha.fromStream(response.data, { algorithm: 'sha1' });
+    return hash(response.data, { algorithm: 'sha1' });
   } catch (e) {
     console.error(`Error getting file ${url}: ${e}`);
     return url;

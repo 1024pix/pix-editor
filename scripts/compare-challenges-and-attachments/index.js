@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
-import hasha from 'hasha';
+import { hash } from 'hasha';
 import pLimit from 'p-limit';
 import { readJSONFile } from '../common/read-json-file.js';
 const limit = pLimit(300);
@@ -103,7 +103,7 @@ async function remoteChecksumComputer(url) {
     responseType: 'stream'
   });
 
-  return hasha.fromStream(response.data, { algorithm: 'sha1' });
+  return hash(response.data.pipe, { algorithm: 'sha1' });
 }
 
 if (process.env.NODE_ENV !== 'test') {
