@@ -9,8 +9,6 @@ import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
-const tablesTranslationsForReading = ['Competences', 'Acquis'];
-const tablesTranslationsForWriting = ['Competences', 'Acquis'];
 
 export async function register(server) {
   server.route([
@@ -22,16 +20,18 @@ export async function register(server) {
           const tableName = request.params.path.split('/')[0];
           const response = await _proxyRequestToAirtable(request, config.airtable.base);
 
-          if (_isResponseOK(response) && tablesTranslationsForReading.includes(tableName)) {
-            const tableTranslations = tablesTranslations[tableName];
-            if (response.data.records) {
-              const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
-              response.data.records.forEach((entity) => {
-                tableTranslations.hydrateToAirtableObject(entity.fields, translations);
-              });
-            } else {
-              const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
-              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
+          if (_isResponseOK(response)) {
+            const tableTranslations = getTableTranslations(tableName);
+            if (tableTranslations.readFromPgEnabled) {
+              if (response.data.records) {
+                const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
+                response.data.records.forEach((entity) => {
+                  tableTranslations.hydrateToAirtableObject(entity.fields, translations);
+                });
+              } else {
+                const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
+                tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
+              }
             }
           }
 
@@ -50,24 +50,28 @@ export async function register(server) {
         }],
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const tableTranslations = tablesTranslations[tableName];
+          const tableTranslations = getTableTranslations(tableName);
 
           let translations;
-          if (tablesTranslationsForWriting.includes(tableName) && tableTranslations) {
+          if (tableTranslations.writeToPgEnabled) {
             translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
-            tableTranslations.dehydrateAirtableObject?.(request.payload?.fields);
+          }
+
+          if (tableTranslations.writeToAirtableDisabled) {
+            tableTranslations.dehydrateAirtableObject(request.payload?.fields);
           }
 
           const response = await _proxyRequestToAirtable(request, config.airtable.base);
 
           if (_isResponseOK(response)) {
-            if (translations) {
+            if (tableTranslations.writeToPgEnabled) {
               if (request.method === 'patch') {
                 await translationRepository.deleteByKeyPrefix(tableTranslations.prefixFor(response.data.fields));
               }
-
               await translationRepository.save(translations);
+            }
 
+            if (tableTranslations.readFromPgEnabled) {
               tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
             }
 
@@ -144,4 +148,23 @@ async function _updateStagingPixApiCache(type, entity, translations) {
 
 function _isResponseOK(response) {
   return response.status >= 200 && response.status < 300;
+}
+
+function getTableTranslations(tableName) {
+  const tableTranslations = tablesTranslations[tableName];
+
+  const writeToPgEnabled = tableTranslations?.extractFromAirtableObject !== undefined;
+
+  // Lecture dans PG possible seulement si écriture dans PG activée
+  const readFromPgEnabled = writeToPgEnabled && tableTranslations?.hydrateToAirtableObject !== undefined;
+
+  // Arrêt de l'écriture dans Airtable possible seulement si écriture et lecture dans PG activées
+  const writeToAirtableDisabled = readFromPgEnabled && tableTranslations?.dehydrateAirtableObject !== undefined;
+
+  return {
+    ...tableTranslations,
+    writeToPgEnabled,
+    readFromPgEnabled,
+    writeToAirtableDisabled,
+  };
 }
