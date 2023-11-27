@@ -4,7 +4,7 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 const expect = chai.expect;
 import _ from 'lodash';
-import { parseData, findAirtableIds, updateRecords } from './index.js';
+import { parseData, findAirtableIds, updateRecords, clearDifficultyAndDiscriminant } from './index.js';
 import airtable from 'airtable';
 const { Record: AirtableRecord } = airtable;
 
@@ -126,6 +126,42 @@ describe('Populate alpha and delta column', function() {
       };
       await updateRecords(base, data);
       expect(base.update).to.have.been.calledTwice;
+    });
+  });
+
+  describe('#clearDifficultyAndDiscriminant', function() {
+    it('deletes value of difficulty and discriminant in challenges records', async function() {
+      const recordsCount = 100;
+      const records = _.range(0, recordsCount)
+        .map((recordIndex) => ({
+          id: `recAirtableId${recordIndex}`,
+          fields: {
+            'Difficulté calculée': '0.98765432166556',
+            'Discrimination calculée': '-0.321'
+          }
+        }));
+
+      const all = sinon.stub().resolves(records);
+      const base = {
+        update: sinon.stub(),
+        select: () => ({
+          all
+        })
+      };
+
+      const updatedRecords = [];
+
+      base.update.callsFake((records) => {
+        expect(records.length).to.be.lessThanOrEqual(10, 'Update should be called with at least 10 records');
+        updatedRecords.push(...records);
+      });
+      await clearDifficultyAndDiscriminant(base);
+
+      expect(updatedRecords.length).to.equal(recordsCount);
+      updatedRecords.forEach((record) => {
+        expect(record.fields['Difficulté calculée']).to.be.null;
+        expect(record.fields['Discrimination calculée']).to.be.null;
+      });
     });
   });
 });

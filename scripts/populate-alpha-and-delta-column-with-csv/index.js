@@ -85,6 +85,42 @@ export async function updateRecords(base, data) {
   return Promise.all(promises);
 }
 
+export async function clearDifficultyAndDiscriminant(base) {
+
+  try {
+    const records = await base.select({
+      fields: ['Difficulté calculée', 'Discrimination calculée'],
+      filterByFormula: 'OR({Difficulté calculée}, {Discrimination calculée})'
+    }).all();
+
+    console.log(`Purging ${records.length} records`);
+
+    const recordsWithoutDifficultyAndDiscriminant = records.map(({ id }) => ({
+      id,
+      fields: {
+        'Difficulté calculée': null,
+        'Discrimination calculée': null
+      }
+    }));
+
+    const chunks = _.chunk(recordsWithoutDifficultyAndDiscriminant, 10);
+
+    const bar = new ProgressBar('[:bar] :percent', {
+      total: chunks.length,
+      width: 50,
+    });
+
+    await Promise.all(chunks.map(async (chunk) => {
+      await base.update(chunk);
+      bar.tick();
+    }));
+
+    console.log('Records purged successfully');
+  } catch (error) {
+    console.error('Error updating records:', error);
+  }
+}
+
 function getBaseChallenges() {
   const base = new Airtable({
     apiKey: process.env.AIRTABLE_API_KEY
@@ -97,8 +133,12 @@ async function main() {
   const csv = fs.readFileSync('./file.csv', 'utf-8');
 
   const base = getBaseChallenges();
+  await clearDifficultyAndDiscriminant(base);
+  console.log('Parsing CSV Data');
   const matchedData = await parseData(csv);
+  console.log('Mapping CSV Data ids to airtable IDs');
   const matchedDataWithAirtableIds = await findAirtableIds(base, matchedData);
+  console.log('Updating records');
   await updateRecords(base, matchedDataWithAirtableIds);
 }
 
