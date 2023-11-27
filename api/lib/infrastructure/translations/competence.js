@@ -15,8 +15,8 @@ const fields = [
 const idField = 'id persistant';
 
 export const {
-  extractFromAirtableObject,
-  hydrateToAirtableObject,
+  extractFromProxyObject,
+  hydrateProxyObject,
   dehydrateAirtableObject,
   hydrateReleaseObject,
   extractFromReleaseObject,

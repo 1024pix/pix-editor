@@ -16,7 +16,7 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
     tableTranslations = {
       prefix: 'entity.',
       prefixFor: vi.fn(),
-      hydrateToAirtableObject: vi.fn(),
+      hydrateProxyObject: vi.fn(),
       readFromPgEnabled: false,
     };
     translationRepository = {
@@ -70,8 +70,8 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
         expect(translationRepository.listByPrefix).toHaveBeenCalledOnce();
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('entity.id.');
 
-        expect(tableTranslations.hydrateToAirtableObject).toHaveBeenCalledOnce();
-        expect(tableTranslations.hydrateToAirtableObject).toHaveBeenCalledWith(entity, translations);
+        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledOnce();
+        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledWith(entity, translations);
       });
     });
   });
@@ -119,9 +119,9 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
         expect(translationRepository.listByPrefix).toHaveBeenCalledOnce();
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith(tableTranslations.prefix);
 
-        expect(tableTranslations.hydrateToAirtableObject).toHaveBeenCalledTimes(2);
-        expect(tableTranslations.hydrateToAirtableObject).toHaveBeenNthCalledWith(1, entity1, translations);
-        expect(tableTranslations.hydrateToAirtableObject).toHaveBeenNthCalledWith(2, entity2, translations);
+        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledTimes(2);
+        expect(tableTranslations.hydrateProxyObject).toHaveBeenNthCalledWith(1, entity1, translations);
+        expect(tableTranslations.hydrateProxyObject).toHaveBeenNthCalledWith(2, entity2, translations);
       });
     });
   });

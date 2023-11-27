@@ -5,12 +5,12 @@ describe('Unit | Application | airtable proxy', function() {
   describe('#getTableTranslation', function() {
     const tableName = 'Entites';
 
-    describe('when table translations implements extractFromAirtableObject', () => {
+    describe('when table translations implements extractFromProxyObject', () => {
       it('should enable Write to Pg', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            extractFromAirtableObject: vi.fn(),
+            extractFromProxyObject: vi.fn(),
           },
         };
 
@@ -24,13 +24,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements extractFromAirtableObject and hydrateToAirtableObject', () => {
+    describe('when table translations implements extractFromProxyObject and hydrateProxyObject', () => {
       it('should enable Read to Pg', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            extractFromAirtableObject: vi.fn(),
-            hydrateToAirtableObject: vi.fn(),
+            extractFromProxyObject: vi.fn(),
+            hydrateProxyObject: vi.fn(),
           },
         };
 
@@ -44,13 +44,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements extractFromAirtableObject, hydrateToAirtableObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements extractFromProxyObject, hydrateProxyObject and dehydrateAirtableObject', () => {
       it('shoud enable Write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            extractFromAirtableObject: vi.fn(),
-            hydrateToAirtableObject: vi.fn(),
+            extractFromProxyObject: vi.fn(),
+            hydrateProxyObject: vi.fn(),
             dehydrateAirtableObject: vi.fn(),
           },
         };
@@ -65,12 +65,12 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only hydrateToAirtableObject', () => {
+    describe('when table translations implements only hydrateProxyObject', () => {
       it('should not enable Read to Pg', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            hydrateToAirtableObject: vi.fn(),
+            hydrateProxyObject: vi.fn(),
           },
         };
 
@@ -84,12 +84,12 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only hydrateToAirtableObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements only hydrateProxyObject and dehydrateAirtableObject', () => {
       it('should not enable Read to Pg or disable write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            hydrateToAirtableObject: vi.fn(),
+            hydrateProxyObject: vi.fn(),
             dehydrateAirtableObject: vi.fn(),
           },
         };
@@ -104,12 +104,12 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only extractFromAirtableObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements only extractFromProxyObject and dehydrateAirtableObject', () => {
       it('should enable only write to PG', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            extractFromAirtableObject: vi.fn(),
+            extractFromProxyObject: vi.fn(),
             dehydrateAirtableObject: vi.fn(),
           },
         };

@@ -8,7 +8,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
 }) {
   let translations;
   if (tableTranslations.writeToPgEnabled) {
-    translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
+    translations = tableTranslations.extractFromProxyObject(request.payload.fields);
   }
 
   if (tableTranslations.writeToAirtableDisabled) {
@@ -29,7 +29,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   }
 
   if (tableTranslations.readFromPgEnabled) {
-    tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
+    tableTranslations.hydrateProxyObject(response.data.fields, translations);
   }
 
   await updateStagingPixApiCache(tableName, response.data, translations);

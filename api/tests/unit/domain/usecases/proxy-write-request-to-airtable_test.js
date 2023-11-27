@@ -21,9 +21,9 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
     tableTranslations = {
       prefix: 'entity.',
       prefixFor: vi.fn(),
-      extractFromAirtableObject: vi.fn(),
+      extractFromProxyObject: vi.fn(),
       dehydrateAirtableObject: vi.fn(),
-      hydrateToAirtableObject: vi.fn(),
+      hydrateProxyObject: vi.fn(),
       writeToPgEnabled: false,
       readFromPgEnabled: false,
       writeToAirtableDisabled: false,
@@ -85,7 +85,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
         request = { method: 'post', payload: { fields: requestFields } };
 
         tableTranslations.writeToPgEnabled = true;
-        tableTranslations.extractFromAirtableObject.mockReturnValue(translations);
+        tableTranslations.extractFromProxyObject.mockReturnValue(translations);
       });
 
       it('should save extracted translations to PG', async () => {
@@ -100,8 +100,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
         // then
         expect(actualResponse).toBe(response);
 
-        expect(tableTranslations.extractFromAirtableObject).toHaveBeenCalledOnce();
-        expect(tableTranslations.extractFromAirtableObject).toHaveBeenCalledWith(requestFields);
+        expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledOnce();
+        expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestFields);
 
         expect(translationRepository.save).toHaveBeenCalledOnce();
         expect(translationRepository.save).toHaveBeenCalledWith(translations);
@@ -126,8 +126,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
           // then
           expect(actualResponse).toBe(response);
 
-          expect(tableTranslations.extractFromAirtableObject).toHaveBeenCalledOnce();
-          expect(tableTranslations.extractFromAirtableObject).toHaveBeenCalledWith(requestFields);
+          expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledOnce();
+          expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestFields);
 
           expect(tableTranslations.prefixFor).toHaveBeenCalledOnce();
           expect(tableTranslations.prefixFor).toHaveBeenCalledWith(responseFields);
@@ -157,8 +157,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
           // then
           expect(actualResponse).toBe(response);
 
-          expect(tableTranslations.hydrateToAirtableObject).toHaveBeenCalledOnce();
-          expect(tableTranslations.hydrateToAirtableObject).toHaveBeenCalledWith(responseFields, translations);
+          expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledOnce();
+          expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledWith(responseFields, translations);
 
           expect(updateStagingPixApiCache).toHaveBeenCalledOnce();
           expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, translations);

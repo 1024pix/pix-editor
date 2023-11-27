@@ -22,7 +22,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
     translationsUtils = buildTranslationsUtils({ fields, locales, prefix, idField });
   });
 
-  describe('#extractFromAirtableObject', () => {
+  describe('#extractFromProxyObject', () => {
     it('should return the list of translations', () => {
       // given
       const entity = {
@@ -34,7 +34,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = translationsUtils.extractFromAirtableObject(entity);
+      const translations = translationsUtils.extractFromProxyObject(entity);
 
       // then
       expect(translations).to.deep.equal([
@@ -54,7 +54,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = translationsUtils.extractFromAirtableObject(entity);
+      const translations = translationsUtils.extractFromProxyObject(entity);
 
       // then
       expect(translations).to.deep.equal([
@@ -88,7 +88,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateToAirtableObject(entity, translations);
+      translationsUtils.hydrateProxyObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({
@@ -117,7 +117,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateToAirtableObject(entity, translations);
+      translationsUtils.hydrateProxyObject(entity, translations);
 
       // then
       expect(entity).to.deep.equal({

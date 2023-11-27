@@ -9,7 +9,7 @@ function buildLocalizedFields(locales, fields) {
   );
 }
 
-function extractFromAirtableObject({ localizedFields, prefixFor }) {
+function extractFromProxyObject({ localizedFields, prefixFor }) {
   return (entity) => {
     return localizedFields
       .filter(({ airtableField, airtableLocale }) => entity[`${airtableField} ${airtableLocale}`])
@@ -21,7 +21,7 @@ function extractFromAirtableObject({ localizedFields, prefixFor }) {
   };
 }
 
-function hydrateToAirtableObject({ localizedFields, prefixFor }) {
+function hydrateProxyObject({ localizedFields, prefixFor }) {
   return (entity, translations) => {
     for (const {
       airtableLocale,
@@ -94,8 +94,8 @@ export function buildTranslationsUtils({ locales, fields, prefix, idField }) {
   return {
     localizedFields,
     prefixFor,
-    extractFromAirtableObject: extractFromAirtableObject({ localizedFields, prefixFor }),
-    hydrateToAirtableObject: hydrateToAirtableObject({ localizedFields, prefixFor }),
+    extractFromProxyObject: extractFromProxyObject({ localizedFields, prefixFor }),
+    hydrateProxyObject: hydrateProxyObject({ localizedFields, prefixFor }),
     dehydrateAirtableObject: dehydrateAirtableObject({ localizedFields }),
     hydrateReleaseObject: hydrateReleaseObject({ fields, locales, prefix }),
     extractFromReleaseObject: extractFromReleaseObject({ localizedFields, prefix }),

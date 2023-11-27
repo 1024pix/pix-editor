@@ -120,10 +120,10 @@ async function _updateStagingPixApiCache(type, entity, translations) {
 export function getTableTranslations(tablesTranslations, tableName) {
   const tableTranslations = tablesTranslations[tableName];
 
-  const writeToPgEnabled = tableTranslations?.extractFromAirtableObject !== undefined;
+  const writeToPgEnabled = tableTranslations?.extractFromProxyObject !== undefined;
 
   // Lecture dans PG possible seulement si écriture dans PG activée
-  const readFromPgEnabled = writeToPgEnabled && tableTranslations?.hydrateToAirtableObject !== undefined;
+  const readFromPgEnabled = writeToPgEnabled && tableTranslations?.hydrateProxyObject !== undefined;
 
   // Arrêt de l'écriture dans Airtable possible seulement si écriture et lecture dans PG activées
   const writeToAirtableDisabled = readFromPgEnabled && tableTranslations?.dehydrateAirtableObject !== undefined;
