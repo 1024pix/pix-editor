@@ -126,7 +126,7 @@ export function getTableTranslations(tablesTranslations, tableName) {
   const readFromPgEnabled = writeToPgEnabled && tableTranslations?.hydrateProxyObject !== undefined;
 
   // Arrêt de l'écriture dans Airtable possible seulement si écriture et lecture dans PG activées
-  const writeToAirtableDisabled = readFromPgEnabled && tableTranslations?.dehydrateAirtableObject !== undefined;
+  const writeToAirtableDisabled = readFromPgEnabled && tableTranslations?.proxyObjectToAirtableObject !== undefined;
 
   return {
     ...tableTranslations,

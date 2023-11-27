@@ -130,10 +130,10 @@ describe('Unit | Infrastructure | Entity translations', () => {
     });
   });
 
-  describe('#dehydrateAirtableObject', () => {
-    it('should set translated fields into the object', () => {
+  describe('#proxyObjectToAirtableObject', () => {
+    it('should return an airtable object', () => {
       // given
-      const entity = {
+      const proxyObject = {
         'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
         'Attribut2 fr-fr': 'value2 fr-fr initial',
@@ -141,11 +141,18 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      translationsUtils.dehydrateAirtableObject(entity);
+      const airtableObject = translationsUtils.proxyObjectToAirtableObject(proxyObject);
 
       // then
-      expect(entity).to.deep.equal({
+      expect(airtableObject).to.deep.equal({
         'mon id': 'test',
+        otherField: 'foo',
+      });
+
+      expect(proxyObject).to.deep.equal({
+        'mon id': 'test',
+        'Attribut fr-fr': 'value fr-fr initial',
+        'Attribut2 fr-fr': 'value2 fr-fr initial',
         otherField: 'foo',
       });
     });

@@ -44,14 +44,14 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements extractFromProxyObject, hydrateProxyObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements extractFromProxyObject, hydrateProxyObject and proxyObjectToAirtableObject', () => {
       it('shoud enable Write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
             extractFromProxyObject: vi.fn(),
             hydrateProxyObject: vi.fn(),
-            dehydrateAirtableObject: vi.fn(),
+            proxyObjectToAirtableObject: vi.fn(),
           },
         };
 
@@ -84,13 +84,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only hydrateProxyObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements only hydrateProxyObject and proxyObjectToAirtableObject', () => {
       it('should not enable Read to Pg or disable write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
             hydrateProxyObject: vi.fn(),
-            dehydrateAirtableObject: vi.fn(),
+            proxyObjectToAirtableObject: vi.fn(),
           },
         };
 
@@ -104,13 +104,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only extractFromProxyObject and dehydrateAirtableObject', () => {
+    describe('when table translations implements only extractFromProxyObject and proxyObjectToAirtableObject', () => {
       it('should enable only write to PG', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
             extractFromProxyObject: vi.fn(),
-            dehydrateAirtableObject: vi.fn(),
+            proxyObjectToAirtableObject: vi.fn(),
           },
         };
 

@@ -6,13 +6,10 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   translationRepository = repositories.translationRepository,
   updateStagingPixApiCache,
 }) {
-  let translations;
-  if (tableTranslations.writeToPgEnabled) {
-    translations = tableTranslations.extractFromProxyObject(request.payload.fields);
-  }
+  const requestFields = request.payload.fields;
 
   if (tableTranslations.writeToAirtableDisabled) {
-    tableTranslations.dehydrateAirtableObject(request.payload?.fields);
+    request.payload.fields = tableTranslations.proxyObjectToAirtableObject(requestFields);
   }
 
   const response = await proxyRequestToAirtable(request, airtableBase);
@@ -21,10 +18,14 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
     return response;
   }
 
+  let translations;
   if (tableTranslations.writeToPgEnabled) {
     if (request.method === 'patch') {
       await translationRepository.deleteByKeyPrefix(tableTranslations.prefixFor(response.data.fields));
     }
+
+    translations = tableTranslations.extractFromProxyObject(requestFields);
+
     await translationRepository.save(translations);
   }
 
