@@ -22,8 +22,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       prefix: 'entity.',
       prefixFor: vi.fn(),
       extractFromProxyObject: vi.fn(),
+      airtableObjectToProxyObject: vi.fn(),
       proxyObjectToAirtableObject: vi.fn(),
-      hydrateProxyObject: vi.fn(),
       writeToPgEnabled: false,
       readFromPgEnabled: false,
       writeToAirtableDisabled: false,
@@ -141,8 +141,11 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       });
 
       describe('when reading translations from PG is enabled', () => {
+        const proxyResponseFields = Symbol('proxyResponseFields');
+
         beforeEach(() => {
           tableTranslations.readFromPgEnabled = true;
+          tableTranslations.airtableObjectToProxyObject.mockReturnValue(proxyResponseFields);
         });
 
         it('should hydrate response and update staging Pix API cache using translations from PG', async () => {
@@ -156,9 +159,10 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
           // then
           expect(actualResponse).toBe(response);
+          expect(response.data.fields).toBe(proxyResponseFields);
 
-          expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledOnce();
-          expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledWith(responseFields, translations);
+          expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledOnce();
+          expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledWith(responseFields, translations);
 
           expect(updateStagingPixApiCache).toHaveBeenCalledOnce();
           expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, translations);

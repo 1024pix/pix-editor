@@ -24,13 +24,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements extractFromProxyObject and hydrateProxyObject', () => {
+    describe('when table translations implements extractFromProxyObject and airtableObjectToProxyObject', () => {
       it('should enable Read to Pg', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
             extractFromProxyObject: vi.fn(),
-            hydrateProxyObject: vi.fn(),
+            airtableObjectToProxyObject: vi.fn(),
           },
         };
 
@@ -44,13 +44,13 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements extractFromProxyObject, hydrateProxyObject and proxyObjectToAirtableObject', () => {
+    describe('when table translations implements extractFromProxyObject, airtableObjectToProxyObject and proxyObjectToAirtableObject', () => {
       it('shoud enable Write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
             extractFromProxyObject: vi.fn(),
-            hydrateProxyObject: vi.fn(),
+            airtableObjectToProxyObject: vi.fn(),
             proxyObjectToAirtableObject: vi.fn(),
           },
         };
@@ -65,12 +65,12 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only hydrateProxyObject', () => {
+    describe('when table translations implements only airtableObjectToProxyObject', () => {
       it('should not enable Read to Pg', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            hydrateProxyObject: vi.fn(),
+            airtableObjectToProxyObject: vi.fn(),
           },
         };
 
@@ -84,12 +84,12 @@ describe('Unit | Application | airtable proxy', function() {
       });
     });
 
-    describe('when table translations implements only hydrateProxyObject and proxyObjectToAirtableObject', () => {
+    describe('when table translations implements only airtableObjectToProxyObject and proxyObjectToAirtableObject', () => {
       it('should not enable Read to Pg or disable write to Airtable', async function() {
         // Given
         const tablesTranslations = {
           [tableName]: {
-            hydrateProxyObject: vi.fn(),
+            airtableObjectToProxyObject: vi.fn(),
             proxyObjectToAirtableObject: vi.fn(),
           },
         };

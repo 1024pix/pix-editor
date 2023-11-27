@@ -16,7 +16,7 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
     tableTranslations = {
       prefix: 'entity.',
       prefixFor: vi.fn(),
-      hydrateProxyObject: vi.fn(),
+      airtableObjectToProxyObject: vi.fn(),
       readFromPgEnabled: false,
     };
     translationRepository = {
@@ -25,10 +25,10 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
   });
 
   describe('when reading a single entity', () => {
-    const entity = Symbol('entity');
+    const airtableFields = Symbol('airtableFields');
 
     beforeEach(() => {
-      response = { status: 200, data: { fields: entity } };
+      response = { status: 200, data: { fields: airtableFields } };
       proxyRequestToAirtable.mockResolvedValue(response);
     });
 
@@ -47,10 +47,13 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
     });
 
     describe('when reading translations from PG is enabled', () => {
+      const proxyResponseFields = Symbol('proxyResponseFields');
+
       beforeEach(() => {
         tableTranslations.readFromPgEnabled = true;
         tableTranslations.prefixFor.mockReturnValue('entity.id.');
         translationRepository.listByPrefix.mockResolvedValue(translations);
+        tableTranslations.airtableObjectToProxyObject.mockReturnValue(proxyResponseFields);
       });
 
       it('should hydrate response with translations from PG', async () => {
@@ -63,25 +66,26 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
 
         // then
         expect(actualResponse).toBe(response);
+        expect(response.data.fields).toBe(proxyResponseFields);
 
         expect(tableTranslations.prefixFor).toHaveBeenCalledOnce();
-        expect(tableTranslations.prefixFor).toHaveBeenCalledWith(entity);
+        expect(tableTranslations.prefixFor).toHaveBeenCalledWith(airtableFields);
 
         expect(translationRepository.listByPrefix).toHaveBeenCalledOnce();
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('entity.id.');
 
-        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledOnce();
-        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledWith(entity, translations);
+        expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledOnce();
+        expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledWith(airtableFields, translations);
       });
     });
   });
 
   describe('when reading several entities', () => {
-    const entity1 = Symbol('entity1');
-    const entity2 = Symbol('entity2');
+    const airtableFields1 = Symbol('airtableFields1');
+    const airtableFields2 = Symbol('airtableFields2');
 
     beforeEach(() => {
-      response = { status: 200, data: { records: [{ fields: entity1 }, { fields: entity2 }] } };
+      response = { status: 200, data: { records: [{ fields: airtableFields1 }, { fields: airtableFields2 }] } };
       proxyRequestToAirtable.mockResolvedValue(response);
     });
 
@@ -100,9 +104,14 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
     });
 
     describe('when reading translations from PG is enabled', () => {
+      const proxyResponseFields1 = Symbol('proxyResponseFields1');
+      const proxyResponseFields2 = Symbol('proxyResponseFields2');
+
       beforeEach(() => {
         tableTranslations.readFromPgEnabled = true;
         translationRepository.listByPrefix.mockResolvedValue(translations);
+        tableTranslations.airtableObjectToProxyObject.mockReturnValueOnce(proxyResponseFields1);
+        tableTranslations.airtableObjectToProxyObject.mockReturnValueOnce(proxyResponseFields2);
       });
 
       it('should hydrate response with translations from PG', async () => {
@@ -115,13 +124,15 @@ describe('Unit | Domain | Usecases | proxy-read-request-to-airtable', () => {
 
         // then
         expect(actualResponse).toBe(response);
+        expect(actualResponse.data.records[0].fields).toBe(proxyResponseFields1);
+        expect(actualResponse.data.records[1].fields).toBe(proxyResponseFields2);
 
         expect(translationRepository.listByPrefix).toHaveBeenCalledOnce();
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith(tableTranslations.prefix);
 
-        expect(tableTranslations.hydrateProxyObject).toHaveBeenCalledTimes(2);
-        expect(tableTranslations.hydrateProxyObject).toHaveBeenNthCalledWith(1, entity1, translations);
-        expect(tableTranslations.hydrateProxyObject).toHaveBeenNthCalledWith(2, entity2, translations);
+        expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledTimes(2);
+        expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenNthCalledWith(1, airtableFields1, translations);
+        expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenNthCalledWith(2, airtableFields2, translations);
       });
     });
   });

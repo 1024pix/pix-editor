@@ -30,7 +30,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   }
 
   if (tableTranslations.readFromPgEnabled) {
-    tableTranslations.hydrateProxyObject(response.data.fields, translations);
+    response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
   }
 
   await updateStagingPixApiCache(tableName, response.data, translations);
