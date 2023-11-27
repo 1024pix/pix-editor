@@ -1,10 +1,14 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge } from '../../domain/models/Challenge.js';
+import { Challenge } from '../../domain/models/index.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
-import { extractFromChallenge as extractTranslationsFromChallenge, prefix, prefixFor } from '../translations/challenge.js';
+import {
+  extractFromChallenge as extractTranslationsFromChallenge,
+  prefix,
+  prefixFor
+} from '../translations/challenge.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -40,14 +44,18 @@ export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save(translations);
-  await localizedChallengeRepository.create([{ id: challenge.id, challengeId: challenge.id, locale: challenge.primaryLocale }]);
+  await localizedChallengeRepository.create([{
+    id: challenge.id,
+    challengeId: challenge.id,
+    locale: challenge.primaryLocale
+  }]);
   return toDomain(createdChallengeDto, translations);
 }
 
 export async function update(challenge) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.deleteByKeyPrefix(prefixFor(challenge));
+  await translationRepository.deleteByKeyPrefixAndLocales(prefixFor(challenge), [challenge.primaryLocale]);
   await translationRepository.save(translations);
   return toDomain(updatedChallengeDto, translations);
 }

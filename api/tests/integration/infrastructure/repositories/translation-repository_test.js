@@ -61,23 +61,40 @@ describe('Integration | Repository | translation-repository', function() {
     });
   });
 
-  context('#deleteByKeyPrefix', function() {
-    it('should delete translations where key starts with given string', async function() {
+  context('#deleteByKeyPrefixAndLocales', function() {
+    it('should delete translations having key prefix and locales', async function() {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'some.prefix.key',
         locale: 'fr',
         value: 'Bonjour, la mif'
       });
+      databaseBuilder.factory.buildTranslation({
+        key: 'some.prefix.key',
+        locale: 'en',
+        value: 'Hello, the mif'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'some.prefix.key',
+        locale: 'nl-be',
+        value: 'Hallo, het mif'
+      });
       await databaseBuilder.commit();
 
       const prefixToDelete = 'some.prefix.';
+      const locales = ['fr', 'en'];
 
       // when
-      await translationRepository.deleteByKeyPrefix(prefixToDelete);
+      await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
 
       // then
-      expect(await knex('translations').count()).to.deep.equal([{ count: 0 }]);
+      expect(await knex('translations').select()).to.deep.equal([
+        {
+          key: 'some.prefix.key',
+          locale: 'nl-be',
+          value: 'Hallo, het mif'
+        },
+      ]);
     });
 
     context('when Airtable has a translations table', () => {
@@ -101,7 +118,7 @@ describe('Integration | Repository | translation-repository', function() {
                 'value',
               ],
             },
-            filterByFormula: 'REGEX_MATCH(key, "^some\\.prefix\\.")',
+            filterByFormula: 'AND(REGEX_MATCH(key, \'^some\\.prefix\\.\'), OR(locale = \'fr\', locale = \'en\'))',
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, {
@@ -119,7 +136,7 @@ describe('Integration | Repository | translation-repository', function() {
                 fields: {
                   key: 'some.prefix.key',
                   locale: 'en',
-                  value: 'Hello, the fim',
+                  value: 'Hello, the mif',
                 },
               },
             ]
@@ -129,10 +146,7 @@ describe('Integration | Repository | translation-repository', function() {
           .delete('/v0/airtableBaseValue/translations')
           .query({
             records: {
-              '': [
-                'recTranslation1',
-                'recTranslation2',
-              ]
+              '': ['recTranslation1', 'recTranslation2'],
             }
           })
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
@@ -144,9 +158,10 @@ describe('Integration | Repository | translation-repository', function() {
           });
 
         const prefixToDelete = 'some.prefix.';
+        const locales = ['fr', 'en'];
 
         // when
-        await translationRepository.deleteByKeyPrefix(prefixToDelete);
+        await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
 
         expect(nock.isDone()).toBe(true);
       });
@@ -340,12 +355,34 @@ describe('Integration | Repository | translation-repository', function() {
 async function _setShouldDuplicateToAirtable(value) {
   if (value) {
     nock('https://api.airtable.com')
-      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .get('/v0/airtableBaseValue/translations')
+      .query({
+        fields: {
+          '': [
+            'key',
+            'locale',
+            'value',
+          ],
+        },
+        sort: [{ field: 'key_locale', direction: 'asc' }],
+        maxRecords: 1,
+      })
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
       .reply(200, { records: [] });
   } else {
     nock('https://api.airtable.com')
-      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
+      .get('/v0/airtableBaseValue/translations')
+      .query({
+        fields: {
+          '': [
+            'key',
+            'locale',
+            'value',
+          ],
+        },
+        sort: [{ field: 'key_locale', direction: 'asc' }],
+        maxRecords: 1,
+      })
       .matchHeader('authorization', 'Bearer airtableApiKeyValue')
       .reply(404);
   }

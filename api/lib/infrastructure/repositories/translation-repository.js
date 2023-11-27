@@ -68,10 +68,11 @@ function _toDomain(dto) {
   return new Translation(dto);
 }
 
-export async function deleteByKeyPrefix(prefix) {
+export async function deleteByKeyPrefixAndLocales(prefix, locales) {
   await knex('translations')
+    .delete()
     .whereLike('key', `${prefix}%`)
-    .delete();
+    .whereIn('locale', locales);
 
   if (_shouldDuplicateToAirtable == null && _shouldDuplicateToAirtablePromise == null) {
     await checkIfShouldDuplicateToAirtable();
@@ -80,8 +81,8 @@ export async function deleteByKeyPrefix(prefix) {
   if (_shouldDuplicateToAirtable) {
     const records = await translationDatasource.filter({
       filter: {
-        formula: `REGEX_MATCH(key, "^${prefix.replace(/(\.)/g, '\\$1')}")`,
-      }
+        formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))`,
+      },
     });
     const recordIds = records.map(({ airtableId }) => airtableId);
     await translationDatasource.delete(recordIds);
