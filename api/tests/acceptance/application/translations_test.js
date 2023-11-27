@@ -5,7 +5,7 @@ import { createServer } from '../../../server';
 
 describe('Acceptance | Controller | translations-controller', () => {
 
-  describe('GET /translations.csv - export all translations in CSV file', () => {
+  describe('GET /translations.csv - export only translations of core framework in CSV file', () => {
 
     it('should return a csv file', async () => {
       // Given
@@ -13,7 +13,10 @@ describe('Acceptance | Controller | translations-controller', () => {
       const releaseContent = {
         frameworks: [{
           id: 'recFramework0',
-          name: 'Nom du referentiel'
+          name: 'Pix'
+        }, {
+          id: 'recFramework1',
+          name: 'Pix+'
         }],
         areas: [{
           id: 'recArea0',
@@ -26,6 +29,18 @@ describe('Acceptance | Controller | translations-controller', () => {
           competenceIds: ['recCompetence0'],
           color: 'jaffa',
           frameworkId: 'recFramework0',
+        },
+        {
+          id: 'recArea1',
+          name: 'Nom du Domaine pix+',
+          code: '1',
+          title_i18n: {
+            fr: 'Titre du Domaine - fr',
+            en: 'Titre du Domaine - en',
+          },
+          competenceIds: ['recCompetence1'],
+          color: 'jaffa',
+          frameworkId: 'recFramework1',
         }],
         competences: [{
           id: 'recCompetence0',
@@ -38,6 +53,22 @@ describe('Acceptance | Controller | translations-controller', () => {
           origin: 'Pix',
           skillIds: ['recSkill0'],
           thematicIds: ['recThematic0'],
+          description_i18n: {
+            fr: 'Description de la compétence - fr',
+            en: 'Description de la compétence - en',
+          }
+        },
+        {
+          id: 'recCompetence1',
+          index: '1.1',
+          name_i18n: {
+            fr: 'Nom de la Compétence - fr',
+            en: 'Nom de la Compétence - en',
+          },
+          areaId: 'recArea1',
+          origin: 'Pix+',
+          skillIds: [],
+          thematicIds: [],
           description_i18n: {
             fr: 'Description de la compétence - fr',
             en: 'Description de la compétence - en',
@@ -143,13 +174,13 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,Nom_du_referentiel-1-1.1-acquis-acquis1-valide,Nom_du_referentiel-1-1.1-acquis-acquis1,Nom_du_referentiel-1-1.1-acquis,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,Nom_du_referentiel-1-1.1-acquis-acquis1-valide,Nom_du_referentiel-1-1.1-acquis-acquis1,Nom_du_referentiel-1-1.1-acquis,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,Nom_du_referentiel-1-1.1-acquis-acquis1-valide,Nom_du_referentiel-1-1.1-acquis-acquis1,Nom_du_referentiel-1-1.1-acquis,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,Nom_du_referentiel-1-1.1-acquis-acquis1-valide,Nom_du_referentiel-1-1.1-acquis-acquis1,Nom_du_referentiel-1-1.1-acquis,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,Nom_du_referentiel-1-1.1-acquis-acquis1-valide,Nom_du_referentiel-1-1.1-acquis-acquis1,Nom_du_referentiel-1-1.1-acquis,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
+        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
       ]);
     });
 
@@ -159,7 +190,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       const releaseContent = {
         frameworks: [{
           id: 'recFramework0',
-          name: 'Nom du referentiel'
+          name: 'Pix'
         }],
         areas: [{
           id: 'recArea0',
@@ -289,13 +320,8 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags');
       expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,valide"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,valide"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,valide"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,valide"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,valide"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Nom_du_referentiel-1-1.1,Nom_du_referentiel-1,Nom_du_referentiel"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
       ]);
     });
 

@@ -22,12 +22,14 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
     .filter((challenge) => challenge.locales.includes('fr'))
     .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'epreuve'))
     .flatMap(extractTranslationsFromObject(extractFromChallenge))
+    .filter(keepPixFramework)
     .map(translationAndTagsToCSVLine);
 
   const competencesStream = Readable.from(release.content.competences)
     .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'competence'))
     .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
     .filter(({ translation }) => translation.locale === 'fr')
+    .filter(keepPixFramework)
     .map(translationAndTagsToCSVLine);
 
   pipeline(
@@ -38,6 +40,10 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
+}
+
+function keepPixFramework({ tags }) {
+  return tags.includes('Pix');
 }
 
 function toTag(tagName) {
