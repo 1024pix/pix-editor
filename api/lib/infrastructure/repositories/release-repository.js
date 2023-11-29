@@ -2,7 +2,6 @@ import {
   areaDatasource,
   attachmentDatasource,
   challengeDatasource,
-  competenceDatasource,
   frameworkDatasource,
   skillDatasource,
   thematicDatasource,
@@ -11,7 +10,7 @@ import {
 } from '../datasources/airtable/index.js';
 import {
   challengeRepository,
-  translationRepository,
+  competenceRepository,
   localizedChallengeRepository,
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
@@ -23,7 +22,6 @@ import {
   tutorialTransformer,
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
-import * as competenceTranslations from '../translations/competence.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
@@ -72,9 +70,15 @@ export async function serializeEntity({ type, entity, translations }) {
     return { updatedRecord: challenge, model: challengeDatasource.path() };
   }
 
-  tablesTranslations[type]?.hydrateReleaseObject?.(updatedRecord, translations);
+  if (!tablesTranslations[type]?.toDomain) return { updatedRecord, model };
 
-  return { updatedRecord, model };
+  return {
+    updatedRecord:{
+      ...updatedRecord,
+      ...tablesTranslations[type].toDomain(translations),
+    },
+    model,
+  };
 }
 
 function _toDomain(releaseDTO) {
@@ -110,18 +114,16 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes,
     tutorials,
-    translations,
     localizedChallenges,
   ] = await Promise.all([
     areaDatasource.list(),
     attachmentDatasource.list(),
-    competenceDatasource.list(),
+    competenceRepository.list(),
     frameworkDatasource.list(),
     skillDatasource.list(),
     thematicDatasource.list(),
     tubeDatasource.list(),
     tutorialDatasource.list(),
-    translationRepository.listByPrefix(competenceTranslations.prefix),
     localizedChallengeRepository.list(),
   ]);
   const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenges });
@@ -130,8 +132,6 @@ async function _getCurrentContentFromAirtable(challenges) {
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
-
-  filteredCompetences.forEach((competence) => competenceTranslations.hydrateReleaseObject(competence, translations));
 
   return {
     frameworks,

@@ -1,4 +1,5 @@
 export * as challengeRepository from './challenge-repository.js';
+export * as competenceRepository from './competence-repository.js';
 export * as fileStorageTokenRepository from './file-storage-token-repository.js';
 export * as localizedChallengeRepository from './localized-challenge-repository.js';
 export * as releaseRepository from './release-repository.js';
