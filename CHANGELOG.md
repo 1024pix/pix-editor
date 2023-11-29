@@ -1,5 +1,21 @@
 
 
+## v3.108.0 (29/11/2023)
+
+
+### :rocket: Amélioration
+- [#392](https://github.com/1024pix/pix-editor/pull/392) [FEATURE] Exporte uniquement les traductions du référentiel cœur (PIX-10128).
+
+### :building_construction: Tech
+- [#388](https://github.com/1024pix/pix-editor/pull/388) [TECH] Refactoring gestion des traductions dans proxy Airtable (PIX-10085).
+- [#390](https://github.com/1024pix/pix-editor/pull/390) [TECH] Supprimer les données de calibration préexistantes lors de l'import d'une nouvelle calibration. (PIX-10099).
+
+### :bug: Correction
+- [#395](https://github.com/1024pix/pix-editor/pull/395) [BUGFIX] Résolution de problème d'import des traductions venant de Phrase. (PIX-10169).
+
+### :arrow_up: Montée de version
+- [#391](https://github.com/1024pix/pix-editor/pull/391) [BUMP] Update dependency eslint to v8.54.0.
+
 ## v3.107.0 (23/11/2023)
 
 
