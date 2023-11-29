@@ -18,7 +18,6 @@ export const {
   extractFromProxyObject,
   airtableObjectToProxyObject,
   proxyObjectToAirtableObject,
-  hydrateReleaseObject,
   toDomain,
   extractFromReleaseObject,
   prefixFor,
