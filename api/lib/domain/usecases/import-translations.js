@@ -2,6 +2,7 @@ import { translationRepository, localizedChallengeRepository } from '../../infra
 import { LocalizedChallenge, Translation } from '../models/index.js';
 import { parseStream } from 'fast-csv';
 import fp from 'lodash/fp.js';
+
 export class InvalidFileError extends Error {}
 
 export function importTranslations(csvStream, dependencies = { translationRepository, localizedChallengeRepository }) {
@@ -12,7 +13,9 @@ export function importTranslations(csvStream, dependencies = { translationReposi
       strictColumnHandling: true,
     }).validate((data) => data.key && data.locale && data.value)
       .on('error', reject)
-      .on('data-invalid', reject)
+      .on('data-invalid', (invalidData) => {
+        reject(new InvalidFileError(`Invalid data: ${JSON.stringify(invalidData)}`));
+      })
       .on('data', (row) => {
         translations.push(new Translation(row));
       })

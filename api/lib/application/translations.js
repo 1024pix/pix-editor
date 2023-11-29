@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import Boom from '@hapi/boom';
 import { exportTranslations } from '../domain/usecases/export-translations.js';
 import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
+import { logger } from '../infrastructure/logger.js';
 
 export async function register(server) {
   server.route([
@@ -43,6 +44,7 @@ export async function importTranslationsHandler(request, h) {
     await importTranslations(stream);
   } catch (error) {
     if (error instanceof InvalidFileError) {
+      logger.error(error);
       return Boom.badRequest('Invalid CSV file');
     }
     throw error;
