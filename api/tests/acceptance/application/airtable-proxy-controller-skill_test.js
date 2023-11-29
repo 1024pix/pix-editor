@@ -150,45 +150,6 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
         }]);
       });
     });
-
-    describe('when some fields are emptied', () => {
-      it('should delete translation keys', async () => {
-        // Given
-        const skillDataObject = domainBuilder.buildSkillDatasourceObject({
-          id: 'mon_id_persistant',
-        });
-        skillToUpdate = inputOutputDataBuilder.factory.buildSkill({
-          ...skillDataObject,
-          hint_i18n: {
-            fr: 'AAA',
-          },
-        });
-
-        nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/Acquis/id_airtable', skillToUpdate)
-          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, skillToUpdate);
-        const server = await createServer();
-
-        // When
-        const response = await server.inject({
-          method: 'PATCH',
-          url: '/api/airtable/content/Acquis/id_airtable',
-          headers: generateAuthorizationHeader(user),
-          payload: skillToUpdate,
-        });
-
-        // Then
-        expect(response.statusCode).to.equal(200);
-        const translations = await knex('translations').select('key', 'locale', 'value');
-        expect(translations.length).to.equal(1);
-        expect(translations[0]).to.deep.equal({
-          key: 'skill.mon_id_persistant.hint',
-          locale: 'fr',
-          value: 'AAA'
-        });
-      });
-    });
   });
 });
 

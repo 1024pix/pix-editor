@@ -22,7 +22,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
     translationsUtils = buildTranslationsUtils({ fields, locales, prefix, idField });
   });
 
-  describe('#extractFromAirtableObject', () => {
+  describe('#extractFromProxyObject', () => {
     it('should return the list of translations', () => {
       // given
       const entity = {
@@ -34,7 +34,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = translationsUtils.extractFromAirtableObject(entity);
+      const translations = translationsUtils.extractFromProxyObject(entity);
 
       // then
       expect(translations).to.deep.equal([
@@ -54,7 +54,7 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      const translations = translationsUtils.extractFromAirtableObject(entity);
+      const translations = translationsUtils.extractFromProxyObject(entity);
 
       // then
       expect(translations).to.deep.equal([
@@ -64,10 +64,10 @@ describe('Unit | Infrastructure | Entity translations', () => {
     });
   });
 
-  describe('#hydrateAirtableObject', () => {
+  describe('#airtableObjectToProxyObject', () => {
     it('should set translated fields into the object', () => {
       // given
-      const entity = {
+      const airtableObject = {
         'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
         otherField: 'foo',
@@ -88,10 +88,10 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateToAirtableObject(entity, translations);
+      const proxyObject = translationsUtils.airtableObjectToProxyObject(airtableObject, translations);
 
       // then
-      expect(entity).to.deep.equal({
+      expect(proxyObject).to.deep.equal({
         'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr',
         'Attribut en-us': 'value en-us',
@@ -99,11 +99,17 @@ describe('Unit | Infrastructure | Entity translations', () => {
         'Attribut2 en-us': 'value2 en-us',
         otherField: 'foo',
       });
+
+      expect(airtableObject).to.deep.equal({
+        'mon id': 'test',
+        'Attribut fr-fr': 'value fr-fr initial',
+        otherField: 'foo',
+      });
     });
 
     it('should set null value for missing translations', () => {
       // given
-      const entity = {
+      const airtableObject = {
         'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
       };
@@ -117,23 +123,28 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateToAirtableObject(entity, translations);
+      const proxyObject = translationsUtils.airtableObjectToProxyObject(airtableObject, translations);
 
       // then
-      expect(entity).to.deep.equal({
+      expect(proxyObject).to.deep.equal({
         'mon id': 'test',
         'Attribut fr-fr': null,
         'Attribut en-us': 'value en-us',
         'Attribut2 fr-fr': null,
         'Attribut2 en-us': 'value2 en-us',
       });
+
+      expect(airtableObject).to.deep.equal({
+        'mon id': 'test',
+        'Attribut fr-fr': 'value fr-fr initial',
+      });
     });
   });
 
-  describe('#dehydrateAirtableObject', () => {
-    it('should set translated fields into the object', () => {
+  describe('#proxyObjectToAirtableObject', () => {
+    it('should return an airtable object', () => {
       // given
-      const entity = {
+      const proxyObject = {
         'mon id': 'test',
         'Attribut fr-fr': 'value fr-fr initial',
         'Attribut2 fr-fr': 'value2 fr-fr initial',
@@ -141,11 +152,18 @@ describe('Unit | Infrastructure | Entity translations', () => {
       };
 
       // when
-      translationsUtils.dehydrateAirtableObject(entity);
+      const airtableObject = translationsUtils.proxyObjectToAirtableObject(proxyObject);
 
       // then
-      expect(entity).to.deep.equal({
+      expect(airtableObject).to.deep.equal({
         'mon id': 'test',
+        otherField: 'foo',
+      });
+
+      expect(proxyObject).to.deep.equal({
+        'mon id': 'test',
+        'Attribut fr-fr': 'value fr-fr initial',
+        'Attribut2 fr-fr': 'value2 fr-fr initial',
         otherField: 'foo',
       });
     });

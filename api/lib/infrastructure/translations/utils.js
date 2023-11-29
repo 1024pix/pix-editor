@@ -9,7 +9,7 @@ function buildLocalizedFields(locales, fields) {
   );
 }
 
-function extractFromAirtableObject({ localizedFields, prefixFor }) {
+function extractFromProxyObject({ localizedFields, prefixFor }) {
   return (entity) => {
     return localizedFields
       .filter(({ airtableField, airtableLocale }) => entity[`${airtableField} ${airtableLocale}`])
@@ -21,35 +21,32 @@ function extractFromAirtableObject({ localizedFields, prefixFor }) {
   };
 }
 
-function hydrateToAirtableObject({ localizedFields, prefixFor }) {
-  return (entity, translations) => {
-    for (const {
-      airtableLocale,
-      locale,
-      airtableField,
-      field,
-    } of localizedFields) {
-      const translation = translations.find(
-        (translation) =>
-          translation.key === `${prefixFor(entity)}${field}` &&
-          translation.locale === locale
-      );
+function airtableObjectToProxyObject({ localizedFields, prefixFor }) {
+  return (airtableObject, translations) => {
+    return {
+      ...airtableObject,
+      ...Object.fromEntries(
+        localizedFields.map(({ airtableLocale, locale, airtableField, field }) => {
+          const translation = translations.find(
+            (translation) =>
+              translation.key === `${prefixFor(airtableObject)}${field}` &&
+              translation.locale === locale
+          );
 
-      entity[`${airtableField} ${airtableLocale}`] =
-        translation?.value ?? null;
-    }
+          return [`${airtableField} ${airtableLocale}`, translation?.value ?? null];
+        }),
+      ),
+    };
   };
 }
 
-function dehydrateAirtableObject({ localizedFields }) {
-  return (entity) => {
-    for (const {
-      airtableLocale,
-      airtableField,
-    } of localizedFields) {
-      delete entity[`${airtableField} ${airtableLocale}`];
-    }
-  };
+function proxyObjectToAirtableObject({ localizedFields }) {
+  const airtableLocalizedFields = localizedFields
+    .map(({ airtableLocale, airtableField }) => `${airtableField} ${airtableLocale}`);
+
+  return (proxyObject) => Object.fromEntries(
+    Object.entries(proxyObject).filter(([field]) => !airtableLocalizedFields.includes(field)),
+  );
 }
 
 function hydrateReleaseObject({ fields, locales, prefix }) {
@@ -94,9 +91,9 @@ export function buildTranslationsUtils({ locales, fields, prefix, idField }) {
   return {
     localizedFields,
     prefixFor,
-    extractFromAirtableObject: extractFromAirtableObject({ localizedFields, prefixFor }),
-    hydrateToAirtableObject: hydrateToAirtableObject({ localizedFields, prefixFor }),
-    dehydrateAirtableObject: dehydrateAirtableObject({ localizedFields }),
+    extractFromProxyObject: extractFromProxyObject({ localizedFields, prefixFor }),
+    airtableObjectToProxyObject: airtableObjectToProxyObject({ localizedFields, prefixFor }),
+    proxyObjectToAirtableObject: proxyObjectToAirtableObject({ localizedFields }),
     hydrateReleaseObject: hydrateReleaseObject({ fields, locales, prefix }),
     extractFromReleaseObject: extractFromReleaseObject({ localizedFields, prefix }),
   };

@@ -4,13 +4,12 @@ import * as config from '../config.js';
 import * as pixApiClient from '../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';
 import { logger } from '../infrastructure/logger.js';
-import { releaseRepository, translationRepository } from '../infrastructure/repositories/index.js';
+import { releaseRepository } from '../infrastructure/repositories/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import * as tablesTranslations from '../infrastructure/translations/index.js';
+import * as usecases from '../domain/usecases/index.js';
 
 const AIRTABLE_BASE_URL = 'https://api.airtable.com/v0';
-const tablesTranslationsForReading = ['Competences', 'Acquis'];
-const tablesTranslationsForWriting = ['Competences', 'Acquis'];
 
 export async function register(server) {
   server.route([
@@ -20,20 +19,12 @@ export async function register(server) {
       config: {
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
+          const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
-          if (_isResponseOK(response) && tablesTranslationsForReading.includes(tableName)) {
-            const tableTranslations = tablesTranslations[tableName];
-            if (response.data.records) {
-              const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
-              response.data.records.forEach((entity) => {
-                tableTranslations.hydrateToAirtableObject(entity.fields, translations);
-              });
-            } else {
-              const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
-              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
-            }
-          }
+          const response = await usecases.proxyReadRequestToAirtable(request, config.airtable.base, {
+            tableTranslations,
+            proxyRequestToAirtable: _proxyRequestToAirtable,
+          });
 
           return h.response(response.data).code(response.status);
         }
@@ -50,29 +41,13 @@ export async function register(server) {
         }],
         handler: async function(request, h) {
           const tableName = request.params.path.split('/')[0];
-          const tableTranslations = tablesTranslations[tableName];
+          const tableTranslations = getTableTranslations(tablesTranslations, tableName);
 
-          let translations;
-          if (tablesTranslationsForWriting.includes(tableName) && tableTranslations) {
-            translations = tableTranslations.extractFromAirtableObject(request.payload.fields);
-            tableTranslations.dehydrateAirtableObject?.(request.payload?.fields);
-          }
-
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
-
-          if (_isResponseOK(response)) {
-            if (translations) {
-              if (request.method === 'patch') {
-                await translationRepository.deleteByKeyPrefix(tableTranslations.prefixFor(response.data.fields));
-              }
-
-              await translationRepository.save(translations);
-
-              tableTranslations.hydrateToAirtableObject(response.data.fields, translations);
-            }
-
-            await _updateStagingPixApiCache(tableName, response.data, translations);
-          }
+          const response = await usecases.proxyWriteRequestToAirtable(request, config.airtable.base, tableName, {
+            proxyRequestToAirtable: _proxyRequestToAirtable,
+            tableTranslations,
+            updateStagingPixApiCache: _updateStagingPixApiCache,
+          });
 
           return h.response(response.data).code(response.status);
         }
@@ -142,6 +117,21 @@ async function _updateStagingPixApiCache(type, entity, translations) {
   }
 }
 
-function _isResponseOK(response) {
-  return response.status >= 200 && response.status < 300;
+export function getTableTranslations(tablesTranslations, tableName) {
+  const tableTranslations = tablesTranslations[tableName];
+
+  const writeToPgEnabled = tableTranslations?.extractFromProxyObject !== undefined;
+
+  // Lecture dans PG possible seulement si écriture dans PG activée
+  const readFromPgEnabled = writeToPgEnabled && tableTranslations?.airtableObjectToProxyObject !== undefined;
+
+  // Arrêt de l'écriture dans Airtable possible seulement si écriture et lecture dans PG activées
+  const writeToAirtableDisabled = readFromPgEnabled && tableTranslations?.proxyObjectToAirtableObject !== undefined;
+
+  return {
+    ...tableTranslations,
+    writeToPgEnabled,
+    readFromPgEnabled,
+    writeToAirtableDisabled,
+  };
 }
