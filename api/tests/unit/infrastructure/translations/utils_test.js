@@ -243,6 +243,68 @@ describe('Unit | Infrastructure | Entity translations', () => {
     });
   });
 
+  describe('#toDomain', () => {
+    it('should return i18n fields for domain object', () => {
+      // given
+      const translations = [
+        { key: 'entity.test.attribute', locale: 'fr', value: 'value fr-fr' },
+        {
+          key: 'entity.test.attribute2',
+          locale: 'fr',
+          value: 'value2 fr-fr',
+        },
+        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
+        {
+          key: 'entity.test.attribute2',
+          locale: 'en',
+          value: 'value2 en-us',
+        },
+      ];
+
+      // when
+      const i18nFields = translationsUtils.toDomain(translations);
+
+      // then
+      expect(i18nFields).to.deep.equal({
+        attribute_i18n: {
+          fr: 'value fr-fr',
+          en: 'value en-us',
+        },
+        attribute2_i18n: {
+          fr: 'value2 fr-fr',
+          en: 'value2 en-us',
+        },
+      });
+    });
+
+    it('should return null fields for missing translations', () => {
+      // given
+      const translations = [
+        { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
+        {
+          key: 'entity.test.attribute2',
+          locale: 'en',
+          value: 'value2 en-us',
+        },
+      ];
+
+      // when
+      const domainObject = translationsUtils.toDomain(translations);
+
+      // then
+      expect(domainObject).to.deep.equal({
+        attribute_i18n: {
+          fr: null,
+          en: 'value en-us',
+        },
+        attribute2_i18n: {
+          fr: null,
+          en: 'value2 en-us',
+        },
+      });
+    });
+  });
+
   describe('#prefixFor', () => {
     it('should return the prefix for entity fields keys', () => {
       // given
