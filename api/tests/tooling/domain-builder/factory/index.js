@@ -2,6 +2,7 @@ export * from './build-area-for-release.js';
 export * from './build-attachment.js';
 export * from './build-challenge-for-release.js';
 export * from './build-challenge.js';
+export * from './build-competence.js';
 export * from './build-competence-for-release.js';
 export * from './build-content-for-release.js';
 export * from './build-course-for-release.js';
