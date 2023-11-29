@@ -11,6 +11,7 @@ export * from './build-domain-release.js';
 export * from './build-framework-for-release.js';
 export * from './build-localized-challenge.js';
 export * from './build-release.js';
+export * from './build-skill.js';
 export * from './build-skill-for-release.js';
 export * from './build-static-course.js';
 export * from './build-thematic-for-release.js';
