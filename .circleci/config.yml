@@ -193,7 +193,7 @@ jobs:
 
       - run:
           name: Wait for Pix Editor API to be ready...
-          command: curl --fail --ipv4 --retry 6 --retry-connrefused --retry-delay 10 --silent http://localhost:3002/api > /dev/null
+          command: curl --fail --ipv4 --retry 9 --retry-connrefused --retry-delay 10 --silent http://localhost:3002/api > /dev/null
 
       - run:
           name: Wait for Pix Editor to be ready...
