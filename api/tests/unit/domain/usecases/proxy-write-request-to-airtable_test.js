@@ -29,7 +29,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       writeToAirtableDisabled: false,
     };
     translationRepository = {
-      deleteByKeyPrefix: vi.fn(),
+      deleteByKeyPrefixAndLocales: vi.fn(),
       save: vi.fn(),
     };
     updateStagingPixApiCache = vi.fn();
@@ -132,8 +132,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
           expect(tableTranslations.prefixFor).toHaveBeenCalledOnce();
           expect(tableTranslations.prefixFor).toHaveBeenCalledWith(responseFields);
 
-          expect(translationRepository.deleteByKeyPrefix).toHaveBeenCalledOnce();
-          expect(translationRepository.deleteByKeyPrefix).toHaveBeenCalledWith('entity.id');
+          expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledOnce();
+          expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith('entity.id', ['fr', 'fr-fr', 'en']);
 
           expect(translationRepository.save).toHaveBeenCalledOnce();
           expect(translationRepository.save).toHaveBeenCalledWith(translations);
