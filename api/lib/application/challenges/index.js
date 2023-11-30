@@ -11,6 +11,7 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { challengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
+import { previewChallenge } from '../../domain/usecases/index.js';
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -72,6 +73,27 @@ export async function register(server) {
             return Boom.notFound();
           }
           return challengeSerializer.serialize(challenges[0]);
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/challenges/{id}/preview',
+      config: {
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+          }),
+          query: Joi.object({
+            locale: Joi.string().min(2).max(5)
+          }),
+        },
+        handler: async function(request, h) {
+          const challengeId = request.params.id;
+          const locale = request.query.locale;
+
+          const previewUrl = await previewChallenge({ challengeId, locale }, { refreshCache: _refreshCache });
+          return h.redirect(previewUrl);
         },
       },
     },
