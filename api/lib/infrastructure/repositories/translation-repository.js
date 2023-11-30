@@ -84,6 +84,7 @@ export async function deleteByKeyPrefixAndLocales(prefix, locales) {
         formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))`,
       },
     });
+    if (records.length === 0) return;
     const recordIds = records.map(({ airtableId }) => airtableId);
     await translationDatasource.delete(recordIds);
   }
