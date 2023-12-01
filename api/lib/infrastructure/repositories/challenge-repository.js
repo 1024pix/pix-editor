@@ -26,6 +26,13 @@ async function _getChallengesFromParams(params) {
   return challengeDatasource.list(params);
 }
 
+export async function get(id) {
+  const challengeDto = await challengeDatasource.filterById(id);
+  const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
+
+  return toDomain(challengeDto, translations);
+}
+
 export async function list() {
   const [challengeDtos, translations] = await Promise.all([
     challengeDatasource.list(),
