@@ -49,6 +49,10 @@ export let pixApi = {
   password: process.env.PIX_API_USER_PASSWORD,
 };
 
+export const pixApp = {
+  baseUrl: process.env.PIX_APP_BASEURL
+};
+
 export let pixEditor = {
   airtableUrl: process.env.AIRTABLE_URL,
   airtableBase: process.env.AIRTABLE_BASE,
@@ -120,6 +124,8 @@ if (process.env.NODE_ENV === 'test') {
     user: 'adminUser',
     password: '123',
   };
+
+  pixApp.baseUrl = 'https://app.test.pix.fr';
 
   pixEditor = {
     airtableUrl: 'airtableUrlValue',
