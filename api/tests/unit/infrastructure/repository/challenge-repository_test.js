@@ -3,6 +3,7 @@ import { filter, list, get } from '../../../../lib/infrastructure/repositories/c
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
+import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Repository | challenge-repository', () => {
 
@@ -212,6 +213,20 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
       expect(translationRepository.listByPrefix).toHaveBeenCalledWith(`challenge.${challengeId}.`);
       expect(result).toEqual(expectedChallenge);
+    });
+
+    describe('when challenge does not exist', () => {
+      it('should throw a NotFoundError', async() => {
+        // given
+        const challengeId = 'challengeId';
+        vi.spyOn(challengeDatasource, 'filterById').mockResolvedValue(undefined);
+
+        // when
+        const promise = get(challengeId);
+
+        await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve introuvable'));
+        expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
+      });
     });
   });
 });

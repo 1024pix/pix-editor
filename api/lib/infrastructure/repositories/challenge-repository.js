@@ -9,6 +9,7 @@ import {
   prefix,
   prefixFor
 } from '../translations/challenge.js';
+import { NotFoundError } from '../../domain/errors.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -28,6 +29,9 @@ async function _getChallengesFromParams(params) {
 
 export async function get(id) {
   const challengeDto = await challengeDatasource.filterById(id);
+
+  if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
+
   const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
 
   return toDomain(challengeDto, translations);

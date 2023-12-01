@@ -170,6 +170,7 @@ export const challengeDatasource = datasource.extend({
       filterByFormula: `{id persistant} = '${id}'`,
       maxRecords: 1,
     });
+    if (airtableRawObjects.length === 0) return undefined;
     return this.fromAirTableObject(airtableRawObjects[0]);
   },
 
