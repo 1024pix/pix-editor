@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Joi from 'joi';
 import Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
@@ -67,12 +67,17 @@ export async function register(server) {
           }),
         },
         handler: async function(request) {
-          const params = { filter: { ids: [request.params.id] } };
+          const challengeId = request.params.id;
+          const params = { filter: { ids: [challengeId] } };
           const challenges = await challengeRepository.filter(params);
           if (challenges.length === 0) {
             return Boom.notFound();
           }
-          return challengeSerializer.serialize(challenges[0]);
+          const localizedChallenges = await localizedChallengeRepository.listByChallengeId(challengeId);
+          const alternativeLocales = localizedChallenges
+            .filter(({ locale }) => locale !== challenges[0].primaryLocale)
+            .map(({ locale }) => locale);
+          return challengeSerializer.serialize({ ...challenges[0], alternativeLocales });
         },
       },
     },

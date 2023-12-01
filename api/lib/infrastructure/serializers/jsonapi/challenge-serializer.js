@@ -33,6 +33,7 @@ const serializer = new Serializer('challenges', {
     'spoil',
     'responsive',
     'locales',
+    'alternativeLocales',
     'area',
     'autoReply',
     'focusable',

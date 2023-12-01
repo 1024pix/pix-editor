@@ -7,6 +7,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
     it('should serialize a Challenge', () => {
       // Given
       const challenge = domainBuilder.buildChallenge();
+      const alternativeLocales = ['en', 'nl'];
       const expectedSerializedChallenge = {
         data: {
           type: 'challenges',
@@ -40,6 +41,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             spoil: 'Non Sp',
             responsive:  'non',
             locales: ['fr'],
+            'alternative-locales': ['en', 'nl'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -68,7 +70,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       };
 
       // When
-      const json = serialize(challenge);
+      const json = serialize({ ...challenge, alternativeLocales });
 
       // Then
       expect(json).to.deep.equal(expectedSerializedChallenge);

@@ -516,6 +516,18 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recChallengeId1',
+        challengeId: 'recChallengeId1',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recChallengeId1Nl',
+        challengeId: 'recChallengeId1',
+        locale: 'nl',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -562,6 +574,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             spoil: 'Non Sp',
             responsive: 'non',
             locales: ['fr'],
+            'alternative-locales': ['nl'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
