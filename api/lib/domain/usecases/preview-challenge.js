@@ -9,6 +9,7 @@ export async function previewChallenge(
     refreshCache,
   },
 ) {
+  if (!locale) return new URL(`challenges/${challengeId}/preview`, config.pixApp.baseUrl).href;
   const localizedChallenge = await localizedChallengeRepository.getByChallengeIdAndLocale({ challengeId, locale });
   const challenge = await challengeRepository.get(challengeId);
   await refreshCache({ challenge, localizedChallenge });

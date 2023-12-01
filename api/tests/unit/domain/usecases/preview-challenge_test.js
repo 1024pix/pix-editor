@@ -34,4 +34,18 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
     expect(challengeRepository.get).toHaveBeenCalledWith(challengeId);
     expect(refreshCache).toHaveBeenCalledWith({ challenge, localizedChallenge });
   });
+
+  describe('when no locale is specified', () => {
+    it('should redirect to a preview on given challengeId without updating cache', async () => {
+      // given
+      vi.spyOn(config.pixApp, 'baseUrl', 'get').mockReturnValue('https://preview.url.fr');
+      const challengeId = 'challenge-id';
+
+      // when
+      const url = await previewChallenge({ challengeId }, {});
+
+      // then
+      expect(url).to.equal(`https://preview.url.fr/challenges/${challengeId}/preview`);
+    });
+  });
 });
