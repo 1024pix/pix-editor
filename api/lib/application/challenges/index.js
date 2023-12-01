@@ -23,15 +23,15 @@ function _parseQueryParams(search) {
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
-async function _refreshCache(challenge) {
+async function _refreshCache({ challenge, localizedChallenge }) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
 
   try {
     const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
-    const learningContent = {
+    const transformChallenge = challengeTransformer.createChallengeTransformer({
       attachments,
-    };
-    const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+      localizedChallenge,
+    });
     const newChallenge = transformChallenge(challenge);
 
     const model = 'challenges';
@@ -83,7 +83,7 @@ export async function register(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
-          await _refreshCache(createdChallenge);
+          await _refreshCache({ challenge: createdChallenge });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -101,7 +101,7 @@ export async function register(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await challengeRepository.update(challenge);
-          await _refreshCache(updatedChallenge);
+          await _refreshCache({ challenge: updatedChallenge });
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },
