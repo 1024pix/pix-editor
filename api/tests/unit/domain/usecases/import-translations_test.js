@@ -63,7 +63,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
   it('should create a localized challenge when a new locale is added', async () => {
     // when
     const promise = importTranslations(csvStream, { localizedChallengeRepository, translationRepository });
-    csvStream.write('key_name,nl,comment\nchallenge.id.key,Hallo,\nchallenge.id.key2,Hallo2,');
+    csvStream.write('key_name,nl,comment\nchallenge.id.key,Hallo,\nchallenge.id.key2,Hallo2,\nchallenge.id2.key,Hallo3,');
     csvStream.end();
 
     // then
@@ -80,12 +80,23 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         key: 'challenge.id.key2',
         locale: 'nl',
         value: 'Hallo2'
+      }),
+      new Translation({
+        key: 'challenge.id2.key',
+        locale: 'nl',
+        value: 'Hallo3'
       })
     ]);
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
-    expect(localizedChallengeRepository.create).toHaveBeenCalledWith([new LocalizedChallenge({
-      challengeId: 'id',
-      locale: 'nl',
-    })]);
+    expect(localizedChallengeRepository.create).toHaveBeenCalledWith([
+      new LocalizedChallenge({
+        challengeId: 'id',
+        locale: 'nl',
+      }),
+      new LocalizedChallenge({
+        challengeId: 'id2',
+        locale: 'nl',
+      }),
+    ]);
   });
 });
