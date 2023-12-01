@@ -11,6 +11,7 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { challengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
+import { previewChallenge } from '../../domain/usecases/index.js';
 
 function _parseQueryParams(search) {
   const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
@@ -23,15 +24,15 @@ function _parseQueryParams(search) {
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
-async function _refreshCache(challenge) {
+async function _refreshCache({ challenge, localizedChallenge }) {
   if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
 
   try {
     const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
-    const learningContent = {
+    const transformChallenge = challengeTransformer.createChallengeTransformer({
       attachments,
-    };
-    const transformChallenge = challengeTransformer.createChallengeTransformer(learningContent);
+      localizedChallenge,
+    });
     const newChallenge = transformChallenge(challenge);
 
     const model = 'challenges';
@@ -76,6 +77,27 @@ export async function register(server) {
       },
     },
     {
+      method: 'GET',
+      path: '/api/challenges/{id}/preview',
+      config: {
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+          }),
+          query: Joi.object({
+            locale: Joi.string().min(2).max(5)
+          }),
+        },
+        handler: async function(request, h) {
+          const challengeId = request.params.id;
+          const locale = request.query.locale;
+
+          const previewUrl = await previewChallenge({ challengeId, locale }, { refreshCache: _refreshCache });
+          return h.redirect(previewUrl);
+        },
+      },
+    },
+    {
       method: 'POST',
       path: '/api/challenges',
       config: {
@@ -83,7 +105,7 @@ export async function register(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
-          await _refreshCache(createdChallenge);
+          await _refreshCache({ challenge: createdChallenge });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },
@@ -101,7 +123,7 @@ export async function register(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const updatedChallenge = await challengeRepository.update(challenge);
-          await _refreshCache(updatedChallenge);
+          await _refreshCache({ challenge: updatedChallenge });
           return h.response(challengeSerializer.serialize(updatedChallenge));
         },
       },

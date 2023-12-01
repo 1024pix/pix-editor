@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, list } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { filter, list, get } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { domainBuilder } from '../../../test-helper.js';
+import { NotFoundError } from '../../../../lib/domain/errors.js';
 
 describe('Unit | Repository | challenge-repository', () => {
 
@@ -158,6 +160,72 @@ describe('Unit | Repository | challenge-repository', () => {
         });
 
         expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto', ids: ['challengeId1'] }, page: { size: 'limit' } });
+      });
+    });
+  });
+
+  describe('#get', () => {
+    it('should return a challenge by id', async () => {
+      // given
+      const locale = 'en';
+      const primaryLocale = 'fr';
+      const challengeId = 'challengeId';
+      const challengeFromAirtable = domainBuilder.buildChallengeDatasourceObject({ id: challengeId, locales: [primaryLocale] });
+      vi.spyOn(challengeDatasource, 'filterById').mockResolvedValue(challengeFromAirtable);
+      vi.spyOn(translationRepository, 'listByPrefix')
+        .mockResolvedValueOnce([{
+          key: `challenge.${challengeId}.instruction`,
+          value: 'instruction fr',
+          locale: primaryLocale,
+        }, {
+          key: `challenge.${challengeId}.proposals`,
+          value: 'proposals fr',
+          locale: primaryLocale,
+        }, {
+          key: `challenge.${challengeId}.instruction`,
+          value: 'instruction en',
+          locale
+        }, {
+          key: `challenge.${challengeId}.proposals`,
+          value: 'proposals en',
+          locale
+        }]);
+
+      const expectedChallenge = domainBuilder.buildChallenge({
+        ...challengeFromAirtable,
+        locales: [ primaryLocale ],
+        translations: {
+          [primaryLocale]: {
+            instruction: 'instruction fr',
+            proposals: 'proposals fr',
+          },
+          [locale]: {
+            instruction: 'instruction en',
+            proposals: 'proposals en',
+          },
+        }
+      });
+
+      // when
+      const result = await get(challengeId);
+
+      // then
+      expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
+      expect(translationRepository.listByPrefix).toHaveBeenCalledWith(`challenge.${challengeId}.`);
+      expect(result).toEqual(expectedChallenge);
+    });
+
+    describe('when challenge does not exist', () => {
+      it('should throw a NotFoundError', async() => {
+        // given
+        const challengeId = 'challengeId';
+        vi.spyOn(challengeDatasource, 'filterById').mockResolvedValue(undefined);
+
+        // when
+        const promise = get(challengeId);
+
+        await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve introuvable'));
+        expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
       });
     });
   });

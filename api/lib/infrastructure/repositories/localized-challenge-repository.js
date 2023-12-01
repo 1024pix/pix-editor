@@ -1,4 +1,5 @@
 import { knex } from '../../../db/knex-database-connection.js';
+import { NotFoundError } from '../../domain/errors.js';
 import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
@@ -22,6 +23,14 @@ export async function create(localizedChallenges = [], generateId = _generateId)
     };
   });
   await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore() ;
+}
+
+export async function getByChallengeIdAndLocale({ challengeId, locale }) {
+  const dto = await knex('localized_challenges').select().where({ challengeId, locale }).first();
+
+  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
+
+  return _toDomain(dto);
 }
 
 function _toDomain(dto) {

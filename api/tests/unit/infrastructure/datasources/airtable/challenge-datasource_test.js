@@ -198,6 +198,21 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
         maxRecords: 1
       });
     });
+
+    describe('when record is not found', () => {
+      it('should return undefined', async () => {
+        const airtableFindRecordsSpy = vi.spyOn(airtable, 'findRecords')
+          .mockResolvedValue([]);
+
+        const result = await challengeDatasource.filterById('recChallenge');
+
+        expect(result).toBe(undefined);
+        expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', {
+          filterByFormula: '{id persistant} = \'recChallenge\'',
+          maxRecords: 1
+        });
+      });
+    });
   });
 
   describe('#search', () => {

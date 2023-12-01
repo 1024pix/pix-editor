@@ -39,6 +39,8 @@ export class AirtableMockRoute {
       .get(url)
       .query(query ? query : this.query)
       .reply(statusCode, body);
+
+    return this;
   }
 }
 

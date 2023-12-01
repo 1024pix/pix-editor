@@ -2,13 +2,21 @@ import _ from 'lodash';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { fields as challengeLocalizedFields } from '../../infrastructure/translations/challenge.js';
 
-export function createChallengeTransformer({ attachments, localizedChallenges }) {
+export function createChallengeTransformer({ attachments, localizedChallenges, localizedChallenge }) {
 
   if (localizedChallenges) {
     return _.flow(
       _addAttachmentsToChallenge({ attachments }),
-      _localizeChallenge({ localizedChallenges }),
+      _challengeToTranslatedChallenges({ localizedChallenges }),
       _filterChallengesFields,
+    );
+  }
+
+  if (localizedChallenge) {
+    return _.flow(
+      _addAttachmentsToChallenge({ attachments }),
+      (challenge) => _translateChallenge(challenge, localizedChallenge),
+      _filterChallengeFields,
     );
   }
 
@@ -18,27 +26,26 @@ export function createChallengeTransformer({ attachments, localizedChallenges })
   );
 }
 
-function _localizeChallenge({ localizedChallenges }) {
-  return (challenge) => {
-    const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
-    return localizedChallenges
-      .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
-      .map(({ locale, id }) => {
-        const isPrimaryLocale = primaryLocale === locale;
-        const clearedLocalizedFields = challengeLocalizedFields.reduce((acc, field) => {
-          acc[field] = '';
-          return acc;
-        }, {});
-        return {
-          ...challenge,
-          ...clearedLocalizedFields,
-          ...challenge.translations[locale],
-          id,
-          locales: isPrimaryLocale ? challenge.locales : [locale],
-        };
-      });
-  };
+function _challengeToTranslatedChallenges({ localizedChallenges }) {
+  return (challenge) => localizedChallenges
+    .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
+    .map((localizedChallenge) => _translateChallenge(challenge, localizedChallenge));
+}
 
+function _translateChallenge(challenge, { locale, id }) {
+  const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
+  const isPrimaryLocale = primaryLocale === locale;
+  const clearedLocalizedFields = challengeLocalizedFields.reduce((acc, field) => {
+    acc[field] = '';
+    return acc;
+  }, {});
+  return {
+    ...challenge,
+    ...clearedLocalizedFields,
+    ...challenge.translations[locale],
+    id,
+    locales: isPrimaryLocale ? challenge.locales : [locale],
+  };
 }
 
 function _filterChallengesFields(challenges) {

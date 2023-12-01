@@ -621,6 +621,113 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
   });
 
+  describe('GET /challenges/:id/preview', () => {
+    const challengeId = 'challenge123';
+    const localizedChallengeId =  challengeId + '_nl';
+    const locale = 'nl';
+    let user;
+    let airtableChallengeScope;
+    let airtableAttachmentScope;
+
+    beforeEach(async function() {
+      airtableChallengeScope = airtableBuilder.mockList({ tableName: 'Epreuves' }).returns([
+        airtableBuilder.factory.buildChallenge({
+          id: challengeId,
+          locales: ['fr', 'fr-fr'],
+        })
+      ]).activate().nockScope;
+
+      airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([]).activate().nockScope;
+
+      user = databaseBuilder.factory.buildReadonlyUser();
+
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.instruction`,
+        locale,
+        value: 'instruction for nl',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.alternativeInstruction`,
+        locale,
+        value: 'alternative instruction for nl',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solution`,
+        locale,
+        value: 'solution for nl',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solutionToDisplay`,
+        locale,
+        value: 'solution to display for nl',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.proposals`,
+        locale,
+        value: 'proposals for nl',
+      });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: localizedChallengeId,
+        challengeId,
+        locale,
+      });
+
+      await databaseBuilder.commit();
+    });
+
+    it('should redirect to a staging Pix App preview URL', async () => {
+      // given
+      const apiToken = 'secret';
+      const apiTokenScope = nock('https://api.test.pix.fr')
+        .post('/api/token', { username: 'adminUser', password: '123', grant_type: 'password' })
+        .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
+        .reply(200, { 'access_token': apiToken });
+      const apiCacheScope = nock('https://api.test.pix.fr')
+        .patch(`/api/cache/challenges/${localizedChallengeId}`,
+          {
+            id: 'challenge123_nl',
+            alpha: null,
+            alternativeInstruction: 'alternative instruction for nl',
+            autoReply: false,
+            competenceId: null,
+            delta: null,
+            format: 'mots',
+            illustrationAlt: null,
+            illustrationUrl: null,
+            instruction: 'instruction for nl',
+            locales: [ 'nl' ],
+            proposals: 'proposals for nl',
+            solution: 'solution for nl',
+            solutionToDisplay: 'solution to display for nl',
+            skillId: null,
+            t1Status: false,
+            t2Status: false,
+            t3Status: false
+          })
+        .matchHeader('Authorization', `Bearer ${apiToken}`)
+        .reply(200);
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/challenges/${challengeId}/preview?locale=${locale}`,
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // then
+      expect(response.statusCode).to.equal(302);
+      expect(response.headers.location).to.equal(`https://app.test.pix.fr/challenges/${localizedChallengeId}/preview`);
+
+      apiTokenScope.done();
+      apiCacheScope.done();
+      airtableChallengeScope.done();
+      airtableAttachmentScope.done();
+    });
+  });
+
   describe('POST /challenges', () => {
     let user;
     beforeEach(async function() {
