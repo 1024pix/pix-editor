@@ -1,5 +1,17 @@
 
 
+## v3.109.0 (01/12/2023)
+
+
+### :rocket: Amélioration
+- [#398](https://github.com/1024pix/pix-editor/pull/398) [FEATURE] Permettre de prévisualiser une épreuve dans une locale donnée (PIX-10182).
+
+### :bug: Correction
+- [#393](https://github.com/1024pix/pix-editor/pull/393) [BUGFIX] Modifications depuis PixEditor : ne pas supprimer toutes les traductions (PIX-10004).
+
+### :arrow_up: Montée de version
+- [#394](https://github.com/1024pix/pix-editor/pull/394) [BUMP] Update dependency node to v20.10.0.
+
 ## v3.108.0 (29/11/2023)
 
 
