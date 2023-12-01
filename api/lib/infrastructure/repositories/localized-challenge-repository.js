@@ -33,6 +33,11 @@ export async function getByChallengeIdAndLocale({ challengeId, locale }) {
   return _toDomain(dto);
 }
 
+export async function listByChallengeId(challengeId) {
+  const dtos = await knex('localized_challenges').select().where({ challengeId }).orderBy('locale');
+  return dtos.map(_toDomain);
+}
+
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
 }

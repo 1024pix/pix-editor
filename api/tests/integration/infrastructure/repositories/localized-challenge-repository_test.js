@@ -196,4 +196,54 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
     });
   });
+
+  context('#listByChallengeId', () => {
+    it('should return the list of localized challenge for a challenge ID', async () => {
+      const challengeId = 'challengeId';
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr-fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeIdEn',
+        challengeId,
+        locale: 'en',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeIdNl',
+        challengeId,
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'otherChallengeId',
+        challengeId: 'otherChallengeId',
+        locale: 'fr',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.listByChallengeId(challengeId);
+
+      // then
+      expect(localizedChallenges).to.deep.equal([
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challengeIdEn',
+          challengeId,
+          locale: 'en',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: 'fr-fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challengeIdNl',
+          challengeId,
+          locale: 'nl',
+        }),
+      ]);
+    });
+  });
 });
