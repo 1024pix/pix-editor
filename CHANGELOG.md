@@ -1,5 +1,11 @@
 
 
+## v3.109.1 (01/12/2023)
+
+
+### :bug: Correction
+- [#401](https://github.com/1024pix/pix-editor/pull/401) [BUGFIX] Import des traductions ne créé qu'une seule épreuve virtuelle (PIX-10218).
+
 ## v3.109.0 (01/12/2023)
 
 
