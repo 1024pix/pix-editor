@@ -55,5 +55,5 @@ const extractChallengesLocales = fp.flow(
       locale: challengeTranslation.locale,
     });
   }),
-  fp.uniqBy(['locale', 'challengeId']),
+  fp.uniqBy(({ challengeId, locale }) => `${challengeId}:${locale}`),
 );
