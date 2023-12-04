@@ -85,6 +85,7 @@ export async function register(server) {
       method: 'GET',
       path: '/api/challenges/{id}/preview',
       config: {
+        auth: false,
         validate: {
           params: Joi.object({
             id: challengeIdType,

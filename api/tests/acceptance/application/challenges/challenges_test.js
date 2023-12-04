@@ -636,7 +636,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
     const challengeId = 'challenge123';
     const localizedChallengeId =  challengeId + '_nl';
     const locale = 'nl';
-    let user;
     let airtableChallengeScope;
     let airtableAttachmentScope;
 
@@ -649,8 +648,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]).activate().nockScope;
 
       airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([]).activate().nockScope;
-
-      user = databaseBuilder.factory.buildReadonlyUser();
 
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -725,7 +722,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: `/api/challenges/${challengeId}/preview?locale=${locale}`,
-        headers: generateAuthorizationHeader(user)
       });
 
       // then
