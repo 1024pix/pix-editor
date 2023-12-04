@@ -169,13 +169,9 @@ describe('Unit | Infrastructure | Entity translations', () => {
     });
   });
 
-  describe('#hydrateReleaseObject', () => {
-    it('should set translated fields into the object', () => {
+  describe('#toDomain', () => {
+    it('should return i18n fields for domain object', () => {
       // given
-      const entity = {
-        id: 'test',
-        otherField: 'foo',
-      };
       const translations = [
         { key: 'entity.test.attribute', locale: 'fr', value: 'value fr-fr' },
         {
@@ -192,11 +188,10 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateReleaseObject(entity, translations);
+      const i18nFields = translationsUtils.toDomain(translations);
 
       // then
-      expect(entity).to.deep.equal({
-        id: 'test',
+      expect(i18nFields).to.deep.equal({
         attribute_i18n: {
           fr: 'value fr-fr',
           en: 'value en-us',
@@ -205,16 +200,11 @@ describe('Unit | Infrastructure | Entity translations', () => {
           fr: 'value2 fr-fr',
           en: 'value2 en-us',
         },
-        otherField: 'foo',
       });
     });
 
-    it('should set null value for missing translations', () => {
+    it('should return null fields for missing translations', () => {
       // given
-      const entity = {
-        id: 'test',
-        otherField: 'foo',
-      };
       const translations = [
         { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
         {
@@ -225,11 +215,10 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ];
 
       // when
-      translationsUtils.hydrateReleaseObject(entity, translations);
+      const domainObject = translationsUtils.toDomain(translations);
 
       // then
-      expect(entity).to.deep.equal({
-        id: 'test',
+      expect(domainObject).to.deep.equal({
         attribute_i18n: {
           fr: null,
           en: 'value en-us',
@@ -238,7 +227,6 @@ describe('Unit | Infrastructure | Entity translations', () => {
           fr: null,
           en: 'value2 en-us',
         },
-        otherField: 'foo',
       });
     });
   });

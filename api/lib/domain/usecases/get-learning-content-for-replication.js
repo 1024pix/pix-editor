@@ -1,19 +1,15 @@
 import {
   areaDatasource,
   attachmentDatasource,
-  competenceDatasource,
   skillDatasource,
   thematicDatasource,
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
-import * as competenceTranslations from '../../infrastructure/translations/competence.js';
-import { challengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository, competenceRepository } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
-export async function getLearningContentForReplication(dependencies = { translationRepository }) {
-  const { translationRepository } = dependencies;
-
+export async function getLearningContentForReplication() {
   const [
     areas,
     competences,
@@ -24,10 +20,9 @@ export async function getLearningContentForReplication(dependencies = { translat
     attachments,
     thematics,
     courses,
-    translations,
   ] = await Promise.all([
     areaDatasource.list(),
-    competenceDatasource.list(),
+    competenceRepository.list(),
     tubeDatasource.list(),
     skillDatasource.list(),
     challengeRepository.list(),
@@ -35,12 +30,7 @@ export async function getLearningContentForReplication(dependencies = { translat
     attachmentDatasource.list(),
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
-    translationRepository.listByPrefix(competenceTranslations.prefix),
   ]);
-
-  competences.forEach((competence) => {
-    competenceTranslations.hydrateReleaseObject(competence, translations);
-  });
 
   return {
     areas,
