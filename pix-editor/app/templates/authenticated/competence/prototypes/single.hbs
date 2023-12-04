@@ -79,13 +79,12 @@
       Annuler
     </button>
   {{else}}
-    <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+    <a class="ui button item" href={{this.getPreviewUrl ''}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
       Prévisualiser
     </a>
-
     {{#each this.challenge.alternativeLocales as |locale| }}
-      <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+      <a class="ui button item" href={{this.getPreviewUrl locale}} target="_blank" rel="noopener noreferrer">
         <i class="eye icon"></i>
         Prévisualiser {{ locale }}
       </a>

@@ -59,7 +59,7 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
       const link = await screen.findByText('Prévisualiser nl');
 
       // then
-      assert.strictEqual(link.getAttribute('href'), 'preview nl');
+      assert.strictEqual(link.getAttribute('href'), 'preview?locale=nl');
     });
   });
 });
