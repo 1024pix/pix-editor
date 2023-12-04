@@ -83,6 +83,13 @@
       <i class="eye icon"></i>
       Prévisualiser
     </a>
+
+    {{#each this.challenge.alternativeLocales as |locale| }}
+      <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+        <i class="eye icon"></i>
+        Prévisualiser {{ locale }}
+      </a>
+    {{/each}}
     {{#if this.mayEdit}}
       <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>

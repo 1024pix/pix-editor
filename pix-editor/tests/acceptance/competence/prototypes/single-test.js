@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
-import { visit, click, findAll, find } from '@ember/test-helpers';
+import { click, findAll, find } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -12,7 +13,7 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', updatedAt: '2021-10-04T14:00:00Z' });
+    this.server.create('challenge', { id: 'recChallenge1', updatedAt: '2021-10-04T14:00:00Z', alternativeLocales: ['nl', 'en'] });
     this.server.create('challenge', { id: 'recChallenge2', status: 'proposé', updatedAt: '2021-10-04T14:00:00Z', genealogy: 'Prototype 1' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1', 'recChallenge2'], level: 1 });
     this.server.create('skill', { id: 'recSkill2', status: 'en construction', challengeIds: [], level: 2, name:'@skill2' });
@@ -47,5 +48,18 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
     assert.dom('[data-test-main-message]').hasText('Changement d\'acquis effectué pour le prototype');
     assert.strictEqual(challenge.skill.get('id'), 'recSkill2');
+  });
+
+  module('when the challenge is an alternative locale', function() {
+    test('it should open to challenge preview', async function(assert) {
+      // given
+      const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1?leftMaximized=false');
+
+      // when
+      const link = await screen.findByText('Prévisualiser nl');
+
+      // then
+      assert.strictEqual(link.getAttribute('href'), 'preview nl');
+    });
   });
 });
