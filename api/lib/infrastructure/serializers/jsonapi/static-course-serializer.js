@@ -32,6 +32,10 @@ const serializer = new Serializer('static-courses', {
   typeForAttribute(attribute) {
     if (attribute === 'challengeSummaries') return 'challenge-summaries';
   },
+  transform(staticCourse) {
+    staticCourse.challengeSummaries?.forEach((challenge) => challenge.previewUrl = `/api/challenges/${challenge.id}/preview`);
+    return staticCourse;
+  }
 });
 
 export function serialize(staticCourse) {

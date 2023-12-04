@@ -22,7 +22,6 @@ export class Challenge {
     pedagogy,
     author,
     declinable,
-    preview,
     version,
     alternativeVersion,
     accessibility1,
@@ -64,7 +63,6 @@ export class Challenge {
     this.pedagogy = pedagogy;
     this.author = author;
     this.declinable = declinable;
-    this.preview = preview;
     this.version = version;
     this.alternativeVersion = alternativeVersion;
     this.accessibility1 = accessibility1;

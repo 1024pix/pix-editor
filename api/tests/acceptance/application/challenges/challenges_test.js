@@ -35,7 +35,6 @@ const challengeAirtableFields = [
   'Type péda',
   'Auteur',
   'Déclinable',
-  'Preview',
   'Version prototype',
   'Version déclinaison',
   'Non voyant',
@@ -58,7 +57,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   function _removeReadonlyFields(airtableChallengeBody, deleteId) {
     const body = _.cloneDeep(airtableChallengeBody);
-    delete body.fields.Preview;
     delete body.fields['Record ID'];
     delete body.fields['Compétences (via tube) (id persistant)'];
     delete body.fields['Acquix (id persistant)'];
@@ -158,7 +156,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/my id/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -307,7 +305,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/1/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -366,7 +364,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/2/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -563,7 +561,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/recChallengeId1/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -865,7 +863,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/challengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -1286,7 +1284,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
