@@ -22,7 +22,7 @@ async function mockCurrentContent() {
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaDatasourceObject()],
-    competences: [domainBuilder.buildCompetenceForRelease({
+    competences: [domainBuilder.buildCompetence({
       name_i18n: {
         fr: 'Français',
         en: 'English',
@@ -33,7 +33,7 @@ async function mockCurrentContent() {
       }
     })],
     tubes: [domainBuilder.buildTubeDatasourceObject()],
-    skills: [domainBuilder.buildSkillDatasourceObject()],
+    skills: [domainBuilder.buildSkill()],
     challenges: [domainBuilder.buildChallenge()],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematicDatasourceObject()],
@@ -92,6 +92,7 @@ async function mockCurrentContent() {
     locale: 'en',
     value: expectedCurrentContent.competences[0].description_i18n.en,
   });
+
   databaseBuilder.factory.buildTranslation({
     key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
     locale: 'fr',
@@ -102,6 +103,7 @@ async function mockCurrentContent() {
     locale: 'en',
     value: expectedCurrentContent.skills[0].hint_i18n.en,
   });
+
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr',

@@ -1,10 +1,6 @@
 export function buildSkill({
   id,
   name,
-  hint_i18n: {
-    fr: hintFrFr,
-    en: hintEnUs,
-  } = {},
   hintStatus,
   tutorialIds,
   learningMoreTutorialIds,
@@ -22,8 +18,6 @@ export function buildSkill({
     id,
     'fields': {
       'id persistant': id,
-      'Indice fr-fr': hintFrFr,
-      'Indice en-us': hintEnUs,
       'Statut de l\'indice': hintStatus,
       'Comprendre (id persistant)': tutorialIds,
       'En savoir plus (id persistant)': learningMoreTutorialIds,
