@@ -1,12 +1,11 @@
 import {
   areaDatasource,
   attachmentDatasource,
-  skillDatasource,
   thematicDatasource,
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
-import { challengeRepository, competenceRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
@@ -24,7 +23,7 @@ export async function getLearningContentForReplication() {
     areaDatasource.list(),
     competenceRepository.list(),
     tubeDatasource.list(),
-    skillDatasource.list(),
+    skillRepository.list(),
     challengeRepository.list(),
     tutorialDatasource.list(),
     attachmentDatasource.list(),

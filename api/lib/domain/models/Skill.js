@@ -9,6 +9,7 @@ export class Skill {
     learningMoreTutorialIds,
     pixValue,
     competenceId,
+    internationalisation,
     status,
     tubeId,
     version,
@@ -27,5 +28,6 @@ export class Skill {
     this.tubeId = tubeId;
     this.version = version;
     this.level = level;
+    this.internationalisation = internationalisation;
   }
 }
