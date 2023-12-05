@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, list, get } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { filter, list, get, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import { localizedChallengeRepository, translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
@@ -300,6 +300,28 @@ describe('Unit | Repository | challenge-repository', () => {
         await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve introuvable'));
         expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
       });
+    });
+  });
+
+  describe('#update', () => {
+    it('should update an existing challenge', async () => {
+      // given
+      const challengeId = 'pouet';
+      const locales = ['fr'];
+      const challenge = domainBuilder.buildChallenge({ id: challengeId, locales });
+      vi.spyOn(challengeDatasource, 'update').mockResolvedValueOnce({ id: challengeId, locales });
+      vi.spyOn(translationRepository, 'deleteByKeyPrefixAndLocales').mockResolvedValueOnce();
+      vi.spyOn(translationRepository, 'save').mockResolvedValueOnce();
+
+      // when
+      const updatedChallenge = await update(challenge);
+
+      // then
+      expect(updatedChallenge.id).toBe(challenge.id);
+      expect(updatedChallenge.instruction).toBe(challenge.instruction);
+      expect(challengeDatasource.update).toHaveBeenCalledWith(challenge);
+      expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith(`challenge.${challengeId}.`, locales);
+      expect(translationRepository.save).toHaveBeenCalledOnce();
     });
   });
 });
