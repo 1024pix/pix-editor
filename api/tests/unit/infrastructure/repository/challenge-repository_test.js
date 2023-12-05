@@ -29,6 +29,23 @@ describe('Unit | Repository | challenge-repository', () => {
           locale: 'fr'
         }]);
       vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [] }, { id: 2, locales: [] }]);
+      vi.spyOn(localizedChallengeRepository, 'list').mockResolvedValueOnce([
+        domainBuilder.buildLocalizedChallenge({
+          id: '1',
+          challengeId: '1',
+          locale: 'fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: '1_en',
+          challengeId: '1',
+          locale: 'en',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: '2',
+          challengeId: '2',
+          locale: 'fr',
+        }),
+      ]);
 
       // when
       const challenges = await list();
@@ -37,10 +54,13 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challenges.length).equal(2);
       expect(challengeDatasource.list).toHaveBeenCalled();
       expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.');
+      expect(localizedChallengeRepository.list).toHaveBeenCalled();
       expect(challenges[0].instruction).to.equal('instruction');
       expect(challenges[0].proposals).to.equal('proposals');
+      expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
       expect(challenges[1].instruction).to.equal('instruction 2');
       expect(challenges[1].proposals).to.equal('proposals 2');
+      expect(challenges[1].alternativeLocales).to.deep.equal([]);
     });
   });
 

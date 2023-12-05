@@ -41,11 +41,12 @@ export async function get(id) {
 }
 
 export async function list() {
-  const [challengeDtos, translations] = await Promise.all([
+  const [challengeDtos, translations, localizedChallenges] = await Promise.all([
     challengeDatasource.list(),
     translationRepository.listByPrefix(prefix),
+    localizedChallengeRepository.list(),
   ]);
-  return toDomainList(challengeDtos, translations);
+  return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
 export async function filter(params = {}) {
@@ -87,12 +88,14 @@ async function loadTranslationsForChallenges(challengeDtos) {
   }, { readOnly: true });
 }
 
-function toDomainList(challengeDtos, translations) {
+function toDomainList(challengeDtos, translations, localizedChallenges = []) {
   const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
+  const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
 
   return challengeDtos.map((challengeDto) => {
     const challengeTranslations = translationsByChallengeId[challengeDto.id] ?? [];
-    return toDomain(challengeDto, challengeTranslations);
+    const challengeLocalizedChallenges = localizedChallengesByChallengeId[challengeDto.id] ?? [];
+    return toDomain(challengeDto, challengeTranslations, challengeLocalizedChallenges);
   });
 }
 
