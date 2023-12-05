@@ -32,9 +32,12 @@ export async function get(id) {
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
 
-  const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
+  const [translations, localizedChallenges] = await Promise.all([
+    translationRepository.listByPrefix(`challenge.${id}.`),
+    localizedChallengeRepository.listByChallengeIds([id]),
+  ]);
 
-  return toDomain(challengeDto, translations);
+  return toDomain(challengeDto, translations, localizedChallenges);
 }
 
 export async function list() {
@@ -93,15 +96,21 @@ function toDomainList(challengeDtos, translations) {
   });
 }
 
-function toDomain(challengeDto, challengeTranslations) {
+function toDomain(challengeDto, challengeTranslations, localizedChallenges = []) {
   const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
   const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
     return Object.fromEntries([
       ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
     ]);
   });
+
+  const primaryLocale = Challenge.getPrimaryLocale(challengeDto.locales);
+  const alternativeLocales = localizedChallenges
+    .map(({ locale }) => locale)
+    .filter((locale) => locale !== primaryLocale);
   return new Challenge({
     ...challengeDto,
     translations,
+    alternativeLocales,
   });
 }
