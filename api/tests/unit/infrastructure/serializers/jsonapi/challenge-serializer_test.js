@@ -116,6 +116,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             spoil: 'Non Sp',
             responsive:  'non',
             locales: [],
+            'alternative-locales': [],
             area: 'France',
             'auto-reply': false,
             focusable: false,

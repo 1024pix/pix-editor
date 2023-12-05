@@ -16,6 +16,7 @@ export class Challenge {
     files,
     autoReply,
     locales,
+    alternativeLocales,
     focusable,
     airtableId,
     genealogy,
@@ -57,6 +58,7 @@ export class Challenge {
     this.files = files;
     this.autoReply = autoReply;
     this.locales = Challenge.defaultLocales(locales);
+    this.alternativeLocales = alternativeLocales;
     this.focusable = focusable;
     this.airtableId = airtableId;
     this.genealogy = genealogy;
