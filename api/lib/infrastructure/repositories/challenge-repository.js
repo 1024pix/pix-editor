@@ -72,7 +72,8 @@ export async function update(challenge) {
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.deleteByKeyPrefixAndLocales(prefixFor(challenge), [challenge.primaryLocale]);
   await translationRepository.save(translations);
-  return toDomain(updatedChallengeDto, translations);
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challenge.id]);
+  return toDomain(updatedChallengeDto, translations, localizedChallenges);
 }
 
 export async function getAllIdsIn(challengeIds) {

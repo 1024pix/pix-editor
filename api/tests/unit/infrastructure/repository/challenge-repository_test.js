@@ -312,6 +312,18 @@ describe('Unit | Repository | challenge-repository', () => {
       vi.spyOn(challengeDatasource, 'update').mockResolvedValueOnce({ id: challengeId, locales });
       vi.spyOn(translationRepository, 'deleteByKeyPrefixAndLocales').mockResolvedValueOnce();
       vi.spyOn(translationRepository, 'save').mockResolvedValueOnce();
+      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: 'fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: `${challengeId}_en`,
+          challengeId,
+          locale: 'en',
+        }),
+      ]);
 
       // when
       const updatedChallenge = await update(challenge);
@@ -319,9 +331,11 @@ describe('Unit | Repository | challenge-repository', () => {
       // then
       expect(updatedChallenge.id).toBe(challenge.id);
       expect(updatedChallenge.instruction).toBe(challenge.instruction);
+      expect(updatedChallenge.alternativeLocales).toEqual(['en']);
       expect(challengeDatasource.update).toHaveBeenCalledWith(challenge);
       expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith(`challenge.${challengeId}.`, locales);
       expect(translationRepository.save).toHaveBeenCalledOnce();
+      expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith([challengeId]);
     });
   });
 });
