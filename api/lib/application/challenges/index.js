@@ -53,7 +53,11 @@ export async function register(server) {
         handler: async function(request) {
           const params = _parseQueryParams(request.url.search);
           const challenges = await challengeRepository.filter(params);
-          return challengeSerializer.serialize(challenges);
+          const localizedChallenges = await localizedChallengeRepository.listByChallengeIds(challenges.map(({ id })=> id));
+          const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
+          return challengeSerializer.serialize(
+            challenges.map((challenge) => challengeWithAlternativeLocales(challenge, localizedChallengesByChallengeId[challenge.id])),
+          );
         },
       },
     },
@@ -73,11 +77,8 @@ export async function register(server) {
           if (challenges.length === 0) {
             return Boom.notFound();
           }
-          const localizedChallenges = await localizedChallengeRepository.listByChallengeId(challengeId);
-          const alternativeLocales = localizedChallenges
-            .filter(({ locale }) => locale !== challenges[0].primaryLocale)
-            .map(({ locale }) => locale);
-          return challengeSerializer.serialize({ ...challenges[0], alternativeLocales });
+          const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeId]);
+          return challengeSerializer.serialize(challengeWithAlternativeLocales(challenges[0], localizedChallenges));
         },
       },
     },
@@ -138,3 +139,10 @@ export async function register(server) {
 }
 
 export const name = 'challenges';
+
+function challengeWithAlternativeLocales(challenge, localizedChallenges) {
+  const alternativeLocales = localizedChallenges
+    ?.filter(({ locale }) => locale !== challenge.primaryLocale)
+    ?.map(({ locale }) => locale) ?? [];
+  return { ...challenge, alternativeLocales };
+}
