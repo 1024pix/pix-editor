@@ -68,7 +68,7 @@ describe('Unit | Repository | challenge-repository', () => {
     describe('when ids are specified', () => {
       it('should return challenges with given ids', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [] }, { id: 2, locales: [] }]);
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: '1', locales: [] }, { id: '2', locales: [] }]);
         vi.spyOn(translationRepository, 'listByPrefix')
           .mockResolvedValueOnce([{
             key: 'challenge.1.instruction',
@@ -88,6 +88,23 @@ describe('Unit | Repository | challenge-repository', () => {
             value: 'proposals 2',
             locale: 'fr'
           }]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+          domainBuilder.buildLocalizedChallenge({
+            id: '1',
+            challengeId: '1',
+            locale: 'fr',
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: '1_en',
+            challengeId: '1',
+            locale: 'en',
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: '2',
+            challengeId: '2',
+            locale: 'fr',
+          }),
+        ]);
 
         // when
         const challenges = await filter({ filter: { ids: ['1', '2'] } });
@@ -96,11 +113,14 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges.length).equal(2);
         expect(challenges[0].instruction).to.equal('instruction');
         expect(challenges[0].proposals).to.equal('proposals');
+        expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
         expect(challenges[1].instruction).to.equal('instruction 2');
         expect(challenges[1].proposals).to.equal('proposals 2');
+        expect(challenges[1].alternativeLocales).to.deep.equal([]);
         expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.1.', { transaction: expect.anything() });
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.', { transaction: expect.anything() });
+        expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith(['1', '2']);
       });
 
       it('should return challenges with empty fields when have no translation', async () => {
@@ -112,6 +132,7 @@ describe('Unit | Repository | challenge-repository', () => {
             value: 'proposals',
             locale: 'fr'
           }]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
 
         // when
         const challenges = await filter({ filter: { ids: ['1'] } });
@@ -131,6 +152,7 @@ describe('Unit | Repository | challenge-repository', () => {
             value: 'proposals',
             locale: 'fr'
           }]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
 
         // when
         const challenges = await filter({ filter: { ids: ['1'] } });
@@ -146,6 +168,7 @@ describe('Unit | Repository | challenge-repository', () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{}, {}]);
         vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ locales: [] }, { locales: [] }]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
 
         // when
         const challenges = await filter({ page: { size: 20 } });
@@ -160,18 +183,15 @@ describe('Unit | Repository | challenge-repository', () => {
     describe('when search is specified', () => {
       it('should search challenges according to filters', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{}, {}]);
-        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{}, {}]);
         vi.spyOn(challengeDatasource, 'search').mockResolvedValue([{ locales: [] }, { locales: [] }]);
         vi.spyOn(translationRepository, 'search').mockResolvedValueOnce(['challengeId1']);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
 
         // when
         const challenges = await filter({ filter: { search: 'toto' }, page: { size: 'limit' } });
 
         // then
         expect(challenges.length).equal(2);
-        expect(challengeDatasource.filter).not.toHaveBeenCalled();
-        expect(challengeDatasource.list).not.toHaveBeenCalled();
         expect(translationRepository.search).toHaveBeenCalledWith({
           entity: 'challenge',
           fields: ['instruction', 'proposals'],
@@ -180,6 +200,23 @@ describe('Unit | Repository | challenge-repository', () => {
         });
 
         expect(challengeDatasource.search).toHaveBeenCalledWith({ filter: { search: 'toto', ids: ['challengeId1'] }, page: { size: 'limit' } });
+      });
+    });
+
+    describe('when no challenges match the params', () => {
+      it('should return an empty array w/o loading translations and localized challenges', async () => {
+        // given
+        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([]);
+        vi.spyOn(translationRepository, 'listByPrefix');
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds');
+
+        // when
+        const challenges = await filter({ filter: { ids: ['unknown id'] } });
+
+        // then
+        expect(challenges).to.deep.equal([]);
+        expect(translationRepository.listByPrefix).not.toHaveBeenCalled();
+        expect(localizedChallengeRepository.listByChallengeIds).not.toHaveBeenCalled();
       });
     });
   });
