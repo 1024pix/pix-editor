@@ -41,7 +41,11 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
       const skill = domainBuilder.buildSkillDatasourceObject({ id: 'mon_id_persistant' });
       airtableRawSkill = airtableBuilder.factory.buildSkill(skill);
       skillToSave = inputOutputDataBuilder.factory.buildSkill({
-        ...skill
+        ...skill,
+        hint_i18n: {
+          fr: 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
+          en: 'Can we geo-locate a rabbit on the ice floe?',
+        }
       });
     });
 
@@ -84,6 +88,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
 
   describe('PATCH /api/airtable/content/Acquis/id_airtable', () => {
     let skillToUpdate;
+    let airtableSkill;
     let user;
 
     beforeEach(async function() {
@@ -92,12 +97,13 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
       const skillDataObject = domainBuilder.buildSkillDatasourceObject({
         id: 'mon_id_persistant',
       });
+      airtableSkill = airtableBuilder.factory.buildSkill(skillDataObject);
       skillToUpdate = inputOutputDataBuilder.factory.buildSkill({
         ...skillDataObject,
         hint_i18n: {
           fr: 'AAA',
           en: 'BBB',
-        }
+        },
       });
 
       databaseBuilder.factory.buildTranslation({
@@ -119,9 +125,9 @@ describe('Acceptance | Controller | airtable-proxy-controller | create skill tra
       it('should proxy request to airtable and update translations to the PG table', async () => {
         // Given
         nock('https://api.airtable.com')
-          .patch('/v0/airtableBaseValue/Acquis/id_airtable', skillToUpdate)
+          .patch('/v0/airtableBaseValue/Acquis/id_airtable', airtableSkill)
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, skillToUpdate);
+          .reply(200, airtableSkill);
         const server = await createServer();
 
         // When
@@ -165,7 +171,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
 
   describe('GET /api/airtable/content/Acquis', () => {
     let skillDataObject;
-    let skill;
+    let airtableSkill;
     let user;
 
     beforeEach(async function() {
@@ -174,13 +180,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
       skillDataObject = domainBuilder.buildSkillDatasourceObject({
         id: 'mon_id_persistant',
       });
-      skill = inputOutputDataBuilder.factory.buildSkill({
-        ...skillDataObject,
-        hint_i18n: {
-          fr: 'CCC',
-          en: 'DDD',
-        }
-      });
+      airtableSkill = airtableBuilder.factory.buildSkill(skillDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
@@ -212,7 +212,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Acquis')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, { records: [skill] });
+          .reply(200, { records: [airtableSkill] });
         const server = await createServer();
 
         // When
@@ -231,7 +231,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
 
   describe('GET /api/airtable/content/Acquis/id', () => {
     let skillDataObject;
-    let skill;
+    let airtableSkill;
     let user;
 
     beforeEach(async function() {
@@ -240,13 +240,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
       skillDataObject = domainBuilder.buildSkillDatasourceObject({
         id: 'mon_id_persistant',
       });
-      skill = inputOutputDataBuilder.factory.buildSkill({
-        ...skillDataObject,
-        hint_i18n: {
-          fr: 'Pouet',
-          en: 'Toot',
-        },
-      });
+      airtableSkill = airtableBuilder.factory.buildSkill(skillDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
@@ -278,7 +272,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | retrieve skill t
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Acquis/recId')
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-          .reply(200, skill);
+          .reply(200, airtableSkill);
         const server = await createServer();
 
         // When

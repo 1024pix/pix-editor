@@ -2,10 +2,6 @@ export function buildSkillDatasourceObject(
   {
     id = 'recTIddrkopID28Ep',
     name = '@accesDonnées1',
-    hint_i18n = {
-      fr: 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
-      en: 'Can we geo-locate a rabbit on the ice floe?',
-    },
     hintStatus = 'Validé',
     tutorialIds = ['receomyzL0AmpMFGw'],
     learningMoreTutorialIds = ['recQbjXNAPsVJthXh', 'rec3DkUX0a6RNi2Hz'],
@@ -21,7 +17,6 @@ export function buildSkillDatasourceObject(
   return {
     id,
     name,
-    hint_i18n,
     hintStatus,
     tutorialIds,
     learningMoreTutorialIds,

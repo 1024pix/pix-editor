@@ -31,11 +31,9 @@ describe('Migrate translation from airtable', function() {
     // given
     const skill = airtableBuilder.factory.buildSkill({
       id: 'skillid1',
-      hint_i18n: {
-        fr: 'indice',
-        en: 'clue',
-      }
     });
+    skill.fields['Indice fr-fr'] = 'indice';
+    skill.fields['Indice en-us'] = 'clue';
 
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Acquis')
