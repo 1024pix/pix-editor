@@ -902,6 +902,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             spoil: 'Non Sp',
             responsive: 'non',
             locales: ['fr'],
+            'alternative-locales': [],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -1172,8 +1173,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should update a challenge', async () => {
       // Given
+      const challengeId = 'recChallengeId';
       const challenge = {
-        ...domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] }),
+        ...domainBuilder.buildChallengeDatasourceObject({ id: challengeId, locales: ['fr'] }),
         instruction: 'consigne',
         alternativeInstruction: 'consigne alternative',
         solution: 'solution',
@@ -1181,30 +1183,42 @@ describe('Acceptance | Controller | challenges-controller', () => {
         proposals: 'propositions',
       };
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.instruction',
+        key: `challenge.${challengeId}.instruction`,
         locale: 'fr',
         value: 'Ancienne valeur de l\'instruction',
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.alternativeInstruction',
+        key: `challenge.${challengeId}.alternativeInstruction`,
         locale: 'fr',
         value: challenge.alternativeInstruction,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.solution',
+        key: `challenge.${challengeId}.solution`,
         locale: 'fr',
         value: challenge.solution,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.solutionToDisplay',
+        key: `challenge.${challengeId}.solutionToDisplay`,
         locale: 'fr',
         value: challenge.solutionToDisplay,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.proposals',
+        key: `challenge.${challengeId}.proposals`,
         locale: 'fr',
         value: challenge.proposals,
       });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: `${challengeId}_en`,
+        challengeId,
+        locale: 'en',
+      });
+
       await databaseBuilder.commit();
 
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
@@ -1323,6 +1337,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             spoil: 'Non Sp',
             responsive: 'non',
             locales: ['fr'],
+            'alternative-locales': ['en'],
             area: 'France',
             'auto-reply': false,
             focusable: false,

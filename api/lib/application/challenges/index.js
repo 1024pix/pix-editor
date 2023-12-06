@@ -4,7 +4,7 @@ import _ from 'lodash';
 import Joi from 'joi';
 import Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
-import { challengeRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository } from '../../infrastructure/repositories/index.js';
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
@@ -53,11 +53,7 @@ export async function register(server) {
         handler: async function(request) {
           const params = _parseQueryParams(request.url.search);
           const challenges = await challengeRepository.filter(params);
-          const localizedChallenges = await localizedChallengeRepository.listByChallengeIds(challenges.map(({ id })=> id));
-          const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
-          return challengeSerializer.serialize(
-            challenges.map((challenge) => challengeWithAlternativeLocales(challenge, localizedChallengesByChallengeId[challenge.id])),
-          );
+          return challengeSerializer.serialize(challenges);
         },
       },
     },
@@ -77,8 +73,7 @@ export async function register(server) {
           if (challenges.length === 0) {
             return Boom.notFound();
           }
-          const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeId]);
-          return challengeSerializer.serialize(challengeWithAlternativeLocales(challenges[0], localizedChallenges));
+          return challengeSerializer.serialize(challenges[0]);
         },
       },
     },
@@ -139,10 +134,3 @@ export async function register(server) {
 }
 
 export const name = 'challenges';
-
-function challengeWithAlternativeLocales(challenge, localizedChallenges) {
-  const alternativeLocales = localizedChallenges
-    ?.filter(({ locale }) => locale !== challenge.primaryLocale)
-    ?.map(({ locale }) => locale) ?? [];
-  return { ...challenge, alternativeLocales };
-}
