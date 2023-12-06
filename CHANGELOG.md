@@ -1,5 +1,18 @@
 
 
+## v3.111.0 (06/12/2023)
+
+
+### :rocket: Amélioration
+- [#402](https://github.com/1024pix/pix-editor/pull/402) [FEATURE] Bouton de prévisualisation des langues alternatives (PIX-10215).
+- [#406](https://github.com/1024pix/pix-editor/pull/406) [FEATURE] Ajout des traductions des acquis dans l'export Phrase (PIX-10230).
+
+### :building_construction: Tech
+- [#413](https://github.com/1024pix/pix-editor/pull/413) [TECH] Retrouve les `alternative-locales` depuis les traductions présentes.
+
+### :arrow_up: Montée de version
+- [#409](https://github.com/1024pix/pix-editor/pull/409) [BUMP] Update dependency @1024pix/stylelint-config to ^5.0.2 (pix-editor).
+
 ## v3.110.0 (06/12/2023)
 
 
