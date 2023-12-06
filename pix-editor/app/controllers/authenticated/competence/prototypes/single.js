@@ -111,6 +111,10 @@ export default class SingleController extends Controller {
     return this.challenge.updatedAt.toISOString();
   }
 
+  get absolutePreviewUrl() {
+    return new URL(this.challenge.preview, window.location).href;
+  }
+
   @action
   getPreviewUrl(locale) {
     return locale ? `${this.challenge.preview}?locale=${locale}` : this.challenge.preview;

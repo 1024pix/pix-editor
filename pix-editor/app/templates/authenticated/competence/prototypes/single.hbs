@@ -65,7 +65,7 @@
                      @displaySolutionToDisplayField={{this.displaySolutionToDisplayField}}
                      @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}}/>
     {{#if this.copyOperation}}
-      <Field::Copy @value={{this.challenge.preview}} @onCopied={{this.linkCopied}}/>
+      <Field::Copy @value={{this.absolutePreviewUrl}} @onCopied={{this.linkCopied}}/>
     {{/if}}
   </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
@@ -109,7 +109,7 @@
     {{/if}}
     <button class="ui button item" {{on "click" this.copyLink}} type="button">
       <i class="linkify icon"></i>
-      Copier lien
+      Copier le lien
     </button>
     {{#if this.mayAccessAlternatives}}
       <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
