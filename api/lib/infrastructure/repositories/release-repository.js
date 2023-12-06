@@ -15,7 +15,7 @@ import {
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
-  challengeTransformer,
+  createChallengeTransformer,
   competenceTransformer,
   skillTransformer,
   tubeTransformer,
@@ -64,7 +64,7 @@ export async function serializeEntity({ type, entity, translations }) {
   if (model === attachmentDatasource.path()) {
     const [rawChallenge] = await challengeRepository.filter({ filter: { ids: [updatedRecord.challengeId] } });
     const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
-    const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments });
+    const transformChallenge = createChallengeTransformer({ attachments });
     const challenge = transformChallenge(rawChallenge);
 
     return { updatedRecord: challenge, model: challengeDatasource.path() };
@@ -126,7 +126,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tutorialDatasource.list(),
     localizedChallengeRepository.list(),
   ]);
-  const transformChallenge = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenges });
+  const transformChallenge = createChallengeTransformer({ attachments, localizedChallenges });
   const transformedChallenges = challenges.flatMap(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
