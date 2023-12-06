@@ -49,4 +49,9 @@ describe('parseQCMSolutions', () => {
       new TypeError('solution should be a number greater than or equal to 1'),
     );
   });
+
+  it('should throw a TypeError if a solution is duplicated', () => {
+    expect(() => parseQCMSolutions('1,1')).toThrow(new TypeError('solution should not be duplicated'));
+    expect(() => parseQCMSolutions('2,12,2')).toThrow(new TypeError('solution should not be duplicated'));
+  });
 });

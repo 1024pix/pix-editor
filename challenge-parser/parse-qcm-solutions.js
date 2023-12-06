@@ -11,5 +11,9 @@ export function parseQCMSolutions(inputs) {
     return number - 1;
   });
 
+  if (new Set(solutions).size < solutions.length) {
+    throw new TypeError('solution should not be duplicated');
+  }
+
   return solutions;
 }
