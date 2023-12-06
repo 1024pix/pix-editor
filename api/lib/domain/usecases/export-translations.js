@@ -3,7 +3,8 @@ import csv from 'fast-csv';
 import _ from 'lodash';
 import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
-import { extractFromReleaseObject } from '../../infrastructure/translations/competence.js';
+import * as competenceTranslations from '../../infrastructure/translations/competence.js';
+import * as skillTranslations from '../../infrastructure/translations/skill.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
@@ -18,28 +19,34 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
       ]),
   );
 
-  const challengesStream = Readable.from(release.content.challenges)
-    .filter((challenge) => challenge.locales.includes('fr'))
-    .map(extractTagsFromObject(extractTagsFromChallenge, releaseContent, 'epreuve'))
-    .flatMap(extractTranslationsFromObject(extractFromChallenge))
-    .filter(keepPixFramework)
-    .map(translationAndTagsToCSVLine);
+  const frenchChallenges = release.content.challenges
+    .filter((challenge) => challenge.locales.includes('fr'));
 
-  const competencesStream = Readable.from(release.content.competences)
-    .map(extractTagsFromObject(extractTagsFromCompetence, releaseContent, 'competence'))
-    .flatMap(extractTranslationsFromObject(extractFromReleaseObject))
+  const translationsStreams =  mergeStreams(
+    createTranslationsStream(release.content.competences, extractTagsFromCompetence, releaseContent, 'competence',competenceTranslations.extractFromReleaseObject),
+    createTranslationsStream(release.content.skills, extractTagsFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
+    createTranslationsStream(frenchChallenges, extractTagsFromChallenge, releaseContent, 'epreuve', extractFromChallenge),
+  );
+
+  const csvLinesStream = translationsStreams
     .filter(({ translation }) => translation.locale === 'fr')
     .filter(keepPixFramework)
     .map(translationAndTagsToCSVLine);
 
   pipeline(
-    mergeStreams(competencesStream, challengesStream),
+    csvLinesStream,
     csv.format({ headers: true }),
     stream,
     (error) => {
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
+}
+
+function createTranslationsStream(entities, extractTagsFn, releaseContent, typeTag, extractTranslationsFn) {
+  return Readable.from(entities)
+    .map(extractTagsFromObject(extractTagsFn, releaseContent, typeTag))
+    .flatMap(extractTranslationsFromObject(extractTranslationsFn));
 }
 
 function keepPixFramework({ tags }) {

@@ -181,6 +181,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
         'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
+        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
       ]);
     });
 
@@ -322,6 +323,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(payload).to.deep.equal([
         'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
+        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
       ]);
     });
 
