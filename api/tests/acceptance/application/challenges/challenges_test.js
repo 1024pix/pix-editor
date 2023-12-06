@@ -120,16 +120,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
-
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'my id',
-        challengeId: 'my id',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'my id Nl',
-        challengeId: 'my id',
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.instruction',
         locale: 'nl',
+        value: 'Hallo',
       });
 
       await databaseBuilder.commit();
@@ -280,21 +274,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
-
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: '1',
-        challengeId: '1',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: '2',
-        challengeId: '2',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: '2 nl',
-        challengeId: '2',
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.proposals',
         locale: 'nl',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
       await databaseBuilder.commit();
@@ -547,15 +530,10 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallengeId1',
-        challengeId: 'recChallengeId1',
-        locale: 'fr',
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'recChallengeId1Nl',
-        challengeId: 'recChallengeId1',
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.proposals',
         locale: 'nl',
+        value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
       await databaseBuilder.commit();
@@ -901,6 +879,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             accessibility2: 'RAS',
             spoil: 'Non Sp',
             responsive: 'non',
+            'alternative-locales': [],
             locales: ['fr'],
             area: 'France',
             'auto-reply': false,
@@ -1322,6 +1301,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             accessibility2: 'RAS',
             spoil: 'Non Sp',
             responsive: 'non',
+            'alternative-locales': [],
             locales: ['fr'],
             area: 'France',
             'auto-reply': false,
