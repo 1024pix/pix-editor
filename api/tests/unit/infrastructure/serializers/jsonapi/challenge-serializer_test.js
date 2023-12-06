@@ -6,7 +6,10 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a Challenge', () => {
       // Given
-      const challenge = domainBuilder.buildChallenge();
+      const challenge = domainBuilder.buildChallenge({
+        id: 'recwWzTquPlvIl4So',
+      });
+      const alternativeLocales = ['en', 'nl'];
       const expectedSerializedChallenge = {
         data: {
           type: 'challenges',
@@ -29,7 +32,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/recwWzTquPlvIl4So/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -40,6 +43,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             spoil: 'Non Sp',
             responsive:  'non',
             locales: ['fr'],
+            'alternative-locales': ['en', 'nl'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -68,7 +72,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       };
 
       // When
-      const json = serialize(challenge);
+      const json = serialize({ ...challenge, alternativeLocales });
 
       // Then
       expect(json).to.deep.equal(expectedSerializedChallenge);

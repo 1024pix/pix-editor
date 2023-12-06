@@ -196,4 +196,76 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
     });
   });
+
+  context('#listByChallengeIds', () => {
+    it('should return the list of localized challenges for a list of challenge IDs', async () => {
+      const challengeId1 = 'challengeId1';
+      const challengeId2 = 'challengeId2';
+
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId1,
+        challengeId: challengeId1,
+        locale: 'fr-fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: `${challengeId1}En`,
+        challengeId: challengeId1,
+        locale: 'en',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: `${challengeId1}Nl`,
+        challengeId: challengeId1,
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId2,
+        challengeId: challengeId2,
+        locale: 'fr-fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: `${challengeId2}En`,
+        challengeId: challengeId2,
+        locale: 'en',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'otherChallengeId',
+        challengeId: 'otherChallengeId',
+        locale: 'fr',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeId1, challengeId2]);
+
+      // then
+      expect(localizedChallenges).to.deep.equal([
+        domainBuilder.buildLocalizedChallenge({
+          id: `${challengeId1}En`,
+          challengeId: challengeId1,
+          locale: 'en',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeId1,
+          challengeId: challengeId1,
+          locale: 'fr-fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: `${challengeId1}Nl`,
+          challengeId: challengeId1,
+          locale: 'nl',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: `${challengeId2}En`,
+          challengeId: challengeId2,
+          locale: 'en',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeId2,
+          challengeId: challengeId2,
+          locale: 'fr-fr',
+        }),
+      ]);
+    });
+  });
 });

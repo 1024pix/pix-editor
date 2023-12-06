@@ -40,21 +40,18 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
         id: 'challengeid2',
         skillId: airtableSkills[0].id,
         status: 'status for challengeid2',
-        preview: 'site/challenges/challengeid2',
         locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid3',
         skillId: airtableSkills[1].id,
         status: 'status for challengeid3',
-        preview: 'site/challenges/challengeid3',
         locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid4',
         skillId: airtableSkills[2].id,
         status: 'status for challengeid4',
-        preview: 'site/challenges/challengeid4',
         locales: ['fr'],
       }),
     ];
@@ -149,7 +146,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid2',
             'skill-name': '@skillid2',
             status: 'status for challengeid2',
-            'preview-url': 'site/challenges/challengeid2',
+            'preview-url': '/api/challenges/challengeid2/preview',
           },
         },
         {
@@ -160,7 +157,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
             status: 'status for challengeid3',
-            'preview-url': 'site/challenges/challengeid3',
+            'preview-url': '/api/challenges/challengeid3/preview',
           },
         },
         {
@@ -171,7 +168,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid4',
             'skill-name': '@skillid4',
             status: 'status for challengeid4',
-            'preview-url': 'site/challenges/challengeid4',
+            'preview-url': '/api/challenges/challengeid4/preview',
           },
         }
       ],

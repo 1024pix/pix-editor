@@ -62,7 +62,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       id: 'challengeid1',
       skillId: 'skillid1',
       status: 'status for challengeid1',
-      preview: 'site/challenges/challengeid1',
       locales: ['fr'],
     });
     const airtableSkill1 = airtableBuilder.factory.buildSkill({
@@ -74,7 +73,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       id: 'challengeid2',
       skillId: 'skillid2',
       status: 'status for challengeid2',
-      preview: 'site/challenges/challengeid2',
       locales: ['fr'],
     });
     const airtableSkill2 = airtableBuilder.factory.buildSkill({
@@ -86,7 +84,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       id: 'challengeid3',
       skillId: 'skillid3',
       status: 'status for challengeid3',
-      preview: 'site/challenges/challengeid3',
       locales: ['fr'],
     });
     const airtableSkill3 = airtableBuilder.factory.buildSkill({
@@ -98,7 +95,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       id: 'challengeid4',
       skillId: 'skillid4',
       status: 'status for challengeid4',
-      preview: 'site/challenges/challengeid4',
       locales: ['fr'],
     });
     const airtableSkill4 = airtableBuilder.factory.buildSkill({
@@ -176,7 +172,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
             status: 'status for challengeid3',
-            'preview-url': 'site/challenges/challengeid3',
+            'preview-url': '/api/challenges/challengeid3/preview',
           },
         },
         {
@@ -187,7 +183,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
-            'preview-url': 'site/challenges/challengeid1',
+            'preview-url': '/api/challenges/challengeid1/preview',
           },
         }
       ],

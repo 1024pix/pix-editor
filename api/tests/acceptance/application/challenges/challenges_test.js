@@ -35,7 +35,6 @@ const challengeAirtableFields = [
   'Type péda',
   'Auteur',
   'Déclinable',
-  'Preview',
   'Version prototype',
   'Version déclinaison',
   'Non voyant',
@@ -58,7 +57,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   function _removeReadonlyFields(airtableChallengeBody, deleteId) {
     const body = _.cloneDeep(airtableChallengeBody);
-    delete body.fields.Preview;
     delete body.fields['Record ID'];
     delete body.fields['Compétences (via tube) (id persistant)'];
     delete body.fields['Acquix (id persistant)'];
@@ -122,6 +120,18 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'my id',
+        challengeId: 'my id',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'my id Nl',
+        challengeId: 'my id',
+        locale: 'nl',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -158,7 +168,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/my id/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -169,6 +179,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               spoil: 'Non Sp',
               responsive: 'non',
               locales: ['fr'],
+              'alternative-locales': ['nl'],
               area: 'France',
               'auto-reply': false,
               focusable: false,
@@ -269,6 +280,23 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '1',
+        challengeId: '1',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '2',
+        challengeId: '2',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '2 nl',
+        challengeId: '2',
+        locale: 'nl',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -307,7 +335,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/1/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -318,6 +346,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               spoil: 'Non Sp',
               responsive: 'non',
               locales: ['fr'],
+              'alternative-locales': [],
               area: 'France',
               'auto-reply': false,
               focusable: false,
@@ -366,7 +395,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               version: 1,
               genealogy: 'Prototype 1',
               status: 'validé',
-              preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+              preview: '/api/challenges/2/preview',
               timer: 1234,
               'embed-url': 'https://github.io/page/epreuve.html',
               'embed-title': 'Epreuve de selection de dossier',
@@ -377,6 +406,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               spoil: 'Non Sp',
               responsive: 'non',
               locales: ['fr'],
+              'alternative-locales': ['nl'],
               area: 'France',
               'auto-reply': false,
               focusable: false,
@@ -516,6 +546,18 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recChallengeId1',
+        challengeId: 'recChallengeId1',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recChallengeId1Nl',
+        challengeId: 'recChallengeId1',
+        locale: 'nl',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -551,7 +593,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/recChallengeId1/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -562,6 +604,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             spoil: 'Non Sp',
             responsive: 'non',
             locales: ['fr'],
+            'alternative-locales': ['nl'],
             area: 'France',
             'auto-reply': false,
             focusable: false,
@@ -625,7 +668,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
     const challengeId = 'challenge123';
     const localizedChallengeId =  challengeId + '_nl';
     const locale = 'nl';
-    let user;
     let airtableChallengeScope;
     let airtableAttachmentScope;
 
@@ -638,8 +680,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]).activate().nockScope;
 
       airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([]).activate().nockScope;
-
-      user = databaseBuilder.factory.buildReadonlyUser();
 
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -714,7 +754,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       const response = await server.inject({
         method: 'GET',
         url: `/api/challenges/${challengeId}/preview?locale=${locale}`,
-        headers: generateAuthorizationHeader(user)
       });
 
       // then
@@ -852,7 +891,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/challengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',
@@ -1273,7 +1312,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             version: 1,
             genealogy: 'Prototype 1',
             status: 'validé',
-            preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
+            preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
             'embed-title': 'Epreuve de selection de dossier',

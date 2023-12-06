@@ -32,6 +32,7 @@ export default class ChallengeModel extends Model {
   @attr spoil;
   @attr responsive;
   @attr ({ defaultValue: function() { return []; } }) locales;
+  @attr alternativeLocales;
   @attr area;
   @attr autoReply;
   @attr focusable;

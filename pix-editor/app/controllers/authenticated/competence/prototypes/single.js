@@ -103,17 +103,17 @@ export default class SingleController extends Controller {
     }
   }
 
-  get previewUrl() {
-    return this.challenge.preview;
-  }
-
-
   get airtableUrl() {
     return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${ this.challenge.airtableId}`;
   }
 
   get lastUpdatedAtISO() {
     return this.challenge.updatedAt.toISOString();
+  }
+
+  @action
+  getPreviewUrl(locale) {
+    return locale ? `${this.challenge.preview}?locale=${locale}` : this.challenge.preview;
   }
 
   @action

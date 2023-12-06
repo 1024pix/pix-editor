@@ -33,6 +33,7 @@ const serializer = new Serializer('challenges', {
     'spoil',
     'responsive',
     'locales',
+    'alternativeLocales',
     'area',
     'autoReply',
     'focusable',
@@ -59,6 +60,7 @@ const serializer = new Serializer('challenges', {
     }
   },
   transform(challenge) {
+    challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
     return challenge;
   }

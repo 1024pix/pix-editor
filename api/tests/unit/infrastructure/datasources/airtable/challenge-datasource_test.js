@@ -107,7 +107,6 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
   describe('#toAirTableObject', () => {
 
     function _removeReadonlyFields(airtableChallenge) {
-      delete airtableChallenge.fields.Preview;
       delete airtableChallenge.fields['Record ID'];
       delete airtableChallenge.fields['Compétences (via tube) (id persistant)'];
       delete airtableChallenge.fields['Acquix (id persistant)'];
