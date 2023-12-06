@@ -1,5 +1,22 @@
 
 
+## v3.110.0 (06/12/2023)
+
+
+### :rocket: Amélioration
+- [#405](https://github.com/1024pix/pix-editor/pull/405) [FEATURE] Débrancher les champs traduisibles des acquis dans Airtable (PIX-9404).
+- [#404](https://github.com/1024pix/pix-editor/pull/404) [FEATURE] Adapter la réplication pour utiliser les traductions PG des Acquis (PIX-9403) .
+- [#396](https://github.com/1024pix/pix-editor/pull/396) [FEATURE] Lecture des traductions des acquis dans la release (PIX-9402).
+
+### :arrow_up: Montée de version
+- [#407](https://github.com/1024pix/pix-editor/pull/407) [BUMP] Update dependency ember-cli-notifications to v9 (pix-editor).
+- [#410](https://github.com/1024pix/pix-editor/pull/410) [BUMP] Update dependency @1024pix/pix-ui to ^41.1.1 (pix-editor).
+- [#408](https://github.com/1024pix/pix-editor/pull/408) [BUMP] Update dependency @1024pix/pix-ui to ^41.1.0 (pix-editor).
+- [#400](https://github.com/1024pix/pix-editor/pull/400) [BUMP] Lock file maintenance (pix-editor).
+- [#397](https://github.com/1024pix/pix-editor/pull/397) [BUMP] Update dependency node to v20.10.0.
+- [#399](https://github.com/1024pix/pix-editor/pull/399) [BUMP] Lock file maintenance (api).
+- [#403](https://github.com/1024pix/pix-editor/pull/403) [BUMP] Update redis.
+
 ## v3.109.1 (01/12/2023)
 
 
