@@ -8,7 +8,7 @@ import { challengeRepository } from '../../infrastructure/repositories/index.js'
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from '../security-pre-handlers.js';
 import { attachmentDatasource } from '../../infrastructure/datasources/airtable/index.js';
-import { challengeTransformer } from '../../infrastructure/transformers/index.js';
+import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import { previewChallenge } from '../../domain/usecases/index.js';
@@ -29,7 +29,7 @@ async function _refreshCache({ challenge, localizedChallenge }) {
 
   try {
     const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
-    const transformChallenge = challengeTransformer.createChallengeTransformer({
+    const transformChallenge = createChallengeTransformer({
       attachments,
       localizedChallenge,
     });

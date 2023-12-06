@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import * as challengeTransformer from '../../../../lib/infrastructure/transformers/challenge-transformer.js';
+import { createChallengeTransformer } from '../../../../lib/infrastructure/transformers/challenge-transformer.js';
 import { LocalizedChallenge } from '../../../../lib/domain/models/LocalizedChallenge.js';
 import { domainBuilder } from '../../../test-helper.js';
 
@@ -44,7 +44,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
 
         // when
-        const transform = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenges });
+        const transform = createChallengeTransformer({ attachments, localizedChallenges });
         const result = transform(challenge);
 
         // then
@@ -96,7 +96,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
 
         // when
-        const transform = challengeTransformer.createChallengeTransformer({ attachments, localizedChallenge });
+        const transform = createChallengeTransformer({ attachments, localizedChallenge });
         const result = transform(challenge);
 
         // then
@@ -130,7 +130,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
 
         // when
-        const transform = challengeTransformer.createChallengeTransformer({ attachments });
+        const transform = createChallengeTransformer({ attachments });
         const result = transform(challenge);
 
         // then
@@ -161,7 +161,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
 
         // when
-        const transform = challengeTransformer.createChallengeTransformer({ attachments });
+        const transform = createChallengeTransformer({ attachments });
         const result = transform(challenge);
 
         // then
@@ -207,7 +207,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
 
         // when
-        const transform = challengeTransformer.createChallengeTransformer({ attachments });
+        const transform = createChallengeTransformer({ attachments });
         const result = transform(challenge);
 
         // then
