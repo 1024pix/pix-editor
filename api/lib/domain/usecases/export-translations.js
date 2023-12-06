@@ -1,15 +1,16 @@
 import { Readable, pipeline } from 'node:stream';
 import csv from 'fast-csv';
 import _ from 'lodash';
-import { releaseRepository } from '../../infrastructure/repositories/index.js';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import * as competenceTranslations from '../../infrastructure/translations/competence.js';
 import * as skillTranslations from '../../infrastructure/translations/skill.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function exportTranslations(stream, dependencies = { releaseRepository }) {
+export async function exportTranslations(stream, dependencies) {
   const release = await dependencies.releaseRepository.getLatestRelease();
+  const rawLocalizedChallenges = await dependencies.localizedChallengeRepository.list();
+  const localizedChallenges = _.groupBy(rawLocalizedChallenges, 'challengeId');
 
   const releaseContent = Object.fromEntries(
     Object.entries(release.content)
@@ -22,10 +23,10 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
   const frenchChallenges = release.content.challenges
     .filter((challenge) => challenge.locales.includes('fr'));
 
-  const translationsStreams =  mergeStreams(
-    createTranslationsStream(release.content.competences, extractTagsFromCompetence, releaseContent, 'competence',competenceTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.skills, extractTagsFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
-    createTranslationsStream(frenchChallenges, extractTagsFromChallenge, releaseContent, 'epreuve', extractFromChallenge),
+  const translationsStreams = mergeStreams(
+    createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
+    createTranslationsStream(release.content.skills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
+    createTranslationsStream(frenchChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
 
   const csvLinesStream = translationsStreams
@@ -43,9 +44,9 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
   );
 }
 
-function createTranslationsStream(entities, extractTagsFn, releaseContent, typeTag, extractTranslationsFn) {
+function createTranslationsStream(entities, extractMetadataFn, releaseContent, typeTag, extractTranslationsFn) {
   return Readable.from(entities)
-    .map(extractTagsFromObject(extractTagsFn, releaseContent, typeTag))
+    .map(extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag))
     .flatMap(extractTranslationsFromObject(extractTranslationsFn));
 }
 
@@ -57,33 +58,67 @@ function toTag(tagName) {
   return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '');
 }
 
-function extractTagsFromObject(extractTagsFn, releaseContent, typeTag) {
+function toDescription(localizedChallenges, challenge, baseUrl) {
+  const primaryLocalePreviewUrl = `Prévisualisation FR: ${baseUrl}/api/challenges/${challenge.id}/preview`;
+  const alternativeLocalePreviewUrls = localizedChallenges[challenge.id]
+    .filter(({ locale }) => locale !== 'fr')
+    .map(({ locale }) => {
+      return `Prévisualisation ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
+    });
+
+  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls].join(' ');
+}
+
+function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
   return (object) => {
-    const hierarchyTags = extractTagsFn(object, releaseContent).reverse();
-    const tags = hierarchyTags.map((_, index) => {
-      return hierarchyTags.slice(0,hierarchyTags.length - index).join('-');
+    const { tags: hierarchyTags, description } = extractMetadataFn(object, releaseContent);
+    const tags = hierarchyTags.reverse().map((_, index) => {
+      return hierarchyTags.slice(0, hierarchyTags.length - index).join('-');
     });
 
     return {
       tags: [typeTag, ...tags],
+      description,
       object,
     };
   };
 }
 
-function translationAndTagsToCSVLine({ translation: { key, value }, tags }) {
+function translationAndTagsToCSVLine({ translation: { key, value }, tags, description }) {
   return {
     key,
     fr: value,
     tags: tags.join(),
+    description,
   };
 }
 
 function extractTranslationsFromObject(extractFn) {
-  return ({ tags, object }) => {
+  return ({ description, tags, object }) => {
     return extractFn(object).map((translation) => {
-      return { tags, translation };
+      return { description, tags, translation };
     });
+  };
+}
+
+function extractMetadataFromChallenge(baseUrl, localizedChallenges, challenge, releaseContent) {
+  return {
+    tags: extractTagsFromChallenge(challenge, releaseContent),
+    description: toDescription(localizedChallenges, challenge, baseUrl),
+  };
+}
+
+function extractMetadataFromSkill(skill, releaseContent) {
+  return {
+    tags: extractTagsFromSkill(skill, releaseContent),
+    description: '',
+  };
+}
+
+function extractMetadataFromCompetence(competence, releaseContent) {
+  return {
+    tags: extractTagsFromCompetence(competence, releaseContent),
+    description: '',
   };
 }
 
