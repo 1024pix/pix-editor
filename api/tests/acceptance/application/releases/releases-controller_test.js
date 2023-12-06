@@ -45,6 +45,7 @@ async function mockCurrentContent() {
       name_i18n: {
         fr: 'Nom de la Compétence - fr',
         en: 'Nom de la Compétence - en',
+        nl: 'Nom de la Compétence - nl',
       },
       areaId: '1',
       origin: 'Pix',
@@ -53,6 +54,7 @@ async function mockCurrentContent() {
       description_i18n: {
         fr: 'Description de la compétence - fr',
         en: 'Description de la compétence - en',
+        nl: 'Nom de la Compétence - nl',
       }
     }],
     thematics: [{
@@ -90,6 +92,7 @@ async function mockCurrentContent() {
       hint_i18n: {
         fr: 'Indice - fr',
         en: 'Indice - en',
+        nl: 'Indice - nl',
       },
       hintStatus: 'Statut de l‘indice',
       tutorialIds: ['recTutorial0'],
@@ -180,36 +183,25 @@ async function mockCurrentContent() {
     challengeIds: 'recChallenge0',
   });
 
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].name_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].name_i18n.en,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].description_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].description_i18n.en,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'fr',
-    value: expectedCurrentContent.skills[0].hint_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'en',
-    value: expectedCurrentContent.skills[0].hint_i18n.en,
-  });
+  for (const locale of ['fr', 'en', 'nl']) {
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+      locale,
+      value: expectedCurrentContent.competences[0].name_i18n[locale],
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+      locale,
+      value: expectedCurrentContent.competences[0].description_i18n[locale],
+    });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
+      locale,
+      value: expectedCurrentContent.skills[0].hint_i18n[locale],
+    });
+  }
+
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr-fr',
@@ -276,10 +268,12 @@ async function mockContentForRelease() {
       name_i18n: {
         en: 'Nom de la Compétence - en',
         fr: 'Nom de la Compétence - fr',
+        nl: 'Nom de la Compétence - nl',
       },
       description_i18n: {
         en: 'Description de la compétence - en',
         fr: 'Description de la compétence - fr',
+        nl: 'Description de la compétence - nl',
       },
     }],
     thematics: [{
@@ -326,6 +320,7 @@ async function mockContentForRelease() {
       hint_i18n: {
         en: 'Indice - en',
         fr: 'Indice - fr',
+        nl: 'Indice - nl',
       },
     }],
     challenges: [{
@@ -409,36 +404,25 @@ async function mockContentForRelease() {
     imageUrl: 'Image du Course',
   });
 
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].name_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.name`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].name_i18n.en,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'fr',
-    value: expectedCurrentContent.competences[0].description_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `competence.${expectedCurrentContent.competences[0].id}.description`,
-    locale: 'en',
-    value: expectedCurrentContent.competences[0].description_i18n.en,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'fr',
-    value: expectedCurrentContent.skills[0].hint_i18n.fr,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
-    locale: 'en',
-    value: expectedCurrentContent.skills[0].hint_i18n.en,
-  });
+  for (const locale of ['fr', 'en', 'nl']) {
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.name`,
+      locale,
+      value: expectedCurrentContent.competences[0].name_i18n[locale],
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `competence.${expectedCurrentContent.competences[0].id}.description`,
+      locale,
+      value: expectedCurrentContent.competences[0].description_i18n[locale],
+    });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
+      locale,
+      value: expectedCurrentContent.skills[0].hint_i18n[locale],
+    });
+  }
+
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
     locale: 'fr-fr',
