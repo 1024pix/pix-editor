@@ -101,4 +101,8 @@ export class Challenge {
   get primaryLocale() {
     return this.locales[0];
   }
+
+  get alternativeLocales() {
+    return Object.keys(this.translations).filter((locale) => locale !== this.primaryLocale);
+  }
 }
