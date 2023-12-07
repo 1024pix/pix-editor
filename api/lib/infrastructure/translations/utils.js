@@ -53,12 +53,15 @@ function toDomain({ fields, locales }) {
   return (translations) => {
     return Object.fromEntries(fields.map(({ field }) => [
       `${field}_i18n`,
-      Object.fromEntries(locales.map(({ locale }) => [
-        locale,
-        translations.find(
-          (translation) => translation.key.endsWith(`.${field}`) && translation.locale === locale,
-        )?.value ?? null,
-      ]))
+      Object.fromEntries([
+        ...locales.map(({ locale }) => [locale, null]),
+        ...translations
+          .filter((translation) => translation.key.endsWith(`.${field}`))
+          .map((translation) => [
+            translation.locale,
+            translation.value
+          ]),
+      ]),
     ]));
   };
 }
@@ -92,7 +95,7 @@ export function buildTranslationsUtils({ locales, fields, prefix, idField }) {
     extractFromProxyObject: extractFromProxyObject({ localizedFields, prefixFor }),
     airtableObjectToProxyObject: airtableObjectToProxyObject({ localizedFields, prefixFor }),
     proxyObjectToAirtableObject: proxyObjectToAirtableObject({ localizedFields }),
-    toDomain: toDomain({ fields ,locales }),
+    toDomain: toDomain({ fields, locales }),
     extractFromReleaseObject: extractFromReleaseObject({ localizedFields, prefix }),
   };
 }

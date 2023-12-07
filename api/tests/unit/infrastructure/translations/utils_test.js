@@ -185,6 +185,8 @@ describe('Unit | Infrastructure | Entity translations', () => {
           locale: 'en',
           value: 'value2 en-us',
         },
+        { key: 'entity.test.attribute', locale: 'nl', value: 'value nl-be' },
+        { key: 'entity.test.attribute2', locale: 'nl', value: 'value2 nl-be' },
       ];
 
       // when
@@ -195,15 +197,17 @@ describe('Unit | Infrastructure | Entity translations', () => {
         attribute_i18n: {
           fr: 'value fr-fr',
           en: 'value en-us',
+          nl: 'value nl-be',
         },
         attribute2_i18n: {
           fr: 'value2 fr-fr',
           en: 'value2 en-us',
+          nl: 'value2 nl-be',
         },
       });
     });
 
-    it('should return null fields for missing translations', () => {
+    it('should return null fields for missing translations in given locales', () => {
       // given
       const translations = [
         { key: 'entity.test.attribute', locale: 'en', value: 'value en-us' },
