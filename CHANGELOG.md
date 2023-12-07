@@ -1,5 +1,17 @@
 
 
+## v3.111.1 (07/12/2023)
+
+
+### :building_construction: Tech
+- [#411](https://github.com/1024pix/pix-editor/pull/411) [TECH] Documenter le format des challenges et créer un parser de QCU/QCM.
+
+### :bug: Correction
+- [#416](https://github.com/1024pix/pix-editor/pull/416) [BUGFIX] Bouton "Copier le lien" copie une URL sans protocole ni host (PIX-10284).
+
+### :arrow_up: Montée de version
+- [#417](https://github.com/1024pix/pix-editor/pull/417) [BUMP] Update dependency googleapis to v129 (api).
+
 ## v3.111.0 (06/12/2023)
 
 
