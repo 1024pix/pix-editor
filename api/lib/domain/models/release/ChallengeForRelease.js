@@ -30,7 +30,6 @@ export class ChallengeForRelease {
     illustrationUrl,
     shuffled,
     alternativeVersion,
-    translations,
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -62,6 +61,5 @@ export class ChallengeForRelease {
     this.illustrationUrl = illustrationUrl;
     this.shuffled = shuffled;
     this.alternativeVersion = alternativeVersion;
-    this.translations = translations;
   }
 }
