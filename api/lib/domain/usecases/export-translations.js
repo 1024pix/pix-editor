@@ -38,7 +38,9 @@ export async function exportTranslations(stream, dependencies = { releaseReposit
     csv.format({ headers: true }),
     stream,
     (error) => {
-      logger.error({ error }, 'Error while exporting translations from release');
+      if (error) {
+        logger.error(error, 'Error while exporting translations from release');
+      }
     },
   );
 }
