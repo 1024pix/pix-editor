@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import FormData from 'form-data';
+import { parseString as parseCSVString } from 'fast-csv';
+import _ from 'lodash';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper';
 import { createServer } from '../../../server';
 
@@ -184,18 +186,65 @@ describe('Acceptance | Controller | translations-controller', () => {
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
-      const [headers, ...payload] = response.payload.split('\n');
-      payload.sort();
-      expect(headers).to.equal('key,fr,tags,description');
-      expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview Prévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview Prévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview Prévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview Prévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview Prévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl',
-        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
-        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
+
+      const [headers, ...data] = await new Promise((resolve, reject) => {
+        const stream = parseCSVString(response.payload);
+        const data = [];
+        stream.on('data', (chunk) => data.push(chunk));
+        stream.on('end', () => resolve(data));
+        stream.on('error', (error) => reject(error));
+      });
+
+      expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
+      expect(_.orderBy(data, '0')).to.deep.equal([
+        [
+          'challenge.recChallenge0.alternativeInstruction',
+          'Consigne alternative',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.instruction',
+          'Consigne du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.proposals',
+          'Propositions du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.solution',
+          'Bonnes réponses du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.solutionToDisplay',
+          'Bonnes réponses du Challenge à afficher',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'competence.recCompetence0.description',
+          'Description de la compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
+        [
+          'competence.recCompetence0.name',
+          'Nom de la Compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
+        [
+          'skill.recSkill0.hint',
+          'Indice - fr',
+          'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
       ]);
     });
 

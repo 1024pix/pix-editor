@@ -66,7 +66,7 @@ function toDescription(localizedChallenges, challenge, baseUrl) {
       return `Prévisualisation ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
 
-  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls].join(' ');
+  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls].join('\n');
 }
 
 function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
