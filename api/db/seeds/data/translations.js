@@ -19,13 +19,11 @@ export async function translationsBuilder(databaseBuilder) {
     throw err;
   }
 
-  const translations = airtableTranslations.map((translation) => {
-    return {
-      key: translation.get('key'),
-      locale: translation.get('locale'),
-      value: translation.get('value'),
-    };
-  });
+  const translations = airtableTranslations.map((translation) => ({
+    key: translation.get('key'),
+    locale: translation.get('locale'),
+    value: translation.get('value'),
+  }));
 
-  translations.forEach(databaseBuilder.factory.buildTranslation);
+  return translations.map(databaseBuilder.factory.buildTranslation);
 }
