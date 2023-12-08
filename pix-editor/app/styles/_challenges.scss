@@ -26,12 +26,17 @@
   flex-direction: row;
   overflow: hidden;
 
-  .ui.labeled.icon.menu .item {
-    text-align: left;
+  .ui.labeled.icon.menu {
+    overflow-y: auto;
 
-    > .icon:not(.dropdown) {
-      display: inline;
-      margin-right: 10px !important;
+    .item {
+      text-align: left;
+
+      > .icon:not(.dropdown) {
+        display: inline;
+        margin-right: 10px !important;
+        font-size: 1.2em !important;
+      }
     }
   }
 
