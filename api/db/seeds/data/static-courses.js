@@ -17,4 +17,4 @@ export function staticCoursesBuilder(databaseBuilder) {
     isActive: false,
     deactivationReason: 'Les épreuves sont trop faciles',
   });
-};
+}

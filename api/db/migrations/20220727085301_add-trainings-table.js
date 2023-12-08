@@ -16,11 +16,11 @@ export function up(knex) {
 
   return knex.schema
     .createTable(TABLE_NAME, table);
-};
+}
 
 export function down(knex) {
 
   return knex.schema
     .dropTable(TABLE_NAME);
-};
+}
 

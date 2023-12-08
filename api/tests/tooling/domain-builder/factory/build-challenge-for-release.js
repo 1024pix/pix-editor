@@ -31,7 +31,6 @@ export function buildChallengeForRelease({
   illustrationUrl = 'url illu',
   shuffled = false,
   alternativeVersion = 2,
-  translations,
 } = {}) {
 
   return new ChallengeForRelease({
@@ -65,6 +64,5 @@ export function buildChallengeForRelease({
     illustrationUrl,
     shuffled,
     alternativeVersion,
-    translations,
   });
 }

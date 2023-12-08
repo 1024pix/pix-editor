@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import FormData from 'form-data';
+import { parseString as parseCSVString } from 'fast-csv';
+import _ from 'lodash';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper';
 import { createServer } from '../../../server';
 
@@ -155,13 +157,27 @@ describe('Acceptance | Controller | translations-controller', () => {
         content: releaseContent
       });
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
       const getTranslationsOptions = {
         method: 'GET',
         url: '/api/translations.csv',
-        headers: generateAuthorizationHeader(user)
+        headers: {
+          ...generateAuthorizationHeader(user),
+          host: 'test.site',
+        },
       };
 
       // When
@@ -170,22 +186,69 @@ describe('Acceptance | Controller | translations-controller', () => {
       // Then
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
-      const [headers, ...payload] = response.payload.split('\n');
-      payload.sort();
-      expect(headers).to.equal('key,fr,tags');
-      expect(payload).to.deep.equal([
-        'challenge.recChallenge0.alternativeInstruction,Consigne alternative,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
-        'challenge.recChallenge0.instruction,Consigne du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
-        'challenge.recChallenge0.proposals,Propositions du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
-        'challenge.recChallenge0.solution,Bonnes réponses du Challenge,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
-        'challenge.recChallenge0.solutionToDisplay,Bonnes réponses du Challenge à afficher,"epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
-        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
-        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+
+      const [headers, ...data] = await new Promise((resolve, reject) => {
+        const stream = parseCSVString(response.payload);
+        const data = [];
+        stream.on('data', (chunk) => data.push(chunk));
+        stream.on('end', () => resolve(data));
+        stream.on('error', (error) => reject(error));
+      });
+
+      expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
+      expect(_.orderBy(data, '0')).to.deep.equal([
+        [
+          'challenge.recChallenge0.alternativeInstruction',
+          'Consigne alternative',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.instruction',
+          'Consigne du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.proposals',
+          'Propositions du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.solution',
+          'Bonnes réponses du Challenge',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'challenge.recChallenge0.solutionToDisplay',
+          'Bonnes réponses du Challenge à afficher',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+        ],
+        [
+          'competence.recCompetence0.description',
+          'Description de la compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
+        [
+          'competence.recCompetence0.name',
+          'Nom de la Compétence - fr',
+          'competence,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
+        [
+          'skill.recSkill0.hint',
+          'Indice - fr',
+          'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],
       ]);
     });
 
-    it('should still export csv file even when a challenge has no skill' , async () => {
+    it('should still export csv file even when a challenge has no skill', async () => {
       // Given
       const user = databaseBuilder.factory.buildAdminUser();
       const releaseContent = {
@@ -302,6 +365,12 @@ describe('Acceptance | Controller | translations-controller', () => {
         content: releaseContent
       });
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -319,16 +388,16 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
       const [headers, ...payload] = response.payload.split('\n');
       payload.sort();
-      expect(headers).to.equal('key,fr,tags');
+      expect(headers).to.equal('key,fr,tags,description');
       expect(payload).to.deep.equal([
-        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
-        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix"',
-        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix"',
+        'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
+        'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
+        'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
       ]);
     });
 
     describe('when an error occurs during streaming', () => {
-      it('should manage unexpected errors' , async () => {
+      it('should manage unexpected errors', async () => {
         // Given
         const user = databaseBuilder.factory.buildAdminUser();
         const releaseContent = {
@@ -404,7 +473,7 @@ describe('Acceptance | Controller | translations-controller', () => {
 
   describe('PATCH /translations.csv - import translations from a CSV file', () => {
 
-    afterEach(async() => {
+    afterEach(async () => {
       await knex('translations').delete();
     });
 
@@ -447,7 +516,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         .where({ key: 'challenge.challengeId.some-key' })
         .select('locale', 'value')
         .orderBy('locale'))
-        .resolves.to.deep.equal([{ locale: 'fr', value: 'La clé !' },{ locale: 'nl', value: 'plop' }]);
+        .resolves.to.deep.equal([{ locale: 'fr', value: 'La clé !' }, { locale: 'nl', value: 'plop' }]);
       await expect(knex('translations')
         .where({ key: 'challenge.challengeId.key' })
         .select('locale', 'value')

@@ -7,7 +7,7 @@ export function up(knex) {
     ADD CONSTRAINT "users_access_check"
     CHECK (access IN ('readpixonly', 'readonly', 'replicator', 'editor', 'admin'))
   `);
-};
+}
 
 export async function down(knex) {
   await knex(TABLE_NAME).update({
@@ -20,4 +20,4 @@ export async function down(knex) {
     ADD CONSTRAINT "users_access_check"
     CHECK (access IN ('readonly', 'replicator', 'editor', 'admin'))
   `);
-};
+}

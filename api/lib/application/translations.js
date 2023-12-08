@@ -4,6 +4,7 @@ import Boom from '@hapi/boom';
 import { exportTranslations } from '../domain/usecases/export-translations.js';
 import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
 import { logger } from '../infrastructure/logger.js';
+import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 
 export async function register(server) {
   server.route([
@@ -11,9 +12,11 @@ export async function register(server) {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
-        handler: function(_, h) {
+        handler: function(request, h) {
           const stream = new PassThrough();
-          exportTranslations(stream);
+          const url = new URL(request.url);
+          const baseUrl = `${url.protocol}//${url.host}`;
+          exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
           return h.response(stream).header('Content-type', 'text/csv');
         }
       },

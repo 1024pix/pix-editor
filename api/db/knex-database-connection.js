@@ -1,5 +1,5 @@
 import pg from 'pg';
-import Knex from 'knex'
+import Knex from 'knex';
 import _ from 'lodash';
 import * as knexConfigs from './knexfile.js';
 import { environment } from '../lib/config.js';
