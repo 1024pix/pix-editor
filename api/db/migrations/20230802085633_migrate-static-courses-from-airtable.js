@@ -37,11 +37,11 @@ export async function up(knex) {
   console.log('Copying them to PG...');
   await knex.batchInsert('static_courses', cleanedStaticCourses);
   console.log('DONE');
-};
+}
 
 /**
  * @returns { Promise<void> }
  */
 export function down() {
   console.log('No rollback possible, sorry!');
-};
+}

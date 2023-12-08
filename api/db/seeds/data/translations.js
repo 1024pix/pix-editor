@@ -28,4 +28,4 @@ export async function translationsBuilder(databaseBuilder) {
   });
 
   translations.forEach(databaseBuilder.factory.buildTranslation);
-};
+}

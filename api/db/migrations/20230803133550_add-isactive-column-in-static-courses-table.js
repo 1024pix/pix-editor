@@ -10,7 +10,7 @@ export async function up(knex) {
     table.boolean(IS_ACTIVE_COLUMN).notNullable().defaultTo(true);
   });
   return knex.raw('ALTER TABLE ?? ALTER COLUMN ?? DROP DEFAULT', [TABLE_NAME, IS_ACTIVE_COLUMN]);
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
@@ -20,4 +20,4 @@ export function down(knex) {
   return knex.schema.table(TABLE_NAME, function(table) {
     table.dropColumn(IS_ACTIVE_COLUMN);
   });
-};
+}
