@@ -44,8 +44,16 @@ function _translateChallenge(challenge, { locale, id }) {
     ...clearedLocalizedFields,
     ...challenge.translations[locale],
     id,
+    embedUrl: isPrimaryLocale ? challenge.embedUrl : _replaceLangParamsInUrl(locale, challenge.embedUrl),
     locales: isPrimaryLocale ? challenge.locales : [locale],
   };
+}
+
+function _replaceLangParamsInUrl(locale, embedUrl) {
+  if (!embedUrl) return undefined;
+  const url = new URL(embedUrl);
+  url.searchParams.set('lang', locale);
+  return url.href;
 }
 
 function _filterChallengesFields(challenges) {

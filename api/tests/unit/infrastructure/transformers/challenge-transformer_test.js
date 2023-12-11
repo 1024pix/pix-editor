@@ -29,6 +29,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         ];
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
+          embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
           translations: {
             fr: {
               instruction: 'Consigne',
@@ -52,6 +53,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'challenge-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
             locales: ['fr', 'fr-fr'],
             instruction: 'Consigne',
             alternativeInstruction: 'Consigne alternative',
@@ -60,6 +62,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'localized-challenge-en-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=en&mode=a#123456',
             locales: ['en'],
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',
@@ -80,6 +83,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         });
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
+          embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
           translations: {
             fr: {
               instruction: 'Consigne',
@@ -104,6 +108,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'nl-challenge-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=nl-be&mode=a#123456',
             locales: ['nl-be'],
             instruction: 'Volgorde',
             alternativeInstruction: 'Alternatieve instructie',
