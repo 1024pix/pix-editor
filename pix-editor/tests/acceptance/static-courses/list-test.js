@@ -14,6 +14,7 @@ module('Acceptance | Static Courses | List', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', isActive: true, challengeCount: 3, createdAt: new Date('2020-01-01') });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', isActive: false, challengeCount: 10, createdAt: new Date('2019-01-01') });
+    this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
     return authenticateSession();
   });
 

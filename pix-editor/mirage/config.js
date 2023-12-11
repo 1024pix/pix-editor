@@ -225,6 +225,31 @@ function routes() {
     return challenge;
   });
 
+  this.get('/missions', function (schema, request) {
+    const queryParams = request.queryParams;
+    const {
+      'filter[isActive]': isActiveFilter,
+    } = queryParams;
+    let allMissions;
+    if (isActiveFilter === 'true') {
+      allMissions = schema.missions.where({ status: 'ACTIVE' }).models;
+    } else {
+      allMissions = schema.missions.all().models;
+    }
+    const rowCount = allMissions.length;
+    const pagination = _getPaginationFromQueryParams(queryParams);
+    const paginatedMissions = _applyPagination(allMissions, pagination);
+
+    const json = this.serialize({ modelName: 'mission', models: paginatedMissions }, 'mission');
+    json.meta = {
+      page: pagination.page,
+      pageSize: pagination.pageSize,
+      rowCount,
+      pageCount: Math.ceil(rowCount / pagination.pageSize),
+    };
+    return json;
+  });
+
   this.get('/static-course-summaries', function(schema, request) {
     const queryParams = request.queryParams;
     const {

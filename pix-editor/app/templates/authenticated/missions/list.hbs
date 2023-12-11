@@ -1,0 +1,80 @@
+<header class="page-header">
+  <h1 class="page-title">Missions</h1>
+  <div class="page-actions">
+    <PixButtonLink
+      @backgroundColor="blue"
+      @route="authenticated.missions"
+      @isDisabled={{not this.model.mayCreateOrEditMissions}}
+      class="pix-button-link-with-icon white-font"
+    >
+      <FaIcon
+        @icon="plus"
+        @prefix="fas"></FaIcon>
+      Créer une nouvelle mission
+    </PixButtonLink>
+  </div>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <PixFilterBanner
+      @title="Filtres"
+      class="table-filter-banner"
+      @clearFiltersLabel="Réinitialiser les filtres"
+      @onClearFilters={{this.clearFilters}}
+      @isClearFilterButtonDisabled={{false}}
+    >
+      <PixToggle
+        @label="Statut"
+        @inline={{true}}
+        @onLabel="Actives"
+        @offLabel="Toutes"
+        @toggled={{this.showActiveMissions}}
+        @onChange={{this.toggleShowActiveMissions}}
+        @screenReaderOnly={{true}}
+      />
+    </PixFilterBanner>
+    <div class="panel-table-v2">
+      <table class="content-text content-text--small">
+        <colgroup class="table__column">
+          <col class="table__column--wide" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+          <col class="table__column--small" />
+        </colgroup>
+        <thead>
+        <tr>
+          <th>Nom de la mission</th>
+          <th>Compétences liées</th>
+          <th>Créé le</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#each this.model.missions as |mission|}}
+          <tr class="tr--clickable">
+            <td>
+              {{mission.name}}
+            </td>
+            <td>{{mission.competences}}</td>
+            <td>{{dayjs-format mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
+            <td>
+              <PixTag @color="{{if mission.isActive "green-light" "grey-light"}}">
+                {{if mission.isActive "Actif" "Inactif"}}
+              </PixTag>
+            </td>
+            <td class="actions">
+            </td>
+          </tr>
+        {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </section>
+  <div class="missions-list__pagination">
+    <PixPagination
+      @pagination={{this.model.missions.meta}}
+    />
+  </div>
+</main>
