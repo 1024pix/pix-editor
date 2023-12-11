@@ -1,5 +1,17 @@
 
 
+## v3.112.0 (11/12/2023)
+
+
+### :rocket: Amélioration
+- [#418](https://github.com/1024pix/pix-editor/pull/418) [FEATURE] Permettre l'affichage des bouton d'actions d'une épreuve (PIX-10288).
+- [#415](https://github.com/1024pix/pix-editor/pull/415) [FEATURE] Exporte le lien de prévisualisation dans l'outil de traduction.
+- [#414](https://github.com/1024pix/pix-editor/pull/414) [FEATURE] Ajouter le néerlandais des compétences/acquis dans la release (PIX-10240).
+
+### :arrow_up: Montée de version
+- [#420](https://github.com/1024pix/pix-editor/pull/420) [BUMP] Update dependency eslint to v8.55.0.
+- [#422](https://github.com/1024pix/pix-editor/pull/422) [BUMP] Lock file maintenance (api).
+
 ## v3.111.1 (07/12/2023)
 
 
