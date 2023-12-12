@@ -5,6 +5,10 @@ export default defineConfig({
     include: ['tests/**/*_test.js'],
     reporters: 'dot',
     restoreMocks: true,
-    singleThread: true,
+    poolOptions: {
+      threads: {
+        singleThread: true,
+      },
+    }
   },
 });
