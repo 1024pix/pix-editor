@@ -40,6 +40,7 @@ export class Challenge {
     delta,
     skillId,
     translations,
+    localizedChallenges,
   } = {}) {
     this.id = id;
     this.type = type;
@@ -87,6 +88,7 @@ export class Challenge {
     this.proposals = this.translations[this.locales[0]]?.proposals ?? '';
     this.solution = this.translations[this.locales[0]]?.solution ?? '';
     this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
+    this.localizedChallenges = localizedChallenges ?? [];
   }
 
   static defaultLocales(locales) {
@@ -103,6 +105,6 @@ export class Challenge {
   }
 
   get alternativeLocales() {
-    return Object.keys(this.translations).filter((locale) => locale !== this.primaryLocale);
+    return this.localizedChallenges.map(({ locale }) => locale).filter((locale) => locale !== this.primaryLocale);
   }
 }

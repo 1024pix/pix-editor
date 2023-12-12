@@ -47,8 +47,8 @@ export async function list() {
 
 export async function filter(params = {}) {
   const challengeDtos = await _getChallengesFromParams(params);
-  const translations = await loadTranslationsForChallenges(challengeDtos);
-  return toDomainList(challengeDtos, translations);
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos);
+  return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
 export async function create(challenge) {
@@ -98,25 +98,32 @@ export async function getAllIdsIn(challengeIds) {
   return challengeDatasource.getAllIdsIn(challengeIds);
 }
 
-async function loadTranslationsForChallenges(challengeDtos) {
+async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
+  if (challengeDtos.length === 0) return [[], []];
+
   return knex.transaction(async (transaction) => {
     const challengesTranslations = await Promise.all(challengeDtos.map(
       (challengeDto) => translationRepository.listByPrefix(prefixFor(challengeDto), { transaction })
     ));
-    return challengesTranslations.flat();
+    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds(challengeDtos.map(({ id }) => id));
+
+    return [challengesTranslations.flat(), localizedChallenges];
   }, { readOnly: true });
 }
 
-function toDomainList(challengeDtos, translations) {
+function toDomainList(challengeDtos, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
+  const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
 
   return challengeDtos.map((challengeDto) => {
     const challengeTranslations = translationsByChallengeId[challengeDto.id] ?? [];
-    return toDomain(challengeDto, challengeTranslations);
+    const localizedChallenges = localizedChallengesByChallengeId[challengeDto.id] ?? [];
+
+    return toDomain(challengeDto, challengeTranslations, localizedChallenges);
   });
 }
 
-function toDomain(challengeDto, challengeTranslations) {
+function toDomain(challengeDto, challengeTranslations, localizedChallenges = []) {
   const translationsByLocale = _.groupBy(challengeTranslations, 'locale');
   const translations = _.mapValues(translationsByLocale, (localeTranslations) => {
     return Object.fromEntries([
@@ -126,5 +133,6 @@ function toDomain(challengeDto, challengeTranslations) {
   return new Challenge({
     ...challengeDto,
     translations,
+    localizedChallenges,
   });
 }

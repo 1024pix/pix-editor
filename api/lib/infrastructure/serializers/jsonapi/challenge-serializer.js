@@ -45,6 +45,7 @@ const serializer = new Serializer('challenges', {
     'madeObsoleteAt',
     'shuffled',
     'contextualizedFields',
+    'localizedChallenges',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'files') return 'attachments';
@@ -58,6 +59,10 @@ const serializer = new Serializer('challenges', {
     ref(challenge, fileId) {
       return fileId;
     }
+  },
+  localizedChallenges: {
+    ref: 'id',
+    included: false,
   },
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
