@@ -200,6 +200,11 @@ function routes() {
     return schema.challenges.find(request.params.id);
   });
 
+  this.get('/localized-challenges/:id', (schema, request) => {
+    return schema.localizedChallenges.find(request.params.id);
+  });
+
+
   this.post('/challenges', (schema, request) => {
     const challenge = JSON.parse(request.requestBody);
     const skillId = challenge.data.relationships.skill.data.id;

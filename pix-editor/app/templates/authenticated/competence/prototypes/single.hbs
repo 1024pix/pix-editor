@@ -89,6 +89,12 @@
         Prévisualiser {{ locale }}
       </a>
     {{/each}}
+    {{#each this.challenge.localizedChallenges as |localizedChallenge| }}
+      <LinkTo @route="authenticated.competence.prototypes.localized" @model={{localizedChallenge}}>
+        <i class="globe icon"></i>
+        Voir version {{ localizedChallenge.locale }}
+      </LinkTo>
+    {{/each}}
     {{#if this.mayEdit}}
       <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>
@@ -112,7 +118,7 @@
       Copier le lien
     </button>
     {{#if this.mayAccessAlternatives}}
-      <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
+      <button class="ui button item alternatives" {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
       </button>

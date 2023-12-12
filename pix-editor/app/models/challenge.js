@@ -45,6 +45,7 @@ export default class ChallengeModel extends Model {
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
+  @hasMany('localized-challenge', { inverse: 'challenge' }) localizedChallenges;
 
   @service('store') myStore;
   @service config;
