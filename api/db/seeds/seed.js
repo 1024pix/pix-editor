@@ -33,11 +33,11 @@ export async function seed(knex) {
     apiKey: process.env.REVIEW_APP_READ_ONLY_USER_API_KEY || readOnlyUserApiKey,
   });
 
-  await localizedChallengesBuilder(databaseBuilder);
+  const translations = await translationsBuilder(databaseBuilder);
+
+  await localizedChallengesBuilder(databaseBuilder, translations);
 
   staticCoursesBuilder(databaseBuilder);
-
-  await translationsBuilder(databaseBuilder);
 
   return databaseBuilder.commit();
 }

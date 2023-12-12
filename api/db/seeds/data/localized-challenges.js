@@ -1,8 +1,9 @@
 import Airtable from 'airtable';
+import fp from 'lodash/fp.js';
+import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
+import { generateNewId } from '../../../lib/infrastructure/utils/id-generator.js';
 
-import { fetchLocalizedChallenges } from '../../../scripts/fill-localized-challenges/index.js';
-
-export async function localizedChallengesBuilder(databaseBuilder) {
+export async function localizedChallengesBuilder(databaseBuilder, translations) {
   const {
     AIRTABLE_API_KEY: airtableApiKey,
     AIRTABLE_BASE: airtableBase,
@@ -10,7 +11,34 @@ export async function localizedChallengesBuilder(databaseBuilder) {
 
   const airtableClient = new Airtable({ apiKey: airtableApiKey }).base(airtableBase);
 
-  const localizedChallenges = await fetchLocalizedChallenges({ airtableClient });
+  const challenges = await airtableClient
+    .table('Epreuves')
+    .select({
+      fields: [
+        'id persistant',
+        'Langues',
+      ],
+    })
+    .all();
+
+  const challengesLocales = fp.flow(
+    fp.filter(({ key }) => key.startsWith('challenge.')),
+    fp.groupBy(({ key }) => key.split('.')[1]),
+    fp.mapValues(fp.flow(fp.map('locale'), fp.uniq))
+  )(translations);
+
+  const localizedChallenges = challenges.flatMap((challenge) => {
+    const challengeId = challenge.get('id persistant');
+    const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
+    return [
+      { id: challengeId, challengeId,locale: primaryLocale },
+      ...challengesLocales[challengeId]
+        ?.filter((locale) => locale !== primaryLocale)
+        .map((locale) => ({
+          id: generateNewId('challenge'), challengeId, locale,
+        })) ?? [],
+    ];
+  });
 
   localizedChallenges.forEach(databaseBuilder.factory.buildLocalizedChallenge);
 }
