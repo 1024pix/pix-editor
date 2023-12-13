@@ -1,5 +1,17 @@
 
 
+## v3.113.0 (13/12/2023)
+
+
+### :rocket: Amélioration
+- [#424](https://github.com/1024pix/pix-editor/pull/424) [FEATURE] Adapte les URLs des simulateurs avec la locale de l'épreuve (PIX-10329).
+- [#419](https://github.com/1024pix/pix-editor/pull/419) [FEATURE] Seeds : Créer des épreuves virtuelles pour les épreuves ayant des traductions supplémentaires (PIX-10311).
+
+### :arrow_up: Montée de version
+- [#427](https://github.com/1024pix/pix-editor/pull/427) [BUMP] Update dependency p-map to v7 (api).
+- [#425](https://github.com/1024pix/pix-editor/pull/425) [BUMP] Update dependency vitest to v1 (api).
+- [#426](https://github.com/1024pix/pix-editor/pull/426) [BUMP] Update dependency vitest to v1 (challenge-parser).
+
 ## v3.112.0 (11/12/2023)
 
 
