@@ -38,11 +38,12 @@ export async function get(id) {
 }
 
 export async function list() {
-  const [challengeDtos, translations] = await Promise.all([
+  const [challengeDtos, translations, localizedChallenges] = await Promise.all([
     challengeDatasource.list(),
     translationRepository.listByPrefix(prefix),
+    localizedChallengeRepository.list(),
   ]);
-  return toDomainList(challengeDtos, translations);
+  return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
 export async function filter(params = {}) {
