@@ -7,7 +7,6 @@ export class Challenge {
     t3Status,
     status,
     skills,
-    embedUrl,
     embedTitle,
     embedHeight,
     timer,
@@ -49,7 +48,6 @@ export class Challenge {
     this.t3Status = t3Status;
     this.status = status;
     this.skills = skills;
-    this.embedUrl = embedUrl;
     this.embedTitle = embedTitle;
     this.embedHeight = embedHeight;
     this.timer = timer;
@@ -89,6 +87,17 @@ export class Challenge {
     this.solution = this.translations[this.locales[0]]?.solution ?? '';
     this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
     this.localizedChallenges = localizedChallenges ?? [];
+    this.embedUrl = localizedChallenges
+      ?.find(({ locale }) => Challenge.getPrimaryLocale(this.locales) === locale)
+      ?.embedUrl;
+  }
+
+  get primaryLocale() {
+    return this.locales[0];
+  }
+
+  get alternativeLocales() {
+    return this.localizedChallenges.map(({ locale }) => locale).filter((locale) => locale !== this.primaryLocale);
   }
 
   static defaultLocales(locales) {
@@ -98,13 +107,5 @@ export class Challenge {
 
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
-  }
-
-  get primaryLocale() {
-    return this.locales[0];
-  }
-
-  get alternativeLocales() {
-    return this.localizedChallenges.map(({ locale }) => locale).filter((locale) => locale !== this.primaryLocale);
   }
 }

@@ -55,6 +55,12 @@ export function buildChallenge({
       solutionToDisplay,
     },
   },
+  localizedChallenges = [{
+    id,
+    challengeId: id,
+    locale: Challenge.getPrimaryLocale(locales),
+    embedUrl,
+  }],
 } = {}, fieldsToOmit = []) {
   const data = {
     id,
@@ -64,7 +70,6 @@ export function buildChallenge({
     t3Status,
     status,
     skills,
-    embedUrl,
     embedTitle,
     embedHeight,
     timer,

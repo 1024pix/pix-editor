@@ -251,6 +251,22 @@ describe('Unit | Repository | challenge-repository', () => {
         id: challengeId,
         locales: [primaryLocale]
       });
+      const expectedChallenge = domainBuilder.buildChallenge({
+        ...challengeFromAirtable,
+        locales: [primaryLocale],
+        translations: {
+          [primaryLocale]: {
+            instruction: 'instruction fr',
+            proposals: 'proposals fr',
+          },
+          [locale]: {
+            instruction: 'instruction en',
+            proposals: 'proposals en',
+          },
+        },
+      });
+
+      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(expectedChallenge.localizedChallenges);
       vi.spyOn(challengeDatasource, 'filterById').mockResolvedValue(challengeFromAirtable);
       vi.spyOn(translationRepository, 'listByPrefix')
         .mockResolvedValueOnce([{
@@ -271,20 +287,7 @@ describe('Unit | Repository | challenge-repository', () => {
           locale
         }]);
 
-      const expectedChallenge = domainBuilder.buildChallenge({
-        ...challengeFromAirtable,
-        locales: [primaryLocale],
-        translations: {
-          [primaryLocale]: {
-            instruction: 'instruction fr',
-            proposals: 'proposals fr',
-          },
-          [locale]: {
-            instruction: 'instruction en',
-            proposals: 'proposals en',
-          },
-        }
-      });
+
 
       // when
       const result = await get(challengeId);

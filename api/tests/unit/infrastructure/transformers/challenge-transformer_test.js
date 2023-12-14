@@ -15,10 +15,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'challenge-id',
             challengeId: 'challenge-id',
             locale: 'fr',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
           }),
           new LocalizedChallenge({
             id: 'localized-challenge-en-id',
             challengeId: 'challenge-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a#123456',
             locale: 'en',
           }),
           new LocalizedChallenge({
@@ -29,7 +31,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         ];
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
-          embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
           translations: {
             fr: {
               instruction: 'Consigne',
@@ -41,6 +42,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
               alternativeInstruction: 'Alternative english instructions',
             },
           },
+          localizedChallenges,
           locales: ['fr', 'fr-fr'],
         });
 
@@ -62,7 +64,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'localized-challenge-en-id',
-            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=en&mode=a#123456',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en#123456',
             locales: ['en'],
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',
@@ -76,31 +78,38 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       it('should transform and translate challenge', () => {
         // given
         const attachments = [];
-        const localizedChallenge = new LocalizedChallenge({
+        const localizedChallengeFr = new LocalizedChallenge({
+          id: 'fr-challenge-id',
+          challengeId: 'challenge-id',
+          locale: 'fr-fr',
+        });
+        const localizedChallengeNl = new LocalizedChallenge({
           id: 'nl-challenge-id',
           challengeId: 'challenge-id',
           locale: 'nl-be',
+          embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=nl-be&mode=a#123456',
         });
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
           embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
           translations: {
             fr: {
-              instruction: 'Consigne',
-              alternativeInstruction: 'Consigne alternative',
-              proposals: 'Propositions',
+              instruction: 'Consigne fr',
+              alternativeInstruction: 'Consigne alternative fr',
+              proposals: 'Propositions fr',
             },
             'nl-be': {
-              instruction: 'Volgorde',
-              alternativeInstruction: 'Alternatieve instructie',
-              proposals: 'Voorstellen',
+              instruction: 'Volgorde nl',
+              alternativeInstruction: 'Alternatieve instructie nl',
+              proposals: 'Voorstellen nl',
             },
           },
+          localizedChallenges: [localizedChallengeFr, localizedChallengeNl],
           locales: ['fr', 'fr-fr'],
         });
 
         // when
-        const transform = createChallengeTransformer({ attachments, localizedChallenge });
+        const transform = createChallengeTransformer({ attachments, localizedChallenge: localizedChallengeNl });
         const result = transform(challenge);
 
         // then
@@ -110,9 +119,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'nl-challenge-id',
             embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=nl-be&mode=a#123456',
             locales: ['nl-be'],
-            instruction: 'Volgorde',
-            alternativeInstruction: 'Alternatieve instructie',
-            proposals: 'Voorstellen',
+            instruction: 'Volgorde nl',
+            alternativeInstruction: 'Alternatieve instructie nl',
+            proposals: 'Voorstellen nl',
           }),
         );
       });
@@ -146,7 +155,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
     });
 
     describe('when there are attachments', () => {
-      it ('should add these on the challenge', () => {
+      it('should add these on the challenge', () => {
         // given
         const attachments = [
           { url: 'https://dl.example.com/attachment1.xlsx', challengeId: 'challenge-id' },
@@ -183,7 +192,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
     });
 
     describe('when there is an illustration attachments', () => {
-      it ('should add it on the challenge', () => {
+      it('should add it on the challenge', () => {
         // given
         const attachments = [
           {

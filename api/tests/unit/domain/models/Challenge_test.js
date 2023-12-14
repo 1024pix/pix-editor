@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { Challenge } from '../../../../lib/domain/models/Challenge';
+import { Challenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Challenge', () => {
 
@@ -113,6 +113,37 @@ describe('Unit | Domain | Challenge', () => {
         // then
         expect.soft(actual).toBe(expected);
       }
+    });
+  });
+
+  describe('#embedUrl', () => {
+    it('should return embedUrl from localized challenge', () => {
+      // given
+      const localizedChallenges = [{
+        id: '1',
+        challengeId: '1',
+        locale: 'fr',
+        embedUrl: 'mon.site.fr'
+      }, {
+        id: '2',
+        challengeId: '1',
+        locale: 'nl',
+        embedUrl: 'mon.site.nl'
+      }];
+
+      const challenge = new Challenge({
+        locales: ['fr'],
+        translations: {
+          fr: {},
+        },
+        localizedChallenges
+      });
+
+      // when
+      const embedUrl = challenge.embedUrl;
+
+      // then
+      expect(embedUrl).toBe('mon.site.fr');
     });
   });
 });

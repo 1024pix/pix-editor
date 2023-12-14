@@ -32,9 +32,11 @@ export async function get(id) {
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
 
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeDto.id]);
+
   const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
 
-  return toDomain(challengeDto, translations);
+  return toDomain(challengeDto, translations, localizedChallenges);
 }
 
 export async function list() {
