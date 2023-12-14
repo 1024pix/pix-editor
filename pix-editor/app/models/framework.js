@@ -8,6 +8,6 @@ export default class FrameworkModel extends Model {
   get sortedAreas() {
     return this.areas
       .toArray()
-      .sort((areaA, areaB) => parseInt(areaA.code) > parseInt(areaB.code));
+      .sort((areaA, areaB) => parseInt(areaA.code) - parseInt(areaB.code));
   }
 }
