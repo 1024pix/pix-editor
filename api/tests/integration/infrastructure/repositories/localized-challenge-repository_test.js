@@ -304,4 +304,35 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
     });
   });
+
+  context('#update', () => {
+    it('should change localized challenge locale', async () => {
+      // given
+      const id = 'localizedChallengeId';
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id,
+        challengeId: 'challengeId',
+        locale: 'bz',
+      });
+      await databaseBuilder.commit();
+
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id,
+        challengeId: 'differentChallengeId should not be updated',
+        locale: 'ar',
+      });
+
+      // when
+      await localizedChallengeRepository.update({ localizedChallenge });
+
+      // then
+      await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
+        {
+          id,
+          challengeId: 'challengeId',
+          locale: 'ar',
+        },
+      ]);
+    });
+  });
 });
