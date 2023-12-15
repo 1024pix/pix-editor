@@ -1151,37 +1151,44 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should update a challenge', async () => {
       // Given
+      const challengeId = 'recChallengeId';
+      const locale = 'fr';
       const challenge = {
-        ...domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId', locales: ['fr'] }),
+        ...domainBuilder.buildChallengeDatasourceObject({ id: challengeId, locales: [locale] }),
         instruction: 'consigne',
         alternativeInstruction: 'consigne alternative',
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
       };
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale,
+      });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.instruction',
-        locale: 'fr',
+        key: `challenge.${challengeId}.instruction`,
+        locale,
         value: 'Ancienne valeur de l\'instruction',
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.alternativeInstruction',
-        locale: 'fr',
+        key: `challenge.${challengeId}.alternativeInstruction`,
+        locale,
         value: challenge.alternativeInstruction,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.solution',
-        locale: 'fr',
+        key: `challenge.${challengeId}.solution`,
+        locale,
         value: challenge.solution,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.solutionToDisplay',
-        locale: 'fr',
+        key: `challenge.${challengeId}.solutionToDisplay`,
+        locale,
         value: challenge.solutionToDisplay,
       });
       databaseBuilder.factory.buildTranslation({
-        key: 'challenge.recChallengeId.proposals',
-        locale: 'fr',
+        key: `challenge.${challengeId}.proposals`,
+        locale,
         value: challenge.proposals,
       });
       await databaseBuilder.commit();
@@ -1331,6 +1338,233 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         },
       });
+      await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
+        {
+          key: 'challenge.recChallengeId.alternativeInstruction',
+          locale: 'fr',
+          value: challenge.alternativeInstruction,
+        },
+        {
+          key: 'challenge.recChallengeId.instruction',
+          locale: 'fr',
+          value: challenge.instruction,
+        },
+        {
+          key: 'challenge.recChallengeId.proposals',
+          locale: 'fr',
+          value: challenge.proposals,
+        },
+        {
+          key: 'challenge.recChallengeId.solution',
+          locale: 'fr',
+          value: challenge.solution,
+        },
+        {
+          key: 'challenge.recChallengeId.solutionToDisplay',
+          locale: 'fr',
+          value: challenge.solutionToDisplay,
+        },
+      ]);
+    });
+
+    it.fails('should change challenge\'s primary locale', async () => {
+      // Given
+      const challengeId = 'recChallengeId';
+      const originalLocale = 'fr-fr';
+      const newLocales = ['fr', 'fr-fr'];
+
+      const challenge = {
+        ...domainBuilder.buildChallengeDatasourceObject({ id: challengeId, locales: newLocales }),
+        instruction: 'consigne',
+        alternativeInstruction: 'consigne alternative',
+        solution: 'solution',
+        solutionToDisplay: 'solution à afficher',
+        proposals: 'propositions',
+      };
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: originalLocale,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.instruction`,
+        locale: originalLocale,
+        value: 'Ancienne valeur de l\'instruction',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.alternativeInstruction`,
+        locale: originalLocale,
+        value: challenge.alternativeInstruction,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solution`,
+        locale: originalLocale,
+        value: challenge.solution,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.solutionToDisplay`,
+        locale: originalLocale,
+        value: challenge.solutionToDisplay,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.proposals`,
+        locale: originalLocale,
+        value: challenge.proposals,
+      });
+      await databaseBuilder.commit();
+
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+      const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge);
+      const expectedBody = { records: [expectedBodyChallenge] };
+
+      const airtableCall = nock('https://api.airtable.com')
+        .patch('/v0/airtableBaseValue/Epreuves/?', expectedBody)
+        .reply(
+          200,
+          { records: [airtableChallenge] }
+        );
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: `/api/challenges/${challenge.id}`,
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'challenges',
+            id: challenge.id,
+            attributes: {
+              'airtable-id': challenge.airtableId,
+              instruction: challenge.instruction,
+              'alternative-instruction': challenge.alternativeInstruction,
+              type: challenge.type,
+              format: challenge.format,
+              proposals: challenge.proposals,
+              solution: challenge.solution,
+              'solution-to-display': challenge.solutionToDisplay,
+              't1-status': challenge.t1Status,
+              't2-status': challenge.t2Status,
+              't3-status': challenge.t3Status,
+              pedagogy: challenge.pedagogy,
+              author: challenge.author,
+              declinable: challenge.declinable,
+              version: challenge.version,
+              genealogy: challenge.genealogy,
+              status: challenge.status,
+              preview: challenge.preview,
+              timer: challenge.timer,
+              'embed-url': challenge.embedUrl,
+              'embed-title': challenge.embedTitle,
+              'embed-height': challenge.embedHeight,
+              'alternative-version': challenge.alternativeVersion,
+              accessibility1: challenge.accessibility1,
+              accessibility2: challenge.accessibility2,
+              spoil: challenge.spoil,
+              responsive: challenge.responsive,
+              locales: challenge.locales,
+              area: challenge.area,
+              'auto-reply': challenge.autoReply,
+              focusable: challenge.focusable,
+              'updated-at': '2021-10-04',
+              'validated-at': '2023-02-02T14:17:30.820Z',
+              'archived-at': '2023-03-03T10:47:05.555Z',
+              'made-obsolete-at': '2023-04-04T10:47:05.555Z',
+              shuffled: false,
+              'contextualized-fields': ['instruction', 'illustration'],
+            },
+            relationships: {
+              skill: {
+                data: {
+                  type: 'skills',
+                  id: challenge.skills[0],
+                }
+              },
+              files: {
+                data: challenge.files.map((file) => {
+                  return {
+                    type: 'attachments',
+                    id: file,
+                  };
+                }),
+              },
+            },
+          },
+        },
+      });
+
+      // Then
+      expect(airtableCall.isDone()).to.be.true;
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal({
+        data: {
+          type: 'challenges',
+          id: 'recChallengeId',
+          attributes: {
+            'airtable-id': challenge.airtableId,
+            instruction: 'consigne',
+            'alternative-instruction': 'consigne alternative',
+            type: 'QCM',
+            format: 'mots',
+            proposals: 'propositions',
+            solution: 'solution',
+            'solution-to-display': 'solution à afficher',
+            't1-status': true,
+            't2-status': false,
+            't3-status': true,
+            pedagogy: 'q-situation',
+            author: ['SPS'],
+            declinable: 'facilement',
+            version: 1,
+            genealogy: 'Prototype 1',
+            status: 'validé',
+            preview: '/api/challenges/recChallengeId/preview',
+            timer: 1234,
+            'embed-url': 'https://github.io/page/epreuve.html',
+            'embed-title': 'Epreuve de selection de dossier',
+            'embed-height': 500,
+            'alternative-version': 2,
+            accessibility1: 'OK',
+            accessibility2: 'RAS',
+            spoil: 'Non Sp',
+            responsive: 'non',
+            'alternative-locales': [],
+            locales: ['fr', 'fr-fr'],
+            area: 'France',
+            'auto-reply': false,
+            focusable: false,
+            'updated-at': '2021-10-04',
+            'validated-at': '2023-02-02T14:17:30.820Z',
+            'archived-at': '2023-03-03T10:47:05.555Z',
+            'made-obsolete-at': '2023-04-04T10:47:05.555Z',
+            shuffled: false,
+            'contextualized-fields': ['instruction', 'illustration'],
+          },
+          relationships: {
+            skill: {
+              data: {
+                id: 'recordId generated by Airtable',
+                type: 'skills',
+              }
+            },
+            files: {
+              data: [
+                {
+                  id: 'attachment recordId generated by Airtable',
+                  type: 'attachments',
+                }
+              ]
+            },
+          },
+        },
+      });
+      await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
+        {
+          id: challengeId,
+          challengeId,
+          locale: 'fr',
+        },
+      ]);
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
