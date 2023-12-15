@@ -1367,7 +1367,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
 
-    it.fails('should change challenge\'s primary locale', async () => {
+    it('should change challenge\'s primary locale', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const originalLocale = 'fr-fr';

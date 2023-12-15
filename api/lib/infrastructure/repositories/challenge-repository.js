@@ -66,13 +66,27 @@ export async function create(challenge) {
 export async function update(challenge) {
   return knex.transaction(async (transaction) => {
     const updatedChallengeDto = await challengeDatasource.update(challenge);
+
+    const primaryLocalizedChallenge = await localizedChallengeRepository.get({ id: challenge.id, transaction });
+
+    const oldPrimaryLocale = primaryLocalizedChallenge.locale;
+
+    if (oldPrimaryLocale !== challenge.primaryLocale) {
+      primaryLocalizedChallenge.locale = challenge.primaryLocale;
+      await localizedChallengeRepository.update({
+        localizedChallenge: primaryLocalizedChallenge,
+        transaction,
+      });
+    }
+
     const translations = extractTranslationsFromChallenge(challenge);
     await translationRepository.deleteByKeyPrefixAndLocales({
       prefix: prefixFor(challenge),
-      locales: [challenge.primaryLocale],
+      locales: [oldPrimaryLocale],
       transaction,
     });
     await translationRepository.save({ translations, transaction });
+
     return toDomain(updatedChallengeDto, translations);
   });
 }
