@@ -68,8 +68,8 @@ function _toDomain(dto) {
   return new Translation(dto);
 }
 
-export async function deleteByKeyPrefixAndLocales(prefix, locales) {
-  await knex('translations')
+export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction: knexConnection = knex }) {
+  await knexConnection('translations')
     .delete()
     .whereLike('key', `${prefix}%`)
     .whereIn('locale', locales);

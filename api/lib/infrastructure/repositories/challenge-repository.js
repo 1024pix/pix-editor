@@ -66,7 +66,10 @@ export async function create(challenge) {
 export async function update(challenge) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.deleteByKeyPrefixAndLocales(prefixFor(challenge), [challenge.primaryLocale]);
+  await translationRepository.deleteByKeyPrefixAndLocales({
+    prefix: prefixFor(challenge), locales:
+    [challenge.primaryLocale],
+  });
   await translationRepository.save(translations);
   return toDomain(updatedChallengeDto, translations);
 }

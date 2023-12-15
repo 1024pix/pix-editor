@@ -85,7 +85,7 @@ describe('Integration | Repository | translation-repository', function() {
       const locales = ['fr', 'en'];
 
       // when
-      await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
+      await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
 
       // then
       expect(await knex('translations').select()).to.deep.equal([
@@ -161,7 +161,7 @@ describe('Integration | Repository | translation-repository', function() {
         const locales = ['fr', 'en'];
 
         // when
-        await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
+        await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
 
         expect(nock.isDone()).toBe(true);
       });
