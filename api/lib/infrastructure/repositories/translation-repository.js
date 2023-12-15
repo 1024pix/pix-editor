@@ -6,10 +6,10 @@ import _ from 'lodash';
 let _shouldDuplicateToAirtable;
 let _shouldDuplicateToAirtablePromise;
 
-export async function save(translations) {
+export async function save({ translations, transaction: knexConnection = knex }) {
   if (translations.length === 0) return [];
 
-  await knex('translations')
+  await knexConnection('translations')
     .insert(translations)
     .onConflict(['key', 'locale'])
     .merge();

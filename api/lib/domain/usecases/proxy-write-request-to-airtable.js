@@ -29,7 +29,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
 
     translations = tableTranslations.extractFromProxyObject(requestFields);
 
-    await translationRepository.save(translations);
+    await translationRepository.save({ translations });
   }
 
   if (tableTranslations.readFromPgEnabled) {

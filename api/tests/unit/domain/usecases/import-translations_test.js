@@ -31,11 +31,13 @@ describe('Unit | Domain | Usecases | import-translations', function() {
     await promise;
 
     expect(translationRepository.save).toHaveBeenCalledOnce();
-    expect(translationRepository.save).toHaveBeenCalledWith([new Translation({
-      key: 'some.key',
-      locale: 'nl',
-      value: 'Hallo'
-    })]);
+    expect(translationRepository.save).toHaveBeenCalledWith({
+      translations: [new Translation({
+        key: 'some.key',
+        locale: 'nl',
+        value: 'Hallo'
+      })],
+    });
   });
 
   it('should return an error when the CSV doesn\'t have key_name as first column', async () => {
@@ -70,23 +72,25 @@ describe('Unit | Domain | Usecases | import-translations', function() {
     await promise;
 
     expect(translationRepository.save).toHaveBeenCalledOnce();
-    expect(translationRepository.save).toHaveBeenCalledWith([
-      new Translation({
-        key: 'challenge.id.key',
-        locale: 'nl',
-        value: 'Hallo'
-      }),
-      new Translation({
-        key: 'challenge.id.key2',
-        locale: 'nl',
-        value: 'Hallo2'
-      }),
-      new Translation({
-        key: 'challenge.id2.key',
-        locale: 'nl',
-        value: 'Hallo3'
-      })
-    ]);
+    expect(translationRepository.save).toHaveBeenCalledWith({
+      translations: [
+        new Translation({
+          key: 'challenge.id.key',
+          locale: 'nl',
+          value: 'Hallo'
+        }),
+        new Translation({
+          key: 'challenge.id.key2',
+          locale: 'nl',
+          value: 'Hallo2'
+        }),
+        new Translation({
+          key: 'challenge.id2.key',
+          locale: 'nl',
+          value: 'Hallo3'
+        })
+      ],
+    });
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
     expect(localizedChallengeRepository.create).toHaveBeenCalledWith([
       new LocalizedChallenge({

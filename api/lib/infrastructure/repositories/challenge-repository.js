@@ -54,7 +54,7 @@ export async function filter(params = {}) {
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.save(translations);
+  await translationRepository.save({ translations });
   await localizedChallengeRepository.create([{
     id: challenge.id,
     challengeId: challenge.id,
@@ -70,7 +70,7 @@ export async function update(challenge) {
     prefix: prefixFor(challenge), locales:
     [challenge.primaryLocale],
   });
-  await translationRepository.save(translations);
+  await translationRepository.save({ translations });
   return toDomain(updatedChallengeDto, translations);
 }
 
