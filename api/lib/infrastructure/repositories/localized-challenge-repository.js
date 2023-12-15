@@ -38,6 +38,14 @@ export async function listByChallengeIds(challengeIds) {
   return dtos.map(_toDomain);
 }
 
+export async function get({ id, transaction: knexConnection = knex }) {
+  const dto = await knexConnection('localized_challenges').select().where('id', id).first();
+
+  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
+
+  return _toDomain(dto);
+}
+
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
 }

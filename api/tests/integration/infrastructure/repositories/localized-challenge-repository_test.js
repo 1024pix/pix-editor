@@ -268,4 +268,40 @@ describe('Integration | Repository | localized-challenge-repository', function()
       ]);
     });
   });
+
+  context('#get', () => {
+    it('should return localized challenge by id', async () => {
+      // given
+      const id = 'localizedChallengeId';
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id,
+        challengeId: 'challengeId',
+        locale: 'bz',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const localizedChallenge = await localizedChallengeRepository.get({ id });
+
+      // then
+      expect(localizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
+        id,
+        challengeId: 'challengeId',
+        locale: 'bz',
+      }));
+    });
+
+    context('when id does not exist', () => {
+      it('should throw a NotFoundError', async () => {
+        // given
+        const id = 'unknownLocalizedChallengeId';
+
+        // when
+        const promise = localizedChallengeRepository.get({ id });
+
+        // then
+        await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve ou langue introuvable'));
+      });
+    });
+  });
 });
