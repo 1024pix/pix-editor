@@ -58,7 +58,8 @@ export async function create(challenge) {
   await localizedChallengeRepository.create([{
     id: challenge.id,
     challengeId: challenge.id,
-    locale: challenge.primaryLocale
+    locale: challenge.primaryLocale,
+    embedUrl: challenge.embedUrl,
   }]);
   return toDomain(createdChallengeDto, translations);
 }
