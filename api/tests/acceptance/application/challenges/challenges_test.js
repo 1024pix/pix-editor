@@ -1165,6 +1165,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
+        embedUrl: 'old_url',
         locale,
       });
       databaseBuilder.factory.buildTranslation({
@@ -1339,6 +1340,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         },
       });
+      const localizedChallenge =  await knex('localized_challenges').select('embedUrl').where('id', challengeId).pluck('embedUrl');
+      expect(localizedChallenge).to.deep.equal([challenge.embedUrl]);
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -1563,6 +1566,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         {
           id: challengeId,
           challengeId,
+          embedUrl: challenge.embedUrl,
           locale: 'fr',
         },
       ]);
