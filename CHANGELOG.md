@@ -1,5 +1,15 @@
 
 
+## v3.114.0 (18/12/2023)
+
+
+### :bug: Correction
+- [#431](https://github.com/1024pix/pix-editor/pull/431) [BUGFIX] Changement de la locale principale de l'épreuve (PIX-10424).
+- [#428](https://github.com/1024pix/pix-editor/pull/428) [BUGFIX] Ordre des domaines dans le panneau de navigation (PIX-10264).
+
+### :arrow_up: Montée de version
+- [#429](https://github.com/1024pix/pix-editor/pull/429) [BUMP] Update dependency p-queue to v8 (pix-editor).
+
 ## v3.113.0 (13/12/2023)
 
 
