@@ -7,7 +7,7 @@ import { disconnect } from '../../db/knex-database-connection.js';
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 export async function fillLocalizedChallenges({ airtableClient }) {
-  const localizedChallenges = await fetchLocalizedChallenges({ airtableClient })
+  const localizedChallenges = await fetchLocalizedChallenges({ airtableClient });
   await localizedChallengeRepository.create(localizedChallenges);
 }
 
@@ -42,6 +42,7 @@ async function main() {
     }).base(process.env.AIRTABLE_BASE);
 
     await fillLocalizedChallenges({ airtableClient });
+    console.log('Embed url of localized challenge filled !');
   } catch (e) {
     console.error(e);
     process.exitCode = 1;
