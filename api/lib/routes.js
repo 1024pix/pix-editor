@@ -3,6 +3,7 @@ import * as challengesRoute from './application/challenges/index.js';
 import * as configRoute from './application/config.js';
 import * as fileStorageTokenRoute from './application/file-storage-token/index.js';
 import * as healthcheckRoute from './application/healthcheck/index.js';
+import * as missionsRoute from './application/missions/index.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
@@ -16,6 +17,7 @@ export const routes = [
   configRoute,
   fileStorageTokenRoute,
   healthcheckRoute,
+  missionsRoute,
   releasesRoute,
   replicationDataRoute,
   staticCoursesRoute,
