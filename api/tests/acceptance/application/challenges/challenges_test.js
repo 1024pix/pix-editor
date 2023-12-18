@@ -915,6 +915,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: 'challengeId',
           challengeId: 'challengeId',
           locale: 'fr',
+          embedUrl: null,
         }
       ]);
       const translations = await knex('translations').select().orderBy('key');

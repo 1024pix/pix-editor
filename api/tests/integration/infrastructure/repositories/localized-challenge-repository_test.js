@@ -11,7 +11,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
         challengeId: 'challengeId',
-        locale: 'fr-fr'
+        locale: 'fr-fr',
+        embedUrl: 'https://site.com/embed.html',
       });
       await databaseBuilder.commit();
 
@@ -23,6 +24,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'challengeNewid',
         challengeId: 'challengeId',
         locale: 'fr-fr',
+        embedUrl: 'https://site.com/embed.html',
       }]);
     });
   });
@@ -38,6 +40,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'localizedChallengeId',
         challengeId: 'challengeId',
         locale: 'locale',
+        embedUrl: 'https://site.com/embed.html',
       }]);
 
       // then
@@ -47,6 +50,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'localizedChallengeId',
         challengeId: 'challengeId',
         locale: 'locale',
+        embedUrl: 'https://site.com/embed.html',
       }]);
     });
 
@@ -68,6 +72,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         await localizedChallengeRepository.create([{
           challengeId: 'challengeId',
           locale: 'locale',
+          embedUrl: 'https://site.com/embed.html',
         }], () => 'generated-id');
 
         // then
@@ -77,6 +82,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id: 'generated-id',
           challengeId: 'challengeId',
           locale: 'locale',
+          embedUrl: 'https://site.com/embed.html',
         }]);
       });
 
@@ -131,6 +137,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id: 'id',
           challengeId: 'challengeId',
           locale: 'en',
+          embedUrl: null,
         });
       });
     });
@@ -167,6 +174,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'localizedChallengeIdNl',
         challengeId,
         locale,
+        embedUrl: null,
       }));
     });
 
@@ -244,26 +252,31 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id: `${challengeId1}En`,
           challengeId: challengeId1,
           locale: 'en',
+          embedUrl: null,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: challengeId1,
           challengeId: challengeId1,
           locale: 'fr-fr',
+          embedUrl: null,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId1}Nl`,
           challengeId: challengeId1,
           locale: 'nl',
+          embedUrl: null,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId2}En`,
           challengeId: challengeId2,
           locale: 'en',
+          embedUrl: null,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: challengeId2,
           challengeId: challengeId2,
           locale: 'fr-fr',
+          embedUrl: null,
         }),
       ]);
     });
