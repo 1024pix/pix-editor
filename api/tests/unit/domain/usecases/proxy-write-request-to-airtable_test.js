@@ -104,7 +104,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
         expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestFields);
 
         expect(translationRepository.save).toHaveBeenCalledOnce();
-        expect(translationRepository.save).toHaveBeenCalledWith(translations);
+        expect(translationRepository.save).toHaveBeenCalledWith({ translations });
       });
 
       describe('when updating an existing entity', () => {
@@ -133,10 +133,10 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
           expect(tableTranslations.prefixFor).toHaveBeenCalledWith(responseFields);
 
           expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledOnce();
-          expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith('entity.id', ['fr', 'fr-fr', 'en']);
+          expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith({ prefix:'entity.id', locales: ['fr', 'fr-fr', 'en'] });
 
           expect(translationRepository.save).toHaveBeenCalledOnce();
-          expect(translationRepository.save).toHaveBeenCalledWith(translations);
+          expect(translationRepository.save).toHaveBeenCalledWith({ translations });
         });
       });
 

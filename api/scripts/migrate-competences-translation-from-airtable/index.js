@@ -25,7 +25,7 @@ export async function migrateCompetencesTranslationFromAirtable({ airtableClient
     competenceTranslations.extractFromProxyObject(competence.fields)
   );
 
-  await translationRepository.save(translations);
+  await translationRepository.save({ translations });
 }
 
 async function main() {

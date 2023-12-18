@@ -23,7 +23,7 @@ export async function migrateSkillsTranslationFromAirtable({ airtableClient }) {
     skillTranslations.extractFromProxyObject(skill.fields)
   );
 
-  await translationRepository.save(translations);
+  await translationRepository.save({ translations });
 }
 
 async function main() {

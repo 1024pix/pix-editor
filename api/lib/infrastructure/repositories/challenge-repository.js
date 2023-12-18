@@ -54,7 +54,7 @@ export async function filter(params = {}) {
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.save(translations);
+  await translationRepository.save({ translations });
   await localizedChallengeRepository.create([{
     id: challenge.id,
     challengeId: challenge.id,
@@ -64,11 +64,31 @@ export async function create(challenge) {
 }
 
 export async function update(challenge) {
-  const updatedChallengeDto = await challengeDatasource.update(challenge);
-  const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.deleteByKeyPrefixAndLocales(prefixFor(challenge), [challenge.primaryLocale]);
-  await translationRepository.save(translations);
-  return toDomain(updatedChallengeDto, translations);
+  return knex.transaction(async (transaction) => {
+    const updatedChallengeDto = await challengeDatasource.update(challenge);
+
+    const primaryLocalizedChallenge = await localizedChallengeRepository.get({ id: challenge.id, transaction });
+
+    const oldPrimaryLocale = primaryLocalizedChallenge.locale;
+
+    if (oldPrimaryLocale !== challenge.primaryLocale) {
+      primaryLocalizedChallenge.locale = challenge.primaryLocale;
+      await localizedChallengeRepository.update({
+        localizedChallenge: primaryLocalizedChallenge,
+        transaction,
+      });
+    }
+
+    const translations = extractTranslationsFromChallenge(challenge);
+    await translationRepository.deleteByKeyPrefixAndLocales({
+      prefix: prefixFor(challenge),
+      locales: [oldPrimaryLocale],
+      transaction,
+    });
+    await translationRepository.save({ translations, transaction });
+
+    return toDomain(updatedChallengeDto, translations);
+  });
 }
 
 export async function getAllIdsIn(challengeIds) {

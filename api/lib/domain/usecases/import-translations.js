@@ -38,7 +38,7 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         const challengesLocales = extractChallengesLocales(translations);
         await dependencies.localizedChallengeRepository.create(challengesLocales);
 
-        await dependencies.translationRepository.save(translations);
+        await dependencies.translationRepository.save({ translations });
 
         resolve();
       });

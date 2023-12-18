@@ -38,7 +38,7 @@ export async function migrateChallengesTranslationFromAirtable({ airtableClient 
   });
 
   for (const translationsChunk of _.chunk(translations, 5000)) {
-    await translationRepository.save(translationsChunk);
+    await translationRepository.save({ translations: translationsChunk });
   }
 }
 

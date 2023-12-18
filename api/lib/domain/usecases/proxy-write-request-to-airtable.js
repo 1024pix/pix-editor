@@ -21,12 +21,15 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   let translations;
   if (tableTranslations.writeToPgEnabled) {
     if (request.method === 'patch') {
-      await translationRepository.deleteByKeyPrefixAndLocales(tableTranslations.prefixFor(response.data.fields), ['fr', 'fr-fr', 'en']);
+      await translationRepository.deleteByKeyPrefixAndLocales({
+        prefix: tableTranslations.prefixFor(response.data.fields),
+        locales: ['fr', 'fr-fr', 'en'],
+      });
     }
 
     translations = tableTranslations.extractFromProxyObject(requestFields);
 
-    await translationRepository.save(translations);
+    await translationRepository.save({ translations });
   }
 
   if (tableTranslations.readFromPgEnabled) {

@@ -16,6 +16,35 @@ describe('Integration | Repository | translation-repository', function() {
 
   context('#save', function() {
 
+    it('should create or update translations', async () => {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity.id.key1',
+        locale: 'fr',
+        value: 'key1 fr'
+      });
+      await databaseBuilder.commit();
+
+      const translations = [
+        {
+          key: 'entity.id.key1',
+          locale: 'fr',
+          value: 'key1 fr'
+        },
+        {
+          key: 'entity.id.key2',
+          locale: 'fr',
+          value: 'key2 fr'
+        }
+      ];
+
+      // when
+      await translationRepository.save({ translations });
+
+      // then
+      await expect(knex('translations').select().orderBy('key')).resolves.to.deep.equal(translations);
+    });
+
     context('when Airtable has a translations table', () => {
       beforeEach(async function() {
         await _setShouldDuplicateToAirtable(true);
@@ -49,14 +78,10 @@ describe('Integration | Repository | translation-repository', function() {
           .reply(200, { records: [] });
 
         // when
-        await save([{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }]);
+        await save({ translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }] });
 
         // then
         expect(nock.isDone()).to.be.true;
-      });
-
-      afterEach(async function() {
-        await _setShouldDuplicateToAirtable(false);
       });
     });
   });
@@ -85,7 +110,7 @@ describe('Integration | Repository | translation-repository', function() {
       const locales = ['fr', 'en'];
 
       // when
-      await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
+      await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
 
       // then
       expect(await knex('translations').select()).to.deep.equal([
@@ -161,7 +186,7 @@ describe('Integration | Repository | translation-repository', function() {
         const locales = ['fr', 'en'];
 
         // when
-        await translationRepository.deleteByKeyPrefixAndLocales(prefixToDelete, locales);
+        await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
 
         expect(nock.isDone()).toBe(true);
       });
