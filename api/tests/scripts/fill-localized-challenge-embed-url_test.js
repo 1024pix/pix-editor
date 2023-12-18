@@ -1,4 +1,4 @@
-import { beforeEach, afterEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import Airtable from 'airtable';
 import nock from 'nock';
 import { knex, databaseBuilder } from '../test-helper.js';
@@ -8,12 +8,6 @@ describe('Fill `embedUrl` localized challenges from airtable', function() {
   let airtableClient;
 
   beforeEach(() => {
-    nock('https://api.airtable.com')
-      .get(/^\/v0\/airtableBaseValue\/translations\?.*/)
-      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
-      .optionally()
-      .reply(404);
-
     airtableClient = new Airtable({
       apiKey: 'airtableApiKeyValue',
     }).base('airtableBaseValue');
@@ -52,7 +46,8 @@ describe('Fill `embedUrl` localized challenges from airtable', function() {
             'id persistant',
             'Embed URL',
           ]
-        }
+        },
+        filterByFormula: 'NOT({Embed URL} = \'\')'
       })
       .reply(200, { records: [challenge1] });
 

@@ -23,12 +23,16 @@ export async function fetchLocalizedChallenges({ airtableClient }) {
         'id persistant',
         'Embed URL',
       ],
+      filterByFormula: 'NOT({Embed URL} = \'\')',
     })
     .all();
 
   return allChallenges.map((challenge) => {
     const idPersistant = challenge.get('id persistant');
     const embedUrl = challenge.get('Embed URL');
+    if (!embedUrl) {
+      console.error(`Embed URL is empty ! (challenge id ${idPersistant})`);
+    }
     return {
       id: idPersistant,
       embedUrl,

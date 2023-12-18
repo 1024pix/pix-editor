@@ -327,7 +327,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
       databaseBuilder.factory.buildLocalizedChallenge({
         id,
         challengeId: 'challengeId',
-        embedUrl: "my-url.html",
+        embedUrl: 'my-url.html',
         locale: 'bz',
       });
       await databaseBuilder.commit();
