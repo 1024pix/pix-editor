@@ -1,5 +1,5 @@
 import { databaseBuffer } from '../database-buffer.js';
-import { MissionSummary } from '../../../../lib/domain/readmodels/MissionSummary.js';
+import { Mission } from '../../../../lib/domain/models/Mission.js';
 import { buildTranslation } from './build-translation.js';
 
 export function buildMission({
@@ -9,7 +9,7 @@ export function buildMission({
   learningObjectives = 'Que tu sois le meilleur',
   thematicId = 'thematicId',
   validatedObjectives = 'Rien',
-  status = MissionSummary.status.INACTIVE,
+  status = Mission.status.INACTIVE,
   createdAt = new Date('2010-01-04'),
 } = {}) {
 

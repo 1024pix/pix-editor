@@ -2,6 +2,7 @@ import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-b
 import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { translationsBuilder } from './data/translations.js';
+import { buildMissions } from './data/missions.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
@@ -38,6 +39,8 @@ export async function seed(knex) {
   await localizedChallengesBuilder(databaseBuilder, translations);
 
   staticCoursesBuilder(databaseBuilder);
+
+  buildMissions(databaseBuilder);
 
   return databaseBuilder.commit();
 }
