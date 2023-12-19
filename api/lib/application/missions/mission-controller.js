@@ -13,7 +13,7 @@ const DEFAULT_PAGE = {
 export async function findMissions(request, h) {
   const { filter, page } = extractParameters(request.query);
   const { missions, meta } = await findAllMissions({ filter: normalizeFilter(filter), page: normalizePage(page) });
-  return h.response(missionSerializer.serializeMission(missions, meta));
+  return h.response(missionSerializer.serializeMissionSummary(missions, meta));
 }
 
 function normalizePage(page) {

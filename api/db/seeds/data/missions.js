@@ -4,9 +4,9 @@ export function buildMissions(databaseBuilder) {
   databaseBuilder.factory.buildMission({
     id : 1,
     name : 'Mission test active',
-    competenceId : 'competence2LLOcPlzpjR0UD',
+    competenceId : 'competence1NC9NE3IIOa0ym',
     learningObjectives : 'Que tu sois le meilleur',
-    thematicId : 'recExjO7RHeDI48HK',
+    thematicId : 'recOO8OsMJpe5cZzi',
     validatedObjectives : '- Ca\n Et puis ça',
     status : Mission.status.ACTIVE,
     createdAt : new Date('2023-12-17'),
@@ -15,9 +15,9 @@ export function buildMissions(databaseBuilder) {
   databaseBuilder.factory.buildMission({
     id : 2,
     name : 'Mission test inactive',
-    competenceId : 'competence19Y5Op9XTwCRhc',
+    competenceId : 'competence2k2eVZ2GRLwqFL',
     learningObjectives : 'Y\'en a plus',
-    thematicId : 'recZtwymXXrtdXRrx',
+    thematicId : 'rec98EBX88mkQR3gx',
     validatedObjectives : '- Ca aussi\n Et puis ça aussi',
     status : Mission.status.INACTIVE,
     createdAt : new Date('2023-12-18'),

@@ -3,6 +3,7 @@ import { hFake } from '../../../test-helper.js';
 import * as missionsController from '../../../../lib/application/missions/mission-controller.js';
 import * as usecases from '../../../../lib/domain/usecases/find-all-missions.js';
 import { Mission } from '../../../../lib/domain/models/Mission.js';
+import {MissionSummary} from "../../../../lib/domain/readmodels/index.js";
 
 describe('Unit | Controller | missions controller', function() {
   describe('findMissions', function() {
@@ -13,12 +14,10 @@ describe('Unit | Controller | missions controller', function() {
       findAllMissions.mockResolvedValue(
         {
           missions: [
-            new Mission({
+            new MissionSummary({
               id: 1,
-              name_i18n: { fr: 'Ma première mission' },
-              competenceId: 'competenceId',
-              learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-              validatedObjectives_i18n: { fr: 'Rien' },
+              name: 'Ma première mission',
+              competence: '1.1 Ma compétence',
               status: Mission.status.ACTIVE,
               createdAt: new Date('2010-01-04'),
             })],
@@ -46,13 +45,11 @@ describe('Unit | Controller | missions controller', function() {
       // then
       expect(result.source.data).to.deep.equal([
         {
-          type: 'missions',
+          type: 'mission-summaries',
           id: '1',
           attributes: {
             name: 'Ma première mission',
-            'thematic-id': undefined,
-            'learning-objectives': 'Que tu sois le meilleur',
-            'validated-objectives': 'Rien',
+            competence: '1.1 Ma compétence',
             'created-at': new Date('2010-01-04'),
             status: 'ACTIVE'
           }
