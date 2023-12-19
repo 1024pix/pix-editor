@@ -293,7 +293,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '1',
         challengeId: '1',
-        locale: 'fr'
+        locale: 'fr',
+        embedUrl: 'http://example.com/my_embed.html',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
@@ -346,7 +347,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               status: 'validé',
               preview: '/api/challenges/1/preview',
               timer: 1234,
-              'embed-url': 'https://github.io/page/epreuve.html',
+              'embed-url': 'http://example.com/my_embed.html',
               'embed-title': 'Epreuve de selection de dossier',
               'embed-height': 500,
               'alternative-version': 2,
@@ -406,7 +407,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               status: 'validé',
               preview: '/api/challenges/2/preview',
               timer: 1234,
-              'embed-url': 'https://github.io/page/epreuve.html',
+              'embed-url': null,
               'embed-title': 'Epreuve de selection de dossier',
               'embed-height': 500,
               'alternative-version': 2,
@@ -533,6 +534,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: 'recChallengeId1',
         challengeId: 'recChallengeId1',
         locale: 'fr',
+        embedUrl: 'https://github.io/page/epreuve.html',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',

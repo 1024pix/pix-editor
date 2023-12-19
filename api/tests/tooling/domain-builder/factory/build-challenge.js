@@ -102,6 +102,7 @@ export function buildChallenge({
     skillId,
     alpha,
     delta,
+    localizedChallenges,
   };
   return new Challenge(_.omit(data, fieldsToOmit));
 }
