@@ -63,7 +63,7 @@ describe('Fill localized challenges from airtable', function() {
     await fillLocalizedChallenges({ airtableClient });
 
     // then
-    const localizedChallenges = await knex('localized_challenges').select().orderBy([{
+    const localizedChallenges = await knex('localized_challenges').select('id', 'challengeId', 'locale').orderBy([{
       column: 'id',
       order: 'asc'
     }, { column: 'locale', order: 'asc' }]);

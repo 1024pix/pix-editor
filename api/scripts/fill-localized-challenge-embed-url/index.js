@@ -1,14 +1,18 @@
 import { localizedChallengeRepository } from '../../lib/infrastructure/repositories/index.js';
-import { convertLanguagesToLocales } from '../../lib/domain/services/convert-locales.js';
 import { fileURLToPath } from 'node:url';
 import Airtable from 'airtable';
-import { disconnect } from '../../db/knex-database-connection.js';
+import { knex, disconnect } from '../../db/knex-database-connection.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
-export async function fillLocalizedChallenges({ airtableClient }) {
-  const localizedChallenges = await fetchLocalizedChallenges({ airtableClient });
-  await localizedChallengeRepository.create(localizedChallenges);
+
+export function fillLocalizedChallengesEmbedUrl({ airtableClient }) {
+  return knex.transaction(async (transaction) => {
+    const localizedChallenges = await fetchLocalizedChallenges({ airtableClient });
+    for (const localizedChallenge of localizedChallenges) {
+      await localizedChallengeRepository.update({ localizedChallenge, transaction });
+    }
+  });
 }
 
 export async function fetchLocalizedChallenges({ airtableClient }) {
@@ -17,18 +21,21 @@ export async function fetchLocalizedChallenges({ airtableClient }) {
     .select({
       fields: [
         'id persistant',
-        'Langues',
+        'Embed URL',
       ],
+      filterByFormula: 'NOT({Embed URL} = \'\')',
     })
     .all();
 
   return allChallenges.map((challenge) => {
-    const locale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const idPersistant = challenge.get('id persistant');
+    const embedUrl = challenge.get('Embed URL');
+    if (!embedUrl) {
+      console.error(`Embed URL is empty ! (challenge id ${idPersistant})`);
+    }
     return {
       id: idPersistant,
-      challengeId: idPersistant,
-      locale,
+      embedUrl,
     };
   });
 }
@@ -41,8 +48,7 @@ async function main() {
       apiKey: process.env.AIRTABLE_API_KEY,
     }).base(process.env.AIRTABLE_BASE);
 
-    await fillLocalizedChallenges({ airtableClient });
-    console.log('Embed url of localized challenge filled !');
+    await fillLocalizedChallengesEmbedUrl({ airtableClient });
   } catch (e) {
     console.error(e);
     process.exitCode = 1;

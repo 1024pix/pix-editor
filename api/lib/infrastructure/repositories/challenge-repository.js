@@ -58,7 +58,8 @@ export async function create(challenge) {
   await localizedChallengeRepository.create([{
     id: challenge.id,
     challengeId: challenge.id,
-    locale: challenge.primaryLocale
+    locale: challenge.primaryLocale,
+    embedUrl: challenge.embedUrl,
   }]);
   return toDomain(createdChallengeDto, translations);
 }
@@ -70,14 +71,16 @@ export async function update(challenge) {
     const primaryLocalizedChallenge = await localizedChallengeRepository.get({ id: challenge.id, transaction });
 
     const oldPrimaryLocale = primaryLocalizedChallenge.locale;
-
     if (oldPrimaryLocale !== challenge.primaryLocale) {
       primaryLocalizedChallenge.locale = challenge.primaryLocale;
-      await localizedChallengeRepository.update({
-        localizedChallenge: primaryLocalizedChallenge,
-        transaction,
-      });
     }
+
+    primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
+
+    await localizedChallengeRepository.update({
+      localizedChallenge: primaryLocalizedChallenge,
+      transaction,
+    });
 
     const translations = extractTranslationsFromChallenge(challenge);
     await translationRepository.deleteByKeyPrefixAndLocales({

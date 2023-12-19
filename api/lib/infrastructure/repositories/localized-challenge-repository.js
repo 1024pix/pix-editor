@@ -46,8 +46,8 @@ export async function get({ id, transaction: knexConnection = knex }) {
   return _toDomain(dto);
 }
 
-export async function update({ localizedChallenge: { id, locale }, transaction: knexConnection = knex }) {
-  await knexConnection('localized_challenges').where('id', id).update({ locale });
+export async function update({ localizedChallenge: { id, locale, embedUrl }, transaction: knexConnection = knex }) {
+  await knexConnection('localized_challenges').where('id', id).update({ locale, embedUrl });
 }
 
 function _toDomain(dto) {
