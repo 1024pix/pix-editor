@@ -19,6 +19,7 @@ const {
 } = airtableBuilder.factory;
 
 async function mockCurrentContent() {
+  const challenge = domainBuilder.buildChallenge();
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaDatasourceObject()],
@@ -34,7 +35,7 @@ async function mockCurrentContent() {
     })],
     tubes: [domainBuilder.buildTubeDatasourceObject()],
     skills: [domainBuilder.buildSkill()],
-    challenges: [domainBuilder.buildChallenge()],
+    challenges: [challenge],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematicDatasourceObject()],
     courses: [{
@@ -72,6 +73,12 @@ async function mockCurrentContent() {
     challengeIds: 'recChallenge0',
   });
 
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: challenge.id,
+    challengeId: challenge.id,
+    locale: 'fr',
+    embedUrl: challenge.embedUrl,
+  });
   databaseBuilder.factory.buildTranslation({
     key: `competence.${expectedCurrentContent.competences[0].id}.name`,
     locale: 'fr',

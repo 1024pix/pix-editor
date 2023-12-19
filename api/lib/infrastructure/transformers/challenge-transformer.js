@@ -44,7 +44,7 @@ function _translateChallenge(challenge, localizedChallenge) {
     ...clearedLocalizedFields,
     ...challenge.translations[localizedChallenge.locale],
     id: localizedChallenge.id,
-    embedUrl: isPrimaryLocale ? localizedChallenge.embedUrl : _replaceLangParamsInUrl(localizedChallenge.locale, localizedChallenge.embedUrl),
+    embedUrl: localizedChallenge.embedUrl ?? _replaceLangParamsInUrl(localizedChallenge.locale, challenge.embedUrl),
     locales: isPrimaryLocale ? challenge.locales : [localizedChallenge.locale],
   };
 }

@@ -287,8 +287,6 @@ describe('Unit | Repository | challenge-repository', () => {
           locale
         }]);
 
-
-
       // when
       const result = await get(challengeId);
 

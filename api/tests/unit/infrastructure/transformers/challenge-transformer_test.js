@@ -15,12 +15,12 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'challenge-id',
             challengeId: 'challenge-id',
             locale: 'fr',
-            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=fr#123456',
           }),
           new LocalizedChallenge({
             id: 'localized-challenge-en-id',
             challengeId: 'challenge-id',
-            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a#123456',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
             locale: 'en',
           }),
           new LocalizedChallenge({
@@ -55,7 +55,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'challenge-id',
-            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=fr#123456',
             locales: ['fr', 'fr-fr'],
             instruction: 'Consigne',
             alternativeInstruction: 'Consigne alternative',
@@ -64,7 +64,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           _buildReleaseChallenge({
             ...challenge,
             id: 'localized-challenge-en-id',
-            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en#123456',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
             locales: ['en'],
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',

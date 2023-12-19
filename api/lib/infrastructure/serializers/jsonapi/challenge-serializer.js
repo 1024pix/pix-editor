@@ -106,7 +106,7 @@ export function deserialize(challengeBody) {
         challengeId: challengeObject.id,
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
-      }]
+      }];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
   });

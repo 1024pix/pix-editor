@@ -56,15 +56,19 @@ export async function filter(params = {}) {
 
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
-  const translations = extractTranslationsFromChallenge(challenge);
-  await translationRepository.save({ translations });
-  await localizedChallengeRepository.create([{
+
+  const primaryLocalizedChallenge = {
     id: challenge.id,
     challengeId: challenge.id,
     locale: challenge.primaryLocale,
     embedUrl: challenge.embedUrl,
-  }]);
-  return toDomain(createdChallengeDto, translations);
+  };
+  await localizedChallengeRepository.create([primaryLocalizedChallenge]);
+
+  const translations = extractTranslationsFromChallenge(challenge);
+  await translationRepository.save({ translations });
+
+  return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
 }
 
 export async function update(challenge) {
@@ -93,7 +97,7 @@ export async function update(challenge) {
     });
     await translationRepository.save({ translations, transaction });
 
-    return toDomain(updatedChallengeDto, translations);
+    return toDomain(updatedChallengeDto, translations, [primaryLocalizedChallenge]);
   });
 }
 
