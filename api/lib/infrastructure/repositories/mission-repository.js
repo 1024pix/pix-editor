@@ -5,7 +5,23 @@ import * as translationRepository from './translation-repository.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
 
-function toDomain(mission, translations) {
+export async function findAllMissions({ filter, page }) {
+  const query = knex('missions')
+    .select('*')
+    .orderBy('createdAt', 'desc');
+  if (filter.isActive) {
+    query.where('status', Mission.status.ACTIVE);
+  }
+  const { results, pagination } = await fetchPage(query, page);
+  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+
+  return {
+    missions: _toDomainList(results, translations),
+    meta: pagination
+  };
+}
+
+function _toDomain(mission, translations) {
   return new Mission({
     id: mission.id,
     createdAt: mission.createdAt,
@@ -15,18 +31,7 @@ function toDomain(mission, translations) {
   });
 }
 
-export async function findAllMissions({ filter, page }) {
-  const query = knex('missions')
-    .select('*')
-    .orderBy('createdAt', 'desc');
-  if (filter.isActive) {
-    query.where('status', Mission.status.ACTIVE);
-  }
-  const { results, pagination } = await fetchPage(query, page);
-
-  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+function _toDomainList(missions, translations) {
   const translationsByMissionId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
-
-  const missions = results.map((mission) => toDomain(mission, translationsByMissionId[mission.id]));
-  return { missions, meta: pagination };
+  return missions.map((mission) => _toDomain(mission, translationsByMissionId[mission.id]));
 }

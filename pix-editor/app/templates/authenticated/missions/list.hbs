@@ -36,8 +36,8 @@
     <div class="panel-table-v2">
       <table class="content-text content-text--small">
         <colgroup class="table__column">
-          <col class="table__column--wide" />
           <col class="table__column--small" />
+          <col class="table__column--wide" />
           <col class="table__column--small" />
           <col class="table__column--small" />
           <col class="table__column--small" />
@@ -45,7 +45,7 @@
         <thead>
         <tr>
           <th>Nom de la mission</th>
-          <th>Compétences liées</th>
+          <th>Compétence liée</th>
           <th>Créé le</th>
           <th>Statut</th>
           <th>Actions</th>
@@ -57,7 +57,7 @@
             <td>
               {{mission.name}}
             </td>
-            <td>{{mission.competences}}</td>
+            <td>{{mission.competence}}</td>
             <td>{{dayjs-format mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
             <td>
               <PixTag @color="{{if mission.isActive "green-light" "grey-light"}}">

@@ -17,7 +17,7 @@ export default class MissionsRoute extends Route {
   @service store;
   @service access;
   async model(params) {
-    const missions = await this.store.query('mission', {
+    const missions = await this.store.query('mission-summary', {
       page: {
         number: params.pageNumber,
         size: params.pageSize,

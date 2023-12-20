@@ -3,7 +3,7 @@ import { hFake } from '../../../test-helper.js';
 import * as missionsController from '../../../../lib/application/missions/mission-controller.js';
 import * as usecases from '../../../../lib/domain/usecases/find-all-missions.js';
 import { Mission } from '../../../../lib/domain/models/Mission.js';
-import {MissionSummary} from "../../../../lib/domain/readmodels/index.js";
+import { MissionSummary } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Unit | Controller | missions controller', function() {
   describe('findMissions', function() {

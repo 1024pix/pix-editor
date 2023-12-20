@@ -1,6 +1,6 @@
 import Model, { attr } from '@ember-data/model';
 
-export default class Mission extends Model {
+export default class MissionSummary extends Model {
   @attr name;
   @attr competence;
   @attr createdAt;

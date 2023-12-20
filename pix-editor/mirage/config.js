@@ -230,17 +230,17 @@ function routes() {
     const {
       'filter[isActive]': isActiveFilter,
     } = queryParams;
-    let allMissions;
+    let allmissionSummaries;
     if (isActiveFilter === 'true') {
-      allMissions = schema.missions.where({ status: 'ACTIVE' }).models;
+      allmissionSummaries = schema.missionSummaries.where({ status: 'ACTIVE' }).models;
     } else {
-      allMissions = schema.missions.all().models;
+      allmissionSummaries = schema.missionSummaries.all().models;
     }
-    const rowCount = allMissions.length;
+    const rowCount = allmissionSummaries.length;
     const pagination = _getPaginationFromQueryParams(queryParams);
-    const paginatedMissions = _applyPagination(allMissions, pagination);
+    const paginatedMissions = _applyPagination(allmissionSummaries, pagination);
 
-    const json = this.serialize({ modelName: 'mission', models: paginatedMissions }, 'mission');
+    const json = this.serialize({ modelName: 'mission-summary', models: paginatedMissions }, 'mission-summary');
     json.meta = {
       page: pagination.page,
       pageSize: pagination.pageSize,

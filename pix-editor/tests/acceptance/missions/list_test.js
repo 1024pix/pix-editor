@@ -14,8 +14,8 @@ module('Acceptance | Missions | List', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
     this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D' });
-    this.server.create('mission', { name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
-    this.server.create('mission', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
+    this.server.create('mission-summary', { name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
+    this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
 
     return authenticateSession();
   });

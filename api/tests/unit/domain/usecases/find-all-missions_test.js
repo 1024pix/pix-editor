@@ -29,6 +29,7 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     });
     const mission2 = domainBuilder.buildMission({
       id: 4,
+      name: 'Alt name',
       competenceId: 'recCompetence2',
     });
 
@@ -48,10 +49,13 @@ describe('Unit | Domain | Usecases | find all missions', function() {
 
     // then
     const missionSummary1 = domainBuilder.buildMissionSummary({
-      ...mission1, competence: '1.1 Nom compétence 1'
+      id: 3,
+      competence: '1.1 Nom compétence 1'
     });
     const missionSummary2 = domainBuilder.buildMissionSummary({
-      ...mission2, competence: '2.2 Nom compétence 2'
+      id: 4,
+      name: 'Alt name',
+      competence: '2.2 Nom compétence 2'
     });
 
     expect(result).toEqual({ missions: [missionSummary1, missionSummary2], meta });
