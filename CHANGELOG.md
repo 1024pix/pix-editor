@@ -1,5 +1,15 @@
 
 
+## v3.115.0 (20/12/2023)
+
+
+### :rocket: Amélioration
+- [#432](https://github.com/1024pix/pix-editor/pull/432) [FEATURE] Ecrire et mettre à jour l'embed-url dans localized_challenge (PIX-10435).
+
+### :arrow_up: Montée de version
+- [#434](https://github.com/1024pix/pix-editor/pull/434) [BUMP] Update dependency @playwright/test to v1.40.1.
+- [#430](https://github.com/1024pix/pix-editor/pull/430) [BUMP] Update dependency stylelint to v16 (pix-editor).
+
 ## v3.114.0 (18/12/2023)
 
 
