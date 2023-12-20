@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
+import { LOCALE_TO_LANGUAGE_MAP, TUTORIAL_LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -53,7 +53,7 @@ export const pixApp = {
   baseUrl: process.env.PIX_APP_BASEURL
 };
 
-export let pixEditor = {
+export const pixEditor = {
   airtableUrl: process.env.AIRTABLE_URL,
   airtableBase: process.env.AIRTABLE_BASE,
   tableChallenges: process.env.TABLE_CHALLENGES,
@@ -62,6 +62,7 @@ export let pixEditor = {
   storagePost: process.env.STORAGE_POST,
   storageBucket: process.env.STORAGE_BUCKET,
   localeToLanguageMap: LOCALE_TO_LANGUAGE_MAP,
+  tutorialLocaleToLanguageMap: TUTORIAL_LOCALE_TO_LANGUAGE_MAP,
 };
 
 export let storage = {
@@ -126,15 +127,6 @@ if (process.env.NODE_ENV === 'test') {
   };
 
   pixApp.baseUrl = 'https://app.test.pix.fr';
-
-  pixEditor = {
-    airtableUrl: 'airtableUrlValue',
-    tableChallenges: 'tableChallengesValue',
-    tableSkills: 'tableSkillsValue',
-    tableTubes: 'tableTubesValue',
-    storagePost: 'storagePostValue',
-    storageBucket: 'storageBucketValue',
-  };
 
   storage = {
     authUrl: 'https://storage.auth.example.net/api/auth',

@@ -1,6 +1,7 @@
-import { beforeEach, describe, describe as context, expect, it } from 'vitest';
+import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import * as config from '../../../../lib/config.js';
 
 describe('Acceptance | Controller | config', () => {
 
@@ -30,6 +31,17 @@ describe('Acceptance | Controller | config', () => {
 
       it('should return config', async () => {
         // Given
+        vi.spyOn(config, 'pixEditor', 'get').mockReturnValue({
+          'airtableUrl': 'airtableUrlValue',
+          'tableChallenges': 'tableChallengesValue',
+          'tableSkills': 'tableSkillsValue',
+          'tableTubes': 'tableTubesValue',
+          'storagePost': 'storagePostValue',
+          'storageBucket': 'storageBucketValue',
+          'localeToLanguageMap': 'localeToLanguageMap',
+          'tutorialLocaleToLanguageMap': 'tutorialLocaleToLanguageMap',
+        });
+
         const expectedConfig = {
           data: {
             type: 'configs',
@@ -40,6 +52,8 @@ describe('Acceptance | Controller | config', () => {
               'table-tubes': 'tableTubesValue',
               'storage-post': 'storagePostValue',
               'storage-bucket': 'storageBucketValue',
+              'locale-to-language-map': 'localeToLanguageMap',
+              'tutorial-locale-to-language-map': 'tutorialLocaleToLanguageMap',
             },
           }
         };

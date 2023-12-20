@@ -10,13 +10,9 @@ const serializer = new Serializer('config', {
     'tableSkills',
     'tableTubes',
     'storagePost',
-    'storageTenant',
-    'storageUser',
-    'storagePassword',
-    'storageKey',
-    'storageAuth',
     'storageBucket',
     'localeToLanguageMap',
+    'tutorialLocaleToLanguageMap',
   ],
 });
 
