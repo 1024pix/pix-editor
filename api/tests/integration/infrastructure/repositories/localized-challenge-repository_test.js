@@ -244,7 +244,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
       await databaseBuilder.commit();
 
       // when
-      const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeId1, challengeId2]);
+      const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeId1, challengeId2] });
 
       // then
       expect(localizedChallenges).to.deep.equal([

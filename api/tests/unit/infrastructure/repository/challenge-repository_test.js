@@ -137,7 +137,7 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.1.', { transaction: expect.anything() });
         expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.', { transaction: expect.anything() });
-        expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith(['1', '2']);
+        expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: ['1', '2'], transaction: expect.anything() });
       });
 
       it('should return challenges with empty fields when have no translation', async () => {
@@ -293,6 +293,7 @@ describe('Unit | Repository | challenge-repository', () => {
       // then
       expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
       expect(translationRepository.listByPrefix).toHaveBeenCalledWith(`challenge.${challengeId}.`);
+      expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: [challengeId] });
       expect(result).toEqual(expectedChallenge);
     });
 

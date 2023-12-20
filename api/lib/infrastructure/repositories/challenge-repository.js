@@ -32,7 +32,7 @@ export async function get(id) {
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
 
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds([challengeDto.id]);
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeDto.id] });
 
   const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
 
@@ -112,7 +112,10 @@ async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos
     const challengesTranslations = await Promise.all(challengeDtos.map(
       (challengeDto) => translationRepository.listByPrefix(prefixFor(challengeDto), { transaction })
     ));
-    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds(challengeDtos.map(({ id }) => id));
+    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
+      challengeIds: challengeDtos.map(({ id }) => id),
+      transaction,
+    });
 
     return [challengesTranslations.flat(), localizedChallenges];
   }, { readOnly: true });
