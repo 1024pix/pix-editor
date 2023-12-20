@@ -125,7 +125,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'nl',
         value: 'Hallo',
       });
-
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'my id',
+        challengeId: 'my id',
+        locale: 'fr',
+        embedUrl: 'http://example.com/my_embed.html'
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'my id_nl',
+        challengeId: 'my id',
+        locale: 'nl'
+      });
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -164,7 +174,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               status: 'validé',
               preview: '/api/challenges/my id/preview',
               timer: 1234,
-              'embed-url': 'https://github.io/page/epreuve.html',
+              'embed-url': 'http://example.com/my_embed.html',
               'embed-title': 'Epreuve de selection de dossier',
               'embed-height': 500,
               'alternative-version': 2,
@@ -198,7 +208,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
                     type: 'attachments'
                   }
                 ]
-              },
+              }
             }
           },
         ],
@@ -280,6 +290,23 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '1',
+        challengeId: '1',
+        locale: 'fr',
+        embedUrl: 'http://example.com/my_embed.html',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '2',
+        challengeId: '2',
+        locale: 'fr'
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: '2_nl',
+        challengeId: '2',
+        locale: 'nl'
+      });
+
       await databaseBuilder.commit();
 
       const server = await createServer();
@@ -320,7 +347,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               status: 'validé',
               preview: '/api/challenges/1/preview',
               timer: 1234,
-              'embed-url': 'https://github.io/page/epreuve.html',
+              'embed-url': 'http://example.com/my_embed.html',
               'embed-title': 'Epreuve de selection de dossier',
               'embed-height': 500,
               'alternative-version': 2,
@@ -380,7 +407,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               status: 'validé',
               preview: '/api/challenges/2/preview',
               timer: 1234,
-              'embed-url': 'https://github.io/page/epreuve.html',
+              'embed-url': null,
               'embed-title': 'Epreuve de selection de dossier',
               'embed-height': 500,
               'alternative-version': 2,
@@ -503,7 +530,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
             airtableChallenge,
           ]
         });
-
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'recChallengeId1',
+        challengeId: 'recChallengeId1',
+        locale: 'fr',
+        embedUrl: 'https://github.io/page/epreuve.html',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId2',
+        challengeId: 'recChallengeId1',
+        locale: 'nl',
+      });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.instruction',
         locale: 'fr',
@@ -644,7 +681,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
   describe('GET /challenges/:id/preview', () => {
     const challengeId = 'challenge123';
-    const localizedChallengeId =  challengeId + '_nl';
+    const localizedChallengeId = challengeId + '_nl';
     const locale = 'nl';
     let airtableChallengeScope;
     let airtableAttachmentScope;
@@ -714,7 +751,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             illustrationAlt: null,
             illustrationUrl: null,
             instruction: 'instruction for nl',
-            locales: [ 'nl' ],
+            locales: ['nl'],
             proposals: 'proposals for nl',
             solution: 'solution for nl',
             solutionToDisplay: 'solution to display for nl',

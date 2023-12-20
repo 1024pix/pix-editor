@@ -232,6 +232,7 @@ async function mockCurrentContent() {
     id: expectedCurrentContent.challenges[0].id,
     challengeId: expectedCurrentContent.challenges[0].id,
     locale: 'fr-fr',
+    embedUrl: expectedCurrentContent.challenges[0].embedUrl,
   });
 
   await databaseBuilder.commit();
@@ -453,6 +454,7 @@ async function mockContentForRelease() {
     id: expectedCurrentContent.challenges[0].id,
     challengeId: expectedCurrentContent.challenges[0].id,
     locale: 'fr-fr',
+    embedUrl: expectedCurrentContent.challenges[0].embedUrl,
   });
 
   await databaseBuilder.commit();

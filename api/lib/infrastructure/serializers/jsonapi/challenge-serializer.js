@@ -97,10 +97,17 @@ const deserializer = new Deserializer({
   }
 });
 
-export function deserialize(challenge) {
+export function deserialize(challengeBody) {
   return new Promise((resolve, reject) => {
-    deserializer.deserialize(challenge, (err, challenges) => {
-      return err ? reject(err) : resolve(new Challenge(challenges));
+
+    deserializer.deserialize(challengeBody, (err, challengeObject) => {
+      challengeObject.localizedChallenges = [{
+        id: challengeObject.id,
+        challengeId: challengeObject.id,
+        locale: Challenge.getPrimaryLocale(challengeObject.locales),
+        embedUrl: challengeObject.embedUrl,
+      }];
+      return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
   });
 }

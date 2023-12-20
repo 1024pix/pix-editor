@@ -32,9 +32,9 @@ function _challengeToTranslatedChallenges({ localizedChallenges }) {
     .map((localizedChallenge) => _translateChallenge(challenge, localizedChallenge));
 }
 
-function _translateChallenge(challenge, { locale, id }) {
+function _translateChallenge(challenge, localizedChallenge) {
   const primaryLocale = Challenge.getPrimaryLocale(challenge.locales) ?? 'fr';
-  const isPrimaryLocale = primaryLocale === locale;
+  const isPrimaryLocale = primaryLocale === localizedChallenge.locale;
   const clearedLocalizedFields = challengeLocalizedFields.reduce((acc, field) => {
     acc[field] = '';
     return acc;
@@ -42,10 +42,10 @@ function _translateChallenge(challenge, { locale, id }) {
   return {
     ...challenge,
     ...clearedLocalizedFields,
-    ...challenge.translations[locale],
-    id,
-    embedUrl: isPrimaryLocale ? challenge.embedUrl : _replaceLangParamsInUrl(locale, challenge.embedUrl),
-    locales: isPrimaryLocale ? challenge.locales : [locale],
+    ...challenge.translations[localizedChallenge.locale],
+    id: localizedChallenge.id,
+    embedUrl: localizedChallenge.embedUrl ?? _replaceLangParamsInUrl(localizedChallenge.locale, challenge.embedUrl),
+    locales: isPrimaryLocale ? challenge.locales : [localizedChallenge.locale],
   };
 }
 

@@ -17,6 +17,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
       fields: [
         'id persistant',
         'Langues',
+        'Embed URL',
       ],
     })
     .all();
@@ -31,7 +32,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
     const challengeId = challenge.get('id persistant');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     return [
-      { id: challengeId, challengeId,locale: primaryLocale },
+      { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('Embed URL') },
       ...challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
