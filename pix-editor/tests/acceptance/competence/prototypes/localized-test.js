@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { click, findAll } from '@ember/test-helpers';
-import { visit } from '@1024pix/ember-testing-library';
+import { visit, clickByText } from '@1024pix/ember-testing-library';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -37,5 +37,18 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
 
     const link = await screen.findByText('Prévisualiser en');
     assert.strictEqual(link.getAttribute('href'), 'preview?locale=en');
+  });
+
+  test('it should go back to the original challenge', async function(assert) {
+    const screen = await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await click(screen.getByText('Version en'));
+
+    await clickByText('Prévisualiser en');
+    await clickByText('Version originale');
+    assert.dom(screen.getByText('Version en')).exists();
   });
 });

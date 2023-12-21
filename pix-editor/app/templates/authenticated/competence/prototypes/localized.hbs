@@ -9,10 +9,14 @@
       />
     </form>
   </div>
-    <div class="ui vertical compact labeled icon menu challenge-menu">
-        <a class="ui button item" href={{this.getPreviewUrl this.localizedChallenge.locale}} target="_blank" rel="noopener noreferrer">
-          <i class="eye icon"></i>
-          Prévisualiser {{ this.localizedChallenge.locale }}
-        </a>
-    </div>
+  <div class="ui vertical compact labeled icon menu challenge-menu">
+      <a class="ui button item" href={{this.getPreviewUrl this.localizedChallenge.locale}} target="_blank" rel="noopener noreferrer">
+        <i class="eye icon"></i>
+        Prévisualiser {{ this.localizedChallenge.locale }}
+      </a>
+    <LinkTo @route="authenticated.competence.prototypes.single" @model={{this.localizedChallenge.challenge}} class="ui button item">
+      <i class="globe icon"></i>
+      Version originale
+    </LinkTo>
+  </div>
 </div>
