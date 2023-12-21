@@ -1,5 +1,16 @@
 
 
+## v3.116.0 (21/12/2023)
+
+
+### :rocket: Amélioration
+- [#436](https://github.com/1024pix/pix-editor/pull/436) [FEATURE] Ajoute la langue "nl" dans les tutoriels (PIX-10167).
+- [#437](https://github.com/1024pix/pix-editor/pull/437) [FEATURE] Script de nettoyage des localized challenges et translations (PIX-10479).
+- [#433](https://github.com/1024pix/pix-editor/pull/433) [FEATURE] Lit le champ `embedURL` depuis la table `localized_challenges` (PIX-10366).
+
+### :arrow_up: Montée de version
+- [#435](https://github.com/1024pix/pix-editor/pull/435) [BUMP] Update dependency p-queue to v8.0.1 (pix-editor).
+
 ## v3.115.0 (20/12/2023)
 
 
