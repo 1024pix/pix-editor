@@ -30,10 +30,12 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
     await click(findAll('[data-test-competence-item]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
-    await click(screen.getByText('Voir version en'));
+    await click(screen.getByText('Version en'));
 
-    const embedUrlInput = await screen.getByRole('textbox', { name: 'URL :' });
-
+    const embedUrlInput = await screen.getByRole('textbox', { name: 'Embed URL :' });
     assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
+
+    const link = await screen.findByText('Prévisualiser en');
+    assert.strictEqual(link.getAttribute('href'), 'preview?locale=en');
   });
 });
