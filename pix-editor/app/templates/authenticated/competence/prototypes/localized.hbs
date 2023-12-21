@@ -1,8 +1,10 @@
-<form action="" class="ui form">
-  <Field::Input
-    @title="Embed"
-    @value={{this.model.embedURL}}
-    @edition={{false}}
-    @label="URL"
-  />
-</form>
+<div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
+  <form action="" class="ui form">
+    <Field::Input
+      @title="Embed"
+      @value={{this.model.embedURL}}
+      @edition={{false}}
+      @label="URL"
+    />
+  </form>
+</div>
