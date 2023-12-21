@@ -210,6 +210,14 @@ export default class ChallengeModel extends Model {
     return null;
   }
 
+  get primaryLocale() {
+    return this.locales[0];
+  }
+
+  get otherLocalizedChallenges() {
+    return this.localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
+  }
+
   set attachmentBaseName(value) {
     this._definedBaseName = value;
     return value;
