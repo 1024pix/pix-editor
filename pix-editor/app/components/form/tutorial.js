@@ -4,11 +4,11 @@ import { inject as service } from '@ember/service';
 
 export default class TutorialForm extends Component {
 
+  @service config;
   @service store;
   @service idGenerator;
 
   options = {
-    'language': [{ value:'en-us',label:'Anglais' }, { value:'fr-fr',label:'Français' }],
     'format': ['audio', 'frise', 'image', 'jeu', 'outil', 'page', 'pdf', 'site', 'slide', 'son', 'vidéo'],
     'level': ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     'license': ['CC-BY-SA', '(c)', 'Youtube']
@@ -19,7 +19,11 @@ export default class TutorialForm extends Component {
   }
 
   get tutorialLanguage() {
-    return this.options.language.find(language=>language.value === this.args.tutorial.language);
+    return this.config.tutorialLocaleToLanguageMap[this.args.tutorial.language];
+  }
+
+  get tutorialLanguageOptions() {
+    return Object.entries(this.config.tutorialLocaleToLanguageMap).map(([value, label]) => ({ value, label }));
   }
 
   @action

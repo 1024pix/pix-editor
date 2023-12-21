@@ -6,6 +6,13 @@ import { hbs } from 'ember-cli-htmlbars';
 module('Integration | Component | pop-in/tutorial', function(hooks) {
   setupIntlRenderingTest(hooks);
 
+  hooks.beforeEach(function () {
+    const configService = this.owner.lookup('service:config');
+    configService.tutorialLocaleToLanguageMap = {
+      lang: 'Première langue',
+    };
+  });
+
   test('save input should be disabled if mandatory field are empty', async function(assert) {
     //given
     this.set('close', () => {});
@@ -21,8 +28,8 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
       level:'',
       tags:[]
     });
-    //when
 
+    //when
     await render(hbs`<PopIn::Tutorial @close={{this.close}} @tutorial={{this.tutorial}} @saveTutorial={{this.saveTutorial}}/>`);
 
     //then

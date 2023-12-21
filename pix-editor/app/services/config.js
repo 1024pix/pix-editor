@@ -17,6 +17,7 @@ export default class ConfigService extends Service {
   @tracked storagePost;
   @tracked storageBucket;
   @tracked localeToLanguageMap;
+  @tracked tutorialLocaleToLanguageMap;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
@@ -32,6 +33,7 @@ export default class ConfigService extends Service {
     this.storagePost = config.storagePost;
     this.storageBucket = config.storageBucket;
     this.localeToLanguageMap = config.localeToLanguageMap;
+    this.tutorialLocaleToLanguageMap = config.tutorialLocaleToLanguageMap;
     this.intl.setLocale(['fr']);
 
     Sentry.setUser({ userName: this.author });
