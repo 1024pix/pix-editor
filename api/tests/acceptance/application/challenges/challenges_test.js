@@ -77,7 +77,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should return challenges', async () => {
+    it('should return challenges', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id' });
 
@@ -227,7 +227,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
     });
 
-    it.fails('should filter challenges by id', async () => {
+    it('should filter challenges by id', async () => {
       // Given
       const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1' });
       const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2' });
@@ -545,7 +545,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should return given challenge', async () => {
+    it('should return given challenge', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'recChallengeId1' });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
@@ -837,7 +837,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await knex('localized_challenges').truncate();
     });
 
-    it.fails('should create a challenge', async () => {
+    it('should create a challenge', async () => {
       // Given
       const challenge = {
         ...domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] }),
@@ -1237,7 +1237,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
-    it.fails('should update a challenge', async () => {
+    it('should update a challenge', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const locale = 'fr';
@@ -1473,7 +1473,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
 
-    it.fails('should change challenge\'s primary locale', async () => {
+    it('should change challenge\'s primary locale', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const originalLocale = 'fr-fr';
