@@ -1,7 +1,7 @@
 import { describe, describe as context, expect, it } from 'vitest';
 import { databaseBuilder } from '../../../test-helper.js';
 import { findAllMissions } from '../../../../lib/infrastructure/repositories/mission-repository.js';
-import { Mission } from '../../../../lib/domain/models/Mission.js';
+import { Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | mission-repository', function() {
   context('#findReadSummaries', function() {

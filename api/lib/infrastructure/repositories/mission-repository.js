@@ -1,6 +1,6 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { fetchPage } from '../utils/knex-utils.js';
-import { Mission } from '../../domain/models/Mission.js';
+import { Mission } from '../../domain/models/index.js';
 import * as translationRepository from './translation-repository.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';

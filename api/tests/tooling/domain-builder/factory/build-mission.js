@@ -1,4 +1,4 @@
-import { Mission } from '../../../../lib/domain/models/Mission.js';
+import { Mission } from '../../../../lib/domain/models/index.js';
 
 export function buildMission({
   id = 3,

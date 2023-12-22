@@ -1,4 +1,4 @@
-class Mission {
+export class Mission {
   constructor({
     id,
     name_i18n,
@@ -26,4 +26,3 @@ const status = {
 };
 
 Mission.status = status;
-export { Mission };

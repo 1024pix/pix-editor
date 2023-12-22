@@ -1,8 +1,11 @@
-import * as repositories from '../../infrastructure/repositories/index.js';
+import { missionRepository, competenceRepository } from '../../infrastructure/repositories/index.js';
 import { MissionSummary } from '../readmodels/index.js';
-export async function findAllMissions(params, missionRepository = repositories.missionRepository, competenceRepository = repositories.competenceRepository) {
-  const result = await missionRepository.findAllMissions(params);
-  const competences = await competenceRepository.list();
+export async function findAllMissions(params, dependencies = {
+  missionRepository,
+  competenceRepository
+}) {
+  const result = await dependencies.missionRepository.findAllMissions(params);
+  const competences = await dependencies.competenceRepository.getMany(result.missions.map((mission) => mission.competenceId));
 
   const missionSummmaries = result.missions.map((mission) => {
     const missionCompetence = competences.find((competence) => competence.id === mission.competenceId);

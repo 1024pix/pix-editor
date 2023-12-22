@@ -2,7 +2,7 @@ import { beforeEach, describe, describe as context, expect, it, vi } from 'vites
 import { hFake } from '../../../test-helper.js';
 import * as missionsController from '../../../../lib/application/missions/mission-controller.js';
 import * as usecases from '../../../../lib/domain/usecases/find-all-missions.js';
-import { Mission } from '../../../../lib/domain/models/Mission.js';
+import { Mission } from '../../../../lib/domain/models/index.js';
 import { MissionSummary } from '../../../../lib/domain/readmodels/index.js';
 
 describe('Unit | Controller | missions controller', function() {

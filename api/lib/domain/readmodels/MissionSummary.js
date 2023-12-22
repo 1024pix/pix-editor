@@ -1,4 +1,4 @@
-class MissionSummary {
+export class MissionSummary {
   constructor({
     id,
     name,
@@ -13,5 +13,3 @@ class MissionSummary {
     this.status = status;
   }
 }
-
-export { MissionSummary };

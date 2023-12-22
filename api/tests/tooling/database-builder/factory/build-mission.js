@@ -3,7 +3,7 @@ import { Mission } from '../../../../lib/domain/models/Mission.js';
 import { buildTranslation } from './build-translation.js';
 
 export function buildMission({
-  id = 10998765,
+  id = databaseBuffer.nextId++,
   name = 'Ma première mission',
   competenceId = 'competenceId',
   learningObjectives = 'Que tu sois le meilleur',

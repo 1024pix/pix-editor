@@ -34,7 +34,7 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     });
 
     const competenceRepository = {
-      list: vi.fn().mockResolvedValueOnce([competence1, competence2]),
+      getMany: vi.fn().mockResolvedValueOnce([competence1, competence2]),
     };
     const meta = Symbol('meta');
     const missionRepository = {
@@ -42,10 +42,8 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     };
 
     // when
-    const result = await findAllMissions({
-      filter: { isActive: false },
-      page: { number: 1, size: 20 }
-    }, missionRepository, competenceRepository);
+    const params = { filter: { isActive: false }, page: { number: 1, size: 20 } };
+    const result = await findAllMissions(params, { missionRepository, competenceRepository });
 
     // then
     const missionSummary1 = domainBuilder.buildMissionSummary({
@@ -59,7 +57,10 @@ describe('Unit | Domain | Usecases | find all missions', function() {
     });
 
     expect(result).toEqual({ missions: [missionSummary1, missionSummary2], meta });
+    expect(missionRepository.findAllMissions).to.toHaveBeenCalledWith(params);
+    expect(competenceRepository.getMany).to.toHaveBeenCalledWith(['recCompetence1', 'recCompetence2']);
   });
+
   describe('When there is no competence found', function() {
     it('should specify there is no competence', async () => {
       // given
@@ -77,7 +78,7 @@ describe('Unit | Domain | Usecases | find all missions', function() {
       });
 
       const competenceRepository = {
-        list: vi.fn().mockResolvedValueOnce([competence]),
+        getMany: vi.fn().mockResolvedValueOnce([competence]),
       };
       const meta = Symbol('meta');
       const missionRepository = {
@@ -85,10 +86,10 @@ describe('Unit | Domain | Usecases | find all missions', function() {
       };
 
       // when
-      const result = await findAllMissions({
-        filter: { isActive: false },
-        page: { number: 1, size: 20 }
-      }, missionRepository, competenceRepository);
+      const result = await findAllMissions(
+        { filter: { isActive: false }, page: { number: 1, size: 20 } },
+        { missionRepository, competenceRepository }
+      );
 
       // then
       const missionSummary = domainBuilder.buildMissionSummary({

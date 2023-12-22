@@ -11,6 +11,12 @@ export async function list() {
   return toDomainList(datasourceCompetences, translations);
 }
 
+export async function getMany(ids) {
+  const datasourceCompetences = await competenceDatasource.filter({ filter: { ids } });
+  const translations = await translationRepository.listByPrefix(competenceTranslations.prefix);
+  return toDomainList(datasourceCompetences, translations);
+}
+
 function toDomainList(datasourceCompetences, translations) {
   const translationsByCompetenceId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
   return datasourceCompetences.map(

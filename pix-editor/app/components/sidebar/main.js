@@ -33,7 +33,7 @@ export default class SidebarMain extends Component {
     return this.access.isReadOnly();
   }
 
-  get ispix1dFrameworkName() {
+  get shouldShowMissionsLink() {
     return this.currentData?.getFramework()?.name.toLowerCase() === this.pix1dFrameworkName.toLowerCase();
   }
 }
