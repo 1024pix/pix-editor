@@ -1,14 +1,18 @@
 import Controller from '@ember/controller';
-import { action } from '@ember/object';
 
 export default class LocalizedController extends Controller {
 
-  get localizedChallenge() {
-    return this.model;
+  get previewUrl() {
+    return this.model.locale ? `${this.model.challenge.get('preview')}?locale=${this.model.locale}` : this.model.challenge.get('preview');
   }
 
-  @action
-  getPreviewUrl(locale) {
-    return locale ? `${this.localizedChallenge.challenge.get('preview')}?locale=${locale}` : this.localizedChallenge.challenge.get('preview');
+  get challengeRoute() {
+    return this.model.challenge.get('isPrototype') ? 'authenticated.competence.prototypes.single' : 'authenticated.competence.prototypes.single.alternatives.single';
+  }
+
+  get challengeModels() {
+    return this.model.challenge.get('isPrototype')
+      ? [this.model.challenge]
+      : [this.model.challenge.get('relatedPrototype'), this.model.challenge];
   }
 }
