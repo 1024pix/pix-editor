@@ -4,7 +4,7 @@ import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | localized-challenges-controller', () => {
   describe('GET /localized-challenges/{id}', () => {
-    it.fails('should get a localized challenge by ID', async () => {
+    it('should get a localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
