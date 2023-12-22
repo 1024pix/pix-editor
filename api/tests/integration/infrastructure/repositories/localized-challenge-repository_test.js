@@ -114,6 +114,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             id: 'id',
             challengeId: 'challengeId',
             locale: 'en',
+            embedUrl: 'site.com',
           }
         );
 
@@ -122,10 +123,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
           {
             challengeId: 'challengeId',
             locale: 'en',
+            embedUrl: 'site.com',
           },
           {
             challengeId: 'challengeId',
             locale: 'fr',
+            embedUrl: 'site.fr',
           }
         ]);
 
@@ -133,12 +136,20 @@ describe('Integration | Repository | localized-challenge-repository', function()
         const localizedChallenges = await knex('localized_challenges').select().orderBy('locale');
 
         expect(localizedChallenges.length).to.equal(2);
-        expect(localizedChallenges[0]).to.deep.equal({
-          id: 'id',
-          challengeId: 'challengeId',
-          locale: 'en',
-          embedUrl: null,
-        });
+        expect(localizedChallenges).toEqual([
+          {
+            id: 'id',
+            challengeId: 'challengeId',
+            locale: 'en',
+            embedUrl: 'site.com',
+          },
+          {
+            id: expect.stringMatching(/^challenge\w+$/),
+            challengeId: 'challengeId',
+            locale: 'fr',
+            embedUrl: 'site.fr',
+          },
+        ]);
       });
     });
   });
@@ -209,37 +220,44 @@ describe('Integration | Repository | localized-challenge-repository', function()
     it('should return the list of localized challenges for a list of challenge IDs', async () => {
       const challengeId1 = 'challengeId1';
       const challengeId2 = 'challengeId2';
+      const embedUrl = 'https://site.com';
 
       // given
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId1,
         challengeId: challengeId1,
         locale: 'fr-fr',
+        embedUrl,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: `${challengeId1}En`,
         challengeId: challengeId1,
         locale: 'en',
+        embedUrl,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: `${challengeId1}Nl`,
         challengeId: challengeId1,
         locale: 'nl',
+        embedUrl,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId2,
         challengeId: challengeId2,
         locale: 'fr-fr',
+        embedUrl,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: `${challengeId2}En`,
         challengeId: challengeId2,
         locale: 'en',
+        embedUrl,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'otherChallengeId',
         challengeId: 'otherChallengeId',
         locale: 'fr',
+        embedUrl,
       });
       await databaseBuilder.commit();
 
@@ -252,31 +270,31 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id: `${challengeId1}En`,
           challengeId: challengeId1,
           locale: 'en',
-          embedUrl: null,
+          embedUrl,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: challengeId1,
           challengeId: challengeId1,
           locale: 'fr-fr',
-          embedUrl: null,
+          embedUrl,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId1}Nl`,
           challengeId: challengeId1,
           locale: 'nl',
-          embedUrl: null,
+          embedUrl,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId2}En`,
           challengeId: challengeId2,
           locale: 'en',
-          embedUrl: null,
+          embedUrl,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: challengeId2,
           challengeId: challengeId2,
           locale: 'fr-fr',
-          embedUrl: null,
+          embedUrl,
         }),
       ]);
     });
