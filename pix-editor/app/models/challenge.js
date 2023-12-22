@@ -128,7 +128,7 @@ export default class ChallengeModel extends Model {
       return skill.get('alternatives').filter(alternative => {
         return (alternative.version === currentVersion);
       }).sort((a, b) => {
-        return a.alternativeVersion > b.alternativeVersion;
+        return a.alternativeVersion - b.alternativeVersion;
       });
     } else {
       return [];
