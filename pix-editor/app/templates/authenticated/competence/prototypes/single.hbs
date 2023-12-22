@@ -79,12 +79,12 @@
       Annuler
     </button>
   {{else}}
-    <a class="ui button item" href={{this.getPreviewUrl ''}} target="_blank" rel="noopener noreferrer">
+    <a class="ui button item" href={{this.challenge.preview}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
       Prévisualiser
     </a>
     {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
-      <LinkTo @route="authenticated.competence.prototypes.localized" @model={{localizedChallenge}} class="ui button item">
+      <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
         <i class="globe icon"></i>
         Version {{ localizedChallenge.locale }}
       </LinkTo>
