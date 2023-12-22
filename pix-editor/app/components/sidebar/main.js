@@ -4,7 +4,7 @@ import ENV from 'pixeditor/config/environment';
 
 export default class SidebarMain extends Component {
   version = ENV.APP.version;
-
+  pix1dFrameworkName = 'Pix 1D';
   @service access;
   @service config;
   @service currentData;
@@ -32,4 +32,9 @@ export default class SidebarMain extends Component {
   get maySearch() {
     return this.access.isReadOnly();
   }
+
+  get shouldShowMissionsLink() {
+    return this.currentData?.getFramework()?.name.toLowerCase() === this.pix1dFrameworkName.toLowerCase();
+  }
 }
+

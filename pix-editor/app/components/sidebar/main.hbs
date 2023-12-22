@@ -5,6 +5,11 @@
   <Sidebar::Search @displaySearch={{this.maySearch}} @close={{@close}} />
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}}/>
   <div class="secondary-links">
+    {{#if this.shouldShowMissionsLink}}
+      <LinkTo @route="authenticated.missions" {{on "click" @close}}>
+        <i class="graduation cap icon"></i> Missions Pix 1D
+      </LinkTo>
+    {{/if}}
     {{#if this.mayAccessStaticCourses}}
       <LinkTo @route="authenticated.static-courses" {{on "click" @close}}>
         <FaIcon @icon="sheet-plastic" @prefix="fas"></FaIcon>
