@@ -69,6 +69,7 @@ Router.map(function () {
     });
     this.route('missions', function() {
       this.route('list', { path: '/' });
+      this.route('new');
     });
   });
 });

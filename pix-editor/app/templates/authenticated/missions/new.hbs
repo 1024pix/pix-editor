@@ -1,0 +1,13 @@
+<header class="page-header">
+  <h1 class="page-title">Création d'une mission</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Form::Mission
+      @mission={{this.model}}
+      @onFormCancelled={{this.goBackToList}}
+      @submitButtonText="Créer la mission"
+      @onFormSubmitted={{this.createMission}}
+    />
+  </section>
+</main>
