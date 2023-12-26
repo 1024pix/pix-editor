@@ -1,0 +1,22 @@
+<div class="challenge">
+  <div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
+    <form action="" class="ui form">
+      <Field::Input
+        @label="Embed URL"
+        @value={{this.model.embedURL}}
+        @edition={{false}}
+        @placeholder="Url de l'embed"
+      />
+    </form>
+  </div>
+  <div class="ui vertical compact labeled icon menu challenge-menu">
+      <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+        <i class="eye icon"></i>
+        Prévisualiser {{ this.model.locale }}
+      </a>
+    <LinkTo @route={{this.challengeRoute}} @models={{this.challengeModels}} class="ui button item">
+      <i class="globe icon"></i>
+      Version originale
+    </LinkTo>
+  </div>
+</div>

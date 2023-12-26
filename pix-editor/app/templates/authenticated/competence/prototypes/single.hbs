@@ -79,15 +79,15 @@
       Annuler
     </button>
   {{else}}
-    <a class="ui button item" href={{this.getPreviewUrl ''}} target="_blank" rel="noopener noreferrer">
+    <a class="ui button item" href={{this.challenge.preview}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
       Prévisualiser
     </a>
-    {{#each this.challenge.alternativeLocales as |locale| }}
-      <a class="ui button item" href={{this.getPreviewUrl locale}} target="_blank" rel="noopener noreferrer">
-        <i class="eye icon"></i>
-        Prévisualiser {{ locale }}
-      </a>
+    {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
+      <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
+        <i class="globe icon"></i>
+        Version {{ localizedChallenge.locale }}
+      </LinkTo>
     {{/each}}
     {{#if this.mayEdit}}
       <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
@@ -112,7 +112,7 @@
       Copier le lien
     </button>
     {{#if this.mayAccessAlternatives}}
-      <button class="ui button item alternatives"  {{on "click" this.showAlternatives}} type="button">
+      <button class="ui button item alternatives" {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>
         Déclinaisons &gt;&gt;
       </button>

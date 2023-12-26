@@ -115,9 +115,13 @@ export default class SingleController extends Controller {
     return new URL(this.challenge.preview, window.location).href;
   }
 
+  get localizedChallengeLinkRoute() {
+    return this.challenge.get('isPrototype') ? 'authenticated.competence.prototypes.localized' : 'authenticated.competence.prototypes.single.alternatives.localized';
+  }
+
   @action
-  getPreviewUrl(locale) {
-    return locale ? `${this.challenge.preview}?locale=${locale}` : this.challenge.preview;
+  getLocalizedChallengeLinkModels(localizedChallenge) {
+    return [this.challenge.get('id'), localizedChallenge.get('id')];
   }
 
   @action

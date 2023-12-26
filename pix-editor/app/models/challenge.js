@@ -45,6 +45,7 @@ export default class ChallengeModel extends Model {
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
+  @hasMany('localized-challenge', { inverse: 'challenge' }) localizedChallenges;
 
   @service('store') myStore;
   @service config;
@@ -127,7 +128,7 @@ export default class ChallengeModel extends Model {
       return skill.get('alternatives').filter(alternative => {
         return (alternative.version === currentVersion);
       }).sort((a, b) => {
-        return a.alternativeVersion > b.alternativeVersion;
+        return a.alternativeVersion - b.alternativeVersion;
       });
     } else {
       return [];
@@ -207,6 +208,14 @@ export default class ChallengeModel extends Model {
       return attachments[0].filename.replace(/\.[^/.]+$/, '');
     }
     return null;
+  }
+
+  get primaryLocale() {
+    return this.locales[0];
+  }
+
+  get otherLocalizedChallenges() {
+    return this.localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
   }
 
   set attachmentBaseName(value) {

@@ -49,17 +49,4 @@ module('Acceptance | Controller | Get Challenge', function(hooks) {
     assert.dom('[data-test-main-message]').hasText('Changement d\'acquis effectué pour le prototype');
     assert.strictEqual(challenge.skill.get('id'), 'recSkill2');
   });
-
-  module('when the challenge is an alternative locale', function() {
-    test('it should open to challenge preview', async function(assert) {
-      // given
-      const screen = await visit('/competence/recCompetence1.1/prototypes/recChallenge1?leftMaximized=false');
-
-      // when
-      const link = await screen.findByText('Prévisualiser nl');
-
-      // then
-      assert.strictEqual(link.getAttribute('href'), 'preview?locale=nl');
-    });
-  });
 });

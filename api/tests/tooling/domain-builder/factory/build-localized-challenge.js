@@ -4,7 +4,7 @@ export function buildLocalizedChallenge({
   id = 'persistant id',
   challengeId = 'persistant id',
   locale = 'fr',
-  embedUrl = 'https://site.com/embed.html',
+  embedUrl = 'https://example.com/embed.html',
 }) {
   return new LocalizedChallenge({
     id,

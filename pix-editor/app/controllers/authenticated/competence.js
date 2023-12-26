@@ -80,6 +80,7 @@ export default class CompetenceController extends Controller {
       case 'authenticated.competence.prototypes.single.alternatives.index':
       case 'authenticated.competence.prototypes.single.alternatives.single':
       case 'authenticated.competence.prototypes.single.alternatives.new':
+      case 'authenticated.competence.prototypes.single.alternatives.localized':
       case 'authenticated.competence.skills.single.archive.index':
       case 'authenticated.competence.skills.single.archive.single':
         return true;
