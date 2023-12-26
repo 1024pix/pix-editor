@@ -3,7 +3,7 @@ import Controller from '@ember/controller';
 export default class LocalizedController extends Controller {
 
   get previewUrl() {
-    return `${this.model.challenge.get('preview')}?locale=${this.model.locale}`;
+    return new URL(`${this.model.challenge.get('preview')}?locale=${this.model.locale}`, window.location).href;
   }
 
   get challengeRoute() {
