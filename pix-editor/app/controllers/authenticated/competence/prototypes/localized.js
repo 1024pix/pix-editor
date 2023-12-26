@@ -23,6 +23,12 @@ export default class LocalizedController extends Controller {
       : [this.model.challenge.get('relatedPrototype'), this.model.challenge];
   }
 
+  get challengeTitle() {
+    return this.isPrototype
+      ? this.model.challenge.get('skillName')
+      : `Déclinaison n°${this.model.challenge.get('alternativeVersion')}`;
+  }
+
   get isPrototype() {
     return this.model.challenge.get('isPrototype');
   }

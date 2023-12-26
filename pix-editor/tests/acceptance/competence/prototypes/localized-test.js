@@ -35,7 +35,7 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
     const embedUrlInput = await screen.getByRole('textbox', { name: 'Embed URL :' });
     assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
 
-    const link = await screen.findByText('Prévisualiser en');
+    const link = await screen.findByText('Prévisualiser');
     assert.ok(link.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
   });
 
@@ -47,7 +47,6 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(screen.getByText('Version en'));
 
-    await clickByText('Prévisualiser en');
     await clickByText('Version originale');
     assert.dom(screen.getByText('Version en')).exists();
   });
