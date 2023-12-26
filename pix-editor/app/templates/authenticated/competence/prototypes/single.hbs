@@ -83,6 +83,10 @@
       <i class="eye icon"></i>
       Prévisualiser
     </a>
+    <button class="ui button item" {{on "click" this.copyLink}} type="button">
+      <i class="linkify icon"></i>
+      Copier le lien
+    </button>
     {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
       <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
         <i class="globe icon"></i>
@@ -107,10 +111,6 @@
         Airtable
       </a>
     {{/if}}
-    <button class="ui button item" {{on "click" this.copyLink}} type="button">
-      <i class="linkify icon"></i>
-      Copier le lien
-    </button>
     {{#if this.mayAccessAlternatives}}
       <button class="ui button item alternatives" {{on "click" this.showAlternatives}} type="button">
         <i class="cubes icon"></i>
