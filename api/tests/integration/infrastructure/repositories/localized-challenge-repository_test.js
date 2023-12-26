@@ -12,7 +12,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'challengeNewid',
         challengeId: 'challengeId',
         locale: 'fr-fr',
-        embedUrl: 'https://site.com/embed.html',
+        embedUrl: 'https://example.com/embed.html',
       });
       await databaseBuilder.commit();
 
@@ -24,7 +24,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'challengeNewid',
         challengeId: 'challengeId',
         locale: 'fr-fr',
-        embedUrl: 'https://site.com/embed.html',
+        embedUrl: 'https://example.com/embed.html',
       }]);
     });
   });
@@ -40,7 +40,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'localizedChallengeId',
         challengeId: 'challengeId',
         locale: 'locale',
-        embedUrl: 'https://site.com/embed.html',
+        embedUrl: 'https://example.com/embed.html',
       }]);
 
       // then
@@ -50,7 +50,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         id: 'localizedChallengeId',
         challengeId: 'challengeId',
         locale: 'locale',
-        embedUrl: 'https://site.com/embed.html',
+        embedUrl: 'https://example.com/embed.html',
       }]);
     });
 
@@ -72,7 +72,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         await localizedChallengeRepository.create([{
           challengeId: 'challengeId',
           locale: 'locale',
-          embedUrl: 'https://site.com/embed.html',
+          embedUrl: 'https://example.com/embed.html',
         }], () => 'generated-id');
 
         // then
@@ -82,7 +82,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id: 'generated-id',
           challengeId: 'challengeId',
           locale: 'locale',
-          embedUrl: 'https://site.com/embed.html',
+          embedUrl: 'https://example.com/embed.html',
         }]);
       });
 
@@ -114,7 +114,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             id: 'id',
             challengeId: 'challengeId',
             locale: 'en',
-            embedUrl: 'site.com',
+            embedUrl: 'example.com',
           }
         );
 
@@ -123,12 +123,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
           {
             challengeId: 'challengeId',
             locale: 'en',
-            embedUrl: 'site.com',
+            embedUrl: 'example.com',
           },
           {
             challengeId: 'challengeId',
             locale: 'fr',
-            embedUrl: 'site.fr',
+            embedUrl: 'example.net',
           }
         ]);
 
@@ -141,13 +141,13 @@ describe('Integration | Repository | localized-challenge-repository', function()
             id: 'id',
             challengeId: 'challengeId',
             locale: 'en',
-            embedUrl: 'site.com',
+            embedUrl: 'example.com',
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
             challengeId: 'challengeId',
             locale: 'fr',
-            embedUrl: 'site.fr',
+            embedUrl: 'example.net',
           },
         ]);
       });
@@ -220,7 +220,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
     it('should return the list of localized challenges for a list of challenge IDs', async () => {
       const challengeId1 = 'challengeId1';
       const challengeId2 = 'challengeId2';
-      const embedUrl = 'https://site.com';
+      const embedUrl = 'https://example.com';
 
       // given
       databaseBuilder.factory.buildLocalizedChallenge({
