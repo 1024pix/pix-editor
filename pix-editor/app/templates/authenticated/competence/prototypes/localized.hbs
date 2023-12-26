@@ -10,10 +10,11 @@
     </form>
   </div>
   <div class="ui vertical compact labeled icon menu challenge-menu">
-      <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
-        <i class="eye icon"></i>
-        Prévisualiser {{ this.model.locale }}
-      </a>
+    <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+      <i class="eye icon"></i>
+      Prévisualiser {{ this.model.locale }}
+    </a>
+    <Buttons::CopyLink @link={{this.previewUrl}} />
     <LinkTo @route={{this.challengeRoute}} @models={{this.challengeModels}} class="ui button item">
       <i class="globe icon"></i>
       Version originale

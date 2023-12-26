@@ -36,7 +36,7 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
     assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
 
     const link = await screen.findByText('Prévisualiser en');
-    assert.strictEqual(link.getAttribute('href'), 'preview?locale=en');
+    assert.ok(link.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
   });
 
   test('it should go back to the original challenge', async function(assert) {
