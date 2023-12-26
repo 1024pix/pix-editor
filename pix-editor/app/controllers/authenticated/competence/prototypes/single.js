@@ -20,7 +20,6 @@ export default class SingleController extends Controller {
   @tracked displaySelectLocation = false;
   @tracked displayChallengeLog = false;
   @tracked displayChangeLog = false;
-  @tracked copyOperation = false;
   @tracked changelogDefault = '';
   @tracked displayConfirmLog = false;
 
@@ -162,18 +161,13 @@ export default class SingleController extends Controller {
   }
 
   @action
-  copyLink() {
-    this.copyOperation = true;
+  linkCopySuccess() {
+    this._message('Lien copié');
   }
 
   @action
-  linkCopied(result) {
-    this.copyOperation = false;
-    if (result) {
-      this._message('lien copié');
-    } else {
-      this._errorMessage('Erreur lors de la copie');
-    }
+  linkCopyError() {
+    this._errorMessage('Erreur lors de la copie');
   }
 
   @action

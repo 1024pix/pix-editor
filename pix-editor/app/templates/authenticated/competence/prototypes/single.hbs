@@ -64,9 +64,6 @@
                      @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}
                      @displaySolutionToDisplayField={{this.displaySolutionToDisplayField}}
                      @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}}/>
-    {{#if this.copyOperation}}
-      <Field::Copy @value={{this.absolutePreviewUrl}} @onCopied={{this.linkCopied}}/>
-    {{/if}}
   </div>
 <div class="ui vertical compact labeled icon menu challenge-menu">
   {{#if this.edition}}
@@ -83,10 +80,15 @@
       <i class="eye icon"></i>
       Prévisualiser
     </a>
-    <button class="ui button item" {{on "click" this.copyLink}} type="button">
+    <CopyButton
+      class="ui button item"
+      @text={{this.absolutePreviewUrl}}
+      @onSuccess={{this.linkCopySuccess}}
+      @onError={{this.linkCopyError}}
+    >
       <i class="linkify icon"></i>
       Copier le lien
-    </button>
+    </CopyButton>
     {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
       <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
         <i class="globe icon"></i>
