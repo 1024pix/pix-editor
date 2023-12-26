@@ -1,35 +1,40 @@
-<div class={{concat "challenge-header " this.challenge.statusCSS}}>
-  <div class="ui menu">
-      <div class="ui left menu">
+<Competence::Prototypes::ChallengeHeader
+  @class={{this.challenge.statusCSS}}
+  @maximized={{this.maximized}}
+  @minimize={{this.minimize}}
+  @maximize={{this.maximize}}
+  @close={{this.close}}
+>
+  <:actions>
     {{#if this.mayAccessLog}}
-        <button class="ui button icon item" {{on "click" this.challengeLog}} type="button"><i class="icon window chat"></i></button>
+      <button class="ui button icon item" {{on "click" this.challengeLog}} type="button"><i class="icon window chat"></i></button>
     {{/if}}
     {{#unless this.edition}}
       {{#if (and this.challenge.isPrototype (not this.challenge.isWorkbench))}}
-          <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
+        <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
       {{/if}}
       {{#if (or this.mayValidate this.mayArchive this.mayObsolete)}}
-        <BasicDropdown @id="testdd" @renderInPlace={{true}} @class="icon ui dropdown " @horizontalPosition="left" as |dd|>
+        <BasicDropdown @renderInPlace={{true}} @class="icon ui dropdown" @horizontalPosition="left" as |dd|>
           <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
           <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
-              {{#if this.mayValidate}}
-                <button class="ui button validate item"  {{on "click" (fn this.validate dd)}} type="button">
-                  <i class="checkmark icon"></i>
-                  {{t 'common.validate'}}
-                </button>
-              {{/if}}
-              {{#if this.mayArchive}}
-                <button class="ui button archive item"  {{on "click" (fn this.archive dd)}} type="button">
-                  <i class="archive icon"></i>
-                  {{t 'competence.prototypes.archive'}}
-                </button>
-              {{/if}}
-              {{#if this.mayObsolete}}
+            {{#if this.mayValidate}}
+              <button class="ui button validate item"  {{on "click" (fn this.validate dd)}} type="button">
+                <i class="checkmark icon"></i>
+                {{t 'common.validate'}}
+              </button>
+            {{/if}}
+            {{#if this.mayArchive}}
+              <button class="ui button archive item"  {{on "click" (fn this.archive dd)}} type="button">
+                <i class="archive icon"></i>
+                {{t 'competence.prototypes.archive'}}
+              </button>
+            {{/if}}
+            {{#if this.mayObsolete}}
               <button class="ui button archive item"  {{on "click" (fn this.obsolete dd)}} type="button">
-                  <i class="trash alternate icon"></i>
-                  {{t 'competence.prototypes.obsolete'}}
-                </button>
-              {{/if}}
+                <i class="trash alternate icon"></i>
+                {{t 'competence.prototypes.obsolete'}}
+              </button>
+            {{/if}}
           </dd.Content>
         </BasicDropdown>
       {{/if}}
@@ -37,24 +42,17 @@
         <button data-test-move-button class="ui icon button item" {{on "click" this.movePrototype}} type="button"><i class="icon random"></i></button>
       {{/if}}
     {{/unless}}
-      </div>
-    <div class={{concat "item header" (if this.creation " creation" "")}}>
+  </:actions>
+  <:default>
+    <div class={{(if this.creation " creation" "")}}>
       {{this.challengeTitle}}
-      <div class="ui circular label {{this.challenge.statusCSS}}">{{this.challenge.status}}</div>
-      {{#unless this.challenge.isNew}}
-        <time class="ui colored label" title="Dernière modification" datetime="{{this.lastUpdatedAtISO}}">{{format-date this.challenge.updatedAt}}</time>
-      {{/unless}}
     </div>
-    <div class="ui right menu">
-      {{#if this.maximized}}
-        <button class="ui icon button item" {{on "click" this.minimize}} type="button"><i class="window minimize icon"></i></button>
-      {{else}}
-        <button class="ui icon button item" {{on "click" this.maximize}} type="button"><i class="window maximize outline icon"></i></button>
-      {{/if}}
-      <button class="ui icon button item" {{on "click" this.close}} type="button"><i class="icon window close"></i></button>
-    </div>
-  </div>
-</div>
+    <div class="ui circular label {{this.challenge.statusCSS}}">{{this.challenge.status}}</div>
+    {{#unless this.challenge.isNew}}
+      <time class="ui colored label" title="Dernière modification" datetime="{{this.lastUpdatedAtISO}}">{{format-date this.challenge.updatedAt}}</time>
+    {{/unless}}
+  </:default>
+</Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top this.edition}}>
     <Form::Challenge @challenge={{this.challenge}}
