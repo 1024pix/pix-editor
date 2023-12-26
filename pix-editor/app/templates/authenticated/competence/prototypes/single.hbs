@@ -76,19 +76,11 @@
       Annuler
     </button>
   {{else}}
-    <a class="ui button item" href={{this.challenge.preview}} target="_blank" rel="noopener noreferrer">
+    <a class="ui button item" href={{this.absolutePreviewUrl}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
       Prévisualiser
     </a>
-    <CopyButton
-      class="ui button item"
-      @text={{this.absolutePreviewUrl}}
-      @onSuccess={{this.linkCopySuccess}}
-      @onError={{this.linkCopyError}}
-    >
-      <i class="linkify icon"></i>
-      Copier le lien
-    </CopyButton>
+    <Buttons::CopyLink @link={{this.absolutePreviewUrl}} />
     {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
       <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
         <i class="globe icon"></i>

@@ -161,16 +161,6 @@ export default class SingleController extends Controller {
   }
 
   @action
-  linkCopySuccess() {
-    this._message('Lien copié');
-  }
-
-  @action
-  linkCopyError() {
-    this._errorMessage('Erreur lors de la copie');
-  }
-
-  @action
   edit() {
     this.wasMaximized = this.maximized;
     this.maximize();
