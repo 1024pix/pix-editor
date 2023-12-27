@@ -1,3 +1,15 @@
+<Competence::Prototypes::ChallengeHeader
+  @class=""
+  @maximized={{this.maximized}}
+  @minimize={{this.minimize}}
+  @maximize={{this.maximize}}
+  @close={{this.close}}
+>
+  <:default>
+    <i class="{{convert-language-as-flag this.model.locale}} flag" title={{this.model.locale}}></i>
+    {{this.challengeTitle}}
+  </:default>
+</Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
     <form action="" class="ui form">
@@ -12,7 +24,7 @@
   <div class="ui vertical compact labeled icon menu challenge-menu">
     <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
       <i class="eye icon"></i>
-      Prévisualiser {{ this.model.locale }}
+      Prévisualiser
     </a>
     <Buttons::CopyLink @link={{this.previewUrl}} />
     <LinkTo @route={{this.challengeRoute}} @models={{this.challengeModels}} class="ui button item">
