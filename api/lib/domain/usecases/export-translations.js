@@ -65,8 +65,9 @@ function toDescription(localizedChallenges, challenge, baseUrl) {
     .map(({ locale }) => {
       return `Prévisualisation ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challenge.id}/preview?locale=${locale}`;
     });
+  const peURL = `Pix Editor: ${baseUrl}/challenge/${challenge.id}`;
 
-  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls].join('\n');
+  return [primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls, peURL].join('\n');
 }
 
 function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {

@@ -201,31 +201,31 @@ describe('Acceptance | Controller | translations-controller', () => {
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
           'challenge.recChallenge0.proposals',
           'Propositions du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
           'challenge.recChallenge0.solution',
           'Bonnes réponses du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
           'challenge.recChallenge0.solutionToDisplay',
           'Bonnes réponses du Challenge à afficher',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
-          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl'
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
           'competence.recCompetence0.description',
