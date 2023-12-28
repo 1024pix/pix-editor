@@ -1,5 +1,26 @@
 
 
+## v3.117.0 (28/12/2023)
+
+
+### :rocket: Amélioration
+- [#443](https://github.com/1024pix/pix-editor/pull/443) [FEATURE] Ajout du button de copie de lien pour les épreuves localisées (PIX-10536).
+- [#446](https://github.com/1024pix/pix-editor/pull/446) [FEATURE] Ajouter le lien vers Pix Editor dans la description des clefs des épreuves (PIX-10472).
+- [#438](https://github.com/1024pix/pix-editor/pull/438) [FEATURE] Permettre l'affichage de l'embedURL pour toutes les épreuves localisées (PIX-10332).
+- [#423](https://github.com/1024pix/pix-editor/pull/423) [FEATURE] Ajouter une page liste des missions (PIX-10271).
+
+### :building_construction: Tech
+- [#445](https://github.com/1024pix/pix-editor/pull/445) [TECH] Monter la version de l'image postgresql.
+
+### :arrow_up: Montée de version
+- [#439](https://github.com/1024pix/pix-editor/pull/439) [BUMP] Update dependency eslint to v8.56.0.
+- [#442](https://github.com/1024pix/pix-editor/pull/442) [BUMP] Lock file maintenance (pix-editor).
+- [#441](https://github.com/1024pix/pix-editor/pull/441) [BUMP] Lock file maintenance (challenge-parser).
+- [#440](https://github.com/1024pix/pix-editor/pull/440) [BUMP] Lock file maintenance (api).
+
+### :coffee: Autre
+- [#444](https://github.com/1024pix/pix-editor/pull/444) [REFACTOR] Ajout du bandeau sur la page de version d'un challenge (PIX-10534).
+
 ## v3.116.0 (21/12/2023)
 
 
