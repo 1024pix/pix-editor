@@ -96,5 +96,22 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         embedUrl: 'https://cassoulet.com/',
       });
     });
+
+    it('should not update a challenge when i am a read-only user', async () => {
+      // Given
+      const readOnlyUser = databaseBuilder.factory.buildReadonlyUser();
+      await databaseBuilder.commit();
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/localized-challenges/123',
+        headers: generateAuthorizationHeader(readOnlyUser),
+        payload: {}
+      });
+      // Then
+      await expect(response.statusCode).to.equal(403);
+    });
   });
 });
