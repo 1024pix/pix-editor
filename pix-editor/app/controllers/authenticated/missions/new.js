@@ -9,7 +9,6 @@ export default class MissionController extends Controller {
   @action
   async createMission(formData) {
     try {
-      console.log('formData', formData);
       await this.model.save({ adapterOptions: formData });
       this.notifications.success('Mission créé avec succès.');
       this.router.transitionTo('authenticated.missions.list');

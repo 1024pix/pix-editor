@@ -19,7 +19,7 @@ export default class MissionForm extends Component {
   get statusOptions() {
     return [{ value: 'ACTIVE', label: 'ACTIVE' }, { value: 'INACTIVE', label: 'INACTIVE' }];
   }
-  
+
   //TODO: à décommenter quand on affichera la liste des compétences pour le référentiel PIX 1D
   // get competencesOptions() {
   //   // this.currentData.getCompetence().map((competence) => { value: competence.id, label: });
@@ -159,5 +159,5 @@ class CompetenceIdField extends FormField {
       : STATES.ERROR;
   }
 
-  getValueForSubmit() { console.log('test', this.value); return this.value.trim(); }
+  getValueForSubmit() { return this.value.trim(); }
 }
