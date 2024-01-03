@@ -1,6 +1,7 @@
 import JsonapiSerializer from 'jsonapi-serializer';
+import { LocalizedChallenge } from '../../../domain/models/index.js';
 
-const { Serializer } = JsonapiSerializer;
+const { Serializer, Deserializer } = JsonapiSerializer;
 
 const serializer = new Serializer('localized-challenges', {
   attributes: [
@@ -20,4 +21,13 @@ export function serialize(localizedChallenge) {
     ...props,
     challenge: { id: challengeId },
   });
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+});
+
+export async function deserialize(localizedChallengeBody) {
+  const dto = await deserializer.deserialize(localizedChallengeBody);
+  return new LocalizedChallenge(dto);
 }

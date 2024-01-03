@@ -38,7 +38,7 @@ rules:
     - { max: 1, maxEOF: 1 }
   no-unused-vars:
     - 2
-    - { argsIgnorePattern: "_" }
+    - { argsIgnorePattern: "_", varsIgnorePattern: "_" }
   no-var:
     - 2
   object-curly-spacing:
