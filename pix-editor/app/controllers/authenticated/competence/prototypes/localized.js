@@ -1,10 +1,17 @@
 import Controller, { inject as controller } from '@ember/controller';
 import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import * as Sentry from '@sentry/ember';
 
 export default class LocalizedController extends Controller {
 
   @service router;
+  @service access;
+  @service notify;
+  @service loader;
+
+  @tracked edition = false;
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
@@ -43,6 +50,38 @@ export default class LocalizedController extends Controller {
 
   get maximized() {
     return this.isPrototype ? this.prototypeMaximized : this.alternativeMaximized;
+  }
+
+  get mayEdit() {
+    // model.challenge is a proxy object, thus we passed the content prop
+    // to access service
+    return this.access.mayEdit(this.model.challenge.content);
+  }
+
+  @action edit() {
+    this.edition = true;
+  }
+
+  @action cancelEdit() {
+    this.edition = false;
+    this.model.rollbackAttributes();
+    this.notify.message('Modification annulée');
+  }
+
+  @action save() {
+    this.loader.start();
+    return this.model.save()
+      .then(()=> {
+        this.edition = false;
+        this.loader.stop();
+        this.notify.message('Épreuve mise à jour');
+      })
+      .catch((error) => {
+        console.error(error);
+        Sentry.captureException(error);
+        this.loader.stop();
+        this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+      });
   }
 
   @action maximize() {
