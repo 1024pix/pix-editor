@@ -25,9 +25,20 @@ export function serialize(localizedChallenge) {
 
 const deserializer = new Deserializer({
   keyForAttribute: 'camelCase',
+  challenges: {
+    valueForRelationship(challenge) {
+      return challenge.id;
+    },
+  },
+  transform: function({ challenge, embedUrl, ...localizedChallenge }) {
+    return new LocalizedChallenge({
+      ...localizedChallenge,
+      challengeId: challenge,
+      embedUrl: embedUrl === '' ? null : embedUrl,
+    });
+  }
 });
 
 export async function deserialize(localizedChallengeBody) {
-  const dto = await deserializer.deserialize(localizedChallengeBody);
-  return new LocalizedChallenge(dto);
+  return deserializer.deserialize(localizedChallengeBody);
 }
