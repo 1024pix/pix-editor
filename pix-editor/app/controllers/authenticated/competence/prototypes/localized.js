@@ -53,9 +53,7 @@ export default class LocalizedController extends Controller {
   }
 
   get mayEdit() {
-    // model.challenge is a proxy object, thus we passed the content prop
-    // to access service
-    return this.access.mayEdit(this.model.challenge.content);
+    return this.access.mayEdit(this.model.challenge);
   }
 
   @action edit() {

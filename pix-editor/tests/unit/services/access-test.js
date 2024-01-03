@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import EmberObject from '@ember/object';
 
 module('Unit | Service | access', function(hooks) {
   setupTest(hooks);
@@ -28,12 +29,12 @@ module('Unit | Service | access', function(hooks) {
   module('mayEdit', function() {
 
     test('it should return `false` if challenge is obsolete', function (assert) {
-      //given
-      const challenge = {
+      // given
+      const challenge = EmberObject.create({
         id: 'rec123656',
         name: 'deletedChallenge',
         isObsolete: true
-      };
+      });
 
       //when
       const accessResult = accessService.mayEdit(challenge);
@@ -45,17 +46,17 @@ module('Unit | Service | access', function(hooks) {
     module('#liveChallenge', function(hooks) {
       let validatedChallenge, archivedChallenge;
       hooks.beforeEach(function () {
-        validatedChallenge = {
+        validatedChallenge = EmberObject.create({
           id: 'recChallenge1',
           name: 'challenge',
           isValidated: true,
-        };
+        });
 
-        archivedChallenge = {
+        archivedChallenge = EmberObject.create({
           id: 'recChallenge2',
           name: 'challenge',
           isArchived: true,
-        };
+        });
       });
       test('it should return `true` if challenge is live and level is `EDITOR`', function (assert) {
         //when
@@ -78,20 +79,20 @@ module('Unit | Service | access', function(hooks) {
 
     test('it should return `true` when level is `REPLICATOR` only if challenge is not in production and is not a prototype', function (assert) {
       //given
-      const validatedChallenge = {
+      const validatedChallenge = EmberObject.create({
         id: 'rec123655',
         name: 'validatedChallenge',
         isValidated: true,
-      };
-      const prototypeChallenge = {
+      });
+      const prototypeChallenge = EmberObject.create({
         id: 'rec123656',
         name: 'prototypeChallenge',
         isPrototype: true,
-      };
-      const challenge = {
+      });
+      const challenge = EmberObject.create({
         id: 'rec123657',
         name: 'challenge',
-      };
+      });
 
       //when
       _stubAccessLevel(REPLICATOR, this.owner);
