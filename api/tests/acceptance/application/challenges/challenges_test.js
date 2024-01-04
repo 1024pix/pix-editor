@@ -1013,6 +1013,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           value: 'consigne alternative'
         },
         {
+          key: 'challenge.challengeId.embedTitle',
+          locale: 'fr',
+          value: challenge.embedTitle,
+        },
+        {
           key: 'challenge.challengeId.instruction',
           locale: 'fr',
           value: 'consigne'
@@ -1451,6 +1456,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           value: challenge.alternativeInstruction,
         },
         {
+          key: 'challenge.recChallengeId.embedTitle',
+          locale: 'fr',
+          value: challenge.embedTitle,
+        },
+        {
           key: 'challenge.recChallengeId.instruction',
           locale: 'fr',
           value: challenge.instruction,
@@ -1685,6 +1695,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           key: 'challenge.recChallengeId.alternativeInstruction',
           locale: 'fr',
           value: challenge.alternativeInstruction,
+        },
+        {
+          key: 'challenge.recChallengeId.embedTitle',
+          locale: 'fr',
+          value: challenge.embedTitle,
         },
         {
           key: 'challenge.recChallengeId.instruction',

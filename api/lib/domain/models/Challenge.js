@@ -48,7 +48,6 @@ export class Challenge {
     this.t3Status = t3Status;
     this.status = status;
     this.skills = skills;
-    this.embedTitle = embedTitle;
     this.embedHeight = embedHeight;
     this.timer = timer;
     this.competenceId = competenceId;
@@ -86,6 +85,7 @@ export class Challenge {
     this.proposals = this.translations[this.locales[0]]?.proposals ?? '';
     this.solution = this.translations[this.locales[0]]?.solution ?? '';
     this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
+    this.embedTitle = this.translations[this.locales[0]]?.embedTitle ?? embedTitle;
     this.localizedChallenges = localizedChallenges ?? [];
     this.embedUrl = localizedChallenges
       ?.find(({ locale }) => Challenge.getPrimaryLocale(this.locales) === locale)

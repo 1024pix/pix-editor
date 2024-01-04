@@ -16,25 +16,43 @@ describe('Unit | Infrastructure | Challenge translations', () => {
             proposals: 'propositions en français',
             solution: 'bonnes réponses en français',
             solutionToDisplay: 'bonnes réponses à afficher en français',
+            embedTitle: 'titre du simulateur',
           }
         },
         locales: ['fr'],
       });
       const translations = extractFromChallenge(challenge);
       expect(translations).to.deep.equal([
-        { key: 'challenge.test.instruction', locale: 'fr', value: 'consigne en français' },
+        {
+          key: 'challenge.test.instruction',
+          locale: 'fr',
+          value: 'consigne en français',
+        },
         {
           key: 'challenge.test.alternativeInstruction',
           locale: 'fr',
           value: 'consigne alternative en français'
         },
-        { key: 'challenge.test.proposals', locale: 'fr', value: 'propositions en français' },
-        { key: 'challenge.test.solution', locale: 'fr', value: 'bonnes réponses en français' },
+        {
+          key: 'challenge.test.proposals',
+          locale: 'fr',
+          value: 'propositions en français',
+        },
+        {
+          key: 'challenge.test.solution',
+          locale: 'fr',
+          value: 'bonnes réponses en français',
+        },
         {
           key: 'challenge.test.solutionToDisplay',
           locale: 'fr',
           value: 'bonnes réponses à afficher en français'
         },
+        {
+          key: 'challenge.test.embedTitle',
+          locale: 'fr',
+          value: 'titre du simulateur',
+        }
       ]);
     });
 
