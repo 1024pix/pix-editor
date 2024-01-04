@@ -10,9 +10,13 @@ export const fields = [
   'solutionToDisplay',
 ];
 
+const writableFields = [
+  'embedTitle',
+];
+
 export function extractFromChallenge(challenge) {
   const locale = Challenge.getPrimaryLocale(challenge.locales);
-  return fields
+  return [...fields, ...writableFields]
     .filter((field) => challenge[field])
     .map((field) => {
       return new Translation({
