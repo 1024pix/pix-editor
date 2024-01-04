@@ -1,5 +1,11 @@
 
 
+## v3.119.0 (04/01/2024)
+
+
+### :rocket: Amélioration
+- [#454](https://github.com/1024pix/pix-editor/pull/454) [FEATURE] Ecrit le titre des embed dans la table translations (PIX-10615).
+
 ## v3.118.0 (04/01/2024)
 
 
