@@ -1,5 +1,17 @@
 
 
+## v3.118.0 (04/01/2024)
+
+
+### :rocket: Amélioration
+- [#452](https://github.com/1024pix/pix-editor/pull/452) [FEATURE] Afficher l'identifiant de l'épreuve localisée (PIX-10604).
+- [#450](https://github.com/1024pix/pix-editor/pull/450) [FEATURE] Permettre la modification de l'embed URL d'une épreuve nl (PIX-10365).
+
+### :arrow_up: Montée de version
+- [#451](https://github.com/1024pix/pix-editor/pull/451) [BUMP] Update dependency @1024pix/pix-ui to v42 (pix-editor).
+- [#448](https://github.com/1024pix/pix-editor/pull/448) [BUMP] Lock file maintenance (challenge-parser).
+- [#447](https://github.com/1024pix/pix-editor/pull/447) [BUMP] Lock file maintenance (api).
+
 ## v3.117.0 (28/12/2023)
 
 
