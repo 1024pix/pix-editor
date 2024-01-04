@@ -53,6 +53,7 @@ export function buildChallenge({
       proposals,
       solution,
       solutionToDisplay,
+      embedTitle,
     },
   },
   localizedChallenges = [{
@@ -70,7 +71,6 @@ export function buildChallenge({
     t3Status,
     status,
     skills,
-    embedTitle,
     embedHeight,
     timer,
     competenceId,

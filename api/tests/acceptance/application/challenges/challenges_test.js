@@ -22,7 +22,6 @@ const challengeAirtableFields = [
   'Statut',
   'Acquix (id persistant)',
   'Embed URL',
-  'Embed title',
   'Embed height',
   'Format',
   'files',
@@ -104,6 +103,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         key: 'challenge.my id.alternativeInstruction',
         locale: 'fr',
         value: 'Débrouille toi',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.embedTitle',
+        locale: 'fr',
+        value: 'Epreuve de selection de dossier',
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.my id.solution',
@@ -257,6 +261,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'Débrouille toi',
       });
       databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.embedTitle',
+        locale: 'fr',
+        value: 'Epreuve de selection de dossier',
+      });
+      databaseBuilder.factory.buildTranslation({
         key: 'challenge.1.solution',
         locale: 'fr',
         value: '1, 5',
@@ -280,6 +289,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         key: 'challenge.2.alternativeInstruction',
         locale: 'fr',
         value: 'Débrouille toi encore',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.embedTitle',
+        locale: 'fr',
+        value: 'Epreuve de selection de dossier',
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.solution',
@@ -584,6 +598,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'Débrouille toi',
       });
       databaseBuilder.factory.buildTranslation({
+        key: 'challenge.recChallengeId1.embedTitle',
+        locale: 'fr',
+        value: 'Epreuve de selection de dossier',
+      });
+      databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.solution',
         locale: 'fr',
         value: '1, 5',
@@ -765,6 +784,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale,
         value: 'proposals for nl',
       });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.embedTitle`,
+        locale,
+        value: 'embed title for nl',
+      });
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
@@ -791,6 +815,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             autoReply: false,
             competenceId: null,
             delta: null,
+            embedTitle: 'embed title for nl',
             format: 'mots',
             illustrationAlt: null,
             illustrationUrl: null,
@@ -846,6 +871,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
+        embedTitle: 'Titre d\'embed',
       };
       const expectedBodyChallenge = _removeReadonlyFields(airtableBuilder.factory.buildChallenge(challenge), true);
       const expectedBody = { records: [expectedBodyChallenge] };
@@ -953,7 +979,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/challengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Epreuve de selection de dossier',
+            'embed-title': 'Titre d\'embed',
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: 'OK',
@@ -1050,6 +1076,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
+        embedTitle: 'Titre d\'embed',
       };
       const expectedChallengeRelease = domainBuilder.buildChallengeForRelease({
         ...challenge,
@@ -1253,6 +1280,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
+        embedTitle: 'Titre d\'embed',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1284,6 +1312,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         key: `challenge.${challengeId}.proposals`,
         locale,
         value: challenge.proposals,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.embedTitle`,
+        locale,
+        value: challenge.embedTitle,
       });
       await databaseBuilder.commit();
 
@@ -1402,7 +1435,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Epreuve de selection de dossier',
+            'embed-title': 'Titre d\'embed',
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: 'OK',
@@ -1496,6 +1529,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solution: 'solution',
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
+        embedTitle: 'Titre d\'embed',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1526,6 +1560,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         key: `challenge.${challengeId}.proposals`,
         locale: originalLocale,
         value: challenge.proposals,
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.embedTitle`,
+        locale: originalLocale,
+        value: challenge.embedTitle,
       });
       await databaseBuilder.commit();
 
@@ -1637,7 +1676,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
-            'embed-title': 'Epreuve de selection de dossier',
+            'embed-title': 'Titre d\'embed',
             'embed-height': 500,
             'alternative-version': 2,
             accessibility1: 'OK',

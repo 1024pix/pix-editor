@@ -7,7 +7,6 @@ export class Challenge {
     t3Status,
     status,
     skills,
-    embedTitle,
     embedHeight,
     timer,
     competenceId,
@@ -85,7 +84,7 @@ export class Challenge {
     this.proposals = this.translations[this.locales[0]]?.proposals ?? '';
     this.solution = this.translations[this.locales[0]]?.solution ?? '';
     this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
-    this.embedTitle = this.translations[this.locales[0]]?.embedTitle ?? embedTitle;
+    this.embedTitle = this.translations[this.locales[0]]?.embedTitle ?? '';
     this.localizedChallenges = localizedChallenges ?? [];
     this.embedUrl = localizedChallenges
       ?.find(({ locale }) => Challenge.getPrimaryLocale(this.locales) === locale)

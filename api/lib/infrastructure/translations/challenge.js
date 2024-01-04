@@ -8,15 +8,12 @@ export const fields = [
   'proposals',
   'solution',
   'solutionToDisplay',
-];
-
-const writableFields = [
   'embedTitle',
 ];
 
 export function extractFromChallenge(challenge) {
   const locale = Challenge.getPrimaryLocale(challenge.locales);
-  return [...fields, ...writableFields]
+  return fields
     .filter((field) => challenge[field])
     .map((field) => {
       return new Translation({

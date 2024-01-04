@@ -136,6 +136,11 @@ async function mockCurrentContent() {
     locale: 'fr',
     value: expectedCurrentContent.challenges[0].translations.fr.solutionToDisplay,
   });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
+    locale: 'fr',
+    value: expectedCurrentContent.challenges[0].translations.fr.embedTitle,
+  });
 
   await databaseBuilder.commit();
 
