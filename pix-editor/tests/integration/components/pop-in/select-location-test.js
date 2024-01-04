@@ -261,7 +261,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       await click(findAll('.ember-power-select-options li')[1]);
 
       // then
-      assert.dom('[data-test-move-action]').hasClass('pix-button--disabled');
+      assert.dom('[data-test-move-action]').hasAttribute('disabled');
     });
 
     test('it should invoke `setSkill` on click with new skill location argument', async function (assert) {
@@ -366,7 +366,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       await click(findAll('.ember-power-select-options li')[0]);
 
       // then
-      assert.dom('[data-test-move-action]').hasClass('pix-button--disabled');
+      assert.dom('[data-test-move-action]').hasAttribute('disabled');
     });
 
     test('it should call setCompetence with a competence and a theme', async function (assert) {
