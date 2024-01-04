@@ -16,20 +16,37 @@
       <Field::Input
         @label="Embed URL"
         @value={{this.model.embedURL}}
-        @edition={{false}}
+        @edition={{this.edition}}
         @placeholder="Url de l'embed"
       />
     </form>
   </div>
   <div class="ui vertical compact labeled icon menu challenge-menu">
-    <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
-      <i class="eye icon"></i>
-      Prévisualiser
-    </a>
-    <Buttons::CopyLink @link={{this.previewUrl}} />
-    <LinkTo @route={{this.challengeRoute}} @models={{this.challengeModels}} class="ui button item">
-      <i class="globe icon"></i>
-      Version originale
-    </LinkTo>
+    {{#if this.edition}}
+      <button class="ui button item important-action" {{on "click" this.save}} type="button">
+        <i class="save icon"></i>
+        Enregistrer
+      </button>
+      <button class="ui button item" {{on "click" this.cancelEdit}} type="button">
+        <i class="ban icon"></i>
+        Annuler
+      </button>
+    {{else}}
+      <a class="ui button item" href={{this.previewUrl}} target="_blank" rel="noopener noreferrer">
+        <i class="eye icon"></i>
+        Prévisualiser
+      </a>
+      <Buttons::CopyLink @link={{this.previewUrl}} />
+      <LinkTo @route={{this.challengeRoute}} @models={{this.challengeModels}} class="ui button item">
+        <i class="globe icon"></i>
+        Version originale
+      </LinkTo>
+      {{#if this.mayEdit}}
+        <button class="ui button item" {{on "click" this.edit}} type="button">
+          <i class="edit icon"></i>
+          Modifier
+        </button>
+      {{/if}}
+    {{/if}}
   </div>
 </div>

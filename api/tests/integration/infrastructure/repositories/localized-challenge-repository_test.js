@@ -358,7 +358,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
 
       // when
-      await localizedChallengeRepository.update({ localizedChallenge });
+      const localizedUpdatedChallenge = await localizedChallengeRepository.update({ localizedChallenge });
 
       // then
       await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
@@ -369,6 +369,14 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ar',
         },
       ]);
+
+      expect(localizedUpdatedChallenge).to.deep.equal(
+        domainBuilder.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'my-new-url.html',
+          locale: 'ar'
+        }));
     });
   });
 });

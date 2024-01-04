@@ -1,6 +1,7 @@
 import JsonapiSerializer from 'jsonapi-serializer';
+import { LocalizedChallenge } from '../../../domain/models/index.js';
 
-const { Serializer } = JsonapiSerializer;
+const { Serializer, Deserializer } = JsonapiSerializer;
 
 const serializer = new Serializer('localized-challenges', {
   attributes: [
@@ -20,4 +21,24 @@ export function serialize(localizedChallenge) {
     ...props,
     challenge: { id: challengeId },
   });
+}
+
+const deserializer = new Deserializer({
+  keyForAttribute: 'camelCase',
+  challenges: {
+    valueForRelationship(challenge) {
+      return challenge.id;
+    },
+  },
+  transform: function({ challenge, embedUrl, ...localizedChallenge }) {
+    return new LocalizedChallenge({
+      ...localizedChallenge,
+      challengeId: challenge,
+      embedUrl: embedUrl === '' ? null : embedUrl,
+    });
+  }
+});
+
+export async function deserialize(localizedChallengeBody) {
+  return deserializer.deserialize(localizedChallengeBody);
 }
