@@ -14,11 +14,20 @@
   <div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
     <form action="" class="ui form">
       <Field::Input
+        @id="localized-challenge-embed-url"
         @label="Embed URL"
         @value={{this.model.embedURL}}
         @edition={{this.edition}}
         @placeholder="Url de l'embed"
       />
+      {{#unless this.edition}}
+        <Field::Input
+          @id="localized-challenge-id"
+          @value={{this.model.id}}
+          @label="Id"
+          @edition={{false}}
+        />
+      {{/unless}}
     </form>
   </div>
   <div class="ui vertical compact labeled icon menu challenge-menu">
