@@ -2,8 +2,8 @@
   <p>{{@title}}</p>
   <div class="ui input">
     {{#if @label}}
-      <label class="label-input" for="input" >{{@label}} : </label>
+      <label class="label-input" for={{@id}} >{{@label}} : </label>
     {{/if}}
-    <Input id="input" @value={{@value}} placeholder={{@placeholder}} readonly={{not @edition}} />
+    <Input id={{@id}} @value={{@value}} placeholder={{@placeholder}} readonly={{not @edition}} />
   </div>
 </div>
