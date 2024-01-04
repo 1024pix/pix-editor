@@ -1,4 +1,16 @@
 <form action="" class="ui form">
-  <Field::Input data-test-theme-name-field @value={{@theme.name}} @edition={{@edition}} @label="Nom fr-fr"/>
-  <Field::Input data-test-theme-name-en-us-field @value={{@theme.nameEnUs}} @edition={{@edition}} @label="Nom en-us"/>
+  <Field::Input
+    data-test-theme-name-field
+    @value={{@theme.name}}
+    @edition={{@edition}}
+    @label="Nom fr-fr"
+    @id="theme-name-fr"
+  />
+  <Field::Input
+    data-test-theme-name-en-us-field
+    @value={{@theme.nameEnUs}}
+    @edition={{@edition}}
+    @label="Nom en-us"
+    @id="theme-name-en"
+  />
 </form>
