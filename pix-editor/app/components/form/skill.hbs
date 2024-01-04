@@ -1,9 +1,36 @@
 <form action="" class="ui form">
-  <Field::Textarea @title="Description" @value={{@skill.description}} @edition={{@edition}} />
-  <Field::Select @title="Statut de la description" @value={{@skill.descriptionStatus}} @options={{this.options.descriptionStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.descriptionStatus)}}/>
-  <Field::Textarea @title="Indice (fr)" @value={{@skill.clue}} @edition={{@edition}} />
-  <Field::Textarea @title="Indice (en)" @value={{@skill.clueEn}} @edition={{@edition}} />
-  <Field::Select @title="Statut de l'indice" @value={{@skill.clueStatus}} @options={{this.options.clueStatus}} @edition={{@edition}} @setValue={{fn (mut @skill.clueStatus)}}/>
+  <Field::Textarea
+    @title="Description"
+    @value={{@skill.description}}
+    @edition={{@edition}}
+    @id="skill-description"
+  />
+  <Field::Select
+    @title="Statut de la description"
+    @value={{@skill.descriptionStatus}}
+    @options={{this.options.descriptionStatus}}
+    @edition={{@edition}}
+    @setValue={{fn (mut @skill.descriptionStatus)}}
+  />
+  <Field::Textarea
+    @title="Indice (fr)"
+    @value={{@skill.clue}}
+    @edition={{@edition}}
+    @id="skill-clue-fr"
+  />
+  <Field::Textarea
+    @title="Indice (en)"
+    @value={{@skill.clueEn}}
+    @edition={{@edition}}
+    @id="skill-clue-en"
+  />
+  <Field::Select
+    @title="Statut de l'indice"
+    @value={{@skill.clueStatus}}
+    @options={{this.options.clueStatus}}
+    @edition={{@edition}}
+    @setValue={{fn (mut @skill.clueStatus)}}
+  />
   {{#if @skill.productionPrototype}}
     <Field::Quality @title="Qualité" @challenge={{@skill.productionPrototype}} @edition={{@edition}} />
   {{/if}}
@@ -23,7 +50,13 @@
     @searchClass="more"
     @addTutorial={{fn this.addTutorial @skill.tutoMore}}
     @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
-  <Field::Select @title="Internationalisation" @value={{@skill.i18n}} @options={{this.options.i18n}} @edition={{@edition}} @setValue={{fn (mut @skill.i18n)}}/>
+  <Field::Select
+    @title="Internationalisation"
+    @value={{@skill.i18n}}
+    @options={{this.options.i18n}}
+    @edition={{@edition}}
+    @setValue={{fn (mut @skill.i18n)}}
+  />
   {{#unless @edition}}
     <Field::Input @value={{@skill.pixId}} @title="Id" @edition={{false}} />
   {{/unless}}
