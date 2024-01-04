@@ -150,16 +150,19 @@
     @value={{@challenge.embedURL}}
     @edition={{@edition}}
     @label="URL"
+    @id="challenge-embed-url"
   />
   <Field::Input
     @value={{@challenge.embedHeight}}
     @edition={{@edition}}
     @label="Hauteur"
+    @id="challenge-embed-height"
   />
   <Field::Input
     @value={{@challenge.embedTitle}}
     @edition={{@edition}}
     @label="Titre"
+    @id="challenge-embed-title"
   />
   {{#if @challenge.isPrototype}}
     <Field::Select
