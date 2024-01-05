@@ -227,6 +227,11 @@ async function mockCurrentContent() {
     locale: 'fr-fr',
     value: expectedCurrentContent.challenges[0].solutionToDisplay,
   });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].embedTitle,
+  });
 
   databaseBuilder.factory.buildLocalizedChallenge({
     id: expectedCurrentContent.challenges[0].id,
@@ -448,6 +453,11 @@ async function mockContentForRelease() {
     key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
     locale: 'fr-fr',
     value: expectedCurrentContent.challenges[0].solutionToDisplay,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].embedTitle,
   });
 
   databaseBuilder.factory.buildLocalizedChallenge({
