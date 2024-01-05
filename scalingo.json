@@ -10,8 +10,18 @@
     "first-deploy": "npm run scalingo-post-ra-creation"
   },
   "addons": [
-    "postgresql:postgresql-sandbox",
-    "redis:redis-sandbox"
+    {
+      "plan": "postgresql:postgresql-sandbox",
+      "options": {
+        "version": "14.10"
+      }
+    },
+    {
+      "plan": "redis:redis-sandbox",
+      "options": {
+        "version": "7.2.3"
+      }
+    }
   ],
   "formation": {
     "web": {
