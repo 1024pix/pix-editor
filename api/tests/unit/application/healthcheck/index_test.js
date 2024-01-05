@@ -14,7 +14,7 @@ describe('Unit | Router | HealthcheckRouter', function() {
 
     beforeEach(function() {
       vi.spyOn(healthcheckController, 'get').mockReturnValue('ok');
-      return server.register(route);
+      server.register(route);
     });
 
     it('should exist', async function() {

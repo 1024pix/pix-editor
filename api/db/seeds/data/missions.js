@@ -2,7 +2,6 @@ import { Mission } from '../../../lib/domain/models/Mission.js';
 
 export function buildMissions(databaseBuilder) {
   databaseBuilder.factory.buildMission({
-    id : 1,
     name : 'Mission test active',
     competenceId : 'competence1NC9NE3IIOa0ym',
     learningObjectives : 'Que tu sois le meilleur',
@@ -13,7 +12,6 @@ export function buildMissions(databaseBuilder) {
   });
 
   databaseBuilder.factory.buildMission({
-    id : 2,
     name : 'Mission test inactive',
     competenceId : 'competence2k2eVZ2GRLwqFL',
     learningObjectives : 'Y\'en a plus',

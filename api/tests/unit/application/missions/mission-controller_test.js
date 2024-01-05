@@ -1,7 +1,7 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { hFake } from '../../../test-helper.js';
 import * as missionsController from '../../../../lib/application/missions/mission-controller.js';
-import * as usecases from '../../../../lib/domain/usecases/find-all-missions.js';
+import * as usecases from '../../../../lib/domain/usecases/index.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { MissionSummary } from '../../../../lib/domain/readmodels/index.js';
 
@@ -174,6 +174,58 @@ describe('Unit | Controller | missions controller', function() {
           expect(findAllMissions).toHaveBeenNthCalledWith(6, { filter: { isActive: false }, page });
         });
       });
+    });
+  });
+
+  describe('createMission', function() {
+    let createMissionMock;
+    const attributes = {
+      name: 'Mission impossible',
+      'competence-id': 'AZERTY',
+      status: Mission.status.INACTIVE,
+      'learning-objectives': null,
+      'validated-objectives': 'Très bien',
+      'thematic-id': null
+    };
+
+    const request = { payload: { data: { attributes } } };
+
+    beforeEach(function() {
+      createMissionMock = vi.spyOn(usecases, 'createMission');
+      createMissionMock.mockResolvedValue(new Mission({
+        id: 1
+      }));
+    });
+
+    it('should call the usecase with a domain object', async function() {
+      // given
+     
+      // when
+      await missionsController.create(request, hFake);
+
+      const deserializedMission = new Mission({
+        name_i18n: { fr: 'Mission impossible' },
+        competenceId: 'AZERTY',
+        thematicId: null,
+        learningObjectives_i18n: { fr: null },
+        validatedObjectives_i18n: { fr: 'Très bien' },
+        status: Mission.status.INACTIVE,
+      });
+      // then
+      expect(createMissionMock).toHaveBeenCalledWith(deserializedMission);
+    });
+
+    it('should return the serialized mission id', async function() {
+      // when
+      const result = await missionsController.create(request, hFake);
+
+      // then
+      expect(result.source.data).to.deep.equal(
+        {
+          type: 'missions',
+          id: '1',
+        }
+      );
     });
   });
 });
