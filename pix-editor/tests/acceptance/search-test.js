@@ -4,8 +4,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-// eslint-disable-next-line qunit/no-only
-module.only('Acceptance | Search', function (hooks) {
+module('Acceptance | Search', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
@@ -15,7 +14,9 @@ module.only('Acceptance | Search', function (hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1', instruction: 'test', airtableId: 'REC_RECHERCHE1' });
     this.server.create('challenge', { id: 'challengeChallenge1', airtableId: 'REC_RECHERCHE2' });
+    this.server.create('localized-challenge', { id: 'challengeChallenge1', challengeId: 'challengeChallenge1' });
     this.server.create('localized-challenge', { id: 'challengeLocalizedChallenge1', challengeId: 'challengeChallenge1' });
+    this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1' });
     this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('competence', {

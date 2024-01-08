@@ -43,6 +43,21 @@ export default class SidebarSearchComponent extends Component {
     }));
   }
 
+  async searchLocalizedChallengesById(localizedChallengeId) {
+    const results = await this.store.query('localized-challenge', {
+      filter: {
+        ids: [localizedChallengeId],
+      },
+    });
+    return results.map(result => ({
+      title: result.id,
+      transition: {
+        route: 'authenticated.challenge',
+        model: result.id,
+      },
+    }));
+  }
+
   async searchChallengesByText(text) {
     const challenges = await this.store.query('challenge', {
       filter: {
@@ -67,7 +82,9 @@ export default class SidebarSearchComponent extends Component {
     if (query.startsWith('@')) {
       return this.searchSkillsByName(query);
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
-      return this.searchChallengesById(query);
+      const challenges = await this.searchChallengesById(query);
+      const localizedChallenges = await this.searchLocalizedChallengesById(query);
+      return [...challenges, ...localizedChallenges];
     }
     return this.searchChallengesByText(query);
   }

@@ -1,5 +1,5 @@
 import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
-import { createServer } from 'miragejs';
+import { Response, createServer } from 'miragejs';
 import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
 import slice from 'lodash/slice';
 
@@ -189,7 +189,7 @@ function routes() {
     const search = request.queryParams['filter[search]'];
     let records = null;
     if (ids) {
-      records = schema.challenges.find(ids);
+      records = schema.challenges.where((challenge)=> ids.includes(challenge.id));
     } else if (search) {
       records = schema.challenges.where((challenge) => challenge.instruction.includes(search));
     } else {
@@ -199,13 +199,17 @@ function routes() {
   });
 
   this.get('/challenges/:id', (schema, request) => {
-    return schema.challenges.find(request.params.id);
+    try {
+      return schema.challenges.find(request.params.id);
+    } catch (e) {
+      return new Response(404);
+    }
   });
 
   this.get('/localized-challenges', (schema, request) => {
     const ids = request.queryParams['filter[ids]'];
     if (ids) {
-      return schema.localizedChallenges.find(ids);
+      return schema.localizedChallenges.where((localizedChallenge)=> ids.includes(localizedChallenge.id));
     }
     return schema.localizedChallenges.all();
   });
@@ -213,7 +217,6 @@ function routes() {
   this.get('/localized-challenges/:id', (schema, request) => {
     return schema.localizedChallenges.find(request.params.id);
   });
-
 
   this.post('/challenges', (schema, request) => {
     const challenge = JSON.parse(request.requestBody);
