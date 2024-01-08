@@ -1,5 +1,17 @@
 
 
+## v3.120.0 (08/01/2024)
+
+
+### :rocket: Amélioration
+- [#456](https://github.com/1024pix/pix-editor/pull/456) [FEATURE] Lire le titre des embeds depuis les traductions dans PG (PIX-10620).
+
+### :building_construction: Tech
+- [#457](https://github.com/1024pix/pix-editor/pull/457) [TECH] Fixer la versions des addons de BDD pour les reviews APP.
+
+### :arrow_up: Montée de version
+- [#459](https://github.com/1024pix/pix-editor/pull/459) [BUMP] Lock file maintenance (api).
+
 ## v3.119.0 (04/01/2024)
 
 
