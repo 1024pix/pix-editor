@@ -15,8 +15,8 @@ module.only('Acceptance | Search', function (hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1', instruction: 'test', airtableId: 'REC_RECHERCHE1' });
     this.server.create('challenge', { id: 'challengeChallenge1', airtableId: 'REC_RECHERCHE2' });
-    this.server.create('localized-challenge', { id: 'localizedChallenge1', challengeId: 'challengeChallenge1' });
-    this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
+    this.server.create('localized-challenge', { id: 'challengeLocalizedChallenge1', challengeId: 'challengeChallenge1' });
+    this.server.create('skill', { id: 'recSkill1', name: '@skill1', challengeIds: ['recChallenge1', 'challengeChallenge1'] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('competence', {
       id: 'recCompetence1.1',
@@ -67,11 +67,11 @@ module.only('Acceptance | Search', function (hooks) {
 
   test('search a challenge by localized challenge id', async function (assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/localizedChallenge1';
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1/localized/challengeLocalizedChallenge1';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
-    await fillIn('[data-test-sidebar-search] input', '  localizedChallenge1  ');
+    await fillIn('[data-test-sidebar-search] input', '  challengeLocalizedChallenge1  ');
     await waitUntil(function () {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });
@@ -88,6 +88,22 @@ module.only('Acceptance | Search', function (hooks) {
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
     await fillIn('[data-test-sidebar-search] input', 'test');
+    await waitUntil(function () {
+      return find('[data-test-sidebar-search] li');
+    }, { timeout: 1000 });
+    await click(find('[data-test-sidebar-search] li'));
+
+    // then
+    assert.strictEqual(currentURL(), expectedUrl);
+  });
+
+  test('search a skill by name - starting with @', async function (assert) {
+    // given
+    const expectedUrl = '/competence/recCompetence1.1/skills/recSkill1';
+    // when
+    await visit('/');
+    await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
+    await fillIn('[data-test-sidebar-search] input', '@skill1');
     await waitUntil(function () {
       return find('[data-test-sidebar-search] li');
     }, { timeout: 1000 });

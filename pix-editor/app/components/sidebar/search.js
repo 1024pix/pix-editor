@@ -13,7 +13,6 @@ export default class SidebarSearchComponent extends Component {
   async getSearchResults(query) {
     query = query.trim();
     if (query.startsWith('@')) {
-      this.routeModel = 'authenticated.skill';
       const skills = await this.store.query('skill', {
         filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
         maxRecords: 20,
@@ -22,13 +21,13 @@ export default class SidebarSearchComponent extends Component {
       return skills.map(skill => ({
         isSkill: true,
         title: skill.name,
-        name: skill.name,
+        id: skill.name,
         status: skill.status,
         statusCSS: skill.statusCSS,
-        version: skill.version
+        version: skill.version,
+        route: 'authenticated.skill',
       }));
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
-      this.routeModel = 'authenticated.challenge';
       const challenges = await this.store.query('challenge', {
         filter: {
           ids: [query],
@@ -36,10 +35,10 @@ export default class SidebarSearchComponent extends Component {
       });
       return challenges.map(challenge => ({
         title: challenge.id,
-        id: challenge.id
+        id: challenge.id,
+        route: 'authenticated.challenge',
       }));
     } else {
-      this.routeModel = 'authenticated.challenge';
       const challenges = await this.store.query('challenge', {
         filter: {
           search: query.toLowerCase(),
@@ -50,7 +49,8 @@ export default class SidebarSearchComponent extends Component {
       });
       return challenges.map(challenge => ({
         title: challenge.instruction.substr(0, 100),
-        id: challenge.id
+        route: 'authenticated.challenge',
+        id: challenge.id,
       }));
     }
   }
@@ -61,9 +61,9 @@ export default class SidebarSearchComponent extends Component {
     const router = this.router;
     this.args.close();
     if (route === 'authenticated.skill') {
-      router.transitionTo(route, item.name);
+      router.transitionTo(item.route, item.id);
     } else {
-      router.transitionTo(route, item.id);
+      router.transitionTo(item.route, item.id);
     }
   }
 
