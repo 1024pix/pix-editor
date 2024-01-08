@@ -186,10 +186,12 @@ function routes() {
 
   this.get('/challenges', (schema, request) => {
     const ids = request.queryParams['filter[ids]'];
+    const search = request.queryParams['filter[search]'];
     let records = null;
-
     if (ids) {
       records = schema.challenges.find(ids);
+    } else if (search) {
+      records = schema.challenges.where((challenge) => challenge.instruction.includes(search));
     } else {
       records = schema.challenges.all();
     }
@@ -198,6 +200,14 @@ function routes() {
 
   this.get('/challenges/:id', (schema, request) => {
     return schema.challenges.find(request.params.id);
+  });
+
+  this.get('/localized-challenges', (schema, request) => {
+    const ids = request.queryParams['filter[ids]'];
+    if (ids) {
+      return schema.localizedChallenges.find(ids);
+    }
+    return schema.localizedChallenges.all();
   });
 
   this.get('/localized-challenges/:id', (schema, request) => {
