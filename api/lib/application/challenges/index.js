@@ -1,4 +1,3 @@
-import qs from 'qs';
 import Boom from '@hapi/boom';
 import _ from 'lodash';
 import Joi from 'joi';
@@ -12,15 +11,7 @@ import { createChallengeTransformer } from '../../infrastructure/transformers/in
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import { previewChallenge } from '../../domain/usecases/index.js';
-
-function _parseQueryParams(search) {
-  const paramsParsed = qs.parse(search, { ignoreQueryPrefix: true });
-  const params = _.defaults(paramsParsed, { filter: {}, page: { size: 100 } });
-  if (params.page.size) {
-    params.page.size = parseInt(params.page.size);
-  }
-  return params;
-}
+import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
@@ -51,7 +42,7 @@ export async function register(server) {
       path: '/api/challenges',
       config: {
         handler: async function(request) {
-          const params = _parseQueryParams(request.url.search);
+          const params = extractParameters(request.query, { page: { size: 100 } });
           const challenges = await challengeRepository.filter(params);
           return challengeSerializer.serialize(challenges);
         },

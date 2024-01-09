@@ -2,13 +2,17 @@ import _ from 'lodash';
 
 // query example: 'filter[organizationId]=4&page[size]=30$page[number]=3&sort=createdAt[desc]&include=user'
 // Warning: there is not any order between sort parameters
-export function extractParameters(query) {
-  return {
+export function extractParameters(query, defaultQuery) {
+  return _.mapValues({
     filter: _extractFilter(query),
     page: _extractPage(query),
     sort: _extractSort(query, 'sort'),
     include: _extractArrayParameter(query, 'include'),
-  };
+  }, (value, key) => {
+    if (Array.isArray(value)) return value;
+    if (defaultQuery?.[key] == undefined) return value;
+    return _.defaults(value, defaultQuery[key]);
+  });
 }
 
 function _extractFilter(query) {
@@ -24,7 +28,6 @@ function _extractSort(query) {
 function _extractPage(query) {
   const regex = /page\[([a-zA-Z]*)\]/;
   const params = _extractObjectParameter(query, regex);
-
   return _convertObjectValueToInt(params);
 }
 
