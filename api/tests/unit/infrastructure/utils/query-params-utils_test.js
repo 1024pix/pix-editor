@@ -8,6 +8,8 @@ describe('Unit | Utils | Query Params Utils', function() {
       const query = {
         'filter[courseId]': '26',
         'filter[userId]': '1',
+        'filter[skillIds][]': '123',
+        'filter[tubeIds][]': ['456', '789'],
         'page[number]': '1',
         'page[size]': '200',
         'sort[participationCount]': 'asc',
@@ -22,6 +24,8 @@ describe('Unit | Utils | Query Params Utils', function() {
         filter: {
           courseId: '26',
           userId: '1',
+          skillIds: ['123'],
+          tubeIds: ['456', '789'],
         },
         page: {
           number: 1,

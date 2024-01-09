@@ -51,6 +51,126 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     });
   });
 
+  describe('GET /localized-challenges', () => {
+    it('should find a localized challenge by ID', async () => {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+        embedUrl: 'https://choucroute.com/',
+      });
+
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const getLocalizedChallengeOptions = {
+        method: 'GET',
+        url: '/api/localized-challenges?filter[ids][]=localizedChallengeId',
+        headers: generateAuthorizationHeader(user),
+      };
+
+      const expectedLocalizedChallenges = {
+        data: [{
+          type: 'localized-challenges',
+          id: localizedChallenge.id,
+          attributes: {
+            'locale': localizedChallenge.locale,
+            'embed-url': localizedChallenge.embedUrl,
+          },
+          relationships: {
+            challenge: {
+              data: {
+                id: localizedChallenge.challengeId,
+                type: 'challenges',
+              },
+            },
+          },
+        }]
+      };
+
+      // When
+      const response = await server.inject(getLocalizedChallengeOptions);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal(expectedLocalizedChallenges);
+    });
+
+    it('should filter several localized challenges by IDs', async () => {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      const localizedChallenges = [
+        databaseBuilder.factory.buildLocalizedChallenge({
+          challengeId: 'recChallenge0',
+          id: 'localizedChallengeId0',
+          locale: 'nl',
+          embedUrl: 'https://choucroute.com/',
+        }),
+        databaseBuilder.factory.buildLocalizedChallenge({
+          challengeId: 'recChallenge1',
+          id: 'localizedChallengeId1',
+          locale: 'de',
+          embedUrl: 'https://raclette.com/',
+        }),
+      ];
+
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const getLocalizedChallengeOptions = {
+        method: 'GET',
+        url: '/api/localized-challenges?filter[ids][]=localizedChallengeId0&filter[ids][]=localizedChallengeId1',
+        headers: generateAuthorizationHeader(user),
+      };
+
+      const expectedLocalizedChallenges = {
+        data: [
+          {
+            type: 'localized-challenges',
+            id: localizedChallenges[0].id,
+            attributes: {
+              'locale': localizedChallenges[0].locale,
+              'embed-url': localizedChallenges[0].embedUrl,
+            },
+            relationships: {
+              challenge: {
+                data: {
+                  id: localizedChallenges[0].challengeId,
+                  type: 'challenges',
+                },
+              },
+            },
+          },
+          {
+            type: 'localized-challenges',
+            id: localizedChallenges[1].id,
+            attributes: {
+              'locale': localizedChallenges[1].locale,
+              'embed-url': localizedChallenges[1].embedUrl,
+            },
+            relationships: {
+              challenge: {
+                data: {
+                  id: localizedChallenges[1].challengeId,
+                  type: 'challenges',
+                },
+              },
+            },
+          }
+        ]
+      };
+
+      // When
+      const response = await server.inject(getLocalizedChallengeOptions);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal(expectedLocalizedChallenges);
+    });
+  });
+
   describe('PATCH /localized-challenges/{id}', () => {
     it('should modify localized challenge of given ID', async () => {
       // given

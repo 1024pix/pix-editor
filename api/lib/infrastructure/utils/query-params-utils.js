@@ -34,7 +34,11 @@ function _extractObjectParameter(query, regex) {
     (result, queryFilterValue, queryFilterKey) => {
       const parameter = queryFilterKey.match(regex);
       if (parameter && parameter[1]) {
-        result[parameter[1]] = queryFilterValue;
+        if (queryFilterKey.endsWith('[]')) {
+          result[parameter[1]] = Array.isArray(queryFilterValue) ? queryFilterValue : [queryFilterValue];
+        } else {
+          result[parameter[1]] = queryFilterValue;
+        }
       }
       return result;
     },

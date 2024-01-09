@@ -22,7 +22,7 @@ export async function create(localizedChallenges = [], generateId = _generateId)
       id: localizedChallenge.id ?? generateId(),
     };
   });
-  await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore() ;
+  await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {
@@ -46,8 +46,16 @@ export async function get({ id, transaction: knexConnection = knex }) {
   return _toDomain(dto);
 }
 
+export async function getMany({ ids, transaction: knexConnection = knex }) {
+  const dtos = await knexConnection('localized_challenges').whereIn('id', ids).select();
+  return dtos.map(_toDomain);
+}
+
 export async function update({ localizedChallenge: { id, locale, embedUrl }, transaction: knexConnection = knex }) {
-  const [dto] = await knexConnection('localized_challenges').where('id', id).update({ locale, embedUrl }).returning('*');
+  const [dto] = await knexConnection('localized_challenges').where('id', id).update({
+    locale,
+    embedUrl
+  }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
