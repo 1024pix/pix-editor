@@ -15,6 +15,7 @@ function localPostgresEnv(databaseUrl) {
     migrations: {
       tableName: 'knex_migrations',
       directory: './migrations',
+      stub: './migration-template.js',
     },
     seeds: {
       directory: './seeds',
