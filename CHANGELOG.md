@@ -1,5 +1,15 @@
 
 
+## v3.120.1 (09/01/2024)
+
+
+### :bug: Correction
+- [#461](https://github.com/1024pix/pix-editor/pull/461) [BUGFIX] Augmente la taille maximale autorisée du fichier de traductions importé (PIX-10718).
+
+### :arrow_up: Montée de version
+- [#458](https://github.com/1024pix/pix-editor/pull/458) [BUMP] Update dependency redis to v7.2.3.
+- [#460](https://github.com/1024pix/pix-editor/pull/460) [BUMP] Lock file maintenance (challenge-parser).
+
 ## v3.120.0 (08/01/2024)
 
 
