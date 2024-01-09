@@ -110,6 +110,8 @@ export const checkUrlsJobs = {
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
 };
 
+export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
+
 if (process.env.NODE_ENV === 'test') {
   port = 0;
   hapi.publicDir = 'tests/public-tests/';

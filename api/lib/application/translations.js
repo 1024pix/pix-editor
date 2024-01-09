@@ -5,6 +5,7 @@ import { exportTranslations } from '../domain/usecases/export-translations.js';
 import { importTranslations, InvalidFileError } from '../domain/usecases/import-translations.js';
 import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
+import * as config from '../config.js';
 
 export async function register(server) {
   server.route([
@@ -28,6 +29,7 @@ export async function register(server) {
         payload: {
           multipart: true,
           output: 'file',
+          maxBytes: config.importTranslationsFileMaxSize,
         },
         handler: importTranslationsHandler
       },
