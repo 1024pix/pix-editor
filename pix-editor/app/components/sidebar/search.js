@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { uniqBy } from 'lodash';
 
 export default class SidebarSearchComponent extends Component {
 
@@ -84,7 +85,7 @@ export default class SidebarSearchComponent extends Component {
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
       const challenges = await this.searchChallengesById(query);
       const localizedChallenges = await this.searchLocalizedChallengesById(query);
-      return [...challenges, ...localizedChallenges];
+      return uniqBy([...challenges, ...localizedChallenges], 'id');
     }
     return this.searchChallengesByText(query);
   }
