@@ -9,22 +9,26 @@ export default class MissionForm extends Component {
   @service store;
 
   @tracked name = new NameField();
-  @tracked thematicId = null;
-  @tracked competenceId = new CompetenceIdField();
+  @tracked selectedThematicId = null;
+  @tracked selectedCompetenceId = new CompetenceIdField();
   @tracked selectedStatus = 'ACTIVE';
   @tracked validatedObjectives = null;
   @tracked learningObjectives = null;
   @tracked errorMessages = A([]);
+  @tracked themeOptions = [];
+  @tracked isSubmitting = false;
+  @tracked isFormValid = false;
 
   get statusOptions() {
     return [{ value: 'ACTIVE', label: 'ACTIVE' }, { value: 'INACTIVE', label: 'INACTIVE' }];
   }
 
-  //TODO: à décommenter quand on affichera la liste des compétences pour le référentiel PIX 1D
-  // get competencesOptions() {
-  //   // this.currentData.getCompetence().map((competence) => { value: competence.id, label: });
-  //   return []
-  // }
+  get competencesOptions() {
+    return this.args.competences.map((competence) => {
+      return { value: competence.pixId, label: competence.title };
+    });
+  }
+
 
   @action
   async onSubmitClicked(event) {
@@ -33,8 +37,8 @@ export default class MissionForm extends Component {
     this.isSubmitting = true;
     const formData = {
       name: this.name.getValueForSubmit(),
-      competenceId: this.competenceId.getValueForSubmit(),
-      thematicId: this.thematicId,
+      competenceId: this.selectedCompetenceId.value,
+      thematicId: this.selectedThematicId,
       status: this.selectedStatus,
       learningObjectives: this.learningObjectives,
       validatedObjectives: this.validatedObjectives
@@ -63,12 +67,40 @@ export default class MissionForm extends Component {
   }
 
   @action
+  validateCompetence() {
+    this.selectedCompetenceId.validate();
+    this.checkFormValidity();
+  }
+
+  @action
   changeStatus(value) {
     this.selectedStatus = value;
   }
 
+  @action
+  changeCompetence(value) {
+    this.selectedCompetenceId.setValue(value);
+    this.selectedCompetenceId.validate();
+    this.checkFormValidity();
+    this.updateThemes(value);
+  }
+
+  @action
+  changeThematic(value) {
+    this.selectedThematicId = value;
+  }
+
   checkFormValidity() {
-    this.isFormInvalid = !this.name.isValid && !this.competenceId.isValid;
+    this.isFormValid = !!this.selectedCompetenceId.value && !!this.name.getValueForSubmit();
+  }
+
+  @action
+  updateThemes(competenceId) {
+    const filteredCompetence = this.args.competences.filter((competence) => competence.pixId === competenceId);
+    const options = filteredCompetence[0].themes;
+    this.themeOptions = options.map((option) => {
+      return { value: option.id, label: option.name };
+    });
   }
 
   @action
@@ -79,24 +111,6 @@ export default class MissionForm extends Component {
   @action
   updateValidatedObjectives(event) {
     this.validatedObjectives = event.target.value;
-  }
-
-  //TODO: À supprimer quand on affichera la liste des compétences pour le référentiel PIX 1D
-  @action
-  validateComptenceId() {
-    this.competenceId.validate();
-    this.checkFormValidity();
-  }
-
-  @action
-  updateCompetenceId(event) {
-    this.competenceId.setValue(event.target.value);
-    this.competenceId.validate();
-    this.checkFormValidity();
-  }
-  @action
-  updateThematicId(event) {
-    this.thematicId = event.target.value;
   }
 }
 
@@ -150,14 +164,17 @@ class NameField extends FormField {
 
 class CompetenceIdField extends FormField {
   constructor() {
-    super({ errorMessage: 'La présence de competenceId est obligatoire. Renseignez le champ' });
+    super();
   }
 
   validate() {
     this.state = this.value.trim().length > 0
       ? STATES.SUCCESS
       : STATES.ERROR;
+    if (this.state == STATES.ERROR) {
+      this.errorMessage = 'La présence d\'une competence est obligatoire. Renseignez le champ';
+    } else {
+      this.errorMessage = '';
+    }
   }
-
-  getValueForSubmit() { return this.value.trim(); }
 }

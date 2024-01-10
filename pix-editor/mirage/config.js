@@ -307,7 +307,6 @@ function routes() {
 
   this.post('/static-courses', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
-    console.log(attributes);
     return schema.create('static-course', {
       id: 'newStaticCourseId',
       name: attributes.name,

@@ -13,8 +13,10 @@ module('Acceptance | Missions | Creation', function(hooks) {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
+    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence' , source: 'Pix+' });
+    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
-    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D' });
+    this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
     this.server.create('mission-summary', { name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
     this.server.create('mission-summary', { name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
   });
@@ -70,6 +72,11 @@ module('Acceptance | Missions | Creation', function(hooks) {
       // when
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
+
+      await clickByName('Compétence');
+      await screen.findByRole('listbox');
+
+      await click(screen.getByRole('option', { name: 'Notre compétence' }));
       await clickByName('Créer la mission');
 
       // then

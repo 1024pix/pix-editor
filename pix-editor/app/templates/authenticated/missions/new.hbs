@@ -4,7 +4,8 @@
 <main class="page-body">
   <section class="page-section">
     <Form::Mission
-      @mission={{this.model}}
+      @mission={{this.model.mission}}
+      @competences={{this.model.competences}}
       @onFormCancelled={{this.goBackToList}}
       @submitButtonText="Créer la mission"
       @onFormSubmitted={{this.createMission}}

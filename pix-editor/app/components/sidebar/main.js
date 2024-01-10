@@ -1,10 +1,10 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
+import FrameworkModel from '../../models/framework';
 
 export default class SidebarMain extends Component {
   version = ENV.APP.version;
-  pix1dFrameworkName = 'Pix 1D';
   @service access;
   @service config;
   @service currentData;
@@ -34,7 +34,7 @@ export default class SidebarMain extends Component {
   }
 
   get shouldShowMissionsLink() {
-    return this.currentData?.getFramework()?.name.toLowerCase() === this.pix1dFrameworkName.toLowerCase();
+    return this.currentData?.getFramework()?.name.toLowerCase() === FrameworkModel.pix1DFrameworkName.toLowerCase();
   }
 }
 
