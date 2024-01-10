@@ -44,6 +44,7 @@ function _translateChallenge(challenge, localizedChallenge) {
     ...clearedLocalizedFields,
     ...challenge.translations[localizedChallenge.locale],
     id: localizedChallenge.id,
+    status: (isPrimaryLocale || challenge.status !== 'validé') ? challenge.status : localizedChallenge.status,
     embedUrl: localizedChallenge.embedUrl ?? _replaceLangParamsInUrl(localizedChallenge.locale, challenge.embedUrl),
     locales: isPrimaryLocale ? challenge.locales : [localizedChallenge.locale],
   };

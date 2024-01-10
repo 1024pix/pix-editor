@@ -16,12 +16,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             challengeId: 'challenge-id',
             locale: 'fr',
             embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=fr#123456',
+            status: null,
           }),
           new LocalizedChallenge({
             id: 'localized-challenge-en-id',
             challengeId: 'challenge-id',
             embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
             locale: 'en',
+            status: 'localized_status',
+
           }),
           new LocalizedChallenge({
             id: 'other-challenge-id',
@@ -42,6 +45,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
               alternativeInstruction: 'Alternative english instructions',
             },
           },
+          status: 'validé',
           localizedChallenges,
           locales: ['fr', 'fr-fr'],
         });
@@ -69,6 +73,79 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',
             proposals: '',
+            status: 'localized_status',
+          }),
+        ]);
+      });
+    });
+
+    [
+      { challengeStatus: 'périmé', expectedLocalizedChallengeStatus: 'périmé' },
+      { challengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'proposé' },
+      { challengeStatus: 'archivé', expectedLocalizedChallengeStatus: 'archivé' },
+      { challengeStatus: 'validé', expectedLocalizedChallengeStatus: 'localized_status' },
+    ].forEach(({ challengeStatus, expectedLocalizedChallengeStatus }) => {
+      it(`when challenge is '${challengeStatus}' and localized challenge is 'localized_status', it should export '${expectedLocalizedChallengeStatus} in release'`, async function() {
+        // given
+        const attachments = [];
+        const localizedChallenges = [
+          new LocalizedChallenge({
+            id: 'challenge-id',
+            challengeId: 'challenge-id',
+            locale: 'fr',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=fr#123456',
+            status: null,
+          }),
+          new LocalizedChallenge({
+            id: 'localized-challenge-en-id',
+            challengeId: 'challenge-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
+            locale: 'en',
+            status: 'localized_status',
+          }),
+        ];
+        const challenge = domainBuilder.buildChallenge({
+          id: 'challenge-id',
+          translations: {
+            fr: {
+              instruction: 'Consigne',
+              alternativeInstruction: 'Consigne alternative',
+              proposals: 'Propositions',
+            },
+            en: {
+              instruction: 'English instructions',
+              alternativeInstruction: 'Alternative english instructions',
+            },
+          },
+          status: challengeStatus,
+          localizedChallenges,
+          locales: ['fr', 'fr-fr'],
+        });
+
+        // when
+        const transform = createChallengeTransformer({ attachments, localizedChallenges });
+        const result = transform(challenge);
+
+        // then
+        expect(result).to.deep.equal([
+          _buildReleaseChallenge({
+            ...challenge,
+            id: 'challenge-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=fr#123456',
+            locales: ['fr', 'fr-fr'],
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          }),
+          _buildReleaseChallenge({
+            ...challenge,
+            id: 'localized-challenge-en-id',
+            embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
+            locales: ['en'],
+            instruction: 'English instructions',
+            alternativeInstruction: 'Alternative english instructions',
+            proposals: '',
+            status: expectedLocalizedChallengeStatus,
           }),
         ]);
       });
@@ -82,12 +159,14 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           id: 'fr-challenge-id',
           challengeId: 'challenge-id',
           locale: 'fr-fr',
+          status: 'validé',
         });
         const localizedChallengeNl = new LocalizedChallenge({
           id: 'nl-challenge-id',
           challengeId: 'challenge-id',
           locale: 'nl-be',
           embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=nl-be&mode=a#123456',
+          status: 'validé',
         });
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',

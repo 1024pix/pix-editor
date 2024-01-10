@@ -282,6 +282,7 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
     challengeId: challenge.id,
     locale,
     embedUrl: localizedChallengeId === challenge.id ? challenge.embedUrl : undefined,
+    status: 'validé',
   });
 }
 
