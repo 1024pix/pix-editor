@@ -51,6 +51,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'locale',
         embedUrl: 'https://example.com/embed.html',
+        status: null,
       }]);
     });
 
@@ -83,6 +84,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
+          status: null,
         }]);
       });
 
@@ -142,12 +144,14 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'en',
             embedUrl: 'example.com',
+            status: null,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
             challengeId: 'challengeId',
             locale: 'fr',
             embedUrl: 'example.net',
+            status: null,
           },
         ]);
       });
@@ -405,6 +409,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
+          status: null,
         },
       ]);
 

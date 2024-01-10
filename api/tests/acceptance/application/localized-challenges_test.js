@@ -78,6 +78,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            status: null,
           },
           relationships: {
             challenge: {
@@ -133,6 +134,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
+              status: null,
             },
             relationships: {
               challenge: {
@@ -149,6 +151,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
+              status: null,
             },
             relationships: {
               challenge: {
@@ -214,6 +217,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         challengeId: localizedChallenge.challengeId,
         locale: 'nl',
         embedUrl: 'https://cassoulet.com/',
+        status: null,
       });
     });
 
