@@ -53,6 +53,7 @@ const extractChallengesLocales = fp.flow(
     return new LocalizedChallenge({
       challengeId: challengeTranslation.key.split('.')[1],
       locale: challengeTranslation.locale,
+      status: 'proposé',
     });
   }),
   fp.uniqBy(({ challengeId, locale }) => `${challengeId}:${locale}`),

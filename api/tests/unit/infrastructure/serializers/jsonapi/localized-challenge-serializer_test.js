@@ -14,6 +14,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           attributes: {
             'embed-url': expectedLocalizedChallenge.embedUrl,
             locale: expectedLocalizedChallenge.locale,
+            status: expectedLocalizedChallenge.status,
           },
           relationships: {
             challenge: {
@@ -45,6 +46,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           attributes: {
             'embed-url': '',
             locale: expectedLocalizedChallenge.locale,
+            status: expectedLocalizedChallenge.status,
           },
           relationships: {
             challenge: {

@@ -96,10 +96,12 @@ describe('Unit | Domain | Usecases | import-translations', function() {
       new LocalizedChallenge({
         challengeId: 'id',
         locale: 'nl',
+        status: 'proposé',
       }),
       new LocalizedChallenge({
         challengeId: 'id2',
         locale: 'nl',
+        status: 'proposé',
       }),
     ]);
   });

@@ -5,11 +5,13 @@ export function buildLocalizedChallenge({
   challengeId = 'persistant id',
   locale = 'fr',
   embedUrl = 'https://example.com/embed.html',
+  status = null,
 }) {
   return new LocalizedChallenge({
     id,
     challengeId,
     locale,
     embedUrl,
+    status
   });
 }
