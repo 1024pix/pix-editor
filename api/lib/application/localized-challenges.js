@@ -1,8 +1,8 @@
-import _ from 'lodash';
 import { localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import { localizedChallengeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
+import { hasAuthenticatedUserAccess, replyForbiddenError } from './security-utils.js';
 
 export async function register(server) {
   server.route([
@@ -35,6 +35,11 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const { locale: _, ...localizedChallenge } = await localizedChallengeSerializer.deserialize(request.payload);
+
+          if (localizedChallenge.status !== undefined && !hasAuthenticatedUserAccess(request, 'admin')) {
+            return replyForbiddenError(h);
+          }
+
           const updatedLocalizedChallenge = await localizedChallengeRepository.update({ localizedChallenge });
           return h.response(localizedChallengeSerializer.serialize(updatedLocalizedChallenge));
         },
