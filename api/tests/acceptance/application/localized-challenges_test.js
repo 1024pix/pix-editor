@@ -12,6 +12,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
+        status: 'proposé'
       });
 
       await databaseBuilder.commit();
@@ -30,6 +31,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            'status': localizedChallenge.status,
           },
           relationships: {
             challenge: {
@@ -237,5 +239,50 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       // Then
       await expect(response.statusCode).to.equal(403);
     });
+
+    it('should modify localized challenge status of given ID', async () => {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+        embedUrl: 'https://choucroute.com/',
+      });
+
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const patchLocalizedChallengeOptions = {
+        method: 'PATCH',
+        url: '/api/localized-challenges/localizedChallengeId',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'localized-challenges',
+            id: localizedChallenge.id,
+            attributes: {
+              'status': 'validé',
+            },
+          },
+        },
+      };
+
+      // When
+      const response = await server.inject(patchLocalizedChallengeOptions);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+
+      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
+      expect(updatedLocalizedChallenge).to.deep.equal({
+        id: localizedChallenge.id,
+        challengeId: localizedChallenge.challengeId,
+        locale: 'nl',
+        embedUrl: 'https://choucroute.com/',
+        status: 'validé',
+      });
+    });
+
   });
 });
