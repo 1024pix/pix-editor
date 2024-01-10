@@ -8,6 +8,7 @@
   <:default>
     <i class="{{convert-language-as-flag this.model.locale}} flag" title={{this.model.locale}}></i>
     {{this.challengeTitle}}
+    <div class="ui circular label {{this.model.statusCSS}}">{{ this.model.statusText }}</div>
   </:default>
 </Competence::Prototypes::ChallengeHeader>
 <div class="challenge">

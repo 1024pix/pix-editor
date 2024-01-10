@@ -14,7 +14,7 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1', status: 'validé', alternativeLocales: ['en'] });
-    this.server.create('localized-challenge', { id: 'localized-challenge-id-1', challengeId: 'recChallenge1', locale: 'en', embedURL: 'https://my-embed.com/en.html' });
+    this.server.create('localized-challenge', { id: 'localized-challenge-id-1', challengeId: 'recChallenge1', locale: 'en', embedURL: 'https://my-embed.com/en.html', status: 'proposé' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -37,6 +37,9 @@ module('Acceptance | Controller | Get Localized Challenge', function(hooks) {
 
     const link = await screen.findByText('Prévisualiser');
     assert.ok(link.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
+
+    const header = await screen.getByTestId('challenge-header');
+    assert.dom(header).hasText(/Pas en prod/);
   });
 
   test('it should go back to the original challenge', async function(assert) {
