@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import { localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import { localizedChallengeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
+import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 
 export async function register(server) {
   server.route([
@@ -12,6 +14,17 @@ export async function register(server) {
           const localizedChallengeId = request.params.id;
           const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
           return localizedChallengeSerializer.serialize(localizedChallenge);
+        }
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/localized-challenges',
+      config: {
+        handler: async function(request) {
+          const params = extractParameters(request.query);
+          const localizedChallenges = await localizedChallengeRepository.getMany({ ids: params.filter.ids });
+          return localizedChallengeSerializer.serialize(localizedChallenges);
         }
       },
     },

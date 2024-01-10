@@ -13,14 +13,16 @@ const serializer = new Serializer('localized-challenges', {
     ref: 'id',
     included: false,
   },
+  transform: function({ challengeId, ...localizedChallenge }) {
+    return {
+      ...localizedChallenge,
+      challenge: { id: challengeId },
+    };
+  }
 });
 
 export function serialize(localizedChallenge) {
-  const { challengeId, ...props } = localizedChallenge;
-  return serializer.serialize({
-    ...props,
-    challenge: { id: challengeId },
-  });
+  return serializer.serialize(localizedChallenge);
 }
 
 const deserializer = new Deserializer({

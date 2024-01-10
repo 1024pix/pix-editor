@@ -5,4 +5,8 @@ export default class LocalizedChallengeModel extends Model {
   @attr locale;
 
   @belongsTo('challenge') challenge;
+
+  get isPrimaryChallenge() {
+    return this.challenge.get('id') === this.id;
+  }
 }

@@ -1,6 +1,7 @@
 import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import { uniqBy } from 'lodash';
 
 export default class SidebarSearchComponent extends Component {
 
@@ -9,62 +10,91 @@ export default class SidebarSearchComponent extends Component {
   @service store;
   @service router;
 
+  async searchSkillsByName(skillName) {
+    const skills = await this.store.query('skill', {
+      filterByFormula: `FIND('${skillName.toLowerCase()}', LOWER(Nom))`,
+      maxRecords: 20,
+      sort: [{ field: 'Nom', direction: 'asc' }]
+    });
+    return skills.map(skill => ({
+      isSkill: true,
+      title: skill.name,
+      status: skill.status,
+      statusCSS: skill.statusCSS,
+      version: skill.version,
+      transition: {
+        route: 'authenticated.skill',
+        model: skill.name,
+      },
+    }));
+  }
+
+  async searchChallengesById(challengeId) {
+    const challenges = await this.store.query('challenge', {
+      filter: {
+        ids: [challengeId],
+      },
+    });
+    return challenges.map(challenge => ({
+      title: challenge.id,
+      transition: {
+        route: 'authenticated.challenge',
+        model: challenge.id,
+      },
+    }));
+  }
+
+  async searchLocalizedChallengesById(localizedChallengeId) {
+    const results = await this.store.query('localized-challenge', {
+      filter: {
+        ids: [localizedChallengeId],
+      },
+    });
+    return results.map(result => ({
+      title: result.id,
+      transition: {
+        route: 'authenticated.challenge',
+        model: result.id,
+      },
+    }));
+  }
+
+  async searchChallengesByText(text) {
+    const challenges = await this.store.query('challenge', {
+      filter: {
+        search: text.toLowerCase(),
+      },
+      page: {
+        size: 20,
+      },
+    });
+    return challenges.map(challenge => ({
+      title: challenge.instruction.substr(0, 100),
+      transition: {
+        route: 'authenticated.challenge',
+        model: challenge.id,
+      },
+    }));
+  }
+
   @action
   async getSearchResults(query) {
     query = query.trim();
     if (query.startsWith('@')) {
-      this.routeModel = 'authenticated.skill';
-      const skills = await this.store.query('skill', {
-        filterByFormula: `FIND('${query.toLowerCase()}', LOWER(Nom))`,
-        maxRecords: 20,
-        sort: [{ field: 'Nom', direction: 'asc' }]
-      });
-      return skills.map(skill => ({
-        isSkill: true,
-        title: skill.name,
-        name: skill.name,
-        status: skill.status,
-        statusCSS: skill.statusCSS,
-        version: skill.version
-      }));
+      return this.searchSkillsByName(query);
     } else if (query.startsWith('rec') || query.startsWith('challenge')) {
-      this.routeModel = 'authenticated.challenge';
-      const challenges = await this.store.query('challenge', {
-        filter: {
-          ids: [query],
-        },
-      });
-      return challenges.map(challenge => ({
-        title: challenge.id,
-        id: challenge.id
-      }));
-    } else {
-      this.routeModel = 'authenticated.challenge';
-      const challenges = await this.store.query('challenge', {
-        filter: {
-          search: query.toLowerCase(),
-        },
-        page: {
-          size: 20,
-        },
-      });
-      return challenges.map(challenge => ({
-        title: challenge.instruction.substr(0, 100),
-        id: challenge.id
-      }));
+      const challenges = await this.searchChallengesById(query);
+      const localizedChallenges = await this.searchLocalizedChallengesById(query);
+      return uniqBy([...challenges, ...localizedChallenges], 'id');
     }
+    return this.searchChallengesByText(query);
   }
 
   @action
-  linkTo(item) {
-    const route = this.routeModel;
+  linkTo({ transition }) {
     const router = this.router;
     this.args.close();
-    if (route === 'authenticated.skill') {
-      router.transitionTo(route, item.name);
-    } else {
-      router.transitionTo(route, item.id);
-    }
+    router.transitionTo(transition.route, transition.model);
   }
 
 }

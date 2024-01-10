@@ -338,6 +338,44 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
   });
 
+  context('#getMany', () => {
+    it('should return localized challenges by ids', async () => {
+      // given
+      const ids = ['localizedChallengeId1', 'localizedChallengeId2'];
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: ids[0],
+        challengeId: 'challengeId1',
+        embedUrl: 'mon-url.com',
+        locale: 'bz',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: ids[1],
+        challengeId: 'challengeId2',
+        locale: 'ur',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.getMany({ ids });
+
+      // then
+      expect(localizedChallenges).to.deep.equal([
+        domainBuilder.buildLocalizedChallenge({
+          id: ids[0],
+          challengeId: 'challengeId1',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: ids[1],
+          challengeId: 'challengeId2',
+          embedUrl:  null,
+          locale: 'ur',
+        }),
+      ]);
+    });
+  });
+
   context('#update', () => {
     it('should change localized challenge locale and embedUrl', async () => {
       // given
