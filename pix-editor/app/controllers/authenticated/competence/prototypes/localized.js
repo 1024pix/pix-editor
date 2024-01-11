@@ -56,6 +56,23 @@ export default class LocalizedController extends Controller {
     return this.access.mayEdit(this.model.challenge);
   }
 
+  get mayChangeStatus() {
+    return this.access.mayChangeLocalizedChallengeStatus(this.model);
+  }
+
+  get changeStatusButtonText() {
+    return this.model.isInProduction ? 'Mettre en pause' : 'Mettre en prod';
+  }
+
+  get changeStatusButtonIcon() {
+    return this.model.isInProduction ? 'pause' : 'play';
+  }
+
+  @action editStatus() {
+    this.model.status = this.model.isInProduction ? 'proposé' : 'validé';
+    return this.save();
+  }
+
   @action edit() {
     this.edition = true;
   }

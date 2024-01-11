@@ -57,6 +57,12 @@
           Modifier
         </button>
       {{/if}}
+      {{#if this.mayChangeStatus}}
+        <button class="ui button item" {{on "click" this.editStatus}} type="button">
+          <i class="{{this.changeStatusButtonIcon}} icon"></i>
+          {{this.changeStatusButtonText}}
+        </button>
+      {{/if}}
     {{/if}}
   </div>
 </div>
