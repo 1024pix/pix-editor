@@ -14,9 +14,12 @@ module('Unit | Model | localized-challenge', function(hooks) {
     [
       { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedStatus: 'suggested' },
       { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedStatus: 'validated' },
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'onSenFOu', expectedStatus: 'suggested' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'onSenFOu', expectedStatus: 'archived' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'onSenFOu', expectedStatus: 'deleted' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedStatus: 'suggested' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedStatus: 'suggested' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedStatus: 'validated' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedStatus: 'validated' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedStatus: 'suggested' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedStatus: 'suggested' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedStatus })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedStatus}`, function (assert) {
         const localizedChallenge = run(() => store.createRecord('localized-challenge', {
@@ -38,9 +41,12 @@ module('Unit | Model | localized-challenge', function(hooks) {
     [
       { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedText: 'Pas en prod' },
       { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedText: 'En prod' },
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'onSenFOu', expectedText: 'Pas en prod' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'onSenFOu', expectedText: 'Pas en prod' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'onSenFOu', expectedText: 'Pas en prod' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedText: 'Pas en prod' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedText: 'Pas en prod' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedText: 'En prod' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedText: 'En prod' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedText: 'Pas en prod' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedText: 'Pas en prod' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedText })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedText}`, function (assert) {
         const localizedChallenge = run(() => store.createRecord('localized-challenge', {
@@ -57,4 +63,32 @@ module('Unit | Model | localized-challenge', function(hooks) {
       });
     });
   });
+
+  module('#isInProduction', function() {
+    [
+      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expected: false },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expected: true },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expected: false },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expected: false },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expected: true },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expected: true },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expected: false },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
+    ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} should ${expected ? '' : 'not '}be in production`, function (assert) {
+        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+          id: 'rec123456',
+          status: localizedChallengeStatus,
+          challenge: store.createRecord('challenge',{
+            id: 'rec654260',
+            status: challengeStatus
+          })
+        }));
+
+        assert.strictEqual(localizedChallenge.isInProduction, expected);
+      });
+    });
+  });
 });
+
+
