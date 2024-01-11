@@ -2,6 +2,7 @@
   @title={{this.title}}
   @onCloseButtonClick={{@onDeny}}
   @showModal={{@showModal}}
+  ...attributes
 >
   <:content>
     {{@content}}
@@ -14,6 +15,11 @@
     >
       Annuler
     </PixButton>
-    <PixButton @triggerAction={{@onApprove}}>Oui</PixButton>
+    <PixButton
+      @triggerAction={{@onApprove}}
+      data-testid='popin-confirm-button'
+    >
+      Oui
+    </PixButton>
   </:footer>
 </PixModal>

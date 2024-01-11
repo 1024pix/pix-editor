@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { click, findAll } from '@ember/test-helpers';
-import { visit, clickByText } from '@1024pix/ember-testing-library';
+import { visit, clickByText, within } from '@1024pix/ember-testing-library';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -64,6 +64,9 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
       await click(screen.getByText('Version en'));
 
       await clickByText('Mettre en prod');
+      const popin = screen.getByTestId('change-status-confirm-popin');
+
+      await click(within(popin).getByTestId('popin-confirm-button'));
 
       assert.dom(screen.getByText('En prod')).exists();
     });
@@ -77,6 +80,9 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
       await click(screen.getByText('Version en'));
 
       await clickByText('Mettre en pause');
+      const popin = screen.getByTestId('change-status-confirm-popin');
+
+      await click(within(popin).getByTestId('popin-confirm-button'));
 
       assert.dom(screen.getByText('Pas en prod')).exists();
     });

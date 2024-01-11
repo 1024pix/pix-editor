@@ -12,6 +12,7 @@ export default class LocalizedController extends Controller {
   @service loader;
 
   @tracked edition = false;
+  @tracked displayConfirm = false;
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
@@ -68,9 +69,28 @@ export default class LocalizedController extends Controller {
     return this.model.isInProduction ? 'pause' : 'play';
   }
 
-  @action editStatus() {
+  get confirmTitle() {
+    return this.model.isInProduction ? 'Mise en pause' : 'Mise en prod';
+  }
+
+  get confirmContent() {
+    return this.model.isInProduction
+      ? 'Êtes-vous sûr de vouloir mettre en pause cette épreuve ?'
+      : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
+  }
+
+  @action async confirmApprove() {
     this.model.status = this.model.isInProduction ? 'proposé' : 'validé';
-    return this.save();
+    await this.save();
+    this.displayConfirm = false;
+  }
+
+  @action confirmDeny() {
+    this.displayConfirm = false;
+  }
+
+  @action editStatus() {
+    this.displayConfirm = true;
   }
 
   @action edit() {

@@ -65,4 +65,12 @@
       {{/if}}
     {{/if}}
   </div>
+  <PopIn::Confirm
+    @title={{this.confirmTitle}}
+    @content={{this.confirmContent}}
+    @onApprove={{this.confirmApprove}}
+    @onDeny={{this.confirmDeny}}
+    @showModal={{this.displayConfirm}}
+    data-testid='change-status-confirm-popin'
+  />
 </div>

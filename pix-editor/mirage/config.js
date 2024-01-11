@@ -219,7 +219,7 @@ function routes() {
   });
 
   this.patch('/localized-challenges/:id', (schema, request) => {
-    const localizedChallenge = schema.challenges.find(request.params.id);
+    const localizedChallenge = schema.localizedChallenges.find(request.params.id);
     const { status } = JSON.parse(request.requestBody);
 
     localizedChallenge.update({ status });
