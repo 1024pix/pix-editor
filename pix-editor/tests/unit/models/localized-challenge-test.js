@@ -89,6 +89,33 @@ module('Unit | Model | localized-challenge', function(hooks) {
       });
     });
   });
+
+  module('#isStatusEditable', function() {
+    [
+      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expected: true },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expected: true },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expected: false },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expected: false },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expected: true },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expected: true },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expected: false },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
+    ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} status is ${expected ? '' : 'not '}editable`, function (assert) {
+        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+          id: 'rec123456',
+          status: localizedChallengeStatus,
+          challenge: store.createRecord('challenge',{
+            id: 'rec654260',
+            status: challengeStatus
+          })
+        }));
+
+        assert.strictEqual(localizedChallenge.isStatusEditable, expected);
+      });
+    });
+
+  });
 });
 
 

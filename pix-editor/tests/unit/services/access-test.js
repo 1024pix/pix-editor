@@ -103,4 +103,51 @@ module('Unit | Service | access', function(hooks) {
       assert.ok(accessService.mayEdit(challenge));
     });
   });
+
+  module('mayChangeLocalizedChallengeStatus', function() {
+    test('it should return `false` if localized challenge is not editable', function (assert) {
+      // given
+      const localizedChallenge = EmberObject.create({
+        id: 'rec123656',
+        isStatusEditable: false,
+      });
+
+      //when
+      const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
+
+      //then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `false` if localized challenge is editable and user is not admin', function (assert) {
+      // given
+      const localizedChallenge = EmberObject.create({
+        id: 'rec123656',
+        isStatusEditable: true,
+      });
+      _stubAccessLevel(EDITOR, this.owner);
+
+      //when
+      const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
+
+      //then
+      assert.notOk(accessResult);
+    });
+
+    test('it should return `true` if localized challenge is editable and user is admin', function (assert) {
+      // given
+      const localizedChallenge = EmberObject.create({
+        id: 'rec123656',
+        isStatusEditable: true,
+      });
+      _stubAccessLevel(ADMIN, this.owner);
+
+      //when
+      const accessResult = accessService.mayChangeLocalizedChallengeStatus(localizedChallenge);
+
+      //then
+      assert.ok(accessResult);
+    });
+
+  });
 });

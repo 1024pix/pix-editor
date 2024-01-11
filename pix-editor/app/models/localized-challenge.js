@@ -28,4 +28,8 @@ export default class LocalizedChallengeModel extends Model {
   get isInProduction() {
     return inProductionCombinations.includes(`${this.challenge.get('status')}:${this.status}`);
   }
+
+  get isStatusEditable() {
+    return ['validé', 'archivé'].includes(this.challenge.get('status'));
+  }
 }
