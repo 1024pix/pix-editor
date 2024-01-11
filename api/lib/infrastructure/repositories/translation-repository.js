@@ -3,10 +3,10 @@ import { translationDatasource } from '../datasources/airtable/index.js';
 import { Translation } from '../../domain/models/index.js';
 import _ from 'lodash';
 
-let _shouldDuplicateToAirtable;
-let _shouldDuplicateToAirtablePromise;
+let _doesTableExistInAirtable;
+let _doesTableExistInAirtablePromise;
 
-export async function save({ translations, transaction: knexConnection = knex }) {
+export async function save({ translations, transaction: knexConnection = knex, shouldDuplicateToAirtable = true }) {
   if (translations.length === 0) return [];
 
   await knexConnection('translations')
@@ -14,11 +14,13 @@ export async function save({ translations, transaction: knexConnection = knex })
     .onConflict(['key', 'locale'])
     .merge();
 
-  if (_shouldDuplicateToAirtable == null && _shouldDuplicateToAirtablePromise == null) {
-    await checkIfShouldDuplicateToAirtable();
+  if (!shouldDuplicateToAirtable) return;
+
+  if (_doesTableExistInAirtable == null && _doesTableExistInAirtablePromise == null) {
+    await checkIfTableExistInAirtable();
   }
 
-  if (_shouldDuplicateToAirtable) {
+  if (_doesTableExistInAirtable) {
     await translationDatasource.upsert(translations);
   }
 }
@@ -59,9 +61,9 @@ function escapeWildcardCharacters(s) {
   return s.replace(/(%|_)/g, '\\$1');
 }
 
-export async function checkIfShouldDuplicateToAirtable() {
-  _shouldDuplicateToAirtablePromise = translationDatasource.exists();
-  _shouldDuplicateToAirtable = await _shouldDuplicateToAirtablePromise;
+export async function checkIfTableExistInAirtable() {
+  _doesTableExistInAirtablePromise = translationDatasource.exists();
+  _doesTableExistInAirtable = await _doesTableExistInAirtablePromise;
 }
 
 function _toDomain(dto) {
@@ -74,11 +76,11 @@ export async function deleteByKeyPrefixAndLocales({ prefix, locales, transaction
     .whereLike('key', `${prefix}%`)
     .whereIn('locale', locales);
 
-  if (_shouldDuplicateToAirtable == null && _shouldDuplicateToAirtablePromise == null) {
-    await checkIfShouldDuplicateToAirtable();
+  if (_doesTableExistInAirtable == null && _doesTableExistInAirtablePromise == null) {
+    await checkIfTableExistInAirtable();
   }
 
-  if (_shouldDuplicateToAirtable) {
+  if (_doesTableExistInAirtable) {
     const records = await translationDatasource.filter({
       filter: {
         formula: `AND(REGEX_MATCH(key, '^${prefix.replace(/(\.)/g, '\\$1')}'), OR(${locales.map((locale) => `locale = '${locale}'`).join(', ')}))`,

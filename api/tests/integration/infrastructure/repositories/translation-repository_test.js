@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
 import { knex, databaseBuilder } from '../../../test-helper.js';
 import {
-  checkIfShouldDuplicateToAirtable,
+  checkIfTableExistInAirtable,
   save,
   search,
 } from '../../../../lib/infrastructure/repositories/translation-repository.js';
@@ -15,7 +15,6 @@ describe('Integration | Repository | translation-repository', function() {
   });
 
   context('#save', function() {
-
     it('should create or update translations', async () => {
       // given
       databaseBuilder.factory.buildTranslation({
@@ -47,11 +46,11 @@ describe('Integration | Repository | translation-repository', function() {
 
     context('when Airtable has a translations table', () => {
       beforeEach(async function() {
-        await _setShouldDuplicateToAirtable(true);
+        await _setDoesTableExistInAirtable(true);
       });
 
       afterEach(async function() {
-        await _setShouldDuplicateToAirtable(false);
+        await _setDoesTableExistInAirtable(false);
       });
 
       it('should save translations to airtable', async function() {
@@ -124,11 +123,11 @@ describe('Integration | Repository | translation-repository', function() {
 
     context('when Airtable has a translations table', () => {
       beforeEach(async function() {
-        await _setShouldDuplicateToAirtable(true);
+        await _setDoesTableExistInAirtable(true);
       });
 
       afterEach(async function() {
-        await _setShouldDuplicateToAirtable(false);
+        await _setDoesTableExistInAirtable(false);
       });
 
       it('should delete keys in Airtable', async () => {
@@ -377,7 +376,7 @@ describe('Integration | Repository | translation-repository', function() {
   });
 });
 
-async function _setShouldDuplicateToAirtable(value) {
+async function _setDoesTableExistInAirtable(value) {
   if (value) {
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/translations')
@@ -412,5 +411,5 @@ async function _setShouldDuplicateToAirtable(value) {
       .reply(404);
   }
 
-  await checkIfShouldDuplicateToAirtable();
+  await checkIfTableExistInAirtable();
 }

@@ -29,7 +29,7 @@ export async function save(mission) {
   }).returning('*');
 
   const translations = missionTranslations.extractFromReleaseObject({ ...mission, id: insertedMission.id });
-  await translationRepository.save({ translations });
+  await translationRepository.save({ translations, shouldDuplicateToAirtable: false });
 
   return _toDomain(insertedMission, translations);
 }
