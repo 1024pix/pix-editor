@@ -12,10 +12,11 @@ export const LOCALE = {
 export const LOCALE_TO_LANGUAGE_MAP = Object.freeze({
   [LOCALE.DEUTSCH_SPOKEN]: 'Allemand',
   [LOCALE.ENGLISH_SPOKEN]: 'Anglais',
+  [LOCALE.SPANISH_SPOKEN]: 'Espagnol',
   [LOCALE.FRENCH_FRANCE]: 'Franco Français',
   [LOCALE.FRENCH_SPOKEN]: 'Francophone',
   [LOCALE.ITALIAN_SPOKEN]: 'Italie',
-  [LOCALE.SPANISH_SPOKEN]: 'Espagnol',
+  [LOCALE.DUTCH_SPOKEN]: 'Néerlandais',
   [LOCALE.PORTUGUESE_SPOKEN]: 'Portugais',
 });
 
