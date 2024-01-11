@@ -2,7 +2,6 @@ import Model, { attr, belongsTo } from '@ember-data/model';
 
 const inProductionCombinations = [
   'validé:validé',
-  'archivé:proposé',
   'archivé:validé',
 ];
 

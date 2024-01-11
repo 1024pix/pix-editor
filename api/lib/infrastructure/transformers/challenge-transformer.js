@@ -44,10 +44,17 @@ function _translateChallenge(challenge, localizedChallenge) {
     ...clearedLocalizedFields,
     ...challenge.translations[localizedChallenge.locale],
     id: localizedChallenge.id,
-    status: (isPrimaryLocale || challenge.status !== 'validé') ? challenge.status : localizedChallenge.status,
+    status: isPrimaryLocale ? challenge.status : getLocalizedChallengeStatus(challenge, localizedChallenge),
     embedUrl: localizedChallenge.embedUrl ?? _replaceLangParamsInUrl(localizedChallenge.locale, challenge.embedUrl),
     locales: isPrimaryLocale ? challenge.locales : [localizedChallenge.locale],
   };
+}
+
+function getLocalizedChallengeStatus(challenge, localizedChallenge) {
+  if (['proposé', 'périmé'].includes(challenge.status) || localizedChallenge.status === 'validé') {
+    return challenge.status;
+  }
+  return localizedChallenge.status;
 }
 
 function _replaceLangParamsInUrl(locale, embedUrl) {

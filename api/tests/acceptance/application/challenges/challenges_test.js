@@ -754,6 +754,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         airtableBuilder.factory.buildChallenge({
           id: challengeId,
           locales: ['fr', 'fr-fr'],
+          status: 'validé',
         })
       ]).activate().nockScope;
 
@@ -794,6 +795,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: localizedChallengeId,
         challengeId,
         locale,
+        status: 'proposé',
       });
 
       await databaseBuilder.commit();
@@ -827,7 +829,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             skillId: null,
             t1Status: false,
             t2Status: false,
-            t3Status: false
+            t3Status: false,
+            status: 'proposé',
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);

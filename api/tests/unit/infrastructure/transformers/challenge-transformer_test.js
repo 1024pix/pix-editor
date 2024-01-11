@@ -23,8 +23,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             challengeId: 'challenge-id',
             embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
             locale: 'en',
-            status: 'localized_status',
-
+            status: 'proposé',
           }),
           new LocalizedChallenge({
             id: 'other-challenge-id',
@@ -73,19 +72,23 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             instruction: 'English instructions',
             alternativeInstruction: 'Alternative english instructions',
             proposals: '',
-            status: 'localized_status',
+            status: 'proposé',
           }),
         ]);
       });
     });
 
     [
-      { challengeStatus: 'périmé', expectedLocalizedChallengeStatus: 'périmé' },
-      { challengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'proposé' },
-      { challengeStatus: 'archivé', expectedLocalizedChallengeStatus: 'archivé' },
-      { challengeStatus: 'validé', expectedLocalizedChallengeStatus: 'localized_status' },
-    ].forEach(({ challengeStatus, expectedLocalizedChallengeStatus }) => {
-      it(`when challenge is '${challengeStatus}' and localized challenge is 'localized_status', it should export '${expectedLocalizedChallengeStatus} in release'`, async function() {
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'proposé' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedLocalizedChallengeStatus: 'proposé' },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'proposé' },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedLocalizedChallengeStatus: 'validé' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'proposé' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedLocalizedChallengeStatus: 'archivé' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedLocalizedChallengeStatus: 'périmé' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedLocalizedChallengeStatus: 'périmé' },
+    ].forEach(({ challengeStatus, localizedChallengeStatus, expectedLocalizedChallengeStatus }) => {
+      it(`when challenge is '${challengeStatus}' and localized challenge is '${localizedChallengeStatus}', it should export '${expectedLocalizedChallengeStatus} in release'`, async function() {
         // given
         const attachments = [];
         const localizedChallenges = [
@@ -101,7 +104,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             challengeId: 'challenge-id',
             embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=a&lang=en-US#7890',
             locale: 'en',
-            status: 'localized_status',
+            status: localizedChallengeStatus,
           }),
         ];
         const challenge = domainBuilder.buildChallenge({
