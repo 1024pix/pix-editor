@@ -1,5 +1,18 @@
 
 
+## v3.121.0 (11/01/2024)
+
+
+### :rocket: Amélioration
+- [#465](https://github.com/1024pix/pix-editor/pull/465) [FEATURE] Ajoute la locale `nl` aux locales possibles des déclinaisons (PIX-10735).
+- [#462](https://github.com/1024pix/pix-editor/pull/462) [FEATURE] Pouvoir rechercher une épreuve localisée par identifiant (PIX-10680).
+
+### :building_construction: Tech
+- [#463](https://github.com/1024pix/pix-editor/pull/463) [TECH] Ajouter un template custom de migration Knex.
+
+### :arrow_up: Montée de version
+- [#464](https://github.com/1024pix/pix-editor/pull/464) [BUMP] Update dependency stylelint-config-standard-scss to v13 (pix-editor).
+
 ## v3.120.1 (09/01/2024)
 
 
