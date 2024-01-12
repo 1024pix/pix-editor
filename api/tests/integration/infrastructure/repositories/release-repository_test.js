@@ -6,6 +6,7 @@ import {
   getRelease,
   getCurrentContent
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
+import { Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -107,6 +108,7 @@ describe('Integration | Repository | release-repository', function() {
         competences: [],
         courses: [],
         frameworks: [],
+        mission: [],
         skills: [],
         thematics: [],
         tubes: [],
@@ -183,6 +185,17 @@ describe('Integration | Repository | release-repository', function() {
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2020-01-02'),
       });
+
+      databaseBuilder.factory.buildMission({
+        id: 123456789,
+        name: 'mission PG name',
+        competenceId: 'competenceId',
+        learningObjectives: 'Que tu sois le meilleur',
+        thematicId: 'thematicId',
+        validatedObjectives: 'Rien',
+        status: Mission.status.INACTIVE,
+      });
+
       return databaseBuilder.commit();
     });
 
@@ -1321,6 +1334,19 @@ function _getRichCurrentContentDTO() {
       locale: 'fr-fr',
     },
   ];
+  const expectedMissionsDTOs = [
+    new Mission({
+      id: 123456789,
+      name_i18n : { fr: 'mission PG name' },
+      competenceId: 'competenceId',
+      thematicId: 'thematicId',
+      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+      validatedObjectives_i18n: { fr: 'Rien' },
+      status: Mission.status.INACTIVE,
+      createdAt: new Date('2010-01-04')
+    }),
+  ];
+
   return {
     frameworks: expectedFrameworkDTOs,
     areas: expectedAreaDTOs,
@@ -1331,5 +1357,6 @@ function _getRichCurrentContentDTO() {
     challenges: expectedChallengeDTOs,
     courses: expectedCourseDTOs,
     tutorials: expectedTutorialDTOs,
+    missions: expectedMissionsDTOs,
   };
 }

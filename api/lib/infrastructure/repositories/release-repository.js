@@ -11,6 +11,7 @@ import {
   challengeRepository,
   competenceRepository,
   localizedChallengeRepository,
+  missionRepository,
   skillRepository,
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
@@ -149,6 +150,8 @@ async function _getCurrentContentFromPG(airtableChallenges) {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
+  const missions = await missionRepository.list();
+
   return {
     courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
       const challenges = challengeIds.replaceAll(' ', '').split(',');
@@ -164,5 +167,6 @@ async function _getCurrentContentFromPG(airtableChallenges) {
         competences,
       };
     }),
+    missions
   };
 }

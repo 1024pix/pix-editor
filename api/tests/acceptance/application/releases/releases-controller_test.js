@@ -7,6 +7,7 @@ import {
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
+import { Mission } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -151,6 +152,25 @@ async function mockCurrentContent() {
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
     }],
+    missions: [new Mission({
+      id: 1,
+      name_i18n: { fr: 'Ma première mission' },
+      competenceId: 'competenceId',
+      thematicId: 'thematicId',
+      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+      validatedObjectives_i18n: { fr: 'Rien' },
+      status: Mission.status.ACTIVE,
+      createdAt: new Date('2010-01-04'),
+    }), new Mission({
+      id: 2,
+      name_i18n: { fr: 'Alt name' },
+      competenceId: 'competenceId',
+      thematicId: 'thematicId',
+      learningObjectives_i18n: { fr: 'Alt objectives' },
+      validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+      status: Mission.status.INACTIVE,
+      createdAt: new Date('2010-01-05'),
+    })]
   };
 
   const attachments = [{
@@ -181,6 +201,27 @@ async function mockCurrentContent() {
     description: 'Description du Course',
     isActive: true,
     challengeIds: 'recChallenge0',
+  });
+
+  databaseBuilder.factory.buildMission({
+    id: 1,
+    name: 'Ma première mission',
+    competenceId: 'competenceId',
+    thematicId: 'thematicId',
+    learningObjectives: 'Que tu sois le meilleur',
+    validatedObjectives: 'Rien',
+    status: Mission.status.ACTIVE,
+    createdAt: new Date('2010-01-04'),
+  });
+  databaseBuilder.factory.buildMission({
+    id: 2,
+    name: 'Alt name',
+    competenceId: 'competenceId',
+    thematicId: 'thematicId',
+    learningObjectives: 'Alt objectives',
+    validatedObjectives: 'Alt validated objectives',
+    status: Mission.status.INACTIVE,
+    createdAt: new Date('2010-01-05'),
   });
 
   for (const locale of ['fr', 'en', 'nl']) {
@@ -376,6 +417,23 @@ async function mockContentForRelease() {
       competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
     }],
+    missions: [new Mission({
+      id: 1,
+      name_i18n: { fr: 'Ma première mission' },
+      competenceId: 'competenceId',
+      thematicId: 'thematicId',
+      learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+      validatedObjectives_i18n: { fr: 'Rien' },
+      status: Mission.status.ACTIVE,
+    }), new Mission({
+      id: 2,
+      name_i18n: { fr: 'Alt name' },
+      competenceId: 'competenceId',
+      thematicId: 'thematicId',
+      learningObjectives_i18n: { fr: 'Alt objectives' },
+      validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+      status: Mission.status.INACTIVE,
+    })],
   };
 
   const attachments = [{
@@ -542,7 +600,8 @@ describe('Acceptance | Controller | release-controller', () => {
             skills: [],
             thematics: [],
             tubes: [],
-            tutorials: []
+            tutorials: [],
+            missions: [],
           }
         });
         const expectedContent = {
@@ -554,7 +613,8 @@ describe('Acceptance | Controller | release-controller', () => {
           skills: [],
           thematics: [],
           tubes: [],
-          tutorials: []
+          tutorials: [],
+          missions: [],
         };
         await databaseBuilder.commit();
 
@@ -590,6 +650,24 @@ describe('Acceptance | Controller | release-controller', () => {
       it('should create the release', async () => {
         // Given
         const user = databaseBuilder.factory.buildAdminUser();
+        databaseBuilder.factory.buildMission({
+          id: 1,
+          name: 'Ma première mission' ,
+          competenceId: 'competenceId',
+          thematicId: 'thematicId',
+          learningObjectives: 'Que tu sois le meilleur',
+          validatedObjectives: 'Rien',
+          status: Mission.status.ACTIVE,
+        });
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          competenceId: 'competenceId',
+          thematicId: 'thematicId',
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          status: Mission.status.INACTIVE,
+        });
         const server = await createServer();
         await databaseBuilder.commit();
         const expectedCurrentContent = await mockContentForRelease();
@@ -667,7 +745,8 @@ describe('Acceptance | Controller | release-controller', () => {
           skills: [],
           thematics: [],
           tubes: [],
-          tutorials: []
+          tutorials: [],
+          missions: [],
         };
 
         await databaseBuilder.commit();
