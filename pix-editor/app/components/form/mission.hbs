@@ -1,0 +1,80 @@
+<form {{on "submit" this.onSubmitClicked}} class="new-mission-form">
+  <Card class="new-mission-form__card" @title="Création d'une mission">
+    <PixInput
+      @id="mission-name"
+      @label="Nom de la mission"
+      @errorMessage="{{this.name.errorMessage}}"
+      @requiredLabel="{{this.name.errorMessage}}"
+      @validationStatus={{this.name.state}}
+      {{on "focusout" this.validateName}}
+      {{on "keyup" this.updateName}}
+    />
+   <PixSelect
+      @options={{this.statusOptions}}
+      @value={{this.selectedStatus}}
+      @hideDefaultOption={{true}}
+      @onChange={{this.changeStatus}}
+      @requiredText="{{this.name.errorMessage}}"
+      @label='Statut'
+    />
+
+    <PixSelect
+      class="new-mission-form__select"
+      @hideDefaultOption={{true}}
+      @options={{this.competencesOptions}}
+      @onChange={{this.changeCompetence}}
+      @value={{this.selectedCompetenceId.value}}
+      @requiredText="champs requis"
+      @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
+      @label="Compétence"
+      {{on "focusout" this.validateCompetence}}
+      />
+
+    <PixSelect
+      class="new-mission-form__select"
+      @hideDefaultOption={{true}}
+      @isDisabled={{not this.selectedCompetenceId.value}}
+      @label="Thématique"
+      @options={{this.themeOptions}}
+      @onChange={{this.changeThematic}}
+      @value={{this.selectedThematicId}}
+      @isComputeWidthDisabled={{true}}
+    />
+
+    <label class="new-mission-form__label-text-area"  for="mission-learning-objectives">Objectifs d'apprentissage</label>
+    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
+    <PixTextarea
+      @id="mission-learning-objectives"
+      {{on "change" this.updateLearningObjectives}}
+    />
+
+    <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la mission</label>
+    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, cet élément est pour le moment utilisé que pour de l’affichage dans Pix 1D</p>
+    <PixTextarea
+      @id="mission-validated-objectives"
+      {{on "change" this.updateValidatedObjectives}}
+    />
+   </Card>
+  <div class="form-error">
+    {{#each this.errorMessages as |errorMessage|}}
+      {{errorMessage}}<br/>
+    {{/each}}
+  </div>
+
+  <div class="page-actions">
+    <PixButton
+      @backgroundColor="transparent-light"
+      @isBorderVisible={{true}}
+      @triggerAction={{@onFormCancelled}}
+    >
+      Annuler
+    </PixButton>
+    <PixButton
+      @type="submit"
+      @isDisabled={{not this.isFormValid}}
+      @isLoading={{this.isSubmitting}}
+    >
+      {{@submitButtonText}}
+    </PixButton>
+  </div>
+</form>

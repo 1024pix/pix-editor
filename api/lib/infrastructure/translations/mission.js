@@ -14,4 +14,5 @@ const fields = [
 
 export const {
   toDomain,
+  extractFromReleaseObject,
 } = buildTranslationsUtils({ locales, fields, prefix });

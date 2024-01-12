@@ -1,3 +1,4 @@
+export * from './create-mission.js';
 export * from './export-translations.js';
 export * from './find-all-missions.js';
 export * from './import-translations.js';

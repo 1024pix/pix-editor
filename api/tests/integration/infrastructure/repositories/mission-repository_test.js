@@ -1,10 +1,17 @@
-import { describe, describe as context, expect, it } from 'vitest';
-import { databaseBuilder } from '../../../test-helper.js';
-import { findAllMissions } from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import { omit } from 'lodash';
+import { describe, describe as context, beforeEach, expect, expectTypeOf, it } from 'vitest';
+import { databaseBuilder, knex } from '../../../test-helper.js';
+import { findAllMissions, save } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | mission-repository', function() {
-  context('#findReadSummaries', function() {
+
+  beforeEach(async function() {
+    await knex('translations').delete();
+    await knex('missions').delete();
+  });
+
+  describe('#findAllMissions', function() {
     context('When there are missions', function() {
       it('should return all missions', async function() {
         databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.ACTIVE });
@@ -23,6 +30,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
+          thematicId: 'thematicId',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           status: Mission.status.ACTIVE,
@@ -31,6 +39,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
+          thematicId: 'thematicId',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.INACTIVE,
@@ -94,6 +103,68 @@ describe('Integration | Repository | mission-repository', function() {
           });
         });
       });
+    });
+  });
+
+  describe('#save', function() {
+
+    it('should store mission', async function() {
+      const mission = new Mission({
+        name_i18n: { fr: 'Mission impossible'  },
+        competenceId: 'AZERTY',
+        thematicId: 'QWERTY',
+        learningObjectives_i18n:  { fr: null },
+        validatedObjectives_i18n: { fr: 'Très bien' },
+        status: Mission.status.INACTIVE,
+      });
+
+      const savedMission = await save(mission);
+      expectTypeOf(savedMission).toEqualTypeOf('Mission');
+      await expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...mission, id: savedMission.id }), ['createdAt']));
+
+      const expectedMission = {
+        id: savedMission.id,
+        competenceId: 'AZERTY',
+        thematicId: 'QWERTY',
+        status: Mission.status.INACTIVE,
+      };
+
+      const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
+      await expect(missionFromDb).to.deep.equal(expectedMission);
+    });
+
+    it('should store I18n for mission', async function() {
+
+      const mission = new Mission({
+        name_i18n: { fr: 'Mission impossible'  },
+        competenceId: 'AZERTY',
+        thematicId: 'QWERTY',
+        learningObjectives_i18n:  { fr: 'au boulot' },
+        validatedObjectives_i18n: { fr: 'Très bien' },
+        status: Mission.status.INACTIVE,
+      });
+
+      const savedMission = await save(mission);
+
+      const translations = [
+        {
+          key: `mission.${savedMission.id}.name`,
+          locale: 'fr',
+          value: 'Mission impossible'
+        },
+        {
+          key: `mission.${savedMission.id}.learningObjectives`,
+          locale: 'fr',
+          value: 'au boulot',
+        },
+        {
+          key: `mission.${savedMission.id}.validatedObjectives`,
+          locale: 'fr',
+          value: 'Très bien'
+        }
+      ];
+
+      expect(await knex('translations').select('*')).to.deep.equal(translations);
     });
   });
 });

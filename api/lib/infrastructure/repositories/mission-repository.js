@@ -21,12 +21,26 @@ export async function findAllMissions({ filter, page }) {
   };
 }
 
+export async function save(mission) {
+  const [insertedMission] = await knex('missions').insert({
+    competenceId: mission.competenceId,
+    thematicId: mission.thematicId,
+    status: mission.status
+  }).returning('*');
+
+  const translations = missionTranslations.extractFromReleaseObject({ ...mission, id: insertedMission.id });
+  await translationRepository.save({ translations, shouldDuplicateToAirtable: false });
+
+  return _toDomain(insertedMission, translations);
+}
+
 function _toDomain(mission, translations) {
   return new Mission({
     id: mission.id,
     createdAt: mission.createdAt,
     status: mission.status,
     competenceId: mission.competenceId,
+    thematicId: mission.thematicId,
     ...missionTranslations.toDomain(translations)
   });
 }

@@ -243,6 +243,7 @@ function routes() {
     return challenge;
   });
 
+  //TODO extraire le contenu des configs liées aux missions dans un fichier dédié
   this.get('/missions', function (schema, request) {
     const queryParams = request.queryParams;
     const {
@@ -266,6 +267,13 @@ function routes() {
       pageCount: Math.ceil(rowCount / pagination.pageSize),
     };
     return json;
+  });
+
+  this.post('/missions', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const mission = schema.create('mission', { ...attributes });
+    schema.create('mission-summary', { id: mission.id, ...attributes });
+    return mission;
   });
 
   this.get('/static-course-summaries', function(schema, request) {

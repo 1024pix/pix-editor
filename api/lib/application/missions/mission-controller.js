@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { findAllMissions } from '../../domain/usecases/index.js';
+import { findAllMissions, createMission } from '../../domain/usecases/index.js';
 import { missionSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 //TODO Faire éventuellement un refacto pour mutualiser la gestion de la pagination
@@ -14,6 +14,13 @@ export async function findMissions(request, h) {
   const { filter, page } = extractParameters(request.query);
   const { missions, meta } = await findAllMissions({ filter: normalizeFilter(filter), page: normalizePage(page) });
   return h.response(missionSerializer.serializeMissionSummary(missions, meta));
+}
+
+export async function create(request, h) {
+  const attributes = request?.payload?.data?.attributes;
+  const mission = missionSerializer.deserializeMission(attributes);
+  const savedMission = await createMission(mission);
+  return h.response(missionSerializer.serializeMissionId(savedMission.id)).created();
 }
 
 function normalizePage(page) {

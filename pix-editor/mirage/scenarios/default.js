@@ -1,5 +1,5 @@
-export default function(server) {
 
+export default function(server) {
   server.create('config', 'default');
   server.create('user', { trigram: 'ABC' });
 
