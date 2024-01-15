@@ -9,7 +9,7 @@ export async function findAllMissions({ filter, page }) {
   const query = knex('missions')
     .select('*')
     .orderBy('createdAt', 'desc');
-  if (filter.isActive) {
+  if (filter?.isActive) {
     query.where('status', Mission.status.ACTIVE);
   }
   const { results, pagination } = await fetchPage(query, page);
@@ -19,6 +19,14 @@ export async function findAllMissions({ filter, page }) {
     missions: _toDomainList(results, translations),
     meta: pagination
   };
+}
+
+export async function list() {
+  const missions = await knex('missions').select('*');
+
+  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+
+  return _toDomainList(missions, translations);
 }
 
 export async function save(mission) {

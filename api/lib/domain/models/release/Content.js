@@ -7,6 +7,7 @@ import { SkillForRelease } from './SkillForRelease.js';
 import { ThematicForRelease } from './ThematicForRelease.js';
 import { TubeForRelease } from './TubeForRelease.js';
 import { TutorialForRelease } from './TutorialForRelease.js';
+import { MissionForRelease } from './MissionForRelease.js';
 
 export class Content {
   constructor({
@@ -19,6 +20,7 @@ export class Content {
     thematics,
     tubes,
     tutorials,
+    missions,
   } = {}) {
     this.areas = areas;
     this.challenges = challenges;
@@ -29,6 +31,7 @@ export class Content {
     this.thematics = thematics;
     this.tubes = tubes;
     this.tutorials = tutorials;
+    this.missions = missions;
   }
 
   static buildForRelease({
@@ -41,6 +44,7 @@ export class Content {
     thematics,
     tubes,
     tutorials,
+    missions
   }) {
     const content = new Content();
     content.areas = areas ? areas.map((area) => new AreaForRelease(area)) : [];
@@ -52,6 +56,7 @@ export class Content {
     content.thematics = thematics ? thematics.map((thematic) => new ThematicForRelease(thematic)) : [];
     content.tubes = tubes ? tubes.map((tube) => new TubeForRelease(tube)) : [];
     content.tutorials = tutorials ? tutorials.map((tutorial) => new TutorialForRelease(tutorial)) : [];
+    content.missions = missions ? missions.map((mission) => new MissionForRelease(mission)) : [];
 
     return content;
   }

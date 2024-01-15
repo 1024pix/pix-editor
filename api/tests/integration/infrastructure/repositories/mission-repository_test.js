@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import { describe, describe as context, beforeEach, expect, expectTypeOf, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
-import { findAllMissions, save } from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import { findAllMissions, save, list } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | mission-repository', function() {
@@ -103,6 +103,50 @@ describe('Integration | Repository | mission-repository', function() {
           });
         });
       });
+    });
+  });
+
+  describe('list', function()  {
+
+    it('Should return all missions', async function() {
+
+      databaseBuilder.factory.buildMission({
+        id: 1,
+        status: Mission.status.ACTIVE
+      });
+
+      databaseBuilder.factory.buildMission({
+        id: 2,
+        name: 'Alt name',
+        status: Mission.status.INACTIVE,
+        learningObjectives: 'Alt objectives',
+        validatedObjectives: 'Alt validated objectives'
+      });
+
+      await databaseBuilder.commit();
+
+      const result = await list();
+
+      expect(result).to.deep.equal([new Mission({
+        id: 1,
+        name_i18n: { fr: 'Ma première mission' },
+        competenceId: 'competenceId',
+        thematicId: 'thematicId',
+        learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
+        validatedObjectives_i18n: { fr: 'Rien' },
+        status: Mission.status.ACTIVE,
+        createdAt: new Date('2010-01-04'),
+      }), new Mission({
+        id: 2,
+        name_i18n: { fr: 'Alt name' },
+        competenceId: 'competenceId',
+        thematicId: 'thematicId',
+        learningObjectives_i18n: { fr: 'Alt objectives' },
+        validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        status: Mission.status.INACTIVE,
+        createdAt: new Date('2010-01-04'),
+      })]);
+
     });
   });
 
