@@ -1,5 +1,22 @@
 
 
+## v3.122.0 (15/01/2024)
+
+
+### :rocket: Amélioration
+- [#470](https://github.com/1024pix/pix-editor/pull/470) [FEATURE] Ajouter les missions à la création de release (PIX-10275).
+- [#466](https://github.com/1024pix/pix-editor/pull/466) [FEATURE] Permettre de jouer ou non en prod une épreuve traduite (PIX-10710).
+- [#449](https://github.com/1024pix/pix-editor/pull/449) [FEATURE] Pouvoir créer une mission (PIX-10273).
+
+### :arrow_up: Montée de version
+- [#468](https://github.com/1024pix/pix-editor/pull/468) [BUMP] Update dependency googleapis to v130 (api).
+- [#471](https://github.com/1024pix/pix-editor/pull/471) [BUMP] Lock file maintenance (api).
+- [#472](https://github.com/1024pix/pix-editor/pull/472) [BUMP] Lock file maintenance (challenge-parser).
+- [#467](https://github.com/1024pix/pix-editor/pull/467) [BUMP] Update dependency @1024pix/pix-ui to ^42.0.4 (pix-editor).
+
+### :coffee: Autre
+- [#469](https://github.com/1024pix/pix-editor/pull/469) Utilise un attribute static pour simplifier.
+
 ## v3.121.0 (11/01/2024)
 
 
