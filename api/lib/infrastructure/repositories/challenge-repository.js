@@ -10,7 +10,6 @@ import {
   prefixFor
 } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
-import { listByChallengeIds } from './localized-challenge-repository.js';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
