@@ -61,6 +61,7 @@ export function buildChallenge({
     challengeId: id,
     locale: Challenge.getPrimaryLocale(locales),
     embedUrl,
+    status: null,
   }],
 } = {}, fieldsToOmit = []) {
   const data = {

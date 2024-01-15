@@ -8,6 +8,7 @@
   <:default>
     <i class="{{convert-language-as-flag this.model.locale}} flag" title={{this.model.locale}}></i>
     {{this.challengeTitle}}
+    <div class="ui circular label {{this.model.statusCSS}}">{{ this.model.statusText }}</div>
   </:default>
 </Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
@@ -56,6 +57,20 @@
           Modifier
         </button>
       {{/if}}
+      {{#if this.mayChangeStatus}}
+        <button class="ui button item" {{on "click" this.editStatus}} type="button">
+          <i class="{{this.changeStatusButtonIcon}} icon"></i>
+          {{this.changeStatusButtonText}}
+        </button>
+      {{/if}}
     {{/if}}
   </div>
+  <PopIn::Confirm
+    @title={{this.confirmTitle}}
+    @content={{this.confirmContent}}
+    @onApprove={{this.confirmApprove}}
+    @onDeny={{this.confirmDeny}}
+    @showModal={{this.displayConfirm}}
+    data-testid='change-status-confirm-popin'
+  />
 </div>

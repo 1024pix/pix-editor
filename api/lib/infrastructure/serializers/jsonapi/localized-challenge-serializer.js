@@ -8,6 +8,7 @@ const serializer = new Serializer('localized-challenges', {
     'challenge',
     'locale',
     'embedUrl',
+    'status',
   ],
   challenge: {
     ref: 'id',

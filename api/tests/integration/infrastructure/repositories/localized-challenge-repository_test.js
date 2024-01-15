@@ -13,6 +13,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
+        status: 'proposé'
       });
       await databaseBuilder.commit();
 
@@ -25,6 +26,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
+        status: 'proposé'
       }]);
     });
   });
@@ -51,6 +53,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'locale',
         embedUrl: 'https://example.com/embed.html',
+        status: null,
       }]);
     });
 
@@ -83,6 +86,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
+          status: null,
         }]);
       });
 
@@ -142,12 +146,14 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'en',
             embedUrl: 'example.com',
+            status: null,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
             challengeId: 'challengeId',
             locale: 'fr',
             embedUrl: 'example.net',
+            status: null,
           },
         ]);
       });
@@ -393,6 +399,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'differentChallengeId should not be updated',
         embedUrl: 'my-new-url.html',
         locale: 'ar',
+        status: null,
       });
 
       // when
@@ -405,6 +412,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
+          status: null,
         },
       ]);
 
@@ -413,7 +421,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
           id,
           challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
-          locale: 'ar'
+          locale: 'ar',
+          status: null,
         }));
     });
   });

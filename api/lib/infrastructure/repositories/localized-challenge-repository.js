@@ -51,10 +51,14 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
   return dtos.map(_toDomain);
 }
 
-export async function update({ localizedChallenge: { id, locale, embedUrl }, transaction: knexConnection = knex }) {
+export async function update({
+  localizedChallenge: { id, locale, embedUrl, status },
+  transaction: knexConnection = knex
+}) {
   const [dto] = await knexConnection('localized_challenges').where('id', id).update({
     locale,
-    embedUrl
+    embedUrl,
+    status,
   }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');

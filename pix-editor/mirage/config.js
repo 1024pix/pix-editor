@@ -218,6 +218,15 @@ function routes() {
     return schema.localizedChallenges.find(request.params.id);
   });
 
+  this.patch('/localized-challenges/:id', (schema, request) => {
+    const localizedChallenge = schema.localizedChallenges.find(request.params.id);
+    const { status } = JSON.parse(request.requestBody);
+
+    localizedChallenge.update({ status });
+
+    return localizedChallenge;
+  });
+
   this.post('/challenges', (schema, request) => {
     const challenge = JSON.parse(request.requestBody);
     const skillId = challenge.data.relationships.skill.data.id;

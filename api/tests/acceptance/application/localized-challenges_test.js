@@ -12,6 +12,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
+        status: 'proposé'
       });
 
       await databaseBuilder.commit();
@@ -30,6 +31,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            'status': localizedChallenge.status,
           },
           relationships: {
             challenge: {
@@ -78,6 +80,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            status: null,
           },
           relationships: {
             challenge: {
@@ -133,6 +136,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
+              status: null,
             },
             relationships: {
               challenge: {
@@ -149,6 +153,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
+              status: null,
             },
             relationships: {
               challenge: {
@@ -214,10 +219,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         challengeId: localizedChallenge.challengeId,
         locale: 'nl',
         embedUrl: 'https://cassoulet.com/',
+        status: null,
       });
     });
 
-    it('should not update a challenge when i am a read-only user', async () => {
+    it('should return forbidden error when user is read-only', async () => {
       // Given
       const readOnlyUser = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
@@ -230,8 +236,81 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         headers: generateAuthorizationHeader(readOnlyUser),
         payload: {}
       });
+
       // Then
-      await expect(response.statusCode).to.equal(403);
+      expect(response.statusCode).to.equal(403);
+    });
+
+    it('should modify localized challenge status of given ID', async () => {
+      // given
+      const user = databaseBuilder.factory.buildAdminUser();
+      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+        embedUrl: 'https://choucroute.com/',
+      });
+
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const patchLocalizedChallengeOptions = {
+        method: 'PATCH',
+        url: '/api/localized-challenges/localizedChallengeId',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'localized-challenges',
+            id: localizedChallenge.id,
+            attributes: {
+              'status': 'validé',
+            },
+          },
+        },
+      };
+
+      // When
+      const response = await server.inject(patchLocalizedChallengeOptions);
+
+      // then
+      expect(response.statusCode).to.equal(200);
+
+      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
+      expect(updatedLocalizedChallenge).to.deep.equal({
+        id: localizedChallenge.id,
+        challengeId: localizedChallenge.challengeId,
+        locale: 'nl',
+        embedUrl: 'https://choucroute.com/',
+        status: 'validé',
+      });
+    });
+
+    it('should return forbidden error if user is NOT admin and updates status', async() => {
+      // given
+      const user = databaseBuilder.factory.buildEditorUser();
+      await databaseBuilder.commit();
+
+      const server = await createServer();
+      const patchLocalizedChallengeOptions = {
+        method: 'PATCH',
+        url: '/api/localized-challenges/localizedChallengeId',
+        headers: generateAuthorizationHeader(user),
+        payload: {
+          data: {
+            type: 'localized-challenges',
+            id: 'localizedChallengeId',
+            attributes: {
+              'status': 'validé',
+            },
+          },
+        },
+      };
+
+      // When
+      const response = await server.inject(patchLocalizedChallengeOptions);
+
+      // Then
+      expect(response.statusCode).to.equal(403);
     });
   });
 });
