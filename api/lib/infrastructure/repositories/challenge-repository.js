@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/index.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
+import * as challengeElasticDatasource from '../datasources/elastic/challenge-datasource.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import {
@@ -16,13 +17,7 @@ async function _getChallengesFromParams(params) {
     return challengeDatasource.filter(params);
   }
   if (params.filter && params.filter.search) {
-    params.filter.ids = await translationRepository.search({
-      entity: 'challenge',
-      fields: ['instruction', 'proposals'],
-      search: params.filter.search,
-      limit: params.page?.size,
-    });
-    return challengeDatasource.search(params);
+    return challengeElasticDatasource.search(params);
   }
   return challengeDatasource.list(params);
 }
@@ -68,6 +63,8 @@ export async function create(challenge) {
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save({ translations });
 
+  await challengeElasticDatasource.index(challenge);
+
   return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
 }
 
@@ -97,7 +94,11 @@ export async function update(challenge) {
     });
     await translationRepository.save({ translations, transaction });
 
-    return toDomain(updatedChallengeDto, translations, [primaryLocalizedChallenge]);
+    const updatedChallenge = toDomain(updatedChallengeDto, translations, [primaryLocalizedChallenge]);
+
+    await challengeElasticDatasource.index(updatedChallenge);
+
+    return updatedChallenge;
   });
 }
 
