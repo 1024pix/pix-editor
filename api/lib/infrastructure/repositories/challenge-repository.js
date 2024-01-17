@@ -76,7 +76,7 @@ export async function update(challenge) {
     const updatedChallengeDto = await challengeDatasource.update(challenge);
 
     const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction });
-    const primaryLocalizedChallenge = localizedChallenges.find(({ id })=> id === challenge.id);
+    const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary })=> isPrimary);
 
     const oldPrimaryLocale = primaryLocalizedChallenge.locale;
     if (oldPrimaryLocale !== challenge.primaryLocale) {
