@@ -288,6 +288,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should return forbidden error if user is NOT admin and updates status', async() => {
       // given
       const user = databaseBuilder.factory.buildEditorUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'localizedChallengeId',
+        locale: 'nl',
+        status: 'proposé',
+        embedUrl: 'https://choucroute.com/',
+      });
       await databaseBuilder.commit();
 
       const server = await createServer();

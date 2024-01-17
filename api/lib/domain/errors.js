@@ -52,3 +52,5 @@ export class InvalidStaticCourseCreationOrUpdateError extends DomainError {
     this.errors.push({ field, data: duplicates, code: 'DUPLICATES_FORBIDDEN' });
   }
 }
+
+export class ForbiddenError extends DomainError {}

@@ -3,6 +3,8 @@ import { localizedChallengeSerializer } from '../infrastructure/serializers/json
 import * as securityPreHandlers from './security-pre-handlers.js';
 import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError } from './security-utils.js';
+import { modifyLocalizedChallenge } from '../domain/usecases/index.js';
+import { ForbiddenError } from '../domain/errors.js';
 
 export async function register(server) {
   server.route([
@@ -35,13 +37,19 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const { locale: _, ...localizedChallenge } = await localizedChallengeSerializer.deserialize(request.payload);
-
-          if (localizedChallenge.status !== undefined && !hasAuthenticatedUserAccess(request, 'admin')) {
-            return replyForbiddenError(h);
+          const isAdmin = hasAuthenticatedUserAccess(request, 'admin');
+          try {
+            const updatedLocalizedChallenge = await modifyLocalizedChallenge({
+              isAdmin,
+              localizedChallenge
+            }, { localizedChallengeRepository });
+            return h.response(localizedChallengeSerializer.serialize(updatedLocalizedChallenge));
+          } catch (error) {
+            if (error instanceof ForbiddenError) {
+              return replyForbiddenError(h, error);
+            }
+            throw error;
           }
-
-          const updatedLocalizedChallenge = await localizedChallengeRepository.update({ localizedChallenge });
-          return h.response(localizedChallengeSerializer.serialize(updatedLocalizedChallenge));
         },
       },
     },
