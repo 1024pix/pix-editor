@@ -75,7 +75,8 @@ export async function update(challenge) {
   return knex.transaction(async (transaction) => {
     const updatedChallengeDto = await challengeDatasource.update(challenge);
 
-    const primaryLocalizedChallenge = await localizedChallengeRepository.get({ id: challenge.id, transaction });
+    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction });
+    const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary })=> isPrimary);
 
     const oldPrimaryLocale = primaryLocalizedChallenge.locale;
     if (oldPrimaryLocale !== challenge.primaryLocale) {
@@ -97,7 +98,7 @@ export async function update(challenge) {
     });
     await translationRepository.save({ translations, transaction });
 
-    return toDomain(updatedChallengeDto, translations, [primaryLocalizedChallenge]);
+    return toDomain(updatedChallengeDto, translations, localizedChallenges);
   });
 }
 

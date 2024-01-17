@@ -12,4 +12,8 @@ export class LocalizedChallenge {
     this.embedUrl = embedUrl;
     this.status = status;
   }
+
+  get isPrimary() {
+    return this.id === this.challengeId;
+  }
 }

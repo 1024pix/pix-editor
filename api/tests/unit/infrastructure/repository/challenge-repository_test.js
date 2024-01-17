@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, list, get } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { filter, list, get, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import {
   localizedChallengeRepository,
@@ -309,6 +309,73 @@ describe('Unit | Repository | challenge-repository', () => {
         await expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve introuvable'));
         expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
       });
+    });
+  });
+  describe('#update', () => {
+    it('should update a challenge by id', async () => {
+      // given
+      const locale = 'en';
+      const primaryLocale = 'fr';
+      const challengeId = 'challengeId';
+      const challengeFromAirtable = domainBuilder.buildChallengeDatasourceObject({
+        id: challengeId,
+        locales: [primaryLocale]
+      });
+      const localizedChallenges = [
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: primaryLocale,
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId,
+          locale,
+        }),
+      ];
+      const challengeToUpdate = domainBuilder.buildChallenge({
+        ...challengeFromAirtable,
+        locales: [primaryLocale],
+        translations: {
+          [primaryLocale]: {
+            instruction: 'instruction fr',
+            proposals: 'proposals fr',
+          },
+        },
+        localizedChallenges,
+      });
+
+      vi.spyOn(challengeDatasource, 'update').mockResolvedValue(challengeFromAirtable);
+      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(localizedChallenges);
+      vi.spyOn(localizedChallengeRepository, 'update').mockResolvedValueOnce();
+      vi.spyOn(translationRepository, 'save').mockResolvedValueOnce();
+      vi.spyOn(translationRepository, 'deleteByKeyPrefixAndLocales').mockResolvedValueOnce();
+
+      // when
+      const result = await update(challengeToUpdate);
+
+      // then
+      expect(challengeDatasource.update).toHaveBeenCalledWith(challengeToUpdate);
+      expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: [challengeId], transaction: expect.anything() });
+      expect(localizedChallengeRepository.update).toHaveBeenCalledWith({ localizedChallenge: localizedChallenges[0], transaction: expect.anything() });
+      expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith({
+        prefix: 'challenge.challengeId.',
+        locales: [primaryLocale],
+        transaction: expect.anything(),
+      });
+      expect(translationRepository.save).toHaveBeenCalledWith({
+        translations: [{
+          key: `challenge.${challengeId}.instruction`,
+          value: 'instruction fr',
+          locale: primaryLocale,
+        }, {
+          key: `challenge.${challengeId}.proposals`,
+          value: 'proposals fr',
+          locale: primaryLocale,
+        }],
+        transaction: expect.anything(),
+      });
+      expect(result).toEqual(challengeToUpdate);
     });
   });
 });

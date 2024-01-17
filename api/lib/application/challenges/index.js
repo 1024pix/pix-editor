@@ -1,5 +1,4 @@
 import Boom from '@hapi/boom';
-import _ from 'lodash';
 import Joi from 'joi';
 import Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
