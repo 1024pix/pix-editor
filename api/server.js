@@ -7,7 +7,6 @@ import { catchDomainAndInfrastructureErrors } from './lib/infrastructure/utils/p
 import { routes } from './lib/routes.js';
 import { plugins } from './lib/infrastructure/plugins/index.js';
 import * as security from './lib/infrastructure/security.js';
-import * as securityPreHandlers from './lib/application/security-pre-handlers.js';
 import * as monitoringTools from './lib/infrastructure/monitoring-tools.js';
 
 monitoringTools.installHapiHook();
