@@ -28,7 +28,10 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         reject(new InvalidFileError(`Invalid data: ${JSON.stringify(invalidData)}`));
       })
       .on('data', (row) => {
-        translations.push(new Translation({ ...row, locale }));
+        translations.push(new Translation({
+          ...replaceAntislashDoubleQuotes(row),
+          locale,
+        }));
       })
       .on('end', async () => {
         if (translations.length === 0) {
@@ -43,6 +46,13 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         resolve();
       });
   });
+}
+
+function replaceAntislashDoubleQuotes(row) {
+  return {
+    ...row,
+    value: row.value.replaceAll('[antislashdoublequote]', '\\"'),
+  };
 }
 
 const extractChallengesLocales = fp.flow(
