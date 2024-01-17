@@ -40,6 +40,7 @@ export async function exportTranslations(stream, dependencies) {
     csv.format({ headers: true }),
     stream,
     (error) => {
+      if (!error) return;
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
