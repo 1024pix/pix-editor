@@ -1,5 +1,18 @@
 
 
+## v3.123.0 (18/01/2024)
+
+
+### :bug: Correction
+- [#476](https://github.com/1024pix/pix-editor/pull/476) [BUGFIX] Autorise les modifications de Embed URL par un utilisateur non admin (PIX-10804).
+- [#474](https://github.com/1024pix/pix-editor/pull/474) [BUGFIX] Afficher les versions traduites d'une épreuve périmée ou archivée (PIX-10770).
+
+### :arrow_up: Montée de version
+- [#473](https://github.com/1024pix/pix-editor/pull/473) [BUMP] Update dependency node to v20.11.0.
+
+### :coffee: Autre
+- [#477](https://github.com/1024pix/pix-editor/pull/477) [WORKAROUND] Solution de contournement pour pouvoir importer `\"` dans Phrase (PIX-10120).
+
 ## v3.122.0 (15/01/2024)
 
 
