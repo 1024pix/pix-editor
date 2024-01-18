@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   areaDatasource,
   attachmentDatasource,
@@ -153,20 +154,21 @@ async function _getCurrentContentFromPG(airtableChallenges) {
   const missions = await missionRepository.list();
 
   return {
-    courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
-      const challenges = challengeIds.replaceAll(' ', '').split(',');
-      const competences = challenges.map((challengeId) => {
+    courses: await Promise.all(staticCoursesDTO.map(async ({ id, name, description, isActive, challengeIds }) => {
+      const localizedChallengeIds = challengeIds.replaceAll(' ', '').split(',');
+      const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
+      const competences = _.uniq(localizedChallenges.map(({ challengeId }) => {
         return airtableChallenges.find((airtableChallenge) => airtableChallenge.id === challengeId).competenceId;
-      });
+      }));
       return {
         id,
         name,
         description,
         isActive,
-        challenges,
+        challenges: localizedChallengeIds,
         competences,
       };
-    }),
+    })),
     missions
   };
 }
