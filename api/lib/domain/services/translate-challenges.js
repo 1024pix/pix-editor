@@ -1,9 +1,11 @@
+import _ from 'lodash';
 import { Challenge } from '../../domain/models/Challenge.js';
 import { fields as challengeLocalizedFields } from '../../infrastructure/translations/challenge.js';
 
 export function translateChallenges({ localizedChallenges }) {
-  return (challenge) => localizedChallenges
-    .filter((localizedChallenge) => localizedChallenge.challengeId === challenge.id)
+  const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
+
+  return (challenge) => localizedChallengesByChallengeId[challenge.id]
     .map((localizedChallenge) => translateChallenge(challenge, localizedChallenge));
 }
 
