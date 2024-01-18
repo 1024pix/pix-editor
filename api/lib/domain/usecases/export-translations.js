@@ -32,6 +32,7 @@ export async function exportTranslations(stream, dependencies) {
   const csvLinesStream = translationsStreams
     .filter(({ translation }) => translation.locale === 'fr')
     .filter(keepPixFramework)
+    .map(replaceAntislashDoubleQuotes)
     .map(translationAndTagsToCSVLine);
 
   pipeline(
@@ -39,6 +40,7 @@ export async function exportTranslations(stream, dependencies) {
     csv.format({ headers: true }),
     stream,
     (error) => {
+      if (!error) return;
       logger.error({ error }, 'Error while exporting translations from release');
     },
   );
@@ -82,6 +84,17 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
       description,
       object,
     };
+  };
+}
+
+function replaceAntislashDoubleQuotes({ translation, tags, description }) {
+  return {
+    translation: {
+      ...translation,
+      value: translation.value.replace(/\\"/g, '[NOTRANSLATE][antislashdoublequote][/NOTRANSLATE]'),
+    },
+    tags,
+    description,
   };
 }
 
