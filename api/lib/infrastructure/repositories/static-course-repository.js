@@ -8,6 +8,7 @@ import {
 import { StaticCourse } from '../../domain/models/index.js';
 import { skillDatasource } from '../datasources/airtable/index.js';
 import * as challengeRepository from './challenge-repository.js';
+import { localizedChallengeRepository } from './index.js';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
@@ -31,26 +32,26 @@ export async function findReadSummaries({ filter, page }) {
   return { results: staticCoursesSummaries, meta: pagination };
 }
 
-export async function getRead(id) {
+export async function getRead(id, { baseUrl }) {
   const staticCourse = await knex('static_courses')
     .select('*')
     .where('id', id)
     .first();
-  if (staticCourse) {
-    const challengeIds = staticCourse.challengeIds.split(',');
-    const challengeSummaries = await findChallengeSummaries(challengeIds);
-    return new StaticCourse_Read({
-      id: staticCourse.id,
-      name: staticCourse.name,
-      description: staticCourse.description,
-      isActive: staticCourse.isActive,
-      deactivationReason: staticCourse.deactivationReason || '',
-      createdAt: staticCourse.createdAt,
-      updatedAt: staticCourse.updatedAt,
-      challengeSummaries,
-    });
-  }
-  return null;
+
+  if (!staticCourse) return null;
+
+  const localizedChallengeIds = staticCourse.challengeIds.split(',');
+  const challengeSummaries = await findChallengeSummaries(localizedChallengeIds, { baseUrl });
+  return new StaticCourse_Read({
+    id: staticCourse.id,
+    name: staticCourse.name,
+    description: staticCourse.description,
+    isActive: staticCourse.isActive,
+    deactivationReason: staticCourse.deactivationReason || '',
+    createdAt: staticCourse.createdAt,
+    updatedAt: staticCourse.updatedAt,
+    challengeSummaries,
+  });
 }
 
 export async function get(id) {
@@ -92,20 +93,35 @@ export async function save(staticCourseForCreation) {
   return serializedStaticCourseForDB.id;
 }
 
-async function findChallengeSummaries(challengeIds) {
+async function findChallengeSummaries(localizedChallengeIds, dependencies) {
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
+  const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
   const challengesFromAirtable = await challengeRepository.filter({ filter: { ids: challengeIds } });
+
   const skillIds = challengesFromAirtable.map(({ skillId }) => skillId);
   const skillsFromAirtable = await skillDatasource.filter({ filter: { ids: skillIds } });
-  return challengeIds.map((challengeId) => {
-    const challengeFromAirtable = challengesFromAirtable.find((challengeFromAirtable) => challengeId === challengeFromAirtable.id);
+  return localizedChallengeIds.map((localizedChallengeId, index) => {
+    const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);
+    const locale = localizedChallenge.locale;
+    const challengeFromAirtable = challengesFromAirtable.find((challengeFromAirtable) => localizedChallenge.challengeId === challengeFromAirtable.id);
+    const previewUrl = localizedChallenge.isPrimary ?
+      `${dependencies.baseUrl}/api/challenges/${challengeFromAirtable.id}/preview`
+      : `${dependencies.baseUrl}/api/challenges/${challengeFromAirtable.id}/preview?locale=${locale}`;
     const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challengeFromAirtable.skillId);
     return new ChallengeSummary_Read({
-      id: challengeFromAirtable.id,
-      instruction: challengeFromAirtable.instruction || '',
-      skillName: correspondingSkill?.name || '',
-      status: challengeFromAirtable.status,
-      index: challengeIds.indexOf(challengeFromAirtable.id),
-      previewUrl: challengeFromAirtable.preview,
+      id: localizedChallengeId,
+      instruction: challengeFromAirtable.translations[locale].instruction ?? '',
+      skillName: correspondingSkill?.name ?? '',
+      status: localizedChallenge.isPrimary ? challengeFromAirtable.status : getLocalizedChallengeStatus(challengeFromAirtable, localizedChallenge),
+      index,
+      previewUrl,
     });
   });
+}
+
+function getLocalizedChallengeStatus(challenge, localizedChallenge) {
+  if (['proposé', 'périmé'].includes(challenge.status) || localizedChallenge.status === 'validé') {
+    return challenge.status;
+  }
+  return localizedChallenge.status;
 }

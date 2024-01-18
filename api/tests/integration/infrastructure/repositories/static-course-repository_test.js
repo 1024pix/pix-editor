@@ -1,7 +1,8 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import { findReadSummaries, getRead } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
-import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import { challengeRepository, localizedChallengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
 describe('Integration | Repository | static-course-repository', function() {
   context('#findReadSummaries', function() {
@@ -133,33 +134,45 @@ describe('Integration | Repository | static-course-repository', function() {
         id: 'rec123',
         challengeIds: 'challengeA,challengeB',
       });
-      const airtableChallenges = [
-        domainBuilder.buildChallengeDatasourceObject({
+      const challenges = [
+        domainBuilder.buildChallenge({
           id: 'challengeA',
           status: 'A',
           skillId: 'skillA',
-          preview: 'site/challenges/challengeA',
         }),
-        domainBuilder.buildChallengeDatasourceObject({
+        domainBuilder.buildChallenge({
           id: 'challengeB',
           status: 'B',
           skillId: 'skillB',
-          preview: 'site/challenges/challengeB',
         }),
       ];
-      const stubFilterChallengeDatasource = vi.spyOn(challengeDatasource, 'filter').mockResolvedValue(airtableChallenges);
+      const localizedChallenges = [
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challengeA',
+          challengeId: 'challengeA',
+          locale: 'fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'challengeB',
+          challengeId: 'challengeB',
+          locale: 'fr',
+        }),
+      ];
+      const stubLocalizedChallengeRepository = vi.spyOn(localizedChallengeRepository, 'getMany').mockResolvedValue(localizedChallenges);
+      const stubFilterChallengeRepository = vi.spyOn(challengeRepository, 'filter').mockResolvedValue(challenges);
       const stubFilterSkillDatasource = vi.spyOn(skillDatasource, 'filter').mockResolvedValue([
         { id: 'skillA', name: '@skillA' }, { id: 'skillB', name: '@skillB' }
       ]);
       await databaseBuilder.commit();
 
       //when
-      const staticCourse = await getRead('rec123');
+      const staticCourse = await getRead('rec123', { baseUrl: 'host.site' });
 
       //then
       expect(staticCourse.id).to.equal('rec123');
-      expect(stubFilterChallengeDatasource).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
+      expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
       expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });
+      expect(stubLocalizedChallengeRepository).toHaveBeenCalledWith({ ids: ['challengeA', 'challengeB'] });
     });
   });
 });

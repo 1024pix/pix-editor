@@ -31,6 +31,16 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       locale: 'fr',
       value: 'instruction for challengeid2',
     });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid1',
+      challengeId: 'challengeid1',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid2',
+      challengeId: 'challengeid2',
+      locale: 'fr',
+    });
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid1',
@@ -63,7 +73,10 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
     const response = await server.inject({
       method: 'GET',
       url: '/api/static-courses/courseid1',
-      headers: generateAuthorizationHeader(user),
+      headers: {
+        ...generateAuthorizationHeader(user),
+        host: 'host.site',
+      },
     });
 
     // Then
@@ -104,7 +117,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
-            'preview-url': '/api/challenges/challengeid1/preview',
+            'preview-url': 'http://host.site/api/challenges/challengeid1/preview',
           },
         },
         {
@@ -115,7 +128,7 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid2',
             'skill-name': '@skillid2',
             status: 'status for challengeid2',
-            'preview-url': '/api/challenges/challengeid2/preview',
+            'preview-url': 'http://host.site/api/challenges/challengeid2/preview',
           },
         }
       ],

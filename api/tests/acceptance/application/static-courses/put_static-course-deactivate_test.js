@@ -26,6 +26,21 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
       createdAt: new Date('2020-01-01T00:00:10Z'),
       updatedAt: new Date('2020-01-01T00:00:10Z'),
     });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid2',
+      challengeId: 'challengeid2',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid3',
+      challengeId: 'challengeid3',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid4',
+      challengeId: 'challengeid4',
+      locale: 'fr',
+    });
     databaseBuilder.factory.buildTranslation({
       key: 'challenge.challengeid2.instruction',
       locale: 'fr',
@@ -101,7 +116,10 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     const response = await server.inject({
       method: 'PUT',
       url: `/api/static-courses/${staticCourseId}/deactivate`,
-      headers: generateAuthorizationHeader(user),
+      headers: {
+        ...generateAuthorizationHeader(user),
+        host: 'test.site'
+      },
       payload,
     });
 
@@ -147,7 +165,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid2',
             'skill-name': '@skillid2',
             status: 'status for challengeid2',
-            'preview-url': '/api/challenges/challengeid2/preview',
+            'preview-url': 'http://test.site/api/challenges/challengeid2/preview',
           },
         },
         {
@@ -158,7 +176,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
             status: 'status for challengeid3',
-            'preview-url': '/api/challenges/challengeid3/preview',
+            'preview-url': 'http://test.site/api/challenges/challengeid3/preview',
           },
         },
         {
@@ -169,7 +187,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
             instruction: 'instruction for challengeid4',
             'skill-name': '@skillid4',
             status: 'status for challengeid4',
-            'preview-url': '/api/challenges/challengeid4/preview',
+            'preview-url': 'http://test.site/api/challenges/challengeid4/preview',
           },
         }
       ],
