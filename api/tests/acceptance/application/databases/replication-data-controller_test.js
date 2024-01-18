@@ -20,6 +20,24 @@ const {
 
 async function mockCurrentContent() {
   const challenge = domainBuilder.buildChallenge();
+  const challengeNl = domainBuilder.buildChallenge({
+    id: 'localized-challenge-id',
+    locales: ['nl'],
+    embedUrl: 'https://github.io/page/epreuve.html?lang=nl',
+    translations: {
+      nl: {
+        instruction: 'Consigne en nl',
+      },
+    },
+  });
+  const expectedChallenge = { ...challenge };
+  delete expectedChallenge.localizedChallenges;
+  delete expectedChallenge.translations;
+
+  const expectedChallengeNl = { ...challengeNl };
+  delete expectedChallengeNl.localizedChallenges;
+  delete expectedChallengeNl.translations;
+
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],
     areas: [domainBuilder.buildAreaDatasourceObject()],
@@ -35,7 +53,7 @@ async function mockCurrentContent() {
     })],
     tubes: [domainBuilder.buildTubeDatasourceObject()],
     skills: [domainBuilder.buildSkill()],
-    challenges: [challenge],
+    challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematicDatasourceObject()],
     courses: [{
@@ -53,7 +71,7 @@ async function mockCurrentContent() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
+    challenges: [buildChallenge(expectedChallenge)],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
@@ -78,6 +96,18 @@ async function mockCurrentContent() {
     challengeId: challenge.id,
     locale: 'fr',
     embedUrl: challenge.embedUrl,
+    status: 'validé',
+  });
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: 'localized-challenge-id',
+    challengeId: challenge.id,
+    locale: 'nl',
+    status: 'validé',
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${challenge.id}.instruction`,
+    locale: 'nl',
+    value: 'Consigne en nl',
   });
   databaseBuilder.factory.buildTranslation({
     key: `competence.${expectedCurrentContent.competences[0].id}.name`,
@@ -112,34 +142,34 @@ async function mockCurrentContent() {
   });
 
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
+    key: `challenge.${expectedChallenge.id}.instruction`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.instruction,
+    value: expectedChallenge.instruction,
   });
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
+    key: `challenge.${expectedChallenge.id}.alternativeInstruction`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.alternativeInstruction,
+    value: expectedChallenge.alternativeInstruction,
   });
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
+    key: `challenge.${expectedChallenge.id}.proposals`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.proposals,
+    value: expectedChallenge.proposals,
   });
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
+    key: `challenge.${expectedChallenge.id}.solution`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.solution,
+    value: expectedChallenge.solution,
   });
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
+    key: `challenge.${expectedChallenge.id}.solutionToDisplay`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.solutionToDisplay,
+    value: expectedChallenge.solutionToDisplay,
   });
   databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
+    key: `challenge.${expectedChallenge.id}.embedTitle`,
     locale: 'fr',
-    value: expectedCurrentContent.challenges[0].translations.fr.embedTitle,
+    value: expectedChallenge.embedTitle,
   });
 
   await databaseBuilder.commit();
