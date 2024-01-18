@@ -93,33 +93,41 @@ export async function save(staticCourseForCreation) {
   return serializedStaticCourseForDB.id;
 }
 
-async function findChallengeSummaries(localizedChallengeIds, dependencies) {
+async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
   const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
   const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
-  const challengesFromAirtable = await challengeRepository.filter({ filter: { ids: challengeIds } });
+  const challenges = await challengeRepository.filter({ filter: { ids: challengeIds } });
 
-  const skillIds = challengesFromAirtable.map(({ skillId }) => skillId);
+  const skillIds = challenges.map(({ skillId }) => skillId);
   const skillsFromAirtable = await skillDatasource.filter({ filter: { ids: skillIds } });
+
   return localizedChallengeIds.map((localizedChallengeId, index) => {
     const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);
     const locale = localizedChallenge.locale;
-    const challengeFromAirtable = challengesFromAirtable.find((challengeFromAirtable) => localizedChallenge.challengeId === challengeFromAirtable.id);
-    const previewUrl = localizedChallenge.isPrimary ?
-      `${dependencies.baseUrl}/api/challenges/${challengeFromAirtable.id}/preview`
-      : `${dependencies.baseUrl}/api/challenges/${challengeFromAirtable.id}/preview?locale=${locale}`;
-    const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challengeFromAirtable.skillId);
+    const challenge = challenges.find((challenge) => localizedChallenge.challengeId === challenge.id);
+    const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challenge.skillId);
+
     return new ChallengeSummary_Read({
       id: localizedChallengeId,
-      instruction: challengeFromAirtable.translations[locale].instruction ?? '',
+      instruction: challenge.translations[locale].instruction ?? '',
       skillName: correspondingSkill?.name ?? '',
-      status: localizedChallenge.isPrimary ? challengeFromAirtable.status : getLocalizedChallengeStatus(challengeFromAirtable, localizedChallenge),
+      status: getLocalizedChallengeStatus(challenge, localizedChallenge),
       index,
-      previewUrl,
+      previewUrl: getPreviewUrl(localizedChallenge, baseUrl),
     });
   });
 }
 
+function getPreviewUrl(localizedChallenge, baseUrl) {
+  return localizedChallenge.isPrimary
+    ? `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview`
+    : `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview?locale=${localizedChallenge.locale}`;
+}
+
 function getLocalizedChallengeStatus(challenge, localizedChallenge) {
+  if (localizedChallenge.isPrimary) {
+    return challenge.status;
+  }
   if (['proposé', 'périmé'].includes(challenge.status) || localizedChallenge.status === 'validé') {
     return challenge.status;
   }
