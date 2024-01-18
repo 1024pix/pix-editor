@@ -4,7 +4,6 @@ import { fields as challengeLocalizedFields } from '../../infrastructure/transla
 
 export function translateChallenges({ localizedChallenges }) {
   const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
-
   return (challenge) => localizedChallengesByChallengeId[challenge.id]
     .map((localizedChallenge) => translateChallenge(challenge, localizedChallenge));
 }

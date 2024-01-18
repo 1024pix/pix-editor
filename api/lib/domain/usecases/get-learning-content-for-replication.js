@@ -5,8 +5,9 @@ import {
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
-import { challengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository, localizedChallengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
+import { translateChallenges } from '../services/translate-challenges.js';
 
 export async function getLearningContentForReplication() {
   const [
@@ -15,6 +16,7 @@ export async function getLearningContentForReplication() {
     tubes,
     skills,
     challenges,
+    localizedChallenges,
     tutorials,
     attachments,
     thematics,
@@ -25,18 +27,22 @@ export async function getLearningContentForReplication() {
     tubeDatasource.list(),
     skillRepository.list(),
     challengeRepository.list(),
+    localizedChallengeRepository.list(),
     tutorialDatasource.list(),
     attachmentDatasource.list(),
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
   ]);
+  const translate = translateChallenges({ localizedChallenges });
+
+  const translatedChallenges = challenges.flatMap((challenge) => translate(challenge)).map(normalizeChallenge);
 
   return {
     areas,
     competences,
     tubes,
     skills,
-    challenges,
+    challenges: translatedChallenges,
     tutorials,
     attachments,
     thematics,
@@ -50,3 +56,9 @@ async function _getCoursesFromPGForReplication() {
     .orderBy('id');
 }
 
+function normalizeChallenge(challenge) {
+  delete challenge.localizedChallenges;
+  delete challenge.translations;
+
+  return challenge;
+}
