@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { findAllMissions, createMission } from '../../domain/usecases/index.js';
+import { findAllMissions, createMission, updateMission } from '../../domain/usecases/index.js';
 import { missionSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 //TODO Faire éventuellement un refacto pour mutualiser la gestion de la pagination
@@ -21,6 +21,13 @@ export async function create(request, h) {
   const mission = missionSerializer.deserializeMission(attributes);
   const savedMission = await createMission(mission);
   return h.response(missionSerializer.serializeMissionId(savedMission.id)).created();
+}
+export async function update(request, h) {
+  const attributes = request?.payload?.data?.attributes;
+  const missionId = request?.params?.id;
+  const mission = missionSerializer.deserializeMission({ ...attributes, id: missionId });
+  const updatedMission = await updateMission(mission);
+  return h.response(missionSerializer.serializeMissionId(updatedMission.id)).created();
 }
 
 function normalizePage(page) {

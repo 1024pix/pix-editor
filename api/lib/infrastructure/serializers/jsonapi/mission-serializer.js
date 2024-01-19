@@ -24,6 +24,7 @@ export function serializeMissionId(id) {
 
 export function deserializeMission(attributes) {
   return new Mission({
+    id: attributes.id,
     name_i18n: { fr: attributes.name  },
     competenceId: attributes['competence-id'],
     thematicId: attributes['thematic-id'],

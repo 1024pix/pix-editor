@@ -17,6 +17,14 @@ export async function register(server) {
         handler: missionController.create,
       },
     },
+    {
+      method: 'PUT',
+      path: '/api/missions/{id}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: missionController.update,
+      },
+    },
   ]);
 }
 

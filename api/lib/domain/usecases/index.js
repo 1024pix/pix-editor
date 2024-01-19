@@ -6,4 +6,5 @@ export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';
 export * from './proxy-read-request-to-airtable.js';
 export * from './proxy-write-request-to-airtable.js';
+export * from './update-mission.js';
 export * from './validate-urls-from-release.js';

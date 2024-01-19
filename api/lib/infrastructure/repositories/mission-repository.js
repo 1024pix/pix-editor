@@ -4,6 +4,17 @@ import { Mission } from '../../domain/models/index.js';
 import * as translationRepository from './translation-repository.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
+import { NotFoundError } from '../../domain/errors.js';
+
+export async function getById(id) {
+  const mission = await knex('missions').select('*').where({ id }).first();
+  if (!mission) {
+    throw new NotFoundError('Mission introuvable');
+  }
+
+  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+  return _toDomain(mission, translations);
+}
 
 export async function findAllMissions({ filter, page }) {
   const query = knex('missions')
@@ -31,10 +42,13 @@ export async function list() {
 
 export async function save(mission) {
   const [insertedMission] = await knex('missions').insert({
+    id: mission.id,
     competenceId: mission.competenceId,
     thematicId: mission.thematicId,
     status: mission.status
-  }).returning('*');
+  }).onConflict('id')
+    .merge()
+    .returning('*');
 
   const translations = missionTranslations.extractFromReleaseObject({ ...mission, id: insertedMission.id });
   await translationRepository.save({ translations, shouldDuplicateToAirtable: false });

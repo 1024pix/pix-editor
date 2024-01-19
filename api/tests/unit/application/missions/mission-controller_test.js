@@ -199,7 +199,7 @@ describe('Unit | Controller | missions controller', function() {
 
     it('should call the usecase with a domain object', async function() {
       // given
-     
+
       // when
       await missionsController.create(request, hFake);
 
@@ -218,6 +218,59 @@ describe('Unit | Controller | missions controller', function() {
     it('should return the serialized mission id', async function() {
       // when
       const result = await missionsController.create(request, hFake);
+
+      // then
+      expect(result.source.data).to.deep.equal(
+        {
+          type: 'missions',
+          id: '1',
+        }
+      );
+    });
+  });
+  describe('updateMission', function() {
+    let updateMissionMock;
+    const attributes = {
+      name: 'Mission possible',
+      'competence-id': 'QWERTY',
+      status: Mission.status.ACTIVE,
+      'learning-objectives': 'apprendre à éviter les lasers',
+      'validated-objectives': 'Très bien',
+      'thematic-id': null
+    };
+
+    const missionId = 1;
+    const request = { payload: { data: { attributes } }, params: { id: missionId } };
+
+    beforeEach(function() {
+      updateMissionMock = vi.spyOn(usecases, 'updateMission');
+      updateMissionMock.mockResolvedValue(new Mission({
+        id: missionId
+      }));
+    });
+
+    it('should call the usecase with a domain object', async function() {
+      // given
+
+      // when
+      await missionsController.update(request, hFake);
+
+      const deserializedMission = new Mission({
+        id: missionId,
+        name_i18n: { fr: 'Mission possible' },
+        competenceId: 'QWERTY',
+        thematicId: null,
+        learningObjectives_i18n: { fr: 'apprendre à éviter les lasers' },
+        validatedObjectives_i18n: { fr: 'Très bien' },
+        status: Mission.status.ACTIVE,
+      });
+      // then
+      expect(updateMissionMock).toHaveBeenCalledWith(deserializedMission);
+    });
+
+    it('should return the serialized mission id', async function() {
+      // when
+      const result = await missionsController.update(request, hFake);
 
       // then
       expect(result.source.data).to.deep.equal(
