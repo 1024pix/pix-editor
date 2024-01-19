@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { Challenge } from '../../domain/models/Challenge.js';
+import { Challenge } from '../models/Challenge.js';
 import { fields as challengeLocalizedFields } from '../../infrastructure/translations/challenge.js';
 
-export function translateChallenges({ localizedChallenges }) {
+export function createChallengeTranslator({ localizedChallenges }) {
   const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
   return (challenge) => localizedChallengesByChallengeId[challenge.id]
     .map((localizedChallenge) => translateChallenge(challenge, localizedChallenge));

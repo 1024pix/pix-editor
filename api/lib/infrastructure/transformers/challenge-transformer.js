@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { translateChallenges, translateChallenge } from '../../domain/services/translate-challenges.js';
+import { createChallengeTranslator, translateChallenge } from '../../domain/services/translate-challenge.js';
 
 export function createChallengeTransformer({ attachments, localizedChallenges, localizedChallenge }) {
 
   if (localizedChallenges) {
     return _.flow(
       _addAttachmentsToChallenge({ attachments }),
-      translateChallenges({ localizedChallenges }),
+      createChallengeTranslator({ localizedChallenges }),
       _filterChallengesFields,
     );
   }
