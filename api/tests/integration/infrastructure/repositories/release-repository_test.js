@@ -1310,7 +1310,6 @@ function _getRichCurrentContentDTO() {
       name: 'course1PG name',
       description: 'course1PG description',
       isActive: false,
-      competences: ['competence12', 'competence21'],
       challenges: ['challenge121212', 'challenge211113', 'challengeNl'],
     },
   ];

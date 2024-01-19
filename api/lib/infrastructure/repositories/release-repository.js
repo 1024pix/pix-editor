@@ -98,7 +98,7 @@ async function _getCurrentContent() {
   const challenges = await challengeRepository.list();
   const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
     _getCurrentContentFromAirtable(challenges),
-    _getCurrentContentFromPG(challenges),
+    _getCurrentContentFromPG(),
   ]);
   return {
     ...currentContentFromAirtable,
@@ -147,28 +147,23 @@ async function _getCurrentContentFromAirtable(challenges) {
   };
 }
 
-async function _getCurrentContentFromPG(airtableChallenges) {
+async function _getCurrentContentFromPG() {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
   const missions = await missionRepository.list();
 
   return {
-    courses: await Promise.all(staticCoursesDTO.map(async ({ id, name, description, isActive, challengeIds }) => {
-      const localizedChallengeIds = challengeIds.replaceAll(' ', '').split(',');
-      const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
-      const competences = _.uniq(localizedChallenges.map(({ challengeId }) => {
-        return airtableChallenges.find((airtableChallenge) => airtableChallenge.id === challengeId).competenceId;
-      }));
+    courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
+      const challenges = challengeIds.replaceAll(' ', '').split(',');
       return {
         id,
         name,
         description,
         isActive,
-        challenges: localizedChallengeIds,
-        competences,
+        challenges,
       };
-    })),
-    missions
+    }),
+    missions,
   };
 }
