@@ -1,5 +1,11 @@
 
 
+## v3.124.1 (22/01/2024)
+
+
+### :rocket: Amélioration
+- [#486](https://github.com/1024pix/pix-editor/pull/486) [FEATURE] Rattacher l'attachment à un localized challenge (PIX-10879).
+
 ## v3.124.0 (22/01/2024)
 
 
