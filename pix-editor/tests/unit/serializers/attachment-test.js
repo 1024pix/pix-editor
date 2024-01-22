@@ -26,6 +26,7 @@ module('Unit | Serializer | attachment', function(hooks) {
       type: 'type',
       alt: 'alt',
       challengeId: ['myAirtableId'],
+      localizedChallengeId: 'myAirtableId',
     };
 
     const serializedAttachment = attachment.serialize();
