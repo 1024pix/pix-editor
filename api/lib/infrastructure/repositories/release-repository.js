@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   areaDatasource,
   attachmentDatasource,
@@ -97,7 +98,7 @@ async function _getCurrentContent() {
   const challenges = await challengeRepository.list();
   const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
     _getCurrentContentFromAirtable(challenges),
-    _getCurrentContentFromPG(challenges),
+    _getCurrentContentFromPG(),
   ]);
   return {
     ...currentContentFromAirtable,
@@ -146,7 +147,7 @@ async function _getCurrentContentFromAirtable(challenges) {
   };
 }
 
-async function _getCurrentContentFromPG(airtableChallenges) {
+async function _getCurrentContentFromPG() {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
@@ -155,18 +156,14 @@ async function _getCurrentContentFromPG(airtableChallenges) {
   return {
     courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
       const challenges = challengeIds.replaceAll(' ', '').split(',');
-      const competences = challenges.map((challengeId) => {
-        return airtableChallenges.find((airtableChallenge) => airtableChallenge.id === challengeId).competenceId;
-      });
       return {
         id,
         name,
         description,
         isActive,
         challenges,
-        competences,
       };
     }),
-    missions
+    missions,
   };
 }

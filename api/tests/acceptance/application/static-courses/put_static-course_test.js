@@ -37,6 +37,32 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       createdAt: new Date('2020-01-01T00:00:10Z'),
       updatedAt: new Date('2020-01-01T00:00:10Z'),
     });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid2',
+      challengeId: 'challengeid2',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid3',
+      challengeId: 'challengeid3',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid1',
+      challengeId: 'challengeid1',
+      locale: 'fr',
+    });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeidnl1',
+      challengeId: 'challengeid1',
+      locale: 'nl',
+      status: 'validé',
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'challenge.challengeid1.instruction',
+      locale: 'nl',
+      value: 'instruction for challengeidnl1',
+    });
     databaseBuilder.factory.buildTranslation({
       key: 'challenge.challengeid1.instruction',
       locale: 'fr',
@@ -113,6 +139,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     return knex('static_courses').delete();
   });
 
+  // Add some localized challenge and make the test pass
   it('updates and returns the static course', async function() {
     // given
     const payload = {
@@ -120,7 +147,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
         attributes: {
           name: 'static course 1',
           description: 'static course description',
-          'challenge-ids': ['challengeid3', 'challengeid1'],
+          'challenge-ids': ['challengeid3', 'challengeid1', 'challengeidnl1'],
         },
       },
     };
@@ -130,7 +157,10 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     const response = await server.inject({
       method: 'PUT',
       url: `/api/static-courses/${activeCourseId}`,
-      headers: generateAuthorizationHeader(user),
+      headers: {
+        ...generateAuthorizationHeader(user),
+        host: 'host.site',
+      },
       payload,
     });
 
@@ -159,6 +189,10 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
                 type: 'challenge-summaries',
                 id: 'challengeid1',
               },
+              {
+                type: 'challenge-summaries',
+                id: 'challengeidnl1',
+              },
             ],
           },
         },
@@ -172,7 +206,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
             status: 'status for challengeid3',
-            'preview-url': '/api/challenges/challengeid3/preview',
+            'preview-url': 'http://host.site/api/challenges/challengeid3/preview',
           },
         },
         {
@@ -183,9 +217,20 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
-            'preview-url': '/api/challenges/challengeid1/preview',
+            'preview-url': 'http://host.site/api/challenges/challengeid1/preview',
           },
-        }
+        },
+        {
+          type: 'challenge-summaries',
+          id: 'challengeidnl1',
+          attributes: {
+            index: 2,
+            instruction: 'instruction for challengeidnl1',
+            'skill-name': '@skillid1',
+            status: 'status for challengeid1',
+            'preview-url': 'http://host.site/api/challenges/challengeid1/preview?locale=nl',
+          },
+        },
       ],
     });
   });

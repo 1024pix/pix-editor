@@ -181,7 +181,7 @@ describe('Integration | Repository | release-repository', function() {
         name: 'course1PG name',
         description: 'course1PG description',
         isActive: false,
-        challengeIds: 'challenge121212,challenge211113',
+        challengeIds: 'challenge121212,challenge211113,challengeNl',
         createdAt: new Date('2020-01-01'),
         updatedAt: new Date('2020-01-02'),
       });
@@ -255,7 +255,7 @@ function buildChallengesTranslationsAndLocalizedChallenges(challenges) {
     buildChallengeTranslationsAndLocalizedChallenge(challenge, challenge.locales[0]);
   }
 
-  buildChallengeTranslationsAndLocalizedChallenge(challenges[0], 'nl-be', 'challenge129803721984');
+  buildChallengeTranslationsAndLocalizedChallenge(challenges[0], 'nl-be', 'challengeNl');
 }
 
 function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, localizedChallengeId = challenge.id) {
@@ -1147,7 +1147,7 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121211 alternativeVersion',
     },
     {
-      id: 'challenge129803721984',
+      id: 'challengeNl',
       instruction: 'challenge121211 instruction nl-be',
       proposals: 'challenge121211 proposals nl-be',
       type: 'challenge121211 type',
@@ -1310,8 +1310,7 @@ function _getRichCurrentContentDTO() {
       name: 'course1PG name',
       description: 'course1PG description',
       isActive: false,
-      competences: ['competence12', 'competence21'],
-      challenges: ['challenge121212', 'challenge211113'],
+      challenges: ['challenge121212', 'challenge211113', 'challengeNl'],
     },
   ];
   const expectedTutorialDTOs = [

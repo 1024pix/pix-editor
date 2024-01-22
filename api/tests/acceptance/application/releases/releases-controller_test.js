@@ -149,7 +149,6 @@ async function mockCurrentContent() {
       name: 'Nom du Course',
       description: 'Description du Course',
       isActive: true,
-      competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
     }],
     missions: [new Mission({
@@ -414,7 +413,6 @@ async function mockContentForRelease() {
       name: 'Nom du Course',
       description: 'Description du Course',
       isActive: true,
-      competences: ['recCompetence0'],
       challenges: ['recChallenge0'],
     }],
     missions: [new Mission({

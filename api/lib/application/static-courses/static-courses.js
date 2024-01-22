@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { challengeRepository, staticCourseRepository } from '../../infrastructure/repositories/index.js';
+import { localizedChallengeRepository, staticCourseRepository } from '../../infrastructure/repositories/index.js';
 import { staticCourseSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
 import { StaticCourse } from '../../domain/models/index.js';
@@ -20,23 +20,23 @@ export async function findSummaries(request, h) {
 
 export async function get(request, h) {
   const staticCourseId = request.params.id;
-  const staticCourse = await staticCourseRepository.getRead(staticCourseId);
+  const staticCourse = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourse));
 }
 
 export async function create(request, h) {
   const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
-  const allChallengeIds = await challengeRepository.getAllIdsIn(creationCommand.challengeIds);
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: creationCommand.challengeIds });
   const commandResult = StaticCourse.buildFromCreationCommand({
     creationCommand,
-    allChallengeIds,
+    allChallengeIds: localizedChallenges.map(({ id }) => id),
     idGenerator: idGenerator.generateNewId,
   });
   if (commandResult.isFailure()) {
     throw commandResult.error;
   }
   const staticCourseId = await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel)).created();
 }
 
@@ -47,16 +47,16 @@ export async function update(request, h) {
   if (!staticCourseToUpdate) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
-  const allChallengeIds = await challengeRepository.getAllIdsIn(updateCommand.challengeIds);
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: updateCommand.challengeIds });
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
-    allChallengeIds,
+    allChallengeIds: localizedChallenges.map(({ id }) => id),
   });
   if (commandResult.isFailure()) {
     throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
@@ -72,7 +72,7 @@ export async function deactivate(request, h) {
     throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
@@ -87,7 +87,7 @@ export async function reactivate(request, h) {
     throw commandResult.error;
   }
   await staticCourseRepository.save(commandResult.value);
-  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId);
+  const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
 }
 
@@ -127,4 +127,8 @@ function normalizeDeactivationCommand(attrs) {
   return {
     reason: _.isString(attrs.reason) ? attrs.reason : '',
   };
+}
+
+function getBaseUrl(request) {
+  return `${request.url.protocol}//${request.url.host}`;
 }

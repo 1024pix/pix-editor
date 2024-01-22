@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { hFake, domainBuilder, catchErr } from '../../../test-helper.js';
 import * as staticCourseController from '../../../../lib/application/static-courses/static-courses.js';
-import { challengeRepository, staticCourseRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { localizedChallengeRepository, staticCourseRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import { InvalidStaticCourseCreationOrUpdateError } from '../../../../lib/domain/errors.js';
 
@@ -162,14 +162,14 @@ describe('Unit | Controller | static courses controller', function() {
   describe('create', function() {
 
     describe('creationCommand normalization', function() {
-      let saveStub, getReadStub, getAllIdsInStub, generateNewIdStub;
+      let saveStub, getReadStub, getManyStub, generateNewIdStub;
 
       beforeEach(function() {
         vi.useFakeTimers({
           now: new Date('2021-10-29T03:04:00Z'),
         });
-        getAllIdsInStub = vi.spyOn(challengeRepository, 'getAllIdsIn');
-        getAllIdsInStub.mockResolvedValue(['chalA']);
+        getManyStub = vi.spyOn(localizedChallengeRepository, 'getMany');
+        getManyStub.mockResolvedValue([{ id: 'chalA' }]);
         saveStub = vi.spyOn(staticCourseRepository, 'save');
         saveStub.mockResolvedValue('course123');
         getReadStub = vi.spyOn(staticCourseRepository, 'getRead');
@@ -184,11 +184,13 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should pass along creation command from attributes when all is valid', async function() {
         // given
-        const request = { payload: { data: { attributes: {
-          name: 'some valid name  ',
-          description: '  some valid description',
-          'challenge-ids': ['chalA'],
-        } } } };
+        const request = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name  ',
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } } };
 
         // when
         await staticCourseController.create(request, hFake);
@@ -207,20 +209,26 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
         // given
-        const request0 = { payload: { data: { attributes: {
-          name: null,
-          description: '  some valid description',
-          'challenge-ids': ['chalA'],
-        } } } };
-        const request1 = { payload: { data: { attributes: {
-          description: '  some valid description',
-          'challenge-ids': ['chalA'],
-        } } } };
-        const request2 = { payload: { data: { attributes: {
-          name: 123,
-          description: '  some valid description',
-          'challenge-ids': ['chalA'],
-        } } } };
+        const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: null,
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } } };
+        const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } } };
+        const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 123,
+            description: '  some valid description',
+            'challenge-ids': ['chalA'],
+          } } } };
 
         // when
         const error0 = await catchErr(staticCourseController.create)(request0, hFake);
@@ -239,20 +247,26 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should normalize description to an empty string when not a string', async function() {
         // given
-        const request0 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: null,
-          'challenge-ids': ['chalA'],
-        } } } };
-        const request1 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          'challenge-ids': ['chalA'],
-        } } } };
-        const request2 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: 123,
-          'challenge-ids': ['chalA'],
-        } } } };
+        const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: null,
+            'challenge-ids': ['chalA'],
+          } } } };
+        const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            'challenge-ids': ['chalA'],
+          } } } };
+        const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 123,
+            'challenge-ids': ['chalA'],
+          } } } };
 
         // when
         await staticCourseController.create(request0, hFake);
@@ -275,25 +289,33 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
         // given
-        const request0 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: 'some valid description',
-          challengeIds: 'coucou',
-        } } } };
-        const request1 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: 'some valid description',
-          challengeIds: null,
-        } } } };
-        const request2 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: 'some valid description',
-        } } } };
-        const request3 = { payload: { data: { attributes: {
-          name: 'some valid name',
-          description: 'some valid description',
-          challengeIds: 123,
-        } } } };
+        const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: 'coucou',
+          } } } };
+        const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: null,
+          } } } };
+        const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+          } } } };
+        const request3 = {
+          url: { host: 'host.site', protocol: 'http:' },
+          payload: { data: { attributes: {
+            name: 'some valid name',
+            description: 'some valid description',
+            challengeIds: 123,
+          } } } };
 
         // when
         const error0 = await catchErr(staticCourseController.create)(request0, hFake);
@@ -317,14 +339,14 @@ describe('Unit | Controller | static courses controller', function() {
   describe('update', function() {
 
     describe('updateCommand normalization', function() {
-      let saveStub, getReadStub, getAllIdsInStub, getStub;
+      let saveStub, getReadStub, getManyStub, getStub;
 
       beforeEach(function() {
         vi.useFakeTimers({
           now: new Date('2021-10-29T03:04:00Z'),
         });
-        getAllIdsInStub = vi.spyOn(challengeRepository, 'getAllIdsIn');
-        getAllIdsInStub.mockResolvedValue(['chalA']);
+        getManyStub = vi.spyOn(localizedChallengeRepository, 'getMany');
+        getManyStub.mockResolvedValue([{ id: 'chalA' }]);
         saveStub = vi.spyOn(staticCourseRepository, 'save');
         saveStub.mockResolvedValue();
         getStub = vi.spyOn(staticCourseRepository, 'get');
@@ -343,6 +365,7 @@ describe('Unit | Controller | static courses controller', function() {
       it('should pass along update command from attributes when all is valid', async function() {
         // given
         const request = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name  ',
             description: '  some valid description',
@@ -368,6 +391,7 @@ describe('Unit | Controller | static courses controller', function() {
       it('should normalize name to an empty string when not a string, and thus throw an error', async function() {
         // given
         const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: null,
             description: '  some valid description',
@@ -375,12 +399,14 @@ describe('Unit | Controller | static courses controller', function() {
           } } },
           params: { id: 'someCourseId' } };
         const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             description: '  some valid description',
             'challenge-ids': ['chalA'],
           } } },
           params: { id: 'someCourseId' } };
         const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 123,
             description: '  some valid description',
@@ -406,6 +432,7 @@ describe('Unit | Controller | static courses controller', function() {
       it('should normalize description to an empty string when not a string', async function() {
         // given
         const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: null,
@@ -413,12 +440,14 @@ describe('Unit | Controller | static courses controller', function() {
           } } },
           params: { id: 'someCourseId' } };
         const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             'challenge-ids': ['chalA'],
           } } },
           params: { id: 'someCourseId' } };
         const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: 123,
@@ -448,6 +477,7 @@ describe('Unit | Controller | static courses controller', function() {
       it('should normalize challengeIds to an empty array when not an array, and thus throw an error', async function() {
         // given
         const request0 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: 'some valid description',
@@ -455,6 +485,7 @@ describe('Unit | Controller | static courses controller', function() {
           } } },
           params: { id: 'someCourseId' } };
         const request1 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: 'some valid description',
@@ -462,12 +493,14 @@ describe('Unit | Controller | static courses controller', function() {
           } } },
           params: { id: 'someCourseId' } };
         const request2 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: 'some valid description',
           } } },
           params: { id: 'someCourseId' } };
         const request3 = {
+          url: { host: 'host.site', protocol: 'http:' },
           payload: { data: { attributes: {
             name: 'some valid name',
             description: 'some valid description',

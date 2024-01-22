@@ -8,6 +8,7 @@ import {
 import { StaticCourse } from '../../domain/models/index.js';
 import { skillDatasource } from '../datasources/airtable/index.js';
 import * as challengeRepository from './challenge-repository.js';
+import { localizedChallengeRepository } from './index.js';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
@@ -31,26 +32,26 @@ export async function findReadSummaries({ filter, page }) {
   return { results: staticCoursesSummaries, meta: pagination };
 }
 
-export async function getRead(id) {
+export async function getRead(id, { baseUrl }) {
   const staticCourse = await knex('static_courses')
     .select('*')
     .where('id', id)
     .first();
-  if (staticCourse) {
-    const challengeIds = staticCourse.challengeIds.split(',');
-    const challengeSummaries = await findChallengeSummaries(challengeIds);
-    return new StaticCourse_Read({
-      id: staticCourse.id,
-      name: staticCourse.name,
-      description: staticCourse.description,
-      isActive: staticCourse.isActive,
-      deactivationReason: staticCourse.deactivationReason || '',
-      createdAt: staticCourse.createdAt,
-      updatedAt: staticCourse.updatedAt,
-      challengeSummaries,
-    });
-  }
-  return null;
+
+  if (!staticCourse) return null;
+
+  const localizedChallengeIds = staticCourse.challengeIds.split(',');
+  const challengeSummaries = await findChallengeSummaries(localizedChallengeIds, { baseUrl });
+  return new StaticCourse_Read({
+    id: staticCourse.id,
+    name: staticCourse.name,
+    description: staticCourse.description,
+    isActive: staticCourse.isActive,
+    deactivationReason: staticCourse.deactivationReason || '',
+    createdAt: staticCourse.createdAt,
+    updatedAt: staticCourse.updatedAt,
+    challengeSummaries,
+  });
 }
 
 export async function get(id) {
@@ -92,20 +93,43 @@ export async function save(staticCourseForCreation) {
   return serializedStaticCourseForDB.id;
 }
 
-async function findChallengeSummaries(challengeIds) {
-  const challengesFromAirtable = await challengeRepository.filter({ filter: { ids: challengeIds } });
-  const skillIds = challengesFromAirtable.map(({ skillId }) => skillId);
+async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
+  const challengeIds = localizedChallenges.map(({ challengeId }) => challengeId);
+  const challenges = await challengeRepository.filter({ filter: { ids: challengeIds } });
+
+  const skillIds = challenges.map(({ skillId }) => skillId);
   const skillsFromAirtable = await skillDatasource.filter({ filter: { ids: skillIds } });
-  return challengeIds.map((challengeId) => {
-    const challengeFromAirtable = challengesFromAirtable.find((challengeFromAirtable) => challengeId === challengeFromAirtable.id);
-    const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challengeFromAirtable.skillId);
+
+  return localizedChallengeIds.map((localizedChallengeId, index) => {
+    const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);
+    const locale = localizedChallenge.locale;
+    const challenge = challenges.find((challenge) => localizedChallenge.challengeId === challenge.id);
+    const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challenge.skillId);
+
     return new ChallengeSummary_Read({
-      id: challengeFromAirtable.id,
-      instruction: challengeFromAirtable.instruction || '',
-      skillName: correspondingSkill?.name || '',
-      status: challengeFromAirtable.status,
-      index: challengeIds.indexOf(challengeFromAirtable.id),
-      previewUrl: challengeFromAirtable.preview,
+      id: localizedChallengeId,
+      instruction: challenge.translations[locale].instruction ?? '',
+      skillName: correspondingSkill?.name ?? '',
+      status: getLocalizedChallengeStatus(challenge, localizedChallenge),
+      index,
+      previewUrl: getPreviewUrl(localizedChallenge, baseUrl),
     });
   });
+}
+
+function getPreviewUrl(localizedChallenge, baseUrl) {
+  return localizedChallenge.isPrimary
+    ? `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview`
+    : `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview?locale=${localizedChallenge.locale}`;
+}
+
+function getLocalizedChallengeStatus(challenge, localizedChallenge) {
+  if (localizedChallenge.isPrimary) {
+    return challenge.status;
+  }
+  if (['proposé', 'périmé'].includes(challenge.status) || localizedChallenge.status === 'validé') {
+    return challenge.status;
+  }
+  return localizedChallenge.status;
 }
