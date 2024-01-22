@@ -1,5 +1,20 @@
 
 
+## v3.124.0 (22/01/2024)
+
+
+### :rocket: Amélioration
+- [#481](https://github.com/1024pix/pix-editor/pull/481) [FEATURE] Ajoute les épreuves traduites à la réplication (PIX-10761).
+- [#480](https://github.com/1024pix/pix-editor/pull/480) [FEATURE] Autorise les épreuves traduites dans les tests statiques (PIX-10848).
+
+### :building_construction: Tech
+- [#478](https://github.com/1024pix/pix-editor/pull/478) [TECH] Vérifier que la version de node est disponible sur Scalingo avant de la mettre à jour.
+
+### :arrow_up: Montée de version
+- [#483](https://github.com/1024pix/pix-editor/pull/483) [BUMP] Update dependency axios-cookiejar-support to v5 (api).
+- [#482](https://github.com/1024pix/pix-editor/pull/482) [BUMP] Update dependency @fast-csv/parse to v5 (scripts).
+- [#485](https://github.com/1024pix/pix-editor/pull/485) [BUMP] Update dependency fast-csv to v5 (api).
+
 ## v3.123.0 (18/01/2024)
 
 
