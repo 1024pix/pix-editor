@@ -1,5 +1,11 @@
 
 
+## v3.124.2 (23/01/2024)
+
+
+### :bug: Correction
+- [#487](https://github.com/1024pix/pix-editor/pull/487) [BUGFIX] Le localizedChallengeId doit se baser sur le challengeId Persistant (PIX-10884).
+
 ## v3.124.1 (22/01/2024)
 
 
