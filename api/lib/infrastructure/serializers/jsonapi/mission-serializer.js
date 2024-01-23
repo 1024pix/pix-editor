@@ -17,6 +17,28 @@ export function serializeMissionSummary(mission, meta) {
     meta,
   }).serialize(mission);
 }
+export function serializeMission(mission) {
+  return new Serializer('mission', {
+    transform: (mission) => {
+      return {
+        ...mission,
+        name: mission.name_i18n.fr,
+        learningObjectives: mission.learningObjectives_i18n.fr,
+        validatedObjectives: mission.validatedObjectives_i18n.fr
+      };
+    },
+    attributes: [
+      'name',
+      'competenceId',
+      'thematicId',
+      'learningObjectives',
+      'validatedObjectives',
+      'createdAt',
+      'status'
+    ],
+
+  }).serialize(mission);
+}
 
 export function serializeMissionId(id) {
   return new Serializer('mission', {}).serialize({ id });

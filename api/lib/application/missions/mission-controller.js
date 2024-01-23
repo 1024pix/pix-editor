@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import { findAllMissions, createMission, updateMission } from '../../domain/usecases/index.js';
 import { missionSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-
+import * as missionRepository  from '../../infrastructure/repositories/mission-repository.js';
 //TODO Faire éventuellement un refacto pour mutualiser la gestion de la pagination
 const DEFAULT_PAGE = {
   number: 1,
@@ -14,6 +14,11 @@ export async function findMissions(request, h) {
   const { filter, page } = extractParameters(request.query);
   const { missions, meta } = await findAllMissions({ filter: normalizeFilter(filter), page: normalizePage(page) });
   return h.response(missionSerializer.serializeMissionSummary(missions, meta));
+}
+
+export async function getMission(request, h) {
+  const mission = await missionRepository.getById(request.params.id);
+  return h.response(missionSerializer.serializeMission(mission));
 }
 
 export async function create(request, h) {
