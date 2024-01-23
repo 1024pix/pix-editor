@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 
 module('Unit | Model | competence', function(hooks) {
   setupTest(hooks);
@@ -16,10 +15,10 @@ module('Unit | Model | competence', function(hooks) {
       name: 'workbench_theme',
     });
 
-    const competence = run(() => store.createRecord('competence', {
+    const competence = store.createRecord('competence', {
       title: 'competence1',
       rawThemes: [liveTheme, workbenchTheme]
-    }));
+    });
 
     assert.deepEqual(competence.themes, [liveTheme]);
   });
@@ -39,10 +38,10 @@ module('Unit | Model | competence', function(hooks) {
         name: 'workbenchTube',
       });
 
-      const competence = run(() => store.createRecord('competence', {
+      const competence = store.createRecord('competence', {
         title: 'competence1',
         rawTubes: [liveTube, workbenchTube]
-      }));
+      });
 
       assert.deepEqual(competence.productionTubes, [liveTube]);
     });

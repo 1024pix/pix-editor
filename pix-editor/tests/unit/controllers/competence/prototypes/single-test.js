@@ -1,5 +1,4 @@
 import { module, test } from 'qunit';
-import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import EmberObject from '@ember/object';
@@ -176,11 +175,9 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         challenges: [validatePrototype2_1, validateChallenge2_1, proposalPrototype2_2, proposalChallenge2_2],
         save: saveStub
       });
-      tube = run(() => {
-        return store.createRecord('tube', {
-          id: 'rec_tube',
-          skills: [skill1, skill2]
-        });
+      tube = store.createRecord('tube', {
+        id: 'rec_tube',
+        skills: [skill1, skill2]
       });
       tube.skills.forEach(skill=>{
         skill.tube = tube;

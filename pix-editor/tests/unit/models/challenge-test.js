@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 import Service from '@ember/service';
 import sinon from 'sinon';
 
@@ -46,7 +45,7 @@ module('Unit | Model | challenge', function(hooks) {
   module('#duplicate', function() {
     test('it should duplicate challenge to create new prototype version', async function (assert) {
       // given
-      const challenge = run(() => store.createRecord('challenge', prototype));
+      const challenge = store.createRecord('challenge', prototype);
 
       // when
       const clonedChallenge = await challenge.duplicate();
@@ -63,7 +62,7 @@ module('Unit | Model | challenge', function(hooks) {
 
     test('it should duplicate challenge to create new alternative version', async function (assert) {
       // given
-      const challenge = run(() => store.createRecord('challenge', alternative));
+      const challenge = store.createRecord('challenge', alternative);
 
       // when
       const clonedChallenge = await challenge.duplicate();
@@ -96,7 +95,7 @@ module('Unit | Model | challenge', function(hooks) {
   module('#copyForDifferentSkill', function() {
     test('it should create a copy of the challenge for a different skill', async function(assert) {
       // given
-      const challenge = run(() => store.createRecord('challenge', prototype));
+      const challenge = store.createRecord('challenge', prototype);
 
       // when
       const clonedChallenge = await challenge.copyForDifferentSkill();

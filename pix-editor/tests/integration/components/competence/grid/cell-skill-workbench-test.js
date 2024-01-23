@@ -2,7 +2,6 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { run } from '@ember/runloop';
 
 
 module('Integration | Component | competence/grid/cell-skill-workbench', function(hooks) {
@@ -57,7 +56,7 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
       name: skillName,
       status:'périmé',
     });
-    tube = run(() => store.createRecord('tube',{
+    tube = store.createRecord('tube',{
       id: 'rec123456',
       name: 'tubeName',
       rawSkills: [
@@ -68,7 +67,7 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
         ,skillRecord5
         ,skillRecord6
       ]
-    }));
+    });
     this.skill = skillRecord1;
     this.skills = [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6];
     this.tube = tube;
