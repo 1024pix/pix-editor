@@ -1,6 +1,6 @@
 <header class="page-header">
   <h1 class="page-title">Missions</h1>
-  {{!-- {{#if this.model.mayCreateOrEditMissions}} --}}
+  {{#if this.model.mayCreateOrEditMissions}}
     <div class="page-actions">
       <PixButtonLink
         @backgroundColor="blue"
@@ -13,7 +13,7 @@
         Créer une nouvelle mission
       </PixButtonLink>
     </div>
-  {{!-- {{/if}}   --}}
+  {{/if}}
 </header>
 <main class="page-body">
   <section class="page-section">
@@ -65,7 +65,20 @@
                 {{if mission.isActive "Actif" "Inactif"}}
               </PixTag>
             </td>
-            <td class="actions">
+            <td class="actions actions__edit-mission">
+              {{#if this.model.mayCreateOrEditMissions}}
+                <PixButtonLink
+                  @backgroundColor="blue"
+                  @route="authenticated.missions.edit"
+                  class="pix-button-link-with-icon white-font"
+                  @model={{mission.id}}
+                >
+                  <FaIcon
+                    @icon="plus"
+                    @prefix="fas"></FaIcon>
+                  Modifier
+                </PixButtonLink>
+              {{/if}}
             </td>
           </tr>
         {{/each}}

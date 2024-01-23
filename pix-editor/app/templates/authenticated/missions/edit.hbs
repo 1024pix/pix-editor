@@ -1,0 +1,14 @@
+<header class="page-header">
+  <h1 class="page-title">Modification d'une mission</h1>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Form::Mission
+      @mission={{this.model.mission}}
+      @competences={{this.model.competences}}
+      @onFormCancelled={{this.goBackToList}}
+      @submitButtonText="Modifier la mission"
+      @onFormSubmitted={{this.editMission}}
+    />
+  </section>
+</main>
