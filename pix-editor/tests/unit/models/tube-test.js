@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 
 module('Unit | Model | tube', function(hooks) {
   setupTest(hooks);
@@ -56,7 +55,7 @@ module('Unit | Model | tube', function(hooks) {
       level: 6,
       status:'périmé',
     });
-    tube = run(() => store.createRecord('tube', {
+    tube = store.createRecord('tube', {
       id: 'rec123456',
       name: 'tubeName',
       rawSkills: [
@@ -67,7 +66,7 @@ module('Unit | Model | tube', function(hooks) {
         ,skillRecord5
         ,skillRecord6
       ]
-    }));
+    });
   });
 
   test('it should return an array of skill with status is not `archivé` or `périmé`', function(assert) {

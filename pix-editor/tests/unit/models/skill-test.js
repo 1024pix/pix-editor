@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 import sinon from 'sinon';
 
 module('Unit | Model | skill', function(hooks) {
@@ -32,7 +31,7 @@ module('Unit | Model | skill', function(hooks) {
 
   test('it should return a map of unique language and alternatives', function(assert) {
     // given
-    const skill = run(() => store.createRecord('skill', {
+    const skill = store.createRecord('skill', {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
@@ -41,7 +40,7 @@ module('Unit | Model | skill', function(hooks) {
         store.createRecord('challenge',challenge3),
         store.createRecord('challenge',challenge4),
       ]
-    }));
+    });
 
     // when
     const languagesAndAlternativesCount = skill.languagesAndAlternativesCount;
@@ -52,7 +51,7 @@ module('Unit | Model | skill', function(hooks) {
 
   test('it should return an array of unique language sorted', function(assert) {
     // given
-    const skill = run(() => store.createRecord('skill', {
+    const skill = store.createRecord('skill', {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
@@ -61,7 +60,7 @@ module('Unit | Model | skill', function(hooks) {
         store.createRecord('challenge',challenge3),
         store.createRecord('challenge',challenge4),
       ]
-    }));
+    });
 
     // when
     const languages = skill.languages;
@@ -79,7 +78,7 @@ module('Unit | Model | skill', function(hooks) {
     const tutorial2 = store.createRecord('tutorial', { title: 'tutoSolution1' });
     const tutorial3 = store.createRecord('tutorial', { title: 'tutoSolution2' });
     const tube = store.createRecord('tube', { title: 'tube' });
-    const skill = run(() => store.createRecord('skill', {
+    const skill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       status: 'actif',
@@ -88,7 +87,7 @@ module('Unit | Model | skill', function(hooks) {
       challenges: [store.createRecord('challenge',challenge1)],
       tutoSolution: [tutorial1],
       tutoMore: [tutorial2, tutorial3]
-    }));
+    });
 
     skill.idGenerator = idGeneratorStub;
     // const ignoredFields = ['competence', 'level', 'tube', 'challenges'];

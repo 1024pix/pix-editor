@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, find, findAll, click, waitUntil } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { later } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -91,7 +91,7 @@ module('Acceptance | competence/prototypes/list', function () {
       // Ugly hack to wait for ToastUI to be ready
       // otherwise test is flacky and fails with error message
       // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
-      await later(this, async () => {}, 100);
+      await runTask(this, async () => {}, 100);
 
       //then
       assert.strictEqual(currentURL().indexOf(expectedResult), 0);

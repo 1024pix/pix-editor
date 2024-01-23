@@ -4,7 +4,7 @@ import { tracked } from '@glimmer/tracking';
 
 export default class PopInConfirmLog extends Component {
   @tracked displayTextarea = false;
-  @tracked defaultValue = this.args.defaultValue;
+  defaultValue = this.args.defaultValue;
   inputId = this.args.inputId;
 
   get changeLogValue() {

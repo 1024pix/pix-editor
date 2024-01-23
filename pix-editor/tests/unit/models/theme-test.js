@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 
 module('Unit | Model | theme', function(hooks) {
   setupTest(hooks);
@@ -53,7 +52,7 @@ module('Unit | Model | theme', function(hooks) {
       rawSkills: [activeSkill_2]
     });
 
-    theme = run(() => store.createRecord('theme', {
+    theme = store.createRecord('theme', {
       name: 'themeName',
       rawTubes: [
         tube_4,
@@ -61,7 +60,7 @@ module('Unit | Model | theme', function(hooks) {
         tube_2,
         tube_3
       ]
-    }));
+    });
   });
 
   test('it should not return workbench tubes', function(assert) {
@@ -107,13 +106,13 @@ module('Unit | Model | theme', function(hooks) {
 
     test('it should be false if has no selected tube', function(assert) {
       // given
-      theme = run(() => store.createRecord('theme', {
+      theme = store.createRecord('theme', {
         name: 'themeName',
         rawTubes: [
           tube_1,
           tube_3
         ]
-      }));
+      });
 
       // when
       const hasSelectedProductionTube = theme.hasSelectedProductionTube;

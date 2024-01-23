@@ -1,6 +1,5 @@
 import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import { run } from '@ember/runloop';
 
 module('Unit | Model | localized-challenge', function(hooks) {
   setupTest(hooks);
@@ -22,14 +21,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedStatus: 'suggested' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedStatus })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedStatus}`, function (assert) {
-        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+        const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
           challenge: store.createRecord('challenge',{
             id: 'rec654260',
             status: challengeStatus
           })
-        }));
+        });
         const statusCSS = localizedChallenge.statusCSS;
 
         assert.strictEqual(statusCSS, expectedStatus);
@@ -49,14 +48,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedText: 'Pas en prod' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedText })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedText}`, function (assert) {
-        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+        const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
           challenge: store.createRecord('challenge',{
             id: 'rec654260',
             status: challengeStatus
           })
-        }));
+        });
         const statusText = localizedChallenge.statusText;
 
         assert.strictEqual(statusText, expectedText);
@@ -76,14 +75,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} should ${expected ? '' : 'not '}be in production`, function (assert) {
-        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+        const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
           challenge: store.createRecord('challenge',{
             id: 'rec654260',
             status: challengeStatus
           })
-        }));
+        });
 
         assert.strictEqual(localizedChallenge.isInProduction, expected);
       });
@@ -102,14 +101,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
       test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} status is ${expected ? '' : 'not '}editable`, function (assert) {
-        const localizedChallenge = run(() => store.createRecord('localized-challenge', {
+        const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
           challenge: store.createRecord('challenge',{
             id: 'rec654260',
             status: challengeStatus
           })
-        }));
+        });
 
         assert.strictEqual(localizedChallenge.isStatusEditable, expected);
       });

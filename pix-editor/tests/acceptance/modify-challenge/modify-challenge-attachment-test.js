@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { visit, findAll, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { later } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import Service from '@ember/service';
@@ -51,7 +51,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-attachment] input', file);
 
-    await later(this, async () => {}, 400);
+    await runTask(this, async () => {}, 400);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -87,7 +87,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 
-    await later(this, async () => {}, 200);
+    await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -121,7 +121,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-attachment-button]'));
 
-    await later(this, async () => {}, 200);
+    await runTask(this, async () => {}, 200);
     await click(find('[data-test-cancel-challenge-button]'));
 
     const store = this.owner.lookup('service:store');

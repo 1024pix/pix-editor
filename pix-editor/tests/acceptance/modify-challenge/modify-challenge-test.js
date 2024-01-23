@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { visit, findAll, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { later } from '@ember/runloop';
+import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -39,7 +39,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     // Ugly hack to wait for ToastUI to be ready
     // otherwise test is flacky and fails with error message
     // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
-    await later(this, async () => {}, 200);
+    await runTask(this, async () => {}, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
