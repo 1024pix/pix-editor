@@ -71,7 +71,13 @@ async function mockCurrentContent() {
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
-    challenges: [buildChallenge(expectedChallenge)],
+    challenges: [buildChallenge({
+      ...expectedChallenge,
+      files: [{
+        fileId: expectedChallenge.files[0],
+        localizedChallengeId: expectedChallenge.id
+      }]
+    })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     attachments: [buildAttachment(expectedCurrentContent.attachments[0])],

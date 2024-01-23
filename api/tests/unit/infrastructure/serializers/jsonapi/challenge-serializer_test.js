@@ -78,7 +78,6 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
           }
         }
       };
-
       // When
       const json = serialize({ ...challenge, alternativeLocales });
 

@@ -1,4 +1,5 @@
 export class Challenge {
+
   constructor({
     id,
     type,
@@ -51,7 +52,7 @@ export class Challenge {
     this.timer = timer;
     this.competenceId = competenceId;
     this.format = format;
-    this.files = files;
+    this.files = files?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id).map(({ fileId }) => fileId);
     this.autoReply = autoReply;
     this.locales = Challenge.defaultLocales(locales);
     this.focusable = focusable;

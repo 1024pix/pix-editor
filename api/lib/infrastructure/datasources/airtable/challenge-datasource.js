@@ -22,6 +22,7 @@ export const challengeDatasource = datasource.extend({
     'Embed height',
     'Format',
     'files',
+    'filesLocalizedChallengeIds',
     'Réponse automatique',
     'Langues',
     'Focalisée',
@@ -46,7 +47,7 @@ export const challengeDatasource = datasource.extend({
     'archived_at',
     'made_obsolete_at',
     'shuffled',
-    'contextualizedFields'
+    'contextualizedFields',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -60,6 +61,15 @@ export const challengeDatasource = datasource.extend({
     if (airtableRecord.get('Timer')) {
       timer = parseInt(airtableRecord.get('Timer'));
     }
+
+    const filesIds = airtableRecord.get('files');
+    const filesLocalizedChallengeIds = airtableRecord.get('filesLocalizedChallengeIds');
+    const files = filesIds?.map((fileId, index) => {
+      return {
+        fileId,
+        localizedChallengeId: filesLocalizedChallengeIds[index],
+      };
+    });
 
     return {
       id: airtableRecord.get('id persistant'),
@@ -75,7 +85,7 @@ export const challengeDatasource = datasource.extend({
       timer,
       competenceId,
       format: airtableRecord.get('Format') || 'mots',
-      files: airtableRecord.get('files'),
+      files,
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: convertLanguagesToLocales(airtableRecord.get('Langues') || []),
       focusable: airtableRecord.get('Focalisée'),
