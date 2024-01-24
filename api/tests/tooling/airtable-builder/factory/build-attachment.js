@@ -4,6 +4,7 @@ export function buildAttachment({
   type = 'image/png',
   url = 'url/to/attachment',
   challengeId = 'challid1',
+  localizedChallengeId = challengeId,
 } = {}) {
 
   return {
@@ -14,6 +15,7 @@ export function buildAttachment({
       'url': url,
       'challengeId persistant': [challengeId],
       'type': type,
+      localizedChallengeId
     },
   };
 }

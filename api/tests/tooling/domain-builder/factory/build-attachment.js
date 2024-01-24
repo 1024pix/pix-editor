@@ -4,6 +4,7 @@ export function buildAttachment({
   alt = 'alt text',
   type = 'image',
   challengeId = 'recChallengeId',
+  localizedChallengeId = challengeId,
 } = {}) {
 
   return {
@@ -12,5 +13,6 @@ export function buildAttachment({
     alt,
     type,
     challengeId,
+    localizedChallengeId,
   };
 }

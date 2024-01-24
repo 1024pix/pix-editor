@@ -47,6 +47,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           status: 'validé',
           localizedChallenges,
           locales: ['fr', 'fr-fr'],
+          files: [],
         });
 
         // when
@@ -123,6 +124,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           status: challengeStatus,
           localizedChallenges,
           locales: ['fr', 'fr-fr'],
+          files: [],
         });
 
         // when
@@ -188,6 +190,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           },
           localizedChallenges: [localizedChallengeFr, localizedChallengeNl],
           locales: ['fr', 'fr-fr'],
+          files: [],
         });
 
         // when
@@ -223,6 +226,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             },
           },
           locales: ['fr', 'fr-fr'],
+          files: [],
         });
 
         // when
@@ -240,9 +244,30 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       it('should add these on the challenge', () => {
         // given
         const attachments = [
-          { url: 'https://dl.example.com/attachment1.xlsx', challengeId: 'challenge-id' },
-          { url: 'https://dl.example.com/attachment1.csv', challengeId: 'challenge-id' },
-          { url: 'https://dl.example.com/attachment2.txt', challengeId: 'other-challenge-id' },
+          {
+            id: 'attId1',
+            url: 'https://dl.example.com/attachment1.xlsx',
+            challengeId: 'challenge-id',
+            localizedChallengeId: 'challenge-id',
+          },
+          {
+            id: 'attId2',
+            url: 'https://dl.example.com/attachment1.csv',
+            challengeId: 'challenge-id',
+            localizedChallengeId: 'challenge-id',
+          },
+          {
+            id: 'attId3',
+            url: 'https://dl.example.com/attachment2.txt',
+            challengeId: 'other-challenge-id',
+            localizedChallengeId: 'other-challenge-id',
+          },
+          {
+            id: 'attId4',
+            url: 'https://dl.example.com/attachment2-nl.txt',
+            challengeId: 'challenge-id',
+            localizedChallengeId: 'challenge-id-nl',
+          },
         ];
         const challenge = domainBuilder.buildChallenge({
           id: 'challenge-id',
@@ -254,6 +279,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             },
           },
           locales: ['fr', 'fr-fr'],
+          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
         });
 
         // when
@@ -278,16 +304,28 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         // given
         const attachments = [
           {
+            id: 'attId1',
             type: 'illustration',
             url: 'https://dl.example.com/illustration1.jpg',
             alt: 'A dog making bubbles with his nose',
             challengeId: 'challenge-id',
+            localizedChallengeId: 'challenge-id',
           },
           {
+            id: 'attId2',
             type: 'illustration',
             url: 'https://dl.example.com/illustration2.jpg',
             alt: 'A cat doing nothing cause he is useless',
             challengeId: 'other-challenge-id',
+            localizedChallengeId: 'other-challenge-id',
+          },
+          {
+            id: 'attId3',
+            type: 'illustration',
+            url: 'https://dl.example.com/illustration1-nl.jpg',
+            alt: 'A dog making bubbles with his nose nl',
+            challengeId: 'challenge-id',
+            localizedChallengeId: 'challenge-id-nl',
           },
         ];
         const challenge = domainBuilder.buildChallenge({
@@ -300,6 +338,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             },
           },
           locales: ['fr', 'fr-fr'],
+          files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
         });
 
         // when

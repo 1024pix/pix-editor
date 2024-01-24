@@ -15,6 +15,7 @@ export const attachmentDatasource = datasource.extend({
     'mimeType',
     'alt',
     'challengeId persistant',
+    'localizedChallengeId',
   ],
 
   sortField: 'createdAt',
@@ -28,6 +29,7 @@ export const attachmentDatasource = datasource.extend({
       mimeType: airtableRecord.get('mimeType'),
       alt: airtableRecord.get('alt'),
       challengeId: airtableRecord.get('challengeId persistant')[0],
+      localizedChallengeId: airtableRecord.get('localizedChallengeId'),
     };
   },
 

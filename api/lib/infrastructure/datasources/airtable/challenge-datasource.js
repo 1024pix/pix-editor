@@ -69,7 +69,7 @@ export const challengeDatasource = datasource.extend({
         fileId,
         localizedChallengeId: filesLocalizedChallengeIds[index],
       };
-    });
+    }) ?? [];
 
     return {
       id: airtableRecord.get('id persistant'),

@@ -173,19 +173,33 @@ async function mockCurrentContent() {
   };
 
   const attachments = [{
+    id: 'attid1',
     url: 'url de l‘illustration',
     alt: 'Texte alternatif illustration',
     type: 'illustration',
     challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0',
   }, {
+    id: 'attid2',
     url: 'url de la pièce jointe',
     type: 'attachment',
     challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0',
+  }, {
+    id: 'attid3',
+    url: 'url of the joint piece',
+    type: 'attachment',
+    challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0En',
   }];
+
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
+    challenges: [buildChallenge({
+      ...expectedCurrentContent.challenges[0],
+      files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+    })],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
@@ -435,20 +449,33 @@ async function mockContentForRelease() {
   };
 
   const attachments = [{
+    id: 'attid1',
     url: 'url de l‘illustration',
     alt: 'Texte alternatif illustration',
     type: 'illustration',
     challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0',
   }, {
+    id: 'attid2',
     url: 'url de la pièce jointe',
     type: 'attachment',
     challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0',
+  }, {
+    id: 'attid3',
+    url: 'url de la pièce jointe',
+    type: 'attachment',
+    challengeId: 'recChallenge0',
+    localizedChallengeId: 'recChallenge0En',
   }];
 
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge(expectedCurrentContent.challenges[0])],
+    challenges: [buildChallenge({
+      ...expectedCurrentContent.challenges[0],
+      files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+    })],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
