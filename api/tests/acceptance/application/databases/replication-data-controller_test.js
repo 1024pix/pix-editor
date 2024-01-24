@@ -19,7 +19,13 @@ const {
 } = airtableBuilder.factory;
 
 async function mockCurrentContent() {
-  const challenge = domainBuilder.buildChallenge();
+  const challenge = domainBuilder.buildChallenge({
+    id: 'challenge-id',
+    files: [
+      { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
+      { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
+    ],
+  });
   const challengeNl = domainBuilder.buildChallenge({
     id: 'localized-challenge-id',
     locales: ['nl'],
@@ -29,15 +35,25 @@ async function mockCurrentContent() {
         instruction: 'Consigne en nl',
       },
     },
+    files: [
+      { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
+      { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
+    ],
   });
   const expectedChallenge = { ...challenge };
   delete expectedChallenge.localizedChallenges;
 
-  const expectedChallengeNl = { ...challengeNl, files: [] };
+  const expectedChallengeNl = { ...challengeNl };
   delete expectedChallengeNl.localizedChallenges;
 
+  const expectedAttachment = { id: 'attid1', challengeId: challenge.id, url: 'http://example.fr', type: 'lol', alt: 'stop' };
+  const expectedAttachmentNl = { id: 'attid2', challengeId: challengeNl.id, url: 'http://example.nl', type: 'haha', alt: 'arrête' };
+
   const expectedCurrentContent = {
-    attachments: [domainBuilder.buildAttachment()],
+    attachments: [
+      domainBuilder.buildAttachment(expectedAttachment),
+      domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
+    ],
     areas: [domainBuilder.buildAreaDatasourceObject()],
     competences: [domainBuilder.buildCompetence({
       name_i18n: {
@@ -71,14 +87,23 @@ async function mockCurrentContent() {
     skills: [buildSkill(expectedCurrentContent.skills[0])],
     challenges: [buildChallenge({
       ...expectedChallenge,
-      files: [{
-        fileId: expectedChallenge.files[0],
-        localizedChallengeId: expectedChallenge.id
-      }]
+      files: [
+        {
+          fileId: expectedAttachment.id,
+          localizedChallengeId: expectedChallenge.id
+        },
+        {
+          fileId: expectedAttachmentNl.id,
+          localizedChallengeId: expectedChallengeNl.id
+        },
+      ]
     })],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
-    attachments: [buildAttachment(expectedCurrentContent.attachments[0])],
+    attachments: [
+      buildAttachment(expectedAttachment),
+      buildAttachment(expectedAttachmentNl)
+    ],
   });
 
   databaseBuilder.factory.buildStaticCourse({

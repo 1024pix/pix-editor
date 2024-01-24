@@ -38,6 +38,11 @@ export async function getLearningContentForReplication() {
     ])
     .map(normalizeChallenge);
 
+  const translatedAttachments = attachments.map((attachment) => ({
+    ...attachment,
+    challengeId: attachment.localizedChallengeId,
+  }));
+
   return {
     areas,
     competences,
@@ -45,7 +50,7 @@ export async function getLearningContentForReplication() {
     skills,
     challenges: translatedChallenges,
     tutorials,
-    attachments,
+    attachments: translatedAttachments,
     thematics,
     courses
   };
