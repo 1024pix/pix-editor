@@ -161,10 +161,10 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         // given
         const attachments = [];
         const localizedChallengeFr = new LocalizedChallenge({
-          id: 'fr-challenge-id',
+          id: 'challenge-id',
           challengeId: 'challenge-id',
-          locale: 'fr-fr',
-          status: 'validé',
+          locale: 'fr',
+          embedUrl: 'https://epreuves.pix.fr/mon-embed.html?lang=fr&mode=a#123456',
         });
         const localizedChallengeNl = new LocalizedChallenge({
           id: 'nl-challenge-id',

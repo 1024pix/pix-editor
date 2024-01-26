@@ -1,111 +1,172 @@
 export class Challenge {
 
+  #allFiles;
+  #primaryLocales;
+  #primaryStatus;
+
   constructor({
+    accessibility1,
+    accessibility2,
+    airtableId,
+    alternativeVersion,
+    alpha,
+    archivedAt,
+    area,
+    author,
+    autoReply,
+    competenceId,
+    contextualizedFields,
+    createdAt,
+    declinable,
+    delta,
+    embedHeight,
+    files,
+    focusable,
+    format,
+    genealogy,
     id,
-    type,
+    locales,
+    localizedChallenges,
+    madeObsoleteAt,
+    pedagogy,
+    responsive,
+    shuffled,
+    skillId,
+    skills,
+    spoil,
+    status,
     t1Status,
     t2Status,
     t3Status,
-    status,
-    skills,
-    embedHeight,
     timer,
-    competenceId,
-    format,
-    files,
-    autoReply,
-    locales,
-    focusable,
-    airtableId,
-    genealogy,
-    pedagogy,
-    author,
-    declinable,
-    version,
-    alternativeVersion,
-    accessibility1,
-    accessibility2,
-    spoil,
-    responsive,
-    area,
+    translations,
+    type,
     updatedAt,
     validatedAt,
-    archivedAt,
-    madeObsoleteAt,
-    createdAt,
-    shuffled,
-    contextualizedFields,
-    alpha,
-    delta,
-    skillId,
-    translations,
-    localizedChallenges,
+    version,
   } = {}) {
+    this.accessibility1 = accessibility1;
+    this.accessibility2 = accessibility2;
+    this.airtableId = airtableId;
+    this.alpha = alpha;
+    this.alternativeVersion = alternativeVersion;
+    this.archivedAt = archivedAt;
+    this.area = area;
+    this.author = author;
+    this.autoReply = autoReply;
+    this.competenceId = competenceId;
+    this.contextualizedFields = contextualizedFields;
+    this.createdAt = createdAt;
+    this.declinable = declinable;
+    this.delta = delta;
+    this.embedHeight = embedHeight;
+    this.focusable = focusable;
+    this.format = format;
+    this.genealogy = genealogy;
     this.id = id;
-    this.type = type;
+    this.madeObsoleteAt = madeObsoleteAt;
+    this.pedagogy = pedagogy;
+    this.responsive = responsive;
+    this.shuffled = shuffled;
+    this.skillId = skillId;
+    this.skills = skills;
+    this.spoil = spoil;
     this.t1Status = t1Status;
     this.t2Status = t2Status;
     this.t3Status = t3Status;
-    this.status = status;
-    this.skills = skills;
-    this.embedHeight = embedHeight;
     this.timer = timer;
-    this.competenceId = competenceId;
-    this.format = format;
-    this.files = files?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id).map(({ fileId }) => fileId);
-    this.autoReply = autoReply;
-    this.locales = Challenge.defaultLocales(locales);
-    this.focusable = focusable;
-    this.airtableId = airtableId;
-    this.genealogy = genealogy;
-    this.pedagogy = pedagogy;
-    this.author = author;
-    this.declinable = declinable;
-    this.version = version;
-    this.alternativeVersion = alternativeVersion;
-    this.accessibility1 = accessibility1;
-    this.accessibility2 = accessibility2;
-    this.spoil = spoil;
-    this.responsive = responsive;
-    this.area = area;
+    this.type = type;
     this.updatedAt = updatedAt;
     this.validatedAt = validatedAt;
-    this.archivedAt = archivedAt;
-    this.madeObsoleteAt = madeObsoleteAt;
-    this.createdAt = createdAt;
-    this.shuffled = shuffled;
-    this.contextualizedFields = contextualizedFields;
-    this.alpha = alpha;
-    this.delta = delta;
-    this.skillId = skillId;
+    this.version = version;
+
+    this.localizedChallenges = localizedChallenges;
+
+    this.#allFiles = files;
+    this.#primaryLocales = Challenge.defaultLocales(locales);
+    this.#primaryStatus = status;
     this.translations = translations;
 
-    this.instruction = this.translations[this.locales[0]]?.instruction ?? '';
-    this.alternativeInstruction = this.translations[this.locales[0]]?.alternativeInstruction ?? '';
-    this.proposals = this.translations[this.locales[0]]?.proposals ?? '';
-    this.solution = this.translations[this.locales[0]]?.solution ?? '';
-    this.solutionToDisplay = this.translations[this.locales[0]]?.solutionToDisplay ?? '';
-    this.embedTitle = this.translations[this.locales[0]]?.embedTitle ?? '';
-    this.localizedChallenges = localizedChallenges ?? [];
-    this.embedUrl = localizedChallenges
-      ?.find(({ locale }) => Challenge.getPrimaryLocale(this.locales) === locale)
-      ?.embedUrl;
+    this.#translate(this.primaryLocale);
+  }
+
+  translate(locale) {
+    const challenge = new Challenge({
+      ...this,
+      files: this.#allFiles,
+      locales: this.#primaryLocales,
+      status: this.#primaryStatus,
+      // TODO add translations when private
+    });
+    challenge.#translate(locale);
+    return challenge;
+  }
+
+  #translate(locale) {
+    this.locales = locale === this.primaryLocale
+      ? this.#primaryLocales
+      : [locale];
+
+    this.instruction = this.translations[this.locale]?.instruction ?? '';
+    this.alternativeInstruction = this.translations[this.locale]?.alternativeInstruction ?? '';
+    this.proposals = this.translations[this.locale]?.proposals ?? '';
+    this.solution = this.translations[this.locale]?.solution ?? '';
+    this.solutionToDisplay = this.translations[this.locale]?.solutionToDisplay ?? '';
+    this.embedTitle = this.translations[this.locale]?.embedTitle ?? '';
+
+    const localizedChallenge = this.localizedChallenges.find(({ locale }) => this.locale === locale);
+
+    this.id = localizedChallenge.id;
+    this.status = this.#translateStatus(localizedChallenge);
+    this.embedUrl = this.#translateEmbedUrl(localizedChallenge);
+
+    this.files = this.#allFiles
+      ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)
+      .map(({ fileId }) => fileId);
+  }
+
+  #translateStatus(localizedChallenge) {
+    if (this.isPrimary) return this.#primaryStatus;
+    if (['proposé', 'périmé'].includes(this.status) || localizedChallenge.status === 'validé') {
+      return this.status;
+    }
+    return localizedChallenge.status;
+  }
+
+  #translateEmbedUrl(localizedChallenge) {
+    if (!this.#primaryEmbedUrl) return null;
+    if (localizedChallenge.embedUrl) return localizedChallenge.embedUrl;
+    const url = new URL(this.#primaryEmbedUrl);
+    url.searchParams.set('lang', localizedChallenge.locale);
+    return url.href;
   }
 
   get primaryLocale() {
-    return this.locales[0];
+    return this.#primaryLocales[0];
   }
 
   get alternativeLocales() {
     return this.localizedChallenges.map(({ locale }) => locale).filter((locale) => locale !== this.primaryLocale);
   }
 
-  static defaultLocales(locales) {
-    if (locales == undefined || locales.length === 0) return ['fr'];
-    return [...locales].sort();
+  get locale() {
+    return this.locales[0];
+  }
+
+  get isPrimary() {
+    return this.locale === this.primaryLocale;
+  }
+
+  get #primaryEmbedUrl() {
+    return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale).embedUrl;
   }
 
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
+  }
+
+  static defaultLocales(locales) {
+    if (locales == undefined || locales.length === 0) return ['fr'];
+    return [...locales].sort();
   }
 }

@@ -800,6 +800,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
         challengeId,
         locale,
