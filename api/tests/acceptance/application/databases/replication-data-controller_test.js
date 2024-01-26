@@ -34,7 +34,7 @@ async function mockCurrentContent() {
   delete expectedChallenge.localizedChallenges;
   delete expectedChallenge.translations;
 
-  const expectedChallengeNl = { ...challengeNl };
+  const expectedChallengeNl = { ...challengeNl, files: [] };
   delete expectedChallengeNl.localizedChallenges;
   delete expectedChallengeNl.translations;
 
