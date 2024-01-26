@@ -1,32 +1,10 @@
 import _ from 'lodash';
-import { createChallengeTranslator, translateChallenge } from '../../domain/services/translate-challenge.js';
 
-export function createChallengeTransformer({ attachments, localizedChallenges, localizedChallenge }) {
-
-  if (localizedChallenges) {
-    return _.flow(
-      _addAttachmentsToChallenge({ attachments }),
-      createChallengeTranslator({ localizedChallenges }),
-      _filterChallengesFields,
-    );
-  }
-
-  if (localizedChallenge) {
-    return _.flow(
-      _addAttachmentsToChallenge({ attachments }),
-      (challenge) => translateChallenge(challenge, localizedChallenge),
-      _filterChallengeFields,
-    );
-  }
-
+export function createChallengeTransformer({ attachments }) {
   return _.flow(
     _addAttachmentsToChallenge({ attachments }),
     _filterChallengeFields,
   );
-}
-
-function _filterChallengesFields(challenges) {
-  return challenges.map(_filterChallengeFields);
 }
 
 function _filterChallengeFields(challenge) {

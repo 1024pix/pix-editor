@@ -830,6 +830,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             autoReply: false,
             competenceId: null,
             delta: null,
+            embedUrl: null,
             embedTitle: 'embed title for nl',
             format: 'mots',
             illustrationAlt: null,

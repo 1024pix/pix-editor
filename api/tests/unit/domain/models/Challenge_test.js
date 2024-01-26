@@ -300,5 +300,52 @@ describe('Unit | Domain | Challenge', () => {
       expect(englishChallenge).toHaveProperty('locale', 'en');
       expect(englishChallenge).toHaveProperty('isPrimary', false);
     });
+
+    [
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
+      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'proposé' },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
+      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'validé' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
+      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'archivé' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'périmé' },
+      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'périmé' },
+    ].forEach(({ challengeStatus, localizedChallengeStatus, expectedTranslatedStatus }) => {
+      it(`should translate status ${challengeStatus} and localized status ${localizedChallengeStatus} to ${expectedTranslatedStatus}`, () => {
+        // given
+        const challengeId = 'challengeId';
+
+        const primaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: 'fr',
+        });
+        const secondaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id: 'secondaryChallengeId',
+          challengeId,
+          locale: 'nl',
+          status: localizedChallengeStatus,
+        });
+        const localizedChallenges = [
+          primaryLocalizedChallenge,
+          secondaryLocalizedChallenge,
+        ];
+
+        const challenge = domainBuilder.buildChallenge({
+          id: challengeId,
+          locales: ['fr'],
+          status: challengeStatus,
+          localizedChallenges,
+          translations: Object.fromEntries(localizedChallenges.map(({ locale }) => [locale, {}])),
+          files: [],
+        });
+
+        // when
+        const translatedChallenge = challenge.translate('nl');
+
+        // then
+        expect(translatedChallenge.status).toBe(expectedTranslatedStatus);
+      });
+    });
   });
 });
