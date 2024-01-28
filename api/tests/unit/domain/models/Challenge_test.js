@@ -233,22 +233,24 @@ describe('Unit | Domain | Challenge', () => {
         { fileId: 'fileId2En', localizedChallengeId: englishChallengeId },
       ];
 
+      const translations = Object.fromEntries(localizedChallenges.map(({ locale }) => [
+        locale,
+        {
+          alternativeInstruction: `alternativeInstruction ${locale}`,
+          embedTitle: `embedTitle ${locale}`,
+          instruction: `instruction ${locale}`,
+          proposals: `proposals ${locale}`,
+          solution: `solution ${locale}`,
+          solutionToDisplay: `solutionToDisplay ${locale}`,
+        },
+      ]));
+
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
         locales: ['fr-fr', 'fr'],
         status: 'validé',
         localizedChallenges,
-        translations: Object.fromEntries(localizedChallenges.map(({ locale }) => [
-          locale,
-          {
-            alternativeInstruction: `alternativeInstruction ${locale}`,
-            embedTitle: `embedTitle ${locale}`,
-            instruction: `instruction ${locale}`,
-            proposals: `proposals ${locale}`,
-            solution: `solution ${locale}`,
-            solutionToDisplay: `solutionToDisplay ${locale}`,
-          },
-        ])),
+        translations,
         files: [
           ...frenchFiles,
           ...dutchFiles,
@@ -261,7 +263,7 @@ describe('Unit | Domain | Challenge', () => {
         id: dutchChallengeId,
         locales: ['nl'],
         status: 'proposé',
-        ...challenge.translations.nl,
+        ...translations.nl,
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
       };
@@ -271,7 +273,7 @@ describe('Unit | Domain | Challenge', () => {
         id: englishChallengeId,
         locales: ['en'],
         status: 'validé',
-        ...challenge.translations.en,
+        ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
       };

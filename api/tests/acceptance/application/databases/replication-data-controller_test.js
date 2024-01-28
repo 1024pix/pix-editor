@@ -32,11 +32,9 @@ async function mockCurrentContent() {
   });
   const expectedChallenge = { ...challenge };
   delete expectedChallenge.localizedChallenges;
-  delete expectedChallenge.translations;
 
   const expectedChallengeNl = { ...challengeNl, files: [] };
   delete expectedChallengeNl.localizedChallenges;
-  delete expectedChallengeNl.translations;
 
   const expectedCurrentContent = {
     attachments: [domainBuilder.buildAttachment()],

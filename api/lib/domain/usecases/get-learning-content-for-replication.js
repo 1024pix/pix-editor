@@ -59,7 +59,6 @@ async function _getCoursesFromPGForReplication() {
 
 function normalizeChallenge(challenge) {
   delete challenge.localizedChallenges;
-  delete challenge.translations;
 
   return challenge;
 }

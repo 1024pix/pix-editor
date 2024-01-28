@@ -3,6 +3,7 @@ export class Challenge {
   #allFiles;
   #primaryLocales;
   #primaryStatus;
+  #translations;
 
   constructor({
     accessibility1,
@@ -85,7 +86,7 @@ export class Challenge {
     this.#allFiles = files;
     this.#primaryLocales = Challenge.defaultLocales(locales);
     this.#primaryStatus = status;
-    this.translations = translations;
+    this.#translations = translations;
 
     this.#translate(this.primaryLocale);
   }
@@ -96,7 +97,7 @@ export class Challenge {
       files: this.#allFiles,
       locales: this.#primaryLocales,
       status: this.#primaryStatus,
-      // TODO add translations when private
+      translations: this.#translations,
     });
     challenge.#translate(locale);
     return challenge;
@@ -107,12 +108,12 @@ export class Challenge {
       ? this.#primaryLocales
       : [locale];
 
-    this.instruction = this.translations[this.locale]?.instruction ?? '';
-    this.alternativeInstruction = this.translations[this.locale]?.alternativeInstruction ?? '';
-    this.proposals = this.translations[this.locale]?.proposals ?? '';
-    this.solution = this.translations[this.locale]?.solution ?? '';
-    this.solutionToDisplay = this.translations[this.locale]?.solutionToDisplay ?? '';
-    this.embedTitle = this.translations[this.locale]?.embedTitle ?? '';
+    this.instruction = this.#translations[this.locale]?.instruction ?? '';
+    this.alternativeInstruction = this.#translations[this.locale]?.alternativeInstruction ?? '';
+    this.proposals = this.#translations[this.locale]?.proposals ?? '';
+    this.solution = this.#translations[this.locale]?.solution ?? '';
+    this.solutionToDisplay = this.#translations[this.locale]?.solutionToDisplay ?? '';
+    this.embedTitle = this.#translations[this.locale]?.embedTitle ?? '';
 
     const localizedChallenge = this.localizedChallenges.find(({ locale }) => this.locale === locale);
 
