@@ -1,5 +1,24 @@
 
 
+## v3.125.0 (29/01/2024)
+
+
+### :rocket: Amélioration
+- [#499](https://github.com/1024pix/pix-editor/pull/499) [FEATURE] Ecrire dans la base PG les données traduites des domaines (PIX-9479).
+- [#492](https://github.com/1024pix/pix-editor/pull/492) [FEATURE] Lister les pièces jointes et illustrations de l'épreuve par langue (PIX-10896).
+
+### :arrow_up: Montée de version
+- [#497](https://github.com/1024pix/pix-editor/pull/497) [BUMP] Update dependency ember-file-upload to v9 (pix-editor).
+- [#498](https://github.com/1024pix/pix-editor/pull/498) [BUMP] Update dependency npm-run-all2 to v6 (pix-editor).
+- [#475](https://github.com/1024pix/pix-editor/pull/475) [BUMP] Update dependency node to v20.11.0.
+- [#495](https://github.com/1024pix/pix-editor/pull/495) [BUMP] Replace dependency npm-run-all with npm-run-all2 ^5.0.0 (pix-editor).
+- [#496](https://github.com/1024pix/pix-editor/pull/496) [BUMP] Update dependency @playwright/test to v1.41.1.
+- [#494](https://github.com/1024pix/pix-editor/pull/494) [BUMP] Update dependency ember-cli-showdown to v8 (pix-editor).
+- [#491](https://github.com/1024pix/pix-editor/pull/491) [BUMP] Update dependency p-limit to v5 (scripts).
+- [#489](https://github.com/1024pix/pix-editor/pull/489) [BUMP] Update dependency @playwright/test to v1.41.0.
+- [#488](https://github.com/1024pix/pix-editor/pull/488) [BUMP] Update dependency googleapis to v131 (api).
+- [#484](https://github.com/1024pix/pix-editor/pull/484) [BUMP] Update dependency eslint-plugin-ember to v12 (pix-editor).
+
 ## v3.124.2 (23/01/2024)
 
 
