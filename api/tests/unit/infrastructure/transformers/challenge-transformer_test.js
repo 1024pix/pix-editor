@@ -35,7 +35,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
     describe('when there are attachments', () => {
       it('should add these on the challenge', () => {
         // given
-        // TODO simplify, we are testing Challenge model instead of transformer
         const attachments = [
           {
             id: 'attId1',
@@ -48,18 +47,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             url: 'https://dl.example.com/attachment1.csv',
             challengeId: 'challenge-id',
             localizedChallengeId: 'challenge-id',
-          },
-          {
-            id: 'attId3',
-            url: 'https://dl.example.com/attachment2.txt',
-            challengeId: 'other-challenge-id',
-            localizedChallengeId: 'other-challenge-id',
-          },
-          {
-            id: 'attId4',
-            url: 'https://dl.example.com/attachment2-nl.txt',
-            challengeId: 'challenge-id',
-            localizedChallengeId: 'challenge-id-nl',
           },
         ];
         const challenge = domainBuilder.buildChallenge({
