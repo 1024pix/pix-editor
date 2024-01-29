@@ -118,12 +118,12 @@ describe('Acceptance | Controller | airtable-proxy-controller | Retrieve area tr
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',
         key: 'area.mon_id_persistant.title',
-        value: 'AAA'
+        value: 'Titre de domaine dans PG'
       });
       databaseBuilder.factory.buildTranslation({
         locale: 'en',
         key: 'area.mon_id_persistant.title',
-        value: 'BBB'
+        value: 'Area title in PG'
       });
 
       await databaseBuilder.commit();
@@ -138,8 +138,8 @@ describe('Acceptance | Controller | airtable-proxy-controller | Retrieve area tr
         const expectedArea = inputOutputDataBuilder.factory.buildArea({
           ...expectedAreaDataObject,
           title_i18n: {
-            fr: 'Information et données',
-            en: 'Information and data',
+            fr: 'Titre de domaine dans PG',
+            en: 'Area title in PG',
           }
         });
         nock('https://api.airtable.com')
@@ -197,10 +197,10 @@ describe('Acceptance | Controller | airtable-proxy-controller | Retrieve area tr
         });
         const expectedArea = inputOutputDataBuilder.factory.buildArea({
           ...expectedAreaDataObject,
-          hint_i18n: {
-            fr: 'Information et données',
-            en: 'Information and data',
-          },
+          title_i18n: {
+            fr: 'Prout',
+            en: 'Fart',
+          }
         });
         nock('https://api.airtable.com')
           .get('/v0/airtableBaseValue/Domaines/recId')
