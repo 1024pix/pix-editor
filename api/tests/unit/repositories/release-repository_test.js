@@ -3,6 +3,7 @@ import { domainBuilder, airtableBuilder } from '../../test-helper.js';
 import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 import { challengeRepository } from '../../../lib/infrastructure/repositories/index.js';
+import { Translation } from '../../../lib/domain/models/index.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
@@ -21,10 +22,23 @@ describe('Unit | Repository | release-repository', () => {
         frameworkId: 'recFramework0',
       });
       const type = 'Domaines';
+      const translations = [
+        new Translation({
+          key: 'area.1.title',
+          locale: 'fr',
+          value: 'Bonjour',
+        }),
+        new Translation({
+          key: 'area.1.title',
+          locale: 'en',
+          value: 'Hello',
+        }),
+      ];
+
       vi.spyOn(attachmentDatasource, 'filterByChallengeId');
       vi.spyOn(challengeDatasource, 'filterById');
 
-      const { updatedRecord, model } = await serializeEntity({ entity, type });
+      const { updatedRecord, model } = await serializeEntity({ entity, type, translations });
 
       expect(updatedRecord).to.deep.equal({
         id: '1',

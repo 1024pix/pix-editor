@@ -29,11 +29,12 @@ async function mockCurrentContent() {
     }],
     areas: [{
       id: 'recArea0',
-      name: 'Nom du Domaine',
+      name: '1. Titre du Domaine - fr',
       code: '1',
       title_i18n: {
         fr: 'Titre du Domaine - fr',
         en: 'Titre du Domaine - en',
+        nl: 'Titre du Domaine - nl',
       },
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
@@ -254,6 +255,12 @@ async function mockCurrentContent() {
       locale,
       value: expectedCurrentContent.skills[0].hint_i18n[locale],
     });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${expectedCurrentContent.areas[0].id}.title`,
+      locale,
+      value: expectedCurrentContent.areas[0].title_i18n[locale],
+    });
   }
 
   databaseBuilder.factory.buildTranslation({
@@ -307,7 +314,7 @@ async function mockContentForRelease() {
     }],
     areas: [{
       id: 'recArea0',
-      name: 'Nom du Domaine',
+      name: '1. Titre du Domaine - fr',
       code: '1',
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
@@ -316,6 +323,7 @@ async function mockContentForRelease() {
       title_i18n: {
         en: 'Titre du Domaine - en',
         fr: 'Titre du Domaine - fr',
+        nl: 'Titre du Domaine - nl',
       },
     }],
     competences: [{
@@ -510,6 +518,12 @@ async function mockContentForRelease() {
       locale,
       value: expectedCurrentContent.skills[0].hint_i18n[locale],
     });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${expectedCurrentContent.areas[0].id}.title`,
+      locale,
+      value: expectedCurrentContent.areas[0].title_i18n[locale],
+    });
   }
 
   databaseBuilder.factory.buildTranslation({
@@ -677,7 +691,7 @@ describe('Acceptance | Controller | release-controller', () => {
         const user = databaseBuilder.factory.buildAdminUser();
         databaseBuilder.factory.buildMission({
           id: 1,
-          name: 'Ma première mission' ,
+          name: 'Ma première mission',
           competenceId: 'competenceId',
           thematicId: 'thematicId',
           learningObjectives: 'Que tu sois le meilleur',
