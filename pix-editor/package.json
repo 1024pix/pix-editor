@@ -97,7 +97,7 @@
     "lodash": "^4.17.21",
     "miragejs": "^0.1.47",
     "morgan": "^1.10.0",
-    "npm-run-all2": "^5.0.0",
+    "npm-run-all2": "^6.0.0",
     "p-queue": "8.0.1",
     "qunit": "^2.19.3",
     "qunit-dom": "^3.0.0",
