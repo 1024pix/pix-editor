@@ -58,6 +58,11 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       locale: 'nl',
       status: 'validé',
     });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: 'challengeid4',
+      challengeId: 'challengeid4',
+      locale: 'fr',
+    });
     databaseBuilder.factory.buildTranslation({
       key: 'challenge.challengeid1.instruction',
       locale: 'nl',
@@ -128,6 +133,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       name: '@skillid4',
       hint_i18n: {},
     });
+    // TODO replace by nock to assert airtable query parameters
     airtableBuilder.mockLists({
       challenges: [airtableChallenge1, airtableChallenge2, airtableChallenge3, airtableChallenge4],
       skills: [airtableSkill1, airtableSkill2, airtableSkill3, airtableSkill4],
@@ -139,7 +145,6 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     return knex('static_courses').delete();
   });
 
-  // Add some localized challenge and make the test pass
   it('updates and returns the static course', async function() {
     // given
     const payload = {

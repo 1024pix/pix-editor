@@ -73,7 +73,7 @@ describe('Unit | Repository | challenge-repository', () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([
           { id: '1', locales: ['fr'] },
-          { id: '2', locales: ['fr'] }
+          { id: '2', locales: ['fr'] },
         ]);
         vi.spyOn(translationRepository, 'listByPrefix')
           .mockResolvedValueOnce([{
@@ -149,7 +149,13 @@ describe('Unit | Repository | challenge-repository', () => {
             value: 'proposals',
             locale: 'fr'
           }]);
-        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+          domainBuilder.buildLocalizedChallenge({
+            id: '1',
+            challengeId: '1',
+            locale: 'fr',
+          }),
+        ]);
 
         // when
         const challenges = await filter({ filter: { ids: ['1'] } });
@@ -169,7 +175,13 @@ describe('Unit | Repository | challenge-repository', () => {
             value: 'proposals',
             locale: 'fr'
           }]);
-        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+          domainBuilder.buildLocalizedChallenge({
+            id: '1',
+            challengeId: '1',
+            locale: 'en',
+          }),
+        ]);
 
         // when
         const challenges = await filter({ filter: { ids: ['1'] } });
@@ -183,9 +195,23 @@ describe('Unit | Repository | challenge-repository', () => {
     describe('when ids and search are not specified', () => {
       it('should return all challenges', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{}, {}]);
-        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ locales: [] }, { locales: [] }]);
-        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
+        vi.spyOn(challengeDatasource, 'filter');
+        vi.spyOn(challengeDatasource, 'list').mockResolvedValue([
+          { id: '1', locales: ['fr'] },
+          { id: '2', locales: ['en'] },
+        ]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+          domainBuilder.buildLocalizedChallenge({
+            id: '1',
+            challengeId: '1',
+            locale: 'fr',
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: '2',
+            challengeId: '2',
+            locale: 'en',
+          }),
+        ]);
 
         // when
         const challenges = await filter({ page: { size: 20 } });
@@ -200,15 +226,23 @@ describe('Unit | Repository | challenge-repository', () => {
     describe('when search is specified', () => {
       it('should search challenges according to filters', async () => {
         // given
-        vi.spyOn(challengeDatasource, 'search').mockResolvedValue([{ locales: [] }, { locales: [] }]);
         vi.spyOn(translationRepository, 'search').mockResolvedValueOnce(['challengeId1']);
-        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([]);
+        vi.spyOn(challengeDatasource, 'search').mockResolvedValue([
+          { id: 'challengeId1', locales: ['fr'] },
+        ]);
+        vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challengeId1',
+            challengeId: 'challengeId1',
+            locale: 'fr',
+          }),
+        ]);
 
         // when
         const challenges = await filter({ filter: { search: 'toto' }, page: { size: 'limit' } });
 
         // then
-        expect(challenges.length).equal(2);
+        expect(challenges.length).equal(1);
         expect(translationRepository.search).toHaveBeenCalledWith({
           entity: 'challenge',
           fields: ['instruction', 'proposals'],

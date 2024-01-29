@@ -88,7 +88,16 @@ const deserializer = new Deserializer({
       return attachment.id;
     },
   },
-  transform({ skill, instruction, alternativeInstruction, proposals, solution, solutionToDisplay, embedTitle, ...challenge }) {
+  transform({
+    skill,
+    instruction,
+    alternativeInstruction,
+    proposals,
+    solution,
+    solutionToDisplay,
+    embedTitle,
+    ...challenge
+  }) {
     challenge.skills = skill ? [skill] : [];
     challenge.translations = {
       [Challenge.getPrimaryLocale(challenge.locales)]: {
@@ -100,6 +109,7 @@ const deserializer = new Deserializer({
         embedTitle,
       },
     };
+    challenge.files = challenge.files?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));
     return challenge;
   }
 });

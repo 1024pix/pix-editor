@@ -32,7 +32,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
     expect(url).to.equal(`https://preview.url.fr/challenges/${localizedChallengeId}/preview`);
     expect(localizedChallengeRepository.getByChallengeIdAndLocale).toHaveBeenCalledWith({ locale, challengeId });
     expect(challengeRepository.get).toHaveBeenCalledWith(challengeId);
-    expect(refreshCache).toHaveBeenCalledWith({ challenge, localizedChallenge });
+    expect(refreshCache).toHaveBeenCalledWith({ challenge });
   });
 
   describe('when no locale is specified', () => {

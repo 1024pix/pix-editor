@@ -5,9 +5,8 @@ import {
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
-import { challengeRepository, localizedChallengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
+import { challengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
-import { createChallengeTranslator } from '../services/translate-challenge.js';
 
 export async function getLearningContentForReplication() {
   const [
@@ -16,7 +15,6 @@ export async function getLearningContentForReplication() {
     tubes,
     skills,
     challenges,
-    localizedChallenges,
     tutorials,
     attachments,
     thematics,
@@ -27,15 +25,23 @@ export async function getLearningContentForReplication() {
     tubeDatasource.list(),
     skillRepository.list(),
     challengeRepository.list(),
-    localizedChallengeRepository.list(),
     tutorialDatasource.list(),
     attachmentDatasource.list(),
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
   ]);
-  const translateChallenge = createChallengeTranslator({ localizedChallenges });
 
-  const translatedChallenges = challenges.flatMap(translateChallenge).map(normalizeChallenge);
+  const translatedChallenges = challenges
+    .flatMap((challenge) => [
+      challenge,
+      ...challenge.alternativeLocales.map((locale) => challenge.translate(locale)),
+    ])
+    .map(normalizeChallenge);
+
+  const translatedAttachments = attachments.map((attachment) => ({
+    ...attachment,
+    challengeId: attachment.localizedChallengeId,
+  }));
 
   return {
     areas,
@@ -44,7 +50,7 @@ export async function getLearningContentForReplication() {
     skills,
     challenges: translatedChallenges,
     tutorials,
-    attachments,
+    attachments: translatedAttachments,
     thematics,
     courses
   };
@@ -58,7 +64,6 @@ async function _getCoursesFromPGForReplication() {
 
 function normalizeChallenge(challenge) {
   delete challenge.localizedChallenges;
-  delete challenge.translations;
 
   return challenge;
 }

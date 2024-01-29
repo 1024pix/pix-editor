@@ -103,15 +103,15 @@ async function findChallengeSummaries(localizedChallengeIds, { baseUrl }) {
 
   return localizedChallengeIds.map((localizedChallengeId, index) => {
     const localizedChallenge = localizedChallenges.find(({ id }) => id === localizedChallengeId);
-    const locale = localizedChallenge.locale;
     const challenge = challenges.find((challenge) => localizedChallenge.challengeId === challenge.id);
-    const correspondingSkill = skillsFromAirtable.find((skill) => skill.id === challenge.skillId);
+    const translatedChallenge = challenge.translate(localizedChallenge.locale);
+    const skill = skillsFromAirtable.find((skill) => skill.id === challenge.skillId);
 
     return new ChallengeSummary_Read({
       id: localizedChallengeId,
-      instruction: challenge.translations[locale].instruction ?? '',
-      skillName: correspondingSkill?.name ?? '',
-      status: getLocalizedChallengeStatus(challenge, localizedChallenge),
+      instruction: translatedChallenge.instruction,
+      skillName: skill?.name ?? '',
+      status: translatedChallenge.status,
       index,
       previewUrl: getPreviewUrl(localizedChallenge, baseUrl),
     });
@@ -122,14 +122,4 @@ function getPreviewUrl(localizedChallenge, baseUrl) {
   return localizedChallenge.isPrimary
     ? `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview`
     : `${baseUrl}/api/challenges/${localizedChallenge.challengeId}/preview?locale=${localizedChallenge.locale}`;
-}
-
-function getLocalizedChallengeStatus(challenge, localizedChallenge) {
-  if (localizedChallenge.isPrimary) {
-    return challenge.status;
-  }
-  if (['proposé', 'périmé'].includes(challenge.status) || localizedChallenge.status === 'validé') {
-    return challenge.status;
-  }
-  return localizedChallenge.status;
 }

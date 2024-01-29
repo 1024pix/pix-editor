@@ -114,12 +114,19 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
       delete airtableChallenge.fields['Discrimination calculée'];
       delete airtableChallenge.fields['updated_at'];
       delete airtableChallenge.fields['created_at'];
+      delete airtableChallenge.fields['filesLocalizedChallengeIds'];
     }
 
     it('should serialize a challenge to an airtable object', () => {
       // given
-      const createdChallenge = domainBuilder.buildChallengeDatasourceObject({ locales: ['fr-fr'] });
-      const airtableChallenge = airtableBuilder.factory.buildChallenge(createdChallenge);
+      const createdChallenge = domainBuilder.buildChallenge({ locales: ['fr-fr'] });
+      const airtableChallenge = airtableBuilder.factory.buildChallenge({
+        ...createdChallenge,
+        files: [{
+          fileId: createdChallenge.files[0],
+          localizedChallengeId: createdChallenge.id,
+        }]
+      });
       _removeReadonlyFields(airtableChallenge);
 
       // when

@@ -70,19 +70,27 @@ describe('Unit | Repository | release-repository', () => {
 
       const challenge = domainBuilder.buildChallenge({
         id: 'recChallenge',
-        type : 'QCM',
-        t1Status : 'Activé',
-        t2Status : 'Désactivé',
-        t3Status : 'Activé',
-        status : 'validé',
-        skillId : 'recUDrCWD76fp5MsE',
-        timer : 1234,
-        competenceId : 'recsvLz0W2ShyfD63',
-        embedUrl : 'https://github.io/page/epreuve.html',
-        embedTitle : 'Epreuve de selection de dossier',
-        embedHeight : 500,
-        format : 'mots',
-        autoReply : false,
+        type: 'QCM',
+        t1Status: 'Activé',
+        t2Status: 'Désactivé',
+        t3Status: 'Activé',
+        status: 'validé',
+        skillId: 'recUDrCWD76fp5MsE',
+        timer: 1234,
+        competenceId: 'recsvLz0W2ShyfD63',
+        embedUrl: 'https://github.io/page/epreuve.html',
+        embedTitle: 'Epreuve de selection de dossier',
+        embedHeight: 500,
+        format: 'mots',
+        autoReply: false,
+        files: [{
+          fileId: 'recAttachment',
+          localizedChallengeId: 'recChallenge'
+        },
+        {
+          fileId: 'recAttachment2',
+          localizedChallengeId: 'recChallenge'
+        }],
       });
       const type = 'Attachments';
 
