@@ -1172,7 +1172,6 @@ function _getRichCurrentContentDTO() {
       focusable: 'challenge121211 focusable',
       delta: 1.1,
       alpha: 2.2,
-      //TODO add nl specific attachments?
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
