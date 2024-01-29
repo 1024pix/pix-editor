@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 const inProductionCombinations = [
   'validé:validé',
@@ -11,9 +11,18 @@ export default class LocalizedChallengeModel extends Model {
   @attr status;
 
   @belongsTo('challenge') challenge;
+  @hasMany('attachment', { inverse: 'localizedChallenge' }) files;
 
   get isPrimaryChallenge() {
     return this.challenge.get('id') === this.id;
+  }
+
+  get illustration() {
+    return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
+  }
+
+  get attachments() {
+    return this.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
   }
 
   get statusCSS() {

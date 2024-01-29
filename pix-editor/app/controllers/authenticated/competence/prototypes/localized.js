@@ -10,9 +10,14 @@ export default class LocalizedController extends Controller {
   @service access;
   @service notify;
   @service loader;
+  @service store;
+  @service storage;
+  @service filePath;
 
   @tracked edition = false;
   @tracked displayConfirm = false;
+  @tracked popInImageSrc = null;
+  @tracked displayImage = false;
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
@@ -79,6 +84,13 @@ export default class LocalizedController extends Controller {
       : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
   }
 
+  @action
+  showIllustration() {
+    const illustration = this.challenge.illustration;
+    this.popInImageSrc = illustration.url;
+    this.displayImage = true;
+  }
+
   @action async confirmApprove() {
     this.model.status = this.model.isInProduction ? 'proposé' : 'validé';
     await this.save();
@@ -97,15 +109,23 @@ export default class LocalizedController extends Controller {
     this.edition = true;
   }
 
-  @action cancelEdit() {
+  @action async cancelEdit() {
     this.edition = false;
     this.model.rollbackAttributes();
+    await this.model.files;
+    this.model.files.forEach((file) => file.rollbackAttributes());
+    if (!this.wasMaximized) {
+      this.minimize();
+    }
     this.notify.message('Modification annulée');
   }
 
   @action save() {
     this.loader.start();
-    return this.model.save()
+    return this._handleIllustration(this.model)
+      .then(challenge => this._handleAttachments(challenge))
+      .then(challenge => this._saveChallenge(challenge))
+      .then(challenge => this._saveAttachments(challenge))
       .then(()=> {
         this.edition = false;
         this.loader.stop();
@@ -151,4 +171,113 @@ export default class LocalizedController extends Controller {
       );
     }
   }
+
+  @action
+  addIllustration(file, alt = '') {
+    const attachment = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'illustration',
+      localizedChallenge: this.model,
+      challenge: this.model.challenge,
+      alt,
+    };
+    this.store.createRecord('attachment', attachment);
+  }
+
+  @action
+  async removeIllustration() {
+    await this.model.files;
+    const removedFile = this.model.illustration;
+    if (removedFile) {
+      removedFile.deleteRecord();
+      return removedFile.alt;
+    }
+  }
+
+  @action
+  addAttachment(file) {
+    const attachment = {
+      filename: file.name,
+      size: file.size,
+      mimeType: file.type,
+      file,
+      type: 'attachment',
+      localizedChallenge: this.model,
+      challenge: this.model.challenge,
+    };
+    this.store.createRecord('attachment', attachment);
+  }
+
+  @action
+  async removeAttachment(removedAttachment) {
+    await this.model.files;
+    const removedFile = this.model.files.findBy('filename', removedAttachment.filename);
+    if (removedFile) {
+      removedFile.deleteRecord();
+    }
+  }
+
+  async _handleIllustration(challenge) {
+    const illustration = challenge.illustration;
+    if (illustration && illustration.isNew) {
+      this.loader.start('Envoi de l\'illustration...');
+      const newIllustration = await this.storage.uploadFile({ file: illustration.file });
+      challenge.illustration.url = newIllustration.url;
+    }
+    return challenge;
+  }
+
+  async _handleAttachments(challenge) {
+    const attachments = challenge.attachments;
+    if (attachments.length === 0) {
+      return challenge;
+    }
+    this.loader.start('Gestion des pièces jointes...');
+    await Promise.all(attachments.map((attachment) => this._handleAttachment(attachment, challenge)));
+    await this._renameAttachmentFiles(challenge);
+
+    return challenge;
+  }
+
+  async _handleAttachment(attachment) {
+    if (!attachment.isNew) {
+      return;
+    }
+    const newAttachment = await this.storage.uploadFile({ file: attachment.file, filename: attachment.filename, isAttachment: true });
+    attachment.url = newAttachment.url;
+  }
+
+  async _renameAttachmentFiles(challenge) {
+    if (!challenge.baseNameUpdated()) {
+      return;
+    }
+
+    const attachments = await challenge.attachments;
+    for (const file of attachments.toArray()) {
+      file.filename = this._getAttachmentFullFilename(challenge, file.filename);
+      await this.storage.renameFile(file.url, file.filename);
+    }
+  }
+
+  _getAttachmentFullFilename(challenge, filename) {
+    return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
+  }
+
+  _saveChallenge(challenge) {
+    this.loader.start('Enregistrement...');
+    return challenge.save();
+  }
+
+  async _saveAttachments(challenge) {
+    await challenge.files;
+    for (const file of challenge.files.toArray()) {
+      await file.save();
+    }
+    return challenge;
+  }
+
+
 }
