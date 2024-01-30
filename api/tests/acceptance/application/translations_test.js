@@ -22,7 +22,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         }],
         areas: [{
           id: 'recArea0',
-          name: 'Nom du Domaine',
+          name: '1. Titre du Domaine - fr',
           code: '1',
           title_i18n: {
             fr: 'Titre du Domaine - fr',
@@ -34,11 +34,11 @@ describe('Acceptance | Controller | translations-controller', () => {
         },
         {
           id: 'recArea1',
-          name: 'Nom du Domaine pix+',
+          name: '1. Titre du Domaine Pix+ - fr',
           code: '1',
           title_i18n: {
-            fr: 'Titre du Domaine - fr',
-            en: 'Titre du Domaine - en',
+            fr: 'Titre du Domaine Pix+ - fr',
+            en: 'Titre du Domaine Pix+ - en',
           },
           competenceIds: ['recCompetence1'],
           color: 'jaffa',
@@ -198,6 +198,12 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
       expect(_.orderBy(data, '0')).to.deep.equal([
         [
+          'area.recArea0.title',
+          'Titre du Domaine - fr',
+          'domaine,Pix-1,Pix',
+          ''
+        ],
+        [
           'challenge.recChallenge0.alternativeInstruction',
           'Consigne alternative',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
@@ -264,7 +270,7 @@ describe('Acceptance | Controller | translations-controller', () => {
         }],
         areas: [{
           id: 'recArea0',
-          name: 'Nom du Domaine',
+          name: '1. Titre du Domaine - fr',
           code: '1',
           title_i18n: {
             fr: 'Titre du Domaine - fr',
@@ -396,6 +402,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       payload.sort();
       expect(headers).to.equal('key,fr,tags,description');
       expect(payload).to.deep.equal([
+        'area.recArea0.title,Titre du Domaine - fr,"domaine,Pix-1,Pix",',
         'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
@@ -490,7 +497,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           }],
           areas: [{
             id: 'recArea0',
-            name: 'Nom du Domaine',
+            name: '1. Titre du Domaine - fr',
             code: '1',
             title_i18n: {
               fr: 'Titre du Domaine - fr',
@@ -502,10 +509,10 @@ describe('Acceptance | Controller | translations-controller', () => {
           },
           {
             id: 'recArea1',
-            name: 'Nom du Domaine pix+',
+            name: '1. Titre du Domaine pix+ - fr',
             code: '1',
             title_i18n: {
-              fr: 'Titre du Domaine - fr',
+              fr: 'Titre du Domaine pix+ - fr',
               en: 'Titre du Domaine - en',
             },
             competenceIds: ['recCompetence1'],
@@ -659,6 +666,12 @@ describe('Acceptance | Controller | translations-controller', () => {
 
         expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
         expect(_.orderBy(data, '0')).to.deep.equal([
+          [
+            'area.recArea0.title',
+            'Titre du Domaine - fr',
+            'domaine,Pix-1,Pix',
+            ''
+          ],
           [
             'challenge.recChallenge0.alternativeInstruction',
             'Consigne alternative',
