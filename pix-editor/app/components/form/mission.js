@@ -19,6 +19,27 @@ export default class MissionForm extends Component {
   @tracked isSubmitting = false;
   @tracked isFormValid = false;
 
+  constructor(...args) {
+    super(...args);
+    if (this.args.mission.name?.length > 0) {
+      this.name.setValue(this.args.mission.name);
+      this.name.validate();
+      this.selectedStatus = this.args.mission.status;
+      this.validatedObjectives = this.args.mission.validatedObjectives;
+      this.learningObjectives = this.args.mission.learningObjectives;
+      this.isFormValid = true;
+    }
+    if (this.args.mission.competenceId?.length > 0) {
+      this.selectedCompetenceId.setValue(this.args.mission.competenceId);
+      this.selectedCompetenceId.validate();
+      this.updateThemes(this.args.mission.competenceId);
+      if (this.args.mission.thematicId?.length > 0) {
+        this.selectedThematicId = this.args.mission.thematicId;
+      }
+    }
+  }
+
+
   get statusOptions() {
     return [{ value: 'ACTIVE', label: 'ACTIVE' }, { value: 'INACTIVE', label: 'INACTIVE' }];
   }

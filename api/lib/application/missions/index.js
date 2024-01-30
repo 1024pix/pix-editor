@@ -8,6 +8,12 @@ export async function register(server) {
       config: {
         handler: missionController.findMissions,
       },
+    },{
+      method: 'GET',
+      path: '/api/missions/{id}',
+      config: {
+        handler: missionController.getMission,
+      },
     },
     {
       method: 'POST',
@@ -15,6 +21,14 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: missionController.create,
+      },
+    },
+    {
+      method: 'PATCH',
+      path: '/api/missions/{id}',
+      config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
+        handler: missionController.update,
       },
     },
   ]);

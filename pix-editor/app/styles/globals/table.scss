@@ -86,6 +86,10 @@
          height: 100%;
          margin: auto;
 
+         &__edit-mission {
+           height: inherit;
+         }
+
          a {
            padding: 8px 10px;
            border-radius: 50%;
@@ -94,6 +98,14 @@
              background-color: $pix-neutral-20;
            }
          }
+        &__edit-mission{
+          a {
+            border-radius: 0;
+            &:hover {
+              background-color: var(--pix-primary-700);
+            }
+          }
+        }
       }
 
       > a {

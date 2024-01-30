@@ -285,6 +285,27 @@ function routes() {
     return mission;
   });
 
+  this.get('/missions/:id', function(schema, request) {
+    const id = request.params.id;
+    return schema.create('mission', {
+      id,
+      name: 'Mission impossible',
+      competenceId: 'recCompetence1.1',
+      thematicId: null, status: 'ACTIVE',
+      learningObjectives: null,
+      validatedObjectives: null
+    });
+  });
+
+  this.patch('/missions/:id', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const id = request.params.id;
+    const mission = schema.missions.find(id);
+    mission.update({ ...attributes });
+    schema.create('mission-summary', { ...attributes, id });
+    return mission;
+  });
+
   this.get('/static-course-summaries', function(schema, request) {
     const queryParams = request.queryParams;
     const {

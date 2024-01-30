@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 
-export default class StaticCoursesRoute extends Route {
+export default class StaticCourseRoute extends Route {
   @service store;
 
   model(params) {

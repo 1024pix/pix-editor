@@ -1,8 +1,9 @@
 <form {{on "submit" this.onSubmitClicked}} class="new-mission-form">
-  <Card class="new-mission-form__card" @title="Création d'une mission">
+  <Card class="new-mission-form__card" @title={{@submitButtonText}}>
     <PixInput
       @id="mission-name"
       @label="Nom de la mission"
+      @value={{this.name.value}}
       @errorMessage="{{this.name.errorMessage}}"
       @requiredLabel="{{this.name.errorMessage}}"
       @validationStatus={{this.name.state}}
@@ -45,6 +46,7 @@
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
     <PixTextarea
       @id="mission-learning-objectives"
+      @value={{this.learningObjectives}}
       {{on "change" this.updateLearningObjectives}}
     />
 
@@ -52,6 +54,7 @@
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, cet élément est pour le moment utilisé que pour de l’affichage dans Pix 1D</p>
     <PixTextarea
       @id="mission-validated-objectives"
+      @value={{this.validatedObjectives}}
       {{on "change" this.updateValidatedObjectives}}
     />
    </Card>
