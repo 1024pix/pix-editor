@@ -137,6 +137,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | Retrieve area tr
         });
         const expectedArea = inputOutputDataBuilder.factory.buildArea({
           ...expectedAreaDataObject,
+          name: `${expectedAreaDataObject.code}. Titre de domaine dans PG`,
           title_i18n: {
             fr: 'Titre de domaine dans PG',
             en: 'Area title in PG',
@@ -197,6 +198,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | Retrieve area tr
         });
         const expectedArea = inputOutputDataBuilder.factory.buildArea({
           ...expectedAreaDataObject,
+          name: `${expectedAreaDataObject.code}. Prout`,
           title_i18n: {
             fr: 'Prout',
             en: 'Fart',
