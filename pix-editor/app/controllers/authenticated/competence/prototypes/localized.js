@@ -120,23 +120,22 @@ export default class LocalizedController extends Controller {
     this.notify.message('Modification annulée');
   }
 
-  @action save() {
+  @action async save() {
     this.loader.start();
-    return this._handleIllustration(this.model)
-      .then(challenge => this._handleAttachments(challenge))
-      .then(challenge => this._saveChallenge(challenge))
-      .then(challenge => this._saveAttachments(challenge))
-      .then(()=> {
-        this.edition = false;
-        this.loader.stop();
-        this.notify.message('Épreuve mise à jour');
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this.loader.stop();
-        this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
-      });
+    try {
+      const localizedChallenge = await this._handleIllustration(this.model);
+      this._handleAttachments(localizedChallenge);
+      this._saveChallenge(localizedChallenge);
+      this._saveAttachments(localizedChallenge);
+      this.edition = false;
+      this.loader.stop();
+      this.notify.message('Épreuve mise à jour');
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this.loader.stop();
+      this.notify.error('Erreur lors de la mise à jour de l\'épreuve');
+    }
   }
 
   @action maximize() {
