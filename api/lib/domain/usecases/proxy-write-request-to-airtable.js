@@ -4,7 +4,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   proxyRequestToAirtable,
   tableTranslations,
   translationRepository = repositories.translationRepository,
-  localizedChallengesAttachmentsRepository, //= repositories.localizedChallengesAttachmentsRepository,
+  localizedChallengesAttachmentsRepository = repositories.localizedChallengesAttachmentsRepository,
   updateStagingPixApiCache,
 }) {
   const requestFields = request.payload.fields;
