@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
-import FrameworkModel from '../../../models/framework';
+import FrameworkModel from '../../../../models/framework';
 
 export default class MissionNewRoute extends Route {
   @service access;
@@ -10,19 +10,20 @@ export default class MissionNewRoute extends Route {
 
 
   beforeModel() {
-    if (!this.access.mayCreateOrEditStaticCourse()) {
+    if (!this.access.mayCreateOrEditMission()) {
       this.router.transitionTo('authenticated.missions.list');
     }
   }
 
-  async model(params) {
+  async model() {
     const frameworks = this.currentData.getFrameworks().filter((framework) => framework.name === FrameworkModel.pix1DFrameworkName);
     const getAreas = frameworks.map(framework => framework.areas);
 
     const frameworkAreas = await Promise.all(getAreas);
     const getCompetences = frameworkAreas.map(areas => areas.map(area => area.competences)).flat();
     const areaCompetences = await Promise.all(getCompetences);
-    const mission = await this.store.findRecord('mission', params.mission_id);
+
+    const mission = this.modelFor('authenticated.missions.mission');
     return {
       mission,
       competences: areaCompetences.flatMap((competences) => competences.toArray()),

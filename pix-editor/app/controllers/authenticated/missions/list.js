@@ -20,4 +20,9 @@ export default class MissionsListController extends Controller {
   clearFilters() {
     this.showActiveMissions = false;
   }
+
+  @action
+  goToMissionDetails(id) {
+    this.router.transitionTo('authenticated.missions.mission.details', id);
+  }
 }

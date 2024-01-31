@@ -70,7 +70,10 @@ Router.map(function () {
     this.route('missions', function() {
       this.route('list', { path: '/' });
       this.route('new');
-      this.route('edit', { path: '/:mission_id' });
+      this.route('mission', { path: '/:mission_id' }, function() {
+        this.route('details', { path: '/' });
+        this.route('edit');
+      });
     });
   });
 });

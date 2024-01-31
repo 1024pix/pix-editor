@@ -1,5 +1,6 @@
 import Service from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import FrameworkModel from '../models/framework';
 
 export default class CurrentDataService extends Service {
   @tracked _areas = null;
@@ -57,4 +58,19 @@ export default class CurrentDataService extends Service {
     return this._prototype;
   }
 
+  async getCompetencesFromPix1DFramework() {
+    const frameworks = this.getFrameworks().filter((framework) => framework.name === FrameworkModel.pix1DFrameworkName);
+    const getAreas = frameworks.map(framework => framework.areas);
+    const frameworkAreas = await Promise.all(getAreas);
+    const getCompetences = frameworkAreas.map(areas => areas.map(area => area.competences)).flat();
+    const areaCompetences = await Promise.all(getCompetences);
+    return areaCompetences.flatMap((competences) => competences.toArray());
+  }
+
+  async getThematicsFromPix1DFramework() {
+    const competences = await this.getCompetencesFromPix1DFramework();
+    const getThemes = competences.map(competence => competence.rawThemes);
+    const themes = await Promise.all(getThemes);
+    return themes.flatMap((theme) => theme.toArray());
+  }
 }

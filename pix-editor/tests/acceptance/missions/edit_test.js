@@ -20,10 +20,10 @@ module('Acceptance | Missions | Edit', function(hooks) {
       competenceIds: ['recCompetence1.1']
     });
     this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
-    this.server.create('mission-summary', {
+    this.server.create('mission', {
       id: 2,
       name: 'Mission 1',
-      competence: 'Mirage',
+      competenceId: 'recCompetence1.1',
       createdAt: '2023/12/11',
       status: 'ACTIVE'
     });
@@ -38,13 +38,13 @@ module('Acceptance | Missions | Edit', function(hooks) {
 
     test('should be able to edit a mission', async function (assert) {
       // given
-      await visit('/missions');
+      await visit('/missions/2');
 
       // when
-      await clickByName('Modifier');
+      await clickByName('Modifier la mission');
 
       // then
-      assert.strictEqual(currentURL(), '/missions/2');
+      assert.strictEqual(currentURL(), '/missions/2/edit');
     });
 
     test('should save updated informations', async function (assert) {
@@ -52,11 +52,12 @@ module('Acceptance | Missions | Edit', function(hooks) {
       this.server.create('mission', {
         id: 3,
         name: 'Mission',
-        competenceId: 'Mirage',
+        competenceId: 'recCompetence1.1',
+        thematicId: null,
         createdAt: '2023/12/11',
         status: 'ACTIVE'
       });
-      const screen = await visit('/missions/3');
+      const screen = await visit('/missions/3/edit');
 
       // when
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
@@ -68,7 +69,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
 
       // then
-      assert.strictEqual(currentURL(), '/missions');
+      assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
     });
   });
