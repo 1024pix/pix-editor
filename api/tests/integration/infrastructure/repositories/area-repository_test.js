@@ -15,11 +15,6 @@ describe('Integration | Repository | area-repository', () => {
           competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
           competenceIds: ['competenceId11', 'competenceId12'],
           frameworkId: 'frameworkId1',
-          name: '1. Premier domaine airtable',
-          title_i18n: {
-            fr: 'Premier domaine airtable',
-            en: 'First area airtable',
-          },
         }),
         airtableBuilder.factory.buildArea({
           id: 'areaId2',
@@ -28,11 +23,6 @@ describe('Integration | Repository | area-repository', () => {
           competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
           competenceIds: ['competenceId21', 'competenceId22'],
           frameworkId: 'frameworkId1',
-          name: '2. Second domaine airtable',
-          title_i18n: {
-            fr: 'Second domaine airtable',
-            en: 'Second area airtable',
-          },
         }),
       ]).activate().nockScope;
 

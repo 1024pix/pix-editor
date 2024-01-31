@@ -76,7 +76,7 @@ export async function serializeEntity({ type, entity, translations }) {
   return {
     updatedRecord: {
       ...updatedRecord,
-      ...tablesTranslations[type].toDomain(translations),
+      ...tablesTranslations[type].toDomain(translations, updatedRecord),
     },
     model,
   };

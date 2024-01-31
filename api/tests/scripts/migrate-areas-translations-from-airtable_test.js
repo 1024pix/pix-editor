@@ -31,22 +31,19 @@ describe('Script | Migrate areas translations from Airtable', function() {
       airtableBuilder.factory.buildArea({
         id: 'recArea51',
         code: '51',
-        name: '51. La zone 51',
-        title_i18n: {
-          fr: 'La zone 51',
-          en: 'The 51 area',
-        },
       }),
       airtableBuilder.factory.buildArea({
         id: 'recArea52',
         code: '52',
-        name: '52. La zone 52',
-        title_i18n: {
-          fr: 'La zone 52',
-          en: 'The 52 area',
-        },
       }),
     ];
+
+    areas[0].fields['Titre fr-fr'] = 'La zone 51';
+    areas[0].fields['Titre en-us'] = 'The 51 area';
+    areas[0].fields['Name'] = '51. La zone 51';
+    areas[1].fields['Titre fr-fr'] = 'La zone 52';
+    areas[1].fields['Titre en-us'] = 'The 52 area';
+    areas[1].fields['Name'] = '52. La zone 52';
 
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Domaines')

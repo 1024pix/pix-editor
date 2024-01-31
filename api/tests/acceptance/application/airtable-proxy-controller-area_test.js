@@ -38,13 +38,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create area tran
       user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
       const area = domainBuilder.buildAreaDatasourceObject({ id: 'mon_id_persistant' });
-      airtableRawArea = airtableBuilder.factory.buildArea({
-        ...area,
-        title_i18n: {
-          fr: 'Domaine titre',
-          en: 'Area title',
-        }
-      });
+      airtableRawArea = airtableBuilder.factory.buildArea(area);
       areaToSave = inputOutputDataBuilder.factory.buildArea({
         ...area,
         title_i18n: {
