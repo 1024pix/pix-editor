@@ -138,6 +138,18 @@ async function mockCurrentContent() {
     locale: 'nl',
     value: 'Consigne en nl',
   });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `area.${expectedCurrentContent.areas[0].id}.title`,
+    locale: 'fr',
+    value: expectedCurrentContent.areas[0].title_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `area.${expectedCurrentContent.areas[0].id}.title`,
+    locale: 'en',
+    value: expectedCurrentContent.areas[0].title_i18n.en,
+  });
+
   databaseBuilder.factory.buildTranslation({
     key: `competence.${expectedCurrentContent.competences[0].id}.name`,
     locale: 'fr',

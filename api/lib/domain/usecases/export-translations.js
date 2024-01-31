@@ -4,6 +4,7 @@ import _ from 'lodash';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import * as competenceTranslations from '../../infrastructure/translations/competence.js';
 import * as skillTranslations from '../../infrastructure/translations/skill.js';
+import * as areaTranslations from '../../infrastructure/translations/area.js';
 import { mergeStreams } from '../../infrastructure/utils/merge-stream.js';
 import { logger } from '../../infrastructure/logger.js';
 
@@ -25,6 +26,7 @@ export async function exportTranslations(stream, dependencies) {
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
+    createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.skills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
     createTranslationsStream(frenchChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
@@ -125,6 +127,13 @@ function extractMetadataFromChallenge(baseUrl, localizedChallenges, challenge, r
 function extractMetadataFromSkill(skill, releaseContent) {
   return {
     tags: extractTagsFromSkill(skill, releaseContent),
+    description: '',
+  };
+}
+
+function extractMetadataFromArea(area, releaseContent) {
+  return {
+    tags: extractTagsFromArea(area, releaseContent),
     description: '',
   };
 }

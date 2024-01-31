@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import {
-  areaDatasource,
   attachmentDatasource,
   challengeDatasource,
   frameworkDatasource,
@@ -9,6 +8,7 @@ import {
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
 import {
+  areaRepository,
   challengeRepository,
   competenceRepository,
   missionRepository,
@@ -74,7 +74,7 @@ export async function serializeEntity({ type, entity, translations }) {
   if (!tablesTranslations[type]?.toDomain) return { updatedRecord, model };
 
   return {
-    updatedRecord:{
+    updatedRecord: {
       ...updatedRecord,
       ...tablesTranslations[type].toDomain(translations),
     },
@@ -116,7 +116,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubes,
     tutorials,
   ] = await Promise.all([
-    areaDatasource.list(),
+    areaRepository.list(),
     attachmentDatasource.list(),
     competenceRepository.list(),
     frameworkDatasource.list(),

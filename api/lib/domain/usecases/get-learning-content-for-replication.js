@@ -1,11 +1,15 @@
 import {
-  areaDatasource,
   attachmentDatasource,
   thematicDatasource,
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
-import { challengeRepository, competenceRepository, skillRepository } from '../../infrastructure/repositories/index.js';
+import {
+  areaRepository,
+  challengeRepository,
+  competenceRepository,
+  skillRepository,
+} from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
@@ -20,7 +24,7 @@ export async function getLearningContentForReplication() {
     thematics,
     courses,
   ] = await Promise.all([
-    areaDatasource.list(),
+    areaRepository.list(),
     competenceRepository.list(),
     tubeDatasource.list(),
     skillRepository.list(),

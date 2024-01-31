@@ -6,3 +6,4 @@ export * from './Skill.js';
 export * from './StaticCourse.js';
 export * from './Translation.js';
 export * from './User.js';
+export * from './Area.js';

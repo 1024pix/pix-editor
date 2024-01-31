@@ -170,8 +170,9 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      const { competences, skills, challenges } = _mockRichAirtableContent();
+      const { areas, competences, skills, challenges } = _mockRichAirtableContent();
 
+      buildAreasTranslations(areas);
       buildCompetencesTranslations(competences);
       buildSkillsTranslations(skills);
       buildChallengesTranslationsAndLocalizedChallenges(challenges);
@@ -209,6 +210,21 @@ describe('Integration | Repository | release-repository', function() {
     });
   });
 });
+
+function buildAreasTranslations(areas) {
+  for (const area of areas) {
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${area.id}.title`,
+      locale: 'fr',
+      value: `${area.id} titleFrFr`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `area.${area.id}.title`,
+      locale: 'en',
+      value: `${area.id} titleEnUs`,
+    });
+  }
+}
 
 function buildCompetencesTranslations(competences) {
   for (const competence of competences) {
@@ -304,7 +320,7 @@ function _mockRichAirtableContent() {
     id: 'frameworkA',
     name: 'FrameworkA',
   });
-  const airtableArea1 = airtableBuilder.factory.buildArea({
+  const area1 = {
     id: 'area1',
     competenceIds: ['competence11', 'competence12'],
     competenceAirtableIds: ['competence11', 'competence12'],
@@ -312,12 +328,13 @@ function _mockRichAirtableContent() {
       fr: 'area1 titleFrFr',
       en: 'area1 titleEnUs',
     },
-    code: 'area1 code',
+    code: '1',
     name: 'area1 name',
     color: 'area1 color',
     frameworkId: 'frameworkA',
-  });
-  const airtableArea2 = airtableBuilder.factory.buildArea({
+  };
+  const airtableArea1 = airtableBuilder.factory.buildArea(area1);
+  const area2 = {
     id: 'area2',
     competenceIds: ['competence21'],
     competenceAirtableIds: ['competence21'],
@@ -325,11 +342,12 @@ function _mockRichAirtableContent() {
       fr: 'area2 titleFrFr',
       en: 'area2 titleEnUs',
     },
-    code: 'area2 code',
+    code: '2',
     name: 'area2 name',
     color: 'area2 color',
     frameworkId: 'frameworkA',
-  });
+  };
+  const airtableArea2 = airtableBuilder.factory.buildArea(area2);
   const competence11 = {
     id: 'competence11',
     index: 'competence11 index',
@@ -783,6 +801,7 @@ function _mockRichAirtableContent() {
   });
 
   return {
+    areas: [area1, area2],
     competences: [competence11, competence12, competence21],
     skills: [skill11111, skill11112, skill12121, skill21111],
     challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
@@ -810,8 +829,8 @@ function _getRichCurrentContentDTO() {
       fr: 'area1 titleFrFr',
       en: 'area1 titleEnUs',
     },
-    code: 'area1 code',
-    name: 'area1 name',
+    code: '1',
+    name: '1. area1 titleFrFr',
     color: 'area1 color',
     frameworkId: 'frameworkA',
   }, {
@@ -826,8 +845,8 @@ function _getRichCurrentContentDTO() {
       fr: 'area2 titleFrFr',
       en: 'area2 titleEnUs',
     },
-    code: 'area2 code',
-    name: 'area2 name',
+    code: '2',
+    name: '2. area2 titleFrFr',
     color: 'area2 color',
     frameworkId: 'frameworkA',
   }];
