@@ -46,15 +46,27 @@ async function mockCurrentContent() {
   const expectedChallengeNl = { ...challengeNl };
   delete expectedChallengeNl.localizedChallenges;
 
-  const expectedAttachment = { id: 'attid1', challengeId: challenge.id, url: 'http://example.fr', type: 'lol', alt: 'stop' };
-  const expectedAttachmentNl = { id: 'attid2', challengeId: challengeNl.id, url: 'http://example.nl', type: 'haha', alt: 'arrête' };
+  const expectedAttachment = {
+    id: 'attid1',
+    challengeId: challenge.id,
+    url: 'http://example.fr',
+    type: 'lol',
+    alt: 'stop'
+  };
+  const expectedAttachmentNl = {
+    id: 'attid2',
+    challengeId: challengeNl.id,
+    url: 'http://example.nl',
+    type: 'haha',
+    alt: 'arrête'
+  };
 
   const expectedCurrentContent = {
     attachments: [
       domainBuilder.buildAttachment(expectedAttachment),
       domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
     ],
-    areas: [domainBuilder.buildAreaDatasourceObject()],
+    areas: [domainBuilder.buildArea()],
     competences: [domainBuilder.buildCompetence({
       name_i18n: {
         fr: 'Français',

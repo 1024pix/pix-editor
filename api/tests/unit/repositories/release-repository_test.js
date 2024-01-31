@@ -12,13 +12,8 @@ describe('Unit | Repository | release-repository', () => {
         id: '1',
         code: 1,
         color: 'blue',
-        name: '1',
         competenceIds: [],
         competenceAirtableIds: [],
-        title_i18n: {
-          fr: 'Bonjour',
-          en: 'Hello',
-        },
         frameworkId: 'recFramework0',
       });
       const type = 'Domaines';
@@ -44,7 +39,7 @@ describe('Unit | Repository | release-repository', () => {
         id: '1',
         code: 1,
         color: 'blue',
-        name: '1',
+        name: '1. Bonjour',
         competenceIds: [],
         competenceAirtableIds: [],
         title_i18n: {

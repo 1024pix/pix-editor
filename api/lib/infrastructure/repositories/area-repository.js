@@ -20,6 +20,6 @@ function toDomainList(datasourceAreas, translations) {
 export function toDomain(datasourceArea, translations = []) {
   return new Area({
     ...datasourceArea,
-    ...areaTranslations.toDomain(translations),
+    ...areaTranslations.toDomain(translations, datasourceArea),
   });
 }

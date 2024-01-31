@@ -11,6 +11,7 @@ export function buildArea({
 } = {}) {
   return new Area({
     id,
+    name: `${code}. ${title_i18n.fr}`,
     code,
     title_i18n,
     competenceIds,
