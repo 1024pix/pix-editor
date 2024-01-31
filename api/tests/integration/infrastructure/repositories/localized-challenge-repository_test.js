@@ -26,24 +26,27 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé'
+        status: 'proposé',
+        fileIds: [],
       }]);
     });
   });
 
   context('#create', function() {
     afterEach(async () => {
-      await knex('localized_challenges').truncate();
+      await knex('localized_challenges').delete();
     });
 
     it('should create a localized challenge', async function() {
       // when
-      await localizedChallengeRepository.create([{
-        id: 'localizedChallengeId',
-        challengeId: 'challengeId',
-        locale: 'locale',
-        embedUrl: 'https://example.com/embed.html',
-      }]);
+      await localizedChallengeRepository.create([
+        domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'locale',
+          embedUrl: 'https://example.com/embed.html',
+        })
+      ]);
 
       // then
       const localizedChallenge = await knex('localized_challenges').select();
@@ -218,6 +221,55 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
         // then
         expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve ou langue introuvable'));
+      });
+    });
+
+    context('when there is one attachment joined to localized challenge', () => {
+      it('should return localized challenge for challengeId, attachmentIds and locale', async () => {
+        // given
+        const challengeId = 'challengeId';
+        const locale = 'nl';
+        const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeIdFr',
+          challengeId,
+          locale: 'fr',
+        });
+        const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeIdNl',
+          challengeId,
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'otherLocalizedChallengeIdNl',
+          challengeId: 'otherChallengeId',
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeFr.id,
+          attachmentId: 'attachment-id-0',
+        });
+        const localizedChallengeAttachment1 = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeNl.id,
+          attachmentId: 'attachment-id-1',
+        });
+        const localizedChallengeAttachment2 = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeNl.id,
+          attachmentId: 'attachment-id-2',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenge = await localizedChallengeRepository.getByChallengeIdAndLocale({ challengeId, locale });
+
+        // then
+        expect(localizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeIdNl',
+          challengeId,
+          locale,
+          embedUrl: null,
+          fileIds: [localizedChallengeAttachment1.attachmentId, localizedChallengeAttachment2.attachmentId]
+        }));
       });
     });
   });

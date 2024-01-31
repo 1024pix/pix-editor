@@ -18,17 +18,31 @@ export async function create(localizedChallenges = [], generateId = _generateId)
   }
   const localizedChallengesWithId = localizedChallenges.map((localizedChallenge) => {
     return {
-      ...localizedChallenge,
       id: localizedChallenge.id ?? generateId(),
+      challengeId: localizedChallenge.challengeId,
+      embedUrl: localizedChallenge.embedUrl,
+      locale: localizedChallenge.locale,
+      status: localizedChallenge.status,
     };
   });
   await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {
-  const dto = await knex('localized_challenges').select().where({ challengeId, locale }).first();
+  const dtos = await knex('localized_challenges')
+    .select('localized_challenges.*', 'localized_challenges-attachments.attachmentId')
+    .leftJoin('localized_challenges-attachments', { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
+    .where({ challengeId, locale });
 
-  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
+  if (!dtos?.[0]) throw new NotFoundError('Épreuve ou langue introuvable');
+
+  const fileIds = dtos.map(({ attachmentId }) => attachmentId)
+    .filter((attachementId) => attachementId);
+
+  const dto = {
+    ...dtos[0],
+    fileIds,
+  };
 
   return _toDomain(dto);
 }
