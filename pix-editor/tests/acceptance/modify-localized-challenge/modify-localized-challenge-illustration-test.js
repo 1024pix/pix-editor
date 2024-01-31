@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import sinon from 'sinon';
-import { visit, clickByText } from '@1024pix/ember-testing-library';
+import { visit, clickByText, within } from '@1024pix/ember-testing-library';
 import { findAll, click, find } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { runTask } from 'ember-lifeline';
@@ -59,14 +59,19 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
+    const showImageButton = await screen.findByRole('presentation');
+    await click(showImageButton);
+
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
+    const popIn = await screen.findByTestId('display-illustration-pop-in');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every(record => !record.isNew));
     assert.strictEqual(attachments.length, 1);
+    assert.dom(await within(popIn).findByRole('img')).hasAttribute('src', 'data:,');
   });
 
   test('delete illustration', async function(assert) {

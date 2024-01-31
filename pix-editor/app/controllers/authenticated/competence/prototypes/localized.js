@@ -86,7 +86,7 @@ export default class LocalizedController extends Controller {
 
   @action
   showIllustration() {
-    const illustration = this.challenge.illustration;
+    const illustration = this.model.illustration;
     this.popInImageSrc = illustration.url;
     this.displayImage = true;
   }
