@@ -75,6 +75,7 @@
     "pg-query-stream": "^4.5.3",
     "pino": "^8.0.0",
     "pino-pretty": "^10.2.0",
+    "progress": "2.0.3",
     "qs": "^6.10.1",
     "sequelize": "^6.29.0",
     "showdown": "^2.0.0",

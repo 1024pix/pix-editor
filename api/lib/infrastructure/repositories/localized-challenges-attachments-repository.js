@@ -1,7 +1,7 @@
 import { knex } from '../../../db/knex-database-connection.js';
 
-export async function save({ attachmentId, localizedChallengeId }) {
-  await knex('localized_challenges-attachments')
+export async function save({ attachmentId, localizedChallengeId, transaction: knexConnection = knex }) {
+  await knexConnection('localized_challenges-attachments')
     .insert({ attachmentId, localizedChallengeId });
 }
 

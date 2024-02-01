@@ -36,7 +36,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
       ...challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
-          id: generateNewId('challenge'),
+          id: `${challengeId}-${locale}`,
           challengeId,
           locale,
           status: 'proposé'
