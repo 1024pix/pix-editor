@@ -34,6 +34,45 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       expect(localizedChallenge).to.deep.equal(expectedLocalizedChallenge);
     });
 
+    it('should deserialize a Localized Challenge with files', async () => {
+      // Given
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        fileIds: ['attachmentId']
+      });
+
+      const json = {
+        data: {
+          type: 'localized-challenges',
+          id: `${expectedLocalizedChallenge.id}`,
+          attributes: {
+            'embed-url': expectedLocalizedChallenge.embedUrl,
+            locale: expectedLocalizedChallenge.locale,
+            status: expectedLocalizedChallenge.status,
+          },
+          relationships: {
+            challenge: {
+              data: {
+                type: 'challenges',
+                id: expectedLocalizedChallenge.challengeId,
+              },
+            },
+            files: {
+              data: [{
+                type: 'attachments',
+                id: 'attachmentId'
+              }]
+            }
+          },
+        },
+      };
+
+      // When
+      const localizedChallenge = await deserialize(json);
+
+      // Then
+      expect(localizedChallenge).to.deep.equal(expectedLocalizedChallenge);
+    });
+
     it('should deserialize empty embed URL as null', async () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({

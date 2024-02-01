@@ -40,6 +40,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 type: 'challenges',
               },
             },
+            files: {
+              data: [],
+            },
           },
         }
       };
@@ -88,6 +91,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                 id: localizedChallenge.challengeId,
                 type: 'challenges',
               },
+            },
+            files: {
+              data: [],
             },
           },
         }]
@@ -145,6 +151,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   type: 'challenges',
                 },
               },
+              files: {
+                data: [],
+              },
             },
           },
           {
@@ -161,6 +170,9 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
                   id: localizedChallenges[1].challengeId,
                   type: 'challenges',
                 },
+              },
+              files: {
+                data: [],
               },
             },
           }
