@@ -63,6 +63,7 @@ export async function register(server) {
           }
         }],
         handler: async function(request, h) {
+          const tableName = request.params.path.split('/')[0];
           const response = await usecases.proxyDeleteRequestToAirtable(request, config.airtable.base, tableName, {
             proxyRequestToAirtable: _proxyRequestToAirtable,
           });
