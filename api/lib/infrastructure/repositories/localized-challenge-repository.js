@@ -56,7 +56,8 @@ export async function get({ id, transaction: knexConnection = knex }) {
 }
 
 export async function getMany({ ids, transaction: knexConnection = knex }) {
-  const dtos = await knexConnection('localized_challenges').whereIn('id', ids).select();
+  const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection).whereIn('id', ids).select().orderBy('id');
+
   return dtos.map(_toDomain);
 }
 

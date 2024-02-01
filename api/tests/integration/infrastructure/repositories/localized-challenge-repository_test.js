@@ -478,7 +478,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
   });
 
-  context('#getMany', () => {
+  context('#getMany', () =>   {
     it('should return localized challenges by ids', async () => {
       // given
       const ids = ['localizedChallengeId1', 'localizedChallengeId2'];
@@ -493,6 +493,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId2',
         locale: 'ur',
       });
+
       await databaseBuilder.commit();
 
       // when
@@ -513,6 +514,49 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ur',
         }),
       ]);
+    });
+    context('when there is one attachment joined to localized challenge', ()=> {
+      it('should return localized challenges by ids with attachment', async () => {
+        // given
+        const ids = ['localizedChallengeId1', 'localizedChallengeId2'];
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: ids[0],
+          challengeId: 'challengeId1',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: ids[1],
+          challengeId: 'challengeId2',
+          locale: 'ur',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: ids[0],
+          attachmentId: 'attachmentId',
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenges = await localizedChallengeRepository.getMany({ ids });
+
+        // then
+        expect(localizedChallenges).to.deep.equal([
+          domainBuilder.buildLocalizedChallenge({
+            id: ids[0],
+            challengeId: 'challengeId1',
+            embedUrl: 'mon-url.com',
+            locale: 'bz',
+            fileIds: ['attachmentId']
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: ids[1],
+            challengeId: 'challengeId2',
+            embedUrl:  null,
+            locale: 'ur',
+          }),
+        ]);
+      });
+
     });
   });
 
