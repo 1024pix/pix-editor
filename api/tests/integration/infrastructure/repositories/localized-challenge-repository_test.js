@@ -382,6 +382,37 @@ describe('Integration | Repository | localized-challenge-repository', function()
       }));
     });
 
+    context('when there is one attachment joined to localized challenge', () => {
+      it('should return localized challenge with fileIds', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        });
+
+        const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeBz.id,
+          attachmentId: 'attachment-id-0',
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenge = await localizedChallengeRepository.get({ id });
+
+        // then
+        expect(localizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+          fileIds: [localizedChallengeAttachment.attachmentId],
+        }));
+      });
+    });
+
     context('when id does not exist', () => {
       it('should throw a NotFoundError', async () => {
         // given

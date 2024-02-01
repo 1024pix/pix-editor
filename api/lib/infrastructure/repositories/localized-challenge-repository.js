@@ -36,15 +36,7 @@ export async function getByChallengeIdAndLocale({ challengeId, locale }) {
 
   if (!dtos?.[0]) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  const fileIds = dtos.map(({ attachmentId }) => attachmentId)
-    .filter((attachementId) => attachementId);
-
-  const dto = {
-    ...dtos[0],
-    fileIds,
-  };
-
-  return _toDomain(dto);
+  return _toDomainForAttachment(dtos);
 }
 
 export async function listByChallengeIds({ challengeIds, transaction: knexConnection = knex }) {
@@ -53,11 +45,14 @@ export async function listByChallengeIds({ challengeIds, transaction: knexConnec
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
-  const dto = await knexConnection('localized_challenges').select().where('id', id).first();
+  const dtos = await knex('localized_challenges')
+    .select('localized_challenges.*', 'localized_challenges-attachments.attachmentId')
+    .leftJoin('localized_challenges-attachments', { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
+    .where('id', id);
 
-  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
+  if (!dtos?.[0]) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomain(dto);
+  return _toDomainForAttachment(dtos);
 }
 
 export async function getMany({ ids, transaction: knexConnection = knex }) {
@@ -82,4 +77,16 @@ export async function update({
 
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
+}
+
+function _toDomainForAttachment(dtos) {
+  const fileIds = dtos.map(({ attachmentId }) => attachmentId)
+    .filter((attachmentId) => attachmentId);
+
+  const dto = {
+    ...dtos[0],
+    fileIds,
+  };
+
+  return _toDomain(dto);
 }
