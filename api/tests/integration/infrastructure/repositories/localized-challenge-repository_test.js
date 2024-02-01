@@ -32,6 +32,57 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
   });
 
+  context('when there is one attachment joined to localized challenges', () => {
+    it('should return a list of localized challenges with fileIds', async () => {
+      // given
+      const id = 'localizedChallengeId';
+      const id2 = 'localizedChallengeId2';
+      const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
+        id,
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url.com',
+        locale: 'bz',
+      });
+      const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
+        id: id2,
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url-nl.com',
+        locale: 'nl',
+      });
+      const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url-fr.com',
+        locale: 'fr',
+      });
+
+      const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        localizedChallengeId: localizedChallengeBz.id,
+        attachmentId: 'attachment-id-0',
+      });
+      await databaseBuilder.commit();
+
+      const expectedFrenchChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeFr,
+        fileIds: [],
+      });
+      const expectedBzChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeBz,
+        fileIds: [localizedChallengeAttachment.attachmentId],
+      });
+      const expectedNlChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeNl,
+        fileIds: [],
+      });
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.list();
+
+      // then
+      expect(localizedChallenges).to.deep.equal([expectedFrenchChallenge, expectedBzChallenge, expectedNlChallenge]);
+    });
+  });
+
   context('#create', function() {
     afterEach(async () => {
       await knex('localized_challenges').delete();

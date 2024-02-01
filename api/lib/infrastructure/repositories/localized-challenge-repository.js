@@ -4,7 +4,16 @@ import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
 export async function list() {
-  const localizedChallengeDtos = await knex('localized_challenges').select();
+  const localizedChallengeDtos = await knex('localized_challenges')
+    .select('localized_challenges.*', 'fileIds')
+    .leftJoin(
+      knex('localized_challenges-attachments')
+        .as('localized_challenges-attachments')
+        .groupBy('localizedChallengeId')
+        .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
+      { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
+    .orderBy('id');
+
   return localizedChallengeDtos.map(_toDomain);
 }
 
@@ -45,7 +54,7 @@ export async function listByChallengeIds({ challengeIds, transaction: knexConnec
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
-  const dtos = await knex('localized_challenges')
+  const dtos = await knexConnection('localized_challenges')
     .select('localized_challenges.*', 'localized_challenges-attachments.attachmentId')
     .leftJoin('localized_challenges-attachments', { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
     .where('id', id);

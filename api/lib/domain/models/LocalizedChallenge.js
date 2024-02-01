@@ -3,14 +3,14 @@ export class LocalizedChallenge {
     id,
     challengeId,
     embedUrl,
-    fileIds = [],
+    fileIds,
     locale,
     status,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
     this.embedUrl = embedUrl;
-    this.fileIds = fileIds;
+    this.fileIds = fileIds ?? [];
     this.locale = locale;
     this.status = status;
   }
