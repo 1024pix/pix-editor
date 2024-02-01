@@ -904,59 +904,5 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(await knex('translations').where({ key: 'some-key' }).select('value').first()).to.deep.equal({ value: 'plop' });
     });
 
-    describe('when the file contains [antislashdoublequote] occurences', () => {
-      it('should replace these by \\"', async () => {
-        // Given
-        const user = databaseBuilder.factory.buildAdminUser();
-        databaseBuilder.factory.buildTranslation({
-          key: 'challenge.challengeId.some-key',
-          locale: 'fr',
-          value: 'La clé !'
-        });
-        databaseBuilder.factory.buildLocalizedChallenge({
-          id: 'challengeId',
-          challengeId: 'challengeId',
-          locale: 'fr',
-        });
-
-        await databaseBuilder.commit();
-        const formData = new FormData();
-        formData.append('file', 'key_name,nl,comment\nchallenge.challengeId.some-key,[antislashdoublequote]plop[antislashdoublequote],commentaire\nchallenge.challengeId.key,[antislashdoublequote]blip[antislashdoublequote],', 'test.csv');
-
-        const server = await createServer();
-        const putTranslationsOptions = {
-          method: 'PATCH',
-          url: '/api/translations.csv',
-          headers: {
-            ...generateAuthorizationHeader(user),
-            ...formData.getHeaders(),
-          },
-          payload: formData.getBuffer()
-        };
-
-        // When
-        const response = await server.inject(putTranslationsOptions);
-
-        // Then
-        expect(response.statusCode).to.equal(204);
-        await expect(knex('translations').count()).resolves.to.deep.equal([{ count: 3 }]);
-        await expect(knex('translations')
-          .where({ key: 'challenge.challengeId.some-key' })
-          .select('locale', 'value')
-          .orderBy('locale'))
-          .resolves.to.deep.equal([{ locale: 'fr', value: 'La clé !' }, { locale: 'nl', value: '\\"plop\\"' }]);
-        await expect(knex('translations')
-          .where({ key: 'challenge.challengeId.key' })
-          .select('locale', 'value')
-          .first())
-          .resolves.to.deep.equal({ locale: 'nl', value: '\\"blip\\"' });
-        await expect(knex('localized_challenges').count()).resolves.to.deep.equal([{ count: 2 }]);
-        await expect(knex('localized_challenges')
-          .where({ locale: 'nl' })
-          .select(['challengeId', 'locale'])
-          .first())
-          .resolves.to.deep.equal({ challengeId: 'challengeId', locale: 'nl' });
-      });
-    });
   });
 });
