@@ -1,5 +1,13 @@
 
 
+## v3.126.0 (01/02/2024)
+
+
+### :rocket: Amélioration
+- [#502](https://github.com/1024pix/pix-editor/pull/502) [FEATURE] Déprécier les colonnes traduites des domaines de airtable (PIX-9484).
+- [#500](https://github.com/1024pix/pix-editor/pull/500) [FEATURE] i18n : Lecture hybride des domaines (PIX-9481).
+- [#493](https://github.com/1024pix/pix-editor/pull/493) [FEATURE] Pouvoir mettre à jour une mission (Pix-10274).
+
 ## v3.125.0 (29/01/2024)
 
 
