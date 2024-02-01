@@ -603,5 +603,52 @@ describe('Integration | Repository | localized-challenge-repository', function()
           status: null,
         }));
     });
+    context('when there is one attachment joined to localized challenge', ()=> {
+      it('should change localized challenge locale and embedUrl with attachmentId', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'my-url.html',
+          locale: 'bz',
+        });
+
+        await databaseBuilder.commit();
+
+        const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id,
+          challengeId: 'differentChallengeId should not be updated',
+          embedUrl: 'my-new-url.html',
+          locale: 'ar',
+          status: null,
+          files: ['attachmentId']
+        });
+
+        // when
+        const localizedUpdatedChallenge = await localizedChallengeRepository.update({ localizedChallenge });
+
+        // then
+        await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
+          {
+            id,
+            challengeId: 'challengeId',
+            embedUrl: 'my-new-url.html',
+            locale: 'ar',
+            status: null,
+          },
+        ]);
+
+        expect(localizedUpdatedChallenge).to.deep.equal(
+          domainBuilder.buildLocalizedChallenge({
+            id,
+            challengeId: 'challengeId',
+            embedUrl: 'my-new-url.html',
+            locale: 'ar',
+            status: null,
+            files: ['attachmentId']
+          }));
+      });
+    });
   });
 });
