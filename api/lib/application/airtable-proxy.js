@@ -63,7 +63,9 @@ export async function register(server) {
           }
         }],
         handler: async function(request, h) {
-          const response = await _proxyRequestToAirtable(request, config.airtable.base);
+          const response = await usecases.proxyDeleteRequestToAirtable(request, config.airtable.base, tableName, {
+            proxyRequestToAirtable: _proxyRequestToAirtable,
+          });
           return h.response(response.data).code(response.status);
         }
       },
