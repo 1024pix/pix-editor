@@ -4,14 +4,7 @@ import { LocalizedChallenge } from '../../domain/models/index.js';
 import { generateNewId } from '../utils/id-generator.js';
 
 export async function list() {
-  const localizedChallengeDtos = await knex('localized_challenges')
-    .select('localized_challenges.*', 'fileIds')
-    .leftJoin(
-      knex('localized_challenges-attachments')
-        .as('localized_challenges-attachments')
-        .groupBy('localizedChallengeId')
-        .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
-      { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
+  const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment()
     .orderBy('id');
 
   return localizedChallengeDtos.map(_toDomain);
@@ -38,14 +31,13 @@ export async function create(localizedChallenges = [], generateId = _generateId)
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {
-  const dtos = await knex('localized_challenges')
-    .select('localized_challenges.*', 'localized_challenges-attachments.attachmentId')
-    .leftJoin('localized_challenges-attachments', { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
-    .where({ challengeId, locale });
+  const dto = await _queryLocalizedChallengeWithAttachment()
+    .where({ challengeId, locale })
+    .first();
 
-  if (!dtos?.[0]) throw new NotFoundError('Épreuve ou langue introuvable');
+  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomainForAttachment(dtos);
+  return _toDomain(dto);
 }
 
 export async function listByChallengeIds({ challengeIds, transaction: knexConnection = knex }) {
@@ -54,14 +46,13 @@ export async function listByChallengeIds({ challengeIds, transaction: knexConnec
 }
 
 export async function get({ id, transaction: knexConnection = knex }) {
-  const dtos = await knexConnection('localized_challenges')
-    .select('localized_challenges.*', 'localized_challenges-attachments.attachmentId')
-    .leftJoin('localized_challenges-attachments', { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' })
-    .where('id', id);
+  const dto = await _queryLocalizedChallengeWithAttachment(knexConnection)
+    .where('id', id)
+    .first();
 
-  if (!dtos?.[0]) throw new NotFoundError('Épreuve ou langue introuvable');
+  if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
 
-  return _toDomainForAttachment(dtos);
+  return _toDomain(dto);
 }
 
 export async function getMany({ ids, transaction: knexConnection = knex }) {
@@ -88,14 +79,13 @@ function _toDomain(dto) {
   return new LocalizedChallenge(dto);
 }
 
-function _toDomainForAttachment(dtos) {
-  const fileIds = dtos.map(({ attachmentId }) => attachmentId)
-    .filter((attachmentId) => attachmentId);
-
-  const dto = {
-    ...dtos[0],
-    fileIds,
-  };
-
-  return _toDomain(dto);
+function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {
+  return knexConnection('localized_challenges')
+    .select('localized_challenges.*', 'fileIds')
+    .leftJoin(
+      knex('localized_challenges-attachments')
+        .as('localized_challenges-attachments')
+        .groupBy('localizedChallengeId')
+        .select('localizedChallengeId', knex.raw('array_agg("attachmentId") as "fileIds"')),
+      { 'localized_challenges-attachments.localizedChallengeId': 'localized_challenges.id' });
 }
