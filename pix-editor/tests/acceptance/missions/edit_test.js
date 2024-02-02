@@ -10,6 +10,8 @@ module('Acceptance | Missions | Edit', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function () {
+    const notifications = this.owner.lookup('service:notifications');
+    notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
     this.server.create('theme', { id: 'recTheme1' });
     this.server.create('competence', { id:  'recCompetence1.1', pixId: 'recCompetence1.1', rawThemeIds: ['recTheme1'], title: 'Notre compétence' });

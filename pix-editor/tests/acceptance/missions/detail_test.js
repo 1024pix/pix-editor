@@ -10,6 +10,8 @@ module('Acceptance | Missions | Detail', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function() {
+    const notifications = this.owner.lookup('service:notifications');
+    notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence' });
