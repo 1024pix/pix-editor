@@ -72,13 +72,19 @@
   }
 
   #select-framework {
+
+    .ember-power-select-status-icon {
+      border-color: rgba(255, 255, 255, 0.9) transparent transparent transparent;
+    }
+
     .ember-power-select-trigger {
       margin: 10px 5px;
       color: rgba(255, 255, 255, 0.5);
       background-color: transparent;
-      border-color: transparent;
-      border-bottom: 1px solid rgba(34, 36, 38, 0.15);
-      border-left: 1px solid rgba(34, 36, 38, 0.15);
+      border-color: rgba(255, 255, 255, 0.9);
+      color: white;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.9);
+      border-left: 1px solid rgba(255, 255, 255, 0.9);
       cursor: pointer;
     }
   }
