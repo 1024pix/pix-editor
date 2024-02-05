@@ -22,6 +22,8 @@ export default class LocalizedController extends Controller {
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
 
+  deletedFiles = [];
+
   get previewUrl() {
     return new URL(`${this.model.challenge.get('preview')}?locale=${this.model.locale}`, window.location).href;
   }
@@ -123,10 +125,10 @@ export default class LocalizedController extends Controller {
   @action async save() {
     this.loader.start();
     try {
-      const localizedChallenge = await this._handleIllustration(this.model);
-      this._handleAttachments(localizedChallenge);
-      this._saveChallenge(localizedChallenge);
-      this._saveAttachments(localizedChallenge);
+      await this._handleIllustration(this.model);
+      await this._handleAttachments(this.model);
+      await this._saveChallenge(this.model);
+      await this._saveAttachments(this.model);
       this.edition = false;
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');
@@ -180,7 +182,6 @@ export default class LocalizedController extends Controller {
       file,
       type: 'illustration',
       localizedChallenge: this.model,
-      challenge: this.model.challenge,
       alt,
     };
     this.store.createRecord('attachment', attachment);
@@ -192,6 +193,7 @@ export default class LocalizedController extends Controller {
     const removedFile = this.model.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
+      this.deletedFiles.push(removedFile);
       return removedFile.alt;
     }
   }
@@ -205,7 +207,6 @@ export default class LocalizedController extends Controller {
       file,
       type: 'attachment',
       localizedChallenge: this.model,
-      challenge: this.model.challenge,
     };
     this.store.createRecord('attachment', attachment);
   }
@@ -216,6 +217,7 @@ export default class LocalizedController extends Controller {
     const removedFile = this.model.files.findBy('filename', removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
+      this.deletedFiles.push(removedFile);
     }
   }
 
@@ -265,18 +267,21 @@ export default class LocalizedController extends Controller {
     return challenge.attachmentBaseName + '.' + this.filePath.getExtension(filename);
   }
 
-  _saveChallenge(challenge) {
+  async _saveChallenge(challenge) {
     this.loader.start('Enregistrement...');
     return challenge.save();
   }
 
   async _saveAttachments(challenge) {
     await challenge.files;
+
     for (const file of challenge.files.toArray()) {
       await file.save();
     }
+    for (const file of this.deletedFiles) {
+      await file.save();
+    }
+    this.deletedFiles = [];
     return challenge;
   }
-
-
 }

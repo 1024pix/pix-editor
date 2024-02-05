@@ -36,7 +36,6 @@ export default class AirtableSerializer extends RESTSerializer {
       delete payload.id;
       delete payload.deleted;
     }
-
     return super.normalizeResponse(...arguments);
   }
 

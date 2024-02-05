@@ -11,6 +11,6 @@ export default class Attachment extends Model {
 
   @tracked cloneBeforeSave;
 
-  @belongsTo('challenge') challenge;
+  @belongsTo('challenge', { inverse: 'files' }) challenge;
   @belongsTo('localized-challenge',  { inverse: 'files' }) localizedChallenge;
 }

@@ -10,7 +10,7 @@ export default class LocalizedChallengeModel extends Model {
   @attr locale;
   @attr status;
 
-  @belongsTo('challenge') challenge;
+  @belongsTo('challenge', { inverse: 'localizedChallenges' }) challenge;
   @hasMany('attachment', { inverse: 'localizedChallenge' }) files;
 
   get isPrimaryChallenge() {

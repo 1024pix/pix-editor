@@ -24,6 +24,9 @@ function routes() {
   this.post('/airtable/content/Attachments', (schema, request) => {
     const payload = JSON.parse(request.requestBody);
     const attachment = _deserializePayload(payload, 'attachment');
+    if (attachment.localizedChallenge) {
+      attachment.localizedChallenge = schema.localizedChallenges.find(attachment.localizedChallenge);
+    }
     const createdAttachment = schema.attachments.create(attachment);
     return _serializeModel(createdAttachment, 'attachment');
   });
