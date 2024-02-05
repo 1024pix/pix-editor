@@ -40,4 +40,28 @@ export default class LocalizedChallengeModel extends Model {
   get isStatusEditable() {
     return ['validé', 'archivé'].includes(this.challenge.get('status'));
   }
+
+  get _firstAttachmentBaseName() {
+    const attachments = this.attachments;
+    if (attachments && attachments.length > 0) {
+      return attachments[0].filename.replace(/\.[^/.]+$/, '');
+    }
+    return null;
+  }
+
+  get attachmentBaseName() {
+    if (this._definedBaseName) {
+      return this._definedBaseName;
+    }
+    return this._firstAttachmentBaseName;
+  }
+
+  set attachmentBaseName(value) {
+    this._definedBaseName = value;
+    return value;
+  }
+
+  baseNameUpdated() {
+    return this._firstAttachmentBaseName !== this.attachmentBaseName;
+  }
 }

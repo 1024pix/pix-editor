@@ -89,7 +89,8 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
     const rollbackAttributesStub = sinon.stub();
     const localizedChallenge = EmberObject.create({
       id: 'recChallenge',
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
+      files: [],
     });
     controller.model = localizedChallenge;
 
