@@ -1,5 +1,6 @@
 import { DatabaseBuilder } from '../../tests/tooling/database-builder/database-builder.js';
 import { localizedChallengesBuilder } from './data/localized-challenges.js';
+import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
@@ -37,6 +38,8 @@ export async function seed(knex) {
   const translations = await translationsBuilder(databaseBuilder);
 
   await localizedChallengesBuilder(databaseBuilder, translations);
+
+  await localizedChallengesAttachmentsBuilder(databaseBuilder);
 
   staticCoursesBuilder(databaseBuilder);
 
