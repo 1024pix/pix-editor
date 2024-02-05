@@ -34,7 +34,6 @@ export async function exportTranslations(stream, dependencies) {
   const csvLinesStream = translationsStreams
     .filter(({ translation }) => translation.locale === 'fr')
     .filter(keepPixFramework)
-    .map(replaceAntislashDoubleQuotes)
     .map(translationAndTagsToCSVLine);
 
   pipeline(
@@ -86,17 +85,6 @@ function extractMetadataFromObject(extractMetadataFn, releaseContent, typeTag) {
       description,
       object,
     };
-  };
-}
-
-function replaceAntislashDoubleQuotes({ translation, tags, description }) {
-  return {
-    translation: {
-      ...translation,
-      value: translation.value.replace(/\\"/g, '[NOTRANSLATE][antislashdoublequote][/NOTRANSLATE]'),
-    },
-    tags,
-    description,
   };
 }
 
