@@ -2,14 +2,16 @@ export class LocalizedChallenge {
   constructor({
     id,
     challengeId,
-    locale,
     embedUrl,
+    fileIds,
+    locale,
     status,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
-    this.locale = locale;
     this.embedUrl = embedUrl;
+    this.fileIds = fileIds ?? [];
+    this.locale = locale;
     this.status = status;
   }
 

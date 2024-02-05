@@ -26,24 +26,78 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé'
+        status: 'proposé',
+        fileIds: [],
       }]);
+    });
+  });
+
+  context('when there is one attachment joined to localized challenges', () => {
+    it('should return a list of localized challenges with fileIds', async () => {
+      // given
+      const id = 'localizedChallengeId';
+      const id2 = 'localizedChallengeId2';
+      const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
+        id,
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url.com',
+        locale: 'bz',
+      });
+      const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
+        id: id2,
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url-nl.com',
+        locale: 'nl',
+      });
+      const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeId',
+        challengeId: 'challengeId',
+        embedUrl: 'mon-url-fr.com',
+        locale: 'fr',
+      });
+
+      const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        localizedChallengeId: localizedChallengeBz.id,
+        attachmentId: 'attachment-id-0',
+      });
+      await databaseBuilder.commit();
+
+      const expectedFrenchChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeFr,
+        fileIds: [],
+      });
+      const expectedBzChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeBz,
+        fileIds: [localizedChallengeAttachment.attachmentId],
+      });
+      const expectedNlChallenge = domainBuilder.buildLocalizedChallenge({
+        ...localizedChallengeNl,
+        fileIds: [],
+      });
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.list();
+
+      // then
+      expect(localizedChallenges).to.deep.equal([expectedFrenchChallenge, expectedBzChallenge, expectedNlChallenge]);
     });
   });
 
   context('#create', function() {
     afterEach(async () => {
-      await knex('localized_challenges').truncate();
+      await knex('localized_challenges').delete();
     });
 
     it('should create a localized challenge', async function() {
       // when
-      await localizedChallengeRepository.create([{
-        id: 'localizedChallengeId',
-        challengeId: 'challengeId',
-        locale: 'locale',
-        embedUrl: 'https://example.com/embed.html',
-      }]);
+      await localizedChallengeRepository.create([
+        domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeId',
+          challengeId: 'challengeId',
+          locale: 'locale',
+          embedUrl: 'https://example.com/embed.html',
+        })
+      ]);
 
       // then
       const localizedChallenge = await knex('localized_challenges').select();
@@ -220,6 +274,55 @@ describe('Integration | Repository | localized-challenge-repository', function()
         expect(promise).rejects.to.deep.equal(new NotFoundError('Épreuve ou langue introuvable'));
       });
     });
+
+    context('when there is one attachment joined to localized challenge', () => {
+      it('should return localized challenge for challengeId, attachmentIds and locale', async () => {
+        // given
+        const challengeId = 'challengeId';
+        const locale = 'nl';
+        const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeIdFr',
+          challengeId,
+          locale: 'fr',
+        });
+        const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'localizedChallengeIdNl',
+          challengeId,
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'otherLocalizedChallengeIdNl',
+          challengeId: 'otherChallengeId',
+          locale: 'nl',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeFr.id,
+          attachmentId: 'attachment-id-0',
+        });
+        const localizedChallengeAttachment1 = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeNl.id,
+          attachmentId: 'attachment-id-1',
+        });
+        const localizedChallengeAttachment2 = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeNl.id,
+          attachmentId: 'attachment-id-2',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenge = await localizedChallengeRepository.getByChallengeIdAndLocale({ challengeId, locale });
+
+        // then
+        expect(localizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeIdNl',
+          challengeId,
+          locale,
+          embedUrl: null,
+          fileIds: [localizedChallengeAttachment1.attachmentId, localizedChallengeAttachment2.attachmentId]
+        }));
+      });
+    });
   });
 
   context('#listByChallengeIds', () => {
@@ -304,6 +407,66 @@ describe('Integration | Repository | localized-challenge-repository', function()
         }),
       ]);
     });
+    context('when there are attachments', () => {
+      it('should return the list of localized challenges with attachment for a list of challenge IDs', async () => {
+        const challengeId1 = 'challengeId1';
+        const challengeId2 = 'challengeId2';
+        const embedUrl = 'url.com';
+
+        // given
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: challengeId1,
+          challengeId: challengeId1,
+          locale: 'fr-fr',
+          embedUrl,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: `${challengeId1}En`,
+          challengeId: challengeId1,
+          locale: 'en',
+          embedUrl,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: `${challengeId2}Nl`,
+          challengeId: challengeId2,
+          locale: 'nl',
+          embedUrl,
+        });
+
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: `${challengeId2}Nl`,
+          attachmentId: 'attachment-nl',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeId1, challengeId2] });
+
+        // then
+        expect(localizedChallenges).to.deep.equal([
+          domainBuilder.buildLocalizedChallenge({
+            id: `${challengeId1}En`,
+            challengeId: challengeId1,
+            locale: 'en',
+            embedUrl,
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeId1,
+            challengeId: challengeId1,
+            locale: 'fr-fr',
+            embedUrl,
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: `${challengeId2}Nl`,
+            challengeId: challengeId2,
+            locale: 'nl',
+            fileIds: ['attachment-nl'],
+            embedUrl,
+          })
+        ]);
+      });
+    });
   });
 
   context('#get', () => {
@@ -330,6 +493,37 @@ describe('Integration | Repository | localized-challenge-repository', function()
       }));
     });
 
+    context('when there is one attachment joined to localized challenge', () => {
+      it('should return localized challenge with fileIds', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        });
+
+        const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeBz.id,
+          attachmentId: 'attachment-id-0',
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenge = await localizedChallengeRepository.get({ id });
+
+        // then
+        expect(localizedChallenge).to.deep.equal(domainBuilder.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+          fileIds: [localizedChallengeAttachment.attachmentId],
+        }));
+      });
+    });
+
     context('when id does not exist', () => {
       it('should throw a NotFoundError', async () => {
         // given
@@ -344,7 +538,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
   });
 
-  context('#getMany', () => {
+  context('#getMany', () =>   {
     it('should return localized challenges by ids', async () => {
       // given
       const ids = ['localizedChallengeId1', 'localizedChallengeId2'];
@@ -359,6 +553,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId2',
         locale: 'ur',
       });
+
       await databaseBuilder.commit();
 
       // when
@@ -379,6 +574,49 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ur',
         }),
       ]);
+    });
+    context('when there is one attachment joined to localized challenge', ()=> {
+      it('should return localized challenges by ids with attachment', async () => {
+        // given
+        const ids = ['localizedChallengeId1', 'localizedChallengeId2'];
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: ids[0],
+          challengeId: 'challengeId1',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: ids[1],
+          challengeId: 'challengeId2',
+          locale: 'ur',
+        });
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: ids[0],
+          attachmentId: 'attachmentId',
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenges = await localizedChallengeRepository.getMany({ ids });
+
+        // then
+        expect(localizedChallenges).to.deep.equal([
+          domainBuilder.buildLocalizedChallenge({
+            id: ids[0],
+            challengeId: 'challengeId1',
+            embedUrl: 'mon-url.com',
+            locale: 'bz',
+            fileIds: ['attachmentId']
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: ids[1],
+            challengeId: 'challengeId2',
+            embedUrl:  null,
+            locale: 'ur',
+          }),
+        ]);
+      });
+
     });
   });
 
@@ -424,6 +662,53 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ar',
           status: null,
         }));
+    });
+    context('when there is one attachment joined to localized challenge', ()=> {
+      it('should change localized challenge locale and embedUrl with attachmentId', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'my-url.html',
+          locale: 'bz',
+        });
+
+        await databaseBuilder.commit();
+
+        const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+          id,
+          challengeId: 'differentChallengeId should not be updated',
+          embedUrl: 'my-new-url.html',
+          locale: 'ar',
+          status: null,
+          files: ['attachmentId']
+        });
+
+        // when
+        const localizedUpdatedChallenge = await localizedChallengeRepository.update({ localizedChallenge });
+
+        // then
+        await expect(knex('localized_challenges').select()).resolves.to.deep.equal([
+          {
+            id,
+            challengeId: 'challengeId',
+            embedUrl: 'my-new-url.html',
+            locale: 'ar',
+            status: null,
+          },
+        ]);
+
+        expect(localizedUpdatedChallenge).to.deep.equal(
+          domainBuilder.buildLocalizedChallenge({
+            id,
+            challengeId: 'challengeId',
+            embedUrl: 'my-new-url.html',
+            locale: 'ar',
+            status: null,
+            files: ['attachmentId']
+          }));
+      });
     });
   });
 });

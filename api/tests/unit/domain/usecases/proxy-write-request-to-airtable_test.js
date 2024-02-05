@@ -80,6 +80,47 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, undefined);
     });
 
+    it('should write joint entry to localized_challenges-attachments', async () => {
+      // when
+      const createAttachmentAirtableResponse = {
+        status: 200,
+        data: {
+          id: 'created-attachement-id',
+          fields: {
+            localizedChallengeId: 'localizedChallengeId',
+          }
+        }
+      };
+      const localizedChallengesAttachmentsRepository = {
+        save: vi.fn(),
+      };
+
+      proxyRequestToAirtable.mockResolvedValue(createAttachmentAirtableResponse);
+
+      const createAttachmentRequest = {
+        method: 'post',
+        payload: {
+          fields: {
+            localizedChallengeId: 'localizedChallengeId',
+          },
+        }
+      };
+
+      const actualResponse = await proxyWriteRequestToAirtable(createAttachmentRequest, airtableBase, 'Attachments', {
+        proxyRequestToAirtable,
+        tableTranslations,
+        localizedChallengesAttachmentsRepository,
+        updateStagingPixApiCache,
+      });
+
+      // then
+      expect(actualResponse).toBe(createAttachmentAirtableResponse);
+      expect(localizedChallengesAttachmentsRepository.save).toHaveBeenCalledWith({
+        attachmentId: 'created-attachement-id',
+        localizedChallengeId: 'localizedChallengeId',
+      });
+    });
+
     describe('when writing translations to PG is enabled', () => {
       beforeEach(() => {
         request = { method: 'post', payload: { fields: requestFields } };

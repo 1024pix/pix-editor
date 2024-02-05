@@ -1,4 +1,5 @@
 import JsonapiSerializer from 'jsonapi-serializer';
+import Inflector from 'inflected';
 import { LocalizedChallenge } from '../../../domain/models/index.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
@@ -9,10 +10,23 @@ const serializer = new Serializer('localized-challenges', {
     'locale',
     'embedUrl',
     'status',
+    'fileIds',
   ],
+  typeForAttribute(attribute) {
+    if (attribute === 'fileIds') return 'attachments';
+  },
+  keyForAttribute(attribute) {
+    if (attribute === 'fileIds') return 'files';
+    return Inflector.dasherize(Inflector.underscore(attribute));
+  },
   challenge: {
     ref: 'id',
     included: false,
+  },
+  fileIds: {
+    ref(_, fileId) {
+      return fileId;
+    }
   },
   transform: function({ challengeId, ...localizedChallenge }) {
     return {
@@ -33,11 +47,17 @@ const deserializer = new Deserializer({
       return challenge.id;
     },
   },
+  attachments: {
+    valueForRelationship(attachment) {
+      return attachment.id;
+    }
+  },
   transform: function({ challenge, embedUrl, ...localizedChallenge }) {
     return new LocalizedChallenge({
       ...localizedChallenge,
       challengeId: challenge,
       embedUrl: embedUrl === '' ? null : embedUrl,
+      fileIds: localizedChallenge.files,
     });
   }
 });

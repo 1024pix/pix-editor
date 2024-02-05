@@ -1,7 +1,6 @@
 import Airtable from 'airtable';
 import fp from 'lodash/fp.js';
 import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
-import { generateNewId } from '../../../lib/infrastructure/utils/id-generator.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {
   const {
@@ -36,7 +35,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
       ...challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
-          id: generateNewId('challenge'),
+          id: `${challengeId}-${locale}`,
           challengeId,
           locale,
           status: 'proposé'

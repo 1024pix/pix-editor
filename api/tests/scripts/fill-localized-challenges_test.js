@@ -23,7 +23,7 @@ describe('Fill localized challenges from airtable', function() {
   });
 
   afterEach(async () => {
-    await knex('localized_challenges').truncate();
+    await knex('localized_challenges').delete();
   });
 
   it('fills localized_challenges table from airtable', async function() {

@@ -876,7 +876,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
     afterEach(async function() {
       await knex('translations').truncate();
-      await knex('localized_challenges').truncate();
+      await knex('localized_challenges').delete();
     });
 
     it('should create a challenge', async () => {

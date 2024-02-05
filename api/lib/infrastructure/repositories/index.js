@@ -2,6 +2,7 @@ export * as areaRepository from './area-repository.js';
 export * as challengeRepository from './challenge-repository.js';
 export * as competenceRepository from './competence-repository.js';
 export * as fileStorageTokenRepository from './file-storage-token-repository.js';
+export * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 export * as localizedChallengeRepository from './localized-challenge-repository.js';
 export * as missionRepository from './mission-repository.js';
 export * as releaseRepository from './release-repository.js';

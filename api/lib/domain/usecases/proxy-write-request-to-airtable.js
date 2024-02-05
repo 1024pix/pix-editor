@@ -4,6 +4,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   proxyRequestToAirtable,
   tableTranslations,
   translationRepository = repositories.translationRepository,
+  localizedChallengesAttachmentsRepository = repositories.localizedChallengesAttachmentsRepository,
   updateStagingPixApiCache,
 }) {
   const requestFields = request.payload.fields;
@@ -16,6 +17,17 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
 
   if (!_isResponseOK(response)) {
     return response;
+  }
+
+  const isCreatingAttachment = tableName === 'Attachments' && request.method === 'post';
+
+  if (isCreatingAttachment) {
+    const localizedChallengeId = response.data.fields.localizedChallengeId;
+    const attachmentId = response.data.id;
+    await localizedChallengesAttachmentsRepository.save({
+      localizedChallengeId,
+      attachmentId
+    });
   }
 
   let translations;
