@@ -12,5 +12,9 @@
   "license": "MIT",
   "devDependencies": {
     "vitest": "^1.0.0"
+  },
+  "dependencies": {
+    "@markdoc/markdoc": "^0.4.0",
+    "js-yaml": "^4.1.0"
   }
 }
