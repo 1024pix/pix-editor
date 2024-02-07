@@ -1,0 +1,13 @@
+.mission-details {
+  &__card-information {
+    li {
+      margin-bottom: 12px;
+    }
+  }
+  &__back-home {
+    width: fit-content;
+    &:hover{
+      color: white;
+    }
+  }
+}

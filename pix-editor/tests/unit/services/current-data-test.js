@@ -3,7 +3,7 @@ import { setupTest } from 'ember-qunit';
 
 module('Unit | Service | current-data', function(hooks) {
   setupTest(hooks);
-  let service, pixFramework, pixFranceFramework, pixArea, pixFranceArea, competence, prototype;
+  let competence, service, pixFramework, pixFranceFramework, pix1dFramework, pixArea, pix1dArea, pixFranceArea, pix1dThematic, pix1dCompetence, prototype;
 
   hooks.beforeEach(function() {
     const store = this.owner.lookup('service:store');
@@ -17,6 +17,15 @@ module('Unit | Service | current-data', function(hooks) {
       id: 'competence'
     });
 
+    pix1dThematic = store.createRecord('theme',{
+      id: 'thematic'
+    });
+
+    pix1dCompetence = store.createRecord('competence',{
+      id: 'pix1dCompetence',
+      rawThemes: [pix1dThematic]
+    });
+
     pixFranceArea = store.createRecord('area',{
       id: 'pixFranceArea',
       code: '1',
@@ -25,6 +34,12 @@ module('Unit | Service | current-data', function(hooks) {
     pixArea = store.createRecord('area',{
       id: 'pixArea',
       code: '2',
+    });
+
+    pix1dArea = store.createRecord('area',{
+      id: 'pix1dArea',
+      code: '3',
+      competences: [pix1dCompetence]
     });
 
     pixFranceFramework = store.createRecord('framework', {
@@ -39,10 +54,16 @@ module('Unit | Service | current-data', function(hooks) {
       areas: [pixArea]
     });
 
+    pix1dFramework = store.createRecord('framework', {
+      id: 'pix1dFramework',
+      name: 'Pix 1D',
+      areas: [pix1dArea]
+    });
+
     service = this.owner.lookup('service:current-data');
-    service.setFrameworks([pixFramework, pixFranceFramework]);
+    service.setFrameworks([pixFramework, pixFranceFramework, pix1dFramework]);
     service.setFramework(pixFramework);
-    service.setAreas([pixArea, pixFranceArea]);
+    service.setAreas([pixArea, pixFranceArea, pix1dArea]);
     service.setCompetence(competence);
     service.setPrototype(prototype);
   });
@@ -52,10 +73,10 @@ module('Unit | Service | current-data', function(hooks) {
     const frameworks = service.getFrameworks();
 
     // then
-    assert.deepEqual(frameworks, [pixFramework, pixFranceFramework]);
+    assert.deepEqual(frameworks, [pixFramework, pixFranceFramework, pix1dFramework]);
   });
 
-  test('it should return framework', function(assert) {
+  test('it should return one framework', function(assert) {
     // when
     const framework = service.getFramework();
 
@@ -68,7 +89,7 @@ module('Unit | Service | current-data', function(hooks) {
     const areas = service.getAreas(false);
 
     // then
-    assert.deepEqual(areas, [pixArea, pixFranceArea]);
+    assert.deepEqual(areas, [pixArea, pixFranceArea, pix1dArea]);
   });
 
   test('it should return areas of set framework when have no argument ', async function(assert) {
@@ -112,5 +133,21 @@ module('Unit | Service | current-data', function(hooks) {
 
     // then
     assert.notOk(isPixFrameworkResult);
+  });
+
+  test('it should return competences for pix1d', async function(assert) {
+    // when
+    const competencesResult = await service.getCompetencesFromPix1DFramework();
+
+    // then
+    assert.deepEqual(competencesResult, [pix1dCompetence]);
+  });
+
+  test('it should return thematics for pix1d', async function(assert) {
+    // when
+    const thematicsResult = await service.getThematicsFromPix1DFramework();
+
+    // then
+    assert.deepEqual(thematicsResult, [pix1dThematic]);
   });
 });

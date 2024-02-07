@@ -17,7 +17,7 @@ export default class MissionEditController extends Controller {
       this.model.mission.learningObjectives = formData.learningObjectives;
       await this.model.mission.save();
       this.notifications.success('Mission mise à jour avec succès.');
-      this.router.transitionTo('authenticated.missions.list');
+      this.router.transitionTo('authenticated.missions.mission');
     } catch (err) {
       this.model.mission.rollbackAttributes();
       await this.notifications.error('Une erreur est survenue lors de la mise à jour de la mission.');
@@ -25,7 +25,7 @@ export default class MissionEditController extends Controller {
   }
 
   @action
-  async goBackToList() {
-    this.router.transitionTo('authenticated.missions.list');
+  async goBackToMission() {
+    this.router.transitionTo('authenticated.missions.mission');
   }
 }

@@ -41,7 +41,6 @@
           <col class="table__column--wide" />
           <col class="table__column--small" />
           <col class="table__column--small" />
-          <col class="table__column--small" />
         </colgroup>
         <thead>
         <tr>
@@ -49,12 +48,11 @@
           <th>Compétence liée</th>
           <th>Créé le</th>
           <th>Statut</th>
-          <th>Actions</th>
         </tr>
         </thead>
         <tbody>
         {{#each this.model.missions as |mission|}}
-          <tr class="tr--clickable">
+          <tr class="tr--clickable" {{on "click" (fn this.goToMissionDetails mission.id)}}>
             <td>
               {{mission.name}}
             </td>
@@ -64,21 +62,6 @@
               <PixTag @color="{{if mission.isActive "green-light" "grey-light"}}">
                 {{if mission.isActive "Actif" "Inactif"}}
               </PixTag>
-            </td>
-            <td class="actions actions__edit-mission">
-              {{#if this.model.mayCreateOrEditMissions}}
-                <PixButtonLink
-                  @backgroundColor="blue"
-                  @route="authenticated.missions.edit"
-                  class="pix-button-link-with-icon white-font"
-                  @model={{mission.id}}
-                >
-                  <FaIcon
-                    @icon="plus"
-                    @prefix="fas"></FaIcon>
-                  Modifier
-                </PixButtonLink>
-              {{/if}}
             </td>
           </tr>
         {{/each}}

@@ -10,6 +10,8 @@ module('Acceptance | Missions | Edit', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function () {
+    const notifications = this.owner.lookup('service:notifications');
+    notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
     this.server.create('theme', { id: 'recTheme1' });
     this.server.create('competence', { id:  'recCompetence1.1', pixId: 'recCompetence1.1', rawThemeIds: ['recTheme1'], title: 'Notre compétence' });
@@ -20,10 +22,10 @@ module('Acceptance | Missions | Edit', function(hooks) {
       competenceIds: ['recCompetence1.1']
     });
     this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
-    this.server.create('mission-summary', {
+    this.server.create('mission', {
       id: 2,
       name: 'Mission 1',
-      competence: 'Mirage',
+      competenceId: 'recCompetence1.1',
       createdAt: '2023/12/11',
       status: 'ACTIVE'
     });
@@ -38,13 +40,13 @@ module('Acceptance | Missions | Edit', function(hooks) {
 
     test('should be able to edit a mission', async function (assert) {
       // given
-      await visit('/missions');
+      await visit('/missions/2');
 
       // when
-      await clickByName('Modifier');
+      await clickByName('Modifier la mission');
 
       // then
-      assert.strictEqual(currentURL(), '/missions/2');
+      assert.strictEqual(currentURL(), '/missions/2/edit');
     });
 
     test('should save updated informations', async function (assert) {
@@ -52,11 +54,12 @@ module('Acceptance | Missions | Edit', function(hooks) {
       this.server.create('mission', {
         id: 3,
         name: 'Mission',
-        competenceId: 'Mirage',
+        competenceId: 'recCompetence1.1',
+        thematicId: null,
         createdAt: '2023/12/11',
         status: 'ACTIVE'
       });
-      const screen = await visit('/missions/3');
+      const screen = await visit('/missions/3/edit');
 
       // when
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
@@ -68,7 +71,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
 
       // then
-      assert.strictEqual(currentURL(), '/missions');
+      assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
     });
   });

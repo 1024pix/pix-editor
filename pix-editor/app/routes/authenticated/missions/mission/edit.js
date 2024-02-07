@@ -16,8 +16,7 @@ export default class MissionNewRoute extends Route {
 
   async model() {
     const competences = await this.currentData.getCompetencesFromPix1DFramework();
-    const mission =  this.store.createRecord('mission');
-
+    const mission = this.modelFor('authenticated.missions.mission');
     return {
       mission,
       competences

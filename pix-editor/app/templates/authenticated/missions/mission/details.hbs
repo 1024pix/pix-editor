@@ -1,0 +1,52 @@
+<header class="page-header">
+  <h1 class="page-title">Détails d'une mission</h1>
+  <div class="page-actions">
+    <PixButtonLink
+      @route="authenticated.missions.mission.edit"
+      @isDisabled={{not this.model.userMayCreateOrEditMissions}}
+      class="pix-button-link-with-icon white-font"
+    >
+      <FaIcon
+        @icon="pen"
+        @prefix="fas"></FaIcon>Modifier la mission
+    </PixButtonLink>
+  </div>
+</header>
+<main class="page-body">
+  <section class="page-section">
+    <Card class="mission-details__card-information" @title="1. Informations">
+      <ul>
+        <li><span class="bold">Nom : </span>{{this.model.mission.name}}</li>
+        <li>
+          <span class="bold">Compétence : </span>
+            {{this.model.competence}}
+        </li>
+        <li>
+          <span class="bold">Thématique : </span>
+          {{this.model.thematic}}
+        </li>
+        <li><span class="bold">Statut : </span>
+          <PixTag @color="{{if this.model.mission.isActive "green-light" "grey-light"}}">
+            {{if this.model.mission.isActive "Actif" "Inactif"}}
+          </PixTag>
+        </li>
+        <li>
+          <span class="bold">Objectifs d'apprentissage : </span>
+          <div class="mission-details__description">
+            <MarkdownToHtml @markdown={{this.model.mission.learningObjectives}} />
+          </div>
+        </li>
+        <li>
+          <span class="bold">Objectifs validés dans la mission : </span>
+          <div class="mission-details__description">
+            <MarkdownToHtml @markdown={{this.model.mission.validatedObjectives}} />
+          </div>
+        </li>
+        <li><span class="bold">Crée le : </span>{{dayjs-format this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
+      </ul>
+    </Card>
+  </section>
+  <PixButtonLink @route="authenticated.missions" class="mission-details__back-home">
+    Retour à la liste des missions
+  </PixButtonLink>
+</main>

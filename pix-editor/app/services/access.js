@@ -161,6 +161,9 @@ export default class AccessService extends Service {
   mayCreateOrEditStaticCourse() {
     return this.isEditor();
   }
+  mayCreateOrEditMission() {
+    return this.isEditor();
+  }
 
   mayChangeLocalizedChallengeStatus(localizedChallenge) {
     return this.isAdmin() && localizedChallenge.isStatusEditable;

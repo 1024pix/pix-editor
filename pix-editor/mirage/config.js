@@ -287,11 +287,14 @@ function routes() {
 
   this.get('/missions/:id', function(schema, request) {
     const id = request.params.id;
+    const mission = schema.missions.find(id);
+    if (mission) return mission;
     return schema.create('mission', {
       id,
       name: 'Mission impossible',
       competenceId: 'recCompetence1.1',
-      thematicId: null, status: 'ACTIVE',
+      thematicId: null,
+      status: 'ACTIVE',
       learningObjectives: null,
       validatedObjectives: null
     });
