@@ -9,6 +9,7 @@ export default class AttachmentSerializer extends AirtableSerializer {
     mimeType: 'mimeType',
     size: 'size',
     type: 'type',
+    localizedChallenge: 'localizedChallengeId',
   };
 
   payloadKeyFromModelName() {
@@ -16,12 +17,22 @@ export default class AttachmentSerializer extends AirtableSerializer {
   }
 
   serializeBelongsTo(snapshot, json, relationship) {
-    if (relationship.key !== 'challenge') return;
+    if (relationship.key === 'localizedChallenge') {
+      const localizedChallenge = snapshot.belongsTo('localizedChallenge');
+      if (localizedChallenge) {
+        json.localizedChallengeId = localizedChallenge.id;
+      }
+    }
 
-    const challenge = snapshot.belongsTo('challenge');
-    const { airtableId } = challenge.attributes();
+    if (relationship.key === 'challenge') {
+      const challenge = snapshot.belongsTo('challenge');
+      if (!challenge) return;
 
-    json.challengeId = [airtableId];
-    json.localizedChallengeId = challenge.id;
+      json.challengeId = [challenge.attributes().airtableId];
+      if (!json.localizedChallengeId) {
+        json.localizedChallengeId = challenge.id;
+      }
+
+    }
   }
 }

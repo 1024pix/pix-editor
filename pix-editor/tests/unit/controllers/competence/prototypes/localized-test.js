@@ -29,14 +29,15 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
     this.owner.register('service:notify', NotifyService);
   });
 
-  module('It should save localized challenge', function(hooks) {
-    let handleIllustrationStub, handleAttachmentStub, localizedChallenge;
+  module('it should save localized challenge', function(hooks) {
+    let handleIllustrationStub, handleAttachmentStub, localizedChallenge, saveChallengeStub, saveAttachmentsStub;
 
     hooks.beforeEach(function () {
 
       localizedChallenge = {
         id: 'rec123456',
         save: sinon.stub().resolves(localizedChallenge),
+        files: [],
       };
       controller.model = localizedChallenge;
 
@@ -45,6 +46,12 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
 
       handleAttachmentStub = sinon.stub().resolves(localizedChallenge);
       controller._handleAttachments = handleAttachmentStub;
+
+      saveChallengeStub = sinon.stub().resolves(localizedChallenge);
+      controller._saveChallenge = saveChallengeStub;
+
+      saveAttachmentsStub = sinon.stub().resolves(localizedChallenge);
+      controller._saveAttachments = saveAttachmentsStub;
 
       controller.wasMaximized = true;
     });
@@ -55,10 +62,12 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
 
       // then
       assert.ok(startStub.calledOnce);
-      assert.ok(localizedChallenge.save.calledOnce);
+      assert.ok(handleIllustrationStub.calledWith(localizedChallenge));
+      assert.ok(handleAttachmentStub.calledWith(localizedChallenge));
+      assert.ok(saveChallengeStub.calledWith(localizedChallenge));
+      assert.ok(saveAttachmentsStub.calledWith(localizedChallenge));
       assert.ok(messageStub.calledWith('Épreuve mise à jour'));
       assert.ok(stopStub.calledOnce);
-
     });
 
     test('it should reinitialize edition',  async function(assert) {
@@ -80,7 +89,8 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
     const rollbackAttributesStub = sinon.stub();
     const localizedChallenge = EmberObject.create({
       id: 'recChallenge',
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
+      files: [],
     });
     controller.model = localizedChallenge;
 

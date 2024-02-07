@@ -1,4 +1,4 @@
-import Model, { attr, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 const inProductionCombinations = [
   'validé:validé',
@@ -10,10 +10,19 @@ export default class LocalizedChallengeModel extends Model {
   @attr locale;
   @attr status;
 
-  @belongsTo('challenge') challenge;
+  @belongsTo('challenge', { inverse: 'localizedChallenges' }) challenge;
+  @hasMany('attachment', { inverse: 'localizedChallenge' }) files;
 
   get isPrimaryChallenge() {
     return this.challenge.get('id') === this.id;
+  }
+
+  get illustration() {
+    return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
+  }
+
+  get attachments() {
+    return this.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
   }
 
   get statusCSS() {
@@ -30,5 +39,29 @@ export default class LocalizedChallengeModel extends Model {
 
   get isStatusEditable() {
     return ['validé', 'archivé'].includes(this.challenge.get('status'));
+  }
+
+  get _firstAttachmentBaseName() {
+    const attachments = this.attachments;
+    if (attachments && attachments.length > 0) {
+      return attachments[0].filename.replace(/\.[^/.]+$/, '');
+    }
+    return null;
+  }
+
+  get attachmentBaseName() {
+    if (this._definedBaseName) {
+      return this._definedBaseName;
+    }
+    return this._firstAttachmentBaseName;
+  }
+
+  set attachmentBaseName(value) {
+    this._definedBaseName = value;
+    return value;
+  }
+
+  baseNameUpdated() {
+    return this._firstAttachmentBaseName !== this.attachmentBaseName;
   }
 }

@@ -175,6 +175,7 @@ export default class SingleController extends Controller {
     this.challenge.rollbackAttributes();
     await this.challenge.files;
     this.challenge.files.forEach((file) => file.rollbackAttributes());
+    this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
     }

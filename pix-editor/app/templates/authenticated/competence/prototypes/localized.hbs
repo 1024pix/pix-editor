@@ -14,6 +14,32 @@
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top false}}>
     <form action="" class="ui form">
+      <Field::Illustration
+        @title="Illustration"
+        @value={{this.model.illustration}}
+        @edition={{this.edition}}
+        @addIllustration={{this.addIllustration}}
+        @removeIllustration={{this.removeIllustration}}
+        @display={{this.showIllustration}}
+        data-test-file-input-illustration
+      />
+      {{#if this.model.illustration}}
+        <Field::Textarea
+          @value={{this.model.illustration.alt}}
+          @title="Texte alternatif"
+          @edition={{false}}
+          @id="challenge-illustration-alt"
+        />
+      {{/if}}
+      <Field::Files
+        @title="Pièces jointes"
+        @value={{this.model.attachments}}
+        @baseName={{this.model.attachmentBaseName}}
+        @addAttachment={{this.addAttachment}}
+        @edition={{this.edition}}
+        @removeAttachment={{this.removeAttachment}}
+        data-test-file-input-attachment
+      />
       <Field::Input
         @id="localized-challenge-embed-url"
         @label="Embed URL"
@@ -72,5 +98,11 @@
     @onDeny={{this.confirmDeny}}
     @showModal={{this.displayConfirm}}
     data-testid='change-status-confirm-popin'
+  />
+  <PopIn::Image
+    @imageSrc={{this.popInImageSrc}}
+    @close={{this.closeIllustration}}
+    @showModal={{this.displayImage}}
+    data-testid='display-illustration-pop-in'
   />
 </div>

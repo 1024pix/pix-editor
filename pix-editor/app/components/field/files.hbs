@@ -1,12 +1,14 @@
 <div class="field" ...attributes>
   {{#if (or @value.length @edition)}}
-    <label>{{@title}}</label>
+    <h3 class="field-title">{{@title}}</h3>
   {{/if}}
   {{#if @value.length}}
     {{#each @value as |file|}}
-      <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i class="file icon"></i> {{file.filename}}</a>
+      <a href={{file.url}} download={{file.filename}} target="_blank" rel="noopener noreferrer"><i
+        class="file icon"></i> {{file.filename}}</a>
       {{#if @edition}}
-        <button {{on "click" (fn this.remove file)}} class="ui button file-remove" data-test-delete-attachment-button type="button"><i class="remove icon"></i></button>
+        <button {{on "click" (fn this.remove file)}} class="ui button file-remove" data-test-delete-attachment-button
+                                                     type="button"><i class="remove icon"></i></button>
       {{/if}}
     {{/each}}
   {{/if}}
@@ -19,8 +21,8 @@
     {{/let}}
     {{#if @value.length}}
       <div class="ui input">
-          <label class="label-input" for="name">Nom :</label>
-          <Input id="name" @value={{@baseName}} />
+        <label class="label-input" for="name">Nom :</label>
+        <Input id="name" @value={{@baseName}} />
       </div>
     {{/if}}
   {{/if}}
