@@ -25,7 +25,7 @@
       @options={{this.competencesOptions}}
       @onChange={{this.changeCompetence}}
       @value={{this.selectedCompetenceId.value}}
-      @requiredText="champs requis"
+      @requiredText="champ requis"
       @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
       @label="Compétence"
       {{on "focusout" this.validateCompetence}}
@@ -42,7 +42,7 @@
       @isComputeWidthDisabled={{true}}
     />
 
-    <label class="new-mission-form__label-text-area"  for="mission-learning-objectives">Objectifs d'apprentissage</label>
+    <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
     <PixTextarea
       @id="mission-learning-objectives"

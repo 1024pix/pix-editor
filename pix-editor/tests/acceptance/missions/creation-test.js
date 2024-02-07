@@ -73,7 +73,7 @@ module('Acceptance | Missions | Creation', function(hooks) {
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
-      await clickByName('Compétence');
+      await clickByName('champ requis Compétence');
       await screen.findByRole('listbox');
 
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
