@@ -39,7 +39,7 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
       });
     }
 
-    translations = tableTranslations.extractFromProxyObject(requestFields);
+    translations = await tableTranslations.extractFromProxyObject(requestFields);
 
     await translationRepository.save({ translations });
   }
@@ -47,7 +47,6 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   if (tableTranslations.readFromPgEnabled) {
     response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
   }
-
   await updateStagingPixApiCache(tableName, response.data, translations);
 
   return response;

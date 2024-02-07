@@ -21,6 +21,7 @@ export * from './build-thematic-for-release.js';
 export * from './build-tube-for-release.js';
 export * from './build-tutorial-for-release.js';
 export * from './datasource-objects/build-area-datasource-object.js';
+export * from './datasource-objects/build-attachment-datasource-object.js';
 export * from './datasource-objects/build-challenge-datasource-object.js';
 export * from './datasource-objects/build-competence-datasource-object.js';
 export * from './datasource-objects/build-framework-datasource-object.js';
