@@ -25,7 +25,7 @@ export default class MissionEditController extends Controller {
   }
 
   @action
-  async goBackToList() {
+  async goBackToMission() {
     this.router.transitionTo('authenticated.missions.mission');
   }
 }
