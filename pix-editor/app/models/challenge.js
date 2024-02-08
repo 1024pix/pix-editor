@@ -33,7 +33,7 @@ export default class ChallengeModel extends Model {
   @attr responsive;
   @attr ({ defaultValue: function() { return []; } }) locales;
   @attr alternativeLocales;
-  @attr area;
+  @attr geography;
   @attr autoReply;
   @attr focusable;
   @attr('date') updatedAt;
