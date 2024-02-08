@@ -12,7 +12,6 @@ export class Challenge {
     alternativeVersion,
     alpha,
     archivedAt,
-    area,
     author,
     autoReply,
     competenceId,
@@ -25,6 +24,7 @@ export class Challenge {
     focusable,
     format,
     genealogy,
+    geography,
     id,
     locales,
     localizedChallenges,
@@ -52,7 +52,6 @@ export class Challenge {
     this.alpha = alpha;
     this.alternativeVersion = alternativeVersion;
     this.archivedAt = archivedAt;
-    this.area = area;
     this.author = author;
     this.autoReply = autoReply;
     this.competenceId = competenceId;
@@ -64,6 +63,7 @@ export class Challenge {
     this.focusable = focusable;
     this.format = format;
     this.genealogy = genealogy;
+    this.geography = geography;
     this.id = id;
     this.madeObsoleteAt = madeObsoleteAt;
     this.pedagogy = pedagogy;
