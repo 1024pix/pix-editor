@@ -221,12 +221,12 @@
       <div class="field">
         <Field::Select
           @title="Géographie"
-          @value={{@challenge.area}}
+          @value={{@challenge.geography}}
           @edition={{@edition}}
           @multiple={{false}}
           @defaultValue="Neutre"
-          @options={{this.options.area}}
-          @setValue={{fn (mut @challenge.area)}}
+          @options={{this.options.geography}}
+          @setValue={{fn (mut @challenge.geography)}}
         />
       </div>
     </div>

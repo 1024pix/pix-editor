@@ -40,10 +40,10 @@ async function mockCurrentContent() {
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
     ],
   });
-  const expectedChallenge = { ...challenge };
+  const expectedChallenge = { ...challenge, area: challenge.geography };
   delete expectedChallenge.localizedChallenges;
 
-  const expectedChallengeNl = { ...challengeNl };
+  const expectedChallengeNl = { ...challengeNl, area: challenge.geography };
   delete expectedChallengeNl.localizedChallenges;
 
   const expectedAttachment = {

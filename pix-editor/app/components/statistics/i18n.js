@@ -62,17 +62,17 @@ export default class StatisticsI18nComponent extends Component {
           return tube.productionSkills.reduce((current, skill) => {
             if (skill.i18n === 'Monde') {
               return skill.challenges.reduce((current, challenge) => {
-                const area = challenge.area;
-                if (!current.has(area)) {
-                  current.set(area, [0,0]);
+                const geography = challenge.geography;
+                if (!current.has(geography)) {
+                  current.set(geography, [0,0]);
                 }
-                const value = current.get(area);
+                const value = current.get(geography);
                 if (challenge.isValidated) {
                   value[0]++;
-                  current.set(area, value);
+                  current.set(geography, value);
                 } else if (challenge.isDraft) {
                   value[1]++;
-                  current.set(area, value);
+                  current.set(geography, value);
                 }
                 return current;
               }, current);
@@ -125,7 +125,7 @@ export default class StatisticsI18nComponent extends Component {
       return current;
     }, { validated:0, suggested:0 });
   }
-  
+
   get i18nNeutralTotal() {
     return this.i18nTotal('neutralValidated', 'neutralSuggested');
   }

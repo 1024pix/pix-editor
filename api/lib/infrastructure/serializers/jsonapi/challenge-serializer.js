@@ -34,7 +34,7 @@ const serializer = new Serializer('challenges', {
     'responsive',
     'locales',
     'alternativeLocales',
-    'area',
+    'geography',
     'autoReply',
     'focusable',
     'skill',
