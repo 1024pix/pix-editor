@@ -1,5 +1,14 @@
 
 
+## v3.128.0 (08/02/2024)
+
+
+### :rocket: Amélioration
+- [#511](https://github.com/1024pix/pix-editor/pull/511) [FEATURE] Ecrire l'alternative textuel des illustrations dans la table de traduction (PIX-9296).  .
+
+### :building_construction: Tech
+- [#510](https://github.com/1024pix/pix-editor/pull/510) [TECH] Renommer le champ `challenge.area` en `challenge.geography` (PIX-11117).
+
 ## v3.127.0 (08/02/2024)
 
 
