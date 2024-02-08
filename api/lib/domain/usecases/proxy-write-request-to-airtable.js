@@ -33,8 +33,9 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   let translations;
   if (tableTranslations.writeToPgEnabled) {
     if (request.method === 'patch') {
+      const prefix = await tableTranslations.prefixFor(response.data.fields);
       await translationRepository.deleteByKeyPrefixAndLocales({
-        prefix: tableTranslations.prefixFor(response.data.fields),
+        prefix,
         locales: ['fr', 'fr-fr', 'en'],
       });
     }

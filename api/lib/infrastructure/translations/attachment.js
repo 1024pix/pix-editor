@@ -1,22 +1,31 @@
 import { Translation } from '../../domain/models/index.js';
 import { localizedChallengeRepository } from '../repositories/index.js';
-import { prefixFor } from './challenge.js';
+import { prefixFor as prefixForChallenge } from './challenge.js';
 
 export const prefix = 'challenge.';
 
-export async function extractFromProxyObject(airtableAttachment) {
-  const { alt: illustrationAlt, localizedChallengeId } = airtableAttachment;
+export async function prefixFor(airtableAttachment) {
+  const localizedChallenge = await getLocalizedChallenge(airtableAttachment);
 
-  if (!illustrationAlt || !localizedChallengeId) {
-    return [];
-  }
-
-  const localizedChallenge = await localizedChallengeRepository.get({ id: localizedChallengeId });
-
-  return new Translation({
-    key: `${prefixFor({ id: localizedChallenge.challengeId })}illustrationAlt`,
-    locale: localizedChallenge.locale,
-    value: illustrationAlt,
-  });
+  return `${prefixForChallenge({ id: localizedChallenge.challengeId })}illustrationAlt`;
 }
 
+export async function extractFromProxyObject(airtableAttachment) {
+  if (!airtableAttachment.alt) return [];
+
+  const localizedChallenge = await getLocalizedChallenge(airtableAttachment);
+
+  return [
+    new Translation({
+      key: `${prefixForChallenge({ id: localizedChallenge.challengeId })}illustrationAlt`,
+      locale: localizedChallenge.locale,
+      value: airtableAttachment.alt,
+    }),
+  ];
+}
+
+async function getLocalizedChallenge(airtableAttachment) {
+  const { localizedChallengeId } = airtableAttachment;
+
+  return localizedChallengeRepository.get({ id: localizedChallengeId });
+}
