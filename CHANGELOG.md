@@ -1,5 +1,24 @@
 
 
+## v3.127.0 (08/02/2024)
+
+
+### :rocket: Amélioration
+- [#501](https://github.com/1024pix/pix-editor/pull/501) [FEATURE] Permettre l'ajout d'une piece jointe ou d'une illustration sur une épreuve traduite (PIX-10934).
+- [#506](https://github.com/1024pix/pix-editor/pull/506) [FEATURE] Ajouter une page de détails pour une mission (Pix-10871).
+- [#504](https://github.com/1024pix/pix-editor/pull/504) [FEATURE] Ajout d'une table de jointure entre localized challenges et attachments pour gérer ces derniers côté PG (PIX-10978).
+
+### :bug: Correction
+- [#505](https://github.com/1024pix/pix-editor/pull/505) [BUGFIX] Changement de couleur des bordures d'un composant "SELECT".
+
+### :arrow_up: Montée de version
+- [#509](https://github.com/1024pix/pix-editor/pull/509) [BUMP] Update dependency @1024pix/pix-ui to v43 (pix-editor).
+- [#507](https://github.com/1024pix/pix-editor/pull/507) [BUMP] Lock file maintenance (api).
+- [#508](https://github.com/1024pix/pix-editor/pull/508) [BUMP] Lock file maintenance (challenge-parser).
+
+### :coffee: Autre
+- [#503](https://github.com/1024pix/pix-editor/pull/503) [REVERT] Suppression du contournement pour les \" dans l'export Phrase (PIX-10210).
+
 ## v3.126.0 (01/02/2024)
 
 
