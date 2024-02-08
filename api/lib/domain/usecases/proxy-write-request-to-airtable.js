@@ -33,13 +33,14 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   let translations;
   if (tableTranslations.writeToPgEnabled) {
     if (request.method === 'patch') {
+      const prefix = await tableTranslations.prefixFor(response.data.fields);
       await translationRepository.deleteByKeyPrefixAndLocales({
-        prefix: tableTranslations.prefixFor(response.data.fields),
+        prefix,
         locales: ['fr', 'fr-fr', 'en'],
       });
     }
 
-    translations = tableTranslations.extractFromProxyObject(requestFields);
+    translations = await tableTranslations.extractFromProxyObject(requestFields);
 
     await translationRepository.save({ translations });
   }
@@ -47,7 +48,6 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   if (tableTranslations.readFromPgEnabled) {
     response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
   }
-
   await updateStagingPixApiCache(tableName, response.data, translations);
 
   return response;
