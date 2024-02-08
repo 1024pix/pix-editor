@@ -68,6 +68,6 @@ async function _getCoursesFromPGForReplication() {
 
 function normalizeChallenge(challenge) {
   delete challenge.localizedChallenges;
-
+  challenge.area = challenge.geography;
   return challenge;
 }
