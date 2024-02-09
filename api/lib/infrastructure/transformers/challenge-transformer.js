@@ -47,7 +47,7 @@ function _filterChallengeFields(challenge) {
 function _addAttachmentsToChallenge({ attachments }) {
   return (challenge) => {
     const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
-    const challengeAttachments = challenge.files.map((fileId) => attachments.find(({ id }) => id === fileId));
+    const challengeAttachments = attachments.filter(({ localizedChallengeId }) => localizedChallengeId === challenge.id);
     challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
     return newChallenge;
   };

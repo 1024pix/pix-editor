@@ -177,6 +177,11 @@ describe('Integration | Repository | release-repository', function() {
       buildSkillsTranslations(skills);
       buildChallengesTranslationsAndLocalizedChallenges(challenges);
 
+      databaseBuilder.factory.buildLocalizedChallengeAttachment({
+        attachmentId: 'attachment4',
+        localizedChallengeId: 'challengeNl',
+      });
+
       databaseBuilder.factory.buildStaticCourse({
         id: 'course1PG',
         name: 'course1PG name',
@@ -787,6 +792,14 @@ function _mockRichAirtableContent() {
     url: 'attachment3 url',
     challengeId: 'challenge211111',
   });
+  const airtableAttachment4 = airtableBuilder.factory.buildAttachmentForLocalizedChallenge({
+    id: 'attachment4',
+    alt: 'attachment4 alt',
+    type: 'attachment',
+    url: 'attachment4 url',
+    challengeId: '',
+    localizedChallengeId: 'challengeNl',
+  });
 
   airtableBuilder.mockLists({
     frameworks: [airtableFrameworkA],
@@ -797,7 +810,7 @@ function _mockRichAirtableContent() {
     skills: [airtableSkill11111, airtableSkill11112, airtableSkill12121, airtableSkill21111],
     challenges: [airtableChallenge121211, airtableChallenge121212, airtableChallenge211111, airtableChallenge211112, airtableChallenge211113],
     tutorials: [airtableTutorial1, airtableTutorial2],
-    attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3],
+    attachments: [airtableAttachment1, airtableAttachment2, airtableAttachment3, airtableAttachment4],
   });
 
   return {
@@ -1191,6 +1204,7 @@ function _getRichCurrentContentDTO() {
       focusable: 'challenge121211 focusable',
       delta: 1.1,
       alpha: 2.2,
+      attachments: ['attachment4 url'],
       illustrationUrl: null,
       illustrationAlt: null,
       shuffled: false,
