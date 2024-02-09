@@ -1,5 +1,11 @@
 
 
+## v3.128.1 (09/02/2024)
+
+
+### :bug: Correction
+- [#514](https://github.com/1024pix/pix-editor/pull/514) [BUGFIX] Fix des attachments pour les localized challenges dans la release (PIX-11138).
+
 ## v3.128.0 (08/02/2024)
 
 
