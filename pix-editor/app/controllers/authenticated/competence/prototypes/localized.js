@@ -182,6 +182,7 @@ export default class LocalizedController extends Controller {
       file,
       type: 'illustration',
       localizedChallenge: this.model,
+      challenge: this.model.challenge,
       alt,
     };
     this.store.createRecord('attachment', attachment);
@@ -207,6 +208,7 @@ export default class LocalizedController extends Controller {
       file,
       type: 'attachment',
       localizedChallenge: this.model,
+      challenge: this.model.challenge,
     };
     this.store.createRecord('attachment', attachment);
   }
