@@ -15,8 +15,6 @@ import { extractParameters } from '../../infrastructure/utils/query-params-utils
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
 async function _refreshCache({ challenge }) {
-  if (!pixApiClient.isPixApiCachePatchingEnabled()) return;
-
   try {
     const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
     const transformChallenge = createChallengeTransformer({ attachments });

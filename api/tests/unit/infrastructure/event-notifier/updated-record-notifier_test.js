@@ -10,7 +10,10 @@ describe('Unit | Infrastructure | EventNotifier | UpdatedRecordedNotifier', () =
       // given
       const updatedRecord = domainBuilder.buildAreaDatasourceObject();
       const model = 'Model';
-      const pixApiClient = { request: vi.fn() };
+      const pixApiClient = {
+        request: vi.fn(),
+        isPixApiCachePatchingEnabled: vi.fn().mockReturnValue(true),
+      };
 
       // when
       await notify({ pixApiClient, updatedRecord, model });
