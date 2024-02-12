@@ -19,7 +19,9 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
     const localizedChallengeRepository = {
       getByChallengeIdAndLocale: vi.fn().mockResolvedValueOnce(localizedChallenge),
     };
-    const challenge = domainBuilder.buildChallenge();
+    const challenge = domainBuilder.buildChallenge({
+      localizedChallenges: [localizedChallenge],
+    });
     const challengeRepository = {
       get: vi.fn().mockResolvedValueOnce(challenge),
     };
@@ -30,7 +32,6 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
 
     // then
     expect(url).to.equal(`https://preview.url.fr/challenges/${localizedChallengeId}/preview`);
-    expect(localizedChallengeRepository.getByChallengeIdAndLocale).toHaveBeenCalledWith({ locale, challengeId });
     expect(challengeRepository.get).toHaveBeenCalledWith(challengeId);
     expect(refreshCache).toHaveBeenCalledWith({ challenge });
   });

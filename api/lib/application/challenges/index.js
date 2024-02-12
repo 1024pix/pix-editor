@@ -16,7 +16,7 @@ const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).re
 
 async function _refreshCache({ challenge }) {
   try {
-    const attachments = await attachmentDatasource.filterByChallengeId(challenge.id);
+    const attachments = await attachmentDatasource.filterByLocalizedChallengeId(challenge.id);
     const transformChallenge = createChallengeTransformer({ attachments });
     const newChallenge = transformChallenge(challenge);
 

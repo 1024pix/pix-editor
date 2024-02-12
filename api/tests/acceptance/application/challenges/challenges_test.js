@@ -1122,7 +1122,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       const attachmentsScope = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Attachments')
-        .query({ filterByFormula: '{challengeId persistant} = \'recChallengeId\'' })
+        .query({ filterByFormula: '{localizedChallengeId} = \'recChallengeId\'' })
         .matchHeader('authorization', 'Bearer airtableApiKeyValue')
         .reply(200, { records: [airtableAttachment] });
 

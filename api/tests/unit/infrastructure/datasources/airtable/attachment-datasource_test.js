@@ -6,7 +6,7 @@ import airtableClient from 'airtable';
 
 describe('Unit | Infrastructure | Datasource | Airtable | AttachmentDatasource', () => {
 
-  describe('#filterByChallengeId', () => {
+  describe('#filterByLocalizedChallengeId', () => {
     it('calls airtable', async () => {
       const attachment = airtableBuilder.factory.buildAttachment({
         id: 'recAttachment',
@@ -17,11 +17,11 @@ describe('Unit | Infrastructure | Datasource | Airtable | AttachmentDatasource',
       const airtableFindRecordsSpy = vi.spyOn(airtable, 'findRecords')
         .mockResolvedValue([attachmentRecord]);
 
-      const newAttachments = await attachmentDatasource.filterByChallengeId('recChallenge');
+      const newAttachments = await attachmentDatasource.filterByLocalizedChallengeId('recChallenge');
 
       expect(newAttachments[0].id).to.equal('recAttachment');
       expect(newAttachments).to.have.length(1);
-      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Attachments', { filterByFormula: '{challengeId persistant} = \'recChallenge\'' });
+      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Attachments', { filterByFormula: '{localizedChallengeId} = \'recChallenge\'' });
     });
   });
 });

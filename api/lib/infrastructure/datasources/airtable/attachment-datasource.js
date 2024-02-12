@@ -33,9 +33,9 @@ export const attachmentDatasource = datasource.extend({
     };
   },
 
-  async filterByChallengeId(challengeId) {
+  async filterByLocalizedChallengeId(localizedChallengeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula : `{challengeId persistant} = '${challengeId}'`,
+      filterByFormula : `{localizedChallengeId} = '${localizedChallengeId}'`,
     });
     return airtableRawObjects.map(this.fromAirTableObject);
   }

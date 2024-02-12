@@ -64,7 +64,7 @@ export async function serializeEntity({ type, entity, translations }) {
 
   if (model === attachmentDatasource.path()) {
     const [rawChallenge] = await challengeRepository.filter({ filter: { ids: [updatedRecord.challengeId] } });
-    const attachments = await attachmentDatasource.filterByChallengeId(updatedRecord.challengeId);
+    const attachments = await attachmentDatasource.filterByLocalizedChallengeId(updatedRecord.challengeId);
     const transformChallenge = createChallengeTransformer({ attachments });
     const challenge = transformChallenge(rawChallenge);
 

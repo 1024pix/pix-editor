@@ -30,7 +30,7 @@ describe('Unit | Repository | release-repository', () => {
         }),
       ];
 
-      vi.spyOn(attachmentDatasource, 'filterByChallengeId');
+      vi.spyOn(attachmentDatasource, 'filterByLocalizedChallengeId');
       vi.spyOn(challengeDatasource, 'filterById');
 
       const { updatedRecord, model } = await serializeEntity({ entity, type, translations });
@@ -48,7 +48,7 @@ describe('Unit | Repository | release-repository', () => {
         },
         frameworkId: 'recFramework0',
       });
-      expect(attachmentDatasource.filterByChallengeId).not.toHaveBeenCalled();
+      expect(attachmentDatasource.filterByLocalizedChallengeId).not.toHaveBeenCalled();
       expect(challengeDatasource.filterById).not.toHaveBeenCalled();
       expect(model).to.equal('areas');
     });
@@ -106,7 +106,7 @@ describe('Unit | Repository | release-repository', () => {
       vi.spyOn(challengeRepository, 'filter').mockImplementation(async ({ filter: { ids } }) => {
         if (ids.length === 1 && ids[0] === 'recChallenge') return [challenge];
       });
-      vi.spyOn(attachmentDatasource, 'filterByChallengeId').mockImplementation(async (spyId) => {
+      vi.spyOn(attachmentDatasource, 'filterByLocalizedChallengeId').mockImplementation(async (spyId) => {
         if (spyId === 'recChallenge') return attachmentRecords;
       });
 
