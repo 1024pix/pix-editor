@@ -756,6 +756,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
     const locale = 'nl';
     let airtableChallengeScope;
     let airtableAttachmentScope;
+    let attachment;
 
     beforeEach(async function() {
       airtableChallengeScope = airtableBuilder.mockList({ tableName: 'Epreuves' }).returns([
@@ -766,7 +767,12 @@ describe('Acceptance | Controller | challenges-controller', () => {
         })
       ]).activate().nockScope;
 
-      airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([]).activate().nockScope;
+      attachment = airtableBuilder.factory.buildAttachment({
+        challengeId,
+        localizedChallengeId,
+        type: 'illustration',
+      });
+      airtableAttachmentScope = airtableBuilder.mockList({ tableName: 'Attachments' }).returns([attachment]).activate().nockScope;
 
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -833,8 +839,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
             embedUrl: null,
             embedTitle: 'embed title for nl',
             format: 'mots',
-            illustrationAlt: null,
-            illustrationUrl: null,
+            illustrationAlt: attachment.fields.alt,
+            illustrationUrl: attachment.fields.url,
             instruction: 'instruction for nl',
             locales: ['nl'],
             proposals: 'proposals for nl',
