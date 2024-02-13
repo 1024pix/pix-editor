@@ -1,5 +1,22 @@
 
 
+## v3.129.0 (13/02/2024)
+
+
+### :rocket: Amélioration
+- [#512](https://github.com/1024pix/pix-editor/pull/512) [FEATURE] Migre les traductions des textes alternatifs des illustrations vers la table `translations`  (PIX-9505).
+
+### :bug: Correction
+- [#515](https://github.com/1024pix/pix-editor/pull/515) [BUGFIX] Maintient la relation Epreuves <-> Attachements à jour (PIX-11147).
+
+### :arrow_up: Montée de version
+- [#520](https://github.com/1024pix/pix-editor/pull/520) [BUMP] Update dependency googleapis to v132 (api).
+- [#518](https://github.com/1024pix/pix-editor/pull/518) [BUMP] Lock file maintenance (pix-editor).
+- [#513](https://github.com/1024pix/pix-editor/pull/513) [BUMP] Update dependency @playwright/test to v1.41.2.
+- [#519](https://github.com/1024pix/pix-editor/pull/519) [BUMP] Lock file maintenance (scripts).
+- [#517](https://github.com/1024pix/pix-editor/pull/517) [BUMP] Lock file maintenance (challenge-parser).
+- [#516](https://github.com/1024pix/pix-editor/pull/516) [BUMP] Lock file maintenance (api).
+
 ## v3.128.1 (09/02/2024)
 
 
