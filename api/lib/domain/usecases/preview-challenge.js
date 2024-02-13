@@ -4,15 +4,13 @@ import * as config from '../../config.js';
 export async function previewChallenge(
   { challengeId, locale },
   {
-    localizedChallengeRepository = repositories.localizedChallengeRepository,
     challengeRepository = repositories.challengeRepository,
     refreshCache,
   },
 ) {
   if (!locale) return new URL(`challenges/${challengeId}/preview`, config.pixApp.baseUrl).href;
-  const localizedChallenge = await localizedChallengeRepository.getByChallengeIdAndLocale({ challengeId, locale });
   const challenge = await challengeRepository.get(challengeId);
   const translatedChallenge = challenge.translate(locale);
   await refreshCache({ challenge: translatedChallenge });
-  return new URL(`challenges/${localizedChallenge.id}/preview`, config.pixApp.baseUrl).href;
+  return new URL(`challenges/${translatedChallenge.id}/preview`, config.pixApp.baseUrl).href;
 }
