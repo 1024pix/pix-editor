@@ -413,6 +413,16 @@ export default class SingleController extends Controller {
     }
   }
 
+  @action
+  async removeAttachment(removedAttachment) {
+    await this.challenge.files;
+    const removedFile = this.challenge.attachments.findBy('filename', removedAttachment.filename);
+    if (removedFile) {
+      removedFile.deleteRecord();
+      this.deletedFiles.push(removedFile);
+    }
+  }
+
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
       this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');

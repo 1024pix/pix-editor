@@ -185,15 +185,6 @@ export default class ChallengeForm extends Component {
   }
 
   @action
-  async removeAttachment(removedAttachment) {
-    await this.args.challenge.files;
-    const removedFile = this.args.challenge.files.findBy('filename', removedAttachment.filename);
-    if (removedFile) {
-      removedFile.deleteRecord();
-    }
-  }
-
-  @action
   setLocales(selectedOptions) {
     this.args.challenge.locales = selectedOptions.map(({ value }) => value);
   }

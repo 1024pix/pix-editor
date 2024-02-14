@@ -252,7 +252,7 @@ function routes() {
     const skill = schema.skills.find(skillId);
     challenge.skill = skill;
 
-    const files = body.data.relationships.files.data.map(({id}) => {
+    const files = body.data.relationships.files.data.map(({ id }) => {
       return schema.attachments.find(id);
     });
     challenge.files = files;

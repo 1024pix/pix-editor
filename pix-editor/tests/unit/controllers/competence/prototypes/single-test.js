@@ -387,7 +387,39 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
       // then
       assert.ok(deleteRecordStub.calledOnce);
-      assert.equal(controller.deletedFiles.length, 1);
+      assert.strictEqual(controller.deletedFiles.length, 1);
+    });
+  });
+
+  module('#removeAttachment', function() {
+    test('it should remove the attachment', async function(assert) {
+      // given
+      const deleteRecordStub = sinon.stub();
+      const challenge = {
+        id: 'recchallenge_1',
+        name: 'challenge',
+        files: [],
+        attachments: [
+          {
+            filename: 'file_name.pdf',
+            size: 123,
+            mimeType: 'application/pdf',
+            type: 'attachment',
+            deleteRecord: deleteRecordStub,
+          }
+        ]
+
+      };
+      controller.model = challenge;
+
+      // when
+      await controller.removeAttachment({
+        filename: 'file_name.pdf'
+      });
+
+      // then
+      assert.ok(deleteRecordStub.calledOnce);
+      assert.strictEqual(controller.deletedFiles.length, 1);
     });
   });
 
