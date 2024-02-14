@@ -116,6 +116,7 @@ export default class LocalizedController extends Controller {
     this.model.rollbackAttributes();
     await this.model.files;
     this.model.files.forEach((file) => file.rollbackAttributes());
+    this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
     }
