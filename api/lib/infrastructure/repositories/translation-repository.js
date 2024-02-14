@@ -32,6 +32,13 @@ export async function listByPrefix(prefix, { transaction = knex } = {}) {
   return translationDtos.map(_toDomain);
 }
 
+export async function listByPattern(pattern, { transaction = knex } = {}) {
+  const translationDtos = await transaction('translations')
+    .select()
+    .whereLike('key', `${pattern}`);
+  return translationDtos.map(_toDomain);
+}
+
 export async function list() {
   const translationDtos = await knex('translations').select();
   return translationDtos.map(_toDomain);
