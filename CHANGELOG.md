@@ -1,5 +1,11 @@
 
 
+## v3.129.1 (14/02/2024)
+
+
+### :bug: Correction
+- [#521](https://github.com/1024pix/pix-editor/pull/521) [BUGFIX] Réparation des fichiers de challenges qui n'étaient pas supprimés (PIX-11213).
+
 ## v3.129.0 (13/02/2024)
 
 
