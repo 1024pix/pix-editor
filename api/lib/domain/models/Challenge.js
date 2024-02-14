@@ -114,6 +114,7 @@ export class Challenge {
     this.solution = this.#translations[this.locale]?.solution ?? '';
     this.solutionToDisplay = this.#translations[this.locale]?.solutionToDisplay ?? '';
     this.embedTitle = this.#translations[this.locale]?.embedTitle ?? '';
+    this.illustrationAlt = this.#translations[this.locale]?.illustrationAlt ?? '';
 
     const localizedChallenge = this.localizedChallenges.find(({ locale }) => this.locale === locale);
 
