@@ -363,6 +363,34 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     assert.ok(messageStub.calledWith('Modification annulée'));
   });
 
+  module('#removeIllustration', function() {
+    test('it should remove illustration', async function(assert) {
+      // given
+      const deleteRecordStub = sinon.stub();
+      const challenge = {
+        id: 'recchallenge_1',
+        name: 'challenge',
+        files: [],
+        illustration: {
+          filename: 'file_name',
+          size: 123,
+          mimeType: 'image/png',
+          type: 'illustration',
+          deleteRecord: deleteRecordStub,
+          alt: 'alternative text',
+        }
+      };
+      controller.model = challenge;
+
+      // when
+      await controller.removeIllustration();
+
+      // then
+      assert.ok(deleteRecordStub.calledOnce);
+      assert.equal(controller.deletedFiles.length, 1);
+    });
+  });
+
   module('_saveCheck', function(hooks) {
     let challenge;
 
