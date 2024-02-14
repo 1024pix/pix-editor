@@ -36,6 +36,8 @@ export default class SingleController extends Controller {
   @service storage;
   @service store;
 
+  deletedFiles = [];
+
   get maximized() {
     return this.parentController.leftMaximized;
   }
@@ -401,6 +403,26 @@ export default class SingleController extends Controller {
     await Promise.all(updateChallenges);
   }
 
+  @action
+  async removeIllustration() {
+    await this.challenge.files;
+    const removedFile = this.challenge.illustration;
+    if (removedFile) {
+      removedFile.deleteRecord();
+      this.deletedFiles.push(removedFile);
+    }
+  }
+
+  @action
+  async removeAttachment(removedAttachment) {
+    await this.challenge.files;
+    const removedFile = this.challenge.attachments.findBy('filename', removedAttachment.filename);
+    if (removedFile) {
+      removedFile.deleteRecord();
+      this.deletedFiles.push(removedFile);
+    }
+  }
+
   _saveCheck(challenge) {
     if (challenge.autoReply && !challenge.embedURL) {
       this._errorMessage('Le mode "Réponse automatique" à été activé alors que l\'épreuve ne contient pas d\'embed');
@@ -622,6 +644,7 @@ export default class SingleController extends Controller {
 
   _saveChallenge(challenge) {
     this._loadingMessage('Enregistrement...');
+
     return challenge.save();
   }
 
@@ -634,6 +657,10 @@ export default class SingleController extends Controller {
       }
       await file.save();
     }
+    for (const deletedFile of this.deletedFiles) {
+      await deletedFile.save();
+    }
+    this.deletedFiles = [];
     return challenge;
   }
 

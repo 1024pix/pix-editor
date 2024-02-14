@@ -172,16 +172,6 @@ export default class ChallengeForm extends Component {
   }
 
   @action
-  async removeIllustration() {
-    await this.args.challenge.files;
-    const removedFile = this.args.challenge.illustration;
-    if (removedFile) {
-      removedFile.deleteRecord();
-      return removedFile.alt;
-    }
-  }
-
-  @action
   addAttachment(file) {
     const attachment = {
       filename: file.name,
@@ -192,15 +182,6 @@ export default class ChallengeForm extends Component {
       challenge: this.args.challenge,
     };
     this.store.createRecord('attachment', attachment);
-  }
-
-  @action
-  async removeAttachment(removedAttachment) {
-    await this.args.challenge.files;
-    const removedFile = this.args.challenge.files.findBy('filename', removedAttachment.filename);
-    if (removedFile) {
-      removedFile.deleteRecord();
-    }
   }
 
   @action

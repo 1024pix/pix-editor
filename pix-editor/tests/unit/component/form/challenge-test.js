@@ -48,32 +48,6 @@ module('unit | Component | form/challenge', function(hooks) {
     assert.ok(createRecordStub.calledWith('attachment', expectedAttachment));
   });
 
-  test('it should remove illustration', async function(assert) {
-    // given
-    const deleteRecordStub = sinon.stub();
-    const challenge = {
-      id: 'recchallenge_1',
-      name: 'challenge',
-      files: [],
-      illustration: {
-        filename: 'file_name',
-        size: 123,
-        mimeType: 'image/png',
-        type: 'illustration',
-        deleteRecord: deleteRecordStub,
-        alt: 'alternative text',
-      }
-    };
-    component.args.challenge = challenge;
-
-    // when
-    const alternativeText = await component.removeIllustration();
-
-    // then
-    assert.ok(deleteRecordStub.calledOnce);
-    assert.strictEqual(alternativeText, 'alternative text');
-  });
-
   test('it should add attachment', async function(assert) {
     //given
     const createRecordStub = sinon.stub();

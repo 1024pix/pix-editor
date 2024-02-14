@@ -363,6 +363,66 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     assert.ok(messageStub.calledWith('Modification annulée'));
   });
 
+  module('#removeIllustration', function() {
+    test('it should remove illustration', async function(assert) {
+      // given
+      const deleteRecordStub = sinon.stub();
+      const challenge = {
+        id: 'recchallenge_1',
+        name: 'challenge',
+        files: [],
+        illustration: {
+          filename: 'file_name',
+          size: 123,
+          mimeType: 'image/png',
+          type: 'illustration',
+          deleteRecord: deleteRecordStub,
+          alt: 'alternative text',
+        }
+      };
+      controller.model = challenge;
+
+      // when
+      await controller.removeIllustration();
+
+      // then
+      assert.ok(deleteRecordStub.calledOnce);
+      assert.strictEqual(controller.deletedFiles.length, 1);
+    });
+  });
+
+  module('#removeAttachment', function() {
+    test('it should remove the attachment', async function(assert) {
+      // given
+      const deleteRecordStub = sinon.stub();
+      const challenge = {
+        id: 'recchallenge_1',
+        name: 'challenge',
+        files: [],
+        attachments: [
+          {
+            filename: 'file_name.pdf',
+            size: 123,
+            mimeType: 'application/pdf',
+            type: 'attachment',
+            deleteRecord: deleteRecordStub,
+          }
+        ]
+
+      };
+      controller.model = challenge;
+
+      // when
+      await controller.removeAttachment({
+        filename: 'file_name.pdf'
+      });
+
+      // then
+      assert.ok(deleteRecordStub.calledOnce);
+      assert.strictEqual(controller.deletedFiles.length, 1);
+    });
+  });
+
   module('_saveCheck', function(hooks) {
     let challenge;
 
