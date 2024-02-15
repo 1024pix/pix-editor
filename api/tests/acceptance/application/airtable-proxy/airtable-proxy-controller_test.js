@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import nock from 'nock';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader
-} from '../../test-helper.js';
-import { createServer } from '../../../server.js';
+import { databaseBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller', () => {
 

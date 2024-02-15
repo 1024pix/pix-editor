@@ -3,13 +3,13 @@ import { omit } from 'lodash';
 import nock from 'nock';
 import {
   airtableBuilder,
-  inputOutputDataBuilder,
   databaseBuilder,
   domainBuilder,
   generateAuthorizationHeader,
+  inputOutputDataBuilder,
   knex,
-} from '../../test-helper.js';
-import { createServer } from '../../../server.js';
+} from '../../../test-helper.js';
+import { createServer } from '../../../../server.js';
 
 describe('Acceptance | Controller | airtable-proxy-controller | create attachment translations', () => {
   beforeEach(() => {
