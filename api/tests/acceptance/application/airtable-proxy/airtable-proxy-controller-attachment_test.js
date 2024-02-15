@@ -221,3 +221,126 @@ describe('Acceptance | Controller | airtable-proxy-controller | create attachmen
     });
   });
 });
+
+describe('Acceptance | Controller | airtable-proxy-controller | retrieve attachment translations', () => {
+
+  afterEach(() => {
+    expect(nock.isDone()).to.be.true;
+  });
+
+  afterEach(function() {
+    return knex('translations').truncate();
+  });
+
+  describe('GET /api/airtable/content/Attachments', () => {
+    let airtableAttachment;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'mon_localized_challenge_id',
+        challengeId: 'mon_challenge_id_persistant'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.mon_challenge_id_persistant.illustrationAlt',
+        locale: 'fr',
+        value: 'la trad de mon illustration',
+      });
+      airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'mon_attachment_id_persistant',
+        challengeId: 'mon_challenge_id_persistant',
+        localizedChallengeId: 'mon_localized_challenge_id',
+        type: 'image',
+        url: '/une/url',
+      });
+      await databaseBuilder.commit();
+    });
+
+    describe('nominal cases', () => {
+      it('should proxy request to airtable and read translations to the PG table', async () => {
+        // Given
+        const expectedAttachment = inputOutputDataBuilder.factory.buildAttachment({
+          id: 'mon_attachment_id_persistant',
+          challengeId: 'mon_challenge_id_persistant',
+          localizedChallengeId: 'mon_localized_challenge_id',
+          type: 'image',
+          url: '/une/url',
+          alt: 'la trad de mon illustration',
+        });
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Attachments')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, { records: [omit(airtableAttachment, 'fields.createdAt')] });
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/airtable/content/Attachments',
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal({ records: [expectedAttachment] });
+      });
+    });
+  });
+
+  describe('GET /api/airtable/content/Attachments/id', () => {
+    let airtableAttachment;
+    let user;
+
+    beforeEach(async function() {
+      user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'mon_localized_challenge_id',
+        challengeId: 'mon_challenge_id_persistant'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'challenge.mon_challenge_id_persistant.illustrationAlt',
+        locale: 'fr',
+        value: 'la trad de mon illustration',
+      });
+      airtableAttachment = airtableBuilder.factory.buildAttachment({
+        id: 'mon_attachment_id_persistant',
+        challengeId: 'mon_challenge_id_persistant',
+        localizedChallengeId: 'mon_localized_challenge_id',
+        type: 'image',
+        url: '/une/url',
+      });
+      await databaseBuilder.commit();
+    });
+
+    describe('nominal cases', () => {
+      it('should proxy request to airtable and read translations to the PG table', async () => {
+        // Given
+        const expectedAttachment = inputOutputDataBuilder.factory.buildAttachment({
+          id: 'mon_attachment_id_persistant',
+          challengeId: 'mon_challenge_id_persistant',
+          localizedChallengeId: 'mon_localized_challenge_id',
+          type: 'image',
+          url: '/une/url',
+          alt: 'la trad de mon illustration',
+        });
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Attachments/mon_attachment_id_persistant')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .reply(200, omit(airtableAttachment, 'fields.createdAt'));
+        const server = await createServer();
+
+        // When
+        const response = await server.inject({
+          method: 'GET',
+          url: '/api/airtable/content/Attachments/mon_attachment_id_persistant',
+          headers: generateAuthorizationHeader(user)
+        });
+
+        // Then
+        expect(response.statusCode).to.equal(200);
+        expect(response.result).to.deep.equal(expectedAttachment);
+      });
+    });
+  });
+});
