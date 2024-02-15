@@ -49,6 +49,7 @@ export function buildChallenge({
   skillId = 'recSkillId',
   alpha = 0.5,
   delta = 0.2,
+  illustrationAlt = null,
   translations = {
     [Challenge.getPrimaryLocale(locales)]: {
       instruction,
@@ -57,6 +58,7 @@ export function buildChallenge({
       solution,
       solutionToDisplay,
       embedTitle,
+      illustrationAlt,
     },
   },
   localizedChallenges = [{

@@ -1,11 +1,11 @@
 import {
-  attachmentDatasource,
   thematicDatasource,
   tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
+  attachmentRepository,
   challengeRepository,
   competenceRepository,
   skillRepository,
@@ -30,7 +30,7 @@ export async function getLearningContentForReplication() {
     skillRepository.list(),
     challengeRepository.list(),
     tutorialDatasource.list(),
-    attachmentDatasource.list(),
+    attachmentRepository.list(),
     thematicDatasource.list(),
     _getCoursesFromPGForReplication(),
   ]);

@@ -804,6 +804,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale,
         value: 'embed title for nl',
       });
+      databaseBuilder.factory.buildTranslation({
+        key: `challenge.${challengeId}.illustrationAlt`,
+        locale,
+        value: 'illustration alt for nl',
+      });
 
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -839,7 +844,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             embedUrl: null,
             embedTitle: 'embed title for nl',
             format: 'mots',
-            illustrationAlt: attachment.fields.alt,
+            illustrationAlt: 'illustration alt for nl',
             illustrationUrl: attachment.fields.url,
             instruction: 'instruction for nl',
             locales: ['nl'],

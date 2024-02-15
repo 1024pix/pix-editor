@@ -17,9 +17,12 @@ function toDomainList(datasourceAttachments, translations, localizedChallenges) 
   const localizedChallengesById = _.groupBy(localizedChallenges, 'id');
 
   return datasourceAttachments.map((attachment) => {
+    if (attachment.type !== 'illustration') {
+      return toDomain(attachment);
+    }
     const challengeTranslations = translationsByChallengeId[attachment.challengeId];
     const locale = localizedChallengesById[attachment.localizedChallengeId][0].locale;
-    const translation = challengeTranslations.find((translation) => locale === translation.locale);
+    const translation = challengeTranslations?.find((translation) => locale === translation.locale);
 
     return toDomain(attachment, translation);
   });
@@ -28,6 +31,6 @@ function toDomainList(datasourceAttachments, translations, localizedChallenges) 
 export function toDomain(attachment, translation) {
   return new Attachment({
     ...attachment,
-    alt: attachment.type === 'illustration' ? translation.value : null,
+    alt: translation?.value ?? null,
   });
 }

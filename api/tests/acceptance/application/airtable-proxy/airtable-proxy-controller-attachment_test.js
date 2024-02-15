@@ -69,6 +69,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create attachmen
         }]
       });
       airtableRawAttachment = airtableBuilder.factory.buildAttachment(attachment);
+      airtableRawAttachment.fields.alt = attachment.alt;
       attachmentToSave = inputOutputDataBuilder.factory.buildAttachment(attachment);
     });
 
@@ -166,6 +167,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create attachmen
         }]
       });
       airtableRawAttachment = airtableBuilder.factory.buildAttachment(attachment);
+      airtableRawAttachment.fields.alt = attachment.alt;
       attachmentToUpdate = inputOutputDataBuilder.factory.buildAttachment(attachment);
     });
 

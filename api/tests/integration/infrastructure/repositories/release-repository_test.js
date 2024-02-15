@@ -773,28 +773,24 @@ function _mockRichAirtableContent() {
   });
   const airtableAttachment1 = airtableBuilder.factory.buildAttachment({
     id: 'attachment1',
-    alt: 'attachment1 alt',
     type: 'attachment',
     url: 'attachment1 url',
     challengeId: 'challenge121211',
   });
   const airtableAttachment2 = airtableBuilder.factory.buildAttachment({
     id: 'attachment2',
-    alt: 'attachment2 alt',
     type: 'attachment',
     url: 'attachment2 url',
     challengeId: 'challenge121211',
   });
   const airtableAttachment3 = airtableBuilder.factory.buildAttachment({
     id: 'attachment3',
-    alt: 'attachment3 alt',
     type: 'attachment',
     url: 'attachment3 url',
     challengeId: 'challenge211111',
   });
   const airtableAttachment4 = airtableBuilder.factory.buildAttachmentForLocalizedChallenge({
     id: 'attachment4',
-    alt: 'attachment4 alt',
     type: 'attachment',
     url: 'attachment4 url',
     challengeId: '',
