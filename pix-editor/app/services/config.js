@@ -20,7 +20,7 @@ export default class ConfigService extends Service {
   @tracked tutorialLocaleToLanguageMap;
 
   async load() {
-    const currentUser = await this.store.queryRecord('user', { me: true });
+    const currentUser = this.store.peekAll('user').toArray()[0];
     const config = await this.store.findRecord('config', 'pix-editor-global-config');
 
     this.author = currentUser.trigram;
