@@ -5,7 +5,7 @@ import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
-export default class ApplicationController extends Controller {
+export default class AuthenticatedController extends Controller {
   confirmCallback = null;
 
   @tracked confirmTitle = '';
@@ -13,10 +13,8 @@ export default class ApplicationController extends Controller {
   @tracked displayConfirm = false;
   @tracked loading = false;
   @tracked loadingMessage = '';
-  @tracked _menuOpen = false;
   @tracked displayLoginForm = false;
   @tracked displayLogout = false;
-
   @service config;
   @service router;
   @service notify;
@@ -25,7 +23,6 @@ export default class ApplicationController extends Controller {
   @service store;
   @service window;
   @service session;
-
   messages = A([]);
 
   constructor() {
@@ -34,6 +31,8 @@ export default class ApplicationController extends Controller {
     this.loader.setTarget(this);
     this.confirm.setTarget(this);
   }
+
+  @tracked _menuOpen = false;
 
   get menuOpen() {
     if (this.router.currentRouteName === 'authenticated.index' || this.lockedMenu) {
