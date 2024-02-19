@@ -34,7 +34,7 @@
     "@babel/eslint-parser": "^7.22.9",
     "@babel/plugin-proposal-decorators": "^7.22.7",
     "@ember/optional-features": "^2.0.0",
-    "@ember/test-helpers": "^2.8.1",
+    "@ember/test-helpers": "^3.0.0",
     "@embroider/compat": "^3.2.0",
     "@embroider/core": "^3.2.0",
     "@embroider/webpack": "^3.1.4",
@@ -58,7 +58,7 @@
     "ember-cli-dependency-checker": "^3.3.1",
     "ember-cli-htmlbars": "^6.1.1",
     "ember-cli-inject-live-reload": "^2.0.2",
-    "ember-cli-mirage": "^3.0.0-alpha.3",
+    "ember-cli-mirage": "^3.0.0",
     "ember-cli-notifications": "^9.0.0",
     "ember-cli-sass": "^11.0.1",
     "ember-cli-showdown": "^9.0.0",
@@ -72,7 +72,7 @@
     "ember-modal-dialog": "^4.0.1",
     "ember-modifier": "^4.1.0",
     "ember-power-select": "^7.0.0",
-    "ember-qunit": "^6.0.0",
+    "ember-qunit": "^8.0.0",
     "ember-resolver": "^11.0.0",
     "ember-simple-auth": "^6.0.0",
     "ember-sortable": "^5.0.0",
@@ -108,6 +108,9 @@
     "stylelint-config-standard-scss": "^13.0.0",
     "tracked-built-ins": "^3.1.1",
     "webpack": "^5.88.1"
+  },
+  "overrides": {
+    "ember-cli-page-object": ">= 2.1.0"
   },
   "engines": {
     "node": "^20.11.0"
