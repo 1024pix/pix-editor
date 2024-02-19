@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from 'dotenv/config';
 
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
@@ -114,7 +113,12 @@ export async function fixAttachments({ dryRun }) {
     await knex('localized_challenges-attachments').where({ attachmentId, localizedChallengeId }).delete();
   }
 
-  await airtable.deleteRecords('Attachments', attachmentsToDelete.map(({ id }) => id));
+  if (attachmentsToDelete.length > 0) {
+    const recordsChunks = _.chunk(attachmentsToDelete, 10);
+    for (const recordsChunk of recordsChunks) {
+      await airtable.deleteRecords('Attachments', recordsChunk.map(({ id }) => id));
+    }
+  }
 
   for (const { id: attachmentId, localizedChallengeId } of attachmentsToDelete) {
     await knex('localized_challenges-attachments').where({ attachmentId, localizedChallengeId }).delete();
