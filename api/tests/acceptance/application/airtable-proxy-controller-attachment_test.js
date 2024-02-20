@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
+import { omit } from 'lodash';
 import nock from 'nock';
 import {
   airtableBuilder,
@@ -10,7 +11,7 @@ import {
 } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
 
-describe('Acceptance | Controller | airtable-proxy-controller | create area translations', () => {
+describe('Acceptance | Controller | airtable-proxy-controller | create attachment translations', () => {
   beforeEach(() => {
     nock('https://api.test.pix.fr').post(/.*/).reply(200);
 
@@ -91,7 +92,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create area tran
           });
 
         nock('https://api.airtable.com')
-          .post('/v0/airtableBaseValue/Attachments', airtableRawAttachment)
+          .post('/v0/airtableBaseValue/Attachments', omit(airtableRawAttachment, ['fields.createdAt']))
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, airtableRawAttachment);
 
@@ -188,7 +189,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create area tran
           });
 
         nock('https://api.airtable.com')
-          .patch(`/v0/airtableBaseValue/Attachments/${attachmentToUpdate.id}`, airtableRawAttachment)
+          .patch(`/v0/airtableBaseValue/Attachments/${attachmentToUpdate.id}`, omit(airtableRawAttachment, ['fields.createdAt']))
           .matchHeader('authorization', 'Bearer airtableApiKeyValue')
           .reply(200, airtableRawAttachment);
 

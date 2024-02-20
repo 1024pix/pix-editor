@@ -1,9 +1,10 @@
 export function buildAttachment({
   id = 'attid1',
   alt = 'alt',
-  type = 'image/png',
+  type = 'illustration',
   url = 'url/to/attachment',
   challengeId = 'challid1',
+  createdAt = new Date().toISOString(),
   localizedChallengeId = challengeId,
 } = {}) {
 
@@ -11,11 +12,12 @@ export function buildAttachment({
     id,
     'fields': {
       'Record ID': id,
-      'alt': alt,
-      'url': url,
       'challengeId persistant': [challengeId],
-      'type': type,
-      localizedChallengeId
+      alt,
+      createdAt,
+      localizedChallengeId,
+      type,
+      url,
     },
   };
 }
