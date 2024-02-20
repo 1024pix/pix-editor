@@ -8,4 +8,8 @@ export default class Mission extends Model {
   @attr status;
   @attr learningObjectives;
   @attr validatedObjectives;
+
+  get isActive () {
+    return this.status === 'ACTIVE';
+  }
 }
