@@ -176,7 +176,6 @@ async function mockCurrentContent() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    alt: 'Texte alternatif illustration',
     type: 'illustration',
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
@@ -292,6 +291,11 @@ async function mockCurrentContent() {
     key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
     locale: 'fr-fr',
     value: expectedCurrentContent.challenges[0].embedTitle,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.illustrationAlt`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].illustrationAlt,
   });
 
   databaseBuilder.factory.buildLocalizedChallenge({
@@ -459,7 +463,6 @@ async function mockContentForRelease() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    alt: 'Texte alternatif illustration',
     type: 'illustration',
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
@@ -555,6 +558,11 @@ async function mockContentForRelease() {
     key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
     locale: 'fr-fr',
     value: expectedCurrentContent.challenges[0].embedTitle,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedCurrentContent.challenges[0].id}.illustrationAlt`,
+    locale: 'fr-fr',
+    value: expectedCurrentContent.challenges[0].illustrationAlt,
   });
 
   databaseBuilder.factory.buildLocalizedChallenge({

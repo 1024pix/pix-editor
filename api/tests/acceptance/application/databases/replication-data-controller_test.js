@@ -43,7 +43,7 @@ async function mockCurrentContent() {
   const expectedChallenge = { ...challenge, area: challenge.geography };
   delete expectedChallenge.localizedChallenges;
 
-  const expectedChallengeNl = { ...challengeNl, area: challenge.geography };
+  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', area: challenge.geography };
   delete expectedChallengeNl.localizedChallenges;
 
   const expectedAttachment = {
@@ -51,14 +51,16 @@ async function mockCurrentContent() {
     challengeId: challenge.id,
     url: 'http://example.fr',
     type: 'lol',
-    alt: 'stop'
+    alt: null,
+    localizedChallenge: challenge.id,
   };
   const expectedAttachmentNl = {
     id: 'attid2',
-    challengeId: challengeNl.id,
+    challengeId: challenge.id,
     url: 'http://example.nl',
-    type: 'haha',
-    alt: 'arrête'
+    type: 'illustration',
+    alt: 'alt_nl',
+    localizedChallengeId: 'localized-challenge-id',
   };
 
   const expectedCurrentContent = {
@@ -223,6 +225,12 @@ async function mockCurrentContent() {
     key: `challenge.${expectedChallenge.id}.embedTitle`,
     locale: 'fr',
     value: expectedChallenge.embedTitle,
+  });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `challenge.${expectedChallenge.id}.illustrationAlt`,
+    locale: 'nl',
+    value: expectedAttachmentNl.alt,
   });
 
   await databaseBuilder.commit();

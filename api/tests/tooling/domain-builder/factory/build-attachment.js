@@ -1,3 +1,5 @@
+import { Attachment } from '../../../../lib/domain/models/Attachment';
+
 export function buildAttachment({
   id = 'attachmentId',
   url = 'http://',
@@ -7,12 +9,12 @@ export function buildAttachment({
   localizedChallengeId = challengeId,
 } = {}) {
 
-  return {
+  return new Attachment({
     id,
     url,
     alt,
     type,
     challengeId,
     localizedChallengeId,
-  };
+  });
 }

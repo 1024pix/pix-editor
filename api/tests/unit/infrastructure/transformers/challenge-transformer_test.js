@@ -87,7 +87,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'attId1',
             type: 'illustration',
             url: 'https://dl.example.com/illustration1.jpg',
-            alt: 'A dog making bubbles with his nose',
             challengeId: 'challenge-id',
             localizedChallengeId: 'challenge-id',
           },
@@ -95,7 +94,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'attId2',
             type: 'illustration',
             url: 'https://dl.example.com/illustration2.jpg',
-            alt: 'A cat doing nothing cause he is useless',
             challengeId: 'other-challenge-id',
             localizedChallengeId: 'other-challenge-id',
           },
@@ -103,7 +101,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             id: 'attId3',
             type: 'illustration',
             url: 'https://dl.example.com/illustration1-nl.jpg',
-            alt: 'A dog making bubbles with his nose nl',
             challengeId: 'challenge-id',
             localizedChallengeId: 'challenge-id-nl',
           },
@@ -115,6 +112,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
               instruction: 'Consigne',
               alternativeInstruction: 'Consigne alternative',
               proposals: 'Propositions',
+              illustrationAlt: 'Un chien qui fait des bulles avec son museau'
             },
           },
           locales: ['fr', 'fr-fr'],
@@ -129,7 +127,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         expect(result).to.deep.equal(
           _buildReleaseChallenge({
             ...challenge,
-            illustrationAlt: 'A dog making bubbles with his nose',
+            illustrationAlt: 'Un chien qui fait des bulles avec son museau',
             illustrationUrl: 'https://dl.example.com/illustration1.jpg',
           }),
         );

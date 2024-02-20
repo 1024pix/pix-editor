@@ -46,7 +46,7 @@ function _filterChallengeFields(challenge) {
 
 function _addAttachmentsToChallenge({ attachments }) {
   return (challenge) => {
-    const newChallenge = { ...challenge, illustrationAlt: null, illustrationUrl: null };
+    const newChallenge = { ...challenge, illustrationUrl: null };
     const challengeAttachments = attachments.filter(({ localizedChallengeId }) => localizedChallengeId === challenge.id);
     challengeAttachments.forEach((attachment) => _assignAttachmentToChallenge(newChallenge, attachment));
     return newChallenge;
@@ -55,7 +55,6 @@ function _addAttachmentsToChallenge({ attachments }) {
 
 function _assignAttachmentToChallenge(challenge, attachment) {
   if (attachment.type === 'illustration') {
-    challenge.illustrationAlt = attachment.alt;
     challenge.illustrationUrl = attachment.url;
   } else {
     if (!challenge.attachments) {

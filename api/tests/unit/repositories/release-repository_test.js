@@ -56,7 +56,6 @@ describe('Unit | Repository | release-repository', () => {
     it('serializes attachment', async () => {
       const entity = airtableBuilder.factory.buildAttachment({
         id: 'recAttachment',
-        alt: 'texte alternatif à l\'image',
         url: 'http://example.com/test',
         type: 'illustration',
         challengeId: 'recChallenge'
@@ -92,6 +91,7 @@ describe('Unit | Repository | release-repository', () => {
         embedHeight: 500,
         format: 'mots',
         autoReply: false,
+        illustrationAlt: 'texte alternatif à l\'image',
         files: [{
           fileId: 'recAttachment',
           localizedChallengeId: 'recChallenge'

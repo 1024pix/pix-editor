@@ -24,6 +24,16 @@ export async function extractFromProxyObject(airtableAttachment) {
   ];
 }
 
+export async function airtableObjectToProxyObject(airtableObject, translations) {
+  const localizedChallenge = await localizedChallengeRepository.get({ id: airtableObject.localizedChallengeId });
+  const translation = translations.find(({ key, locale }) => key === `${prefixForChallenge({ id: localizedChallenge.challengeId })}illustrationAlt` && locale === localizedChallenge.locale);
+
+  return {
+    ...airtableObject,
+    alt: translation?.value ?? null,
+  };
+}
+
 async function getLocalizedChallenge(airtableAttachment) {
   const { localizedChallengeId } = airtableAttachment;
 
