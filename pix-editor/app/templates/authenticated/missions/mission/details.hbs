@@ -27,7 +27,7 @@
         </li>
         <li><span class="bold">Statut : </span>
           <PixTag @color="{{if this.model.mission.isActive "green-light" "grey-light"}}">
-            {{if this.model.mission.isActive "Actif" "Inactif"}}
+            {{ if this.model.mission.isActive "Active" "Inactive" }}
           </PixTag>
         </li>
         <li>

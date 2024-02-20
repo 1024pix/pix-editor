@@ -60,7 +60,7 @@
             <td>{{dayjs-format mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
             <td>
               <PixTag @color="{{if mission.isActive "green-light" "grey-light"}}">
-                {{if mission.isActive "Actif" "Inactif"}}
+                {{if mission.isActive "Active" "Inactive"}}
               </PixTag>
             </td>
           </tr>
