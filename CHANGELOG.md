@@ -1,5 +1,27 @@
 
 
+## v3.130.0 (20/02/2024)
+
+
+### :rocket: Amélioration
+- [#525](https://github.com/1024pix/pix-editor/pull/525) [FEATURE] Lire le texte alternatif des illustrations depuis PG (PIX-9506).
+- [#522](https://github.com/1024pix/pix-editor/pull/522) [FEATURE] Script pour lister les épreuves avec des pièces jointes en double (PIX-11217).
+
+### :bug: Correction
+- [#535](https://github.com/1024pix/pix-editor/pull/535) [BUGFIX]  Affichage du bon statut sur les détails d'une mission (Pix-11164).
+- [#533](https://github.com/1024pix/pix-editor/pull/533) [BUGFIX] Supprimer les pièces jointes et illustrations en doublon (PIX-11295).
+
+### :arrow_up: Montée de version
+- [#536](https://github.com/1024pix/pix-editor/pull/536) [BUMP] Update dependency @1024pix/pix-ui to ^43.1.0 (pix-editor).
+- [#531](https://github.com/1024pix/pix-editor/pull/531) [BUMP] Update dependency @ember/test-helpers to v3 (pix-editor).
+- [#528](https://github.com/1024pix/pix-editor/pull/528) [BUMP] Lock file maintenance (challenge-parser).
+- [#526](https://github.com/1024pix/pix-editor/pull/526) [BUMP] Update dependency googleapis to v133 (api).
+- [#529](https://github.com/1024pix/pix-editor/pull/529) [BUMP] Lock file maintenance (pix-editor).
+- [#530](https://github.com/1024pix/pix-editor/pull/530) [BUMP] Lock file maintenance (scripts).
+- [#527](https://github.com/1024pix/pix-editor/pull/527) [BUMP] Lock file maintenance (api).
+- [#524](https://github.com/1024pix/pix-editor/pull/524) [BUMP] Update dependency @1024pix/pix-ui to ^43.0.1 (pix-editor).
+- [#523](https://github.com/1024pix/pix-editor/pull/523) [BUMP] Update dependency ember-cli-showdown to v9 (pix-editor).
+
 ## v3.129.1 (14/02/2024)
 
 
