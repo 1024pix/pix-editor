@@ -158,7 +158,7 @@ export default class ChallengeForm extends Component {
   }
 
   @action
-  addIllustration(file, alt = '') {
+  addIllustration(file) {
     const attachment = {
       filename: file.name,
       size: file.size,
@@ -166,7 +166,6 @@ export default class ChallengeForm extends Component {
       file,
       type: 'illustration',
       challenge: this.args.challenge,
-      alt,
     };
     this.store.createRecord('attachment', attachment);
   }
