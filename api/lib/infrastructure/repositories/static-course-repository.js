@@ -26,7 +26,7 @@ export async function findReadSummaries({ filter, page }) {
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
     return new StaticCourseSummary_Read({
       id: staticCourse.id,
-      name: staticCourse.name || '',
+      name: staticCourse.name,
       createdAt: staticCourse.createdAt,
       challengeCount: staticCourse.challengeIds.split(',').length,
       isActive: staticCourse.isActive,
