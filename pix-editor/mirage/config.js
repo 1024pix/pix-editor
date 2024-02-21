@@ -1,5 +1,5 @@
 import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
-import { Response, createServer } from 'miragejs';
+import { createServer, Response } from 'miragejs';
 import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
 import slice from 'lodash/slice';
 
@@ -322,6 +322,7 @@ function routes() {
     const queryParams = request.queryParams;
     const {
       'filter[isActive]': isActiveFilter,
+      'filter[name]' : nameFilter,
     } = queryParams;
     let allStaticCourseSummaries;
     if (isActiveFilter === '') {
@@ -329,6 +330,12 @@ function routes() {
     } else {
       const isActive = isActiveFilter === 'true';
       allStaticCourseSummaries = schema.staticCourseSummaries.where({ isActive }).models;
+    }
+    if (nameFilter.length > 0) {
+      allStaticCourseSummaries = allStaticCourseSummaries.filter((staticCourse) => {
+        const staticCourseName = staticCourse.name.toLowerCase();
+        return staticCourseName.includes(nameFilter.toLowerCase());
+      });
     }
     const rowCount = allStaticCourseSummaries.length;
 

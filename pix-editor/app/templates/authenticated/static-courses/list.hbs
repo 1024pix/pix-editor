@@ -29,23 +29,38 @@
 </header>
 <main class="page-body">
   <section class="page-section">
-    <PixFilterBanner
-    @title="Filtres"
-    class="table-filter-banner"
-    @clearFiltersLabel="Réinitialiser les filtres"
-    @onClearFilters={{this.clearFilters}}
-    @isClearFilterButtonDisabled={{false}}
-    >
-      <PixToggle
-        @label="Statut"
-        @inline={{true}}
-        @onLabel="Actifs"
-        @offLabel="Tous"
-        @toggled={{this.showActiveOnly}}
-        @onChange={{this.toggleShowActiveOnly}}
-        @screenReaderOnly={{true}}
-      />
-    </PixFilterBanner>
+    <form {{on "submit" this.submitFilters}} class="new-mission-form">
+      <PixFilterBanner
+      @title="Filtres"
+      class="table-filter-banner"
+      @clearFiltersLabel="Réinitialiser les filtres"
+      @onClearFilters={{this.clearFilters}}
+      @isClearFilterButtonDisabled={{false}}
+      >
+        <PixInput
+          @id="static-course-filter-name"
+          @label="Nom"
+          placeholder="Nom"
+          @screenReaderOnly={{true}}
+          @value={{this.name}}
+          {{on "keyup" this.updateName}}
+        />
+        <PixToggle
+          @label="Statut"
+          @inline={{true}}
+          @onLabel="Actifs"
+          @offLabel="Tous"
+          @toggled={{this.showActiveOnly}}
+          @onChange={{this.toggleShowActiveOnly}}
+          @screenReaderOnly={{true}}
+        />
+        <PixButton
+          @type="submit"
+        >
+          Filtrer
+        </PixButton>
+      </PixFilterBanner>
+    </form>
     <div class="panel-table-v2">
       <table class="content-text content-text--small">
         <colgroup class="table__column">

@@ -2,8 +2,8 @@ import { module, test } from 'qunit';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL } from '@ember/test-helpers';
-import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, triggerEvent } from '@ember/test-helpers';
+import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Static Courses | List', function(hooks) {
   setupApplicationTest(hooks);
@@ -34,10 +34,13 @@ module('Acceptance | Static Courses | List', function(hooks) {
     const screen = await visit('/');
     await clickByName('Tests statiques');
     await click(await screen.findByRole('button', { name: 'Statut' }));
+    await fillByLabel('Nom', 'prem');
+    await triggerEvent(await screen.getByLabelText('Nom'), 'keyup', '');
+    await click(await screen.findByRole('button', { name: 'Filtrer' }));
 
     // then
-    assert.strictEqual(currentURL(), '/static-courses');
+    assert.strictEqual(currentURL(), '/static-courses?name=prem');
     assert.dom(screen.getByText('Premier test statique')).exists();
-    assert.dom(screen.getByText('Deuxième test statique')).exists();
+    assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 });
