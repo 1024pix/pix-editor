@@ -124,6 +124,133 @@ describe('Integration | Repository | static-course-repository', function() {
           });
         });
       });
+      context('name', function() {
+        const page = { number: 1, size: 20 };
+
+        context('with results', function() {
+          beforeEach(function() {
+            // 4 Static courses
+            [{ createdAt: new Date('2010-01-01'), name: 'iRis' },
+              { createdAt:new Date('2011-01-01'), name: 'aras' },
+              { createdAt: new Date('2012-01-01'), name: 'iras' },
+              { createdAt: new Date('2013-01-01'), name: 'aris' }]
+              .map(({ createdAt, name }, index) => {
+                databaseBuilder.factory.buildStaticCourse({
+                  id: `courseId${index}`,
+                  name,
+                  createdAt,
+                });
+              });
+            return databaseBuilder.commit();
+          });
+
+          it('should return all the static courses of %name% when filter name is set', async function() {
+            // given
+            const filter = { name: 'ri' };
+
+            // when
+            const {
+              results: actualStaticCourseSummaries,
+              meta
+            } = await findReadSummaries({ filter, page });
+
+            // then
+            const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId0']);
+            expect(meta).to.deep.equal({
+              page: 1,
+              pageSize: 20,
+              rowCount: 2,
+              pageCount: 1,
+            });
+          });
+
+          it('should return all the static courses of %name% when filter name is set in a case insensitive fashion', async function() {
+            // given
+            const filter = { name: 'rI' };
+
+            // when
+            const {
+              results: actualStaticCourseSummaries,
+              meta
+            } = await findReadSummaries({ filter, page });
+
+            // then
+            const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId3', 'courseId0']);
+            expect(meta).to.deep.equal({
+              page: 1,
+              pageSize: 20,
+              rowCount: 2,
+              pageCount: 1,
+            });
+          });
+
+          it('should return 0 static courses of %name% when filter name is set with a value that matches none of the records', async function() {
+            // given
+            const filter = { name: 'laura' };
+
+            // when
+            const {
+              results: actualStaticCourseSummaries,
+              meta
+            } = await findReadSummaries({ filter, page });
+
+            // then
+            const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
+            expect(actualStaticCourseSummaryIds).to.be.empty;
+            expect(meta).to.deep.equal({
+              page: 1,
+              pageSize: 20,
+              rowCount: 0,
+              pageCount: 0,
+            });
+          });
+        });
+      });
+      context('with many filters', function() {
+        const page = { number: 1, size: 20 };
+
+        context('with results', function() {
+          beforeEach(function() {
+            // 4 Static courses
+            [{ createdAt: new Date('2010-01-01'), name: 'iris' },
+              { createdAt:new Date('2011-01-01'), name: 'aras' },
+              { createdAt: new Date('2012-01-01'), name: 'iras' },
+              { createdAt: new Date('2013-01-01'), name: 'aris' }]
+              .map(({ createdAt, name }, index) => {
+                databaseBuilder.factory.buildStaticCourse({
+                  id: `courseId${index}`,
+                  isActive: index % 2 === 0, // pair actif, impair inactif
+                  name,
+                  createdAt,
+                });
+              });
+            return databaseBuilder.commit();
+          });
+
+          it('should return all the static courses according to given filters', async function() {
+            // given
+            const filter = { isActive: true, name: 'ri' };
+
+            // when
+            const {
+              results: actualStaticCourseSummaries,
+              meta
+            } = await findReadSummaries({ filter, page });
+
+            // then
+            const actualStaticCourseSummaryIds = actualStaticCourseSummaries.map(({ id }) => id);
+            expect(actualStaticCourseSummaryIds).toEqual(['courseId0']);
+            expect(meta).to.deep.equal({
+              page: 1,
+              pageSize: 20,
+              rowCount: 1,
+              pageCount: 1,
+            });
+          });
+        });
+      });
     });
   });
 
