@@ -36,6 +36,7 @@ export default class ChallengeModel extends Model {
   @attr geography;
   @attr autoReply;
   @attr focusable;
+  @attr illustrationAlt;
   @attr('date') updatedAt;
   @attr('date') validatedAt;
   @attr('date') archivedAt;

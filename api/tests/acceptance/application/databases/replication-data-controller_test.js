@@ -65,8 +65,11 @@ async function mockCurrentContent() {
 
   const expectedCurrentContent = {
     attachments: [
-      domainBuilder.buildAttachment(expectedAttachment),
-      domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
+      { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
+      {
+        ...domainBuilder.buildAttachment({ ...expectedAttachmentNl, challengeId: challengeNl.id }),
+        alt: 'alt_nl'
+      },
     ],
     areas: [domainBuilder.buildArea()],
     competences: [domainBuilder.buildCompetence({

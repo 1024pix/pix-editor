@@ -38,11 +38,10 @@ module('unit | Component | form/challenge', function(hooks) {
       file,
       type: 'illustration',
       challenge,
-      alt: 'alternative text',
     };
 
     // when
-    component.addIllustration(file, 'alternative text');
+    component.addIllustration(file);
 
     // then
     assert.ok(createRecordStub.calledWith('attachment', expectedAttachment));

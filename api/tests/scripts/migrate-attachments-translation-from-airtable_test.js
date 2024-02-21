@@ -64,7 +64,6 @@ describe('Migrate translation from airtable', function() {
       order: 'asc'
     }, { column: 'locale', order: 'asc' }]);
 
-    expect(translations).to.have.lengthOf(1);
     expect(translations).to.deep.equal([
       {
         key: 'challenge.monChallengeId.illustrationAlt',

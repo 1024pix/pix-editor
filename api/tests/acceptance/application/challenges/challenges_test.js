@@ -112,6 +112,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'Epreuve de selection de dossier',
       });
       databaseBuilder.factory.buildTranslation({
+        key: 'challenge.my id.illustrationAlt',
+        locale: 'fr',
+        value: 'Une illustration',
+      });
+      databaseBuilder.factory.buildTranslation({
         key: 'challenge.my id.solution',
         locale: 'fr',
         value: '1, 5',
@@ -125,11 +130,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
         key: 'challenge.my id.proposals',
         locale: 'fr',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.my id.instruction',
-        locale: 'nl',
-        value: 'Hallo',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'my id',
@@ -199,6 +199,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'illustration-alt': 'Une illustration',
             },
             relationships: {
               skill: {
@@ -268,6 +269,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'Epreuve de selection de dossier',
       });
       databaseBuilder.factory.buildTranslation({
+        key: 'challenge.1.illustrationAlt',
+        locale: 'fr',
+        value: 'La belle image',
+      });
+      databaseBuilder.factory.buildTranslation({
         key: 'challenge.1.solution',
         locale: 'fr',
         value: '1, 5',
@@ -298,6 +304,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         value: 'Epreuve de selection de dossier',
       });
       databaseBuilder.factory.buildTranslation({
+        key: 'challenge.2.illustrationAlt',
+        locale: 'fr',
+        value: 'Une autre image',
+      });
+      databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.solution',
         locale: 'fr',
         value: '1, 5',
@@ -310,11 +321,6 @@ describe('Acceptance | Controller | challenges-controller', () => {
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.2.proposals',
         locale: 'fr',
-        value: '- 1\n- 2\n- 3\n- 4\n- 5',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.2.proposals',
-        locale: 'nl',
         value: '- 1\n- 2\n- 3\n- 4\n- 5',
       });
 
@@ -394,6 +400,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'illustration-alt': 'La belle image',
             },
             relationships: {
               skill: {
@@ -462,6 +469,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'illustration-alt': 'Une autre image',
             },
             relationships: {
               skill: {
@@ -687,6 +695,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
+            'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
           },
           relationships: {
@@ -1025,6 +1034,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
+            'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
           },
           relationships: {
@@ -1504,6 +1514,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
+            'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
           },
           relationships: {
@@ -1749,6 +1760,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
+            'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
           },
           relationships: {

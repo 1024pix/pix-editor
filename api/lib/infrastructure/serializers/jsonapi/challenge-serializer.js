@@ -46,6 +46,7 @@ const serializer = new Serializer('challenges', {
     'shuffled',
     'contextualizedFields',
     'localizedChallenges',
+    'illustrationAlt',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'files') return 'attachments';
@@ -96,6 +97,7 @@ const deserializer = new Deserializer({
     solution,
     solutionToDisplay,
     embedTitle,
+    illustrationAlt,
     ...challenge
   }) {
     challenge.skills = skill ? [skill] : [];
@@ -107,6 +109,7 @@ const deserializer = new Deserializer({
         solution,
         solutionToDisplay,
         embedTitle,
+        illustrationAlt,
       },
     };
     challenge.files = challenge.files?.map((fileId) => ({ fileId, localizedChallengeId: challenge.id }));

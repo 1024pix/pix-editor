@@ -9,6 +9,7 @@ export const fields = [
   'solution',
   'solutionToDisplay',
   'embedTitle',
+  'illustrationAlt',
 ];
 
 export function extractFromChallenge(challenge) {

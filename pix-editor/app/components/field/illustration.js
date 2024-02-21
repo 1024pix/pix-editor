@@ -9,7 +9,7 @@ export default class Illustration extends Component {
 
   @action
   async add(file) {
-    const alt = await this.args.removeIllustration();
-    this.args.addIllustration(file, alt);
+    await this.args.removeIllustration();
+    this.args.addIllustration(file);
   }
 }
