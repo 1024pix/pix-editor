@@ -1,5 +1,11 @@
 
 
+## v3.130.1 (21/02/2024)
+
+
+### :bug: Correction
+- [#538](https://github.com/1024pix/pix-editor/pull/538) [BUGFIX] Transmettre l'illustration alt depuis l'objet épreuves plutot que sur l'attachment (PIX-11335). .
+
 ## v3.130.0 (20/02/2024)
 
 

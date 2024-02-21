@@ -1,6 +1,6 @@
 {
   "name": "@1024pix/challenge-parser",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "description": "Le format attendu pour les propositions d'un QCU / QCM est une liste utilisant la syntaxe des listes non ordonnées markdown.",
   "main": "index.js",
   "type": "module",
