@@ -1,32 +1,41 @@
 import { fileURLToPath } from 'node:url';
 import Airtable from 'airtable';
 import _ from 'lodash';
-import { extractFromProxyObject } from '../../lib/infrastructure/translations/attachment.js';
-import { translationRepository } from '../../lib/infrastructure/repositories/index.js';
+import { localizedChallengeRepository, translationRepository } from '../../lib/infrastructure/repositories/index.js';
 import { disconnect } from '../../db/knex-database-connection.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 
 export async function migrateAttachmentsTranslationFromAirtable({ airtableClient }) {
-  const allAttachments = await airtableClient
-    .table('Attachments')
-    .select({
-      fields: [
-        'alt',
-        'localizedChallengeId',
-      ],
-    })
-    .all();
+  const [allAttachments, localizedChallenges] = await Promise.all([
+    airtableClient
+      .table('Attachments')
+      .select({
+        fields: [
+          'alt',
+          'localizedChallengeId',
+        ],
+      })
+      .all(),
+    localizedChallengeRepository.list(),
+  ]);
+
+  const localizedChallengesById = _.keyBy(localizedChallenges, 'id');
 
   const translations = [];
 
   for (const attachment of allAttachments) {
-    const objectTranslations = await extractFromProxyObject({
-      alt: attachment.get('alt'),
-      localizedChallengeId: attachment.get('localizedChallengeId')
+    const alt = attachment.get('alt');
+    if (!alt || alt === '') continue;
+
+    const localizedChallenge = localizedChallengesById[attachment.get('localizedChallengeId')];
+
+    translations.push({
+      key: `challenge.${localizedChallenge.challengeId}.illustrationAlt`,
+      locale: localizedChallenge.locale,
+      value: alt,
     });
-    translations.push(...objectTranslations);
   }
 
   for (const translationsChunk of _.chunk(translations, 5000)) {

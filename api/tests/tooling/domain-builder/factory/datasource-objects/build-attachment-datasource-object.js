@@ -1,7 +1,6 @@
 export function buildAttachmentDatasourceObject({
   id = 'attachmentId',
   url = 'http://',
-  alt = 'alt text',
   type = 'image',
   challengeId = 'recChallengeId',
   localizedChallengeId = challengeId,
@@ -10,7 +9,6 @@ export function buildAttachmentDatasourceObject({
   return {
     id,
     url,
-    alt,
     type,
     challengeId,
     localizedChallengeId,

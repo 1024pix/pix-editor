@@ -789,11 +789,11 @@ function _mockRichAirtableContent() {
     url: 'attachment3 url',
     challengeId: 'challenge211111',
   });
-  const airtableAttachment4 = airtableBuilder.factory.buildAttachmentForLocalizedChallenge({
+  const airtableAttachment4 = airtableBuilder.factory.buildAttachment({
     id: 'attachment4',
     type: 'attachment',
     url: 'attachment4 url',
-    challengeId: '',
+    challengeId: 'challenge121211',
     localizedChallengeId: 'challengeNl',
   });
 

@@ -216,6 +216,12 @@ describe('Acceptance | Controller | translations-controller', () => {
           'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
         ],
         [
+          'challenge.recChallenge0.illustrationAlt',
+          'Texte alternatif illustration',
+          'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          'Prévisualisation FR: http://test.site/api/challenges/recChallenge0/preview\nPrévisualisation NL: http://test.site/api/challenges/recChallenge0/preview?locale=nl\nPix Editor: http://test.site/challenge/recChallenge0'
+        ],
+        [
           'challenge.recChallenge0.instruction',
           'Consigne du Challenge',
           'epreuve,Pix-1-1.1-acquis-acquis1-valide,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',

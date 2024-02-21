@@ -45,6 +45,7 @@ export async function getLearningContentForReplication() {
   const translatedAttachments = attachments.map((attachment) => ({
     ...attachment,
     challengeId: attachment.localizedChallengeId,
+    alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
 
   return {
