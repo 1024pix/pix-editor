@@ -1,7 +1,10 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
-import { hFake, domainBuilder, catchErr } from '../../../test-helper.js';
+import { catchErr, domainBuilder, hFake } from '../../../test-helper.js';
 import * as staticCourseController from '../../../../lib/application/static-courses/static-courses.js';
-import { localizedChallengeRepository, staticCourseRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import {
+  localizedChallengeRepository,
+  staticCourseRepository
+} from '../../../../lib/infrastructure/repositories/index.js';
 import * as idGenerator from '../../../../lib/infrastructure/utils/id-generator.js';
 import { InvalidStaticCourseCreationOrUpdateError } from '../../../../lib/domain/errors.js';
 
@@ -9,7 +12,7 @@ describe('Unit | Controller | static courses controller', function() {
   describe('findSummaries', function() {
     describe('pagination normalization', function() {
       let stub;
-      const filter = { isActive: null };
+      const filter = { isActive: null, name: null };
 
       beforeEach(function() {
         stub = vi.spyOn(staticCourseRepository, 'findReadSummaries');
@@ -110,13 +113,13 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should pass along filter from query params when all is valid', async function() {
         // given
-        const request = { query: { 'filter[isActive]': 'true' } };
+        const request = { query: { 'filter[isActive]': 'true', 'filter[name]': 'Laura' } };
 
         // when
         await staticCourseController.findSummaries(request, hFake);
 
         // then
-        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true }, page });
+        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: 'Laura' }, page });
       });
 
       it('ignore unknown filter parameters', async function() {
@@ -127,7 +130,7 @@ describe('Unit | Controller | static courses controller', function() {
         await staticCourseController.findSummaries(request, hFake);
 
         // then
-        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true }, page });
+        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: null }, page });
       });
 
       context('filter isActive', function() {
@@ -149,12 +152,33 @@ describe('Unit | Controller | static courses controller', function() {
           await staticCourseController.findSummaries(request5, hFake);
 
           // then
-          expect(stub).toHaveBeenNthCalledWith(1, { filter: { isActive: false }, page });
-          expect(stub).toHaveBeenNthCalledWith(2, { filter: { isActive: false }, page });
-          expect(stub).toHaveBeenNthCalledWith(3, { filter: { isActive: null }, page });
-          expect(stub).toHaveBeenNthCalledWith(4, { filter: { isActive: true }, page });
-          expect(stub).toHaveBeenNthCalledWith(5, { filter: { isActive: false }, page });
-          expect(stub).toHaveBeenNthCalledWith(6, { filter: { isActive: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(1, { filter: { isActive: false, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(2, { filter: { isActive: false, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(3, { filter: { isActive: null, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(4, { filter: { isActive: true, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(5, { filter: { isActive: false, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(6, { filter: { isActive: null, name: null }, page });
+        });
+      });
+      context('filter name', function() {
+        it('extract name parameter correctly', async function() {
+          // given
+          const request0 = { query: { 'filter[name]': 3 } };
+          const request1 = { query: { 'filter[name]': 'ok' } };
+          const request2 = { query: { 'filter[somethingElse]': 'coucou' } };
+          const request3 = { query: { 'filter[name]': '' } };
+
+          // when
+          await staticCourseController.findSummaries(request0, hFake);
+          await staticCourseController.findSummaries(request1, hFake);
+          await staticCourseController.findSummaries(request2, hFake);
+          await staticCourseController.findSummaries(request3, hFake);
+
+          // then
+          expect(stub).toHaveBeenNthCalledWith(1, { filter: { isActive: null, name: '3' }, page });
+          expect(stub).toHaveBeenNthCalledWith(2, { filter: { isActive: null, name: 'ok' }, page });
+          expect(stub).toHaveBeenNthCalledWith(3, { filter: { isActive: null, name: null }, page });
+          expect(stub).toHaveBeenNthCalledWith(4, { filter: { isActive: null, name: null }, page });
         });
       });
     });
