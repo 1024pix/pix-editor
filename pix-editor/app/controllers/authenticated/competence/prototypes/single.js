@@ -199,8 +199,8 @@ export default class SingleController extends Controller {
     return Promise.resolve(this.challenge)
       .then(challenge => this._handleIllustration(challenge))
       .then(challenge => this._handleAttachments(challenge))
-      .then(challenge => this._saveChallenge(challenge))
       .then(challenge => this._saveAttachments(challenge))
+      .then(challenge => this._saveChallenge(challenge))
       .then(challenge => this._handleChangelog(challenge, changelog))
       .then(() => {
         this.edition = false;

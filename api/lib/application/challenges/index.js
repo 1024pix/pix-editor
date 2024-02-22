@@ -92,7 +92,6 @@ export async function register(server) {
         handler: async function(request, h) {
           const challenge = await challengeSerializer.deserialize(request.payload);
           const createdChallenge = await challengeRepository.create(challenge);
-          await _refreshCache({ challenge: createdChallenge });
           return h.response(challengeSerializer.serialize(createdChallenge)).created();
         },
       },

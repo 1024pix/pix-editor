@@ -9,7 +9,6 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
     let controller,
       messageStub,
       prototype1_1,
-      savePrototypeStub,
       newPrototype1_2,
       skill;
 
@@ -32,8 +31,6 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
         pixId: 'pix_proto1_1',
         genealogy: 'Prototype 1',
       });
-      savePrototypeStub = sinon.stub().resolves(newPrototype1_2);
-      newPrototype1_2.save = savePrototypeStub;
 
       skill = store.createRecord('skill',{
         id: 'rec_proto1_2',
@@ -51,7 +48,6 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
       assert.strictEqual(newPrototype1_2.version, 2);
       assert.ok(messageStub.calledOnce);
       assert.ok(messageStub.calledWith('Nouvelle version : 2', true));
-      assert.ok(savePrototypeStub.calledOnce);
     });
 
     test('it should not set version if is workbench prototype', async function(assert) {
@@ -64,7 +60,6 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
       // then
       assert.strictEqual(newPrototype1_2.version, undefined);
       assert.notOk(messageStub.calledOnce);
-      assert.notOk(savePrototypeStub.calledOnce);
     });
   });
 });
