@@ -96,6 +96,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
         const screen = await visit('/');
         await clickByName('Tests statiques');
         await click(await screen.findByRole('button', { name: 'Statut' }));
+        await click(await screen.findByRole('button', { name: 'Filtrer' }));
         await click(screen.getAllByRole('cell')[0]);
         await click(screen.getAllByText('Éditer le test statique')[0]);
 

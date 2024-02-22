@@ -5,11 +5,14 @@ import { tracked } from '@glimmer/tracking';
 
 export default class StaticCoursesController extends Controller {
   @service router;
-  queryParams = ['pageNumber', 'pageSize', 'isActive'];
+  queryParams = ['pageNumber', 'pageSize', 'isActive', 'name'];
   @tracked pageNumber = 1;
   @tracked pageSize = 10;
   @tracked showActiveOnly = true;
   @tracked isActive = true;
+  @tracked tempIsActive = true;
+  @tracked name = '';
+  @tracked tempName = '';
 
   @action
   async copyStaticCoursePreviewUrl(staticCourseSummary) {
@@ -25,12 +28,25 @@ export default class StaticCoursesController extends Controller {
   @action
   async toggleShowActiveOnly() {
     this.showActiveOnly = !this.showActiveOnly;
-    this.isActive = this.showActiveOnly || null;
+    this.tempIsActive = this.showActiveOnly || null;
+  }
+
+  @action
+  async updateName(event) {
+    this.tempName = event.target.value;
   }
 
   @action
   clearFilters() {
     this.showActiveOnly = true;
     this.isActive = true;
+    this.name = '';
+  }
+
+  @action
+  async submitFilters(event) {
+    event.preventDefault();
+    this.name = this.tempName;
+    this.isActive = this.tempIsActive;
   }
 }

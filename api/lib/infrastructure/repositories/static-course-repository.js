@@ -9,20 +9,24 @@ import { StaticCourse } from '../../domain/models/index.js';
 import { skillDatasource } from '../datasources/airtable/index.js';
 import * as challengeRepository from './challenge-repository.js';
 import { localizedChallengeRepository } from './index.js';
+import _ from 'lodash';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
     .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
     .orderBy('createdAt', 'desc');
-  if (filter.isActive !== null) {
-    query.where('isActive', filter.isActive);
+  if (!_.isNil(filter.isActive)) {
+    query.andWhere('isActive', filter.isActive);
+  }
+  if (filter.name) {
+    query.andWhereILike('name', `%${filter.name}%`);
   }
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
     return new StaticCourseSummary_Read({
       id: staticCourse.id,
-      name: staticCourse.name || '',
+      name: staticCourse.name,
       createdAt: staticCourse.createdAt,
       challengeCount: staticCourse.challengeIds.split(',').length,
       isActive: staticCourse.isActive,

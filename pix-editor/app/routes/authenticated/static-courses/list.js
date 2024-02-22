@@ -12,6 +12,9 @@ export default class StaticCoursesRoute extends Route {
     isActive: {
       refreshModel: true,
     },
+    name: {
+      refreshModel: true,
+    }
   };
 
   @service store;
@@ -27,6 +30,7 @@ export default class StaticCoursesRoute extends Route {
         },
         filter: {
           isActive: params.isActive,
+          name: params.name,
         },
       },
       { reload: true }

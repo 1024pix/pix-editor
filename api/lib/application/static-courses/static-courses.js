@@ -99,20 +99,27 @@ function normalizePage(page) {
 }
 
 function normalizeFilter(filter) {
-  let isActive;
+  const normalizedFilter = {};
   if (filter.isActive === undefined)
-    isActive = null;
+    normalizedFilter.isActive = null;
   else if (_.isString(filter.isActive)) {
     const trimmedValueFromFilter = filter.isActive.trim().toLowerCase();
-    if (trimmedValueFromFilter === '') isActive = null;
-    else isActive = trimmedValueFromFilter === 'true';
+    if (trimmedValueFromFilter === '') normalizedFilter.isActive = null;
+    else normalizedFilter.isActive = trimmedValueFromFilter === 'true';
   } else {
-    isActive = false;
+    normalizedFilter.isActive = false;
   }
 
-  return {
-    isActive,
-  };
+  if (filter.name) {
+    const trimmedValueFromFilter = filter.name.toString().trim();
+    if (trimmedValueFromFilter.length > 0) normalizedFilter.name = trimmedValueFromFilter;
+    else normalizedFilter.name = null;
+  }
+  else {
+    normalizedFilter.name = null;
+  }
+
+  return normalizedFilter;
 }
 
 function normalizeCreationOrUpdateCommand(attrs) {
