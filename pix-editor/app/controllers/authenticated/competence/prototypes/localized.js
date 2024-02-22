@@ -17,7 +17,7 @@ export default class LocalizedController extends Controller {
   @tracked edition = false;
   @tracked displayConfirm = false;
   @tracked popInImageSrc = null;
-  @tracked displayImage = false;
+  @tracked displayIllustration = false;
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
@@ -88,9 +88,11 @@ export default class LocalizedController extends Controller {
 
   @action
   showIllustration() {
-    const illustration = this.model.illustration;
-    this.popInImageSrc = illustration.url;
-    this.displayImage = true;
+    this.displayIllustration = true;
+  }
+
+  @action closeIllustration() {
+    this.displayIllustration = false;
   }
 
   @action async confirmApprove() {
