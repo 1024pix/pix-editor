@@ -58,7 +58,7 @@
     "blipp": "4.0.2",
     "bull": "^4.10.4",
     "dotenv": "^16.0.0",
-    "fast-csv": "5.0.0",
+    "fast-csv": "5.0.1",
     "file-saver": "2.0.5",
     "googleapis": "^133.0.0",
     "hapi-pino": "^8.4.0",
