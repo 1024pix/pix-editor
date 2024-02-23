@@ -80,44 +80,124 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, undefined);
     });
 
-    it('should write joint entry to localized_challenges-attachments', async () => {
-      // when
-      const createAttachmentAirtableResponse = {
-        status: 200,
-        data: {
-          id: 'created-attachement-id',
-          fields: {
-            localizedChallengeId: 'localizedChallengeId',
+    describe('when creating an Attachment', () =>{
+      it('should write joint entry to localized_challenges-attachments', async () => {
+        // when
+        const createAttachmentAirtableResponse = {
+          status: 200,
+          data: {
+            id: 'created-attachement-id',
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            }
           }
-        }
-      };
-      const localizedChallengesAttachmentsRepository = {
-        save: vi.fn(),
-      };
+        };
+        const localizedChallengesAttachmentsRepository = {
+          save: vi.fn(),
+        };
 
-      proxyRequestToAirtable.mockResolvedValue(createAttachmentAirtableResponse);
+        proxyRequestToAirtable.mockResolvedValue(createAttachmentAirtableResponse);
 
-      const createAttachmentRequest = {
-        method: 'post',
-        payload: {
-          fields: {
-            localizedChallengeId: 'localizedChallengeId',
-          },
-        }
-      };
+        const createAttachmentRequest = {
+          method: 'post',
+          payload: {
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            },
+          }
+        };
 
-      const actualResponse = await proxyWriteRequestToAirtable(createAttachmentRequest, airtableBase, 'Attachments', {
-        proxyRequestToAirtable,
-        tableTranslations,
-        localizedChallengesAttachmentsRepository,
-        updateStagingPixApiCache,
+        const actualResponse = await proxyWriteRequestToAirtable(createAttachmentRequest, airtableBase, 'Attachments', {
+          proxyRequestToAirtable,
+          tableTranslations,
+          localizedChallengesAttachmentsRepository,
+          updateStagingPixApiCache,
+        });
+
+        // then
+        expect(actualResponse).toBe(createAttachmentAirtableResponse);
+        expect(localizedChallengesAttachmentsRepository.save).toHaveBeenCalledWith({
+          attachmentId: 'created-attachement-id',
+          localizedChallengeId: 'localizedChallengeId',
+        });
       });
 
-      // then
-      expect(actualResponse).toBe(createAttachmentAirtableResponse);
-      expect(localizedChallengesAttachmentsRepository.save).toHaveBeenCalledWith({
-        attachmentId: 'created-attachement-id',
-        localizedChallengeId: 'localizedChallengeId',
+      it('should NOT refresh Pix API cache', async () => {
+        // when
+        const createAttachmentAirtableResponse = {
+          status: 200,
+          data: {
+            id: 'created-attachement-id',
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            }
+          }
+        };
+        const localizedChallengesAttachmentsRepository = {
+          save: vi.fn(),
+        };
+
+        proxyRequestToAirtable.mockResolvedValue(createAttachmentAirtableResponse);
+
+        const createAttachmentRequest = {
+          method: 'post',
+          payload: {
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            },
+          }
+        };
+
+        const actualResponse = await proxyWriteRequestToAirtable(createAttachmentRequest, airtableBase, 'Attachments', {
+          proxyRequestToAirtable,
+          tableTranslations,
+          localizedChallengesAttachmentsRepository,
+          updateStagingPixApiCache,
+        });
+
+        // then
+        expect(actualResponse).toBe(createAttachmentAirtableResponse);
+        expect(updateStagingPixApiCache).not.to.toHaveBeenCalled();
+      });
+    });
+
+    describe('when updating an Attachment', () =>{
+      it('should NOT refresh Pix API cache', async () => {
+        // when
+        const updateAttachmentAirtableResponse = {
+          status: 200,
+          data: {
+            id: 'updated-attachement-id',
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            }
+          }
+        };
+        const localizedChallengesAttachmentsRepository = {
+          save: vi.fn(),
+        };
+
+        proxyRequestToAirtable.mockResolvedValue(updateAttachmentAirtableResponse);
+
+        const updateAttachmentRequest = {
+          method: 'patch',
+          payload: {
+            fields: {
+              localizedChallengeId: 'localizedChallengeId',
+            },
+          }
+        };
+
+        const actualResponse = await proxyWriteRequestToAirtable(updateAttachmentRequest, airtableBase, 'Attachments', {
+          proxyRequestToAirtable,
+          tableTranslations,
+          localizedChallengesAttachmentsRepository,
+          updateStagingPixApiCache,
+        });
+
+        // then
+        expect(actualResponse).toBe(updateAttachmentAirtableResponse);
+        expect(updateStagingPixApiCache).not.to.toHaveBeenCalled();
       });
     });
 

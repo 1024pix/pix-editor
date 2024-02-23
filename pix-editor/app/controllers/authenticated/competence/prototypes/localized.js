@@ -130,8 +130,8 @@ export default class LocalizedController extends Controller {
     try {
       await this._handleIllustration(this.model);
       await this._handleAttachments(this.model);
-      await this._saveChallenge(this.model);
       await this._saveAttachments(this.model);
+      await this._saveChallenge(this.model);
       this.edition = false;
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');

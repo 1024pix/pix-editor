@@ -19,7 +19,8 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
     return response;
   }
 
-  const isCreatingAttachment = tableName === 'Attachments' && request.method === 'post';
+  const isAttachment = tableName === 'Attachments';
+  const isCreatingAttachment = isAttachment && request.method === 'post';
 
   if (isCreatingAttachment) {
     const localizedChallengeId = response.data.fields.localizedChallengeId;
@@ -48,6 +49,9 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   if (tableTranslations.readFromPgEnabled) {
     response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
   }
+
+  if (isAttachment) return response;
+
   await updateStagingPixApiCache(tableName, response.data, translations);
 
   return response;
