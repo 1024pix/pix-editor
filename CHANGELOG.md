@@ -1,5 +1,20 @@
 
 
+## v3.131.0 (23/02/2024)
+
+
+### :rocket: Amélioration
+- [#543](https://github.com/1024pix/pix-editor/pull/543) [FEATURE] Agrandir le nombre de lignes visibles dans le champ texte de la description d'un test statique (PIX-11377).
+- [#540](https://github.com/1024pix/pix-editor/pull/540) [FEATURE] Permettre de filtrer les tests statiques par nom (PIX-8886).
+
+### :bug: Correction
+- [#542](https://github.com/1024pix/pix-editor/pull/542) [BUGFIX] Preview des challenges après suppression/remplacement de PJ/illustration (PIX-11375).
+- [#541](https://github.com/1024pix/pix-editor/pull/541) [BUGFIX] Fermeture de la modal d'illustration sur une épreuve NL (PIX-11355).
+
+### :arrow_up: Montée de version
+- [#537](https://github.com/1024pix/pix-editor/pull/537) [BUMP] Update dependency fast-csv to v5.0.1 (api).
+- [#539](https://github.com/1024pix/pix-editor/pull/539) [BUMP] Update dependency @1024pix/pix-ui to v44 (pix-editor).
+
 ## v3.130.1 (21/02/2024)
 
 
