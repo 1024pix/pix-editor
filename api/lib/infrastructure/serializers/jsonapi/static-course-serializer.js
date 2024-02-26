@@ -9,8 +9,18 @@ export function serializeSummary(staticCourseSummary, meta) {
       'createdAt',
       'challengeCount',
       'isActive',
+      'tags',
     ],
+    tags: {
+      ref: 'id',
+      included: true,
+      attributes: ['label'],
+    },
     meta,
+    typeForAttribute(attribute) {
+      if (attribute === 'tags') return 'static-course-tags';
+      return undefined;
+    },
   }).serialize(staticCourseSummary);
 }
 
