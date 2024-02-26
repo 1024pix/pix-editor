@@ -1,4 +1,4 @@
-import { AreaForRelease } from '../../../../lib/domain/models/release/AreaForRelease.js';
+import { AreaForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildAreaForRelease({
   id = 'recArea1',

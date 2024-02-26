@@ -1,4 +1,4 @@
-import { Area } from '../../../../lib/domain/models/Area';
+import { Area } from '../../../../lib/domain/models/index.js';
 
 export function buildArea({
   id = 'recArea1',

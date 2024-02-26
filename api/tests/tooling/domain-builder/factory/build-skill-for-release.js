@@ -1,4 +1,4 @@
-import { SkillForRelease } from '../../../../lib/domain/models/release/SkillForRelease.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildSkillForRelease({
   id = 'recTIddrkopID28Ep',

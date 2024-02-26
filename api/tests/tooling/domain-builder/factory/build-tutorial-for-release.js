@@ -1,4 +1,4 @@
-import { TutorialForRelease } from '../../../../lib/domain/models/release/TutorialForRelease.js';
+import { TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildTutorialForRelease(
   {

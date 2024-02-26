@@ -1,4 +1,4 @@
-import { CompetenceForRelease } from '../../../../lib/domain/models/release/CompetenceForRelease.js';
+import { CompetenceForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildCompetenceForRelease({
   id = 'recCompetence1',

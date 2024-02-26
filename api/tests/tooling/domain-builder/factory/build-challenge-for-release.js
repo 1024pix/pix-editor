@@ -1,4 +1,4 @@
-import { ChallengeForRelease } from '../../../../lib/domain/models/release/ChallengeForRelease.js';
+import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',

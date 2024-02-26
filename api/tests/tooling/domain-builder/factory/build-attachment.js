@@ -1,4 +1,4 @@
-import { Attachment } from '../../../../lib/domain/models/Attachment';
+import { Attachment } from '../../../../lib/domain/models/index.js';
 
 export function buildAttachment({
   id = 'attachmentId',

@@ -1,4 +1,4 @@
-import { TubeForRelease } from '../../../../lib/domain/models/release/TubeForRelease.js';
+import { TubeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildTubeForRelease({
   id = 'recTIddrkopID23Fp',

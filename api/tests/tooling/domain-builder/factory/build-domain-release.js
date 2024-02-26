@@ -1,4 +1,4 @@
-import { Release } from '../../../../lib/domain/models/release/Release.js';
+import { Release } from '../../../../lib/domain/models/release/index.js';
 import { buildContentForRelease } from './build-content-for-release.js';
 
 export function buildDomainRelease({
