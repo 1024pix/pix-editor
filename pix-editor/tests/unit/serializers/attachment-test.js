@@ -13,8 +13,7 @@ module('Unit | Serializer | attachment', function (hooks) {
       mimeType: 'mimeType',
       size: 'size',
       type: 'type',
-      alt: 'alt',
-      challenge
+      challenge,
     });
 
     const expectedSerializedAttachment = {
@@ -23,7 +22,6 @@ module('Unit | Serializer | attachment', function (hooks) {
       mimeType: 'mimeType',
       size: 'size',
       type: 'type',
-      alt: 'alt',
       challengeId: ['myAirtableId'],
       localizedChallengeId: 'challengeId'
     };
