@@ -6,6 +6,50 @@ import { challengeRepository, localizedChallengeRepository } from '../../../../l
 
 describe('Integration | Repository | static-course-repository', function() {
   context('#findReadSummaries', function() {
+    context('content', function() {
+      const page = { number: 1, size: 20 };
+      it('should return complete StaticCourseSummary model', async function() {
+        // given
+        const staticCourseDB1 = databaseBuilder.factory.buildStaticCourse({
+          id: 'staticCourse1_id',
+          name : 'Mon super test statique 1',
+          challengeIds : 'challengeABC, challengeDEF',
+          isActive : true,
+          createdAt : new Date('2010-01-04'),
+        });
+        const staticCourseDB2 = databaseBuilder.factory.buildStaticCourse({
+          id: 'staticCourse2_id',
+          name : 'Mon super test statique 2',
+          challengeIds : 'challengeABC, challengeGHI, challengeJKL',
+          isActive : false,
+          createdAt : new Date('2013-01-04'),
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const {
+          results: actualStaticCourseSummaries,
+        } = await findReadSummaries({ filter: {}, page });
+
+        // then
+        const expectedStaticCourseSummary1 = domainBuilder.buildStaticCourseSummary({
+          id: staticCourseDB1.id,
+          name: staticCourseDB1.name,
+          challengeCount: 2,
+          isActive: staticCourseDB1.isActive,
+          createdAt: staticCourseDB1.createdAt,
+        });
+        const expectedStaticCourseSummary2 = domainBuilder.buildStaticCourseSummary({
+          id: staticCourseDB2.id,
+          name: staticCourseDB2.name,
+          challengeCount: 3,
+          isActive: staticCourseDB2.isActive,
+          createdAt: staticCourseDB2.createdAt,
+        });
+        expect(actualStaticCourseSummaries[0]).to.deep.equal(expectedStaticCourseSummary2);
+        expect(actualStaticCourseSummaries[1]).to.deep.equal(expectedStaticCourseSummary1);
+      });
+    });
     context('filter', function() {
       context('isActive', function() {
         const page = { number: 1, size: 20 };

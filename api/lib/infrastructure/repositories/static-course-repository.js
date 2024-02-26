@@ -13,7 +13,13 @@ import _ from 'lodash';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
-    .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
+    .select({
+      id: 'static_courses.id',
+      name: 'static_courses.name',
+      createdAt: 'static_courses.createdAt',
+      challengeIds: 'static_courses.challengeIds',
+      isActive: 'static_courses.isActive',
+    })
     .orderBy('createdAt', 'desc');
   if (!_.isNil(filter.isActive)) {
     query.andWhere('isActive', filter.isActive);

@@ -17,6 +17,7 @@ export * from './build-release.js';
 export * from './build-skill.js';
 export * from './build-skill-for-release.js';
 export * from './build-static-course.js';
+export * from './build-static-course-summary.js';
 export * from './build-thematic-for-release.js';
 export * from './build-tube-for-release.js';
 export * from './build-tutorial-for-release.js';
