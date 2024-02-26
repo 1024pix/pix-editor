@@ -19,11 +19,19 @@ const HEADERS_MAPPING = {
   discriminants: 'alpha',
 };
 
+const getMissingHeaders = (headers) => Object.keys(HEADERS_MAPPING).filter((h) => !headers.includes(h));
+
 export function parseData(csvData) {
   return new Promise((resolve, reject) => {
     const result = [];
 
-    parseString(csvData, { headers: (headers) => headers.map((h) => HEADERS_MAPPING[h]) })
+    parseString(csvData, { headers: (headers) => {
+      const missingHeaders = getMissingHeaders(headers);
+      if (missingHeaders.length > 0) {
+        reject(new Error(`Missing header: ${missingHeaders.join(',')}`));
+      }
+      return headers.map((h) => HEADERS_MAPPING[h]);
+    } })
       .on('error', (error) => {
         console.error(error);
         reject(error);
