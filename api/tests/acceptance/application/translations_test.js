@@ -7,7 +7,7 @@ import { createServer } from '../../../server';
 
 describe('Acceptance | Controller | translations-controller', () => {
 
-  describe('GET /translations.csv - export only translations of core framework in CSV file', () => {
+  describe('GET /translations.csv - export only french translations with validated challenges of core framework in CSV file', () => {
 
     it('should return a csv file', async () => {
       // Given
@@ -151,6 +151,65 @@ describe('Acceptance | Controller | translations-controller', () => {
           alpha: 0.9,
           responsive: ['Smartphone'],
           genealogy: 'Prototype 1',
+        },
+        {
+          id: 'recChallenge1',
+          instruction: 'Consigne du Challenge',
+          proposals: 'Propositions du Challenge',
+          type: 'Type d\'épreuve',
+          solution: 'Bonnes réponses du Challenge',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+          t1Status: false,
+          t2Status: true,
+          t3Status: false,
+          status: 'validé',
+          skillId: 'recSkill0',
+          embedUrl: 'Embed URL',
+          embedTitle: 'Embed title',
+          embedHeight: 'Embed height',
+          timer: 12,
+          illustrationUrl: 'url de l‘illustration',
+          attachments: ['url de la pièce jointe'],
+          competenceId: 'recCompetence0',
+          illustrationAlt: 'Texte alternatif illustration',
+          format: 'mots',
+          autoReply: false,
+          locales: ['en'],
+          alternativeInstruction: 'Consigne alternative',
+          focusable: false,
+          delta: 0.5,
+          alpha: 0.9,
+          responsive: ['Smartphone'],
+          genealogy: 'Prototype 1',
+        },{
+          id: 'recChallenge2',
+          instruction: 'Consigne du Challenge',
+          proposals: 'Propositions du Challenge',
+          type: 'Type d\'épreuve',
+          solution: 'Bonnes réponses du Challenge',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
+          t1Status: false,
+          t2Status: true,
+          t3Status: false,
+          status: 'proposé',
+          skillId: 'recSkill0',
+          embedUrl: 'Embed URL',
+          embedTitle: 'Embed title',
+          embedHeight: 'Embed height',
+          timer: 12,
+          illustrationUrl: 'url de l‘illustration',
+          attachments: ['url de la pièce jointe'],
+          competenceId: 'recCompetence0',
+          illustrationAlt: 'Texte alternatif illustration',
+          format: 'mots',
+          autoReply: false,
+          locales: ['fr'],
+          alternativeInstruction: 'Consigne alternative',
+          focusable: false,
+          delta: 0.5,
+          alpha: 0.9,
+          responsive: ['Smartphone'],
+          genealogy: 'Prototype 1',
         }],
       };
       databaseBuilder.factory.buildRelease({
@@ -165,6 +224,16 @@ describe('Acceptance | Controller | translations-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge1',
+        id: 'recChallenge1',
+        locale: 'en',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge2',
+        id: 'recChallenge2',
         locale: 'fr',
       });
 
