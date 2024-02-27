@@ -6,9 +6,22 @@ const expect = chai.expect;
 import _ from 'lodash';
 import { matchData, findAirtableIds, updateRecords } from './index.js';
 import airtable from 'airtable';
+import { parseData } from '../populate-alpha-and-delta-column-with-csv/index.js';
 const { Record: AirtableRecord } = airtable;
 
 describe('Populate alpha and delta column', function() {
+  describe('#parseData', function() {
+    describe('when an expected header is missing', function() {
+      it('should throw an error', async function() {
+        const data = 'missing,difficulties\nrec1,0.8423189520825876\nrec2,-0.9423189520825878';
+        const dataPromise = parseData(data);
+        const parseDataError = await dataPromise.catch((error) => error);
+
+        expect(parseDataError).to.deep.equal(new Error('Missing header: items,discriminants'));
+      });
+    });
+  });
+
   describe('#matchData', function() {
     it('should return a object table with challenge persistent id, alpha and delta',  async function() {
       const csvData = 'ChallengeIdHash,challengeId\nhash1,recPix1\nhash2,recPix2';
