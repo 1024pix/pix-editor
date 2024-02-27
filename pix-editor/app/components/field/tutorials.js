@@ -26,7 +26,7 @@ export default class Tutorials extends Component {
         .join(', ');
     }
     const tutorials = await this.store.query('tutorial', {
-      filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query}', LOWER(Titre))`,
+      filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query.replace(/'/g, '\\\'')}', LOWER(Titre))`,
       maxRecords: 100,
       sort: [{ field: 'Titre', direction: 'asc' }]
     });

@@ -3,7 +3,7 @@ import { setupTest } from 'ember-qunit';
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 import sinon from 'sinon';
 
-module('unit | Component | field/tutorials', function(hooks) {
+module('Unit | Component | field/tutorials', function(hooks) {
   setupTest(hooks);
   let component;
 
@@ -11,12 +11,18 @@ module('unit | Component | field/tutorials', function(hooks) {
     component = createGlimmerComponent('component:field/tutorials');
   });
 
-  module('#getSearchTutorialResults', function() {
+  module('#getSearchTutorialResults', function(hooks) {
+    let queryStub;
+
+    hooks.beforeEach(function() {
+      queryStub = sinon.stub();
+      component.store.query = queryStub;
+    });
+
     test('it should search tutorials', async function(assert) {
-      const queryStub = sinon.stub().resolves([
+      queryStub.resolves([
         { id: 'tutorialId', title: 'test', tagsTitle: '' }
       ]);
-      component.store.query = queryStub;
 
       const results = await component.getSearchTutorialResults('Hello');
       assert.ok(queryStub.calledOnce);
@@ -31,10 +37,9 @@ module('unit | Component | field/tutorials', function(hooks) {
     });
 
     test('it should search tutorials by tags', async function(assert) {
-      const queryStub = sinon.stub().resolves([
+      queryStub.resolves([
         { id: 'tutorialId', title: 'test', tagsTitle: '' }
       ]);
-      component.store.query = queryStub;
 
       const results = await component.getSearchTutorialResults('>Hello');
 
@@ -50,10 +55,9 @@ module('unit | Component | field/tutorials', function(hooks) {
     });
 
     test('it should search tutorials by multiple tags', async function(assert) {
-      const queryStub = sinon.stub().resolves([
+      queryStub.resolves([
         { id: 'tutorialId', title: 'test', tagsTitle: '' }
       ]);
-      component.store.query = queryStub;
 
       const results = await component.getSearchTutorialResults('>hello >world');
 
@@ -66,6 +70,18 @@ module('unit | Component | field/tutorials', function(hooks) {
       assert.deepEqual(results, [
         { title: 'test', description: 'TAG : ', id: 'tutorialId' }
       ]);
+    });
+
+    test('it should escape single quotes', async function (assert) {
+      queryStub.resolves([ ]);
+
+      await component.getSearchTutorialResults('Coco l\'asticot a mangé l\'abricot');
+      assert.ok(queryStub.calledOnce);
+      assert.ok(queryStub.calledWith('tutorial', {
+        filterByFormula: 'FIND(\'coco l\\\'asticot a mangé l\\\'abricot\', LOWER(Titre))',
+        maxRecords: 100,
+        sort: [{ field: 'Titre', direction: 'asc' }]
+      }));
     });
   });
 });
