@@ -21,18 +21,20 @@ export async function exportTranslations(stream, dependencies) {
       ]),
   );
 
-  const frenchChallenges = release.content.challenges
-    .filter((challenge) => challenge.locales.includes('fr'));
+  const localeToExtract = 'fr';
+
+  const filteredValidedChallenges = release.content.challenges
+    .filter((challenge) => challenge.locales.includes(localeToExtract) && challenge.status === 'validé');
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.skills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
-    createTranslationsStream(frenchChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
+    createTranslationsStream(filteredValidedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
 
   const csvLinesStream = translationsStreams
-    .filter(({ translation }) => translation.locale === 'fr')
+    .filter(({ translation }) => translation.locale === localeToExtract)
     .filter(keepPixFramework)
     .map(translationAndTagsToCSVLine);
 
