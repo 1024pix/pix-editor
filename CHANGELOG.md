@@ -1,5 +1,23 @@
 
 
+## v3.131.1 (27/02/2024)
+
+
+### :rocket: Amélioration
+- [#551](https://github.com/1024pix/pix-editor/pull/551) [FEATURE] Vérifier les colonnes du CSV avant l'import de la calibration certif V3 (PIX-11415).
+- [#548](https://github.com/1024pix/pix-editor/pull/548) [FEATURE] Exporte en csv seulement les épreuves validées (PIX-11219).
+
+### :bug: Correction
+- [#553](https://github.com/1024pix/pix-editor/pull/553) [BUGFIX] Erreur 422 recherche de tutos (création modification acquis) (PIX-11423).
+- [#552](https://github.com/1024pix/pix-editor/pull/552) [BUGFIX] Impossible d'enregistrer une illustration sur une épreuve NL (PIX-11416).
+
+### :arrow_up: Montée de version
+- [#549](https://github.com/1024pix/pix-editor/pull/549) [BUMP] Update browser-tools orb to v1.4.7 (.circleci).
+- [#550](https://github.com/1024pix/pix-editor/pull/550) [BUMP] Update dependency @1024pix/pix-ui to ^44.0.2 (pix-editor).
+- [#546](https://github.com/1024pix/pix-editor/pull/546) [BUMP] Update dependency @1024pix/pix-ui to ^44.0.1 (pix-editor).
+- [#545](https://github.com/1024pix/pix-editor/pull/545) [BUMP] Lock file maintenance (challenge-parser).
+- [#544](https://github.com/1024pix/pix-editor/pull/544) [BUMP] Lock file maintenance (api).
+
 ## v3.131.0 (23/02/2024)
 
 

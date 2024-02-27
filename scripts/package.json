@@ -1,6 +1,6 @@
 {
   "name": "migrate-attachments-from-airtable",
-  "version": "1.110.0",
+  "version": "1.110.1",
   "description": "",
   "main": "index.js",
   "type": "module",
