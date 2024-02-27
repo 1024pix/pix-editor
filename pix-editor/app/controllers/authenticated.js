@@ -4,6 +4,7 @@ import { inject as service } from '@ember/service';
 import { A } from '@ember/array';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
+import ENV from 'pixeditor/config/environment';
 
 export default class ApplicationController extends Controller {
   confirmCallback = null;
@@ -33,6 +34,13 @@ export default class ApplicationController extends Controller {
     this.notify.setTarget(this);
     this.loader.setTarget(this);
     this.confirm.setTarget(this);
+    this.checkApiVersionInterval = setInterval(() => {
+      this.checkApiVersion().catch(console.error);
+    }, 60000);
+  }
+
+  willDestroy() {
+    clearInterval(this.checkApiVersionInterval);
   }
 
   get menuOpen() {
@@ -141,5 +149,20 @@ export default class ApplicationController extends Controller {
   logout() {
     Sentry.configureScope(scope => scope.setUser(null));
     this.session.invalidate();
+  }
+
+  async checkApiVersion(reload = (...args) => window.reload(...args)) {
+    const api = await this.store.queryRecord('api', { dummy: '' });
+
+    if (api.version === ENV.APP.version) return;
+
+    clearInterval(this.checkApiVersionInterval);
+
+    try {
+      await this.confirm.ask('Charger la nouvelle version ?', 'Une nouvelle version de PixEditor a été mise en prod. Voulez-vous recharger ?');
+      reload(true);
+    } catch {
+      // do nothing
+    }
   }
 }
