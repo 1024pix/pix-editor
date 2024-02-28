@@ -329,20 +329,28 @@ describe('Integration | Repository | static-course-repository', function() {
   context('#getRead', function() {
     it('should return the static course', async function() {
       //given
-      databaseBuilder.factory.buildStaticCourse({
+      const staticCourseDb = databaseBuilder.factory.buildStaticCourse({
         id: 'rec123',
         challengeIds: 'challengeA,challengeB',
+        name: 'Mon super test statique',
+        description: 'Ma super description de test statique',
+        isActive: false,
+        deactivationReason: 'Je l\'aime plus.',
+        createdAt: new Date('2010-01-04'),
+        updatedAt: new Date('2010-01-11'),
       });
       const challenges = [
         domainBuilder.buildChallenge({
           id: 'challengeA',
           status: 'A',
           skillId: 'skillA',
+          instruction: 'Mon instruction A',
         }),
         domainBuilder.buildChallenge({
           id: 'challengeB',
           status: 'B',
           skillId: 'skillB',
+          instruction: 'Mon instruction B',
         }),
       ];
       const localizedChallenges = [
@@ -367,8 +375,36 @@ describe('Integration | Repository | static-course-repository', function() {
       //when
       const staticCourse = await getRead('rec123', { baseUrl: 'host.site' });
 
+
       //then
-      expect(staticCourse.id).to.equal('rec123');
+      const challengeSummaryA = domainBuilder.buildChallengeSummary(
+        {
+          id: challenges[0].id,
+          instruction: challenges[0].instruction,
+          skillName: '@skillA',
+          status: challenges[0].status,
+          index: 0,
+          previewUrl: 'host.site/api/challenges/challengeA/preview',
+        }
+      );
+      const challengeSummaryB = domainBuilder.buildChallengeSummary({
+        id: challenges[1].id,
+        instruction: challenges[1].instruction,
+        skillName: '@skillB',
+        status: challenges[1].status,
+        index: 1,
+        previewUrl: 'host.site/api/challenges/challengeB/preview',
+      });
+      expect(staticCourse).to.deep.equal(domainBuilder.buildStaticCourseRead({
+        id: staticCourseDb.id,
+        name: staticCourseDb.name,
+        description: staticCourseDb.description,
+        challengeSummaries: [challengeSummaryA, challengeSummaryB],
+        isActive: staticCourseDb.isActive,
+        deactivationReason: staticCourseDb.deactivationReason,
+        createdAt: staticCourseDb.createdAt,
+        updatedAt: staticCourseDb.updatedAt,
+      }));
       expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
       expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });
       expect(stubLocalizedChallengeRepository).toHaveBeenCalledWith({ ids: ['challengeA', 'challengeB'] });
