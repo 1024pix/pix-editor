@@ -108,6 +108,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'locale',
         embedUrl: 'https://example.com/embed.html',
         status: null,
+        geography: null,
       }]);
     });
 
@@ -141,6 +142,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
           status: null,
+          geography: null,
         }]);
       });
 
@@ -201,6 +203,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             locale: 'en',
             embedUrl: 'example.com',
             status: null,
+            geography: null,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
@@ -208,6 +211,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             locale: 'fr',
             embedUrl: 'example.net',
             status: null,
+            geography: null,
           },
         ]);
       });
@@ -651,6 +655,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           embedUrl: 'my-new-url.html',
           locale: 'ar',
           status: null,
+          geography: null,
         },
       ]);
 
@@ -696,6 +701,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             embedUrl: 'my-new-url.html',
             locale: 'ar',
             status: null,
+            geography: null,
           },
         ]);
 

@@ -232,6 +232,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         locale: 'nl',
         embedUrl: 'https://cassoulet.com/',
         status: null,
+        geography: null,
       });
     });
 
@@ -294,6 +295,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
         status: 'validé',
+        geography: null,
       });
     });
 

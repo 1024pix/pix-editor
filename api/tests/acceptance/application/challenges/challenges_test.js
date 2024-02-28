@@ -1069,6 +1069,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           locale: 'fr',
           embedUrl: challenge.embedUrl,
           status: null,
+          geography: null,
         }
       ]);
       const translations = await knex('translations').select().orderBy('key');
@@ -1777,6 +1778,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           embedUrl: challenge.embedUrl,
           locale: 'fr',
           status: null,
+          geography: null,
         },
       ]);
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
