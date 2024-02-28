@@ -1,4 +1,4 @@
-import { CourseForRelease } from '../../../../lib/domain/models/release/CourseForRelease.js';
+import { CourseForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildCourseForRelease({
   id = 'recPBOj7JzBcgXEtO',

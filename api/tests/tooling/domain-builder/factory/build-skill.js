@@ -1,4 +1,4 @@
-import { Skill } from '../../../../lib/domain/models/Skill.js';
+import { Skill } from '../../../../lib/domain/models/index.js';
 
 export function buildSkill({
   id = 'recTIddrkopID28Ep',

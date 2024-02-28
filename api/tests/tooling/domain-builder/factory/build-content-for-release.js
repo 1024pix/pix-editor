@@ -1,4 +1,4 @@
-import { Content } from '../../../../lib/domain/models/release/Content.js';
+import { Content } from '../../../../lib/domain/models/release/index.js';
 
 export function buildContentForRelease({
   areas = [],

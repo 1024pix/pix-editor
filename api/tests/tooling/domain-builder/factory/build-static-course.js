@@ -1,4 +1,4 @@
-import { StaticCourse } from '../../../../lib/domain/models/StaticCourse.js';
+import { StaticCourse } from '../../../../lib/domain/models/index.js';
 
 export function buildStaticCourse({
   id = 'courseABC123',

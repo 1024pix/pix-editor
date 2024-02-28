@@ -1,3 +1,7 @@
 import ApplicationSerializer from './application';
 
-export default ApplicationSerializer.extend({});
+const include = ['tags'];
+
+export default ApplicationSerializer.extend({
+  include,
+});

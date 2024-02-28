@@ -1,7 +1,7 @@
 import { databaseBuffer } from '../database-buffer.js';
 
 export function buildUser({
-  id,
+  id = databaseBuffer.nextId++,
   name,
   trigram,
   access,

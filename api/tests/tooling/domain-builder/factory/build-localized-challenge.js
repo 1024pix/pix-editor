@@ -1,4 +1,4 @@
-import { LocalizedChallenge } from '../../../../lib/domain/models';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 export function buildLocalizedChallenge({
   id = 'persistant id',

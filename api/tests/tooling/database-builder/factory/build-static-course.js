@@ -1,7 +1,7 @@
 import { databaseBuffer } from '../database-buffer.js';
 
 export function buildStaticCourse({
-  id = 'staticCourseABC123',
+  id = `staticCourse${databaseBuffer.nextId++}`,
   name = 'Mon super test statique',
   description = 'Ma super description de test statique',
   challengeIds = 'challengeABC, challengeDEF',

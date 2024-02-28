@@ -28,6 +28,15 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
       createdAt: new Date('2021-01-05'),
       isActive: true,
     });
+    const tagAId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagA' }).id;
+    const tagBId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagB' }).id;
+    const tagCId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagC' }).id;
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagAId, staticCourseId: 'courseid1' });
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagBId, staticCourseId: 'courseid1' });
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagBId, staticCourseId: 'courseid2' });
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagCId, staticCourseId: 'courseid2' });
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagCId, staticCourseId: 'courseid3' });
+    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagAId, staticCourseId: 'courseid3' });
     await databaseBuilder.commit();
 
     // When
@@ -50,6 +59,20 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
           'challenge-count': 3,
           'is-active': true,
         },
+        relationships: {
+          tags: {
+            data: [
+              {
+                type: 'static-course-tags',
+                id: `${tagAId}`,
+              },
+              {
+                type: 'static-course-tags',
+                id: `${tagCId}`,
+              },
+            ],
+          },
+        },
       },
       {
         type: 'static-course-summaries',
@@ -60,7 +83,45 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
           'challenge-count': 2,
           'is-active': true,
         },
+        relationships: {
+          tags: {
+            data: [
+              {
+                type: 'static-course-tags',
+                id: `${tagAId}`,
+              },
+              {
+                type: 'static-course-tags',
+                id: `${tagBId}`,
+              },
+            ],
+          },
+        },
       }
+    ]);
+    expect(response.result.included).to.deep.equal([
+      {
+        type: 'static-course-tags',
+        id: `${tagAId}`,
+        attributes: {
+          label: 'TagA',
+        },
+        relationships: {},
+      },
+      {
+        type: 'static-course-tags',
+        id: `${tagCId}`,
+        attributes: {
+          label: 'TagC',
+        },
+      },
+      {
+        type: 'static-course-tags',
+        id: `${tagBId}`,
+        attributes: {
+          label: 'TagB',
+        },
+      },
     ]);
   });
 });

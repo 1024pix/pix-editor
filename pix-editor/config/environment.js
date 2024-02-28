@@ -32,6 +32,7 @@ module.exports = function (environment) {
         defaultValue: 4,
         minValue: 1
       }),
+      ENABLE_STATIC_COURSE_TAGS: _isFeatureEnabled(process.env.ENABLE_STATIC_COURSE_TAGS || 'true'),
     },
 
     fontawesome: {

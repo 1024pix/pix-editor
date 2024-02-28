@@ -1,7 +1,7 @@
 import { databaseBuffer } from '../database-buffer.js';
 
 export function buildRelease({
-  id,
+  id = databaseBuffer.nextId++,
   content,
   createdAt = new Date(),
 } = {}) {

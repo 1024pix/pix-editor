@@ -1,4 +1,4 @@
-import { ThematicForRelease } from '../../../../lib/domain/models/release/ThematicForRelease.js';
+import { ThematicForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildThematicForRelease({
   id = 'recFvllz2Ckz',

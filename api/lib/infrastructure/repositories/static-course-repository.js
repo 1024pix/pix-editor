@@ -4,6 +4,7 @@ import {
   ChallengeSummary as ChallengeSummary_Read,
   StaticCourse as StaticCourse_Read,
   StaticCourseSummary as StaticCourseSummary_Read,
+  StaticCourseTag as StaticCourseTag_Read,
 } from '../../domain/readmodels/index.js';
 import { StaticCourse } from '../../domain/models/index.js';
 import { skillDatasource } from '../datasources/airtable/index.js';
@@ -13,8 +14,23 @@ import _ from 'lodash';
 
 export async function findReadSummaries({ filter, page }) {
   const query = knex('static_courses')
-    .select('id', 'name', 'createdAt', 'challengeIds', 'isActive')
+    .select({
+      id: 'static_courses.id',
+      name: 'static_courses.name',
+      createdAt: 'static_courses.createdAt',
+      challengeIds: 'static_courses.challengeIds',
+      isActive: 'static_courses.isActive',
+      tags: knex.raw(`
+        json_agg(
+          json_build_object('id', "static_course_tags"."id", 'label', "static_course_tags"."label")
+          ORDER BY "static_course_tags"."label" ASC
+        )`),
+    })
+    .leftJoin('static_courses_tags_link', 'static_courses.id', 'static_courses_tags_link.staticCourseId')
+    .leftJoin('static_course_tags', 'static_course_tags.id', 'static_courses_tags_link.staticCourseTagId')
+    .groupBy('static_courses.id')
     .orderBy('createdAt', 'desc');
+
   if (!_.isNil(filter.isActive)) {
     query.andWhere('isActive', filter.isActive);
   }
@@ -24,12 +40,14 @@ export async function findReadSummaries({ filter, page }) {
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
+    const tags = staticCourse.tags.map(({ id, label }) => new StaticCourseTag_Read({ id, label })).filter(({ id }) => id !== null);
     return new StaticCourseSummary_Read({
       id: staticCourse.id,
       name: staticCourse.name,
       createdAt: staticCourse.createdAt,
       challengeCount: staticCourse.challengeIds.split(',').length,
       isActive: staticCourse.isActive,
+      tags,
     });
   });
 

@@ -1,4 +1,4 @@
-import { FrameworkForRelease } from '../../../../lib/domain/models/release/FrameworkForRelease.js';
+import { FrameworkForRelease } from '../../../../lib/domain/models/release/index.js';
 
 export function buildFrameworkForRelease(
   {
