@@ -9,6 +9,7 @@ export function buildStaticCourseRead({
   deactivationReason = '',
   createdAt = new Date(),
   updatedAt = new Date(),
+  tags = [],
 } = {}) {
   return new StaticCourse({
     id,
@@ -19,5 +20,6 @@ export function buildStaticCourseRead({
     deactivationReason,
     createdAt,
     updatedAt,
+    tags,
   });
 }

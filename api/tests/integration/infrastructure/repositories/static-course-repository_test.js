@@ -339,6 +339,18 @@ describe('Integration | Repository | static-course-repository', function() {
         createdAt: new Date('2010-01-04'),
         updatedAt: new Date('2010-01-11'),
       });
+      const staticCourseTagDb1 = databaseBuilder.factory.buildStaticCourseTag({
+        id: 123,
+        label: 'Pix+BTP',
+      });
+      const staticCourseTagDb2 = databaseBuilder.factory.buildStaticCourseTag({
+        id: 456,
+        label: 'Arbre',
+      });
+      databaseBuilder.factory.linkTagsTo({
+        staticCourseId: staticCourseDb.id,
+        staticCourseTagIds: [staticCourseTagDb1.id, staticCourseTagDb2.id],
+      });
       const challenges = [
         domainBuilder.buildChallenge({
           id: 'challengeA',
@@ -375,7 +387,6 @@ describe('Integration | Repository | static-course-repository', function() {
       //when
       const staticCourse = await getRead('rec123', { baseUrl: 'host.site' });
 
-
       //then
       const challengeSummaryA = domainBuilder.buildChallengeSummary(
         {
@@ -395,6 +406,14 @@ describe('Integration | Repository | static-course-repository', function() {
         index: 1,
         previewUrl: 'host.site/api/challenges/challengeB/preview',
       });
+      const tagA = domainBuilder.buildStaticCourseTag({
+        id: staticCourseTagDb2.id,
+        label: staticCourseTagDb2.label,
+      });
+      const tagB = domainBuilder.buildStaticCourseTag({
+        id: staticCourseTagDb1.id,
+        label: staticCourseTagDb1.label,
+      });
       expect(staticCourse).to.deep.equal(domainBuilder.buildStaticCourseRead({
         id: staticCourseDb.id,
         name: staticCourseDb.name,
@@ -404,6 +423,7 @@ describe('Integration | Repository | static-course-repository', function() {
         deactivationReason: staticCourseDb.deactivationReason,
         createdAt: staticCourseDb.createdAt,
         updatedAt: staticCourseDb.updatedAt,
+        tags: [tagA, tagB],
       }));
       expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
       expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });

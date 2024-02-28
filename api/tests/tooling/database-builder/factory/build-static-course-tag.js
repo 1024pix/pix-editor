@@ -22,3 +22,15 @@ export function linkTagTo({
     values: { id: databaseBuffer.nextId++, staticCourseTagId, staticCourseId },
   });
 }
+
+export function linkTagsTo({
+  staticCourseTagIds,
+  staticCourseId,
+} = {}) {
+  for (const staticCourseTagId of staticCourseTagIds) {
+    databaseBuffer.pushInsertable({
+      tableName: 'static_courses_tags_link',
+      values: { id: databaseBuffer.nextId++, staticCourseTagId, staticCourseId },
+    });
+  }
+}
