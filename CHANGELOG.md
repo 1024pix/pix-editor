@@ -1,5 +1,11 @@
 
 
+## v3.131.2 (28/02/2024)
+
+
+### :rocket: Amélioration
+- [#554](https://github.com/1024pix/pix-editor/pull/554) [FEATURE] Popup de rechargement lors du déploiement d'une nouvelle version.
+
 ## v3.131.1 (27/02/2024)
 
 
