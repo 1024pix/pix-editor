@@ -25,13 +25,10 @@ export function staticCoursesBuilder(databaseBuilder) {
     deactivationReason: 'Les épreuves sont trop cools',
   }).id;
   const tagA = databaseBuilder.factory.buildStaticCourseTag({ label: 'Panel Externe' });
-  databaseBuilder.factory.linkTagTo({ staticCourseId: staticCourseId3, staticCourseTagId: tagA.id });
   const tagB = databaseBuilder.factory.buildStaticCourseTag({ label: 'International' });
-  databaseBuilder.factory.linkTagTo({ staticCourseId: staticCourseId3, staticCourseTagId: tagB.id });
   const tagC = databaseBuilder.factory.buildStaticCourseTag({ label: 'Pix+ BTP' });
-  databaseBuilder.factory.linkTagTo({ staticCourseId: staticCourseId3, staticCourseTagId: tagC.id });
   const tagD = databaseBuilder.factory.buildStaticCourseTag({ label: 'Brouillon' });
-  databaseBuilder.factory.linkTagTo({ staticCourseId: staticCourseId3, staticCourseTagId: tagD.id });
   const tagE = databaseBuilder.factory.buildStaticCourseTag({ label: 'Panel Interne' });
-  databaseBuilder.factory.linkTagTo({ staticCourseId: staticCourseId1, staticCourseTagId: tagE.id });
+  databaseBuilder.factory.linkTagsTo({ staticCourseId: staticCourseId3, staticCourseTagIds: [tagA.id, tagB.id, tagC.id, tagD.id] });
+  databaseBuilder.factory.linkTagsTo({ staticCourseId: staticCourseId1, staticCourseTagIds: [tagE.id] });
 }

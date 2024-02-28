@@ -31,12 +31,9 @@ describe('Acceptance | API | static courses | GET /api/static-course-summaries',
     const tagAId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagA' }).id;
     const tagBId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagB' }).id;
     const tagCId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagC' }).id;
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagAId, staticCourseId: 'courseid1' });
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagBId, staticCourseId: 'courseid1' });
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagBId, staticCourseId: 'courseid2' });
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagCId, staticCourseId: 'courseid2' });
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagCId, staticCourseId: 'courseid3' });
-    databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagAId, staticCourseId: 'courseid3' });
+    databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagAId, tagBId], staticCourseId: 'courseid1' });
+    databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagBId, tagCId], staticCourseId: 'courseid2' });
+    databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagCId, tagAId], staticCourseId: 'courseid3' });
     await databaseBuilder.commit();
 
     // When

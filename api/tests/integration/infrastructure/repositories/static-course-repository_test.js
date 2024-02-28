@@ -20,8 +20,7 @@ describe('Integration | Repository | static-course-repository', function() {
           isActive : true,
           createdAt : new Date('2010-01-04'),
         });
-        databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagB_DB.id, staticCourseId: staticCourseDB1.id });
-        databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagC_DB.id, staticCourseId: staticCourseDB1.id });
+        databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagB_DB.id, tagC_DB.id], staticCourseId: staticCourseDB1.id });
         const staticCourseDB2 = databaseBuilder.factory.buildStaticCourse({
           id: 'staticCourse2_id',
           name : 'Mon super test statique 2',
@@ -29,8 +28,7 @@ describe('Integration | Repository | static-course-repository', function() {
           isActive : false,
           createdAt : new Date('2013-01-04'),
         });
-        databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagB_DB.id, staticCourseId: staticCourseDB2.id });
-        databaseBuilder.factory.linkTagTo({ staticCourseTagId: tagA_DB.id, staticCourseId: staticCourseDB2.id });
+        databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagB_DB.id, tagA_DB.id], staticCourseId: staticCourseDB2.id });
         const staticCourseDB3 = databaseBuilder.factory.buildStaticCourse({
           id: 'staticCourse3_id',
           name : 'Mon super test statique 3',

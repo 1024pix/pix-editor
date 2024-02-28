@@ -13,16 +13,6 @@ export function buildStaticCourseTag({
   });
 }
 
-export function linkTagTo({
-  staticCourseTagId,
-  staticCourseId,
-} = {}) {
-  databaseBuffer.pushInsertable({
-    tableName: 'static_courses_tags_link',
-    values: { id: databaseBuffer.nextId++, staticCourseTagId, staticCourseId },
-  });
-}
-
 export function linkTagsTo({
   staticCourseTagIds,
   staticCourseId,
