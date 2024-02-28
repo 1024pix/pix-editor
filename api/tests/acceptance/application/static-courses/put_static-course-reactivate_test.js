@@ -1,10 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import {
-  databaseBuilder,
-  generateAuthorizationHeader,
-  airtableBuilder,
-  knex,
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deactivate', function() {
@@ -137,6 +132,9 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
           'deactivation-reason': '',
         },
         relationships: {
+          tags: {
+            data: [],
+          },
           'challenge-summaries': {
             data: [
               {

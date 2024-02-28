@@ -41,6 +41,10 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
       challengeId: 'challengeid2',
       locale: 'fr',
     });
+    const tagAId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagA' }).id;
+    const tagBId = databaseBuilder.factory.buildStaticCourseTag({ label: 'TagB' }).id;
+    databaseBuilder.factory.linkTagsTo({ staticCourseTagIds: [tagAId, tagBId], staticCourseId: 'courseid1' });
+
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid1',
@@ -106,6 +110,18 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
               },
             ],
           },
+          tags: {
+            data: [
+              {
+                type: 'static-course-tags',
+                id: `${tagAId}`,
+              },
+              {
+                type: 'static-course-tags',
+                id: `${tagBId}`,
+              },
+            ],
+          }
         },
       },
       included: [
@@ -130,7 +146,21 @@ describe('Acceptance | API | static courses | GET /api/static-courses/{id}', fun
             status: 'status for challengeid2',
             'preview-url': 'http://host.site/api/challenges/challengeid2/preview',
           },
-        }
+        },
+        {
+          type: 'static-course-tags',
+          id: `${tagAId}`,
+          attributes: {
+            label: 'TagA',
+          },
+        },
+        {
+          type: 'static-course-tags',
+          id: `${tagBId}`,
+          attributes: {
+            label: 'TagB',
+          },
+        },
       ],
     });
   });
