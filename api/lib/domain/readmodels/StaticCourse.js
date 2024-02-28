@@ -8,6 +8,7 @@ export class StaticCourse {
     deactivationReason,
     createdAt,
     updatedAt,
+    tags,
   }) {
     this.id = id;
     this.name = name;
@@ -17,5 +18,6 @@ export class StaticCourse {
     this.deactivationReason = deactivationReason;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.tags = tags;
   }
 }

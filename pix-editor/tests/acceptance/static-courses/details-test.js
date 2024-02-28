@@ -10,6 +10,7 @@ module('Acceptance | Static Courses | Details', function(hooks) {
   setupMirage(hooks);
 
   hooks.beforeEach(function() {
+    const tag = this.server.create('static-course-tag', { id: 123, label: 'Mon super tag' });
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', isActive: true, challengeCount: 3, createdAt: new Date('2020-01-01') });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', isActive: true, challengeCount: 10, createdAt: new Date('2019-01-01') });
 
@@ -43,6 +44,7 @@ module('Acceptance | Static Courses | Details', function(hooks) {
       createdAt: new Date('2021-01-01'),
       updatedAt: new Date('2021-02-02'),
       challengeSummaries,
+      tags: [tag],
     });
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC', access: 'readonly' });
@@ -88,6 +90,7 @@ module('Acceptance | Static Courses | Details', function(hooks) {
     assert.strictEqual(removeWhitespacesFnc(instructionCellC.textContent), 'instruction chalC');
     assert.strictEqual(removeWhitespacesFnc(skillNameCellC.textContent), '@acquisPourChalC');
     assert.strictEqual(removeWhitespacesFnc(statusCellC.textContent), 'archivé');
+    assert.dom(screen.getByText('Mon super tag')).exists();
   });
 
   test('should go back to static course list when clicking on "Retour" button', async function(assert) {

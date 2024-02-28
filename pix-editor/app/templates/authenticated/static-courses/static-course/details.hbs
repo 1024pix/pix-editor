@@ -28,6 +28,11 @@
 <main class="page-body">
   <section class="page-section">
     <Card class="static-course-details__card-information" @title="1. Informations">
+      {{#each this.model.staticCourse.tags as |tag|}}
+        <PixTag class="static-course-tag" @color="yellow-light">
+          {{tag.label}}
+        </PixTag>
+      {{/each}}
       <ul>
         <li><span class="bold">Nom : </span>{{this.model.staticCourse.name}}</li>
         <li>

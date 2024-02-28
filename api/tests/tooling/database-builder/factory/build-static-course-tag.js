@@ -13,12 +13,14 @@ export function buildStaticCourseTag({
   });
 }
 
-export function linkTagTo({
-  staticCourseTagId,
+export function linkTagsTo({
+  staticCourseTagIds,
   staticCourseId,
 } = {}) {
-  databaseBuffer.pushInsertable({
-    tableName: 'static_courses_tags_link',
-    values: { id: databaseBuffer.nextId++, staticCourseTagId, staticCourseId },
-  });
+  for (const staticCourseTagId of staticCourseTagIds) {
+    databaseBuffer.pushInsertable({
+      tableName: 'static_courses_tags_link',
+      values: { id: databaseBuffer.nextId++, staticCourseTagId, staticCourseId },
+    });
+  }
 }

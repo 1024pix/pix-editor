@@ -1,6 +1,6 @@
 import ApplicationSerializer from './application';
 
-const include = ['challengeSummaries'];
+const include = ['challengeSummaries', 'tags'];
 
 export default ApplicationSerializer.extend({
   include,

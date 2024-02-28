@@ -33,14 +33,21 @@ const serializer = new Serializer('static-courses', {
     'createdAt',
     'updatedAt',
     'challengeSummaries',
+    'tags'
   ],
   challengeSummaries: {
     ref: 'id',
     included: true,
     attributes: ['instruction', 'skillName', 'status', 'index', 'previewUrl'],
   },
+  tags: {
+    ref: 'id',
+    included: true,
+    attributes: ['label'],
+  },
   typeForAttribute(attribute) {
     if (attribute === 'challengeSummaries') return 'challenge-summaries';
+    if (attribute === 'tags') return 'static-course-tags';
   }
 });
 

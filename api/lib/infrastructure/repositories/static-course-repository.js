@@ -56,12 +56,30 @@ export async function findReadSummaries({ filter, page }) {
 
 export async function getRead(id, { baseUrl }) {
   const staticCourse = await knex('static_courses')
-    .select('*')
-    .where('id', id)
+    .select({
+      id: 'static_courses.id',
+      name: 'static_courses.name',
+      updatedAt: 'static_courses.updatedAt',
+      createdAt: 'static_courses.createdAt',
+      description: 'static_courses.description',
+      deactivationReason: 'static_courses.deactivationReason',
+      challengeIds: 'static_courses.challengeIds',
+      isActive: 'static_courses.isActive',
+      tags: knex.raw(`
+        json_agg(
+          json_build_object('id', "static_course_tags"."id", 'label', "static_course_tags"."label")
+          ORDER BY "static_course_tags"."label" ASC
+        )`),
+    })
+    .where('static_courses.id', id)
+    .leftJoin('static_courses_tags_link', 'static_courses.id', 'static_courses_tags_link.staticCourseId')
+    .leftJoin('static_course_tags', 'static_course_tags.id', 'static_courses_tags_link.staticCourseTagId')
+    .groupBy('static_courses.id')
     .first();
 
   if (!staticCourse) return null;
 
+  const tags = staticCourse.tags.map(({ id, label }) => new StaticCourseTag_Read({ id, label })).filter(({ id }) => id !== null);
   const localizedChallengeIds = staticCourse.challengeIds.split(',');
   const challengeSummaries = await findChallengeSummaries(localizedChallengeIds, { baseUrl });
   return new StaticCourse_Read({
@@ -73,6 +91,7 @@ export async function getRead(id, { baseUrl }) {
     createdAt: staticCourse.createdAt,
     updatedAt: staticCourse.updatedAt,
     challengeSummaries,
+    tags,
   });
 }
 
