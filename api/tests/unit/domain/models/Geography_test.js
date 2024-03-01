@@ -229,7 +229,7 @@ describe('Unit | Model | Geography', () => {
       expect(codes, `no country code for ${names[codes.indexOf(undefined)]}`).not.toContain(undefined);
     });
 
-    it('should return undefined for other names', () => {
+    it('should return null for other names', () => {
       // given
       const names = [
         'Neutre',
@@ -244,11 +244,11 @@ describe('Unit | Model | Geography', () => {
 
       // then
       expect(codes).toEqual([
-        undefined,
-        undefined,
-        undefined,
-        undefined,
-        undefined,
+        null,
+        null,
+        null,
+        null,
+        null,
       ]);
     });
   });

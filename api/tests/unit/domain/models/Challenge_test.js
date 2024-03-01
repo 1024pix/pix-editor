@@ -393,7 +393,7 @@ describe('Unit | Domain | Challenge', () => {
       });
 
       // then
-      expect(codes).toEqual([undefined, undefined, undefined]);
+      expect(codes).toEqual([null, null, null]);
     });
   });
 });

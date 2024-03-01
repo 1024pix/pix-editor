@@ -28,7 +28,7 @@ export function getCountryCode(name) {
   if (standardCountry) return standardCountry.code;
 
   const nonStandardCountry = findByNameComparison(nonStandardCountries, name);
-  return nonStandardCountry?.code;
+  return nonStandardCountry?.code ?? null;
 }
 
 const collator = new Intl.Collator(NAME_LOCALE, {
