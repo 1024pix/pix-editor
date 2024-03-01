@@ -5,10 +5,11 @@ export function buildLocalizedChallenge({
   challengeId = 'challenge123',
   locale = 'fr',
   embedUrl,
-  status = null
+  status = null,
+  geography = null,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'localized_challenges',
-    values: { id, challengeId, locale, embedUrl, status },
+    values: { id, challengeId, locale, embedUrl, status, geography },
   });
 }

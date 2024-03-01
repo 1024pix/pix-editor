@@ -62,6 +62,7 @@ export async function create(challenge) {
     challengeId: challenge.id,
     locale: challenge.primaryLocale,
     embedUrl: challenge.embedUrl,
+    geography: challenge.geographyCode,
   };
   await localizedChallengeRepository.create([primaryLocalizedChallenge]);
 
@@ -84,6 +85,7 @@ export async function update(challenge) {
     }
 
     primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
+    primaryLocalizedChallenge.geography = challenge.geographyCode;
 
     await localizedChallengeRepository.update({
       localizedChallenge: primaryLocalizedChallenge,

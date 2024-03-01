@@ -96,6 +96,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
+          geography: 'AZ',
         })
       ]);
 
@@ -108,7 +109,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'locale',
         embedUrl: 'https://example.com/embed.html',
         status: null,
-        geography: null,
+        geography: 'AZ',
       }]);
     });
 
@@ -131,6 +132,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
+          geography: 'BE',
         }], () => 'generated-id');
 
         // then
@@ -142,7 +144,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
           status: null,
-          geography: null,
+          geography: 'BE',
         }]);
       });
 
@@ -169,14 +171,13 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
       it('should not create duplicated localizedChallenges when already exist', async () => {
         // given
-        await knex('localized_challenges').insert(
-          {
-            id: 'id',
-            challengeId: 'challengeId',
-            locale: 'en',
-            embedUrl: 'example.com',
-          }
-        );
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'id',
+          challengeId: 'challengeId',
+          locale: 'en',
+          embedUrl: 'example.com',
+        });
+        await databaseBuilder.commit();
 
         // when
         await localizedChallengeRepository.create([
@@ -184,11 +185,13 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'en',
             embedUrl: 'example.com',
+            geography: null,
           },
           {
             challengeId: 'challengeId',
             locale: 'fr',
             embedUrl: 'example.net',
+            geography: 'FR',
           }
         ]);
 
@@ -211,7 +214,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             locale: 'fr',
             embedUrl: 'example.net',
             status: null,
-            geography: null,
+            geography: 'FR',
           },
         ]);
       });
@@ -633,6 +636,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         embedUrl: 'my-url.html',
         locale: 'bz',
+        geography: 'BZ',
       });
       await databaseBuilder.commit();
 
@@ -642,6 +646,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         embedUrl: 'my-new-url.html',
         locale: 'ar',
         status: null,
+        geography: 'AR',
       });
 
       // when
@@ -655,7 +660,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           embedUrl: 'my-new-url.html',
           locale: 'ar',
           status: null,
-          geography: null,
+          geography: 'AR',
         },
       ]);
 
@@ -668,6 +673,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           status: null,
         }));
     });
+
     context('when there is one attachment joined to localized challenge', ()=> {
       it('should change localized challenge locale and embedUrl with attachmentId', async () => {
         // given

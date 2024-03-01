@@ -1069,7 +1069,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           locale: 'fr',
           embedUrl: challenge.embedUrl,
           status: null,
-          geography: null,
+          geography: 'FR',
         }
       ]);
       const translations = await knex('translations').select().orderBy('key');
@@ -1326,6 +1326,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
+        geography: 'Pays-Bas',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1488,7 +1489,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: 'non',
             'alternative-locales': ['nl'],
             locales: ['fr'],
-            geography: 'France',
+            geography: 'Pays-Bas',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1529,8 +1530,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
           },
         },
       });
-      const localizedChallenge = await knex('localized_challenges').select('embedUrl').where('id', challengeId).pluck('embedUrl');
-      expect(localizedChallenge).to.deep.equal([challenge.embedUrl]);
+      const localizedChallenge = await knex('localized_challenges').select().where('id', challengeId).first();
+      expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
+      expect(localizedChallenge).toHaveProperty('geography', 'NL');
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -1579,6 +1581,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
+        geography: 'Neutre',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
@@ -1734,7 +1737,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: 'non',
             'alternative-locales': [],
             locales: ['fr', 'fr-fr'],
-            geography: 'France',
+            geography: 'Neutre',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
