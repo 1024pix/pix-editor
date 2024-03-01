@@ -350,4 +350,50 @@ describe('Unit | Domain | Challenge', () => {
       });
     });
   });
+
+  describe('#geographyCode', () => {
+    it('should return a country code', () => {
+      // given
+      const challengeId = 'challengeId';
+      const challenge = domainBuilder.buildChallenge({
+        id: challengeId,
+        locales: ['fr'],
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: 'fr',
+        })],
+        translations: { fr: {} },
+        geography: 'Nouvelle-Zélande',
+      });
+
+      // then
+      expect(challenge).toHaveProperty('geographyCode', 'NZ');
+    });
+
+    it('should undefined when geography is not a country', () => {
+      // given
+      const geographies = ['Neutre', undefined, null];
+      const challengeId = 'challengeId';
+      const challenge = domainBuilder.buildChallenge({
+        id: challengeId,
+        locales: ['fr'],
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: challengeId,
+          challengeId,
+          locale: 'fr',
+        })],
+        translations: { fr: {} },
+      });
+
+      // when
+      const codes = geographies.map((geography) => {
+        challenge.geography = geography;
+        return challenge.geographyCode;
+      });
+
+      // then
+      expect(codes).toEqual([undefined, undefined, undefined]);
+    });
+  });
 });
