@@ -68,6 +68,23 @@ const ImportExportComponent = () => {
     }
   }
 
+  async function importTranslationFromPhrase() {
+    setFetching(true);
+    try {
+      const token = currentAdmin?.email;
+      await axios.post('/api/phrase/download', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      sendNotice({ message: 'Download request in progress', type: 'success' });
+    } catch (e) {
+      sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
+    }
+  }
+
   if (isFetching) {
     return <Loader />;
   }
@@ -81,7 +98,7 @@ const ImportExportComponent = () => {
           variant="outlined"
           disabled={isFetching}
         >
-          Exporter toutes les traductions dans un fichier CSV
+          Exporter les traductions FR du référentiel Pix dans un fichier CSV
         </Button>
         <br/>
         <Button
@@ -90,7 +107,7 @@ const ImportExportComponent = () => {
           variant="outlined"
           disabled={isFetching}
         >
-          Exporter toutes les traductions dans phrase
+          Exporter les traductions FR du référentiel Pix dans Phrase
         </Button>
       </Box>
       <Box>
@@ -106,6 +123,15 @@ const ImportExportComponent = () => {
           mt={24}
         >
           Importer les traductions
+        </Button>
+        <br/>
+        <Button
+          mt={10}
+          onClick={importTranslationFromPhrase}
+          variant="outlined"
+          disabled={isFetching}
+        >
+          Importer les traductions depuis Phrase
         </Button>
       </Box>
     </Box>
