@@ -604,4 +604,79 @@ describe('Unit | Domain | StaticCourse', function() {
       });
     });
   });
+
+  context('reactivate', function() {
+    beforeEach(function() {
+      vi.useFakeTimers({
+        now: new Date('2021-10-29T03:04:00Z'),
+      });
+    });
+
+    afterEach(function() {
+      vi.useRealTimers();
+    });
+
+    it('should make the static course active when it is inactive', function() {
+      // given
+      const inactiveStaticCourse = domainBuilder.buildStaticCourse({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        tagIds: [123, 456],
+        isActive: false,
+        deactivationReason: 'Parce que',
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-00-00T09:00:00Z'),
+      });
+
+      // when
+      const commandResult = inactiveStaticCourse.reactivate();
+
+      // then
+      expect(commandResult.isSuccess()).to.be.true;
+      expect(commandResult.value.toDTO()).to.deep.equal({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        tagIds: [123, 456],
+        isActive: true,
+        deactivationReason: '',
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-10-29T03:04:00Z'),
+      });
+    });
+
+    it('should let the static course active when it is already active', function() {
+      // given
+      const activeStaticCourse = domainBuilder.buildStaticCourse({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        tagIds: [123, 456],
+        isActive: true,
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-00-00T09:00:00Z'),
+      });
+
+      // when
+      const commandResult = activeStaticCourse.reactivate();
+
+      // then
+      expect(commandResult.isSuccess()).to.be.true;
+      expect(commandResult.value.toDTO()).to.deep.equal({
+        id: 'myAwesomeCourse66',
+        name: 'name',
+        description: 'description',
+        challengeIds: ['chalABC ', 'chalDEF'],
+        tagIds: [123, 456],
+        isActive: true,
+        deactivationReason: '',
+        createdAt: new Date('2021-00-00T09:00:00Z'),
+        updatedAt: new Date('2021-10-29T03:04:00Z'),
+      });
+    });
+  });
 });

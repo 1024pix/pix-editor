@@ -94,6 +94,7 @@ export class StaticCourse {
       name: this.name,
       description: this.description,
       isActive: true,
+      deactivationReason: '',
       challengeIds: this.challengeIds,
       tagIds: this.tagIds,
       createdAt: this.createdAt,
