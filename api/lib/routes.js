@@ -5,6 +5,7 @@ import * as fileStorageTokenRoute from './application/file-storage-token/index.j
 import * as healthcheckRoute from './application/healthcheck/index.js';
 import * as localizedChallengesRoute from './application/localized-challenges.js';
 import * as missionsRoute from './application/missions/index.js';
+import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
@@ -20,6 +21,7 @@ export const routes = [
   healthcheckRoute,
   localizedChallengesRoute,
   missionsRoute,
+  phraseRoute,
   releasesRoute,
   replicationDataRoute,
   staticCoursesRoute,

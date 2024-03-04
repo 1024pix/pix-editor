@@ -6,6 +6,7 @@ import { importTranslations, InvalidFileError } from '../domain/usecases/import-
 import { logger } from '../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import * as config from '../config.js';
+import * as securityPreHandlers from './security-pre-handlers.js';
 
 export async function register(server) {
   server.route([
@@ -26,6 +27,7 @@ export async function register(server) {
       method: 'PATCH',
       path: '/api/translations.csv',
       config: {
+        pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         payload: {
           multipart: true,
           output: 'file',

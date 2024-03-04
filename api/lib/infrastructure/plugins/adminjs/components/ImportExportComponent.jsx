@@ -24,8 +24,26 @@ const ImportExportComponent = () => {
       sendNotice({ message: 'Exported successfully', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
+  }
+
+  async function exportTranslationToPhrase() {
+    setFetching(true);
+    try {
+      const token = currentAdmin?.email;
+      await axios.post('/api/phrase/upload', {}, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      });
+      sendNotice({ message: 'Upload request in progress', type: 'success' });
+    } catch (e) {
+      sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
+    }
   }
 
   async function importTranslations() {
@@ -45,8 +63,9 @@ const ImportExportComponent = () => {
       sendNotice({ message: 'Imported successfully', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   }
 
   if (isFetching) {
@@ -63,6 +82,15 @@ const ImportExportComponent = () => {
           disabled={isFetching}
         >
           Exporter toutes les traductions dans un fichier CSV
+        </Button>
+        <br/>
+        <Button
+          mt={10}
+          onClick={exportTranslationToPhrase}
+          variant="outlined"
+          disabled={isFetching}
+        >
+          Exporter toutes les traductions dans phrase
         </Button>
       </Box>
       <Box>

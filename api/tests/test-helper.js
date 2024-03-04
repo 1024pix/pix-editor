@@ -15,6 +15,8 @@ afterEach(async () => {
   nock.cleanAll();
 });
 
+export { streamToPromise, streamToPromiseArray } from '../lib/infrastructure/utils/stream-to-promise.js';
+
 // Knex
 export { knex };
 
@@ -77,25 +79,6 @@ export function catchErr(promiseFn, ctx) {
       return err;
     }
   };
-}
-
-export async function streamToPromise(stream) {
-  return streamToPromiseArray(stream).then((array) => {
-    return array.join('');
-  });
-}
-
-export function streamToPromiseArray(stream) {
-  return new Promise((resolve, reject) => {
-    const result = [];
-    stream.on('data', (data) => {
-      result.push(data);
-    });
-    stream.on('end', () => {
-      resolve(result);
-    });
-    stream.on('error', reject);
-  });
 }
 
 // airtableBuilder

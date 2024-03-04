@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import FormData from 'form-data';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
-import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper';
+import { databaseBuilder, streamToPromiseArray, generateAuthorizationHeader, knex } from '../../test-helper';
 import { createServer } from '../../../server';
 
 describe('Acceptance | Controller | translations-controller', () => {
@@ -256,13 +256,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
 
-      const [headers, ...data] = await new Promise((resolve, reject) => {
-        const stream = parseCSVString(response.payload);
-        const data = [];
-        stream.on('data', (chunk) => data.push(chunk));
-        stream.on('end', () => resolve(data));
-        stream.on('error', (error) => reject(error));
-      });
+      const [headers, ...data] = await streamToPromiseArray(parseCSVString(response.payload));
 
       expect(headers).to.deep.equal(['key', 'fr', 'tags', 'description']);
       expect(_.orderBy(data, '0')).to.deep.equal([
