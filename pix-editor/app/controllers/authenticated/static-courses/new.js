@@ -41,10 +41,22 @@ function _cleanErrors(errors) {
         cleanErrors += 'La présence d\'épreuves est requise pour pouvoir créer un test statique.';
       else
         cleanErrors += JSON.stringify(error);
-    } else if (error.code === 'UNKNOWN_RESOURCES') {
-      cleanErrors += `Les épreuves suivantes n'existent pas : ${error.detail.join(', ')}.\n`;
-    } else if (error.code === 'DUPLICATES_FORBIDDEN') {
-      cleanErrors += `Les épreuves suivantes ont été ajoutées plusieurs fois : ${error.detail.join(', ')}.\n`;
+    } else if (error.source.pointer.endsWith('challenge-ids')) {
+      if (error.code === 'UNKNOWN_RESOURCES') {
+        cleanErrors += `Les épreuves suivantes n'existent pas : ${error.detail.join(', ')}.\n`;
+      } else if (error.code === 'DUPLICATES_FORBIDDEN') {
+        cleanErrors += `Les épreuves suivantes ont été ajoutées plusieurs fois : ${error.detail.join(', ')}.\n`;
+      } else {
+        cleanErrors += JSON.stringify(error);
+      }
+    } else if (error.source.pointer.endsWith('tag-ids')) {
+      if (error.code === 'UNKNOWN_RESOURCES') {
+        cleanErrors += `Les tags suivants n'existent pas : ${error.detail.join(', ')}.\n`;
+      } else if (error.code === 'DUPLICATES_FORBIDDEN') {
+        cleanErrors += `Les tags suivants ont été ajoutées plusieurs fois : ${error.detail.join(', ')}.\n`;
+      } else {
+        cleanErrors += JSON.stringify(error);
+      }
     } else {
       cleanErrors += JSON.stringify(error);
     }

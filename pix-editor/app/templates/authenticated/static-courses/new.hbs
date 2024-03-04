@@ -7,10 +7,12 @@
       @initialName=""
       @initialDescription=""
       @initialChallengeIds=""
+      @initialTagIds=""
       @cancelButtonText="Annuler"
       @onFormCancelled={{this.goBackToList}}
       @submitButtonText="Créer le test statique"
       @onFormSubmitted={{this.createStaticCourse}}
+      @staticCourseTags={{this.model.staticCourseTags}}
     />
   </section>
 </main>

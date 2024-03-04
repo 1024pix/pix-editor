@@ -12,13 +12,15 @@ export default class StaticCoursesRoute extends Route {
     }
   }
 
-  model() {
-    return this.modelFor('authenticated.static-courses.static-course');
+  async model() {
+    const staticCourseTags = await this.store.findAll('static-course-tag', { reload: true });
+    const staticCourse = this.modelFor('authenticated.static-courses.static-course');
+    return { staticCourseTags, staticCourse };
   }
 
   afterModel(model) {
-    if (!model.isActive) {
-      this.router.transitionTo('authenticated.static-courses.static-course.details', model);
+    if (!model.staticCourse.isActive) {
+      this.router.transitionTo('authenticated.static-courses.static-course.details', model.staticCourse);
     }
   }
 }

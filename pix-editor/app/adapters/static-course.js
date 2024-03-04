@@ -33,6 +33,7 @@ function preparePayloadForCreateAndUpdate(payload, adapterOptions) {
   payload.data.attributes.name = adapterOptions.name;
   payload.data.attributes.description = adapterOptions.description;
   payload.data.attributes['challenge-ids'] = adapterOptions.challengeIds;
+  payload.data.attributes['tag-ids'] = adapterOptions.tagIds;
   return payload;
 }
 

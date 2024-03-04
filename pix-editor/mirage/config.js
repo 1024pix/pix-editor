@@ -354,23 +354,31 @@ function routes() {
 
   this.get('/static-courses/:id');
 
+  this.get('/static-course-tags');
+
   this.post('/static-courses', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
+    const tagIds = attributes['tag-ids'];
+    const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
     return schema.create('static-course', {
       id: 'newStaticCourseId',
       name: attributes.name,
       description: attributes.description,
       challengeSummaryIds: attributes['challenge-ids'],
+      tags,
     });
   });
 
   this.put('/static-courses/:id', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
+    const tagIds = attributes['tag-ids'];
+    const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
       name: attributes.name,
       description: attributes.description,
       challengeSummaryIds: attributes['challenge-ids'],
+      tags,
     });
     return staticCourse;
   });

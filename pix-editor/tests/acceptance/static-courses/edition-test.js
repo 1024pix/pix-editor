@@ -38,6 +38,9 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       status: 'archivé',
       index: 2,
     }));
+    this.server.create('static-course-tag', { id: 123, label: 'tagA' });
+    this.server.create('static-course-tag', { id: 456, label: 'tagB' });
+    this.server.create('static-course-tag', { id: 789, label: 'tagC' });
     staticCourse = this.server.create('static-course', {
       id: 'courseA',
       name: 'Premier test statique',
@@ -46,6 +49,7 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       updatedAt: new Date('2021-02-02'),
       challengeSummaries,
       isActive: true,
+      tags: [],
     });
   });
 
@@ -126,9 +130,13 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
 
       // when
       await fillByLabel('Description à usage interne', 'Ma nouvelle description toute jolie');
+      await fillByLabel('Tags', 'ta');
+      await screen.getByLabelText('tagC').click();
+      await screen.getByLabelText('tagB').click();
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
+      await clickByName('Enregistrer');
       await clickByName('Enregistrer');
 
       // then
@@ -137,6 +145,8 @@ module('Acceptance | Static Courses | Edition', function(hooks) {
       assert.dom(screen.getByText('chalA')).exists();
       assert.dom(screen.getByText('chalC')).exists();
       assert.dom(screen.queryByText('chalB')).doesNotExist();
+      assert.dom(screen.getByText('tagB')).exists();
+      assert.dom(screen.getByText('tagC')).exists();
     });
 
     test('should cancel static course edition', async function(assert) {
