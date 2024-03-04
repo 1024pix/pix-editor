@@ -24,8 +24,9 @@ const ImportExportComponent = () => {
       sendNotice({ message: 'Exported successfully', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   }
 
   async function exportTranslationToPhrase() {
@@ -40,8 +41,9 @@ const ImportExportComponent = () => {
       sendNotice({ message: 'Upload request in progress', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   }
 
   async function importTranslations() {
@@ -61,8 +63,9 @@ const ImportExportComponent = () => {
       sendNotice({ message: 'Imported successfully', type: 'success' });
     } catch (e) {
       sendNotice({ message: e.message, type: 'error' });
+    } finally {
+      setFetching(false);
     }
-    setFetching(false);
   }
 
   if (isFetching) {
