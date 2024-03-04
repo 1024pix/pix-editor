@@ -40,8 +40,8 @@ export async function uploadTranslationToPhrase(request) {
   try {
     await new UploadsApi(configuration).uploadCreate(requestParameters);
   } catch (e) {
-    const text = await e.text();
+    const text = await e.text?.() ?? e;
     logger.error(`Phrase error while uploading translations: ${text}`);
-    throw new Error('Phrase error', text);
+    throw new Error('Phrase error', { cause: e });
   }
 }

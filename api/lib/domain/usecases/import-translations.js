@@ -31,10 +31,6 @@ export function importTranslations(csvStream, dependencies = { translationReposi
         translations.push(new Translation({ ...row, locale }));
       })
       .on('end', async () => {
-        if (translations.length === 0) {
-          return reject(new InvalidFileError());
-        }
-
         const challengesLocales = extractChallengesLocales(translations);
         await dependencies.localizedChallengeRepository.create(challengesLocales);
 
