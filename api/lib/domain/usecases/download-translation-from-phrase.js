@@ -29,7 +29,7 @@ export async function downloadTranslationFromPhrase() {
     }
   } catch (e) {
     const text = await e.text?.() ?? e;
-    logger.error(`Phrase error while downloading translations: ${text}`);
-    throw new Error('Phrase error', text);
+    logger.error(`Error while downloading translations: ${text}`);
+    throw new Error('Download error', { cause: e });
   }
 }
