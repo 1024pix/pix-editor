@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
-import { localizedChallengeRepository, staticCourseRepository } from '../../infrastructure/repositories/index.js';
+import {
+  localizedChallengeRepository,
+  staticCourseRepository,
+  staticCourseTagRepository
+} from '../../infrastructure/repositories/index.js';
 import { staticCourseSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 import * as idGenerator from '../../infrastructure/utils/id-generator.js';
 import { StaticCourse } from '../../domain/models/index.js';
@@ -27,9 +31,11 @@ export async function get(request, h) {
 export async function create(request, h) {
   const creationCommand = normalizeCreationOrUpdateCommand(request.payload.data.attributes);
   const localizedChallenges = await localizedChallengeRepository.getMany({ ids: creationCommand.challengeIds });
+  const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = StaticCourse.buildFromCreationCommand({
     creationCommand,
     allChallengeIds: localizedChallenges.map(({ id }) => id),
+    allTagIds,
     idGenerator: idGenerator.generateNewId,
   });
   if (commandResult.isFailure()) {
@@ -48,9 +54,11 @@ export async function update(request, h) {
     throw new NotFoundError(`Le test statique d'id ${staticCourseId} n'existe pas ou son accès restreint`);
   }
   const localizedChallenges = await localizedChallengeRepository.getMany({ ids: updateCommand.challengeIds });
+  const allTagIds = await staticCourseTagRepository.listIds();
   const commandResult = staticCourseToUpdate.update({
     updateCommand,
     allChallengeIds: localizedChallenges.map(({ id }) => id),
+    allTagIds,
   });
   if (commandResult.isFailure()) {
     throw commandResult.error;
@@ -127,6 +135,7 @@ function normalizeCreationOrUpdateCommand(attrs) {
     name: _.isString(attrs.name) ? attrs.name : '',
     description: _.isString(attrs.description) ? attrs.description : '',
     challengeIds: _.isArray(attrs['challenge-ids']) ? attrs['challenge-ids'] : [],
+    tagIds: _.isArray(attrs['tag-ids']) ? attrs['tag-ids'].map((tagId) => parseInt(tagId)) : [],
   };
 }
 

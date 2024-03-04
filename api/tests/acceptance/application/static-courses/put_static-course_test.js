@@ -83,6 +83,26 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       locale: 'fr',
       value: 'instruction for challengeid4',
     });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 123,
+      label: 'tagA'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 456,
+      label: 'tagB'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 789,
+      label: 'tagC'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 159,
+      label: 'tagD'
+    });
+    databaseBuilder.factory.linkTagsTo({
+      staticCourseTagIds: [123, 456, 159],
+      staticCourseId: activeCourseId,
+    });
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid1',
@@ -135,8 +155,9 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
     });
   });
 
-  afterEach(function() {
+  afterEach(async function() {
     vi.useRealTimers();
+    await knex('static_courses_tags_link').delete();
     return knex('static_courses').delete();
   });
 
@@ -148,6 +169,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
           name: 'static course 1',
           description: 'static course description',
           'challenge-ids': ['challengeid3', 'challengeid1', 'challengeidnl1'],
+          'tag-ids': ['456', '789'],
         },
       },
     };
@@ -180,7 +202,16 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
         },
         relationships: {
           tags: {
-            data: [],
+            data: [
+              {
+                type: 'static-course-tags',
+                id: '456',
+              },
+              {
+                type: 'static-course-tags',
+                id: '789',
+              }
+            ],
           },
           'challenge-summaries': {
             data: [
@@ -232,6 +263,20 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
             'skill-name': '@skillid1',
             status: 'status for challengeid1',
             'preview-url': 'http://host.site/api/challenges/challengeid1/preview?locale=nl',
+          },
+        },
+        {
+          type: 'static-course-tags',
+          id: '456',
+          attributes: {
+            label: 'tagB'
+          },
+        },
+        {
+          type: 'static-course-tags',
+          id: '789',
+          attributes: {
+            label: 'tagC'
           },
         },
       ],

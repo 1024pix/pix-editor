@@ -62,6 +62,22 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       locale: 'fr',
       value: 'instruction for challengeid4',
     });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 123,
+      label: 'tagA'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 456,
+      label: 'tagB'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 789,
+      label: 'tagC'
+    });
+    databaseBuilder.factory.buildStaticCourseTag({
+      id: 159,
+      label: 'tagD'
+    });
 
     await databaseBuilder.commit();
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
@@ -114,8 +130,9 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     });
   });
 
-  afterEach(function() {
+  afterEach(async function() {
     vi.useRealTimers();
+    await knex('static_courses_tags_link').delete();
     return knex('static_courses').delete();
   });
 
@@ -127,6 +144,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
           name: 'static course 1',
           description: 'static course description',
           'challenge-ids': ['challengeid3', 'challengeid1', 'challengeid1nl'],
+          'tag-ids': ['123', '456']
         },
       },
     };
@@ -157,7 +175,16 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
         },
         relationships: {
           tags: {
-            data: [],
+            data: [
+              {
+                type: 'static-course-tags',
+                id: '123',
+              },
+              {
+                type: 'static-course-tags',
+                id: '456',
+              }
+            ],
           },
           'challenge-summaries': {
             data: [
@@ -209,6 +236,20 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             'skill-name': '@skillid1',
             status: 'proposé',
             'preview-url': 'http://test.site/api/challenges/challengeid1/preview?locale=nl',
+          },
+        },
+        {
+          type: 'static-course-tags',
+          id: '123',
+          attributes: {
+            label: 'tagA'
+          },
+        },
+        {
+          type: 'static-course-tags',
+          id: '456',
+          attributes: {
+            label: 'tagB'
           },
         },
       ],

@@ -8,6 +8,7 @@ export class StaticCourse {
     name,
     description,
     challengeIds,
+    tagIds,
     isActive,
     deactivationReason,
     createdAt,
@@ -19,21 +20,23 @@ export class StaticCourse {
     this.isActive = isActive;
     this.deactivationReason = deactivationReason;
     this.challengeIds = challengeIds;
+    this.tagIds = tagIds;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
 
   // idGenerator : (prefix: string) => string
-  static buildFromCreationCommand({ creationCommand, allChallengeIds, idGenerator }) {
+  static buildFromCreationCommand({ creationCommand, allChallengeIds, allTagIds, idGenerator }) {
     const timestamp = new Date();
     const attributes = {
       name: creationCommand.name.trim(),
       description: creationCommand.description.trim(),
       challengeIds: creationCommand.challengeIds.map((challengeId) => challengeId.trim()),
+      tagIds: creationCommand.tagIds,
       createdAt: timestamp,
       updatedAt: timestamp,
     };
-    const validationError = validateAttributes(attributes, allChallengeIds);
+    const validationError = validateAttributes(attributes, allChallengeIds, allTagIds);
     if (validationError.hasErrors()) {
       return CommandResult.Failure({ value: null, error: validationError });
     }
@@ -41,7 +44,7 @@ export class StaticCourse {
     return CommandResult.Success({ value: staticCourse });
   }
 
-  update({ updateCommand, allChallengeIds }) {
+  update({ updateCommand, allChallengeIds, allTagIds }) {
     if (!this.isActive) {
       return CommandResult.Failure({ value: null, error: new StaticCourseIsInactiveError() });
     }
@@ -53,10 +56,11 @@ export class StaticCourse {
       isActive: this.isActive,
       deactivationReason: this.deactivationReason,
       challengeIds: updateCommand.challengeIds.map((challengeId) => challengeId.trim()),
+      tagIds: updateCommand.tagIds,
       createdAt: this.createdAt,
       updatedAt: timestamp,
     };
-    const validationError = validateAttributes(attributes, allChallengeIds);
+    const validationError = validateAttributes(attributes, allChallengeIds, allTagIds);
     if (validationError.hasErrors()) {
       return CommandResult.Failure({ value: null, error: validationError });
     }
@@ -74,6 +78,7 @@ export class StaticCourse {
       isActive: false,
       deactivationReason: deactivationCommand.reason,
       challengeIds: this.challengeIds,
+      tagIds: this.tagIds,
       createdAt: this.createdAt,
       updatedAt: timestamp,
     };
@@ -90,6 +95,7 @@ export class StaticCourse {
       description: this.description,
       isActive: true,
       challengeIds: this.challengeIds,
+      tagIds: this.tagIds,
       createdAt: this.createdAt,
       updatedAt: timestamp,
     };
@@ -105,16 +111,18 @@ export class StaticCourse {
       isActive: this.isActive,
       deactivationReason: this.deactivationReason,
       challengeIds: this.challengeIds,
+      tagIds: this.tagIds,
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
     };
   }
 }
 
-function validateAttributes({ name, challengeIds }, allChallengeIds) {
+function validateAttributes({ name, challengeIds, tagIds }, allChallengeIds, allTagIds) {
   const validationError = new InvalidStaticCourseCreationOrUpdateError();
   checkName(name, validationError);
   checkChallengeIds(challengeIds, allChallengeIds, validationError);
+  checkTagIds(tagIds, allTagIds, validationError);
   return validationError;
 }
 
@@ -144,5 +152,24 @@ function checkChallengeIds(challengeIds, allChallengeIds, validationError) {
   }
   if (duplicateChallengeIds.length > 0) {
     validationError.addDuplicatesForbiddenError({ field: 'challengeIds', duplicates: duplicateChallengeIds });
+  }
+}
+
+function checkTagIds(tagIds, allTagIds, validationError) {
+
+  const notFoundTagIds = _.difference(tagIds, allTagIds);
+  if (notFoundTagIds.length > 0) {
+    validationError.addUnknownResourcesError({ field: 'tagIds', unknownResources: notFoundTagIds });
+  }
+
+  const tagOccurrencesMap = _.countBy(tagIds);
+  const duplicateTagIds = [];
+  for (const [tagId, occurrences] of Object.entries(tagOccurrencesMap)) {
+    if (occurrences > 1) {
+      duplicateTagIds.push(tagId);
+    }
+  }
+  if (duplicateTagIds.length > 0) {
+    validationError.addDuplicatesForbiddenError({ field: 'tagIds', duplicates: duplicateTagIds.map((tagId) => parseInt(tagId)) });
   }
 }

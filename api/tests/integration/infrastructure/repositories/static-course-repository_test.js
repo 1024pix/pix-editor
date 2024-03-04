@@ -1,6 +1,6 @@
 import { beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import { databaseBuilder, domainBuilder } from '../../../test-helper.js';
-import { findReadSummaries, getRead } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
+import { findReadSummaries, get, getRead } from '../../../../lib/infrastructure/repositories/static-course-repository.js';
 import { skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { challengeRepository, localizedChallengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 
@@ -325,7 +325,7 @@ describe('Integration | Repository | static-course-repository', function() {
   });
 
   context('#getRead', function() {
-    it('should return the static course', async function() {
+    it('should return the static course read model', async function() {
       //given
       const staticCourseDb = databaseBuilder.factory.buildStaticCourse({
         id: 'rec123',
@@ -426,6 +426,51 @@ describe('Integration | Repository | static-course-repository', function() {
       expect(stubFilterChallengeRepository).toHaveBeenCalledWith({ filter: { ids: ['challengeA', 'challengeB'] } });
       expect(stubFilterSkillDatasource).toHaveBeenCalledWith({ filter: { ids: ['skillA', 'skillB'] } });
       expect(stubLocalizedChallengeRepository).toHaveBeenCalledWith({ ids: ['challengeA', 'challengeB'] });
+    });
+  });
+
+  context('#get', function() {
+    it('should return the static course model', async function() {
+      //given
+      const staticCourseDb = databaseBuilder.factory.buildStaticCourse({
+        id: 'rec123',
+        challengeIds: 'challengeA,challengeB',
+        name: 'Mon super test statique',
+        description: 'Ma super description de test statique',
+        isActive: false,
+        deactivationReason: 'Je l\'aime plus.',
+        createdAt: new Date('2010-01-04'),
+        updatedAt: new Date('2010-01-11'),
+      });
+      const staticCourseTagDb1 = databaseBuilder.factory.buildStaticCourseTag({
+        id: 123,
+        label: 'Pix+BTP',
+      });
+      const staticCourseTagDb2 = databaseBuilder.factory.buildStaticCourseTag({
+        id: 456,
+        label: 'Arbre',
+      });
+      databaseBuilder.factory.linkTagsTo({
+        staticCourseId: staticCourseDb.id,
+        staticCourseTagIds: [staticCourseTagDb1.id, staticCourseTagDb2.id],
+      });
+      await databaseBuilder.commit();
+
+      //when
+      const staticCourse = await get('rec123');
+
+      //then
+      expect(staticCourse).to.deep.equal(domainBuilder.buildStaticCourse({
+        id: staticCourseDb.id,
+        name: staticCourseDb.name,
+        description: staticCourseDb.description,
+        challengeIds: ['challengeA', 'challengeB'],
+        isActive: staticCourseDb.isActive,
+        deactivationReason: staticCourseDb.deactivationReason,
+        createdAt: staticCourseDb.createdAt,
+        updatedAt: staticCourseDb.updatedAt,
+        tagIds: [456, 123],
+      }));
     });
   });
 });

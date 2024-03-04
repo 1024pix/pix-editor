@@ -97,15 +97,34 @@ export async function getRead(id, { baseUrl }) {
 
 export async function get(id) {
   const staticCourse = await knex('static_courses')
-    .select('*')
-    .where('id', id)
+    .select({
+      id: 'static_courses.id',
+      name: 'static_courses.name',
+      updatedAt: 'static_courses.updatedAt',
+      createdAt: 'static_courses.createdAt',
+      description: 'static_courses.description',
+      deactivationReason: 'static_courses.deactivationReason',
+      challengeIds: 'static_courses.challengeIds',
+      isActive: 'static_courses.isActive',
+      tags: knex.raw(`
+        json_agg(
+          json_build_object('id', "static_course_tags"."id")
+          ORDER BY "static_course_tags"."label" ASC
+        )`),
+    })
+    .where('static_courses.id', id)
+    .leftJoin('static_courses_tags_link', 'static_courses.id', 'static_courses_tags_link.staticCourseId')
+    .leftJoin('static_course_tags', 'static_course_tags.id', 'static_courses_tags_link.staticCourseTagId')
+    .groupBy('static_courses.id')
     .first();
   if (staticCourse) {
+    const tagIds = staticCourse.tags.map(({ id }) => id).filter((id) => id !== null);
     return new StaticCourse({
       id: staticCourse.id,
       name: staticCourse.name,
       description: staticCourse.description,
       challengeIds: staticCourse.challengeIds.split(','),
+      tagIds,
       isActive: staticCourse.isActive,
       deactivationReason: staticCourse.deactivationReason,
       createdAt: staticCourse.createdAt,
@@ -127,10 +146,20 @@ export async function save(staticCourseForCreation) {
     createdAt: staticCourseDTO.createdAt,
     updatedAt: staticCourseDTO.updatedAt,
   };
-  await knex('static_courses')
-    .insert(serializedStaticCourseForDB)
-    .onConflict('id')
-    .merge();
+  await knex.transaction(async (trx) => {
+    await trx('static_courses')
+      .insert(serializedStaticCourseForDB)
+      .onConflict('id')
+      .merge();
+    await trx('static_courses_tags_link')
+      .del()
+      .where('staticCourseId', serializedStaticCourseForDB.id);
+    if (staticCourseDTO.tagIds.length > 0) {
+      await trx('static_courses_tags_link')
+        .insert(staticCourseDTO.tagIds.map((staticCourseDtoTagId) => ({ staticCourseTagId: staticCourseDtoTagId, staticCourseId: serializedStaticCourseForDB.id })));
+    }
+  });
+
   return serializedStaticCourseForDB.id;
 }
 
