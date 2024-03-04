@@ -24,6 +24,34 @@ export const User = sequelize.define(
   {}
 );
 
+export const LocalizedChallenge = sequelize.define(
+  'localized_challenges',
+  {
+    id: {
+      type: DataTypes.STRING,
+      primaryKey: true,
+    },
+    challengeId: {
+      type: DataTypes.STRING,
+    },
+    locale: {
+      type: DataTypes.STRING,
+    },
+    status: {
+      type: DataTypes.STRING,
+    },
+    embedUrl: {
+      type: DataTypes.STRING,
+    },
+    geography: {
+      type: DataTypes.STRING,
+    },
+  },
+  {
+    timestamps: false,
+  },
+);
+
 export const Release = sequelize.define(
   'release',
   {
