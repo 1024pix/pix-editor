@@ -1,5 +1,27 @@
 
 
+## v3.132.0 (04/03/2024)
+
+
+### :rocket: Amélioration
+- [#568](https://github.com/1024pix/pix-editor/pull/568) [FEATURE] Ajoute les Localized Challenge au panneau d'administration.
+- [#567](https://github.com/1024pix/pix-editor/pull/567) [FEATURE] Télécharger les traductions depuis Phrase (PIX-11512).
+- [#557](https://github.com/1024pix/pix-editor/pull/557) [FEATURE] Écrire le champ Géographie des épreuves dans PG (PIX-11088).
+- [#556](https://github.com/1024pix/pix-editor/pull/556) [FEATURE] Envoi des traductions dans phrase (Pix-11414).
+- [#555](https://github.com/1024pix/pix-editor/pull/555) [FEATURE] Voir les tags des tests statiques dans leur page de détails. (PIX-11381).
+- [#547](https://github.com/1024pix/pix-editor/pull/547) [FEATURE] Afficher les tags d'un test statique sur la liste (PIX-11378).
+
+### :arrow_up: Montée de version
+- [#566](https://github.com/1024pix/pix-editor/pull/566) [BUMP] Update dependency @1024pix/pix-ui to ^44.1.0 (pix-editor).
+- [#565](https://github.com/1024pix/pix-editor/pull/565) [BUMP] Update dependency @1024pix/pix-ui to ^44.0.4 (pix-editor).
+- [#534](https://github.com/1024pix/pix-editor/pull/534) [BUMP] Update dependency node to v20.11.1.
+- [#560](https://github.com/1024pix/pix-editor/pull/560) [BUMP] Update dependency eslint to v8.57.0.
+- [#559](https://github.com/1024pix/pix-editor/pull/559) [BUMP] Update browser-tools orb to v1.4.8 (.circleci).
+- [#564](https://github.com/1024pix/pix-editor/pull/564) [BUMP] Lock file maintenance (pix-editor).
+- [#563](https://github.com/1024pix/pix-editor/pull/563) [BUMP] Update dependency @1024pix/pix-ui to ^44.0.3 (pix-editor).
+- [#561](https://github.com/1024pix/pix-editor/pull/561) [BUMP] Lock file maintenance (api).
+- [#562](https://github.com/1024pix/pix-editor/pull/562) [BUMP] Lock file maintenance (challenge-parser).
+
 ## v3.131.2 (28/02/2024)
 
 
