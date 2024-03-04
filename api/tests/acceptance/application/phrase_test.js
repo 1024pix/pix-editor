@@ -310,6 +310,12 @@ describe('Acceptance | Controller | phrase-controller', () => {
             default: true,
           },
           {
+            id: 'enLocaleId',
+            name: 'en',
+            code: 'en',
+            default: false,
+          },
+          {
             id: 'nlLocaleId',
             name: 'nl',
             code: 'nl',
@@ -317,7 +323,13 @@ describe('Acceptance | Controller | phrase-controller', () => {
           },
         ]);
 
-      const phraseAPIDownload = nock('https://api.phrase.com')
+      const phraseAPIDownloadEn = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales/enLocaleId/download')
+        .query({ file_format: 'csv' })
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, 'key_name,en,comment', { 'Content-type': 'text/csv' });
+
+      const phraseAPIDownloadNl = nock('https://api.phrase.com')
         .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales/nlLocaleId/download')
         .query({ file_format: 'csv' })
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
@@ -338,7 +350,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
       // Then
       expect(response.statusCode).to.equal(204);
       expect(phraseAPILocales.isDone()).to.be.true;
-      expect(phraseAPIDownload.isDone()).to.be.true;
+      expect(phraseAPIDownloadEn.isDone()).to.be.true;
+      expect(phraseAPIDownloadNl.isDone()).to.be.true;
       expect(knex('translations').select().orderBy('key')).resolves.to.deep.equal([
         { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
         { key: 'challenge.challenge1nwE8BcKcmiNvR.instruction', locale: 'nl', value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n' },
