@@ -1,5 +1,11 @@
 
 
+## v3.132.1 (04/03/2024)
+
+
+### :bug: Correction
+- [#569](https://github.com/1024pix/pix-editor/pull/569) [BUGFIX] URL pour vérifier la version d'API.
+
 ## v3.132.0 (04/03/2024)
 
 
