@@ -57,6 +57,7 @@
     "base-x": "^4.0.0",
     "blipp": "4.0.2",
     "bull": "^4.10.4",
+    "countries-list": "^3.0.6",
     "dotenv": "^16.0.0",
     "fast-csv": "5.0.1",
     "file-saver": "2.0.5",

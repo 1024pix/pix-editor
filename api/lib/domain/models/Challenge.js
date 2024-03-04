@@ -1,3 +1,5 @@
+import { getCountryCode } from './Geography.js';
+
 export class Challenge {
 
   #allFiles;
@@ -157,6 +159,10 @@ export class Challenge {
 
   get isPrimary() {
     return this.locale === this.primaryLocale;
+  }
+
+  get geographyCode() {
+    return getCountryCode(this.geography);
   }
 
   get #primaryEmbedUrl() {
