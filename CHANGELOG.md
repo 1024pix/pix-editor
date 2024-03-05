@@ -1,5 +1,11 @@
 
 
+## v3.132.2 (05/03/2024)
+
+
+### :bug: Correction
+- [#570](https://github.com/1024pix/pix-editor/pull/570) [BUGFIX] Corrige le rechargement de la page .
+
 ## v3.132.1 (04/03/2024)
 
 
