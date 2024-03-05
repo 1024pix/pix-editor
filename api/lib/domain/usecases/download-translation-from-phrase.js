@@ -4,16 +4,22 @@ import { logger } from '../../infrastructure/logger.js';
 import { importTranslations } from './import-translations.js';
 import { Readable } from 'node:stream';
 
-export async function downloadTranslationFromPhrase() {
+export async function downloadTranslationFromPhrase(phraseApi = { Configuration, LocalesApi }) {
+
   const { apiKey, projectId } = config.phrase;
 
-  const configuration = new Configuration({
+  if (!apiKey || !projectId) {
+    logger.info('Phrase API Key or Project Id is not defined. Skipping download translations.');
+    return;
+  }
+
+  const configuration = new phraseApi.Configuration({
     fetchApi: fetch,
     apiKey: `token ${apiKey}`,
   });
 
   try {
-    const localesApi = new LocalesApi(configuration);
+    const localesApi = new phraseApi.LocalesApi(configuration);
 
     const phraseLocales = await localesApi.localesList({ projectId });
 
