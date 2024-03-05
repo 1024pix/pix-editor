@@ -17,8 +17,9 @@
     margin: 0;
 
     .page-title {
+      font-family: $font-roboto;
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 1.2rem;
 
       a {
         color: $pix-primary;
