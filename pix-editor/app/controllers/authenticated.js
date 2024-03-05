@@ -151,7 +151,7 @@ export default class ApplicationController extends Controller {
     this.session.invalidate();
   }
 
-  async checkApiVersion(reload = (...args) => window.reload(...args)) {
+  async checkApiVersion(reload = (...args) => location.reload(...args)) {
     const api = await this.store.queryRecord('api', { dummy: '' });
 
     if (api.version === ENV.APP.version) return;
