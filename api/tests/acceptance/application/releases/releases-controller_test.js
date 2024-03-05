@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
+import nock from 'nock';
 import {
   airtableBuilder,
   databaseBuilder,
@@ -718,6 +719,18 @@ describe('Acceptance | Controller | release-controller', () => {
         const server = await createServer();
         await databaseBuilder.commit();
         const expectedCurrentContent = await mockContentForRelease();
+
+        nock('https://api.phrase.com')
+          .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
+          .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+          .reply(200, [
+            {
+              id: 'frLocaleId',
+              name: 'fr',
+              code: 'fr',
+              default: true,
+            },
+          ]);
 
         // When
         const response = await server.inject({

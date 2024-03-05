@@ -1,4 +1,4 @@
-import { afterEach } from 'vitest';
+import { beforeEach, afterEach } from 'vitest';
 import * as infraErrors from '../lib/infrastructure/errors.js';
 import { cache } from '../lib/infrastructure/cache.js';
 import nock from 'nock';
@@ -7,6 +7,10 @@ import { AirtableBuilder } from './tooling/airtable-builder/airtable-builder.js'
 import { InputOutputDataBuilder }  from './tooling/input-output-data-builder/input-output-data-builder.js';
 import { knex } from '../db/knex-database-connection.js';
 import './tooling/vitest-custom-matchers/index.js';
+
+beforeEach(() => {
+  nock.disableNetConnect();
+});
 
 afterEach(async () => {
   airtableBuilder.cleanAll();

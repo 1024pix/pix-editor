@@ -3,6 +3,7 @@ import { releaseRepository } from '../../../../lib/infrastructure/repositories/i
 import { Release } from '../../../../lib/domain/models/release/Release.js';
 import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
 import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
+import * as downloadTranslationFromPhraseUseCase from '../../../../lib/domain/usecases/download-translation-from-phrase.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
 import * as config from '../../../../lib/config.js';
@@ -14,6 +15,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
     it('should create and persist a new Release in data repository', async () => {
       // given
+      vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
       vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedRelease);
       vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
 
@@ -29,6 +31,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
       const resolvedCreatedReleaseId = 1;
 
       beforeEach(() => {
+        vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
         vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedReleaseId);
         vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
       });
@@ -90,6 +93,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
     describe('when release creation failed', () => {
 
       beforeEach(() => {
+        vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
         vi.spyOn(releaseRepository, 'create').mockRejectedValue(new Error('Network error'));
         vi.spyOn(learningContentNotification, 'notifyReleaseCreationFailure').mockResolvedValue();
       });
