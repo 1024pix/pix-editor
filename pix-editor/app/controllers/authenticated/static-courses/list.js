@@ -2,7 +2,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import ENV from 'pixeditor/config/environment';
 
 export default class StaticCoursesController extends Controller {
   @service router;
@@ -14,7 +13,6 @@ export default class StaticCoursesController extends Controller {
   @tracked tempIsActive = true;
   @tracked name = '';
   @tracked tempName = '';
-  @tracked shouldDisplayTags = ENV.APP.ENABLE_STATIC_COURSE_TAGS;
 
   @action
   async copyStaticCoursePreviewUrl(staticCourseSummary) {
