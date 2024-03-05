@@ -3,7 +3,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Static Courses | Creation', function(hooks) {
   setupApplicationTest(hooks);
@@ -14,6 +14,9 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
     notifications.setDefaultClearDuration(50);
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01') });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', challengeCount: 10, createdAt: new Date('2019-01-01') });
+    this.server.create('static-course-tag', { id: 123, label: 'COUleur' });
+    this.server.create('static-course-tag', { id: 456, label: 'COUrage' });
+    this.server.create('static-course-tag', { id: 789, label: 'Foin' });
 
     const challengeSummaries = [];
     challengeSummaries.push(this.server.create('challenge-summary', {
@@ -84,10 +87,14 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
       // when
       await fillByLabel('* Nom du test statique', 'Mon nouveau test statique');
       await fillByLabel('Description à usage interne', 'Une super description pour mon nouveau test');
+      await fillByLabel('Tags', 'cou');
+      await clickByText('COUrage');
+      await clickByText('COUleur');
       await fillByLabel('IDs des épreuves', 'chalA\nchalC');
       await triggerEvent(find('#static-course-name'), 'keyup', '');
       await triggerEvent(find('#static-course-description'), 'keyup', '');
       await triggerEvent(find('#static-course-challenges'), 'keyup', '');
+      await clickByName('Créer le test statique'); // once to lose focus on the tag dropdown
       await clickByName('Créer le test statique');
 
       // then
@@ -99,6 +106,8 @@ module('Acceptance | Static Courses | Creation', function(hooks) {
         .replace(/\s?:\s?/g, ':');
       assert.strictEqual(removeWhitespacesFnc(nameItem.textContent), 'Nom:Mon nouveau test statique');
       assert.strictEqual(removeWhitespacesFnc(descriptionItem.textContent), 'Description:Une super description pour mon nouveau test');
+      assert.dom(screen.getByText('COUrage')).exists();
+      assert.dom(screen.getByText('COUleur')).exists();
     });
 
     test('should cancel static course creation', async function(assert) {

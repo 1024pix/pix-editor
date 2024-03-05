@@ -9,6 +9,7 @@ import * as phraseRoute from './application/phrase.js';
 import * as releasesRoute from './application/releases.js';
 import * as replicationDataRoute from './application/replication-data.js';
 import * as staticCoursesRoute from './application/static-courses/index.js';
+import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
 import * as staticRoute from './application/static/index.js';
 import * as translationsRoute from './application/translations.js';
 import * as usersRoute from './application/users.js';
@@ -25,6 +26,7 @@ export const routes = [
   releasesRoute,
   replicationDataRoute,
   staticCoursesRoute,
+  staticCourseTagsRoute,
   staticRoute,
   translationsRoute,
   usersRoute,

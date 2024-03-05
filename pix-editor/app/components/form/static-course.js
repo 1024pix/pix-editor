@@ -12,6 +12,9 @@ export default class StaticCourseForm extends Component {
   @tracked challengeIds = new ChallengeIdsField();
   @tracked isFormInvalid = true;
   @tracked isSubmitting = false;
+  @tracked tagOptions = [];
+  @tracked selectedTagIds = [];
+  @tracked selectedTags = [];
   @tracked errorMessages = A([]);
 
   constructor(...args) {
@@ -29,7 +32,21 @@ export default class StaticCourseForm extends Component {
       this.challengeIds.setValue(this.args.initialChallengeIds);
       this.challengeIds.validate();
     }
+    if (this.args.initialTagIds.length > 0) {
+      this.selectedTagIds = this.args.initialTagIds;
+      this.updateDisplayedTags();
+    }
+    for (const tag of this.args.staticCourseTags.toArray()) {
+      this.tagOptions.push({ value: tag.id, label: tag.label });
+    }
+    this.tagOptions.sort((a, b) => a.label.localeCompare(b.label));
     this.checkFormValidity();
+  }
+
+  @action
+  onTagClicked(tagIds) {
+    this.selectedTagIds = tagIds;
+    this.updateDisplayedTags();
   }
 
   @action
@@ -41,6 +58,7 @@ export default class StaticCourseForm extends Component {
       name: this.name.getValueForSubmit(),
       description: this.description.getValueForSubmit(),
       challengeIds: this.challengeIds.getValueForSubmit(),
+      tagIds: this.selectedTagIds,
     };
     try {
       await this.args.onFormSubmitted(formData);
@@ -86,6 +104,12 @@ export default class StaticCourseForm extends Component {
 
   checkFormValidity() {
     this.isFormInvalid = !this.name.isValid || !this.challengeIds.isValid;
+  }
+
+  updateDisplayedTags() {
+    this.selectedTags = this.args.staticCourseTags.toArray()
+      .filter(({ id }) => this.selectedTagIds.includes(id))
+      .sort((a, b) => a.label.localeCompare(b.label));
   }
 }
 

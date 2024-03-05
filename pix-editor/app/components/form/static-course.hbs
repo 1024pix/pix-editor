@@ -18,6 +18,30 @@
       @value={{@initialDescription}}
       {{on "keyup" this.updateDescription}}
     />
+    <div class="static-course-tag__area">
+      <PixMultiSelect
+        @id="tags-selector"
+        @label="Tags"
+        @labelSize=""
+        @placeholder="Sélectionnez des tags"
+        @values={{this.selectedTagIds}}
+        @onChange={{this.onTagClicked}}
+        @isSearchable="true"
+        @emptyMessage="Pas de résultats"
+        @options={{this.tagOptions}}
+        as
+        |option|
+      >
+        {{option.label}}
+      </PixMultiSelect>
+      <div class="static-course-chips">
+        {{#each this.selectedTags as |tag|}}
+          <PixTag class="static-course-tag" @color="secondary">
+            {{tag.label}}
+          </PixTag>
+        {{/each}}
+      </div>
+    </div>
   </Card>
   <Card class="new-static-course-form-card" @title="2. Sélectionner les épreuves">
     <span>

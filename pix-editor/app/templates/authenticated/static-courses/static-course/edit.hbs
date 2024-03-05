@@ -4,13 +4,15 @@
 <main class="page-body">
   <section class="page-section">
     <Form::StaticCourse
-      @initialName={{this.model.name}}
-      @initialDescription={{this.model.description}}
+      @initialName={{this.model.staticCourse.name}}
+      @initialDescription={{this.model.staticCourse.description}}
       @initialChallengeIds={{this.challengeIdsAsStringWithBreakLines}}
+      @initialTagIds={{this.tagIds}}
       @cancelButtonText="Annuler"
       @onFormCancelled={{this.goBackToDetails}}
       @submitButtonText="Enregistrer"
       @onFormSubmitted={{this.editStaticCourse}}
+      @staticCourseTags={{this.model.staticCourseTags}}
     />
   </section>
 </main>
