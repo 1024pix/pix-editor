@@ -3,6 +3,8 @@ import Sentry from '@sentry/node';
 import Queue from 'bull';
 import * as config from '../../config.js';
 
+export const queues = [];
+
 const queueError = (queueName, err, ...messages) => {
   logger.error(err, queueName, ...messages);
   Sentry.captureException(err);
@@ -24,6 +26,6 @@ export function createQueue(queueName) {
   queue.on('cleaned', () => queueMessage(queueName, 'The queue has been cleaned'));
   queue.on('drained', () => queueMessage(queueName, 'The queue has been drained'));
   queue.on('removed', () => queueMessage(queueName, 'A job has been removed'));
-
+  queues.push(queue);
   return queue;
 }
