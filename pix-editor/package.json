@@ -43,7 +43,7 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
-    "@playwright/test": "1.41.2",
+    "@playwright/test": "1.42.0",
     "@sentry/ember": "^7.22.0",
     "acorn": "^8.8.1",
     "base-x": "^4.0.0",
