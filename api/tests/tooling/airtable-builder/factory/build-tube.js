@@ -6,11 +6,11 @@ export function buildTube({
   practicalTitle_i18n: {
     fr: practicalTitleFrFr,
     en: practicalTitleEnUs,
-  },
+  } = {},
   practicalDescription_i18n: {
     fr: practicalDescriptionFrFr,
     en: practicalDescriptionEnUs,
-  },
+  } = {},
   competenceId,
 } = {}) {
 

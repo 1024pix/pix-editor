@@ -4,7 +4,7 @@ export function buildThematic(
     name_i18n: {
       fr: name,
       en: nameEnUs,
-    },
+    } = {},
     competenceId,
     tubeIds,
     index,
