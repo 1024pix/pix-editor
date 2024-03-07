@@ -5,15 +5,16 @@ import * as config from '../../config.js';
 import { logger } from '../../infrastructure/logger.js';
 import { releaseRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
 import { streamToPromise } from '../../infrastructure/utils/stream-to-promise.js';
+import { schedule as scheduleDeleteUnmentionedKeysAfterUploadJob } from '../../infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
-export async function uploadTranslationToPhrase(request) {
+export async function uploadTranslationToPhrase(request, phraseApi = { Configuration, UploadsApi }) {
   const stream = new PassThrough();
   const url = new URL(request.url);
   const baseUrl = `${url.protocol}//${url.host}`;
   exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
   const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
 
-  const configuration = new Configuration({
+  const configuration = new phraseApi.Configuration({
     fetchApi: fetch,
     apiKey: `token ${config.phrase.apiKey}`,
   });
@@ -38,7 +39,8 @@ export async function uploadTranslationToPhrase(request) {
   };
 
   try {
-    await new UploadsApi(configuration).uploadCreate(requestParameters);
+    const upload = await new phraseApi.UploadsApi(configuration).uploadCreate(requestParameters);
+    scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
   } catch (e) {
     const text = await e.text?.() ?? e;
     logger.error(`Phrase error while uploading translations: ${text}`);

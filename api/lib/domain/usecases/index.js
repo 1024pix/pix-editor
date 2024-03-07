@@ -1,4 +1,5 @@
 export * from './create-mission.js';
+export * from './delete-unmentioned-keys-after-upload.js';
 export * from './download-translation-from-phrase.js';
 export * from './export-translations.js';
 export * from './find-all-missions.js';
