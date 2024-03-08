@@ -2,7 +2,7 @@
   @extend .challenge-header;
 
   color: var(--pix-neutral-0) !important;
-  background-color: #684AB6 !important;
+  background-color: var(--pix-primary-500) !important;
 
   .ui.button {
     color: var(--pix-neutral-0) !important;
