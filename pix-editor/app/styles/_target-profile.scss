@@ -101,7 +101,7 @@
     background: #F3F3F3;
 
     &:not(:nth-last-child(2)) {
-      border-bottom: #d4d4d4 solid 1px;
+      border-bottom: var(--pix-neutral-20) solid 1px;
     }
 
     .theme-name {
