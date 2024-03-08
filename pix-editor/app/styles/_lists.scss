@@ -39,7 +39,7 @@
 
         &::before {
           display: inline-block;
-          color: #b9b9b9;
+          color: var(--pix-neutral-20);
           font-family: Icons;
           line-height: 1;
           border: none;
