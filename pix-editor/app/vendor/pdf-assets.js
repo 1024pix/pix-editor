@@ -44,7 +44,7 @@ const area3bg = `<svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/
 </style>
 <linearGradient id="XMLID_16_" gradientUnits="userSpaceOnUse" x1="297.64" y1="-1.282388e-008" x2="297.64" y2="48.969">
  <stop  offset="0" style="stop-color:#3D68FF"/>
- <stop  offset="1" style="stop-color:#12A3FF"/>
+ <stop  offset="1" style="stop-color:var(--pix-communication-light)"/>
 </linearGradient>
 <path id="XMLID_2_" class="st0" d="M583.3,49H12C5.4,49,0,43.6,0,37V12C0,5.4,5.4,0,12,0h571.3c6.6,0,12,5.4,12,12v25
  C595.3,43.6,589.9,49,583.3,49z"/>
