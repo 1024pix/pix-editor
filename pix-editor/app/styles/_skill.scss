@@ -23,18 +23,18 @@
   &.suggested,
   &.archived,
   &.deleted {
-    color: #2f2f2f !important;
+    color: var(--pix-neutral-800) !important;
     background: $skill-background-color !important;
   }
 
   .circular {
     &.validated {
-      color: #2f2f2f !important;
+      color: var(--pix-neutral-800) !important;
       background: $validated-background-color !important;
     }
 
     &.suggested {
-      color: #2f2f2f !important;
+      color: var(--pix-neutral-800) !important;
       background: $suggested-background-color !important;
     }
 
