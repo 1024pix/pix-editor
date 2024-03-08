@@ -232,7 +232,7 @@
       }
 
       &.disabled {
-        background-color: #dddddd;
+        background-color: var(--pix-neutral-20);
         cursor: default;
       }
     }
