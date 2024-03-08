@@ -20,7 +20,7 @@
 
 .target-profile-title {
   color: var(--pix-neutral-0);
-  background: black;
+  background: var(--pix-shadow);
 
   .trigger-menu {
     cursor: pointer;
@@ -85,7 +85,7 @@
 
         &:hover {
           i {
-            color: black;
+            color: var(--pix-shadow);
           }
         }
       }

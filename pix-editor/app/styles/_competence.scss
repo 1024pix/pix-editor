@@ -111,7 +111,7 @@
       text-align: center;
 
       .skill-cell__link {
-        color: black;
+        color: var(--pix-shadow);
         cursor: pointer;
 
         &.disabled {
@@ -173,7 +173,7 @@
             }
 
             &.not-declinable {
-              color: black;
+              color: var(--pix-shadow);
               background: var(--pix-neutral-0);
             }
 
@@ -447,7 +447,7 @@
     position: absolute;
     top: 0;
     left: 3px;
-    color: black;
+    color: var(--pix-shadow);
     font-weight: bold;
     font-size: 10px;
     font-style: normal;
