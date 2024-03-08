@@ -9,9 +9,9 @@
   font-weight: normal;
 
   .ember-power-select-trigger {
-    color: white;
+    color: var(--pix-neutral-0);
     background: transparent;
-    border-color: white;
+    border-color: var(--pix-neutral-0);
 
     .ember-power-select-status-icon {
       border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
@@ -27,10 +27,10 @@
 }
 
 .competence-management-link {
-  color: white;
+  color: var(--pix-neutral-0);
 
   &:hover {
-    color: white;
+    color: var(--pix-neutral-0);
     text-decoration: underline;
   }
 }
@@ -163,18 +163,18 @@
             }
 
             &.archived-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $archived-background-color;
             }
 
             &.obsolete-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $deleted-background-color;
             }
 
             &.not-declinable {
               color: black;
-              background: white;
+              background: var(--pix-neutral-0);
             }
 
             &.loading {
@@ -267,12 +267,12 @@
             }
 
             &.archive-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $archived-background-color;
             }
 
             &.obsolete-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $deleted-background-color;
             }
           }
@@ -289,7 +289,7 @@
         }
 
         .skill-i18n-name {
-          color: white;
+          color: var(--pix-neutral-0);
         }
 
         .flags {
@@ -311,7 +311,7 @@
           cursor: pointer;
 
           &.bad-quality {
-            color: white;
+            color: var(--pix-neutral-0);
             background: #EA2700;
           }
 
@@ -378,7 +378,7 @@
 .quality-indication-details {
   tr {
     &:nth-child(even) {
-      color: white;
+      color: var(--pix-neutral-0);
       background: #FFA300;
     }
 

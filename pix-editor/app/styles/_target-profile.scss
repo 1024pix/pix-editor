@@ -19,7 +19,7 @@
 }
 
 .target-profile-title {
-  color: white;
+  color: var(--pix-neutral-0);
   background: black;
 
   .trigger-menu {
@@ -50,7 +50,7 @@
 
   .competence-profile {
     margin-bottom: 0;
-    color: white;
+    color: var(--pix-neutral-0);
     background-color: #000044;
 
     &.area-profile-1 {
@@ -80,7 +80,7 @@
         box-shadow: none;
 
         i {
-          color: white;
+          color: var(--pix-neutral-0);
         }
 
         &:hover {

@@ -13,7 +13,7 @@
 
       &.ember-tabs__tab--selected {
         border: 1px solid rgb(212, 212, 213);
-        border-bottom-color: white;
+        border-bottom-color: var(--pix-neutral-0);
         border-radius: 5px 5px 0 0;
       }
     }
