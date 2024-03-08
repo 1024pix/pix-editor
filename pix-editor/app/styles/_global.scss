@@ -165,7 +165,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     box-sizing: border-box;
     min-width: 0;
     overflow: hidden;
-    border-left: 10px solid #dfe1e4;
+    border-left: 10px solid var(--pix-primary-10);
   }
 
 }
