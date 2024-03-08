@@ -1,5 +1,25 @@
 
 
+## v3.133.0 (08/03/2024)
+
+
+### :rocket: Amélioration
+- [#575](https://github.com/1024pix/pix-editor/pull/575) [FEATURE] Création de script pour ajouter des tags de tests statiques (PIX-11538).
+- [#576](https://github.com/1024pix/pix-editor/pull/576) [FEATURE] Supprime les clés non mentionnées après l'envoi des traductions sur Phrase (PIX-11547).
+- [#573](https://github.com/1024pix/pix-editor/pull/573) [FEATURE] Télécharge les traductions depuis Phrase à chaque création de Release.
+- [#558](https://github.com/1024pix/pix-editor/pull/558) [FEATURE] Pouvoir définir des tags à la création et à la modification des tests statiques (PIX-11371).
+
+### :building_construction: Tech
+- [#579](https://github.com/1024pix/pix-editor/pull/579) [TECH] Supprimer les translations dans Airtable qui ne référencent aucune entité pour alléger l'exécution des seeds en local et en RA (PIX-11556).
+
+### :arrow_up: Montée de version
+- [#582](https://github.com/1024pix/pix-editor/pull/582) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.4 (pix-editor).
+- [#581](https://github.com/1024pix/pix-editor/pull/581) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.3 (pix-editor).
+- [#578](https://github.com/1024pix/pix-editor/pull/578) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.2 (pix-editor).
+- [#577](https://github.com/1024pix/pix-editor/pull/577) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.1 (pix-editor).
+- [#574](https://github.com/1024pix/pix-editor/pull/574) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.0 (pix-editor).
+- [#572](https://github.com/1024pix/pix-editor/pull/572) [BUMP] Update dependency @playwright/test to v1.42.0.
+
 ## v3.132.2 (05/03/2024)
 
 
