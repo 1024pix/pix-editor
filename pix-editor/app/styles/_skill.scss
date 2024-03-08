@@ -106,10 +106,10 @@
   }
 
   .crush {
-    color: red;
+    color: var(--pix-error-500);
 
     &:hover {
-      color: red;
+      color: var(--pix-error-500);
     }
   }
 

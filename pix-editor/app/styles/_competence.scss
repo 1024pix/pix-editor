@@ -135,7 +135,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;
@@ -200,7 +200,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;

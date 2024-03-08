@@ -36,7 +36,7 @@ $ember-power-select-disabled-background-color: var(--pix-neutral-20);
 }
 
 .slide-fade {
-  background-color: red;
+  background-color: var(--pix-error-500);
   will-change: transform, opacity;
 
   &.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioning-in {
