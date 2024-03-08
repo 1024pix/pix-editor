@@ -1,7 +1,7 @@
 $ember-power-select-border-color: rgba(34, 36, 38, 0.15);
 $ember-power-select-trigger-ltr-padding: .3em 16px .3em .3em;
 $ember-power-select-dropdown-box-shadow: 0 4px 10px rgba(34, 36, 38, 0.4);
-$ember-power-select-disabled-background-color: #f9f9f9;
+$ember-power-select-disabled-background-color: var(--pix-neutral-20);
 
 .ember-basic-dropdown-content {
   z-index: 1002 !important;
@@ -9,7 +9,7 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 
 .ember-power-select-multiple-options .ember-power-select-multiple-option {
   background: none;
-  border-color: #dddddd;
+  border-color: var(--pix-neutral-20);
 }
 
 .field {
@@ -36,7 +36,7 @@ $ember-power-select-disabled-background-color: #f9f9f9;
 }
 
 .slide-fade {
-  background-color: red;
+  background-color: var(--pix-error-500);
   will-change: transform, opacity;
 
   &.ember-basic-dropdown-content--below.ember-basic-dropdown--transitioning-in {
@@ -92,7 +92,7 @@ $ember-power-select-disabled-background-color: #f9f9f9;
   position: absolute;
   top: 4px;
   right: 2px;
-  color: grey;
+  color: var(--pix-neutral-500);
 }
 
 .ember-power-select-option, .ember-power-select-selected-item {

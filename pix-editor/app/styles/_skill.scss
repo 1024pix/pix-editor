@@ -7,7 +7,7 @@
     font-size: 14px;
 
     &.active {
-      color: #ffffff;
+      color: var(--pix-neutral-0);
     }
 
     .checkbox {
@@ -23,18 +23,18 @@
   &.suggested,
   &.archived,
   &.deleted {
-    color: #2f2f2f !important;
+    color: var(--pix-neutral-800) !important;
     background: $skill-background-color !important;
   }
 
   .circular {
     &.validated {
-      color: #2f2f2f !important;
+      color: var(--pix-neutral-800) !important;
       background: $validated-background-color !important;
     }
 
     &.suggested {
-      color: #2f2f2f !important;
+      color: var(--pix-neutral-800) !important;
       background: $suggested-background-color !important;
     }
 
@@ -49,12 +49,12 @@
   }
 
   .ui.button {
-    color: black !important;
+    color: var(--pix-shadow) !important;
   }
 
   .ember-basic-dropdown-content .ui.button {
     margin: 0;
-    color: #000000 !important;
+    color: var(--pix-shadow) !important;
   }
 
 }
@@ -80,7 +80,7 @@
     border-bottom: solid 1px rgba(34, 36, 38, .1);
 
     &.ember-power-select-option[aria-current="true"] .search-description {
-      color: lightgrey;
+      color: var(--pix-neutral-100);
     }
 
     .search-title {
@@ -88,7 +88,7 @@
     }
 
     .search-description {
-      color: grey;
+      color: var(--pix-neutral-500);
     }
   }
 }
@@ -106,10 +106,10 @@
   }
 
   .crush {
-    color: red;
+    color: var(--pix-error-500);
 
     &:hover {
-      color: red;
+      color: var(--pix-error-500);
     }
   }
 

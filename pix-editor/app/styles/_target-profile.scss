@@ -19,8 +19,8 @@
 }
 
 .target-profile-title {
-  color: white;
-  background: black;
+  color: var(--pix-neutral-0);
+  background: var(--pix-shadow);
 
   .trigger-menu {
     cursor: pointer;
@@ -32,7 +32,7 @@
   }
 
   .ember-power-select-multiple-option {
-    background-color: #ffffff;
+    background-color: var(--pix-neutral-0);
   }
 }
 
@@ -50,27 +50,27 @@
 
   .competence-profile {
     margin-bottom: 0;
-    color: white;
-    background-color: #000044;
+    color: var(--pix-neutral-0);
+    background-color: var(--pix-neutral-110);
 
     &.area-profile-1 {
-      background: #F1A141;
+      background: var(--pix-information-light);
     }
 
     &.area-profile-2 {
-      background: #57C884;
+      background: var(--pix-content-light);
     }
 
     &.area-profile-3 {
-      background: #12A3FF;
+      background: var(--pix-communication-light);
     }
 
     &.area-profile-4 {
-      background: #FF3F94;
+      background: var(--pix-security-light);
     }
 
     &.area-profile-5 {
-      background: #574DA6;
+      background: var(--pix-environment-light);
     }
 
     .competence-info {
@@ -80,12 +80,12 @@
         box-shadow: none;
 
         i {
-          color: white;
+          color: var(--pix-neutral-0);
         }
 
         &:hover {
           i {
-            color: black;
+            color: var(--pix-shadow);
           }
         }
       }
@@ -98,10 +98,10 @@
 
   .theme-profile {
     padding: 0 !important;
-    background: #F3F3F3;
+    background: var(--pix-error-50);
 
     &:not(:nth-last-child(2)) {
-      border-bottom: #d4d4d4 solid 1px;
+      border-bottom: var(--pix-neutral-20) solid 1px;
     }
 
     .theme-name {
@@ -137,7 +137,7 @@
           transform: translateY(0.2rem);
 
           &.active {
-            color: #57C884
+            color: var(--pix-content-light)
           }
 
         }
@@ -167,7 +167,7 @@
           }
 
           &__color-red {
-            color: #7f0101;
+            color: var(--pix-error-90);
           }
         }
       }
@@ -183,7 +183,7 @@
 
       &.thematicResult {
         .icon.active {
-          color: #3f7bc4;
+          color: var(--pix-orga-500);
         }
 
         .practicalTitle-profile {
@@ -209,7 +209,7 @@
     flex-direction: row;
     justify-content: space-evenly;
     height: 60px;
-    border-color: #000000;
+    border-color: var(--pix-shadow);
     border-style: solid;
     border-width: 1px 0 0 1px;
 
@@ -222,7 +222,7 @@
       padding: 20px;
       font-size: 16px;
       text-align: center;
-      border-color: #000000;
+      border-color: var(--pix-shadow);
       border-style: solid;
       border-width: 0 1px 1px 0;
       cursor: pointer;
@@ -232,7 +232,7 @@
       }
 
       &.disabled {
-        background-color: #dddddd;
+        background-color: var(--pix-neutral-20);
         cursor: default;
       }
     }

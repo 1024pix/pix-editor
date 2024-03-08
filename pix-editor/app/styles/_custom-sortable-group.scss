@@ -18,7 +18,7 @@
 
       &.is-dragging {
         z-index: 100;
-        box-shadow: #2f2f2f 0 0 30px;
+        box-shadow: var(--pix-neutral-800) 0 0 30px;
         cursor: grabbing;
       }
 

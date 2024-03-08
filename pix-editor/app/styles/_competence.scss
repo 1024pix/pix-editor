@@ -9,9 +9,9 @@
   font-weight: normal;
 
   .ember-power-select-trigger {
-    color: white;
+    color: var(--pix-neutral-0);
     background: transparent;
-    border-color: white;
+    border-color: var(--pix-neutral-0);
 
     .ember-power-select-status-icon {
       border-color: rgba(255, 255, 255, 0.5) transparent transparent transparent;
@@ -27,10 +27,10 @@
 }
 
 .competence-management-link {
-  color: white;
+  color: var(--pix-neutral-0);
 
   &:hover {
-    color: white;
+    color: var(--pix-neutral-0);
     text-decoration: underline;
   }
 }
@@ -111,7 +111,7 @@
       text-align: center;
 
       .skill-cell__link {
-        color: black;
+        color: var(--pix-shadow);
         cursor: pointer;
 
         &.disabled {
@@ -135,7 +135,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;
@@ -163,18 +163,18 @@
             }
 
             &.archived-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $archived-background-color;
             }
 
             &.obsolete-prototype {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $deleted-background-color;
             }
 
             &.not-declinable {
-              color: black;
-              background: white;
+              color: var(--pix-shadow);
+              background: var(--pix-neutral-0);
             }
 
             &.loading {
@@ -200,7 +200,7 @@
 
         &.active {
           position: relative;
-          color: red !important;
+          color: var(--pix-error-500) !important;
 
           &::after {
             position: absolute;
@@ -267,12 +267,12 @@
             }
 
             &.archive-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $archived-background-color;
             }
 
             &.obsolete-skill {
-              color: white;
+              color: var(--pix-neutral-0);
               background: $deleted-background-color;
             }
           }
@@ -289,7 +289,7 @@
         }
 
         .skill-i18n-name {
-          color: white;
+          color: var(--pix-neutral-0);
         }
 
         .flags {
@@ -297,7 +297,7 @@
           background: rgba(255, 255, 255, .7);
 
           > i.flag {
-            box-shadow: grey 0 0 2px;
+            box-shadow: var(--pix-neutral-500) 0 0 2px;
           }
         }
       }
@@ -311,12 +311,12 @@
           cursor: pointer;
 
           &.bad-quality {
-            color: white;
+            color: var(--pix-neutral-0);
             background: #EA2700;
           }
 
           &.medium-quality {
-            background: #F3AC0B;
+            background: var(--pix-warning-500);
           }
 
           &.good-quality {
@@ -334,7 +334,7 @@
 
         &.active {
           .quality {
-            box-shadow: #000000 0 0 7px;
+            box-shadow: var(--pix-shadow) 0 0 7px;
             opacity: .8;
           }
 
@@ -378,7 +378,7 @@
 .quality-indication-details {
   tr {
     &:nth-child(even) {
-      color: white;
+      color: var(--pix-neutral-0);
       background: #FFA300;
     }
 
@@ -447,7 +447,7 @@
     position: absolute;
     top: 0;
     left: 3px;
-    color: black;
+    color: var(--pix-shadow);
     font-weight: bold;
     font-size: 10px;
     font-style: normal;

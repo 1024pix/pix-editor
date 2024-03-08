@@ -1,29 +1,29 @@
 $challenge-background-color: #fcfd9f;
 $skill-background-color: #d5e8fd;
-$production-background-color: #00ff00;
-$production-color: #000000;
-$draft-color: #000000;
-$validated-background-color: #00ff00/*#08cf08*/;
-$validated-color: #000000;
-$validated-no-test-background-color: #00ff00;
-$validated-no-test-color: #000000;
-$prevalidated-background-color: #00ff00/*#aaFFaa*/;
-$prevalidated-color: #000000;
+$production-background-color: var(--pix-content-light);
+$production-color: var(--pix-shadow);
+$draft-color: var(--pix-shadow);
+$validated-background-color: var(--pix-content-light)/*#08cf08*/;
+$validated-color: var(--pix-shadow);
+$validated-no-test-background-color: var(--pix-content-light);
+$validated-no-test-color: var(--pix-shadow);
+$prevalidated-background-color: var(--pix-content-light)/*#aaFFaa*/;
+$prevalidated-color: var(--pix-shadow);
 $suggested-background-color: #9ceaf7;
 $suggested-color: #0a1b53;
 $archived-background-color: #6b686d;
-$archived-color: #ffffff;
+$archived-color: var(--pix-neutral-0);
 $deleted-background-color: #c13b3b;
 $deleted-color: #1f0101;
 $to-be-submitted-background-color: #ffc851;
-$to-be-submitted-color: #000000;
+$to-be-submitted-color: var(--pix-shadow);
 $need-work-background-color: #ff51e8;
-$need-work-color: #000000;
+$need-work-color: var(--pix-shadow);
 $na-background-color: #eceaea;
 $na-color: #3e7726;
 $production-alternative-color: #085508;/* #0000ff; */
 $draft-alternative-color: #1083ce;
-$alternative-count-color: #c48807;
+$alternative-count-color: var(--pix-information-light);
 
 body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pusher > .column {
   min-height: 100vh;
@@ -34,7 +34,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .application {
-  background-color: #ffffff;
+  background-color: var(--pix-neutral-0);
 
   .pusher {
     display: flex;
@@ -49,7 +49,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   border-radius: 0;
 
   .ui.icon.button {
-    color: #ffffff;
+    color: var(--pix-neutral-0);
   }
 
 }
@@ -99,15 +99,15 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       .item {
         margin-top: 0.4em;
         padding-top: 0.528571em;
-        color: #777777;
+        color: var(--pix-neutral-500);
         cursor: pointer;
 
         &.active {
-          background-color: #F9FAFB;
+          background-color: var(--pix-neutral-0);
 
           &.production,
           &.workbench {
-            color: #dbbd17;
+            color: var(--pix-secondary-500);
           }
         }
       }
@@ -117,8 +117,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .menu.skill-mode .ui[class*="top attached"].menu.tabular .item.active {
     &.production,
     &.workbench {
-      color: #444488;
-
+      color: var(--pix-environment-light);
     }
   }
 
@@ -130,7 +129,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   .ui.attached {
 
     &.menu:not(.tabular) {
-      background-color: #F9FAFB;
+      background-color: var(--pix-neutral-0);
       border: none;
       border-bottom: 1px solid rgba(34, 36, 38, 0.15);
     }
@@ -166,7 +165,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
     box-sizing: border-box;
     min-width: 0;
     overflow: hidden;
-    border-left: 10px solid #dfe1e4;
+    border-left: 10px solid var(--pix-primary-10);
   }
 
 }
@@ -174,17 +173,17 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 .main-title {
   box-sizing: border-box;
   padding: 0 10px;
-  background-color: #3498db;
+  background-color: var(--pix-communication-light);
   border-bottom: 1px solid rgba(34, 36, 38, 0.15);
 
   &.lite {
-    background-color: #7C0E6A;
+    background-color: var(--pix-environment-dark);
   }
 
   h1.ui.header {
     margin: 0;
     padding: 6px 0;
-    color: #FFFFFF;
+    color: var(--pix-neutral-0);
     font-weight: normal;
     font-size: 20px;
 
@@ -202,7 +201,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         box-shadow: none;
 
         i {
-          color: #ffffff;
+          color: var(--pix-neutral-0);
         }
       }
     }
@@ -221,10 +220,10 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 
 
 .ui.inverted.menu {
-  background-color: #3498db;
+  background-color: var(--pix-communication-light);
 
   &.lite {
-    background-color: #7C0E6A;
+    background-color: var(--pix-environment-dark);
   }
 
   &.main-menu {
@@ -232,7 +231,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .item {
-    color: #ffffff;
+    color: var(--pix-neutral-0);
   }
 }
 
@@ -252,7 +251,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 footer.ui.attached.header {
-  color: white;
+  color: var(--pix-neutral-0);
   background: rgb(52, 152, 219) !important;
 
   p {
@@ -262,7 +261,7 @@ footer.ui.attached.header {
 }
 
 .ui.button {
-  color: #000000;
+  color: var(--pix-shadow);
   font-weight: normal;
   background-color: transparent;
 
