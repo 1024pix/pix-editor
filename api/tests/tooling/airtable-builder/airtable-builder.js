@@ -36,9 +36,15 @@ export class AirtableBuilder {
     frameworks,
     skills,
     thematics,
+    translations = [],
     tubes,
     tutorials,
   }) {
+    if (translations.length > 0) {
+      this.mockList({ tableName: 'translations' })
+        .returns(translations)
+        .activate();
+    }
     this.mockList({ tableName: 'Referentiel' })
       .returns(frameworks)
       .activate();
