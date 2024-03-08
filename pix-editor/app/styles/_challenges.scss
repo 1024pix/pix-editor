@@ -202,7 +202,7 @@ img.clickable {
       height: 95px;
       padding: 0.78571429em 1em;
       overflow: scroll;
-      background-color: #f9f9f9;
+      background-color: var(--pix-neutral-20);
       border: 1px solid rgba(34, 36, 38, 0.15);
       border-radius: 0.28571429rem;
     }
@@ -211,7 +211,7 @@ img.clickable {
       textarea,
       input[type="text"],
       .selection {
-        background-color: #f9f9f9;
+        background-color: var(--pix-neutral-20);
       }
     }
 
