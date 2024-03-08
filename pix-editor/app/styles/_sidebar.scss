@@ -9,7 +9,7 @@
     height: 50px;
     margin: 0;
     padding: 15px 5px;
-    color: #ffffff;
+    color: var(--pix-neutral-0);
     font-size: 25px;
   }
 
@@ -133,7 +133,7 @@
     .menu .item {
       align-items: initial;
       padding: 10px;
-      color: #ffffff;
+      color: var(--pix-neutral-0);
     }
 
     .menu .item i.icon {
@@ -168,13 +168,13 @@
       }
 
       i.icon {
-        color: #ffffff;
+        color: var(--pix-neutral-0);
       }
     }
 
     &.loading {
       .input > i.icon::after {
-        border-color: #ffffff transparent transparent;
+        border-color: var(--pix-neutral-0) transparent transparent;
       }
     }
 

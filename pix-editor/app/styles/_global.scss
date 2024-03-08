@@ -12,7 +12,7 @@ $prevalidated-color: #000000;
 $suggested-background-color: #9ceaf7;
 $suggested-color: #0a1b53;
 $archived-background-color: #6b686d;
-$archived-color: #ffffff;
+$archived-color: var(--pix-neutral-0);
 $deleted-background-color: #c13b3b;
 $deleted-color: #1f0101;
 $to-be-submitted-background-color: #ffc851;
@@ -34,7 +34,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
 }
 
 .application {
-  background-color: #ffffff;
+  background-color: var(--pix-neutral-0);
 
   .pusher {
     display: flex;
@@ -49,7 +49,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   border-radius: 0;
 
   .ui.icon.button {
-    color: #ffffff;
+    color: var(--pix-neutral-0);
   }
 
 }
@@ -184,7 +184,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   h1.ui.header {
     margin: 0;
     padding: 6px 0;
-    color: #FFFFFF;
+    color: var(--pix-neutral-0);
     font-weight: normal;
     font-size: 20px;
 
@@ -202,7 +202,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
         box-shadow: none;
 
         i {
-          color: #ffffff;
+          color: var(--pix-neutral-0);
         }
       }
     }
@@ -232,7 +232,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
   }
 
   .item {
-    color: #ffffff;
+    color: var(--pix-neutral-0);
   }
 }
 
