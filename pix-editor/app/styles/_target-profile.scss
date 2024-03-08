@@ -98,7 +98,7 @@
 
   .theme-profile {
     padding: 0 !important;
-    background: #F3F3F3;
+    background: var(--pix-error-50);
 
     &:not(:nth-last-child(2)) {
       border-bottom: var(--pix-neutral-20) solid 1px;
