@@ -297,7 +297,7 @@
           background: rgba(255, 255, 255, .7);
 
           > i.flag {
-            box-shadow: grey 0 0 2px;
+            box-shadow: var(--pix-neutral-500) 0 0 2px;
           }
         }
       }

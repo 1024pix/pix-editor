@@ -92,7 +92,7 @@ $ember-power-select-disabled-background-color: var(--pix-neutral-20);
   position: absolute;
   top: 4px;
   right: 2px;
-  color: grey;
+  color: var(--pix-neutral-500);
 }
 
 .ember-power-select-option, .ember-power-select-selected-item {
