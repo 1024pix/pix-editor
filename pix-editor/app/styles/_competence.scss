@@ -334,7 +334,7 @@
 
         &.active {
           .quality {
-            box-shadow: #000000 0 0 7px;
+            box-shadow: var(--pix-shadow) 0 0 7px;
             opacity: .8;
           }
 

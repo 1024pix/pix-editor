@@ -54,7 +54,7 @@
 
   .ember-basic-dropdown-content .ui.button {
     margin: 0;
-    color: #000000 !important;
+    color: var(--pix-shadow) !important;
   }
 
 }

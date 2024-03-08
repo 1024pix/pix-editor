@@ -1,14 +1,14 @@
 $challenge-background-color: #fcfd9f;
 $skill-background-color: #d5e8fd;
 $production-background-color: #00ff00;
-$production-color: #000000;
-$draft-color: #000000;
+$production-color: var(--pix-shadow);
+$draft-color: var(--pix-shadow);
 $validated-background-color: #00ff00/*#08cf08*/;
-$validated-color: #000000;
+$validated-color: var(--pix-shadow);
 $validated-no-test-background-color: #00ff00;
-$validated-no-test-color: #000000;
+$validated-no-test-color: var(--pix-shadow);
 $prevalidated-background-color: #00ff00/*#aaFFaa*/;
-$prevalidated-color: #000000;
+$prevalidated-color: var(--pix-shadow);
 $suggested-background-color: #9ceaf7;
 $suggested-color: #0a1b53;
 $archived-background-color: #6b686d;
@@ -16,9 +16,9 @@ $archived-color: var(--pix-neutral-0);
 $deleted-background-color: #c13b3b;
 $deleted-color: #1f0101;
 $to-be-submitted-background-color: #ffc851;
-$to-be-submitted-color: #000000;
+$to-be-submitted-color: var(--pix-shadow);
 $need-work-background-color: #ff51e8;
-$need-work-color: #000000;
+$need-work-color: var(--pix-shadow);
 $na-background-color: #eceaea;
 $na-color: #3e7726;
 $production-alternative-color: #085508;/* #0000ff; */
@@ -262,7 +262,7 @@ footer.ui.attached.header {
 }
 
 .ui.button {
-  color: #000000;
+  color: var(--pix-shadow);
   font-weight: normal;
   background-color: transparent;
 
