@@ -80,7 +80,7 @@
     border-bottom: solid 1px rgba(34, 36, 38, .1);
 
     &.ember-power-select-option[aria-current="true"] .search-description {
-      color: lightgrey;
+      color: var(--pix-neutral-100);
     }
 
     .search-title {
