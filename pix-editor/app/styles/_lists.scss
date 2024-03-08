@@ -83,7 +83,7 @@
     }
 
     tr.is-selected td {
-      background-color: #ffffcc;
+      background-color: var(--pix-warning-100);
     }
   }
 }
