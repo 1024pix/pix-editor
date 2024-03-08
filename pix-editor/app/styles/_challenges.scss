@@ -253,7 +253,7 @@ img.clickable {
   .item {
 
     &.alternatives {
-      color: #2185d0;
+      color: var(--pix-info-500);
     }
   }
 }
