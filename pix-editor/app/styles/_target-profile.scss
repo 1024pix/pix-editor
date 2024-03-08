@@ -58,7 +58,7 @@
     }
 
     &.area-profile-2 {
-      background: #57C884;
+      background: var(--pix-content-light);
     }
 
     &.area-profile-3 {
@@ -137,7 +137,7 @@
           transform: translateY(0.2rem);
 
           &.active {
-            color: #57C884
+            color: var(--pix-content-light)
           }
 
         }
