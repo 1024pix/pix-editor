@@ -99,7 +99,7 @@ body, html, body > div.ember-view, .application, .pusher, .main, .main-menu, .pu
       .item {
         margin-top: 0.4em;
         padding-top: 0.528571em;
-        color: #777777;
+        color: var(--pix-neutral-500);
         cursor: pointer;
 
         &.active {
