@@ -2,9 +2,9 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { releaseRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { Release } from '../../../../lib/domain/models/release/Release.js';
 import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
+import * as uploadTranslationToPhraseJob from '../../../../lib/infrastructure/scheduled-jobs/upload-translation-job.js';
 import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
 import * as downloadTranslationFromPhraseUseCase from '../../../../lib/domain/usecases/download-translation-from-phrase.js';
-import * as uploadTranslationToPhraseUsecase from '../../../../lib/domain/usecases/upload-translation-to-phrase.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
 import * as config from '../../../../lib/config.js';
@@ -19,6 +19,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
       vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
       vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedRelease);
       vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
+      vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
 
       // when
       await releaseJobProcessor({ data: {} });
@@ -35,6 +36,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
         vi.spyOn(releaseRepository, 'create').mockResolvedValue(resolvedCreatedReleaseId);
         vi.spyOn(learningContentNotification, 'notifyReleaseCreationSuccess').mockResolvedValue();
+        vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
       });
 
       it('should return the persisted release ID', async () => {
@@ -90,15 +92,15 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
-      it('should call upload translation to phrase when is finished', async () => {
+      it('should start the upload translation job to  phrase when is finished', async () => {
         // given
-        const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseUsecase, 'uploadTranslationToPhrase');
+        const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
 
         // when
         await releaseJobProcessor({ data: {} });
 
         // then
-        expect(uploadTranslationToPhraseStub).toHaveBeenCalled();
+        expect(uploadTranslationToPhraseStub).toHaveBeenCalledOnce();
       });
     });
 
@@ -108,6 +110,7 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         vi.spyOn(downloadTranslationFromPhraseUseCase, 'downloadTranslationFromPhrase').mockResolvedValue();
         vi.spyOn(releaseRepository, 'create').mockRejectedValue(new Error('Network error'));
         vi.spyOn(learningContentNotification, 'notifyReleaseCreationFailure').mockResolvedValue();
+        vi.spyOn(uploadTranslationToPhraseJob, 'start');
       });
 
       it('should log the error', async () => {

@@ -1,12 +1,12 @@
+import './job-process.js';
 import { SlackNotifier } from '../notifications/SlackNotifier.js';
 import * as checkUrlsJob from './check-urls-job.js';
+import * as uploadTranslationJob from './upload-translation-job.js';
 import * as config from '../../config.js';
-import { downloadTranslationFromPhrase } from '../../domain/usecases/download-translation-from-phrase.js';
+import { downloadTranslationFromPhrase } from '../../domain/usecases/index.js';
 import * as learningContentNotification from '../../domain/services/learning-content-notification.js';
 import { logger } from '../logger.js';
 import { releaseRepository } from '../repositories/index.js';
-import { uploadTranslationToPhrase } from '../../domain/usecases/index.js';
-import { disconnect } from '../../../db/knex-database-connection.js';
 
 export default async function releaseJobProcessor(job) {
   try {
@@ -19,7 +19,7 @@ export default async function releaseJobProcessor(job) {
     if (config.scheduledJobs.startCheckUrlJob) {
       checkUrlsJob.start();
     }
-    uploadTranslationToPhrase();
+    await uploadTranslationJob.start();
     return releaseId;
   } catch (error) {
     if (_isSlackNotificationGloballyEnabled()) {
@@ -32,17 +32,3 @@ export default async function releaseJobProcessor(job) {
 function _isSlackNotificationGloballyEnabled() {
   return config.notifications.slack.enable;
 }
-
-async function exitOnSignal(signal) {
-  logger.info(`Processor received signal ${signal}. Closing DB connections before exiting.`);
-  try {
-    await disconnect();
-    process.exit(0);
-  } catch (err) {
-    logger.error(err);
-    process.exit(1);
-  }
-}
-
-process.on('SIGTERM', () => { exitOnSignal('SIGTERM'); });
-process.on('SIGINT', () => { exitOnSignal('SIGINT'); });

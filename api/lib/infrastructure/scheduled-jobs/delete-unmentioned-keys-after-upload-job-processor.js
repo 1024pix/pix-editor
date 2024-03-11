@@ -1,3 +1,4 @@
+import './job-process.js';
 import { RETRY, deleteUnmentionedKeysAfterUpload } from '../../domain/usecases/index.js';
 import { schedule } from './delete-unmentioned-keys-after-upload-job.js';
 
