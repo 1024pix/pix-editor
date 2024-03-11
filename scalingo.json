@@ -4,6 +4,9 @@
     "REVIEW_APP": {
       "description": "Indicates that the application is a review app",
       "value": "true"
+    },
+    "PIX_EDITOR_BASE_URL": {
+      "generator": "url"
     }
   },
   "scripts": {
