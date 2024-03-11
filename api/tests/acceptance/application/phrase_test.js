@@ -207,10 +207,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       const postPhraseUploadOptions = {
         method: 'POST',
         url: '/api/phrase/upload',
-        headers: {
-          ...generateAuthorizationHeader(user),
-          host: 'test.site',
-        },
+        headers: generateAuthorizationHeader(user),
       };
 
       // When

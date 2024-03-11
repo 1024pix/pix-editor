@@ -140,7 +140,7 @@ if (process.env.NODE_ENV === 'test') {
 
   pixApp.baseUrl = 'https://app.test.pix.fr';
 
-  lcms.PIX_EDITOR_BASE_URL = 'http://test.site';
+  lcms.baseUrl = 'http://test.site';
 
   storage = {
     authUrl: 'https://storage.auth.example.net/api/auth',

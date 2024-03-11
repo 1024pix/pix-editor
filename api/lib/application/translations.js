@@ -16,8 +16,7 @@ export async function register(server) {
       config: {
         handler: function(request, h) {
           const stream = new PassThrough();
-          const url = new URL(request.url);
-          const baseUrl = `${url.protocol}//${url.host}`;
+          const baseUrl = config.lcms.baseUrl;
           exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
           return h.response(stream).header('Content-type', 'text/csv');
         }
