@@ -12,5 +12,7 @@ async function exitOnSignal(signal) {
   }
 }
 
-process.on('SIGTERM', () => { exitOnSignal('SIGTERM'); });
-process.on('SIGINT', () => { exitOnSignal('SIGINT'); });
+if (process.env.NODE_ENV !== 'test') {
+  process.on('SIGTERM', () => { exitOnSignal('SIGTERM'); });
+  process.on('SIGINT', () => { exitOnSignal('SIGINT'); });
+}
