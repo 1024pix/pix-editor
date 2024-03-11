@@ -14,7 +14,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
 
     // when
-    await uploadTranslationToPhrase({ url: 'https://example.net' }, { Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
 
     // then
     expect(uploadCreateStub).toHaveBeenCalled();
@@ -31,7 +31,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     const scheduleStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule').mockResolvedValue();
 
     // when
-    await uploadTranslationToPhrase({ url: 'https://example.net' }, { Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
 
     // then
     expect(scheduleStub).toHaveBeenCalledWith({ uploadId: 'upload-id' });

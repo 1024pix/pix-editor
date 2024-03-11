@@ -53,6 +53,10 @@ export const pixApp = {
   baseUrl: process.env.PIX_APP_BASEURL
 };
 
+export const lcms = {
+  baseUrl: process.env.PIX_EDITOR_BASE_URL
+};
+
 export const pixEditor = {
   airtableUrl: process.env.AIRTABLE_URL,
   airtableBase: process.env.AIRTABLE_BASE,
@@ -135,6 +139,8 @@ if (process.env.NODE_ENV === 'test') {
   };
 
   pixApp.baseUrl = 'https://app.test.pix.fr';
+
+  lcms.PIX_EDITOR_BASE_URL = 'http://test.site';
 
   storage = {
     authUrl: 'https://storage.auth.example.net/api/auth',
