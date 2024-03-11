@@ -1,6 +1,7 @@
 import Airtable from 'airtable';
 import fp from 'lodash/fp.js';
 import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
+import { getCountryCode } from '../../../lib/domain/models/Geography.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {
   const {
@@ -17,6 +18,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
         'id persistant',
         'Langues',
         'Embed URL',
+        'Géographie',
       ],
     })
     .all();
@@ -29,7 +31,12 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
 
   const localizedChallenges = challenges.flatMap((challenge) => {
     const challengeId = challenge.get('id persistant');
+    const countryName = challenge.get('Géographie');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
+    const countryCode = getCountryCode(countryName);
+    if (!countryCode) {
+      console.log({ challengeId }, `could not find country code for name "${countryName}"`);
+    }
     return [
       { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('Embed URL') },
       ...challengesLocales[challengeId]
@@ -38,7 +45,8 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
           id: `${challengeId}-${locale}`,
           challengeId,
           locale,
-          status: 'proposé'
+          status: 'proposé',
+          geography: countryCode,
         })) ?? [],
     ];
   });
