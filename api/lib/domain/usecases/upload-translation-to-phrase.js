@@ -8,6 +8,14 @@ import { streamToPromise } from '../../infrastructure/utils/stream-to-promise.js
 import { schedule as scheduleDeleteUnmentionedKeysAfterUploadJob } from '../../infrastructure/scheduled-jobs/delete-unmentioned-keys-after-upload-job.js';
 
 export async function uploadTranslationToPhrase(phraseApi = { Configuration, UploadsApi }) {
+
+  const { apiKey, projectId } = config.phrase;
+
+  if (!apiKey || !projectId) {
+    logger.info('Phrase API Key or Project Id is not defined. Skipping upload translations.');
+    return;
+  }
+
   const baseUrl = config.lcms.baseUrl;
   const stream = new PassThrough();
   exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
