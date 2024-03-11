@@ -5,6 +5,7 @@ import { downloadTranslationFromPhrase } from '../../domain/usecases/download-tr
 import * as learningContentNotification from '../../domain/services/learning-content-notification.js';
 import { logger } from '../logger.js';
 import { releaseRepository } from '../repositories/index.js';
+import { uploadTranslationToPhrase } from '../../domain/usecases/index.js';
 import { disconnect } from '../../../db/knex-database-connection.js';
 
 export default async function releaseJobProcessor(job) {
@@ -18,6 +19,7 @@ export default async function releaseJobProcessor(job) {
     if (config.scheduledJobs.startCheckUrlJob) {
       checkUrlsJob.start();
     }
+    uploadTranslationToPhrase();
     return releaseId;
   } catch (error) {
     if (_isSlackNotificationGloballyEnabled()) {

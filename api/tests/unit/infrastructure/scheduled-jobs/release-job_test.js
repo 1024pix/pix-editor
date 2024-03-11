@@ -4,6 +4,7 @@ import { Release } from '../../../../lib/domain/models/release/Release.js';
 import releaseJobProcessor from '../../../../lib/infrastructure/scheduled-jobs/release-job-processor.js';
 import * as learningContentNotification from '../../../../lib/domain/services/learning-content-notification.js';
 import * as downloadTranslationFromPhraseUseCase from '../../../../lib/domain/usecases/download-translation-from-phrase.js';
+import * as uploadTranslationToPhraseUsecase from '../../../../lib/domain/usecases/upload-translation-to-phrase.js';
 import { logger } from '../../../../lib/infrastructure/logger.js';
 import { SlackNotifier } from '../../../../lib/infrastructure/notifications/SlackNotifier.js';
 import * as config from '../../../../lib/config.js';
@@ -87,6 +88,17 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
 
         // Then
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
+      });
+
+      it('should call upload translation to phrase when is finished', async () => {
+        // given
+        const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseUsecase, 'uploadTranslationToPhrase');
+
+        // when
+        await releaseJobProcessor({ data: {} });
+
+        // then
+        expect(uploadTranslationToPhraseStub).toHaveBeenCalled();
       });
     });
 
