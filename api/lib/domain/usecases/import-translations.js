@@ -1,4 +1,4 @@
-import { translationRepository, localizedChallengeRepository } from '../../infrastructure/repositories/index.js';
+import { localizedChallengeRepository, translationRepository } from '../../infrastructure/repositories/index.js';
 import { LocalizedChallenge, Translation } from '../models/index.js';
 import { parseStream } from 'fast-csv';
 import fp from 'lodash/fp.js';
@@ -45,12 +45,6 @@ const extractChallengesLocales = fp.flow(
   fp.filter((translation) => {
     return translation.key.startsWith('challenge.');
   }),
-  fp.map((challengeTranslation) => {
-    return new LocalizedChallenge({
-      challengeId: challengeTranslation.key.split('.')[1],
-      locale: challengeTranslation.locale,
-      status: 'proposé',
-    });
-  }),
+  fp.map(LocalizedChallenge.buildAlternativeFromTranslation),
   fp.uniqBy(({ challengeId, locale }) => `${challengeId}:${locale}`),
 );

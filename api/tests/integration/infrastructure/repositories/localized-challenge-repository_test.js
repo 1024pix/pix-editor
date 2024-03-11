@@ -1,4 +1,4 @@
-import { describe, describe as context, expect, it, afterEach } from 'vitest';
+import { afterEach, describe as context, describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
@@ -13,7 +13,8 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé'
+        status: 'proposé',
+        geography: null,
       });
       await databaseBuilder.commit();
 
@@ -28,6 +29,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         embedUrl: 'https://example.com/embed.html',
         status: 'proposé',
         fileIds: [],
+        geography: null,
       }]);
     });
   });
@@ -671,6 +673,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           embedUrl: 'my-new-url.html',
           locale: 'ar',
           status: null,
+          geography: 'AR',
         }));
     });
 

@@ -1,9 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { Translation, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
-import {
-  InvalidFileError,
-  importTranslations
-} from '../../../../lib/domain/usecases/import-translations';
+import { LocalizedChallenge, Translation } from '../../../../lib/domain/models/index.js';
+import { importTranslations, InvalidFileError } from '../../../../lib/domain/usecases/index.js';
 import { PassThrough } from 'node:stream';
 
 describe('Unit | Domain | Usecases | import-translations', function() {
@@ -35,7 +32,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
       translations: [new Translation({
         key: 'some.key',
         locale: 'nl',
-        value: 'Hallo'
+        value: 'Hallo',
       })],
     });
   });
@@ -94,14 +91,22 @@ describe('Unit | Domain | Usecases | import-translations', function() {
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
     expect(localizedChallengeRepository.create).toHaveBeenCalledWith([
       new LocalizedChallenge({
+        id: null,
         challengeId: 'id',
         locale: 'nl',
         status: 'proposé',
+        embedUrl: null,
+        fileIds: [],
+        geography: null,
       }),
       new LocalizedChallenge({
+        id: null,
         challengeId: 'id2',
         locale: 'nl',
         status: 'proposé',
+        embedUrl: null,
+        fileIds: [],
+        geography: null,
       }),
     ]);
   });

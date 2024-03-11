@@ -63,5 +63,9 @@ const deserializer = new Deserializer({
 });
 
 export async function deserialize(localizedChallengeBody) {
-  return deserializer.deserialize(localizedChallengeBody);
+  const deserializedBody = await deserializer.deserialize(localizedChallengeBody);
+  return new LocalizedChallenge({
+    ...deserializedBody,
+    geography: null,
+  });
 }

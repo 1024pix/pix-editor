@@ -9,15 +9,13 @@ export function buildLocalizedChallenge({
   status = null,
   geography = null,
 }) {
-  const localizedChallenge = new LocalizedChallenge({
+  return new LocalizedChallenge({
     id,
     challengeId,
     embedUrl,
     fileIds,
     locale,
-    status
+    status,
+    geography,
   });
-  // FIXME remove when constructor has geography
-  if (geography) localizedChallenge.geography = geography;
-  return localizedChallenge;
 }
