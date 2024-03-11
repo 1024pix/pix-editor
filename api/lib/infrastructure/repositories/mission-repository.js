@@ -57,7 +57,7 @@ export async function save(mission) {
 }
 
 function _toDomain(mission, translations) {
-  const translationsByMissionId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsByMissionId = _.groupBy(translations, 'entityId');
   return new Mission({
     id: mission.id,
     createdAt: mission.createdAt,
@@ -69,6 +69,6 @@ function _toDomain(mission, translations) {
 }
 
 function _toDomainList(missions, translations) {
-  const translationsByMissionId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsByMissionId = _.groupBy(translations, 'entityId');
   return missions.map((mission) => _toDomain(mission, translationsByMissionId[mission.id]));
 }

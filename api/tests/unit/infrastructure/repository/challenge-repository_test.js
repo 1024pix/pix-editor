@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, list, get, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
-import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
+import { filter, get, list, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import {
   localizedChallengeRepository,
   translationRepository
@@ -30,7 +30,7 @@ describe('Unit | Repository | challenge-repository', () => {
           key: 'challenge.2.proposals',
           value: 'proposals 2',
           locale: 'fr'
-        }]);
+        }].map(domainBuilder.buildTranslation));
       vi.spyOn(localizedChallengeRepository, 'list').mockResolvedValueOnce([
         domainBuilder.buildLocalizedChallenge({
           id: '1',
@@ -88,7 +88,7 @@ describe('Unit | Repository | challenge-repository', () => {
             key: 'challenge.1.proposals',
             value: 'proposals',
             locale: 'fr'
-          }])
+          }].map(domainBuilder.buildTranslation))
           .mockResolvedValueOnce([{
             key: 'challenge.2.instruction',
             value: 'instruction 2',
@@ -97,7 +97,7 @@ describe('Unit | Repository | challenge-repository', () => {
             key: 'challenge.2.proposals',
             value: 'proposals 2',
             locale: 'fr'
-          }]);
+          }].map(domainBuilder.buildTranslation));
 
         const localizedChallenge1 = domainBuilder.buildLocalizedChallenge({
           id: '1',
@@ -148,7 +148,7 @@ describe('Unit | Repository | challenge-repository', () => {
             key: 'challenge.1.proposals',
             value: 'proposals',
             locale: 'fr'
-          }]);
+          }].map(domainBuilder.buildTranslation));
         vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce([
           domainBuilder.buildLocalizedChallenge({
             id: '1',

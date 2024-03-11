@@ -125,7 +125,7 @@ async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos
 }
 
 function toDomainList(challengeDtos, translations, localizedChallenges) {
-  const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
+  const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
 
   return challengeDtos.map((challengeDto) => {

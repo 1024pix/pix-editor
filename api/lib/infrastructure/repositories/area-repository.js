@@ -11,7 +11,7 @@ export async function list() {
 }
 
 function toDomainList(datasourceAreas, translations) {
-  const translationsByAreaId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsByAreaId = _.groupBy(translations, 'entityId');
   return datasourceAreas.map(
     (datasourceArea) => toDomain(datasourceArea, translationsByAreaId[datasourceArea.id]),
   );

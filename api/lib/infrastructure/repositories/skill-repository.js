@@ -12,7 +12,7 @@ export async function list() {
 }
 
 function toDomainList(datasourceSkills, translations) {
-  const translationsBySkillId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsBySkillId = _.groupBy(translations, 'entityId');
   return datasourceSkills.map(
     (datasourceSkill) => toDomain(datasourceSkill, translationsBySkillId[datasourceSkill.id]),
   );

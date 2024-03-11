@@ -18,7 +18,7 @@ export async function getMany(ids) {
 }
 
 function toDomainList(datasourceCompetences, translations) {
-  const translationsByCompetenceId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsByCompetenceId = _.groupBy(translations, 'entityId');
   return datasourceCompetences.map(
     (datasourceCompetence) => toDomain(datasourceCompetence, translationsByCompetenceId[datasourceCompetence.id]),
   );
