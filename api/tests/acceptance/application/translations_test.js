@@ -243,10 +243,7 @@ describe('Acceptance | Controller | translations-controller', () => {
       const getTranslationsOptions = {
         method: 'GET',
         url: '/api/translations.csv',
-        headers: {
-          ...generateAuthorizationHeader(user),
-          host: 'test.site',
-        },
+        headers: generateAuthorizationHeader(user),
       };
 
       // When

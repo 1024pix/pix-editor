@@ -9,7 +9,7 @@ export async function register(server) {
       config: {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
-          await uploadTranslationToPhrase(request);
+          await uploadTranslationToPhrase();
           return h.response();
         }
       },
