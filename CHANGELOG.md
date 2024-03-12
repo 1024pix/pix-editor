@@ -1,5 +1,20 @@
 
 
+## v3.134.0 (12/03/2024)
+
+
+### :rocket: Amélioration
+- [#588](https://github.com/1024pix/pix-editor/pull/588) [FEATURE]  Exporter les traductions vers phrase après que le job de la release soit finit (PIX-11220).
+
+### :bug: Correction
+- [#585](https://github.com/1024pix/pix-editor/pull/585) [BUGFIX] Impossible de créer un test statique avec une longue description (PIX-11592).
+
+### :arrow_up: Montée de version
+- [#591](https://github.com/1024pix/pix-editor/pull/591) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.8 (pix-editor).
+- [#586](https://github.com/1024pix/pix-editor/pull/586) [BUMP] Update dependency @playwright/test to v1.42.1.
+- [#587](https://github.com/1024pix/pix-editor/pull/587) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.7 (pix-editor).
+- [#584](https://github.com/1024pix/pix-editor/pull/584) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.6 (pix-editor).
+
 ## v3.133.0 (08/03/2024)
 
 
