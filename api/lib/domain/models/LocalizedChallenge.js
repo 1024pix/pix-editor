@@ -23,13 +23,18 @@ export class LocalizedChallenge {
     return this.id === this.challengeId;
   }
 
-  static buildPrimary(challenge) {
+  static buildPrimary({
+    challengeId,
+    locale,
+    embedUrl,
+    geography,
+  }) {
     return new LocalizedChallenge({
-      id: challenge.id,
-      challengeId: challenge.id,
-      locale: challenge.primaryLocale,
-      embedUrl: challenge.embedUrl,
-      geography: challenge.geographyCode,
+      id: challengeId,
+      challengeId,
+      locale,
+      embedUrl,
+      geography,
       status: null,
       fileIds: [],
     });

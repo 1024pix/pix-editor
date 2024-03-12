@@ -24,15 +24,18 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   describe('static buildPrimary', function() {
     it('should build a primary localized challenge', function() {
       // given
-      const challenge = domainBuilder.buildChallenge({
-        id: 'idDuChallenge',
-        locales: ['jp', 'fr', 'en'],
-        geography: 'Japon',
-        embedUrl: 'mon/embed.url',
-      });
+      const challengeId = 'idDuChallenge';
+      const locale = 'en';
+      const embedUrl = 'mon/embed.url';
+      const geography = 'JP';
 
       // when
-      const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary(challenge);
+      const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
+        challengeId,
+        locale,
+        embedUrl,
+        geography,
+      });
 
       // then
       expect(primaryLocalizedChallenge).to.deep.equal({

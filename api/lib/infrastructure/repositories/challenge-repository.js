@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge, LocalizedChallenge } from '../../domain/models/index.js';
+import { Challenge } from '../../domain/models/index.js';
 import { challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
@@ -56,8 +56,7 @@ export async function filter(params = {}) {
 
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
-
-  const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary(challenge);
+  const primaryLocalizedChallenge = challenge.localizedChallenges[0];
   await localizedChallengeRepository.create([primaryLocalizedChallenge]);
 
   const translations = extractTranslationsFromChallenge(challenge);
