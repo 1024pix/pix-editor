@@ -33,6 +33,10 @@ export default class SidebarMain extends Component {
     return this.access.isReadOnly();
   }
 
+  get maySynchronizeTranslations() {
+    return this.access.isEditor();
+  }
+
   get shouldShowMissionsLink() {
     return this.currentData?.getFramework()?.name.toLowerCase() === FrameworkModel.pix1DFrameworkName.toLowerCase();
   }

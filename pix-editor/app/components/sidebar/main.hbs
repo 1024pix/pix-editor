@@ -5,6 +5,11 @@
   <Sidebar::Search @displaySearch={{this.maySearch}} @close={{@close}} />
   <Sidebar::Navigation @displayFrameworkList={{this.maySwitchFramework}} @close={{@close}}/>
   <div class="secondary-links">
+    {{#if this.maySynchronizeTranslations}}
+      <LinkTo @route="authenticated.synchronize-translations" {{on "click" @close}}>
+        <i class="sync icon"></i> Synchroniser les traductions
+      </LinkTo>
+    {{/if}}
     {{#if this.shouldShowMissionsLink}}
       <LinkTo @route="authenticated.missions" {{on "click" @close}}>
         <i class="graduation cap icon"></i> Missions Pix 1D
