@@ -56,7 +56,7 @@ describe('Unit | Repository | challenge-repository', () => {
       const challenges = await list();
 
       // then
-      expect(challenges.length).equal(2);
+      expect(challenges.length).to.equal(2);
       expect(challengeDatasource.list).toHaveBeenCalled();
       expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.');
       expect(localizedChallengeRepository.list).toHaveBeenCalled();
@@ -131,7 +131,7 @@ describe('Unit | Repository | challenge-repository', () => {
         const challenges = await filter({ filter: { ids: ['1', '2'] } });
 
         // then
-        expect(challenges.length).equal(2);
+        expect(challenges.length).to.equal(2);
         expect(challenges[0].instruction).to.equal('instruction');
         expect(challenges[0].proposals).to.equal('proposals');
         expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
@@ -170,7 +170,7 @@ describe('Unit | Repository | challenge-repository', () => {
         const challenges = await filter({ filter: { ids: ['1'] } });
 
         // then
-        expect(challenges.length).equal(1);
+        expect(challenges.length).to.equal(1);
         expect(challenges[0].instruction).to.equal('');
         expect(challenges[0].proposals).to.equal('proposals');
         expect(challenges[0].geography).to.equal('Brésil');
@@ -198,7 +198,7 @@ describe('Unit | Repository | challenge-repository', () => {
         const challenges = await filter({ filter: { ids: ['1'] } });
 
         // then
-        expect(challenges.length).equal(1);
+        expect(challenges.length).to.equal(1);
         expect(challenges[0].proposals).to.equal('');
         expect(challenges[0].geography).to.equal('Brésil');
       });
@@ -231,7 +231,7 @@ describe('Unit | Repository | challenge-repository', () => {
         const challenges = await filter({ page: { size: 20 } });
 
         // then
-        expect(challenges.length).equal(2);
+        expect(challenges.length).to.equal(2);
         expect(challengeDatasource.filter).not.toHaveBeenCalled();
         expect(challengeDatasource.list).toHaveBeenCalledWith({ page: { size: 20 } });
       });
@@ -257,8 +257,8 @@ describe('Unit | Repository | challenge-repository', () => {
         const challenges = await filter({ filter: { search: 'toto' }, page: { size: 'limit' } });
 
         // then
-        expect(challenges.length).equal(1);
-        expect(challenges[0].geography).equal('Brésil');
+        expect(challenges.length).to.equal(1);
+        expect(challenges[0].geography).to.equal('Brésil');
         expect(translationRepository.search).toHaveBeenCalledWith({
           entity: 'challenge',
           fields: ['instruction', 'proposals'],
