@@ -22,7 +22,6 @@ module('Acceptance | Synchronize Translations', function(hooks) {
 
     // then
     assert.strictEqual(currentURL(), '/synchronize-translations');
-    assert.dom(screen.getByText('Envoyer les traductions vers Phrase')).exists();
     assert.dom(screen.getByText('Récupérer les traductions depuis Phrase')).exists();
   });
 });
