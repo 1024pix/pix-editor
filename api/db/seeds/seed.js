@@ -3,6 +3,7 @@ import { localizedChallengesBuilder } from './data/localized-challenges.js';
 import { localizedChallengesAttachmentsBuilder } from './data/localized-challenges-attachments.js';
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { translationsBuilder } from './data/translations.js';
+import { oufs } from './data/on-est-des-oufs.js';
 import { buildMissions } from './data/missions.js';
 
 export async function seed(knex) {
@@ -44,6 +45,8 @@ export async function seed(knex) {
   staticCoursesBuilder(databaseBuilder);
 
   buildMissions(databaseBuilder);
+
+  oufs(databaseBuilder);
 
   return databaseBuilder.commit();
 }
