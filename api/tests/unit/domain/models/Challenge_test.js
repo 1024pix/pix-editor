@@ -281,7 +281,7 @@ describe('Unit | Domain | Challenge', () => {
         ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
-        geography: null,
+        geography: 'Neutre',
       };
 
       // when

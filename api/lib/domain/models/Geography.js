@@ -37,7 +37,7 @@ export function getCountryName(code) {
     ...nonStandardCountries
   ].find((standardCountry) => collator.compare(standardCountry.code, code) === 0);
 
-  return countryFound?.name ?? null;
+  return countryFound?.name ?? 'Neutre';
 }
 
 const collator = new Intl.Collator(NAME_LOCALE, {

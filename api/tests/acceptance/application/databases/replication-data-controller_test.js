@@ -56,7 +56,7 @@ async function mockCurrentContent() {
   const expectedChallenge = { ...challenge, geography: 'Brésil', area: 'Brésil' };
   delete expectedChallenge.localizedChallenges;
 
-  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: null, area: null };
+  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
   const expectedCurrentContent = {
     attachments: [
