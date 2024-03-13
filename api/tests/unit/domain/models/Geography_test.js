@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest';
-
-import { getCountryCode } from '../../../../lib/domain/models/Geography';
+import { getCountryCode, getCountryName } from '../../../../lib/domain/models/Geography';
 
 describe('Unit | Model | Geography', () => {
   describe('#getCountryCode', () => {
@@ -249,6 +248,69 @@ describe('Unit | Model | Geography', () => {
         null,
         null,
         null,
+      ]);
+    });
+  });
+  describe('#getCountryName', () => {
+    it('should convert country code to country french name', () => {
+      // given
+      const codes = [
+        'af', 'ZA', 'AL', 'DZ', 'DE', 'AD',
+        'AO', 'AG', 'SA', 'AR', 'AM', 'AU',
+        'AT', 'AZ', 'BS', 'BH', 'BD', 'BB',
+        'BE', 'BZ', 'BJ', 'BT', 'BY', 'MM',
+        'BO', 'BA', 'BW', 'BR', 'BN', 'BG',
+        'BF', 'BI', 'KH', 'CM', 'CA', 'CV',
+        'CL', 'CN', 'CY', 'CO', 'KM', 'CG',
+        'CK', 'KP', 'KR', 'CR', 'CI', 'HR',
+        'CU', 'DK',
+        'DJ', 'DO', 'DM', 'EG', 'AE', 'EC',
+        'ER', 'ES', 'EE', 'SZ', 'ET', 'FJ',
+        'FI', 'FR', 'GA', 'GM', 'GE', 'GH',
+        'GR', 'GD', 'GN', 'GT', 'GQ', 'GW',
+        'GY', 'HT', 'HN', 'HU', 'IN', 'ID',
+        'IQ', 'IR', 'IE', 'IS', 'IL', 'IT',
+        'JM', 'JP', 'JO', 'KZ', 'KE', 'KG',
+        'KI', 'XK', 'KW', 'LA', 'LS', 'LV',
+        'LB', 'LR',
+        'LY', 'LI', 'LT', 'LU', 'MK', 'MG',
+        'MY', 'MW', 'MV', 'ML', 'MT', 'MA',
+        'MH', 'MU', 'MR', 'MX', 'FM', 'MD',
+        'MC', 'MN', 'ME', 'MZ', 'NA', 'NR',
+        'NP', 'NI', 'NE', 'NG', 'NU', 'NO',
+        'NZ', 'OM', 'UG', 'UZ', 'PK', 'PW',
+        'PS', 'PA', 'PG', 'PY', 'NL', 'PE',
+        'PH', 'PL', 'PT', 'QA', 'CF', 'RO',
+        'RU', 'RW',
+        'KN', 'LC', 'SM', 'VC', 'SB', 'SV',
+        'WS', 'ST', 'SN', 'RS', 'SL', 'SG',
+        'SK', 'SI', 'SO', 'SD', 'SS', 'LK',
+        'SE', 'CH', 'SR', 'SY', 'TJ', 'TZ',
+        'TD', 'CZ', 'TH', 'TL', 'TG', 'TO',
+        'TT', 'TN', 'TM', 'TR', 'TV', 'GB',
+        'UA', 'UY', 'US', 'VU', 'VA', 'VE',
+        'VN', 'YE', 'ZM', 'ZW',
+      ];
+
+      // when
+      const names = codes.map(getCountryName);
+
+      // then
+      expect(names, `no country name for ${codes[names.indexOf(undefined)]}`).not.toContain(undefined);
+    });
+
+    it('should return \'Neutre\' for unknown country code', () => {
+      // given
+      const codes = [ null, 'UKNOWN', undefined ];
+
+      // when
+      const names = codes.map(getCountryName);
+
+      // then
+      expect(names).toEqual([
+        'Neutre',
+        'Neutre',
+        'Neutre',
       ]);
     });
   });

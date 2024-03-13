@@ -1,10 +1,5 @@
 import { beforeEach, describe, expect, it } from 'vitest';
-import {
-  generateAuthorizationHeader,
-  databaseBuilder,
-  airtableBuilder,
-  domainBuilder
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 
 const {
@@ -40,11 +35,6 @@ async function mockCurrentContent() {
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
     ],
   });
-  const expectedChallenge = { ...challenge, area: challenge.geography };
-  delete expectedChallenge.localizedChallenges;
-
-  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', area: challenge.geography };
-  delete expectedChallengeNl.localizedChallenges;
 
   const expectedAttachment = {
     id: 'attid1',
@@ -63,6 +53,11 @@ async function mockCurrentContent() {
     localizedChallengeId: 'localized-challenge-id',
   };
 
+  const expectedChallenge = { ...challenge, geography: 'Brésil', area: 'Brésil' };
+  delete expectedChallenge.localizedChallenges;
+
+  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
+  delete expectedChallengeNl.localizedChallenges;
   const expectedCurrentContent = {
     attachments: [
       { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
@@ -143,12 +138,14 @@ async function mockCurrentContent() {
     locale: 'fr',
     embedUrl: challenge.embedUrl,
     status: 'validé',
+    geography: 'BR',
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
     challengeId: challenge.id,
     locale: 'nl',
     status: 'validé',
+    geography: null,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${challenge.id}.instruction`,

@@ -56,14 +56,7 @@ export async function filter(params = {}) {
 
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
-
-  const primaryLocalizedChallenge = {
-    id: challenge.id,
-    challengeId: challenge.id,
-    locale: challenge.primaryLocale,
-    embedUrl: challenge.embedUrl,
-    geography: challenge.geographyCode,
-  };
+  const primaryLocalizedChallenge = challenge.localizedChallenges[0];
   await localizedChallengeRepository.create([primaryLocalizedChallenge]);
 
   const translations = extractTranslationsFromChallenge(challenge);
@@ -125,7 +118,7 @@ async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos
 }
 
 function toDomainList(challengeDtos, translations, localizedChallenges) {
-  const translationsByChallengeId = _.groupBy(translations, ({ key }) => `${key.split('.')[1]}`);
+  const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesByChallengeId = _.groupBy(localizedChallenges, 'challengeId');
 
   return challengeDtos.map((challengeDto) => {

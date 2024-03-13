@@ -22,6 +22,7 @@ export * from './build-static-course-read.js';
 export * from './build-static-course-summary.js';
 export * from './build-tag.js';
 export * from './build-thematic-for-release.js';
+export * from './build-translation.js';
 export * from './build-tube-for-release.js';
 export * from './build-tutorial-for-release.js';
 export * from './datasource-objects/build-area-datasource-object.js';

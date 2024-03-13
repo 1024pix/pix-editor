@@ -1,5 +1,6 @@
 import JsonapiSerializer from 'jsonapi-serializer';
-import { Challenge } from '../../../domain/models/Challenge.js';
+import { Challenge, LocalizedChallenge } from '../../../domain/models/index.js';
+import { getCountryCode } from '../../../domain/models/Geography.js';
 
 const { Serializer, Deserializer } = JsonapiSerializer;
 
@@ -121,13 +122,12 @@ export function deserialize(challengeBody) {
   return new Promise((resolve, reject) => {
 
     deserializer.deserialize(challengeBody, (err, challengeObject) => {
-      challengeObject.localizedChallenges = [{
-        id: challengeObject.id,
+      challengeObject.localizedChallenges = [LocalizedChallenge.buildPrimary({
         challengeId: challengeObject.id,
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
-        status: null,
-      }];
+        geography: getCountryCode(challengeObject.geography),
+      })];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
   });

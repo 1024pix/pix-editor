@@ -199,6 +199,7 @@ describe('Unit | Domain | Challenge', () => {
         challengeId,
         locale: 'fr',
         embedUrl: 'https://example.com/index.html?lang=fr&mode=example',
+        geography: 'FR',
       });
       const dutchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: dutchChallengeId,
@@ -206,6 +207,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'nl',
         embedUrl: 'https://example.nl/index.html?mode=example',
         status: 'proposé',
+        geography: 'NL',
       });
       const englishLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: englishChallengeId,
@@ -213,6 +215,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'en',
         embedUrl: null,
         status: 'validé',
+        geography: null,
       });
       const localizedChallenges = [
         frenchLocalizedChallenge,
@@ -256,6 +259,7 @@ describe('Unit | Domain | Challenge', () => {
           ...dutchFiles,
           ...englishFiles,
         ],
+        geography: 'France',
       });
 
       const expectedDutchChallenge = {
@@ -266,6 +270,7 @@ describe('Unit | Domain | Challenge', () => {
         ...translations.nl,
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
+        geography: 'Pays-Bas',
       };
 
       const expectedEnglishChallenge = {
@@ -276,6 +281,7 @@ describe('Unit | Domain | Challenge', () => {
         ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
+        geography: 'Neutre',
       };
 
       // when
@@ -362,9 +368,10 @@ describe('Unit | Domain | Challenge', () => {
           id: challengeId,
           challengeId,
           locale: 'fr',
+          geography: 'NZ',
         })],
         translations: { fr: {} },
-        geography: 'Nouvelle-Zélande',
+        geography: 'DeprecatedLand',
       });
 
       // then
@@ -382,8 +389,10 @@ describe('Unit | Domain | Challenge', () => {
           id: challengeId,
           challengeId,
           locale: 'fr',
+          geography: null,
         })],
         translations: { fr: {} },
+        geography: 'DeprecatedLand',
       });
 
       // when

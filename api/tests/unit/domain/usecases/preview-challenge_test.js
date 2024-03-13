@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { previewChallenge } from '../../../../lib/domain/usecases/preview-challenge.js';
+import { previewChallenge } from '../../../../lib/domain/usecases/index.js';
 import * as config from '../../../../lib/config.js';
 
 describe('Unit | Domain | Usecases | preview-challenge', function() {
@@ -11,16 +11,18 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
     const locale = 'fr';
     const challengeId = 'challenge-id';
     const localizedChallengeId = 'localizedChallengeId';
-    const localizedChallenge = {
+    const localizedChallenge = domainBuilder.buildLocalizedChallenge({
       id: localizedChallengeId,
       challengeId,
       locale,
-    };
+      geography: 'TJ',
+    });
     const localizedChallengeRepository = {
       getByChallengeIdAndLocale: vi.fn().mockResolvedValueOnce(localizedChallenge),
     };
     const challenge = domainBuilder.buildChallenge({
       localizedChallenges: [localizedChallenge],
+      geography: 'Tadjikistan',
     });
     const challengeRepository = {
       get: vi.fn().mockResolvedValueOnce(challenge),

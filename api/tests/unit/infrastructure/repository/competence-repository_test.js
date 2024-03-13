@@ -60,7 +60,7 @@ describe('Unit | Repository | competence-repository', () => {
           key: 'competence.competence2.description',
           locale: 'en',
           value: 'Competence 2 description',
-        }]);
+        }].map(domainBuilder.buildTranslation));
 
       // when
       const competences = await competenceRepository.getMany(['competence1', 'competence2']);

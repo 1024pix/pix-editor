@@ -13,7 +13,7 @@ export async function list() {
 }
 
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {
-  const translationsByChallengeId = _.groupBy(translations, ({ key }) => key.split('.')[1]);
+  const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesById = _.groupBy(localizedChallenges, 'id');
 
   return datasourceAttachments.map((attachment) => {

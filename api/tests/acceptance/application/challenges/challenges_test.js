@@ -2,10 +2,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import nock from 'nock';
 import _ from 'lodash';
 import {
+  airtableBuilder,
   databaseBuilder,
   domainBuilder,
   generateAuthorizationHeader,
-  airtableBuilder,
   knex
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
@@ -80,7 +80,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should return challenges', async () => {
       // Given
-      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id' });
+      const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'DeprecatedLand' });
 
       const airtableChallenges = [
         airtableBuilder.factory.buildChallenge(challenge),
@@ -135,12 +135,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: 'my id',
         challengeId: 'my id',
         locale: 'fr',
-        embedUrl: 'http://example.com/my_embed.html'
+        embedUrl: 'http://example.com/my_embed.html',
+        geography: 'BR',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'my id_nl',
         challengeId: 'my id',
-        locale: 'nl'
+        locale: 'nl',
+        geography: null,
       });
       await databaseBuilder.commit();
 
@@ -190,7 +192,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: 'non',
               locales: ['fr'],
               'alternative-locales': ['nl'],
-              geography: 'France',
+              geography: 'Brésil',
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -236,8 +238,8 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should filter challenges by id', async () => {
       // Given
-      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1' });
-      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2' });
+      const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'DeprecatedLand' });
+      const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'DeprecatedLand' });
       const airtableCall = nock('https://api.airtable.com')
         .get('/v0/airtableBaseValue/Epreuves')
         .query({
@@ -329,16 +331,19 @@ describe('Acceptance | Controller | challenges-controller', () => {
         challengeId: '1',
         locale: 'fr',
         embedUrl: 'http://example.com/my_embed.html',
+        geography: 'BR',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
         challengeId: '2',
-        locale: 'fr'
+        locale: 'fr',
+        geography: 'PH',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2_nl',
         challengeId: '2',
-        locale: 'nl'
+        locale: 'nl',
+        geography: null,
       });
 
       await databaseBuilder.commit();
@@ -391,7 +396,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: 'non',
               locales: ['fr'],
               'alternative-locales': [],
-              geography: 'France',
+              geography: 'Brésil',
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -460,7 +465,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: 'non',
               locales: ['fr'],
               'alternative-locales': ['nl'],
-              geography: 'France',
+              geography: 'Philippines',
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -577,6 +582,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           { fileId: 'fileId1', localizedChallengeId: 'recChallengeId1' },
           { fileId: 'fileId2', localizedChallengeId: 'recChallengeId2' },
         ],
+        geography: 'DeprecatedLand',
       });
       const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
       const airtableCall = nock('https://api.airtable.com')
@@ -597,11 +603,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
         challengeId: 'recChallengeId1',
         locale: 'fr',
         embedUrl: 'https://github.io/page/epreuve.html',
+        geography: 'BR',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
         challengeId: 'recChallengeId1',
         locale: 'nl',
+        geography: null,
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.instruction',
@@ -687,7 +695,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: 'non',
             locales: ['fr'],
             'alternative-locales': ['nl'],
-            geography: 'France',
+            geography: 'Brésil',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -773,6 +781,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: challengeId,
           locales: ['fr', 'fr-fr'],
           status: 'validé',
+          geography: 'DeprecatedLand',
         })
       ]).activate().nockScope;
 
@@ -823,12 +832,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: challengeId,
         challengeId,
         locale: 'fr',
+        geography: 'BR',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
         challengeId,
         locale,
         status: 'proposé',
+        geography: null,
       });
 
       await databaseBuilder.commit();
@@ -903,6 +914,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       // Given
       const challenge = {
         ...domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] }),
+        geography: 'Mozambique',
         instruction: 'consigne',
         alternativeInstruction: 'consigne alternative',
         solution: 'solution',
@@ -1026,7 +1038,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: 'non',
             'alternative-locales': [],
             locales: ['fr'],
-            geography: 'France',
+            geography: 'Mozambique',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1069,7 +1081,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           locale: 'fr',
           embedUrl: challenge.embedUrl,
           status: null,
-          geography: 'FR',
+          geography: 'MZ',
         }
       ]);
       const translations = await knex('translations').select().orderBy('key');
@@ -1581,12 +1593,13 @@ describe('Acceptance | Controller | challenges-controller', () => {
         solutionToDisplay: 'solution à afficher',
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
-        geography: 'Neutre',
+        geography: 'Jamaïque',
       };
       databaseBuilder.factory.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
         locale: originalLocale,
+        geography: 'BR',
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1737,7 +1750,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             responsive: 'non',
             'alternative-locales': [],
             locales: ['fr', 'fr-fr'],
-            geography: 'Neutre',
+            geography: 'Jamaïque',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1781,7 +1794,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           embedUrl: challenge.embedUrl,
           locale: 'fr',
           status: null,
-          geography: null,
+          geography: 'JM',
         },
       ]);
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([

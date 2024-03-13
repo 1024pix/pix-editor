@@ -1,15 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
-import { serialize, deserialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
+import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a Challenge', () => {
       // Given
-      const localizedChallenge = domainBuilder.buildLocalizedChallenge({ id: 'recwWzTquPlvIl4So' });
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({ id: 'recwWzTquPlvIl4So', geography: 'MZ' });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
         localizedChallenges: [localizedChallenge],
+        geography: 'DEPRECATED',
       });
       const alternativeLocales = ['en', 'nl'];
       const expectedSerializedChallenge = {
@@ -47,7 +48,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             responsive: 'non',
             locales: ['fr'],
             'alternative-locales': ['en', 'nl'],
-            geography: 'France',
+            geography: 'Mozambique',
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -90,7 +91,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#deserialize', () => {
     it('should deserialize a Challenge', async () => {
       // Given
-      const expectedDeserializedChallenge = domainBuilder.buildChallenge(undefined, ['alpha', 'delta', 'skillId']);
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        geography: 'MD',
+        embedUrl: 'https://github.io/page/epreuve.html',
+      });
+      const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
         data: {
           type: 'challenges',
@@ -124,7 +129,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             spoil: 'Non Sp',
             responsive: 'non',
             locales: [],
-            geography: 'France',
+            geography: 'Moldavie',
             'auto-reply': false,
             focusable: false,
             competenceId: 'recsvLz0W2ShyfD63',
