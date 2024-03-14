@@ -1,0 +1,28 @@
+<div class="page">
+  <header class="page-header">
+    <h1 class="page-title">Synchronisation des traductions</h1>
+  </header>
+  <main class="page-body synchronize-translations">
+    <section class="page-section">
+      <PixBlock @shadow="light" class="synchronize-translations--block">
+      <p>L'envoi des traductions du référentiel se base sur la dernière release du référentiel et se fait automatiquement à ce moment la.
+        <br>Est envoyé sur Phrase l'ensemble des traductions du référentiel Pix en français et les épreuves validées.
+        <br><em>Le traitement de l'envoi par Phrase peut prendre plusieurs minutes. Une fois une release lancé, vous pouvez suivre le traitement sur la page Uploads du projet Phrase.</em></p>
+      </PixBlock>
+
+      <PixBlock @shadow="light" class="synchronize-translations--block">
+      <p>La récupération des traductions depuis Phrase se fait automatiquement à la création de la release du référentiel. Vous pouvez récupérez manuellement les traductions pour la prévisualisation par exemple.
+        <br>Récupére toutes les traductions de Phrase, sauf celles de la langue principale (le fr).</p>
+        <PixButton
+          @triggerAction={{this.importFromPhrase}}
+          @loadingColor="white"
+          @size="small"
+          @isBorderVisible="{{true}}"
+          class="synchronize-translations--action"
+        >
+          Récupérer les traductions depuis Phrase
+        </PixButton>
+      </PixBlock>
+    </section>
+  </main>
+</div>
