@@ -9,7 +9,7 @@ import { attachmentDatasource } from '../../infrastructure/datasources/airtable/
 import { createChallengeTransformer } from '../../infrastructure/transformers/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
-import { previewChallenge } from '../../domain/usecases/index.js';
+import { getPhraseTranslationsURL, previewChallenge } from '../../domain/usecases/index.js';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
@@ -81,6 +81,27 @@ export async function register(server) {
 
           const previewUrl = await previewChallenge({ challengeId, locale }, { refreshCache: _refreshCache });
           return h.redirect(previewUrl);
+        },
+      },
+    },
+    {
+      method: 'GET',
+      path: '/api/challenges/{id}/translations/{locale}',
+      config: {
+        auth: false,
+        validate: {
+          params: Joi.object({
+            id: challengeIdType,
+            locale: Joi.string().min(2).max(5),
+          }),
+        },
+        handler: async function(request, h) {
+          const challengeId = request.params.id;
+          const locale = request.params.locale;
+
+          const translationsUrl = await getPhraseTranslationsURL({ challengeId, locale });
+
+          return h.redirect(translationsUrl);
         },
       },
     },

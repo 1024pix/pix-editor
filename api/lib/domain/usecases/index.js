@@ -3,6 +3,7 @@ export * from './delete-unmentioned-keys-after-upload.js';
 export * from './download-translation-from-phrase.js';
 export * from './export-translations.js';
 export * from './find-all-missions.js';
+export * from './get-phrase-translations-url.js';
 export * from './import-translations.js';
 export * from './modify-localized-challenge.js';
 export * from './preview-challenge.js';
