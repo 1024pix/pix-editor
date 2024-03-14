@@ -21,7 +21,7 @@ const challengeAirtableFields = [
   'T3 - Distance d\'édition',
   'Statut',
   'Acquix (id persistant)',
-  'Embed URL',
+  '[DEPRECATED] Embed URL',
   'Embed height',
   'Format',
   'files',
@@ -518,7 +518,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             '': challengeAirtableFields,
           },
           maxRecords: 100,
-          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
+          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({[DEPRECATED] Embed URL})))',
         })
         .reply(200, {
           records: []
@@ -545,7 +545,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
+          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({[DEPRECATED] Embed URL})))',
           maxRecords: 20,
         })
         .reply(200, {

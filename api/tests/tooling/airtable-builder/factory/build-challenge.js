@@ -50,7 +50,7 @@ export function buildChallenge({
       'T2 - Ponctuation': _convertStatusFromBoolToString(t2Status),
       'T3 - Distance d\'édition': _convertStatusFromBoolToString(t3Status),
       'Statut': status,
-      'Embed URL': embedUrl,
+      '[DEPRECATED] Embed URL': embedUrl,
       'Embed height': embedHeight,
       'Acquix (id persistant)': [skillId],
       'Format': format,

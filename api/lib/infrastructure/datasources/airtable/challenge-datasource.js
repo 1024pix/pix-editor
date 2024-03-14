@@ -18,7 +18,7 @@ export const challengeDatasource = datasource.extend({
     'T3 - Distance d\'édition',
     'Statut',
     'Acquix (id persistant)',
-    'Embed URL',
+    '[DEPRECATED] Embed URL',
     'Embed height',
     'Format',
     'files',
@@ -80,7 +80,7 @@ export const challengeDatasource = datasource.extend({
       status: airtableRecord.get('Statut'),
       skills: airtableRecord.get('Acquix') || [],
       skillId: (airtableRecord.get('Acquix (id persistant)') || [])[0],
-      embedUrl: airtableRecord.get('Embed URL'),
+      embedUrl: airtableRecord.get('[DEPRECATED] Embed URL'),
       embedHeight: airtableRecord.get('Embed height'),
       timer,
       competenceId,
@@ -122,7 +122,7 @@ export const challengeDatasource = datasource.extend({
         'T2 - Ponctuation': _convertBooleanToAirtableValue(model.t2Status),
         'T3 - Distance d\'édition': _convertBooleanToAirtableValue(model.t3Status),
         'Statut': model.status,
-        'Embed URL': model.embedUrl,
+        '[DEPRECATED] Embed URL': model.embedUrl,
         'Embed height': model.embedHeight,
         'Timer': model.timer,
         'Format': model.format,
@@ -158,7 +158,7 @@ export const challengeDatasource = datasource.extend({
   async search(params) {
     const options = {
       fields: this.usedFields,
-      filterByFormula: `FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE({Embed URL})))`
+      filterByFormula: `FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE({[DEPRECATED] Embed URL})))`
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
       options.filterByFormula = 'OR(' + options.filterByFormula + ', ' + params.filter.ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')';

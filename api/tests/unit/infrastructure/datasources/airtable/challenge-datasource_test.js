@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { domainBuilder, airtableBuilder } from '../../../../test-helper.js';
+import { airtableBuilder, domainBuilder } from '../../../../test-helper.js';
 import { challengeDatasource } from '../../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 import airtableLib from 'airtable';
@@ -241,7 +241,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
-        filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))'
+        filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({[DEPRECATED] Embed URL})))'
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
@@ -266,7 +266,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
-        filterByFormula: 'OR(FIND(\'query term\', LOWER(CONCATENATE({Embed URL}))), \'challengeId1\' = {id persistant})'
+        filterByFormula: 'OR(FIND(\'query term\', LOWER(CONCATENATE({[DEPRECATED] Embed URL}))), \'challengeId1\' = {id persistant})'
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
@@ -281,7 +281,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
-        filterByFormula: 'FIND(\'query \\\' term\', LOWER(CONCATENATE({Embed URL})))'
+        filterByFormula: 'FIND(\'query \\\' term\', LOWER(CONCATENATE({[DEPRECATED] Embed URL})))'
       });
     });
   });

@@ -17,7 +17,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
       fields: [
         'id persistant',
         'Langues',
-        'Embed URL',
+        '[DEPRECATED] Embed URL',
         '[DEPRECATED] Géographie',
       ],
     })
@@ -38,7 +38,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
       console.log({ challengeId }, `could not find country code for name "${countryName}"`);
     }
     return [
-      { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('Embed URL') },
+      { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('[DEPRECATED] Embed URL') },
       ...challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
