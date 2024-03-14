@@ -28,6 +28,10 @@ export default class LocalizedController extends Controller {
     return new URL(`${this.model.challenge.get('preview')}?locale=${this.model.locale}`, window.location).href;
   }
 
+  get translationsUrl() {
+    return new URL(`/api/challenges/${this.model.challenge.get('id')}/translations/${this.model.locale}`, window.location).href;
+  }
+
   get challengeRoute() {
     return this.isPrototype ? 'authenticated.competence.prototypes.single' : 'authenticated.competence.prototypes.single.alternatives.single';
   }

@@ -36,11 +36,14 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     const embedUrlInput = await screen.getByRole('textbox', { name: 'Embed URL :' });
     assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
 
-    const link = await screen.findByText('Prévisualiser');
-    assert.ok(link.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
+    const previewLink = await screen.findByText('Prévisualiser');
+    assert.ok(previewLink.getAttribute('href').endsWith('/preview?locale=en'), 'href ends with /preview?locale=en');
 
     const header = await screen.getByTestId('challenge-header');
     assert.dom(header).hasText(/Pas en prod/);
+
+    const translationsLink = await screen.findByText('Traductions');
+    assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en'), 'href ends with /translations/en');
   });
 
   test('it should go back to the original challenge', async function(assert) {
