@@ -18,7 +18,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
         'id persistant',
         'Langues',
         'Embed URL',
-        'Géographie',
+        '[DEPRECATED] Géographie',
       ],
     })
     .all();
@@ -31,7 +31,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
 
   const localizedChallenges = challenges.flatMap((challenge) => {
     const challengeId = challenge.get('id persistant');
-    const countryName = challenge.get('Géographie');
+    const countryName = challenge.get('[DEPRECATED] Géographie');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const countryCode = getCountryCode(countryName);
     if (!countryCode) {

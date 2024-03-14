@@ -41,7 +41,7 @@ const challengeAirtableFields = [
   'Daltonien',
   'Spoil',
   'Responsive',
-  'Géographie',
+  '[DEPRECATED] Géographie',
   'Difficulté calculée',
   'Discrimination calculée',
   'updated_at',

@@ -1,4 +1,4 @@
-import {  describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import nock from 'nock';
 
 import { databaseBuilder, knex } from '../test-helper';
@@ -48,16 +48,16 @@ describe('Script | migrate-localized-challenges-geography', () => {
         fields: {
           '': [
             'id persistant',
-            'Géographie',
+            '[DEPRECATED] Géographie',
           ]
         },
-        filterByFormula: 'AND({Géographie} != \'\', {Géographie} != \'Neutre\', {Géographie} != \'Institutions internationales\')'
+        filterByFormula: 'AND({[DEPRECATED] Géographie} != \'\', {[DEPRECATED] Géographie} != \'Neutre\', {[DEPRECATED] Géographie} != \'Institutions internationales\')'
       })
       .reply(200, { records: [
-        { id: 'challenge2', fields: { 'id persistant': 'recChallenge2', Géographie: 'Turkménistan' } },
-        { id: 'challenge3', fields: { 'id persistant': 'recChallenge3', Géographie: 'Allemagne' } },
-        { id: 'challenge4', fields: { 'id persistant': 'recChallenge4', Géographie: 'cote d\'ivoire' } },
-        { id: 'challenge5', fields: { 'id persistant': 'recChallenge5', Géographie: 'congo' } },
+        { id: 'challenge2', fields: { 'id persistant': 'recChallenge2', '[DEPRECATED] Géographie': 'Turkménistan' } },
+        { id: 'challenge3', fields: { 'id persistant': 'recChallenge3', '[DEPRECATED] Géographie': 'Allemagne' } },
+        { id: 'challenge4', fields: { 'id persistant': 'recChallenge4', '[DEPRECATED] Géographie': 'cote d\'ivoire' } },
+        { id: 'challenge5', fields: { 'id persistant': 'recChallenge5', '[DEPRECATED] Géographie': 'congo' } },
       ] });
 
     // when

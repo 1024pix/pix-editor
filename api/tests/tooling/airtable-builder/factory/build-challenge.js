@@ -71,7 +71,7 @@ export function buildChallenge({
       'Daltonien': accessibility2,
       'Spoil': spoil,
       'Responsive': responsive,
-      'Géographie': geography,
+      '[DEPRECATED] Géographie': geography,
       'Focalisée': focusable,
       'Difficulté calculée': delta ? delta.toString() : '',
       'Discrimination calculée': alpha ? alpha.toString() : '',
