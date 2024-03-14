@@ -1,5 +1,16 @@
 
 
+## v3.135.0 (14/03/2024)
+
+
+### :rocket: Amélioration
+- [#592](https://github.com/1024pix/pix-editor/pull/592) [FEATURE] Ajouter les fonctions de synchronisation de et vers Phrase dans Pix-Editor (PIX-11621).
+- [#593](https://github.com/1024pix/pix-editor/pull/593) [FEATURE] Ecrire dans la base PG les données traduites des sujets (PIX-9409).
+
+### :building_construction: Tech
+- [#594](https://github.com/1024pix/pix-editor/pull/594) [TECH] Copie les champs traduisible des sujets depuis airtable vers la base postgres (PIX-9410).
+- [#590](https://github.com/1024pix/pix-editor/pull/590) [TECH] Lire le champ "Géographie" depuis les localized_challenges de la base PG (PIX-11090).
+
 ## v3.134.0 (12/03/2024)
 
 
