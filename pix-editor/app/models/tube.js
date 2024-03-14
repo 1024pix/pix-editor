@@ -7,8 +7,6 @@ export default class TubeModel extends Model {
   selectedThematicResultSkills = [];
 
   @attr name;
-  @attr title;
-  @attr description;
   @attr practicalTitleFr;
   @attr practicalTitleEn;
   @attr practicalDescriptionFr;

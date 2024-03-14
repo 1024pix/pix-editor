@@ -49,8 +49,6 @@ export default class SidebarExportComponent extends Component {
               competence.name,
               theme.name,
               tube.name,
-              tube.title,
-              tube.description,
               tube.practicalTitleFr,
               tube.practicalDescriptionFr,
               tube.productionSkills.reduce((table, skill) => {
@@ -64,7 +62,7 @@ export default class SidebarExportComponent extends Component {
           }, content);
         }, content);
       }, content);
-    }, '"Domaine","Compétence","Thématique","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"');
+    }, '"Domaine","Compétence","Thématique","Tube","Titre pratique","Description pratique","Liste des acquis"');
   }
 
   _formatCSVString(str) {
