@@ -183,11 +183,29 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       let csvContent;
 
-      const phraseAPIUpload = nock('https://api.phrase.com')
+      const phraseLocalesAPI = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, [
+          {
+            id: 'frLocaleId',
+            name: 'fr',
+            code: 'fr',
+            default: true,
+          },
+          {
+            id: 'nlLocaleId',
+            name: 'nl',
+            code: 'nl',
+            default: false,
+          },
+        ]);
+
+      const phraseUploadAPI = nock('https://api.phrase.com')
         .post('/v2/projects/MY_PHRASE_PROJECT_ID/uploads', (body) => {
           const parsedBody = parseFormData(body);
           csvContent = findFormDataParameter(parsedBody, 'file').data.toString();
-          return matchFormDataParameter(parsedBody, 'locale_id', 'MY_PHRASE_LOCALE_ID') &&
+          return matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId') &&
             matchFormDataParameter(parsedBody, 'file_format', 'csv') &&
             matchFormDataParameter(parsedBody, 'update_descriptions', 'true') &&
             matchFormDataParameter(parsedBody, 'update_translations', 'true') &&
@@ -213,7 +231,8 @@ describe('Acceptance | Controller | phrase-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(204);
-      expect(phraseAPIUpload.isDone()).to.be.true;
+      expect(phraseLocalesAPI.isDone()).to.be.true;
+      expect(phraseUploadAPI.isDone()).to.be.true;
 
       const [headers, ...data] = await streamToPromiseArray(parseCSVString(csvContent));
 
