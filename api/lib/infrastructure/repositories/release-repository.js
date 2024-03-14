@@ -4,7 +4,6 @@ import {
   challengeDatasource,
   frameworkDatasource,
   thematicDatasource,
-  tubeDatasource,
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
 import {
@@ -13,6 +12,7 @@ import {
   competenceRepository,
   missionRepository,
   skillRepository,
+  tubeRepository,
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
 import {
@@ -122,7 +122,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     frameworkDatasource.list(),
     skillRepository.list(),
     thematicDatasource.list(),
-    tubeDatasource.list(),
+    tubeRepository.list(),
     tutorialDatasource.list(),
   ]);
   const translatedChallenges = challenges.flatMap((challenge) => [

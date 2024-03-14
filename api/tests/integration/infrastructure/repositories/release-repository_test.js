@@ -170,10 +170,11 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      const { areas, competences, skills, challenges } = _mockRichAirtableContent();
+      const { areas, competences, tubeIds, skills, challenges } = _mockRichAirtableContent();
 
       buildAreasTranslations(areas);
       buildCompetencesTranslations(competences);
+      buildTubesTranslations(tubeIds);
       buildSkillsTranslations(skills);
       buildChallengesTranslationsAndLocalizedChallenges(challenges);
 
@@ -271,6 +272,31 @@ function buildSkillsTranslations(skills) {
   }
 }
 
+function buildTubesTranslations(tubeIds) {
+  for (const id of tubeIds) {
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${id}.practicalDescription`,
+      locale: 'fr',
+      value: `${id} practicalDescriptionFrFr from PG`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${id}.practicalDescription`,
+      locale: 'en',
+      value: `${id} practicalDescriptionEnUs from PG`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${id}.practicalTitle`,
+      locale: 'fr',
+      value: `${id} practicalTitleFrFr from PG`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${id}.practicalTitle`,
+      locale: 'en',
+      value: `${id} practicalTitleEnUs from PG`,
+    });
+  }
+}
+
 function buildChallengesTranslationsAndLocalizedChallenges(challenges) {
   for (const challenge of challenges) {
     buildChallengeTranslationsAndLocalizedChallenge(challenge, challenge.locales[0]);
@@ -329,10 +355,6 @@ function _mockRichAirtableContent() {
     id: 'area1',
     competenceIds: ['competence11', 'competence12'],
     competenceAirtableIds: ['competence11', 'competence12'],
-    title_i18n: {
-      fr: 'area1 titleFrFr',
-      en: 'area1 titleEnUs',
-    },
     code: '1',
     name: 'area1 name',
     color: 'area1 color',
@@ -343,10 +365,6 @@ function _mockRichAirtableContent() {
     id: 'area2',
     competenceIds: ['competence21'],
     competenceAirtableIds: ['competence21'],
-    title_i18n: {
-      fr: 'area2 titleFrFr',
-      en: 'area2 titleEnUs',
-    },
     code: '2',
     name: 'area2 name',
     color: 'area2 color',
@@ -812,6 +830,7 @@ function _mockRichAirtableContent() {
   return {
     areas: [area1, area2],
     competences: [competence11, competence12, competence21],
+    tubeIds:  [airtableTube1111.id, airtableTube1121.id, airtableTube1211.id, airtableTube1212.id, airtableTube2111.id],
     skills: [skill11111, skill11112, skill12121, skill21111],
     challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
   };
@@ -979,12 +998,12 @@ function _getRichCurrentContentDTO() {
       id: 'tube1111',
       name: 'tube1111 name',
       practicalTitle_i18n: {
-        fr: 'tube1111 practicalTitleFrFr',
-        en: 'tube1111 practicalTitleEnUs',
+        fr: 'tube1111 practicalTitleFrFr from PG',
+        en: 'tube1111 practicalTitleEnUs from PG',
       },
       practicalDescription_i18n: {
-        fr: 'tube1111 practicalDescriptionFrFr',
-        en: 'tube1111 practicalDescriptionEnUs',
+        fr: 'tube1111 practicalDescriptionFrFr from PG',
+        en: 'tube1111 practicalDescriptionEnUs from PG',
       },
       competenceId: 'competence11',
       isMobileCompliant: false,
@@ -996,12 +1015,12 @@ function _getRichCurrentContentDTO() {
       id: 'tube1121',
       name: 'tube1121 name',
       practicalTitle_i18n: {
-        fr: 'tube1121 practicalTitleFrFr',
-        en: 'tube1121 practicalTitleEnUs',
+        fr: 'tube1121 practicalTitleFrFr from PG',
+        en: 'tube1121 practicalTitleEnUs from PG',
       },
       practicalDescription_i18n: {
-        fr: 'tube1121 practicalDescriptionFrFr',
-        en: 'tube1121 practicalDescriptionEnUs',
+        fr: 'tube1121 practicalDescriptionFrFr from PG',
+        en: 'tube1121 practicalDescriptionEnUs from PG',
       },
       competenceId: 'competence11',
       isMobileCompliant: false,
@@ -1013,12 +1032,12 @@ function _getRichCurrentContentDTO() {
       id: 'tube1211',
       name: 'tube1211 name',
       practicalTitle_i18n: {
-        fr: 'tube1211 practicalTitleFrFr',
-        en: 'tube1211 practicalTitleEnUs',
+        fr: 'tube1211 practicalTitleFrFr from PG',
+        en: 'tube1211 practicalTitleEnUs from PG',
       },
       practicalDescription_i18n: {
-        fr: 'tube1211 practicalDescriptionFrFr',
-        en: 'tube1211 practicalDescriptionEnUs',
+        fr: 'tube1211 practicalDescriptionFrFr from PG',
+        en: 'tube1211 practicalDescriptionEnUs from PG',
       },
       competenceId: 'competence12',
       isMobileCompliant: false,
@@ -1030,12 +1049,12 @@ function _getRichCurrentContentDTO() {
       id: 'tube1212',
       name: 'tube1212 name',
       practicalTitle_i18n: {
-        fr: 'tube1212 practicalTitleFrFr',
-        en: 'tube1212 practicalTitleEnUs',
+        fr: 'tube1212 practicalTitleFrFr from PG',
+        en: 'tube1212 practicalTitleEnUs from PG',
       },
       practicalDescription_i18n: {
-        fr: 'tube1212 practicalDescriptionFrFr',
-        en: 'tube1212 practicalDescriptionEnUs',
+        fr: 'tube1212 practicalDescriptionFrFr from PG',
+        en: 'tube1212 practicalDescriptionEnUs from PG',
       },
       competenceId: 'competence12',
       isMobileCompliant: true,
@@ -1047,12 +1066,12 @@ function _getRichCurrentContentDTO() {
       id: 'tube2111',
       name: 'tube2111 name',
       practicalTitle_i18n: {
-        fr: 'tube2111 practicalTitleFrFr',
-        en: 'tube2111 practicalTitleEnUs',
+        fr: 'tube2111 practicalTitleFrFr from PG',
+        en: 'tube2111 practicalTitleEnUs from PG',
       },
       practicalDescription_i18n: {
-        fr: 'tube2111 practicalDescriptionFrFr',
-        en: 'tube2111 practicalDescriptionEnUs',
+        fr: 'tube2111 practicalDescriptionFrFr from PG',
+        en: 'tube2111 practicalDescriptionEnUs from PG',
       },
       competenceId: 'competence21',
       isMobileCompliant: false,
