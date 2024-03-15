@@ -323,6 +323,16 @@ describe('Acceptance | Controller | translations-controller', () => {
           'Indice - fr',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           ''
+        ],[
+          'tube.recTube0.practicalDescription',
+          'Description pratique du Tube - fr',
+          'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          ''
+        ],[
+          'tube.recTube0.practicalTitle',
+          'Titre pratique du Tube - fr',
+          'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
+          ''
         ],
       ]);
     });
@@ -473,6 +483,8 @@ describe('Acceptance | Controller | translations-controller', () => {
         'competence.recCompetence0.description,Description de la compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'competence.recCompetence0.name,Nom de la Compétence - fr,"competence,Pix-1-1.1,Pix-1,Pix",',
         'skill.recSkill0.hint,Indice - fr,"acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
+        'tube.recTube0.practicalDescription,Description pratique du Tube - fr,"sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
+        'tube.recTube0.practicalTitle,Titre pratique du Tube - fr,"sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix",',
       ]);
     });
 

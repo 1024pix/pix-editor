@@ -19,6 +19,7 @@ const tubeTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, i
 export const {
   toDomain,
   extractFromProxyObject,
+  extractFromReleaseObject,
   airtableObjectToProxyObject,
   prefixFor,
 } = tubeTranslationUtils;
