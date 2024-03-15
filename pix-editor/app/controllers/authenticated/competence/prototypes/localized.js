@@ -29,7 +29,7 @@ export default class LocalizedController extends Controller {
   }
 
   get translationsUrl() {
-    return new URL(`/api/challenges/${this.model.challenge.get('id')}/translations/${this.model.locale}`, window.location).href;
+    return new URL(`${this.model.translations}`, window.location).href;
   }
 
   get challengeRoute() {

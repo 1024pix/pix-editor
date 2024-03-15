@@ -121,6 +121,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             locale: localizedChallenge.locale,
             'embed-url': null,
             status: localizedChallenge.status,
+            translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
           relationships: {
             files: {

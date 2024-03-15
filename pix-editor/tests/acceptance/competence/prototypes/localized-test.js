@@ -15,7 +15,14 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     this.server.create('user', { trigram: 'ABC' });
 
     this.server.create('challenge', { id: 'recChallenge1', status: 'validé', alternativeLocales: ['en'] });
-    localizedChallenge = this.server.create('localized-challenge', { id: 'localized-challenge-id-1', challengeId: 'recChallenge1', locale: 'en', embedURL: 'https://my-embed.com/en.html', status: 'proposé' });
+    localizedChallenge = this.server.create('localized-challenge', {
+      id: 'localized-challenge-id-1',
+      challengeId: 'recChallenge1',
+      locale: 'en',
+      embedURL: 'https://my-embed.com/en.html',
+      status: 'proposé',
+      translations: '/api/challenges/recChallenge1/translations/en',
+    });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
