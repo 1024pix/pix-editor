@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
 import { Buffer } from 'node:buffer';
-import multipart  from 'parse-multipart-data';
+import multipart from 'parse-multipart-data';
 import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
@@ -151,6 +151,36 @@ describe('Acceptance | Controller | phrase-controller', () => {
           alpha: 0.9,
           responsive: ['Smartphone'],
           genealogy: 'Prototype 1',
+        },
+        {
+          id: 'recChallenge66',
+          instruction: 'Consigne du Challenge66',
+          proposals: 'Propositions du Challenge66',
+          type: 'Type d\'épreuve66',
+          solution: 'Bonnes réponses du Challenge66',
+          solutionToDisplay: 'Bonnes réponses du Challenge à afficher66',
+          t1Status: false,
+          t2Status: true,
+          t3Status: false,
+          status: 'proposé',
+          skillId: 'recSkill0',
+          embedUrl: 'Embed URL66',
+          embedTitle: 'Embed title66',
+          embedHeight: 'Embed height66',
+          timer: 12,
+          illustrationUrl: 'url de l‘illustration66',
+          attachments: ['url de la pièce jointe66'],
+          competenceId: 'recCompetence0',
+          illustrationAlt: 'Texte alternatif illustration66',
+          format: 'mots',
+          autoReply: false,
+          locales: ['fr'],
+          alternativeInstruction: 'Consigne alternative66',
+          focusable: false,
+          delta: 0.5,
+          alpha: 0.9,
+          responsive: ['Smartphone'],
+          genealogy: 'Décliné 1',
         }],
       };
       databaseBuilder.factory.buildRelease({
@@ -165,6 +195,11 @@ describe('Acceptance | Controller | phrase-controller', () => {
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'recChallenge0',
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge66',
+        id: 'recChallenge66',
         locale: 'fr',
       });
 
