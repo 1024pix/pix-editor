@@ -62,4 +62,17 @@ export class ChallengeForRelease {
     this.shuffled = shuffled;
     this.alternativeVersion = alternativeVersion;
   }
+
+  canExportForTranslation(locale) {
+    return this.locales.includes(locale) && this.status === ChallengeForRelease.STATUSES.VALIDE;
+  }
+
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
 }

@@ -27,4 +27,17 @@ export class SkillForRelease {
 
     this.hint_i18n = hint_i18n;
   }
+
+  canExportForTranslation() {
+    return this.status === SkillForRelease.STATUSES.ACTIF;
+  }
+
+  static get STATUSES() {
+    return {
+      ACTIF: 'actif',
+      EN_CONSTRUCTION: 'en construction',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
 }

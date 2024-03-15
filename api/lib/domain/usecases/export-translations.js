@@ -1,4 +1,4 @@
-import { Readable, pipeline } from 'node:stream';
+import { pipeline, Readable } from 'node:stream';
 import csv from 'fast-csv';
 import _ from 'lodash';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
@@ -23,14 +23,17 @@ export async function exportTranslations(stream, dependencies) {
 
   const localeToExtract = 'fr';
 
-  const filteredValidedChallenges = release.content.challenges
-    .filter((challenge) => challenge.locales.includes(localeToExtract) && challenge.status === 'validé');
+  const filteredActiveSkills = release.content.skills
+    .filter((skill) => skill.canExportForTranslation());
+
+  const filteredValidatedChallenges = release.content.challenges
+    .filter((challenge) => challenge.canExportForTranslation(localeToExtract));
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.skills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
-    createTranslationsStream(filteredValidedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
+    createTranslationsStream(filteredActiveSkills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
+    createTranslationsStream(filteredValidatedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
 
   const csvLinesStream = translationsStreams
