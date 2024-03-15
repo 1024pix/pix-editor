@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import FormData from 'form-data';
 import { parseString as parseCSVString } from 'fast-csv';
 import _ from 'lodash';
-import { databaseBuilder, streamToPromiseArray, generateAuthorizationHeader, knex } from '../../test-helper';
+import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
 
 describe('Acceptance | Controller | translations-controller', () => {
@@ -117,7 +117,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
           competenceId: 'recCompetence0',
-          status: 'validé',
+          status: 'actif',
           tubeId: 'recTube0',
           version: 1,
           level: 1,
@@ -403,7 +403,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
           competenceId: 'recCompetence0',
-          status: 'validé',
+          status: 'actif',
           tubeId: 'recTube0',
           version: 1,
           level: 1,

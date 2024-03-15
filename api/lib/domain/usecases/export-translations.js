@@ -23,13 +23,16 @@ export async function exportTranslations(stream, dependencies) {
 
   const localeToExtract = 'fr';
 
+  const filteredActiveSkills = release.content.skills
+    .filter((skill) => skill.status === 'actif');
+
   const filteredValidedChallenges = release.content.challenges
     .filter((challenge) => challenge.locales.includes(localeToExtract) && challenge.status === 'validé');
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.skills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
+    createTranslationsStream(filteredActiveSkills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
     createTranslationsStream(filteredValidedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
 
