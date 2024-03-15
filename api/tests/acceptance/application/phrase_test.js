@@ -6,6 +6,7 @@ import multipart from 'parse-multipart-data';
 import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
+import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
 
@@ -117,7 +118,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
           competenceId: 'recCompetence0',
-          status: 'actif',
+          status: SkillForRelease.STATUSES.ACTIF,
           tubeId: 'recTube0',
           version: 1,
           level: 1,
@@ -133,7 +134,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
           competenceId: 'recCompetence0',
-          status: 'archivé',
+          status: SkillForRelease.STATUSES.ARCHIVE,
           tubeId: 'recTube0',
           version: 1,
           level: 1,
@@ -149,7 +150,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
           competenceId: 'recCompetence0',
-          status: 'périmé',
+          status: SkillForRelease.STATUSES.PERIME,
           tubeId: 'recTube0',
           version: 1,
           level: 1,
@@ -164,7 +165,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           t1Status: false,
           t2Status: true,
           t3Status: false,
-          status: 'validé',
+          status: ChallengeForRelease.STATUSES.VALIDE,
           skillId: 'recSkill0',
           embedUrl: 'Embed URL',
           embedTitle: 'Embed title',
@@ -194,7 +195,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           t1Status: false,
           t2Status: true,
           t3Status: false,
-          status: 'proposé',
+          status: ChallengeForRelease.STATUSES.PROPOSE,
           skillId: 'recSkill0',
           embedUrl: 'Embed URL66',
           embedTitle: 'Embed title66',
@@ -443,7 +444,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         locale: 'nl',
         geography: null,
         embedUrl: null,
-        status: 'proposé',
+        status: ChallengeForRelease.STATUSES.PROPOSE,
       }]);
     });
   });

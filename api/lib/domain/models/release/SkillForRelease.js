@@ -29,6 +29,15 @@ export class SkillForRelease {
   }
 
   canExportForTranslation() {
-    return this.status === 'actif';
+    return this.status === SkillForRelease.STATUSES.ACTIF;
+  }
+
+  static get STATUSES() {
+    return {
+      ACTIF: 'actif',
+      EN_CONSTRUCTION: 'en construction',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
   }
 }

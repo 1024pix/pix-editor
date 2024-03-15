@@ -64,6 +64,15 @@ export class ChallengeForRelease {
   }
 
   canExportForTranslation(locale) {
-    return this.locales.includes(locale) && this.status === 'validé';
+    return this.locales.includes(locale) && this.status === ChallengeForRelease.STATUSES.VALIDE;
+  }
+
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
   }
 }
