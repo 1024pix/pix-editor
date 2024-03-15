@@ -1,6 +1,5 @@
 import {
   thematicDatasource,
-  tubeDatasource,
   tutorialDatasource,
 } from '../../infrastructure/datasources/airtable/index.js';
 import {
@@ -9,6 +8,7 @@ import {
   challengeRepository,
   competenceRepository,
   skillRepository,
+  tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
@@ -26,7 +26,7 @@ export async function getLearningContentForReplication() {
   ] = await Promise.all([
     areaRepository.list(),
     competenceRepository.list(),
-    tubeDatasource.list(),
+    tubeRepository.list(),
     skillRepository.list(),
     challengeRepository.list(),
     tutorialDatasource.list(),
