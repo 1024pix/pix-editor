@@ -62,4 +62,8 @@ export class ChallengeForRelease {
     this.shuffled = shuffled;
     this.alternativeVersion = alternativeVersion;
   }
+
+  canExportForTranslation(locale) {
+    return this.locales.includes(locale) && this.status === 'validé';
+  }
 }

@@ -27,4 +27,8 @@ export class SkillForRelease {
 
     this.hint_i18n = hint_i18n;
   }
+
+  canExportForTranslation() {
+    return this.status === 'actif';
+  }
 }
