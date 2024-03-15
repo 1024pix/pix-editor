@@ -9,6 +9,7 @@ export default class LocalizedChallengeModel extends Model {
   @attr embedURL;
   @attr locale;
   @attr status;
+  @attr translations;
 
   @belongsTo('challenge', { inverse: 'localizedChallenges' }) challenge;
   @hasMany('attachment', { inverse: 'localizedChallenge' }) files;

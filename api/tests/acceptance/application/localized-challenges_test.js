@@ -29,9 +29,10 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           type: 'localized-challenges',
           id: localizedChallenge.id,
           attributes: {
-            'locale': localizedChallenge.locale,
+            locale: localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
-            'status': localizedChallenge.status,
+            status: localizedChallenge.status,
+            translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
           relationships: {
             challenge: {
@@ -84,6 +85,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
             status: null,
+            translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
           relationships: {
             challenge: {
@@ -143,6 +145,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'locale': localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
               status: null,
+              translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
             },
             relationships: {
               challenge: {
@@ -163,6 +166,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'locale': localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
               status: null,
+              translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
             },
             relationships: {
               challenge: {

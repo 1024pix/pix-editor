@@ -11,6 +11,7 @@ const serializer = new Serializer('localized-challenges', {
     'embedUrl',
     'status',
     'fileIds',
+    'translations',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'fileIds') return 'attachments';
@@ -32,6 +33,7 @@ const serializer = new Serializer('localized-challenges', {
     return {
       ...localizedChallenge,
       challenge: { id: challengeId },
+      translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
     };
   }
 });

@@ -8,6 +8,12 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
   it('should upload to Phrase', async () => {
     // given
     const ConfigurationStub = class {};
+    const localesListStub = vi.fn().mockResolvedValue([
+      { id: 'frLocaleId', code: 'fr', name: 'fr', _default: true },
+    ]);
+    const LocalesApiStub = class {
+      localesList() { return localesListStub(); }
+    };
     const uploadCreateStub = vi.fn().mockResolvedValue({ id: 'upload-id' });
     const UploadsApiStub = class {
       uploadCreate() { return uploadCreateStub(); }
@@ -15,7 +21,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     vi.spyOn(exportTranslationsUseCase, 'exportTranslations').mockImplementation((stream) => stream.end());
 
     // when
-    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
 
     // then
     expect(uploadCreateStub).toHaveBeenCalled();
@@ -24,6 +30,12 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
   it('should schedule deletion of unmentioned keys', async () => {
     // given
     const ConfigurationStub = class {};
+    const localesListStub = vi.fn().mockResolvedValue([
+      { id: 'frLocaleId', code: 'fr', name: 'fr', _default: true },
+    ]);
+    const LocalesApiStub = class {
+      localesList() { return localesListStub(); }
+    };
     const uploadCreateStub = vi.fn().mockResolvedValue({ id: 'upload-id' });
     const UploadsApiStub = class {
       uploadCreate() { return uploadCreateStub(); }
@@ -32,7 +44,7 @@ describe('Unit | Domain | Usecases | upload-translation-to-phrase', () => {
     const scheduleStub = vi.spyOn(deleteUnmentionedKeysAfterUploadJob, 'schedule').mockResolvedValue();
 
     // when
-    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, UploadsApi: UploadsApiStub });
+    await uploadTranslationToPhrase({ Configuration: ConfigurationStub, LocalesApi: LocalesApiStub, UploadsApi: UploadsApiStub });
 
     // then
     expect(scheduleStub).toHaveBeenCalledWith({ uploadId: 'upload-id' });

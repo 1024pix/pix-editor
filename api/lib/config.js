@@ -117,7 +117,6 @@ export const checkUrlsJobs = {
 export let phrase = {
   apiKey: process.env.PHRASE_API_KEY,
   projectId: process.env.PHRASE_PROJECT_ID,
-  frLocaleId: process.env.PHRASE_FR_LOCALE_ID,
 };
 
 export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
@@ -160,6 +159,5 @@ if (process.env.NODE_ENV === 'test') {
   phrase = {
     apiKey: 'MY_PHRASE_ACCESS_TOKEN',
     projectId: 'MY_PHRASE_PROJECT_ID',
-    frLocaleId: 'MY_PHRASE_LOCALE_ID',
   };
 }

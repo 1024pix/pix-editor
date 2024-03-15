@@ -899,6 +899,78 @@ describe('Acceptance | Controller | challenges-controller', () => {
     });
   });
 
+  describe('GET /challenges/:id/translations/:locale', () => {
+
+    it('should redirect Phrase translations page', async () => {
+      // given
+      const challengeId = 'challenge123';
+      const locale = 'nl';
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId,
+        challengeId,
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challenge123_nl',
+        challengeId,
+        locale,
+      });
+
+      await databaseBuilder.commit();
+
+      const phraseAccountsApiScope = nock('https://api.phrase.com')
+        .get('/v2/accounts')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .query({ page:1 })
+        .reply(200, [
+          {
+            id: 'pixAccountId',
+            name: 'Pix',
+          },
+        ]);
+
+      const phraseLocalesApiScope = nock('https://api.phrase.com')
+        .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .reply(200, [
+          {
+            id: 'frLocaleId',
+            name: 'fr',
+            code: 'fr',
+            default: true,
+          },
+          {
+            id: 'enLocaleId',
+            name: 'en',
+            code: 'en',
+            default: false,
+          },
+          {
+            id: 'nlLocaleId',
+            name: 'nl',
+            code: 'nl',
+            default: false,
+          },
+        ]);
+
+      const server = await createServer();
+
+      // when
+      const response = await server.inject({
+        method: 'GET',
+        url: `/api/challenges/${challengeId}/translations/${locale}`,
+      });
+
+      // then
+      expect(response.statusCode).toBe(302);
+      expect(response.headers.location).toBe(`https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/MY_PHRASE_PROJECT_ID?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`);
+
+      expect(phraseAccountsApiScope.isDone()).toBe(true);
+      expect(phraseLocalesApiScope.isDone()).toBe(true);
+    });
+  });
+
   describe('POST /challenges', () => {
     let user;
     beforeEach(async function() {

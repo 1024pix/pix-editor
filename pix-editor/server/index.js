@@ -20,5 +20,6 @@ module.exports = function(app, options) {
 
     app.use(morgan('dev'));
     app.get('/api/challenges/:id/preview', (req, res) => proxy.web(req, res));
+    app.get('/api/challenges/:id/translations/:locale', (req, res) => proxy.web(req, res));
   }
 };
