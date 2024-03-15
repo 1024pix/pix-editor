@@ -1,8 +1,6 @@
 export function buildTube({
   id,
   name,
-  title,
-  description,
   practicalTitle_i18n: {
     fr: practicalTitleFrFr,
     en: practicalTitleEnUs,
@@ -19,8 +17,6 @@ export function buildTube({
     'fields': {
       'id persistant': id,
       'Nom': name,
-      'Titre': title,
-      'Description': description,
       'Titre pratique fr-fr': practicalTitleFrFr,
       'Titre pratique en-us': practicalTitleEnUs,
       'Description pratique fr-fr': practicalDescriptionFrFr,

@@ -978,8 +978,6 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tube1111',
       name: 'tube1111 name',
-      title: 'tube1111 title',
-      description: 'tube1111 description',
       practicalTitle_i18n: {
         fr: 'tube1111 practicalTitleFrFr',
         en: 'tube1111 practicalTitleEnUs',
@@ -997,8 +995,6 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tube1121',
       name: 'tube1121 name',
-      title: 'tube1121 title',
-      description: 'tube1121 description',
       practicalTitle_i18n: {
         fr: 'tube1121 practicalTitleFrFr',
         en: 'tube1121 practicalTitleEnUs',
@@ -1016,8 +1012,6 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tube1211',
       name: 'tube1211 name',
-      title: 'tube1211 title',
-      description: 'tube1211 description',
       practicalTitle_i18n: {
         fr: 'tube1211 practicalTitleFrFr',
         en: 'tube1211 practicalTitleEnUs',
@@ -1035,8 +1029,6 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tube1212',
       name: 'tube1212 name',
-      title: 'tube1212 title',
-      description: 'tube1212 description',
       practicalTitle_i18n: {
         fr: 'tube1212 practicalTitleFrFr',
         en: 'tube1212 practicalTitleEnUs',
@@ -1054,8 +1046,6 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tube2111',
       name: 'tube2111 name',
-      title: 'tube2111 title',
-      description: 'tube2111 description',
       practicalTitle_i18n: {
         fr: 'tube2111 practicalTitleFrFr',
         en: 'tube2111 practicalTitleEnUs',

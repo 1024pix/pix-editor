@@ -42,8 +42,6 @@ module('unit | Component | sidebar/export', function(hooks) {
 
     const productionTubes_1_1 = {
       name: 'tube1',
-      title: 'title_tube1',
-      description: 'description_tube1',
       practicalTitleFr: 'practicalTitleFr_tube1',
       practicalDescriptionFr: 'practicalDescriptionFr_tube1',
       productionSkills: productionSkill_1_1,
@@ -52,8 +50,6 @@ module('unit | Component | sidebar/export', function(hooks) {
 
     const productionTubes_1_2 = {
       name: 'tube2',
-      title: 'title_tube2',
-      description: 'description_tube2',
       practicalTitleFr: 'practicalTitleFr_tube2',
       practicalDescriptionFr: 'practicalDescriptionFr_tube2',
       productionSkills: productionSkill_1_2,
@@ -62,8 +58,6 @@ module('unit | Component | sidebar/export', function(hooks) {
 
     const productionTubes_2_1 = {
       name: 'tube3',
-      title: 'title_tube3',
-      description: 'description_tube3',
       practicalTitleFr: 'practicalTitleFr_tube3',
       practicalDescriptionFr: 'practicalDescriptionFr_tube3',
       productionSkills: productionSkill_2_1,
@@ -103,10 +97,10 @@ module('unit | Component | sidebar/export', function(hooks) {
 
   test('it should return formatted cvs content', function(assert) {
     // given
-    const expectedCsvContent = `"Domaine","Compétence","Thématique","Tube","Titre","Description","Titre pratique","Description pratique","Liste des acquis"
-"area","competence1","theme1","tube1","title_tube1","description_tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
-"area","competence1","theme1","tube2","title_tube2","description_tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
-"area","competence2","theme2","tube3","title_tube3","description_tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`;
+    const expectedCsvContent = `"Domaine","Compétence","Thématique","Tube","Titre pratique","Description pratique","Liste des acquis"
+"area","competence1","theme1","tube1","practicalTitleFr_tube1","practicalDescriptionFr_tube1","skill1_1,░,skill1_3,░,░,skill1_6,░,░"
+"area","competence1","theme1","tube2","practicalTitleFr_tube2","practicalDescriptionFr_tube2","░,skill2_2,skill2_3,skill2_4,░,░,░,░"
+"area","competence2","theme2","tube3","practicalTitleFr_tube3","practicalDescriptionFr_tube3","skill3_1,░,░,░,skill3_5,skill3_6,░,░"`;
 
     // when
     const csvContent = component._buildCSVContent(areas);

@@ -91,8 +91,6 @@ describe('Acceptance | Controller | phrase-controller', () => {
         tubes: [{
           id: 'recTube0',
           name: '@acquis',
-          title: 'Titre du Tube',
-          description: 'Description du Tube',
           practicalTitle_i18n: {
             fr: 'Titre pratique du Tube - fr',
             en: 'Titre pratique du Tube - en',

@@ -2,8 +2,6 @@ export function buildTubeDatasourceObject(
   {
     id = 'recTIddrkopID23Fp',
     name = '@Moteur',
-    title = 'Moteur de recherche',
-    description = 'Connaître le fonctionnement d\'un moteur de recherche',
     practicalTitle_i18n = {
       fr: 'Outils d\'accès au web',
       en: 'Tools for web',
@@ -17,8 +15,6 @@ export function buildTubeDatasourceObject(
   return {
     id,
     name,
-    title,
-    description,
     practicalTitle_i18n,
     practicalDescription_i18n,
     competenceId,
