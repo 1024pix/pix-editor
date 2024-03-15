@@ -919,6 +919,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       await databaseBuilder.commit();
 
+      const phraseAccountsApiScope = nock('https://api.phrase.com')
+        .get('/v2/accounts')
+        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
+        .query({ page:1 })
+        .reply(200, [
+          {
+            id: 'pixAccountId',
+            name: 'Pix',
+          },
+        ]);
+
       const phraseLocalesApiScope = nock('https://api.phrase.com')
         .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
         .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
@@ -953,8 +964,9 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
       // then
       expect(response.statusCode).toBe(302);
-      expect(response.headers.location).toBe(`https://app.phrase.com/editor/v4/accounts/00000000000000000000000000000000/projects/MY_PHRASE_PROJECT_ID?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`);
+      expect(response.headers.location).toBe(`https://app.phrase.com/editor/v4/accounts/pixAccountId/projects/MY_PHRASE_PROJECT_ID?search=keyNameQuery%3Achallenge.${challengeId}&locales=%27frLocaleId%27%2C%27nlLocaleId%27`);
 
+      expect(phraseAccountsApiScope.isDone()).toBe(true);
       expect(phraseLocalesApiScope.isDone()).toBe(true);
     });
   });

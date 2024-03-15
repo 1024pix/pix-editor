@@ -1,20 +1,26 @@
-import { Configuration, LocalesApi } from 'phrase-js';
+import { AccountsApi, Configuration, LocalesApi } from 'phrase-js';
 import * as config from '../../config.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function getPhraseTranslationsURL({ challengeId, locale }, phrase = { Configuration, LocalesApi }) {
+export async function getPhraseTranslationsURL({ challengeId, locale }, phrase = { AccountsApi, Configuration, LocalesApi }) {
   try {
-    const locales = await new phrase.LocalesApi(new phrase.Configuration({
+    const configuration = new phrase.Configuration({
       apiKey: `token ${config.phrase.apiKey}`,
       fetchApi: fetch,
-    })).localesList({
+    });
+
+    const accounts = await new phrase.AccountsApi(configuration).accountsList({ page: 1 });
+
+    const accountId = accounts.find(({ name }) => name === 'Pix')?.id;
+
+    const locales = await new phrase.LocalesApi(configuration).localesList({
       projectId: config.phrase.projectId,
     });
 
     const defaultLocaleId = locales.find(({ _default }) => _default)?.id;
     const targetLocaleId = locales.find(({ code }) => code === locale)?.id;
 
-    const url = new URL(config.phrase.projectId, 'https://app.phrase.com/editor/v4/accounts/00000000000000000000000000000000/projects/');
+    const url = new URL(config.phrase.projectId, `https://app.phrase.com/editor/v4/accounts/${accountId}/projects/`);
     url.searchParams.set('search', `keyNameQuery:challenge.${challengeId}`);
     url.searchParams.set('locales', `'${defaultLocaleId}','${targetLocaleId}'`);
 
