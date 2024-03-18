@@ -98,4 +98,19 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     });
 
   });
+
+  module('#edit localized challenge', function() {
+    test('should display edition form', async function (assert) {
+      const screen = await visit('/');
+      await click(findAll('[data-test-area-item]')[0]);
+      await click(findAll('[data-test-competence-item]')[0]);
+      await click(findAll('[data-test-skill-cell-link]')[0]);
+      await click(screen.getByText('Version en'));
+
+      await clickByText('Modifier');
+
+      assert.dom(screen.getByRole('textbox', { name: /Embed URL/ })).exists();
+      assert.dom(screen.getByRole('combobox', { name: 'Géographie' })).exists();
+    });
+  });
 });
