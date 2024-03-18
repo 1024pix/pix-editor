@@ -10,10 +10,6 @@ export const tubeDatasource = datasource.extend({
   usedFields: [
     'id persistant',
     'Nom',
-    'Titre pratique fr-fr',
-    'Titre pratique en-us',
-    'Description pratique fr-fr',
-    'Description pratique en-us',
     'Competences (id persistant)',
   ],
 
@@ -21,14 +17,6 @@ export const tubeDatasource = datasource.extend({
     return {
       id: airtableRecord.get('id persistant'),
       name: airtableRecord.get('Nom'),
-      practicalTitle_i18n: {
-        fr: airtableRecord.get('Titre pratique fr-fr'),
-        en: airtableRecord.get('Titre pratique en-us'),
-      },
-      practicalDescription_i18n: {
-        fr: airtableRecord.get('Description pratique fr-fr'),
-        en: airtableRecord.get('Description pratique en-us'),
-      },
       competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
     };
   },
