@@ -18,7 +18,7 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
 
   const baseUrl = config.lcms.baseUrl;
   const stream = new PassThrough();
-  exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
+  await exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
   const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
 
   const configuration = new phraseApi.Configuration({
@@ -51,7 +51,8 @@ export async function uploadTranslationToPhrase(phraseApi = { Configuration, Loc
         header_content_row: true,
       }
     });
-    scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
+
+    await scheduleDeleteUnmentionedKeysAfterUploadJob({ uploadId: upload.id });
   } catch (e) {
     const text = await e.text?.() ?? e;
     logger.error(`Phrase error while uploading translations: ${text}`);
