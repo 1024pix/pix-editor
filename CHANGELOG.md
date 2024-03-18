@@ -1,5 +1,15 @@
 
 
+## v3.136.1 (18/03/2024)
+
+
+### :building_construction: Tech
+- [#608](https://github.com/1024pix/pix-editor/pull/608) [TECH] Désactivation temporaire de la synchro Phrase dans la release (PIX-11665).
+
+### :arrow_up: Montée de version
+- [#606](https://github.com/1024pix/pix-editor/pull/606) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.1 (pix-editor).
+- [#605](https://github.com/1024pix/pix-editor/pull/605) [BUMP] Update dependency @1024pix/ember-testing-library to ^1.1.0 (pix-editor).
+
 ## v3.136.0 (18/03/2024)
 
 
