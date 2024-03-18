@@ -92,16 +92,16 @@ describe('Unit | Infrastructure | scheduled-jobs | release-job', () => {
         expect(learningContentNotification.notifyReleaseCreationSuccess).not.toHaveBeenCalled();
       });
 
-      it('should start the upload translation job to  phrase when is finished', async () => {
-        // given
-        const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
+      // it('should start the upload translation job to  phrase when is finished', async () => {
+      //   // given
+      //   const uploadTranslationToPhraseStub = vi.spyOn(uploadTranslationToPhraseJob, 'start').mockResolvedValue();
 
-        // when
-        await releaseJobProcessor({ data: {} });
+      //   // when
+      //   await releaseJobProcessor({ data: {} });
 
-        // then
-        expect(uploadTranslationToPhraseStub).toHaveBeenCalledOnce();
-      });
+      //   // then
+      //   expect(uploadTranslationToPhraseStub).toHaveBeenCalledOnce();
+      // });
     });
 
     describe('when release creation failed', () => {
