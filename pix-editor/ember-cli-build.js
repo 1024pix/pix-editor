@@ -7,6 +7,11 @@ module.exports = function(defaults) {
     sassOptions: {
       includePaths: ['node_modules/@1024pix/pix-ui/addon/styles'],
     },
+    babel: {
+      plugins: [
+        require.resolve('ember-concurrency/async-arrow-task-transform'),
+      ],
+    }
 
     // Add options here
     /*babel: {
