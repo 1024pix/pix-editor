@@ -5,7 +5,7 @@ import * as areaRepository from '../../../../lib/infrastructure/repositories/are
 describe('Integration | Repository | area-repository', () => {
 
   describe('#list', () => {
-    it('should return the list of all competences', async () => {
+    it('should return the list of all areas', async () => {
       // given
       const airtableScope = airtableBuilder.mockList({ tableName: 'Domaines' }).returns([
         airtableBuilder.factory.buildArea({

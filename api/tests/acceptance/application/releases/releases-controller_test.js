@@ -76,10 +76,12 @@ async function mockCurrentContent() {
       practicalTitle_i18n: {
         fr: 'Titre pratique du Tube - fr',
         en: 'Titre pratique du Tube - en',
+        nl: 'Titre pratique du Tube - nl',
       },
       practicalDescription_i18n: {
         fr: 'Description pratique du Tube - fr',
         en: 'Description pratique du Tube - en',
+        nl: 'Description pratique du Tube - nl',
       },
       competenceId: 'recCompetence0',
       thematicId: 'recThematic0',
@@ -259,6 +261,17 @@ async function mockCurrentContent() {
       locale,
       value: expectedCurrentContent.areas[0].title_i18n[locale],
     });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
+      locale,
+      value: expectedCurrentContent.tubes[0].practicalTitle_i18n[locale],
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
+      locale,
+      value: expectedCurrentContent.tubes[0].practicalDescription_i18n[locale],
+    });
   }
 
   databaseBuilder.factory.buildTranslation({
@@ -368,10 +381,12 @@ async function mockContentForRelease() {
       practicalTitle_i18n: {
         en: 'Titre pratique du Tube - en',
         fr: 'Titre pratique du Tube - fr',
+        nl: 'Titre pratique du Tube - nl',
       },
       practicalDescription_i18n: {
         en: 'Description pratique du Tube - en',
         fr: 'Description pratique du Tube - fr',
+        nl: 'Description pratique du Tube - nl',
       },
     }],
     skills: [{
@@ -523,6 +538,17 @@ async function mockContentForRelease() {
       key: `area.${expectedCurrentContent.areas[0].id}.title`,
       locale,
       value: expectedCurrentContent.areas[0].title_i18n[locale],
+    });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalTitle`,
+      locale,
+      value: expectedCurrentContent.tubes[0].practicalTitle_i18n[locale],
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `tube.${expectedCurrentContent.tubes[0].id}.practicalDescription`,
+      locale,
+      value: expectedCurrentContent.tubes[0].practicalDescription_i18n[locale],
     });
   }
 

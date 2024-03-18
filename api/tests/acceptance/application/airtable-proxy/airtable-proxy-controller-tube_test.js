@@ -97,3 +97,121 @@ describe('Acceptance | Controller | airtable-proxy-controller | create tube tran
     });
   });
 });
+
+describe('Acceptance | Controller | airtable-proxy-controller | Retrieve tube translations', () => {
+  let tubeDataObject;
+  let airtableTube;
+  let user;
+
+  beforeEach(async function() {
+    user = databaseBuilder.factory.buildAdminUser();
+
+    tubeDataObject = domainBuilder.buildTubeDatasourceObject({
+      id: 'mon_id_persistant',
+    });
+    airtableTube = airtableBuilder.factory.buildTube(tubeDataObject);
+
+    databaseBuilder.factory.buildTranslation({
+      key: 'tube.mon_id_persistant.practicalDescription',
+      locale: 'en',
+      value: 'Identify a web browser and a search engine, know how the search engine works from PG'
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'tube.mon_id_persistant.practicalDescription',
+      locale: 'fr',
+      value: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG'
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'tube.mon_id_persistant.practicalTitle',
+      locale: 'en',
+      value: 'Tools for web from PG'
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: 'tube.mon_id_persistant.practicalTitle',
+      locale: 'fr',
+      value: 'Outils d\'accès au web from PG'
+    });
+
+    await databaseBuilder.commit();
+  });
+
+  afterEach(() => {
+    expect(nock.isDone()).to.be.true;
+  });
+
+  afterEach(function() {
+    return knex('translations').truncate();
+  });
+
+  describe('GET /api/airtable/content/Tubes', () => {
+    it('should proxy request to airtable and retrieve all tubes', async () => {
+      // Given
+      const expectedTubeDataObject = domainBuilder.buildTubeDatasourceObject({
+        id: 'mon_id_persistant'
+      });
+      const expectedTube = inputOutputDataBuilder.factory.buildTube({
+        ...expectedTubeDataObject,
+        practicalTitle_i18n: {
+          fr: 'Outils d\'accès au web from PG',
+          en: 'Tools for web from PG',
+        },
+        practicalDescription_i18n: {
+          fr: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG',
+          en: 'Identify a web browser and a search engine, know how the search engine works from PG',
+        },
+      });
+      nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Tubes')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableTube] });
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/airtable/content/Tubes',
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal({ records: [expectedTube] });
+    });
+  });
+
+  describe('GET /api/airtable/content/Tubes/id', () => {
+    it('should proxy request to airtable and retrieve tube by id', async () => {
+      // Given
+      const expectedTubeDataObject = domainBuilder.buildTubeDatasourceObject({
+        id: 'mon_id_persistant',
+      });
+      const expectedTube = inputOutputDataBuilder.factory.buildTube({
+        ...expectedTubeDataObject,
+        practicalTitle_i18n: {
+          fr: 'Outils d\'accès au web from PG',
+          en: 'Tools for web from PG',
+        },
+        practicalDescription_i18n: {
+          fr: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG',
+          en: 'Identify a web browser and a search engine, know how the search engine works from PG',
+        },
+      });
+      nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Tubes/recId')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableTube);
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/airtable/content/Tubes/recId',
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal(expectedTube);
+    });
+  });
+});
