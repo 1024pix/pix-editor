@@ -1,5 +1,24 @@
 
 
+## v3.136.0 (18/03/2024)
+
+
+### :rocket: Amélioration
+- [#599](https://github.com/1024pix/pix-editor/pull/599) [FEATURE] Lecture des champs du sujet depuis PG (PIX-9411).
+- [#597](https://github.com/1024pix/pix-editor/pull/597) [FEATURE] Lien vers les trads de l'épreuve dans Phrase (PIX-11504).
+
+### :building_construction: Tech
+- [#596](https://github.com/1024pix/pix-editor/pull/596) [TECH] Supprimer les usages des titre et description des sujets qui sont des champs dépréciés (PIX-11629).
+
+### :bug: Correction
+- [#598](https://github.com/1024pix/pix-editor/pull/598) [BUGFIX] Filtrer les acquis pour n'envoyer que les "actif" à Phrase (PIX-11645).
+
+### :arrow_up: Montée de version
+- [#603](https://github.com/1024pix/pix-editor/pull/603) [BUMP] Lock file maintenance (challenge-parser).
+- [#602](https://github.com/1024pix/pix-editor/pull/602) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.10 (pix-editor).
+- [#601](https://github.com/1024pix/pix-editor/pull/601) [BUMP] Lock file maintenance (api).
+- [#600](https://github.com/1024pix/pix-editor/pull/600) [BUMP] Update dependency @1024pix/pix-ui to ^44.2.9 (pix-editor).
+
 ## v3.135.0 (14/03/2024)
 
 
