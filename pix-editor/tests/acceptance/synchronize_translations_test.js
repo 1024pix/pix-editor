@@ -18,7 +18,7 @@ module('Acceptance | Synchronize Translations', function(hooks) {
   test('should display page to synchronize translations', async function(assert) {
     // when
     const screen = await visit('/');
-    await clickByName('Synchroniser les traductions');
+    await clickByName('Récupérer les traductions');
 
     // then
     assert.strictEqual(currentURL(), '/synchronize-translations');
