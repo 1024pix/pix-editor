@@ -34,6 +34,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         locale: 'nl',
         value: 'Hallo',
       })],
+      shouldDuplicateToAirtable: false,
     });
   });
 
@@ -87,6 +88,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
           value: 'Hallo3'
         })
       ],
+      shouldDuplicateToAirtable: false,
     });
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
     expect(localizedChallengeRepository.create).toHaveBeenCalledWith([
