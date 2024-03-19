@@ -24,5 +24,5 @@ const deleteUnmentionedKeysAfterUploadJobOptions = {
 };
 
 export function schedule({ uploadId }) {
-  queue.add({ uploadId }, deleteUnmentionedKeysAfterUploadJobOptions);
+  return queue.add({ uploadId }, deleteUnmentionedKeysAfterUploadJobOptions);
 }
