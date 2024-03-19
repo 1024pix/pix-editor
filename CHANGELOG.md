@@ -1,5 +1,18 @@
 
 
+## v3.136.2 (19/03/2024)
+
+
+### :building_construction: Tech
+- [#613](https://github.com/1024pix/pix-editor/pull/613) [TECH] Réactive la synchronisation avec Phrase.
+
+### :arrow_up: Montée de version
+- [#614](https://github.com/1024pix/pix-editor/pull/614) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.4 (pix-editor).
+- [#612](https://github.com/1024pix/pix-editor/pull/612) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.3 (pix-editor).
+- [#604](https://github.com/1024pix/pix-editor/pull/604) [BUMP] Update dependency ember-power-select to v8 (pix-editor).
+- [#611](https://github.com/1024pix/pix-editor/pull/611) [BUMP] Update dependency googleapis to v134 (api).
+- [#609](https://github.com/1024pix/pix-editor/pull/609) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.2 (pix-editor).
+
 ## v3.136.1 (18/03/2024)
 
 
