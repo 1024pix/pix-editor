@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
-import { visit, currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
+import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -24,7 +25,7 @@ module('Acceptance | Search', function(hooks) {
 
     // when
     await visit('/');
-    await click(find('[data-test-frameworks-select] .ember-basic-dropdown-trigger'));
+    await clickByName('Sélectionner un référentiel');
     await click(findAll('.ember-power-select-option')[1]);
     await fillIn('[data-test-framework-name-input] input', newFrameworkName);
     await click(find('[data-test-save-action]'));

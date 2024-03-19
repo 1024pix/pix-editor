@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, findAll, render } from '@ember/test-helpers';
+import { clickByName } from '@1024pix/ember-testing-library';
 import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
 import sinon  from 'sinon';
@@ -72,7 +73,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
       // when
       await render(hbs`<Sidebar::Navigation @displayFrameworkList={{this.displayFrameworkList}} @close={{this.closeAction}}/>`);
 
-      await click('[data-test-frameworks-select] .ember-basic-dropdown-trigger');
+      await clickByName('Sélectionner un référentiel');
 
       // then
       const sourcesList = findAll('.ember-power-select-option');
