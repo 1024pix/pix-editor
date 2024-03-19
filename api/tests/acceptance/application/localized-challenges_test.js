@@ -31,6 +31,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             locale: localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            geography: 'Neutre',
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
@@ -85,6 +86,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
             status: null,
+            geography: 'Neutre',
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
           relationships: {
@@ -144,6 +146,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
+              geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
             },
@@ -165,6 +168,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
+              geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
             },

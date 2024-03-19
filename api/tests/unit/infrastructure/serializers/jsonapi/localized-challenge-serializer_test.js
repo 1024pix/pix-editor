@@ -6,13 +6,16 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
   describe('#deserialize', () => {
     it('should deserialize a Localized Challenge', async () => {
       // Given
-      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({});
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        geography: 'BZ',
+      });
       const json = {
         data: {
           type: 'localized-challenges',
           id: `${expectedLocalizedChallenge.id}`,
           attributes: {
             'embed-url': expectedLocalizedChallenge.embedUrl,
+            geography: 'Bélize',
             locale: expectedLocalizedChallenge.locale,
             status: expectedLocalizedChallenge.status,
           },
@@ -111,6 +114,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         embedUrl: null,
         status: 'validé',
+        geography: 'BZ',
         fileIds: ['attachment1', 'attachment2']
       });
       const expectedSerializedLocalizedChallenge = {
@@ -120,6 +124,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           attributes: {
             locale: localizedChallenge.locale,
             'embed-url': null,
+            geography: 'Belize',
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },
