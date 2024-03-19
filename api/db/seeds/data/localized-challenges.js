@@ -34,9 +34,6 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
     const countryName = challenge.get('Géographie');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const countryCode = getCountryCode(countryName);
-    if (!countryCode) {
-      console.log({ challengeId }, `could not find country code for name "${countryName}"`);
-    }
     return [
       { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('Embed URL') },
       ...challengesLocales[challengeId]
