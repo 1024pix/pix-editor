@@ -27,30 +27,29 @@ describe('Script | Migrate tubes translations from Airtable', function() {
 
   it('fills translations table', async function() {
     // given
-    const tubes = [
-      airtableBuilder.factory.buildTube({
-        id: 'tubeId1',
-        practicalTitle_i18n: {
-          fr: 'practicalTitleFrTubeId1',
-          en: 'practicalTitleEnUsTubeId1',
-        },
-        practicalDescription_i18n: {
-          fr: 'practicalDescriptionFrTubeId1',
-          en: 'practicalDescriptionEnUsTubeId1',
-        },
-      }),
-      airtableBuilder.factory.buildTube({
-        id: 'tubeId2',
-        practicalTitle_i18n: {
-          fr: 'practicalTitleFrTubeId2',
-          en: 'practicalTitleEnUsTubeId2',
-        },
-        practicalDescription_i18n: {
-          fr: 'practicalDescriptionFrTubeId2',
-          en: 'practicalDescriptionEnUsTubeId2',
-        },
-      }),
-    ];
+    const tube1FromAirtable = airtableBuilder.factory.buildTube({
+      id: 'tubeId1',
+    });
+    tube1FromAirtable.fields = {
+      ...tube1FromAirtable.fields,
+      'Titre pratique fr-fr': 'practicalTitleFrTubeId1',
+      'Titre pratique en-us': 'practicalTitleEnUsTubeId1',
+      'Description pratique fr-fr': 'practicalDescriptionFrTubeId1',
+      'Description pratique en-us': 'practicalDescriptionEnUsTubeId1',
+    };
+
+    const tube2FromAirtable = airtableBuilder.factory.buildTube({
+      id: 'tubeId2',
+    });
+    tube2FromAirtable.fields = {
+      ...tube2FromAirtable.fields,
+      'Titre pratique fr-fr': 'practicalTitleFrTubeId2',
+      'Titre pratique en-us': 'practicalTitleEnUsTubeId2',
+      'Description pratique fr-fr': 'practicalDescriptionFrTubeId2',
+      'Description pratique en-us': 'practicalDescriptionEnUsTubeId2',
+    };
+
+    const tubes = [tube1FromAirtable, tube2FromAirtable];
 
     nock('https://api.airtable.com')
       .get('/v0/airtableBaseValue/Tubes')
