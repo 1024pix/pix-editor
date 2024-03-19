@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import { visit } from '@ember/test-helpers';
+import { visit } from '@1024pix/ember-testing-library';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -17,17 +17,19 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
 
   for (const role of ['readonly', 'replicator', 'editor', 'admin']) {
     module(`when user is ${role}`, function(hooks) {
+      let screen;
+
       hooks.beforeEach(async function () {
         //given
         this.server.create('user', { apiKey, trigram: 'ABC', access: role, });
 
         //when
-        await visit('/');
+        screen = await visit('/');
       });
 
       test('it should display select framework', async function (assert) {
         // then
-        assert.dom('[data-test-frameworks-select]').exists();
+        assert.dom(await screen.findByRole('combobox', { name: 'Sélectionner un référentiel' })).exists();
       });
 
       test('it should display generator target profile link', async function (assert) {

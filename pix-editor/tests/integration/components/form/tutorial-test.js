@@ -22,7 +22,7 @@ module('Integration | Component | tutorial-form', function(hooks) {
 
     const screen = await render(hbs`<Form::Tutorial @tutorial={{this.tutorial}} />`);
 
-    await clickByName('Langue');
+    await clickByName('Langue *');
     assert.ok(screen.getByRole('listbox', { option: 'Première Langue' }));
     assert.ok(screen.getByRole('listbox', { option: 'Autre Langue' }));
   });
