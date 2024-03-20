@@ -103,6 +103,16 @@ export default class LocalizedController extends Controller {
       : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
   }
 
+  get shouldDisplayPrimaryEmbedUrl() {
+    return !this.localizedChallenge.embedURL && this.challenge.embedURL;
+  }
+
+  get defaultEmbedUrl() {
+    const url = new URL(this.challenge.embedURL);
+    url.searchParams.set('lang', this.localizedChallenge.locale);
+    return url.href;
+  }
+
   @action
   showIllustration() {
     this.displayIllustration = true;

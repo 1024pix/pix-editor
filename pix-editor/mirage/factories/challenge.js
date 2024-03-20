@@ -19,7 +19,7 @@ export default Factory.extend({
   preview: 'preview',
   airtableId: undefined,
   timer: 'timer',
-  embedURL: 'embedURL',
+  embedURL: 'https://mon-site.fr/my-link.html',
   embedTitle: 'embedTitle',
   embedHeight: 'embedHeight',
   alternativeVersion: 'alternativeVersion',
