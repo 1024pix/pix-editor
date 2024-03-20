@@ -22,7 +22,7 @@ export async function migrateTubesTranslationsFromAirtable({ airtableClient }) {
     .all();
 
   const translations = tubes.flatMap((tube) =>
-    tubesTranslations.extractFromProxyObject(tube.fields)
+    tubesTranslations.extractFromProxyObject(tube)
   );
 
   await translationRepository.save({ translations });

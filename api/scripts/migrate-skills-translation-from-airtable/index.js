@@ -20,7 +20,7 @@ export async function migrateSkillsTranslationFromAirtable({ airtableClient }) {
     .all();
 
   const translations = allSkills.flatMap((skill) =>
-    skillTranslations.extractFromProxyObject(skill.fields)
+    skillTranslations.extractFromProxyObject(skill)
   );
 
   await translationRepository.save({ translations });
