@@ -1,5 +1,22 @@
 
 
+## v3.137.0 (20/03/2024)
+
+
+### :rocket: Amélioration
+- [#618](https://github.com/1024pix/pix-editor/pull/618) [FEATURE] Renommer "Synchroniser les traductions" en "Récupérer les traductions" (PIX-11673).
+- [#607](https://github.com/1024pix/pix-editor/pull/607) [FEATURE] Afficher et pouvoir modifier le champ géographie au niveau d'une épreuve traduite (PIX-11092).
+
+### :building_construction: Tech
+- [#617](https://github.com/1024pix/pix-editor/pull/617) [TECH] Ne pas copier les traductions importées dans Airtable.
+- [#616](https://github.com/1024pix/pix-editor/pull/616) [TECH] Supprimer le warning pour la géographie dans les seeds.
+
+### :bug: Correction
+- [#610](https://github.com/1024pix/pix-editor/pull/610) [BUGFIX] Terminer de supprimer les données traduisibles liées aux sujets (PIX-11666).
+
+### :arrow_up: Montée de version
+- [#615](https://github.com/1024pix/pix-editor/pull/615) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.6 (pix-editor).
+
 ## v3.136.2 (19/03/2024)
 
 
