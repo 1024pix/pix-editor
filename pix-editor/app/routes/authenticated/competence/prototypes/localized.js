@@ -4,7 +4,9 @@ import { service } from '@ember/service';
 export default class LocalizedPrototypeRoute extends Route {
   @service store;
 
-  model({ localized_challenge_id }) {
-    return this.store.findRecord('localized_challenge', localized_challenge_id);
+  async model({ localized_challenge_id }) {
+    const localizedChallenge = await this.store.findRecord('localized_challenge', localized_challenge_id);
+    const challenge =  await localizedChallenge.challenge;
+    return { localizedChallenge, challenge };
   }
 }

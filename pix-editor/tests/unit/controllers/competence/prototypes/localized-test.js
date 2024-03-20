@@ -11,7 +11,7 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
   hooks.beforeEach(function () {
     //given
     controller = this.owner.lookup('controller:authenticated.competence/prototypes/localized');
-
+    controller.model = {};
     startStub = sinon.stub();
     stopStub = sinon.stub();
     class LoaderService extends Service {
@@ -39,7 +39,7 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
         save: sinon.stub().resolves(localizedChallenge),
         files: [],
       };
-      controller.model = localizedChallenge;
+      controller.model.localizedChallenge = localizedChallenge;
 
       handleIllustrationStub = sinon.stub().resolves(localizedChallenge);
       controller._handleIllustration = handleIllustrationStub;
@@ -92,7 +92,7 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
       rollbackAttributes: rollbackAttributesStub,
       files: [],
     });
-    controller.model = localizedChallenge;
+    controller.model.localizedChallenge = localizedChallenge;
 
     // when
     await controller.cancelEdit();

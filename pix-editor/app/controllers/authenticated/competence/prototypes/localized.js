@@ -28,12 +28,21 @@ export default class LocalizedController extends Controller {
 
   deletedFiles = [];
 
+  get challenge() {
+    return this.model.challenge;
+  }
+
+  get localizedChallenge() {
+    return this.model.localizedChallenge;
+  }
+
+
   get previewUrl() {
-    return new URL(`${this.model.challenge.get('preview')}?locale=${this.model.locale}`, window.location).href;
+    return new URL(`${this.challenge.preview}?locale=${this.localizedChallenge.locale}`, window.location).href;
   }
 
   get translationsUrl() {
-    return new URL(`${this.model.translations}`, window.location).href;
+    return new URL(`${this.localizedChallenge.translations}`, window.location).href;
   }
 
   get challengeRoute() {
@@ -42,18 +51,18 @@ export default class LocalizedController extends Controller {
 
   get challengeModels() {
     return this.isPrototype
-      ? [this.model.challenge]
-      : [this.model.challenge.get('relatedPrototype'), this.model.challenge];
+      ? [this.challenge]
+      : [this.challenge.relatedPrototype, this.challenge];
   }
 
   get challengeTitle() {
     return this.isPrototype
-      ? this.model.challenge.get('skillName')
-      : `Déclinaison n°${this.model.challenge.get('alternativeVersion')}`;
+      ? this.challenge.skillName
+      : `Déclinaison n°${this.challenge.alternativeVersion}`;
   }
 
   get isPrototype() {
-    return this.model.challenge.get('isPrototype');
+    return this.challenge.isPrototype;
   }
 
   get prototypeMaximized() {
@@ -69,27 +78,27 @@ export default class LocalizedController extends Controller {
   }
 
   get mayEdit() {
-    return this.access.mayEdit(this.model.challenge);
+    return this.access.mayEdit(this.challenge);
   }
 
   get mayChangeStatus() {
-    return this.access.mayChangeLocalizedChallengeStatus(this.model);
+    return this.access.mayChangeLocalizedChallengeStatus(this.localizedChallenge);
   }
 
   get changeStatusButtonText() {
-    return this.model.isInProduction ? 'Mettre en pause' : 'Mettre en prod';
+    return this.localizedChallenge.isInProduction ? 'Mettre en pause' : 'Mettre en prod';
   }
 
   get changeStatusButtonIcon() {
-    return this.model.isInProduction ? 'pause' : 'play';
+    return this.localizedChallenge.isInProduction ? 'pause' : 'play';
   }
 
   get confirmTitle() {
-    return this.model.isInProduction ? 'Mise en pause' : 'Mise en prod';
+    return this.localizedChallenge.isInProduction ? 'Mise en pause' : 'Mise en prod';
   }
 
   get confirmContent() {
-    return this.model.isInProduction
+    return this.localizedChallenge.isInProduction
       ? 'Êtes-vous sûr de vouloir mettre en pause cette épreuve ?'
       : 'Êtes-vous sûr de vouloir mettre en prod cette épreuve ?';
   }
@@ -104,7 +113,7 @@ export default class LocalizedController extends Controller {
   }
 
   @action async confirmApprove() {
-    this.model.status = this.model.isInProduction ? 'proposé' : 'validé';
+    this.localizedChallenge.status = this.localizedChallenge.isInProduction ? 'proposé' : 'validé';
     await this.save();
     this.displayConfirm = false;
   }
@@ -123,9 +132,9 @@ export default class LocalizedController extends Controller {
 
   @action async cancelEdit() {
     this.edition = false;
-    this.model.rollbackAttributes();
+    this.localizedChallenge.rollbackAttributes();
     await this.model.files;
-    this.model.files.forEach((file) => file.rollbackAttributes());
+    this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
     this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
@@ -136,10 +145,10 @@ export default class LocalizedController extends Controller {
   @action async save() {
     this.loader.start();
     try {
-      await this._handleIllustration(this.model);
-      await this._handleAttachments(this.model);
-      await this._saveAttachments(this.model);
-      await this._saveChallenge(this.model);
+      await this._handleIllustration(this.localizedChallenge);
+      await this._handleAttachments(this.localizedChallenge);
+      await this._saveAttachments(this.localizedChallenge);
+      await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');
@@ -192,8 +201,8 @@ export default class LocalizedController extends Controller {
       mimeType: file.type,
       file,
       type: 'illustration',
-      localizedChallenge: this.model,
-      challenge: this.model.challenge,
+      localizedChallenge: this.localizedChallenge,
+      challenge: this.challenge,
       alt,
     };
     this.store.createRecord('attachment', attachment);
@@ -201,8 +210,8 @@ export default class LocalizedController extends Controller {
 
   @action
   async removeIllustration() {
-    await this.model.files;
-    const removedFile = this.model.illustration;
+    await this.localizedChallenge.files;
+    const removedFile = this.localizedChallenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
       this.deletedFiles.push(removedFile);
@@ -218,16 +227,16 @@ export default class LocalizedController extends Controller {
       mimeType: file.type,
       file,
       type: 'attachment',
-      localizedChallenge: this.model,
-      challenge: this.model.challenge,
+      localizedChallenge: this.localizedChallenge,
+      challenge: this.challenge,
     };
     this.store.createRecord('attachment', attachment);
   }
 
   @action
   async removeAttachment(removedAttachment) {
-    await this.model.files;
-    const removedFile = this.model.files.findBy('filename', removedAttachment.filename);
+    await this.localizedChallenge.files;
+    const removedFile = this.localizedChallenge.files.findBy('filename', removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
       this.deletedFiles.push(removedFile);
