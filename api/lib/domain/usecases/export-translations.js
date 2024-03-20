@@ -27,13 +27,17 @@ export async function exportTranslations(stream, dependencies) {
   const filteredActiveSkills = release.content.skills
     .filter((skill) => skill.canExportForTranslation());
 
+  const activeTubeIds = filteredActiveSkills.map(({ tubeId }) => tubeId);
+  const filteredTubes = release.content.tubes
+    .filter((tube) => activeTubeIds.includes(tube.id));
+
   const filteredValidatedChallenges = release.content.challenges
     .filter((challenge) => challenge.canExportForTranslation(localeToExtract));
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
-    createTranslationsStream(release.content.tubes, extractMetadataFromTube, releaseContent, 'sujet', tubeTranslations.extractFromReleaseObject),
+    createTranslationsStream(filteredTubes, extractMetadataFromTube, releaseContent, 'sujet', tubeTranslations.extractFromReleaseObject),
     createTranslationsStream(filteredActiveSkills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
     createTranslationsStream(filteredValidatedChallenges, _.curry(extractMetadataFromChallenge)(dependencies.baseUrl, localizedChallenges), releaseContent, 'epreuve', extractFromChallenge),
   );
