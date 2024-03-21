@@ -49,8 +49,9 @@ export let pixApi = {
   password: process.env.PIX_API_USER_PASSWORD,
 };
 
-export const pixApp = {
-  baseUrl: process.env.PIX_APP_BASEURL
+export let pixApp = {
+  baseUrlFr: process.env.PIX_APP_BASEURL_FR ?? process.env.PIX_APP_BASEURL,
+  baseUrlOrg: process.env.PIX_APP_BASEURL_ORG ?? process.env.PIX_APP_BASEURL,
 };
 
 export const lcms = {
@@ -137,7 +138,10 @@ if (process.env.NODE_ENV === 'test') {
     password: '123',
   };
 
-  pixApp.baseUrl = 'https://app.test.pix.fr';
+  pixApp = {
+    baseUrlFr: 'https://app.test.pix.fr',
+    baseUrlOrg: 'https://app.test.pix.org',
+  };
 
   lcms.baseUrl = 'http://test.site';
 

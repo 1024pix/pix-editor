@@ -7,7 +7,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
 
   it('should return a preview url for challengeId and locale', async () => {
     // given
-    vi.spyOn(config.pixApp, 'baseUrl', 'get').mockReturnValue('https://preview.url.fr');
+    vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://preview.url.fr');
     const locale = 'fr';
     const challengeId = 'challenge-id';
     const localizedChallengeId = 'localizedChallengeId';
@@ -41,7 +41,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
   describe('when no locale is specified', () => {
     it('should redirect to a preview on given challengeId without updating cache', async () => {
       // given
-      vi.spyOn(config.pixApp, 'baseUrl', 'get').mockReturnValue('https://preview.url.fr');
+      vi.spyOn(config.pixApp, 'baseUrlFr', 'get').mockReturnValue('https://preview.url.fr');
       const challengeId = 'challenge-id';
 
       // when
