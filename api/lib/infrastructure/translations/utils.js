@@ -101,7 +101,6 @@ export function buildTranslationsUtils({
   const prefixFor = makePrefixFor({ prefix, idField });
 
   return {
-    localizedFields,
     prefixFor,
     extractFromProxyObject: extractFromProxyObject({ localizedFields, prefixFor }),
     airtableObjectToProxyObject: airtableObjectToProxyObject({ localizedFields, prefixFor }),

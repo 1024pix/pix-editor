@@ -310,4 +310,164 @@ describe('Unit | Infrastructure | Entity translations', () => {
       ]);
     });
   });
+
+  describe('when overriding generated localized fields', () => {
+    const locales = [
+      { locale: 'fr' },
+      { locale: 'en' },
+    ];
+
+    const fields = [
+      { field: 'field' },
+    ];
+
+    const localizedFields = [
+      { airtableField: 'Champ', field: 'field', locale: 'fr' },
+      { airtableField: 'Field', field: 'field', locale: 'en' },
+    ];
+
+    beforeEach(() => {
+      translationsUtils = buildTranslationsUtils({ locales, fields, localizedFields, prefix, idField });
+    });
+
+    describe('#extractFromProxyObject', () => {
+      it('should return the list of translations', () => {
+      // given
+        const entity = {
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr',
+            'Field': 'field en',
+          },
+        };
+
+        // when
+        const translations = translationsUtils.extractFromProxyObject(entity);
+
+        // then
+        expect(translations).to.deep.equal([
+          { key: 'entity.test.field', locale: 'fr', value: 'field fr' },
+          { key: 'entity.test.field', locale: 'en', value: 'field en' },
+        ]);
+      });
+    });
+
+    describe('#airtableObjectToProxyObject', () => {
+      it('should set translated fields into the object', () => {
+      // given
+        const airtableObject = {
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr initial',
+            otherField: 'foo',
+          },
+        };
+        const translations = [
+          { key: 'entity.test.field', locale: 'fr', value: 'field fr' },
+          { key: 'entity.test.field', locale: 'en', value: 'field en' },
+        ];
+
+        // when
+        const proxyObject = translationsUtils.airtableObjectToProxyObject(airtableObject, translations);
+
+        // then
+        expect(proxyObject).to.deep.equal({
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr',
+            'Field': 'field en',
+            otherField: 'foo',
+          },
+        });
+
+        expect(airtableObject).to.deep.equal({
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr initial',
+            otherField: 'foo',
+          },
+        });
+      });
+    });
+
+    describe('#proxyObjectToAirtableObject', () => {
+      it('should return an airtable object', () => {
+      // given
+        const proxyObject = {
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr initial',
+            'Field': 'field en initial',
+            otherField: 'foo',
+          },
+        };
+
+        // when
+        const airtableObject = translationsUtils.proxyObjectToAirtableObject(proxyObject);
+
+        // then
+        expect(airtableObject).to.deep.equal({
+          fields: {
+            'mon id': 'test',
+            otherField: 'foo',
+          },
+        });
+
+        expect(proxyObject).to.deep.equal({
+          fields: {
+            'mon id': 'test',
+            'Champ': 'field fr initial',
+            'Field': 'field en initial',
+            otherField: 'foo',
+          },
+        });
+      });
+    });
+
+    describe('#toDomain', () => {
+      it('should return i18n fields for domain object', () => {
+      // given
+        const translations = [
+          { key: 'entity.test.field', locale: 'fr', value: 'field fr' },
+          { key: 'entity.test.field', locale: 'en', value: 'field en' },
+          { key: 'entity.test.field', locale: 'nl', value: 'field nl' },
+        ];
+
+        // when
+        const i18nFields = translationsUtils.toDomain(translations);
+
+        // then
+        expect(i18nFields).to.deep.equal({
+          field_i18n: {
+            fr: 'field fr',
+            en: 'field en',
+            nl: 'field nl',
+          },
+        });
+      });
+    });
+
+    describe('#extractFromReleaseObject', () => {
+      it('should return translations from release object', () => {
+      // given
+        const entity = {
+          id: 'test',
+          field_i18n: {
+            fr: 'field fr',
+            en: 'field en',
+          },
+          otherField: 'foo',
+        };
+
+        // when
+        const translations = translationsUtils.extractFromReleaseObject(entity);
+
+        // then
+        expect(translations).to.deep.equal([
+          { key: 'entity.test.field', locale: 'fr', value: 'field fr' },
+          { key: 'entity.test.field', locale: 'en', value: 'field en' },
+        ]);
+      });
+    });
+  });
 });
