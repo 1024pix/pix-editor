@@ -12,5 +12,7 @@ export async function previewChallenge(
   const challenge = await challengeRepository.get(challengeId);
   const translatedChallenge = challenge.translate(locale);
   await refreshCache({ challenge: translatedChallenge });
-  return new URL(`challenges/${translatedChallenge.id}/preview`, config.pixApp.baseUrlFr).href;
+  const url = new URL(`challenges/${translatedChallenge.id}/preview`, config.pixApp.baseUrlOrg);
+  url.searchParams.set('lang', locale);
+  return url.href;
 }

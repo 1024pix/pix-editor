@@ -845,7 +845,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should redirect to a staging Pix App preview URL', async () => {
+    it('should redirect to a staging Pix App preview URL', async () => {
       // given
       const apiToken = 'secret';
       const apiTokenScope = nock('https://api.test.pix.fr')
