@@ -46,5 +46,40 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     // then
     assert.dom(await screen.queryByText('https://mon-site.fr/my-link.html?lang=nl', { exact: false })).exists();
   });
+  test('should not display a default url if primary does not have any', async function(assert) {
+    // given
+    this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1', embedURL: null });
+    this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
+    this.server.create('localized-challenge', { id: 'recChallenge2NL', challengeId: 'recChallenge2', locale: 'nl' });
+    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'], level: 1, tubeId: 'recTube1' });
+
+    // when
+    const screen = await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await clickByText('Version nl');
+
+    // then
+    assert.dom(await screen.queryByText('Embed URL auto-générée', { exact: false })).doesNotExist();
+  });
+  test('should display an embed url if localized challenge has one', async function(assert) {
+    // given
+    this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1' });
+    this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
+    this.server.create('localized-challenge', { id: 'recChallenge2NL', challengeId: 'recChallenge2', locale: 'nl', embedURL: 'https://mon-site.fr/my-nl-link.html' });
+    this.server.create('skill', { id: 'recSkill2', challengeIds: ['recChallenge2'], level: 1, tubeId: 'recTube1' });
+
+    // when
+    const screen = await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await clickByText('Version nl');
+
+    // then
+    const input = await screen.findByLabelText('Embed URL :');
+    assert.strictEqual(input.value, 'https://mon-site.fr/my-nl-link.html');
+  });
 });
 
