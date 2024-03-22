@@ -1,10 +1,11 @@
-import { thematicDatasource, tutorialDatasource, } from '../../infrastructure/datasources/airtable/index.js';
+import { tutorialDatasource, } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
   attachmentRepository,
   challengeRepository,
   competenceRepository,
   skillRepository,
+  thematicRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
@@ -28,7 +29,7 @@ export async function getLearningContentForReplication() {
     challengeRepository.list(),
     tutorialDatasource.list(),
     attachmentRepository.list(),
-    thematicDatasource.list(),
+    thematicRepository.list(),
     _getCoursesFromPGForReplication(),
   ]);
 

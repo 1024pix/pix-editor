@@ -87,7 +87,12 @@ async function mockCurrentContent() {
     }],
     challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
-    thematics: [domainBuilder.buildThematicDatasourceObject()],
+    thematics: [domainBuilder.buildThematic({
+      name_i18n: {
+        fr: 'Thématique en fr',
+        en: 'Thematic in en',
+      },
+    })],
     courses: [{
       id: 'recCourse1',
       name: 'nameCourse1',
@@ -198,6 +203,17 @@ async function mockCurrentContent() {
     key: `competence.${expectedCurrentContent.competences[0].id}.description`,
     locale: 'en',
     value: expectedCurrentContent.competences[0].description_i18n.en,
+  });
+
+  databaseBuilder.factory.buildTranslation({
+    key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+    locale: 'fr',
+    value: expectedCurrentContent.thematics[0].name_i18n.fr,
+  });
+  databaseBuilder.factory.buildTranslation({
+    key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+    locale: 'en',
+    value: expectedCurrentContent.thematics[0].name_i18n.en,
   });
 
   databaseBuilder.factory.buildTranslation({
