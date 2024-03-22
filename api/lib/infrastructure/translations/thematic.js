@@ -31,6 +31,7 @@ const thematicTranslationUtils = buildTranslationsUtils({ locales, fields, local
 export const {
   extractFromProxyObject,
   airtableObjectToProxyObject,
+  extractFromReleaseObject,
   toDomain,
   prefixFor,
 } = thematicTranslationUtils;

@@ -3,6 +3,7 @@ import csv from 'fast-csv';
 import _ from 'lodash';
 import { extractFromChallenge } from '../../infrastructure/translations/challenge.js';
 import * as competenceTranslations from '../../infrastructure/translations/competence.js';
+import * as thematicTranslations from '../../infrastructure/translations/thematic.js';
 import * as skillTranslations from '../../infrastructure/translations/skill.js';
 import * as areaTranslations from '../../infrastructure/translations/area.js';
 import * as tubeTranslations from '../../infrastructure/translations/tube.js';
@@ -36,6 +37,7 @@ export async function exportTranslations(stream, dependencies) {
 
   const translationsStreams = mergeStreams(
     createTranslationsStream(release.content.competences, extractMetadataFromCompetence, releaseContent, 'competence', competenceTranslations.extractFromReleaseObject),
+    createTranslationsStream(release.content.thematics, extractMetadataFromThematic, releaseContent, 'thematique', thematicTranslations.extractFromReleaseObject),
     createTranslationsStream(release.content.areas, extractMetadataFromArea, releaseContent, 'domaine', areaTranslations.extractFromReleaseObject),
     createTranslationsStream(filteredTubes, extractMetadataFromTube, releaseContent, 'sujet', tubeTranslations.extractFromReleaseObject),
     createTranslationsStream(filteredActiveSkills, extractMetadataFromSkill, releaseContent, 'acquis', skillTranslations.extractFromReleaseObject),
@@ -151,6 +153,13 @@ function extractMetadataFromCompetence(competence, releaseContent) {
   };
 }
 
+function extractMetadataFromThematic(thematic, releaseContent) {
+  return {
+    tags: extractTagsFromThematic(thematic, releaseContent),
+    description: '',
+  };
+}
+
 function extractTagsFromChallenge(challenge, releaseContent) {
   return [
     toTag(challenge.status),
@@ -171,6 +180,10 @@ function extractTagsFromTube(tube, releaseContent) {
     toTag(tube.name),
     ...extractTagsFromCompetence(releaseContent.competences[tube.competenceId], releaseContent),
   ];
+}
+
+function extractTagsFromThematic(thematic, releaseContent) {
+  return extractTagsFromCompetence(releaseContent.competences[thematic.competenceId], releaseContent);
 }
 
 function extractTagsFromCompetence(competence, releaseContent) {
