@@ -24,7 +24,7 @@ const localizedFields = [
   },
 ];
 
-const idField = 'id';
+const idField = 'fields.id persistant';
 
 const thematicTranslationUtils = buildTranslationsUtils({ locales, fields, localizedFields, prefix, idField });
 

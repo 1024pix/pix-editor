@@ -2,6 +2,7 @@ import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
 
 export default class ThemeModel extends Model {
 
+  @attr pixId;
   @attr name;
   @attr nameEnUs;
   @attr index;

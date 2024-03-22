@@ -1,6 +1,7 @@
 export function buildThematic(
   {
     id,
+    airtableId = id,
     name_i18n: {
       fr: name,
       en: nameEnUs,
@@ -10,8 +11,9 @@ export function buildThematic(
     index,
   } = {}) {
   return {
-    id,
+    id: airtableId,
     'fields': {
+      'id persistant': id,
       'Nom': name,
       'Titre en-us': nameEnUs,
       'Competence (id persistant)': [competenceId],
