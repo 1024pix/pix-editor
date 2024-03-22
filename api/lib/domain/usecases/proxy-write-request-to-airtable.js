@@ -7,10 +7,10 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   localizedChallengesAttachmentsRepository = repositories.localizedChallengesAttachmentsRepository,
   updateStagingPixApiCache,
 }) {
-  const requestFields = request.payload.fields;
+  const requestPayload = request.payload;
 
   if (tableTranslations.writeToAirtableDisabled) {
-    request.payload.fields = tableTranslations.proxyObjectToAirtableObject(requestFields);
+    request.payload = tableTranslations.proxyObjectToAirtableObject(requestPayload);
   }
 
   const response = await proxyRequestToAirtable(request, airtableBase);
@@ -34,20 +34,20 @@ export async function proxyWriteRequestToAirtable(request, airtableBase, tableNa
   let translations;
   if (tableTranslations.writeToPgEnabled) {
     if (request.method === 'patch') {
-      const prefix = tableTranslations.prefixFor(response.data.fields);
+      const prefix = tableTranslations.prefixFor(response.data);
       await translationRepository.deleteByKeyPrefixAndLocales({
         prefix,
         locales: ['fr', 'fr-fr', 'en'],
       });
     }
 
-    translations = tableTranslations.extractFromProxyObject(requestFields);
+    translations = tableTranslations.extractFromProxyObject(requestPayload);
 
     await translationRepository.save({ translations });
   }
 
   if (tableTranslations.readFromPgEnabled) {
-    response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
+    response.data = tableTranslations.airtableObjectToProxyObject(response.data, translations);
   }
 
   if (isAttachment) return response;

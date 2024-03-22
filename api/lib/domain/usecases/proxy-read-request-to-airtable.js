@@ -13,13 +13,10 @@ export async function proxyReadRequestToAirtable(request, airtableBase, {
 
   if (response.data.records) {
     const translations = await translationRepository.listByPrefix(tableTranslations.prefix);
-    response.data.records = response.data.records.map((entity) => ({
-      ...entity,
-      fields: tableTranslations.airtableObjectToProxyObject(entity.fields, translations),
-    }));
+    response.data.records = response.data.records.map((entity) => tableTranslations.airtableObjectToProxyObject(entity, translations));
   } else {
-    const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data.fields));
-    response.data.fields = tableTranslations.airtableObjectToProxyObject(response.data.fields, translations);
+    const translations = await translationRepository.listByPrefix(tableTranslations.prefixFor(response.data));
+    response.data = tableTranslations.airtableObjectToProxyObject(response.data, translations);
   }
 
   return response;

@@ -11,7 +11,7 @@ const fields = [
   { airtableField: 'Titre', field: 'title' },
 ];
 
-const idField = 'id persistant';
+const idField = 'fields.id persistant';
 
 const areaTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, idField });
 
@@ -24,7 +24,7 @@ export const {
 
 export function airtableObjectToProxyObject(airtableObject, translations) {
   const areaProxyObject = areaTranslationUtils.airtableObjectToProxyObject(airtableObject, translations);
-  areaProxyObject.Nom = `${areaProxyObject.Code}. ${areaProxyObject['Titre fr-fr']}`;
+  areaProxyObject.fields.Nom = `${areaProxyObject.fields.Code}. ${areaProxyObject.fields['Titre fr-fr']}`;
   return areaProxyObject;
 }
 

@@ -3,8 +3,9 @@ import { Translation } from '../../domain/models/index.js';
 function buildLocalizedFields(locales, fields) {
   return locales.flatMap((locale) =>
     fields.map((field) => ({
-      ...locale,
-      ...field,
+      locale: locale.locale,
+      field: field.field,
+      airtableField: `${field.airtableField} ${locale.airtableLocale}`,
     }))
   );
 }
@@ -12,10 +13,10 @@ function buildLocalizedFields(locales, fields) {
 function extractFromProxyObject({ localizedFields, prefixFor }) {
   return (entity) => {
     return localizedFields
-      .filter(({ airtableField, airtableLocale }) => entity[`${airtableField} ${airtableLocale}`])
-      .map(({ field, locale, airtableField, airtableLocale }) => new Translation({
+      .filter(({ airtableField }) => entity.fields[airtableField])
+      .map(({ field, locale, airtableField }) => new Translation({
         key: `${prefixFor(entity)}${field}`,
-        value: entity[`${airtableField} ${airtableLocale}`],
+        value: entity.fields[airtableField],
         locale,
       }));
   };
@@ -25,28 +26,33 @@ function airtableObjectToProxyObject({ localizedFields, prefixFor }) {
   return (airtableObject, translations) => {
     return {
       ...airtableObject,
-      ...Object.fromEntries(
-        localizedFields.map(({ airtableLocale, locale, airtableField, field }) => {
-          const translation = translations.find(
-            (translation) =>
-              translation.key === `${prefixFor(airtableObject)}${field}` &&
-              translation.locale === locale
-          );
+      fields: {
+        ...airtableObject.fields,
+        ...Object.fromEntries(
+          localizedFields.map(({ locale, airtableField, field }) => {
+            const translation = translations.find(
+              (translation) =>
+                translation.key === `${prefixFor(airtableObject)}${field}` &&
+                translation.locale === locale
+            );
 
-          return [`${airtableField} ${airtableLocale}`, translation?.value ?? null];
-        }),
-      ),
+            return [airtableField, translation?.value ?? null];
+          }),
+        ),
+      },
     };
   };
 }
 
 function proxyObjectToAirtableObject({ localizedFields }) {
-  const airtableLocalizedFields = localizedFields
-    .map(({ airtableLocale, airtableField }) => `${airtableField} ${airtableLocale}`);
+  const airtableLocalizedFields = localizedFields.map(({ airtableField }) => airtableField);
 
-  return (proxyObject) => Object.fromEntries(
-    Object.entries(proxyObject).filter(([field]) => !airtableLocalizedFields.includes(field)),
-  );
+  return (proxyObject) => ({
+    ...proxyObject,
+    fields: Object.fromEntries(
+      Object.entries(proxyObject.fields).filter(([field]) => !airtableLocalizedFields.includes(field)),
+    ),
+  });
 }
 
 function toDomain({ fields, locales }) {
@@ -80,17 +86,21 @@ function extractFromReleaseObject({ localizedFields, prefix }) {
 
 function makePrefixFor({ prefix, idField }) {
   return (entity) => {
-    const id = entity[idField];
+    const id = idField.split('.').reduce((obj, key) => obj[key], entity);
     return `${prefix}${id}.`;
   };
 }
 
-export function buildTranslationsUtils({ locales, fields, prefix, idField }) {
-  const localizedFields = buildLocalizedFields(locales, fields);
+export function buildTranslationsUtils({
+  locales,
+  fields,
+  localizedFields = buildLocalizedFields(locales, fields),
+  prefix,
+  idField,
+}) {
   const prefixFor = makePrefixFor({ prefix, idField });
 
   return {
-    localizedFields,
     prefixFor,
     extractFromProxyObject: extractFromProxyObject({ localizedFields, prefixFor }),
     airtableObjectToProxyObject: airtableObjectToProxyObject({ localizedFields, prefixFor }),

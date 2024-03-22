@@ -11,7 +11,7 @@ const fields = [
   { airtableField: 'Indice', field: 'hint' },
 ];
 
-const idField = 'id persistant';
+const idField = 'fields.id persistant';
 
 export const {
   extractFromProxyObject,

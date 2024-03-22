@@ -6,15 +6,14 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
   let tableTranslations;
   let translationRepository;
   let updateStagingPixApiCache;
-  let responseEntity;
   let response;
   let request;
 
-  const requestFields = Symbol('requestFields');
+  const requestPayload = Symbol('requestPayload');
   const airtableBase = Symbol('airtableBase');
   const tableName = Symbol('tableName');
   const translations = Symbol('translations');
-  const responseFields = Symbol('responseFields');
+  const responseData = Symbol('responseData');
 
   beforeEach(() => {
     proxyRequestToAirtable = vi.fn();
@@ -37,7 +36,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
   it('should proxy request to airtable', async () => {
     // given
-    request = { payload: { fields: requestFields } };
+    request = { payload: requestPayload };
     response = { status: 200, data: {} };
 
     proxyRequestToAirtable.mockResolvedValue(response);
@@ -58,9 +57,8 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
   describe('when response is OK', () => {
     beforeEach(() => {
-      request = { payload: { fields: requestFields } };
-      responseEntity = { fields: responseFields };
-      response = { status: 200, data: responseEntity };
+      request = { payload: requestPayload };
+      response = { status: 200, data: responseData };
 
       proxyRequestToAirtable.mockResolvedValue(response);
     });
@@ -77,7 +75,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       expect(actualResponse).toBe(response);
 
       expect(updateStagingPixApiCache).toHaveBeenCalledOnce();
-      expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, undefined);
+      expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseData, undefined);
     });
 
     describe('when creating an Attachment', () =>{
@@ -203,7 +201,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
     describe('when writing translations to PG is enabled', () => {
       beforeEach(() => {
-        request = { method: 'post', payload: { fields: requestFields } };
+        request = { method: 'post', payload: requestPayload };
 
         tableTranslations.writeToPgEnabled = true;
         tableTranslations.extractFromProxyObject.mockReturnValue(translations);
@@ -222,7 +220,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
         expect(actualResponse).toBe(response);
 
         expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledOnce();
-        expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestFields);
+        expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestPayload);
 
         expect(translationRepository.save).toHaveBeenCalledOnce();
         expect(translationRepository.save).toHaveBeenCalledWith({ translations });
@@ -248,10 +246,10 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
           expect(actualResponse).toBe(response);
 
           expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledOnce();
-          expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestFields);
+          expect(tableTranslations.extractFromProxyObject).toHaveBeenCalledWith(requestPayload);
 
           expect(tableTranslations.prefixFor).toHaveBeenCalledOnce();
-          expect(tableTranslations.prefixFor).toHaveBeenCalledWith(responseFields);
+          expect(tableTranslations.prefixFor).toHaveBeenCalledWith(responseData);
 
           expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledOnce();
           expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith({ prefix:'entity.id', locales: ['fr', 'fr-fr', 'en'] });
@@ -262,11 +260,11 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
       });
 
       describe('when reading translations from PG is enabled', () => {
-        const proxyResponseFields = Symbol('proxyResponseFields');
+        const proxyResponseData = Symbol('proxyResponseData');
 
         beforeEach(() => {
           tableTranslations.readFromPgEnabled = true;
-          tableTranslations.airtableObjectToProxyObject.mockReturnValue(proxyResponseFields);
+          tableTranslations.airtableObjectToProxyObject.mockReturnValue(proxyResponseData);
         });
 
         it('should hydrate response and update staging Pix API cache using translations from PG', async () => {
@@ -280,21 +278,21 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
           // then
           expect(actualResponse).toBe(response);
-          expect(response.data.fields).toBe(proxyResponseFields);
+          expect(response.data).toBe(proxyResponseData);
 
           expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledOnce();
-          expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledWith(responseFields, translations);
+          expect(tableTranslations.airtableObjectToProxyObject).toHaveBeenCalledWith(responseData, translations);
 
           expect(updateStagingPixApiCache).toHaveBeenCalledOnce();
-          expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, responseEntity, translations);
+          expect(updateStagingPixApiCache).toHaveBeenCalledWith(tableName, proxyResponseData, translations);
         });
 
         describe('when writing translations to Airtable is disabled', () => {
-          const airtableRequestFields = Symbol('airtableRequestFields');
+          const airtableRequestPayload = Symbol('airtableRequestPayload');
 
           beforeEach(() => {
             tableTranslations.writeToAirtableDisabled = true;
-            tableTranslations.proxyObjectToAirtableObject.mockReturnValue(airtableRequestFields);
+            tableTranslations.proxyObjectToAirtableObject.mockReturnValue(airtableRequestPayload);
           });
 
           it('should dehydrate request before proxying to Airtable', async () => {
@@ -309,10 +307,10 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
             // then
             expect(actualResponse).toBe(response);
 
-            expect(request.payload.fields).toBe(airtableRequestFields);
+            expect(request.payload).toBe(airtableRequestPayload);
 
             expect(tableTranslations.proxyObjectToAirtableObject).toHaveBeenCalledOnce();
-            expect(tableTranslations.proxyObjectToAirtableObject).toHaveBeenCalledWith(requestFields);
+            expect(tableTranslations.proxyObjectToAirtableObject).toHaveBeenCalledWith(requestPayload);
           });
         });
       });
@@ -321,7 +319,7 @@ describe('Unit | Domain | Usecases | proxy-write-request-to-airtable', () => {
 
   describe('when response is not OK', () => {
     beforeEach(() => {
-      request = { payload: { fields: requestFields } };
+      request = { payload: requestPayload };
       response = { status: 400 };
 
       proxyRequestToAirtable.mockResolvedValue(response);

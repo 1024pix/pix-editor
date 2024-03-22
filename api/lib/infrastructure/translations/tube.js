@@ -12,7 +12,7 @@ const fields = [
   { airtableField: 'Description pratique', field: 'practicalDescription' },
 ];
 
-const idField = 'id persistant';
+const idField = 'fields.id persistant';
 
 const tubeTranslationUtils = buildTranslationsUtils({ locales, fields, prefix, idField });
 
