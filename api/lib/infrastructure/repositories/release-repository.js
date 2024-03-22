@@ -3,7 +3,6 @@ import {
   attachmentDatasource,
   challengeDatasource,
   frameworkDatasource,
-  thematicDatasource,
   tutorialDatasource,
 } from '../datasources/airtable/index.js';
 import {
@@ -12,6 +11,7 @@ import {
   competenceRepository,
   missionRepository,
   skillRepository,
+  thematicRepository,
   tubeRepository,
 } from './index.js';
 import * as airtableSerializer from '../serializers/airtable-serializer.js';
@@ -121,7 +121,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     competenceRepository.list(),
     frameworkDatasource.list(),
     skillRepository.list(),
-    thematicDatasource.list(),
+    thematicRepository.list(),
     tubeRepository.list(),
     tutorialDatasource.list(),
   ]);
