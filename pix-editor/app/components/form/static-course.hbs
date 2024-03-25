@@ -2,37 +2,32 @@
   <Card class="new-static-course-form-field" @title="1. Renseigner les informations">
     <PixInput
       @id="static-course-name"
-      @label="Nom du test statique"
       @errorMessage="{{this.name.errorMessage}}"
       @requiredLabel="{{this.name.errorMessage}}"
       @validationStatus={{this.name.state}}
       @value={{@initialName}}
       {{on "keyup" this.updateName}}
       {{on "focusout" this.validateName}}
-    />
+    ><:label>Nom du test statique</:label></PixInput>
     <PixTextarea
       @id="static-course-description"
-      @label="Description à usage interne"
       @maxlength="1000"
       rows="5"
       @value={{@initialDescription}}
       {{on "keyup" this.updateDescription}}
-    />
+    ><:label>Description à usage interne</:label></PixTextarea>
     <div class="static-course-tag__area">
       <PixMultiSelect
         @id="tags-selector"
-        @label="Tags"
-        @labelSize=""
         @placeholder="Sélectionnez des tags"
         @values={{this.selectedTagIds}}
         @onChange={{this.onTagClicked}}
         @isSearchable="true"
         @emptyMessage="Pas de résultats"
         @options={{this.tagOptions}}
-        as
-        |option|
       >
-        {{option.label}}
+        <:label>Tags</:label>
+        <:default as |option|>{{option.label}}</:default>
       </PixMultiSelect>
       <div class="static-course-chips">
         {{#each this.selectedTags as |tag|}}
@@ -49,14 +44,13 @@
     </span>
     <PixTextarea
       @id="static-course-challenges"
-      @label="IDs des épreuves"
       @maxlength="1000"
       rows="20"
       @value={{@initialChallengeIds}}
       @errorMessage="{{if this.challengeIds.isError this.challengeIds.errorMessage ''}}"
       {{on "keyup" this.updateChallengeIds}}
       {{on "focusout" this.validateChallengeIds}}
-    />
+    ><:label>IDs des épreuves</:label></PixTextarea>
   </Card>
   <div class="form-error">
     {{#each this.errorMessages as |errorMessage|}}

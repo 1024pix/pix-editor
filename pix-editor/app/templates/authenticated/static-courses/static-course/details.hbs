@@ -185,10 +185,9 @@
       Êtes-vous sûr de vouloir désactiver le test statique <b>{{this.model.staticCourse.name}}</b> ?<br/>
       <PixInput
         @id="deactivationReason"
-        @label="Raison de désactivation (facultatif)"
         @value={{this.deactivationReason}}
         {{on "input" this.setDeactivationReason}}
-      />
+      ><:label>Raison de désactivation (facultatif)</:label></PixInput>
     </p>
   </:content>
   <:footer>

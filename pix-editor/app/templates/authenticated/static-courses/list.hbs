@@ -39,21 +39,19 @@
       >
         <PixInput
           @id="static-course-filter-name"
-          @label="Nom"
           placeholder="Nom"
           @screenReaderOnly={{true}}
           @value={{this.name}}
           {{on "keyup" this.updateName}}
-        />
+        ><:label>Nom</:label></PixInput>
         <PixToggle
-          @label="Statut"
           @inline={{true}}
           @onLabel="Actifs"
           @offLabel="Tous"
           @toggled={{this.showActiveOnly}}
           @onChange={{this.toggleShowActiveOnly}}
           @screenReaderOnly={{true}}
-        />
+        ><:label>Statut</:label></PixToggle>
         <PixButton
           @type="submit"
         >

@@ -25,14 +25,13 @@
       @isClearFilterButtonDisabled={{false}}
     >
       <PixToggle
-        @label="Statut"
         @inline={{true}}
         @onLabel="Actives"
         @offLabel="Toutes"
         @toggled={{this.showActiveMissions}}
         @onChange={{this.toggleShowActiveMissions}}
         @screenReaderOnly={{true}}
-      />
+      ><:label>Statut</:label></PixToggle>
     </PixFilterBanner>
     <div class="panel-table-v2">
       <table class="content-text content-text--small">

@@ -17,10 +17,9 @@
       <PixInput
         @id="login-api-key"
         name="login"
-        @label="Clé API"
         @requiredLabel="Champ obligatoire"
         {{on "input" this.setApiKey}}
-      />
+      ><:label>Clé API</:label></PixInput>
 
       {{#if this.isErrorMessagePresent}}
         <div class="ui negative message" id="login-form-error-message">
