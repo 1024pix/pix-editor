@@ -1,11 +1,9 @@
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import { fileURLToPath } from 'node:url';
 import Airtable from 'airtable';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { performance } from 'node:perf_hooks';
 import _ from 'lodash';
-
-dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;

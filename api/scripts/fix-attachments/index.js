@@ -1,4 +1,4 @@
-import dotenv from 'dotenv/config';
+import 'dotenv/config';
 
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';

@@ -1,5 +1,5 @@
+import 'dotenv/config';
 import _ from 'lodash';
-import dotenv from 'dotenv';
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
 import { disconnect, knex } from '../../db/knex-database-connection.js';
@@ -7,7 +7,6 @@ import { logger } from '../../lib/infrastructure/logger.js';
 import { parseFile } from 'fast-csv';
 import { streamToPromiseArray } from '../../lib/infrastructure/utils/stream-to-promise.js';
 
-dotenv.config();
 const TAG_LABEL_MAX_LENGTH = 30;
 
 function removeCapitalizeAndDiacritics(str) {
