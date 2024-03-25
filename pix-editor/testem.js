@@ -3,6 +3,7 @@
 const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
+  reporter: 'dot',
   launch_in_ci: [
     'Chrome'
   ],
