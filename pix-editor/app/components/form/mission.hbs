@@ -2,22 +2,20 @@
   <Card class="new-mission-form__card" @title={{@submitButtonText}}>
     <PixInput
       @id="mission-name"
-      @label="Nom de la mission"
       @value={{this.name.value}}
       @errorMessage="{{this.name.errorMessage}}"
       @requiredLabel="{{this.name.errorMessage}}"
       @validationStatus={{this.name.state}}
       {{on "focusout" this.validateName}}
       {{on "keyup" this.updateName}}
-    />
+    ><:label>Nom de la mission</:label></PixInput>
    <PixSelect
       @options={{this.statusOptions}}
       @value={{this.selectedStatus}}
       @hideDefaultOption={{true}}
       @onChange={{this.changeStatus}}
-      @requiredText="{{this.name.errorMessage}}"
-      @label='Statut'
-    />
+      @requiredLabel="{{this.name.errorMessage}}"
+    ><:label>Statut</:label></PixSelect>
 
     <PixSelect
       class="new-mission-form__select"
@@ -25,22 +23,20 @@
       @options={{this.competencesOptions}}
       @onChange={{this.changeCompetence}}
       @value={{this.selectedCompetenceId.value}}
-      @requiredText="champ requis"
+      @requiredLabel="champ requis"
       @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
-      @label="Compétence"
       {{on "focusout" this.validateCompetence}}
-      />
+    ><:label>Compétence</:label></PixSelect>
 
     <PixSelect
       class="new-mission-form__select"
       @hideDefaultOption={{true}}
       @isDisabled={{not this.selectedCompetenceId.value}}
-      @label="Thématique"
       @options={{this.themeOptions}}
       @onChange={{this.changeThematic}}
       @value={{this.selectedThematicId}}
       @isComputeWidthDisabled={{true}}
-    />
+    ><:label>Thématique</:label></PixSelect>
 
     <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
