@@ -25,7 +25,7 @@
     "lint:js:fix": "eslint . --fix",
     "start": "ember serve --proxy http://localhost:3002",
     "test": "npm-run-all lint test:*",
-    "test:ember": "ember test --reporter=dot"
+    "test:ember": "ember test"
   },
   "devDependencies": {
     "@1024pix/ember-testing-library": "^1.1.0",
