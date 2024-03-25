@@ -6,9 +6,9 @@
   @close={{this.close}}
 >
   <:default>
-    <i class="{{convert-language-as-flag this.model.locale}} flag" title={{this.model.locale}}></i>
+    <i class="{{convert-language-as-flag this.localizedChallenge.locale}} flag" title={{this.localizedChallenge.locale}}></i>
     {{this.challengeTitle}}
-    <div class="ui circular label {{this.model.statusCSS}}">{{ this.model.statusText }}</div>
+    <div class="ui circular label {{this.localizedChallenge.statusCSS}}">{{ this.localizedChallenge.statusText }}</div>
   </:default>
 </Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
@@ -16,16 +16,16 @@
     <form action="" class="ui form">
       <Field::Illustration
         @title="Illustration"
-        @value={{this.model.illustration}}
+        @value={{this.localizedChallenge.illustration}}
         @edition={{this.edition}}
         @addIllustration={{this.addIllustration}}
         @removeIllustration={{this.removeIllustration}}
         @display={{this.showIllustration}}
         data-test-file-input-illustration
       />
-      {{#if this.model.illustration}}
+      {{#if this.localizedChallenge.illustration}}
         <Field::Textarea
-          @value={{this.model.illustration.alt}}
+          @value={{this.localizedChallenge.illustration.alt}}
           @title="Texte alternatif"
           @edition={{false}}
           @id="challenge-illustration-alt"
@@ -33,8 +33,8 @@
       {{/if}}
       <Field::Files
         @title="Pièces jointes"
-        @value={{this.model.attachments}}
-        @baseName={{this.model.attachmentBaseName}}
+        @value={{this.localizedChallenge.attachments}}
+        @baseName={{this.localizedChallenge.attachmentBaseName}}
         @addAttachment={{this.addAttachment}}
         @edition={{this.edition}}
         @removeAttachment={{this.removeAttachment}}
@@ -43,23 +43,28 @@
       <Field::Input
         @id="localized-challenge-embed-url"
         @label="Embed URL"
-        @value={{this.model.embedURL}}
+        @value={{this.localizedChallenge.embedURL}}
         @edition={{this.edition}}
         @placeholder="Url de l'embed"
       />
+      {{#if this.shouldDisplayPrimaryEmbedUrl }}
+        <div class="ui  blue message">
+         <p>Embed URL auto-générée : {{this.defaultEmbedUrl}}</p>
+        </div>
+      {{/if}}
       <Field::Select
         @title="Géographie"
-        @value={{this.model.geography}}
+        @value={{this.localizedChallenge.geography}}
         @edition={{this.edition}}
         @multiple={{false}}
         @defaultValue="Neutre"
         @options={{this.options.geography}}
-        @setValue={{fn (mut this.model.geography)}}
+        @setValue={{fn (mut this.localizedChallenge.geography)}}
       />
       {{#unless this.edition}}
         <Field::Input
           @id="localized-challenge-id"
-          @value={{this.model.id}}
+          @value={{this.localizedChallenge.id}}
           @label="Id"
           @edition={{false}}
         />
@@ -113,7 +118,7 @@
     data-testid='change-status-confirm-popin'
   />
   <PopIn::Image
-    @imageSrc={{this.model.illustration.url}}
+    @imageSrc={{this.localizedChallenge.illustration.url}}
     @close={{this.closeIllustration}}
     @showModal={{this.displayIllustration}}
     data-testid='display-illustration-pop-in'
