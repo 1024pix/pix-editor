@@ -1,7 +1,7 @@
 import { localizedChallengeRepository } from '../../lib/infrastructure/repositories/index.js';
 import { fileURLToPath } from 'node:url';
 import Airtable from 'airtable';
-import { knex, disconnect } from '../../db/knex-database-connection.js';
+import { disconnect, knex } from '../../db/knex-database-connection.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
@@ -21,15 +21,15 @@ export async function fetchLocalizedChallenges({ airtableClient }) {
     .select({
       fields: [
         'id persistant',
-        'Embed URL',
+        '[DEPRECATED] Embed URL',
       ],
-      filterByFormula: 'NOT({Embed URL} = \'\')',
+      filterByFormula: 'NOT({[DEPRECATED] Embed URL} = \'\')',
     })
     .all();
 
   return allChallenges.map((challenge) => {
     const idPersistant = challenge.get('id persistant');
-    const embedUrl = challenge.get('Embed URL');
+    const embedUrl = challenge.get('[DEPRECATED] Embed URL');
     if (!embedUrl) {
       console.error(`Embed URL is empty ! (challenge id ${idPersistant})`);
     }

@@ -1,22 +1,23 @@
 import dotenv from 'dotenv';
-dotenv.config();
 import { performance } from 'node:perf_hooks';
 import { fileURLToPath } from 'node:url';
 
-import { knex, disconnect } from '../../db/knex-database-connection.js';
+import { disconnect, knex } from '../../db/knex-database-connection.js';
 import * as airtable from '../../lib/infrastructure/airtable.js';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { getCountryCode } from '../../lib/domain/models/Geography.js';
 
+dotenv.config();
+
 export async function migrateLocalizedChallengesGeography({ dryRun } = {}) {
   const challenges = await airtable.findRecords('Epreuves', {
-    fields: ['id persistant', 'Géographie'],
-    filterByFormula: 'AND({Géographie} != \'\', {Géographie} != \'Neutre\', {Géographie} != \'Institutions internationales\')',
+    fields: ['id persistant', '[DEPRECATED] Géographie'],
+    filterByFormula: 'AND({[DEPRECATED] Géographie} != \'\', {[DEPRECATED] Géographie} != \'Neutre\', {[DEPRECATED] Géographie} != \'Institutions internationales\')',
   });
 
   for (const challenge of challenges) {
     const challengeId = challenge.get('id persistant');
-    const countryName =  challenge.get('Géographie');
+    const countryName =  challenge.get('[DEPRECATED] Géographie');
 
     const countryCode = getCountryCode(countryName);
     if (!countryCode) {

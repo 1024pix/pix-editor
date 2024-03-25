@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import Airtable from 'airtable';
 import nock from 'nock';
-import { knex, databaseBuilder } from '../test-helper.js';
+import { databaseBuilder, knex } from '../test-helper.js';
 import { fillLocalizedChallengesEmbedUrl } from '../../scripts/fill-localized-challenge-embed-url';
 
 describe('Fill `embedUrl` localized challenges from airtable', function() {
@@ -19,7 +19,7 @@ describe('Fill `embedUrl` localized challenges from airtable', function() {
       id: 'airtableChallengeId',
       fields: {
         'id persistant': 'challengeid1',
-        'Embed URL': 'my-embed-url-challengeid1',
+        '[DEPRECATED] Embed URL': 'my-embed-url-challengeid1',
       }
     };
     databaseBuilder.factory.buildLocalizedChallenge({
@@ -44,10 +44,10 @@ describe('Fill `embedUrl` localized challenges from airtable', function() {
         fields: {
           '': [
             'id persistant',
-            'Embed URL',
+            '[DEPRECATED] Embed URL',
           ]
         },
-        filterByFormula: 'NOT({Embed URL} = \'\')'
+        filterByFormula: 'NOT({[DEPRECATED] Embed URL} = \'\')'
       })
       .reply(200, { records: [challenge1] });
 
