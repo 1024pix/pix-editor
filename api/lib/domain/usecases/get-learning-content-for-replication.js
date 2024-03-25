@@ -1,7 +1,4 @@
-import {
-  thematicDatasource,
-  tutorialDatasource,
-} from '../../infrastructure/datasources/airtable/index.js';
+import { thematicDatasource, tutorialDatasource, } from '../../infrastructure/datasources/airtable/index.js';
 import {
   areaRepository,
   attachmentRepository,
@@ -47,6 +44,8 @@ export async function getLearningContentForReplication() {
     challengeId: attachment.localizedChallengeId,
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
+
+  await skillRepository.addSpoilData(skills);
 
   return {
     areas,
