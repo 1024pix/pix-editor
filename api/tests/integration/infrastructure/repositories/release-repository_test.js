@@ -170,10 +170,11 @@ describe('Integration | Repository | release-repository', function() {
   describe('#getCurrentContent', function() {
 
     beforeEach(function() {
-      const { areas, competences, tubeIds, skills, challenges } = _mockRichAirtableContent();
+      const { areas, competences, thematics, tubeIds, skills, challenges } = _mockRichAirtableContent();
 
       buildAreasTranslations(areas);
       buildCompetencesTranslations(competences);
+      buildThematicsTranslations(thematics);
       buildTubesTranslations(tubeIds);
       buildSkillsTranslations(skills);
       buildChallengesTranslationsAndLocalizedChallenges(challenges);
@@ -253,6 +254,21 @@ function buildCompetencesTranslations(competences) {
       key: `competence.${competence.id}.description`,
       locale: 'en',
       value: `${competence.id} descriptionEnUs`,
+    });
+  }
+}
+
+function buildThematicsTranslations(thematics) {
+  for (const thematic of thematics) {
+    databaseBuilder.factory.buildTranslation({
+      key: `thematic.${thematic.id}.name`,
+      locale: 'fr',
+      value: `${thematic.id} nameFrFr`,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `thematic.${thematic.id}.name`,
+      locale: 'en',
+      value: `${thematic.id} nameEnUs`,
     });
   }
 }
@@ -398,7 +414,7 @@ function _mockRichAirtableContent() {
     origin: 'FrameworkA',
   };
   const airtableCompetence21 = airtableBuilder.factory.buildCompetence(competence21);
-  const airtableThematic111 = airtableBuilder.factory.buildThematic({
+  const thematic111 = {
     id: 'thematic111',
     name_i18n: {
       fr: 'thematic111 name',
@@ -407,8 +423,9 @@ function _mockRichAirtableContent() {
     competenceId: 'competence11',
     tubeIds: ['tube1111'],
     index: 'thematic111 index',
-  });
-  const airtableThematic112 = airtableBuilder.factory.buildThematic({
+  };
+  const airtableThematic111 = airtableBuilder.factory.buildThematic(thematic111);
+  const thematic112 = {
     id: 'thematic112',
     name_i18n: {
       fr: 'thematic112 name',
@@ -417,8 +434,9 @@ function _mockRichAirtableContent() {
     competenceId: 'competence11',
     tubeIds: ['tube1121'],
     index: 'thematic112 index',
-  });
-  const airtableThematic121 = airtableBuilder.factory.buildThematic({
+  };
+  const airtableThematic112 = airtableBuilder.factory.buildThematic(thematic112);
+  const thematic121 = {
     id: 'thematic121',
     name_i18n: {
       fr: 'thematic121 name',
@@ -427,8 +445,9 @@ function _mockRichAirtableContent() {
     competenceId: 'competence12',
     tubeIds: ['tube1211', 'tube1212'],
     index: 'thematic121 index',
-  });
-  const airtableThematic211 = airtableBuilder.factory.buildThematic({
+  };
+  const airtableThematic121 = airtableBuilder.factory.buildThematic(thematic121);
+  const thematic211 = {
     id: 'thematic211',
     name_i18n: {
       fr: 'thematic211 name',
@@ -437,7 +456,8 @@ function _mockRichAirtableContent() {
     competenceId: 'competence21',
     tubeIds: ['tube2111'],
     index: 'thematic211 index',
-  });
+  };
+  const airtableThematic211 = airtableBuilder.factory.buildThematic(thematic211);
   const airtableTube1111 = airtableBuilder.factory.buildTube({
     id: 'tube1111',
     name: 'tube1111 name',
@@ -830,6 +850,7 @@ function _mockRichAirtableContent() {
   return {
     areas: [area1, area2],
     competences: [competence11, competence12, competence21],
+    thematics: [thematic111, thematic112, thematic121, thematic211],
     tubeIds:  [airtableTube1111.id, airtableTube1121.id, airtableTube1211.id, airtableTube1212.id, airtableTube2111.id],
     skills: [skill11111, skill11112, skill12121, skill21111],
     challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
@@ -946,7 +967,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'thematic111',
       name_i18n: {
-        fr: 'thematic111 name',
+        fr: 'thematic111 nameFrFr',
         en: 'thematic111 nameEnUs',
       },
       competenceId: 'competence11',
@@ -958,7 +979,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'thematic112',
       name_i18n: {
-        fr: 'thematic112 name',
+        fr: 'thematic112 nameFrFr',
         en: 'thematic112 nameEnUs',
       },
       competenceId: 'competence11',
@@ -970,7 +991,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'thematic121',
       name_i18n: {
-        fr: 'thematic121 name',
+        fr: 'thematic121 nameFrFr',
         en: 'thematic121 nameEnUs',
       },
       competenceId: 'competence12',
@@ -983,7 +1004,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'thematic211',
       name_i18n: {
-        fr: 'thematic211 name',
+        fr: 'thematic211 nameFrFr',
         en: 'thematic211 nameEnUs',
       },
       competenceId: 'competence21',

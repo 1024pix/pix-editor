@@ -371,12 +371,20 @@ describe('Acceptance | Controller | phrase-controller', () => {
           'Indice - fr',
           'acquis,Pix-1-1.1-acquis-acquis1,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           ''
-        ],[
+        ],
+        [
+          'thematic.recThematic0.name',
+          'Nom',
+          'thematique,Pix-1-1.1,Pix-1,Pix',
+          '',
+        ],
+        [
           'tube.recTube0.practicalDescription',
           'Description pratique du Tube - fr',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',
           ''
-        ],[
+        ],
+        [
           'tube.recTube0.practicalTitle',
           'Titre pratique du Tube - fr',
           'sujet,Pix-1-1.1-acquis,Pix-1-1.1,Pix-1,Pix',

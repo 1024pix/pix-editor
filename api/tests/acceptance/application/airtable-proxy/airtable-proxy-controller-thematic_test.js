@@ -150,3 +150,92 @@ describe('Acceptance | Controller | airtable-proxy-controller | write thematic',
     });
   });
 });
+
+describe('Acceptance | Controller | airtable-proxy-controller | read thematics', () => {
+  let thematicDataObject;
+  let airtableThematic;
+  let outputThematic;
+  let user;
+
+  beforeEach(async function() {
+    user = databaseBuilder.factory.buildAdminUser();
+
+    thematicDataObject = domainBuilder.buildThematicDatasourceObject({
+      id: 'mon_id_persistant',
+    });
+    airtableThematic = airtableBuilder.factory.buildThematic({
+      ...thematicDataObject,
+      airtableId: 'mon_id_airtable',
+    });
+
+    outputThematic = inputOutputDataBuilder.factory.buildThematic({
+      ...thematicDataObject,
+      airtableId: 'mon_id_airtable',
+      name_i18n: {
+        fr: 'french name',
+        en: 'english name',
+      },
+    });
+
+    databaseBuilder.factory.buildTranslation({
+      locale: 'fr',
+      key: 'thematic.mon_id_persistant.name',
+      value: 'french name'
+    });
+    databaseBuilder.factory.buildTranslation({
+      locale: 'en',
+      key: 'thematic.mon_id_persistant.name',
+      value: 'english name'
+    });
+
+    await databaseBuilder.commit();
+  });
+
+  afterEach(() => {
+    expect(nock.isDone()).to.be.true;
+  });
+
+  describe('GET /api/airtable/content/Thematiques', () => {
+    it('should proxy request to airtable and read translations from the PG table for a list of thematics', async () => {
+      // Given
+      nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Thematiques')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: [airtableThematic] });
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/airtable/content/Thematiques',
+        headers: generateAuthorizationHeader(user),
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal({ records: [outputThematic] });
+    });
+  });
+
+  describe('GET /api/airtable/content/Thematiques/:id', () => {
+    it('should proxy request to airtable and read translations from the PG table for one thematic', async () => {
+      // Given
+      nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Thematiques/recId')
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, airtableThematic);
+      const server = await createServer();
+
+      // When
+      const response = await server.inject({
+        method: 'GET',
+        url: '/api/airtable/content/Thematiques/recId',
+        headers: generateAuthorizationHeader(user)
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).to.deep.equal(outputThematic);
+    });
+  });
+});

@@ -65,6 +65,7 @@ async function mockCurrentContent() {
       name_i18n: {
         fr: 'Nom',
         en: 'name',
+        nl: 'name nl',
       },
       competenceId: 'recCompetence0',
       tubeIds: ['recTube0'],
@@ -251,6 +252,12 @@ async function mockCurrentContent() {
     });
 
     databaseBuilder.factory.buildTranslation({
+      key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+      locale,
+      value: expectedCurrentContent.thematics[0].name_i18n[locale],
+    });
+
+    databaseBuilder.factory.buildTranslation({
       key: `skill.${expectedCurrentContent.skills[0].id}.hint`,
       locale,
       value: expectedCurrentContent.skills[0].hint_i18n[locale],
@@ -368,6 +375,7 @@ async function mockContentForRelease() {
       name_i18n: {
         en: 'name',
         fr: 'Nom',
+        nl: 'name nl',
       },
     }],
     tubes: [{
@@ -526,6 +534,12 @@ async function mockContentForRelease() {
       key: `competence.${expectedCurrentContent.competences[0].id}.description`,
       locale,
       value: expectedCurrentContent.competences[0].description_i18n[locale],
+    });
+
+    databaseBuilder.factory.buildTranslation({
+      key: `thematic.${expectedCurrentContent.thematics[0].id}.name`,
+      locale,
+      value: expectedCurrentContent.thematics[0].name_i18n[locale],
     });
 
     databaseBuilder.factory.buildTranslation({
