@@ -1,5 +1,4 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import 'dotenv/config';
 import { PgClient } from '../PgClient.js';
 import { PGSQL_DUPLICATE_DATABASE_ERROR } from '../../db/pgsql-errors.js';
 

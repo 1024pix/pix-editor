@@ -1,11 +1,9 @@
-import * as dotenv from 'dotenv';
+import 'dotenv/config';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { LOCALE_TO_LANGUAGE_MAP, TUTORIAL_LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
-
-dotenv.config();
 
 function isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
