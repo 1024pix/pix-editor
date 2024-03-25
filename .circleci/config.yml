@@ -90,8 +90,11 @@ jobs:
           command: npm run lint
       - run:
           name: Test
-          command: |
-            npm test
+          command: npm test
+      - store_test_results:
+          path: ./test-results
+      - store_artifacts:
+          path: ./test-results
 
   checkout:
     executor: node-docker

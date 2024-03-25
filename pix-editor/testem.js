@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = {
+const config = {
   test_page: 'tests/index.html?hidepassed',
   disable_watching: true,
   launch_in_ci: [
@@ -25,3 +25,10 @@ module.exports = {
     }
   }
 };
+
+module.exports = process.env.CI
+  ? {
+    ...config,
+    reporter: 'xunit',
+    report_file: './test-results/report.xml',
+  } : config;
