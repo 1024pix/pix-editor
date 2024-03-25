@@ -1,3 +1,5 @@
+import { Challenge } from '../Challenge.js';
+
 export class ChallengeForRelease {
   constructor({
     id,
@@ -68,11 +70,6 @@ export class ChallengeForRelease {
   }
 
   static get STATUSES() {
-    return {
-      VALIDE: 'validé',
-      PROPOSE: 'proposé',
-      ARCHIVE: 'archivé',
-      PERIME: 'périmé',
-    };
+    return Challenge.STATUSES;
   }
 }

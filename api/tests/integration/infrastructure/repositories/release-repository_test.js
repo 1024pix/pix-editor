@@ -108,7 +108,7 @@ describe('Integration | Repository | release-repository', function() {
         competences: [],
         courses: [],
         frameworks: [],
-        mission: [],
+        missions: [],
         skills: [],
         thematics: [],
         tubes: [],
@@ -210,8 +210,8 @@ describe('Integration | Repository | release-repository', function() {
     it('should return current content as DTO', async function() {
       // When
       const currentContentDTO = await getCurrentContent();
-
       // Then
+
       const expectedReleaseContentDTO = _getRichCurrentContentDTO();
       expect(currentContentDTO).to.deep.equal(expectedReleaseContentDTO);
     });
@@ -1400,7 +1400,7 @@ function _getRichCurrentContentDTO() {
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.INACTIVE,
-      createdAt: new Date('2010-01-04')
+      createdAt: new Date('2010-01-04'),
     }),
   ];
 
