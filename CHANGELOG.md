@@ -1,5 +1,25 @@
 
 
+## v3.138.0 (25/03/2024)
+
+
+### :rocket: Amélioration
+- [#623](https://github.com/1024pix/pix-editor/pull/623) [FEATURE] Afficher l'url des embed calculée par défaut pour les épreuves traduites (PIX-11507).
+- [#625](https://github.com/1024pix/pix-editor/pull/625) [FEATURE] Ajouter les champs spoil à l'acquis pour la réplication (PIX-11762).
+- [#622](https://github.com/1024pix/pix-editor/pull/622) [FEATURE] Écrire et migrer les traductions des thématiques (PIX-9472).
+- [#624](https://github.com/1024pix/pix-editor/pull/624) [FEATURE] Preview d'épreuve avec Pix App dans la langue de l'épreuve (PIX-11717).
+- [#619](https://github.com/1024pix/pix-editor/pull/619) [FEATURE] Filtrer les sujets qui n'ont aucun acquis actif lors de l'export des traductions (PIX-11690).
+
+### :building_construction: Tech
+- [#632](https://github.com/1024pix/pix-editor/pull/632) [TECH] Envoyer le résultat des tests API et pix-editor a circleci.
+
+### :arrow_up: Montée de version
+- [#631](https://github.com/1024pix/pix-editor/pull/631) [BUMP] Lock file maintenance (scripts).
+- [#628](https://github.com/1024pix/pix-editor/pull/628) [BUMP] Lock file maintenance (api).
+- [#629](https://github.com/1024pix/pix-editor/pull/629) [BUMP] Lock file maintenance (challenge-parser).
+- [#621](https://github.com/1024pix/pix-editor/pull/621) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.8 (pix-editor).
+- [#620](https://github.com/1024pix/pix-editor/pull/620) [BUMP] Update dependency @1024pix/pix-ui to ^44.3.7 (pix-editor).
+
 ## v3.137.0 (20/03/2024)
 
 
