@@ -9,6 +9,7 @@ export class LocalizedChallenge {
     // FIXME This is a geography code (not a country name !)
     // remove me when all doubt is lifted (because in model challenge, geography references a country name !)
     geography,
+    urlToConsult,
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -17,6 +18,7 @@ export class LocalizedChallenge {
     this.locale = locale;
     this.status = status;
     this.geography = geography;
+    this.urlToConsult = urlToConsult;
   }
 
   get isPrimary() {
@@ -28,6 +30,7 @@ export class LocalizedChallenge {
     locale,
     embedUrl,
     geography,
+    urlToConsult,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -35,6 +38,7 @@ export class LocalizedChallenge {
       locale,
       embedUrl,
       geography,
+      urlToConsult,
       status: null,
       fileIds: [],
     });
@@ -49,6 +53,7 @@ export class LocalizedChallenge {
       embedUrl: null,
       fileIds: [],
       geography: null,
+      urlToConsult: translation.urlToConsult,
     });
   }
 }
