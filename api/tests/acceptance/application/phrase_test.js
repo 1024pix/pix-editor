@@ -462,6 +462,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
         locale: 'nl',
         geography: null,
         embedUrl: null,
+        urlsToConsult: null,
         status: ChallengeForRelease.STATUSES.PROPOSE,
       }]);
     });

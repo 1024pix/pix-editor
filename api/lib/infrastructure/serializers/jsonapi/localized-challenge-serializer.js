@@ -11,6 +11,7 @@ const serializer = new Serializer('localized-challenges', {
     'locale',
     'embedUrl',
     'geography',
+    'urlsToConsult',
     'status',
     'fileIds',
     'translations',
@@ -57,12 +58,12 @@ const deserializer = new Deserializer({
       return attachment.id;
     }
   },
-  transform: function({ challenge, embedUrl, ...localizedChallenge }) {
+  transform: function({ challenge, embedUrl, files, ...localizedChallenge }) {
     return new LocalizedChallenge({
       ...localizedChallenge,
       challengeId: challenge,
       embedUrl: embedUrl === '' ? null : embedUrl,
-      fileIds: localizedChallenge.files,
+      fileIds: files,
     });
   }
 });

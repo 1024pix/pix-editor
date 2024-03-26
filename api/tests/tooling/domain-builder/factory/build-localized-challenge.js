@@ -8,6 +8,7 @@ export function buildLocalizedChallenge({
   locale = 'fr',
   status = null,
   geography = null,
+  urlsToConsult = ['http://url.com'],
 }) {
   return new LocalizedChallenge({
     id,
@@ -17,5 +18,6 @@ export function buildLocalizedChallenge({
     locale,
     status,
     geography,
+    urlsToConsult,
   });
 }

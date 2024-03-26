@@ -8,6 +8,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       // Given
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'BZ',
+        urlsToConsult: ['url-to-consult.org', 'url-to-consult.com', 'url-to-consult.fr'],
       });
       const json = {
         data: {
@@ -16,6 +17,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           attributes: {
             'embed-url': expectedLocalizedChallenge.embedUrl,
             geography: 'Bélize',
+            'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
             locale: expectedLocalizedChallenge.locale,
             status: expectedLocalizedChallenge.status,
           },
@@ -51,6 +53,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             'embed-url': expectedLocalizedChallenge.embedUrl,
             locale: expectedLocalizedChallenge.locale,
             status: expectedLocalizedChallenge.status,
+            'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
           },
           relationships: {
             challenge: {
@@ -87,6 +90,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           id: `${expectedLocalizedChallenge.id}`,
           attributes: {
             'embed-url': '',
+            'urls-to-consult': expectedLocalizedChallenge.urlsToConsult,
             locale: expectedLocalizedChallenge.locale,
             status: expectedLocalizedChallenge.status,
           },
@@ -108,6 +112,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
       expect(localizedChallenge).to.deep.equal(expectedLocalizedChallenge);
     });
   });
+
   describe('#serialize', () => {
     it('should serialize a localized challenge with its attachments', async () => {
       // given
@@ -115,6 +120,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
         embedUrl: null,
         status: 'validé',
         geography: 'BZ',
+        urlsToConsult: ['https://urls.fr', 'pouet.fr'],
         fileIds: ['attachment1', 'attachment2']
       });
       const expectedSerializedLocalizedChallenge = {
@@ -125,6 +131,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
             locale: localizedChallenge.locale,
             'embed-url': null,
             geography: 'Belize',
+            'urls-to-consult': localizedChallenge.urlsToConsult,
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
           },

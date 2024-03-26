@@ -36,6 +36,7 @@ const serializer = new Serializer('challenges', {
     'locales',
     'alternativeLocales',
     'geography',
+    'urlsToConsult',
     'autoReply',
     'focusable',
     'skill',
@@ -127,6 +128,7 @@ export function deserialize(challengeBody) {
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
         geography: getCountryCode(challengeObject.geography),
+        urlsToConsult: challengeObject.urlsToConsult,
       })];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });

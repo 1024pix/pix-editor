@@ -137,12 +137,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
+        urlsToConsult: ['truc'],
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'my id_nl',
         challengeId: 'my id',
         locale: 'nl',
         geography: null,
+        urlsToConsult: ['truc.nl'],
       });
       await databaseBuilder.commit();
 
@@ -193,6 +195,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               locales: ['fr'],
               'alternative-locales': ['nl'],
               geography: 'Brésil',
+              'urls-to-consult': ['truc'],
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -332,18 +335,21 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
+        urlsToConsult: ['truc.fr'],
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
         challengeId: '2',
         locale: 'fr',
         geography: 'PH',
+        urlsToConsult: ['truc2.fr'],
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2_nl',
         challengeId: '2',
         locale: 'nl',
         geography: null,
+        urlsToConsult: ['truc2.nl'],
       });
 
       await databaseBuilder.commit();
@@ -397,6 +403,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               locales: ['fr'],
               'alternative-locales': [],
               geography: 'Brésil',
+              'urls-to-consult': ['truc.fr'],
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -466,6 +473,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               locales: ['fr'],
               'alternative-locales': ['nl'],
               geography: 'Philippines',
+              'urls-to-consult': ['truc2.fr'],
               'auto-reply': false,
               focusable: false,
               'updated-at': '2021-10-04',
@@ -604,12 +612,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         embedUrl: 'https://github.io/page/epreuve.html',
         geography: 'BR',
+        urlsToConsult: ['truc.fr'],
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
         challengeId: 'recChallengeId1',
         locale: 'nl',
         geography: null,
+        urlsToConsult: ['truc.nl'],
       });
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.recChallengeId1.instruction',
@@ -696,6 +706,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             locales: ['fr'],
             'alternative-locales': ['nl'],
             geography: 'Brésil',
+            'urls-to-consult': ['truc.fr'],
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1044,6 +1055,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: challenge.responsive,
               locales: challenge.locales,
               geography: challenge.geography,
+              'urls-to-consult': ['firstLink', 'secondLink'],
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
@@ -1111,6 +1123,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'alternative-locales': [],
             locales: ['fr'],
             geography: 'Mozambique',
+            'urls-to-consult': ['firstLink', 'secondLink'],
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1154,6 +1167,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           embedUrl: challenge.embedUrl,
           status: null,
           geography: 'MZ',
+          urlsToConsult: ['firstLink', 'secondLink']
         }
       ]);
       const translations = await knex('translations').select().orderBy('key');
@@ -1416,12 +1430,14 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: challengeId,
         challengeId,
         embedUrl: 'old_url',
+        urlsToConsult: ['pouet'],
         locale,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge_localized_nl',
         challengeId,
         embedUrl: 'url_nl',
+        urlsToConsult: ['toot'],
         locale: 'nl',
       });
       databaseBuilder.factory.buildTranslation({
@@ -1507,6 +1523,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: challenge.responsive,
               locales: challenge.locales,
               geography: challenge.geography,
+              'urls-to-consult': ['pouet.com'],
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
@@ -1574,6 +1591,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'alternative-locales': ['nl'],
             locales: ['fr'],
             geography: 'Pays-Bas',
+            'urls-to-consult': ['pouet.com'],
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1616,6 +1634,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
       const localizedChallenge = await knex('localized_challenges').select().where('id', challengeId).first();
       expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
+      expect(localizedChallenge).toHaveProperty('urlsToConsult', ['pouet.com']);
       expect(localizedChallenge).toHaveProperty('geography', 'NL');
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
         {
@@ -1672,6 +1691,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         challengeId,
         locale: originalLocale,
         geography: 'BR',
+        urlsToConsult: ['truc'],
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1756,6 +1776,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               responsive: challenge.responsive,
               locales: challenge.locales,
               geography: challenge.geography,
+              'urls-to-consult': ['truc'],
               'auto-reply': challenge.autoReply,
               focusable: challenge.focusable,
               'updated-at': '2021-10-04',
@@ -1823,6 +1844,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             'alternative-locales': [],
             locales: ['fr', 'fr-fr'],
             geography: 'Jamaïque',
+            'urls-to-consult': ['truc'],
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -1867,6 +1889,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           locale: 'fr',
           status: null,
           geography: 'JM',
+          urlsToConsult: ['truc'],
         },
       ]);
       await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
