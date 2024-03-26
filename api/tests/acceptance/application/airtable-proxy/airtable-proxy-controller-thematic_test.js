@@ -39,7 +39,13 @@ describe('Acceptance | Controller | airtable-proxy-controller | write thematic',
       await databaseBuilder.commit();
       const thematic = domainBuilder.buildThematicDatasourceObject({ id: 'mon_id_persistant' });
       airtableRawThematic = airtableBuilder.factory.buildThematic(thematic);
-      thematicToSave = inputOutputDataBuilder.factory.buildThematic(thematic);
+      thematicToSave = inputOutputDataBuilder.factory.buildThematic({
+        ...thematic,
+        name_i18n: {
+          fr: 'téma tique',
+          en: 'look tic',
+        },
+      });
     });
 
     it('should proxy request to airtable and add translations to the PG table', async () => {
@@ -90,15 +96,15 @@ describe('Acceptance | Controller | airtable-proxy-controller | write thematic',
     beforeEach(async function() {
       user = databaseBuilder.factory.buildAdminUser();
 
-      const thematicDataObject = domainBuilder.buildThematicDatasourceObject({
-        id: 'mon_id_persistant',
+      const thematicDataObject = domainBuilder.buildThematicDatasourceObject({ id: 'mon_id_persistant' });
+      airtableThematic = airtableBuilder.factory.buildThematic(thematicDataObject);
+      thematicToUpdate = inputOutputDataBuilder.factory.buildThematic({
+        ...thematicDataObject,
         name_i18n: {
           fr: 'new french name',
           en: 'new english name',
         },
       });
-      airtableThematic = airtableBuilder.factory.buildThematic(thematicDataObject);
-      thematicToUpdate = inputOutputDataBuilder.factory.buildThematic(thematicDataObject);
 
       databaseBuilder.factory.buildTranslation({
         locale: 'fr',

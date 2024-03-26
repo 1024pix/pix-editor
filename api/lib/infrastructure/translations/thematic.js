@@ -32,6 +32,7 @@ export const {
   extractFromProxyObject,
   airtableObjectToProxyObject,
   extractFromReleaseObject,
+  proxyObjectToAirtableObject,
   toDomain,
   prefixFor,
 } = thematicTranslationUtils;

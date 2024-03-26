@@ -13,20 +13,12 @@ describe('Integration | Repository | thematic-repository', () => {
           competenceId: 'competenceId1',
           index: '1',
           tubeIds: ['tubeId1', 'tubeId2'],
-          name_i18n: {
-            en: 'Thematic 1 name airtable',
-            fr: 'Nom thématique 1',
-          },
         }),
         airtableBuilder.factory.buildThematic({
           id: 'thematic2',
           competenceId: 'competenceId2',
           index: '2',
           tubeIds: ['tubeId3', 'tubeId4'],
-          name_i18n: {
-            en: 'Thematic 2 name airtable',
-            fr: 'Nom thématique 2',
-          },
         }),
       ]).activate().nockScope;
 
