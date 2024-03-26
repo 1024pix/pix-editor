@@ -16,7 +16,7 @@ export async function up(knex) {
  * @returns { Promise<void> }
  */
 export async function down(knex) {
-  await knex.schema.table(COLUMN_NAME, function(table) {
-    table.dropColumn('geography');
+  await knex.schema.table(TABLE_NAME, function(table) {
+    table.dropColumn(COLUMN_NAME);
   });
 }
