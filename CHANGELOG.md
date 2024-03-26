@@ -1,5 +1,19 @@
 
 
+## v3.139.0 (26/03/2024)
+
+
+### :rocket: Amélioration
+- [#635](https://github.com/1024pix/pix-editor/pull/635) [FEATURE] Renommer et supprimer les colonnes traduites des thématiques de Airtable (PIX-9477).
+- [#626](https://github.com/1024pix/pix-editor/pull/626) [FEATURE] Lire les traductions des thématiques dans PG (PIX-9474).
+
+### :building_construction: Tech
+- [#633](https://github.com/1024pix/pix-editor/pull/633) [TECH] Utilise la façon moderne ES6 pour importer dotenv.
+
+### :arrow_up: Montée de version
+- [#627](https://github.com/1024pix/pix-editor/pull/627) [BUMP] Update dependency @1024pix/pix-ui to v45 (pix-editor).
+- [#630](https://github.com/1024pix/pix-editor/pull/630) [BUMP] Lock file maintenance (pix-editor).
+
 ## v3.138.0 (25/03/2024)
 
 
