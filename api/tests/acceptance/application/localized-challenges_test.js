@@ -12,7 +12,8 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
-        status: 'proposé'
+        status: 'proposé',
+        urlsToConsult: null,
       });
 
       await databaseBuilder.commit();
@@ -34,6 +35,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             geography: 'Neutre',
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
+            'urls-to-consult': null,
           },
           relationships: {
             challenge: {
@@ -88,6 +90,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             status: null,
             geography: 'Neutre',
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
+            'urls-to-consult': null,
           },
           relationships: {
             challenge: {
@@ -149,6 +152,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
+              'urls-to-consult': null,
             },
             relationships: {
               challenge: {
@@ -171,6 +175,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
+              'urls-to-consult': null,
             },
             relationships: {
               challenge: {
@@ -241,6 +246,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         embedUrl: 'https://cassoulet.com/',
         status: null,
         geography: null,
+        urlsToConsult: null,
       });
     });
 
@@ -304,6 +310,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         embedUrl: 'https://choucroute.com/',
         status: 'validé',
         geography: null,
+        urlsToConsult: null,
       });
     });
 

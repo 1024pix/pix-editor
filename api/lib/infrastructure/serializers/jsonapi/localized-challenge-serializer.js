@@ -11,6 +11,7 @@ const serializer = new Serializer('localized-challenges', {
     'locale',
     'embedUrl',
     'geography',
+    'urlsToConsult',
     'status',
     'fileIds',
     'translations',
@@ -37,6 +38,7 @@ const serializer = new Serializer('localized-challenges', {
       challenge: { id: challengeId },
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
       geography: getCountryName(localizedChallenge.geography),
+      urlsToConsult: !localizedChallenge.urlsToConsult ? null : localizedChallenge.urlsToConsult.join(', '),
     };
   }
 });
@@ -57,12 +59,13 @@ const deserializer = new Deserializer({
       return attachment.id;
     }
   },
-  transform: function({ challenge, embedUrl, ...localizedChallenge }) {
+  transform: function({ challenge, embedUrl, files, urlsToConsult, ...localizedChallenge }) {
     return new LocalizedChallenge({
       ...localizedChallenge,
       challengeId: challenge,
       embedUrl: embedUrl === '' ? null : embedUrl,
-      fileIds: localizedChallenge.files,
+      fileIds: files,
+      urlsToConsult: urlsToConsult?.split(', '),
     });
   }
 });

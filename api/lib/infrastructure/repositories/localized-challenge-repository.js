@@ -6,7 +6,6 @@ import { generateNewId } from '../utils/id-generator.js';
 export async function list() {
   const localizedChallengeDtos = await _queryLocalizedChallengeWithAttachment()
     .orderBy('id');
-
   return localizedChallengeDtos.map(_toDomain);
 }
 
@@ -26,6 +25,7 @@ export async function create(localizedChallenges = [], generateId = _generateId)
       locale: localizedChallenge.locale,
       status: localizedChallenge.status,
       geography: localizedChallenge.geography,
+      urlsToConsult: localizedChallenge.urlsToConsult,
     };
   });
   await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
@@ -65,7 +65,7 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
 }
 
 export async function update({
-  localizedChallenge: { id, locale, embedUrl, status, fileIds, geography },
+  localizedChallenge: { id, locale, embedUrl, status, fileIds, geography, urlsToConsult },
   transaction: knexConnection = knex
 }) {
   const [dto] = await knexConnection('localized_challenges').where('id', id).update({
@@ -73,6 +73,7 @@ export async function update({
     embedUrl,
     status,
     geography,
+    urlsToConsult
   }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');

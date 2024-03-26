@@ -61,7 +61,6 @@ export async function create(challenge) {
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save({ translations });
-
   return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
 }
 
@@ -79,6 +78,7 @@ export async function update(challenge) {
 
     primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
     primaryLocalizedChallenge.geography = challenge.geographyCode;
+    primaryLocalizedChallenge.urlsToConsult = challenge.urlsToConsult;
 
     await localizedChallengeRepository.update({
       localizedChallenge: primaryLocalizedChallenge,

@@ -7,9 +7,10 @@ export function buildLocalizedChallenge({
   embedUrl,
   status = null,
   geography = null,
+  urlsToConsult = null,
 } = {}) {
   return databaseBuffer.pushInsertable({
     tableName: 'localized_challenges',
-    values: { id, challengeId, locale, embedUrl, status, geography },
+    values: { id, challengeId, locale, embedUrl, status, geography, urlsToConsult },
   });
 }

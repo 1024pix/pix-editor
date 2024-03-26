@@ -72,6 +72,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: null,
         locale: 'fr',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -80,6 +81,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: null,
         locale: 'nl',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -88,6 +90,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: 'TM',
         locale: 'fr',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -96,6 +99,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: null,
         locale: 'nl',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -104,6 +108,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: 'DE',
         locale: 'fr',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -112,6 +117,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: 'CI',
         locale: 'fr',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
       {
@@ -120,6 +126,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         geography: 'CG',
         locale: 'fr',
         embedUrl: null,
+        urlsToConsult: null,
         status: null,
       },
     ]);

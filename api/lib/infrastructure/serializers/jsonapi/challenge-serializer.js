@@ -36,6 +36,7 @@ const serializer = new Serializer('challenges', {
     'locales',
     'alternativeLocales',
     'geography',
+    'urlsToConsult',
     'autoReply',
     'focusable',
     'skill',
@@ -70,6 +71,7 @@ const serializer = new Serializer('challenges', {
   transform(challenge) {
     challenge.preview = `/api/challenges/${challenge.id}/preview`;
     challenge.skill = challenge.skills[0];
+    challenge.urlsToConsult = challenge.urlsToConsult?.join(', ');
     return challenge;
   }
 });
@@ -127,6 +129,7 @@ export function deserialize(challengeBody) {
         locale: Challenge.getPrimaryLocale(challengeObject.locales),
         embedUrl: challengeObject.embedUrl,
         geography: getCountryCode(challengeObject.geography),
+        urlsToConsult: challengeObject.urlsToConsult?.split(', '),
       })];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
