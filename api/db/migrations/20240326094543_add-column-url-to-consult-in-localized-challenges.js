@@ -1,5 +1,5 @@
 const TABLE_NAME = 'localized_challenges';
-const COLUMN_NAME = 'urlToConsult';
+const COLUMN_NAME = 'urlsToConsult';
 
 /**
  * @param { import("knex").Knex } knex
