@@ -30,7 +30,7 @@ export default class CompetenceModel extends Model {
   }
 
   get sortedThemes() {
-    return this.themes.sortBy('index');
+    return this.themes.sortBy('name').sortBy('index');
   }
 
   get productionTubes() {

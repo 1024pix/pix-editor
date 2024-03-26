@@ -12,8 +12,6 @@ export const thematicDatasource = datasource.extend({
     'Index',
   ],
 
-  sortField: 'Index',
-
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.id,

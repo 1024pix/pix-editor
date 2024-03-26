@@ -12,9 +12,9 @@ export async function list() {
 
 function toDomainList(datasourceThematics, translations) {
   const translationsByThematicId = _.groupBy(translations, 'entityId');
-  return datasourceThematics.map(
+  return _.orderBy(datasourceThematics.map(
     (datasourceThematic) => toDomain(datasourceThematic, translationsByThematicId[datasourceThematic.id]),
-  );
+  ), ['index', 'name_i18n.fr']);
 }
 
 function toDomain(datasourceThematic, translations = []) {
