@@ -7,6 +7,7 @@ export class MissionForRelease {
     learningObjectives_i18n,
     validatedObjectives_i18n,
     status,
+    content,
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -15,5 +16,6 @@ export class MissionForRelease {
     this.learningObjectives_i18n = learningObjectives_i18n;
     this.validatedObjectives_i18n = validatedObjectives_i18n;
     this.status = status;
+    this.content = content;
   }
 }

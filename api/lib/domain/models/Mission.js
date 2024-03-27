@@ -8,6 +8,12 @@ export class Mission {
     learningObjectives_i18n,
     validatedObjectives_i18n,
     status,
+    content = {
+      tutorialChallenges: [],
+      trainingChallenges: [],
+      validationChallenges: [],
+      dareChallenges: [],
+    },
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -17,6 +23,7 @@ export class Mission {
     this.learningObjectives_i18n = learningObjectives_i18n;
     this.validatedObjectives_i18n = validatedObjectives_i18n;
     this.status = status;
+    this.content = content;
   }
 }
 

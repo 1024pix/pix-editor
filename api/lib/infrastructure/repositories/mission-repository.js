@@ -1,10 +1,12 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { fetchPage } from '../utils/knex-utils.js';
-import { Mission } from '../../domain/models/index.js';
-import * as translationRepository from './translation-repository.js';
+import { Challenge, Mission } from '../../domain/models/index.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
 import { NotFoundError } from '../../domain/errors.js';
+import { challengeRepository, skillRepository, translationRepository, tubeRepository } from './index.js';
+import { thematicDatasource } from '../datasources/airtable/index.js';
+import { logger } from '../logger.js';
 
 export async function getById(id) {
   const mission = await knex('missions').select('*').where({ id }).first();
@@ -32,12 +34,70 @@ export async function findAllMissions({ filter, page }) {
   };
 }
 
+const SCHOOL_PLAYABLE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
+
 export async function list() {
   const missions = await knex('missions').select('*');
 
   const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+  const tubes = await tubeRepository.list();
+  const thematics = await thematicDatasource.list();
+  const skills = await skillRepository.list();
 
-  return _toDomainList(missions, translations);
+  const challenges = await challengeRepository.list();
+
+  const missionsWithContent = missions.map((mission) => {
+    const thematic = thematics.find((thematic) => thematic.id === mission.thematicId);
+    if (!thematic) {
+      logger.warn({ mission }, 'No thematic found for mission');
+      return new Mission(mission);
+    }
+
+    const missionTubes = tubes.filter((tube) => thematic?.tubeIds?.includes(tube.id));
+    if (missionTubes.length === 0) {
+      logger.warn({ mission }, 'No tubes found for mission');
+      return new Mission(mission);
+    }
+
+    const content = {
+      tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
+      trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
+      validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
+      dareChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_de'),
+    };
+    return new Mission({ ...mission, content });
+  });
+
+  return _toDomainList(missionsWithContent, translations);
+}
+
+const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
+
+function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityPostfix) {
+  const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
+
+  if (!activityTube) {
+    logger.warn({ missionTubes }, `No tubes found for postFix ${activityPostfix} in mission tubes`);
+    return [];
+  }
+
+  const activitySkills = skills.filter((skill) => skill.tubeId === activityTube.id).sort(_byLevel);
+
+  if (!activitySkills) {
+    logger.warn({ activityTube }, 'No skills found for activityTube');
+    return [];
+  }
+
+  return activitySkills.map((activitySkill) => {
+    const alternatives = challenges
+      .filter((challenge) => activitySkill.id === challenge.skillId)
+      .filter((challenge) => SCHOOL_PLAYABLE_STATUSES.includes(challenge.status.toLowerCase()));
+
+    if (alternatives.length === 0) {
+      logger.warn({ activitySkill }, 'No challenges found for activitySkill');
+    }
+    return alternatives.map(({ id }) => id);
+  }).filter((activitySkills) => activitySkills.length > 0);
 }
 
 export async function save(mission) {
@@ -64,6 +124,7 @@ function _toDomain(mission, translations) {
     status: mission.status,
     competenceId: mission.competenceId,
     thematicId: mission.thematicId,
+    content: mission.content,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });
 }

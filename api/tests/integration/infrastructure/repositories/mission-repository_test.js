@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import { describe, describe as context, beforeEach, expect, expectTypeOf, it } from 'vitest';
-import { databaseBuilder, knex } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, knex } from '../../../test-helper.js';
 import {
   findAllMissions,
   save,
@@ -9,6 +9,15 @@ import {
 } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+
+function buildLocalizedChallenges(mockedLearningContent) {
+  mockedLearningContent.challenges.forEach((airtableChallenge) => {
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: airtableChallenge.fields['id persistant'],
+      challengeId: airtableChallenge.fields['id persistant']
+    });
+  });
+}
 
 describe('Integration | Repository | mission-repository', function() {
 
@@ -140,20 +149,48 @@ describe('Integration | Repository | mission-repository', function() {
   });
 
   describe('#list', function()  {
+    let mockedLearningContent;
 
-    it('Should return all missions', async function() {
+    beforeEach(async function() {
+      mockedLearningContent = {
+        challenges: [
+          airtableBuilder.factory.buildChallenge({ id: 'challengeTuto1', status: 'validé', skillId: 'skillTuto1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeTraining1', status: 'validé', skillId: 'skillTraining1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidation1', status: 'validé', skillId: 'skillValidation1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeDare1', status: 'validé', skillId: 'skillDare1' }),
+        ],
+        skills: [
+          airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTraining1', level: 1, tubeId: 'tubeTraining1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillDare1', level: 1, tubeId: 'tubeDare1' }),
+        ],
+        tubes: [
+          airtableBuilder.factory.buildTube({ id: 'tubeTuto1', name: '@Pix1D-recherche_di' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeTraining1', name: '@Pix1D-recherche_en' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeValidation1', name: '@Pix1D-recherche_va' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeDare1', name: '@Pix1D-recherche_de' }),
+        ],
+        thematics: [airtableBuilder.factory.buildThematic({
+          id: 'thematic1',
+          tubeIds: ['tubeTuto1', 'tubeTraining1', 'tubeValidation1', 'tubeDare1']
+        })],
+      };
 
-      databaseBuilder.factory.buildMission({
-        id: 1,
-        status: Mission.status.ACTIVE
-      });
+    });
+
+    it('should return all missions', async function() {
+      airtableBuilder.mockLists(mockedLearningContent);
+
+      buildLocalizedChallenges(mockedLearningContent);
 
       databaseBuilder.factory.buildMission({
         id: 2,
         name: 'Alt name',
-        status: Mission.status.INACTIVE,
+        status: Mission.status.ACTIVE,
         learningObjectives: 'Alt objectives',
-        validatedObjectives: 'Alt validated objectives'
+        validatedObjectives: 'Alt validated objectives',
+        thematicId: 'thematic1',
       });
 
       await databaseBuilder.commit();
@@ -161,25 +198,362 @@ describe('Integration | Repository | mission-repository', function() {
       const result = await list();
 
       expect(result).to.deep.equal([new Mission({
-        id: 1,
-        name_i18n: { fr: 'Ma première mission' },
-        competenceId: 'competenceId',
-        thematicId: 'thematicId',
-        learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
-        validatedObjectives_i18n: { fr: 'Rien' },
-        status: Mission.status.ACTIVE,
-        createdAt: new Date('2010-01-04'),
-      }), new Mission({
         id: 2,
         name_i18n: { fr: 'Alt name' },
         competenceId: 'competenceId',
-        thematicId: 'thematicId',
+        thematicId: 'thematic1',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-        status: Mission.status.INACTIVE,
+        status: Mission.status.ACTIVE,
         createdAt: new Date('2010-01-04'),
+        content: {
+          tutorialChallenges: [
+            ['challengeTuto1'],
+          ],
+          trainingChallenges: [
+            ['challengeTraining1'],
+          ],
+          validationChallenges: [
+            ['challengeValidation1'],
+          ],
+          dareChallenges: [
+            ['challengeDare1'],
+          ],
+        },
       })]);
 
+    });
+
+    context('with inactive, proposal, and active challenges', async function() {
+      it('should return proposal and active challenges only', async function() {
+        mockedLearningContent.challenges = [
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: 'validé', skillId: 'skillValidation1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: 'proposé', skillId: 'skillValidation1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: 'périmé', skillId: 'skillValidation1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: 'archivé', skillId: 'skillValidation1' }),
+        ];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [
+              ['challengeValidationValidé', 'challengeValidationProposé'],
+            ],
+            dareChallenges: [],
+          },
+        })]);
+      });
+    });
+
+    context('with multiple challenges in activities', async function() {
+      it('should return ordered challenges', async function() {
+        mockedLearningContent.challenges = [
+          airtableBuilder.factory.buildChallenge({ id: 'secondChallengeValidation', status: 'validé', skillId: 'skillValidation2' }),
+          airtableBuilder.factory.buildChallenge({ id: 'firstChallengeValidation', status: 'validé', skillId: 'skillValidation1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'fourthChallengeValidation', status: 'validé', skillId: 'skillValidation4' }),
+          airtableBuilder.factory.buildChallenge({ id: 'thirdChallengeValidation', status: 'validé', skillId: 'skillValidation3' }),
+        ];
+        mockedLearningContent.skills = [
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation2', level: 2, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation4', level: 4, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation3', level: 3, tubeId: 'tubeValidation1' }),
+        ];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [
+              ['firstChallengeValidation'],
+              ['secondChallengeValidation'],
+              ['thirdChallengeValidation'],
+              ['fourthChallengeValidation'],
+            ],
+            dareChallenges: [],
+          },
+        })]);
+      });
+    });
+
+    context('Without challenges for skills', async function() {
+      it('Should return missions', async function() {
+        mockedLearningContent.challenges = [];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+
+      });
+    });
+    context('Without skills in tubes', async function() {
+      it('Should return missions', async function() {
+        mockedLearningContent.skills = [];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+
+      });
+    });
+    context('Without tubes', async function() {
+      it('Should return missions', async function() {
+        mockedLearningContent.tubes = [];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+
+      });
+    });
+    context('Without tubes in thematic', async function() {
+      it('Should return missions', async function() {
+        mockedLearningContent.thematics = [ airtableBuilder.factory.buildThematic({ id: 'thematic1', tubeIds: undefined }) ];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+
+      });
+    });
+    context('Without thematic', async function() {
+      it('Should return missions', async function() {
+        mockedLearningContent.thematics = [];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: 'thematic1',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: 'thematic1',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+
+      });
+    });
+    context('Without thematicID in mission', async function() {
+      it('Should return missions', async function() {
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicId: null,
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicId: null,
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            tutorialChallenges: [],
+            trainingChallenges: [],
+            validationChallenges: [],
+            dareChallenges: [],
+          },
+        })]);
+      });
     });
   });
 

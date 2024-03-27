@@ -117,6 +117,15 @@ export class Challenge {
     return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale).embedUrl;
   }
 
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
+
   static getPrimaryLocale(locales) {
     return Challenge.defaultLocales(locales)[0];
   }
