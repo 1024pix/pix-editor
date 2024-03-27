@@ -34,6 +34,7 @@ export default class ChallengeModel extends Model {
   @attr ({ defaultValue: function() { return []; } }) locales;
   @attr alternativeLocales;
   @attr geography;
+  @attr urlsToConsult;
   @attr autoReply;
   @attr focusable;
   @attr illustrationAlt;
