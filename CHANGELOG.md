@@ -1,5 +1,11 @@
 
 
+## v3.140.0 (28/03/2024)
+
+
+### :rocket: Amélioration
+- [#634](https://github.com/1024pix/pix-editor/pull/634) [FEATURE] Ajoute les épreuves aux missions pour Pix1D (pix-11698).
+
 ## v3.139.0 (26/03/2024)
 
 
