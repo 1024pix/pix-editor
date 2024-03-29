@@ -1,0 +1,56 @@
+import { module, test } from 'qunit';
+import { visit, clickByText } from '@1024pix/ember-testing-library';
+import { findAll, click, fillIn } from '@ember/test-helpers';
+import { setupApplicationTest } from 'ember-qunit';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { runTask } from 'ember-lifeline';
+
+module('Acceptance | Modify-Localized-Challenge', function(hooks) {
+  setupApplicationTest(hooks);
+  setupMirage(hooks);
+
+  hooks.beforeEach(function() {
+    this.server.create('config', 'default');
+    this.server.create('user', { trigram: 'ABC' });
+
+    this.server.create('challenge', { id: 'recChallenge1' });
+    this.server.create('localizedChallenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
+    this.server.create('localizedChallenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl' });
+    this.server.create('skill', { id: 'recSkill1', name: '@trululu2', challengeIds: ['recChallenge1'] });
+    this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
+    this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
+    this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds:['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
+    this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
+    return authenticateSession();
+  });
+
+  test('visiting /', async function(assert) {
+    // when
+    const store = this.owner.lookup('service:store');
+
+    const screen = await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await clickByText('Version nl');
+
+    assert.dom('[data-test-localized-challenge-urls-to-consult]').doesNotExist();
+
+    await clickByText('Modifier');
+
+    await fillIn('#localized-challenge-urls-to-consult', 'mon-url.com, mon-autre-url.com');
+    await runTask(this, async () => {}, 200);
+    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
+    await click(saveButton);
+
+    // then
+    const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
+    const urlsToConsultInput = await screen.findByLabelText('URLs à consulter :');
+
+    assert.strictEqual(urlsToConsultInput.value, 'mon-url.com, mon-autre-url.com');
+    assert.deepEqual(challenge.urlsToConsult, ['mon-url.com', 'mon-autre-url.com']);
+  });
+});
+

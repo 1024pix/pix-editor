@@ -19,6 +19,8 @@ export default class LocalizedController extends Controller {
   @tracked popInImageSrc = null;
   @tracked displayIllustration = false;
 
+  urlsToConsult = '';
+
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
 
@@ -111,6 +113,16 @@ export default class LocalizedController extends Controller {
     const url = new URL(this.challenge.embedURL);
     url.searchParams.set('lang', this.localizedChallenge.locale);
     return url.href;
+  }
+
+  get displayUrlsToConsult() {
+    return this.edition || this.localizedChallenge.urlsToConsult;
+  }
+
+  @action
+  setUrlsToConsult(value) {
+    const trimmedValue = value.trim();
+    this.localizedChallenge.urlsToConsult = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
   }
 
   @action

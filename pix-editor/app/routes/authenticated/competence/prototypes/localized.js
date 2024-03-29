@@ -9,4 +9,10 @@ export default class LocalizedPrototypeRoute extends Route {
     const challenge =  await localizedChallenge.challenge;
     return { localizedChallenge, challenge };
   }
+
+  setupController(controller, model) {
+    super.setupController(...arguments);
+    const localizedChallenge = model.localizedChallenge;
+    controller.urlsToConsult = localizedChallenge.urlsToConsult?.join(', ') ?? '';
+  }
 }
