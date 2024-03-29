@@ -8,7 +8,9 @@ module('unit | Component | form/challenge', function(hooks) {
   let component;
 
   hooks.beforeEach(function() {
-    component = createGlimmerComponent('component:form/challenge');
+    component = createGlimmerComponent('component:form/challenge', {
+      challenge: {},
+    });
   });
 
   test('it should add illustration', function(assert) {

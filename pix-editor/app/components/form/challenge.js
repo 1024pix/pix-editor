@@ -9,6 +9,7 @@ export default class ChallengeForm extends Component {
   @service store;
 
   @tracked languageOptions = [];
+  urlsToConsult = '';
 
   constructor() {
     super(...arguments);
@@ -21,6 +22,8 @@ export default class ChallengeForm extends Component {
       };
       this.languageOptions.push(option);
     }
+
+    this.urlsToConsult = this.args.challenge.urlsToConsult?.join(', ') ?? '';
   }
 
   options = {
@@ -135,6 +138,10 @@ export default class ChallengeForm extends Component {
     return this.options.contextualizedFields.filter(({ value }) => this.args.challenge.contextualizedFields?.includes(value));
   }
 
+  get displayUrlsToConsult() {
+    return this.args.edition || this.args.challenge.urlsToConsult;
+  }
+
   @action
   setChallengeType({ value }) {
     this.args.challenge.type = value;
@@ -191,5 +198,11 @@ export default class ChallengeForm extends Component {
   @action
   setContextualizedFields(selectedOptions) {
     this.args.challenge.contextualizedFields = selectedOptions.map(({ value }) => value);
+  }
+
+  @action
+  setUrlsToConsult(value) {
+    const trimmedValue = value.trim();
+    this.args.challenge.urlsToConsult = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
   }
 }

@@ -82,4 +82,40 @@ module('Integration | Component | challenge-form', function(hooks) {
     await new Promise(resolve => setTimeout(resolve, 400));
     await settled();
   });
+  module('when `edition` is `false`', function () {
+    test('it should display a list of url to consult when challenge have', async function(assert) {
+      // given
+      const store = this.owner.lookup('service:store');
+      const challengeData = store.createRecord('challenge',{
+        id: 'recChallenge0',
+        genealogy: 'Prototype 1',
+        urlsToConsult: ['jean', 'jacques', 'azimut']
+      });
+      this.set('challengeData', challengeData);
+
+      // When
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{false}}/>`);
+
+      // then
+      const urlsToConsultInput = await find('[data-test-challenge-urls-to-consult] input');
+
+      assert.strictEqual(urlsToConsultInput.value, 'jean, jacques, azimut');
+    });
+
+    test('it should not display a list of url to consult when challenge have not', async function(assert) {
+      const store = this.owner.lookup('service:store');
+      const challengeData = store.createRecord('challenge',{
+        id: 'recChallenge0',
+        genealogy: 'Prototype 1',
+        urlsToConsult: null
+      });
+      this.set('challengeData', challengeData);
+
+      // When
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{false}}/>`);
+
+      // then
+      assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
+    });
+  });
 });

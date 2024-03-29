@@ -4,6 +4,6 @@
     {{#if @label}}
       <label class="label-input" for={{@id}} >{{@label}} : </label>
     {{/if}}
-    <Input id={{@id}} @value={{@value}} placeholder={{@placeholder}} readonly={{not @edition}} />
+    <Input id={{@id}} @value={{@value}} placeholder={{@placeholder}} readonly={{not @edition}} {{on "change" this.change}} />
   </div>
 </div>
