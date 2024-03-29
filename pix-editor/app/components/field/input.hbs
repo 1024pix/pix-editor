@@ -1,5 +1,14 @@
 <div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
   <p>{{@title}}</p>
+  {{#if @helpContent}}
+    <div class="ui compact icon right floated button">
+      <i class="help icon">
+        <EmberTooltip @side="left-start" @tooltipClass="custom-tooltip">
+          {{this.safeHelpContent}}
+        </EmberTooltip>
+      </i>
+    </div>
+  {{/if}}
   <div class="ui input">
     {{#if @label}}
       <label class="label-input" for={{@id}} >{{@label}} : </label>

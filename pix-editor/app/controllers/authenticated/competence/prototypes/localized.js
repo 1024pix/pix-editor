@@ -20,6 +20,7 @@ export default class LocalizedController extends Controller {
   @tracked displayIllustration = false;
 
   urlsToConsult = '';
+  helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
