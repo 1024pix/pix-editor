@@ -47,7 +47,7 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
-    const urlsToConsultInput = await screen.findByLabelText('URLs à consulter :');
+    const urlsToConsultInput = await screen.findByLabelText('URLs externes à consulter :');
 
     assert.strictEqual(urlsToConsultInput.value, 'mon-url.com, mon-autre-url.com');
     assert.deepEqual(challenge.urlsToConsult, ['mon-url.com', 'mon-autre-url.com']);
