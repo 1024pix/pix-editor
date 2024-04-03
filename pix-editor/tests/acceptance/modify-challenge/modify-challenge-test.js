@@ -42,7 +42,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     // otherwise test is flacky and fails with error message
     // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
     await runTask(this, async () => {}, 200);
-    await fillIn('#challenge-urls-to-consult', 'mon-url.com, mon-autre-url.com');
+    await fillIn('#challenge-urls-to-consult', 'https://mon-url.com, mon-autre-url.com');
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -50,7 +50,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     const challenge = await store.peekRecord('challenge', 'recChallenge1');
 
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
-    assert.deepEqual(challenge.urlsToConsult, ['mon-url.com', 'mon-autre-url.com']);
+    assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
   });
 });
 

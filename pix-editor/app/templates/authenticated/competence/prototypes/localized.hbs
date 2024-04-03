@@ -71,6 +71,12 @@
           @id="localized-challenge-urls-to-consult"
           data-test-localized-challenge-urls-to-consult
         />
+        {{#if this.invalidUrlsToConsult}}
+          <p class="ui red message" data-test-invalid-urls-to-consult>
+            URLs invalides :
+            {{this.invalidUrlsToConsult}}
+          </p>
+        {{/if}}
       {{/if}}
       {{#unless this.edition}}
         <Field::Input

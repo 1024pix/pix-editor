@@ -19,7 +19,8 @@ export default class LocalizedController extends Controller {
   @tracked popInImageSrc = null;
   @tracked displayIllustration = false;
 
-  urlsToConsult = '';
+  @tracked urlsToConsult = '';
+  @tracked invalidUrlsToConsult = '';
   helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
 
   @controller('authenticated.competence') competenceController;
@@ -122,8 +123,21 @@ export default class LocalizedController extends Controller {
 
   @action
   setUrlsToConsult(value) {
+    const invalidUrls = [];
     const trimmedValue = value.trim();
-    this.localizedChallenge.urlsToConsult = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    values = values.filter((value) => {
+      try {
+        new URL(value);
+        return true;
+      } catch (e) {
+        invalidUrls.push(value);
+        return false;
+      }
+    });
+    this.invalidUrlsToConsult = invalidUrls.join(', ');
+    this.localizedChallenge.urlsToConsult = values;
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
   }
 
   @action

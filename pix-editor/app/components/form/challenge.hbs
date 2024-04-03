@@ -134,6 +134,12 @@
         data-test-challenge-urls-to-consult
       />
     </div>
+    {{#if this.invalidUrlsToConsult}}
+        <p class="ui red message" data-test-invalid-urls-to-consult>
+          URLs invalides :
+          {{this.invalidUrlsToConsult}}
+        </p>
+    {{/if}}
   {{/if}}
   <Field::Illustration
     @title="Illustration"

@@ -1,6 +1,7 @@
 import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { click, find, findAll, render, settled } from '@ember/test-helpers';
+import { click, find, findAll, settled } from '@ember/test-helpers';
+import { fillByLabel, render } from '@1024pix/ember-testing-library';
 import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
 
@@ -82,6 +83,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     await new Promise(resolve => setTimeout(resolve, 400));
     await settled();
   });
+
   module('when `edition` is `false`', function () {
     test('it should display a list of url to consult when challenge have', async function(assert) {
       // given
@@ -116,6 +118,28 @@ module('Integration | Component | challenge-form', function(hooks) {
 
       // then
       assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
+    });
+  });
+
+  module('when `edition` is `true`', function() {
+    test('it should filter invalid url and display it', async function(assert) {
+      // given
+
+      const store = this.owner.lookup('service:store');
+      const challengeData = store.createRecord('challenge',{
+        id: 'recChallenge0',
+        genealogy: 'Prototype 1',
+        urlsToConsult: ['https://toot.fr']
+      });
+      this.set('challengeData', challengeData);
+
+      // When
+      await render(hbs`<Form::Challenge @challenge={{this.challengeData}} @edition={{true}}/>`);
+      await fillByLabel('URLs externes à consulter :', 'https://toot.fr, toot.fr, http://toot.fr');
+
+      // then
+      assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : toot.fr');
+      assert.deepEqual(challengeData.urlsToConsult, ['https://toot.fr', 'http://toot.fr']);
     });
   });
 });

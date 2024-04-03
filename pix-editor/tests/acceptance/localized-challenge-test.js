@@ -81,5 +81,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     const input = await screen.findByLabelText('Embed URL :');
     assert.strictEqual(input.value, 'https://mon-site.fr/my-nl-link.html');
   });
+
+
 });
 

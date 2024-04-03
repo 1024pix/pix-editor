@@ -14,5 +14,6 @@ export default class LocalizedPrototypeRoute extends Route {
     super.setupController(...arguments);
     const localizedChallenge = model.localizedChallenge;
     controller.urlsToConsult = localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    controller.invalidUrlsToConsult = '';
   }
 }

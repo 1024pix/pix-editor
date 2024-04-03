@@ -9,7 +9,8 @@ export default class ChallengeForm extends Component {
   @service store;
 
   @tracked languageOptions = [];
-  urlsToConsult = '';
+  @tracked invalidUrlsToConsult = '';
+  @tracked urlsToConsult = '';
 
   constructor() {
     super(...arguments);
@@ -203,7 +204,20 @@ export default class ChallengeForm extends Component {
 
   @action
   setUrlsToConsult(value) {
+    const invalidUrls = [];
     const trimmedValue = value.trim();
-    this.args.challenge.urlsToConsult = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    values = values.filter((value) => {
+      try {
+        new URL(value);
+        return true;
+      } catch (e) {
+        invalidUrls.push(value);
+        return false;
+      }
+    });
+    this.invalidUrlsToConsult = invalidUrls.join(', ');
+    this.args.challenge.urlsToConsult = values;
+    this.urlsToConsult = this.args.challenge.urlsToConsult?.join(', ') ?? '';
   }
 }

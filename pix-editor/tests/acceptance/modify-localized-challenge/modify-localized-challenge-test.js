@@ -1,10 +1,9 @@
 import { module, test } from 'qunit';
-import { visit, clickByText } from '@1024pix/ember-testing-library';
-import { findAll, click, fillIn } from '@ember/test-helpers';
+import { visit, clickByText, fillByLabel } from '@1024pix/ember-testing-library';
+import { findAll, click } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { runTask } from 'ember-lifeline';
 
 module('Acceptance | Modify-Localized-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -40,17 +39,15 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
 
     await clickByText('Modifier');
 
-    await fillIn('#localized-challenge-urls-to-consult', 'mon-url.com, mon-autre-url.com');
-    await runTask(this, async () => {}, 200);
+    await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
     const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
     await click(saveButton);
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
-    const urlsToConsultInput = await screen.findByLabelText('URLs externes à consulter :');
 
-    assert.strictEqual(urlsToConsultInput.value, 'mon-url.com, mon-autre-url.com');
-    assert.deepEqual(challenge.urlsToConsult, ['mon-url.com', 'mon-autre-url.com']);
+    assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : mon-autre-url.com');
+    assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
   });
 });
 
