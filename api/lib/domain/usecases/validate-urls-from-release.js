@@ -87,20 +87,20 @@ function findSkillsNameFromTutorial(tutorial, release) {
   return skills.map((s) => s.name).join(' ');
 }
 
-export function findUrlsFromChallenges(challenges, release) {
+export function findUrlsFromChallenges(challenges, release, localizedChallengesById) {
   return challenges.flatMap((challenge) => {
     const functions = [
       findUrlsInstructionFromChallenge,
       findUrlsProposalsFromChallenge,
       findUrlsSolutionFromChallenge,
-      findUrlsSolutionToDisplayFromChallenge
+      findUrlsSolutionToDisplayFromChallenge,
+      (challenge) => localizedChallengesById[challenge.id][0].urlsToConsult,
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
         return { id: [findCompetenceNameFromChallenge(challenge, release), findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status].join(';'), url };
       });
-
     return _.uniqBy(urls, 'url');
   });
 }
@@ -175,17 +175,17 @@ function getDataToUpload(analyzedLines) {
   });
 }
 
-export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository }) {
+export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository, localizedChallengeRepository }) {
   const release = await releaseRepository.getLatestRelease();
 
-  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository });
+  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository });
   await checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository }) {
+async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository }) {
   const challenges = getLiveChallenges(release.content);
-
-  const urlList = findUrlsFromChallenges(challenges, release.content);
+  const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
+  const urlList = findUrlsFromChallenges(challenges, release.content, localizedChallengesById);
 
   const analyzedLines = await analyzeUrls(urlList);
   const dataToUpload = getDataToUpload(analyzedLines);

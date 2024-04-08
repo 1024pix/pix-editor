@@ -1,14 +1,15 @@
 import { describe, expect, it } from 'vitest';
+import { domainBuilder } from '../../../test-helper.js';
 import {
+  findUrlsFromChallenges,
+  findUrlsFromTutorials,
   findUrlsInMarkdown,
   findUrlsInstructionFromChallenge,
   findUrlsProposalsFromChallenge,
   findUrlsSolutionFromChallenge,
   findUrlsSolutionToDisplayFromChallenge,
-  findUrlsFromChallenges,
-  getLiveChallenges,
-  findUrlsFromTutorials
-} from '../../../../lib/domain/usecases/validate-urls-from-release.js';
+  getLiveChallenges
+} from '../../../../lib/domain/usecases/index.js';
 
 describe('Check urls from release', function() {
   describe('#findUrlsInMarkdown', function() {
@@ -130,7 +131,12 @@ describe('Check urls from release', function() {
   });
 
   describe('#findUrlsFromChallenges', function() {
-    it('should find urls from challenges', function() {
+    it('should find urls from challenges', async function() {
+      const localizedChallengesById = {
+        'challenge1': [domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] })],
+        'challenge2': [domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] })],
+        'challenge3': [domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] })],
+      };
       const release = {
         competences: [
           {
@@ -188,12 +194,14 @@ describe('Check urls from release', function() {
         { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://example.net/' },
         { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
         { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://solution_example.net/' },
+        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'http://google.com' },
+        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://zouzou.fr' },
         { id: ';;challenge2;validé', url: 'https://example.fr/' },
+        { id: ';;challenge2;validé', url: 'https://editor.pix.fr' },
         { id: 'competence 1.1;@mySkill2;challenge3;validé', url: 'https://solutionToDisplay_example.org/' },
       ];
 
-      const urls = findUrlsFromChallenges(challenges, release);
-
+      const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById);
       expect(urls).to.deep.equal(expectedOutput);
     });
   });
