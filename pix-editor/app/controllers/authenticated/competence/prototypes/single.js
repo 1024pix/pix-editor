@@ -36,6 +36,9 @@ export default class SingleController extends Controller {
   @service storage;
   @service store;
 
+  @tracked invalidUrlsToConsult = '';
+  @tracked urlsToConsult = '';
+
   deletedFiles = [];
 
   get maximized() {
@@ -177,6 +180,8 @@ export default class SingleController extends Controller {
     this.challenge.rollbackAttributes();
     await this.challenge.files;
     this.challenge.files.forEach((file) => file.rollbackAttributes());
+    this.urlsToConsult = this.challenge.urlsToConsult?.join(', ') ?? '';
+    this.invalidUrlsToConsult = '';
     this.deletedFiles = [];
     if (!this.wasMaximized) {
       this.minimize();
@@ -421,6 +426,25 @@ export default class SingleController extends Controller {
       removedFile.deleteRecord();
       this.deletedFiles.push(removedFile);
     }
+  }
+
+  @action
+  setUrlsToConsult(value) {
+    const invalidUrls = [];
+    const trimmedValue = value.trim();
+    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    values = values.filter((value) => {
+      try {
+        new URL(value);
+        return true;
+      } catch (e) {
+        invalidUrls.push(value);
+        return false;
+      }
+    });
+    this.invalidUrlsToConsult = invalidUrls.join(', ');
+    this.challenge.urlsToConsult = values;
+    this.urlsToConsult = this.challenge.urlsToConsult?.join(', ') ?? '';
   }
 
   _saveCheck(challenge) {

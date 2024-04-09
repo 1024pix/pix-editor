@@ -1,9 +1,10 @@
 import { module, test } from 'qunit';
-import { visit, findAll, click, find, fillIn } from '@ember/test-helpers';
+import { findAll, click, find, fillIn } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Modify-Challenge', function(hooks) {
   setupApplicationTest(hooks);
@@ -50,6 +51,30 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     const challenge = await store.peekRecord('challenge', 'recChallenge1');
 
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
+  });
+
+  test('modify a challenge\'s urlsToConsult', async function(assert) {
+    // when
+    const store = this.owner.lookup('service:store');
+
+    const screen = await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+
+    assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
+
+    await clickByText('Modifier');
+
+    await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
+    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
+    await click(saveButton);
+
+    // then
+    const challenge = await store.peekRecord('challenge', 'recChallenge1');
+
+    assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : mon-autre-url.com');
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
   });
 });

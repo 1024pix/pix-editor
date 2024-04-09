@@ -9,8 +9,6 @@ export default class ChallengeForm extends Component {
   @service store;
 
   @tracked languageOptions = [];
-  @tracked invalidUrlsToConsult = '';
-  @tracked urlsToConsult = '';
 
   constructor() {
     super(...arguments);
@@ -23,8 +21,6 @@ export default class ChallengeForm extends Component {
       };
       this.languageOptions.push(option);
     }
-
-    this.urlsToConsult = this.args.challenge.urlsToConsult?.join(', ') ?? '';
   }
 
   options = {
@@ -200,24 +196,5 @@ export default class ChallengeForm extends Component {
   @action
   setContextualizedFields(selectedOptions) {
     this.args.challenge.contextualizedFields = selectedOptions.map(({ value }) => value);
-  }
-
-  @action
-  setUrlsToConsult(value) {
-    const invalidUrls = [];
-    const trimmedValue = value.trim();
-    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
-    values = values.filter((value) => {
-      try {
-        new URL(value);
-        return true;
-      } catch (e) {
-        invalidUrls.push(value);
-        return false;
-      }
-    });
-    this.invalidUrlsToConsult = invalidUrls.join(', ');
-    this.args.challenge.urlsToConsult = values;
-    this.urlsToConsult = this.args.challenge.urlsToConsult?.join(', ') ?? '';
   }
 }

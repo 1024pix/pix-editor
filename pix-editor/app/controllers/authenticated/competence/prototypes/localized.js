@@ -170,6 +170,8 @@ export default class LocalizedController extends Controller {
   @action async cancelEdit() {
     this.edition = false;
     this.localizedChallenge.rollbackAttributes();
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    this.invalidUrlsToConsult = '';
     await this.model.files;
     this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
     this.deletedFiles = [];

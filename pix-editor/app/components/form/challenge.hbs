@@ -126,18 +126,18 @@
     <div class="field">
       <Field::Input
         @label="URLs externes à consulter"
-        @value={{this.urlsToConsult}}
-        @change={{this.setUrlsToConsult}}
+        @value={{@urlsToConsult}}
+        @change={{@setUrlsToConsult}}
         @edition={{@edition}}
         @helpContent={{this.helpUrlsToConsult}}
         @id="challenge-urls-to-consult"
         data-test-challenge-urls-to-consult
       />
     </div>
-    {{#if this.invalidUrlsToConsult}}
+    {{#if @invalidUrlsToConsult}}
         <p class="ui red message" data-test-invalid-urls-to-consult>
           URLs invalides :
-          {{this.invalidUrlsToConsult}}
+          {{@invalidUrlsToConsult}}
         </p>
     {{/if}}
   {{/if}}
