@@ -211,6 +211,7 @@ export default class SingleController extends Controller {
         this.edition = false;
         this.displayAlternativeInstructionsField = false;
         this.displaySolutionToDisplayField = false;
+        this.invalidUrlsToConsult = '';
         if (!this.wasMaximized) {
           this.minimize();
         }

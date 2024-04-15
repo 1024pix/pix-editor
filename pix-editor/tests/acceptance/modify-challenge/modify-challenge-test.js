@@ -68,14 +68,17 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     await clickByText('Modifier');
 
     await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
-    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
-    await click(saveButton);
 
     // then
     const challenge = await store.peekRecord('challenge', 'recChallenge1');
-
     assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : mon-autre-url.com');
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
+
+    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
+    await click(saveButton);
+    await clickByText('Valider');
+
+    assert.dom('[data-test-invalid-urls-to-consult]').doesNotExist();
   });
 });
 

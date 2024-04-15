@@ -189,6 +189,7 @@ export default class LocalizedController extends Controller {
       await this._saveAttachments(this.localizedChallenge);
       await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
+      this.invalidUrlsToConsult = '';
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');
     } catch (error) {

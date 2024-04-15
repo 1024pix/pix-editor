@@ -40,14 +40,18 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     await clickByText('Modifier');
 
     await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
-    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
-    await click(saveButton);
+
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');
 
     assert.dom('[data-test-invalid-urls-to-consult]').hasText('URLs invalides : mon-autre-url.com');
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
+
+    const saveButton = await screen.findByRole('button', { name: 'Enregistrer' });
+    await click(saveButton);
+
+    assert.dom('[data-test-invalid-urls-to-consult]').doesNotExist();
   });
 });
 
