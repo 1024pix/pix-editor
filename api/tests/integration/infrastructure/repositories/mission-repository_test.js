@@ -10,15 +10,6 @@ import {
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 
-function buildLocalizedChallenges(mockedLearningContent) {
-  mockedLearningContent.challenges.forEach((airtableChallenge) => {
-    databaseBuilder.factory.buildLocalizedChallenge({
-      id: airtableChallenge.fields['id persistant'],
-      challengeId: airtableChallenge.fields['id persistant']
-    });
-  });
-}
-
 describe('Integration | Repository | mission-repository', function() {
 
   beforeEach(async function() {
@@ -207,6 +198,17 @@ describe('Integration | Repository | mission-repository', function() {
         status: Mission.status.ACTIVE,
         createdAt: new Date('2010-01-04'),
         content: {
+          steps: [{
+            tutorialChallenges: [
+              ['challengeTuto1'],
+            ],
+            trainingChallenges: [
+              ['challengeTraining1'],
+            ],
+            validationChallenges: [
+              ['challengeValidation1'],
+            ],
+          }],
           tutorialChallenges: [
             ['challengeTuto1'],
           ],
@@ -259,6 +261,13 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
           content: {
+            steps: [{
+              tutorialChallenges: [],
+              trainingChallenges: [],
+              validationChallenges: [
+                ['challengeValidationValidé', 'challengeValidationProposé'],
+              ],
+            }],
             tutorialChallenges: [],
             trainingChallenges: [],
             validationChallenges: [
@@ -311,6 +320,16 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
           content: {
+            steps: [{
+              tutorialChallenges: [],
+              trainingChallenges: [],
+              validationChallenges: [
+                ['firstChallengeValidation'],
+                ['secondChallengeValidation'],
+                ['thirdChallengeValidation'],
+                ['fourthChallengeValidation'],
+              ],
+            }],
             tutorialChallenges: [],
             trainingChallenges: [],
             validationChallenges: [
@@ -352,12 +371,6 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
 
       });
@@ -391,14 +404,7 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
-
       });
     });
     context('Without tubes', async function() {
@@ -430,12 +436,6 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
 
       });
@@ -469,12 +469,6 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
 
       });
@@ -508,12 +502,6 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
 
       });
@@ -546,12 +534,6 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
-          content: {
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [],
-            dareChallenges: [],
-          },
         })]);
       });
     });
@@ -571,7 +553,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         const savedMission = await save(mission);
         expectTypeOf(savedMission).toEqualTypeOf('Mission');
-        await expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...mission, id: savedMission.id }), ['createdAt']));
+        expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...mission, id: savedMission.id }), ['createdAt']));
 
         const expectedMission = {
           id: savedMission.id,
@@ -581,7 +563,7 @@ describe('Integration | Repository | mission-repository', function() {
         };
 
         const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
-        await expect(missionFromDb).to.deep.equal(expectedMission);
+        expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
       it('should store I18n for mission', async function() {
@@ -637,7 +619,7 @@ describe('Integration | Repository | mission-repository', function() {
         const updatedMission = await save(missionToUpdate);
 
         expectTypeOf(updatedMission).toEqualTypeOf('Mission');
-        await expect(omit(updatedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...missionToUpdate, id: updatedMission.id }), ['createdAt']));
+        expect(omit(updatedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...missionToUpdate, id: updatedMission.id }), ['createdAt']));
 
         const expectedMission = {
           id: updatedMission.id,
@@ -647,7 +629,7 @@ describe('Integration | Repository | mission-repository', function() {
         };
 
         const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
-        await expect(missionFromDb).to.deep.equal(expectedMission);
+        expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
       it('should store I18n for mission', async function() {
@@ -689,4 +671,13 @@ describe('Integration | Repository | mission-repository', function() {
     });
   });
 });
+
+function buildLocalizedChallenges(mockedLearningContent) {
+  mockedLearningContent.challenges.forEach((airtableChallenge) => {
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: airtableChallenge.fields['id persistant'],
+      challengeId: airtableChallenge.fields['id persistant']
+    });
+  });
+}
 
