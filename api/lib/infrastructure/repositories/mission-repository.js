@@ -60,9 +60,11 @@ export async function list() {
     }
 
     const content = {
-      tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
-      trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
-      validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
+      steps: [{
+        tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
+        trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
+        validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
+      }],
       dareChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_de'),
     };
     return new Mission({ ...mission, content });
