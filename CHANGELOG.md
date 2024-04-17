@@ -1,5 +1,24 @@
 
 
+## v3.141.0 (17/04/2024)
+
+
+### :rocket: Amélioration
+- [#650](https://github.com/1024pix/pix-editor/pull/650) [FEATURE] Introduire le concept d'étape d'une mission (PIX-11699).
+
+### :bug: Correction
+- [#636](https://github.com/1024pix/pix-editor/pull/636) [BUGFIX] Le fichier de migration d'ajout de la colonne `géographie` est mal écrit pour le rollback.
+
+### :arrow_up: Montée de version
+- [#645](https://github.com/1024pix/pix-editor/pull/645) [BUMP] Update dependency ember-template-lint to v6 (pix-editor).
+- [#647](https://github.com/1024pix/pix-editor/pull/647) [BUMP] Lock file maintenance (challenge-parser).
+- [#646](https://github.com/1024pix/pix-editor/pull/646) [BUMP] Lock file maintenance (api).
+- [#644](https://github.com/1024pix/pix-editor/pull/644) [BUMP] Update dependency node to v20.12.0.
+- [#641](https://github.com/1024pix/pix-editor/pull/641) [BUMP] Lock file maintenance (pix-editor).
+- [#642](https://github.com/1024pix/pix-editor/pull/642) [BUMP] Lock file maintenance (scripts).
+- [#639](https://github.com/1024pix/pix-editor/pull/639) [BUMP] Lock file maintenance (api).
+- [#640](https://github.com/1024pix/pix-editor/pull/640) [BUMP] Lock file maintenance (challenge-parser).
+
 ## v3.140.0 (28/03/2024)
 
 
