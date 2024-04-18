@@ -19,6 +19,10 @@ export default class LocalizedController extends Controller {
   @tracked popInImageSrc = null;
   @tracked displayIllustration = false;
 
+  @tracked urlsToConsult = '';
+  @tracked invalidUrlsToConsult = '';
+  helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
+
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
 
@@ -113,6 +117,29 @@ export default class LocalizedController extends Controller {
     return url.href;
   }
 
+  get displayUrlsToConsult() {
+    return this.edition || this.localizedChallenge.urlsToConsult;
+  }
+
+  @action
+  setUrlsToConsult(value) {
+    const invalidUrls = [];
+    const trimmedValue = value.trim();
+    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    values = values.filter((value) => {
+      try {
+        new URL(value);
+        return true;
+      } catch (e) {
+        invalidUrls.push(value);
+        return false;
+      }
+    });
+    this.invalidUrlsToConsult = invalidUrls.join(', ');
+    this.localizedChallenge.urlsToConsult = values;
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
+  }
+
   @action
   showIllustration() {
     this.displayIllustration = true;
@@ -143,6 +170,8 @@ export default class LocalizedController extends Controller {
   @action async cancelEdit() {
     this.edition = false;
     this.localizedChallenge.rollbackAttributes();
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    this.invalidUrlsToConsult = '';
     await this.model.files;
     this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
     this.deletedFiles = [];
@@ -160,6 +189,7 @@ export default class LocalizedController extends Controller {
       await this._saveAttachments(this.localizedChallenge);
       await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
+      this.invalidUrlsToConsult = '';
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');
     } catch (error) {

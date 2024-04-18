@@ -100,6 +100,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         embedUrl: null,
         fileIds: [],
         geography: null,
+        urlsToConsult: null,
       }),
       new LocalizedChallenge({
         id: null,
@@ -109,6 +110,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         embedUrl: null,
         fileIds: [],
         geography: null,
+        urlsToConsult: null,
       }),
     ]);
   });

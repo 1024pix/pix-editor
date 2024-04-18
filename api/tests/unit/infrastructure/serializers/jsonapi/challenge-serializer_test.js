@@ -6,7 +6,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
     it('should serialize a Challenge', () => {
       // Given
-      const localizedChallenge = domainBuilder.buildLocalizedChallenge({ id: 'recwWzTquPlvIl4So', geography: 'MZ' });
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: 'recwWzTquPlvIl4So',
+        geography: 'MZ',
+        urlsToConsult: ['mylink1', 'mylink2']
+      });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
         localizedChallenges: [localizedChallenge],
@@ -49,6 +53,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             locales: ['fr'],
             'alternative-locales': ['en', 'nl'],
             geography: 'Mozambique',
+            'urls-to-consult': ['mylink1', 'mylink2'],
             'auto-reply': false,
             focusable: false,
             'updated-at': '2021-10-04',
@@ -94,6 +99,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         geography: 'MD',
         embedUrl: 'https://github.io/page/epreuve.html',
+        urlsToConsult: ['mylink1', 'mylink2'],
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
@@ -130,6 +136,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             responsive: 'non',
             locales: [],
             geography: 'Moldavie',
+            'urls-to-consult': ['mylink1', 'mylink2'],
             'auto-reply': false,
             focusable: false,
             competenceId: 'recsvLz0W2ShyfD63',

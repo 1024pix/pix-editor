@@ -56,6 +56,7 @@ export default class ChallengeForm extends Component {
 
   helpInstructions = '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
 
+  helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
 
   get helpSuggestions() {
     const type = this.args.challenge.type;
@@ -133,6 +134,10 @@ export default class ChallengeForm extends Component {
 
   get contextualizedFields() {
     return this.options.contextualizedFields.filter(({ value }) => this.args.challenge.contextualizedFields?.includes(value));
+  }
+
+  get displayUrlsToConsult() {
+    return this.args.edition || this.args.challenge.urlsToConsult;
   }
 
   @action

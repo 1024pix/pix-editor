@@ -113,8 +113,16 @@ export class Challenge {
     return getCountryCode(this.geography);
   }
 
+  get #primaryLocalizedChallenge() {
+    return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale);
+  }
+
   get #primaryEmbedUrl() {
-    return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale).embedUrl;
+    return this.#primaryLocalizedChallenge.embedUrl;
+  }
+
+  get #primaryUrlsToConsult() {
+    return this.#primaryLocalizedChallenge.urlsToConsult;
   }
 
   static get STATUSES() {
@@ -166,6 +174,7 @@ export class Challenge {
     this.status = this.#translateStatus(localizedChallenge);
     this.embedUrl = this.#translateEmbedUrl(localizedChallenge);
     this.geography = getCountryName(localizedChallenge.geography);
+    this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)
@@ -186,6 +195,11 @@ export class Challenge {
     const url = new URL(this.#primaryEmbedUrl);
     url.searchParams.set('lang', localizedChallenge.locale);
     return url.href;
+  }
+
+  #translateUrlsToConsult(localizedChallenge) {
+    if (!this.#primaryUrlsToConsult) return null;
+    return localizedChallenge.urlsToConsult;
   }
 }
 

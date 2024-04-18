@@ -61,6 +61,23 @@
         @options={{this.options.geography}}
         @setValue={{fn (mut this.localizedChallenge.geography)}}
       />
+      {{#if this.displayUrlsToConsult}}
+        <Field::Input
+          @label="URLs externes à consulter"
+          @value={{this.urlsToConsult}}
+          @change={{this.setUrlsToConsult}}
+          @edition={{this.edition}}
+          @helpContent={{this.helpUrlsToConsult}}
+          @id="localized-challenge-urls-to-consult"
+          data-test-localized-challenge-urls-to-consult
+        />
+        {{#if this.invalidUrlsToConsult}}
+          <p class="ui red message" data-test-invalid-urls-to-consult>
+            URLs invalides :
+            {{this.invalidUrlsToConsult}}
+          </p>
+        {{/if}}
+      {{/if}}
       {{#unless this.edition}}
         <Field::Input
           @id="localized-challenge-id"

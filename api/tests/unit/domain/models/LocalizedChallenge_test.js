@@ -28,6 +28,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       const locale = 'en';
       const embedUrl = 'mon/embed.url';
       const geography = 'JP';
+      const urlsToConsult = 'http://mon-url-a-consulter.com';
 
       // when
       const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
@@ -35,6 +36,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         locale,
         embedUrl,
         geography,
+        urlsToConsult,
       });
 
       // then
@@ -46,6 +48,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         locale: 'en',
         status: null,
         geography: 'JP',
+        urlsToConsult: 'http://mon-url-a-consulter.com',
       });
     });
   });
@@ -70,6 +73,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         embedUrl: null,
         fileIds: [],
         geography: null,
+        urlsToConsult: null,
       });
     });
   });
