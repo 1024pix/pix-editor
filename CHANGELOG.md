@@ -1,5 +1,11 @@
 
 
+## v3.142.0 (23/04/2024)
+
+
+### :rocket: Amélioration
+- [#638](https://github.com/1024pix/pix-editor/pull/638) [FEATURE] Ajouter un champ pour renseigner la/les URL consultées par l'utilisateur pour l'épreuve (PIX-11735).
+
 ## v3.141.0 (17/04/2024)
 
 
