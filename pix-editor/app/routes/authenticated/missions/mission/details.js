@@ -10,9 +10,9 @@ export default class MissionDetailsRoute extends Route {
     const competences = await this.currentData.getCompetencesFromPix1DFramework();
     const missionCompetence = competences.filter((competence) => competence.pixId === mission.competenceId);
     let missionThematicName;
-    if (mission.thematicId) {
+    if (mission.thematicIds) {
       const thematics = await this.currentData.getThematicsFromPix1DFramework();
-      const missionThematic = thematics.filter((thematic) => thematic.id === mission.thematicId);
+      const missionThematic = thematics.filter((thematic) => thematic.id === mission.thematicIds);
       missionThematicName = missionThematic[0].name;
     }
     const userMayCreateOrEditMissions = this.access.mayCreateOrEditMission();

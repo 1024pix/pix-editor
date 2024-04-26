@@ -35,7 +35,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           status: Mission.status.ACTIVE,
@@ -63,7 +63,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           status: Mission.status.ACTIVE,
@@ -72,7 +72,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.INACTIVE,
@@ -181,7 +181,7 @@ describe('Integration | Repository | mission-repository', function() {
         status: Mission.status.ACTIVE,
         learningObjectives: 'Alt objectives',
         validatedObjectives: 'Alt validated objectives',
-        thematicId: 'thematic1',
+        thematicIds: 'thematic1',
       });
 
       await databaseBuilder.commit();
@@ -192,7 +192,7 @@ describe('Integration | Repository | mission-repository', function() {
         id: 2,
         name_i18n: { fr: 'Alt name' },
         competenceId: 'competenceId',
-        thematicId: 'thematic1',
+        thematicIds: 'thematic1',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
         status: Mission.status.ACTIVE,
@@ -244,7 +244,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -255,7 +255,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -303,7 +303,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -314,7 +314,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -355,7 +355,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -366,7 +366,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -388,7 +388,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -399,7 +399,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -420,7 +420,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -431,7 +431,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -453,7 +453,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -464,7 +464,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -486,7 +486,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
         });
 
         await databaseBuilder.commit();
@@ -497,7 +497,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematic1',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -518,7 +518,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: null,
+          thematicIds: null,
         });
 
         await databaseBuilder.commit();
@@ -529,7 +529,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: null,
+          thematicIds: null,
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -545,7 +545,7 @@ describe('Integration | Repository | mission-repository', function() {
         const mission = new Mission({
           name_i18n: { fr: 'Mission impossible'  },
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -558,11 +558,11 @@ describe('Integration | Repository | mission-repository', function() {
         const expectedMission = {
           id: savedMission.id,
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -571,7 +571,7 @@ describe('Integration | Repository | mission-repository', function() {
         const mission = new Mission({
           name_i18n: { fr: 'Mission impossible'  },
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           learningObjectives_i18n:  { fr: 'au boulot' },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -610,7 +610,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: savedMission.id,
           name_i18n: { fr: 'Updated mission'  },
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -624,11 +624,11 @@ describe('Integration | Repository | mission-repository', function() {
         const expectedMission = {
           id: updatedMission.id,
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -640,7 +640,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: savedMission.id,
           name_i18n: { fr: 'Updated mission'  },
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: 'Etre la boss' },
           validatedObjectives_i18n: { fr: 'intermédiaire' },
           status: Mission.status.INACTIVE,

@@ -33,8 +33,8 @@ export default class MissionForm extends Component {
       this.selectedCompetenceId.setValue(this.args.mission.competenceId);
       this.selectedCompetenceId.validate();
       this.updateThemes(this.args.mission.competenceId);
-      if (this.args.mission.thematicId?.length > 0) {
-        this.selectedThematicId = this.args.mission.thematicId;
+      if (this.args.mission.thematicIds?.length > 0) {
+        this.selectedThematicId = this.args.mission.thematicIds;
       }
     }
   }
@@ -59,7 +59,7 @@ export default class MissionForm extends Component {
     const formData = {
       name: this.name.getValueForSubmit(),
       competenceId: this.selectedCompetenceId.value,
-      thematicId: this.selectedThematicId,
+      thematicIds: this.selectedThematicId,
       status: this.selectedStatus,
       learningObjectives: this.learningObjectives,
       validatedObjectives: this.validatedObjectives

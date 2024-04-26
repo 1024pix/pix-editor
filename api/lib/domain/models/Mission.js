@@ -3,7 +3,7 @@ export class Mission {
     id,
     name_i18n,
     competenceId,
-    thematicId,
+    thematicIds,
     createdAt,
     learningObjectives_i18n,
     validatedObjectives_i18n,
@@ -13,7 +13,7 @@ export class Mission {
     this.id = id;
     this.name_i18n = name_i18n;
     this.competenceId = competenceId;
-    this.thematicId = thematicId;
+    this.thematicIds = thematicIds;
     this.createdAt = createdAt;
     this.learningObjectives_i18n = learningObjectives_i18n;
     this.validatedObjectives_i18n = validatedObjectives_i18n;

@@ -12,7 +12,7 @@ export default class MissionEditController extends Controller {
       this.model.mission.name = formData.name;
       this.model.mission.competenceId = formData.competenceId;
       this.model.mission.status = formData.status;
-      this.model.mission.thematicId = formData.thematicId;
+      this.model.mission.thematicIds = formData.thematicIds;
       this.model.mission.validatedObjectives = formData.validatedObjectives;
       this.model.mission.learningObjectives = formData.learningObjectives;
       await this.model.mission.save();

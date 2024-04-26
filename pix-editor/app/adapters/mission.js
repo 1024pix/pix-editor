@@ -13,7 +13,7 @@ function preparePayloadForCreateAndUpdate(payload, adapterOptions) {
   payload.data.attributes.name = adapterOptions.name;
   payload.data.attributes.status = adapterOptions.status;
   payload.data.attributes['competence-id'] = adapterOptions.competenceId;
-  payload.data.attributes['thematic-id'] = adapterOptions.thematicId;
+  payload.data.attributes['thematic-ids'] = adapterOptions.thematicIds;
   payload.data.attributes['learning-objectives'] = adapterOptions.learningObjectives;
   payload.data.attributes['validated-objectives'] = adapterOptions.validatedObjectives;
   return payload;

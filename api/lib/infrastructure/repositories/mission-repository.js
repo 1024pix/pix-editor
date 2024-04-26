@@ -47,7 +47,7 @@ export async function list() {
   const challenges = await challengeRepository.list();
 
   const missionsWithContent = missions.map((mission) => {
-    const thematic = thematics.find((thematic) => thematic.id === mission.thematicId);
+    const thematic = thematics.find((thematic) => thematic.id === mission.thematicIds);
     if (!thematic) {
       logger.warn({ mission }, 'No thematic found for mission');
       return new Mission(mission);
@@ -106,7 +106,7 @@ export async function save(mission) {
   const [insertedMission] = await knex('missions').insert({
     id: mission.id,
     competenceId: mission.competenceId,
-    thematicId: mission.thematicId,
+    thematicIds: mission.thematicIds,
     status: mission.status
   }).onConflict('id')
     .merge()
@@ -125,7 +125,7 @@ function _toDomain(mission, translations) {
     createdAt: mission.createdAt,
     status: mission.status,
     competenceId: mission.competenceId,
-    thematicId: mission.thematicId,
+    thematicIds: mission.thematicIds,
     content: mission.content,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });

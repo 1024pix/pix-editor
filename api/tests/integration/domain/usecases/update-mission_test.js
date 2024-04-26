@@ -26,7 +26,7 @@ describe('Integration | Usecases | Update mission', function() {
         id: mission.id,
         name_i18n: { fr: 'Updated mission'  },
         competenceId: 'QWERTY',
-        thematicId: 'Thematic',
+        thematicIds: 'Thematic',
         learningObjectives_i18n:  { fr: null },
         validatedObjectives_i18n: { fr: 'Très bien' },
         status: Mission.status.INACTIVE,

@@ -199,7 +199,7 @@ describe('Integration | Repository | release-repository', function() {
         name: 'mission PG name',
         competenceId: 'competenceId',
         learningObjectives: 'Que tu sois le meilleur',
-        thematicId: 'thematicId',
+        thematicIds: 'thematicIds',
         validatedObjectives: 'Rien',
         status: Mission.status.INACTIVE,
       });
@@ -1396,7 +1396,7 @@ function _getRichCurrentContentDTO() {
       id: 123456789,
       name_i18n : { fr: 'mission PG name' },
       competenceId: 'competenceId',
-      thematicId: 'thematicId',
+      thematicIds: 'thematicIds',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.INACTIVE,
