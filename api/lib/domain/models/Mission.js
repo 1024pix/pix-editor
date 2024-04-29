@@ -31,15 +31,11 @@ Mission.status = status;
 
 class Content {
   constructor({
-    steps = [new Step()],
+    steps = [],
     dareChallenges = [],
   } = {}) {
     this.steps = steps.map((step) => new Step(step));
     this.dareChallenges = dareChallenges;
-    // for retro compatibility we keep former format (ie. without any step)
-    this.tutorialChallenges = steps[0].tutorialChallenges;
-    this.trainingChallenges = steps[0].trainingChallenges;
-    this.validationChallenges = steps[0].validationChallenges;
   }
 }
 

@@ -9,6 +9,7 @@ import {
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Mission } from '../../../../lib/domain/models/index.js';
+import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
 
 const {
   buildArea,
@@ -158,7 +159,7 @@ async function mockCurrentContent() {
       id: 1,
       name_i18n: { fr: 'Ma première mission' },
       competenceId: 'competenceId',
-      thematicIds: 'thematicId',
+      thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.ACTIVE,
@@ -167,7 +168,7 @@ async function mockCurrentContent() {
       id: 2,
       name_i18n: { fr: 'Alt name' },
       competenceId: 'competenceId',
-      thematicIds: 'thematicId',
+      thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
       status: Mission.status.INACTIVE,
@@ -222,7 +223,7 @@ async function mockCurrentContent() {
     id: 1,
     name: 'Ma première mission',
     competenceId: 'competenceId',
-    thematicIds: 'thematicId',
+    thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Que tu sois le meilleur',
     validatedObjectives: 'Rien',
     status: Mission.status.ACTIVE,
@@ -232,7 +233,7 @@ async function mockCurrentContent() {
     id: 2,
     name: 'Alt name',
     competenceId: 'competenceId',
-    thematicIds: 'thematicId',
+    thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Alt objectives',
     validatedObjectives: 'Alt validated objectives',
     status: Mission.status.INACTIVE,
@@ -461,22 +462,28 @@ async function mockContentForRelease() {
       isActive: true,
       challenges: ['recChallenge0'],
     }],
-    missions: [new Mission({
+    missions: [new MissionForRelease({
       id: 1,
       name_i18n: { fr: 'Ma première mission' },
       competenceId: 'competenceId',
-      thematicIds: 'thematicId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.ACTIVE,
-    }), new Mission({
+      content: {
+        dareChallenges: [],
+        steps: []
+      }
+    }), new MissionForRelease({
       id: 2,
       name_i18n: { fr: 'Alt name' },
       competenceId: 'competenceId',
-      thematicIds: 'thematicId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
       status: Mission.status.INACTIVE,
+      content: {
+        dareChallenges: [],
+        steps: []
+      }
     })],
   };
 
@@ -738,7 +745,7 @@ describe('Acceptance | Controller | release-controller', () => {
           id: 1,
           name: 'Ma première mission',
           competenceId: 'competenceId',
-          thematicIds: 'thematicId',
+          thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Que tu sois le meilleur',
           validatedObjectives: 'Rien',
           status: Mission.status.ACTIVE,
@@ -747,7 +754,7 @@ describe('Acceptance | Controller | release-controller', () => {
           id: 2,
           name: 'Alt name',
           competenceId: 'competenceId',
-          thematicIds: 'thematicId',
+          thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           status: Mission.status.INACTIVE,

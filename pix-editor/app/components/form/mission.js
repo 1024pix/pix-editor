@@ -186,7 +186,7 @@ class ThematicIdsField extends FormField {
   }
 
   validate() {
-    if (this.value.length === 0 || this.allThematicIdsExist()) {
+    if (this.value?.length === 0 || this.allThematicIdsExist()) {
       this.state = STATES.SUCCESS;
     } else {
       this.state = STATES.ERROR;
@@ -194,7 +194,7 @@ class ThematicIdsField extends FormField {
   }
 
   allThematicIdsExist() {
-    return this.value.split(',').every((thematicId) => this.availableThematicIds?.includes(thematicId.trim()));
+    return this.value?.split(',').every((thematicId) => this.availableThematicIds?.includes(thematicId.trim()));
   }
 
   getValueForSubmit() { return this.value.split(',').map((element)=> element.trim()).join(','); }
