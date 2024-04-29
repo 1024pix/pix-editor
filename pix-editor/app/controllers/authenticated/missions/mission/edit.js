@@ -7,7 +7,7 @@ export default class MissionEditController extends Controller {
   @service notifications;
 
   @action
-  async editMission(formData) {
+  async submitMission(formData) {
     try {
       this.model.mission.name = formData.name;
       this.model.mission.competenceId = formData.competenceId;

@@ -28,15 +28,14 @@
       {{on "focusout" this.validateCompetence}}
     ><:label>Compétence</:label></PixSelect>
 
-    <PixSelect
-      class="new-mission-form__select"
-      @hideDefaultOption={{true}}
-      @isDisabled={{not this.selectedCompetenceId.value}}
-      @options={{this.themeOptions}}
-      @onChange={{this.changeThematic}}
-      @value={{this.selectedThematicId}}
-      @isComputeWidthDisabled={{true}}
-    ><:label>Thématique</:label></PixSelect>
+    <PixInput
+      @id="thematic-ids"
+      @value={{this.thematicIds.value}}
+      @errorMessage="{{this.thematicIds.errorMessage}}"
+      @validationStatus={{this.thematicIds.state}}
+      {{on "focusout" this.validateThematicIds}}
+      {{on "keyup" this.updateThematicIds}}
+    ><:label>Liste des thématiques</:label></PixInput>
 
     <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
