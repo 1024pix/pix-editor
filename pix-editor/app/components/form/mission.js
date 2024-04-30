@@ -9,36 +9,39 @@ export default class MissionForm extends Component {
   @service store;
 
   @tracked name = new NameField();
-  @tracked selectedThematicId = null;
+  @tracked thematicIds = new ThematicIdsField();
   @tracked selectedCompetenceId = new CompetenceIdField();
   @tracked selectedStatus = 'ACTIVE';
   @tracked validatedObjectives = null;
   @tracked learningObjectives = null;
   @tracked errorMessages = A([]);
-  @tracked themeOptions = [];
   @tracked isSubmitting = false;
   @tracked isFormValid = false;
 
   constructor(...args) {
     super(...args);
-    if (this.args.mission.name?.length > 0) {
+    if (this.editMode()) {
       this.name.setValue(this.args.mission.name);
       this.name.validate();
       this.selectedStatus = this.args.mission.status;
       this.validatedObjectives = this.args.mission.validatedObjectives;
       this.learningObjectives = this.args.mission.learningObjectives;
       this.isFormValid = true;
+      this.thematicIds.setValue(this.args.mission.thematicIds);
     }
+
     if (this.args.mission.competenceId?.length > 0) {
       this.selectedCompetenceId.setValue(this.args.mission.competenceId);
       this.selectedCompetenceId.validate();
-      this.updateThemes(this.args.mission.competenceId);
-      if (this.args.mission.thematicId?.length > 0) {
-        this.selectedThematicId = this.args.mission.thematicId;
-      }
+      this.updateAvailableThematicIds(this.args.mission.competenceId);
     }
+
+    this.thematicIds.validate();
   }
 
+  editMode() {
+    return this.args.mission.name?.length > 0;
+  }
 
   get statusOptions() {
     return [{ value: 'ACTIVE', label: 'ACTIVE' }, { value: 'INACTIVE', label: 'INACTIVE' }];
@@ -50,7 +53,6 @@ export default class MissionForm extends Component {
     });
   }
 
-
   @action
   async onSubmitClicked(event) {
     event.preventDefault();
@@ -59,7 +61,7 @@ export default class MissionForm extends Component {
     const formData = {
       name: this.name.getValueForSubmit(),
       competenceId: this.selectedCompetenceId.value,
-      thematicId: this.selectedThematicId,
+      thematicIds: this.thematicIds.getValueForSubmit(),
       status: this.selectedStatus,
       learningObjectives: this.learningObjectives,
       validatedObjectives: this.validatedObjectives
@@ -88,6 +90,18 @@ export default class MissionForm extends Component {
   }
 
   @action
+  updateThematicIds(event) {
+    this.thematicIds.setValue(event.target.value);
+    this.checkFormValidity();
+  }
+
+  @action
+  validateThematicIds() {
+    this.thematicIds.validate();
+    this.checkFormValidity();
+  }
+
+  @action
   validateCompetence() {
     this.selectedCompetenceId.validate();
     this.checkFormValidity();
@@ -103,25 +117,18 @@ export default class MissionForm extends Component {
     this.selectedCompetenceId.setValue(value);
     this.selectedCompetenceId.validate();
     this.checkFormValidity();
-    this.updateThemes(value);
-  }
-
-  @action
-  changeThematic(value) {
-    this.selectedThematicId = value;
+    this.updateAvailableThematicIds(value);
   }
 
   checkFormValidity() {
-    this.isFormValid = !!this.selectedCompetenceId.value && !!this.name.getValueForSubmit();
+    this.isFormValid = !!this.selectedCompetenceId.value && !!this.name.getValueForSubmit() && this.thematicIds.isValid;
   }
 
   @action
-  updateThemes(competenceId) {
+  updateAvailableThematicIds(competenceId) {
     const filteredCompetence = this.args.competences.filter((competence) => competence.pixId === competenceId);
-    const options = filteredCompetence[0].themes;
-    this.themeOptions = options.map((option) => {
-      return { value: option.id, label: option.name };
-    });
+    const availableThematicIds = filteredCompetence[0].themes.map((thematic) => thematic.id);
+    this.thematicIds.setAvailableThematicIds(availableThematicIds);
   }
 
   @action
@@ -169,6 +176,30 @@ class FormField {
   getValueForSubmit() { throw new Error('implement me');}
 }
 
+class ThematicIdsField extends FormField {
+  constructor() {
+    super({ errorMessage: 'Le champ doit contenir des identifiants de thématique de la compétence séparés par des virgules' });
+  }
+
+  setAvailableThematicIds(availableThematicIds) {
+    this.availableThematicIds = availableThematicIds;
+  }
+
+  validate() {
+    if (this.value?.length === 0 || this.allThematicIdsExist()) {
+      this.state = STATES.SUCCESS;
+    } else {
+      this.state = STATES.ERROR;
+    }
+  }
+
+  allThematicIdsExist() {
+    return this.value?.split(',').every((thematicId) => this.availableThematicIds?.includes(thematicId.trim()));
+  }
+
+  getValueForSubmit() { return this.value.split(',').map((element)=> element.trim()).join(','); }
+}
+
 class NameField extends FormField {
   constructor() {
     super({ errorMessage: 'Le nom est obligatoire' });
@@ -199,3 +230,4 @@ class CompetenceIdField extends FormField {
     }
   }
 }
+

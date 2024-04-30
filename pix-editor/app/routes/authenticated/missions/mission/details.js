@@ -9,18 +9,19 @@ export default class MissionDetailsRoute extends Route {
     const mission = this.modelFor('authenticated.missions.mission');
     const competences = await this.currentData.getCompetencesFromPix1DFramework();
     const missionCompetence = competences.filter((competence) => competence.pixId === mission.competenceId);
-    let missionThematicName;
-    if (mission.thematicId) {
-      const thematics = await this.currentData.getThematicsFromPix1DFramework();
-      const missionThematic = thematics.filter((thematic) => thematic.id === mission.thematicId);
-      missionThematicName = missionThematic[0].name;
+    let missionThematicNames;
+    if (mission.thematicIds) {
+      const pix1DThematics = await this.currentData.getThematicsFromPix1DFramework();
+      const thematicNameById = new Map(pix1DThematics.map(thematic => [thematic.id, thematic.name]));
+      const missionThematicIds = mission.thematicIds.split(',');
+      missionThematicNames = missionThematicIds.map((thematicId) => thematicNameById.get(thematicId)).join(', ');
     }
     const userMayCreateOrEditMissions = this.access.mayCreateOrEditMission();
 
     return {
       mission,
       competence: missionCompetence[0].title,
-      thematic: missionThematicName,
+      thematics: missionThematicNames,
       userMayCreateOrEditMissions,
     };
   }

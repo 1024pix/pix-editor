@@ -55,7 +55,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
         id: 3,
         name: 'Mission',
         competenceId: 'recCompetence1.1',
-        thematicId: null,
+        thematicIds: '',
         createdAt: '2023/12/11',
         status: 'ACTIVE'
       });

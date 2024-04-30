@@ -35,7 +35,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           status: Mission.status.ACTIVE,
@@ -63,7 +63,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           status: Mission.status.ACTIVE,
@@ -72,7 +72,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematicId',
+          thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.INACTIVE,
@@ -148,24 +148,47 @@ describe('Integration | Repository | mission-repository', function() {
           airtableBuilder.factory.buildChallenge({ id: 'challengeTuto1', status: 'validé', skillId: 'skillTuto1' }),
           airtableBuilder.factory.buildChallenge({ id: 'challengeTraining1', status: 'validé', skillId: 'skillTraining1' }),
           airtableBuilder.factory.buildChallenge({ id: 'challengeValidation1', status: 'validé', skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeDare1', status: 'validé', skillId: 'skillDare1' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeTuto2', status: 'validé', skillId: 'skillTuto2' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeTraining2', status: 'validé', skillId: 'skillTraining2' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeValidation2', status: 'validé', skillId: 'skillValidation2' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeDare', status: 'validé', skillId: 'skillDare' }),
         ],
         skills: [
           airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
           airtableBuilder.factory.buildSkill({ id: 'skillTraining1', level: 1, tubeId: 'tubeTraining1' }),
           airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
-          airtableBuilder.factory.buildSkill({ id: 'skillDare1', level: 1, tubeId: 'tubeDare1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTuto2', level: 1, tubeId: 'tubeTuto2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTraining2', level: 1, tubeId: 'tubeTraining2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation2', level: 1, tubeId: 'tubeValidation2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillDare', level: 1, tubeId: 'tubeDare' }),
         ],
         tubes: [
           airtableBuilder.factory.buildTube({ id: 'tubeTuto1', name: '@Pix1D-recherche_di' }),
           airtableBuilder.factory.buildTube({ id: 'tubeTraining1', name: '@Pix1D-recherche_en' }),
           airtableBuilder.factory.buildTube({ id: 'tubeValidation1', name: '@Pix1D-recherche_va' }),
-          airtableBuilder.factory.buildTube({ id: 'tubeDare1', name: '@Pix1D-recherche_de' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeTuto2', name: '@Pix1D-recherche-2_di' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeTraining2', name: '@Pix1D-recherche-2_en' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeValidation2', name: '@Pix1D-recherche-2_va' }),
+          airtableBuilder.factory.buildTube({ id: 'tubeDare', name: '@Pix1D-recherche_de' }),
         ],
-        thematics: [airtableBuilder.factory.buildThematic({
-          id: 'thematic1',
-          tubeIds: ['tubeTuto1', 'tubeTraining1', 'tubeValidation1', 'tubeDare1']
-        })],
+        thematics: [
+          airtableBuilder.factory.buildThematic({
+            id: 'thematicStep1',
+            tubeIds: ['tubeTuto1', 'tubeTraining1', 'tubeValidation1']
+          }),
+          airtableBuilder.factory.buildThematic({
+            id: 'thematicStep2',
+            tubeIds: ['tubeTuto2', 'tubeTraining2', 'tubeValidation2']
+          }),
+          airtableBuilder.factory.buildThematic({
+            id: 'thematicDefi',
+            tubeIds: ['tubeDare']
+          }),
+          airtableBuilder.factory.buildThematic({
+            id: 'thematicDefiVide',
+            tubeIds: [],
+          })
+        ],
       };
 
     });
@@ -181,7 +204,7 @@ describe('Integration | Repository | mission-repository', function() {
         status: Mission.status.ACTIVE,
         learningObjectives: 'Alt objectives',
         validatedObjectives: 'Alt validated objectives',
-        thematicId: 'thematic1',
+        thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
       });
 
       await databaseBuilder.commit();
@@ -192,7 +215,7 @@ describe('Integration | Repository | mission-repository', function() {
         id: 2,
         name_i18n: { fr: 'Alt name' },
         competenceId: 'competenceId',
-        thematicId: 'thematic1',
+        thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
         status: Mission.status.ACTIVE,
@@ -208,18 +231,19 @@ describe('Integration | Repository | mission-repository', function() {
             validationChallenges: [
               ['challengeValidation1'],
             ],
+          },{
+            tutorialChallenges: [
+              ['challengeTuto2'],
+            ],
+            trainingChallenges: [
+              ['challengeTraining2'],
+            ],
+            validationChallenges: [
+              ['challengeValidation2'],
+            ],
           }],
-          tutorialChallenges: [
-            ['challengeTuto1'],
-          ],
-          trainingChallenges: [
-            ['challengeTraining1'],
-          ],
-          validationChallenges: [
-            ['challengeValidation1'],
-          ],
           dareChallenges: [
-            ['challengeDare1'],
+            ['challengeDare'],
           ],
         },
       })]);
@@ -244,7 +268,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -255,7 +279,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -268,11 +292,6 @@ describe('Integration | Repository | mission-repository', function() {
                 ['challengeValidationValidé', 'challengeValidationProposé'],
               ],
             }],
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [
-              ['challengeValidationValidé', 'challengeValidationProposé'],
-            ],
             dareChallenges: [],
           },
         })]);
@@ -303,7 +322,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -314,7 +333,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -330,14 +349,6 @@ describe('Integration | Repository | mission-repository', function() {
                 ['fourthChallengeValidation'],
               ],
             }],
-            tutorialChallenges: [],
-            trainingChallenges: [],
-            validationChallenges: [
-              ['firstChallengeValidation'],
-              ['secondChallengeValidation'],
-              ['thirdChallengeValidation'],
-              ['fourthChallengeValidation'],
-            ],
             dareChallenges: [],
           },
         })]);
@@ -355,7 +366,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -366,11 +377,18 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
+          content: {
+            steps: [{
+              trainingChallenges: [],
+              validationChallenges: [],
+              tutorialChallenges: [],
+            }]
+          }
         })]);
 
       });
@@ -388,7 +406,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -399,11 +417,18 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
           createdAt: new Date('2010-01-04'),
+          content: {
+            steps: [{
+              trainingChallenges: [],
+              validationChallenges: [],
+              tutorialChallenges: [],
+            }]
+          }
         })]);
       });
     });
@@ -420,7 +445,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -431,7 +456,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -442,7 +467,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
     context('Without tubes in thematic', async function() {
       it('Should return missions', async function() {
-        mockedLearningContent.thematics = [ airtableBuilder.factory.buildThematic({ id: 'thematic1', tubeIds: undefined }) ];
+        mockedLearningContent.thematics = [ airtableBuilder.factory.buildThematic({ id: 'thematicStep1', tubeIds: undefined }, { id: 'thematicDefiVide', tubeIds: undefined }) ];
         airtableBuilder.mockLists(mockedLearningContent);
 
         buildLocalizedChallenges(mockedLearningContent);
@@ -453,7 +478,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -464,7 +489,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -486,7 +511,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
         });
 
         await databaseBuilder.commit();
@@ -497,7 +522,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: 'thematic1',
+          thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -518,7 +543,7 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.ACTIVE,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
-          thematicId: null,
+          thematicIds: null,
         });
 
         await databaseBuilder.commit();
@@ -529,7 +554,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: 2,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
-          thematicId: null,
+          thematicIds: null,
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.ACTIVE,
@@ -545,7 +570,7 @@ describe('Integration | Repository | mission-repository', function() {
         const mission = new Mission({
           name_i18n: { fr: 'Mission impossible'  },
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -558,11 +583,11 @@ describe('Integration | Repository | mission-repository', function() {
         const expectedMission = {
           id: savedMission.id,
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -571,7 +596,7 @@ describe('Integration | Repository | mission-repository', function() {
         const mission = new Mission({
           name_i18n: { fr: 'Mission impossible'  },
           competenceId: 'AZERTY',
-          thematicId: 'QWERTY',
+          thematicIds: 'QWERTY',
           learningObjectives_i18n:  { fr: 'au boulot' },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -610,7 +635,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: savedMission.id,
           name_i18n: { fr: 'Updated mission'  },
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
@@ -624,11 +649,11 @@ describe('Integration | Repository | mission-repository', function() {
         const expectedMission = {
           id: updatedMission.id,
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicId', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -640,7 +665,7 @@ describe('Integration | Repository | mission-repository', function() {
           id: savedMission.id,
           name_i18n: { fr: 'Updated mission'  },
           competenceId: 'QWERTY',
-          thematicId: 'Thematic',
+          thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: 'Etre la boss' },
           validatedObjectives_i18n: { fr: 'intermédiaire' },
           status: Mission.status.INACTIVE,

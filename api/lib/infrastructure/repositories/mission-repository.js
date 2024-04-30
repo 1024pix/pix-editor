@@ -47,26 +47,35 @@ export async function list() {
   const challenges = await challengeRepository.list();
 
   const missionsWithContent = missions.map((mission) => {
-    const thematic = thematics.find((thematic) => thematic.id === mission.thematicId);
-    if (!thematic) {
-      logger.warn({ mission }, 'No thematic found for mission');
-      return new Mission(mission);
-    }
-
-    const missionTubes = tubes.filter((tube) => thematic?.tubeIds?.includes(tube.id));
-    if (missionTubes.length === 0) {
-      logger.warn({ mission }, 'No tubes found for mission');
-      return new Mission(mission);
-    }
-
+    const thematicIds = mission.thematicIds?.split(',') ?? [];
     const content = {
-      steps: [{
-        tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
-        trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
-        validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
-      }],
-      dareChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_de'),
+      steps: []
     };
+
+    thematicIds.forEach((thematicId, index) => {
+      const thematic = thematics.find((thematic) => thematic.id === thematicId);
+
+      if (!thematic) {
+        logger.warn({ mission }, 'No thematic found for mission');
+        return;
+      }
+
+      const missionTubes = tubes.filter((tube) => thematic?.tubeIds?.includes(tube.id));
+      if (missionTubes.length === 0) {
+        logger.warn({ mission }, 'No tubes found for mission');
+        return;
+      }
+
+      if (index < thematicIds.length - 1) {
+        content.steps.push({
+          tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
+          trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
+          validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
+        });
+      } else {
+        content.dareChallenges = _getChallengeIdsForActivity(missionTubes, skills, challenges, '_de');
+      }
+    });
     return new Mission({ ...mission, content });
   });
 
@@ -106,7 +115,7 @@ export async function save(mission) {
   const [insertedMission] = await knex('missions').insert({
     id: mission.id,
     competenceId: mission.competenceId,
-    thematicId: mission.thematicId,
+    thematicIds: mission.thematicIds,
     status: mission.status
   }).onConflict('id')
     .merge()
@@ -125,7 +134,7 @@ function _toDomain(mission, translations) {
     createdAt: mission.createdAt,
     status: mission.status,
     competenceId: mission.competenceId,
-    thematicId: mission.thematicId,
+    thematicIds: mission.thematicIds,
     content: mission.content,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });

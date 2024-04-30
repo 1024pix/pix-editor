@@ -8,7 +8,7 @@ export function serializeMissionSummary(mission, meta) {
     attributes: [
       'name',
       'competence',
-      'thematicId',
+      'thematicIds',
       'learningObjectives',
       'validatedObjectives',
       'createdAt',
@@ -30,7 +30,7 @@ export function serializeMission(mission) {
     attributes: [
       'name',
       'competenceId',
-      'thematicId',
+      'thematicIds',
       'learningObjectives',
       'validatedObjectives',
       'createdAt',
@@ -49,7 +49,7 @@ export function deserializeMission(attributes) {
     id: attributes.id,
     name_i18n: { fr: attributes.name  },
     competenceId: attributes['competence-id'],
-    thematicId: attributes['thematic-id'],
+    thematicIds: attributes['thematic-ids'],
     learningObjectives_i18n:  { fr:  attributes['learning-objectives'] },
     validatedObjectives_i18n: { fr:  attributes['validated-objectives'] },
     status: attributes.status,

@@ -7,13 +7,13 @@ export function buildMission({
   name = 'Ma première mission',
   competenceId = 'competenceId',
   learningObjectives = 'Que tu sois le meilleur',
-  thematicId = 'thematicId',
+  thematicIds = 'thematicIds',
   validatedObjectives = 'Rien',
   status = Mission.status.INACTIVE,
   createdAt = new Date('2010-01-04'),
 } = {}) {
 
-  const values = { id, competenceId, thematicId, createdAt, status };
+  const values = { id, competenceId, thematicIds, createdAt, status };
 
   buildTranslation({
     key: `mission.${id}.name`,
