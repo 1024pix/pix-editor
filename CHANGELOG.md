@@ -1,5 +1,15 @@
 
 
+## v3.143.0 (02/05/2024)
+
+
+### :rocket: Amélioration
+- [#651](https://github.com/1024pix/pix-editor/pull/651) [FEATURE] Gestion des étapes de missions.
+
+### :arrow_up: Montée de version
+- [#653](https://github.com/1024pix/pix-editor/pull/653) [BUMP] Update dependency redis to v7.2.4.
+- [#637](https://github.com/1024pix/pix-editor/pull/637) [BUMP] Update dependency pino-pretty to v11 (api).
+
 ## v3.142.0 (23/04/2024)
 
 
