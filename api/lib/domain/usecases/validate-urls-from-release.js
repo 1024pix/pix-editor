@@ -52,10 +52,10 @@ export function findUrlsInMarkdown(value) {
   return _.uniq(urls.map(cleanUrl).map(prependProtocol));
 }
 
-function findCompetenceNameFromChallenge(challenge, release) {
+function findCompetenceOriginAndNameFromChallenge(challenge, release) {
   const skill = release.skills.find(({ id }) => challenge.skillId === id);
-  if (!skill) return '';
-  return findCompetenceNameFromSkill(skill, release);
+  if (!skill) return ['', ''];
+  return findCompetenceOriginAndNameFromSkill(skill, release);
 }
 
 function findCompetencesNameFromTutorial(tutorial, release) {
@@ -67,11 +67,20 @@ function findCompetencesNameFromTutorial(tutorial, release) {
   return competenceNames.join(' ');
 }
 
-function findCompetenceNameFromSkill(skill, release) {
+function findCompetenceFromSkill(skill, release) {
   const tube = release.tubes.find(({ id }) => skill.tubeId === id);
   if (!tube) return '';
-  const competence = release.competences.find(({ id }) => tube.competenceId === id);
-  return competence?.name_i18n.fr || '';
+  return release.competences.find(({ id }) => tube.competenceId === id);
+}
+
+function findCompetenceNameFromSkill(skill, release) {
+  const competence = findCompetenceFromSkill(skill, release);
+  return competence?.name_i18n.fr ?? '';
+}
+
+function findCompetenceOriginAndNameFromSkill(skill, release) {
+  const competence = findCompetenceFromSkill(skill, release);
+  return [competence?.origin ?? '', competence?.name_i18n.fr ?? ''];
 }
 
 function findSkillsNameFromChallenge(challenge, release) {
@@ -99,7 +108,7 @@ export function findUrlsFromChallenges(challenges, release, localizedChallengesB
     const urls = functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: [findCompetenceNameFromChallenge(challenge, release), findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status].join(';'), url };
+        return { id: [findCompetenceOriginAndNameFromChallenge(challenge, release).join(';'), findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status, challenge.locales[0]].join(';'), url };
       });
     return _.uniqBy(urls, 'url');
   });
