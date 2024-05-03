@@ -133,10 +133,11 @@ describe('Check urls from release', function() {
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', async function() {
       const localizedChallengesById = {
-        'challenge1': [domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] })],
-        'challenge2': [domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] })],
-        'challenge3': [domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] })],
-        'challenge4': [domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: ['http://alice.hole'] })],
+        'challenge1': domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] }),
+        'challenge2': domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] }),
+        'challenge3': domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] }),
+        'challenge4': domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: null }),
+        'challenge5': domainBuilder.buildLocalizedChallenge({ id: 'challenge5', urlsToConsult: ['http://alice.hole'] }),
       };
       const release = {
         competences: [
@@ -212,6 +213,14 @@ describe('Check urls from release', function() {
         {
           id: 'challenge4',
           instruction: 'instructions',
+          solutionToDisplay: 'solution to display https://solution_challenge4.org/',
+          skillId: 'skill2',
+          status: 'validé',
+          locales: ['fr']
+        },
+        {
+          id: 'challenge5',
+          instruction: 'instructions',
           solutionToDisplay: '',
           skillId: 'skill23',
           status: 'validé',
@@ -228,7 +237,8 @@ describe('Check urls from release', function() {
         { id: ';;;challenge2;validé;fr', url: 'https://example.fr/' },
         { id: ';;;challenge2;validé;fr', url: 'https://editor.pix.fr' },
         { id: 'Pix;competence 1.1;@mySkill2;challenge3;validé;en', url: 'https://solutionToDisplay_example.org/' },
-        { id: 'wonderland;competence 4.5;@mySkill23;challenge4;validé;nl', url: 'http://alice.hole' },
+        { id: 'Pix;competence 1.1;@mySkill2;challenge4;validé;fr', url: 'https://solution_challenge4.org/' },
+        { id: 'wonderland;competence 4.5;@mySkill23;challenge5;validé;nl', url: 'http://alice.hole' },
       ];
 
       const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById);

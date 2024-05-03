@@ -103,7 +103,7 @@ export function findUrlsFromChallenges(challenges, release, localizedChallengesB
       findUrlsProposalsFromChallenge,
       findUrlsSolutionFromChallenge,
       findUrlsSolutionToDisplayFromChallenge,
-      (challenge) => localizedChallengesById[challenge.id][0].urlsToConsult,
+      (challenge) => localizedChallengesById[challenge.id].urlsToConsult ?? [],
     ];
     const urls = functions
       .flatMap((fun) => fun(challenge))
