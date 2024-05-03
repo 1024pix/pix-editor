@@ -1,5 +1,15 @@
 
 
+## v3.144.0 (03/05/2024)
+
+
+### :rocket: Amélioration
+- [#656](https://github.com/1024pix/pix-editor/pull/656) [FEATURE] Ajouter des informations à l'extract de la moulinette des URLs cassées (PIX-6304).
+- [#652](https://github.com/1024pix/pix-editor/pull/652) [FEATURE] Ajouter les URLs à consulter renseignées au niveau des épreuves dans la moulinette des URLs cassées (PIX-11736).
+
+### :arrow_up: Montée de version
+- [#654](https://github.com/1024pix/pix-editor/pull/654) [BUMP] Update dependency @playwright/test to v1.43.1.
+
 ## v3.143.0 (02/05/2024)
 
 
