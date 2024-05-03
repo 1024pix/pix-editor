@@ -133,16 +133,26 @@ describe('Check urls from release', function() {
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', async function() {
       const localizedChallengesById = {
-        'challenge1': [domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] })],
-        'challenge2': [domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] })],
-        'challenge3': [domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] })],
+        'challenge1': domainBuilder.buildLocalizedChallenge({ id: 'challenge1', urlsToConsult: ['http://google.com', 'https://zouzou.fr'] }),
+        'challenge2': domainBuilder.buildLocalizedChallenge({ id: 'challenge2', urlsToConsult: ['https://editor.pix.fr'] }),
+        'challenge3': domainBuilder.buildLocalizedChallenge({ id: 'challenge3', urlsToConsult: [] }),
+        'challenge4': domainBuilder.buildLocalizedChallenge({ id: 'challenge4', urlsToConsult: null }),
+        'challenge5': domainBuilder.buildLocalizedChallenge({ id: 'challenge5', urlsToConsult: ['http://alice.hole'] }),
       };
       const release = {
         competences: [
           {
             id: 'competence1',
+            origin: 'Pix',
             name_i18n: {
               fr: 'competence 1.1'
+            }
+          },
+          {
+            id: 'competence2',
+            origin: 'wonderland',
+            name_i18n: {
+              fr: 'competence 4.5'
             }
           }
         ],
@@ -150,6 +160,10 @@ describe('Check urls from release', function() {
           {
             id: 'tube1',
             competenceId: 'competence1'
+          },
+          {
+            id: 'tube2',
+            competenceId: 'competence2'
           }
         ],
         skills: [
@@ -162,6 +176,11 @@ describe('Check urls from release', function() {
             id: 'skill2',
             tubeId: 'tube1',
             name: '@mySkill2'
+          },
+          {
+            id: 'skill23',
+            tubeId: 'tube2',
+            name: '@mySkill23'
           }
         ]
       };
@@ -173,6 +192,7 @@ describe('Check urls from release', function() {
           solution: 'solution [link](https://solution_example.net/)',
           skillId: 'skill1',
           status: 'validé',
+          locales: ['fr']
         },
         {
           id: 'challenge2',
@@ -180,6 +200,7 @@ describe('Check urls from release', function() {
           proposals: 'proposals [link](https://example.fr/)',
           skillId: undefined,
           status: 'validé',
+          locales: ['fr', 'FR-fr']
         },
         {
           id: 'challenge3',
@@ -187,18 +208,37 @@ describe('Check urls from release', function() {
           solutionToDisplay: 'solution to display https://solutionToDisplay_example.org/',
           skillId: 'skill2',
           status: 'validé',
+          locales: ['en']
+        },
+        {
+          id: 'challenge4',
+          instruction: 'instructions',
+          solutionToDisplay: 'solution to display https://solution_challenge4.org/',
+          skillId: 'skill2',
+          status: 'validé',
+          locales: ['fr']
+        },
+        {
+          id: 'challenge5',
+          instruction: 'instructions',
+          solutionToDisplay: '',
+          skillId: 'skill23',
+          status: 'validé',
+          locales: ['nl']
         }
       ];
 
       const expectedOutput = [
-        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://example.net/' },
-        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://other_example.net/' },
-        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://solution_example.net/' },
-        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'http://google.com' },
-        { id: 'competence 1.1;@mySkill1;challenge1;validé', url: 'https://zouzou.fr' },
-        { id: ';;challenge2;validé', url: 'https://example.fr/' },
-        { id: ';;challenge2;validé', url: 'https://editor.pix.fr' },
-        { id: 'competence 1.1;@mySkill2;challenge3;validé', url: 'https://solutionToDisplay_example.org/' },
+        { id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr', url: 'https://example.net/' },
+        { id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr', url: 'https://other_example.net/' },
+        { id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr', url: 'https://solution_example.net/' },
+        { id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr', url: 'http://google.com' },
+        { id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr', url: 'https://zouzou.fr' },
+        { id: ';;;challenge2;validé;fr', url: 'https://example.fr/' },
+        { id: ';;;challenge2;validé;fr', url: 'https://editor.pix.fr' },
+        { id: 'Pix;competence 1.1;@mySkill2;challenge3;validé;en', url: 'https://solutionToDisplay_example.org/' },
+        { id: 'Pix;competence 1.1;@mySkill2;challenge4;validé;fr', url: 'https://solution_challenge4.org/' },
+        { id: 'wonderland;competence 4.5;@mySkill23;challenge5;validé;nl', url: 'http://alice.hole' },
       ];
 
       const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById);
