@@ -9,20 +9,6 @@ export default class ChallengeForm extends Component {
   @service store;
 
   @tracked languageOptions = [];
-
-  constructor() {
-    super(...arguments);
-    const localeToLanguageMap = this.config.localeToLanguageMap;
-
-    for (const localeToLanguageMapKey in localeToLanguageMap) {
-      const option =  {
-        label: localeToLanguageMap[localeToLanguageMapKey],
-        value: localeToLanguageMapKey,
-      };
-      this.languageOptions.push(option);
-    }
-  }
-
   options = {
     'types': [
       { value:'QCU', label:'QCU' },
@@ -53,10 +39,21 @@ export default class ChallengeForm extends Component {
       { value: 'solution', label: 'Réponse' },
     ],
   };
-
   helpInstructions = '<u>Style d’écriture :</u><br>*Écriture en italique*<br>**Écriture en gras**<br>***Écriture en italique et gras***<br><br><u>Aller à la ligne :</u><br>Phrase 1<br><br>Phrase 2<br><br><u>Liste :</u><br>- texte item 1<br>- texte item 2<br><br><u>Paragraphe avec retrait précédé d’un trait vertical gris :</u><br>> texte 1ere ligne<br>><br>> texte 3e ligne<br><br><u>Lien vers une page web :</u><br>[mot cliquable](url avec protocole)';
+  helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
 
-  helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
+  constructor() {
+    super(...arguments);
+    const localeToLanguageMap = this.config.localeToLanguageMap;
+
+    for (const localeToLanguageMapKey in localeToLanguageMap) {
+      const option =  {
+        label: localeToLanguageMap[localeToLanguageMapKey],
+        value: localeToLanguageMapKey,
+      };
+      this.languageOptions.push(option);
+    }
+  }
 
   get helpSuggestions() {
     const type = this.args.challenge.type;

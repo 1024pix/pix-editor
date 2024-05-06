@@ -1,7 +1,6 @@
 import { module, test } from 'qunit';
-import { findAll, click, find, fillIn } from '@ember/test-helpers';
+import { click, find, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
-import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
@@ -38,12 +37,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
-    await click(find('[data-test-modify-challenge-button]'));
-    // Ugly hack to wait for ToastUI to be ready
-    // otherwise test is flacky and fails with error message
-    // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
-    await runTask(this, async () => {}, 200);
-    await fillIn('#challenge-urls-to-consult', 'https://mon-url.com, mon-autre-url.com');
+    await clickByText('Modifier');
+    await clickByText('Ajouter des URLs à consulter');
+    await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -66,8 +62,9 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     assert.dom('[data-test-challenge-urls-to-consult]').doesNotExist();
 
     await clickByText('Modifier');
+    await clickByText('Ajouter des URLs à consulter');
 
-    await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
+    await fillByLabel('URLs externes à consulter', 'https://mon-url.com\n mon-autre-url.com');
 
     // then
     const challenge = await store.peekRecord('challenge', 'recChallenge1');

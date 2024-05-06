@@ -122,25 +122,34 @@
       @id="challenge-solution-to-display"
     />
   </Field::ToggleField>
-  {{#if this.displayUrlsToConsult}}
-    <div class="field">
-      <Field::Input
-        @label="URLs externes à consulter"
-        @value={{@urlsToConsult}}
-        @change={{@setUrlsToConsult}}
-        @edition={{@edition}}
-        @helpContent={{this.helpUrlsToConsult}}
-        @id="challenge-urls-to-consult"
-        data-test-challenge-urls-to-consult
-      />
-    </div>
-    {{#if @invalidUrlsToConsult}}
-        <p class="ui red message" data-test-invalid-urls-to-consult>
-          URLs invalides :
-          {{@invalidUrlsToConsult}}
-        </p>
-    {{/if}}
+
+  <Field::ToggleField
+    @edition={{@edition}}
+    @model={{@challenge}}
+    @modelField="urlsToConsult"
+    @hideTextButton="Supprimer les URLs à consulter"
+    @displayTextButton="Ajouter des URLs à consulter"
+    @confirmText="URLs à consulter"
+    @displayField={{@displayUrlsToConsultField}}
+    @setDisplayField={{@setDisplayUrlsToConsultField}}
+  >
+    <Field::Textarea
+      @title="URLs externes à consulter"
+      @value={{@urlsToConsult}}
+      @edition={{@edition}}
+      @change={{@setUrlsToConsult}}
+      @helpContent={{this.helpUrlsToConsult}}
+      data-test-urls-to-consult-field
+      @id="urls-to-consult-to-display"
+    />
+  </Field::ToggleField>
+  {{#if @invalidUrlsToConsult}}
+    <p class="ui red message" data-test-invalid-urls-to-consult>
+      URLs invalides :
+      {{@invalidUrlsToConsult}}
+    </p>
   {{/if}}
+
   <Field::Illustration
     @title="Illustration"
     @value={{@challenge.illustration}}
