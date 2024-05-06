@@ -1,13 +1,7 @@
-import { fileURLToPath } from 'node:url';
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
-import * as dotenv from 'dotenv';
-dotenv.config({ path: __dirname + '/../../.env' });
 import _ from 'lodash';
-import { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } from '../../lib/domain/usecases/validate-urls-from-release.js';
-import { releaseRepository } from '../../lib/infrastructure/repositories/index.js';
-import { disconnect } from '../../db/knex-database-connection.js';
+import { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } from './index.js';
 
-async function getExternalUrlsList() {
+export async function exportExternalUrlsFromRelease({ releaseRepository }) {
   const release = (await releaseRepository.getLatestRelease()).content;
   const skillIdsWithFramework = getSkillIdsWithFramework(release);
   const activeChallenges = getActiveChallenges(release.challenges);
@@ -76,5 +70,3 @@ function getActiveChallenges(challenges) {
     return !challengeInactiveStatus.includes(challenge.status);
   });
 }
-
-getExternalUrlsList().finally(() => { disconnect(); });
