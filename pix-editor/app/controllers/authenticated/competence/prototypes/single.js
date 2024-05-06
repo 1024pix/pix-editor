@@ -8,12 +8,11 @@ import yaml from 'js-yaml';
 export default class SingleController extends Controller {
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   elementClass = 'prototype-challenge';
-
   @tracked edition = false;
   @tracked displayAlternativeInstructionsField = false;
   @tracked displaySolutionToDisplayField = false;
+  @tracked displayUrlsToConsultField = false;
   @tracked creation = false;
   @tracked popinImageSrc = '';
   @tracked displayImage = false;
@@ -22,7 +21,6 @@ export default class SingleController extends Controller {
   @tracked displayChangeLog = false;
   @tracked changelogDefault = '';
   @tracked displayConfirmLog = false;
-
   @service access;
   @service changelogEntry;
   @service config;
@@ -30,6 +28,7 @@ export default class SingleController extends Controller {
   @service currentData;
   @service filePath;
   @service intl;
+  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   @service loader;
   @service notify;
   @service router;
@@ -40,6 +39,8 @@ export default class SingleController extends Controller {
   @tracked urlsToConsult = '';
 
   deletedFiles = [];
+  @controller('authenticated.competence')
+    parentController;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -48,9 +49,6 @@ export default class SingleController extends Controller {
   get challenge() {
     return this.model;
   }
-
-  @controller('authenticated.competence')
-    parentController;
 
   get challengeTitle() {
     if (this.creation) {
@@ -139,6 +137,11 @@ export default class SingleController extends Controller {
   }
 
   @action
+  setDisplayUrlsToConsultField(value) {
+    this.displayUrlsToConsultField = value;
+  }
+
+  @action
   showIllustration() {
     const illustration = this.challenge.illustration;
     this.popinImageSrc = illustration.url;
@@ -177,10 +180,11 @@ export default class SingleController extends Controller {
     this.edition = false;
     this.displayAlternativeInstructionsField = false;
     this.displaySolutionToDisplayField = false;
+    this.displayUrlsToConsultField = false;
     this.challenge.rollbackAttributes();
     await this.challenge.files;
     this.challenge.files.forEach((file) => file.rollbackAttributes());
-    this.urlsToConsult = this.challenge.urlsToConsult?.join(', ') ?? '';
+    this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
     this.invalidUrlsToConsult = '';
     this.deletedFiles = [];
     if (!this.wasMaximized) {
@@ -211,6 +215,7 @@ export default class SingleController extends Controller {
         this.edition = false;
         this.displayAlternativeInstructionsField = false;
         this.displaySolutionToDisplayField = false;
+        this.displayUrlsToConsultField = false;
         this.invalidUrlsToConsult = '';
         if (!this.wasMaximized) {
           this.minimize();
@@ -432,8 +437,7 @@ export default class SingleController extends Controller {
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    const trimmedValue = value.trim();
-    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    let values = value.split('\n').map((s)=>s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -445,7 +449,7 @@ export default class SingleController extends Controller {
     });
     this.invalidUrlsToConsult = invalidUrls.join(', ');
     this.challenge.urlsToConsult = values;
-    this.urlsToConsult = this.challenge.urlsToConsult?.join(', ') ?? '';
+    this.urlsToConsult = this.challenge.urlsToConsult?.join('\n') ?? '';
   }
 
   _saveCheck(challenge) {

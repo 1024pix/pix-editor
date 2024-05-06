@@ -21,7 +21,7 @@ export default class SingleRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     controller.edition = false;
-    controller.urlsToConsult = model.urlsToConsult?.join(', ') ?? '';
+    controller.urlsToConsult = model.urlsToConsult?.join('\n') ?? '';
     controller.invalidUrlsToConsult = '';
     const competenceController = this.controllerFor('authenticated.competence');
     competenceController.setSection('challenges');

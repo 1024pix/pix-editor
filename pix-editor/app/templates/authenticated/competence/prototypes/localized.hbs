@@ -61,23 +61,34 @@
         @options={{this.options.geography}}
         @setValue={{fn (mut this.localizedChallenge.geography)}}
       />
-      {{#if this.displayUrlsToConsult}}
-        <Field::Input
-          @label="URLs externes à consulter"
+
+      <Field::ToggleField
+        @edition={{this.edition}}
+        @model={{this.localizedChallenge}}
+        @modelField="urlsToConsult"
+        @hideTextButton="Supprimer les URLs à consulter"
+        @displayTextButton="Ajouter des URLs à consulter"
+        @confirmText="URLs à consulter"
+        @displayField={{this.displayUrlsToConsultField}}
+        @setDisplayField={{this.setDisplayUrlsToConsultField}}
+      >
+        <Field::Textarea
+          @title="URLs externes à consulter"
           @value={{this.urlsToConsult}}
-          @change={{this.setUrlsToConsult}}
           @edition={{this.edition}}
+          @change={{this.setUrlsToConsult}}
           @helpContent={{this.helpUrlsToConsult}}
-          @id="localized-challenge-urls-to-consult"
           data-test-localized-challenge-urls-to-consult
+          @id="localized-challenge-urls-to-consult"
         />
-        {{#if this.invalidUrlsToConsult}}
-          <p class="ui red message" data-test-invalid-urls-to-consult>
-            URLs invalides :
-            {{this.invalidUrlsToConsult}}
-          </p>
-        {{/if}}
+      </Field::ToggleField>
+      {{#if this.invalidUrlsToConsult}}
+        <p class="ui red message" data-test-invalid-urls-to-consult>
+          URLs invalides :
+          {{this.invalidUrlsToConsult}}
+        </p>
       {{/if}}
+
       {{#unless this.edition}}
         <Field::Input
           @id="localized-challenge-id"

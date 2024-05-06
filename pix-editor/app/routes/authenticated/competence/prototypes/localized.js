@@ -13,7 +13,12 @@ export default class LocalizedPrototypeRoute extends Route {
   setupController(controller, model) {
     super.setupController(...arguments);
     const localizedChallenge = model.localizedChallenge;
-    controller.urlsToConsult = localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    controller.urlsToConsult = localizedChallenge.urlsToConsult?.join('\n') ?? '';
     controller.invalidUrlsToConsult = '';
+  }
+
+  resetController(controller, _isExiting, _transition) {
+    super.resetController(controller, _isExiting, _transition);
+    controller.send('cancelEdit');
   }
 }

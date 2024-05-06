@@ -1,5 +1,8 @@
 <div class={{concat "field textArea" (if @edition "" " disabled") (if this.maximized " maximized" "")}} ...attributes>
-  <label for={{@id}}>
+  <div>
+    <label class="bold" for={{@id}}>
+      {{@title}}
+    </label>
     {{#if @edition}}
       <button
         {{on "click" this.toggleMaximized}}
@@ -18,7 +21,6 @@
         </div>
       {{/if}}
     {{/if}}
-    {{@title}}
-  </label>
-  <Textarea id={{@id}} @value={{@value}} rows="4" readonly={{not @edition}} class="attached" />
+  </div>
+  <Textarea id={{@id}} @value={{@value}} rows="4" readonly={{not @edition}} class="attached" {{on "change" this.change}}/>
 </div>

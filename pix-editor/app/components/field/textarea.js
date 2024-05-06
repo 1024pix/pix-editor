@@ -15,4 +15,9 @@ export default class Textarea extends Component {
   toggleMaximized() {
     this.maximized = !this.maximized;
   }
+
+  @action
+  change(evt) {
+    this.args.change?.(evt.target.value);
+  }
 }
