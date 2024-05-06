@@ -4,6 +4,8 @@ import { localizedChallengesAttachmentsBuilder } from './data/localized-challeng
 import { staticCoursesBuilder } from './data/static-courses.js';
 import { translationsBuilder } from './data/translations.js';
 import { buildMissions } from './data/missions.js';
+import { releaseRepository } from '../../lib/infrastructure/repositories/index.js';
+import { downloadTranslationFromPhrase } from '../../lib/domain/usecases/index.js';
 
 export async function seed(knex) {
   const databaseBuilder = new DatabaseBuilder({ knex });
@@ -45,7 +47,14 @@ export async function seed(knex) {
 
   buildMissions(databaseBuilder);
 
-  return databaseBuilder.commit();
+  await databaseBuilder.commit();
+  if (process.env.CREATE_RELEASE_AT_START) {
+    await downloadTranslationFromPhrase();
+    const latestRelease = await releaseRepository.getLatestRelease();
+    if (!latestRelease) {
+      await releaseRepository.create();
+    }
+  }
 }
 
 const adminUserApiKey = !process.env.REVIEW_APP && '8d03a893-3967-4501-9dc4-e0aa6c6dc442';
