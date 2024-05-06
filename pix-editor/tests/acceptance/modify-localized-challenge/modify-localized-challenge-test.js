@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
-import { visit, clickByText, fillByLabel } from '@1024pix/ember-testing-library';
-import { findAll, click } from '@ember/test-helpers';
+import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { click, findAll } from '@ember/test-helpers';
 import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -38,9 +38,8 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     assert.dom('[data-test-localized-challenge-urls-to-consult]').doesNotExist();
 
     await clickByText('Modifier');
-
-    await fillByLabel('URLs externes à consulter :', 'https://mon-url.com, mon-autre-url.com');
-
+    await clickByText('Ajouter des URLs à consulter');
+    await fillByLabel('URLs externes à consulter', 'https://mon-url.com\n mon-autre-url.com');
 
     // then
     const challenge = await store.peekRecord('localized-challenge', 'recChallenge1NL');

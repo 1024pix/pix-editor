@@ -18,10 +18,11 @@ export default class LocalizedController extends Controller {
   @tracked displayConfirm = false;
   @tracked popInImageSrc = null;
   @tracked displayIllustration = false;
+  @tracked displayUrlsToConsultField = false;
 
   @tracked urlsToConsult = '';
   @tracked invalidUrlsToConsult = '';
-  helpUrlsToConsult = '<p>Séparer les liens par une virgule</p>';
+  helpUrlsToConsult = '<p>Séparer les liens par un retour à la ligne</p>';
 
   @controller('authenticated.competence') competenceController;
   @controller('authenticated.competence.prototypes.single.alternatives') alternativesController;
@@ -124,8 +125,7 @@ export default class LocalizedController extends Controller {
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    const trimmedValue = value.trim();
-    let values = trimmedValue === '' ? [] : trimmedValue.split(/\s*,\s*/);
+    let values = value.split('\n').map((s)=>s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -137,7 +137,12 @@ export default class LocalizedController extends Controller {
     });
     this.invalidUrlsToConsult = invalidUrls.join(', ');
     this.localizedChallenge.urlsToConsult = values;
-    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join('\n') ?? '';
+  }
+
+  @action
+  setDisplayUrlsToConsultField(value) {
+    this.displayUrlsToConsultField = value;
   }
 
   @action
@@ -170,7 +175,8 @@ export default class LocalizedController extends Controller {
   @action async cancelEdit() {
     this.edition = false;
     this.localizedChallenge.rollbackAttributes();
-    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join(', ') ?? '';
+    this.urlsToConsult = this.localizedChallenge.urlsToConsult?.join('\n') ?? '';
+    this.displayUrlsToConsultField = false;
     this.invalidUrlsToConsult = '';
     await this.model.files;
     this.localizedChallenge.files.forEach((file) => file.rollbackAttributes());
@@ -190,6 +196,7 @@ export default class LocalizedController extends Controller {
       await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
       this.invalidUrlsToConsult = '';
+      this.displayUrlsToConsultField = false;
       this.loader.stop();
       this.notify.message('Épreuve mise à jour');
     } catch (error) {
