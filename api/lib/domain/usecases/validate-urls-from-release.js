@@ -7,8 +7,12 @@ import { CookieJar } from 'tough-cookie';
 
 import { logger } from '../../infrastructure/logger.js';
 
-export function getLiveChallenges(release) {
-  return release.challenges.filter((challenge) => challenge.status !== 'périmé');
+export function getOperativeChallenges(release) {
+  return release.challenges.filter(isOperativeChallenge);
+}
+
+function isOperativeChallenge(challenge) {
+  return challenge.status !== 'proposé' && challenge.status !== 'périmé';
 }
 
 export function findUrlsInstructionFromChallenge(challenge) {
@@ -192,7 +196,7 @@ export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepos
 }
 
 async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository }) {
-  const challenges = getLiveChallenges(release.content);
+  const challenges = getOperativeChallenges(release.content);
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(challenges, release.content, localizedChallengesById);
 
