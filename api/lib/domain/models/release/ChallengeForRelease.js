@@ -65,11 +65,15 @@ export class ChallengeForRelease {
     this.alternativeVersion = alternativeVersion;
   }
 
-  canExportForTranslation(locale) {
-    return this.locales.includes(locale) && this.status === ChallengeForRelease.STATUSES.VALIDE;
-  }
-
   static get STATUSES() {
     return Challenge.STATUSES;
+  }
+
+  get isOperative() {
+    return this.status !== Challenge.STATUSES.PROPOSE && this.status !== Challenge.STATUSES.PERIME;
+  }
+
+  canExportForTranslation(locale) {
+    return this.locales.includes(locale) && this.status === ChallengeForRelease.STATUSES.VALIDE;
   }
 }

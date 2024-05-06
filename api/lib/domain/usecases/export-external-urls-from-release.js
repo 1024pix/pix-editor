@@ -4,8 +4,8 @@ import { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } from
 export async function exportExternalUrlsFromRelease({ releaseRepository }) {
   const release = (await releaseRepository.getLatestRelease()).content;
   const skillIdsWithFramework = getSkillIdsWithFramework(release);
-  const activeChallenges = getActiveChallenges(release.challenges);
-  const urlsFromChallenges = findUrlsFromChallenges(activeChallenges, release);
+  const operativeChallenges = release.operativeChallenges;
+  const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, release);
 
   const baseUrl = function(url) {
     const parsedUrl = new URL(url);
@@ -62,11 +62,4 @@ function getSkillIdsWithFramework(release) {
       ...memo
     };
   }, {});
-}
-
-function getActiveChallenges(challenges) {
-  const challengeInactiveStatus = ['périmé', 'proposé'];
-  return challenges.filter((challenge) =>  {
-    return !challengeInactiveStatus.includes(challenge.status);
-  });
 }

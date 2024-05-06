@@ -8,7 +8,6 @@ import {
   findUrlsProposalsFromChallenge,
   findUrlsSolutionFromChallenge,
   findUrlsSolutionToDisplayFromChallenge,
-  getOperativeChallenges
 } from '../../../../lib/domain/usecases/index.js';
 
 describe('Check urls from release', function() {
@@ -244,47 +243,6 @@ describe('Check urls from release', function() {
       const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById);
       expect(urls).to.deep.equal(expectedOutput);
     });
-  });
-
-  describe('#getOperativeChallenges', function() {
-    it('should list challenges that are not outdated or proposed', function() {
-      const release = {
-        challenges : [
-          {
-            id: 'challenge1',
-            status: 'validé'
-          },
-          {
-            id: 'challenge2',
-            status: 'proposé'
-          },
-          {
-            id: 'challenge3',
-            status: 'périmé'
-          },
-          {
-            id: 'challenge4',
-            status: 'archivé'
-          },
-        ]
-      };
-
-      const expectedOutput = [
-        {
-          id: 'challenge1',
-          status: 'validé'
-        },
-        {
-          id: 'challenge4',
-          status: 'archivé'
-        }
-      ];
-
-      const challenges = getOperativeChallenges(release);
-
-      expect(challenges).to.deep.equal(expectedOutput);
-    });
-
   });
 
   describe('#findUrlsFromTutorials', function() {

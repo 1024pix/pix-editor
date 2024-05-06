@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
+
 describe('Unit | Domain | ChallengeForRelease', () => {
   describe('#canExportForTranslation', () => {
     it('should return true when all conditions are reunited', () => {
@@ -47,6 +48,22 @@ describe('Unit | Domain | ChallengeForRelease', () => {
 
       // then
       expect(result).not.to.be.true;
+    });
+  });
+
+  describe('#get isOperative', () => {
+    it.each(Object.values(ChallengeForRelease.STATUSES))('is "%s" is operative ?', (currentStatus) => {
+      // given
+      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+        status: currentStatus,
+      });
+      const expectedIsOperative = [ChallengeForRelease.STATUSES.ARCHIVE, ChallengeForRelease.STATUSES.VALIDE].includes(currentStatus);
+
+      // when
+      const actual = challengeForRelease.isOperative;
+
+      // then
+      expect(actual).to.equal(expectedIsOperative);
     });
   });
 });

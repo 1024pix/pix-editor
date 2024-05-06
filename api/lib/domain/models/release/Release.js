@@ -8,4 +8,8 @@ export class Release {
     this.createdAt = createdAt;
     this.content = content;
   }
+
+  get operativeChallenges() {
+    return this.content.challenges.filter((c) => c.isOperative);
+  }
 }
