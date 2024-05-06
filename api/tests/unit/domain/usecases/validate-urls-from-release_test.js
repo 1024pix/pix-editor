@@ -1,133 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import {
-  findUrlsFromChallenges,
-  findUrlsFromTutorials,
-  findUrlsInMarkdown,
-  findUrlsInstructionFromChallenge,
-  findUrlsProposalsFromChallenge,
-  findUrlsSolutionFromChallenge,
-  findUrlsSolutionToDisplayFromChallenge,
-} from '../../../../lib/domain/usecases/index.js';
+import { findUrlsFromChallenges, findUrlsFromTutorials, } from '../../../../lib/domain/usecases/index.js';
+import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Check urls from release', function() {
-  describe('#findUrlsInMarkdown', function() {
-    it('should not find url from field value when there is no url', function() {
-      const fieldValue = 'instructions';
-      const urls = findUrlsInMarkdown(fieldValue);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url from a markdown link', function() {
-      const fieldValue =  'instructions [https://example.com/](https://example.com/)';
-      const urls = findUrlsInMarkdown(fieldValue);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-
-    it('should find not find url that are document name', function() {
-      const fieldValue = 'instructions report.docx';
-      const urls = findUrlsInMarkdown(fieldValue);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should prepend https in urls if not present', function() {
-      const fieldValue =  'instructions www.example.com';
-      const urls = findUrlsInMarkdown(fieldValue);
-
-      expect(urls).to.deep.equal(['https://www.example.com']);
-    });
-  });
-
-  describe('#findUrlsInstructionFromChallenge', function() {
-    it('should not find url from a challenge when there is no instructions', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: null,
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url instruction from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        instruction: 'instructions [link](https://example.com/)',
-      };
-      const urls = findUrlsInstructionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
-
-  describe('#findUrlsProposalsFromChallenge', function() {
-    it('should not find url proposals from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        proposals: 'proposals',
-      };
-      const urls = findUrlsProposalsFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url proposals from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        proposals: 'proposals [link](https://example.com/)',
-      };
-      const urls = findUrlsProposalsFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
-
-  describe('#findUrlsSolutionFromChallenge', function() {
-    it('should not find url solution from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        solution: 'solution',
-      };
-      const urls = findUrlsSolutionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url solution from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        solution: 'solution [link](https://example.com/)',
-      };
-      const urls = findUrlsSolutionFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
-
-  describe('#findUrlsSolutionToDisplayFromChallenge', function() {
-    it('should not find url solution to display from a challenge when there is no url', function() {
-      const challenge = {
-        id: 'challenge123',
-        solutionToDisplay: 'solution to display',
-      };
-      const urls = findUrlsSolutionToDisplayFromChallenge(challenge);
-
-      expect(urls).to.deep.equal([]);
-    });
-
-    it('should find url solution to display from a challenge', function() {
-      const challenge = {
-        id: 'challenge123',
-        solutionToDisplay: 'solution to display [link](https://example.com/)',
-      };
-      const urls = findUrlsSolutionToDisplayFromChallenge(challenge);
-
-      expect(urls).to.deep.equal(['https://example.com/']);
-    });
-  });
 
   describe('#findUrlsFromChallenges', function() {
     it('should find urls from challenges', async function() {
@@ -240,7 +116,7 @@ describe('Check urls from release', function() {
         { id: 'wonderland;competence 4.5;@mySkill23;challenge5;validé;nl', url: 'http://alice.hole' },
       ];
 
-      const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById);
+      const urls = findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils);
       expect(urls).to.deep.equal(expectedOutput);
     });
   });

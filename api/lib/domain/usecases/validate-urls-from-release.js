@@ -1,52 +1,8 @@
-import showdown from 'showdown';
 import _ from 'lodash';
-import urlRegex from 'url-regex-safe';
 import axios from 'axios';
 import { wrapper } from 'axios-cookiejar-support';
 import { CookieJar } from 'tough-cookie';
-
 import { logger } from '../../infrastructure/logger.js';
-
-export function findUrlsInstructionFromChallenge(challenge) {
-  return findUrlsInMarkdown(challenge.instruction || '');
-}
-
-export function findUrlsProposalsFromChallenge(challenge) {
-  return findUrlsInMarkdown(challenge.proposals || '');
-}
-
-export function findUrlsSolutionFromChallenge(challenge) {
-  return findUrlsInMarkdown(challenge.solution || '');
-}
-
-export function findUrlsSolutionToDisplayFromChallenge(challenge) {
-  return findUrlsInMarkdown(challenge.solutionToDisplay || '');
-}
-
-function cleanUrl(url) {
-  const index = url.indexOf('</');
-  if (index >= 0) {
-    return url.substr(0, index);
-  }
-  return url;
-}
-
-function prependProtocol(url) {
-  if (!url.includes('http')) {
-    url = 'https://' + url;
-  }
-  return url;
-}
-
-export function findUrlsInMarkdown(value) {
-  const converter = new showdown.Converter();
-  const html = converter.makeHtml(value);
-  const urls = html.match(urlRegex({ strict: true }));
-  if (!urls) {
-    return [];
-  }
-  return _.uniq(urls.map(cleanUrl).map(prependProtocol));
-}
 
 function findCompetenceOriginAndNameFromChallenge(challenge, release) {
   const skill = release.skills.find(({ id }) => challenge.skillId === id);
@@ -92,13 +48,13 @@ function findSkillsNameFromTutorial(tutorial, release) {
   return skills.map((s) => s.name).join(' ');
 }
 
-export function findUrlsFromChallenges(challenges, release, localizedChallengesById) {
+export function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
   return challenges.flatMap((challenge) => {
     const functions = [
-      findUrlsInstructionFromChallenge,
-      findUrlsProposalsFromChallenge,
-      findUrlsSolutionFromChallenge,
-      findUrlsSolutionToDisplayFromChallenge,
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.proposals),
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.solution),
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.solutionToDisplay),
       (challenge) => localizedChallengesById[challenge.id].urlsToConsult ?? [],
     ];
     const urls = functions
@@ -180,17 +136,17 @@ function getDataToUpload(analyzedLines) {
   });
 }
 
-export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository, localizedChallengeRepository }) {
+export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository, localizedChallengeRepository, UrlUtils }) {
   const release = await releaseRepository.getLatestRelease();
 
-  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository });
+  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository, UrlUtils });
   await checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository }) {
+async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository, UrlUtils }) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
-  const urlList = findUrlsFromChallenges(operativeChallenges, release.content, localizedChallengesById);
+  const urlList = findUrlsFromChallenges(operativeChallenges, release.content, localizedChallengesById, UrlUtils);
 
   const analyzedLines = await analyzeUrls(urlList);
   const dataToUpload = getDataToUpload(analyzedLines);

@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import { findUrlsInstructionFromChallenge, findUrlsProposalsFromChallenge } from './index.js';
 
-export async function exportExternalUrlsFromRelease({ releaseRepository }) {
+export async function exportExternalUrlsFromRelease({ releaseRepository, UrlUtils }) {
   const release = (await releaseRepository.getLatestRelease()).content;
   const skillIdsWithFramework = getSkillIdsWithFramework(release);
   const operativeChallenges = release.operativeChallenges;
-  const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, release);
+  const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, UrlUtils);
 
   const baseUrl = function(url) {
     const parsedUrl = new URL(url);
@@ -25,11 +24,11 @@ export async function exportExternalUrlsFromRelease({ releaseRepository }) {
   });
 }
 
-function findUrlsFromChallenges(challenges) {
+function findUrlsFromChallenges(challenges, UrlUtils) {
   const urlsFromChallenges = challenges.flatMap((challenge) => {
     const functions = [
-      findUrlsInstructionFromChallenge,
-      findUrlsProposalsFromChallenge
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
+      (challenge) => UrlUtils.findUrlsInMarkdown(challenge.proposals),
     ];
     return functions
       .flatMap((fun) => fun(challenge))
