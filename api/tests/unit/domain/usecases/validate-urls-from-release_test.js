@@ -8,7 +8,7 @@ import {
   findUrlsProposalsFromChallenge,
   findUrlsSolutionFromChallenge,
   findUrlsSolutionToDisplayFromChallenge,
-  getLiveChallenges
+  getOperativeChallenges
 } from '../../../../lib/domain/usecases/index.js';
 
 describe('Check urls from release', function() {
@@ -246,8 +246,8 @@ describe('Check urls from release', function() {
     });
   });
 
-  describe('#getLiveChallenges', function() {
-    it('should use challenge that are not outdated', function() {
+  describe('#getOperativeChallenges', function() {
+    it('should list challenges that are not outdated or proposed', function() {
       const release = {
         challenges : [
           {
@@ -261,7 +261,11 @@ describe('Check urls from release', function() {
           {
             id: 'challenge3',
             status: 'périmé'
-          }
+          },
+          {
+            id: 'challenge4',
+            status: 'archivé'
+          },
         ]
       };
 
@@ -271,12 +275,12 @@ describe('Check urls from release', function() {
           status: 'validé'
         },
         {
-          id: 'challenge2',
-          status: 'proposé'
+          id: 'challenge4',
+          status: 'archivé'
         }
       ];
 
-      const challenges = getLiveChallenges(release);
+      const challenges = getOperativeChallenges(release);
 
       expect(challenges).to.deep.equal(expectedOutput);
     });
