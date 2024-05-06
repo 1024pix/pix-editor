@@ -53,7 +53,15 @@ async function mockCurrentContent() {
     localizedChallengeId: 'localized-challenge-id',
   };
 
-  const expectedChallenge = { ...challenge, geography: 'Brésil', area: 'Brésil' };
+  const expectedChallenge = {
+    ...challenge,
+    geography: 'Brésil',
+    area: 'Brésil',
+    urlsToConsult: [
+      'https://example.com/',
+      'https://pix.org/nl-be',
+    ],
+  };
   delete expectedChallenge.localizedChallenges;
 
   const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
@@ -159,6 +167,10 @@ async function mockCurrentContent() {
     embedUrl: challenge.embedUrl,
     status: 'validé',
     geography: 'BR',
+    urlsToConsult: [
+      'https://example.com/',
+      'https://pix.org/nl-be',
+    ],
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
