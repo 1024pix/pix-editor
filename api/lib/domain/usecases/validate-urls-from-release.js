@@ -7,50 +7,6 @@ export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepos
   await checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository, UrlUtils });
 }
 
-function findCompetenceOriginAndNameFromChallenge(challenge, release) {
-  const skill = release.skills.find(({ id }) => challenge.skillId === id);
-  if (!skill) return ['', ''];
-  return findCompetenceOriginAndNameFromSkill(skill, release);
-}
-
-function findCompetencesNameFromTutorial(tutorial, release) {
-  const skills = release.skills.filter((skill) => {
-    return skill.tutorialIds.includes(tutorial.id) ||
-      skill.learningMoreTutorialIds.includes(tutorial.id);
-  });
-  const competenceNames =  _.uniq(skills.map((skill) => skill ? findCompetenceNameFromSkill(skill, release) : ''));
-  return competenceNames.join(' ');
-}
-
-function findCompetenceFromSkill(skill, release) {
-  const tube = release.tubes.find(({ id }) => skill.tubeId === id);
-  if (!tube) return '';
-  return release.competences.find(({ id }) => tube.competenceId === id);
-}
-
-function findCompetenceNameFromSkill(skill, release) {
-  const competence = findCompetenceFromSkill(skill, release);
-  return competence?.name_i18n.fr ?? '';
-}
-
-function findCompetenceOriginAndNameFromSkill(skill, release) {
-  const competence = findCompetenceFromSkill(skill, release);
-  return [competence?.origin ?? '', competence?.name_i18n.fr ?? ''];
-}
-
-function findSkillsNameFromChallenge(challenge, release) {
-  const skills = release.skills.filter(({ id }) => challenge.skillId === id);
-  return skills.map((s) => s.name).join(' ');
-}
-
-function findSkillsNameFromTutorial(tutorial, release) {
-  const skills = release.skills.filter((skill) => {
-    return skill.tutorialIds.includes(tutorial.id) ||
-      skill.learningMoreTutorialIds.includes(tutorial.id);
-  });
-  return skills.map((s) => s.name).join(' ');
-}
-
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
   return challenges.flatMap((challenge) => {
     const functions = [
@@ -63,7 +19,16 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
     const urls = functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: [findCompetenceOriginAndNameFromChallenge(challenge, release).join(';'), findSkillsNameFromChallenge(challenge, release), challenge.id, challenge.status, challenge.locales[0]].join(';'), url };
+        return {
+          id: [
+            release.findOriginForChallenge(challenge) ?? '',
+            release.findCompetenceNameForChallenge(challenge) ?? '',
+            release.findSkillNameForChallenge(challenge) ?? '',
+            challenge.id,
+            challenge.status,
+            challenge.locales[0]
+          ].join(';'),
+          url };
       });
     return _.uniqBy(urls, 'url');
   });
@@ -71,7 +36,14 @@ function findUrlsFromChallenges(challenges, release, localizedChallengesById, Ur
 
 function findUrlsFromTutorials(tutorials, release) {
   return tutorials.map((tutorial) => {
-    return { id: [findCompetencesNameFromTutorial(tutorial, release), findSkillsNameFromTutorial(tutorial, release), tutorial.id].join(';'), url: tutorial.link };
+    return {
+      id: [
+        release.findCompetenceNamesForTutorial(tutorial).join(' '),
+        release.findSkillNamesForTutorial(tutorial).join(' '),
+        tutorial.id
+      ].join(';'),
+      url: tutorial.link,
+    };
   });
 }
 
@@ -86,7 +58,7 @@ function keepAndFormatKOUrls(analyzedLines) {
 async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository, UrlUtils }) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
-  const urlList = findUrlsFromChallenges(operativeChallenges, release.content, localizedChallengesById, UrlUtils);
+  const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
   const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlErrorRepository.updateChallenges(formattedKOChallengeUrls);
@@ -94,7 +66,7 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository,
 
 async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository, UrlUtils }) {
   const tutorials = release.content.tutorials;
-  const urlList = findUrlsFromTutorials(tutorials, release.content);
+  const urlList = findUrlsFromTutorials(tutorials, release);
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlErrorRepository.updateTutorials(formattedKOTutorialUrls);
