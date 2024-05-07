@@ -1,9 +1,9 @@
-import { checkUrl } from '../lib/domain/usecases/validate-urls-from-release.js';
+import { UrlUtils } from '../lib/infrastructure/utils/url-utils.js';
 
 async function main(url) {
   console.log('checking', url);
   try {
-    const result = await checkUrl(url, {
+    const result = await UrlUtils.checkUrl(url, {
       timeout: 4000,
       maxRedirects: 10,
       headers: {

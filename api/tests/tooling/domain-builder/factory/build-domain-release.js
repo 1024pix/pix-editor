@@ -13,10 +13,32 @@ export const buildDomainRelease = function({
   });
 };
 
-buildDomainRelease.withChallengesFromRelease = function({ id, challengesFromRelease, createdAt }) {
+buildDomainRelease.withContent = function({
+  id,
+  frameworksFromRelease,
+  areasFromRelease,
+  competencesFromRelease,
+  thematicsFromRelease,
+  tubesFromRelease,
+  skillsFromRelease,
+  challengesFromRelease,
+  tutorialsFromRelease,
+  missionsFromRelease,
+  createdAt,
+}) {
   return buildDomainRelease({
     id,
-    content: buildContentForRelease({ challenges: challengesFromRelease }),
+    content: buildContentForRelease({
+      frameworks: frameworksFromRelease,
+      areas: areasFromRelease,
+      competences: competencesFromRelease,
+      thematics: thematicsFromRelease,
+      tubes: tubesFromRelease,
+      skills: skillsFromRelease,
+      challenges: challengesFromRelease,
+      tutorials: tutorialsFromRelease,
+      missions: missionsFromRelease,
+    }),
     createdAt,
   });
 };

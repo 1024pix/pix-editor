@@ -6,7 +6,7 @@ describe('Unit | Domain | Release', () => {
   describe('#get operativeChallenges', () => {
     it('should only return operative challenges', () => {
       // given
-      const release = domainBuilder.buildDomainRelease.withChallengesFromRelease({
+      const release = domainBuilder.buildDomainRelease.withContent({
         challengesFromRelease: [
           domainBuilder.buildChallengeForRelease({ id: 'valideChal0', status: ChallengeForRelease.STATUSES.VALIDE }),
           domainBuilder.buildChallengeForRelease({ id: 'perimeChal0', status: ChallengeForRelease.STATUSES.PERIME }),
@@ -25,7 +25,7 @@ describe('Unit | Domain | Release', () => {
     });
     it('should return an empty array if no operative challenges', () => {
       // given
-      const release = domainBuilder.buildDomainRelease.withChallengesFromRelease({
+      const release = domainBuilder.buildDomainRelease.withContent({
         challengesFromRelease: [
           domainBuilder.buildChallengeForRelease({ id: 'perimeChal0', status: ChallengeForRelease.STATUSES.PERIME }),
           domainBuilder.buildChallengeForRelease({ id: 'proposeChal0', status: ChallengeForRelease.STATUSES.PROPOSE }),
