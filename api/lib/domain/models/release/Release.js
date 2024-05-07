@@ -25,6 +25,11 @@ export class Release {
     return competence?.name_i18n.fr ?? null;
   }
 
+  findTubeNameForChallenge(challenge) {
+    const tube = _findTubeForChallenge(challenge, this.content);
+    return tube?.name ?? null;
+  }
+
   findSkillNameForChallenge(challenge) {
     const skill = _findSkillForChallenge(challenge, this.content);
     return skill?.name ?? null;
@@ -46,6 +51,14 @@ function _findCompetenceForChallenge(challenge, content) {
   const skill = _findSkillForChallenge(challenge, content);
   if (!skill) return null;
   return _findCompetenceForSkill(skill, content);
+}
+
+function _findTubeForChallenge(challenge, content) {
+  const skill = _findSkillForChallenge(challenge, content);
+  if (!skill) return null;
+  const tube = content.tubes.find(({ id }) => skill.tubeId === id);
+  if (!tube) return null;
+  return tube;
 }
 
 function _findSkillForChallenge(challenge, content) {

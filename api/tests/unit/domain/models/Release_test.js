@@ -261,6 +261,72 @@ describe('Unit | Domain | Release', () => {
     });
   });
 
+  describe('#findTubeNameForChallenge', () => {
+    let challengeWithNoSkill, challengeWithNoTube, challengeOk;
+    let release;
+
+    beforeEach(() => {
+      const tube =  domainBuilder.buildTubeForRelease({
+        id: 'tubeId1',
+        name: 'tube1Name',
+      });
+      const skill = domainBuilder.buildSkillForRelease({
+        id: 'skillId1',
+        tubeId: tube.id,
+        name: '@mySkill1',
+      });
+      const skillNoTube = domainBuilder.buildSkillForRelease({
+        id: 'skillNoTubeId',
+        tubeId: 'tubeUnknown',
+        name: '@mySkill2',
+      });
+      challengeWithNoSkill = domainBuilder.buildChallengeForRelease({
+        id: 'challengeIdWithNoSkill',
+        skillId: 'skillUnknown',
+        status: ChallengeForRelease.STATUSES.VALIDE,
+      });
+      challengeWithNoTube = domainBuilder.buildChallengeForRelease({
+        id: 'challengeIdWithNoTube',
+        skillId: skillNoTube.id,
+        status: ChallengeForRelease.STATUSES.VALIDE,
+      });
+      challengeOk = domainBuilder.buildChallengeForRelease({
+        id: 'challengeIdOk',
+        skillId: skill.id,
+        status: ChallengeForRelease.STATUSES.VALIDE,
+      });
+      release = domainBuilder.buildDomainRelease.withContent({
+        tubesFromRelease: [tube],
+        skillsFromRelease: [skill, skillNoTube],
+        challengesFromRelease: [challengeWithNoSkill, challengeWithNoTube, challengeOk],
+      });
+    });
+
+    it('should return null when no skill found for challenge', () => {
+      // when
+      const tubeName = release.findTubeNameForChallenge(challengeWithNoSkill);
+
+      // then
+      expect(tubeName).toStrictEqual(null);
+    });
+
+    it('should return null when no tube found for challenge', () => {
+      // when
+      const tubeName = release.findTubeNameForChallenge(challengeWithNoTube);
+
+      // then
+      expect(tubeName).toStrictEqual(null);
+    });
+
+    it('should return the tube name', () => {
+      // when
+      const tubeName = release.findTubeNameForChallenge(challengeOk);
+
+      // then
+      expect(tubeName).toStrictEqual('tube1Name');
+    });
+  });
+
   describe('#findSkillNameForChallenge', () => {
     let challengeWithNoSkill, challengeOk;
     let release;

@@ -1,8 +1,7 @@
 import _ from 'lodash';
 
 export async function exportExternalUrlsFromRelease({ releaseRepository, UrlUtils }) {
-  const release = (await releaseRepository.getLatestRelease()).content;
-  const skillIdsWithFramework = getSkillIdsWithFramework(release);
+  const release = (await releaseRepository.getLatestRelease());
   const operativeChallenges = release.operativeChallenges;
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, UrlUtils);
 
@@ -12,9 +11,9 @@ export async function exportExternalUrlsFromRelease({ releaseRepository, UrlUtil
   };
 
   urlsFromChallenges.forEach((urlChallenge) => {
-    urlChallenge.origin = skillIdsWithFramework[urlChallenge.skillId];
+    urlChallenge.origin = release.findOriginForChallenge(urlChallenge.challenge) ?? '';
     urlChallenge.url = baseUrl(urlChallenge.url);
-    urlChallenge.tube = getTubeName(release, urlChallenge);
+    urlChallenge.tube = release.findTubeNameForChallenge(urlChallenge.challenge) ?? '';
   });
 
   const uniqUrls = _.uniqBy(urlsFromChallenges, 'url');
@@ -33,32 +32,8 @@ function findUrlsFromChallenges(challenges, UrlUtils) {
     return functions
       .flatMap((fun) => fun(challenge))
       .map((url) => {
-        return { id: challenge.id, locales: challenge.locales, url, skillId: challenge.skillId, status: challenge.status };
+        return { challenge: challenge, id: challenge.id, locales: challenge.locales, url, skillId: challenge.skillId, status: challenge.status };
       });
   });
   return _.uniqBy(urlsFromChallenges, 'url');
-}
-
-function getTubeName(release, challenge) {
-  const skill = release.skills.find((skill) => {
-    return skill.id === challenge.skillId;
-  });
-  const tube = release.tubes.find((tube) => {
-    return tube.id === skill.tubeId;
-  });
-  return tube.name;
-}
-
-function getSkillIdsWithFramework(release) {
-  return release.competences.reduce((memo, competence) => {
-    return {
-      ...competence.skillIds.reduce((memo2, skillId) => {
-        return {
-          [skillId]: competence.origin,
-          ...memo2
-        };
-      }, {}),
-      ...memo
-    };
-  }, {});
 }
