@@ -75,7 +75,7 @@ function findUrlsFromTutorials(tutorials, release) {
   });
 }
 
-function getDataToUpload(analyzedLines) {
+function keepAndFormatKOUrls(analyzedLines) {
   return analyzedLines.filter((line) => {
     return line.status === 'KO';
   }).map((line) => {
@@ -87,15 +87,15 @@ async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository,
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release.content, localizedChallengesById, UrlUtils);
-  const analyzedLines = await UrlUtils.analyzeIdentifiedUrls(urlList);
-  const dataToUpload = getDataToUpload(analyzedLines);
-  await urlErrorRepository.updateChallenges(dataToUpload);
+  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
+  const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
+  await urlErrorRepository.updateChallenges(formattedKOChallengeUrls);
 }
 
 async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository, UrlUtils }) {
   const tutorials = release.content.tutorials;
   const urlList = findUrlsFromTutorials(tutorials, release.content);
-  const analyzedLines = await UrlUtils.analyzeIdentifiedUrls(urlList);
-  const dataToUpload = getDataToUpload(analyzedLines);
-  await urlErrorRepository.updateTutorials(dataToUpload);
+  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
+  const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
+  await urlErrorRepository.updateTutorials(formattedKOTutorialUrls);
 }
