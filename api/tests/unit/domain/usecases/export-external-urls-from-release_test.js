@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 import { exportExternalUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
@@ -6,15 +6,9 @@ import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Export external urls from release', function() {
   describe('#exportExternalUrlsFromRelease', function() {
-    let releaseRepository, mockedUrlUtils;
-    let consoleLogMock;
-
-    afterEach(() => {
-      consoleLogMock.mockReset();
-    });
+    let releaseRepository, mockedUrlUtils, urlErrorRepository;
 
     beforeEach(function() {
-      consoleLogMock = vi.spyOn(console, 'log').mockImplementation(() => undefined);
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
         id: 'competence1',
         origin: 'Pix',
@@ -103,18 +97,23 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       mockedUrlUtils = {
         findUrlsInMarkdown: UrlUtils.findUrlsInMarkdown,
       };
+      urlErrorRepository = {
+        exportExternalUrls: vi.fn(),
+      };
     });
 
-    it('should log external URLs on operative challenges', async function() {
+    it('should export external URLs for operative challenges', async function() {
       // when
-      await exportExternalUrlsFromRelease({ releaseRepository, UrlUtils: mockedUrlUtils });
+      await exportExternalUrlsFromRelease({ releaseRepository, urlErrorRepository, UrlUtils: mockedUrlUtils });
 
       // then
-      expect(consoleLogMock.mock.calls[0]).toStrictEqual(['Pix,@NomTube1,https://examplechal1.net,fr,validé']);
-      expect(consoleLogMock.mock.calls[1]).toStrictEqual(['Pix,@NomTube1,https://other_examplechal1.net,fr,validé']);
-      expect(consoleLogMock.mock.calls[2]).toStrictEqual(['Pix,@NomTube1,https://example2chal1.net,fr,validé']);
-      expect(consoleLogMock.mock.calls[3]).toStrictEqual(['wonderland,@NomTube2,https://examplechal4.fr,nl;FR-fr,archivé']);
-      expect(consoleLogMock).toHaveBeenCalledTimes(4);
+      expect(urlErrorRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
+      expect(urlErrorRepository.exportExternalUrls).toHaveBeenCalledWith([
+        ['Pix','@NomTube1','https://examplechal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://other_examplechal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://example2chal1.net','fr','validé'],
+        ['wonderland','@NomTube2','https://examplechal4.fr','nl;FR-fr','archivé'],
+      ]);
     });
   });
 });

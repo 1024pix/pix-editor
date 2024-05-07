@@ -114,6 +114,11 @@ export const checkUrlsJobs = {
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
 };
 
+export const exportExternalUrlsJob = {
+  googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
+  spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID,
+};
+
 export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
   projectId: process.env.PHRASE_PROJECT_ID,

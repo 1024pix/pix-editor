@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export async function exportExternalUrlsFromRelease({ releaseRepository, UrlUtils }) {
+export async function exportExternalUrlsFromRelease({ releaseRepository, urlErrorRepository, UrlUtils }) {
   const release = (await releaseRepository.getLatestRelease());
   const operativeChallenges = release.operativeChallenges;
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, UrlUtils);
@@ -17,10 +17,9 @@ export async function exportExternalUrlsFromRelease({ releaseRepository, UrlUtil
   });
 
   const uniqUrls = _.uniqBy(urlsFromChallenges, 'url');
-
-  uniqUrls.forEach(({ origin, url, locales, status, tube }) => {
-    console.log([origin, tube, url, locales.join(';'), status].join(','));
-  });
+  const dataToUpload = uniqUrls.map(({ origin, url, locales, status, tube }) =>
+    [origin, tube, url, locales.join(';'), status]);
+  await urlErrorRepository.exportExternalUrls(dataToUpload);
 }
 
 function findUrlsFromChallenges(challenges, UrlUtils) {
