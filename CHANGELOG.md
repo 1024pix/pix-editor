@@ -1,5 +1,13 @@
 
 
+## v3.145.0 (14/05/2024)
+
+
+### :rocket: Amélioration
+- [#661](https://github.com/1024pix/pix-editor/pull/661) [FEATURE] Améliorer le champ d'URLs externes (PIX-12014).
+- [#660](https://github.com/1024pix/pix-editor/pull/660) [FEATURE] Ne pas checker les URLs des épreuves proposées (PIX-12411).
+- [#659](https://github.com/1024pix/pix-editor/pull/659) [FEATURE] Remonter les "URLs externes à consulter" dans métabase (PIX-12409).
+
 ## v3.144.0 (03/05/2024)
 
 
