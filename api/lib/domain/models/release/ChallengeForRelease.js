@@ -70,7 +70,7 @@ export class ChallengeForRelease {
   }
 
   get isOperative() {
-    return this.status !== Challenge.STATUSES.PROPOSE && this.status !== Challenge.STATUSES.PERIME;
+    return [Challenge.STATUSES.VALIDE, Challenge.STATUSES.ARCHIVE].includes(this.status);
   }
 
   canExportForTranslation(locale) {
