@@ -38,7 +38,7 @@ async function setSpreadsheetValues({ spreadsheetId, auth, range, valueInputOpti
 
 async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   try {
-    const auth = await getAuthToken(config.checkUrlsJobs.googleAuthCredentials);
+    const auth = await getAuthToken(config.googleAuthCredentials);
     await clearSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
@@ -60,7 +60,7 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
 
 async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
   try {
-    const auth = await getAuthToken(config.exportExternalUrlsJob.googleAuthCredentials);
+    const auth = await getAuthToken(config.googleAuthCredentials);
     if ((await sheets.spreadsheets.get({ spreadsheetId, auth })).data.sheets
       .filter((sheet) => sheet.properties.title === sheetName).length === 0) {
       await sheets.spreadsheets.batchUpdate({

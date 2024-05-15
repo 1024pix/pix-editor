@@ -107,15 +107,15 @@ export const notifications = {
   },
 };
 
+export const googleAuthCredentials = JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}');
+
 export const checkUrlsJobs = {
-  googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
   spreadsheetId: process.env.CHECK_URLS_SPREADSHEET_ID,
   challengesSheetName: process.env.CHECK_URLS_CHALLENGES_SHEET_NAME,
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
 };
 
 export const exportExternalUrlsJob = {
-  googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
   spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID,
 };
 
