@@ -1,10 +1,10 @@
 import _ from 'lodash';
 
-export async function validateUrlsFromRelease({ releaseRepository, urlErrorRepository, localizedChallengeRepository, UrlUtils }) {
+export async function validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, UrlUtils }) {
   const release = await releaseRepository.getLatestRelease();
 
-  await checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository, UrlUtils });
-  await checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository, UrlUtils });
+  await checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils });
+  await checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils });
 }
 
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
@@ -55,19 +55,19 @@ function keepAndFormatKOUrls(analyzedLines) {
   });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release, { urlErrorRepository, localizedChallengeRepository, UrlUtils }) {
+async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
   const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlErrorRepository.updateChallenges(formattedKOChallengeUrls);
+  await urlRepository.updateChallenges(formattedKOChallengeUrls);
 }
 
-async function checkAndUploadKOUrlsFromTutorials(release, { urlErrorRepository, UrlUtils }) {
+async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }) {
   const tutorials = release.content.tutorials;
   const urlList = findUrlsFromTutorials(tutorials, release);
   const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
-  await urlErrorRepository.updateTutorials(formattedKOTutorialUrls);
+  await urlRepository.updateTutorials(formattedKOTutorialUrls);
 }

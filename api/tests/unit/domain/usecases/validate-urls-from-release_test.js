@@ -6,7 +6,7 @@ import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Validate urls from release', function() {
   describe('#validateUrlsFromRelease', function() {
-    let releaseRepository, urlErrorRepository, localizedChallengeRepository, mockedUrlUtils;
+    let releaseRepository, urlRepository, localizedChallengeRepository, mockedUrlUtils;
     const identifiedUrlChallenge1_1 = {
       id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr',
       url: 'https://example.net/',
@@ -185,7 +185,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         domainBuilder.buildLocalizedChallenge({ id: 'challenge7', urlsToConsult: [] }),
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
-      urlErrorRepository = {
+      urlRepository = {
         updateChallenges: vi.fn(),
         updateTutorials: vi.fn(),
       };
@@ -297,13 +297,13 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         ]);
 
       // when
-      await validateUrlsFromRelease({ releaseRepository, urlErrorRepository, localizedChallengeRepository, UrlUtils: mockedUrlUtils });
+      await validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, UrlUtils: mockedUrlUtils });
 
       // then
       expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[0]).toStrictEqual([[identifiedUrlChallenge1_1, identifiedUrlChallenge1_2, identifiedUrlChallenge1_3, identifiedUrlChallenge1_4, identifiedUrlChallenge1_5, identifiedUrlChallenge2_1, identifiedUrlChallenge2_2, identifiedUrlChallenge3_1, identifiedUrlChallenge4_1, identifiedUrlChallenge5_1 ]]);
       expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[1]).toStrictEqual([[identifiedTutorial1, identifiedTutorial2, identifiedTutorial3 ]]);
-      expect(urlErrorRepository.updateChallenges).toHaveBeenCalledTimes(1);
-      expect(urlErrorRepository.updateChallenges).toHaveBeenCalledWith([[
+      expect(urlRepository.updateChallenges).toHaveBeenCalledTimes(1);
+      expect(urlRepository.updateChallenges).toHaveBeenCalledWith([[
         'Pix',
         'competence 1.1',
         '@mySkill1',
@@ -376,8 +376,8 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         'identifiedUrlChallenge5_1 HTTP_ERROR',
       ]
       ]);
-      expect(urlErrorRepository.updateTutorials).toHaveBeenCalledTimes(1);
-      expect(urlErrorRepository.updateTutorials).toHaveBeenCalledWith([[
+      expect(urlRepository.updateTutorials).toHaveBeenCalledTimes(1);
+      expect(urlRepository.updateTutorials).toHaveBeenCalledWith([[
         'competence 1.1',
         '@mySkill1',
         'tutorial1',

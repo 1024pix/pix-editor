@@ -6,7 +6,7 @@ import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Export external urls from release', function() {
   describe('#exportExternalUrlsFromRelease', function() {
-    let releaseRepository, mockedUrlUtils, urlErrorRepository;
+    let releaseRepository, mockedUrlUtils, urlRepository;
 
     beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
@@ -97,18 +97,18 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       mockedUrlUtils = {
         findUrlsInMarkdown: UrlUtils.findUrlsInMarkdown,
       };
-      urlErrorRepository = {
+      urlRepository = {
         exportExternalUrls: vi.fn(),
       };
     });
 
     it('should export external URLs for operative challenges', async function() {
       // when
-      await exportExternalUrlsFromRelease({ releaseRepository, urlErrorRepository, UrlUtils: mockedUrlUtils });
+      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils: mockedUrlUtils });
 
       // then
-      expect(urlErrorRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
-      expect(urlErrorRepository.exportExternalUrls).toHaveBeenCalledWith([
+      expect(urlRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
+      expect(urlRepository.exportExternalUrls).toHaveBeenCalledWith([
         ['Pix','@NomTube1','https://examplechal1.net','fr','validé'],
         ['Pix','@NomTube1','https://other_examplechal1.net','fr','validé'],
         ['Pix','@NomTube1','https://example2chal1.net','fr','validé'],

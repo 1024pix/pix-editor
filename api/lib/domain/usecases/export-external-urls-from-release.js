@@ -1,12 +1,12 @@
 import _ from 'lodash';
 
-export async function exportExternalUrlsFromRelease({ releaseRepository, urlErrorRepository, UrlUtils }) {
+export async function exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils }) {
   const release = (await releaseRepository.getLatestRelease());
   const operativeChallenges = release.operativeChallenges;
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, release, UrlUtils);
   const dataToUpload = urlsFromChallenges.map(({ origin, url, locales, status, tube }) =>
     [origin, tube, url, locales.join(';'), status]);
-  await urlErrorRepository.exportExternalUrls(dataToUpload);
+  await urlRepository.exportExternalUrls(dataToUpload);
 }
 
 function findUrlsFromChallenges(challenges, release, UrlUtils) {
