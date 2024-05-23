@@ -51,11 +51,6 @@ export default class GridCell extends Component {
           return 'quality';
         }
         break;
-      case 'i18n' :
-        if (skill) {
-          return 'i18n';
-        }
-        break;
     }
     return 'empty';
   }

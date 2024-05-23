@@ -13,10 +13,8 @@ export default class CompetenceHeader extends Component {
   }, {
     title: 'Qualité',
     id: 'quality'
-  }, {
-    title: 'International',
-    id: 'i18n'
-  }];
+  },
+  ];
 
   languageOptions = [{
     local: false,
