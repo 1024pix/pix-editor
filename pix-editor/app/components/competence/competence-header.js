@@ -39,6 +39,9 @@ export default class CompetenceHeader extends Component {
   }, {
     language: 'Portugais',
     local: 'pt',
+  }, {
+    language: 'Néerlandais',
+    local: 'nl',
   }];
 
   get liteClass() {
