@@ -70,6 +70,14 @@ export class Skill {
     return 'skill';
   }
 
+  static get WORKBENCH() {
+    return '@workbench';
+  }
+
+  get isWorkbench() {
+    return this.name === Skill.WORKBENCH;
+  }
+
   get isLive() {
     return [Skill.STATUSES.EN_CONSTRUCTION, Skill.STATUSES.ACTIF].includes(this.status);
   }
@@ -80,6 +88,14 @@ export class Skill {
 
   get isActif() {
     return this.status === Skill.STATUSES.ACTIF;
+  }
+
+  get isArchive() {
+    return this.status === Skill.STATUSES.ARCHIVE;
+  }
+
+  get isPerime() {
+    return this.status === Skill.STATUSES.PERIME;
   }
 
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {

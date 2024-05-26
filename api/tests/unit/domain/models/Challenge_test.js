@@ -526,6 +526,93 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isPrototype', () => {
+    it('should return true when challenge is a prototype', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.GENEALOGIES).filter((genealogy) => Challenge.GENEALOGIES[genealogy] !== Challenge.GENEALOGIES.PROTOTYPE)
+    )('should return false when status key is %s', (genealogy) => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        genealogy,
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.false;
+    });
+  });
+
+  describe('#get isDeclinaison', () => {
+    it('should return true when challenge is a declinaison', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+
+      // when
+      const isDeclinaison = challenge.isDeclinaison;
+
+      // then
+      expect(isDeclinaison).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.GENEALOGIES).filter((genealogy) => Challenge.GENEALOGIES[genealogy] !== Challenge.GENEALOGIES.DECLINAISON)
+    )('should return false when status key is %s', (genealogy) => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        genealogy,
+      });
+
+      // when
+      const isDeclinaison = challenge.isDeclinaison;
+
+      // then
+      expect(isDeclinaison).to.be.false;
+    });
+  });
+
+  describe('#get isDeclinable', () => {
+    it('should return false when challenge is not declinable', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        declinable: Challenge.DECLINABLES.NON,
+      });
+
+      // when
+      const isDeclinable = challenge.isDeclinable;
+
+      // then
+      expect(isDeclinable).to.be.false;
+    });
+
+    it.each(Object.keys(Challenge.DECLINABLES).filter((declinable) => Challenge.DECLINABLES[declinable] !== Challenge.DECLINABLES.NON)
+    )('should return true when status key is %s', (declinable) => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        declinable,
+      });
+
+      // when
+      const isDeclinable = challenge.isDeclinable;
+
+      // then
+      expect(isDeclinable).to.be.true;
+    });
+  });
+
   describe('#cloneChallengeAndAttachments', ()=> {
     it('should clone challenge', () => {
       // given

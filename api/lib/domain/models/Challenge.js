@@ -231,6 +231,18 @@ export class Challenge {
     return this.status === Challenge.STATUSES.PERIME;
   }
 
+  get isPrototype() {
+    return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
+  }
+
+  get isDeclinaison() {
+    return this.genealogy === Challenge.GENEALOGIES.DECLINAISON;
+  }
+
+  get isDeclinable() {
+    return this.declinable !== Challenge.DECLINABLES.NON;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -261,6 +273,15 @@ export class Challenge {
 
   get translations() {
     return JSON.parse(JSON.stringify(this.#translations));
+  }
+
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
   }
 
   static getPrimaryLocale(locales) {
