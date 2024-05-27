@@ -14,4 +14,12 @@ export class Thematic {
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
   }
+
+  static get WORKBENCH() {
+    return 'workbench';
+  }
+
+  get isWorkbench() {
+    return this.name_i18n['fr'].startsWith(Thematic.WORKBENCH);
+  }
 }
