@@ -7,6 +7,7 @@ import { NotFoundError } from '../../domain/errors.js';
 import { challengeRepository, skillRepository, translationRepository, tubeRepository } from './index.js';
 import { thematicDatasource } from '../datasources/airtable/index.js';
 import { logger } from '../logger.js';
+import { SkillForRelease } from '../../domain/models/release/index.js';
 
 export async function getById(id) {
   const mission = await knex('missions').select('*').where({ id }).first();
@@ -34,7 +35,8 @@ export async function findAllMissions({ filter, page }) {
   };
 }
 
-const SCHOOL_PLAYABLE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
+const SCHOOL_PLAYABLE_CHALLENGE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
+const SCHOOL_PLAYABLE_SKILL_STATUSES = [SkillForRelease.STATUSES.ACTIF, SkillForRelease.STATUSES.EN_CONSTRUCTION];
 
 export async function list() {
   const missions = await knex('missions').select('*');
@@ -92,7 +94,10 @@ function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityP
     return [];
   }
 
-  const activitySkills = skills.filter((skill) => skill.tubeId === activityTube.id).sort(_byLevel);
+  const activitySkills = skills
+    .filter((skill) => skill.tubeId === activityTube.id)
+    .filter((skill) => SCHOOL_PLAYABLE_SKILL_STATUSES.includes(skill.status.toLowerCase()))
+    .sort(_byLevel);
 
   if (!activitySkills) {
     logger.warn({ activityTube }, 'No skills found for activityTube');
@@ -102,7 +107,7 @@ function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityP
   return activitySkills.map((activitySkill) => {
     const alternatives = challenges
       .filter((challenge) => activitySkill.id === challenge.skillId)
-      .filter((challenge) => SCHOOL_PLAYABLE_STATUSES.includes(challenge.status.toLowerCase()));
+      .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()));
 
     if (alternatives.length === 0) {
       logger.warn({ activitySkill }, 'No challenges found for activitySkill');
