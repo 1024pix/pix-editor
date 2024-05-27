@@ -9,6 +9,7 @@ import {
 } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | mission-repository', function() {
 
@@ -290,6 +291,68 @@ describe('Integration | Repository | mission-repository', function() {
               trainingChallenges: [],
               validationChallenges: [
                 ['challengeValidationValidé', 'challengeValidationProposé'],
+              ],
+            }],
+            dareChallenges: [],
+          },
+        })]);
+      });
+    });
+
+    context('with inactive, proposal, and active skills', async function() {
+      it('should return in progress and active skill challenges only', async function() {
+        mockedLearningContent.challenges = [
+          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillActif', status: 'validé', skillId: 'skillValidation1Active' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillEnConstruction', status: 'validé', skillId: 'skillValidation2InProgress' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillPérimé', status: 'validé', skillId: 'skillValidation3Deprecated' }),
+          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillArchivé', status: 'validé', skillId: 'skillValidation3Archived' }),
+        ];
+        mockedLearningContent.skills = [
+          airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTraining1', level: 1, tubeId: 'tubeTraining1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation1Active', status: SkillForRelease.STATUSES.ACTIF, level: 1, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation2InProgress', status: SkillForRelease.STATUSES.EN_CONSTRUCTION, level: 2, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation3Deprecated', status: SkillForRelease.STATUSES.PERIME, level: 3, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation3Archived', status: SkillForRelease.STATUSES.ARCHIVE, level: 4, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTuto2', level: 1, tubeId: 'tubeTuto2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillTraining2', level: 1, tubeId: 'tubeTraining2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation2', level: 1, tubeId: 'tubeValidation2' }),
+          airtableBuilder.factory.buildSkill({ id: 'skillDare', level: 1, tubeId: 'tubeDare' }),
+        ];
+
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicIds: 'thematicStep1,thematicDefiVide',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicIds: 'thematicStep1,thematicDefiVide',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            steps: [{
+              tutorialChallenges: [],
+              trainingChallenges: [],
+              validationChallenges: [
+                ['challengeSkillActif'],
+                ['challengeSkillEnConstruction'],
               ],
             }],
             dareChallenges: [],

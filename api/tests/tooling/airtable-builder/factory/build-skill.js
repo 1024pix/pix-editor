@@ -6,7 +6,7 @@ export function buildSkill({
   learningMoreTutorialIds,
   pixValue,
   competenceId,
-  status,
+  status = 'actif',
   tubeId,
   description,
   level,
