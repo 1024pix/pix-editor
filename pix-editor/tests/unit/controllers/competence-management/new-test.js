@@ -124,7 +124,8 @@ module('Unit | Controller | competence-management/new', function(hooks) {
     const expectedTheme = {
       name: 'workbench_Pix+_1_1',
       competence,
-      index: 0
+      index: 0,
+      pixId: 'recId',
     };
     const expectedTube = {
       name: '@workbench',
