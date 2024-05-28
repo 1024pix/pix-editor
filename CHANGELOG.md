@@ -1,5 +1,21 @@
 
 
+## v3.146.0 (28/05/2024)
+
+
+### :rocket: Amélioration
+- [#669](https://github.com/1024pix/pix-editor/pull/669) [FEATURE] Ajouter le néerlandais dans la liste des langues disponibles sur les vues Epreuves et Acquis (PIX-12645).
+
+### :bug: Correction
+- [#673](https://github.com/1024pix/pix-editor/pull/673) [BUGFIX] Les thématiques créées dans l'atelier de l'atelier n'avaient pas d'id persistant (PIX-12711).
+- [#672](https://github.com/1024pix/pix-editor/pull/672) [BUGFIX] Ajout d'un filtre sur le status des skills lors de la release des missions.
+
+### :arrow_up: Montée de version
+- [#648](https://github.com/1024pix/pix-editor/pull/648) [BUMP] Lock file maintenance (pix-editor).
+- [#665](https://github.com/1024pix/pix-editor/pull/665) [BUMP] Update dependency @playwright/test to v1.44.0.
+- [#663](https://github.com/1024pix/pix-editor/pull/663) [BUMP] Montée de version node : 20.12.0 vers 20.13.0 + montée de version pixui.
+- [#655](https://github.com/1024pix/pix-editor/pull/655) [BUMP] Update dependency @embroider/webpack to v4 (pix-editor).
+
 ## v3.145.0 (14/05/2024)
 
 
