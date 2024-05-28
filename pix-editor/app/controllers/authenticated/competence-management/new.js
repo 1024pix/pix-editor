@@ -63,7 +63,8 @@ export default class CompetenceManagementNewController extends Controller {
     const workbenchTheme = this.store.createRecord('theme', {
       name: themeWorkbenchName,
       competence,
-      index: 0
+      index: 0,
+      pixId: this.idGenerator.newId('thematic'),
     });
     return await workbenchTheme.save();
   }
