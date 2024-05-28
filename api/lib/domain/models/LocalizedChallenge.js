@@ -39,6 +39,14 @@ export class LocalizedChallenge {
     return this.id === this.challengeId;
   }
 
+  get isValide() {
+    return this.status === LocalizedChallenge.STATUSES.PLAY;
+  }
+
+  get isPropose() {
+    return this.status === LocalizedChallenge.STATUSES.PAUSE;
+  }
+
   get defaultEmbedUrl() {
     if (!this.#primaryEmbedUrl) return null;
 
