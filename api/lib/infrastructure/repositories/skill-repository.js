@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
+import { prefixFor } from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import * as airtable from '../airtable.js';
 
@@ -18,6 +19,14 @@ export async function addSpoilData(skills) {
   const airtableRawObjects = await airtable.findRecords('Acquis', options);
 
   skills.forEach((skill) => addSpoilDataToSkill(skill, airtableRawObjects));
+}
+
+export async function get(id) {
+  const [skillDTO] = await skillDatasource.filter({ filter: { ids: [id] } });
+  if (!skillDTO) return null;
+  const prefix = `${skillTranslations.prefix}${skillDTO.id}`;
+  const translations = await translationRepository.listByPrefix(prefix);
+  return toDomain(skillDTO, translations);
 }
 
 function addSpoilDataToSkill(skill, airtableSkills) {
