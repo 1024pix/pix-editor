@@ -1,9 +1,11 @@
-import { beforeEach, afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, knex } from '../test-helper.js';
 import Airtable from 'airtable';
 import nock from 'nock';
 
-import { migrateThematicsTranslationsFromAirtable } from '../../scripts/migrate-thematics-translations-from-airtable/index.js';
+import {
+  migrateThematicsTranslationsFromAirtable
+} from '../../scripts/migrate-thematics-translations-from-airtable/index.js';
 
 describe('Script | Migrate thematics translations from Airtable', function() {
 
@@ -29,7 +31,6 @@ describe('Script | Migrate thematics translations from Airtable', function() {
     // given
     const thematic1FromAirtable = airtableBuilder.factory.buildThematic({
       id: 'thematicId1',
-      airtableId: 'airtableThematicId1',
     });
     thematic1FromAirtable.fields = {
       ...thematic1FromAirtable.fields,
@@ -38,7 +39,6 @@ describe('Script | Migrate thematics translations from Airtable', function() {
     };
 
     const thematic2FromAirtable = airtableBuilder.factory.buildThematic({
-      airtableId: 'airtableThematicId2',
       id: 'thematicId2',
     });
     thematic2FromAirtable.fields = {

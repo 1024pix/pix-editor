@@ -11,7 +11,7 @@ export const competenceDatasource = datasource.extend({
     'Sous-domaine',
     'Domaine (id persistant)',
     'Acquis (via Tubes) (id persistant)',
-    'Thematiques',
+    'Thematiques (id persistant)',
     'Origine2',
   ],
 
@@ -21,7 +21,7 @@ export const competenceDatasource = datasource.extend({
       index: airtableRecord.get('Sous-domaine'),
       areaId: airtableRecord.get('Domaine (id persistant)') ? airtableRecord.get('Domaine (id persistant)')[0] : '',
       skillIds: airtableRecord.get('Acquis (via Tubes) (id persistant)') || [],
-      thematicIds: airtableRecord.get('Thematiques') || [],
+      thematicIds: airtableRecord.get('Thematiques (id persistant)') || [],
       origin: airtableRecord.get('Origine2')[0],
     };
   },

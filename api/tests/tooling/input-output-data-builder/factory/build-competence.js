@@ -17,7 +17,7 @@ export function buildCompetence({
       'Titre fr-fr': nameFrFr,
       'Titre en-us': nameEnUs,
       'Acquis (via Tubes) (id persistant)': skillIds,
-      'Thematiques': thematicIds,
+      'Thematiques (id persistant)': thematicIds,
       'Origine2': [origin],
       'Description fr-fr': descriptionFrFr,
       'Description en-us': descriptionEnUs,
