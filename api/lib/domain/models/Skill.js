@@ -30,4 +30,17 @@ export class Skill {
     this.level = level;
     this.internationalisation = internationalisation;
   }
+
+  static get STATUSES() {
+    return {
+      ACTIF: 'actif',
+      EN_CONSTRUCTION: 'en construction',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
+
+  get isLive() {
+    return [Skill.STATUSES.EN_CONSTRUCTION, Skill.STATUSES.ACTIF].includes(this.status);
+  }
 }
