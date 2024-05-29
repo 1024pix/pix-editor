@@ -279,29 +279,6 @@
         }
       }
 
-
-      &.i18n {
-        height: 45px;
-        background-color: #6223b6;
-
-        &.active {
-          background-color: #8e2dff !important;
-        }
-
-        .skill-i18n-name {
-          color: white;
-        }
-
-        .flags {
-          margin: 5px;
-          background: rgba(255, 255, 255, .7);
-
-          > i.flag {
-            box-shadow: grey 0 0 2px;
-          }
-        }
-      }
-
       &.quality-skill-cell {
         padding: 0;
 

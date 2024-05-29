@@ -15,8 +15,6 @@
   </td>
 {{else if (eq this.cellType "quality")}}
   <Competence::Grid::CellQuality @skill={{@skill}} />
-{{else if (eq this.cellType "i18n")}}
-  <Competence::Grid::CellI18n @skill={{@skill}} />
 {{else}}
   <td class="skill-cell__empty">
     <div class="no-visibility">{{@tube.name}}</div>
