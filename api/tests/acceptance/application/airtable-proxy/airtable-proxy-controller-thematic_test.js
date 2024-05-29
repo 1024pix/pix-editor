@@ -169,14 +169,10 @@ describe('Acceptance | Controller | airtable-proxy-controller | read thematics',
     thematicDataObject = domainBuilder.buildThematicDatasourceObject({
       id: 'mon_id_persistant',
     });
-    airtableThematic = airtableBuilder.factory.buildThematic({
-      ...thematicDataObject,
-      airtableId: 'mon_id_airtable',
-    });
+    airtableThematic = airtableBuilder.factory.buildThematic(thematicDataObject);
 
     outputThematic = inputOutputDataBuilder.factory.buildThematic({
       ...thematicDataObject,
-      airtableId: 'mon_id_airtable',
       name_i18n: {
         fr: 'french name',
         en: 'english name',

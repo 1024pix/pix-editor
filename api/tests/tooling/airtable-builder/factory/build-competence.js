@@ -13,7 +13,7 @@ export function buildCompetence({
       'Sous-domaine': index,
       'Domaine (id persistant)': [areaId],
       'Acquis (via Tubes) (id persistant)': skillIds,
-      'Thematiques': thematicIds,
+      'Thematiques (id persistant)': thematicIds,
       'Origine2': [origin],
     },
   };
