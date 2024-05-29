@@ -1,5 +1,14 @@
 
 
+## v3.147.0 (29/05/2024)
+
+
+### :building_construction: Tech
+- [#670](https://github.com/1024pix/pix-editor/pull/670) [TECH] Suppression de la vue internationale inutilisée (PIX-12654).
+
+### :bug: Correction
+- [#674](https://github.com/1024pix/pix-editor/pull/674) [BUGFIX] Utiliser l'id persistant des thématiques dans le code + écrire la traduction des noms des thématiques "workbench" (PIX-12726).
+
 ## v3.146.0 (28/05/2024)
 
 
