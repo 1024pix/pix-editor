@@ -1,6 +1,10 @@
 import { describe, describe as context, expect, it, vi } from 'vitest';
 import { hFake } from '../../test-helper.js';
-import { checkUserHasWriteAccess, checkUserIsAuthenticatedViaBasicAndAdmin, checkUserIsAuthenticatedViaBearer } from '../../../lib/application/security-pre-handlers.js';
+import {
+  checkUserHasWriteAccess,
+  checkUserIsAuthenticatedViaBasicAndAdmin,
+  checkUserIsAuthenticatedViaBearer
+} from '../../../lib/application/security-pre-handlers.js';
 import { userRepository } from '../../../lib/infrastructure/repositories/index.js';
 import { User } from '../../../lib/domain/models/User.js';
 import { UserNotFoundError } from '../../../lib/domain/errors.js';
@@ -171,6 +175,23 @@ describe('Unit | Application | SecurityPreHandlers', () => {
       expect(response.source).to.equal(true);
     });
 
+    it('returns nothing when the user is replicator', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'replicator',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
     it('returns an error when the user is readonly', async () => {
       // given
       const user = new User({
@@ -178,6 +199,24 @@ describe('Unit | Application | SecurityPreHandlers', () => {
         name: 'AuthenticatedUser',
         trigram: 'ABC',
         access: 'readonly',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+
+    it('returns an error when the user is pix-readonly', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'readpixonly',
       });
       const request = { auth: { credentials: { user } } };
 

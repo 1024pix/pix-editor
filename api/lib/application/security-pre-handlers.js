@@ -27,5 +27,5 @@ export async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
 }
 
 export function checkUserHasWriteAccess(request, h) {
-  return hasAuthenticatedUserAccess(request, 'readonly') ? replyForbiddenError(h) : h.response(true);
+  return hasAuthenticatedUserAccess(request, ['replicator', 'editor', 'admin']) ? h.response(true) : replyForbiddenError(h);
 }
