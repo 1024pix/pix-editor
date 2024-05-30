@@ -1,5 +1,14 @@
 
 
+## v3.147.1 (30/05/2024)
+
+
+### :bug: Correction
+- [#677](https://github.com/1024pix/pix-editor/pull/677) [BUGFIX] Vérifie la validité des thématiques de la mission via l'id persistant.
+
+### :arrow_up: Montée de version
+- [#668](https://github.com/1024pix/pix-editor/pull/668) [BUMP] Update dependency eslint-plugin-n to v17 (pix-editor).
+
 ## v3.147.0 (29/05/2024)
 
 
