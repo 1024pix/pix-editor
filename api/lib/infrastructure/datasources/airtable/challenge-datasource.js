@@ -186,6 +186,18 @@ export const challengeDatasource = datasource.extend({
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },
+
+  async getAirtableIdsByIds(challengeIds) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: ['Record ID', 'id persistant'],
+      filterByFormula: `OR(${challengeIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
+    });
+    const airtableIdsByIds = {};
+    for (const challengeId of challengeIds) {
+      airtableIdsByIds[challengeId] = airtableRawObjects.find((airtableRecord) => airtableRecord.get('id persistant') === challengeId)?.get('Record ID');
+    }
+    return airtableIdsByIds;
+  },
 });
 
 function _escapeQuery(value) {
