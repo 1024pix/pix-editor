@@ -1,4 +1,6 @@
 import { getCountryCode, getCountryName } from './Geography.js';
+import { LocalizedChallenge } from './LocalizedChallenge.js';
+import _ from 'lodash';
 
 export class Challenge {
 
@@ -93,6 +95,19 @@ export class Challenge {
     this.#translate(this.primaryLocale);
   }
 
+  static get STATUSES() {
+    return {
+      VALIDE: 'validé',
+      PROPOSE: 'proposé',
+      ARCHIVE: 'archivé',
+      PERIME: 'périmé',
+    };
+  }
+
+  static get ID_PREFIX() {
+    return 'challenge';
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -125,13 +140,8 @@ export class Challenge {
     return this.#primaryLocalizedChallenge.urlsToConsult;
   }
 
-  static get STATUSES() {
-    return {
-      VALIDE: 'validé',
-      PROPOSE: 'proposé',
-      ARCHIVE: 'archivé',
-      PERIME: 'périmé',
-    };
+  get translations() {
+    return JSON.parse(JSON.stringify(this.#translations));
   }
 
   static getPrimaryLocale(locales) {
@@ -141,6 +151,75 @@ export class Challenge {
   static defaultLocales(locales) {
     if (locales == undefined || locales.length === 0) return ['fr'];
     return [...locales].sort();
+  }
+
+  cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
+    const id = generateNewIdFnc(Challenge.ID_PREFIX);
+    const clonedAttachments  = attachments
+      .filter((attachment) => attachment.localizedChallengeId === this.#primaryLocalizedChallenge.id)
+      .map((attachment) => attachment.clone({
+        challengeId: id,
+        localizedChallengeId: id,
+      }));
+
+    const primaryLocalizedChallengeClone = new LocalizedChallenge({
+      id,
+      challengeId: id,
+      status: null,
+      locale: this.#primaryLocalizedChallenge.locale,
+      embedUrl: this.#primaryLocalizedChallenge.embedUrl,
+      fileIds: [],
+      geography: this.#primaryLocalizedChallenge.geography,
+      urlsToConsult: this.#primaryLocalizedChallenge.urlsToConsult,
+    });
+
+    const primaryTranslations = _.pick(this.#translations, [this.primaryLocale]);
+
+    const clonedChallenge =  new Challenge({
+      id,
+      translations: primaryTranslations,
+      localizedChallenges: [primaryLocalizedChallengeClone],
+      locales: this.locales,
+      files: [],
+      accessibility1: this.accessibility1,
+      accessibility2: this.accessibility2,
+      alternativeVersion,
+      alpha: null,
+      archivedAt: null,
+      author: this.author,
+      autoReply: this.autoReply,
+      competenceId: competenceId,
+      contextualizedFields : this.contextualizedFields,
+      createdAt: null,
+      declinable: this.declinable,
+      delta: null,
+      embedHeight: this.embedHeight,
+      focusable: this.focusable,
+      format: this.format,
+      genealogy: this.genealogy,
+      geography: this.geography,
+      madeObsoleteAt: null,
+      pedagogy: this.pedagogy,
+      responsive: this.responsive,
+      shuffled: this.shuffled,
+      skillId,
+      skills: [],
+      spoil: this.spoil,
+      status: Challenge.STATUSES.PROPOSE,
+      t1Status: this.t1Status,
+      t2Status: this.t2Status,
+      t3Status: this.t3Status,
+      timer: this.timer,
+      type: this.type,
+      updatedAt: null,
+      validatedAt: null,
+      version: prototypeVersion,
+    });
+
+    return {
+      clonedChallenge,
+      clonedAttachments,
+    };
   }
 
   translate(locale) {

@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
@@ -403,6 +403,259 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       expect(codes).toEqual([null, null, null]);
+    });
+  });
+
+  describe('#cloneChallengeAndAttachments', ()=> {
+    it('should clone challenge (no translations yet)', () => {
+      // given
+      const clonedChallengeId = 'clonedChallengeId';
+      const competenceId = 'competenceId';
+      const skillId = 'skillId';
+      const alternativeVersion = 3;
+      const prototypeVersion = 1;
+      const generateNewIdFnc = vi.fn().mockImplementation(() => clonedChallengeId);
+      const challenge = new Challenge({
+        id: 'challengeId',
+        translations: {
+          fr: {
+            instruction: 'instruction',
+            alternativeInstruction: 'alternativeInstruction',
+            proposals: 'proposals',
+            solution: 'solution',
+            solutionToDisplay: 'solutionToDisplay',
+          },
+        },
+        locales: ['fr'],
+        localizedChallenges: [
+          new LocalizedChallenge({
+            id: 'challengeId',
+            challengeId: 'challengeId',
+            locale: 'fr',
+            status: null,
+            fileIds: [],
+            embedUrl: 'pix-mailccoule.fr',
+            geography: 'France',
+            urlsToConsult: ['https://monurl.fr'],
+          }),
+        ],
+        files: [{
+          fileId: 'attID',
+          localizedChallengeId: 'challengeId'
+        }],
+        accessibility1: 'someValue',
+        accessibility2: 'someOtherValue',
+        alternativeVersion: 5,
+        alpha: 'olé',
+        archivedAt: new Date('2020-01-01'),
+        author: 'CHU',
+        autoReply: 'oui c auto reply',
+        competenceId: 'someCompetenceId',
+        contextualizedFields : ['mes super contextualizedFields'],
+        createdAt: new Date('2019-01-01'),
+        declinable: 'NON',
+        delta: 'super delta',
+        embedHeight: 800,
+        focusable: 'oui avec plaisir',
+        format: 'a4',
+        genealogy: 'Décliné 1',
+        geography: 'Monde',
+        madeObsoleteAt: new Date('2021-01-01'),
+        pedagogy: 'très fort',
+        responsive: 'non pas pour mobile',
+        shuffled: true,
+        skillId: 'oldSkillId',
+        skills: ['videz moi'],
+        spoil: 'poil de nez',
+        status: Challenge.STATUSES.VALIDE,
+        t1Status: 'super t1',
+        t2Status: 'super t2',
+        t3Status: 'super t3',
+        timer: '01:30',
+        type: 'QROCM',
+        updatedAt: new Date('2020-01-01'),
+        validatedAt: new Date('2022-01-01'),
+        version: 8,
+      });
+
+      // when
+      const { clonedChallenge, clonedAttachments } = challenge.cloneChallengeAndAttachments({
+        skillId,
+        competenceId,
+        generateNewIdFnc,
+        prototypeVersion,
+        alternativeVersion,
+        attachments: []
+      });
+
+      // then
+      expect(clonedAttachments).toStrictEqual([]);
+
+      expect(clonedChallenge.id).toEqual(clonedChallengeId);
+      expect(clonedChallenge.accessibility1).toEqual(challenge.accessibility1);
+      expect(clonedChallenge.accessibility2).toEqual(challenge.accessibility2);
+      expect(clonedChallenge.alternativeVersion).toEqual(alternativeVersion);
+      expect(clonedChallenge.alpha).toBeNull;
+      expect(clonedChallenge.archivedAt).toBeNull;
+      expect(clonedChallenge.author).toEqual(challenge.author);
+      expect(clonedChallenge.autoReply).toEqual(challenge.autoReply);
+      expect(clonedChallenge.competenceId).toEqual(competenceId);
+      expect(clonedChallenge.contextualizedFields).toEqual(challenge.contextualizedFields);
+      expect(clonedChallenge.createdAt).toBeNull;
+      expect(clonedChallenge.declinable).toEqual(challenge.declinable);
+      expect(clonedChallenge.delta).toBeNull;
+      expect(clonedChallenge.embedHeight).toEqual(challenge.embedHeight);
+      expect(clonedChallenge.focusable).toEqual(challenge.focusable);
+      expect(clonedChallenge.format).toEqual(challenge.format);
+      expect(clonedChallenge.genealogy).toEqual(challenge.genealogy);
+      expect(clonedChallenge.geography).toEqual(challenge.geography);
+      expect(clonedChallenge.madeObsoleteAt).toBeNull;
+      expect(clonedChallenge.pedagogy).toEqual(challenge.pedagogy);
+      expect(clonedChallenge.responsive).toEqual(challenge.responsive);
+      expect(clonedChallenge.shuffled).toEqual(challenge.shuffled);
+      expect(clonedChallenge.skillId).toEqual(skillId);
+      expect(clonedChallenge.status).toEqual(Challenge.STATUSES.PROPOSE);
+      expect(clonedChallenge.t1Status).toEqual(challenge.t1Status);
+      expect(clonedChallenge.t2Status).toEqual(challenge.t2Status);
+      expect(clonedChallenge.t3Status).toEqual(challenge.t3Status);
+      expect(clonedChallenge.timer).toEqual(challenge.timer);
+      expect(clonedChallenge.type).toEqual(challenge.type);
+      expect(clonedChallenge.updatedAt).toBeNull;
+      expect(clonedChallenge.validatedAt).toBeNull;
+      expect(clonedChallenge.version).toEqual(prototypeVersion);
+      expect(clonedChallenge.locales).toEqual(challenge.locales);
+      expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(domainBuilder.buildLocalizedChallenge({
+        id: clonedChallengeId,
+        challengeId: clonedChallengeId,
+        status: null,
+        embedUrl: challenge.localizedChallenges[0].embedUrl,
+        geography: challenge.localizedChallenges[0].geography,
+        urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
+        fileIds: [],
+        locale: challenge.localizedChallenges[0].locale,
+      }));
+    });
+
+    it('should clone challenge translations and attachments', () => {
+      // given
+      const clonedChallengeId = 'clonedChallengeId';
+      const competenceId = 'competenceId';
+      const skillId = 'skillId';
+      const alternativeVersion = 3;
+      const prototypeVersion = 1;
+      const generateNewIdFnc = vi.fn().mockImplementation(() => clonedChallengeId);
+      const locales = ['fr', 'nl'];
+
+      const challenge = new Challenge({
+        id: 'challengeId',
+        translations: {
+          fr: {
+            instruction: 'instruction FR',
+            alternativeInstruction: 'alternativeInstruction FR',
+            proposals: 'proposals FR',
+            solution: 'solution FR',
+            solutionToDisplay: 'solutionToDisplay FR',
+          },
+          nl: {
+            instruction: 'instruction NL',
+            alternativeInstruction: 'alternativeInstruction NL',
+            proposals: 'proposals NL',
+            solution: 'solution NL',
+            solutionToDisplay: 'solutionToDisplay NL',
+          },
+        },
+        locales,
+        localizedChallenges: [
+          new LocalizedChallenge({
+            id: 'challengeId',
+            challengeId: 'challengeId',
+            locale: 'fr',
+            status: null,
+            fileIds: ['attachmentIdA'],
+            embedUrl: 'pix-mailccoule.fr',
+            geography: 'France',
+            urlsToConsult: ['https://monurl.fr'],
+          }),
+          new LocalizedChallenge({
+            id: 'locNLChallengeId',
+            challengeId: 'challengeId',
+            locale: 'nl',
+            status: Challenge.STATUSES.VALIDE,
+            fileIds: ['attachmentIdB'],
+            embedUrl: 'pix-mailccoule.nl',
+            geography: 'Netherlands',
+            urlsToConsult: ['https://monurl.nl'],
+          }),
+        ],
+        files: [{
+          fileId: 'attachmentIdA',
+          localizedChallengeId: 'challengeId'
+        },{
+          fileId: 'attachmentIdB',
+          localizedChallengeId: 'locNLChallengeId'
+        }],
+      });
+
+      const attachmentIdA = domainBuilder.buildAttachment({
+        id: 'attachmentIdA',
+        url: 'cc',
+        type: 'illustration',
+        alt: 'mdr',
+        challengeId: 'challengeId',
+        localizedChallengeId: 'challengeId'
+      });
+      const attachmentIdB = domainBuilder.buildAttachment({
+        id: 'attachmentIdB',
+        url: 'cc',
+        type: 'illustration',
+        alt: 'mdr',
+        challengeId: 'challengeId',
+        localizedChallengeId: 'locNLChallengeId'
+      });
+
+      // when
+      const { clonedChallenge, clonedAttachments } = challenge.cloneChallengeAndAttachments({
+        skillId,
+        competenceId,
+        generateNewIdFnc,
+        prototypeVersion,
+        alternativeVersion,
+        attachments: [attachmentIdA, attachmentIdB]
+      });
+
+      // then
+      // airtable ids are unknown yet
+      expect(clonedChallenge.files).toStrictEqual([]);
+
+      expect(clonedChallenge.translations).toStrictEqual({
+        fr: {
+          instruction: 'instruction FR',
+          alternativeInstruction: 'alternativeInstruction FR',
+          proposals: 'proposals FR',
+          solution: 'solution FR',
+          solutionToDisplay: 'solutionToDisplay FR',
+        },
+      });
+
+      expect(clonedChallenge.localizedChallenges).toStrictEqual([domainBuilder.buildLocalizedChallenge({
+        id: clonedChallengeId,
+        challengeId: clonedChallengeId,
+        status: null,
+        embedUrl: challenge.localizedChallenges[0].embedUrl,
+        geography: challenge.localizedChallenges[0].geography,
+        urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
+        fileIds: [],
+        locale: challenge.localizedChallenges[0].locale,
+      })]);
+
+      expect(clonedAttachments).toStrictEqual([domainBuilder.buildAttachment({
+        id: null,
+        type: attachmentIdA.type,
+        alt: attachmentIdA.alt,
+        url: attachmentIdA.url,
+        localizedChallengeId: clonedChallengeId,
+        challengeId: clonedChallengeId
+      })]);
     });
   });
 });
