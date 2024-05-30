@@ -96,9 +96,13 @@ export async function update(challenge) {
     return toDomain(updatedChallengeDto, translations, localizedChallenges);
   });
 }
-
-export async function getAllIdsIn(challengeIds) {
-  return challengeDatasource.getAllIdsIn(challengeIds);
+export async function listBySkillId(skillId) {
+  const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
+  const [translations, localizedChallenges] = await Promise.all([
+    translationRepository.listByPrefix(prefix),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds: challengeDTOs.map((ch) => ch.id) }),
+  ]);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {

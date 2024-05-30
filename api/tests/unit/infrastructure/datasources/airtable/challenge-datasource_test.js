@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { domainBuilder, airtableBuilder } from '../../../../test-helper.js';
-import { challengeDatasource } from '../../../../../lib/infrastructure/datasources/airtable/challenge-datasource.js';
+import { airtableBuilder, domainBuilder } from '../../../../test-helper.js';
+import { challengeDatasource } from '../../../../../lib/infrastructure/datasources/airtable/index.js';
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 import airtableLib from 'airtable';
 

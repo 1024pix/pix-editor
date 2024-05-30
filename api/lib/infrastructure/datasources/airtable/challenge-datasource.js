@@ -179,14 +179,13 @@ export const challengeDatasource = datasource.extend({
     return this.fromAirTableObject(airtableRawObjects[0]);
   },
 
-  async getAllIdsIn(challengeIds) {
-    const options = {
-      fields: ['id persistant'],
-      filterByFormula: 'OR(' + challengeIds.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
-    };
-    const airtableRawObjects = await findRecords(this.tableName, options);
-    return airtableRawObjects.map((airtableRawObject) => airtableRawObject.get('id persistant'));
-  }
+  async filterBySkillId(skillId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `FIND("${skillId}", ARRAYJOIN({Acquix (id persistant)}))`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 });
 
 function _escapeQuery(value) {
