@@ -12,6 +12,15 @@ export async function list() {
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }
 
+export async function listByChallengeIds(challengeIds) {
+  const datasourceAttachments = await attachmentDatasource.filterByChallengeIds(challengeIds);
+  if (!datasourceAttachments) return [];
+  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds });
+
+  return toDomainList(datasourceAttachments, translations, localizedChallenges);
+}
+
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, 'entityId');
   const localizedChallengesById = _.groupBy(localizedChallenges, 'id');

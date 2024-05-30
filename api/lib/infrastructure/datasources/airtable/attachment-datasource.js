@@ -36,6 +36,15 @@ export const attachmentDatasource = datasource.extend({
       filterByFormula : `{localizedChallengeId} = '${localizedChallengeId}'`,
     });
     return airtableRawObjects.map(this.fromAirTableObject);
-  }
+  },
+
+  async filterByChallengeIds(challengeIds) {
+    if (challengeIds.length === 0) return undefined;
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `OR(${challengeIds.map((id) => `FIND("${id}", ARRAYJOIN({challengeId persistant}))`).join(',')})`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 });
 
