@@ -127,7 +127,7 @@ export default class MissionForm extends Component {
   @action
   updateAvailableThematicIds(competenceId) {
     const filteredCompetence = this.args.competences.filter((competence) => competence.pixId === competenceId);
-    const availableThematicIds = filteredCompetence[0].themes.map((thematic) => thematic.id);
+    const availableThematicIds = filteredCompetence[0].themes.map((thematic) => thematic.pixId);
     this.thematicIds.setAvailableThematicIds(availableThematicIds);
   }
 
