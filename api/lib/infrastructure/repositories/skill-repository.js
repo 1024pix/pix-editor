@@ -1,6 +1,11 @@
 import _ from 'lodash';
 
-import { skillDatasource } from '../datasources/airtable/index.js';
+import {
+  competenceDatasource,
+  skillDatasource,
+  tubeDatasource,
+  tutorialDatasource
+} from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { prefixFor } from '../translations/skill.js';
@@ -27,6 +32,14 @@ export async function get(id) {
   const prefix = `${skillTranslations.prefix}${skillDTO.id}`;
   const translations = await translationRepository.listByPrefix(prefix);
   return toDomain(skillDTO, translations);
+}
+
+export async function create(skill) {
+  // liens airtable à rétablir :
+  // Compétence, Comprendre, En savoir plus, Tube
+  const airtableCompetenceId = (await competenceDatasource.getAirtableIdsByIds([skill.competenceId]))[skill.competenceId];
+  const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
+  const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds([...skill.tutorialIds, ...skill.learningMoreTutorialIds]);
 }
 
 function addSpoilDataToSkill(skill, airtableSkills) {
