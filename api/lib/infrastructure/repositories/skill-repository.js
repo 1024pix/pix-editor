@@ -8,7 +8,6 @@ import {
 } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
-import { prefixFor } from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import * as airtable from '../airtable.js';
 
@@ -32,6 +31,13 @@ export async function get(id) {
   const prefix = `${skillTranslations.prefix}${skillDTO.id}`;
   const translations = await translationRepository.listByPrefix(prefix);
   return toDomain(skillDTO, translations);
+}
+
+export async function listByTubeId(tubeId) {
+  const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
+  if (!datasourceSkills) return [];
+  const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
+  return toDomainList(datasourceSkills, translations);
 }
 
 export async function create(skill) {

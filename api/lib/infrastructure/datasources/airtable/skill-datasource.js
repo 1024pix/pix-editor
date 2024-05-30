@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { datasource } from './datasource.js';
+import { findRecords } from '../../airtable.js';
 
 export const skillDatasource = datasource.extend({
 
@@ -40,5 +41,13 @@ export const skillDatasource = datasource.extend({
       internationalisation: airtableRecord.get('Internationalisation'),
       version: airtableRecord.get('Version')
     };
+  },
+
+  async filterByTubeId(tubeId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `FIND("${tubeId}", ARRAYJOIN({Tube (id persistant)}))`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
   },
 });
