@@ -10,6 +10,7 @@ import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
 import * as airtable from '../airtable.js';
+import { Translation } from '../../domain/models/index.js';
 
 export async function list() {
   const datasourceSkills = await skillDatasource.list();
@@ -41,11 +42,38 @@ export async function listByTubeId(tubeId) {
 }
 
 export async function create(skill) {
-  // liens airtable à rétablir :
-  // Compétence, Comprendre, En savoir plus, Tube
   const airtableCompetenceId = (await competenceDatasource.getAirtableIdsByIds([skill.competenceId]))[skill.competenceId];
   const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
-  const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds([...skill.tutorialIds, ...skill.learningMoreTutorialIds]);
+  const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
+  const airtableTutorialIds = skill.tutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
+  const airtableLearningMoreTutorialIds = skill.learningMoreTutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
+
+  const skillToSaveDTO = {
+    id: skill.id,
+    hintStatus: skill.hintStatus,
+    tutorialIds: airtableTutorialIds,
+    learningMoreTutorialIds: airtableLearningMoreTutorialIds,
+    competenceId: airtableCompetenceId,
+    status: skill.status,
+    tubeId: airtableTubeId,
+    description: skill.description,
+    level: skill.level,
+    internationalisation: skill.internationalisation,
+    version: skill.version,
+  };
+  const createdSkillDTO = await skillDatasource.create(skillToSaveDTO);
+  const translations = [];
+  for (const [locale, value] of Object.entries(skill.hint_i18n)) {
+    if (!(value.trim())) continue;
+    translations.push(new Translation({
+      key: `skill.${skill.id}.hint`, // todo should fetch prefix from translation file utilitary
+      locale,
+      value,
+    }));
+  }
+  const translationsFrOnly = translations.filter((translation) => translation.locale === 'fr');
+  await translationRepository.save({ translations: translationsFrOnly });
+  return toDomain(createdSkillDTO, translationsFrOnly);
 }
 
 function addSpoilDataToSkill(skill, airtableSkills) {
@@ -70,3 +98,7 @@ function toDomain(datasourceSkill, translations = []) {
     ...skillTranslations.toDomain(translations),
   });
 }
+
+/*
+curl -X PUT http://lbergoens-pix:3002/api/skills/clone -H 'Authorization: Bearer ' -H "Content-Type: application/json" -d '{ "data": { "attributes": { "tubeDestinationId": "tube1TAHFjZWXq7W2h", "skillIdToClone":"skill2yFLMIg5SaMLIG", "level":"2"}}}'
+ */

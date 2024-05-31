@@ -43,6 +43,30 @@ export const skillDatasource = datasource.extend({
     };
   },
 
+  /* Attributes to not write while in Airtable because they are formulas or lookups
+    Nom
+    Tube (id persistant)                        (write "Tube" instead)
+    Comprendre (id persistant)                  (write "Comprendre" instead)
+    En savoir plus (id persistant)              (write "En savoir plus" instead)
+    PixValue
+   */
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'id persistant': model.id,
+        'Statut de l\'indice': model.hintStatus,
+        'Comprendre': model.tutorialIds,
+        'En savoir plus': model.learningMoreTutorialIds,
+        'Status': model.status,
+        'Tube': [model.tubeId],
+        'Description': model.description,
+        'Level': model.level,
+        'Internationalisation': model.internationalisation,
+        'Version': model.version,
+      }
+    };
+  },
+
   async filterByTubeId(tubeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `FIND("${tubeId}", ARRAYJOIN({Tube (id persistant)}))`,
