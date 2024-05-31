@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/index.js';
-import { challengeDatasource } from '../datasources/airtable/index.js';
+import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import {
@@ -64,6 +64,27 @@ export async function create(challenge) {
   return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
 }
 
+export async function createBatch(challenges) {
+  if (!challenges || challenges.length === 0) return [];
+  const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
+  const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
+  for (const challenge of challenges) {
+    challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
+    challenge.files = [];
+  }
+  const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
+  const primaryLocalizedChallenges = challenges.map((challenge) => challenge.localizedChallenges[0]);
+  await localizedChallengeRepository.create(primaryLocalizedChallenges);
+
+  const primaryTranslations = [];
+  for (const challenge of challenges) {
+    const allTranslationsForChallenge = extractTranslationsFromChallenge(challenge);
+    primaryTranslations.push(...allTranslationsForChallenge.filter((tr) => tr.locale === challenge.primaryLocale));
+  }
+  await translationRepository.save({ translations: primaryTranslations });
+  return toDomainList(createdChallengesDtos, primaryTranslations, primaryLocalizedChallenges);
+}
+
 export async function update(challenge) {
   return knex.transaction(async (transaction) => {
     const updatedChallengeDto = await challengeDatasource.update(challenge);
@@ -98,6 +119,7 @@ export async function update(challenge) {
 }
 export async function listBySkillId(skillId) {
   const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
+  if (!challengeDTOs) return [];
   const [translations, localizedChallenges] = await Promise.all([
     translationRepository.listByPrefix(prefix),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: challengeDTOs.map((ch) => ch.id) }),

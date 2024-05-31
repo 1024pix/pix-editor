@@ -35,6 +35,12 @@ const _DatasourcePrototype = {
     return this.fromAirTableObject(airtableRawObject);
   },
 
+  async createBatch(models) {
+    const airtableRequestBodies = models.map(this.toAirTableObject);
+    const airtableRawObjects = await airtable.createRecords(this.tableName, airtableRequestBodies);
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
   async update(model) {
     const airtableRequestBody = this.toAirTableObject(model);
     const airtableRawObject = await airtable.updateRecord(this.tableName, airtableRequestBody);
