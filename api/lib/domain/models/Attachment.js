@@ -12,4 +12,15 @@ export class Attachment {
     this.challengeId = challengeId;
     this.localizedChallengeId = localizedChallengeId;
   }
+
+  clone({ challengeId, localizedChallengeId }) {
+    return new Attachment({
+      id: null,
+      url: this.url,
+      type: this.type,
+      alt: this.alt,
+      challengeId,
+      localizedChallengeId,
+    });
+  }
 }
