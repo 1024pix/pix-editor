@@ -1,6 +1,7 @@
 import Airtable from 'airtable';
 import * as config from '../config.js';
 import { logger } from './logger.js';
+import _ from 'lodash';
 
 function _airtableClient() {
   return new Airtable({ apiKey: config.airtable.apiKey }).base(config.airtable.base);
@@ -19,6 +20,17 @@ export async function createRecord(tableName, body) {
     .table(tableName)
     .create([body]);
   return records[0];
+}
+
+export async function createRecords(tableName, bodies) {
+  const records = [];
+  for (const chunkBodies  of _.chunk(bodies, 10)) {
+    const chunkRecords = await _airtableClient()
+      .table(tableName)
+      .create(chunkBodies);
+    records.push(...chunkRecords) ;
+  }
+  return records;
 }
 
 export async function updateRecord(tableName, body) {
