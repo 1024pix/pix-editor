@@ -31,6 +31,22 @@ export const attachmentDatasource = datasource.extend({
     };
   },
 
+  /* Attributes to not write while in Airtable because they are formulas or lookups
+    challengeId persistant                      (write "challengeId" instead)
+   */
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'url': model.url,
+        'size': model.size,
+        'type': model.type,
+        'mimeType': model.mimeType,
+        'challengeId': [model.challengeId],
+        'localizedChallengeId': model.localizedChallengeId,
+      }
+    };
+  },
+
   async filterByLocalizedChallengeId(localizedChallengeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula : `{localizedChallengeId} = '${localizedChallengeId}'`,
