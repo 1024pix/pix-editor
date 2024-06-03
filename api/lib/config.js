@@ -136,6 +136,9 @@ if (process.env.NODE_ENV === 'test') {
     password: '123',
   };
 
+  pixEditor.storagePost = 'https://url-de-mon-storage.com/v1/AUTH_blabla/local-app/';
+  pixEditor.storageBucket = 'mon-bucket-local';
+
   pixApp = {
     baseUrlFr: 'https://app.test.pix.fr',
     baseUrlOrg: 'https://app.test.pix.org',
