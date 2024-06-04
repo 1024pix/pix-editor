@@ -85,6 +85,7 @@ export async function list() {
 }
 
 const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
+const _byAlternativeVersion = (challengeA, challengeB) => challengeA.alternativeVersion - challengeB.alternativeVersion;
 
 function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityPostfix) {
   const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
@@ -112,7 +113,7 @@ function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityP
     if (alternatives.length === 0) {
       logger.warn({ activitySkill }, 'No challenges found for activitySkill');
     }
-    return alternatives.map(({ id }) => id);
+    return alternatives.sort(_byAlternativeVersion).map(({ id }) => id);
   }).filter((activitySkills) => activitySkills.length > 0);
 }
 
