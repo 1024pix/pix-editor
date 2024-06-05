@@ -418,6 +418,57 @@ describe('Integration | Repository | mission-repository', function() {
       });
     });
 
+    context('with alternative challenges in activities', async function() {
+      it('should return ordered alternative challenges', async function() {
+        mockedLearningContent.challenges = [
+          airtableBuilder.factory.buildChallenge({ id: 'secondAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 2 }),
+          airtableBuilder.factory.buildChallenge({ id: 'firstAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 1 }),
+          airtableBuilder.factory.buildChallenge({ id: 'fourthAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 4 }),
+          airtableBuilder.factory.buildChallenge({ id: 'thirdAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 3 }),
+        ];
+        mockedLearningContent.skills = [
+          airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
+        ];
+        airtableBuilder.mockLists(mockedLearningContent);
+
+        buildLocalizedChallenges(mockedLearningContent);
+
+        databaseBuilder.factory.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.ACTIVE,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicIds: 'thematicStep1,thematicDefiVide',
+        });
+
+        await databaseBuilder.commit();
+
+        const result = await list();
+
+        expect(result).to.deep.equal([new Mission({
+          id: 2,
+          name_i18n: { fr: 'Alt name' },
+          competenceId: 'competenceId',
+          thematicIds: 'thematicStep1,thematicDefiVide',
+          learningObjectives_i18n: { fr: 'Alt objectives' },
+          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          status: Mission.status.ACTIVE,
+          createdAt: new Date('2010-01-04'),
+          content: {
+            steps: [{
+              tutorialChallenges: [],
+              trainingChallenges: [],
+              validationChallenges: [
+                ['firstAltChallengeValidation', 'secondAltChallengeValidation', 'thirdAltChallengeValidation', 'fourthAltChallengeValidation'],
+              ],
+            }],
+            dareChallenges: [],
+          },
+        })]);
+      });
+    });
+
     context('Without challenges for skills', async function() {
       it('Should return missions', async function() {
         mockedLearningContent.challenges = [];
