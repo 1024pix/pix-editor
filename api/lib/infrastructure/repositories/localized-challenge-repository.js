@@ -13,7 +13,7 @@ function _generateId() {
   return generateNewId('challenge');
 }
 
-export async function create(localizedChallenges = [], generateId = _generateId) {
+export async function create({ localizedChallenges = [], generateId = _generateId, transaction: knexConnection = knex }) {
   if (localizedChallenges.length === 0) {
     return;
   }
@@ -28,7 +28,7 @@ export async function create(localizedChallenges = [], generateId = _generateId)
       urlsToConsult: localizedChallenge.urlsToConsult,
     };
   });
-  await knex('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
+  await knexConnection('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {

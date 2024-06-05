@@ -91,7 +91,7 @@ describe('Unit | Domain | Usecases | import-translations', function() {
       shouldDuplicateToAirtable: false,
     });
     expect(localizedChallengeRepository.create).toHaveBeenCalledOnce();
-    expect(localizedChallengeRepository.create).toHaveBeenCalledWith([
+    expect(localizedChallengeRepository.create).toHaveBeenCalledWith({ localizedChallenges: [
       new LocalizedChallenge({
         id: null,
         challengeId: 'id',
@@ -112,6 +112,6 @@ describe('Unit | Domain | Usecases | import-translations', function() {
         geography: null,
         urlsToConsult: null,
       }),
-    ]);
+    ] });
   });
 });

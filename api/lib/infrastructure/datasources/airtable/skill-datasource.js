@@ -1,11 +1,14 @@
 import _ from 'lodash';
 import { datasource } from './datasource.js';
+import { findRecords } from '../../airtable.js';
 
 export const skillDatasource = datasource.extend({
 
   modelName: 'Skill',
 
   tableName: 'Acquis',
+
+  airtableIdField: 'Record Id',
 
   usedFields: [
     'id persistant',
@@ -40,5 +43,37 @@ export const skillDatasource = datasource.extend({
       internationalisation: airtableRecord.get('Internationalisation'),
       version: airtableRecord.get('Version')
     };
+  },
+
+  /* Attributes to not write while in Airtable because they are formulas or lookups
+    Nom
+    Tube (id persistant)                        (write "Tube" instead)
+    Comprendre (id persistant)                  (write "Comprendre" instead)
+    En savoir plus (id persistant)              (write "En savoir plus" instead)
+    PixValue
+   */
+  toAirTableObject(model) {
+    return {
+      fields: {
+        'id persistant': model.id,
+        'Statut de l\'indice': model.hintStatus,
+        'Comprendre': model.tutorialIds,
+        'En savoir plus': model.learningMoreTutorialIds,
+        'Status': model.status,
+        'Tube': [model.tubeId],
+        'Description': model.description,
+        'Level': model.level,
+        'Internationalisation': model.internationalisation,
+        'Version': model.version,
+      }
+    };
+  },
+
+  async filterByTubeId(tubeId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `FIND("${tubeId}", ARRAYJOIN({Tube (id persistant)}))`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
   },
 });

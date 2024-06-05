@@ -37,7 +37,7 @@ export async function register(server) {
         pre: [{ method: securityPreHandlers.checkUserHasWriteAccess }],
         handler: async function(request, h) {
           const { locale: _, ...localizedChallenge } = await localizedChallengeSerializer.deserialize(request.payload);
-          const isAdmin = hasAuthenticatedUserAccess(request, 'admin');
+          const isAdmin = hasAuthenticatedUserAccess(request, ['admin']);
           try {
             const updatedLocalizedChallenge = await modifyLocalizedChallenge({
               isAdmin,

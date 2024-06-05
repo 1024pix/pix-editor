@@ -1,8 +1,9 @@
-import { attachmentDatasource } from '../datasources/airtable/index.js';
+import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import _ from 'lodash';
 import { Attachment } from '../../domain/models/index.js';
+import { cloneAttachmentsFileInBucket } from '../utils/storage.js';
 
 export async function list() {
   const datasourceAttachments = await attachmentDatasource.list();
@@ -10,6 +11,40 @@ export async function list() {
   const localizedChallenges = await localizedChallengeRepository.list();
 
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
+}
+
+export async function listByChallengeIds(challengeIds) {
+  const datasourceAttachments = await attachmentDatasource.filterByChallengeIds(challengeIds);
+  if (!datasourceAttachments) return [];
+  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds });
+
+  return toDomainList(datasourceAttachments, translations, localizedChallenges);
+}
+
+export async function createBatch(attachments) {
+  if (!attachments || attachments.length === 0) return [];
+  const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
+  const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
+  const attachmentToSaveDTOs = [];
+  await cloneAttachmentsFileInBucket({
+    attachments,
+    millisecondsTimestamp: Date.now(),
+  });
+  for (const attachment of attachments) {
+    attachmentToSaveDTOs.push({
+      url: attachment.url,
+      size: attachment.size,
+      type: attachment.type,
+      mimeType: attachment.mimeType,
+      challengeId: airtableChallengeIdsByIds[attachment.challengeId],
+      localizedChallengeId: attachment.localizedChallengeId,
+    });
+  }
+  const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
+  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
+  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: attachments.map((attachment) => attachment.challengeId) });
+  return toDomainList(createdAttachmentsDtos, translations, localizedChallenges);
 }
 
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {

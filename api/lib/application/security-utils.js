@@ -2,9 +2,9 @@ import JsonapiSerializer from 'jsonapi-serializer';
 
 const { Error: JSONAPIError } = JsonapiSerializer;
 
-export function hasAuthenticatedUserAccess(request, access) {
+export function hasAuthenticatedUserAccess(request, accesses) {
   const authenticatedUser = request.auth.credentials.user;
-  return authenticatedUser.access === access;
+  return accesses.includes(authenticatedUser.access);
 }
 
 export function replyWithAuthenticationError(h) {

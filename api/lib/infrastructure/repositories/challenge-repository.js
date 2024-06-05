@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { Challenge } from '../../domain/models/index.js';
-import { challengeDatasource } from '../datasources/airtable/index.js';
+import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import {
@@ -57,11 +57,33 @@ export async function filter(params = {}) {
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const primaryLocalizedChallenge = challenge.localizedChallenges[0];
-  await localizedChallengeRepository.create([primaryLocalizedChallenge]);
+  await localizedChallengeRepository.create({ localizedChallenges:[primaryLocalizedChallenge] });
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save({ translations });
   return toDomain(createdChallengeDto, translations, [primaryLocalizedChallenge]);
+}
+
+export async function createBatch(challenges) {
+  if (!challenges || challenges.length === 0) return [];
+  const necessarySkillIds = _.uniq(challenges.map((challenge) => challenge.skillId));
+  const airtableSkillIdsByIds = await skillDatasource.getAirtableIdsByIds(necessarySkillIds);
+  for (const challenge of challenges) {
+    challenge.skills = [airtableSkillIdsByIds[challenge.skillId]];
+    challenge.files = [];
+  }
+  const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
+  const primaryLocalizedChallenges = challenges.map((challenge) => challenge.localizedChallenges[0]);
+  return knex.transaction(async (transaction) => {
+    await localizedChallengeRepository.create({ localizedChallenges: primaryLocalizedChallenges, transaction });
+    const primaryTranslations = [];
+    for (const challenge of challenges) {
+      const allTranslationsForChallenge = extractTranslationsFromChallenge(challenge);
+      primaryTranslations.push(...allTranslationsForChallenge.filter((tr) => tr.locale === challenge.primaryLocale));
+    }
+    await translationRepository.save({ translations: primaryTranslations, transaction });
+    return toDomainList(createdChallengesDtos, primaryTranslations, primaryLocalizedChallenges);
+  });
 }
 
 export async function update(challenge) {
@@ -97,8 +119,11 @@ export async function update(challenge) {
   });
 }
 
-export async function getAllIdsIn(challengeIds) {
-  return challengeDatasource.getAllIdsIn(challengeIds);
+export async function listBySkillId(skillId) {
+  const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
+  if (!challengeDTOs) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {

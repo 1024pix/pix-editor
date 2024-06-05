@@ -7,6 +7,8 @@ export const tubeDatasource = datasource.extend({
 
   tableName: 'Tubes',
 
+  airtableIdField: 'Record Id',
+
   usedFields: [
     'id persistant',
     'Nom',

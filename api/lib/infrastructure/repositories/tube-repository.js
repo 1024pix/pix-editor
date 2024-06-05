@@ -10,6 +10,14 @@ export async function list() {
   return toDomainList(datasourceTubes, translations);
 }
 
+export async function get(id) {
+  const [tubeDTO] = await tubeDatasource.filter({ filter: { ids: [id] } });
+  if (!tubeDTO) return null;
+  const prefix = `${tubeTranslations.prefix}${tubeDTO.id}`;
+  const translations = await translationRepository.listByPrefix(prefix);
+  return toDomain(tubeDTO, translations);
+}
+
 function toDomainList(datasourceTubes, translations) {
   const translationsByTubeId = _.groupBy(translations, 'entityId');
   return datasourceTubes.map(

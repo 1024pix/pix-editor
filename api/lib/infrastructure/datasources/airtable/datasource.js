@@ -35,6 +35,12 @@ const _DatasourcePrototype = {
     return this.fromAirTableObject(airtableRawObject);
   },
 
+  async createBatch(models) {
+    const airtableRequestBodies = models.map(this.toAirTableObject);
+    const airtableRawObjects = await airtable.createRecords(this.tableName, airtableRequestBodies);
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
   async update(model) {
     const airtableRequestBody = this.toAirTableObject(model);
     const airtableRawObject = await airtable.updateRecord(this.tableName, airtableRequestBody);
@@ -54,6 +60,16 @@ const _DatasourcePrototype = {
   async delete(ids) {
     return airtable.deleteRecords(this.tableName, ids);
   },
+
+  async getAirtableIdsByIds(entityIds) {
+    const airtableRawObjects = await airtable.findRecords(this.tableName, {
+      fields: [this.airtableIdField, 'id persistant'],
+      filterByFormula: `OR(${entityIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
+    });
+    return Object
+      .fromEntries(airtableRawObjects
+        .map((airtableObject) => [airtableObject.get('id persistant'), airtableObject.get(this.airtableIdField)]));
+  },
 };
 
 function* chunks(array, chunkSize) {
@@ -66,6 +82,7 @@ export const datasource = {
 
   extend(props) {
     props.sortField = props.sortField || 'id persistant';
+    props.airtableIdField = props.airtableIdField || 'Record ID';
     const result = Object.assign({}, _DatasourcePrototype, props);
     _.bindAll(result, _.functions(result));
     return result;
