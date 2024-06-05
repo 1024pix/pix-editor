@@ -1,11 +1,6 @@
 import _ from 'lodash';
 
-import {
-  competenceDatasource,
-  skillDatasource,
-  tubeDatasource,
-  tutorialDatasource
-} from '../datasources/airtable/index.js';
+import { skillDatasource, tubeDatasource, tutorialDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
@@ -42,8 +37,12 @@ export async function listByTubeId(tubeId) {
 }
 
 export async function create(skill) {
-  const airtableCompetenceId = (await competenceDatasource.getAirtableIdsByIds([skill.competenceId]))[skill.competenceId];
+  console.log(skill);
+  console.log('recup airtable id tube');
+  console.log(await tubeDatasource.getAirtableIdsByIds([skill.tubeId]));
   const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
+  console.log(airtableTubeId);
+  console.log('recup airtable id tuto');
   const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
   const airtableTutorialIds = skill.tutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
   const airtableLearningMoreTutorialIds = skill.learningMoreTutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
@@ -53,7 +52,6 @@ export async function create(skill) {
     hintStatus: skill.hintStatus,
     tutorialIds: airtableTutorialIds,
     learningMoreTutorialIds: airtableLearningMoreTutorialIds,
-    competenceId: airtableCompetenceId,
     status: skill.status,
     tubeId: airtableTubeId,
     description: skill.description,
@@ -61,18 +59,22 @@ export async function create(skill) {
     internationalisation: skill.internationalisation,
     version: skill.version,
   };
+  console.log('peristance...');
   const createdSkillDTO = await skillDatasource.create(skillToSaveDTO);
+  console.log('OK');
   const translations = [];
   for (const [locale, value] of Object.entries(skill.hint_i18n)) {
     if (!(value.trim())) continue;
     translations.push(new Translation({
-      key: `skill.${skill.id}.hint`, // todo should fetch prefix from translation file utilitary
+      key: `skill.${skill.id}.hint`,
       locale,
       value,
     }));
   }
   const translationsFrOnly = translations.filter((translation) => translation.locale === 'fr');
+  console.log('trad...');
   await translationRepository.save({ translations: translationsFrOnly });
+  console.log('OK');
   return toDomain(createdSkillDTO, translationsFrOnly);
 }
 
@@ -98,7 +100,3 @@ function toDomain(datasourceSkill, translations = []) {
     ...skillTranslations.toDomain(translations),
   });
 }
-
-/*
-curl -X PUT http://lbergoens-pix:3002/api/skills/clone -H 'Authorization: Bearer ' -H "Content-Type: application/json" -d '{ "data": { "attributes": { "tubeDestinationId": "tube1TAHFjZWXq7W2h", "skillIdToClone":"skill2yFLMIg5SaMLIG", "level":"2"}}}'
- */

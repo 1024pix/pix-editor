@@ -94,7 +94,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
 
     it('should create a localized challenge', async function() {
       // when
-      await localizedChallengeRepository.create([
+      await localizedChallengeRepository.create({ localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
           id: 'localizedChallengeId',
           challengeId: 'challengeId',
@@ -103,7 +103,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           geography: 'AZ',
           urlsToConsult: ['lien1', 'lien2'],
         })
-      ]);
+      ] });
 
       // then
       const localizedChallenge = await knex('localized_challenges').select();
@@ -122,7 +122,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
     context('when there is no arg', function() {
       it('should do nothing', async function() {
         // when
-        await localizedChallengeRepository.create();
+        await localizedChallengeRepository.create({});
 
         // then
         const localizedChallenge = await knex('localized_challenges').select();
@@ -134,13 +134,13 @@ describe('Integration | Repository | localized-challenge-repository', function()
     context('when there is no id', function() {
       it('should generate an id and create a localized challenge', async function() {
         // when
-        await localizedChallengeRepository.create([{
+        await localizedChallengeRepository.create({ localizedChallenges:[{
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
-        }], () => 'generated-id');
+        }], generateId: () => 'generated-id' });
 
         // then
         const localizedChallenge = await knex('localized_challenges').select();
@@ -159,7 +159,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
       it('should generate multiple unique ids and create localized challenges', async function() {
 
         // when
-        await localizedChallengeRepository.create([
+        await localizedChallengeRepository.create({ localizedChallenges: [
           {
             challengeId: 'challengeId',
             locale: 'en',
@@ -168,7 +168,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'fr',
           }
-        ]);
+        ] });
 
         // then
         const localizedChallenges = await knex('localized_challenges').select();
@@ -189,7 +189,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         await databaseBuilder.commit();
 
         // when
-        await localizedChallengeRepository.create([
+        await localizedChallengeRepository.create({ localizedChallenges: [
           {
             challengeId: 'challengeId',
             locale: 'en',
@@ -204,7 +204,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
           }
-        ]);
+        ] });
 
         // then
         const localizedChallenges = await knex('localized_challenges').select().orderBy('locale');

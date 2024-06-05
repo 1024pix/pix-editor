@@ -57,7 +57,7 @@ export async function filter(params = {}) {
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const primaryLocalizedChallenge = challenge.localizedChallenges[0];
-  await localizedChallengeRepository.create([primaryLocalizedChallenge]);
+  await localizedChallengeRepository.create({ localizedChallenges:[primaryLocalizedChallenge] });
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save({ translations });
@@ -74,15 +74,16 @@ export async function createBatch(challenges) {
   }
   const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
   const primaryLocalizedChallenges = challenges.map((challenge) => challenge.localizedChallenges[0]);
-  await localizedChallengeRepository.create(primaryLocalizedChallenges);
-
-  const primaryTranslations = [];
-  for (const challenge of challenges) {
-    const allTranslationsForChallenge = extractTranslationsFromChallenge(challenge);
-    primaryTranslations.push(...allTranslationsForChallenge.filter((tr) => tr.locale === challenge.primaryLocale));
-  }
-  await translationRepository.save({ translations: primaryTranslations });
-  return toDomainList(createdChallengesDtos, primaryTranslations, primaryLocalizedChallenges);
+  return knex.transaction(async (transaction) => {
+    await localizedChallengeRepository.create({ localizedChallenges: primaryLocalizedChallenges, transaction });
+    const primaryTranslations = [];
+    for (const challenge of challenges) {
+      const allTranslationsForChallenge = extractTranslationsFromChallenge(challenge);
+      primaryTranslations.push(...allTranslationsForChallenge.filter((tr) => tr.locale === challenge.primaryLocale));
+    }
+    await translationRepository.save({ translations: primaryTranslations, transaction });
+    return toDomainList(createdChallengesDtos, primaryTranslations, primaryLocalizedChallenges);
+  });
 }
 
 export async function update(challenge) {
@@ -117,13 +118,11 @@ export async function update(challenge) {
     return toDomain(updatedChallengeDto, translations, localizedChallenges);
   });
 }
+
 export async function listBySkillId(skillId) {
   const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
   if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await Promise.all([
-    translationRepository.listByPrefix(prefix),
-    localizedChallengeRepository.listByChallengeIds({ challengeIds: challengeDTOs.map((ch) => ch.id) }),
-  ]);
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
   return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 

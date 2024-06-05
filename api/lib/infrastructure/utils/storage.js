@@ -2,11 +2,11 @@ import axios from 'axios';
 import * as config from '../../config.js';
 import { fileStorageTokenRepository } from '../repositories/index.js';
 
-export async function cloneFiles({ urls, millisecondsTimestamp }) {
+export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTimestamp }) {
   return _callAPIWithRetry(async (token) => {
-    const fnc = async (url) => {
-      const path = url.replace(config.pixEditor.storagePost, '');
-      const filename = url.split('/').pop();
+    const fnc = async (attachment) => {
+      const path = attachment.url.replace(config.pixEditor.storagePost, '');
+      const filename = attachment.url.split('/').pop();
       const cloneUrl = `${config.pixEditor.storagePost}${millisecondsTimestamp}/${filename}`;
       await axios.put(cloneUrl, null, {
         headers: {
@@ -14,9 +14,9 @@ export async function cloneFiles({ urls, millisecondsTimestamp }) {
           'X-Copy-From': `${config.pixEditor.storageBucket}/${path}`,
         },
       });
-      return cloneUrl;
+      attachment.url = cloneUrl;
     };
-    return Promise.all(urls.map((url) => fnc(url)));
+    return Promise.all(attachments.map((attachment) => fnc(attachment)));
   });
 }
 

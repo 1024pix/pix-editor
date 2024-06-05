@@ -1,3 +1,9 @@
+// TODO LIST
+// industrialiser les utils translations pour gérer les objets du domaine
+// factoriser du code entre pix-api-client et storage et faire un peu mieux (separation of concerns etc...)
+// les objets du domaine devraient maintenant avoir un id (id persistant) et un airtableId (record id de airtable)
+// tester les répos mieux (parce que là on a déconné)
+
 export async function cloneSkill({
   cloneCommand,
   dependencies: {

@@ -68,7 +68,7 @@ const _DatasourcePrototype = {
     });
     return Object
       .fromEntries(airtableRawObjects
-        .map((airtableObject) => [airtableObject.get(this.airtableIdField), airtableObject.get('id persistant')]));
+        .map((airtableObject) => [airtableObject.get('id persistant'), airtableObject.get(this.airtableIdField)]));
   },
 };
 

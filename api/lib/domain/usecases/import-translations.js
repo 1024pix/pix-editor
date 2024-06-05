@@ -32,7 +32,7 @@ export function importTranslations(csvStream, dependencies = { translationReposi
       })
       .on('end', async () => {
         const challengesLocales = extractChallengesLocales(translations);
-        await dependencies.localizedChallengeRepository.create(challengesLocales);
+        await dependencies.localizedChallengeRepository.create({ localizedChallenges:challengesLocales });
 
         await dependencies.translationRepository.save({ translations, shouldDuplicateToAirtable: false });
 
