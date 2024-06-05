@@ -16,7 +16,6 @@ export default class ChallengeForm extends Component {
       { value:'QROC', label:'QROC' },
       { value:'QROCM-ind', label:'QROCM-ind' },
       { value:'QROCM-dep', label:'QROCM-dep' },
-      { value:'QRU', label:'QRU' },
       { value:'autoReply', label:'Embed-auto' }
     ],
     'pedagogy': ['e-preuve', 'q-savoir', 'q-situation'],
@@ -68,8 +67,6 @@ export default class ChallengeForm extends Component {
         return 'Texte1: ${nomVariable1}<br>Texte2: ${nomVariable2}<br>Select: ${nomVariable3#placeholder options=["option1","option2","option3"]}<br><b>Info en plus : </b><br>Pour un placeholder :<br>${nomVariable#JJ/MM/AAAA} <br>Pour un aria-label :<br>${nomVariable§Date de création}';
       case 'QROCM-dep':
         return 'Texte: ${nomVariable1}<br>Texte2: ${nomVariable2}<br>Select: ${nomVariable3#placeholder options=["option1","option2","option3"]}<br><b>Info en plus : </b><br>Pour un placeholder :<br>${nomVariable#JJ/MM/AAAA} <br>Pour un aria-label :<br>${nomVariable§Date de création}<br><b>Attention !</b><br>Il ne faut pas cocher les cases de tolérance (t1, t2, t3) si on utilise un menu déroulant';
-      case 'QRU':
-        return '<i>zone non utilisée</i>';
       default:
         return false;
     }
