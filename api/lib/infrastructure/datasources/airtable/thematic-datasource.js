@@ -6,6 +6,8 @@ export const thematicDatasource = datasource.extend({
 
   tableName: 'Thematiques',
 
+  airtableIdField: 'Record Id',
+
   usedFields: [
     'id persistant',
     'Competence (id persistant)',

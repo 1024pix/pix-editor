@@ -8,6 +8,8 @@ export const skillDatasource = datasource.extend({
 
   tableName: 'Acquis',
 
+  airtableIdField: 'Record Id',
+
   usedFields: [
     'id persistant',
     'Nom',
@@ -73,17 +75,5 @@ export const skillDatasource = datasource.extend({
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
-  },
-
-  async getAirtableIdsByIds(skillIds) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      fields: ['Record Id', 'id persistant'],
-      filterByFormula: `OR(${skillIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
-    });
-    const airtableIdsByIds = {};
-    for (const skillId of skillIds) {
-      airtableIdsByIds[skillId] = airtableRawObjects.find((airtableRecord) => airtableRecord.get('id persistant') === skillId)?.get('Record Id');
-    }
-    return airtableIdsByIds;
   },
 });

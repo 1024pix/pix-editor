@@ -1,5 +1,4 @@
 import { datasource } from './datasource.js';
-import { findRecords } from '../../airtable.js';
 
 export const tutorialDatasource = datasource.extend({
 
@@ -31,18 +30,6 @@ export const tutorialDatasource = datasource.extend({
       tutorialForSkills: airtableRecord.get('Solution à'),
       furtherInformation: airtableRecord.get('En savoir plus'),
     };
-  },
-
-  async getAirtableIdsByIds(tutorialIds) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      fields: ['Record ID', 'id persistant'],
-      filterByFormula: `OR(${tutorialIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
-    });
-    const airtableIdsByIds = {};
-    for (const tutorialId of tutorialIds) {
-      airtableIdsByIds[tutorialId] = airtableRawObjects.find((airtableRecord) => airtableRecord.get('id persistant') === tutorialId)?.get('Record ID');
-    }
-    return airtableIdsByIds;
   },
 });
 

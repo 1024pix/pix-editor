@@ -1,5 +1,4 @@
 import { datasource } from './datasource.js';
-import { findRecords } from '../../airtable.js';
 
 export const competenceDatasource = datasource.extend({
 
@@ -25,17 +24,5 @@ export const competenceDatasource = datasource.extend({
       thematicIds: airtableRecord.get('Thematiques (id persistant)') || [],
       origin: airtableRecord.get('Origine2')[0],
     };
-  },
-
-  async getAirtableIdsByIds(competenceIds) {
-    const airtableRawObjects = await findRecords(this.tableName, {
-      fields: ['Record ID', 'id persistant'],
-      filterByFormula: `OR(${competenceIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
-    });
-    const airtableIdsByIds = {};
-    for (const competenceId of competenceIds) {
-      airtableIdsByIds[competenceId] = airtableRawObjects.find((airtableRecord) => airtableRecord.get('id persistant') === competenceId)?.get('Record ID');
-    }
-    return airtableIdsByIds;
   },
 });
