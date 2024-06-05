@@ -1,5 +1,15 @@
 
 
+## v3.148.0 (05/06/2024)
+
+
+### :building_construction: Tech
+- [#676](https://github.com/1024pix/pix-editor/pull/676) [TECH] Déplacer la logique de duplication d'acquis côté back (PIX-12733).
+
+### :bug: Correction
+- [#679](https://github.com/1024pix/pix-editor/pull/679) [BUGFIX] Supprimer l'option `QRU` pour les type d'une épreuve (PIX-12843).
+- [#678](https://github.com/1024pix/pix-editor/pull/678) [BUGFIX] Trie les versions alternatives dans les missions de la release (PIX-12789).
+
 ## v3.147.1 (30/05/2024)
 
 
