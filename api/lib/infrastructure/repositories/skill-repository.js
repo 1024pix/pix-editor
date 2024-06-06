@@ -37,12 +37,7 @@ export async function listByTubeId(tubeId) {
 }
 
 export async function create(skill) {
-  console.log(skill);
-  console.log('recup airtable id tube');
-  console.log(await tubeDatasource.getAirtableIdsByIds([skill.tubeId]));
   const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
-  console.log(airtableTubeId);
-  console.log('recup airtable id tuto');
   const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
   const airtableTutorialIds = skill.tutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
   const airtableLearningMoreTutorialIds = skill.learningMoreTutorialIds.map((tutorialId) => airtableTutorialAirtableIdsByIds[tutorialId]);
@@ -59,9 +54,7 @@ export async function create(skill) {
     internationalisation: skill.internationalisation,
     version: skill.version,
   };
-  console.log('peristance...');
   const createdSkillDTO = await skillDatasource.create(skillToSaveDTO);
-  console.log('OK');
   const translations = [];
   for (const [locale, value] of Object.entries(skill.hint_i18n)) {
     if (!(value.trim())) continue;
@@ -72,9 +65,7 @@ export async function create(skill) {
     }));
   }
   const translationsFrOnly = translations.filter((translation) => translation.locale === 'fr');
-  console.log('trad...');
   await translationRepository.save({ translations: translationsFrOnly });
-  console.log('OK');
   return toDomain(createdSkillDTO, translationsFrOnly);
 }
 
