@@ -762,4 +762,116 @@ describe('Integration | Repository | localized-challenge-repository', function()
       });
     });
   });
+
+  context('#updateBatch', () => {
+    it('should update localized challenges locale, embedUrl, geography and urlsToConsult', async () => {
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'idA',
+        challengeId: 'idA',
+        locale: 'fr',
+        embedUrl: 'embedUrlBeforeA',
+        geography: 'AA',
+        status: 'statusBeforeA',
+        urlsToConsult: ['urlToConsultBeforeA'],
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'idB',
+        challengeId: 'idA',
+        locale: 'en',
+        embedUrl: 'embedUrlBeforeB',
+        geography: 'BB',
+        status: 'statusBeforeB',
+        urlsToConsult: ['urlToConsultBeforeB1', 'urlToConsultBeforeB2'],
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'idUntouched',
+        challengeId: 'idB',
+        locale: 'en',
+        embedUrl: 'embedUrlUntouched',
+        geography: 'UU',
+        status: 'statusUntouched',
+        urlsToConsult: ['urlToConsultUntouched'],
+      });
+      await databaseBuilder.commit();
+
+      const localizedChallengeA = domainBuilder.buildLocalizedChallenge({
+        id: 'idA',
+        challengeId: 'idA',
+        locale: 'fr',
+        embedUrl: 'embedUrlAfterA',
+        geography: 'ZZ',
+        status: 'statusAfterA',
+        urlsToConsult: [],
+        fileIds: ['dontForgetMeA'],
+      });
+      const localizedChallengeB = domainBuilder.buildLocalizedChallenge({
+        id: 'idB',
+        challengeId: 'idA',
+        locale: 'en',
+        embedUrl: 'embedUrlAfterB',
+        geography: 'YY',
+        status: null,
+        urlsToConsult: ['urlToConsultAfterB'],
+        fileIds: ['dontForgetMeB'],
+      });
+
+      // when
+      const localizedUpdatedChallenges = await localizedChallengeRepository.updateBatch({ localizedChallenges: [localizedChallengeA, localizedChallengeB] });
+
+      // then
+      await expect(knex('localized_challenges').select().orderBy('id')).resolves.to.deep.equal([
+        {
+          id: 'idA',
+          challengeId: 'idA',
+          locale: 'fr',
+          embedUrl: 'embedUrlAfterA',
+          geography: 'ZZ',
+          status: 'statusAfterA',
+          urlsToConsult: [],
+        },
+        {
+          id: 'idB',
+          challengeId: 'idA',
+          locale: 'en',
+          embedUrl: 'embedUrlAfterB',
+          geography: 'YY',
+          status: null,
+          urlsToConsult: ['urlToConsultAfterB'],
+        },
+        {
+          id: 'idUntouched',
+          challengeId: 'idB',
+          locale: 'en',
+          embedUrl: 'embedUrlUntouched',
+          geography: 'UU',
+          status: 'statusUntouched',
+          urlsToConsult: ['urlToConsultUntouched'],
+        },
+      ]);
+
+      expect(localizedUpdatedChallenges).toStrictEqual([
+        domainBuilder.buildLocalizedChallenge({
+          id: 'idA',
+          challengeId: 'idA',
+          locale: 'fr',
+          embedUrl: 'embedUrlAfterA',
+          geography: 'ZZ',
+          status: 'statusAfterA',
+          urlsToConsult: [],
+          fileIds: ['dontForgetMeA'],
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'idB',
+          challengeId: 'idA',
+          locale: 'en',
+          embedUrl: 'embedUrlAfterB',
+          geography: 'YY',
+          status: null,
+          urlsToConsult: ['urlToConsultAfterB'],
+          fileIds: ['dontForgetMeB'],
+        }),
+      ]);
+    });
+  });
 });

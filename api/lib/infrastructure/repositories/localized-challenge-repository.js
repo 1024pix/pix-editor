@@ -81,6 +81,20 @@ export async function update({
   return _toDomain({ ...dto, fileIds });
 }
 
+export async function updateBatch({ localizedChallenges, transaction: knexConnection = knex }) {
+  const toUpdateDtos = localizedChallenges.map(({ id, challengeId, locale, embedUrl, status, geography, urlsToConsult }) => ({ id, challengeId, locale, embedUrl, status, geography, urlsToConsult }));
+  const dtos = await knexConnection('localized_challenges')
+    .insert(toUpdateDtos)
+    .onConflict(['challengeId', 'locale'])
+    .merge()
+    .returning('*');
+
+  return dtos.map((dto) => {
+    const originLocalizedChallenge = localizedChallenges.find((localizedChallenge) => localizedChallenge.id === dto.id);
+    return _toDomain({ ...dto, fileIds: originLocalizedChallenge.fileIds });
+  });
+}
+
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
 }
