@@ -10,6 +10,7 @@ import {
   skillRepository
 } from '../../lib/infrastructure/repositories/index.js';
 import * as idGenerator from '../../lib/infrastructure/utils/id-generator.js';
+import * as usecases from '../../lib/domain/usecases/index.js';
 
 describe('Script | Move skills to focus', function() {
 
@@ -36,6 +37,7 @@ describe('Script | Move skills to focus', function() {
     vi.spyOn(idGenerator, 'generateNewId');
     vi.spyOn(attachmentRepository, 'listByChallengeIds');
     vi.spyOn(attachmentRepository, 'createBatch');
+    vi.spyOn(usecases, 'uploadTranslationToPhrase').mockImplementation(() => true);
   });
 
   afterEach(async () => {
@@ -750,5 +752,21 @@ describe('Script | Move skills to focus', function() {
         }),
       ]);
     });
+  });
+
+  it('should upload translations to phrase', async () => {
+    // given
+    nock('https://api.airtable.com')
+      .get('/v0/airtableBaseValue/Acquis')
+      .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+      .query(true)
+      .times(2)
+      .reply(200, { records: [] });
+
+    // when
+    await moveToFocus({ airtableClient, dryRun: false });
+
+    // then
+    expect(usecases.uploadTranslationToPhrase).toHaveBeenCalledTimes(1);
   });
 });

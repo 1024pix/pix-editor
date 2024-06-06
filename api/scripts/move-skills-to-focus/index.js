@@ -9,6 +9,7 @@ import {
 } from '../../lib/infrastructure/repositories/index.js';
 import { generateNewId } from '../../lib/infrastructure/utils/id-generator.js';
 import { Skill } from '../../lib/domain/models/index.js';
+import { uploadTranslationToPhrase } from '../../lib/domain/usecases/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
@@ -20,6 +21,11 @@ export async function moveToFocus({ airtableClient, dryRun }) {
 
   await _moveEnConstructionSkillsToFocus({ enConstructionSkills, dryRun });
   await _moveActifSkillsToFocus({ actifSkills, dryRun });
+  logger.info('Uploading translations to Phrase...');
+  if (!dryRun) {
+    await uploadTranslationToPhrase();
+  }
+  logger.info('Done');
 }
 
 async function _getSkillsToFocus({ airtableClient }) {
@@ -64,7 +70,6 @@ async function _moveActifSkillsToFocus({ actifSkills, dryRun }) {
     await _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun });
     await _archiveOldSkill({ skill, skillChallenges, dryRun });
   }
-  return true;
 }
 
 async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun }) {
@@ -135,7 +140,6 @@ async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
     await challengeRepository.updateBatch(skillChallenges);
   }
   logger.info(`Skill ${skill.id} archived along with its ${skillChallenges.length} challenges !`);
-  return 'ok';
 }
 
 async function main() {
