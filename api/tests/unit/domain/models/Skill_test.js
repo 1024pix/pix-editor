@@ -185,6 +185,7 @@ describe('Unit | Domain | Skill', () => {
       expect(clonedAttachments).toEqual(['clonedAttachment']);
 
       expect(clonedSkill.description).toEqual(skillToClone.description);
+      expect(clonedSkill.pixValue).toBeNull();
       expect(clonedSkill.hint_i18n).toEqual(skillToClone.hint_i18n);
       expect(clonedSkill.hintStatus).toEqual(skillToClone.hintStatus);
       expect(clonedSkill.tutorialIds).toEqual(skillToClone.tutorialIds);

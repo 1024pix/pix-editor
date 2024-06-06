@@ -106,6 +106,7 @@ export class Skill {
       version,
       name,
       level,
+      pixValue: null,
       tubeId: tubeDestination.id,
       competenceId: tubeDestination.competenceId,
       status: Skill.STATUSES.EN_CONSTRUCTION,
