@@ -554,6 +554,7 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.accessibility2).toEqual(challenge.accessibility2);
       expect(clonedChallenge.alternativeVersion).toEqual(alternativeVersion);
       expect(clonedChallenge.alpha).toBeNull;
+      expect(clonedChallenge.airtableId).toBeNull;
       expect(clonedChallenge.archivedAt).toBeNull;
       expect(clonedChallenge.author).toEqual(challenge.author);
       expect(clonedChallenge.autoReply).toEqual(challenge.autoReply);

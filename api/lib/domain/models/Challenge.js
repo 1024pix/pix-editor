@@ -185,6 +185,7 @@ export class Challenge {
 
     const clonedChallenge =  new Challenge({
       id,
+      airtableId: null,
       translations: primaryTranslations,
       localizedChallenges: [primaryLocalizedChallengeClone],
       locales: this.locales,
