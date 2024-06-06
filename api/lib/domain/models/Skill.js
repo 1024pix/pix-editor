@@ -50,6 +50,14 @@ export class Skill {
     return [Skill.STATUSES.EN_CONSTRUCTION, Skill.STATUSES.ACTIF].includes(this.status);
   }
 
+  get isEnConstruction() {
+    return this.status === Skill.STATUSES.EN_CONSTRUCTION;
+  }
+
+  get isActif() {
+    return this.status === Skill.STATUSES.ACTIF;
+  }
+
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {
     const version = tubeSkills.filter((sk) => sk.level === level).length + 1;
     const name = `${tubeDestination.name}${level}`;

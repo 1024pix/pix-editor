@@ -30,11 +30,11 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.true;
     });
 
-    it.each(Object.keys(Skill.STATUSES).filter((status) => [Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[status]))
-    )('should return false when status key is %s', (status) => {
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => ![Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[statusKey]))
+    )('should return false when status key is %s', (statusKey) => {
       // given
       const skill  = domainBuilder.buildSkill({
-        status,
+        status: Skill.STATUSES[statusKey],
       });
 
       // when
@@ -42,6 +42,62 @@ describe('Unit | Domain | Skill', () => {
 
       // then
       expect(isLive).to.be.false;
+    });
+  });
+  describe('#get isEnConstruction', () => {
+    it('should return true when skill is enConstruction', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.EN_CONSTRUCTION,
+      });
+
+      // when
+      const isEnConstruction = skill.isEnConstruction;
+
+      // then
+      expect(isEnConstruction).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.EN_CONSTRUCTION)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES[statusKey],
+      });
+
+      // when
+      const isEnConstruction = skill.isEnConstruction;
+
+      // then
+      expect(isEnConstruction).to.be.false;
+    });
+  });
+  describe('#get isActif', () => {
+    it('should return true when skill is actif', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      const isActif = skill.isActif;
+
+      // then
+      expect(isActif).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.ACTIF)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES[statusKey],
+      });
+
+      // when
+      const isActif = skill.isActif;
+
+      // then
+      expect(isActif).to.be.false;
     });
   });
 
