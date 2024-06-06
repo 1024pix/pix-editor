@@ -123,4 +123,11 @@ export class Skill {
       clonedAttachments,
     };
   }
+
+  archiveSkillAndChallenges({ skillChallenges }) {
+    this.status = Skill.STATUSES.ARCHIVE;
+    for (const challenge of skillChallenges) {
+      challenge.archive();
+    }
+  }
 }

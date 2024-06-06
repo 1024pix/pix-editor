@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
@@ -747,6 +747,80 @@ describe('Unit | Domain | Challenge', () => {
           challengeId: clonedChallengeId,
         }),
       ]);
+    });
+  });
+
+  describe('#archive', () => {
+    const now = new Date('2021-10-29T03:03:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should make challenge perime when it was propose', () => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.PROPOSE,
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedArchivedChallenge = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: now,
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
+    });
+
+    it('should make challenge archive when it was valide', () => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.VALIDE,
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedArchivedChallenge = domainBuilder.buildChallenge({
+        archivedAt: now,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+      expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => ![Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(Challenge.STATUSES[statusKey]))
+    )('should do nothing when statusKey is %s', (statusKey) => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: new Date('2019-10-01'),
+        madeObsoleteAt: new Date('2019-10-02'),
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedUnchangedChallenge = domainBuilder.buildChallenge({
+        archivedAt: new Date('2019-10-01'),
+        madeObsoleteAt: new Date('2019-10-02'),
+        status: Challenge.STATUSES[statusKey],
+      });
+      expect(challengeToArchive).toStrictEqual(expectedUnchangedChallenge);
     });
   });
 });

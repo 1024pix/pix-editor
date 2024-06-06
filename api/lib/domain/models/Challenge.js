@@ -192,7 +192,7 @@ export class Challenge {
         }));
       }
     }
-    
+
     const clonedChallenge =  new Challenge({
       id,
       airtableId: null,
@@ -239,6 +239,19 @@ export class Challenge {
       clonedChallenge,
       clonedAttachments,
     };
+  }
+
+  archive() {
+    const now = new Date();
+    if (this.isPropose) {
+      this.status = Challenge.STATUSES.PERIME;
+      this.madeObsoleteAt = now;
+      return;
+    }
+    if (this.isValide) {
+      this.status = Challenge.STATUSES.ARCHIVE;
+      this.archivedAt = now;
+    }
   }
 
   translate(locale) {

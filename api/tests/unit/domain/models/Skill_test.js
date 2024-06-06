@@ -100,7 +100,6 @@ describe('Unit | Domain | Skill', () => {
       expect(isActif).to.be.false;
     });
   });
-
   describe('#cloneSkillAndChallenges', () => {
     const clonedSkillId = 'clonedSkillId';
     const level = 4;
@@ -344,6 +343,30 @@ describe('Unit | Domain | Skill', () => {
       expect(spies[proposeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 2 });
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledTimes(1);
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 2 });
+    });
+  });
+  describe('#archiveSkillAndChallenges', () => {
+    it('should archive skill', () => {
+      // given
+      const challenge1 = domainBuilder.buildChallenge();
+      const challenge2 = domainBuilder.buildChallenge();
+      vi.spyOn(challenge1, 'archive').mockImplementation(() => true);
+      vi.spyOn(challenge2, 'archive').mockImplementation(() => true);
+      const skillChallenges = [challenge1, challenge2];
+      const skillToArchive = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      skillToArchive.archiveSkillAndChallenges({ skillChallenges });
+
+      // then
+      const expectedArchivedSkill = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ARCHIVE,
+      });
+      expect(skillToArchive).toStrictEqual(expectedArchivedSkill);
+      expect(challenge1.archive).toHaveBeenCalledTimes(1);
+      expect(challenge2.archive).toHaveBeenCalledTimes(1);
     });
   });
 });
