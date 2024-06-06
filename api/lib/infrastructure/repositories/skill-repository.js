@@ -64,9 +64,8 @@ export async function create(skill) {
       value,
     }));
   }
-  const translationsFrOnly = translations.filter((translation) => translation.locale === 'fr');
-  await translationRepository.save({ translations: translationsFrOnly });
-  return toDomain(createdSkillDTO, translationsFrOnly);
+  await translationRepository.save({ translations });
+  return toDomain(createdSkillDTO, translations);
 }
 
 function addSpoilDataToSkill(skill, airtableSkills) {
