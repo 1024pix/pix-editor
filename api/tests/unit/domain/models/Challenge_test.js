@@ -95,6 +95,64 @@ describe('Unit | Domain | Challenge', () => {
     });
   }
 
+  describe('#get isPropose', () => {
+    it('should return true when challenge is propose', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.PROPOSE,
+      });
+
+      // when
+      const isPropose = challenge.isPropose;
+
+      // then
+      expect(isPropose).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROPOSE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPropose = challenge.isPropose;
+
+      // then
+      expect(isPropose).to.be.false;
+    });
+  });
+
+  describe('#get isValide', () => {
+    it('should return true when challenge is valide', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.VALIDE,
+      });
+
+      // when
+      const isValide = challenge.isValide;
+
+      // then
+      expect(isValide).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.VALIDE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isValide = challenge.isValide;
+
+      // then
+      expect(isValide).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given

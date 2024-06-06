@@ -108,6 +108,14 @@ export class Challenge {
     return 'challenge';
   }
 
+  get isPropose() {
+    return this.status === Challenge.STATUSES.PROPOSE;
+  }
+
+  get isValide() {
+    return this.status === Challenge.STATUSES.VALIDE;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
