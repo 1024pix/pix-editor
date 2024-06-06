@@ -598,11 +598,14 @@ describe('Unit | Domain | Challenge', () => {
     it('should clone challenge translations and attachments', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
+      const clonedNLLocalizedChallengeId = 'clonedNLLocalizedChallengeId';
       const competenceId = 'competenceId';
       const skillId = 'skillId';
       const alternativeVersion = 3;
       const prototypeVersion = 1;
-      const generateNewIdFnc = vi.fn().mockImplementation(() => clonedChallengeId);
+      const generateNewIdFnc = vi.fn()
+        .mockImplementationOnce(() => clonedChallengeId)
+        .mockImplementation(() => clonedNLLocalizedChallengeId);
       const locales = ['fr', 'nl'];
 
       const challenge = new Challenge({
@@ -694,27 +697,56 @@ describe('Unit | Domain | Challenge', () => {
           solution: 'solution FR',
           solutionToDisplay: 'solutionToDisplay FR',
         },
+        nl: {
+          instruction: 'instruction NL',
+          alternativeInstruction: 'alternativeInstruction NL',
+          proposals: 'proposals NL',
+          solution: 'solution NL',
+          solutionToDisplay: 'solutionToDisplay NL',
+        },
       });
 
-      expect(clonedChallenge.localizedChallenges).toStrictEqual([domainBuilder.buildLocalizedChallenge({
-        id: clonedChallengeId,
-        challengeId: clonedChallengeId,
-        status: null,
-        embedUrl: challenge.localizedChallenges[0].embedUrl,
-        geography: challenge.localizedChallenges[0].geography,
-        urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
-        fileIds: [],
-        locale: challenge.localizedChallenges[0].locale,
-      })]);
+      expect(clonedChallenge.localizedChallenges).toStrictEqual([
+        domainBuilder.buildLocalizedChallenge({
+          id: clonedChallengeId,
+          challengeId: clonedChallengeId,
+          status: null,
+          embedUrl: challenge.localizedChallenges[0].embedUrl,
+          geography: challenge.localizedChallenges[0].geography,
+          urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
+          fileIds: [],
+          locale: challenge.localizedChallenges[0].locale,
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: clonedNLLocalizedChallengeId,
+          challengeId: clonedChallengeId,
+          status: Challenge.STATUSES.PROPOSE,
+          embedUrl: challenge.localizedChallenges[1].embedUrl,
+          geography: challenge.localizedChallenges[1].geography,
+          urlsToConsult: challenge.localizedChallenges[1].urlsToConsult,
+          fileIds: [],
+          locale: challenge.localizedChallenges[1].locale,
+        }),
+      ]);
 
-      expect(clonedAttachments).toStrictEqual([domainBuilder.buildAttachment({
-        id: null,
-        type: attachmentIdA.type,
-        alt: attachmentIdA.alt,
-        url: attachmentIdA.url,
-        localizedChallengeId: clonedChallengeId,
-        challengeId: clonedChallengeId
-      })]);
+      expect(clonedAttachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: null,
+          type: attachmentIdA.type,
+          alt: attachmentIdA.alt,
+          url: attachmentIdA.url,
+          localizedChallengeId: clonedChallengeId,
+          challengeId: clonedChallengeId,
+        }),
+        domainBuilder.buildAttachment({
+          id: null,
+          type: attachmentIdB.type,
+          alt: attachmentIdB.alt,
+          url: attachmentIdB.url,
+          localizedChallengeId: clonedNLLocalizedChallengeId,
+          challengeId: clonedChallengeId,
+        }),
+      ]);
     });
   });
 });

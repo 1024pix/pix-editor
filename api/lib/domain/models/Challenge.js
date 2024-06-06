@@ -163,31 +163,41 @@ export class Challenge {
 
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
-    const clonedAttachments  = attachments
-      .filter((attachment) => attachment.localizedChallengeId === this.#primaryLocalizedChallenge.id)
-      .map((attachment) => attachment.clone({
+    const clonedAttachments = [];
+    const clonedLocalizedChallenges = [];
+    for (const localizedChallenge of this.localizedChallenges) {
+      let newLocalizedChallengeId, status;
+      if (localizedChallenge.id === localizedChallenge.challengeId) {
+        newLocalizedChallengeId = id;
+        status = null;
+      } else {
+        newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
+        status = Challenge.STATUSES.PROPOSE;
+      }
+      clonedLocalizedChallenges.push(new LocalizedChallenge({
+        id: newLocalizedChallengeId,
         challengeId: id,
-        localizedChallengeId: id,
+        status,
+        locale: localizedChallenge.locale,
+        embedUrl: localizedChallenge.embedUrl,
+        fileIds: [],
+        geography: localizedChallenge.geography,
+        urlsToConsult: localizedChallenge.urlsToConsult,
       }));
-
-    const primaryLocalizedChallengeClone = new LocalizedChallenge({
-      id,
-      challengeId: id,
-      status: null,
-      locale: this.#primaryLocalizedChallenge.locale,
-      embedUrl: this.#primaryLocalizedChallenge.embedUrl,
-      fileIds: [],
-      geography: this.#primaryLocalizedChallenge.geography,
-      urlsToConsult: this.#primaryLocalizedChallenge.urlsToConsult,
-    });
-
-    const primaryTranslations = _.pick(this.#translations, [this.primaryLocale]);
-
+      for (const attachmentId of localizedChallenge.fileIds) {
+        const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
+        clonedAttachments.push(attachmentToClone.clone({
+          challengeId: id,
+          localizedChallengeId: newLocalizedChallengeId,
+        }));
+      }
+    }
+    
     const clonedChallenge =  new Challenge({
       id,
       airtableId: null,
-      translations: primaryTranslations,
-      localizedChallenges: [primaryLocalizedChallengeClone],
+      translations: _.cloneDeep(this.#translations),
+      localizedChallenges: clonedLocalizedChallenges,
       locales: this.locales,
       files: [],
       accessibility1: this.accessibility1,
