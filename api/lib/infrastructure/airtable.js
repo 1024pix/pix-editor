@@ -40,6 +40,17 @@ export async function updateRecord(tableName, body) {
   return records[0];
 }
 
+export async function updateRecords(tableName, bodies) {
+  const records = [];
+  for (const chunkBodies  of _.chunk(bodies, 10)) {
+    const chunkRecords = await _airtableClient()
+      .table(tableName)
+      .update(chunkBodies);
+    records.push(...chunkRecords) ;
+  }
+  return records;
+}
+
 export async function upsertRecords(tableName, records, fieldsToMergeOn) {
   logger.info({ tableName }, 'Upserting redords in Airtable');
   return _airtableClient().table(tableName).update(
