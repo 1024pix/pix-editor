@@ -642,7 +642,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'locNLChallengeId',
             challengeId: 'challengeId',
             locale: 'nl',
-            status: Challenge.STATUSES.VALIDE,
+            status: LocalizedChallenge.STATUSES.PLAY,
             fileIds: ['attachmentIdB'],
             embedUrl: 'pix-mailccoule.nl',
             geography: 'Netherlands',
@@ -720,7 +720,7 @@ describe('Unit | Domain | Challenge', () => {
         domainBuilder.buildLocalizedChallenge({
           id: clonedNLLocalizedChallengeId,
           challengeId: clonedChallengeId,
-          status: Challenge.STATUSES.PROPOSE,
+          status: LocalizedChallenge.STATUSES.PAUSE,
           embedUrl: challenge.localizedChallenges[1].embedUrl,
           geography: challenge.localizedChallenges[1].geography,
           urlsToConsult: challenge.localizedChallenges[1].urlsToConsult,

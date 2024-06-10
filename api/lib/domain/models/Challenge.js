@@ -172,7 +172,7 @@ export class Challenge {
         status = null;
       } else {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
-        status = Challenge.STATUSES.PROPOSE;
+        status = LocalizedChallenge.STATUSES.PAUSE;
       }
       clonedLocalizedChallenges.push(new LocalizedChallenge({
         id: newLocalizedChallengeId,
