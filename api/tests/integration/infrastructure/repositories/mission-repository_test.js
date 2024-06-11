@@ -421,10 +421,10 @@ describe('Integration | Repository | mission-repository', function() {
     context('with alternative challenges in activities', async function() {
       it('should return ordered alternative challenges', async function() {
         mockedLearningContent.challenges = [
-          airtableBuilder.factory.buildChallenge({ id: 'secondAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 2 }),
-          airtableBuilder.factory.buildChallenge({ id: 'firstAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 1 }),
-          airtableBuilder.factory.buildChallenge({ id: 'fourthAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 4 }),
-          airtableBuilder.factory.buildChallenge({ id: 'thirdAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 3 }),
+          airtableBuilder.factory.buildChallenge({ id: 'secondAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 1 }),
+          airtableBuilder.factory.buildChallenge({ id: 'firstAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: undefined }),
+          airtableBuilder.factory.buildChallenge({ id: 'fourthAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 3 }),
+          airtableBuilder.factory.buildChallenge({ id: 'thirdAltChallengeValidation', status: 'validé', skillId: 'skillValidation1', alternativeVersion: 2 }),
         ];
         mockedLearningContent.skills = [
           airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
