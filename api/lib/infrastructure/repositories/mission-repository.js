@@ -85,7 +85,7 @@ export async function list() {
 }
 
 const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
-const _byAlternativeVersion = (challengeA, challengeB) => challengeA.alternativeVersion - challengeB.alternativeVersion;
+const _byAlternativeVersion = (challengeA, challengeB) => (challengeA.alternativeVersion ?? 0) - (challengeB.alternativeVersion ?? 0);
 
 function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityPostfix) {
   const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
