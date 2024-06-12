@@ -132,6 +132,8 @@ export async function updateBatch(challenges) {
 export async function listBySkillId(skillId) {
   const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
   if (!challengeDTOs) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
