@@ -5,25 +5,35 @@ import { logger } from '../../lib/infrastructure/logger.js';
 import {
   attachmentRepository,
   challengeRepository,
-  skillRepository
+  releaseRepository,
+  skillRepository,
+  translationRepository
 } from '../../lib/infrastructure/repositories/index.js';
 import { generateNewId } from '../../lib/infrastructure/utils/id-generator.js';
-import { Skill } from '../../lib/domain/models/index.js';
-import { uploadTranslationToPhrase } from '../../lib/domain/usecases/index.js';
+import { Challenge, Skill } from '../../lib/domain/models/index.js';
+import _ from 'lodash';
+import * as config from '../../lib/config.js';
+import { Configuration, LocalesApi, UploadsApi } from 'phrase-js';
+import { streamToPromise } from '../../lib/infrastructure/utils/stream-to-promise.js';
+import csv from 'fast-csv';
+import { PassThrough, pipeline, Readable } from 'node:stream';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
 
-export async function moveToFocus({ airtableClient, dryRun }) {
+export async function moveToFocus({ airtableClient, dryRun, skipUpload = false }) {
   const skillsToFocus = await _getSkillsToFocus({ airtableClient });
   const enConstructionSkills = skillsToFocus.filter((skill) => skill.isEnConstruction);
   const actifSkills = skillsToFocus.filter((skill) => skill.isActif);
 
   await _moveEnConstructionSkillsToFocus({ enConstructionSkills, dryRun });
-  await _moveActifSkillsToFocus({ actifSkills, dryRun });
+  const { skills, challenges } = await _moveActifSkillsToFocus({ actifSkills, dryRun });
   logger.info('Uploading translations to Phrase...');
-  if (!dryRun) {
-    await uploadTranslationToPhrase();
+  if (!dryRun && (skills.length > 0 || challenges.length > 0) && !skipUpload) {
+    logger.info('Creating a release to help us upload to Phrase...');
+    const releaseId = await releaseRepository.create();
+    const release = await  releaseRepository.getRelease(releaseId);
+    await uploadToPhrase({ skills, challenges, release });
   }
   logger.info('Done');
 }
@@ -65,11 +75,18 @@ async function _moveEnConstructionSkillsToFocus({ enConstructionSkills, dryRun }
 
 async function _moveActifSkillsToFocus({ actifSkills, dryRun }) {
   logger.info(`${actifSkills.length} actif skills to move to focus...`);
+
+  const skills = [];
+  const challenges = [];
+
   for (const skill of actifSkills) {
     const skillChallenges = await challengeRepository.listBySkillId(skill.id);
-    await _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun });
+    const { clonedSkill, clonedChallenges } = await _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun });
+    skills.push(clonedSkill);
+    challenges.push(...clonedChallenges);
     await _archiveOldSkill({ skill, skillChallenges, dryRun });
   }
+  return { skills, challenges };
 }
 
 async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun }) {
@@ -83,11 +100,13 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
     competenceId: skill.competenceId,
     id: skill.tubeId,
   };
+
   // Pré-filtrage des épreuves pour ne conserver que les proto validées et les déclinaisons validées/proposées
   const preFilteredSkillChallenges = skillChallenges.filter((challenge) =>
     (challenge.genealogy === 'Prototype 1' && challenge.isValide)
     || (challenge.genealogy === 'Décliné 1' && (challenge.isValide || challenge.isPropose))
   );
+
   // Ne me jugez pas, je profite de la fiesta javascript pour "cacher" des données et les récupérer plus tard pour ne pas avoir
   // à altérer la fonction de clonage et pour pouvoir l'utiliser pleinement
   // Quand on clone une épreuve elle passe automatiquement en proposé.
@@ -98,6 +117,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       localizedChallenge.geography = [localizedChallenge.geography, localizedChallenge.status];
     }
   }
+
   const { clonedSkill, clonedChallenges, clonedAttachments } = skill.cloneSkillAndChallenges({
     tubeDestination,
     level: skill.level,
@@ -106,7 +126,9 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
     attachments,
     generateNewIdFnc: generateNewId,
   });
+
   clonedSkill.status = Skill.STATUSES.ACTIF;
+
   // On passe l'épreuve en focus et, ni vu ni connu, je dépile ma donnée cachée
   // on dit merci JS
   for (const clonedChallenge of clonedChallenges) {
@@ -118,6 +140,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       clonedLocalizedChallenge.geography = clonedLocalizedChallenge.geography[0];
     }
   }
+
   // et on répare la donnée cachée car je vais persister les épreuves ensuite
   for (const challenge of preFilteredSkillChallenges) {
     challenge.accessibility1 = challenge.accessibility1[0];
@@ -125,12 +148,14 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       localizedChallenge.geography = localizedChallenge.geography[0];
     }
   }
+
   if (!dryRun) {
     await skillRepository.create(clonedSkill);
     await challengeRepository.createBatch(clonedChallenges);
     await attachmentRepository.createBatch(clonedAttachments);
   }
   logger.info(`Skill ${skill.id} moved to focus along with ${clonedChallenges.length} challenges and ${clonedAttachments.length} attachments !`);
+  return { clonedSkill, clonedChallenges };
 }
 
 async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
@@ -140,6 +165,172 @@ async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
     await challengeRepository.updateBatch(skillChallenges);
   }
   logger.info(`Skill ${skill.id} archived along with its ${skillChallenges.length} challenges !`);
+}
+
+export async function uploadToPhrase({ skills, challenges, release }) {
+  const phraseApi = { Configuration, LocalesApi, UploadsApi };
+  const releaseContent = Object.fromEntries(
+    Object.entries(release.content)
+      .map(([collection, entities]) => [
+        collection,
+        Object.fromEntries(entities.map((entity) => [entity.id, entity])),
+      ]),
+  );
+  const translations =  await translationRepository.list();
+  const translationSkills = translations.filter(({ key })=> {
+    return skills.find(({ id })=> {
+      const regex = new RegExp(`skill\\.${id}\\..+`, 'g');
+      return !!key.match(regex);
+    });
+  });
+  const valideChallengesWithFRPrimaryOnly = challenges.filter((challenge) => challenge.primaryLocale === 'fr' && challenge.status === Challenge.STATUSES.VALIDE);
+  const translationChallenges = translations.filter(({ key })=> {
+    return valideChallengesWithFRPrimaryOnly.find(({ id })=> {
+      const regex = new RegExp(`challenge\\.${id}\\..+`, 'g');
+      return !!key.match(regex);
+    });
+  });
+  const sortedLocales = _.uniq([...translationSkills.map(({ locale }) => locale), ...translationChallenges.map(({ locale }) => locale)])
+    .sort((localeA, localeB) => localeA.localeCompare(localeB));
+  const items = [];
+  items.push([
+    'key',
+    ...sortedLocales,
+    'tags',
+    'description',
+  ]);
+  items.push(..._generateItemsForSkills(translationSkills, releaseContent, sortedLocales));
+  items.push(..._generateItemsForChallenges(translationChallenges, releaseContent, sortedLocales));
+
+  const stream = new PassThrough();
+
+  pipeline(
+    Readable.from(items),
+    csv.format({ headers: true }),
+    stream,
+    () => null,
+  );
+  logger.info(`About to send ${items.length} to Phrase...`);
+  const csvFile = new File([await streamToPromise(stream)], 'translations.csv');
+  const configuration = new phraseApi.Configuration({
+    fetchApi: fetch,
+    apiKey: `token ${config.phrase.apiKey}`,
+  });
+
+  try {
+    const locales = await new phraseApi.LocalesApi(configuration).localesList({
+      projectId: config.phrase.projectId,
+    });
+
+    const defaultLocaleId = locales.find((locale) => locale._default)?.id;
+    const keyIndex = 1;
+    const tagIndex = keyIndex + sortedLocales.length + 1;
+    const descriptionIndex = tagIndex + 1;
+    const localeMapping = Object.fromEntries(sortedLocales.map((locale, index) => [locale, index + keyIndex + 1]));
+    await new phraseApi.UploadsApi(configuration).uploadCreate({
+      projectId: config.phrase.projectId,
+      localeId: defaultLocaleId,
+      file: csvFile,
+      fileFormat: 'csv',
+      updateDescriptions: false,
+      updateTranslations: false,
+      skipUploadTags: true,
+      localeMapping,
+      formatOptions: {
+        key_index: keyIndex,
+        tag_column: tagIndex,
+        comment_index: descriptionIndex,
+        header_content_row: true,
+      }
+    });
+  } catch (e) {
+    const text = await e.text?.() ?? e;
+    logger.error(`Phrase error while uploading translations: ${text}`);
+    throw new Error('Phrase error', { cause: e });
+  }
+}
+
+function _generateItemsForSkills(translationSkills, releaseContent, sortedLocales) {
+  const skillItems = [];
+  const translationsSkillByKey =  _.groupBy(translationSkills, 'key');
+  for (const [key, translations] of Object.entries(translationsSkillByKey)) {
+    const skillItem = [];
+    skillItem.push(key);
+    skillItem.push(...sortedLocales.map((locale) => {
+      const translationForLocale = translations.find((translation) => translation.locale === locale);
+      return translationForLocale?.value ?? '';
+    }));
+    const skillTags = _generateTagsForSkill(key.split('.')[1], releaseContent);
+    skillItem.push(skillTags);
+    skillItem.push('');
+    skillItems.push(skillItem);
+  }
+  return skillItems;
+}
+
+function _generateItemsForChallenges(translationChallenges, releaseContent, sortedLocales) {
+  const challengeItems = [];
+  const translationsChallengeByKey =  _.groupBy(translationChallenges, 'key');
+  for (const [key, translations] of Object.entries(translationsChallengeByKey)) {
+    const challengeItem = [];
+    challengeItem.push(key);
+    challengeItem.push(...sortedLocales.map((locale) => {
+      const translationForLocale = translations.find((translation) => translation.locale === locale);
+      return translationForLocale?.value ?? '';
+    }));
+    const challengeTags = _generateTagsForChallenge(key.split('.')[1], releaseContent);
+    const challengeDescription = _generateDescriptionForChallenge(key.split('.')[1], sortedLocales);
+    challengeItem.push(challengeTags);
+    challengeItem.push(challengeDescription);
+    challengeItems.push(challengeItem);
+  }
+  return challengeItems;
+}
+
+const baseUrl = config.lcms.baseUrl;
+
+function _generateDescriptionForChallenge(challengeId, locales) {
+  const primaryLocalePreviewUrl = `Prévisualisation FR: ${baseUrl}/api/challenges/${challengeId}/preview`;
+  const alternativeLocalePreviewUrls = locales
+    .filter((locale) => locale !== 'fr')
+    .map((locale) => {
+      return `Prévisualisation ${locale.toUpperCase()}: ${baseUrl}/api/challenges/${challengeId}/preview?locale=${locale}`;
+    });
+  const peURL = `Pix Editor: ${baseUrl}/challenge/${challengeId}`;
+
+  return `${[primaryLocalePreviewUrl, ...alternativeLocalePreviewUrls, peURL].join('\n')}`;
+}
+
+function _generateTagsForSkill(skillId, release) {
+  const tags = _generateCommonTagPart(skillId, release);
+  const rawTags = `acquis,${tags}`;
+  return `${toTag(rawTags)}`;
+}
+
+function _generateTagsForChallenge(challengeId, release) {
+  const challenge = release.challenges[challengeId];
+  const tags = _generateCommonTagPart(challenge.skillId, release);
+  const challengeTag = `${tags.split(',')[0]}-${challenge.status}`;
+  const rawTags = `epreuve,${challengeTag},${tags}`;
+  return `${toTag(rawTags)}`;
+}
+
+function _generateCommonTagPart(skillId, release) {
+  const skill = release.skills[skillId];
+  const tube = release.tubes[skill.tubeId];
+  const competence = release.competences[tube.competenceId];
+  const area = release.areas[competence.areaId];
+  const framework = release.frameworks[area.frameworkId];
+  const frameworkTag = `${framework.name}`;
+  const areaTag = `${frameworkTag}-${area.code}`;
+  const competenceTag = `${areaTag}-${competence.index}`;
+  const tubeTag = `${competenceTag}-${tube.name}`;
+  const skillTag = `${tubeTag}-${skill.name}`;
+  return `${skillTag},${tubeTag},${competenceTag},${areaTag},${frameworkTag}`;
+}
+
+function toTag(tagName) {
+  return _(tagName).deburr().replaceAll(' ', '_').replaceAll('@', '');
 }
 
 async function main() {
@@ -164,3 +355,4 @@ async function main() {
 }
 
 main();
+

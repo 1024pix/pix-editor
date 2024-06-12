@@ -113,7 +113,7 @@ export const checkUrlsJobs = {
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
 };
 
-export let phrase = {
+export const phrase = {
   apiKey: process.env.PHRASE_API_KEY,
   projectId: process.env.PHRASE_PROJECT_ID,
 };
@@ -161,8 +161,6 @@ if (process.env.NODE_ENV === 'test') {
 
   notifications.slack.enable = false;
 
-  phrase = {
-    apiKey: 'MY_PHRASE_ACCESS_TOKEN',
-    projectId: 'MY_PHRASE_PROJECT_ID',
-  };
+  phrase.apiKey = 'MY_PHRASE_ACCESS_TOKEN';
+  phrase.projectId = 'MY_PHRASE_PROJECT_ID';
 }

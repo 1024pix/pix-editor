@@ -74,7 +74,7 @@ export async function createBatch(challenges) {
   }
   const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
   const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
-  const allTranslations = challenges.flatMap(extractTranslationsFromChallenge);
+  const allTranslations = challenges.flatMap((challenge) => challenge.translations);
   return knex.transaction(async (transaction) => {
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
     await translationRepository.save({ translations: allTranslations, transaction });
