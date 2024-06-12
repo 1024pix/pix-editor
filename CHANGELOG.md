@@ -1,5 +1,11 @@
 
 
+## v3.148.1 (12/06/2024)
+
+
+### :bug: Correction
+- [#681](https://github.com/1024pix/pix-editor/pull/681) [BUGFIX] Corriger l'ordre des challenge quand la déclinaison est undefined (Pix-12881).
+
 ## v3.148.0 (05/06/2024)
 
 
