@@ -2,6 +2,9 @@ export function buildAttachment({
   id = 'attid1',
   type = 'illustration',
   url = 'url/to/attachment',
+  size = 123,
+  mimeType = 'image/jpeg',
+  filename = 'nom_fichier',
   challengeId = 'challid1',
   createdAt = new Date().toISOString(),
   localizedChallengeId = challengeId,
@@ -16,6 +19,9 @@ export function buildAttachment({
       localizedChallengeId,
       type,
       url,
+      size,
+      mimeType,
+      filename,
     },
   };
 }

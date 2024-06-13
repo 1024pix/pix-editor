@@ -10,6 +10,9 @@ describe('Unit | Domain | Attachment', () => {
         url:'http://cc.c',
         type: 'illustration',
         alt: 'je suis où là ?',
+        size: 345,
+        mimeType: 'image/png',
+        filename: 'nom_du_fichier',
         challengeId: 'challengeId',
         localizedChallengeId: 'localizedChallengeId'
       });
@@ -26,6 +29,9 @@ describe('Unit | Domain | Attachment', () => {
         url:'http://cc.c',
         type: 'illustration',
         alt: 'je suis où là ?',
+        size: 345,
+        mimeType: 'image/png',
+        filename: 'nom_du_fichier',
         challengeId: 'newChallengeId',
         localizedChallengeId: 'newLocalizedChallengeId'
       });

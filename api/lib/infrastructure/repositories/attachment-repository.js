@@ -38,12 +38,12 @@ export async function createBatch(attachments) {
       size: attachment.size,
       type: attachment.type,
       mimeType: attachment.mimeType,
+      filename: attachment.filename,
       challengeId: airtableChallengeIdsByIds[attachment.challengeId],
       localizedChallengeId: attachment.localizedChallengeId,
     });
   }
   const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
-
   for (const createdAttachmentsDto of createdAttachmentsDtos) {
     await localizedChallengesAttachmentsRepository.save({
       localizedChallengeId: createdAttachmentsDto.localizedChallengeId,
