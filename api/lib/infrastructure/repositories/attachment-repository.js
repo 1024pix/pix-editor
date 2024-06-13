@@ -4,6 +4,7 @@ import * as localizedChallengeRepository from './localized-challenge-repository.
 import _ from 'lodash';
 import { Attachment } from '../../domain/models/index.js';
 import { cloneAttachmentsFileInBucket } from '../utils/storage.js';
+import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 
 export async function list() {
   const datasourceAttachments = await attachmentDatasource.list();
@@ -42,6 +43,13 @@ export async function createBatch(attachments) {
     });
   }
   const createdAttachmentsDtos = await attachmentDatasource.createBatch(attachmentToSaveDTOs);
+
+  for (const createdAttachmentsDto of createdAttachmentsDtos) {
+    await localizedChallengesAttachmentsRepository.save({
+      localizedChallengeId: createdAttachmentsDto.localizedChallengeId,
+      attachmentId: createdAttachmentsDto.id,
+    });
+  }
   const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: attachments.map((attachment) => attachment.challengeId) });
   return toDomainList(createdAttachmentsDtos, translations, localizedChallenges);
