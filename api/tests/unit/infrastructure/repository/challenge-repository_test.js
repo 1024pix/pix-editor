@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, get, list, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
-import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
+import {
+  createBatch,
+  filter,
+  get,
+  list,
+  update
+} from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import { challengeDatasource, skillDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import {
   localizedChallengeRepository,
   translationRepository
@@ -428,6 +434,134 @@ describe('Unit | Repository | challenge-repository', () => {
         transaction: expect.anything(),
       });
       expect(result).toEqual(challengeToUpdate);
+    });
+  });
+  describe('#createBatch', () => {
+    it('should return an empty array when there is no challenge to save', async () => {
+      // given
+      const challenges = [];
+
+      // when
+      const result = await createBatch(challenges);
+
+      // then
+      expect(result).toStrictEqual([]);
+    });
+
+    it('should save several challenges', async () => {
+      // given
+      const airtableIdsByIds = {
+        'skillIdPersistantA': 'airtableSkillIdA',
+        'skillIdPersistantB': 'airtableSkillIdB',
+      };
+
+      const challengeIdA = 'challengeIdA';
+      const challengeIdB = 'challengeIdB';
+
+      const localizedChallenges1 = [
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeIdA,
+          challengeId: challengeIdA,
+          locale: 'fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeIdA',
+          challengeId: challengeIdA,
+          locale: 'nl',
+        }),
+      ];
+
+      const localizedChallenges2 = [
+        domainBuilder.buildLocalizedChallenge({
+          id: challengeIdB,
+          challengeId: challengeIdB,
+          locale: 'fr',
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: 'localizedChallengeIdB',
+          challengeId: challengeIdB,
+          locale: 'nl',
+        }),
+      ];
+      const challengesToCreate = [
+        domainBuilder.buildChallenge({
+          skillId: 'skillIdPersistantA',
+          locales: ['fr'],
+          translations: {
+            fr: {
+              instruction: 'instruction A fr',
+              proposals: 'proposals A fr',
+            },
+            nl: {
+              instruction: 'instruction A nl',
+              proposals: 'proposals A nl',
+            },
+          },
+          localizedChallenges: localizedChallenges1,
+        }), domainBuilder.buildChallenge({
+          skillId: 'skillIdPersistantB',
+          locales: ['fr'],
+          translations: {
+            fr: {
+              instruction: 'instruction B fr',
+              proposals: 'proposals B fr',
+            },
+            nl: {
+              instruction: 'instruction B nl',
+              proposals: 'proposals B nl',
+            },
+          },
+          localizedChallenges: localizedChallenges2,
+        })
+      ];
+
+      vi.spyOn(skillDatasource, 'getAirtableIdsByIds').mockImplementation(() => airtableIdsByIds);
+      vi.spyOn(challengeDatasource, 'createBatch').mockImplementation(() => challengesToCreate.map(domainBuilder.buildChallengeDatasourceObject));
+      vi.spyOn(localizedChallengeRepository, 'create');
+      vi.spyOn(translationRepository, 'save').mockImplementation(() => 'savedTranslations');
+
+      // when
+      await createBatch(challengesToCreate);
+
+      // then
+      const expectedTranslations = [
+        domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdA}.instruction`,
+          locale: 'fr',
+          value: 'instruction A fr'
+        }),domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdA}.proposals`,
+          locale: 'fr',
+          value: 'proposals A fr'
+        }), domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdA}.instruction`,
+          locale: 'nl',
+          value: 'instruction A nl'
+        }),domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdA}.proposals`,
+          locale: 'nl',
+          value: 'proposals A nl'
+        }), domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdB}.instruction`,
+          locale: 'fr',
+          value: 'instruction B fr'
+        }),domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdB}.proposals`,
+          locale: 'fr',
+          value: 'proposals B fr'
+        }), domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdB}.instruction`,
+          locale: 'nl',
+          value: 'instruction B nl'
+        }),domainBuilder.buildTranslation({
+          key: `challenge.${challengeIdB}.proposals`,
+          locale: 'nl',
+          value: 'proposals B nl'
+        }),
+      ];
+
+      expect(localizedChallengeRepository.create).toHaveBeenCalledWith({ localizedChallenges: [...localizedChallenges1, ...localizedChallenges2], transaction: expect.anything() });
+      expect(translationRepository.save).toHaveBeenCalledWith({ translations: expectedTranslations, transaction: expect.anything() });
     });
   });
 });

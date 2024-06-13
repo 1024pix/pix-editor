@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
-import { Challenge } from '../../domain/models/index.js';
+import { Challenge, Translation } from '../../domain/models/index.js';
 import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
@@ -74,7 +74,19 @@ export async function createBatch(challenges) {
   }
   const createdChallengesDtos = await challengeDatasource.createBatch(challenges);
   const allLocalizedChallenges = challenges.flatMap((challenge) => challenge.localizedChallenges);
-  const allTranslations = challenges.flatMap((challenge) => challenge.translations);
+  const allTranslations = challenges.flatMap((challenge) => {
+    const translationModels = [];
+    for (const [locale, translationsForLocale] of Object.entries(challenge.translations)) {
+      for (const [field, value] of Object.entries(translationsForLocale)) {
+        translationModels.push(new Translation({
+          key: `${prefixFor(challenge)}${field}`,
+          locale,
+          value,
+        }));
+      }
+    }
+    return translationModels;
+  });
   return knex.transaction(async (transaction) => {
     await localizedChallengeRepository.create({ localizedChallenges: allLocalizedChallenges, transaction });
     await translationRepository.save({ translations: allTranslations, transaction });
