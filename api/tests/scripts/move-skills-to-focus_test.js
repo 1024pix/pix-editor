@@ -10,8 +10,6 @@ import {
   skillRepository,
 } from '../../lib/infrastructure/repositories/index.js';
 import * as idGenerator from '../../lib/infrastructure/utils/id-generator.js';
-import multipart from 'parse-multipart-data';
-import { Buffer } from 'node:buffer';
 
 describe('Script | Move skills to focus', function() {
 
@@ -43,6 +41,8 @@ describe('Script | Move skills to focus', function() {
   afterEach(async () => {
     vi.restoreAllMocks();
     await knex('translations').truncate();
+    await knex('focus_phrase').truncate();
+    await knex('historic_focus').truncate();
   });
 
   describe('for enConstruction skills', () => {
@@ -118,6 +118,8 @@ describe('Script | Move skills to focus', function() {
           skillId: 'enConstructionSkillId',
           focusable: true,
         }));
+      const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+      expect(focus_phrase_records).toStrictEqual([]);
     });
   });
 
@@ -214,6 +216,15 @@ describe('Script | Move skills to focus', function() {
         internationalisation: actifSkillData.internationalisation,
         version: 3,
       }));
+      const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+      expect(focus_phrase_records).toStrictEqual([
+        {
+          id: expect.any(Number),
+          persistantId: 'skillNewId',
+          type: 'skill',
+          createdAt: expect.anything(),
+        },
+      ]);
     });
 
     it('should clone challenges (valide proto and valide/propose déclis), make them focusable and set status to what it was before cloning', async () => {
@@ -265,6 +276,7 @@ describe('Script | Move skills to focus', function() {
         type: 'type attach valideProto',
         size: 1,
         mimeType: 'mimeType1',
+        filename: 'filename_valideproto',
         challengeId: 'valideProtoForActifSkillId',
         localizedChallengeId: 'valideProtoForActifSkillId',
       });
@@ -274,6 +286,7 @@ describe('Script | Move skills to focus', function() {
         type: 'type attach valideProtoNL',
         size: 2,
         mimeType: 'mimeType2',
+        filename: 'filename_valideprotoNL',
         challengeId: 'valideProtoForActifSkillId',
         localizedChallengeId: 'valideProtoForActifSkillLocNLId',
       });
@@ -283,6 +296,7 @@ describe('Script | Move skills to focus', function() {
         type: 'type attach proposeDecli',
         size: 3,
         mimeType: 'mimeType3',
+        filename: 'filename_proposedecli',
         challengeId: 'proposeDecliValideProtoForActifSkillId',
         localizedChallengeId: 'proposeDecliValideProtoForActifSkillId',
       });
@@ -292,6 +306,7 @@ describe('Script | Move skills to focus', function() {
         type: 'type attach valideDecli',
         size: 4,
         mimeType: 'mimeType4',
+        filename: 'filename_valideDecli',
         challengeId: 'valideDecliValideProtoForActifSkillId',
         localizedChallengeId: 'valideDecliValideProtoForActifSkillId',
       });
@@ -588,6 +603,7 @@ describe('Script | Move skills to focus', function() {
           type: valideProtoAttachment.type,
           size: valideProtoAttachment.size,
           mimeType: valideProtoAttachment.mimeType,
+          filename: valideProtoAttachment.filename,
           challengeId: 'valideProtoForActifSkillNewId',
           localizedChallengeId: 'valideProtoForActifSkillNewId',
         }),
@@ -597,6 +613,7 @@ describe('Script | Move skills to focus', function() {
           type: valideProtoAttachmentNL.type,
           size: valideProtoAttachmentNL.size,
           mimeType: valideProtoAttachmentNL.mimeType,
+          filename: valideProtoAttachmentNL.filename,
           challengeId: 'valideProtoForActifSkillNewId',
           localizedChallengeId: 'valideProtoForActifSkillNLNewId',
         }),
@@ -606,6 +623,7 @@ describe('Script | Move skills to focus', function() {
           type: proposeDecliAttachment.type,
           size: proposeDecliAttachment.size,
           mimeType: proposeDecliAttachment.mimeType,
+          filename: proposeDecliAttachment.filename,
           challengeId: 'proposeDecliValideProtoForActifSkillNewId',
           localizedChallengeId: 'proposeDecliValideProtoForActifSkillNewId',
         }),
@@ -615,9 +633,37 @@ describe('Script | Move skills to focus', function() {
           type: valideDecliAttachment.type,
           size: valideDecliAttachment.size,
           mimeType: valideDecliAttachment.mimeType,
+          filename: valideDecliAttachment.filename,
           challengeId: 'valideDecliValideProtoForActifSkillNewId',
           localizedChallengeId: 'valideDecliValideProtoForActifSkillNewId',
         }),
+      ]);
+      const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+      expect(focus_phrase_records).toStrictEqual([
+        {
+          id: expect.any(Number),
+          persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+          type: 'challenge',
+          createdAt: expect.anything(),
+        },
+        {
+          id: expect.any(Number),
+          persistantId: 'valideDecliValideProtoForActifSkillNewId',
+          type: 'challenge',
+          createdAt: expect.anything(),
+        },
+        {
+          id: expect.any(Number),
+          persistantId: 'valideProtoForActifSkillNewId',
+          type: 'challenge',
+          createdAt: expect.anything(),
+        },
+        {
+          id: expect.any(Number),
+          persistantId: 'skillNewId',
+          type: 'skill',
+          createdAt: expect.anything(),
+        },
       ]);
     });
 
@@ -769,280 +815,415 @@ describe('Script | Move skills to focus', function() {
         }),
       ]);
     });
-  });
 
-  describe('#script.uploadToPhrase',() => {
-    it('should return a super csv', async () => {
-      // given
-      const skill1 = domainBuilder.buildSkill({
-        id:'skill1',
-        tubeId: 'tube1',
-        name: '@tube1',
-        hint_i18n: {
-          fr: 'hint skill1 fr',
-          nl: 'hint skill1 nl',
-        }
-      });
-      const skill2 = domainBuilder.buildSkill({
-        id:'skill2',
-        tubeId: 'tube1',
-        name: '@tube2',
-        hint_i18n: {
-          fr: 'hint skill2 fr',
-          es: 'hint skill2 es',
-        }
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skill1.hint',
-        locale: 'fr',
-        value: 'hint skill1 fr'
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skill1.hint',
-        locale: 'nl',
-        value: 'hint skill1 nl'
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skill2.hint',
-        locale: 'fr',
-        value: 'hint skill2 fr'
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'skill.skill2.hint',
-        locale: 'es',
-        value: 'hint skill2 es'
-      });
-      const challengeA = domainBuilder.buildChallenge({
-        id: 'challengeAID',
-        skillId: skill1.id,
-        status: Challenge.STATUSES.VALIDE,
-        locales: ['fr'],
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeAID',
-            challengeId: 'challengeAID',
-            locale: 'fr',
-          }),
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeA_NL_ID',
-            challengeId: 'challengeAID',
-            locale: 'nl',
-          }),
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeA_ES_ID',
-            challengeId: 'challengeAID',
-            locale: 'es',
-          }),
-        ],
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeAID.instruction',
-        locale: 'fr',
-        value: 'challengeAID instruction FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeAID.instruction',
-        locale: 'es',
-        value: 'challengeAID instruction ES',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeAID.instruction',
-        locale: 'nl',
-        value: 'challengeAID instruction NL',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeAID.illustrationAlt',
-        locale: 'fr',
-        value: 'challengeAID illustrationAlt FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeAID.illustrationAlt',
-        locale: 'nl',
-        value: 'challengeAID illustrationAlt NL',
-      });
-      const challengeB = domainBuilder.buildChallenge({
-        id: 'challengeBId',
-        skillId: skill2.id,
-        status: Challenge.STATUSES.VALIDE,
-        locales: ['fr-fr'],
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeBId',
-            challengeId: 'challengeBId',
-            locale: 'fr-fr',
-          }),
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeB_ES_Id',
-            challengeId: 'challengeBId',
-            locale: 'jp',
-          }),
-        ],
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeBId.instruction',
-        locale: 'fr-fr',
-        value: 'challengeBId instruction FRfr',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeBId.instruction',
-        locale: 'jp',
-        value: 'ITADAKISMASU',
-      });
-      const challengeC = domainBuilder.buildChallenge({
-        id: 'challengeCId',
-        skillId: skill2.id,
-        status: Challenge.STATUSES.VALIDE,
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeCId',
-            challengeId: 'challengeCId',
-            locale: 'fr',
-          }),
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeC_NL_Id',
-            challengeId: 'challengeCId',
-            locale: 'nl',
-          }),
-        ],
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeCId.instruction',
-        locale: 'fr',
-        value: 'challengeCId instruction FR',
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeCId.instruction',
-        locale: 'nl',
-        value: 'challengeCId instruction NL',
-      });
-      const challengeD = domainBuilder.buildChallenge({
-        id: 'challengeDId',
-        skillId: skill2.id,
-        status: Challenge.STATUSES.PROPOSE,
-        localizedChallenges: [
-          domainBuilder.buildLocalizedChallenge({
-            id: 'challengeDId',
-            challengeId: 'challengeDId',
-            locale: 'fr',
-          }),
-        ],
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: 'challenge.challengeDId.instruction',
-        locale: 'fr',
-        value: 'challengeDId instruction FR',
-      });
-      await databaseBuilder.commit();
+    describe('historic line', () => {
+      let actifSkillData;
+      const clonedSkillId = 'skillNewId';
+      const clonedChallengeIds = ['valideProtoForActifSkillNewId', 'valideDecliValideProtoForActifSkillNewId', 'proposeDecliValideProtoForActifSkillNewId'];
+      const clonedLocalizedChallengeId = 'valideProtoForActifSkillNLNewId';
 
-      const releaseChallengeA = domainBuilder.buildChallengeForRelease(challengeA);
-      const releaseChallengeB = domainBuilder.buildChallengeForRelease(challengeB);
-      const releaseChallengeC = domainBuilder.buildChallengeForRelease(challengeC);
-      const releaseChallengeD = domainBuilder.buildChallengeForRelease(challengeD);
-      const releaseSkill1 = domainBuilder.buildSkillForRelease(skill1);
-      const releaseSkill2 = domainBuilder.buildSkillForRelease(skill2);
-      const releaseTube = domainBuilder.buildTubeForRelease({
-        id: 'tube1',
-        competenceId: 'competenceId1',
-        name: '@tube'
-      });
-      const releaseCompetence = domainBuilder.buildCompetenceForRelease({
-        id: 'competenceId1',
-        areaId: 'areaId1',
-        index: '1.1'
-      });
-      const releaseArea = domainBuilder.buildAreaForRelease({
-        id: 'areaId1',
-        frameworkId: 'frameworkId1',
-        code: '1'
-      });
-      const releaseFramework = domainBuilder.buildFrameworkForRelease({
-        id: 'frameworkId1',
-        name: 'pix'
-      });
-      const content = domainBuilder.buildContentForRelease({
-        frameworks: [releaseFramework],
-        areas: [releaseArea],
-        competences: [releaseCompetence],
-        tubes: [releaseTube],
-        skills: [releaseSkill1, releaseSkill2],
-        challenges: [releaseChallengeA, releaseChallengeB, releaseChallengeC, releaseChallengeD],
-      });
-      const release = domainBuilder.buildDomainRelease({ content });
-      const phraseLocalesAPI = nock('https://api.phrase.com')
-        .get('/v2/projects/MY_PHRASE_PROJECT_ID/locales')
-        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(200, [
-          {
-            id: 'frLocaleId',
-            name: 'fr',
-            code: 'fr',
-            default: true,
-          },
-          {
-            id: 'nlLocaleId',
-            name: 'nl',
-            code: 'nl',
-            default: false,
-          },
+      beforeEach(async () => {
+        idGenerator.generateNewId
+          .mockImplementationOnce(() => clonedSkillId)
+          .mockImplementationOnce(() => clonedChallengeIds[0])
+          .mockImplementationOnce(() => clonedLocalizedChallengeId)
+          .mockImplementationOnce(() => clonedChallengeIds[1])
+          .mockImplementationOnce(() => clonedChallengeIds[2]);
+        actifSkillData = {
+          id: 'actifSkillId',
+          status: Skill.STATUSES.ACTIF,
+          tubeId: 'tubeId',
+          version: 2,
+          level: 1,
+          name: '@baseTube1',
+          competenceId: 'someCompetenceId',
+        };
+        const actifSkill = airtableBuilder.factory.buildSkill(actifSkillData);
+        databaseBuilder.factory.buildTranslation({
+          key: 'skill.actifSkillId.hint',
+          locale: 'fr',
+          value: 'hint fr',
+        });
+        await databaseBuilder.commit();
+        nock('https://api.airtable.com')
+          .get('/v0/airtableBaseValue/Acquis')
+          .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+          .query(true)
+          .times(2)
+          .reply(200, { records: [actifSkill] });
+
+        skillRepository.listByTubeId.mockImplementation(() => [
+          domainBuilder.buildSkill({ level: 1, version: 1 }),
+          domainBuilder.buildSkill({ level: 1, version: 2 }),
+        ]);
+        const valideProtoAttachment = domainBuilder.buildAttachment({
+          id: 'valideProtoAttachmentId',
+          url: 'url attach valideProto',
+          type: 'type attach valideProto',
+          size: 1,
+          mimeType: 'mimeType1',
+          filename: 'filename_valideproto',
+          challengeId: 'valideProtoForActifSkillId',
+          localizedChallengeId: 'valideProtoForActifSkillId',
+        });
+        const valideProtoAttachmentNL = domainBuilder.buildAttachment({
+          id: 'valideProtoAttachmentNLId',
+          url: 'url attach valideProtoNL',
+          type: 'type attach valideProtoNL',
+          size: 2,
+          mimeType: 'mimeType2',
+          filename: 'filename_valideProtoNL',
+          challengeId: 'valideProtoForActifSkillId',
+          localizedChallengeId: 'valideProtoForActifSkillLocNLId',
+        });
+        const proposeDecliAttachment = domainBuilder.buildAttachment({
+          id: 'proposeDecliAttachmentId',
+          url: 'url attach proposeDecli',
+          type: 'type attach proposeDecli',
+          size: 3,
+          mimeType: 'mimeType3',
+          filename: 'filename_proposedecli',
+          challengeId: 'proposeDecliValideProtoForActifSkillId',
+          localizedChallengeId: 'proposeDecliValideProtoForActifSkillId',
+        });
+        const valideDecliAttachment = domainBuilder.buildAttachment({
+          id: 'valideDecliAttachmentId',
+          url: 'url attach valideDecli',
+          type: 'type attach valideDecli',
+          size: 4,
+          mimeType: 'mimeType4',
+          filename: 'filename_valideDecli',
+          challengeId: 'valideDecliValideProtoForActifSkillId',
+          localizedChallengeId: 'valideDecliValideProtoForActifSkillId',
+        });
+        attachmentRepository.listByChallengeIds.mockImplementation(() => [
+          valideProtoAttachment,
+          proposeDecliAttachment,
+          valideDecliAttachment,
+          valideProtoAttachmentNL,
         ]);
 
-      const parseFormData = (body) => {
-        const boundary = body.match(/.*/g)[0].slice(2);
-        return multipart.parse(Buffer.from(body), boundary);
-      };
-      const findFormDataParameter = (parsedBody, name) => {
-        return parsedBody.find((part) => part.name === name);
-      };
-      const matchFormDataParameter = (parsedBody, name, value) => {
-        return findFormDataParameter(parsedBody, name).data.toString() === value;
-      };
+        const valideProtoForActifSkill = domainBuilder.buildChallenge({
+          id: 'valideProtoForActifSkillId',
+          status: Challenge.STATUSES.VALIDE,
+          skillId: 'actifSkillId',
+          genealogy: 'Prototype 1',
+          version: 4,
+          focusable: false,
+          locales: ['fr', 'nl'],
+          translations: { fr: { instruction: 'instruction valideProto fr' }, nl: { instruction: 'instruction valideProto nl' } },
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: 'valideProtoForActifSkillId',
+              challengeId: 'valideProtoForActifSkillId',
+              embedUrl: 'valideProto embedUrl',
+              fileIds: [valideProtoAttachment.id],
+              locale: 'fr',
+              status: null,
+              geography: 'France',
+              urlsToConsult: ['http://valideProto.com'],
+            }),
+            domainBuilder.buildLocalizedChallenge({
+              id: 'valideProtoForActifSkillLocNLId',
+              challengeId: 'valideProtoForActifSkillId',
+              embedUrl: 'valideProto NL embedUrl',
+              fileIds: [valideProtoAttachmentNL.id],
+              locale: 'nl',
+              status: Challenge.STATUSES.VALIDE,
+              geography: 'Pays-Bas',
+              urlsToConsult: ['http://valideProtoNL.com'],
+            }),
+          ],
+        });
+        const proposeDecliValideProtoForActifSkill = domainBuilder.buildChallenge({
+          id: 'proposeDecliValideProtoForActifSkillId',
+          status: Challenge.STATUSES.PROPOSE,
+          skillId: 'actifSkillId',
+          genealogy: 'Décliné 1',
+          version: 4,
+          alternativeVersion: 3,
+          focusable: false,
+          locales: ['fr'],
+          translations: { fr: { instruction: 'instruction proposeDecli fr' } },
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: 'proposeDecliValideProtoForActifSkillId',
+              challengeId: 'proposeDecliValideProtoForActifSkillId',
+              embedUrl: 'proposeDecli embedUrl',
+              fileIds: [proposeDecliAttachment.id],
+              locale: 'fr',
+              status: null,
+              geography: 'Espagne',
+              urlsToConsult: ['http://proposeDecli.com'],
+            }),
+          ],
+        });
+        const valideDecliValideProtoForActifSkill = domainBuilder.buildChallenge({
+          id: 'valideDecliValideProtoForActifSkillId',
+          status: Challenge.STATUSES.VALIDE,
+          skillId: 'actifSkillId',
+          genealogy: 'Décliné 1',
+          version: 4,
+          alternativeVersion: 4,
+          focusable: false,
+          locales: ['fr'],
+          translations: { fr: { instruction: 'instruction valideDecli fr' } },
+          localizedChallenges: [
+            domainBuilder.buildLocalizedChallenge({
+              id: 'valideDecliValideProtoForActifSkillId',
+              challengeId: 'valideDecliValideProtoForActifSkillId',
+              embedUrl: 'valideDecli embedUrl',
+              fileIds: [valideDecliAttachment.id],
+              locale: 'fr',
+              status: null,
+              geography: 'Espagne',
+              urlsToConsult: ['http://valideDecli.com'],
+            }),
+          ],
+        });
+        const challenges = [
+          valideProtoForActifSkill,
+          proposeDecliValideProtoForActifSkill,
+          valideDecliValideProtoForActifSkill,
+        ];
 
-      let csvContent;
-      const phraseUploadAPI = nock('https://api.phrase.com')
-        .post('/v2/projects/MY_PHRASE_PROJECT_ID/uploads', (body) => {
-          const parsedBody = parseFormData(body);
-          csvContent = findFormDataParameter(parsedBody, 'file').data.toString();
-          return matchFormDataParameter(parsedBody, 'locale_id', 'frLocaleId') &&
-            matchFormDataParameter(parsedBody, 'file_format', 'csv') &&
-            matchFormDataParameter(parsedBody, 'update_descriptions', 'false') &&
-            matchFormDataParameter(parsedBody, 'update_translations', 'false') &&
-            matchFormDataParameter(parsedBody, 'skip_upload_tags', 'true') &&
-            matchFormDataParameter(parsedBody, 'locale_mapping[es]', '2') &&
-            matchFormDataParameter(parsedBody, 'locale_mapping[fr]', '3') &&
-            matchFormDataParameter(parsedBody, 'locale_mapping[nl]', '4') &&
-            matchFormDataParameter(parsedBody, 'format_options[key_index]', '1') &&
-            matchFormDataParameter(parsedBody, 'format_options[tag_column]', '5') &&
-            matchFormDataParameter(parsedBody, 'format_options[comment_index]', '6') &&
-            matchFormDataParameter(parsedBody, 'format_options[header_content_row]', 'true');
-        })
-        .matchHeader('authorization', 'token MY_PHRASE_ACCESS_TOKEN')
-        .reply(201, {});
-
-      // when
-      await script.uploadToPhrase({
-        release,
-        skills: [skill1, skill2],
-        challenges: [challengeA, challengeB, challengeC, challengeD],
+        vi.spyOn(challengeRepository, 'listBySkillId')
+          .mockImplementation((skillId) => challenges.filter((challenge) => challenge.skillId === skillId));
       });
 
-      expect(phraseLocalesAPI.isDone()).to.be.true;
-      expect(phraseUploadAPI.isDone()).to.be.true;
-      expect(csvContent).toEqual(
-        `key,es,fr,nl,tags,description
-skill.skill1.hint,,hint skill1 fr,hint skill1 nl,"acquis,pix-1-1.1-tube-tube1,pix-1-1.1-tube,pix-1-1.1,pix-1,pix",
-skill.skill2.hint,hint skill2 es,hint skill2 fr,,"acquis,pix-1-1.1-tube-tube2,pix-1-1.1-tube,pix-1-1.1,pix-1,pix",
-challenge.challengeAID.instruction,challengeAID instruction ES,challengeAID instruction FR,challengeAID instruction NL,"epreuve,pix-1-1.1-tube-tube1-valide,pix-1-1.1-tube-tube1,pix-1-1.1-tube,pix-1-1.1,pix-1,pix","Prévisualisation FR: http://test.site/api/challenges/challengeAID/preview
-Prévisualisation ES: http://test.site/api/challenges/challengeAID/preview?locale=es
-Prévisualisation NL: http://test.site/api/challenges/challengeAID/preview?locale=nl
-Pix Editor: http://test.site/challenge/challengeAID"
-challenge.challengeAID.illustrationAlt,,challengeAID illustrationAlt FR,challengeAID illustrationAlt NL,"epreuve,pix-1-1.1-tube-tube1-valide,pix-1-1.1-tube-tube1,pix-1-1.1-tube,pix-1-1.1,pix-1,pix","Prévisualisation FR: http://test.site/api/challenges/challengeAID/preview
-Prévisualisation ES: http://test.site/api/challenges/challengeAID/preview?locale=es
-Prévisualisation NL: http://test.site/api/challenges/challengeAID/preview?locale=nl
-Pix Editor: http://test.site/challenge/challengeAID"
-challenge.challengeCId.instruction,,challengeCId instruction FR,challengeCId instruction NL,"epreuve,pix-1-1.1-tube-tube2-valide,pix-1-1.1-tube-tube2,pix-1-1.1-tube,pix-1-1.1,pix-1,pix","Prévisualisation FR: http://test.site/api/challenges/challengeCId/preview
-Prévisualisation ES: http://test.site/api/challenges/challengeCId/preview?locale=es
-Prévisualisation NL: http://test.site/api/challenges/challengeCId/preview?locale=nl
-Pix Editor: http://test.site/challenge/challengeCId"`);
+      it('should log correctly when reading airtable fails (when fetching challenges of skill)', async() => {
+        // given
+        skillRepository.listByTubeId.mockImplementationOnce(() => expect.unreachable('I shouldnt be called'));
+
+        vi.spyOn(challengeRepository, 'listBySkillId')
+          .mockImplementationOnce(() => {
+            throw new Error('ERREUR challengeRepository.listBySkillId');
+          });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR challengeRepository.listBySkillId');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.',
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([]);
+      });
+
+      it('should log correctly when reading airtable fails (when fetching tube skills)', async() => {
+        // given
+        skillRepository.listByTubeId.mockImplementation(() => {
+          throw new Error('ERREUR skillRepository.listByTubeId');
+        });
+        vi.spyOn(challengeRepository, 'listBySkillId')
+          .mockImplementation(() => []);
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR skillRepository.listByTubeId');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.',
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([]);
+      });
+
+      it('should log correctly when failing at persisting cloned skill', async () => {
+        // given
+        skillRepository.create.mockImplementationOnce(() => {
+          throw new Error('ERREUR skillRepository.create');
+        });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR skillRepository.create');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: `Erreur lors de la création de l'acquis cloné. Potentielles données à nettoyer (liste dans l'ordre de création):
+          acquis ${clonedSkillId} sur Airtable,
+          translations avec le pattern "skill.${clonedSkillId}%" sur PG`,
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([]);
+      });
+
+      it('should log correctly when failing at persisting cloned challenges', async () => {
+        // given
+        challengeRepository.createBatch.mockImplementationOnce(() => {
+          throw new Error('ERREUR challengeRepository.createBatch');
+        });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR challengeRepository.createBatch');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: `Erreur lors de la création en masse des épreuves clonées. Potentielles données à nettoyer (liste dans l'ordre de création):
+          acquis ${clonedSkillId} sur Airtable,
+          translations avec le pattern "skill.${clonedSkillId}%" sur PG',
+          challenges ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur Airtable,
+          translations avec les patterns "challenge.${clonedChallengeIds[0]}%", "challenge.${clonedChallengeIds[1]}%", "challenge.${clonedChallengeIds[2]}%" sur PG,
+          localizedChallenges dont les challengeIds sont ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur PG`,
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([]);
+      });
+
+      it('should log correctly when failing at persisting cloned attachments', async () => {
+        // given
+        attachmentRepository.createBatch.mockImplementationOnce(() => {
+          throw new Error('ERREUR attachmentRepository.createBatch');
+        });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR attachmentRepository.createBatch');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: `Erreur lors de la création en masse des attachments clonés. Potentielles données à nettoyer (liste dans l'ordre de création):
+          acquis ${clonedSkillId} sur Airtable,
+          translations avec le pattern "skill.${clonedSkillId}%" sur PG',
+          challenges ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur Airtable,
+          translations avec les patterns "challenge.${clonedChallengeIds[0]}%", "challenge.${clonedChallengeIds[1]}%", "challenge.${clonedChallengeIds[2]}%" sur PG,
+          localizedChallenges dont les challengeIds sont ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur PG,
+          pièces jointes et illustrations clonées sur le bucket. Filtrer par date de création pour les trouver.
+          A ce stade il est possible qu'un attachment ait été physiquement cloné sans que son modèle Airtable n'ait été enregistré.
+          Chercher pour les documents dont le nom est parmi : url attach valideProto, url attach valideProtoNL, url attach proposeDecli, url attach valideDecli,
+          attachments dont les challengeIds persistant sont ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur Airtable,
+          localized_challenges-attachments dont les localizedChallengeIds sont ${clonedChallengeIds[0]}, ${clonedLocalizedChallengeId}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur PG.
+          `,
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([]);
+      });
+
+      it('should log correctly when failing at updating archived skill', async () => {
+        // given
+        skillRepository.update.mockImplementationOnce(() => {
+          throw new Error('ERREUR skillRepository.update');
+        });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR skillRepository.update');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: 'Erreur lors de l\'archivage de l\'acquis. A priori les clones sont sains. On peut envisager d\'archiver l\'acquis à la main sur Airtable et ses épreuves (status + dates le cas échéant)',
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'valideDecliValideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'valideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'skillNewId',
+            type: 'skill',
+            createdAt: expect.anything(),
+          },
+        ]);
+      });
+
+      it('should log correctly when failing at updating archived challenges', async () => {
+        // given
+        challengeRepository.updateBatch.mockImplementationOnce(() => {
+          throw new Error('ERREUR challengeRepository.updateBatch');
+        });
+
+        // when // then
+        await expect(() => script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true })).rejects.toThrowError('ERREUR challengeRepository.updateBatch');
+        const historic_focus = await knex('historic_focus').select('*');
+        expect(historic_focus).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: actifSkillData.id,
+            errorStr: expect.any(String),
+            details: 'Erreur lors de l\'archivage en masse des épreuves. A priori les clones sont sains. On peut envisager de finir l\'archivage des épreuves à la main sur Airtable',
+            createdAt: expect.anything(),
+            dryRun: false,
+          },
+        ]);
+        const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
+        expect(focus_phrase_records).toStrictEqual([
+          {
+            id: expect.any(Number),
+            persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'valideDecliValideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'valideProtoForActifSkillNewId',
+            type: 'challenge',
+            createdAt: expect.anything(),
+          },
+          {
+            id: expect.any(Number),
+            persistantId: 'skillNewId',
+            type: 'skill',
+            createdAt: expect.anything(),
+          },
+        ]);
+      });
     });
   });
 });
