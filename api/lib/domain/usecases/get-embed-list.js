@@ -38,7 +38,7 @@ export function extractEmbedUrlFromChallenges(challenges) {
       });
     }
   }
-  return embedList.sort(compareUrl);
+  return embedList.sort(byUrl);
 }
 
 function getEmbedFromChallenge(challenge) {
@@ -63,12 +63,6 @@ function findUrlFromInstruction(regexWithoutParam, instruction) {
   return instruction.match(regexWithoutParam);
 }
 
-function compareUrl([,urlA], [, urlB]) {
-  if (urlA < urlB) {
-    return -1;
-  }
-  if (urlA > urlB) {
-    return 1;
-  }
-  return 0;
+function byUrl([, urlA], [, urlB]) {
+  return urlA.localeCompare(urlB);
 }
