@@ -2,6 +2,8 @@ import { getCountryCode, getCountryName } from './Geography.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
+const cloneSource = new WeakMap();
+
 export class Challenge {
 
   #allFiles;
@@ -174,7 +176,7 @@ export class Challenge {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
         status = LocalizedChallenge.STATUSES.PAUSE;
       }
-      clonedLocalizedChallenges.push(new LocalizedChallenge({
+      const clonedLocalizedChallenge = new LocalizedChallenge({
         id: newLocalizedChallengeId,
         challengeId: id,
         status,
@@ -183,7 +185,9 @@ export class Challenge {
         fileIds: [],
         geography: localizedChallenge.geography,
         urlsToConsult: localizedChallenge.urlsToConsult,
-      }));
+      });
+      clonedLocalizedChallenges.push(clonedLocalizedChallenge);
+      cloneSource.set(clonedLocalizedChallenge, localizedChallenge);
       for (const attachmentId of localizedChallenge.fileIds) {
         const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
         clonedAttachments.push(attachmentToClone.clone({
@@ -235,10 +239,16 @@ export class Challenge {
       version: prototypeVersion,
     });
 
+    cloneSource.set(clonedChallenge, this);
+
     return {
       clonedChallenge,
       clonedAttachments,
     };
+  }
+
+  static getCloneSource(clonedChallenge) {
+    return cloneSource.get(clonedChallenge);
   }
 
   archive() {

@@ -8,7 +8,7 @@ import {
   skillRepository,
 } from '../../lib/infrastructure/repositories/index.js';
 import { generateNewId } from '../../lib/infrastructure/utils/id-generator.js';
-import { Skill } from '../../lib/domain/models/index.js';
+import { Challenge, Skill } from '../../lib/domain/models/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
@@ -124,17 +124,6 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       || (challenge.genealogy === 'Décliné 1' && (challenge.isValide || challenge.isPropose))
     );
 
-    // Ne me jugez pas, je profite de la fiesta javascript pour "cacher" des données et les récupérer plus tard pour ne pas avoir
-    // à altérer la fonction de clonage et pour pouvoir l'utiliser pleinement
-    // Quand on clone une épreuve elle passe automatiquement en proposé.
-    // Dans notre cas on doit conserver son statut d'avant clonage (validé ou proposé)
-    for (const challenge of preFilteredSkillChallenges) {
-      challenge.accessibility1 = [challenge.accessibility1, challenge.status];
-      for (const localizedChallenge of challenge.localizedChallenges) {
-        localizedChallenge.geography = [localizedChallenge.geography, localizedChallenge.status];
-      }
-    }
-
     const res = skill.cloneSkillAndChallenges({
       tubeDestination,
       level: skill.level,
@@ -149,23 +138,16 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
 
     clonedSkill.status = Skill.STATUSES.ACTIF;
 
-    // On passe l'épreuve en focus et, ni vu ni connu, je dépile ma donnée cachée
-    // on dit merci JS
+    // On passe l'épreuve en focus
     for (const clonedChallenge of clonedChallenges) {
       clonedChallenge.focusable = true;
-      clonedChallenge.status = clonedChallenge.accessibility1[1];
-      clonedChallenge.accessibility1 = clonedChallenge.accessibility1[0];
-      for (const clonedLocalizedChallenge of clonedChallenge.localizedChallenges) {
-        clonedLocalizedChallenge.status = clonedLocalizedChallenge.geography[1];
-        clonedLocalizedChallenge.geography = clonedLocalizedChallenge.geography[0];
-      }
-    }
 
-    // et on répare la donnée cachée car je vais persister les épreuves ensuite
-    for (const challenge of preFilteredSkillChallenges) {
-      challenge.accessibility1 = challenge.accessibility1[0];
-      for (const localizedChallenge of challenge.localizedChallenges) {
-        localizedChallenge.geography = localizedChallenge.geography[0];
+      const sourceChallenge = Challenge.getCloneSource(clonedChallenge);
+      clonedChallenge.status = sourceChallenge.status;
+
+      for (const clonedLocalizedChallenge of clonedChallenge.localizedChallenges) {
+        const sourceLocalizedChallenge = Challenge.getCloneSource(clonedLocalizedChallenge);
+        clonedLocalizedChallenge.status = sourceLocalizedChallenge.status;
       }
     }
   } catch (err) {
