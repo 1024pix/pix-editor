@@ -68,6 +68,17 @@ export const options = {
       resource: Release,
       options: {
         actions: readOnlyOptions,
+        getEmbedList: {
+          actionType: 'resource',
+          component: false,
+          handler: (request, response, context) => {
+            const { record, currentAdmin } = context;
+            return {
+              record: record.toJSON(currentAdmin),
+              msg: 'Hello world',
+            };
+          },
+        }
       }
     },
     {
