@@ -79,24 +79,47 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('clone', function() {
-    it('should return a cloned localized challenge', function() {
+    it('should return a cloned localized challenge and its cloned attachments (primary)', function() {
       // given
-      const newId = 'newLocId';
+      const newId = 'newChallengeId';
       const newChallengeId = 'newChallengeId';
       const newStatus = LocalizedChallenge.STATUSES.PLAY;
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'oldLocId',
-        challengeId: 'oldChallengeId',
+        challengeId: 'oldLocId',
         embedUrl: 'https://example.com/embed.html',
-        fileIds: ['ignore me'],
+        fileIds: ['attachmentA', 'attachmentB'],
         locale: 'fr',
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: 'France',
         urlsToConsult: ['http://url.com'],
       });
+      const attachments = [
+        domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
+        domainBuilder.buildAttachment({
+          id: 'attachmentA',
+          url: 'https://www.attA.com',
+          type: 'illustration',
+          alt: 'osef',
+          size: 123,
+          mimeType: 'image/png',
+          filename: 'fraise_des_bois',
+          localizedChallengeId: 'oldLocId',
+        }),
+        domainBuilder.buildAttachment({
+          id: 'attachmentB',
+          url: 'https://www.attB.com',
+          type: 'attachment',
+          alt: 'osef le retour',
+          size: 456,
+          mimeType: 'text/csv',
+          filename: 'liste_de_courses',
+          localizedChallengeId: 'oldLocId',
+        }),
+      ];
 
       // when
-      const clonedLocalizedChallenge = localizedChallenge.clone({ id: newId, challengeId: newChallengeId, status: newStatus });
+      const { clonedLocalizedChallenge, clonedAttachments } = localizedChallenge.clone({ id: newId, challengeId: newChallengeId, status: newStatus, attachments });
 
       // then
       const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -110,6 +133,109 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         urlsToConsult: localizedChallenge.urlsToConsult,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
+      expect(clonedAttachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: null,
+          url: 'https://www.attA.com',
+          type: 'illustration',
+          alt: 'osef',
+          size: 123,
+          mimeType: 'image/png',
+          filename: 'fraise_des_bois',
+          challengeId: newChallengeId,
+          localizedChallengeId: newId,
+        }),
+        domainBuilder.buildAttachment({
+          id: null,
+          url: 'https://www.attB.com',
+          type: 'attachment',
+          alt: 'osef le retour',
+          size: 456,
+          mimeType: 'text/csv',
+          filename: 'liste_de_courses',
+          challengeId: newChallengeId,
+          localizedChallengeId: newId,
+        }),
+      ]);
+    });
+    it('should return a cloned localized challenge and its cloned attachments (not primary)', function() {
+      // given
+      const newId = 'newLocId';
+      const newChallengeId = 'newChallengeId';
+      const newStatus = LocalizedChallenge.STATUSES.PLAY;
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: 'oldLocId',
+        challengeId: 'oldChallengeId',
+        embedUrl: 'https://example.com/embed.html',
+        fileIds: ['attachmentA', 'attachmentB'],
+        locale: 'fr',
+        status: LocalizedChallenge.STATUSES.PAUSE,
+        geography: 'France',
+        urlsToConsult: ['http://url.com'],
+      });
+      const attachments = [
+        domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
+        domainBuilder.buildAttachment({
+          id: 'attachmentA',
+          url: 'https://www.attA.com',
+          type: 'illustration',
+          alt: 'osef',
+          size: 123,
+          mimeType: 'image/png',
+          filename: 'fraise_des_bois',
+          localizedChallengeId: 'oldLocId',
+        }),
+        domainBuilder.buildAttachment({
+          id: 'attachmentB',
+          url: 'https://www.attB.com',
+          type: 'attachment',
+          alt: 'osef le retour',
+          size: 456,
+          mimeType: 'text/csv',
+          filename: 'liste_de_courses',
+          localizedChallengeId: 'oldLocId',
+        }),
+      ];
+
+      // when
+      const { clonedLocalizedChallenge, clonedAttachments } = localizedChallenge.clone({ id: newId, challengeId: newChallengeId, status: newStatus, attachments });
+
+      // then
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: newId,
+        challengeId: newChallengeId,
+        embedUrl: localizedChallenge.embedUrl,
+        fileIds: [],
+        locale: localizedChallenge.locale,
+        status: newStatus,
+        geography: localizedChallenge.geography,
+        urlsToConsult: localizedChallenge.urlsToConsult,
+      });
+      expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
+      expect(clonedAttachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: null,
+          url: 'https://www.attA.com',
+          type: 'illustration',
+          alt: 'osef',
+          size: 123,
+          mimeType: 'image/png',
+          filename: 'fraise_des_bois',
+          challengeId: null,
+          localizedChallengeId: newId,
+        }),
+        domainBuilder.buildAttachment({
+          id: null,
+          url: 'https://www.attB.com',
+          type: 'attachment',
+          alt: 'osef le retour',
+          size: 456,
+          mimeType: 'text/csv',
+          filename: 'liste_de_courses',
+          challengeId: null,
+          localizedChallengeId: newId,
+        }),
+      ]);
     });
   });
 });

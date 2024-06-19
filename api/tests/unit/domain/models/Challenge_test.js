@@ -744,7 +744,7 @@ describe('Unit | Domain | Challenge', () => {
           alt: attachmentIdB.alt,
           url: attachmentIdB.url,
           localizedChallengeId: clonedNLLocalizedChallengeId,
-          challengeId: clonedChallengeId,
+          challengeId: null,
         }),
       ]);
     });

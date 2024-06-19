@@ -614,7 +614,7 @@ describe('Script | Move skills to focus', function() {
           size: valideProtoAttachmentNL.size,
           mimeType: valideProtoAttachmentNL.mimeType,
           filename: valideProtoAttachmentNL.filename,
-          challengeId: 'valideProtoForActifSkillNewId',
+          challengeId: null,
           localizedChallengeId: 'valideProtoForActifSkillNLNewId',
         }),
         domainBuilder.buildAttachment({
