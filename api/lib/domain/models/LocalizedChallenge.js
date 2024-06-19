@@ -65,4 +65,17 @@ export class LocalizedChallenge {
       urlsToConsult: null,
     });
   }
+
+  clone({ id, challengeId, status }) {
+    return new LocalizedChallenge({
+      id,
+      challengeId,
+      status,
+      locale: this.locale,
+      embedUrl: this.embedUrl,
+      fileIds: [],
+      geography: this.geography,
+      urlsToConsult: this.urlsToConsult,
+    });
+  }
 }

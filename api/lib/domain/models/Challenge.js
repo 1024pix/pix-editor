@@ -163,29 +163,24 @@ export class Challenge {
     return [...locales].sort();
   }
 
+  static getCloneSource(clonedChallenge) {
+    return cloneSource.get(clonedChallenge);
+  }
+
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
     const clonedAttachments = [];
     const clonedLocalizedChallenges = [];
     for (const localizedChallenge of this.localizedChallenges) {
       let newLocalizedChallengeId, status;
-      if (localizedChallenge.id === localizedChallenge.challengeId) {
+      if (localizedChallenge.isPrimary) {
         newLocalizedChallengeId = id;
         status = null;
       } else {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
         status = LocalizedChallenge.STATUSES.PAUSE;
       }
-      const clonedLocalizedChallenge = new LocalizedChallenge({
-        id: newLocalizedChallengeId,
-        challengeId: id,
-        status,
-        locale: localizedChallenge.locale,
-        embedUrl: localizedChallenge.embedUrl,
-        fileIds: [],
-        geography: localizedChallenge.geography,
-        urlsToConsult: localizedChallenge.urlsToConsult,
-      });
+      const clonedLocalizedChallenge = localizedChallenge.clone({ id: newLocalizedChallengeId, challengeId: id, status });
       clonedLocalizedChallenges.push(clonedLocalizedChallenge);
       cloneSource.set(clonedLocalizedChallenge, localizedChallenge);
       for (const attachmentId of localizedChallenge.fileIds) {
@@ -245,10 +240,6 @@ export class Challenge {
       clonedChallenge,
       clonedAttachments,
     };
-  }
-
-  static getCloneSource(clonedChallenge) {
-    return cloneSource.get(clonedChallenge);
   }
 
   archive() {

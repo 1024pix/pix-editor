@@ -126,19 +126,14 @@ export async function update(challenge, knexConn = knex) {
 }
 
 export async function updateBatch(challenges) {
-  const trx = await knex.transaction();
-  const updatedChallenges = [];
-  try {
+  return knex.transaction(async (transaction) => {
+    const updatedChallenges = [];
     for (const challenge of challenges) {
-      const updatedChallenge = await update(challenge, trx);
+      const updatedChallenge = await update(challenge, transaction);
       updatedChallenges.push(updatedChallenge);
     }
-    await trx.commit();
-  } catch (err) {
-    await trx.rollback();
-    throw err;
-  }
-  return updatedChallenges;
+    return updatedChallenges;
+  });
 }
 
 export async function listBySkillId(skillId) {

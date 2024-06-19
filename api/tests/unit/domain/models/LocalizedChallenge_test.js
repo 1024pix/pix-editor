@@ -77,4 +77,39 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       });
     });
   });
+
+  describe('clone', function() {
+    it('should return a cloned localized challenge', function() {
+      // given
+      const newId = 'newLocId';
+      const newChallengeId = 'newChallengeId';
+      const newStatus = LocalizedChallenge.STATUSES.PLAY;
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: 'oldLocId',
+        challengeId: 'oldChallengeId',
+        embedUrl: 'https://example.com/embed.html',
+        fileIds: ['ignore me'],
+        locale: 'fr',
+        status: LocalizedChallenge.STATUSES.PAUSE,
+        geography: 'France',
+        urlsToConsult: ['http://url.com'],
+      });
+
+      // when
+      const clonedLocalizedChallenge = localizedChallenge.clone({ id: newId, challengeId: newChallengeId, status: newStatus });
+
+      // then
+      const expectedLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: newId,
+        challengeId: newChallengeId,
+        embedUrl: localizedChallenge.embedUrl,
+        fileIds: [],
+        locale: localizedChallenge.locale,
+        status: newStatus,
+        geography: localizedChallenge.geography,
+        urlsToConsult: localizedChallenge.urlsToConsult,
+      });
+      expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
+    });
+  });
 });

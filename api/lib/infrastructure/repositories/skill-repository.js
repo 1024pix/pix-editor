@@ -58,8 +58,7 @@ export async function create(skill) {
   const createdSkillDTO = await skillDatasource.create(skillToSaveDTO);
   const translations = [];
   for (const [locale, value] of Object.entries(skill.hint_i18n)) {
-    // todo handle null value
-    if (!(value?.trim())) continue;
+    if (!value) continue;
     translations.push(new Translation({
       key: `skill.${skill.id}.hint`,
       locale,
