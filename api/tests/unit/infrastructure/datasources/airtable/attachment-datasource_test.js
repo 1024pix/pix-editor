@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { airtableBuilder } from '../../../../test-helper.js';
-import { attachmentDatasource } from '../../../../../lib/infrastructure/datasources/airtable/attachment-datasource.js';
+import { attachmentDatasource } from '../../../../../lib/infrastructure/datasources/airtable/index.js';
 import * as airtable from '../../../../../lib/infrastructure/airtable.js';
 import airtableClient from 'airtable';
 

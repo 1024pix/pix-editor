@@ -152,9 +152,9 @@ describe('Integration | Repository | attachment-repository', () => {
     });
   });
 
-  describe('#listByChallengeIds', () => {
+  describe('#listByLocalizedChallengeIds', () => {
 
-    it('should retrieve attachments by given challenge ids', async () => {
+    it('should retrieve attachments by given localized challenge ids', async () => {
       // given
       const attachment_NL_forChallengeA_data = {
         id: 'attachment_NL_forChallengeA_data_id',
@@ -229,7 +229,7 @@ describe('Integration | Repository | attachment-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-        if (options?.filterByFormula !== 'OR(FIND("challengeA", ARRAYJOIN({challengeId persistant})),FIND("challengeB", ARRAYJOIN({challengeId persistant})))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== 'OR(FIND("challengeA", ARRAYJOIN({localizedChallengeId})),FIND("localizedChallengeNLForChallengeA", ARRAYJOIN({localizedChallengeId})),FIND("challengeB", ARRAYJOIN({localizedChallengeId})))') expect.unreachable('Wrong filterByFormula');
         return [
           {
             id: attachment_NL_forChallengeA_data.id,
@@ -277,7 +277,7 @@ describe('Integration | Repository | attachment-repository', () => {
       });
 
       // when
-      const attachments = await attachmentRepository.listByChallengeIds(['challengeA', 'challengeB']);
+      const attachments = await attachmentRepository.listByLocalizedChallengeIds(['challengeA', 'localizedChallengeNLForChallengeA', 'challengeB']);
 
       // then
       expect(attachments).toStrictEqual([
@@ -317,7 +317,7 @@ describe('Integration | Repository | attachment-repository', () => {
       ]);
     });
 
-    it('should return an empty array when no challenge ids provided', async () => {
+    it('should return an empty array when no localized challenge ids provided', async () => {
       // given
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.challengeA.illustrationAlt',
@@ -335,22 +335,22 @@ describe('Integration | Repository | attachment-repository', () => {
       });
 
       // when
-      const attachments = await attachmentRepository.listByChallengeIds([]);
+      const attachments = await attachmentRepository.listByLocalizedChallengeIds([]);
 
       // then
       expect(attachments).toStrictEqual([]);
     });
 
-    it('should return an empty array when no attachment found for provided challenge ids', async () => {
+    it('should return an empty array when no attachment found for provided localized challenge ids', async () => {
       // given
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-        if (options?.filterByFormula !== 'OR(FIND("someChallengeId", ARRAYJOIN({challengeId persistant})))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== 'OR(FIND("someLocalizedChallengeId", ARRAYJOIN({localizedChallengeId})))') expect.unreachable('Wrong filterByFormula');
         return [];
       });
 
       // when
-      const attachments = await attachmentRepository.listByChallengeIds(['someChallengeId']);
+      const attachments = await attachmentRepository.listByLocalizedChallengeIds(['someLocalizedChallengeId']);
 
       // then
       expect(attachments).toStrictEqual([]);
