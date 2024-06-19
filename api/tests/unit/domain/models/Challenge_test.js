@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 
@@ -94,6 +94,64 @@ describe('Unit | Domain | Challenge', () => {
       });
     });
   }
+
+  describe('#get isPropose', () => {
+    it('should return true when challenge is propose', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.PROPOSE,
+      });
+
+      // when
+      const isPropose = challenge.isPropose;
+
+      // then
+      expect(isPropose).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROPOSE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPropose = challenge.isPropose;
+
+      // then
+      expect(isPropose).to.be.false;
+    });
+  });
+
+  describe('#get isValide', () => {
+    it('should return true when challenge is valide', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.VALIDE,
+      });
+
+      // when
+      const isValide = challenge.isValide;
+
+      // then
+      expect(isValide).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.VALIDE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isValide = challenge.isValide;
+
+      // then
+      expect(isValide).to.be.false;
+    });
+  });
 
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
@@ -496,6 +554,7 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.accessibility2).toEqual(challenge.accessibility2);
       expect(clonedChallenge.alternativeVersion).toEqual(alternativeVersion);
       expect(clonedChallenge.alpha).toBeNull;
+      expect(clonedChallenge.airtableId).toBeNull;
       expect(clonedChallenge.archivedAt).toBeNull;
       expect(clonedChallenge.author).toEqual(challenge.author);
       expect(clonedChallenge.autoReply).toEqual(challenge.autoReply);
@@ -539,11 +598,14 @@ describe('Unit | Domain | Challenge', () => {
     it('should clone challenge translations and attachments', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
+      const clonedNLLocalizedChallengeId = 'clonedNLLocalizedChallengeId';
       const competenceId = 'competenceId';
       const skillId = 'skillId';
       const alternativeVersion = 3;
       const prototypeVersion = 1;
-      const generateNewIdFnc = vi.fn().mockImplementation(() => clonedChallengeId);
+      const generateNewIdFnc = vi.fn()
+        .mockImplementationOnce(() => clonedChallengeId)
+        .mockImplementation(() => clonedNLLocalizedChallengeId);
       const locales = ['fr', 'nl'];
 
       const challenge = new Challenge({
@@ -580,7 +642,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'locNLChallengeId',
             challengeId: 'challengeId',
             locale: 'nl',
-            status: Challenge.STATUSES.VALIDE,
+            status: LocalizedChallenge.STATUSES.PLAY,
             fileIds: ['attachmentIdB'],
             embedUrl: 'pix-mailccoule.nl',
             geography: 'Netherlands',
@@ -635,27 +697,130 @@ describe('Unit | Domain | Challenge', () => {
           solution: 'solution FR',
           solutionToDisplay: 'solutionToDisplay FR',
         },
+        nl: {
+          instruction: 'instruction NL',
+          alternativeInstruction: 'alternativeInstruction NL',
+          proposals: 'proposals NL',
+          solution: 'solution NL',
+          solutionToDisplay: 'solutionToDisplay NL',
+        },
       });
 
-      expect(clonedChallenge.localizedChallenges).toStrictEqual([domainBuilder.buildLocalizedChallenge({
-        id: clonedChallengeId,
-        challengeId: clonedChallengeId,
-        status: null,
-        embedUrl: challenge.localizedChallenges[0].embedUrl,
-        geography: challenge.localizedChallenges[0].geography,
-        urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
-        fileIds: [],
-        locale: challenge.localizedChallenges[0].locale,
-      })]);
+      expect(clonedChallenge.localizedChallenges).toStrictEqual([
+        domainBuilder.buildLocalizedChallenge({
+          id: clonedChallengeId,
+          challengeId: clonedChallengeId,
+          status: null,
+          embedUrl: challenge.localizedChallenges[0].embedUrl,
+          geography: challenge.localizedChallenges[0].geography,
+          urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
+          fileIds: [],
+          locale: challenge.localizedChallenges[0].locale,
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: clonedNLLocalizedChallengeId,
+          challengeId: clonedChallengeId,
+          status: LocalizedChallenge.STATUSES.PAUSE,
+          embedUrl: challenge.localizedChallenges[1].embedUrl,
+          geography: challenge.localizedChallenges[1].geography,
+          urlsToConsult: challenge.localizedChallenges[1].urlsToConsult,
+          fileIds: [],
+          locale: challenge.localizedChallenges[1].locale,
+        }),
+      ]);
 
-      expect(clonedAttachments).toStrictEqual([domainBuilder.buildAttachment({
-        id: null,
-        type: attachmentIdA.type,
-        alt: attachmentIdA.alt,
-        url: attachmentIdA.url,
-        localizedChallengeId: clonedChallengeId,
-        challengeId: clonedChallengeId
-      })]);
+      expect(clonedAttachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: null,
+          type: attachmentIdA.type,
+          alt: attachmentIdA.alt,
+          url: attachmentIdA.url,
+          localizedChallengeId: clonedChallengeId,
+          challengeId: clonedChallengeId,
+        }),
+        domainBuilder.buildAttachment({
+          id: null,
+          type: attachmentIdB.type,
+          alt: attachmentIdB.alt,
+          url: attachmentIdB.url,
+          localizedChallengeId: clonedNLLocalizedChallengeId,
+          challengeId: clonedChallengeId,
+        }),
+      ]);
+    });
+  });
+
+  describe('#archive', () => {
+    const now = new Date('2021-10-29T03:03:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should make challenge perime when it was propose', () => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.PROPOSE,
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedArchivedChallenge = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: now,
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
+    });
+
+    it('should make challenge archive when it was valide', () => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: null,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.VALIDE,
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedArchivedChallenge = domainBuilder.buildChallenge({
+        archivedAt: now,
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+      expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => ![Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(Challenge.STATUSES[statusKey]))
+    )('should do nothing when statusKey is %s', (statusKey) => {
+      // given
+      const challengeToArchive = domainBuilder.buildChallenge({
+        archivedAt: new Date('2019-10-01'),
+        madeObsoleteAt: new Date('2019-10-02'),
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      challengeToArchive.archive();
+
+      // then
+      const expectedUnchangedChallenge = domainBuilder.buildChallenge({
+        archivedAt: new Date('2019-10-01'),
+        madeObsoleteAt: new Date('2019-10-02'),
+        status: Challenge.STATUSES[statusKey],
+      });
+      expect(challengeToArchive).toStrictEqual(expectedUnchangedChallenge);
     });
   });
 });

@@ -2,6 +2,8 @@ import { getCountryCode, getCountryName } from './Geography.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
+const cloneSource = new WeakMap();
+
 export class Challenge {
 
   #allFiles;
@@ -108,6 +110,14 @@ export class Challenge {
     return 'challenge';
   }
 
+  get isPropose() {
+    return this.status === Challenge.STATUSES.PROPOSE;
+  }
+
+  get isValide() {
+    return this.status === Challenge.STATUSES.VALIDE;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -153,32 +163,40 @@ export class Challenge {
     return [...locales].sort();
   }
 
+  static getCloneSource(clonedChallenge) {
+    return cloneSource.get(clonedChallenge);
+  }
+
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
-    const clonedAttachments  = attachments
-      .filter((attachment) => attachment.localizedChallengeId === this.#primaryLocalizedChallenge.id)
-      .map((attachment) => attachment.clone({
-        challengeId: id,
-        localizedChallengeId: id,
-      }));
-
-    const primaryLocalizedChallengeClone = new LocalizedChallenge({
-      id,
-      challengeId: id,
-      status: null,
-      locale: this.#primaryLocalizedChallenge.locale,
-      embedUrl: this.#primaryLocalizedChallenge.embedUrl,
-      fileIds: [],
-      geography: this.#primaryLocalizedChallenge.geography,
-      urlsToConsult: this.#primaryLocalizedChallenge.urlsToConsult,
-    });
-
-    const primaryTranslations = _.pick(this.#translations, [this.primaryLocale]);
+    const clonedAttachments = [];
+    const clonedLocalizedChallenges = [];
+    for (const localizedChallenge of this.localizedChallenges) {
+      let newLocalizedChallengeId, status;
+      if (localizedChallenge.isPrimary) {
+        newLocalizedChallengeId = id;
+        status = null;
+      } else {
+        newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
+        status = LocalizedChallenge.STATUSES.PAUSE;
+      }
+      const clonedLocalizedChallenge = localizedChallenge.clone({ id: newLocalizedChallengeId, challengeId: id, status });
+      clonedLocalizedChallenges.push(clonedLocalizedChallenge);
+      cloneSource.set(clonedLocalizedChallenge, localizedChallenge);
+      for (const attachmentId of localizedChallenge.fileIds) {
+        const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
+        clonedAttachments.push(attachmentToClone.clone({
+          challengeId: id,
+          localizedChallengeId: newLocalizedChallengeId,
+        }));
+      }
+    }
 
     const clonedChallenge =  new Challenge({
       id,
-      translations: primaryTranslations,
-      localizedChallenges: [primaryLocalizedChallengeClone],
+      airtableId: null,
+      translations: _.cloneDeep(this.#translations),
+      localizedChallenges: clonedLocalizedChallenges,
       locales: this.locales,
       files: [],
       accessibility1: this.accessibility1,
@@ -216,10 +234,25 @@ export class Challenge {
       version: prototypeVersion,
     });
 
+    cloneSource.set(clonedChallenge, this);
+
     return {
       clonedChallenge,
       clonedAttachments,
     };
+  }
+
+  archive() {
+    const now = new Date();
+    if (this.isPropose) {
+      this.status = Challenge.STATUSES.PERIME;
+      this.madeObsoleteAt = now;
+      return;
+    }
+    if (this.isValide) {
+      this.status = Challenge.STATUSES.ARCHIVE;
+      this.archivedAt = now;
+    }
   }
 
   translate(locale) {

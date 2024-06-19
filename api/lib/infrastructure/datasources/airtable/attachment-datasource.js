@@ -13,6 +13,7 @@ export const attachmentDatasource = datasource.extend({
     'size',
     'type',
     'mimeType',
+    'filename',
     'challengeId persistant',
     'localizedChallengeId',
   ],
@@ -26,6 +27,7 @@ export const attachmentDatasource = datasource.extend({
       size: airtableRecord.get('size'),
       type: airtableRecord.get('type'),
       mimeType: airtableRecord.get('mimeType'),
+      filename: airtableRecord.get('filename'),
       challengeId: airtableRecord.get('challengeId persistant')?.[0],
       localizedChallengeId: airtableRecord.get('localizedChallengeId'),
     };
@@ -41,6 +43,7 @@ export const attachmentDatasource = datasource.extend({
         'size': model.size,
         'type': model.type,
         'mimeType': model.mimeType,
+        'filename': model.filename,
         'challengeId': [model.challengeId],
         'localizedChallengeId': model.localizedChallengeId,
       }

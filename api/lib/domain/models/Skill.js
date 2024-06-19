@@ -50,6 +50,14 @@ export class Skill {
     return [Skill.STATUSES.EN_CONSTRUCTION, Skill.STATUSES.ACTIF].includes(this.status);
   }
 
+  get isEnConstruction() {
+    return this.status === Skill.STATUSES.EN_CONSTRUCTION;
+  }
+
+  get isActif() {
+    return this.status === Skill.STATUSES.ACTIF;
+  }
+
   cloneSkillAndChallenges({ tubeDestination, level, skillChallenges, tubeSkills, attachments, generateNewIdFnc }) {
     const version = tubeSkills.filter((sk) => sk.level === level).length + 1;
     const name = `${tubeDestination.name}${level}`;
@@ -98,6 +106,7 @@ export class Skill {
       version,
       name,
       level,
+      pixValue: null,
       tubeId: tubeDestination.id,
       competenceId: tubeDestination.competenceId,
       status: Skill.STATUSES.EN_CONSTRUCTION,
@@ -113,5 +122,12 @@ export class Skill {
       clonedChallenges,
       clonedAttachments,
     };
+  }
+
+  archiveSkillAndChallenges({ skillChallenges }) {
+    this.status = Skill.STATUSES.ARCHIVE;
+    for (const challenge of skillChallenges) {
+      challenge.archive();
+    }
   }
 }

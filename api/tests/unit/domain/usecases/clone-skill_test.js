@@ -192,7 +192,5 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       expect(challengeRepository.createBatch).toHaveBeenCalledWith(clonedChallenges);
       expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }]);
     });
-
-    it.todo('should send to persistance the changelog');
   });
 });

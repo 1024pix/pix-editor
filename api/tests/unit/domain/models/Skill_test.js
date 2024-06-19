@@ -30,11 +30,11 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.true;
     });
 
-    it.each(Object.keys(Skill.STATUSES).filter((status) => [Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[status]))
-    )('should return false when status key is %s', (status) => {
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => ![Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION].includes(Skill.STATUSES[statusKey]))
+    )('should return false when status key is %s', (statusKey) => {
       // given
       const skill  = domainBuilder.buildSkill({
-        status,
+        status: Skill.STATUSES[statusKey],
       });
 
       // when
@@ -44,7 +44,62 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.false;
     });
   });
+  describe('#get isEnConstruction', () => {
+    it('should return true when skill is enConstruction', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.EN_CONSTRUCTION,
+      });
 
+      // when
+      const isEnConstruction = skill.isEnConstruction;
+
+      // then
+      expect(isEnConstruction).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.EN_CONSTRUCTION)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES[statusKey],
+      });
+
+      // when
+      const isEnConstruction = skill.isEnConstruction;
+
+      // then
+      expect(isEnConstruction).to.be.false;
+    });
+  });
+  describe('#get isActif', () => {
+    it('should return true when skill is actif', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      const isActif = skill.isActif;
+
+      // then
+      expect(isActif).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((statusKey) => Skill.STATUSES[statusKey] !== Skill.STATUSES.ACTIF)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES[statusKey],
+      });
+
+      // when
+      const isActif = skill.isActif;
+
+      // then
+      expect(isActif).to.be.false;
+    });
+  });
   describe('#cloneSkillAndChallenges', () => {
     const clonedSkillId = 'clonedSkillId';
     const level = 4;
@@ -129,6 +184,7 @@ describe('Unit | Domain | Skill', () => {
       expect(clonedAttachments).toEqual(['clonedAttachment']);
 
       expect(clonedSkill.description).toEqual(skillToClone.description);
+      expect(clonedSkill.pixValue).toBeNull();
       expect(clonedSkill.hint_i18n).toEqual(skillToClone.hint_i18n);
       expect(clonedSkill.hintStatus).toEqual(skillToClone.hintStatus);
       expect(clonedSkill.tutorialIds).toEqual(skillToClone.tutorialIds);
@@ -287,6 +343,30 @@ describe('Unit | Domain | Skill', () => {
       expect(spies[proposeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 2 });
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledTimes(1);
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 2 });
+    });
+  });
+  describe('#archiveSkillAndChallenges', () => {
+    it('should archive skill', () => {
+      // given
+      const challenge1 = domainBuilder.buildChallenge();
+      const challenge2 = domainBuilder.buildChallenge();
+      vi.spyOn(challenge1, 'archive').mockImplementation(() => true);
+      vi.spyOn(challenge2, 'archive').mockImplementation(() => true);
+      const skillChallenges = [challenge1, challenge2];
+      const skillToArchive = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ACTIF,
+      });
+
+      // when
+      skillToArchive.archiveSkillAndChallenges({ skillChallenges });
+
+      // then
+      const expectedArchivedSkill = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ARCHIVE,
+      });
+      expect(skillToArchive).toStrictEqual(expectedArchivedSkill);
+      expect(challenge1.archive).toHaveBeenCalledTimes(1);
+      expect(challenge2.archive).toHaveBeenCalledTimes(1);
     });
   });
 });

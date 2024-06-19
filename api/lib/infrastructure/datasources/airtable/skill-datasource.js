@@ -53,7 +53,7 @@ export const skillDatasource = datasource.extend({
     PixValue
    */
   toAirTableObject(model) {
-    return {
+    const body = {
       fields: {
         'id persistant': model.id,
         'Statut de l\'indice': model.hintStatus,
@@ -67,6 +67,10 @@ export const skillDatasource = datasource.extend({
         'Version': model.version,
       }
     };
+    if (model.airtableId) {
+      body.id = model.airtableId;
+    }
+    return body;
   },
 
   async filterByTubeId(tubeId) {

@@ -5,6 +5,9 @@ export function buildAttachment({
   url = 'http://',
   type = 'image',
   alt = 'alt text',
+  size = 123,
+  mimeType = 'image/jpeg',
+  filename = 'mon_image',
   challengeId = 'recChallengeId',
   localizedChallengeId = challengeId,
 } = {}) {
@@ -14,6 +17,9 @@ export function buildAttachment({
     url,
     type,
     alt,
+    size,
+    mimeType,
+    filename,
     challengeId,
     localizedChallengeId,
   });

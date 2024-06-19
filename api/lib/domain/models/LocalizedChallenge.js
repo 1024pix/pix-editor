@@ -1,3 +1,5 @@
+import { Challenge } from './Challenge.js';
+
 export class LocalizedChallenge {
   constructor({
     id,
@@ -19,6 +21,13 @@ export class LocalizedChallenge {
     this.status = status;
     this.geography = geography;
     this.urlsToConsult = urlsToConsult;
+  }
+
+  static get STATUSES() {
+    return {
+      PLAY: Challenge.STATUSES.VALIDE,
+      PAUSE: Challenge.STATUSES.PROPOSE,
+    };
   }
 
   get isPrimary() {
@@ -54,6 +63,19 @@ export class LocalizedChallenge {
       fileIds: [],
       geography: null,
       urlsToConsult: null,
+    });
+  }
+
+  clone({ id, challengeId, status }) {
+    return new LocalizedChallenge({
+      id,
+      challengeId,
+      status,
+      locale: this.locale,
+      embedUrl: this.embedUrl,
+      fileIds: [],
+      geography: this.geography,
+      urlsToConsult: this.urlsToConsult,
     });
   }
 }

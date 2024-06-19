@@ -6,7 +6,7 @@ export class Translation {
   } = {}) {
     this.key = key;
     this.locale = locale;
-    this.value = value;
+    this.value = value ?? '';
   }
 
   get entityId() {
