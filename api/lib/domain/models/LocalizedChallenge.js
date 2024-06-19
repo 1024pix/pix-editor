@@ -81,7 +81,7 @@ export class LocalizedChallenge {
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
       clonedAttachments.push(attachmentToClone.clone({
-        challengeId: this.isPrimary ? challengeId : null,
+        challengeId,
         localizedChallengeId: id,
       }));
     }
