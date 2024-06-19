@@ -34,7 +34,7 @@ describe('Script | Move skills to focus', function() {
     vi.spyOn(skillRepository, 'create');
     vi.spyOn(skillRepository, 'update');
     vi.spyOn(idGenerator, 'generateNewId');
-    vi.spyOn(attachmentRepository, 'listByChallengeIds');
+    vi.spyOn(attachmentRepository, 'listByLocalizedChallengeIds');
     vi.spyOn(attachmentRepository, 'createBatch');
   });
 
@@ -310,7 +310,7 @@ describe('Script | Move skills to focus', function() {
         challengeId: 'valideDecliValideProtoForActifSkillId',
         localizedChallengeId: 'valideDecliValideProtoForActifSkillId',
       });
-      attachmentRepository.listByChallengeIds.mockImplementation(() => [
+      attachmentRepository.listByLocalizedChallengeIds.mockImplementation(() => [
         valideProtoAttachment,
         proposeDecliAttachment,
         valideDecliAttachment,
@@ -614,7 +614,7 @@ describe('Script | Move skills to focus', function() {
           size: valideProtoAttachmentNL.size,
           mimeType: valideProtoAttachmentNL.mimeType,
           filename: valideProtoAttachmentNL.filename,
-          challengeId: 'valideProtoForActifSkillNewId',
+          challengeId: null,
           localizedChallengeId: 'valideProtoForActifSkillNLNewId',
         }),
         domainBuilder.buildAttachment({
@@ -701,7 +701,7 @@ describe('Script | Move skills to focus', function() {
         .reply(200, { records: [actifSkill] });
 
       skillRepository.listByTubeId.mockImplementation(() => []);
-      attachmentRepository.listByChallengeIds.mockImplementation(() => []);
+      attachmentRepository.listByLocalizedChallengeIds.mockImplementation(() => []);
 
       const valideForActifSkillData = {
         id: 'valideForActifSkillId',
@@ -896,7 +896,7 @@ describe('Script | Move skills to focus', function() {
           challengeId: 'valideDecliValideProtoForActifSkillId',
           localizedChallengeId: 'valideDecliValideProtoForActifSkillId',
         });
-        attachmentRepository.listByChallengeIds.mockImplementation(() => [
+        attachmentRepository.listByLocalizedChallengeIds.mockImplementation(() => [
           valideProtoAttachment,
           proposeDecliAttachment,
           valideDecliAttachment,

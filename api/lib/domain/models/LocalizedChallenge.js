@@ -66,8 +66,9 @@ export class LocalizedChallenge {
     });
   }
 
-  clone({ id, challengeId, status }) {
-    return new LocalizedChallenge({
+  clone({ id, challengeId, status, attachments }) {
+    const clonedAttachments = [];
+    const clonedLocalizedChallenge = new LocalizedChallenge({
       id,
       challengeId,
       status,
@@ -77,5 +78,16 @@ export class LocalizedChallenge {
       geography: this.geography,
       urlsToConsult: this.urlsToConsult,
     });
+    for (const attachmentId of this.fileIds) {
+      const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
+      clonedAttachments.push(attachmentToClone.clone({
+        challengeId: this.isPrimary ? challengeId : null,
+        localizedChallengeId: id,
+      }));
+    }
+    return {
+      clonedLocalizedChallenge,
+      clonedAttachments,
+    };
   }
 }

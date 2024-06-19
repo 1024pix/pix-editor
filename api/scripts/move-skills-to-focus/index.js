@@ -108,8 +108,8 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
   let clonedAttachments, clonedChallenges, clonedSkill;
   try {
     const tubeSkills = await skillRepository.listByTubeId(skill.tubeId);
-    const challengeIds = skillChallenges.map((ch) => ch.id);
-    const attachments = await attachmentRepository.listByChallengeIds(challengeIds);
+    const localizedChallengeIds = skillChallenges.flatMap((ch) => ch.localizedChallenges.map((loc) => loc.id));
+    const attachments = await attachmentRepository.listByLocalizedChallengeIds(localizedChallengeIds);
     // Exploitation du duck typing pour tricher
     // tubeDestination : besoin de name, competenceId et id
     const tubeDestination = {

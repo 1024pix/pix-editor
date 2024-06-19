@@ -78,8 +78,8 @@ async function _checkIfCloningIsPossible({ level, tubeId, skillIdToClone, tubeRe
 async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRepository, attachmentRepository }) {
   const skillChallenges = await challengeRepository.listBySkillId(skillToCloneId);
   const tubeSkills = await skillRepository.listByTubeId(tubeId);
-  const challengeIds = skillChallenges.map((ch) => ch.id);
-  const attachments = await attachmentRepository.listByChallengeIds(challengeIds);
+  const localizedChallengeIds = skillChallenges.flatMap((ch) => ch.localizedChallenges.map((loc) => loc.id));
+  const attachments = await attachmentRepository.listByLocalizedChallengeIds(localizedChallengeIds);
 
   return {
     skillChallenges,

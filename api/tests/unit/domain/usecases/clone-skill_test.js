@@ -22,7 +22,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       createBatch: vi.fn(),
     };
     attachmentRepository = {
-      listByChallengeIds: vi.fn(),
+      listByLocalizedChallengeIds: vi.fn(),
       createBatch: vi.fn(),
     };
     generateNewIdFnc = vi.fn();
@@ -130,14 +130,26 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       skillRepository.get.mockResolvedValue(skillToClone);
       tube = domainBuilder.buildTube({ id: cloneCommand.tubeDestinationId });
       tubeRepository.get.mockResolvedValue(tube);
-      challengeToClone1 = domainBuilder.buildChallenge({ id: 'challenge1' });
-      challengeToClone2 = domainBuilder.buildChallenge({ id: 'challenge2' });
+      challengeToClone1 = domainBuilder.buildChallenge({
+        id: 'challenge1',
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({ id: 'challenge1' }),
+          domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeA' }),
+        ],
+      });
+      challengeToClone2 = domainBuilder.buildChallenge({
+        id: 'challenge2',
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({ id: 'challenge2' }),
+          domainBuilder.buildLocalizedChallenge({ id: 'localizedChallengeB' }),
+        ],
+      });
       challengeRepository.listBySkillId.mockResolvedValue([challengeToClone1, challengeToClone2]);
       tubeSkill1 = domainBuilder.buildSkill({ id: 'tubeSkill1', tubeId: cloneCommand.tubeDestinationId });
       tubeSkill2 = domainBuilder.buildSkill({ id: 'tubeSkill2', tubeId: cloneCommand.tubeDestinationId });
       skillRepository.listByTubeId.mockResolvedValue([tubeSkill1, tubeSkill2]);
-      attachmentToClone1 = domainBuilder.buildAttachment({ id: 'challenge1_attachment', challengeId: 'challenge1' });
-      attachmentRepository.listByChallengeIds.mockResolvedValue([attachmentToClone1]);
+      attachmentToClone1 = domainBuilder.buildAttachment({ id: 'challenge1_attachment' });
+      attachmentRepository.listByLocalizedChallengeIds.mockResolvedValue([attachmentToClone1]);
       skillRepository.create.mockResolvedValue();
       challengeRepository.createBatch.mockResolvedValue();
       attachmentRepository.createBatch.mockResolvedValue();
@@ -159,7 +171,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       expect(tubeRepository.get).toHaveBeenCalledWith(cloneCommand.tubeDestinationId);
       expect(challengeRepository.listBySkillId).toHaveBeenCalledWith(cloneCommand.skillIdToClone);
       expect(skillRepository.listByTubeId).toHaveBeenCalledWith(cloneCommand.tubeDestinationId);
-      expect(attachmentRepository.listByChallengeIds).toHaveBeenCalledWith([challengeToClone1.id, challengeToClone2.id]);
+      expect(attachmentRepository.listByLocalizedChallengeIds).toHaveBeenCalledWith(['challenge1', 'localizedChallengeA', 'challenge2', 'localizedChallengeB']);
       expect(spyCloneFnc).toHaveBeenCalledWith({
         tubeDestination: tube,
         level: cloneCommand.level,

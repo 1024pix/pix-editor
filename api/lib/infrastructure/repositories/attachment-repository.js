@@ -14,11 +14,11 @@ export async function list() {
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }
 
-export async function listByChallengeIds(challengeIds) {
-  const datasourceAttachments = await attachmentDatasource.filterByChallengeIds(challengeIds);
+export async function listByLocalizedChallengeIds(localizedChallengeIds) {
+  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds);
   if (!datasourceAttachments) return [];
   const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds });
+  const localizedChallenges = await localizedChallengeRepository.listByIds({ ids: localizedChallengeIds });
 
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }

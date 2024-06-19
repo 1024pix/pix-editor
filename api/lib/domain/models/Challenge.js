@@ -180,16 +180,10 @@ export class Challenge {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
         status = LocalizedChallenge.STATUSES.PAUSE;
       }
-      const clonedLocalizedChallenge = localizedChallenge.clone({ id: newLocalizedChallengeId, challengeId: id, status });
+      const { clonedLocalizedChallenge, clonedAttachments: clonedAttachmentsForLoc } = localizedChallenge.clone({ id: newLocalizedChallengeId, challengeId: id, status, attachments });
       clonedLocalizedChallenges.push(clonedLocalizedChallenge);
       cloneSource.set(clonedLocalizedChallenge, localizedChallenge);
-      for (const attachmentId of localizedChallenge.fileIds) {
-        const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);
-        clonedAttachments.push(attachmentToClone.clone({
-          challengeId: id,
-          localizedChallengeId: newLocalizedChallengeId,
-        }));
-      }
+      clonedAttachments.push(...clonedAttachmentsForLoc);
     }
 
     const clonedChallenge =  new Challenge({

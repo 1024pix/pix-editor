@@ -502,6 +502,134 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
   });
 
+  context('#listByIds', () => {
+    it('should return the list of localized challenges for a list of challenge IDs', async () => {
+      const id1 = 'locChallengeId1';
+      const id2 = 'locChallengeId2';
+      const id3 = 'locChallengeId3';
+      const embedUrl = 'https://example.com';
+
+      // given
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: id1,
+        challengeId: 'challengeA',
+        locale: 'fr-fr',
+        embedUrl,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: id2,
+        challengeId: 'challengeA',
+        locale: 'en',
+        embedUrl,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: id3,
+        challengeId: 'challengeB',
+        locale: 'nl',
+        embedUrl,
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'anotherOne',
+        challengeId: 'challengeB',
+        locale: 'fr-fr',
+        embedUrl,
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const localizedChallenges = await localizedChallengeRepository.listByIds({ ids: [id1, id2, id3] });
+
+      // then
+      expect(localizedChallenges).to.deep.equal([
+        domainBuilder.buildLocalizedChallenge({
+          id: id2,
+          challengeId: 'challengeA',
+          locale: 'en',
+          embedUrl,
+          urlsToConsult: null,
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: id1,
+          challengeId: 'challengeA',
+          locale: 'fr-fr',
+          embedUrl,
+          urlsToConsult: null,
+        }),
+        domainBuilder.buildLocalizedChallenge({
+          id: id3,
+          challengeId: 'challengeB',
+          locale: 'nl',
+          embedUrl,
+          urlsToConsult: null,
+        }),
+      ]);
+    });
+    context('when there are attachments', () => {
+      it('should return the list of localized challenges with attachment for a list of challenge IDs', async () => {
+        const id1 = 'locChallengeId1';
+        const id2 = 'locChallengeId2';
+        const id3 = 'locChallengeId3';
+        const embedUrl = 'url.com';
+
+        // given
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: id1,
+          challengeId: 'challengeA',
+          locale: 'fr-fr',
+          embedUrl,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: id2,
+          challengeId: 'challengeA',
+          locale: 'en',
+          embedUrl,
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: id3,
+          challengeId: 'challengeB',
+          locale: 'nl',
+          embedUrl,
+        });
+
+        databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: id2,
+          attachmentId: 'attachment-en',
+        });
+
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenges = await localizedChallengeRepository.listByIds({ ids: [id1, id2, id3] });
+
+        // then
+        expect(localizedChallenges).to.deep.equal([
+          domainBuilder.buildLocalizedChallenge({
+            id: id2,
+            challengeId: 'challengeA',
+            locale: 'en',
+            embedUrl,
+            urlsToConsult: null,
+            fileIds: ['attachment-en'],
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: id1,
+            challengeId: 'challengeA',
+            locale: 'fr-fr',
+            embedUrl,
+            urlsToConsult: null,
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: id3,
+            challengeId: 'challengeB',
+            locale: 'nl',
+            embedUrl,
+            urlsToConsult: null,
+          })
+        ]);
+      });
+    });
+  });
+
   context('#get', () => {
     it('should return localized challenge by id', async () => {
       // given

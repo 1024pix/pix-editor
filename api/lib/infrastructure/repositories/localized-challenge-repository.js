@@ -48,6 +48,13 @@ export async function listByChallengeIds({ challengeIds, transaction: knexConnec
   return dtos.map(_toDomain);
 }
 
+export async function listByIds({ ids, transaction: knexConnection = knex }) {
+  const dtos = await _queryLocalizedChallengeWithAttachment(knexConnection)
+    .whereIn('id', ids)
+    .orderBy(['challengeId', 'locale']);
+  return dtos.map(_toDomain);
+}
+
 export async function get({ id, transaction: knexConnection = knex }) {
   const dto = await _queryLocalizedChallengeWithAttachment(knexConnection)
     .where('id', id)
