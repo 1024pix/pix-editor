@@ -179,7 +179,7 @@ export class Challenge {
       let newLocalizedChallengeId, status;
       if (localizedChallenge.isPrimary) {
         newLocalizedChallengeId = id;
-        status = null;
+        status = LocalizedChallenge.STATUSES.PRIMARY;
       } else {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
         status = LocalizedChallenge.STATUSES.PAUSE;
@@ -300,7 +300,7 @@ export class Challenge {
 
   #translateStatus(localizedChallenge) {
     if (this.isPrimary) return this.#primaryStatus;
-    if (['proposé', 'périmé'].includes(this.status) || localizedChallenge.status === 'validé') {
+    if ([Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY) {
       return this.status;
     }
     return localizedChallenge.status;

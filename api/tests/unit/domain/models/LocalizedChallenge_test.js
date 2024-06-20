@@ -78,7 +78,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         embedUrl: 'mon/embed.url',
         fileIds: [],
         locale: 'en',
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'JP',
         urlsToConsult: 'http://mon-url-a-consulter.com',
       });
@@ -101,7 +101,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         id: null,
         challengeId: 'idDuChallenge',
         locale: 'fr',
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         embedUrl: null,
         fileIds: [],
         geography: null,

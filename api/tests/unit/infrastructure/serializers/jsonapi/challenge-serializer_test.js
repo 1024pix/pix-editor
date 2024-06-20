@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
 import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
+import { Challenge } from '../../../../../lib/domain/models/index.js';
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
@@ -39,7 +40,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: '/api/challenges/recwWzTquPlvIl4So/preview',
             timer: 1234,
             'embed-url': localizedChallenge.embedUrl,
@@ -123,7 +124,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: 'http://staging.pix.fr/challenges/recwWzTquPlvIl4So/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',

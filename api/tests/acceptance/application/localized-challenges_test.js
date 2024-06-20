@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../test-helper.js';
 import { createServer } from '../../../server.js';
+import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | localized-challenges-controller', () => {
   describe('GET /localized-challenges/{id}', () => {
@@ -20,7 +21,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/le-nl-c-est-ici',
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         urlsToConsult: null,
       });
 
@@ -282,7 +283,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         challengeId: localizedChallenge.challengeId,
         locale: 'nl',
         embedUrl: 'https://cassoulet.com/',
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: null,
         urlsToConsult: null,
       });
@@ -320,6 +321,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
+        status: LocalizedChallenge.STATUSES.PAUSE,
       });
 
       await databaseBuilder.commit();
@@ -334,7 +336,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             type: 'localized-challenges',
             id: localizedChallenge.id,
             attributes: {
-              'status': 'validé',
+              'status': LocalizedChallenge.STATUSES.PLAY,
             },
           },
         },
@@ -352,7 +354,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         challengeId: localizedChallenge.challengeId,
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
-        status: 'validé',
+        status: LocalizedChallenge.STATUSES.PLAY,
         geography: null,
         urlsToConsult: null,
       });
@@ -372,7 +374,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',
         locale: 'nl',
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         embedUrl: 'https://choucroute.com/',
       });
       await databaseBuilder.commit();
@@ -387,7 +389,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             type: 'localized-challenges',
             id: 'localizedChallengeId',
             attributes: {
-              'status': 'validé',
+              'status': LocalizedChallenge.STATUSES.PLAY,
             },
           },
         },

@@ -11,7 +11,7 @@ export function buildChallengeForRelease({
   t1Status = 'Activé',
   t2Status = 'Désactivé',
   t3Status = 'Activé',
-  status = 'validé',
+  status = ChallengeForRelease.STATUSES.VALIDE,
   skillId = 'brecUDrCWD76fp5MsE',
   timer = 1234,
   competenceId = 'recsvLz0W2ShyfD63',

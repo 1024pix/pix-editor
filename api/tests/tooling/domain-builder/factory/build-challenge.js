@@ -12,7 +12,7 @@ export function buildChallenge({
   t1Status = true,
   t2Status = false,
   t3Status = true,
-  status = 'validé',
+  status = Challenge.STATUSES.VALIDE,
   timer = 1234,
   competenceId = 'recsvLz0W2ShyfD63',
   embedUrl = 'https://github.io/page/epreuve.html',

@@ -10,6 +10,7 @@ import {
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import * as config from '../../../../lib/config.js';
+import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const challengeAirtableFields = [
   'id persistant',
@@ -181,7 +182,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               declinable: 'facilement',
               version: 1,
               genealogy: 'Prototype 1',
-              status: 'validé',
+              status: Challenge.STATUSES.VALIDE,
               preview: '/api/challenges/my id/preview',
               timer: 1234,
               'embed-url': 'http://example.com/my_embed.html',
@@ -389,7 +390,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               declinable: 'facilement',
               version: 1,
               genealogy: 'Prototype 1',
-              status: 'validé',
+              status: Challenge.STATUSES.VALIDE,
               preview: '/api/challenges/1/preview',
               timer: 1234,
               'embed-url': 'http://example.com/my_embed.html',
@@ -459,7 +460,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
               declinable: 'facilement',
               version: 1,
               genealogy: 'Prototype 1',
-              status: 'validé',
+              status: Challenge.STATUSES.VALIDE,
               preview: '/api/challenges/2/preview',
               timer: 1234,
               'embed-url': null,
@@ -692,7 +693,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: '/api/challenges/recChallengeId1/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
@@ -791,7 +792,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         airtableBuilder.factory.buildChallenge({
           id: challengeId,
           locales: ['fr', 'fr-fr'],
-          status: 'validé',
+          status: Challenge.STATUSES.VALIDE,
           geography: 'DeprecatedLand',
         })
       ]).activate().nockScope;
@@ -849,7 +850,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         id: localizedChallengeId,
         challengeId,
         locale,
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         geography: null,
       });
 
@@ -886,7 +887,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             t1Status: false,
             t2Status: false,
             t3Status: false,
-            status: 'proposé',
+            status: Challenge.STATUSES.PROPOSE,
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);
@@ -1109,7 +1110,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: '/api/challenges/challengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
@@ -1577,7 +1578,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',
@@ -1830,7 +1831,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             declinable: 'facilement',
             version: 1,
             genealogy: 'Prototype 1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             preview: '/api/challenges/recChallengeId/preview',
             timer: 1234,
             'embed-url': 'https://github.io/page/epreuve.html',

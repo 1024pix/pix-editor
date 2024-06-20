@@ -2,6 +2,7 @@ import Airtable from 'airtable';
 import fp from 'lodash/fp.js';
 import { convertLanguagesToLocales } from '../../../lib/domain/services/convert-locales.js';
 import { getCountryCode } from '../../../lib/domain/models/Geography.js';
+import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 export async function localizedChallengesBuilder(databaseBuilder, translations) {
   const {
@@ -42,7 +43,7 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
           id: `${challengeId}-${locale}`,
           challengeId,
           locale,
-          status: 'proposé',
+          status: LocalizedChallenge.STATUSES.PAUSE,
           geography: countryCode,
         })) ?? [],
     ];

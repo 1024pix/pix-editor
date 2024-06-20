@@ -4,6 +4,7 @@ import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastr
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 import { challengeRepository } from '../../../lib/infrastructure/repositories/index.js';
 import { Area, Translation } from '../../../lib/domain/models/index.js';
+import { ChallengeForRelease } from '../../../lib/domain/models/release/index.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
@@ -82,7 +83,7 @@ describe('Unit | Repository | release-repository', () => {
         t1Status: 'Activé',
         t2Status: 'Désactivé',
         t3Status: 'Activé',
-        status: 'validé',
+        status: ChallengeForRelease.STATUSES.VALIDE,
         skillId: 'recUDrCWD76fp5MsE',
         timer: 1234,
         competenceId: 'recsvLz0W2ShyfD63',

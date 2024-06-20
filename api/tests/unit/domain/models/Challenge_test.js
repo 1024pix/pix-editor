@@ -324,7 +324,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'nl',
         embedUrl: 'https://example.nl/index.html?mode=example',
         primaryEmbedUrl,
-        status: 'proposé',
+        status: Challenge.STATUSES.PROPOSE,
         geography: 'NL',
       });
       const englishLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -333,7 +333,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'en',
         embedUrl: null,
         primaryEmbedUrl,
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         geography: null,
       });
       const localizedChallenges = [
@@ -370,7 +370,7 @@ describe('Unit | Domain | Challenge', () => {
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
         locales: ['fr-fr', 'fr'],
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         localizedChallenges,
         translations,
         files: [
@@ -385,7 +385,7 @@ describe('Unit | Domain | Challenge', () => {
         ...challenge,
         id: dutchChallengeId,
         locales: ['nl'],
-        status: 'proposé',
+        status: Challenge.STATUSES.PROPOSE,
         ...translations.nl,
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
@@ -396,7 +396,7 @@ describe('Unit | Domain | Challenge', () => {
         ...challenge,
         id: englishChallengeId,
         locales: ['en'],
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
@@ -429,14 +429,14 @@ describe('Unit | Domain | Challenge', () => {
     });
 
     [
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'validé' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'archivé' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'périmé' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'périmé' },
+      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.VALIDE },
+      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.ARCHIVE },
+      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
+      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedTranslatedStatus }) => {
       it(`should translate status ${challengeStatus} and localized status ${localizedChallengeStatus} to ${expectedTranslatedStatus}`, () => {
         // given
@@ -551,7 +551,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'challengeId',
             challengeId: 'challengeId',
             locale: 'fr',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             fileIds: [],
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
@@ -647,7 +647,7 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(domainBuilder.buildLocalizedChallenge({
         id: clonedChallengeId,
         challengeId: clonedChallengeId,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         embedUrl: challenge.localizedChallenges[0].embedUrl,
         geography: challenge.localizedChallenges[0].geography,
         urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
@@ -693,7 +693,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'challengeId',
             challengeId: 'challengeId',
             locale: 'fr',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             fileIds: ['attachmentIdA'],
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
@@ -771,7 +771,7 @@ describe('Unit | Domain | Challenge', () => {
         domainBuilder.buildLocalizedChallenge({
           id: clonedChallengeId,
           challengeId: clonedChallengeId,
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           embedUrl: challenge.localizedChallenges[0].embedUrl,
           geography: challenge.localizedChallenges[0].geography,
           urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,

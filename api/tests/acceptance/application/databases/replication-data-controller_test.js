@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -169,7 +170,7 @@ async function mockCurrentContent() {
     challengeId: challenge.id,
     locale: 'fr',
     embedUrl: challenge.embedUrl,
-    status: 'validé',
+    status: LocalizedChallenge.STATUSES.PLAY,
     geography: 'BR',
     urlsToConsult: [
       'https://example.com/',
@@ -180,7 +181,7 @@ async function mockCurrentContent() {
     id: 'localized-challenge-id',
     challengeId: challenge.id,
     locale: 'nl',
-    status: 'validé',
+    status: LocalizedChallenge.STATUSES.PLAY,
     geography: null,
   });
   databaseBuilder.factory.buildTranslation({

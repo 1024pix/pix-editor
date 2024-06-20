@@ -1,10 +1,12 @@
+import { Challenge } from '../../../../../lib/domain/models/index.js';
+
 export function buildChallengeDatasourceObject({
   id = 'persistant id',
   type = 'QCM',
   t1Status = true,
   t2Status = false,
   t3Status = true,
-  status = 'validé',
+  status = Challenge.STATUSES.VALIDE,
   skillId = 'recUDrCWD76fp5MsE',
   timer = 1234,
   competenceId = 'recsvLz0W2ShyfD63',

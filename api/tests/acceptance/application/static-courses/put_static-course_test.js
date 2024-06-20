@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', function() {
   let user;
@@ -51,7 +52,7 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}', fun
       id: 'challengeidnl1',
       challengeId: 'challengeid1',
       locale: 'nl',
-      status: 'validé',
+      status: LocalizedChallenge.STATUSES.PLAY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'challengeid4',

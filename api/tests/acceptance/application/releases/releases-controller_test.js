@@ -5,7 +5,7 @@ import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
-import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
+import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 const {
   buildArea,
@@ -100,7 +100,7 @@ async function mockCurrentContent() {
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,
       competenceId: 'recCompetence0',
-      status: 'validé',
+      status: SkillForRelease.STATUSES.ACTIF,
       tubeId: 'recTube0',
       version: 1,
       level: 1,
@@ -115,7 +115,7 @@ async function mockCurrentContent() {
       t1Status: false,
       t2Status: true,
       t3Status: false,
-      status: 'validé',
+      status: ChallengeForRelease.STATUSES.VALIDE,
       skillId: 'recSkill0',
       embedUrl: 'Embed URL',
       embedTitle: 'Embed title',
@@ -402,7 +402,7 @@ async function mockContentForRelease() {
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,
       competenceId: 'recCompetence0',
-      status: 'validé',
+      status: SkillForRelease.STATUSES.ACTIF,
       tubeId: 'recTube0',
       version: 1,
       level: 1,
@@ -422,7 +422,7 @@ async function mockContentForRelease() {
       t1Status: false,
       t2Status: true,
       t3Status: false,
-      status: 'validé',
+      status: ChallengeForRelease.STATUSES.VALIDE,
       skillId: 'recSkill0',
       embedUrl: 'Embed URL',
       embedTitle: 'Embed title',
