@@ -2,7 +2,7 @@ import { Challenge } from '../../../../../lib/domain/models/index.js';
 
 export function buildChallengeDatasourceObject({
   id = 'persistant id',
-  type = 'QCM',
+  type = Challenge.TYPES.QCM,
   t1Status = true,
   t2Status = false,
   t3Status = true,

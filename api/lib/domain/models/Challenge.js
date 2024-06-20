@@ -106,6 +106,19 @@ export class Challenge {
     };
   }
 
+  static get TYPES() {
+    return {
+      QCU: 'QCU',
+      QCM: 'QCM',
+      QROC: 'QROC',
+      QROCM: 'QROCM',
+      QROCM_IND: 'QROCM-ind',
+      QROCM_DEP: 'QROCM-dep',
+      QMAIL: 'QMAIL',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

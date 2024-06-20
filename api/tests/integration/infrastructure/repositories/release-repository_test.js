@@ -600,7 +600,7 @@ function _mockRichAirtableContent() {
   const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);
   const challenge121211 = {
     id: 'challenge121211',
-    type: 'challenge121211 type',
+    type: ChallengeForRelease.TYPES.QCM,
     t1Status: 'challenge121211 t1Status',
     t2Status: 'challenge121211 t2Status',
     t3Status: 'challenge121211 t3Status',
@@ -641,7 +641,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge121211 = airtableBuilder.factory.buildChallenge(challenge121211);
   const challenge121212 = {
     id: 'challenge121212',
-    type: 'challenge121212 type',
+    type: ChallengeForRelease.TYPES.QCU,
     t1Status: 'challenge121212 t1Status',
     t2Status: 'challenge121212 t2Status',
     t3Status: 'challenge121212 t3Status',
@@ -678,7 +678,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge121212 = airtableBuilder.factory.buildChallenge(challenge121212);
   const challenge211111 = {
     id: 'challenge211111',
-    type: 'challenge211111 type',
+    type: ChallengeForRelease.TYPES.QCM,
     t1Status: 'challenge211111 t1Status',
     t2Status: 'challenge211111 t2Status',
     t3Status: 'challenge211111 t3Status',
@@ -716,7 +716,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge211111 = airtableBuilder.factory.buildChallenge(challenge211111);
   const challenge211112 = {
     id: 'challenge211112',
-    type: 'challenge211112 type',
+    type: ChallengeForRelease.TYPES.QROCM_DEP,
     t1Status: 'challenge211112 t1Status',
     t2Status: 'challenge211112 t2Status',
     t3Status: 'challenge211112 t3Status',
@@ -753,7 +753,7 @@ function _mockRichAirtableContent() {
   const airtableChallenge211112 = airtableBuilder.factory.buildChallenge(challenge211112);
   const challenge211113 = {
     id: 'challenge211113',
-    type: 'challenge211113 type',
+    type: ChallengeForRelease.TYPES.QROCM,
     t1Status: 'challenge211113 t1Status',
     t2Status: 'challenge211113 t2Status',
     t3Status: 'challenge211113 t3Status',
@@ -1177,7 +1177,7 @@ function _getRichCurrentContentDTO() {
       id: 'challenge121211',
       instruction: 'challenge121211 instruction fr-fr',
       proposals: 'challenge121211 proposals fr-fr',
-      type: 'challenge121211 type',
+      type: ChallengeForRelease.TYPES.QCM,
       solution: 'challenge121211 solution fr-fr',
       solutionToDisplay: 'challenge121211 solutionToDisplay fr-fr',
       t1Status: true,
@@ -1209,7 +1209,7 @@ function _getRichCurrentContentDTO() {
       id: 'challengeNl',
       instruction: 'challenge121211 instruction nl-be',
       proposals: 'challenge121211 proposals nl-be',
-      type: 'challenge121211 type',
+      type: ChallengeForRelease.TYPES.QCM,
       solution: 'challenge121211 solution nl-be',
       solutionToDisplay: 'challenge121211 solutionToDisplay nl-be',
       t1Status: true,
@@ -1241,7 +1241,7 @@ function _getRichCurrentContentDTO() {
       id: 'challenge121212',
       instruction: 'challenge121212 instruction en',
       proposals: 'challenge121212 proposals en',
-      type: 'challenge121212 type',
+      type: ChallengeForRelease.TYPES.QCU,
       solution: 'challenge121212 solution en',
       solutionToDisplay: 'challenge121212 solutionToDisplay en',
       t1Status: true,
@@ -1272,7 +1272,7 @@ function _getRichCurrentContentDTO() {
       id: 'challenge211111',
       instruction: 'challenge211111 instruction fr',
       proposals: 'challenge211111 proposals fr',
-      type: 'challenge211111 type',
+      type: ChallengeForRelease.TYPES.QCM,
       solution: 'challenge211111 solution fr',
       solutionToDisplay: 'challenge211111 solutionToDisplay fr',
       t1Status: true,
@@ -1304,7 +1304,7 @@ function _getRichCurrentContentDTO() {
       id: 'challenge211112',
       instruction: 'challenge211112 instruction fr',
       proposals: 'challenge211112 proposals fr',
-      type: 'challenge211112 type',
+      type: ChallengeForRelease.TYPES.QROCM_DEP,
       solution: 'challenge211112 solution fr',
       solutionToDisplay: 'challenge211112 solutionToDisplay fr',
       t1Status: true,
@@ -1335,7 +1335,7 @@ function _getRichCurrentContentDTO() {
       id: 'challenge211113',
       instruction: 'challenge211113 instruction fr',
       proposals: 'challenge211113 proposals fr',
-      type: 'challenge211113 type',
+      type: ChallengeForRelease.TYPES.QROCM,
       solution: 'challenge211113 solution fr',
       solutionToDisplay: 'challenge211113 solutionToDisplay fr',
       t1Status: true,

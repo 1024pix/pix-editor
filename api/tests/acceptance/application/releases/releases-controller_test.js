@@ -109,7 +109,7 @@ async function mockCurrentContent() {
       id: 'recChallenge0',
       instruction: 'Consigne du Challenge - fr-fr',
       proposals: 'Propositions du Challenge - fr-fr',
-      type: 'Type d\'épreuve',
+      type: ChallengeForRelease.TYPES.QCM,
       solution: 'Bonnes réponses du Challenge - fr-fr',
       solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
       t1Status: false,

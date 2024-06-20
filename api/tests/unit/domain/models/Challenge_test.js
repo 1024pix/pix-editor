@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
+import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Domain | Challenge', () => {
 
@@ -591,7 +592,7 @@ describe('Unit | Domain | Challenge', () => {
         t2Status: 'super t2',
         t3Status: 'super t3',
         timer: '01:30',
-        type: 'QROCM',
+        type: ChallengeForRelease.TYPES.QROCM,
         updatedAt: new Date('2020-01-01'),
         validatedAt: new Date('2022-01-01'),
         version: 8,

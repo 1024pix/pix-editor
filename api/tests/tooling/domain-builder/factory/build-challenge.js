@@ -6,7 +6,7 @@ export function buildChallenge({
   instruction = 'Les moteurs de recherche affichent certains liens en raison d\'un accord commercial.\n\nDans quels encadrés se trouvent ces liens ?',
   alternativeInstruction = '',
   proposals = '- 1\n- 2\n- 3\n- 4\n- 5',
-  type = 'QCM',
+  type = Challenge.TYPES.QCM,
   solution = '1, 5',
   solutionToDisplay = '1',
   t1Status = true,

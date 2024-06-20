@@ -79,7 +79,7 @@ describe('Unit | Repository | release-repository', () => {
 
       const challenge = domainBuilder.buildChallenge({
         id: 'recChallenge',
-        type: 'QCM',
+        type: ChallengeForRelease.TYPES.QCM,
         t1Status: 'Activé',
         t2Status: 'Désactivé',
         t3Status: 'Activé',
