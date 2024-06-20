@@ -8,7 +8,7 @@ export function buildSkill({
     fr: 'Peut-on géo-localiser un téléphone lorsqu’il est éteint ?',
     en: 'Can we geo-locate a rabbit on the ice floe?',
   },
-  hintStatus = 'Validé',
+  hintStatus = Skill.HINT_STATUSES.VALIDE,
   tutorialIds = ['receomyzL0AmpMFGw'],
   learningMoreTutorialIds = ['recQbjXNAPsVJthXh', 'rec3DkUX0a6RNi2Hz'],
   competenceId = 'recofJCxg0NqTqTdP',

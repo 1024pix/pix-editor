@@ -5,6 +5,7 @@ import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 const {
   buildArea,
@@ -94,7 +95,7 @@ async function mockCurrentContent() {
         en: 'Indice - en',
         nl: 'Indice - nl',
       },
-      hintStatus: 'Statut de l‘indice',
+      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,
@@ -396,7 +397,7 @@ async function mockContentForRelease() {
     skills: [{
       id: 'recSkill0',
       name: 'Nom de l‘Acquis',
-      hintStatus: 'Statut de l‘indice',
+      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,

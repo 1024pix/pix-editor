@@ -7,6 +7,7 @@ import {
   tutorialDatasource
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | skill-repository', () => {
 
@@ -18,7 +19,7 @@ describe('Integration | Repository | skill-repository', () => {
           id: 'skill1',
           name: 'Acquis 1',
           description: 'Description Acquis 1',
-          hintStatus: 'validé',
+          hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
           tutorialIds: ['tuto1', 'tuto2'],
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           pixValue: 2.5,
@@ -33,7 +34,7 @@ describe('Integration | Repository | skill-repository', () => {
           id: 'skill2',
           name: 'Acquis 2',
           description: 'Description Acquis 2',
-          hintStatus: 'proposé',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['tuto5'],
           learningMoreTutorialIds: ['tuto6'],
           pixValue: 1.6,
@@ -82,7 +83,7 @@ describe('Integration | Repository | skill-repository', () => {
             fr: 'Indice acquis 1',
             en: 'Skill 1 hint',
           },
-          hintStatus: 'validé',
+          hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
           tutorialIds: ['tuto1', 'tuto2'],
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           pixValue: 2.5,
@@ -101,7 +102,7 @@ describe('Integration | Repository | skill-repository', () => {
             fr: 'Indice acquis 2',
             en: 'Skill 2 hint',
           },
-          hintStatus: 'proposé',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['tuto5'],
           learningMoreTutorialIds: ['tuto6'],
           pixValue: 1.6,
@@ -140,7 +141,7 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillNoHintBeforeHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantA',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
@@ -154,7 +155,7 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillHintBeforeHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantB',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
@@ -178,7 +179,7 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillHintBeforeNoHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantC',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
@@ -202,7 +203,7 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillNoHintBeforeNoHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantD',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
@@ -222,7 +223,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillNoHintBeforeHintAfter.tutorialIds,
           learningMoreTutorialIds: skillNoHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeHintAfter.tutorialIds,
+          hintStatus: skillNoHintBeforeHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillNoHintBeforeHintAfter.status,
@@ -237,7 +238,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillHintBeforeHintAfter.tutorialIds,
           learningMoreTutorialIds: skillHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeHintAfter.tutorialIds,
+          hintStatus: skillHintBeforeHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillHintBeforeHintAfter.status,
@@ -252,7 +253,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillHintBeforeNoHintAfter.tutorialIds,
           learningMoreTutorialIds: skillHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeNoHintAfter.tutorialIds,
+          hintStatus: skillHintBeforeNoHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillHintBeforeNoHintAfter.status,
@@ -267,7 +268,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillNoHintBeforeNoHintAfter.tutorialIds,
           learningMoreTutorialIds: skillNoHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeNoHintAfter.tutorialIds,
+          hintStatus: skillNoHintBeforeNoHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillNoHintBeforeNoHintAfter.status,

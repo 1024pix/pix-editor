@@ -7,6 +7,7 @@ import {
   getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
 import { Area, Mission } from '../../../../lib/domain/models/index.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -536,7 +537,7 @@ function _mockRichAirtableContent() {
   const skill11111 = {
     id: 'skill11111',
     name: 'skill11111 name',
-    hintStatus: 'skill11111 hintStatus',
+    hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
     tutorialIds: ['tutorial2'],
     learningMoreTutorialIds: ['tutorial1'],
     pixValue: 1,
@@ -552,7 +553,7 @@ function _mockRichAirtableContent() {
   const skill11112 = {
     id: 'skill11112',
     name: 'skill11112 name',
-    hintStatus: 'skill11112 hintStatus',
+    hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
     pixValue: 2,
@@ -568,7 +569,7 @@ function _mockRichAirtableContent() {
   const skill12121 = {
     id: 'skill12121',
     name: 'skill12121 name',
-    hintStatus: 'skill12121 hintStatus',
+    hintStatus: SkillForRelease.HINT_STATUSES.PRE_VALIDE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
     pixValue: 3,
@@ -584,7 +585,7 @@ function _mockRichAirtableContent() {
   const skill21111 = {
     id: 'skill21111',
     name: 'skill21111 name',
-    hintStatus: 'skill21111 hintStatus',
+    hintStatus: SkillForRelease.HINT_STATUSES.A_SOUMETTRE,
     tutorialIds: [],
     learningMoreTutorialIds: [],
     pixValue: 4,
@@ -1109,7 +1110,7 @@ function _getRichCurrentContentDTO() {
         fr: 'skill11111 hintFrFr',
         en: 'skill11111 hintEnUs',
       },
-      hintStatus: 'skill11111 hintStatus',
+      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
       tutorialIds: ['tutorial2'],
       learningMoreTutorialIds: ['tutorial1'],
       pixValue: 1,
@@ -1126,7 +1127,7 @@ function _getRichCurrentContentDTO() {
         fr: 'skill11112 hintFrFr',
         en: 'skill11112 hintEnUs',
       },
-      hintStatus: 'skill11112 hintStatus',
+      hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
       learningMoreTutorialIds: [],
       tutorialIds: [],
       pixValue: 2,
@@ -1143,7 +1144,7 @@ function _getRichCurrentContentDTO() {
         fr: 'skill12121 hintFrFr',
         en: 'skill12121 hintEnUs',
       },
-      hintStatus: 'skill12121 hintStatus',
+      hintStatus: SkillForRelease.HINT_STATUSES.PRE_VALIDE,
       tutorialIds: [],
       learningMoreTutorialIds: [],
       pixValue: 3,
@@ -1160,7 +1161,7 @@ function _getRichCurrentContentDTO() {
         fr: 'skill21111 hintFrFr',
         en: 'skill21111 hintEnUs',
       },
-      hintStatus: 'skill21111 hintStatus',
+      hintStatus: SkillForRelease.HINT_STATUSES.A_SOUMETTRE,
       tutorialIds: [],
       learningMoreTutorialIds: [],
       pixValue: 4,

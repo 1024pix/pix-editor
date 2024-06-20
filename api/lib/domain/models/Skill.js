@@ -42,6 +42,19 @@ export class Skill {
     };
   }
 
+  static get HINT_STATUSES() {
+    return {
+      PROPOSE: 'Proposé',
+      VALIDE: 'Validé',
+      PRE_VALIDE: 'pré-validé',
+      A_SOUMETTRE: 'à soumettre',
+      A_RETRAVAILLER: 'à retravailler',
+      ARCHIVE: 'archivé',
+      INAPPLICABLE: 'inapplicable',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'skill';
   }

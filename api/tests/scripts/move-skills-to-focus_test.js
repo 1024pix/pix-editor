@@ -147,7 +147,7 @@ describe('Script | Move skills to focus', function() {
       const actifSkillData = {
         id: 'actifSkillId',
         description: 'la description de mon acquis',
-        hintStatus: 'some hint status',
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeId',
         competenceId: 'competenceId',
@@ -683,7 +683,7 @@ describe('Script | Move skills to focus', function() {
       const actifSkillData = {
         id: 'actifSkillId',
         description: 'la description de mon acquis',
-        hintStatus: 'some hint status',
+        hintStatus: Skill.HINT_STATUSES.VALIDE,
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeId',
         competenceId: 'competenceId',
