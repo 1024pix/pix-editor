@@ -81,6 +81,10 @@ export class ChallengeForRelease {
     return Challenge.RESPONSIVES;
   }
 
+  static get FORMATS() {
+    return Challenge.FORMATS;
+  }
+
   get isOperative() {
     return [Challenge.STATUSES.VALIDE, Challenge.STATUSES.ARCHIVE].includes(this.status);
   }

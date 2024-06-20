@@ -183,6 +183,18 @@ export class Challenge {
     };
   }
 
+  static get FORMATS() {
+    return {
+      PETIT: 'petit',
+      MOTS: 'mots',
+      PHRASE: 'phrase',
+      PARAGRAPHE: 'paragraphe',
+      NOMBRE: 'nombre',
+      DATE: 'date',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

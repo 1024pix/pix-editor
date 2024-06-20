@@ -18,7 +18,7 @@ export function buildChallenge({
   embedUrl = 'https://github.io/page/epreuve.html',
   embedTitle = 'Epreuve de selection de dossier',
   embedHeight = 500,
-  format = 'mots',
+  format = Challenge.FORMATS.MOTS,
   autoReply = false,
   locales = ['fr'],
   focusable = false,

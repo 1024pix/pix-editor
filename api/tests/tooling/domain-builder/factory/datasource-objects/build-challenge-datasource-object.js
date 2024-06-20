@@ -12,7 +12,7 @@ export function buildChallengeDatasourceObject({
   competenceId = 'recsvLz0W2ShyfD63',
   embedUrl = 'https://github.io/page/epreuve.html',
   embedHeight = 500,
-  format = 'mots',
+  format = Challenge.FORMATS.MOTS,
   autoReply = false,
   locales = [],
   focusable = false,

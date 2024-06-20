@@ -90,7 +90,7 @@ describe('Unit | Repository | release-repository', () => {
         embedUrl: 'https://github.io/page/epreuve.html',
         embedTitle: 'Epreuve de selection de dossier',
         embedHeight: 500,
-        format: 'mots',
+        format: ChallengeForRelease.FORMATS.MOTS,
         autoReply: false,
         illustrationAlt: 'texte alternatif à l\'image',
         files: [{

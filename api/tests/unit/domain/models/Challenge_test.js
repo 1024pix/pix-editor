@@ -577,7 +577,7 @@ describe('Unit | Domain | Challenge', () => {
         delta: 'super delta',
         embedHeight: 800,
         focusable: 'oui avec plaisir',
-        format: 'a4',
+        format: Challenge.FORMATS.PETIT,
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
         geography: 'Monde',
         madeObsoleteAt: new Date('2021-01-01'),

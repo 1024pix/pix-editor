@@ -2,6 +2,9 @@ import { datasource } from './datasource.js';
 import { findRecords } from '../../airtable.js';
 import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
+// Cet import m'embête un peu qu'en pensez-vous ?
+import { Challenge } from '../../../domain/models/index.js';
+
 export const challengeDatasource = datasource.extend({
 
   modelName: 'Challenge',
@@ -84,7 +87,7 @@ export const challengeDatasource = datasource.extend({
       embedHeight: airtableRecord.get('Embed height'),
       timer,
       competenceId,
-      format: airtableRecord.get('Format') || 'mots',
+      format: airtableRecord.get('Format') || Challenge.FORMATS.MOTS,
       files,
       autoReply: Boolean(airtableRecord.get('Réponse automatique')) || false,
       locales: convertLanguagesToLocales(airtableRecord.get('Langues') || []),
