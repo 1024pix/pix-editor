@@ -173,6 +173,16 @@ export class Challenge {
     };
   }
 
+  static get RESPONSIVES() {
+    return {
+      TABLETTE: 'Tablette',
+      SMARTPHONE: 'Smartphone',
+      TABLETTE_ET_SMARTPHONE: 'Tablette/Smartphone',
+      NON: 'Non',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

@@ -38,9 +38,11 @@ function _filterValidatedPrototypeTubeChallenges(skills, challenges, tubeId) {
 }
 
 function _isChallengeSmartphoneCompliant(challenge) {
-  return challenge.responsive?.includes('Smartphone');
+  return [ChallengeForRelease.RESPONSIVES.SMARTPHONE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
+    .includes(challenge.responsive);
 }
 
 function _isChallengeTabletCompliant(challenge) {
-  return challenge.responsive?.includes('Tablet');
+  return [ChallengeForRelease.RESPONSIVES.TABLETTE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
+    .includes(challenge.responsive);
 }

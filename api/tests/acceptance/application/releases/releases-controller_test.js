@@ -132,7 +132,7 @@ async function mockCurrentContent() {
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
-      responsive: ['Smartphone'],
+      responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
       genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
     }],
     tutorials: [{
@@ -436,7 +436,7 @@ async function mockContentForRelease() {
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
-      responsive: ['Smartphone'],
+      responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
       genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
       attachments: ['url de la pièce jointe'],
       illustrationUrl: 'url de l‘illustration',

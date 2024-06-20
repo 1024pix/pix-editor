@@ -24,7 +24,7 @@ export function buildChallengeForRelease({
   focusable = false,
   delta = 0.2,
   alpha = 0.5,
-  responsive = 'Smartphone',
+  responsive = ChallengeForRelease.RESPONSIVES.SMARTPHONE,
   genealogy = ChallengeForRelease.GENEALOGIES.PROTOTYPE,
   attachments,
   illustrationAlt = 'alt illu',

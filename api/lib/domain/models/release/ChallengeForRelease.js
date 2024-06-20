@@ -77,6 +77,10 @@ export class ChallengeForRelease {
     return Challenge.GENEALOGIES;
   }
 
+  static get RESPONSIVES() {
+    return Challenge.RESPONSIVES;
+  }
+
   get isOperative() {
     return [Challenge.STATUSES.VALIDE, Challenge.STATUSES.ARCHIVE].includes(this.status);
   }

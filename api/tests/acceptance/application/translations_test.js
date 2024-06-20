@@ -181,7 +181,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },
         {
@@ -211,7 +211,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },{
           id: 'recChallenge2',
@@ -240,7 +240,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         }],
       };
@@ -485,7 +485,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
           genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         }],
       };
@@ -577,7 +577,7 @@ describe('Acceptance | Controller | translations-controller', () => {
             focusable: false,
             delta: 0.5,
             alpha: 0.9,
-            responsive: ['Smartphone'],
+            responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
             genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
           }],
         };

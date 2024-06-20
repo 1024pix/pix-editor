@@ -582,7 +582,7 @@ describe('Unit | Domain | Challenge', () => {
         geography: 'Monde',
         madeObsoleteAt: new Date('2021-01-01'),
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
-        responsive: 'non pas pour mobile',
+        responsive: Challenge.RESPONSIVES.NON,
         shuffled: true,
         skillId: 'oldSkillId',
         skills: ['videz moi'],
