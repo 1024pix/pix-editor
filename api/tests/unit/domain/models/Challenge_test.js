@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
@@ -723,7 +723,7 @@ describe('Unit | Domain | Challenge', () => {
       const attachmentIdA = domainBuilder.buildAttachment({
         id: 'attachmentIdA',
         url: 'cc',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
         localizedChallengeId: 'challengeId'
@@ -731,7 +731,7 @@ describe('Unit | Domain | Challenge', () => {
       const attachmentIdB = domainBuilder.buildAttachment({
         id: 'attachmentIdB',
         url: 'cc',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
         localizedChallengeId: 'locNLChallengeId'

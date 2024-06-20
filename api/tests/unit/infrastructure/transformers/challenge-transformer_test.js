@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createChallengeTransformer } from '../../../../lib/infrastructure/transformers/challenge-transformer.js';
 import { domainBuilder } from '../../../test-helper.js';
+import { Attachment } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Infrastructure | Challenge Transformer', function() {
 
@@ -85,21 +86,21 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         const attachments = [
           {
             id: 'attId1',
-            type: 'illustration',
+            type: Attachment.TYPES.ILLUSTRATION,
             url: 'https://dl.example.com/illustration1.jpg',
             challengeId: 'challenge-id',
             localizedChallengeId: 'challenge-id',
           },
           {
             id: 'attId2',
-            type: 'illustration',
+            type: Attachment.TYPES.ILLUSTRATION,
             url: 'https://dl.example.com/illustration2.jpg',
             challengeId: 'other-challenge-id',
             localizedChallengeId: 'other-challenge-id',
           },
           {
             id: 'attId3',
-            type: 'illustration',
+            type: Attachment.TYPES.ILLUSTRATION,
             url: 'https://dl.example.com/illustration1-nl.jpg',
             challengeId: 'challenge-id',
             localizedChallengeId: 'challenge-id-nl',

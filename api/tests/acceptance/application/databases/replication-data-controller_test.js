@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -43,7 +43,7 @@ async function mockCurrentContent() {
     url: 'http://example.fr',
     mimeType: 'mimeType1',
     filename: 'nom_fichier_1',
-    type: 'lol',
+    type: Attachment.TYPES.ILLUSTRATION,
     alt: null,
     localizedChallenge: challenge.id,
   };
@@ -53,7 +53,7 @@ async function mockCurrentContent() {
     url: 'http://example.nl',
     mimeType: 'mimeType2',
     filename: 'nom_fichier_2',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
   };

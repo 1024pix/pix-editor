@@ -56,7 +56,7 @@ function toDomainList(datasourceAttachments, translations, localizedChallenges) 
   const localizedChallengesById = _.groupBy(localizedChallenges, 'id');
 
   return datasourceAttachments.map((attachment) => {
-    if (attachment.type !== 'illustration') {
+    if (attachment.type !== Attachment.TYPES.ILLUSTRATION) {
       return toDomain(attachment);
     }
     const challengeTranslations = translationsByChallengeId[attachment.challengeId];

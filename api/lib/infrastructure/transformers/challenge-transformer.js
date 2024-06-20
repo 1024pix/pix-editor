@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Attachment } from '../../domain/models/index.js';
 
 export function createChallengeTransformer({ attachments }) {
   return _.flow(
@@ -54,7 +55,7 @@ function _addAttachmentsToChallenge({ attachments }) {
 }
 
 function _assignAttachmentToChallenge(challenge, attachment) {
-  if (attachment.type === 'illustration') {
+  if (attachment.type === Attachment.TYPES.ILLUSTRATION) {
     challenge.illustrationUrl = attachment.url;
   } else {
     if (!challenge.attachments) {

@@ -21,6 +21,13 @@ export class Attachment {
     this.localizedChallengeId = localizedChallengeId;
   }
 
+  static get TYPES() {
+    return {
+      ATTACHMENT: 'attachment',
+      ILLUSTRATION: 'illustration',
+    };
+  }
+
   clone({ challengeId, localizedChallengeId }) {
     return new Attachment({
       id: null,

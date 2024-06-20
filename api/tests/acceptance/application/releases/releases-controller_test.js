@@ -3,7 +3,7 @@ import nock from 'nock';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
-import { Area, Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Attachment, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
 import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
@@ -175,19 +175,19 @@ async function mockCurrentContent() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid2',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid3',
     url: 'url of the joint piece',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0En',
   }];
@@ -486,19 +486,19 @@ async function mockContentForRelease() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid2',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid3',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0En',
   }];

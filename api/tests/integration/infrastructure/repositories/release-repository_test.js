@@ -6,7 +6,7 @@ import {
   getLatestRelease,
   getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
-import { Area, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Attachment, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function() {
@@ -812,25 +812,25 @@ function _mockRichAirtableContent() {
   });
   const airtableAttachment1 = airtableBuilder.factory.buildAttachment({
     id: 'attachment1',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment1 url',
     challengeId: 'challenge121211',
   });
   const airtableAttachment2 = airtableBuilder.factory.buildAttachment({
     id: 'attachment2',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment2 url',
     challengeId: 'challenge121211',
   });
   const airtableAttachment3 = airtableBuilder.factory.buildAttachment({
     id: 'attachment3',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment3 url',
     challengeId: 'challenge211111',
   });
   const airtableAttachment4 = airtableBuilder.factory.buildAttachment({
     id: 'attachment4',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     url: 'attachment4 url',
     challengeId: 'challenge121211',
     localizedChallengeId: 'challengeNl',
