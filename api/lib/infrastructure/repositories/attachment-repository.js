@@ -18,7 +18,7 @@ export async function listByLocalizedChallengeIds(localizedChallengeIds) {
   const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds);
   if (!datasourceAttachments) return [];
   const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
-  const localizedChallenges = await localizedChallengeRepository.listByIds({ ids: localizedChallengeIds });
+  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
 
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }
