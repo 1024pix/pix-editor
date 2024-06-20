@@ -24,7 +24,7 @@ export function buildChallengeDatasourceObject({
   version = 1,
   alternativeVersion = 2,
   accessibility1 = Challenge.ACCESSIBILITY1.OK,
-  accessibility2 = 'RAS',
+  accessibility2 = Challenge.ACCESSIBILITY2.RAS,
   spoil = 'Non Sp',
   responsive = 'non',
   geography = 'France',

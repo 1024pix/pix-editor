@@ -155,6 +155,15 @@ export class Challenge {
     };
   }
 
+  static get ACCESSIBILITY2() {
+    return {
+      RAS: 'RAS',
+      OK: 'OK',
+      KO: 'KO',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

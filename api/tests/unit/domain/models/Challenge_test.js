@@ -564,7 +564,7 @@ describe('Unit | Domain | Challenge', () => {
           localizedChallengeId: 'challengeId'
         }],
         accessibility1: Challenge.ACCESSIBILITY1.OK,
-        accessibility2: 'someOtherValue',
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
         alternativeVersion: 5,
         alpha: 'olé',
         archivedAt: new Date('2020-01-01'),
