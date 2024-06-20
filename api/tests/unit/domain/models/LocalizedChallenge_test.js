@@ -22,7 +22,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('#defaultEmbedUrl', () => {
-    it.fails('should compute default embed URL from primary embed URL', () => {
+    it('should compute default embed URL from primary embed URL', () => {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'alternativeId',

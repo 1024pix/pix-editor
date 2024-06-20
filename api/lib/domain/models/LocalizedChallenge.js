@@ -1,10 +1,13 @@
 import { Challenge } from './Challenge.js';
 
 export class LocalizedChallenge {
+  #primaryEmbedUrl;
+
   constructor({
     id,
     challengeId,
     embedUrl,
+    primaryEmbedUrl,
     fileIds,
     locale,
     status,
@@ -16,6 +19,7 @@ export class LocalizedChallenge {
     this.id = id;
     this.challengeId = challengeId;
     this.embedUrl = embedUrl;
+    this.#primaryEmbedUrl = primaryEmbedUrl;
     this.fileIds = fileIds ?? [];
     this.locale = locale;
     this.status = status;
@@ -32,6 +36,13 @@ export class LocalizedChallenge {
 
   get isPrimary() {
     return this.id === this.challengeId;
+  }
+
+  get defaultEmbedUrl() {
+    if (!this.#primaryEmbedUrl) return null;
+    const url = new URL(this.#primaryEmbedUrl);
+    url.searchParams.set('lang', this.locale);
+    return url.href;
   }
 
   static buildPrimary({
