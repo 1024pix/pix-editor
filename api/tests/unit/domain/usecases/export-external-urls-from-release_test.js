@@ -6,7 +6,7 @@ import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Export external urls from release', function() {
   describe('#exportExternalUrlsFromRelease', function() {
-    let releaseRepository, mockedUrlUtils, urlRepository;
+    let releaseRepository, mockedUrlUtils, urlRepository, localizedChallengeRepository;
 
     beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
@@ -52,6 +52,8 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
         id: 'challenge1',
         instruction: 'instructions [link](https://examplechal1.net/) further instructions [other_link](https://other_examplechal1.net/)',
         proposals: 'proposals [link](https://example2chal1.net/)',
+        solution: 'solutions [link](https://example3chal1.net/)',
+        solutionToDisplay: 'solutionToDisplay [link](https://example4chal1.net/)',
         skillId: 'skill1',
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['fr'],
@@ -94,6 +96,15 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
           wonderlandChallenge4Skill23, wonderlandChallenge5Skill23],
       });
       releaseRepository = { getLatestRelease: vi.fn().mockResolvedValue(latestRelease) };
+      const localizedChallenges = [
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge1', challengeId: 'challenge1', urlsToConsult: ['https://exampleloc1chal1.net', 'https://exampleloc2chal1.net'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'someLocChallenge1', challengeId: 'challenge1', urlsToConsult: ['https://not_me.fr'] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge2', challengeId: 'challenge2', urlsToConsult: [] }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge3', challengeId: 'challenge3', urlsToConsult: null }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge4', challengeId: 'challenge4', urlsToConsult: null }),
+        domainBuilder.buildLocalizedChallenge({ id: 'challenge5', challengeId: 'challenge5', urlsToConsult: null }),
+      ];
+      localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
       mockedUrlUtils = {
         findUrlsInMarkdown: UrlUtils.findUrlsInMarkdown,
       };
@@ -102,9 +113,9 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
       };
     });
 
-    it('should export external URLs for operative challenges', async function() {
+    it('should export external URLs for operative challenges (and also get urls from primary localized challenge)', async function() {
       // when
-      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils: mockedUrlUtils });
+      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils: mockedUrlUtils, localizedChallengeRepository });
 
       // then
       expect(urlRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
@@ -112,6 +123,10 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
         ['Pix','@NomTube1','https://examplechal1.net','fr','validé'],
         ['Pix','@NomTube1','https://other_examplechal1.net','fr','validé'],
         ['Pix','@NomTube1','https://example2chal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://example3chal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://example4chal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://exampleloc1chal1.net','fr','validé'],
+        ['Pix','@NomTube1','https://exampleloc2chal1.net','fr','validé'],
         ['wonderland','@NomTube2','https://examplechal4.fr','nl;FR-fr','archivé'],
       ]);
     });
