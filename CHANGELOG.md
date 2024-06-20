@@ -1,5 +1,18 @@
 
 
+## v3.149.0 (20/06/2024)
+
+
+### :rocket: Amélioration
+- [#680](https://github.com/1024pix/pix-editor/pull/680) [FEATURE] Ecrire un script pour passer en masse des acquis en focus (PIX-12844).
+
+### :bug: Correction
+- [#683](https://github.com/1024pix/pix-editor/pull/683) [BUGFIX] Attachment incomplet lors du clonage sur Airtable (PIX-13064).
+- [#682](https://github.com/1024pix/pix-editor/pull/682) [BUGFIX] Echec lors du clone des attachments pour les épreuves localisées pour le script de passage en focus (PIX-13061).
+
+### :arrow_up: Montée de version
+- [#675](https://github.com/1024pix/pix-editor/pull/675) [BUMP] Update dependency postgres to v14.12.
+
 ## v3.148.1 (12/06/2024)
 
 
