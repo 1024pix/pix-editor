@@ -144,6 +144,17 @@ export class Challenge {
     };
   }
 
+  static get ACCESSIBILITY1() {
+    return {
+      RAS: 'RAS',
+      OK: 'OK',
+      ACQUIS_NON_PERTINENT: 'Acquis Non Pertinent',
+      KO: 'KO',
+      A_TESTER: 'A tester',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

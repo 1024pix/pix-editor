@@ -49,7 +49,7 @@ describe('Integration | Repository | challenge-repository', () => {
         declinable: Challenge.DECLINABLES.FACILEMENT,
         version: 'version challengeA',
         alternativeVersion: 'alternativeVersion challengeA',
-        accessibility1: 'accessibility1 challengeA',
+        accessibility1: Challenge.ACCESSIBILITY1.KO,
         accessibility2: 'accessibility2 challengeA',
         spoil: 'spoil challengeA',
         responsive: 'responsive challengeA',
@@ -144,7 +144,7 @@ describe('Integration | Repository | challenge-repository', () => {
         declinable: Challenge.DECLINABLES.NON,
         version: 'version challengeB',
         alternativeVersion: 'alternativeVersion challengeB',
-        accessibility1: 'accessibility1 challengeB',
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: 'accessibility2 challengeB',
         spoil: 'spoil challengeB',
         responsive: 'responsive challengeB',
@@ -432,8 +432,8 @@ describe('Integration | Repository | challenge-repository', () => {
       });
       const challengeA_data = {
         id: 'challengeA_id',
-        accessibility1: 'accessibility1 challengeA',
-        accessibility2: 'accessibility1 challengeA',
+        accessibility1: Challenge.ACCESSIBILITY1.KO,
+        accessibility2: Challenge.ACCESSIBILITY1.KO,
         airtableId: null,
         alternativeVersion: 1,
         alpha: null,
@@ -490,8 +490,8 @@ describe('Integration | Repository | challenge-repository', () => {
       });
       const challengeB_data = {
         id: 'challengeB_id',
-        accessibility1: 'accessibility1 challengeB',
-        accessibility2: 'accessibility1 challengeB',
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY1.OK,
         airtableId: null,
         alternativeVersion: 3,
         alpha: null,

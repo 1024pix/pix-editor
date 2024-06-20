@@ -29,7 +29,7 @@ export function buildChallenge({
   declinable = Challenge.DECLINABLES.FACILEMENT,
   version = 1,
   alternativeVersion = 2,
-  accessibility1 = 'OK',
+  accessibility1 = Challenge.ACCESSIBILITY1.OK,
   accessibility2 = 'RAS',
   spoil = 'Non Sp',
   responsive = 'non',

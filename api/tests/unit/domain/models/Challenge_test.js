@@ -563,7 +563,7 @@ describe('Unit | Domain | Challenge', () => {
           fileId: 'attID',
           localizedChallengeId: 'challengeId'
         }],
-        accessibility1: 'someValue',
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
         accessibility2: 'someOtherValue',
         alternativeVersion: 5,
         alpha: 'olé',
