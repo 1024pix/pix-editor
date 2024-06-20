@@ -182,7 +182,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },
         {
           id: 'recChallenge1',
@@ -212,7 +212,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },{
           id: 'recChallenge2',
           instruction: 'Consigne du Challenge',
@@ -241,7 +241,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         }],
       };
       databaseBuilder.factory.buildRelease({
@@ -486,7 +486,7 @@ describe('Acceptance | Controller | translations-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         }],
       };
       databaseBuilder.factory.buildRelease({
@@ -578,7 +578,7 @@ describe('Acceptance | Controller | translations-controller', () => {
             delta: 0.5,
             alpha: 0.9,
             responsive: ['Smartphone'],
-            genealogy: 'Prototype 1',
+            genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
           }],
         };
         databaseBuilder.factory.buildRelease({

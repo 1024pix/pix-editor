@@ -578,7 +578,7 @@ describe('Unit | Domain | Challenge', () => {
         embedHeight: 800,
         focusable: 'oui avec plaisir',
         format: 'a4',
-        genealogy: 'Décliné 1',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
         geography: 'Monde',
         madeObsoleteAt: new Date('2021-01-01'),
         pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,

@@ -285,17 +285,17 @@ describe('Unit | Domain | Skill', () => {
         internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
-      const perimeProto = domainBuilder.buildChallenge({ id: 'perimeProtoId', version: 3, genealogy: 'Prototype 1', status: Challenge.STATUSES.PERIME });
-      const archiveProto = domainBuilder.buildChallenge({ id: 'archiveProtoId', version: 4, genealogy: 'Prototype 1', status: Challenge.STATUSES.ARCHIVE });
-      const activeProto = domainBuilder.buildChallenge({ id: 'activeProtoId', version: 5, genealogy: 'Prototype 1', status: Challenge.STATUSES.VALIDE });
-      const decliPerimeProtoActive = domainBuilder.buildChallenge({ id: 'decliPerimeProtoActiveId', version: 5, alternativeVersion: 1, genealogy: 'Décliné 1', status: Challenge.STATUSES.PERIME });
-      const decliArchiveProtoActive = domainBuilder.buildChallenge({ id: 'decliArchiveProtoActiveId', version: 5, alternativeVersion: 2, genealogy: 'Décliné 1', status: Challenge.STATUSES.ARCHIVE });
-      const decliValide1ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide1ProtoActiveId', version: 5, alternativeVersion: null, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
-      const decliProposeProtoActive = domainBuilder.buildChallenge({ id: 'decliProposeProtoActiveId', version: 5, alternativeVersion: 4, genealogy: 'Décliné 1', status: Challenge.STATUSES.PROPOSE });
+      const perimeProto = domainBuilder.buildChallenge({ id: 'perimeProtoId', version: 3, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PERIME });
+      const archiveProto = domainBuilder.buildChallenge({ id: 'archiveProtoId', version: 4, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.ARCHIVE });
+      const activeProto = domainBuilder.buildChallenge({ id: 'activeProtoId', version: 5, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.VALIDE });
+      const decliPerimeProtoActive = domainBuilder.buildChallenge({ id: 'decliPerimeProtoActiveId', version: 5, alternativeVersion: 1, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PERIME });
+      const decliArchiveProtoActive = domainBuilder.buildChallenge({ id: 'decliArchiveProtoActiveId', version: 5, alternativeVersion: 2, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.ARCHIVE });
+      const decliValide1ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide1ProtoActiveId', version: 5, alternativeVersion: null, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.VALIDE });
+      const decliProposeProtoActive = domainBuilder.buildChallenge({ id: 'decliProposeProtoActiveId', version: 5, alternativeVersion: 4, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PROPOSE });
       const decliValide2ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide2ProtoActiveId', version: 5, alternativeVersion: 6, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
-      const proposeProto = domainBuilder.buildChallenge({ id: 'proposeProtoId', version: 7, genealogy: 'Prototype 1', status: Challenge.STATUSES.PROPOSE });
-      const decliPerimeProtoPropose = domainBuilder.buildChallenge({ id: 'decliPerimeProtoProposeId', version: 7, genealogy: 'Décliné 1', status: Challenge.STATUSES.PERIME });
-      const decliProposeProtoPropose = domainBuilder.buildChallenge({ id: 'decliProposeProtoProposeId', version: 7, genealogy: 'Décliné 1', status: Challenge.STATUSES.PROPOSE });
+      const proposeProto = domainBuilder.buildChallenge({ id: 'proposeProtoId', version: 7, genealogy: Challenge.GENEALOGIES.PROTOTYPE, status: Challenge.STATUSES.PROPOSE });
+      const decliPerimeProtoPropose = domainBuilder.buildChallenge({ id: 'decliPerimeProtoProposeId', version: 7, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PERIME });
+      const decliProposeProtoPropose = domainBuilder.buildChallenge({ id: 'decliProposeProtoProposeId', version: 7, genealogy: Challenge.GENEALOGIES.DECLINAISON, status: Challenge.STATUSES.PROPOSE });
       skillChallenges = [
         perimeProto,
         archiveProto,
@@ -348,7 +348,7 @@ describe('Unit | Domain | Skill', () => {
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 2 });
     });
   });
-  
+
   describe('#archiveSkillAndChallenges', () => {
     it('should archive skill', () => {
       // given

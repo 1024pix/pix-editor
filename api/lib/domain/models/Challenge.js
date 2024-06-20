@@ -137,6 +137,13 @@ export class Challenge {
     };
   }
 
+  static get GENEALOGIES() {
+    return {
+      PROTOTYPE: 'Protoype 1',
+      DECLINAISON: 'Décliné 1',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

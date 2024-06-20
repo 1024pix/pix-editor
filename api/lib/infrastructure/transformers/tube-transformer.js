@@ -1,7 +1,5 @@
 import { ChallengeForRelease } from '../../domain/models/release/index.js';
 
-const PROTOTYPE_CHALLENGE = 'Prototype 1';
-
 export function transform({ tubes, skills, challenges, thematics }) {
   tubes.forEach((tube) => {
     _addLinks({ tube, skills, thematics });
@@ -33,7 +31,7 @@ function _addDeviceCompliance({ tube, skills, challenges }) {
 function _filterValidatedPrototypeTubeChallenges(skills, challenges, tubeId) {
   return challenges.filter((challenge) => {
     if (challenge.status !== ChallengeForRelease.STATUSES.VALIDE) return false;
-    if (challenge.genealogy !== PROTOTYPE_CHALLENGE) return false;
+    if (challenge.genealogy !== ChallengeForRelease.GENEALOGIES.PROTOTYPE) return false;
     const skill = skills.find((skill) => skill.id === challenge.skillId);
     return skill?.tubeId === tubeId;
   });

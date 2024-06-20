@@ -25,7 +25,7 @@ export function buildChallengeForRelease({
   delta = 0.2,
   alpha = 0.5,
   responsive = 'Smartphone',
-  genealogy = 'Prototype 1',
+  genealogy = ChallengeForRelease.GENEALOGIES.PROTOTYPE,
   attachments,
   illustrationAlt = 'alt illu',
   illustrationUrl = 'url illu',

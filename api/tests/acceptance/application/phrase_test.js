@@ -184,7 +184,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },
         {
           id: 'recChallenge66',
@@ -214,7 +214,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           delta: 0.5,
           alpha: 0.9,
           responsive: ['Smartphone'],
-          genealogy: 'Décliné 1',
+          genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
         }],
       };
       databaseBuilder.factory.buildRelease({

@@ -86,7 +86,7 @@ export class Skill {
     const id = generateNewIdFnc(Skill.ID_PREFIX);
     const liveChallenges = skillChallenges.filter((ch) => [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(ch.status));
     const prototypesWithActiveFirst = liveChallenges
-      .filter((ch) => ch.genealogy === 'Prototype 1')
+      .filter((ch) => ch.genealogy === Challenge.GENEALOGIES.PROTOTYPE)
       .sort((chA, chB) => {
         if (chA.status === Challenge.STATUSES.VALIDE) return -1;
         if (chB.status === Challenge.STATUSES.VALIDE) return 1;
@@ -107,7 +107,7 @@ export class Skill {
       clonedChallenges.push(cloneProto);
       clonedAttachments.push(...cloneAttachmentsProto);
       const declinaisons = liveChallenges
-        .filter((ch) => ch.genealogy === 'Décliné 1' && ch.version === prototype.version)
+        .filter((ch) => ch.genealogy === Challenge.GENEALOGIES.DECLINAISON && ch.version === prototype.version)
         .sort((decliA, decliB) => {
           if (!decliA.alternativeVersion) return 1;
           if (!decliB.alternativeVersion) return -1;
