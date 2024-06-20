@@ -146,7 +146,7 @@ describe('Unit | Domain | Skill', () => {
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
       // when
@@ -217,7 +217,7 @@ describe('Unit | Domain | Skill', () => {
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
       // when
@@ -282,7 +282,7 @@ describe('Unit | Domain | Skill', () => {
         hint_i18n: { fr: 'mon super hint en francais' },
         tutorialIds: ['tutoABC'],
         learningMoreTutorialIds: ['tutoDEF'],
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
       });
 
       const perimeProto = domainBuilder.buildChallenge({ id: 'perimeProtoId', version: 3, genealogy: 'Prototype 1', status: Challenge.STATUSES.PERIME });

@@ -38,6 +38,10 @@ export class SkillForRelease {
     return Skill.HINT_STATUSES;
   }
 
+  static get INTERNATIONALISATIONS() {
+    return Skill.INTERNATIONALISATIONS;
+  }
+
   canExportForTranslation() {
     return this.status === SkillForRelease.STATUSES.ACTIF;
   }

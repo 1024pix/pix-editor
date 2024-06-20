@@ -55,6 +55,15 @@ export class Skill {
     };
   }
 
+  static get INTERNATIONALISATIONS() {
+    return {
+      MONDE: 'Monde',
+      FRANCE: 'France',
+      UNION_EUROPEENNE: 'Union Européenne',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'skill';
   }

@@ -13,7 +13,7 @@ export function buildSkillDatasourceObject(
     tubeId = 'recTU0X22abcdefgh',
     description = 'skill description',
     level = 5,
-    internationalisation = 'Monde',
+    internationalisation = Skill.INTERNATIONALISATIONS.MONDE,
     version = 1,
   } = {}) {
   return {

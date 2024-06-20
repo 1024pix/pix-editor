@@ -546,7 +546,7 @@ function _mockRichAirtableContent() {
     tubeId: 'tube1111',
     description: 'skill11111 description',
     level: 4,
-    internationalisation: 'skill11111 internationalisation',
+    internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
     version: 'skill11111 version',
   };
   const airtableSkill11111 = airtableBuilder.factory.buildSkill(skill11111);
@@ -562,7 +562,7 @@ function _mockRichAirtableContent() {
     tubeId: 'tube1111',
     description: 'skill11112 description',
     level: 3,
-    internationalisation: 'skill11112 internationalisation',
+    internationalisation: SkillForRelease.INTERNATIONALISATIONS.FRANCE,
     version: 'skill11112 version',
   };
   const airtableSkill11112 = airtableBuilder.factory.buildSkill(skill11112);
@@ -578,7 +578,7 @@ function _mockRichAirtableContent() {
     tubeId: 'tube1212',
     description: 'skill12121 description',
     level: 2,
-    internationalisation: 'skill12121 internationalisation',
+    internationalisation: SkillForRelease.INTERNATIONALISATIONS.UNION_EUROPEENNE,
     version: 'skill12121 version',
   };
   const airtableSkill12121 = airtableBuilder.factory.buildSkill(skill12121);
@@ -594,7 +594,7 @@ function _mockRichAirtableContent() {
     tubeId: 'tube2111',
     description: 'skill21111 description',
     level: 1,
-    internationalisation: 'skill21111 internationalisation',
+    internationalisation: SkillForRelease.INTERNATIONALISATIONS.MONDE,
     version: 'skill21111 version',
   };
   const airtableSkill21111 = airtableBuilder.factory.buildSkill(skill21111);

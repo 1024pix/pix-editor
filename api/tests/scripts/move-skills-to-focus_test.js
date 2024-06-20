@@ -156,7 +156,7 @@ describe('Script | Move skills to focus', function() {
         name: '@baseTube1',
         tutorialIds: ['monTuto1Id'],
         learningMoreTutorialIds: ['monTuto2Id'],
-        internationalisation: 'France',
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
       };
       const actifSkill = airtableBuilder.factory.buildSkill(actifSkillData);
       databaseBuilder.factory.buildTranslation({
@@ -692,7 +692,7 @@ describe('Script | Move skills to focus', function() {
         name: '@baseTube1',
         tutorialIds: ['monTuto1Id'],
         learningMoreTutorialIds: ['monTuto2Id'],
-        internationalisation: 'France',
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
         pixValue: 1,
         hint_i18n: { fr: 'hint fr', en: null },
       };

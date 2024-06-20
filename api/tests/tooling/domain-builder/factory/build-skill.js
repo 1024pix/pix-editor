@@ -16,7 +16,7 @@ export function buildSkill({
   status = 'actif',
   tubeId = 'recTU0X22abcdefgh',
   level = 5,
-  internationalisation = 'Monde',
+  internationalisation = Skill.INTERNATIONALISATIONS.MONDE,
   version = 1,
 } = {}) {
   return new Skill({

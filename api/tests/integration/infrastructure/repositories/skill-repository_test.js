@@ -27,7 +27,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: Skill.STATUSES.PERIME,
           tubeId: 'tube1',
           level: 4,
-          internationalisation: 'i18n skill1',
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           version: '1',
         }),
         airtableBuilder.factory.buildSkill({
@@ -42,7 +42,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: 'actif',
           tubeId: 'tube2',
           level: 6,
-          internationalisation: 'i18n skill2',
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
           version: '2',
         }),
       ]).activate().nockScope;
@@ -91,7 +91,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: Skill.STATUSES.PERIME,
           tubeId: 'tube1',
           level: 4,
-          internationalisation: 'i18n skill1',
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           version: '1',
         }),
         domainBuilder.buildSkill({
@@ -110,7 +110,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: 'actif',
           tubeId: 'tube2',
           level: 6,
-          internationalisation: 'i18n skill2',
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
           version: '2',
         }),
       ]);
@@ -148,7 +148,7 @@ describe('Integration | Repository | skill-repository', () => {
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: 'hint A fr', en: 'hint A en' },
       });
@@ -162,7 +162,7 @@ describe('Integration | Repository | skill-repository', () => {
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: 'hint B fr', en: 'hint B en' },
       });
@@ -186,7 +186,7 @@ describe('Integration | Repository | skill-repository', () => {
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: null, en: null },
       });
@@ -210,7 +210,7 @@ describe('Integration | Repository | skill-repository', () => {
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: null, en: null },
       });
