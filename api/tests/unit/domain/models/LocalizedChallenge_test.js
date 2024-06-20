@@ -21,6 +21,21 @@ describe('Unit | Domain | LocalizedChallenge', () => {
     });
   });
 
+  describe('#defaultEmbedUrl', () => {
+    it.fails('should compute default embed URL from primary embed URL', () => {
+      // given
+      const localizedChallenge = domainBuilder.buildLocalizedChallenge({
+        id: 'alternativeId',
+        challengeId: 'challengeId',
+        locale: 'ar',
+        primaryEmbedUrl: 'http://test.com/path/to/page.html?lang=fr',
+      });
+
+      // then
+      expect(localizedChallenge).toHaveProperty('defaultEmbedUrl', 'http://test.com/path/to/page.html?lang=ar');
+    });
+  });
+
   describe('static buildPrimary', function() {
     it('should build a primary localized challenge', function() {
       // given

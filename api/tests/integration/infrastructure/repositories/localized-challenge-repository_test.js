@@ -6,7 +6,7 @@ import { NotFoundError } from '../../../../lib/domain/errors.js';
 describe('Integration | Repository | localized-challenge-repository', function() {
 
   context('#list', function() {
-    it('should returns all localized challenges', async function() {
+    it('should return all localized challenges', async function() {
       // given
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
@@ -653,6 +653,32 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'bz',
         urlsToConsult: null,
       }));
+    });
+
+    context('when localized challenge has no embed URL', () => {
+      it.fails('should be able to auto-compute embed URL', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          embedUrl: 'http://mon-url.com/?lang=fr',
+          locale: 'fr',
+        });
+        databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: null,
+          locale: 'bz',
+        });
+        await databaseBuilder.commit();
+
+        // when
+        const localizedChallenge = await localizedChallengeRepository.get({ id });
+
+        // then
+        expect(localizedChallenge).toHaveProperty('defaultEmbedUrl', 'http://mon-url.com/?lang=bz');
+      });
     });
 
     context('when there is one attachment joined to localized challenge', () => {
