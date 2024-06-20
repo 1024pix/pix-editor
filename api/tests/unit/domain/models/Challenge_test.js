@@ -586,7 +586,7 @@ describe('Unit | Domain | Challenge', () => {
         shuffled: true,
         skillId: 'oldSkillId',
         skills: ['videz moi'],
-        spoil: 'poil de nez',
+        spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.VALIDE,
         t1Status: 'super t1',
         t2Status: 'super t2',

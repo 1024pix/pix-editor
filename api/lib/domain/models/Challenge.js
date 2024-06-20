@@ -164,6 +164,15 @@ export class Challenge {
     };
   }
 
+  static get SPOILS() {
+    return {
+      NON_SPOILABLE: 'Non Sp',
+      DIFFICILEMENT_SPOILABLE: 'Difficilement Sp',
+      FACILEMENT_SPOILABLE: 'Facilement Sp',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }
