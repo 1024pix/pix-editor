@@ -573,7 +573,7 @@ describe('Unit | Domain | Challenge', () => {
         competenceId: 'someCompetenceId',
         contextualizedFields : ['mes super contextualizedFields'],
         createdAt: new Date('2019-01-01'),
-        declinable: 'NON',
+        declinable: Challenge.DECLINABLES.NON,
         delta: 'super delta',
         embedHeight: 800,
         focusable: 'oui avec plaisir',

@@ -26,7 +26,7 @@ export function buildChallenge({
   genealogy = 'Prototype 1',
   pedagogy = Challenge.PEDAGOGIES.Q_SITUATION,
   author = ['SPS'],
-  declinable = 'facilement',
+  declinable = Challenge.DECLINABLES.FACILEMENT,
   version = 1,
   alternativeVersion = 2,
   accessibility1 = 'OK',

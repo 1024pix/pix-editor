@@ -127,6 +127,16 @@ export class Challenge {
     };
   }
 
+  static get DECLINABLES() {
+    return {
+      FACILEMENT: 'facilement',
+      DIFFICILEMENT: 'difficilement',
+      NON: 'non',
+      PERMUTATION: 'permutation',
+      NONE: '',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }
