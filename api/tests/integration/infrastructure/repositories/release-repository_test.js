@@ -6,7 +6,7 @@ import {
   getLatestRelease,
   getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
-import { Area, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
 import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function() {
@@ -621,7 +621,7 @@ function _mockRichAirtableContent() {
     airtableId: 'challenge121211',
     skills: 'challenge121211 skills',
     genealogy: 'Prototype 1',
-    pedagogy: 'challenge121211 pedagogy',
+    pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
     author: 'challenge121211 author',
     declinable: 'challenge121211 declinable',
     preview: 'challenge121211 preview',
@@ -658,7 +658,7 @@ function _mockRichAirtableContent() {
     airtableId: 'challenge121212',
     skills: 'challenge121212 skills',
     genealogy: 'Prototype 1',
-    pedagogy: 'challenge121212 pedagogy',
+    pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
     author: 'challenge121212 author',
     declinable: 'challenge121212 declinable',
     preview: 'challenge121212 preview',
@@ -696,7 +696,7 @@ function _mockRichAirtableContent() {
     airtableId: 'challenge211111',
     skills: 'challenge211111 skills',
     genealogy: 'Prototype 1',
-    pedagogy: 'challenge211111 pedagogy',
+    pedagogy: Challenge.PEDAGOGIES.E_PREUVE,
     author: 'challenge211111 author',
     declinable: 'challenge211111 declinable',
     preview: 'challenge211111 preview',
@@ -733,7 +733,7 @@ function _mockRichAirtableContent() {
     airtableId: 'challenge211112',
     skills: 'challenge211112 skills',
     genealogy: 'Prototype 1',
-    pedagogy: 'challenge211112 pedagogy',
+    pedagogy: Challenge.PEDAGOGIES.Q_SAVOIR,
     author: 'challenge211112 author',
     declinable: 'challenge211112 declinable',
     preview: 'challenge211112 preview',
@@ -770,7 +770,7 @@ function _mockRichAirtableContent() {
     airtableId: 'challenge211113',
     skills: 'challenge211113 skills',
     genealogy: 'NOT_Prototype 1',
-    pedagogy: 'challenge211113 pedagogy',
+    pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
     author: 'challenge211113 author',
     declinable: 'challenge211113 declinable',
     preview: 'challenge211113 preview',

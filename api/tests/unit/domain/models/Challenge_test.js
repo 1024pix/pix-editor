@@ -581,7 +581,7 @@ describe('Unit | Domain | Challenge', () => {
         genealogy: 'Décliné 1',
         geography: 'Monde',
         madeObsoleteAt: new Date('2021-01-01'),
-        pedagogy: 'très fort',
+        pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
         responsive: 'non pas pour mobile',
         shuffled: true,
         skillId: 'oldSkillId',

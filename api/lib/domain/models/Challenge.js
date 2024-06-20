@@ -119,6 +119,14 @@ export class Challenge {
     };
   }
 
+  static get PEDAGOGIES() {
+    return {
+      E_PREUVE: 'e-preuve',
+      Q_SAVOIR: 'q-savoir',
+      Q_SITUATION: 'q-situation',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }
