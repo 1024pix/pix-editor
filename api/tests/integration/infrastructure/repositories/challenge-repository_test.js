@@ -61,7 +61,7 @@ describe('Integration | Repository | challenge-repository', () => {
         updatedAt: null,
         madeObsoleteAt: null,
         shuffled: 'shuffled challengeA',
-        contextualizedFields: 'contextualizedFields challengeA',
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
       };
       const primaryLoc_challengeA_data = {
         embedUrl: 'embedUrl primaryloc challengeA',
@@ -156,7 +156,7 @@ describe('Integration | Repository | challenge-repository', () => {
         madeObsoleteAt: null,
         updatedAt: null,
         shuffled: 'shuffled challengeB',
-        contextualizedFields: 'contextualizedFields challengeB',
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
       };
       const primaryLoc_challengeB_data = {
         embedUrl: 'embedUrl primaryloc challengeB',
@@ -446,7 +446,7 @@ describe('Integration | Repository | challenge-repository', () => {
         author: 'MOI',
         autoReply: true,
         competenceId: 'Unused competenceId',
-        contextualizedFields: 'contextualizedFields challengeA',
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
         declinable: Challenge.DECLINABLES.FACILEMENT,
         embedHeight: 'embedHeight challengeA',
         files: [],
@@ -504,7 +504,7 @@ describe('Integration | Repository | challenge-repository', () => {
         author: 'LUI',
         autoReply: false,
         competenceId: 'Unused competenceId',
-        contextualizedFields: 'contextualizedFields challengeB',
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
         declinable: Challenge.DECLINABLES.NON,
         embedHeight: 'embedHeight challengeB',
         files: [],

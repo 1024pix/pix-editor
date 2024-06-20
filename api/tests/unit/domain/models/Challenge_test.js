@@ -571,7 +571,7 @@ describe('Unit | Domain | Challenge', () => {
         author: 'CHU',
         autoReply: 'oui c auto reply',
         competenceId: 'someCompetenceId',
-        contextualizedFields : ['mes super contextualizedFields'],
+        contextualizedFields : [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
         createdAt: new Date('2019-01-01'),
         declinable: Challenge.DECLINABLES.NON,
         delta: 'super delta',

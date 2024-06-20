@@ -195,6 +195,19 @@ export class Challenge {
     };
   }
 
+  static get CONTEXTUALIZED_FIELDS() {
+    return {
+      INSTRUCTION: 'instruction',
+      PROPOSALS: 'proposals',
+      SOLUTION: 'solution',
+      ILLUSTRATION: 'illustration',
+      EMBED: 'embed',
+      ATTACHMENTS: 'attachments',
+      SKILL_HINT: 'skillHint',
+      EXTERNAL_LINK: 'externalLink',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }

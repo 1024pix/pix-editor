@@ -147,7 +147,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'archived-at': '2023-03-03T10:47:05.555Z',
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             'shuffled': false,
-            'contextualizedFields': ['instruction', 'illustration'],
+            'contextualizedFields': [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
           },
           relationships: {
             skill: {

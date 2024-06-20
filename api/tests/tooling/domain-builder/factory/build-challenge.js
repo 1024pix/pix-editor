@@ -45,7 +45,7 @@ export function buildChallenge({
   archivedAt = '2023-03-03T10:47:05.555Z',
   madeObsoleteAt = '2023-04-04T10:47:05.555Z',
   shuffled = false,
-  contextualizedFields = ['instruction', 'illustration'],
+  contextualizedFields = [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
   skillId = 'recSkillId',
   alpha = 0.5,
   delta = 0.2,
