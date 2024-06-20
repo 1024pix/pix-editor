@@ -4,7 +4,7 @@ export function buildAreaForRelease({
   id = 'recArea1',
   name = 'nameArea1',
   code = 'codeArea1',
-  color = 'colorArea1',
+  color = AreaForRelease.COLORS.CERULEAN,
   competenceIds = ['recComp1', 'recComp2'],
   competenceAirtableIds = ['recAirComp1', 'recAirComp2'],
   frameworkId = 'recFramework1',

@@ -1,14 +1,9 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  generateAuthorizationHeader,
-  knex
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
-import { Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
 
 const {
@@ -40,7 +35,7 @@ async function mockCurrentContent() {
       },
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
-      color: 'jaffa',
+      color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
     }],
     competences: [{
@@ -342,7 +337,7 @@ async function mockContentForRelease() {
       code: '1',
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
-      color: 'jaffa',
+      color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
       title_i18n: {
         en: 'Titre du Domaine - en',

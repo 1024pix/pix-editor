@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
-import { domainBuilder, airtableBuilder } from '../../test-helper.js';
+import { airtableBuilder, domainBuilder } from '../../test-helper.js';
 import { attachmentDatasource, challengeDatasource } from '../../../lib/infrastructure/datasources/airtable/index.js';
 import { serializeEntity } from '../../../lib/infrastructure/repositories/release-repository.js';
 import { challengeRepository } from '../../../lib/infrastructure/repositories/index.js';
-import { Translation } from '../../../lib/domain/models/index.js';
+import { Area, Translation } from '../../../lib/domain/models/index.js';
 
 describe('Unit | Repository | release-repository', () => {
   describe('#serializeEntity', () => {
@@ -11,7 +11,7 @@ describe('Unit | Repository | release-repository', () => {
       const entity = airtableBuilder.factory.buildArea({
         id: '1',
         code: 1,
-        color: 'blue',
+        color: Area.COLORS.JAFFA,
         competenceIds: [],
         competenceAirtableIds: [],
         frameworkId: 'recFramework0',
@@ -38,7 +38,7 @@ describe('Unit | Repository | release-repository', () => {
       expect(updatedRecord).to.deep.equal({
         id: '1',
         code: 1,
-        color: 'blue',
+        color: Area.COLORS.JAFFA,
         name: '1. Bonjour',
         competenceIds: [],
         competenceAirtableIds: [],

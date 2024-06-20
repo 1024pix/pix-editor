@@ -1,3 +1,5 @@
+import { Area } from '../../../../../lib/domain/models/index.js';
+
 export function buildAreaDatasourceObject({
   id = 'recvoGdo7z2z7pXWa',
   code = '1',
@@ -9,7 +11,7 @@ export function buildAreaDatasourceObject({
   competenceAirtableIds = [
     'recChallenge0'
   ],
-  color = 'jaffa',
+  color = Area.COLORS.CERULEAN,
   frameworkId = 'recFramework0',
 } = {}) {
 

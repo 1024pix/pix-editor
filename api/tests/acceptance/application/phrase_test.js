@@ -7,6 +7,7 @@ import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
+import { Area } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
 
@@ -32,7 +33,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Titre du Domaine - en',
           },
           competenceIds: ['recCompetence0'],
-          color: 'jaffa',
+          color: Area.COLORS.JAFFA,
           frameworkId: 'recFramework0',
         },
         {
@@ -44,7 +45,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Titre du Domaine Pix+ - en',
           },
           competenceIds: ['recCompetence1'],
-          color: 'jaffa',
+          color: Area.COLORS.NONE,
           frameworkId: 'recFramework1',
         }],
         competences: [{

@@ -1,12 +1,12 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import { databaseBuilder, knex, domainBuilder, airtableBuilder } from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import {
   create,
+  getCurrentContent,
   getLatestRelease,
-  getRelease,
-  getCurrentContent
+  getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
-import { Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Mission } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -373,7 +373,7 @@ function _mockRichAirtableContent() {
     competenceAirtableIds: ['competence11', 'competence12'],
     code: '1',
     name: 'area1 name',
-    color: 'area1 color',
+    color: Area.COLORS.JAFFA,
     frameworkId: 'frameworkA',
   };
   const airtableArea1 = airtableBuilder.factory.buildArea(area1);
@@ -383,7 +383,7 @@ function _mockRichAirtableContent() {
     competenceAirtableIds: ['competence21'],
     code: '2',
     name: 'area2 name',
-    color: 'area2 color',
+    color: Area.COLORS.EMERALD,
     frameworkId: 'frameworkA',
   };
   const airtableArea2 = airtableBuilder.factory.buildArea(area2);
@@ -880,7 +880,7 @@ function _getRichCurrentContentDTO() {
     },
     code: '1',
     name: '1. area1 titleFrFr',
-    color: 'area1 color',
+    color: Area.COLORS.JAFFA,
     frameworkId: 'frameworkA',
   }, {
     id: 'area2',
@@ -896,7 +896,7 @@ function _getRichCurrentContentDTO() {
     },
     code: '2',
     name: '2. area2 titleFrFr',
-    color: 'area2 color',
+    color: Area.COLORS.EMERALD,
     frameworkId: 'frameworkA',
   }];
   const expectedCompetenceDTOs = [

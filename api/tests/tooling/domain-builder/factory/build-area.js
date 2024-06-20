@@ -3,7 +3,7 @@ import { Area } from '../../../../lib/domain/models/index.js';
 export function buildArea({
   id = 'recArea1',
   code = '1',
-  color = 'colorArea1',
+  color = Area.COLORS.CERULEAN,
   competenceIds = ['recComp1', 'recComp2'],
   competenceAirtableIds = ['recAirComp1', 'recAirComp2'],
   frameworkId = 'recFramework1',

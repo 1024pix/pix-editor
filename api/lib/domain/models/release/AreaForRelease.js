@@ -1,3 +1,5 @@
+import { Area } from '../Area.js';
+
 export class AreaForRelease {
   constructor({
     id,
@@ -17,5 +19,9 @@ export class AreaForRelease {
     this.competenceAirtableIds = competenceAirtableIds;
     this.color = color;
     this.frameworkId = frameworkId;
+  }
+
+  static get COLORS() {
+    return Area.COLORS;
   }
 }
