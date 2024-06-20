@@ -4,7 +4,7 @@ export function buildTutorialForRelease(
   {
     id = 'receomyzL0AmpMFGw',
     duration = '00:03:31',
-    format = 'vidéo',
+    format = TutorialForRelease.FORMATS.VIDEO,
     link = 'http://www.example.com/this-is-an-example.html',
     source = 'Source Example, Example',
     title = 'Communiquer',

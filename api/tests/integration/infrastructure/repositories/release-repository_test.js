@@ -7,7 +7,7 @@ import {
   getRelease
 } from '../../../../lib/infrastructure/repositories/release-repository.js';
 import { Area, Challenge, LocalizedChallenge, Mission } from '../../../../lib/domain/models/index.js';
-import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/models/release/index.js';
+import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | release-repository', function() {
   describe('#create', function() {
@@ -791,7 +791,7 @@ function _mockRichAirtableContent() {
   const airtableTutorial1 = airtableBuilder.factory.buildTutorial({
     id: 'tutorial1',
     title: 'tutorial1 title',
-    format: 'tutorial1 format',
+    format: TutorialForRelease.FORMATS.IMAGE,
     duration: 'tutorial1 duration',
     source: 'tutorial1 source',
     link: 'tutorial1 link',
@@ -802,7 +802,7 @@ function _mockRichAirtableContent() {
   const airtableTutorial2 = airtableBuilder.factory.buildTutorial({
     id: 'tutorial2',
     title: 'tutorial2 title',
-    format: 'tutorial2 format',
+    format: TutorialForRelease.FORMATS.VIDEO,
     duration: 'tutorial2 duration',
     source: 'tutorial2 source',
     link: 'tutorial2 link',
@@ -1376,7 +1376,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tutorial1',
       title: 'tutorial1 title',
-      format: 'tutorial1 format',
+      format: TutorialForRelease.FORMATS.IMAGE,
       duration: 'tutorial1 duration',
       source: 'tutorial1 source',
       link: 'tutorial1 link',
@@ -1385,7 +1385,7 @@ function _getRichCurrentContentDTO() {
     {
       id: 'tutorial2',
       title: 'tutorial2 title',
-      format: 'tutorial2 format',
+      format: TutorialForRelease.FORMATS.VIDEO,
       duration: 'tutorial2 duration',
       source: 'tutorial2 source',
       link: 'tutorial2 link',

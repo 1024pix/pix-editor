@@ -5,7 +5,7 @@ import { createServer } from '../../../../server.js';
 import axios from 'axios';
 import { Area, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
-import { ChallengeForRelease, SkillForRelease } from '../../../../lib/domain/models/release/index.js';
+import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 const {
   buildArea,
@@ -138,7 +138,7 @@ async function mockCurrentContent() {
     tutorials: [{
       id: 'recTutorial0',
       duration: 'Durée du Tutoriel',
-      format: 'Format du Tutoriel',
+      format: TutorialForRelease.FORMATS.FRISE,
       link: 'Lien du Tutoriel',
       source: 'Source du Tutoriel',
       title: 'Titre du Tutoriel',
@@ -445,7 +445,7 @@ async function mockContentForRelease() {
     tutorials: [{
       id: 'recTutorial0',
       duration: 'Durée du Tutoriel',
-      format: 'Format du Tutoriel',
+      format: TutorialForRelease.FORMATS.VIDEO,
       link: 'Lien du Tutoriel',
       source: 'Source du Tutoriel',
       title: 'Titre du Tutoriel',
