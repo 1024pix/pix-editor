@@ -40,8 +40,14 @@ export class LocalizedChallenge {
 
   get defaultEmbedUrl() {
     if (!this.#primaryEmbedUrl) return null;
+
     const url = new URL(this.#primaryEmbedUrl);
-    url.searchParams.set('lang', this.locale);
+    if (hasLocaleInFirstPathSegment(url)) {
+      url.pathname = url.pathname.split('/').with(1, this.locale).join('/');
+    } else {
+      url.searchParams.set('lang', this.locale);
+    }
+
     return url.href;
   }
 
@@ -100,5 +106,19 @@ export class LocalizedChallenge {
       clonedLocalizedChallenge,
       clonedAttachments,
     };
+  }
+}
+
+function hasLocaleInFirstPathSegment(url) {
+  if (url.searchParams.has('lang')) return false;
+  return isLocale(url.pathname.split('/')[1]);
+}
+
+function isLocale(s) {
+  try {
+    new Intl.Locale(s);
+    return true;
+  } catch {
+    return false;
   }
 }
