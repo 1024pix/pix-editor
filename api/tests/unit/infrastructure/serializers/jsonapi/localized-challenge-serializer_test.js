@@ -114,7 +114,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
   });
 
   describe('#serialize', () => {
-    it.fails('should serialize a localized challenge with its attachments', async () => {
+    it('should serialize a localized challenge with its attachments', async () => {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         locale: 'en',

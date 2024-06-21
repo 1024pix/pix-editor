@@ -4,7 +4,7 @@ import { createServer } from '../../../server.js';
 
 describe('Acceptance | Controller | localized-challenges-controller', () => {
   describe('GET /localized-challenges/{id}', () => {
-    it.fails('should get a localized challenge by ID', async () => {
+    it('should get a localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -70,7 +70,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
   });
 
   describe('GET /localized-challenges', () => {
-    it.fails('should filter one localized challenge by ID', async () => {
+    it('should filter one localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -130,7 +130,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       expect(response.result).to.deep.equal(expectedLocalizedChallenges);
     });
 
-    it.fails('should filter several localized challenges by IDs', async () => {
+    it('should filter several localized challenges by IDs', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
 
