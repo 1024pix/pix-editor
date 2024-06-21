@@ -251,12 +251,13 @@ describe('Unit | Domain | Challenge', () => {
       const challengeId = 'challengeId';
       const dutchChallengeId = 'challengeIdNl';
       const englishChallengeId = 'challengeIdEn';
+      const primaryEmbedUrl = 'https://example.com/index.html?lang=fr&mode=example';
 
       const frenchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: challengeId,
         challengeId,
         locale: 'fr',
-        embedUrl: 'https://example.com/index.html?lang=fr&mode=example',
+        embedUrl: primaryEmbedUrl,
         geography: 'FR',
       });
       const dutchLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -264,6 +265,7 @@ describe('Unit | Domain | Challenge', () => {
         challengeId,
         locale: 'nl',
         embedUrl: 'https://example.nl/index.html?mode=example',
+        primaryEmbedUrl,
         status: 'proposé',
         geography: 'NL',
       });
@@ -272,6 +274,7 @@ describe('Unit | Domain | Challenge', () => {
         challengeId,
         locale: 'en',
         embedUrl: null,
+        primaryEmbedUrl,
         status: 'validé',
         geography: null,
       });
