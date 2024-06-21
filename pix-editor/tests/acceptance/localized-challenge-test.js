@@ -15,7 +15,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
 
     this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1',  embedURL: 'https://mon-site.fr/my-link.html?lang=fr' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
-    this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl' });
+    this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
