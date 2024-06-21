@@ -2,7 +2,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
-import * as storage from '../../../../lib/infrastructure/utils/storage.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
 
@@ -440,19 +439,12 @@ describe('Integration | Repository | attachment-repository', () => {
           expect.unreachable('Wrong challenge ids for fetching corresponding airtable ids');
         return airtableIdsByIds;
       });
-      vi.spyOn(storage, 'cloneAttachmentsFileInBucket')
-        .mockImplementation(({ attachments }) => {
-          if (attachments.length !== 2 || attachments[0] !== attachmentA || attachments[1] !== attachmentB)
-            expect.unreachable('Wrong attachments sent for cloning');
-          attachments[0].url = 'cloned/url/attachmentA';
-          attachments[1].url = 'cloned/url/attachmentB';
-        });
       vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
         if (
           airtableRequestBodies.length !== 2
           || !_.isEqual(airtableRequestBodies[0], { fields: {
-            url: 'cloned/url/attachmentA',
+            url: attachmentA.url,
             size: attachmentA.size,
             type: attachmentA.type,
             mimeType: attachmentA.mimeType,
@@ -461,7 +453,7 @@ describe('Integration | Repository | attachment-repository', () => {
             localizedChallengeId: attachmentA.localizedChallengeId,
           } })
           || !_.isEqual(airtableRequestBodies[1], { fields: {
-            url: 'cloned/url/attachmentB',
+            url: attachmentB.url,
             size: attachmentB.size,
             type: attachmentB.type,
             mimeType: attachmentB.mimeType,
@@ -475,7 +467,7 @@ describe('Integration | Repository | attachment-repository', () => {
             id: 'airtableIdAttachmentA',
             fields: {
               'Record ID': 'airtableIdAttachmentA',
-              url: 'cloned/url/attachmentA',
+              url: attachmentA.url,
               size: attachmentA.size,
               type: attachmentA.type,
               mimeType: attachmentA.mimeType,
@@ -489,7 +481,7 @@ describe('Integration | Repository | attachment-repository', () => {
             id: 'airtableIdAttachmentB',
             fields: {
               'Record ID': 'airtableIdAttachmentB',
-              url: 'cloned/url/attachmentB',
+              url: attachmentB.url,
               size: attachmentB.size,
               type: attachmentB.type,
               mimeType: attachmentB.mimeType,
@@ -509,7 +501,7 @@ describe('Integration | Repository | attachment-repository', () => {
       expect(attachments).toStrictEqual([
         domainBuilder.buildAttachment({
           id: 'airtableIdAttachmentA',
-          url: 'cloned/url/attachmentA',
+          url: attachmentA.url,
           type: attachmentA.type,
           alt: 'good illustrationAlt',
           size: attachmentA.size,
@@ -520,7 +512,7 @@ describe('Integration | Repository | attachment-repository', () => {
         }),
         domainBuilder.buildAttachment({
           id: 'airtableIdAttachmentB',
-          url: 'cloned/url/attachmentB',
+          url: attachmentB.url,
           type: attachmentB.type,
           alt: null,
           size: attachmentB.size,

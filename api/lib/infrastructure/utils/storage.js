@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as config from '../../config.js';
 import { fileStorageTokenRepository } from '../repositories/index.js';
 
+// todo fix timestamp bug on batch creation
 export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTimestamp }) {
   return _callAPIWithRetry(async (token) => {
     const fnc = async (attachment) => {
