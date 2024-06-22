@@ -254,6 +254,64 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isPrototype', () => {
+    it('should return true when challenge is prototype', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.GENEALOGIES).filter((genealogyKey) => Challenge.GENEALOGIES[genealogyKey] !== Challenge.GENEALOGIES.PROTOTYPE)
+    )('should return false when genealogy key is %s', (genealogyKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES[genealogyKey],
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.false;
+    });
+  });
+
+  describe('#get isDeclinaison', () => {
+    it('should return true when challenge is declinaison', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+
+      // when
+      const isDeclinaison = challenge.isDeclinaison;
+
+      // then
+      expect(isDeclinaison).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.GENEALOGIES).filter((genealogyKey) => Challenge.GENEALOGIES[genealogyKey] !== Challenge.GENEALOGIES.DECLINAISON)
+    )('should return false when genealogy key is %s', (genealogyKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES[genealogyKey],
+      });
+
+      // when
+      const isDeclinaison = challenge.isDeclinaison;
+
+      // then
+      expect(isDeclinaison).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given

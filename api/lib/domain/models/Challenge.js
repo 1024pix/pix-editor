@@ -237,6 +237,14 @@ export class Challenge {
     return [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(this.status);
   }
 
+  get isPrototype() {
+    return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
+  }
+
+  get isDeclinaison() {
+    return this.genealogy === Challenge.GENEALOGIES.DECLINAISON;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
