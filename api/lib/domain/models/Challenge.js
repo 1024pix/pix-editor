@@ -425,7 +425,7 @@ export class Challenge {
 
   #translateStatus(localizedChallenge) {
     if (this.isPrimary) return this.#primaryStatus;
-    if ([Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY) {
+    if (this.isPropose || this.isPerime || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY) {
       return this.status;
     }
     return localizedChallenge.status;
