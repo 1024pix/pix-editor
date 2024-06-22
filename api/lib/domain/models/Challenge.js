@@ -233,6 +233,10 @@ export class Challenge {
     return this.status === Challenge.STATUSES.PERIME;
   }
 
+  get isLive() {
+    return [Challenge.STATUSES.PROPOSE, Challenge.STATUSES.VALIDE].includes(this.status);
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }

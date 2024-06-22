@@ -212,6 +212,48 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isLive', () => {
+    it('should return true when challenge is valide', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.VALIDE,
+      });
+
+      // when
+      const isLive = challenge.isLive;
+
+      // then
+      expect(isLive).to.be.true;
+    });
+
+    it('should return true when challenge is propose', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.PROPOSE,
+      });
+
+      // when
+      const isLive = challenge.isLive;
+
+      // then
+      expect(isLive).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => ![Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE].includes(Challenge.STATUSES[statusKey]))
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isLive = challenge.isLive;
+
+      // then
+      expect(isLive).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given
