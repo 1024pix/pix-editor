@@ -1,5 +1,3 @@
-import { Challenge } from './Challenge.js';
-
 export class Skill {
   constructor({
     id,
@@ -88,8 +86,8 @@ export class Skill {
     const prototypesWithActiveFirst = liveChallenges
       .filter((ch) => ch.isPrototype)
       .sort((chA, chB) => {
-        if (chA.status === Challenge.STATUSES.VALIDE) return -1;
-        if (chB.status === Challenge.STATUSES.VALIDE) return 1;
+        if (chA.isValide) return -1;
+        if (chB.isValide) return 1;
         return 0;
       });
     const clonedChallenges = [];

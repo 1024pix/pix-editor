@@ -66,4 +66,33 @@ describe('Unit | Domain | ChallengeForRelease', () => {
       expect(actual).to.equal(expectedIsOperative);
     });
   });
+
+  describe('#get isValide', () => {
+    it('should return true when challenge is valide', () => {
+      // given
+      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+        status: ChallengeForRelease.STATUSES.VALIDE,
+      });
+
+      // when
+      const isValide = challengeForRelease.isValide;
+
+      // then
+      expect(isValide).to.be.true;
+    });
+
+    it.each(Object.keys(ChallengeForRelease.STATUSES).filter((statusKey) => ChallengeForRelease.STATUSES[statusKey] !== ChallengeForRelease.STATUSES.VALIDE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challengeForRelease  = domainBuilder.buildChallengeForRelease({
+        status: ChallengeForRelease.STATUSES[statusKey],
+      });
+
+      // when
+      const isValide = challengeForRelease.isValide;
+
+      // then
+      expect(isValide).to.be.false;
+    });
+  });
 });
