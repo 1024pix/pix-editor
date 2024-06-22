@@ -290,6 +290,12 @@ export class Challenge {
     return cloneSource.get(clonedChallenge);
   }
 
+  isDeclinaisonOf(otherChallenge) {
+    if (!otherChallenge.isPrototype) return false;
+    if (!this.isDeclinaison) return false;
+    return otherChallenge.version === this.version;
+  }
+
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
     const clonedAttachments = [];

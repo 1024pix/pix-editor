@@ -107,7 +107,7 @@ export class Skill {
       clonedChallenges.push(cloneProto);
       clonedAttachments.push(...cloneAttachmentsProto);
       const declinaisons = liveChallenges
-        .filter((ch) => ch.isDeclinaison && ch.version === prototype.version)
+        .filter((ch) => ch.isDeclinaisonOf(prototype))
         .sort((decliA, decliB) => {
           if (!decliA.alternativeVersion) return 1;
           if (!decliB.alternativeVersion) return -1;

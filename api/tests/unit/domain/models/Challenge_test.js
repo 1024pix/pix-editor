@@ -626,6 +626,80 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#isDeclinaisonOf', ()=> {
+    it('should return false when other challenge is not a prototype', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+      const otherChallenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+
+      // when
+      const isDeclinaisonOf = challenge.isDeclinaisonOf(otherChallenge);
+
+      // then
+      expect(isDeclinaisonOf).to.be.false;
+    });
+
+    it('should return false when challenge is not a declinaison', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+      const otherChallenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isDeclinaisonOf = challenge.isDeclinaisonOf(otherChallenge);
+
+      // then
+      expect(isDeclinaisonOf).to.be.false;
+    });
+
+    it('should return false when challenges are not in the same prototype version', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+      const otherChallenge = domainBuilder.buildChallenge({
+        version: 2,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isDeclinaisonOf = challenge.isDeclinaisonOf(otherChallenge);
+
+      // then
+      expect(isDeclinaisonOf).to.be.false;
+    });
+
+    it('should return true when all conditions are met', () => {
+      // given
+      const challenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      });
+      const otherChallenge = domainBuilder.buildChallenge({
+        version: 1,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isDeclinaisonOf = challenge.isDeclinaisonOf(otherChallenge);
+
+      // then
+      expect(isDeclinaisonOf).to.be.true;
+    });
+  });
+
   describe('#cloneChallengeAndAttachments', ()=> {
     it('should clone challenge (no translations yet)', () => {
       // given
