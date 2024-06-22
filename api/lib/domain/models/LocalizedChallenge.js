@@ -39,6 +39,10 @@ export class LocalizedChallenge {
     return this.id === this.challengeId;
   }
 
+  get isPlay() {
+    return this.status === LocalizedChallenge.STATUSES.PLAY;
+  }
+
   get defaultEmbedUrl() {
     if (!this.#primaryEmbedUrl) return null;
 

@@ -3,7 +3,7 @@ import { domainBuilder } from '../../../tooling/domain-builder/domain-builder.js
 import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | LocalizedChallenge', () => {
-  describe('#isPrimary', () => {
+  describe('#get isPrimary', () => {
     it('should return true if id is the same as challengeId, false otherwise', () => {
       // given
       const primaryLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -18,6 +18,35 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       // then
       expect(primaryLocalizedChallenge.isPrimary).toBe(true);
       expect(alternativeLocalizedChallenge.isPrimary).toBe(false);
+    });
+  });
+
+  describe('#get isPlay', () => {
+    it('should return true when localized challenge is play', () => {
+      // given
+      const localizedChallenge  = domainBuilder.buildLocalizedChallenge({
+        status: LocalizedChallenge.STATUSES.PLAY,
+      });
+
+      // when
+      const isPlay = localizedChallenge.isPlay;
+
+      // then
+      expect(isPlay).to.be.true;
+    });
+
+    it.each(Object.keys(LocalizedChallenge.STATUSES).filter((statusKey) => LocalizedChallenge.STATUSES[statusKey] !== LocalizedChallenge.STATUSES.PLAY)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const localizedChallenge  = domainBuilder.buildLocalizedChallenge({
+        genealogy: LocalizedChallenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPlay = localizedChallenge.isPlay;
+
+      // then
+      expect(isPlay).to.be.false;
     });
   });
 
