@@ -84,7 +84,13 @@ export class Skill {
       });
       clonedChallenges.push(cloneProto);
       clonedAttachments.push(...cloneAttachmentsProto);
-      const declinaisons = liveChallenges.filter((ch) => ch.genealogy === 'Décliné 1' && ch.version === prototype.version);
+      const declinaisons = liveChallenges
+        .filter((ch) => ch.genealogy === 'Décliné 1' && ch.version === prototype.version)
+        .sort((decliA, decliB) => {
+          if (!decliA.alternativeVersion) return 1;
+          if (!decliB.alternativeVersion) return -1;
+          return decliA.alternativeVersion - decliB.alternativeVersion;
+        });
       let alternativeVersion = 1;
       for (const declinaison of declinaisons) {
         const { clonedChallenge: cloneDecli, clonedAttachments: cloneAttachmentsDecli } = declinaison.cloneChallengeAndAttachments({
@@ -92,7 +98,7 @@ export class Skill {
           competenceId: tubeDestination.competenceId,
           generateNewIdFnc,
           prototypeVersion,
-          alternativeVersion: alternativeVersion,
+          alternativeVersion,
           attachments,
         });
         clonedChallenges.push(cloneDecli);

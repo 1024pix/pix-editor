@@ -261,7 +261,6 @@ describe('Unit | Domain | Skill', () => {
       expect(clonedSkill.learningMoreTutorialIds).toEqual(skillToClone.learningMoreTutorialIds);
       expect(clonedSkill.internationalisation).toEqual(skillToClone.internationalisation);
     });
-
     it('should handle reversioning of all challenges', () => {
       // given
       const tubeSkills = [
@@ -291,8 +290,9 @@ describe('Unit | Domain | Skill', () => {
       const activeProto = domainBuilder.buildChallenge({ id: 'activeProtoId', version: 5, genealogy: 'Prototype 1', status: Challenge.STATUSES.VALIDE });
       const decliPerimeProtoActive = domainBuilder.buildChallenge({ id: 'decliPerimeProtoActiveId', version: 5, alternativeVersion: 1, genealogy: 'Décliné 1', status: Challenge.STATUSES.PERIME });
       const decliArchiveProtoActive = domainBuilder.buildChallenge({ id: 'decliArchiveProtoActiveId', version: 5, alternativeVersion: 2, genealogy: 'Décliné 1', status: Challenge.STATUSES.ARCHIVE });
-      const decliValideProtoActive = domainBuilder.buildChallenge({ id: 'decliValideProtoActiveId', version: 5, alternativeVersion: 3, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
+      const decliValide1ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide1ProtoActiveId', version: 5, alternativeVersion: null, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
       const decliProposeProtoActive = domainBuilder.buildChallenge({ id: 'decliProposeProtoActiveId', version: 5, alternativeVersion: 4, genealogy: 'Décliné 1', status: Challenge.STATUSES.PROPOSE });
+      const decliValide2ProtoActive = domainBuilder.buildChallenge({ id: 'decliValide2ProtoActiveId', version: 5, alternativeVersion: 6, genealogy: 'Décliné 1', status: Challenge.STATUSES.VALIDE });
       const proposeProto = domainBuilder.buildChallenge({ id: 'proposeProtoId', version: 7, genealogy: 'Prototype 1', status: Challenge.STATUSES.PROPOSE });
       const decliPerimeProtoPropose = domainBuilder.buildChallenge({ id: 'decliPerimeProtoProposeId', version: 7, genealogy: 'Décliné 1', status: Challenge.STATUSES.PERIME });
       const decliProposeProtoPropose = domainBuilder.buildChallenge({ id: 'decliProposeProtoProposeId', version: 7, genealogy: 'Décliné 1', status: Challenge.STATUSES.PROPOSE });
@@ -300,10 +300,11 @@ describe('Unit | Domain | Skill', () => {
         perimeProto,
         archiveProto,
         activeProto,
+        decliValide2ProtoActive,
         decliPerimeProtoActive,
         decliArchiveProtoActive,
-        decliValideProtoActive,
         decliProposeProtoActive,
+        decliValide1ProtoActive,
         proposeProto,
         decliPerimeProtoPropose,
         decliProposeProtoPropose,
@@ -326,8 +327,8 @@ describe('Unit | Domain | Skill', () => {
       });
 
       // then
-      expect(clonedAttachments).toEqual(['activeProtoId_attachment', 'decliValideProtoActiveId_attachment', 'decliProposeProtoActiveId_attachment', 'proposeProtoId_attachment', 'decliProposeProtoProposeId_attachment']);
-      expect(clonedChallenges).toEqual(['activeProtoId', 'decliValideProtoActiveId', 'decliProposeProtoActiveId', 'proposeProtoId', 'decliProposeProtoProposeId']);
+      expect(clonedAttachments).toEqual(['activeProtoId_attachment', 'decliProposeProtoActiveId_attachment', 'decliValide2ProtoActiveId_attachment', 'decliValide1ProtoActiveId_attachment', 'proposeProtoId_attachment', 'decliProposeProtoProposeId_attachment']);
+      expect(clonedChallenges).toEqual(['activeProtoId', 'decliProposeProtoActiveId', 'decliValide2ProtoActiveId', 'decliValide1ProtoActiveId', 'proposeProtoId', 'decliProposeProtoProposeId']);
       expect(spies[perimeProto.id]).toHaveBeenCalledTimes(0);
       expect(spies[archiveProto.id]).toHaveBeenCalledTimes(0);
       expect(spies[decliPerimeProtoActive.id]).toHaveBeenCalledTimes(0);
@@ -335,16 +336,19 @@ describe('Unit | Domain | Skill', () => {
       expect(spies[decliPerimeProtoPropose.id]).toHaveBeenCalledTimes(0);
       expect(spies[activeProto.id]).toHaveBeenCalledTimes(1);
       expect(spies[activeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 1 });
-      expect(spies[decliValideProtoActive.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliValideProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 1 });
+      expect(spies[decliValide1ProtoActive.id]).toHaveBeenCalledTimes(1);
+      expect(spies[decliValide1ProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 3, prototypeVersion: 1 });
+      expect(spies[decliValide2ProtoActive.id]).toHaveBeenCalledTimes(1);
+      expect(spies[decliValide2ProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 2, prototypeVersion: 1 });
       expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledTimes(1);
-      expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 2, prototypeVersion: 1 });
+      expect(spies[decliProposeProtoActive.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 1 });
       expect(spies[proposeProto.id]).toHaveBeenCalledTimes(1);
       expect(spies[proposeProto.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: null, prototypeVersion: 2 });
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledTimes(1);
       expect(spies[decliProposeProtoPropose.id]).toHaveBeenCalledWith({ skillId: clonedSkillId, competenceId: tubeDestination.competenceId, generateNewIdFnc, alternativeVersion: 1, prototypeVersion: 2 });
     });
   });
+  
   describe('#archiveSkillAndChallenges', () => {
     it('should archive skill', () => {
       // given
