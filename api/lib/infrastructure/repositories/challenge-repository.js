@@ -48,6 +48,13 @@ export async function list() {
   return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
+export async function getMany(ids) {
+  const challengeDTOs = await challengeDatasource.filter({ filter: { ids } });
+  if (!challengeDTOs) return [];
+  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
+  return toDomainList(challengeDTOs, translations, localizedChallenges);
+}
+
 export async function filter(params = {}) {
   const challengeDtos = await _getChallengesFromParams(params);
   const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos);
