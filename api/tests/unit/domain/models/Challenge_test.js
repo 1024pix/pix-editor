@@ -884,4 +884,54 @@ describe('Unit | Domain | Challenge', () => {
       expect(challengeToArchive).toStrictEqual(expectedUnchangedChallenge);
     });
   });
+
+  describe('#obsolete', () => {
+    const now = new Date('2021-10-29T03:03:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should left the challenge unchanged when is already obsolete', () => {
+      // given
+      const obsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z'),
+        status: Challenge.STATUSES.PERIME,
+      });
+
+      // when
+      obsoleteChallenge.obsolete();
+
+      // then
+      const expectedObsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z'),
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(obsoleteChallenge).toStrictEqual(expectedObsoleteChallenge);
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES.PERIME !== Challenge.STATUSES[statusKey])
+    )('should do nothing when statusKey is %s', (statusKey) => {
+      // given
+      const challengeToPerime = domainBuilder.buildChallenge({
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      challengeToPerime.obsolete();
+
+      // then
+      const expectedObsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: now,
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(challengeToPerime).toStrictEqual(expectedObsoleteChallenge);
+    });
+  });
 });

@@ -253,6 +253,13 @@ export class Challenge {
     }
   }
 
+  obsolete() {
+    if (!this.isPerime) {
+      this.status = Challenge.STATUSES.PERIME;
+      this.madeObsoleteAt = new Date();
+    }
+  }
+
   translate(locale) {
     const challenge = new Challenge({
       ...this,
