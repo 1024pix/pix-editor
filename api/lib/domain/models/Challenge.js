@@ -118,6 +118,14 @@ export class Challenge {
     return this.status === Challenge.STATUSES.VALIDE;
   }
 
+  get isArchive() {
+    return this.status === Challenge.STATUSES.ARCHIVE;
+  }
+
+  get isPerime() {
+    return this.status === Challenge.STATUSES.PERIME;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }

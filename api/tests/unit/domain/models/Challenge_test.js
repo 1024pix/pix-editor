@@ -124,6 +124,35 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isArchive', () => {
+    it('should return true when challenge is archive', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+
+      // when
+      const isArchive = challenge.isArchive;
+
+      // then
+      expect(isArchive).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.ARCHIVE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isArchive = challenge.isArchive;
+
+      // then
+      expect(isArchive).to.be.false;
+    });
+  });
+
   describe('#get isValide', () => {
     it('should return true when challenge is valide', () => {
       // given
@@ -150,6 +179,35 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       expect(isValide).to.be.false;
+    });
+  });
+
+  describe('#get isPerime', () => {
+    it('should return true when challenge is perime', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.PERIME,
+      });
+
+      // when
+      const isPerime = challenge.isPerime;
+
+      // then
+      expect(isPerime).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PERIME)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPerime = challenge.isPerime;
+
+      // then
+      expect(isPerime).to.be.false;
     });
   });
 
