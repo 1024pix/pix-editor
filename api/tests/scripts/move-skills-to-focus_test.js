@@ -221,8 +221,10 @@ describe('Script | Move skills to focus', function() {
         {
           id: expect.any(Number),
           persistantId: 'skillNewId',
+          originPersistantId: 'actifSkillId',
           type: 'skill',
           createdAt: expect.anything(),
+          scriptExectId: expect.anything(),
         },
       ]);
     });
@@ -643,26 +645,34 @@ describe('Script | Move skills to focus', function() {
         {
           id: expect.any(Number),
           persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+          originPersistantId: 'proposeDecliValideProtoForActifSkillId',
           type: 'challenge',
           createdAt: expect.anything(),
+          scriptExectId: expect.anything(),
         },
         {
           id: expect.any(Number),
           persistantId: 'valideDecliValideProtoForActifSkillNewId',
+          originPersistantId: 'valideDecliValideProtoForActifSkillId',
           type: 'challenge',
           createdAt: expect.anything(),
+          scriptExectId: expect.anything(),
         },
         {
           id: expect.any(Number),
           persistantId: 'valideProtoForActifSkillNewId',
+          originPersistantId: 'valideProtoForActifSkillId',
           type: 'challenge',
           createdAt: expect.anything(),
+          scriptExectId: expect.anything(),
         },
         {
           id: expect.any(Number),
           persistantId: 'skillNewId',
+          originPersistantId: 'actifSkillId',
           type: 'skill',
           createdAt: expect.anything(),
+          scriptExectId: expect.anything(),
         },
       ]);
     });
@@ -819,7 +829,7 @@ describe('Script | Move skills to focus', function() {
     describe('historic line', () => {
       let actifSkillData;
       const clonedSkillId = 'skillNewId';
-      const clonedChallengeIds = ['valideProtoForActifSkillNewId', 'valideDecliValideProtoForActifSkillNewId', 'proposeDecliValideProtoForActifSkillNewId'];
+      const clonedChallengeIds = ['valideProtoForActifSkillNewId', 'proposeDecliValideProtoForActifSkillNewId', 'valideDecliValideProtoForActifSkillNewId'];
       const clonedLocalizedChallengeId = 'valideProtoForActifSkillNLNewId';
 
       beforeEach(async () => {
@@ -1011,6 +1021,7 @@ describe('Script | Move skills to focus', function() {
             details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.',
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1036,6 +1047,7 @@ describe('Script | Move skills to focus', function() {
             details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.',
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1061,6 +1073,7 @@ describe('Script | Move skills to focus', function() {
           translations avec le pattern "skill.${clonedSkillId}%" sur PG`,
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1089,6 +1102,7 @@ describe('Script | Move skills to focus', function() {
           localizedChallenges dont les challengeIds sont ${clonedChallengeIds[0]}, ${clonedChallengeIds[1]}, ${clonedChallengeIds[2]} sur PG`,
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1123,6 +1137,7 @@ describe('Script | Move skills to focus', function() {
           `,
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1146,6 +1161,7 @@ describe('Script | Move skills to focus', function() {
             details: 'Erreur lors de l\'archivage de l\'acquis. A priori les clones sont sains. On peut envisager d\'archiver l\'acquis à la main sur Airtable et ses épreuves (status + dates le cas échéant)',
             createdAt: expect.anything(),
             dryRun: false,
+            scriptExectId: expect.anything(),
           },
         ]);
         const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
@@ -1153,25 +1169,33 @@ describe('Script | Move skills to focus', function() {
           {
             id: expect.any(Number),
             persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+            originPersistantId: 'proposeDecliValideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'valideDecliValideProtoForActifSkillNewId',
+            originPersistantId: 'valideDecliValideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'valideProtoForActifSkillNewId',
+            originPersistantId: 'valideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'skillNewId',
+            originPersistantId: 'actifSkillId',
             type: 'skill',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
         ]);
@@ -1192,6 +1216,7 @@ describe('Script | Move skills to focus', function() {
             persistantId: actifSkillData.id,
             errorStr: expect.any(String),
             details: 'Erreur lors de l\'archivage en masse des épreuves. A priori les clones sont sains. On peut envisager de finir l\'archivage des épreuves à la main sur Airtable',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
             dryRun: false,
           },
@@ -1201,25 +1226,33 @@ describe('Script | Move skills to focus', function() {
           {
             id: expect.any(Number),
             persistantId: 'proposeDecliValideProtoForActifSkillNewId',
+            originPersistantId: 'proposeDecliValideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'valideDecliValideProtoForActifSkillNewId',
+            originPersistantId: 'valideDecliValideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'valideProtoForActifSkillNewId',
+            originPersistantId: 'valideProtoForActifSkillId',
             type: 'challenge',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
           {
             id: expect.any(Number),
             persistantId: 'skillNewId',
+            originPersistantId: 'actifSkillId',
             type: 'skill',
+            scriptExectId: expect.anything(),
             createdAt: expect.anything(),
           },
         ]);

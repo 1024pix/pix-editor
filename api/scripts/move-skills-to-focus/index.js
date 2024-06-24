@@ -12,8 +12,7 @@ import { Challenge, Skill } from '../../lib/domain/models/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const isLaunchedFromCommandLine = process.argv[1] === __filename;
-
-export async function moveToFocus({ airtableClient, dryRun }) {
+export async function moveToFocus({ airtableClient, dryRun, scriptExectId }) {
   const skillsToFocus = await _getSkillsToFocus({ airtableClient });
   const enConstructionSkills = skillsToFocus.filter((skill) => skill.isEnConstruction);
   await _moveEnConstructionSkillsToFocus({ enConstructionSkills, dryRun });
@@ -22,7 +21,7 @@ export async function moveToFocus({ airtableClient, dryRun }) {
   logger.info(`${actifSkills.length} actif skills to move to focus...`);
   for (const actifSkill of actifSkills) {
     try {
-      await _moveActifSkillToFocus({ actifSkill, dryRun });
+      await _moveActifSkillToFocus({ actifSkill, dryRun, scriptExectId });
     } catch (err) {
       logger.error(`Une erreur s'est produite pendant le passage en focus de l'acquis ${actifSkill.id}. On quitte...`);
       throw err;
@@ -32,21 +31,25 @@ export async function moveToFocus({ airtableClient, dryRun }) {
   logger.info('Done');
 }
 
-async function _logInHistoricAndPrint(historicLine, dryRun) {
-  await knex('historic_focus').insert({ ...historicLine, dryRun });
+async function _logInHistoricAndPrint(historicLine, dryRun, scriptExectId) {
+  await knex('historic_focus').insert({ ...historicLine, dryRun, scriptExectId });
   if (historicLine.details !== 'OK') logger.error(JSON.stringify(historicLine));
 }
 
-async function _addToPhraseToFocus({ skillId, challengeIds }) {
+async function _addToPhraseToFocus({ originSkillId, skillId, challenges, scriptExectId }) {
   await knex('focus_phrase').insert({
     type: 'skill',
     persistantId: skillId,
+    originPersistantId: originSkillId,
+    scriptExectId,
   });
 
-  if (challengeIds.length > 0) {
-    await knex('focus_phrase').insert(challengeIds.map((challengeId) => ({
+  if (challenges.length > 0) {
+    await knex('focus_phrase').insert(challenges.map((challenge) => ({
       type: 'challenge',
-      persistantId: challengeId,
+      persistantId: challenge.id,
+      originPersistantId: Challenge.getCloneSource(challenge).id,
+      scriptExectId,
     })));
   }
 }
@@ -86,25 +89,25 @@ async function _moveEnConstructionSkillsToFocus({ enConstructionSkills, dryRun }
   logger.info('Done');
 }
 
-async function _moveActifSkillToFocus({ actifSkill, dryRun }) {
+async function _moveActifSkillToFocus({ actifSkill, dryRun, scriptExectId }) {
   let skillChallenges;
   try {
     skillChallenges = await challengeRepository.listBySkillId(actifSkill.id);
   } catch (err) {
-    await _logInHistoricAndPrint({ persistantId: actifSkill.id, errorStr: JSON.stringify(err), details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.' }, dryRun);
+    await _logInHistoricAndPrint({ persistantId: actifSkill.id, errorStr: JSON.stringify(err), details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.' }, dryRun, scriptExectId);
     throw err;
   }
-  const { clonedSkill, clonedChallenges } = await _cloneSkillAndChallengesAndAttachments({ skill: actifSkill, skillChallenges, dryRun });
+  const { clonedSkill, clonedChallenges } = await _cloneSkillAndChallengesAndAttachments({ skill: actifSkill, skillChallenges, dryRun, scriptExectId });
   if (!dryRun) {
-    await _addToPhraseToFocus({ skillId: clonedSkill.id, challengeIds: clonedChallenges.map((chal) => chal.id) });
+    await _addToPhraseToFocus({ originSkillId: actifSkill.id, skillId: clonedSkill.id, challenges: clonedChallenges, scriptExectId });
   }
 
-  await _archiveOldSkill({ skill: actifSkill, skillChallenges, dryRun });
+  await _archiveOldSkill({ skill: actifSkill, skillChallenges, dryRun, scriptExectId });
 
-  await _logInHistoricAndPrint({ persistantId: actifSkill.id, errorStr: '', details: 'OK' }, dryRun);
+  await _logInHistoricAndPrint({ persistantId: actifSkill.id, errorStr: '', details: 'OK' }, dryRun, scriptExectId);
 }
 
-async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun }) {
+async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, dryRun, scriptExectId }) {
   let clonedAttachments, clonedChallenges, clonedSkill;
   try {
     const tubeSkills = await skillRepository.listByTubeId(skill.tubeId);
@@ -151,7 +154,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       }
     }
   } catch (err) {
-    await _logInHistoricAndPrint({ persistantId: skill.id, errorStr: JSON.stringify(err), details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.' }, dryRun);
+    await _logInHistoricAndPrint({ persistantId: skill.id, errorStr: JSON.stringify(err), details: 'RAS Erreur lors d\'une lecture sur Airtable. Rien à nettoyer.' }, dryRun, scriptExectId);
     throw err;
   }
 
@@ -165,7 +168,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
         details: `Erreur lors de la création de l'acquis cloné. Potentielles données à nettoyer (liste dans l'ordre de création):
           acquis ${clonedSkill.id} sur Airtable,
           translations avec le pattern "skill.${clonedSkill.id}%" sur PG`,
-      }, dryRun);
+      }, dryRun, scriptExectId);
       throw err;
     }
     try {
@@ -180,7 +183,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
           challenges ${clonedChallenges.map((chal) => chal.id).join(', ')} sur Airtable,
           translations avec les patterns ${clonedChallenges.map((chal) => `"challenge.${chal.id}%"`).join(', ')} sur PG,
           localizedChallenges dont les challengeIds sont ${clonedChallenges.map((chal) => chal.id).join(', ')} sur PG`,
-      }, dryRun);
+      }, dryRun, scriptExectId);
       throw err;
     }
     try {
@@ -201,7 +204,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
           attachments dont les challengeIds persistant sont ${clonedChallenges.map((chal) => chal.id).join(', ')} sur Airtable,
           localized_challenges-attachments dont les localizedChallengeIds sont ${clonedChallenges.flatMap((chal) => chal.localizedChallenges.map((loc) => loc.id)).join(', ')} sur PG.
           `,
-      }, dryRun);
+      }, dryRun, scriptExectId);
       throw err;
     }
   }
@@ -209,7 +212,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
   return { clonedSkill, clonedChallenges };
 }
 
-async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
+async function _archiveOldSkill({ skill, skillChallenges, dryRun, scriptExectId }) {
   skill.archiveSkillAndChallenges({ skillChallenges });
   if (!dryRun) {
     try {
@@ -219,7 +222,7 @@ async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
         persistantId: skill.id,
         errorStr: JSON.stringify(err),
         details: 'Erreur lors de l\'archivage de l\'acquis. A priori les clones sont sains. On peut envisager d\'archiver l\'acquis à la main sur Airtable et ses épreuves (status + dates le cas échéant)',
-      }, dryRun);
+      }, dryRun, scriptExectId);
       throw err;
     }
     try {
@@ -229,7 +232,7 @@ async function _archiveOldSkill({ skill, skillChallenges, dryRun }) {
         persistantId: skill.id,
         errorStr: JSON.stringify(err),
         details: 'Erreur lors de l\'archivage en masse des épreuves. A priori les clones sont sains. On peut envisager de finir l\'archivage des épreuves à la main sur Airtable',
-      }, dryRun);
+      }, dryRun, scriptExectId);
       throw err;
     }
   }
@@ -247,7 +250,8 @@ async function main() {
 
     if (dryRun) logger.warn('Dry run: no actual modification will be performed, use DRY_RUN=false to disable');
 
-    await moveToFocus({ airtableClient, dryRun });
+    const scriptExectId = `${Date.now()}`;
+    await moveToFocus({ airtableClient, dryRun, scriptExectId });
     logger.info('All done');
   } catch (e) {
     logger.error(e);
