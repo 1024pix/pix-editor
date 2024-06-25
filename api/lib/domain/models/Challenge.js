@@ -142,10 +142,6 @@ export class Challenge {
     return this.localizedChallenges.find(({ locale }) => locale === this.primaryLocale);
   }
 
-  get #primaryEmbedUrl() {
-    return this.#primaryLocalizedChallenge.embedUrl;
-  }
-
   get #primaryUrlsToConsult() {
     return this.#primaryLocalizedChallenge.urlsToConsult;
   }
@@ -278,7 +274,7 @@ export class Challenge {
 
     this.id = localizedChallenge.id;
     this.status = this.#translateStatus(localizedChallenge);
-    this.embedUrl = this.#translateEmbedUrl(localizedChallenge);
+    this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = getCountryName(localizedChallenge.geography);
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
 
@@ -293,14 +289,6 @@ export class Challenge {
       return this.status;
     }
     return localizedChallenge.status;
-  }
-
-  #translateEmbedUrl(localizedChallenge) {
-    if (!this.#primaryEmbedUrl) return null;
-    if (localizedChallenge.embedUrl) return localizedChallenge.embedUrl;
-    const url = new URL(this.#primaryEmbedUrl);
-    url.searchParams.set('lang', localizedChallenge.locale);
-    return url.href;
   }
 
   #translateUrlsToConsult(localizedChallenge) {

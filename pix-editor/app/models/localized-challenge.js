@@ -7,6 +7,7 @@ const inProductionCombinations = [
 
 export default class LocalizedChallengeModel extends Model {
   @attr embedURL;
+  @attr defaultEmbedURL;
   @attr geography;
   @attr urlsToConsult;
   @attr locale;

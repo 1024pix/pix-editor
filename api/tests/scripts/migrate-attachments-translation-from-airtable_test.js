@@ -21,10 +21,16 @@ describe('Migrate translation from airtable', function() {
       apiKey: 'airtableApiKeyValue',
     }).base('airtableBaseValue');
 
+    const challengeId = 'monChallengeId';
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: challengeId,
+      challengeId,
+      locale: 'fr'
+    });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'localizedChallengeId',
-      challengeId: 'monChallengeId',
-      locale: 'fr'
+      challengeId,
+      locale: 'fr-fr'
     });
     databaseBuilder.factory.buildLocalizedChallengeAttachment({
       localizedChallengeId: 'localizedChallengeId',
@@ -67,7 +73,7 @@ describe('Migrate translation from airtable', function() {
     expect(translations).to.deep.equal([
       {
         key: 'challenge.monChallengeId.illustrationAlt',
-        locale: 'fr',
+        locale: 'fr-fr',
         value: 'Mon alt'
       },
     ]);

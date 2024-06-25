@@ -117,7 +117,9 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
     it('should serialize a localized challenge with its attachments', async () => {
       // given
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
-        embedUrl: null,
+        locale: 'en',
+        embedUrl: 'https://example.es/path/to/page.html',
+        primaryEmbedUrl: 'https://example.com/path/to/page.html',
         status: 'validé',
         geography: 'BZ',
         urlsToConsult: ['https://urls.fr', 'pouet.fr'],
@@ -129,7 +131,8 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
           id: `${localizedChallenge.id}`,
           attributes: {
             locale: localizedChallenge.locale,
-            'embed-url': null,
+            'embed-url': localizedChallenge.embedUrl,
+            'default-embed-url': 'https://example.com/path/to/page.html?lang=en',
             geography: 'Belize',
             'urls-to-consult': localizedChallenge.urlsToConsult,
             status: localizedChallenge.status,

@@ -112,12 +112,6 @@ export default class LocalizedController extends Controller {
     return !this.localizedChallenge.embedURL && this.challenge.embedURL;
   }
 
-  get defaultEmbedUrl() {
-    const url = new URL(this.challenge.embedURL);
-    url.searchParams.set('lang', this.localizedChallenge.locale);
-    return url.href;
-  }
-
   get displayUrlsToConsult() {
     return this.edition || this.localizedChallenge.urlsToConsult;
   }

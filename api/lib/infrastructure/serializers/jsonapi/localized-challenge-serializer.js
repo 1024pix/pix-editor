@@ -10,6 +10,7 @@ const serializer = new Serializer('localized-challenges', {
     'challenge',
     'locale',
     'embedUrl',
+    'defaultEmbedUrl',
     'geography',
     'urlsToConsult',
     'status',
@@ -32,9 +33,10 @@ const serializer = new Serializer('localized-challenges', {
       return fileId;
     }
   },
-  transform: function({ challengeId, ...localizedChallenge }) {
+  transform: function({ challengeId, defaultEmbedUrl, ...localizedChallenge }) {
     return {
       ...localizedChallenge,
+      defaultEmbedUrl,
       challenge: { id: challengeId },
       translations: `/api/challenges/${challengeId}/translations/${localizedChallenge.locale}`,
       geography: getCountryName(localizedChallenge.geography),

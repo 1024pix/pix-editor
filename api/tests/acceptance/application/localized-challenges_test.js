@@ -7,11 +7,19 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should get a localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/?lang=fr',
+        status: 'proposé',
+        urlsToConsult: null,
+      });
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',
         locale: 'nl',
-        embedUrl: 'https://choucroute.com/',
+        embedUrl: 'https://choucroute.com/le-nl-c-est-ici',
         status: 'proposé',
         urlsToConsult: null,
       });
@@ -32,6 +40,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             locale: localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            'default-embed-url': 'https://choucroute.com/?lang=nl',
             geography: 'Neutre',
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
@@ -61,9 +70,15 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
   });
 
   describe('GET /localized-challenges', () => {
-    it('should find a localized challenge by ID', async () => {
+    it('should filter one localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/',
+      });
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',
@@ -87,6 +102,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           attributes: {
             'locale': localizedChallenge.locale,
             'embed-url': localizedChallenge.embedUrl,
+            'default-embed-url': 'https://choucroute.com/?lang=nl',
             status: null,
             geography: 'Neutre',
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
@@ -117,6 +133,20 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should filter several localized challenges by IDs', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge1',
+        id: 'recChallenge1',
+        locale: 'fr',
+        embedUrl: 'https://raclette.com/',
+      });
+
       const localizedChallenges = [
         databaseBuilder.factory.buildLocalizedChallenge({
           challengeId: 'recChallenge0',
@@ -149,6 +179,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[0].locale,
               'embed-url': localizedChallenges[0].embedUrl,
+              'default-embed-url': 'https://choucroute.com/?lang=nl',
               geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
@@ -172,6 +203,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             attributes: {
               'locale': localizedChallenges[1].locale,
               'embed-url': localizedChallenges[1].embedUrl,
+              'default-embed-url': 'https://raclette.com/?lang=de',
               geography: 'Neutre',
               status: null,
               translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
@@ -205,11 +237,17 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should modify localized challenge of given ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/',
+      });
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',
         locale: 'nl',
-        embedUrl: 'https://choucroute.com/',
+        embedUrl: null,
       });
 
       await databaseBuilder.commit();
@@ -271,6 +309,12 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should modify localized challenge status of given ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        embedUrl: 'https://choucroute.com/',
+      });
       const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',
@@ -317,6 +361,13 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
     it('should return forbidden error if user is NOT admin and updates status', async() => {
       // given
       const user = databaseBuilder.factory.buildEditorUser();
+      databaseBuilder.factory.buildLocalizedChallenge({
+        challengeId: 'recChallenge0',
+        id: 'recChallenge0',
+        locale: 'fr',
+        status: 'proposé',
+        embedUrl: 'https://choucroute.com/',
+      });
       databaseBuilder.factory.buildLocalizedChallenge({
         challengeId: 'recChallenge0',
         id: 'localizedChallengeId',

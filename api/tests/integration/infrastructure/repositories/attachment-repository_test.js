@@ -15,27 +15,40 @@ describe('Integration | Repository | attachment-repository', () => {
   describe('#list', () => {
     it('should return the list of all attachments with an alt illustration', async () => {
       // given
+      const challengeId1 = 'challengeId1';
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId1',
-        challengeId: 'challengeId1',
+        id: challengeId1,
+        challengeId: challengeId1,
         locale: 'fr',
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'localizedChallengeId1Nl',
-        challengeId: 'challengeId1',
-        locale: 'nl',
+        id: 'localizedChallengeId1',
+        challengeId: challengeId1,
+        locale: 'fr-fr',
       });
 
       databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'localizedChallengeId1Nl',
+        challengeId: challengeId1,
+        locale: 'nl',
+      });
+
+      const challengeId2 = 'challengeId2';
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: challengeId2,
+        challengeId: challengeId2,
+        locale: 'fr',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
-        challengeId: 'challengeId2',
+        challengeId: challengeId2,
         locale: 'en',
       });
 
       databaseBuilder.factory.buildTranslation({
         key: 'challenge.challengeId1.illustrationAlt',
-        locale: 'fr',
+        locale: 'fr-fr',
         value: 'illustration text alt 1',
       });
       databaseBuilder.factory.buildTranslation({
@@ -323,6 +336,11 @@ describe('Integration | Repository | attachment-repository', () => {
         key: 'challenge.challengeA.illustrationAlt',
         locale: 'nl',
         value: 'La trad nl pour attachment NL',
+      });
+      databaseBuilder.factory.buildLocalizedChallenge({
+        id: 'challengeA',
+        challengeId: 'challengeA',
+        locale: 'fr',
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeNLForChallengeA',
