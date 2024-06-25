@@ -1,5 +1,11 @@
 
 
+## v3.150.2 (25/06/2024)
+
+
+### :bug: Correction
+- [#691](https://github.com/1024pix/pix-editor/pull/691) [BUGFIX] Oublie d'historiser dans la BDD quand ça se passe bien (PIX-13164).
+
 ## v3.150.1 (25/06/2024)
 
 
