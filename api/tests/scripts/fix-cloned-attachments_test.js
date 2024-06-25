@@ -124,7 +124,7 @@ describe('Script | Fix cloned attachments', function() {
     const archiveProtoForActifSkill = domainBuilder.buildChallenge({
       id: 'archiveProtoForActifSkill',
       status: Challenge.STATUSES.ARCHIVE,
-      archivedAt: new Date('2020-01-01'),
+      archivedAt: new Date('2020-01-01').toISOString(),
       skillId: 'skillABC',
       genealogy: 'Prototype 1',
       version: 4,
@@ -258,7 +258,7 @@ describe('Script | Fix cloned attachments', function() {
       focusable: false,
       locales: ['fr', 'nl'],
       translations: { fr: { instruction: 'instruction valideProto fr' }, nl: { instruction: 'instruction valideProto nl' } },
-      archivedAt: new Date('2024-01-01T09:58:00Z'),
+      archivedAt: '2024-01-01T09:58:00Z',
       localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
           id: 'archiveProtoForSkillABC',
@@ -292,7 +292,7 @@ describe('Script | Fix cloned attachments', function() {
       focusable: false,
       locales: ['fr'],
       translations: { fr: { instruction: 'instruction valideDecli fr' } },
-      archivedAt: new Date('2024-01-01T10:02:00Z'),
+      archivedAt: '2024-01-01T10:02:00Z',
       localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
           id: 'archiveDecliForSkillABC',
@@ -316,7 +316,7 @@ describe('Script | Fix cloned attachments', function() {
       focusable: false,
       locales: ['fr'],
       translations: { fr: { instruction: 'instruction obsoleteDecli fr' } },
-      madeObsoleteAt: new Date('2024-01-01T10:02:00Z'),
+      madeObsoleteAt:'2024-01-01T10:02:00Z',
       localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
           id: 'obsoleteDecliForSkillABC',
@@ -343,7 +343,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 3,
         locales: [],
         translations: {},
-        archivedAt: new Date('2023-11-01T00:58:00Z'),
+        archivedAt: '2023-11-01T00:58:00Z',
       }),
       domainBuilder.buildChallenge({
         id: 'wrongArchiveProtoForSkillABC2',
@@ -353,7 +353,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 2,
         locales: [],
         translations: {},
-        archivedAt: new Date('2024-01-01T10:10:00Z'),
+        archivedAt: '2024-01-01T10:10:00Z',
       }),
       domainBuilder.buildChallenge({
         id: 'wrongArchiveProtoForSkillABC3',
@@ -363,7 +363,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 1,
         locales: [],
         translations: {},
-        archivedAt: new Date('2024-01-01T09:50:00Z'),
+        archivedAt: '2024-01-01T09:50:00Z',
       }),
       domainBuilder.buildChallenge({
         id: 'wrongArchiveDecliForSkillABC4',
@@ -373,7 +373,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         locales: [],
         translations: {},
-        archivedAt: new Date('2023-01-01T09:50:00Z'),
+        archivedAt: '2023-01-01T09:50:00Z',
       }),
       domainBuilder.buildChallenge({
         id: 'wrongObsoleteDecliForSkillABC5',
@@ -383,7 +383,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         locales: [],
         translations: {},
-        madeObsoleteAt: new Date('2024-01-01T09:50:00Z'),
+        madeObsoleteAt: '2024-01-01T09:50:00Z',
       }),
     ];
 
@@ -620,7 +620,7 @@ describe('Script | Fix cloned attachments', function() {
       version: 4,
       focusable: false,
       locales: ['fr'],
-      archivedAt: new Date('2020-01-01'),
+      archivedAt: new Date('2020-01-01').toISOString(),
       translations: { fr: { instruction: 'instruction archiveProto fr' } },
       localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
@@ -696,12 +696,12 @@ describe('Script | Fix cloned attachments', function() {
       domainBuilder.buildChallenge({
         ...challengeToPerime1_data,
         status: Challenge.STATUSES.PERIME,
-        madeObsoleteAt: obsoleteAt,
+        madeObsoleteAt: obsoleteAt.toISOString(),
       }),
       domainBuilder.buildChallenge({
         ...challengeToPerime2_data,
         status: Challenge.STATUSES.PERIME,
-        madeObsoleteAt: obsoleteAt,
+        madeObsoleteAt: obsoleteAt.toISOString(),
       }),
     ]);
   });
@@ -844,7 +844,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         focusable: false,
         locales: ['fr'],
-        archivedAt: new Date('2020-01-01'),
+        archivedAt: new Date('2020-01-01').toISOString(),
         translations: { fr: { instruction: 'instruction archiveProto fr' } },
         localizedChallenges: [
           domainBuilder.buildLocalizedChallenge({
@@ -948,7 +948,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         focusable: false,
         locales: ['fr'],
-        archivedAt: new Date('2020-01-01'),
+        archivedAt: new Date('2020-01-01').toISOString(),
         translations: { fr: { instruction: 'instruction archiveProto fr' } },
         localizedChallenges: [
           domainBuilder.buildLocalizedChallenge({
@@ -1058,7 +1058,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         focusable: false,
         locales: ['fr'],
-        archivedAt: new Date('2020-01-01'),
+        archivedAt: new Date('2020-01-01').toISOString(),
         translations: { fr: { instruction: 'instruction archiveProto fr' } },
         localizedChallenges: [
           domainBuilder.buildLocalizedChallenge({
@@ -1166,7 +1166,7 @@ describe('Script | Fix cloned attachments', function() {
         version: 4,
         focusable: false,
         locales: ['fr'],
-        archivedAt: new Date('2020-01-01'),
+        archivedAt: new Date('2020-01-01').toISOString(),
         translations: { fr: { instruction: 'instruction archiveProto fr' } },
         localizedChallenges: [
           domainBuilder.buildLocalizedChallenge({
@@ -1220,7 +1220,7 @@ describe('Script | Fix cloned attachments', function() {
         domainBuilder.buildChallenge({
           ...challengeToPerime1_data,
           status: Challenge.STATUSES.PERIME,
-          madeObsoleteAt: obsoleteAt,
+          madeObsoleteAt: obsoleteAt.toISOString(),
         }),
       ]);
     });

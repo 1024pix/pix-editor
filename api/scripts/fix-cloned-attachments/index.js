@@ -91,8 +91,9 @@ async function _getChallengesToClone({ skillChallenges, originSkillId, scriptExe
   const topDate = creattionSkillDate.getTime() + (10 * 60 * 1000);
 
   const protoToClone = skillChallenges.find((challenge) => {
-    return challenge.genealogy === 'Prototype 1' &&
-      (challenge.archivedAt.getTime() > bottomDate && challenge.archivedAt.getTime() < topDate);
+    const archiveDate = new Date(challenge.archivedAt);
+    return challenge.genealogy === 'Prototype 1' && challenge.isArchive &&
+      (archiveDate.getTime() > bottomDate && archiveDate.getTime() < topDate);
   });
 
   if (!protoToClone?.files?.length > 0) {
@@ -104,9 +105,11 @@ async function _getChallengesToClone({ skillChallenges, originSkillId, scriptExe
     })
     .filter((challenge) => {
       if (challenge.isPerime) {
-        return challenge.madeObsoleteAt.getTime() > bottomDate && challenge.madeObsoleteAt.getTime() < topDate;
+        const obsoleteDate = new Date(challenge.madeObsoleteAt);
+        return obsoleteDate.getTime() > bottomDate && obsoleteDate.getTime() < topDate;
       }
-      return challenge.archivedAt.getTime() > bottomDate && challenge.archivedAt.getTime() < topDate;
+      const archiveDate = new Date(challenge.archivedAt);
+      return archiveDate.getTime() > bottomDate && archiveDate.getTime() < topDate;
     });
   return [protoToClone, ...declinaisonsToClone];
 }
