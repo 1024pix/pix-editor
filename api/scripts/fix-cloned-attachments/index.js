@@ -37,6 +37,7 @@ export async function fix({ dryRun, scriptExectIdToFix, scriptExectId }) {
 
     const clonedChallenges = await _fixFor({ originSkill, cloneSkill: correspondingCloneSkill, skillChallenges: challengesToClone, dryRun, scriptExectId });
     await _addToPhraseToFocus({ challenges: clonedChallenges, scriptExectId });
+    await _logInHistoricAndPrint({ persistantId: originSkill.id, errorStr: '', details: 'OK' }, dryRun, scriptExectId);
   }
 
   await _obsoleteChallenges({ cloneSkills, challengeRepository, dryRun, scriptExectIdToFix });
