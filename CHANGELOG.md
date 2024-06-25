@@ -1,5 +1,11 @@
 
 
+## v3.150.1 (25/06/2024)
+
+
+### :bug: Correction
+- [#690](https://github.com/1024pix/pix-editor/pull/690) [BUGFIX] Le script pour corriger le script de passage en masse des focus ne prend pas la bonne date (PIX-13163).
+
 ## v3.150.0 (25/06/2024)
 
 
