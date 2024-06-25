@@ -82,13 +82,13 @@ async function _obsoleteChallenges({ cloneSkills, scriptExectIdToFix, challengeR
   }
 }
 async function _getChallengesToClone({ skillChallenges, originSkillId, scriptExectIdToFix }) {
-  const [creattionSkillDate] = await knex('historic_focus').pluck('createdAt').where({
+  const { createdAt } = await knex('historic_focus').select('createdAt').where({
     persistantId: originSkillId,
     scriptExectId: scriptExectIdToFix
-  });
+  }).orderBy('createdAt', 'DESC').first();
 
-  const bottomDate = creattionSkillDate.getTime() - (10 * 60 * 1000);
-  const topDate = creattionSkillDate.getTime() + (10 * 60 * 1000);
+  const bottomDate = createdAt.getTime() - (10 * 60 * 1000);
+  const topDate = createdAt.getTime() + (10 * 60 * 1000);
 
   const protoToClone = skillChallenges.find((challenge) => {
     const archiveDate = new Date(challenge.archivedAt);
