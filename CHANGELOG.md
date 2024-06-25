@@ -1,5 +1,14 @@
 
 
+## v3.150.0 (25/06/2024)
+
+
+### :rocket: Amélioration
+- [#686](https://github.com/1024pix/pix-editor/pull/686) [FEATURE] Traduction auto des URLs d'embeds Astro (PIX-12527).
+
+### :bug: Correction
+- [#689](https://github.com/1024pix/pix-editor/pull/689) [BUGFIX] Corriger le problème d'attachment lors du passage en focus en masse (PIX-13098).
+
 ## v3.149.0 (20/06/2024)
 
 
