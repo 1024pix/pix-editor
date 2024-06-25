@@ -185,6 +185,12 @@ describe('Script | Fix cloned attachments', function() {
         persistantId: 'skillABC',
         scriptExectId: scriptExectIdToFix,
         dryRun: false,
+        createdAt: new Date('2023-01-01T10:00:00Z')
+      },
+      {
+        persistantId: 'skillABC',
+        scriptExectId: scriptExectIdToFix,
+        dryRun: true,
         createdAt: new Date('2024-01-01T10:00:00Z')
       },
     ]);
