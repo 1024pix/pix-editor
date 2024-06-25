@@ -118,6 +118,14 @@ export class Challenge {
     return this.status === Challenge.STATUSES.VALIDE;
   }
 
+  get isArchive() {
+    return this.status === Challenge.STATUSES.ARCHIVE;
+  }
+
+  get isPerime() {
+    return this.status === Challenge.STATUSES.PERIME;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
@@ -233,7 +241,7 @@ export class Challenge {
   }
 
   archive() {
-    const now = new Date();
+    const now = new Date().toISOString();
     if (this.isPropose) {
       this.status = Challenge.STATUSES.PERIME;
       this.madeObsoleteAt = now;
@@ -242,6 +250,13 @@ export class Challenge {
     if (this.isValide) {
       this.status = Challenge.STATUSES.ARCHIVE;
       this.archivedAt = now;
+    }
+  }
+
+  obsolete() {
+    if (!this.isPerime) {
+      this.status = Challenge.STATUSES.PERIME;
+      this.madeObsoleteAt = new Date().toISOString();
     }
   }
 

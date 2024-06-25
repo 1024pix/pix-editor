@@ -3,7 +3,6 @@ import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import _ from 'lodash';
 import { Attachment } from '../../domain/models/index.js';
-import { cloneAttachmentsFileInBucket } from '../utils/storage.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 
 export async function list() {
@@ -28,10 +27,7 @@ export async function createBatch(attachments) {
   const necessaryChallengeIds = _.uniq(attachments.map((attachment) => attachment.challengeId));
   const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
   const attachmentToSaveDTOs = [];
-  await cloneAttachmentsFileInBucket({
-    attachments,
-    millisecondsTimestamp: Date.now(),
-  });
+
   for (const attachment of attachments) {
     attachmentToSaveDTOs.push({
       url: attachment.url,

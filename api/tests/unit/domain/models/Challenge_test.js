@@ -124,6 +124,35 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isArchive', () => {
+    it('should return true when challenge is archive', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.ARCHIVE,
+      });
+
+      // when
+      const isArchive = challenge.isArchive;
+
+      // then
+      expect(isArchive).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.ARCHIVE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isArchive = challenge.isArchive;
+
+      // then
+      expect(isArchive).to.be.false;
+    });
+  });
+
   describe('#get isValide', () => {
     it('should return true when challenge is valide', () => {
       // given
@@ -150,6 +179,35 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       expect(isValide).to.be.false;
+    });
+  });
+
+  describe('#get isPerime', () => {
+    it('should return true when challenge is perime', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES.PERIME,
+      });
+
+      // when
+      const isPerime = challenge.isPerime;
+
+      // then
+      expect(isPerime).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PERIME)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPerime = challenge.isPerime;
+
+      // then
+      expect(isPerime).to.be.false;
     });
   });
 
@@ -779,7 +837,7 @@ describe('Unit | Domain | Challenge', () => {
       // then
       const expectedArchivedChallenge = domainBuilder.buildChallenge({
         archivedAt: null,
-        madeObsoleteAt: now,
+        madeObsoleteAt: now.toISOString(),
         status: Challenge.STATUSES.PERIME,
       });
       expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
@@ -798,7 +856,7 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedArchivedChallenge = domainBuilder.buildChallenge({
-        archivedAt: now,
+        archivedAt: now.toISOString(),
         madeObsoleteAt: null,
         status: Challenge.STATUSES.ARCHIVE,
       });
@@ -809,8 +867,8 @@ describe('Unit | Domain | Challenge', () => {
     )('should do nothing when statusKey is %s', (statusKey) => {
       // given
       const challengeToArchive = domainBuilder.buildChallenge({
-        archivedAt: new Date('2019-10-01'),
-        madeObsoleteAt: new Date('2019-10-02'),
+        archivedAt: new Date('2019-10-01').toISOString(),
+        madeObsoleteAt: new Date('2019-10-02').toISOString(),
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -819,11 +877,61 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedUnchangedChallenge = domainBuilder.buildChallenge({
-        archivedAt: new Date('2019-10-01'),
-        madeObsoleteAt: new Date('2019-10-02'),
+        archivedAt: new Date('2019-10-01').toISOString(),
+        madeObsoleteAt: new Date('2019-10-02').toISOString(),
         status: Challenge.STATUSES[statusKey],
       });
       expect(challengeToArchive).toStrictEqual(expectedUnchangedChallenge);
+    });
+  });
+
+  describe('#obsolete', () => {
+    const now = new Date('2021-10-29T03:03:00Z');
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(now);
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should left the challenge unchanged when is already obsolete', () => {
+      // given
+      const obsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z').toISOString(),
+        status: Challenge.STATUSES.PERIME,
+      });
+
+      // when
+      obsoleteChallenge.obsolete();
+
+      // then
+      const expectedObsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z').toISOString(),
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(obsoleteChallenge).toStrictEqual(expectedObsoleteChallenge);
+    });
+
+    it.each(Object.keys(Challenge.STATUSES).filter((statusKey) => Challenge.STATUSES.PERIME !== Challenge.STATUSES[statusKey])
+    )('should do nothing when statusKey is %s', (statusKey) => {
+      // given
+      const challengeToPerime = domainBuilder.buildChallenge({
+        madeObsoleteAt: null,
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      challengeToPerime.obsolete();
+
+      // then
+      const expectedObsoleteChallenge = domainBuilder.buildChallenge({
+        madeObsoleteAt: now.toISOString(),
+        status: Challenge.STATUSES.PERIME,
+      });
+      expect(challengeToPerime).toStrictEqual(expectedObsoleteChallenge);
     });
   });
 });
