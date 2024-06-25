@@ -241,7 +241,7 @@ export class Challenge {
   }
 
   archive() {
-    const now = new Date();
+    const now = new Date().toISOString();
     if (this.isPropose) {
       this.status = Challenge.STATUSES.PERIME;
       this.madeObsoleteAt = now;
@@ -256,7 +256,7 @@ export class Challenge {
   obsolete() {
     if (!this.isPerime) {
       this.status = Challenge.STATUSES.PERIME;
-      this.madeObsoleteAt = new Date();
+      this.madeObsoleteAt = new Date().toISOString();
     }
   }
 

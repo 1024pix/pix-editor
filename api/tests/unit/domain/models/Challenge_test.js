@@ -837,7 +837,7 @@ describe('Unit | Domain | Challenge', () => {
       // then
       const expectedArchivedChallenge = domainBuilder.buildChallenge({
         archivedAt: null,
-        madeObsoleteAt: now,
+        madeObsoleteAt: now.toISOString(),
         status: Challenge.STATUSES.PERIME,
       });
       expect(challengeToArchive).toStrictEqual(expectedArchivedChallenge);
@@ -856,7 +856,7 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedArchivedChallenge = domainBuilder.buildChallenge({
-        archivedAt: now,
+        archivedAt: now.toISOString(),
         madeObsoleteAt: null,
         status: Challenge.STATUSES.ARCHIVE,
       });
@@ -867,8 +867,8 @@ describe('Unit | Domain | Challenge', () => {
     )('should do nothing when statusKey is %s', (statusKey) => {
       // given
       const challengeToArchive = domainBuilder.buildChallenge({
-        archivedAt: new Date('2019-10-01'),
-        madeObsoleteAt: new Date('2019-10-02'),
+        archivedAt: new Date('2019-10-01').toISOString(),
+        madeObsoleteAt: new Date('2019-10-02').toISOString(),
         status: Challenge.STATUSES[statusKey],
       });
 
@@ -877,8 +877,8 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedUnchangedChallenge = domainBuilder.buildChallenge({
-        archivedAt: new Date('2019-10-01'),
-        madeObsoleteAt: new Date('2019-10-02'),
+        archivedAt: new Date('2019-10-01').toISOString(),
+        madeObsoleteAt: new Date('2019-10-02').toISOString(),
         status: Challenge.STATUSES[statusKey],
       });
       expect(challengeToArchive).toStrictEqual(expectedUnchangedChallenge);
@@ -900,7 +900,7 @@ describe('Unit | Domain | Challenge', () => {
     it('should left the challenge unchanged when is already obsolete', () => {
       // given
       const obsoleteChallenge = domainBuilder.buildChallenge({
-        madeObsoleteAt: new Date('2024-01-01T00:00:00Z'),
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z').toISOString(),
         status: Challenge.STATUSES.PERIME,
       });
 
@@ -909,7 +909,7 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedObsoleteChallenge = domainBuilder.buildChallenge({
-        madeObsoleteAt: new Date('2024-01-01T00:00:00Z'),
+        madeObsoleteAt: new Date('2024-01-01T00:00:00Z').toISOString(),
         status: Challenge.STATUSES.PERIME,
       });
       expect(obsoleteChallenge).toStrictEqual(expectedObsoleteChallenge);
@@ -928,7 +928,7 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       const expectedObsoleteChallenge = domainBuilder.buildChallenge({
-        madeObsoleteAt: now,
+        madeObsoleteAt: now.toISOString(),
         status: Challenge.STATUSES.PERIME,
       });
       expect(challengeToPerime).toStrictEqual(expectedObsoleteChallenge);

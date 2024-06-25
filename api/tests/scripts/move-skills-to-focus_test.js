@@ -770,7 +770,7 @@ describe('Script | Move skills to focus', function() {
       const archiveForActifSkillData = {
         id: 'archiveForActifSkillId',
         status: Challenge.STATUSES.ARCHIVE,
-        archivedAt: new Date('2020-01-01'),
+        archivedAt: new Date('2020-01-01').toISOString(),
         madeObsoleteAt: null,
         skillId: 'actifSkillId',
         locales: ['fr'],
@@ -808,14 +808,14 @@ describe('Script | Move skills to focus', function() {
         domainBuilder.buildChallenge({
           ...valideForActifSkillData,
           status: Challenge.STATUSES.ARCHIVE,
-          archivedAt: archivedAtDate,
+          archivedAt: archivedAtDate.toISOString(),
           madeObsoleteAt: null,
         }),
         domainBuilder.buildChallenge({
           ...proposeForActifSkillData,
           status: Challenge.STATUSES.PERIME,
           archivedAt: null,
-          madeObsoleteAt: archivedAtDate,
+          madeObsoleteAt: archivedAtDate.toISOString(),
         }),
         domainBuilder.buildChallenge({
           ...archiveForActifSkillData,
