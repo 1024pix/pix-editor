@@ -1,5 +1,11 @@
 
 
+## v3.150.3 (26/06/2024)
+
+
+### :bug: Correction
+- [#692](https://github.com/1024pix/pix-editor/pull/692) [BUGFIX] Rétablir les statuts des épreuves malencontreusement périmées suite au script de passage en masse des acquis en focus (PIX-13173).
+
 ## v3.150.2 (25/06/2024)
 
 
