@@ -1,6 +1,7 @@
-import { describe, expect, it, afterEach } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { databaseBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengesAttachmentsRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | localized-challenges-attachments-repository', function() {
   describe('#save', () => {
@@ -14,7 +15,7 @@ describe('Integration | Repository | localized-challenges-attachments-repository
         challengeId: 'challengeId',
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé'
+        status: LocalizedChallenge.STATUSES.PAUSE,
       });
       await databaseBuilder.commit();
 
@@ -38,7 +39,7 @@ describe('Integration | Repository | localized-challenges-attachments-repository
         challengeId: 'challengeId',
         locale: 'fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé'
+        status: LocalizedChallenge.STATUSES.PAUSE,
       });
       const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
         localizedChallengeId: localizedChallenge.id,

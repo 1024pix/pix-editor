@@ -1,9 +1,10 @@
-import {  describe, expect, it } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import nock from 'nock';
 
 import { databaseBuilder, knex } from '../test-helper';
 
 import { migrateLocalizedChallengesGeography } from '../../scripts/migrate-localized-challenges-geography';
+import { LocalizedChallenge } from '../../lib/domain/models/index.js';
 
 describe('Script | migrate-localized-challenges-geography', () => {
 
@@ -12,32 +13,39 @@ describe('Script | migrate-localized-challenges-geography', () => {
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge1',
       challengeId: 'recChallenge1',
+      status: LocalizedChallenge.STATUSES.PRIMARY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge1Nl',
       challengeId: 'recChallenge1',
       locale: 'nl',
+      status: LocalizedChallenge.STATUSES.PLAY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge2',
       challengeId: 'recChallenge2',
+      status: LocalizedChallenge.STATUSES.PRIMARY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge2Nl',
       challengeId: 'recChallenge2',
       locale: 'nl',
+      status: LocalizedChallenge.STATUSES.PAUSE,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge3',
       challengeId: 'recChallenge3',
+      status: LocalizedChallenge.STATUSES.PRIMARY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge4',
       challengeId: 'recChallenge4',
+      status: LocalizedChallenge.STATUSES.PRIMARY,
     });
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge5',
       challengeId: 'recChallenge5',
+      status: LocalizedChallenge.STATUSES.PRIMARY,
     });
     await databaseBuilder.commit();
 
@@ -73,7 +81,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'fr',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       },
       {
         id: 'recChallenge1Nl',
@@ -82,7 +90,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'nl',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PLAY,
       },
       {
         id: 'recChallenge2',
@@ -91,7 +99,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'fr',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       },
       {
         id: 'recChallenge2Nl',
@@ -100,7 +108,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'nl',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PAUSE,
       },
       {
         id: 'recChallenge3',
@@ -109,7 +117,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'fr',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       },
       {
         id: 'recChallenge4',
@@ -118,7 +126,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'fr',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       },
       {
         id: 'recChallenge5',
@@ -127,7 +135,7 @@ describe('Script | migrate-localized-challenges-geography', () => {
         locale: 'fr',
         embedUrl: null,
         urlsToConsult: null,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       },
     ]);
   });

@@ -3,6 +3,7 @@ import { airtableBuilder, databaseBuilder, knex } from '../test-helper.js';
 import nock from 'nock';
 
 import { fixAttachments } from '../../scripts/fix-attachments/index.js';
+import { Attachment } from '../../lib/domain/models/index.js';
 
 describe('Script | Fix attachments', function() {
 
@@ -73,13 +74,13 @@ describe('Script | Fix attachments', function() {
       airtableBuilder.factory.buildAttachment({
         id: 'attachment1',
         challengeId: 'challenge1',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         createdAt: '2024-02-19T15:29:38.123Z',
       }),
       airtableBuilder.factory.buildAttachment({
         id: 'attachment2',
         challengeId: 'challenge1',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         createdAt: '2024-02-19T14:29:38.123Z',
       })
     ];
@@ -149,35 +150,35 @@ describe('Script | Fix attachments', function() {
       airtableBuilder.factory.buildAttachment({
         id: 'attachment1',
         challengeId: 'challenge1',
-        type: 'attachment',
+        type: Attachment.TYPES.ATTACHMENT,
         url: 'http://example.com/toto.odt',
         createdAt: '2024-02-19T14:29:38.123Z',
       }),
       airtableBuilder.factory.buildAttachment({
         id: 'attachment2',
         challengeId: 'challenge1',
-        type: 'attachment',
+        type: Attachment.TYPES.ATTACHMENT,
         url: 'http://example.com/toto2.odt',
         createdAt: '2024-02-19T15:29:38.123Z',
       }),
       airtableBuilder.factory.buildAttachment({
         id: 'attachment3',
         challengeId: 'challenge1',
-        type: 'attachment',
+        type: Attachment.TYPES.ATTACHMENT,
         url: 'http://example.com/toto.docx',
         createdAt: '2024-02-18T14:29:38.123Z',
       }),
       airtableBuilder.factory.buildAttachment({
         id: 'attachment4',
         challengeId: 'challenge1',
-        type: 'attachment',
+        type: Attachment.TYPES.ATTACHMENT,
         url: 'http://example.com/toto2.docx',
         createdAt: '2024-02-18T15:29:38.123Z',
       }),
       airtableBuilder.factory.buildAttachment({
         id: 'attachment5',
         challengeId: 'challenge1',
-        type: 'attachment',
+        type: Attachment.TYPES.ATTACHMENT,
         url: 'http://example.com/toto2.zip',
         createdAt: '2024-02-18T15:29:38.123Z',
       })

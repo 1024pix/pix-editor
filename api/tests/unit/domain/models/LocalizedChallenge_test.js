@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../tooling/domain-builder/domain-builder.js';
-import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | LocalizedChallenge', () => {
   describe('#isPrimary', () => {
@@ -78,7 +78,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         embedUrl: 'mon/embed.url',
         fileIds: [],
         locale: 'en',
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'JP',
         urlsToConsult: 'http://mon-url-a-consulter.com',
       });
@@ -101,7 +101,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         id: null,
         challengeId: 'idDuChallenge',
         locale: 'fr',
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         embedUrl: null,
         fileIds: [],
         geography: null,
@@ -131,7 +131,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         domainBuilder.buildAttachment({
           id: 'attachmentA',
           url: 'https://www.attA.com',
-          type: 'illustration',
+          type: Attachment.TYPES.ILLUSTRATION,
           alt: 'osef',
           size: 123,
           mimeType: 'image/png',
@@ -141,7 +141,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         domainBuilder.buildAttachment({
           id: 'attachmentB',
           url: 'https://www.attB.com',
-          type: 'attachment',
+          type: Attachment.TYPES.ATTACHMENT,
           alt: 'osef le retour',
           size: 456,
           mimeType: 'text/csv',
@@ -169,7 +169,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         domainBuilder.buildAttachment({
           id: null,
           url: 'https://www.attA.com',
-          type: 'illustration',
+          type: Attachment.TYPES.ILLUSTRATION,
           alt: 'osef',
           size: 123,
           mimeType: 'image/png',
@@ -180,7 +180,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         domainBuilder.buildAttachment({
           id: null,
           url: 'https://www.attB.com',
-          type: 'attachment',
+          type: Attachment.TYPES.ATTACHMENT,
           alt: 'osef le retour',
           size: 456,
           mimeType: 'text/csv',

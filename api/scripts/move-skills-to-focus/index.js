@@ -123,8 +123,8 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
 
     // Pré-filtrage des épreuves pour ne conserver que les proto validées et les déclinaisons validées/proposées
     const preFilteredSkillChallenges = skillChallenges.filter((challenge) =>
-      (challenge.genealogy === 'Prototype 1' && challenge.isValide)
-      || (challenge.genealogy === 'Décliné 1' && (challenge.isValide || challenge.isPropose))
+      (challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE && challenge.isValide)
+      || (challenge.genealogy === Challenge.GENEALOGIES.DECLINAISON && (challenge.isValide || challenge.isPropose))
     );
 
     const res = skill.cloneSkillAndChallenges({

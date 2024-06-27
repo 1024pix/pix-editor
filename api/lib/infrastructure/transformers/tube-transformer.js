@@ -1,5 +1,4 @@
-const VALIDATED_CHALLENGE = 'validé';
-const PROTOTYPE_CHALLENGE = 'Prototype 1';
+import { ChallengeForRelease } from '../../domain/models/release/index.js';
 
 export function transform({ tubes, skills, challenges, thematics }) {
   tubes.forEach((tube) => {
@@ -31,17 +30,19 @@ function _addDeviceCompliance({ tube, skills, challenges }) {
 
 function _filterValidatedPrototypeTubeChallenges(skills, challenges, tubeId) {
   return challenges.filter((challenge) => {
-    if (challenge.status !== VALIDATED_CHALLENGE) return false;
-    if (challenge.genealogy !== PROTOTYPE_CHALLENGE) return false;
+    if (challenge.status !== ChallengeForRelease.STATUSES.VALIDE) return false;
+    if (challenge.genealogy !== ChallengeForRelease.GENEALOGIES.PROTOTYPE) return false;
     const skill = skills.find((skill) => skill.id === challenge.skillId);
     return skill?.tubeId === tubeId;
   });
 }
 
 function _isChallengeSmartphoneCompliant(challenge) {
-  return challenge.responsive?.includes('Smartphone');
+  return [ChallengeForRelease.RESPONSIVES.SMARTPHONE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
+    .includes(challenge.responsive);
 }
 
 function _isChallengeTabletCompliant(challenge) {
-  return challenge.responsive?.includes('Tablet');
+  return [ChallengeForRelease.RESPONSIVES.TABLETTE, ChallengeForRelease.RESPONSIVES.TABLETTE_ET_SMARTPHONE]
+    .includes(challenge.responsive);
 }

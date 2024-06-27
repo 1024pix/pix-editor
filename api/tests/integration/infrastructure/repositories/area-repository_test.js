@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import * as areaRepository from '../../../../lib/infrastructure/repositories/area-repository.js';
+import { Area } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | area-repository', () => {
 
@@ -11,7 +12,7 @@ describe('Integration | Repository | area-repository', () => {
         airtableBuilder.factory.buildArea({
           id: 'areaId1',
           code: '1',
-          color: 'blue da ba di da ba da',
+          color: Area.COLORS.BUTTERFLY_BUSH,
           competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
           competenceIds: ['competenceId11', 'competenceId12'],
           frameworkId: 'frameworkId1',
@@ -19,7 +20,7 @@ describe('Integration | Repository | area-repository', () => {
         airtableBuilder.factory.buildArea({
           id: 'areaId2',
           code: '2',
-          color: 'caca d\'oie',
+          color: Area.COLORS.WILD_STRAWBERRY,
           competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
           competenceIds: ['competenceId21', 'competenceId22'],
           frameworkId: 'frameworkId1',
@@ -57,7 +58,7 @@ describe('Integration | Repository | area-repository', () => {
         domainBuilder.buildArea({
           id: 'areaId1',
           code: '1',
-          color: 'blue da ba di da ba da',
+          color: Area.COLORS.BUTTERFLY_BUSH,
           competenceAirtableIds: ['competenceAirtableId11', 'competenceAirtableId12'],
           competenceIds: ['competenceId11', 'competenceId12'],
           frameworkId: 'frameworkId1',
@@ -69,7 +70,7 @@ describe('Integration | Repository | area-repository', () => {
         domainBuilder.buildArea({
           id: 'areaId2',
           code: '2',
-          color: 'caca d\'oie',
+          color: Area.COLORS.WILD_STRAWBERRY,
           competenceAirtableIds: ['competenceAirtableId21', 'competenceAirtableId22'],
           competenceIds: ['competenceId21', 'competenceId22'],
           frameworkId: 'frameworkId1',

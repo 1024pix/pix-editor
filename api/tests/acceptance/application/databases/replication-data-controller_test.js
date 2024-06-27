@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -42,7 +43,7 @@ async function mockCurrentContent() {
     url: 'http://example.fr',
     mimeType: 'mimeType1',
     filename: 'nom_fichier_1',
-    type: 'lol',
+    type: Attachment.TYPES.ILLUSTRATION,
     alt: null,
     localizedChallenge: challenge.id,
   };
@@ -52,7 +53,7 @@ async function mockCurrentContent() {
     url: 'http://example.nl',
     mimeType: 'mimeType2',
     filename: 'nom_fichier_2',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
   };
@@ -169,7 +170,7 @@ async function mockCurrentContent() {
     challengeId: challenge.id,
     locale: 'fr',
     embedUrl: challenge.embedUrl,
-    status: 'validé',
+    status: LocalizedChallenge.STATUSES.PLAY,
     geography: 'BR',
     urlsToConsult: [
       'https://example.com/',
@@ -180,7 +181,7 @@ async function mockCurrentContent() {
     id: 'localized-challenge-id',
     challengeId: challenge.id,
     locale: 'nl',
-    status: 'validé',
+    status: LocalizedChallenge.STATUSES.PLAY,
     geography: null,
   });
   databaseBuilder.factory.buildTranslation({

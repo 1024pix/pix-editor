@@ -7,6 +7,7 @@ import {
   tutorialDatasource
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
+import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Integration | Repository | skill-repository', () => {
 
@@ -18,22 +19,22 @@ describe('Integration | Repository | skill-repository', () => {
           id: 'skill1',
           name: 'Acquis 1',
           description: 'Description Acquis 1',
-          hintStatus: 'validé',
+          hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
           tutorialIds: ['tuto1', 'tuto2'],
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           pixValue: 2.5,
           competenceId: 'competence1',
-          status: 'périmé',
+          status: Skill.STATUSES.PERIME,
           tubeId: 'tube1',
           level: 4,
-          internationalisation: 'i18n skill1',
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           version: '1',
         }),
         airtableBuilder.factory.buildSkill({
           id: 'skill2',
           name: 'Acquis 2',
           description: 'Description Acquis 2',
-          hintStatus: 'proposé',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['tuto5'],
           learningMoreTutorialIds: ['tuto6'],
           pixValue: 1.6,
@@ -41,7 +42,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: 'actif',
           tubeId: 'tube2',
           level: 6,
-          internationalisation: 'i18n skill2',
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
           version: '2',
         }),
       ]).activate().nockScope;
@@ -82,15 +83,15 @@ describe('Integration | Repository | skill-repository', () => {
             fr: 'Indice acquis 1',
             en: 'Skill 1 hint',
           },
-          hintStatus: 'validé',
+          hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
           tutorialIds: ['tuto1', 'tuto2'],
           learningMoreTutorialIds: ['tuto3', 'tuto4'],
           pixValue: 2.5,
           competenceId: 'competence1',
-          status: 'périmé',
+          status: Skill.STATUSES.PERIME,
           tubeId: 'tube1',
           level: 4,
-          internationalisation: 'i18n skill1',
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
           version: '1',
         }),
         domainBuilder.buildSkill({
@@ -101,7 +102,7 @@ describe('Integration | Repository | skill-repository', () => {
             fr: 'Indice acquis 2',
             en: 'Skill 2 hint',
           },
-          hintStatus: 'proposé',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['tuto5'],
           learningMoreTutorialIds: ['tuto6'],
           pixValue: 1.6,
@@ -109,7 +110,7 @@ describe('Integration | Repository | skill-repository', () => {
           status: 'actif',
           tubeId: 'tube2',
           level: 6,
-          internationalisation: 'i18n skill2',
+          internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
           version: '2',
         }),
       ]);
@@ -140,28 +141,28 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillNoHintBeforeHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantA',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: 'hint A fr', en: 'hint A en' },
       });
 
       const skillHintBeforeHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantB',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: 'hint B fr', en: 'hint B en' },
       });
@@ -178,14 +179,14 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillHintBeforeNoHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantC',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: null, en: null },
       });
@@ -202,14 +203,14 @@ describe('Integration | Repository | skill-repository', () => {
 
       const skillNoHintBeforeNoHintAfter = domainBuilder.buildSkill({
         id: 'skillIdPersistantD',
-        hintStatus: 'skill hint status',
+        hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
         tutorialIds: ['tutorialIdPersistant'],
         learningMoreTutorialIds: [],
         status: Skill.STATUSES.ACTIF,
         tubeId: 'tubeIdPersistant',
         description: 'ma super description',
         level: 4,
-        internationalisation: 'Monde',
+        internationalisation: Skill.INTERNATIONALISATIONS.MONDE,
         version: 2,
         hint_i18n: { fr: null, en: null },
       });
@@ -222,7 +223,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillNoHintBeforeHintAfter.tutorialIds,
           learningMoreTutorialIds: skillNoHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeHintAfter.tutorialIds,
+          hintStatus: skillNoHintBeforeHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillNoHintBeforeHintAfter.status,
@@ -237,7 +238,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillHintBeforeHintAfter.tutorialIds,
           learningMoreTutorialIds: skillHintBeforeHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeHintAfter.tutorialIds,
+          hintStatus: skillHintBeforeHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillHintBeforeHintAfter.status,
@@ -252,7 +253,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillHintBeforeNoHintAfter.tutorialIds,
           learningMoreTutorialIds: skillHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillHintBeforeNoHintAfter.tutorialIds,
+          hintStatus: skillHintBeforeNoHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillHintBeforeNoHintAfter.status,
@@ -267,7 +268,7 @@ describe('Integration | Repository | skill-repository', () => {
           name: 'nom computé',
           tutorialIds: skillNoHintBeforeNoHintAfter.tutorialIds,
           learningMoreTutorialIds: skillNoHintBeforeNoHintAfter.learningMoreTutorialIds,
-          hintStatus: skillNoHintBeforeNoHintAfter.tutorialIds,
+          hintStatus: skillNoHintBeforeNoHintAfter.hintStatus,
           pixValue: 'pix value computé',
           competenceId: 'maSUperCOmpetenceId',
           status: skillNoHintBeforeNoHintAfter.status,

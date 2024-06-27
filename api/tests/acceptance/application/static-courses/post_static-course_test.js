@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex, } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | API | static courses | POST /api/static-courses', function() {
   let user;
@@ -25,7 +26,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
       id: 'challengeid1nl',
       challengeId: 'challengeid1',
       locale: 'nl',
-      status: 'proposé',
+      status: LocalizedChallenge.STATUSES.PAUSE,
     });
     databaseBuilder.factory.buildTranslation({
       key: 'challenge.challengeid1.instruction',
@@ -83,7 +84,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     const airtableChallenge1 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid1',
       skillId: 'skillid1',
-      status: 'validé',
+      status: Challenge.STATUSES.VALIDE,
       locales: ['fr'],
     });
     const airtableSkill1 = airtableBuilder.factory.buildSkill({
@@ -94,7 +95,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     const airtableChallenge2 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid2',
       skillId: 'skillid2',
-      status: 'proposé',
+      status: Challenge.STATUSES.PROPOSE,
       locales: ['fr'],
     });
     const airtableSkill2 = airtableBuilder.factory.buildSkill({
@@ -105,7 +106,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     const airtableChallenge3 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid3',
       skillId: 'skillid3',
-      status: 'proposé',
+      status: Challenge.STATUSES.PROPOSE,
       locales: ['fr'],
     });
     const airtableSkill3 = airtableBuilder.factory.buildSkill({
@@ -116,7 +117,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
     const airtableChallenge4 = airtableBuilder.factory.buildChallenge({
       id: 'challengeid4',
       skillId: 'skillid4',
-      status: 'proposé',
+      status: Challenge.STATUSES.PROPOSE,
       locales: ['fr'],
     });
     const airtableSkill4 = airtableBuilder.factory.buildSkill({
@@ -212,7 +213,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             index: 0,
             instruction: 'instruction for challengeid3',
             'skill-name': '@skillid3',
-            status: 'proposé',
+            status: Challenge.STATUSES.PROPOSE,
             'preview-url': 'http://test.site/api/challenges/challengeid3/preview',
           },
         },
@@ -223,7 +224,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             index: 1,
             instruction: 'instruction for challengeid1',
             'skill-name': '@skillid1',
-            status: 'validé',
+            status: Challenge.STATUSES.VALIDE,
             'preview-url': 'http://test.site/api/challenges/challengeid1/preview',
           },
         },
@@ -234,7 +235,7 @@ describe('Acceptance | API | static courses | POST /api/static-courses', functio
             index: 2,
             instruction: 'instruction for challengeid1 in nl',
             'skill-name': '@skillid1',
-            status: 'proposé',
+            status: Challenge.STATUSES.PROPOSE,
             'preview-url': 'http://test.site/api/challenges/challengeid1/preview?locale=nl',
           },
         },

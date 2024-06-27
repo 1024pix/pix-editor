@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
+import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 
 describe('Unit | Domain | Challenge', () => {
 
@@ -324,7 +325,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'nl',
         embedUrl: 'https://example.nl/index.html?mode=example',
         primaryEmbedUrl,
-        status: 'proposé',
+        status: Challenge.STATUSES.PROPOSE,
         geography: 'NL',
       });
       const englishLocalizedChallenge = domainBuilder.buildLocalizedChallenge({
@@ -333,7 +334,7 @@ describe('Unit | Domain | Challenge', () => {
         locale: 'en',
         embedUrl: null,
         primaryEmbedUrl,
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         geography: null,
       });
       const localizedChallenges = [
@@ -370,7 +371,7 @@ describe('Unit | Domain | Challenge', () => {
       const challenge = domainBuilder.buildChallenge({
         id: challengeId,
         locales: ['fr-fr', 'fr'],
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         localizedChallenges,
         translations,
         files: [
@@ -385,7 +386,7 @@ describe('Unit | Domain | Challenge', () => {
         ...challenge,
         id: dutchChallengeId,
         locales: ['nl'],
-        status: 'proposé',
+        status: Challenge.STATUSES.PROPOSE,
         ...translations.nl,
         embedUrl: dutchLocalizedChallenge.embedUrl,
         files: dutchFiles.map(({ fileId }) => fileId),
@@ -396,7 +397,7 @@ describe('Unit | Domain | Challenge', () => {
         ...challenge,
         id: englishChallengeId,
         locales: ['en'],
-        status: 'validé',
+        status: Challenge.STATUSES.VALIDE,
         ...translations.en,
         embedUrl: 'https://example.com/index.html?lang=en&mode=example',
         files: englishFiles.map(({ fileId }) => fileId),
@@ -429,14 +430,14 @@ describe('Unit | Domain | Challenge', () => {
     });
 
     [
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'proposé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'validé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'validé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'validé' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'proposé' },
-      { challengeStatus: 'archivé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'archivé' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedTranslatedStatus: 'périmé' },
-      { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedTranslatedStatus: 'périmé' },
+      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.PROPOSE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.VALIDE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.VALIDE },
+      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PROPOSE },
+      { challengeStatus: Challenge.STATUSES.ARCHIVE, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.ARCHIVE },
+      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PAUSE, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
+      { challengeStatus: Challenge.STATUSES.PERIME, localizedChallengeStatus: LocalizedChallenge.STATUSES.PLAY, expectedTranslatedStatus: Challenge.STATUSES.PERIME },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedTranslatedStatus }) => {
       it(`should translate status ${challengeStatus} and localized status ${localizedChallengeStatus} to ${expectedTranslatedStatus}`, () => {
         // given
@@ -551,7 +552,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'challengeId',
             challengeId: 'challengeId',
             locale: 'fr',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             fileIds: [],
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
@@ -562,36 +563,36 @@ describe('Unit | Domain | Challenge', () => {
           fileId: 'attID',
           localizedChallengeId: 'challengeId'
         }],
-        accessibility1: 'someValue',
-        accessibility2: 'someOtherValue',
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
         alternativeVersion: 5,
         alpha: 'olé',
         archivedAt: new Date('2020-01-01'),
         author: 'CHU',
         autoReply: 'oui c auto reply',
         competenceId: 'someCompetenceId',
-        contextualizedFields : ['mes super contextualizedFields'],
+        contextualizedFields : [Challenge.CONTEXTUALIZED_FIELDS.ATTACHMENTS],
         createdAt: new Date('2019-01-01'),
-        declinable: 'NON',
+        declinable: Challenge.DECLINABLES.NON,
         delta: 'super delta',
         embedHeight: 800,
         focusable: 'oui avec plaisir',
-        format: 'a4',
-        genealogy: 'Décliné 1',
+        format: Challenge.FORMATS.PETIT,
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
         geography: 'Monde',
         madeObsoleteAt: new Date('2021-01-01'),
-        pedagogy: 'très fort',
-        responsive: 'non pas pour mobile',
+        pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
+        responsive: Challenge.RESPONSIVES.NON,
         shuffled: true,
         skillId: 'oldSkillId',
         skills: ['videz moi'],
-        spoil: 'poil de nez',
+        spoil: Challenge.SPOILS.NON_SPOILABLE,
         status: Challenge.STATUSES.VALIDE,
         t1Status: 'super t1',
         t2Status: 'super t2',
         t3Status: 'super t3',
         timer: '01:30',
-        type: 'QROCM',
+        type: ChallengeForRelease.TYPES.QROCM,
         updatedAt: new Date('2020-01-01'),
         validatedAt: new Date('2022-01-01'),
         version: 8,
@@ -647,7 +648,7 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(domainBuilder.buildLocalizedChallenge({
         id: clonedChallengeId,
         challengeId: clonedChallengeId,
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         embedUrl: challenge.localizedChallenges[0].embedUrl,
         geography: challenge.localizedChallenges[0].geography,
         urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
@@ -693,7 +694,7 @@ describe('Unit | Domain | Challenge', () => {
             id: 'challengeId',
             challengeId: 'challengeId',
             locale: 'fr',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             fileIds: ['attachmentIdA'],
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
@@ -722,7 +723,7 @@ describe('Unit | Domain | Challenge', () => {
       const attachmentIdA = domainBuilder.buildAttachment({
         id: 'attachmentIdA',
         url: 'cc',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
         localizedChallengeId: 'challengeId'
@@ -730,7 +731,7 @@ describe('Unit | Domain | Challenge', () => {
       const attachmentIdB = domainBuilder.buildAttachment({
         id: 'attachmentIdB',
         url: 'cc',
-        type: 'illustration',
+        type: Attachment.TYPES.ILLUSTRATION,
         alt: 'mdr',
         challengeId: 'challengeId',
         localizedChallengeId: 'locNLChallengeId'
@@ -771,7 +772,7 @@ describe('Unit | Domain | Challenge', () => {
         domainBuilder.buildLocalizedChallenge({
           id: clonedChallengeId,
           challengeId: clonedChallengeId,
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           embedUrl: challenge.localizedChallenges[0].embedUrl,
           geography: challenge.localizedChallenges[0].geography,
           urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,

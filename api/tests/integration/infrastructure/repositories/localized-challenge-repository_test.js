@@ -2,6 +2,7 @@ import { afterEach, describe as context, describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import { localizedChallengeRepository } from '../../../../lib/infrastructure/repositories/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | localized-challenge-repository', function() {
 
@@ -23,7 +24,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId,
         locale: 'fr-fr',
         embedUrl: 'https://example.com/embed.html',
-        status: 'proposé',
+        status: LocalizedChallenge.STATUSES.PAUSE,
         geography: null,
         urlsToConsult: ['pouet.com', 'truc.fr'],
       });
@@ -49,7 +50,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'fr-fr',
           embedUrl: 'https://example.com/embed.html',
-          status: 'proposé',
+          status: LocalizedChallenge.STATUSES.PAUSE,
           fileIds: [],
           geography: null,
           urlsToConsult: ['pouet.com', 'truc.fr'],
@@ -124,6 +125,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           embedUrl: 'https://example.com/embed.html',
           geography: 'AZ',
           urlsToConsult: ['lien1', 'lien2'],
+          status: LocalizedChallenge.STATUSES.PRIMARY,
         })
       ] });
 
@@ -135,7 +137,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'challengeId',
         locale: 'locale',
         embedUrl: 'https://example.com/embed.html',
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'AZ',
         urlsToConsult: ['lien1', 'lien2'],
       }]);
@@ -162,6 +164,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           embedUrl: 'https://example.com/embed.html',
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
+          status: LocalizedChallenge.STATUSES.PRIMARY,
         }], generateId: () => 'generated-id' });
 
         // then
@@ -172,7 +175,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
         }]);
@@ -218,6 +221,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             embedUrl: 'example.com',
             geography: null,
             urlsToConsult: ['link1', 'link2'],
+            status: LocalizedChallenge.STATUSES.PRIMARY,
           },
           {
             challengeId: 'challengeId',
@@ -225,6 +229,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             embedUrl: 'example.net',
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
+            status: LocalizedChallenge.STATUSES.PRIMARY,
           }
         ] });
 
@@ -238,7 +243,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'en',
             embedUrl: 'example.com',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: null,
             urlsToConsult: ['link1', 'link2'],
           },
@@ -247,7 +252,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             locale: 'fr',
             embedUrl: 'example.net',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
           },
@@ -826,6 +831,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         embedUrl: 'my-url.html',
         locale: 'bz',
         geography: 'BZ',
+        status: LocalizedChallenge.STATUSES.PRIMARY,
       });
       await databaseBuilder.commit();
 
@@ -834,7 +840,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: 'differentChallengeId should not be updated',
         embedUrl: 'my-new-url.html',
         locale: 'ar',
-        status: null,
+        status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'AR',
         urlsToConsult: ['my-new-link']
       });
@@ -849,7 +855,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'AR',
           urlsToConsult: ['my-new-link']
         },
@@ -861,7 +867,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'AR',
           urlsToConsult: ['my-new-link']
         }));
@@ -916,7 +922,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'differentChallengeId should not be updated',
           embedUrl: 'my-new-url.html',
           locale: 'ar',
-          status: null,
+          status: LocalizedChallenge.STATUSES.PRIMARY,
           files: ['attachmentId'],
           urlsToConsult: null,
         });
@@ -931,7 +937,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             embedUrl: 'my-new-url.html',
             locale: 'ar',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: null,
             urlsToConsult: null,
           },
@@ -943,7 +949,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
             challengeId: 'challengeId',
             embedUrl: 'my-new-url.html',
             locale: 'ar',
-            status: null,
+            status: LocalizedChallenge.STATUSES.PRIMARY,
             files: ['attachmentId'],
             urlsToConsult: null,
           }));

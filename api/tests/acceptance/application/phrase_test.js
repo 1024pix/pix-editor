@@ -7,6 +7,7 @@ import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
+import { Area } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
 
@@ -32,7 +33,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Titre du Domaine - en',
           },
           competenceIds: ['recCompetence0'],
-          color: 'jaffa',
+          color: Area.COLORS.JAFFA,
           frameworkId: 'recFramework0',
         },
         {
@@ -44,7 +45,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             en: 'Titre du Domaine Pix+ - en',
           },
           competenceIds: ['recCompetence1'],
-          color: 'jaffa',
+          color: Area.COLORS.NONE,
           frameworkId: 'recFramework1',
         }],
         competences: [{
@@ -113,7 +114,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             fr: 'Indice - fr',
             en: 'Indice - en',
           },
-          hintStatus: 'Statut de l‘indice',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['recTutorial0'],
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
@@ -129,7 +130,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             fr: 'Indice - fr',
             en: 'Indice - en',
           },
-          hintStatus: 'Statut de l‘indice',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['recTutorial0'],
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
@@ -145,7 +146,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
             fr: 'Indice - fr',
             en: 'Indice - en',
           },
-          hintStatus: 'Statut de l‘indice',
+          hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
           tutorialIds: ['recTutorial0'],
           learningMoreTutorialIds: ['recTutorial1'],
           pixValue: 8,
@@ -159,7 +160,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
           id: 'recChallenge0',
           instruction: 'Consigne du Challenge',
           proposals: 'Propositions du Challenge',
-          type: 'Type d\'épreuve',
+          type: ChallengeForRelease.TYPES.QCM,
           solution: 'Bonnes réponses du Challenge',
           solutionToDisplay: 'Bonnes réponses du Challenge à afficher',
           t1Status: false,
@@ -175,21 +176,21 @@ describe('Acceptance | Controller | phrase-controller', () => {
           attachments: ['url de la pièce jointe'],
           competenceId: 'recCompetence0',
           illustrationAlt: 'Texte alternatif illustration',
-          format: 'mots',
+          format: ChallengeForRelease.FORMATS.MOTS,
           autoReply: false,
           locales: ['fr'],
           alternativeInstruction: 'Consigne alternative',
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
-          genealogy: 'Prototype 1',
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+          genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
         },
         {
           id: 'recChallenge66',
           instruction: 'Consigne du Challenge66',
           proposals: 'Propositions du Challenge66',
-          type: 'Type d\'épreuve66',
+          type: ChallengeForRelease.TYPES.QCU,
           solution: 'Bonnes réponses du Challenge66',
           solutionToDisplay: 'Bonnes réponses du Challenge à afficher66',
           t1Status: false,
@@ -205,15 +206,15 @@ describe('Acceptance | Controller | phrase-controller', () => {
           attachments: ['url de la pièce jointe66'],
           competenceId: 'recCompetence0',
           illustrationAlt: 'Texte alternatif illustration66',
-          format: 'mots',
+          format: ChallengeForRelease.FORMATS.MOTS,
           autoReply: false,
           locales: ['fr'],
           alternativeInstruction: 'Consigne alternative66',
           focusable: false,
           delta: 0.5,
           alpha: 0.9,
-          responsive: ['Smartphone'],
-          genealogy: 'Décliné 1',
+          responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+          genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
         }],
       };
       databaseBuilder.factory.buildRelease({

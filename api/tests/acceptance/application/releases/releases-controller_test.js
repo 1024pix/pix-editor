@@ -1,15 +1,11 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it, vi } from 'vitest';
 import nock from 'nock';
-import {
-  airtableBuilder,
-  databaseBuilder,
-  generateAuthorizationHeader,
-  knex
-} from '../../../test-helper.js';
+import { airtableBuilder, databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
 import axios from 'axios';
-import { Mission } from '../../../../lib/domain/models/index.js';
+import { Area, Attachment, Mission } from '../../../../lib/domain/models/index.js';
 import { MissionForRelease } from '../../../../lib/domain/models/release/MissionForRelease.js';
+import { ChallengeForRelease, SkillForRelease, TutorialForRelease } from '../../../../lib/domain/models/release/index.js';
 
 const {
   buildArea,
@@ -40,7 +36,7 @@ async function mockCurrentContent() {
       },
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
-      color: 'jaffa',
+      color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
     }],
     competences: [{
@@ -99,12 +95,12 @@ async function mockCurrentContent() {
         en: 'Indice - en',
         nl: 'Indice - nl',
       },
-      hintStatus: 'Statut de l‘indice',
+      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,
       competenceId: 'recCompetence0',
-      status: 'validé',
+      status: SkillForRelease.STATUSES.ACTIF,
       tubeId: 'recTube0',
       version: 1,
       level: 1,
@@ -113,13 +109,13 @@ async function mockCurrentContent() {
       id: 'recChallenge0',
       instruction: 'Consigne du Challenge - fr-fr',
       proposals: 'Propositions du Challenge - fr-fr',
-      type: 'Type d\'épreuve',
+      type: ChallengeForRelease.TYPES.QCM,
       solution: 'Bonnes réponses du Challenge - fr-fr',
       solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
       t1Status: false,
       t2Status: true,
       t3Status: false,
-      status: 'validé',
+      status: ChallengeForRelease.STATUSES.VALIDE,
       skillId: 'recSkill0',
       embedUrl: 'Embed URL',
       embedTitle: 'Embed title',
@@ -129,20 +125,20 @@ async function mockCurrentContent() {
       attachments: ['url de la pièce jointe'],
       competenceId: 'recCompetence0',
       illustrationAlt: 'Texte alternatif illustration',
-      format: 'mots',
+      format: ChallengeForRelease.FORMATS.MOTS,
       autoReply: false,
       locales: ['fr-fr'],
       alternativeInstruction: 'Consigne alternative - fr-fr',
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
-      responsive: ['Smartphone'],
-      genealogy: 'Prototype 1',
+      responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+      genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
     }],
     tutorials: [{
       id: 'recTutorial0',
       duration: 'Durée du Tutoriel',
-      format: 'Format du Tutoriel',
+      format: TutorialForRelease.FORMATS.FRISE,
       link: 'Lien du Tutoriel',
       source: 'Source du Tutoriel',
       title: 'Titre du Tutoriel',
@@ -179,19 +175,19 @@ async function mockCurrentContent() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid2',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid3',
     url: 'url of the joint piece',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0En',
   }];
@@ -342,7 +338,7 @@ async function mockContentForRelease() {
       code: '1',
       competenceIds: ['recCompetence0'],
       competenceAirtableIds: ['recCompetence123'],
-      color: 'jaffa',
+      color: Area.COLORS.JAFFA,
       frameworkId: 'recFramework0',
       title_i18n: {
         en: 'Titre du Domaine - en',
@@ -401,12 +397,12 @@ async function mockContentForRelease() {
     skills: [{
       id: 'recSkill0',
       name: 'Nom de l‘Acquis',
-      hintStatus: 'Statut de l‘indice',
+      hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
       tutorialIds: ['recTutorial0'],
       learningMoreTutorialIds: ['recTutorial1'],
       pixValue: 8,
       competenceId: 'recCompetence0',
-      status: 'validé',
+      status: SkillForRelease.STATUSES.ACTIF,
       tubeId: 'recTube0',
       version: 1,
       level: 1,
@@ -426,22 +422,22 @@ async function mockContentForRelease() {
       t1Status: false,
       t2Status: true,
       t3Status: false,
-      status: 'validé',
+      status: ChallengeForRelease.STATUSES.VALIDE,
       skillId: 'recSkill0',
       embedUrl: 'Embed URL',
       embedTitle: 'Embed title',
       embedHeight: 'Embed height',
       timer: 12,
       competenceId: 'recCompetence0',
-      format: 'mots',
+      format: ChallengeForRelease.FORMATS.MOTS,
       autoReply: false,
       locales: ['fr-fr'],
       alternativeInstruction: 'Consigne alternative - fr-fr',
       focusable: false,
       delta: 0.5,
       alpha: 0.9,
-      responsive: ['Smartphone'],
-      genealogy: 'Prototype 1',
+      responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+      genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
       attachments: ['url de la pièce jointe'],
       illustrationUrl: 'url de l‘illustration',
       illustrationAlt: 'Texte alternatif illustration',
@@ -449,7 +445,7 @@ async function mockContentForRelease() {
     tutorials: [{
       id: 'recTutorial0',
       duration: 'Durée du Tutoriel',
-      format: 'Format du Tutoriel',
+      format: TutorialForRelease.FORMATS.VIDEO,
       link: 'Lien du Tutoriel',
       source: 'Source du Tutoriel',
       title: 'Titre du Tutoriel',
@@ -490,19 +486,19 @@ async function mockContentForRelease() {
   const attachments = [{
     id: 'attid1',
     url: 'url de l‘illustration',
-    type: 'illustration',
+    type: Attachment.TYPES.ILLUSTRATION,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid2',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0',
   }, {
     id: 'attid3',
     url: 'url de la pièce jointe',
-    type: 'attachment',
+    type: Attachment.TYPES.ATTACHMENT,
     challengeId: 'recChallenge0',
     localizedChallengeId: 'recChallenge0En',
   }];

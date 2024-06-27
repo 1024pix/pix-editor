@@ -31,6 +31,7 @@ export class LocalizedChallenge {
     return {
       PLAY: Challenge.STATUSES.VALIDE,
       PAUSE: Challenge.STATUSES.PROPOSE,
+      PRIMARY: null,
     };
   }
 
@@ -65,7 +66,7 @@ export class LocalizedChallenge {
       embedUrl,
       geography,
       urlsToConsult,
-      status: null,
+      status: LocalizedChallenge.STATUSES.PRIMARY,
       fileIds: [],
     });
   }
@@ -75,7 +76,7 @@ export class LocalizedChallenge {
       id: null,
       challengeId: translation.entityId,
       locale: translation.locale,
-      status: 'proposé',
+      status: LocalizedChallenge.STATUSES.PAUSE,
       embedUrl: null,
       fileIds: [],
       geography: null,

@@ -106,6 +106,113 @@ export class Challenge {
     };
   }
 
+  static get TYPES() {
+    return {
+      QCU: 'QCU',
+      QCM: 'QCM',
+      QROC: 'QROC',
+      QROCM: 'QROCM',
+      QROCM_IND: 'QROCM-ind',
+      QROCM_DEP: 'QROCM-dep',
+      QMAIL: 'QMAIL',
+      NONE: '',
+    };
+  }
+
+  static get PEDAGOGIES() {
+    return {
+      E_PREUVE: 'e-preuve',
+      Q_SAVOIR: 'q-savoir',
+      Q_SITUATION: 'q-situation',
+    };
+  }
+
+  static get DECLINABLES() {
+    return {
+      FACILEMENT: 'facilement',
+      DIFFICILEMENT: 'difficilement',
+      NON: 'non',
+      PERMUTATION: 'permutation',
+      NONE: '',
+    };
+  }
+
+  static get GENEALOGIES() {
+    return {
+      PROTOTYPE: 'Protoype 1',
+      DECLINAISON: 'Décliné 1',
+      UNUSED_DECLINE: 'décliné',
+      UNUSED_ENG: 'ENG',
+      UNUSED_ECRI: 'ECRI',
+      UNUSED_FRANCOPHONE: 'FRANCOPHONE',
+      NONE: '',
+    };
+  }
+
+  static get ACCESSIBILITY1() {
+    return {
+      RAS: 'RAS',
+      OK: 'OK',
+      ACQUIS_NON_PERTINENT: 'Acquis Non Pertinent',
+      KO: 'KO',
+      A_TESTER: 'A tester',
+      NONE: '',
+    };
+  }
+
+  static get ACCESSIBILITY2() {
+    return {
+      RAS: 'RAS',
+      OK: 'OK',
+      KO: 'KO',
+      NONE: '',
+    };
+  }
+
+  static get SPOILS() {
+    return {
+      NON_SPOILABLE: 'Non Sp',
+      DIFFICILEMENT_SPOILABLE: 'Difficilement Sp',
+      FACILEMENT_SPOILABLE: 'Facilement Sp',
+      NONE: '',
+    };
+  }
+
+  static get RESPONSIVES() {
+    return {
+      TABLETTE: 'Tablette',
+      SMARTPHONE: 'Smartphone',
+      TABLETTE_ET_SMARTPHONE: 'Tablette/Smartphone',
+      NON: 'Non',
+      NONE: '',
+    };
+  }
+
+  static get FORMATS() {
+    return {
+      PETIT: 'petit',
+      MOTS: 'mots',
+      PHRASE: 'phrase',
+      PARAGRAPHE: 'paragraphe',
+      NOMBRE: 'nombre',
+      DATE: 'date',
+      NONE: '',
+    };
+  }
+
+  static get CONTEXTUALIZED_FIELDS() {
+    return {
+      INSTRUCTION: 'instruction',
+      PROPOSALS: 'proposals',
+      SOLUTION: 'solution',
+      ILLUSTRATION: 'illustration',
+      EMBED: 'embed',
+      ATTACHMENTS: 'attachments',
+      SKILL_HINT: 'skillHint',
+      EXTERNAL_LINK: 'externalLink',
+    };
+  }
+
   static get ID_PREFIX() {
     return 'challenge';
   }
@@ -179,7 +286,7 @@ export class Challenge {
       let newLocalizedChallengeId, status;
       if (localizedChallenge.isPrimary) {
         newLocalizedChallengeId = id;
-        status = null;
+        status = LocalizedChallenge.STATUSES.PRIMARY;
       } else {
         newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
         status = LocalizedChallenge.STATUSES.PAUSE;
@@ -300,7 +407,7 @@ export class Challenge {
 
   #translateStatus(localizedChallenge) {
     if (this.isPrimary) return this.#primaryStatus;
-    if (['proposé', 'périmé'].includes(this.status) || localizedChallenge.status === 'validé') {
+    if ([Challenge.STATUSES.PROPOSE, Challenge.STATUSES.PERIME].includes(this.status) || localizedChallenge.status === LocalizedChallenge.STATUSES.PLAY) {
       return this.status;
     }
     return localizedChallenge.status;

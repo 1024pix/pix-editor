@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
-import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/localized-challenge-serializer.js';
+import {
+  deserialize,
+  serialize
+} from '../../../../../lib/infrastructure/serializers/jsonapi/localized-challenge-serializer.js';
+import { LocalizedChallenge } from '../../../../../lib/domain/models/index.js';
 
 describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
   describe('#deserialize', () => {
@@ -120,7 +124,7 @@ describe('Unit | Serializer | JSONAPI | localized-challenge-serializer', () => {
         locale: 'en',
         embedUrl: 'https://example.es/path/to/page.html',
         primaryEmbedUrl: 'https://example.com/path/to/page.html',
-        status: 'validé',
+        status: LocalizedChallenge.STATUSES.PLAY,
         geography: 'BZ',
         urlsToConsult: ['https://urls.fr', 'pouet.fr'],
         fileIds: ['attachment1', 'attachment2']

@@ -1,6 +1,7 @@
-import { expect, describe, vi, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { modifyLocalizedChallenge } from '../../../../lib/domain/usecases/index.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Usecases | modify localized challenge', () => {
   describe('#modify', () => {
@@ -8,14 +9,14 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
       const localizedChallengeRepository = {
         update: vi.fn(),
         get: vi.fn().mockResolvedValue(domainBuilder.buildLocalizedChallenge({
-          status: 'validé',
+          status: LocalizedChallenge.STATUSES.PLAY,
         }))
       };
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'localized-challenge-id',
         challengeId: 'challenge-id',
         embedUrl: 'original-embed-url',
-        status: 'validé',
+        status: LocalizedChallenge.STATUSES.PLAY,
         locale: 'nl',
       });
 
@@ -31,14 +32,14 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(domainBuilder.buildLocalizedChallenge({
-            status: 'validé',
+            status: LocalizedChallenge.STATUSES.PLAY,
           }))
         };
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id: 'localized-challenge-id',
           challengeId: 'challenge-id',
           embedUrl: 'original-embed-url',
-          status: 'validé',
+          status: LocalizedChallenge.STATUSES.PLAY,
           locale: 'nl',
         });
 
@@ -52,14 +53,14 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(domainBuilder.buildLocalizedChallenge({
-            status: 'validé',
+            status: LocalizedChallenge.STATUSES.PLAY,
           })),
         };
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id: 'localized-challenge-id',
           challengeId: 'challenge-id',
           embedUrl: 'original-embed-url',
-          status: 'proposé',
+          status: LocalizedChallenge.STATUSES.PAUSE,
           locale: 'nl',
         });
 
@@ -74,14 +75,14 @@ describe('Unit | Domain | Usecases | modify localized challenge', () => {
         const localizedChallengeRepository = {
           update: vi.fn(),
           get: vi.fn().mockResolvedValue(domainBuilder.buildLocalizedChallenge({
-            status: 'validé',
+            status: LocalizedChallenge.STATUSES.PLAY,
           }))
         };
         const localizedChallenge = domainBuilder.buildLocalizedChallenge({
           id: 'localized-challenge-id',
           challengeId: 'challenge-id',
           embedUrl: 'original-embed-url',
-          status: 'validé',
+          status: LocalizedChallenge.STATUSES.PLAY,
           locale: 'nl',
         });
 
