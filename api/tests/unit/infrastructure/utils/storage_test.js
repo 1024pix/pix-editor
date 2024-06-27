@@ -56,15 +56,15 @@ describe('Unit | Infrastructure | Storage', () => {
         .reply(200);
 
       // when
-      await cloneAttachmentsFileInBucket({ attachments: [attachmentA, attachmentB, attachmentC], millisecondsTimestamp: Date.now() });
+      const newUrlByAttachmentMap = await cloneAttachmentsFileInBucket({ attachments: [attachmentA, attachmentB, attachmentC], millisecondsTimestamp: Date.now() });
 
       // then
       expect(requestInterceptorA.isDone()).to.be.true;
       expect(requestInterceptorB.isDone()).to.be.true;
       expect(requestInterceptorC.isDone()).to.be.true;
-      expect(attachmentA.url).toStrictEqual(expectedDestUrlA);
-      expect(attachmentB.url).toStrictEqual(expectedDestUrlB);
-      expect(attachmentC.url).toStrictEqual(expectedDestUrlC);
+      expect(newUrlByAttachmentMap.get(attachmentA)).toStrictEqual(expectedDestUrlA);
+      expect(newUrlByAttachmentMap.get(attachmentB)).toStrictEqual(expectedDestUrlB);
+      expect(newUrlByAttachmentMap.get(attachmentC)).toStrictEqual(expectedDestUrlC);
     });
   });
 });

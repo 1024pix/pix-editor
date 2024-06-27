@@ -558,8 +558,10 @@ describe('Integration | Repository | attachment-repository', () => {
             expect.unreachable('Wrong attachments sent for cloning');
           if (millisecondsTimestamp !== Date.now())
             expect.unreachable('Wrong timestamp sent for cloning');
-          attachments[0].url = 'cloned/url/attachmentA';
-          attachments[1].url = 'cloned/url/attachmentB';
+          const newUrlByAttachmentMap = new Map();
+          newUrlByAttachmentMap.set(attachmentA, 'cloned/url/attachmentA');
+          newUrlByAttachmentMap.set(attachmentB, 'cloned/url/attachmentB');
+          return newUrlByAttachmentMap;
         });
       vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');

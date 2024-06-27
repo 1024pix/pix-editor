@@ -13,16 +13,19 @@ export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTi
           'X-Copy-From': `${config.pixEditor.storageBucket}/${path}`,
         },
       });
-      attachment.url = cloneUrl;
+      return cloneUrl;
     };
     const identicFilenamesCount = {};
+    const newUrlByAttachmentMap = new Map();
     for (const attachment of attachments) {
       const filename = attachment.url.split('/').pop();
       if (!identicFilenamesCount[filename]) identicFilenamesCount[filename] = 0;
       ++identicFilenamesCount[filename];
       const variableCloneUrlPortion = `${millisecondsTimestamp}_${identicFilenamesCount[filename].toString().padStart(3, '0')}/${filename}`;
-      await fnc(attachment, variableCloneUrlPortion);
+      const cloneUrl = await fnc(attachment, variableCloneUrlPortion);
+      newUrlByAttachmentMap.set(attachment, cloneUrl);
     }
+    return newUrlByAttachmentMap;
   });
 }
 

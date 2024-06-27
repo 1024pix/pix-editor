@@ -29,8 +29,9 @@ export async function createBatch(attachments, { shouldClonePhysicalFile = false
   const airtableChallengeIdsByIds = await challengeDatasource.getAirtableIdsByIds(necessaryChallengeIds);
   const attachmentToSaveDTOs = [];
 
+  let newUrlByAttachmentMap;
   if (shouldClonePhysicalFile) {
-    await cloneAttachmentsFileInBucket({
+    newUrlByAttachmentMap = await cloneAttachmentsFileInBucket({
       attachments,
       millisecondsTimestamp: Date.now(),
     });
@@ -38,7 +39,7 @@ export async function createBatch(attachments, { shouldClonePhysicalFile = false
 
   for (const attachment of attachments) {
     attachmentToSaveDTOs.push({
-      url: attachment.url,
+      url: shouldClonePhysicalFile ? newUrlByAttachmentMap.get(attachment) : attachment.url,
       size: attachment.size,
       type: attachment.type,
       mimeType: attachment.mimeType,
