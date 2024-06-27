@@ -61,8 +61,10 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
 async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
   try {
     const auth = await getAuthToken(config.googleAuthCredentials);
-    if ((await sheets.spreadsheets.get({ spreadsheetId, auth })).data.sheets
-      .filter((sheet) => sheet.properties.title === sheetName).length === 0) {
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
+    const isNameForNewSheetAvailable = spreadsheet.data.sheets
+      .filter((sheet) => sheet.properties.title === sheetName).length === 0;
+    if (isNameForNewSheetAvailable) {
       await sheets.spreadsheets.batchUpdate({
         spreadsheetId,
         auth,

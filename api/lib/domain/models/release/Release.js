@@ -16,65 +16,65 @@ export class Release {
   }
 
   findOriginForChallenge(challenge) {
-    const competence = _findCompetenceForChallenge(challenge, this.content);
+    const competence = findCompetenceForChallenge(challenge, this.content);
     return competence?.origin ?? null;
   }
 
   findCompetenceNameForChallenge(challenge) {
-    const competence = _findCompetenceForChallenge(challenge, this.content);
+    const competence = findCompetenceForChallenge(challenge, this.content);
     return competence?.name_i18n.fr ?? null;
   }
 
   findTubeNameForChallenge(challenge) {
-    const tube = _findTubeForChallenge(challenge, this.content);
+    const tube = findTubeForChallenge(challenge, this.content);
     return tube?.name ?? null;
   }
 
   findSkillNameForChallenge(challenge) {
-    const skill = _findSkillForChallenge(challenge, this.content);
+    const skill = findSkillForChallenge(challenge, this.content);
     return skill?.name ?? null;
   }
 
   findCompetenceNamesForTutorial(tutorial) {
-    const skills = _findSkillsUsingTutorial(tutorial, this.content);
-    const rawCompetenceNames = skills.map((skill) => skill ? _findCompetenceForSkill(skill, this.content)?.name_i18n.fr : null);
+    const skills = findSkillsUsingTutorial(tutorial, this.content);
+    const rawCompetenceNames = skills.map((skill) => skill ? findCompetenceForSkill(skill, this.content)?.name_i18n.fr : null);
     return _.uniq(_.compact(rawCompetenceNames));
   }
 
   findSkillNamesForTutorial(tutorial) {
-    const skills = _findSkillsUsingTutorial(tutorial, this.content);
+    const skills = findSkillsUsingTutorial(tutorial, this.content);
     return skills.map((s) => s.name);
   }
 }
 
-function _findCompetenceForChallenge(challenge, content) {
-  const skill = _findSkillForChallenge(challenge, content);
+function findCompetenceForChallenge(challenge, content) {
+  const skill = findSkillForChallenge(challenge, content);
   if (!skill) return null;
-  return _findCompetenceForSkill(skill, content);
+  return findCompetenceForSkill(skill, content);
 }
 
-function _findTubeForChallenge(challenge, content) {
-  const skill = _findSkillForChallenge(challenge, content);
+function findTubeForChallenge(challenge, content) {
+  const skill = findSkillForChallenge(challenge, content);
   if (!skill) return null;
   const tube = content.tubes.find(({ id }) => skill.tubeId === id);
   if (!tube) return null;
   return tube;
 }
 
-function _findSkillForChallenge(challenge, content) {
+function findSkillForChallenge(challenge, content) {
   const skill = content.skills.find(({ id }) => challenge.skillId === id);
   if (!skill) return null;
   return skill;
 }
 
-function _findCompetenceForSkill(skill, content) {
+function findCompetenceForSkill(skill, content) {
   const tube = content.tubes.find(({ id }) => skill.tubeId === id);
   if (!tube) return null;
   const competence = content.competences.find(({ id }) => tube.competenceId === id);
   return competence ?? null;
 }
 
-function _findSkillsUsingTutorial(tutorial, content) {
+function findSkillsUsingTutorial(tutorial, content) {
   return content.skills.filter((skill) => {
     return skill.tutorialIds.includes(tutorial.id) ||
       skill.learningMoreTutorialIds.includes(tutorial.id);

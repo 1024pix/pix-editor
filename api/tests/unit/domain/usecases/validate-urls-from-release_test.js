@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 import { validateUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
-import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
+import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Validate urls from release', function() {
   describe('#validateUrlsFromRelease', function() {

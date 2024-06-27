@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { UrlUtils } from '../../../../lib/infrastructure/utils/url-utils.js';
+import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Utils | URL Utils', function() {
   describe('#findUrlsInMarkdown', function() {

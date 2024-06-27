@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 export async function exportExternalUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, UrlUtils }) {
-  const release = (await releaseRepository.getLatestRelease());
-  const operativeChallenges = release.operativeChallenges;
+  const release = await releaseRepository.getLatestRelease();
+  const { operativeChallenges } = release;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlsFromChallenges = findUrlsFromChallenges(operativeChallenges, localizedChallengesById, release, UrlUtils);
   const dataToUpload = urlsFromChallenges.map(({ origin, url, locales, status, tube }) =>

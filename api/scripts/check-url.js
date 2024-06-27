@@ -1,4 +1,4 @@
-import { UrlUtils } from '../lib/infrastructure/utils/url-utils.js';
+import * as UrlUtils from '../lib/infrastructure/utils/url-utils.js';
 
 async function main(url) {
   console.log('checking', url);
