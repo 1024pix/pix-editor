@@ -4,27 +4,29 @@ import { fileStorageTokenRepository } from '../repositories/index.js';
 
 export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTimestamp }) {
   return _callAPIWithRetry(async (token) => {
-    const fnc = async (attachment, variableCloneUrlPortion) => {
-      const path = attachment.url.replace(config.pixEditor.storagePost, '');
-      const cloneUrl = `${config.pixEditor.storagePost}${variableCloneUrlPortion}`;
+    const fnc = async (copyFrom, cloneUrl) => {
       await axios.put(cloneUrl, null, {
         headers: {
           'X-Auth-Token': token,
-          'X-Copy-From': `${config.pixEditor.storageBucket}/${path}`,
+          'X-Copy-From': copyFrom,
         },
       });
-      return cloneUrl;
     };
     const identicFilenamesCount = {};
     const newUrlByAttachmentMap = new Map();
+    const promises = [];
     for (const attachment of attachments) {
       const filename = attachment.url.split('/').pop();
       if (!identicFilenamesCount[filename]) identicFilenamesCount[filename] = 0;
       ++identicFilenamesCount[filename];
       const variableCloneUrlPortion = `${millisecondsTimestamp}_${identicFilenamesCount[filename].toString().padStart(3, '0')}/${filename}`;
-      const cloneUrl = await fnc(attachment, variableCloneUrlPortion);
+      const cloneUrl = `${config.pixEditor.storagePost}${variableCloneUrlPortion}`;
+      const originPath = attachment.url.replace(config.pixEditor.storagePost, '');
+      const copyFrom = `${config.pixEditor.storageBucket}/${originPath}`;
+      promises.push(fnc(copyFrom, cloneUrl));
       newUrlByAttachmentMap.set(attachment, cloneUrl);
     }
+    await Promise.all(promises);
     return newUrlByAttachmentMap;
   });
 }
