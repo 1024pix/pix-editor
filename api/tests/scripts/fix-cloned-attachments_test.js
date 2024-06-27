@@ -520,7 +520,7 @@ describe('Script | Fix cloned attachments', function() {
         challengeId: 'valideProtoForActifSkillNewId',
         localizedChallengeId: 'valideProtoForActifSkillNLNewId',
       }),
-    ]);
+    ], { shouldClonePhysicalFile: false });
     const focus_phrase_records = await knex('focus_phrase').select('*').where({ scriptExectId: myCurrentScriptId }).orderBy(['type', 'persistantId']);
     expect(focus_phrase_records).toStrictEqual([
       {

@@ -187,7 +187,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       throw err;
     }
     try {
-      await attachmentRepository.createBatch(clonedAttachments);
+      await attachmentRepository.createBatch(clonedAttachments, { shouldClonePhysicalFile: true });
     } catch (err) {
       await _logInHistoricAndPrint({
         persistantId: skill.id,

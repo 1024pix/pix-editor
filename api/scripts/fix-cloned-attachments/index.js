@@ -165,7 +165,7 @@ async function _fixFor({ originSkill, cloneSkill, skillChallenges, dryRun, scrip
       throw err;
     }
     try {
-      await attachmentRepository.createBatch(clonedAttachments);
+      await attachmentRepository.createBatch(clonedAttachments, { shouldClonePhysicalFile: false });
     } catch (err) {
       await _logInHistoricAndPrint({
         persistantId: originSkill.id,

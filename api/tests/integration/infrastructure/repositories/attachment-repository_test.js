@@ -1,7 +1,8 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as attachmentRepository from '../../../../lib/infrastructure/repositories/attachment-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import * as storage from '../../../../lib/infrastructure/utils/storage.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import _ from 'lodash';
 
@@ -375,14 +376,15 @@ describe('Integration | Repository | attachment-repository', () => {
   });
 
   describe('#createBatch', () => {
+    let attachmentA, attachmentB;
+    const now = new Date('2022-01-01T21:00:00Z');
 
-    afterEach(() => {
-      return knex('localized_challenges-attachments').truncate();
-    });
-
-    it('should create several attachments in airtable, in storage and the links to the localized challenge', async () => {
-      // given
-      const attachmentA = domainBuilder.buildAttachment({
+    beforeEach(async () => {
+      vi.useFakeTimers({
+        now,
+        toFake: ['Date'],
+      });
+      attachmentA = domainBuilder.buildAttachment({
         id: null,
         url: 'url/to/clone/attachmentA',
         type: 'illustration',
@@ -413,7 +415,7 @@ describe('Integration | Repository | attachment-repository', () => {
         challengeId: 'challengeA',
         locale: 'nl',
       });
-      const attachmentB = domainBuilder.buildAttachment({
+      attachmentB = domainBuilder.buildAttachment({
         id: null,
         url: 'url/to/clone/attachmentB',
         type: 'attachment',
@@ -439,6 +441,16 @@ describe('Integration | Repository | attachment-repository', () => {
           expect.unreachable('Wrong challenge ids for fetching corresponding airtable ids');
         return airtableIdsByIds;
       });
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+      return knex('localized_challenges-attachments').truncate();
+    });
+
+    it('should create several attachments in airtable and the links to the localized challenge without physically cloning the resource', async () => {
+      // given
+      vi.spyOn(storage, 'cloneAttachmentsFileInBucket').mockImplementation(() => true);
       vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
         if (
@@ -495,9 +507,10 @@ describe('Integration | Repository | attachment-repository', () => {
       });
 
       // when
-      const attachments = await attachmentRepository.createBatch([attachmentA, attachmentB]);
+      const attachments = await attachmentRepository.createBatch([attachmentA, attachmentB], { shouldClonePhysicalFile: false });
 
       // then
+      expect(storage.cloneAttachmentsFileInBucket).toHaveBeenCalledTimes(0);
       expect(attachments).toStrictEqual([
         domainBuilder.buildAttachment({
           id: 'airtableIdAttachmentA',
@@ -513,6 +526,116 @@ describe('Integration | Repository | attachment-repository', () => {
         domainBuilder.buildAttachment({
           id: 'airtableIdAttachmentB',
           url: attachmentB.url,
+          type: attachmentB.type,
+          alt: null,
+          size: attachmentB.size,
+          mimeType: attachmentB.mimeType,
+          filename: attachmentB.filename,
+          challengeId: attachmentB.challengeId,
+          localizedChallengeId: attachmentB.localizedChallengeId,
+        }),
+      ]);
+      const allLocalizedChallengeAttachments = await knex('localized_challenges-attachments')
+        .select(['attachmentId', 'localizedChallengeId'])
+        .orderBy('attachmentId');
+      expect(allLocalizedChallengeAttachments).toStrictEqual([
+        {
+          attachmentId: 'airtableIdAttachmentA',
+          localizedChallengeId: attachmentA.localizedChallengeId,
+        },
+        {
+          attachmentId: 'airtableIdAttachmentB',
+          localizedChallengeId: attachmentB.localizedChallengeId,
+        },
+      ]);
+    });
+
+    it('should create several attachments in airtable and the links to the localized challenge and physically cloning the resource', async () => {
+      // given
+      vi.spyOn(storage, 'cloneAttachmentsFileInBucket')
+        .mockImplementation(({ attachments, millisecondsTimestamp }) => {
+          if (attachments.length !== 2 || attachments[0] !== attachmentA || attachments[1] !== attachmentB)
+            expect.unreachable('Wrong attachments sent for cloning');
+          if (millisecondsTimestamp !== Date.now())
+            expect.unreachable('Wrong timestamp sent for cloning');
+          attachments[0].url = 'cloned/url/attachmentA';
+          attachments[1].url = 'cloned/url/attachmentB';
+        });
+      vi.spyOn(airtableClient, 'createRecords').mockImplementation((tableName, airtableRequestBodies) => {
+        if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
+        if (
+          airtableRequestBodies.length !== 2
+          || !_.isEqual(airtableRequestBodies[0], { fields: {
+            url: 'cloned/url/attachmentA',
+            size: attachmentA.size,
+            type: attachmentA.type,
+            mimeType: attachmentA.mimeType,
+            filename: attachmentA.filename,
+            challengeId: ['airtableChallengeA'],
+            localizedChallengeId: attachmentA.localizedChallengeId,
+          } })
+          || !_.isEqual(airtableRequestBodies[1], { fields: {
+            url: 'cloned/url/attachmentB',
+            size: attachmentB.size,
+            type: attachmentB.type,
+            mimeType: attachmentB.mimeType,
+            filename: attachmentB.filename,
+            challengeId: ['airtableChallengeB'],
+            localizedChallengeId: attachmentB.localizedChallengeId,
+          } })
+        ) expect.unreachable('Attachments to create to airtable wrong bodies');
+        return [
+          {
+            id: 'airtableIdAttachmentA',
+            fields: {
+              'Record ID': 'airtableIdAttachmentA',
+              url: 'cloned/url/attachmentA',
+              size: attachmentA.size,
+              type: attachmentA.type,
+              mimeType: attachmentA.mimeType,
+              filename: attachmentA.filename,
+              'challengeId persistant': [attachmentA.challengeId],
+              'localizedChallengeId': attachmentA.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          },
+          {
+            id: 'airtableIdAttachmentB',
+            fields: {
+              'Record ID': 'airtableIdAttachmentB',
+              url: 'cloned/url/attachmentB',
+              size: attachmentB.size,
+              type: attachmentB.type,
+              mimeType: attachmentB.mimeType,
+              filename: attachmentB.filename,
+              'challengeId persistant': [attachmentB.challengeId],
+              'localizedChallengeId': attachmentB.localizedChallengeId,
+            },
+            get: function(field) { return this.fields[field]; },
+          },
+        ];
+      });
+
+      // when
+      const attachments = await attachmentRepository.createBatch([attachmentA, attachmentB], { shouldClonePhysicalFile: true });
+
+      // then
+      expect(storage.cloneAttachmentsFileInBucket).toHaveBeenCalledTimes(1);
+      expect(attachments).toStrictEqual([
+        domainBuilder.buildAttachment({
+          id: 'airtableIdAttachmentA',
+          url: 'cloned/url/attachmentA',
+          type: attachmentA.type,
+          alt: 'good illustrationAlt',
+          size: attachmentA.size,
+          mimeType: attachmentA.mimeType,
+          filename: attachmentA.filename,
+          challengeId: attachmentA.challengeId,
+          localizedChallengeId: attachmentA.localizedChallengeId,
+        }),
+        domainBuilder.buildAttachment({
+          id: 'airtableIdAttachmentB',
+          url: 'cloned/url/attachmentB',
           type: attachmentB.type,
           alt: null,
           size: attachmentB.size,

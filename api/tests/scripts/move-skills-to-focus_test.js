@@ -639,7 +639,7 @@ describe('Script | Move skills to focus', function() {
           challengeId: 'valideDecliValideProtoForActifSkillNewId',
           localizedChallengeId: 'valideDecliValideProtoForActifSkillNewId',
         }),
-      ]);
+      ], { shouldClonePhysicalFile: true });
       const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
       expect(focus_phrase_records).toStrictEqual([
         {

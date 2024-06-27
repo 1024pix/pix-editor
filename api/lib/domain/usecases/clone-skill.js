@@ -50,7 +50,7 @@ export async function cloneSkill({
   await challengeRepository.createBatch(clonedChallenges);
   // for now only persist primary attachments
   const attachmentsToPersist = clonedAttachments.filter((attachment) => attachment.challengeId === attachment.localizedChallengeId);
-  await attachmentRepository.createBatch(attachmentsToPersist);
+  await attachmentRepository.createBatch(attachmentsToPersist, { shouldClonePhysicalFile: true });
   return 'ok';
 }
 

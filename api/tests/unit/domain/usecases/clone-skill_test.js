@@ -202,7 +202,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       // then
       expect(skillRepository.create).toHaveBeenCalledWith(clonedSkill);
       expect(challengeRepository.createBatch).toHaveBeenCalledWith(clonedChallenges);
-      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }]);
+      expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }], { shouldClonePhysicalFile: true });
     });
   });
 });
