@@ -87,6 +87,7 @@ export const sentry = {
 export const scheduledJobs = {
   redisUrl: process.env.REDIS_URL,
   createReleaseTime: process.env.CREATE_RELEASE_TIME,
+  exportExternalUrlListTime: process.env.EXPORT_EXTERNAL_URL_LIST_TIME,
   attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
   startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB)
 };
@@ -106,11 +107,16 @@ export const notifications = {
   },
 };
 
+export const googleAuthCredentials = JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}');
+
 export const checkUrlsJobs = {
-  googleAuthCredentials: JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}'),
   spreadsheetId: process.env.CHECK_URLS_SPREADSHEET_ID,
   challengesSheetName: process.env.CHECK_URLS_CHALLENGES_SHEET_NAME,
   tutorialsSheetName: process.env.CHECK_URLS_TUTORIALS_SHEET_NAME,
+};
+
+export const exportExternalUrlsJob = {
+  spreadsheetId: process.env.EXPORT_EXTERNAL_URLS_LIST_SPREADSHEET_ID,
 };
 
 export const phrase = {

@@ -4,6 +4,7 @@ import { createServer } from './server.js';
 import { logger } from './lib/infrastructure/logger.js';
 import { queue as checkUrlQueue } from './lib/infrastructure/scheduled-jobs/check-urls-job.js';
 import * as releaseJob from './lib/infrastructure/scheduled-jobs/release-job.js';
+import * as exportExternalUrlListJob from './lib/infrastructure/scheduled-jobs/export-external-url-list-job.js';
 import { disconnect } from './db/knex-database-connection.js';
 import { validateEnvironmentVariables } from './lib/infrastructure/validate-environement-variables.js';
 
@@ -15,6 +16,7 @@ async function start() {
     await server.start();
 
     releaseJob.schedule();
+    exportExternalUrlListJob.schedule();
 
     logger.info('Server running at %s', server.info.uri);
   } catch (err) {

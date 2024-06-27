@@ -38,7 +38,7 @@ async function setSpreadsheetValues({ spreadsheetId, auth, range, valueInputOpti
 
 async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   try {
-    const auth = await getAuthToken(config.checkUrlsJobs.googleAuthCredentials);
+    const auth = await getAuthToken(config.googleAuthCredentials);
     await clearSpreadsheetValues({
       spreadsheetId: config.checkUrlsJobs.spreadsheetId,
       auth,
@@ -58,10 +58,43 @@ async function sendDataToGoogleSheet(dataToUpload, sheetName) {
   }
 }
 
+async function addSheetToGoogleSheet(dataToUpload, sheetName, spreadsheetId) {
+  try {
+    const auth = await getAuthToken(config.googleAuthCredentials);
+    const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId, auth });
+    const isNameForNewSheetAvailable = spreadsheet.data.sheets
+      .filter((sheet) => sheet.properties.title === sheetName).length === 0;
+    if (isNameForNewSheetAvailable) {
+      await sheets.spreadsheets.batchUpdate({
+        spreadsheetId,
+        auth,
+        resource: { requests: [ { addSheet: { properties: { title: sheetName } } }] } });
+      await setSpreadsheetValues({
+        spreadsheetId,
+        auth,
+        range: `${sheetName}!A:Z`,
+        valueInputOption: 'RAW',
+        resource: {
+          values: dataToUpload
+        }
+      });
+    } else {
+      logger.error(`A sheet with the name "${sheetName}" already exists in spreadsheet`);
+    }
+  } catch (error) {
+    logger.error(error.message);
+  }
+}
+
 export function updateChallenges(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.challengesSheetName);
 }
 
 export function updateTutorials(dataToUpload) {
   return sendDataToGoogleSheet(dataToUpload, config.checkUrlsJobs.tutorialsSheetName);
+}
+
+export function exportExternalUrls(dataToUpload) {
+  const sheetName = new Date().toLocaleDateString('fr-FR');
+  return addSheetToGoogleSheet(dataToUpload, sheetName, config.exportExternalUrlsJob.spreadsheetId);
 }
