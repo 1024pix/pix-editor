@@ -1,5 +1,11 @@
 
 
+## v3.151.0 (27/06/2024)
+
+
+### :rocket: Amélioration
+- [#662](https://github.com/1024pix/pix-editor/pull/662) [FEATURE] Automatiser l'export de la liste des URLs externes (PIX-12467).
+
 ## v3.150.3 (26/06/2024)
 
 
