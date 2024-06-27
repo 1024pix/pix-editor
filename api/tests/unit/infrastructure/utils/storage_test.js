@@ -30,8 +30,12 @@ describe('Unit | Infrastructure | Storage', () => {
       const attachmentB = domainBuilder.buildAttachment({
         url: `${config.pixEditor.storagePost}un_dossier/mon_imageB.jpg`,
       });
-      const expectedDestUrlA = `${config.pixEditor.storagePost}${Date.now()}/mon_imageA.jpg`;
-      const expectedDestUrlB = `${config.pixEditor.storagePost}${Date.now()}/mon_imageB.jpg`;
+      const attachmentC = domainBuilder.buildAttachment({
+        url: `${config.pixEditor.storagePost}un_autre_dossier/mon_imageA.jpg`,
+      });
+      const expectedDestUrlA = `${config.pixEditor.storagePost}${Date.now()}_001/mon_imageA.jpg`;
+      const expectedDestUrlB = `${config.pixEditor.storagePost}${Date.now()}_001/mon_imageB.jpg`;
+      const expectedDestUrlC = `${config.pixEditor.storagePost}${Date.now()}_002/mon_imageA.jpg`;
       const [, baseUrlA, routeA] = [...expectedDestUrlA.matchAll(/^(http.*com)(.*)/g)][0];
       const requestInterceptorA = nock(baseUrlA)
         .put(routeA)
@@ -44,15 +48,23 @@ describe('Unit | Infrastructure | Storage', () => {
         .matchHeader('X-Auth-Token', token)
         .matchHeader('X-Copy-From', `${config.pixEditor.storageBucket}/un_dossier/mon_imageB.jpg`)
         .reply(200);
+      const [, baseUrlC, routeC] = [...expectedDestUrlC.matchAll(/^(http.*com)(.*)/g)][0];
+      const requestInterceptorC = nock(baseUrlC)
+        .put(routeC)
+        .matchHeader('X-Auth-Token', token)
+        .matchHeader('X-Copy-From', `${config.pixEditor.storageBucket}/un_autre_dossier/mon_imageA.jpg`)
+        .reply(200);
 
       // when
-      await cloneAttachmentsFileInBucket({ attachments: [attachmentA, attachmentB], millisecondsTimestamp: Date.now() });
+      await cloneAttachmentsFileInBucket({ attachments: [attachmentA, attachmentB, attachmentC], millisecondsTimestamp: Date.now() });
 
       // then
       expect(requestInterceptorA.isDone()).to.be.true;
       expect(requestInterceptorB.isDone()).to.be.true;
+      expect(requestInterceptorC.isDone()).to.be.true;
       expect(attachmentA.url).toStrictEqual(expectedDestUrlA);
       expect(attachmentB.url).toStrictEqual(expectedDestUrlB);
+      expect(attachmentC.url).toStrictEqual(expectedDestUrlC);
     });
   });
 });

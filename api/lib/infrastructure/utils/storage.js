@@ -2,13 +2,11 @@ import axios from 'axios';
 import * as config from '../../config.js';
 import { fileStorageTokenRepository } from '../repositories/index.js';
 
-// todo fix timestamp bug on batch creation
 export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTimestamp }) {
   return _callAPIWithRetry(async (token) => {
-    const fnc = async (attachment) => {
+    const fnc = async (attachment, variableCloneUrlPortion) => {
       const path = attachment.url.replace(config.pixEditor.storagePost, '');
-      const filename = attachment.url.split('/').pop();
-      const cloneUrl = `${config.pixEditor.storagePost}${millisecondsTimestamp}/${filename}`;
+      const cloneUrl = `${config.pixEditor.storagePost}${variableCloneUrlPortion}`;
       await axios.put(cloneUrl, null, {
         headers: {
           'X-Auth-Token': token,
@@ -17,7 +15,14 @@ export async function cloneAttachmentsFileInBucket({ attachments, millisecondsTi
       });
       attachment.url = cloneUrl;
     };
-    return Promise.all(attachments.map((attachment) => fnc(attachment)));
+    const identicFilenamesCount = {};
+    for (const attachment of attachments) {
+      const filename = attachment.url.split('/').pop();
+      if (!identicFilenamesCount[filename]) identicFilenamesCount[filename] = 0;
+      ++identicFilenamesCount[filename];
+      const variableCloneUrlPortion = `${millisecondsTimestamp}_${identicFilenamesCount[filename].toString().padStart(3, '0')}/${filename}`;
+      await fnc(attachment, variableCloneUrlPortion);
+    }
   });
 }
 
