@@ -141,6 +141,11 @@ export class Challenge {
     return {
       PROTOTYPE: 'Protoype 1',
       DECLINAISON: 'Décliné 1',
+      UNUSED_DECLINE: 'décliné',
+      UNUSED_ENG: 'ENG',
+      UNUSED_ECRI: 'ECRI',
+      UNUSED_FRANCOPHONE: 'FRANCOPHONE',
+      NONE: '',
     };
   }
 
