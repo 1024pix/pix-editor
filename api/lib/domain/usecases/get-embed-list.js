@@ -1,73 +1,74 @@
-import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import {  pipeline, Readable } from 'node:stream';
 import _ from 'lodash';
+import csv from 'fast-csv';
+import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { logger } from '../../infrastructure/logger.js';
 
-const CHALLENGE_STATUSES = {
-  VALIDE: 'validé',
-  PROPOSE: 'proposé',
-  ARCHIVE: 'archivé',
-  PERIME: 'périmé',
-};
-
-export async function getEmbedList(dependencies = { challengeRepository }) {
-
+export async function getEmbedList(stream, dependencies = { challengeRepository }) {
   const challenges = await dependencies.challengeRepository.list();
-  const embedListByChallengeId = {};
+  const embedUrlsToCsv = extractEmbedUrlFromChallenges(challenges);
+
+  const embedUrlWithToCsvHeader = [
+    ['challengeId', 'embedUrl', 'status'],
+    ...embedUrlsToCsv
+  ];
+
+  pipeline(
+    Readable.from(embedUrlWithToCsvHeader),
+    csv.format({ headers: true }),
+    stream,
+    (error) => {
+      if (!error) return;
+      logger.error({ error }, 'Error while get embed list');
+    },
+  );
+}
+
+export function extractEmbedUrlFromChallenges(challenges) {
+  const embedList = [];
   for (const challenge of challenges) {
-    const embedsFromChallenge = getEmbedFRomChallenge(challenge);
+    const embedsFromChallenge = getEmbedFromChallenge(challenge);
     if (embedsFromChallenge.length) {
-      embedsFromChallenge.forEach((embedName) => setChalengeIdsByStatusToEmbedName({ challenge, embedName, embedListByChallengeId }));
+      embedsFromChallenge.forEach((embedUrl) => {
+        embedList.push([
+          challenge.id,
+          embedUrl,
+          challenge.status
+        ]);
+      });
     }
   }
-  return embedListByChallengeId;
+  return embedList.sort(compareUrl);
 }
 
-function setChalengeIdsByStatusToEmbedName({ challenge, embedName, embedListByChallengeId }) {
-  if (! embedListByChallengeId[embedName])  embedListByChallengeId[embedName] = {};
-
-  switch (challenge.status) {
-    case CHALLENGE_STATUSES.PROPOSE:
-      if (!embedListByChallengeId[embedName].propose) embedListByChallengeId[embedName].propose = [];
-      embedListByChallengeId[embedName].propose.push(challenge.id);
-      break;
-    case CHALLENGE_STATUSES.VALIDE:
-      if (!embedListByChallengeId[embedName].valide) embedListByChallengeId[embedName].valide = [];
-      embedListByChallengeId[embedName].valide.push(challenge.id);
-      break;
-    case CHALLENGE_STATUSES.ARCHIVE:
-      if (!embedListByChallengeId[embedName].archive) embedListByChallengeId[embedName].archive = [];
-      embedListByChallengeId[embedName].archive.push(challenge.id);
-      break;
-    case CHALLENGE_STATUSES.PERIME:
-      if (!embedListByChallengeId[embedName].perime) embedListByChallengeId[embedName].perime = [];
-      embedListByChallengeId[embedName].perime.push(challenge.id);
-      break;
-  }
-}
-
-function getEmbedFRomChallenge(challenge) {
+function getEmbedFromChallenge(challenge) {
   const regex = /https:\/\/epreuves\.pix\.fr\/.*\.html/gm;
   const embedUrls = challenge.embedUrl && challenge.embedUrl.match(regex) ? [challenge.embedUrl] : [];
-  const urlsFromInstruction = challenge.instruction.match(regex);
+  const urlsFromInstruction = findUrlFromInstruction(regex, challenge.instruction);
   const allEmbedUrls =  urlsFromInstruction ? [...embedUrls, ...urlsFromInstruction] : embedUrls;
-  return _.uniq(allEmbedUrls.map(getEmbedName));
+  return _.uniq(allEmbedUrls);
 }
 
-function getEmbedName(embedUrl) {
-  const urlParts = embedUrl.replace('https://epreuves.pix.fr/', '').split('/');
-  if (isLocale(urlParts[0])) {
-    return urlParts[1].replace('.html', '');
+function findUrlFromInstruction(regexWithoutParam, instruction) {
+  const regexWithOneParam = /https:\/\/epreuves\.pix\.fr\/.*\.html\?(mode|lang)+=\w+/gm;
+  const regexWithTwoParam = /https:\/\/epreuves\.pix\.fr\/.*\.html\?(mode|lang)+=\w+&(mode|lang)+=\w+/gm;
+  let url = instruction.match(regexWithTwoParam);
+  if (url) {
+    return url;
   }
-  const regex = /[A-Za-z\-_0-9]*([#?]|\.html)/g;
-  const match = embedUrl.match(regex);
-  if (!match) return embedUrl;
-  return match[0].replace('.html', '');
+  url = instruction.match(regexWithOneParam);
+  if (url) {
+    return url;
+  }
+  return instruction.match(regexWithoutParam);
 }
 
-function isLocale(s) {
-  try {
-    new Intl.Locale(s);
-    return true;
-  } catch {
-    return false;
+function compareUrl([,urlA], [, urlB]) {
+  if (urlA < urlB) {
+    return -1;
   }
+  if (urlA > urlB) {
+    return 1;
+  }
+  return 0;
 }

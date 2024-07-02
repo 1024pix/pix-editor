@@ -1,23 +1,20 @@
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { hasAuthenticatedUserAccess } from './security-utils.js';
 import { getEmbedList } from '../domain/usecases/get-embed-list.js';
+import { PassThrough } from 'node:stream';
 
 export async function register(server) {
   server.route([
     {
       method: 'GET',
-      path: '/api/embeds',
+      path: '/api/embeds.csv',
       config: {
         pre:[{
-          method: securityPreHandlers.checkUserHasWriteAccess,
+          method: securityPreHandlers.checkUserHasAdminAccess,
         }],
-        handler: async function(request) {
-          if (hasAuthenticatedUserAccess(request, ['admin'])) {
-            const embedList =  getEmbedList();
-            return JSON.stringify(embedList);
-          } else {
-            // todo no access
-          }
+        handler: function(request, h) {
+          const stream = new PassThrough();
+          getEmbedList(stream);
+          return h.response(stream).header('Content-type', 'text/csv');
         },
       },
     },

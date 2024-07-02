@@ -13,6 +13,7 @@ import * as staticCoursesRoute from './application/static-courses/index.js';
 import * as staticCourseTagsRoute from './application/static-course-tags/index.js';
 import * as staticRoute from './application/static/index.js';
 import * as translationsRoute from './application/translations.js';
+import * as embedsRoute from './application/embeds.js';
 import * as usersRoute from './application/users.js';
 
 export const routes = [
@@ -31,5 +32,6 @@ export const routes = [
   staticCourseTagsRoute,
   staticRoute,
   translationsRoute,
+  embedsRoute,
   usersRoute,
 ];
