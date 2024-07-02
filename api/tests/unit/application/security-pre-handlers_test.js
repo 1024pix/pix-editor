@@ -1,6 +1,7 @@
 import { describe, describe as context, expect, it, vi } from 'vitest';
 import { hFake } from '../../test-helper.js';
 import {
+  checkUserHasAdminAccess,
   checkUserHasWriteAccess,
   checkUserIsAuthenticatedViaBasicAndAdmin,
   checkUserIsAuthenticatedViaBearer
@@ -222,6 +223,97 @@ describe('Unit | Application | SecurityPreHandlers', () => {
 
       // when
       const response = await checkUserHasWriteAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+  });
+
+  describe('#checkUserHasAdminAccess', () => {
+    it('returns nothing when the user is admin', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'admin',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasAdminAccess(request, hFake);
+
+      // then
+      expect(response.source).to.equal(true);
+    });
+
+    it('returns an error when the user is editor', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'editor',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasAdminAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+
+    it('returns an error when the user is replicator', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'replicator',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasAdminAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+
+    it('returns an error when the user is readonly', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'readonly',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasAdminAccess(request, hFake);
+
+      // then
+      expect(response.statusCode).to.equal(403);
+      expect(response.isTakeOver).to.be.true;
+    });
+
+    it('returns an error when the user is pix-readonly', async () => {
+      // given
+      const user = new User({
+        id: '1',
+        name: 'AuthenticatedUser',
+        trigram: 'ABC',
+        access: 'readpixonly',
+      });
+      const request = { auth: { credentials: { user } } };
+
+      // when
+      const response = await checkUserHasAdminAccess(request, hFake);
 
       // then
       expect(response.statusCode).to.equal(403);
