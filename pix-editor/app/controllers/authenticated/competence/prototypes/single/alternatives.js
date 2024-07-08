@@ -12,6 +12,7 @@ export default class AlternativesController extends Controller {
   }
 
   @tracked competence = null;
+  @tracked arePerimeDeclisDisplayed = false;
   @tracked rightMaximized = false;
 
   @service access;
