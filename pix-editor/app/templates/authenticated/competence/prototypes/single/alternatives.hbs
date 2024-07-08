@@ -11,7 +11,7 @@
     </div>
     {{#unless this.rightMaximized}}
       <div class="ui attached segment competence {{this.size}}">
-        <List::Alternatives @list={{this.challenge.alternatives}} />
+        <List::Alternatives @list={{this.challenge.allAlternativesNotObsolete}} />
       </div>
       <div class="ui borderless bottom attached labelled icon menu">
         <div class="item competence-info"><div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div><div>Brouillons : <span class="workbench">{{this.challenge.draftAlternatives.length}}</span></div></div>

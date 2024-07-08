@@ -161,6 +161,10 @@ export default class ChallengeModel extends Model {
     return this.alternatives.filter(alternative => alternative.isDraft);
   }
 
+  get allAlternativesNotObsolete() {
+    return this.alternatives.filter(alternative => alternative.status !== 'périmé');
+  }
+
   get isTextBased() {
     const type = this.type;
     return ['QROC','QROCM','QROCM-ind','QROCM-dep'].includes(type);
