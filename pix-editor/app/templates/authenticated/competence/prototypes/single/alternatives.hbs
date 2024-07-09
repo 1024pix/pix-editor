@@ -11,11 +11,7 @@
     </div>
     {{#unless this.rightMaximized}}
       <div class="ui attached segment competence {{this.size}}">
-        {{#if this.arePerimeDeclisDisplayed }}
-          <List::Alternatives @list={{this.challenge.alternatives}} />
-        {{else}}
-          <List::Alternatives @list={{this.challenge.allAlternativesNotObsolete}} />
-        {{/if}}
+        <List::Alternatives @list={{this.alternatives}} />
       </div>
       <div class="ui borderless bottom attached labelled icon menu">
         <div class="item competence-info">

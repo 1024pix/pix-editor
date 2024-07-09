@@ -34,6 +34,10 @@ export default class AlternativesController extends Controller {
     }
   }
 
+  get alternatives() {
+    return this.arePerimeDeclisDisplayed ? this.challenge.alternatives : this.challenge.alternatives.filter(alternative => alternative.status !== 'périmé');
+  }
+
   maximizeRight(value) {
     if (this.rightMaximized != value) {
       this.rightMaximized = value;
