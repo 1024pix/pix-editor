@@ -1,0 +1,28 @@
+<div class="main-title  {{if this.config.lite "lite" ""}}">
+  <h1 class="ui header">
+    <div class="ui right floated menu">
+      <LinkTo @route="authenticated.competence.prototypes.single" @model={{@challenge}} class="ui button icon item"><i class="icon window close"></i></LinkTo>
+    </div>
+    Déclinaisons de {{@challenge.skillName}}
+  </h1>
+</div>
+{{#unless @rightMaximized}}
+  <div class="ui attached segment competence {{@size}}">
+    <List::Alternatives @list={{this.alternatives}} />
+  </div>
+  <div class="ui borderless bottom attached labelled icon menu">
+    <div class="item competence-info">
+      <div>
+        <Input id="hide-perime" @type="checkbox" @checked={{this.arePerimeDeclisDisplayed}} />
+        <label for="hide-perime">Afficher les déclinaisons périmées</label>
+      </div>
+      <div>En production : <span class="production">{{@challenge.productionAlternatives.length}}</span></div>
+      <div>Brouillons : <span class="workbench">{{@challenge.draftAlternatives.length}}</span></div>
+    </div>
+    {{#if @mayCreateAlternative}}
+      <button class="ui button right item" {{on "click" @newAlternative}} type="button">
+        <i class="plus square outline icon" data-test-new-alternative-action></i> Nouvelle déclinaison
+      </button>
+    {{/if}}
+  </div>
+{{/unless}}

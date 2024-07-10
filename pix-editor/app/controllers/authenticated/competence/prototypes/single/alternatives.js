@@ -7,16 +7,9 @@ export default class AlternativesController extends Controller {
 
   queryParams = ['rightMaximized'];
 
-  get challenge() {
-    return this.model;
-  }
-
-  @tracked competence = null;
-  @tracked arePerimeDeclisDisplayed = false;
   @tracked rightMaximized = false;
-
   @service access;
-  @service config;
+
   @service currentData;
   @service router;
 
@@ -34,10 +27,6 @@ export default class AlternativesController extends Controller {
     }
   }
 
-  get alternatives() {
-    return this.arePerimeDeclisDisplayed ? this.challenge.alternatives : this.challenge.alternatives.filter(alternative => alternative.status !== 'périmé');
-  }
-
   maximizeRight(value) {
     if (this.rightMaximized != value) {
       this.rightMaximized = value;
@@ -46,18 +35,18 @@ export default class AlternativesController extends Controller {
 
   @action
   newAlternative() {
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge);
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.model);
   }
 
   @action
   closeChildComponent() {
     this.maximizeRight(false);
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.challenge);
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives', this.currentData.getCompetence(), this.model);
   }
 
   @action
   copyChallenge(challenge) {
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.challenge, { queryParams: { from: challenge.id } });
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.model, { queryParams: { from: challenge.id } });
   }
 
   @action
@@ -69,5 +58,4 @@ export default class AlternativesController extends Controller {
   selectView() {
     // does nothing
   }
-
 }
