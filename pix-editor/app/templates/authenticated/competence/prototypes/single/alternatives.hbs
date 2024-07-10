@@ -16,7 +16,7 @@
       <div class="ui borderless bottom attached labelled icon menu">
         <div class="item competence-info">
           <div>
-            {{input id="hide-perime" type="checkbox" checked=this.arePerimeDeclisDisplayed}}
+            <Input @id="hide-perime" @type="checkbox" @checked={{this.arePerimeDeclisDisplayed}} />
             <label for="hide-perime">Afficher les déclinaisons périmées</label>
           </div>
           <div>En production : <span class="production">{{this.challenge.productionAlternatives.length}}</span></div>
