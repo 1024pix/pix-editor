@@ -42,13 +42,16 @@ describe('Unit | Utils | URL Utils', function() {
 
     it('should fix url by prepending protocol if missing', function() {
       // given
-      const markdownText = 'instructions [link](www.example.net/)';
+      const markdownText = 'instructions [link](www.example.net/) [second link](www.example.net/?url=https://example.com/path)';
 
       // when
       const urls = UrlUtils.findUrlsInMarkdown(markdownText);
 
       // then
-      expect(urls).toStrictEqual(['https://www.example.net/']);
+      expect(urls).toStrictEqual([
+        'https://www.example.net/',
+        'https://www.example.net/?url=https://example.com/path',
+      ]);
     });
 
     it('should return unique occurences', function() {
@@ -60,6 +63,20 @@ describe('Unit | Utils | URL Utils', function() {
 
       // then
       expect(urls).toStrictEqual(['https://www.example.net/']);
+    });
+  });
+
+  describe('#getOrigin', () => {
+    [
+      { url: 'http://pix.fr', expected: 'http://pix.fr' },
+      { url: 'https://pix.org', expected: 'https://pix.org' },
+      { url: 'https://app.pix.org/le/chemin/index.html?toto=123&titi=456#qwerty', expected: 'https://app.pix.org' },
+    ].forEach(({ url, expected }) => {
+      describe(`when url is "${url}"`, () => {
+        it(`should return "${expected}"`, () => {
+          expect(UrlUtils.getOrigin(url)).toBe(expected);
+        });
+      });
     });
   });
 });

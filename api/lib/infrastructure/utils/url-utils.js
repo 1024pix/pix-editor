@@ -14,7 +14,7 @@ export function findUrlsInMarkdown(value) {
   if (!urls) {
     return [];
   }
-  return _.uniq(urls.map(cleanUrl).map(prependProtocol));
+  return _.uniq(urls.map(cleanUrl).map(ensureProtocol));
 }
 
 /**
@@ -86,9 +86,11 @@ function cleanUrl(url) {
   return url;
 }
 
-function prependProtocol(url) {
-  if (!url.includes('http')) {
-    url = 'https://' + url;
-  }
-  return url;
+function ensureProtocol(url) {
+  if (/^https?:\/\//.test(url)) return url;
+  return  url = 'https://' + url;
+}
+
+export function getOrigin(url) {
+  return new URL(url).origin;
 }

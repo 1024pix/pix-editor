@@ -11,10 +11,6 @@ export async function exportExternalUrlsFromRelease({ releaseRepository, urlRepo
 }
 
 function findUrlsFromChallenges(challenges, localizedChallengesById, release, UrlUtils) {
-  const baseUrl = function(url) {
-    const parsedUrl = new URL(url);
-    return parsedUrl.protocol + '//' + parsedUrl.host;
-  };
   const urlsFromChallenges = challenges.flatMap((challenge) => {
     const functions = [
       (challenge) => UrlUtils.findUrlsInMarkdown(challenge.instruction),
@@ -30,7 +26,7 @@ function findUrlsFromChallenges(challenges, localizedChallengesById, release, Ur
           origin: release.findOriginForChallenge(challenge) ?? '',
           tube: release.findTubeNameForChallenge(challenge) ?? '',
           locales: challenge.locales,
-          url: baseUrl(url),
+          url: UrlUtils.getOrigin(url),
           status: challenge.status,
         };
       });

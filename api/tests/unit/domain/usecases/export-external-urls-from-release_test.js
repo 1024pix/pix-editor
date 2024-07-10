@@ -6,7 +6,7 @@ import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
 
 describe('Unit | Domain | Usecases | Export external urls from release', function() {
   describe('#exportExternalUrlsFromRelease', function() {
-    let releaseRepository, mockedUrlUtils, urlRepository, localizedChallengeRepository;
+    let releaseRepository, urlRepository, localizedChallengeRepository;
 
     beforeEach(function() {
       const pixCompetence = domainBuilder.buildCompetenceForRelease({
@@ -105,9 +105,6 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
         domainBuilder.buildLocalizedChallenge({ id: 'challenge5', challengeId: 'challenge5', urlsToConsult: null }),
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
-      mockedUrlUtils = {
-        findUrlsInMarkdown: UrlUtils.findUrlsInMarkdown,
-      };
       urlRepository = {
         exportExternalUrls: vi.fn(),
       };
@@ -115,7 +112,7 @@ describe('Unit | Domain | Usecases | Export external urls from release', functio
 
     it('should export external URLs for operative challenges (and also get urls from primary localized challenge)', async function() {
       // when
-      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils: mockedUrlUtils, localizedChallengeRepository });
+      await exportExternalUrlsFromRelease({ releaseRepository, urlRepository, UrlUtils, localizedChallengeRepository });
 
       // then
       expect(urlRepository.exportExternalUrls).toHaveBeenCalledTimes(1);
