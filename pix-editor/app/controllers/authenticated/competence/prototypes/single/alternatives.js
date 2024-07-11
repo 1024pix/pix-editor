@@ -35,7 +35,7 @@ export default class AlternativesController extends Controller {
 
   @action
   newAlternative() {
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.model);
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(), this.model);
   }
 
   @action
@@ -46,7 +46,7 @@ export default class AlternativesController extends Controller {
 
   @action
   copyChallenge(challenge) {
-    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(),  this.model, { queryParams: { from: challenge.id } });
+    this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.new', this.currentData.getCompetence(), this.model, { queryParams: { from: challenge.id } });
   }
 
   @action
