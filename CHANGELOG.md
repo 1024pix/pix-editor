@@ -1,5 +1,21 @@
 
 
+## v3.152.0 (11/07/2024)
+
+
+### :rocket: Amélioration
+- [#697](https://github.com/1024pix/pix-editor/pull/697) [FEATURE] Ne pas afficher les déclinaisons périmées par défaut (PIX-12631).
+
+### :building_construction: Tech
+- [#687](https://github.com/1024pix/pix-editor/pull/687) [TECH] Reporter les valeurs des champs "sélection unique/multiples" des entités Airtable dans les modèles correspondants côté API (PIX-13086).
+
+### :bug: Correction
+- [#698](https://github.com/1024pix/pix-editor/pull/698) [BUGFIX] Ajout d'une clé primaire sur localized_challenges-attachments (PIX-13359).
+- [#696](https://github.com/1024pix/pix-editor/pull/696) [BUGFIX] Export des URLs externes: crash sur certaines URLs (PIX-13253).
+
+### :arrow_up: Montée de version
+- [#684](https://github.com/1024pix/pix-editor/pull/684) [BUMP] Update dependency @playwright/test to v1.44.1.
+
 ## v3.151.0 (27/06/2024)
 
 
