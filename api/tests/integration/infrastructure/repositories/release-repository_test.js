@@ -1204,6 +1204,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge121211 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.OK,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
     },
     {
       id: 'challengeNl',
@@ -1236,6 +1238,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge121211 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.OK,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
     },
     {
       id: 'challenge121212',
@@ -1267,6 +1271,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: true,
       alternativeVersion: 'challenge121212 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
     },
     {
       id: 'challenge211111',
@@ -1299,6 +1305,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge211111 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
     },
     {
       id: 'challenge211112',
@@ -1330,6 +1338,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge211112 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
     },
     {
       id: 'challenge211113',
@@ -1361,6 +1371,8 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge211113 alternativeVersion',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.A_TESTER,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
     },
   ];
   const expectedCourseDTOs = [

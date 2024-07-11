@@ -21,6 +21,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         },
         locales: ['fr', 'fr-fr'],
         files: [],
+        accessibility1: 'A tester',
+        accessibility2: 'KO',
       });
 
       // when
@@ -168,6 +170,8 @@ function _buildReleaseChallenge({
   illustrationAlt = null,
   shuffled,
   alternativeVersion,
+  accessibility1,
+  accessibility2,
 }) {
   const releaseChallenge = {
     id,
@@ -199,6 +203,8 @@ function _buildReleaseChallenge({
     illustrationAlt,
     shuffled,
     alternativeVersion,
+    accessibility1,
+    accessibility2,
   };
   if (attachments) {
     releaseChallenge.attachments = attachments;

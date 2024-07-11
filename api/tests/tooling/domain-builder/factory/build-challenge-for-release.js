@@ -31,6 +31,8 @@ export function buildChallengeForRelease({
   illustrationUrl = 'url illu',
   shuffled = false,
   alternativeVersion = 2,
+  accessibility1 = ChallengeForRelease.ACCESSIBILITY1.OK,
+  accessibility2 = ChallengeForRelease.ACCESSIBILITY2.RAS,
 } = {}) {
 
   return new ChallengeForRelease({
@@ -64,5 +66,7 @@ export function buildChallengeForRelease({
     illustrationUrl,
     shuffled,
     alternativeVersion,
+    accessibility1,
+    accessibility2,
   });
 }

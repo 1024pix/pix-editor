@@ -32,6 +32,8 @@ export class ChallengeForRelease {
     illustrationUrl,
     shuffled,
     alternativeVersion,
+    accessibility1,
+    accessibility2,
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -63,6 +65,8 @@ export class ChallengeForRelease {
     this.illustrationUrl = illustrationUrl;
     this.shuffled = shuffled;
     this.alternativeVersion = alternativeVersion;
+    this.accessibility1 = accessibility1;
+    this.accessibility2 = accessibility2;
   }
 
   static get STATUSES() {
@@ -83,6 +87,14 @@ export class ChallengeForRelease {
 
   static get FORMATS() {
     return Challenge.FORMATS;
+  }
+
+  static get ACCESSIBILITY1() {
+    return Challenge.ACCESSIBILITY1;
+  }
+
+  static get ACCESSIBILITY2() {
+    return Challenge.ACCESSIBILITY2;
   }
 
   get isOperative() {
