@@ -197,7 +197,14 @@
         </button>
       {{/if}}
       {{#unless this.mayAccessAlternatives}}
-        <Competence::Prototypes::ChallengeReword />
+        <Competence::Prototypes::ChallengeReword
+          @locale={{this.challenge.locales}}
+          @instruction={{this.challenge.instruction}}
+          @tubeDescription={{get
+            this.challenge.skill.tube
+            "practicalDescriptionFr"
+          }}
+        />
       {{/unless}}
     {{/if}}
   </div>
