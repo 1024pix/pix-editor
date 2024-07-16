@@ -1,11 +1,13 @@
-import Component from "@glimmer/component";
-import { action } from "@ember/object";
-import { tracked } from "@glimmer/tracking";
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
 
 export default class ChallengeReword extends Component {
   @tracked isLoading = false;
   @tracked showModal = false;
   @tracked rewordings = [];
+  @service config;
 
   @action
   toggleModal() {
@@ -16,14 +18,22 @@ export default class ChallengeReword extends Component {
   async reword() {
     this.isLoading = true;
     this.toggleModal();
-
-    const response = await fetch(
-      "https://jsonplaceholder.typicode.com/posts/1/comments"
-    );
+    const response = await fetch(this.config.llmVariationsUrl, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        skillDescription: this.args.skillDescription,
+        tubeDescription: this.args.tubeDescription,
+        instruction: this.args.instruction,
+        locale: this.args.locale[0],
+      }),
+    });
     const json = await response.json();
-    this.rewordings = json.map((comment, index) => {
+    this.rewordings = json.variations.map((comment, index) => {
       return {
-        name: comment.name,
+        name: comment,
         checked: false,
         label: `Reformulation ${index + 1}`,
       };

@@ -13,6 +13,7 @@ const serializer = new Serializer('config', {
     'storageBucket',
     'localeToLanguageMap',
     'tutorialLocaleToLanguageMap',
+    'llmVariationsUrl',
   ],
 });
 

@@ -18,10 +18,14 @@ export default class ConfigService extends Service {
   @tracked storageBucket;
   @tracked localeToLanguageMap;
   @tracked tutorialLocaleToLanguageMap;
+  @tracked llmVariationsUrl;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
-    const config = await this.store.findRecord('config', 'pix-editor-global-config');
+    const config = await this.store.findRecord(
+      'config',
+      'pix-editor-global-config'
+    );
 
     this.author = currentUser.trigram;
     this.accessLevel = this.access.getLevel(currentUser.access);
@@ -34,6 +38,7 @@ export default class ConfigService extends Service {
     this.storageBucket = config.storageBucket;
     this.localeToLanguageMap = config.localeToLanguageMap;
     this.tutorialLocaleToLanguageMap = config.tutorialLocaleToLanguageMap;
+    this.llmVariationsUrl = config.llmVariationsUrl;
     this.intl.setLocale(['fr']);
 
     Sentry.setUser({ userName: this.author });

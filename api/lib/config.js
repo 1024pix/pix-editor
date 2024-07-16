@@ -1,7 +1,10 @@
 import 'dotenv/config';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { LOCALE_TO_LANGUAGE_MAP, TUTORIAL_LOCALE_TO_LANGUAGE_MAP } from './domain/constants.js';
+import {
+  LOCALE_TO_LANGUAGE_MAP,
+  TUTORIAL_LOCALE_TO_LANGUAGE_MAP,
+} from './domain/constants.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -18,11 +21,13 @@ export const rootPath = path.normalize(__dirname + '/..');
 
 export let port = parseInt(process.env.PORT, 10) || 3002;
 
-export const environment = (process.env.NODE_ENV || 'development');
+export const environment = process.env.NODE_ENV || 'development';
 
 export const hapi = {
   options: {},
-  enableRequestMonitoring: isFeatureEnabled(process.env.ENABLE_REQUEST_MONITORING),
+  enableRequestMonitoring: isFeatureEnabled(
+    process.env.ENABLE_REQUEST_MONITORING
+  ),
   publicDir: 'public/',
 };
 
@@ -34,11 +39,12 @@ export const airtable = {
 
 export const logging = {
   enabled: isFeatureEnabled(process.env.LOG_ENABLED),
-  colorEnabled: (process.env.NODE_ENV === 'development'),
-  logLevel: (process.env.LOG_LEVEL || 'info'),
+  colorEnabled: process.env.NODE_ENV === 'development',
+  logLevel: process.env.LOG_LEVEL || 'info',
   logOpsMetrics: isFeatureEnabled(process.env.LOG_OPS_METRICS),
-  emitOpsEventEachSeconds: isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
-  prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT)
+  emitOpsEventEachSeconds:
+    isFeatureEnabled(process.env.OPS_EVENT_EACH_SECONDS) || 15,
+  prettyPrint: isFeatureEnabled(process.env.LOG_PRETTY_PRINT),
 };
 
 export let pixApi = {
@@ -53,10 +59,11 @@ export let pixApp = {
 };
 
 export const lcms = {
-  baseUrl: process.env.PIX_EDITOR_BASE_URL
+  baseUrl: process.env.PIX_EDITOR_BASE_URL,
 };
 
 export const pixEditor = {
+  llmVariationsUrl: process.env.LLM_VARIATIONS_URL,
   airtableUrl: process.env.AIRTABLE_URL,
   airtableBase: process.env.AIRTABLE_BASE,
   tableChallenges: process.env.TABLE_CHALLENGES,
@@ -78,7 +85,7 @@ export let storage = {
 export const sentry = {
   enabled: isFeatureEnabled(process.env.SENTRY_ENABLED),
   dsn: process.env.SENTRY_DSN,
-  environment: (process.env.SENTRY_ENVIRONMENT || 'development'),
+  environment: process.env.SENTRY_ENVIRONMENT || 'development',
   maxBreadcrumbs: _getNumber(process.env.SENTRY_MAX_BREADCRUMBS, 100),
   debug: isFeatureEnabled(process.env.SENTRY_DEBUG),
   maxValueLength: 1000,
@@ -89,14 +96,16 @@ export const scheduledJobs = {
   createReleaseTime: process.env.CREATE_RELEASE_TIME,
   exportExternalUrlListTime: process.env.EXPORT_EXTERNAL_URL_LIST_TIME,
   attempts: _getNumber(process.env.CREATE_RELEASE_ATTEMPTS, 4),
-  startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB)
+  startCheckUrlJob: isFeatureEnabled(process.env.START_CHECK_URL_JOB),
 };
 
 export const database = {
   url: process.env.DATABASE_URL,
   poolMinSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MIN_SIZE, 0),
   poolMaxSize: _getNumber(process.env.DATABASE_CONNECTION_POOL_MAX_SIZE, 4),
-  asyncStackTraceEnabled: isFeatureEnabled(process.env.KNEX_ASYNC_STACKTRACE_ENABLED),
+  asyncStackTraceEnabled: isFeatureEnabled(
+    process.env.KNEX_ASYNC_STACKTRACE_ENABLED
+  ),
   sslEnabled: isFeatureEnabled(process.env.DATABASE_SSL_ENABLED),
 };
 
@@ -107,7 +116,9 @@ export const notifications = {
   },
 };
 
-export const googleAuthCredentials = JSON.parse(process.env.GOOGLE_AUTH_CREDENTIALS || '{}');
+export const googleAuthCredentials = JSON.parse(
+  process.env.GOOGLE_AUTH_CREDENTIALS || '{}'
+);
 
 export const checkUrlsJobs = {
   spreadsheetId: process.env.CHECK_URLS_SPREADSHEET_ID,
@@ -124,7 +135,8 @@ export const phrase = {
   projectId: process.env.PHRASE_PROJECT_ID,
 };
 
-export const importTranslationsFileMaxSize = process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
+export const importTranslationsFileMaxSize =
+  process.env.IMPORT_TRANSLATIONS_FILE_MAX_SIZE || 2097152;
 
 if (process.env.NODE_ENV === 'test') {
   port = 0;
@@ -142,7 +154,8 @@ if (process.env.NODE_ENV === 'test') {
     password: '123',
   };
 
-  pixEditor.storagePost = 'https://url-de-mon-storage.com/v1/AUTH_blabla/local-app/';
+  pixEditor.storagePost =
+    'https://url-de-mon-storage.com/v1/AUTH_blabla/local-app/';
   pixEditor.storageBucket = 'mon-bucket-local';
 
   pixApp = {
