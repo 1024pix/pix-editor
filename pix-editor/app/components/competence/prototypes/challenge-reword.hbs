@@ -27,8 +27,15 @@
               @checked={{rewording.checked}}
               {{on "change" (fn this.toggleRewording index)}}
             />
-            <PixTextarea @id="rewording-{{index}}" @value={{rewording.name}}>
-              <:label>Reformulation {{index}}</:label>
+            <PixTextarea
+              @id="rewording-{{index}}"
+              @value={{rewording.name}}
+              class={{if
+                rewording.checked
+                "challenge-reword__rewording-item--selected"
+              }}
+            >
+              <:label>{{rewording.label}}</:label>
             </PixTextarea>
           </div>
         {{/each}}
@@ -37,12 +44,19 @@
   </:content>
   <:footer>
     <PixButton
-      @variant="secondary"
+      @size="small"
       @isBorderVisible={{true}}
+      @backgroundColor="transparent-light"
       @triggerAction={{this.toggleModal}}
     >
       Annuler
     </PixButton>
-    <PixButton>Valider</PixButton>
+    <PixButton
+      @size="small"
+      @isDisabled={{eq this.selectedRewordingCount 0}}
+      @backgroundColor="blue"
+    >Accepter les
+      {{this.selectedRewordingCount}}
+      déclinaison(s)</PixButton>
   </:footer>
 </PixModal>

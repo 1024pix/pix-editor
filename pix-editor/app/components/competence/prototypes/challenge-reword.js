@@ -14,13 +14,6 @@ export default class ChallengeReword extends Component {
 
   @action
   async reword() {
-    console.log(
-      "reword",
-      this.args.instruction,
-      this.args.tubeDescription,
-      this.args.locale[0]
-    );
-
     this.isLoading = true;
     this.toggleModal();
 
@@ -28,8 +21,12 @@ export default class ChallengeReword extends Component {
       "https://jsonplaceholder.typicode.com/posts/1/comments"
     );
     const json = await response.json();
-    this.rewordings = json.map((comment) => {
-      return { name: comment.name, checked: false };
+    this.rewordings = json.map((comment, index) => {
+      return {
+        name: comment.name,
+        checked: false,
+        label: `Reformulation ${index + 1}`,
+      };
     });
 
     console.log(this.rewordings);
@@ -39,6 +36,16 @@ export default class ChallengeReword extends Component {
 
   @action
   toggleRewording(index) {
-    this.rewordings[index].checked = !this.rewordings[index].checked;
+    const rewordings = this.rewordings.map((item, i) => {
+      if (i === index) {
+        return { ...item, checked: !item.checked };
+      }
+      return item;
+    });
+    this.rewordings = rewordings;
+  }
+
+  get selectedRewordingCount() {
+    return this.rewordings.filter(({ checked }) => checked).length;
   }
 }
