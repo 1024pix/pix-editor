@@ -197,14 +197,7 @@
         </button>
       {{/if}}
       {{#unless this.mayAccessAlternatives}}
-        <button
-          class="ui button item"
-          {{on "click" this.duplicate}}
-          type="button"
-        >
-          <i class="pen icon"></i>
-          Reformuler
-        </button>
+        <Competence::Prototypes::ChallengeReword />
       {{/unless}}
     {{/if}}
   </div>
