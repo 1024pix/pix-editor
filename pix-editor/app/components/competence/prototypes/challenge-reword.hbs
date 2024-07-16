@@ -9,22 +9,19 @@
   @onCloseButtonClick={{this.toggleModal}}
 >
   <:content>
+    <Field::Mde @title="Consigne Initiale" @value={{@instruction}} />
     {{#if this.isLoading}}
       <div class="ui dimmer inverted active" style="position: relative;">
         <div class="ui loader"></div>
       </div>
     {{else}}
-      <p>
-        Une fenêtre modale est, dans une interface graphique, une fenêtre qui
-        prend le contrôle total du clavier et de l'écran. Elle est en général
-        associée à une question à laquelle il est impératif que l'utilisateur
-        réponde avant de poursuivre, ou de modifier quoi que ce soit. La fenêtre
-        modale a pour propos : d'obtenir des informations de l'utilisateur (ces
-        informations sont nécessaires pour réaliser une opération) ; de fournir
-        une information à l'utilisateur (ce dernier doit en prendre connaissance
-        avant de pouvoir continuer à utiliser l'application).
-      </p>
+      {{#each this.rewordings as |rewording index|}}
+        <PixTextarea @id="rewording-{{index}}" @value={{rewording}}>
+          <:label>Reformulation {{index}}</:label>
+        </PixTextarea>
+      {{/each}}
     {{/if}}
+
   </:content>
   <:footer>
     <PixButton
