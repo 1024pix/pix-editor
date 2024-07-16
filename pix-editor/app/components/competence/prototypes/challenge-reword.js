@@ -29,11 +29,16 @@ export default class ChallengeReword extends Component {
     );
     const json = await response.json();
     this.rewordings = json.map((comment) => {
-      return comment.name;
+      return { name: comment.name, checked: false };
     });
 
     console.log(this.rewordings);
 
     this.isLoading = false;
+  }
+
+  @action
+  toggleRewording(index) {
+    this.rewordings[index].checked = !this.rewordings[index].checked;
   }
 }

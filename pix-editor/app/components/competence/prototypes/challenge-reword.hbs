@@ -4,24 +4,36 @@
 </button>
 
 <PixModal
+  class="challenge-reword__modal"
   @title="Liste de déclinaisons possibles"
   @showModal={{this.showModal}}
   @onCloseButtonClick={{this.toggleModal}}
 >
   <:content>
-    <Field::Mde @title="Consigne Initiale" @value={{@instruction}} />
     {{#if this.isLoading}}
       <div class="ui dimmer inverted active" style="position: relative;">
         <div class="ui loader"></div>
       </div>
     {{else}}
-      {{#each this.rewordings as |rewording index|}}
-        <PixTextarea @id="rewording-{{index}}" @value={{rewording}}>
-          <:label>Reformulation {{index}}</:label>
-        </PixTextarea>
-      {{/each}}
+      <div class="challenge-reword__initial-instruction ui form">
+        <Field::Mde @title="Consigne Initiale" @value={{@instruction}} />
+      </div>
+      <hr class="challenge-reword__separator" />
+      <div class="challenge-reword__rewordings">
+        {{#each this.rewordings as |rewording index|}}
+          <div class="challenge-reword__rewording-item">
+            <PixCheckbox
+              @id="checkbox-rewording-{{index}}"
+              @checked={{rewording.checked}}
+              {{on "change" (fn this.toggleRewording index)}}
+            />
+            <PixTextarea @id="rewording-{{index}}" @value={{rewording.name}}>
+              <:label>Reformulation {{index}}</:label>
+            </PixTextarea>
+          </div>
+        {{/each}}
+      </div>
     {{/if}}
-
   </:content>
   <:footer>
     <PixButton
