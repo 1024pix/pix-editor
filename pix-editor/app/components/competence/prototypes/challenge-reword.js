@@ -22,6 +22,7 @@ export default class ChallengeReword extends Component {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
+        Authorization: this.config.llmVariationsToken,
       },
       body: JSON.stringify({
         skillDescription: this.args.skillDescription,

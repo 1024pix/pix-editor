@@ -14,6 +14,7 @@ const serializer = new Serializer('config', {
     'localeToLanguageMap',
     'tutorialLocaleToLanguageMap',
     'llmVariationsUrl',
+    'llmVariationsToken',
   ],
 });
 

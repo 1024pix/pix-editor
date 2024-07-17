@@ -11,4 +11,5 @@ export default class ConfigModel extends Model {
   @attr localeToLanguageMap;
   @attr tutorialLocaleToLanguageMap;
   @attr llmVariationsUrl;
+  @attr llmVariationsToken;
 }

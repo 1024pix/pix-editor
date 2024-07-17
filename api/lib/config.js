@@ -64,6 +64,7 @@ export const lcms = {
 
 export const pixEditor = {
   llmVariationsUrl: process.env.LLM_VARIATIONS_URL,
+  llmVariationsToken: process.env.LLM_VARIATIONS_TOKEN,
   airtableUrl: process.env.AIRTABLE_URL,
   airtableBase: process.env.AIRTABLE_BASE,
   tableChallenges: process.env.TABLE_CHALLENGES,

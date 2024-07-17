@@ -19,6 +19,7 @@ export default class ConfigService extends Service {
   @tracked localeToLanguageMap;
   @tracked tutorialLocaleToLanguageMap;
   @tracked llmVariationsUrl;
+  @tracked llmVariationsToken;
 
   async load() {
     const currentUser = await this.store.queryRecord('user', { me: true });
@@ -39,6 +40,7 @@ export default class ConfigService extends Service {
     this.localeToLanguageMap = config.localeToLanguageMap;
     this.tutorialLocaleToLanguageMap = config.tutorialLocaleToLanguageMap;
     this.llmVariationsUrl = config.llmVariationsUrl;
+    this.llmVariationsToken = config.llmVariationsToken;
     this.intl.setLocale(['fr']);
 
     Sentry.setUser({ userName: this.author });
