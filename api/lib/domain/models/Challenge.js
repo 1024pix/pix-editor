@@ -139,7 +139,7 @@ export class Challenge {
 
   static get GENEALOGIES() {
     return {
-      PROTOTYPE: 'Protoype 1',
+      PROTOTYPE: 'Prototype 1',
       DECLINAISON: 'Décliné 1',
       UNUSED_DECLINE: 'décliné',
       UNUSED_ENG: 'ENG',
