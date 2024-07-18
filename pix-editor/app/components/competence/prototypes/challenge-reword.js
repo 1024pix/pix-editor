@@ -32,7 +32,7 @@ export default class ChallengeReword extends Component {
       }),
     });
     const json = await response.json();
-    this.rewordings = json.variations.map((comment, index) => {
+    this.rewordings = json.rewordings.map((comment, index) => {
       return {
         name: comment,
         checked: false,
