@@ -1,5 +1,11 @@
 
 
+## v3.153.0 (18/07/2024)
+
+
+### :bug: Correction
+- [#702](https://github.com/1024pix/pix-editor/pull/702) [BUGFIX] Rectification des données de responsivité renvoyées false pour les Tubes for Release (PIX-13493).
+
 ## v3.152.0 (11/07/2024)
 
 
