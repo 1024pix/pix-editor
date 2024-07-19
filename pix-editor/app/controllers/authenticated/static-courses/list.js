@@ -5,14 +5,22 @@ import { tracked } from '@glimmer/tracking';
 
 export default class StaticCoursesController extends Controller {
   @service router;
-  queryParams = ['pageNumber', 'pageSize', 'isActive', 'name'];
+  queryParams = ['pageNumber', 'pageSize', 'isActive', 'name', 'tagIds'];
   @tracked pageNumber = 1;
   @tracked pageSize = 10;
   @tracked showActiveOnly = true;
   @tracked isActive = true;
   @tracked tempIsActive = true;
+  @tracked tagIds = [];
+  @tracked tempTagIds = [];
   @tracked name = '';
   @tracked tempName = '';
+
+  get tagOptions() {
+    return this.model.staticCourseTags
+      .map(({ id, label }) => ({ value: id, label }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }
 
   @action
   async copyStaticCoursePreviewUrl(staticCourseSummary) {
@@ -37,10 +45,17 @@ export default class StaticCoursesController extends Controller {
   }
 
   @action
+  async selectTags(tags) {
+    this.tempTagIds = tags;
+  }
+
+  @action
   clearFilters() {
     this.showActiveOnly = true;
     this.isActive = true;
     this.name = '';
+    this.tagIds = [];
+    this.tempTagIds = [];
   }
 
   @action
@@ -48,5 +63,6 @@ export default class StaticCoursesController extends Controller {
     event.preventDefault();
     this.name = this.tempName;
     this.isActive = this.tempIsActive;
+    this.tagIds = this.tempTagIds;
   }
 }
