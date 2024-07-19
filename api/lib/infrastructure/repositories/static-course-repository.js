@@ -37,6 +37,11 @@ export async function findReadSummaries({ filter, page }) {
   if (filter.name) {
     query.andWhereILike('name', `%${filter.name}%`);
   }
+  if (!_.isEmpty(filter.tagIds)) {
+    for (const tagId of filter.tagIds) {
+      query.andWhere('staticCourseTagId', tagId);
+    }
+  }
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
