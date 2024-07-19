@@ -114,13 +114,13 @@ describe('Unit | Controller | static courses controller', function() {
 
       it('should pass along filter from query params when all is valid', async function() {
         // given
-        const request = { query: { 'filter[isActive]': 'true', 'filter[name]': 'Laura' } };
+        const request = { query: { 'filter[isActive]': 'true', 'filter[name]': 'Laura', 'filter[tagIds]': ['1', '2'] } };
 
         // when
         await staticCourseController.findSummaries(request, hFake);
 
         // then
-        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: 'Laura' }, page });
+        expect(stub).toHaveBeenCalledWith({ filter: { isActive: true, name: 'Laura', tagIds: [1, 2] }, page });
       });
 
       it('ignore unknown filter parameters', async function() {
