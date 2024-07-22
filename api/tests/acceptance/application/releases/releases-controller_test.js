@@ -134,6 +134,8 @@ async function mockCurrentContent() {
       alpha: 0.9,
       responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
       genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
     }],
     tutorials: [{
       id: 'recTutorial0',
@@ -441,6 +443,8 @@ async function mockContentForRelease() {
       attachments: ['url de la pièce jointe'],
       illustrationUrl: 'url de l‘illustration',
       illustrationAlt: 'Texte alternatif illustration',
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
     }],
     tutorials: [{
       id: 'recTutorial0',

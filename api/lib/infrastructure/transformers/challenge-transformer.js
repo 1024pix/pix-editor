@@ -40,6 +40,8 @@ function _filterChallengeFields(challenge) {
     'type',
     'shuffled',
     'alternativeVersion',
+    'accessibility1',
+    'accessibility2',
   ];
 
   return _.pick(challenge, fieldsToInclude);

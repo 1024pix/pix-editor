@@ -66,4 +66,21 @@ describe('Unit | Domain | ChallengeForRelease', () => {
       expect(actual).to.equal(expectedIsOperative);
     });
   });
+
+  describe('#keep accessibility1 & 2 challenge properties for release', () => {
+    it('should return the same accessibility properties in the release', () => {
+      // given
+      const challengeProperties = {
+        accessibility1: 'KO',
+        accessibility2: 'OK',
+      };
+
+      // when
+      const challengeForRelease = domainBuilder.buildChallengeForRelease(challengeProperties);
+
+      // then
+      expect(challengeForRelease.accessibility1).to.equal('KO');
+      expect(challengeForRelease.accessibility2).to.equal('OK');
+    });
+  });
 });
