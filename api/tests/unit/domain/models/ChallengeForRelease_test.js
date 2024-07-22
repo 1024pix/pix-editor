@@ -67,8 +67,8 @@ describe('Unit | Domain | ChallengeForRelease', () => {
     });
   });
 
-  describe('#keep accessibility1 & 2 challenge properties for release', () => {
-    it('should return the same accessibility properties in the release', () => {
+  describe('#constructor', () => {
+    it('should have accessibility1 & 2 properties in ChallengeForRelease', () => {
       // given
       const challengeProperties = {
         accessibility1: 'KO',
@@ -76,11 +76,11 @@ describe('Unit | Domain | ChallengeForRelease', () => {
       };
 
       // when
-      const challengeForRelease = domainBuilder.buildChallengeForRelease(challengeProperties);
+      const challengeForRelease = new ChallengeForRelease(challengeProperties);
 
       // then
-      expect(challengeForRelease.accessibility1).to.equal('KO');
-      expect(challengeForRelease.accessibility2).to.equal('OK');
+      expect(challengeForRelease).to.have.property('accessibility1', 'KO');
+      expect(challengeForRelease).to.have.property('accessibility2','OK');
     });
   });
 });
