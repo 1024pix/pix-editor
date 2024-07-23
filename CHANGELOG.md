@@ -1,5 +1,14 @@
 
 
+## v3.154.0 (23/07/2024)
+
+
+### :rocket: Amélioration
+- [#699](https://github.com/1024pix/pix-editor/pull/699) [FEATURE] Ajout des propriétés d'accessibilité des challenges dans la release (PIX-13351).
+
+### :coffee: Autre
+- [#703](https://github.com/1024pix/pix-editor/pull/703) Amélioration du test du ChallengeForRelease pour l'ajout des propriétés accessibility1 & 2.
+
 ## v3.153.0 (18/07/2024)
 
 
