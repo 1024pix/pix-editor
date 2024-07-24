@@ -127,11 +127,9 @@ function normalizeFilter(filter) {
     normalizedFilter.name = null;
   }
 
-  if (!_.isEmpty(filter.tagIds)) {
+  if (filter.tagIds?.length) {
     normalizedFilter.tagIds = filter.tagIds.map((tagId) => {
       return Number(tagId);
-    }).filter((tagId) => {
-      return !isNaN(tagId);
     });
   }
 

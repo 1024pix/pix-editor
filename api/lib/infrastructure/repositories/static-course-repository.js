@@ -37,11 +37,10 @@ export async function findReadSummaries({ filter, page }) {
   if (filter.name) {
     query.andWhereILike('name', `%${filter.name}%`);
   }
-  if (!_.isEmpty(filter.tagIds)) {
-    for (const tagId of filter.tagIds) {
-      query.andWhere('staticCourseTagId', tagId);
-    }
+  if (filter.tagIds?.length) {
+    query.whereIn('static_courses.id', knex.select('staticCourseId').from('static_courses_tags_link').whereIn('staticCourseTagId', filter.tagIds));
   }
+
   const { results: staticCourses, pagination } = await fetchPage(query, page);
 
   const staticCoursesSummaries = staticCourses.map((staticCourse) => {
