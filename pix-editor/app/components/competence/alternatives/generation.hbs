@@ -1,0 +1,10 @@
+<button
+  class="ui button right item"
+  {{on "click" this.generateAlternative}}
+  type="button"
+>
+  <i class="magic icon" data-test-new-alternative-action></i>
+  Générer
+</button>
+
+{{log @challenge.alternatives}}
