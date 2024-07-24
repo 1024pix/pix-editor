@@ -20,27 +20,57 @@
       </div>
     {{else}}
       <div class="alternative-generation__instruction ui form">
-        <Field::Mde @title="Consigne Initiale" @value={{@instruction}} />
+        <Field::Mde
+          @title="Consigne Initiale"
+          @value={{@challenge.instruction}}
+        />
       </div>
-      <hr class="alternative-generation__separator" />
       <div class="alternative-generation__alternatives">
         {{#each this.alternatives as |alternative index|}}
+          <hr class="alternative-generation__separator" />
           <div class="alternative-generation__item">
             <PixCheckbox
               @id="checkbox-alternative-{{index}}"
               @checked={{alternative.checked}}
-              {{on "change" (fn this.toggleRewording index)}}
+              {{on "change" (fn this.toggleAlternatives index)}}
             />
-            <PixTextarea
-              @id="alternative-{{index}}"
-              @value={{alternative.name}}
-              class={{if
-                alternative.checked
-                "alternative-generation__item--selected"
-              }}
-            >
-              <:label>{{alternative.label}}</:label>
-            </PixTextarea>
+            <div>
+              <PixTextarea
+                @id="alternative-{{index}}"
+                @value={{alternative.alternative.instruction}}
+                class={{if
+                  alternative.checked
+                  "alternative-generation__item--selected"
+                }}
+              >
+                <:label>{{alternative.label}}</:label>
+              </PixTextarea>
+              <div class="alternative-generation__item-answers">
+                <div>
+                  <h3
+                    class="alternative-generation__item-answers-title correct"
+                  >
+                    Bonne réponse
+                  </h3>
+                  <code>{{alternative.alternative.answer.correct}}</code>
+                </div>
+                <div>
+                  <h3 class="alternative-generation__item-answers-title wrong">
+                    Mauvaises réponses
+                  </h3>
+                  <ul>
+                    {{#each
+                      alternative.alternative.answer.wrong
+                      as |wrongAnswer index|
+                    }}
+                      <li>
+                        <code>{{wrongAnswer}}</code>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </div>
           </div>
         {{/each}}
       </div>
@@ -57,10 +87,10 @@
     </PixButton>
     <PixButton
       @size="small"
-      @isDisabled={{eq this.selectedAlternativeCount 0}}
+      @isDisabled={{eq this.selectedAlternativesCount 0}}
       @backgroundColor="blue"
     >Accepter les
-      {{this.selectedAlternativeCount}}
+      {{this.selectedAlternativesCount}}
       déclinaison(s)</PixButton>
   </:footer>
 </PixModal>

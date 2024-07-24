@@ -6,7 +6,7 @@ import { inject as service } from "@ember/service";
 export default class AlternativeGeneration extends Component {
   @tracked isLoading = false;
   @tracked showModal = false;
-  @tracked variations = [];
+  @tracked alternatives = [];
   @service config;
 
   @action
@@ -18,45 +18,48 @@ export default class AlternativeGeneration extends Component {
   async generateAlternatives() {
     this.isLoading = true;
     this.toggleModal();
-    // const response = await fetch(`${this.config.llmVariationsUrl}/variations`, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-type": "application/json",
-    //     Authorization: this.config.llmVariationsToken,
-    //   },
-    //   body: JSON.stringify({
-    //     skillDescription: this.args.skillDescription,
-    //     tubeDescription: this.args.tubeDescription,
-    //     instruction: this.args.instruction,
-    //     locale: this.args.locale[0],
-    //   }),
-    // });
-    // const json = await response.json();
-    // this.variations = json.variations.map((alternative, index) => {
-    //   return {
-    //     alternative,
-    //     checked: false,
-    //     label: `Déclinaison ${index + 1}`,
-    //   };
-    // });
 
-    // console.log(this.variations);
+    const response = await fetch(`${this.config.llmVariationsUrl}/variations`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: this.config.llmVariationsToken,
+      },
+      body: JSON.stringify({
+        skillDescription: this.args.challenge.skill.get("description"),
+        tubeDescription: this.args.challenge.skill
+          .get("tube")
+          .get("practicalDescriptionFr"),
+        instruction: this.args.challenge.instruction,
+        locale: this.args.challenge.locales[0],
+      }),
+    });
+    const json = await response.json();
+    this.alternatives = json.variations.map((alternative, index) => {
+      return {
+        alternative,
+        checked: false,
+        label: `Déclinaison ${index + 1}`,
+      };
+    });
+
+    console.log(this.alternatives);
 
     this.isLoading = false;
   }
 
   @action
-  toggleVariations(index) {
-    const variations = this.variations.map((item, i) => {
+  toggleAlternatives(index) {
+    const alternatives = this.alternatives.map((item, i) => {
       if (i === index) {
         return { ...item, checked: !item.checked };
       }
       return item;
     });
-    this.variations = variations;
+    this.alternatives = alternatives;
   }
 
-  get selectedAlternativeCount() {
-    return this.variations.filter(({ checked }) => checked).length;
+  get selectedAlternativesCount() {
+    return this.alternatives.filter(({ checked }) => checked).length;
   }
 }
