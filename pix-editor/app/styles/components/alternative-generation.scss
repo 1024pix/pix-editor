@@ -1,0 +1,22 @@
+.alternative-generation__modal {
+  width: 90vw;
+  max-width: 1200px;
+
+}
+
+.alternative-generation__separator {
+  margin: 20px 0;
+}
+
+.alternative-generation__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
+}
+.pix-label:has(+ div >  .alternative-generation__item--selected)  {
+  color: green;
+}
