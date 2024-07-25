@@ -47,3 +47,12 @@
 .pix-label:has(+ div > .alternative-generation__item--selected) {
   color: green;
 }
+.skill-cell {
+  position: relative;
+}
+.skill-cell--magic {
+  color: $alternative-count-color;
+  position: absolute;
+  bottom: 5px;
+  right:0px;
+}

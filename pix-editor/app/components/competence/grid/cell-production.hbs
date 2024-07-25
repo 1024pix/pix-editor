@@ -11,14 +11,32 @@
       {{#if this.loadingChallenges}}
         ...
       {{else}}
-        <span data-test-production-alternative-length class="production" title="Nombre d'épreuves en production">{{this.productionChallengesFilteredByLanguage}}</span>
+        <span
+          data-test-production-alternative-length
+          class="production"
+          title="Nombre d'épreuves en production"
+        >{{this.productionChallengesFilteredByLanguage}}</span>
         {{#if this.draftAlternativesFilteredByLanguage}}
-          <span data-test-draft-alternative-length class="draft" title="Nombre d'épreuves en cours de construction">({{this.draftAlternativesFilteredByLanguage}})</span>
+          <span
+            data-test-draft-alternative-length
+            class="draft"
+            title="Nombre d'épreuves en cours de construction"
+          >({{this.draftAlternativesFilteredByLanguage}})</span>
         {{/if}}
         {{#if @skill.productionPrototype.notDeclinable}}
           <span class="not-declinable">NR</span>
         {{/if}}
+        {{#unless @skill.productionPrototype.embedUrl}}
+          {{#unless @skill.productionPrototype.files}}
+            <i
+              aria-label="Pas de pièces jointes ou d'embed"
+              class="skill-cell--magic magic icon"
+            ></i>
+          {{/unless}}
+        {{/unless}}
+
       {{/if}}
+
     </div>
   </LinkTo>
 </td>
