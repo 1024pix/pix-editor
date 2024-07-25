@@ -1,7 +1,7 @@
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { inject as service } from '@ember/service';
+import Component from "@glimmer/component";
+import { action } from "@ember/object";
+import { tracked } from "@glimmer/tracking";
+import { inject as service } from "@ember/service";
 
 export default class AlternativeGeneration extends Component {
   @tracked isLoading = false;
@@ -22,24 +22,24 @@ export default class AlternativeGeneration extends Component {
     const response = await fetch(
       `${this.config.llmVariationsUrl}/variations-from-examples`,
       {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-type': 'application/json',
+          "Content-type": "application/json",
           Authorization: this.config.llmVariationsToken,
         },
         body: JSON.stringify({
           challenge: {
             skillDescription:
-              this.args.challenge.skill.get('description') || '',
+              this.args.challenge.skill.get("description") || "",
             tubeDescription:
               this.args.challenge.skill
-                .get('tube')
-                .get('practicalDescriptionFr') || '',
+                .get("tube")
+                .get("practicalDescriptionFr") || "",
             instruction: this.args.challenge.instruction,
             locale: this.args.challenge.locales[0],
           },
           examples: this.args.challenge.skill
-            .get('validatedChallenges')
+            .get("validatedChallenges")
             .map((challenge) => ({
               instruction: challenge.instruction,
               answer: extractResponseFromChallenge(challenge),
@@ -80,15 +80,15 @@ export default class AlternativeGeneration extends Component {
 
 function extractResponseFromChallenge(challenge) {
   switch (challenge.type) {
-    case 'QROC':
-      return challenge.solution.split('\n').pop();
-    case 'QCU':
-    case 'QCM':
+    case "QROC":
+      return challenge.solution.split("\n").pop();
+    case "QCU":
+    case "QCM":
       return challenge.proposals
-        .split('\n')
+        .split("\n")
         .filter((line, index) => challenge.solution.indexOf(index) !== -1)
-        .join('\n');
+        .join("\n");
     default:
-      return '';
+      return "";
   }
 }
