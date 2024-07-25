@@ -1,7 +1,7 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeReword extends Component {
   @tracked isLoading = false;

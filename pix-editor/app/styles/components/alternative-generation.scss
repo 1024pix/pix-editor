@@ -6,10 +6,15 @@
 .alternative-generation__separator {
   margin: 20px 0;
 }
+.alternative-generation__alternatives {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
 
 .alternative-generation__item {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr;
   gap: 20px;
 
   &:not(:first-child) {
