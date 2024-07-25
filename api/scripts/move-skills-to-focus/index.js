@@ -172,6 +172,12 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       throw err;
     }
     try {
+      clonedChallenges.forEach((clonedChallenge) => {
+        logger.info({
+          clonedChallengeId: clonedChallenge.id,
+          sourceChallengeId: Challenge.getCloneSource(clonedChallenge).id,
+        }, 'Correspondance entre les challenges clonés et leur source');
+      });
       await challengeRepository.createBatch(clonedChallenges);
     } catch (err) {
       await _logInHistoricAndPrint({
