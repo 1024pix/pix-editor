@@ -25,7 +25,7 @@ export default class ConfigService extends Service {
     const currentUser = await this.store.queryRecord('user', { me: true });
     const config = await this.store.findRecord(
       'config',
-      'pix-editor-global-config'
+      'pix-editor-global-config',
     );
 
     this.author = currentUser.trigram;

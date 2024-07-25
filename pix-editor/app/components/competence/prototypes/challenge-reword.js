@@ -1,7 +1,7 @@
-import Component from "@glimmer/component";
-import { action } from "@ember/object";
-import { tracked } from "@glimmer/tracking";
-import { inject as service } from "@ember/service";
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeReword extends Component {
   @tracked isLoading = false;
@@ -19,9 +19,9 @@ export default class ChallengeReword extends Component {
     this.isLoading = true;
     this.toggleModal();
     const response = await fetch(`${this.config.llmVariationsUrl}/rewordings`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-type": "application/json",
+        'Content-type': 'application/json',
         Authorization: this.config.llmVariationsToken,
       },
       body: JSON.stringify({
