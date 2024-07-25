@@ -36,8 +36,9 @@ export default class AlternativeGeneration extends Component {
     });
     const json = await response.json();
     this.alternatives = json.variations.map((alternative, index) => {
+      console.log(alternative);
       return {
-        alternative,
+        ...alternative,
         checked: false,
         label: `Déclinaison ${index + 1}`,
       };

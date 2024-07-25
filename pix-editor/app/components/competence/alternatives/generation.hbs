@@ -37,7 +37,7 @@
             <div>
               <PixTextarea
                 @id="alternative-{{index}}"
-                @value={{alternative.alternative.instruction}}
+                @value={{alternative.instruction}}
                 class={{if
                   alternative.checked
                   "alternative-generation__item--selected"
@@ -52,17 +52,14 @@
                   >
                     Bonne réponse
                   </h3>
-                  <code>{{alternative.alternative.answer.correct}}</code>
+                  <code>{{alternative.correctAnswer}}</code>
                 </div>
                 <div>
                   <h3 class="alternative-generation__item-answers-title wrong">
                     Mauvaises réponses
                   </h3>
                   <ul>
-                    {{#each
-                      alternative.alternative.answer.wrong
-                      as |wrongAnswer index|
-                    }}
+                    {{#each alternative.wrongAnswers as |wrongAnswer index|}}
                       <li>
                         <code>{{wrongAnswer}}</code>
                       </li>
