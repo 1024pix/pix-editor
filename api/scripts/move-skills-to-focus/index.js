@@ -61,7 +61,7 @@ async function _getSkillsToFocus({ airtableClient }) {
       fields: [
         'id persistant',
       ],
-      filterByFormula: '"en_devenir" = {Spoil_focus}',
+      filterByFormula: '{Spoil_focus} = "focusable"',
     })
     .all();
   const skillIdsToFocus = airtableSkills.map((at) => at.get('id persistant'));
@@ -172,6 +172,12 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       throw err;
     }
     try {
+      clonedChallenges.forEach((clonedChallenge) => {
+        logger.info({
+          clonedChallengeId: clonedChallenge.id,
+          sourceChallengeId: Challenge.getCloneSource(clonedChallenge).id,
+        }, 'Correspondance entre les challenges clonés et leur source');
+      });
       await challengeRepository.createBatch(clonedChallenges);
     } catch (err) {
       await _logInHistoricAndPrint({
