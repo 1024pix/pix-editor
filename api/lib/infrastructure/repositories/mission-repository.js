@@ -38,8 +38,8 @@ export async function findAllMissions({ filter, page }) {
 const SCHOOL_PLAYABLE_CHALLENGE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
 const SCHOOL_PLAYABLE_SKILL_STATUSES = [SkillForRelease.STATUSES.ACTIF, SkillForRelease.STATUSES.EN_CONSTRUCTION];
 
-export async function list() {
-  const missions = await knex('missions').select('*');
+export async function listActive() {
+  const missions = await knex('missions').select('*').whereNot({ status: 'INACTIVE' });
 
   const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
   const tubes = await tubeRepository.list();

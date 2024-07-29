@@ -197,7 +197,17 @@ describe('Integration | Repository | release-repository', function() {
 
       databaseBuilder.factory.buildMission({
         id: 123456789,
-        name: 'mission PG name',
+        name: 'validated mission PG name',
+        competenceId: 'competenceId',
+        learningObjectives: 'Que tu sois le meilleur',
+        thematicIds: 'thematicIds',
+        validatedObjectives: 'Rien',
+        status: Mission.status.VALIDATED,
+      });
+
+      databaseBuilder.factory.buildMission({
+        id: 987654321,
+        name: 'inactive mission PG name',
         competenceId: 'competenceId',
         learningObjectives: 'Que tu sois le meilleur',
         thematicIds: 'thematicIds',
@@ -852,7 +862,7 @@ function _mockRichAirtableContent() {
     areas: [area1, area2],
     competences: [competence11, competence12, competence21],
     thematics: [thematic111, thematic112, thematic121, thematic211],
-    tubeIds:  [airtableTube1111.id, airtableTube1121.id, airtableTube1211.id, airtableTube1212.id, airtableTube2111.id],
+    tubeIds: [airtableTube1111.id, airtableTube1121.id, airtableTube1211.id, airtableTube1212.id, airtableTube2111.id],
     skills: [skill11111, skill11112, skill12121, skill21111],
     challenges: [challenge121211, challenge121212, challenge211111, challenge211112, challenge211113],
   };
@@ -1407,12 +1417,12 @@ function _getRichCurrentContentDTO() {
   const expectedMissionsDTOs = [
     new Mission({
       id: 123456789,
-      name_i18n : { fr: 'mission PG name' },
+      name_i18n: { fr: 'validated mission PG name' },
       competenceId: 'competenceId',
       thematicIds: 'thematicIds',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.INACTIVE,
+      status: Mission.status.VALIDATED,
       createdAt: new Date('2010-01-04'),
     }),
   ];

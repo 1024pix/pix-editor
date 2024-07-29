@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import { beforeEach, describe as context, describe, expect, expectTypeOf, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, knex } from '../../../test-helper.js';
-import { findAllMissions, getById, list, save, } from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import { findAllMissions, getById, listActive, save, } from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
@@ -98,7 +98,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
     context('With statuses filter', function() {
       context('with results', function() {
-        it('should return all missions of given status', async function() {
+        it('should return all active missions', async function() {
           const activeMission = databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           databaseBuilder.factory.buildMission({ id: 3, status: Mission.status.EXPERIMENTAL });
@@ -136,7 +136,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
   });
 
-  describe('#list', function() {
+  describe('#listActive', function() {
     let mockedLearningContent;
 
     beforeEach(async function() {
@@ -190,7 +190,7 @@ describe('Integration | Repository | mission-repository', function() {
 
     });
 
-    it('should return all missions', async function() {
+    it('should return all active missions', async function() {
       airtableBuilder.mockLists(mockedLearningContent);
 
       buildLocalizedChallenges(mockedLearningContent);
@@ -204,9 +204,18 @@ describe('Integration | Repository | mission-repository', function() {
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
       });
 
+      databaseBuilder.factory.buildMission({
+        id: 3,
+        name: 'inactive name',
+        status: Mission.status.INACTIVE,
+        learningObjectives: 'Alt objectives',
+        validatedObjectives: 'Alt validated objectives',
+        thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
+      });
+
       await databaseBuilder.commit();
 
-      const result = await list();
+      const result = await listActive();
 
       expect(result).to.deep.equal([new Mission({
         id: 2,
@@ -270,7 +279,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -331,7 +340,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -386,7 +395,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -440,7 +449,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -481,7 +490,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -521,7 +530,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -560,7 +569,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -593,7 +602,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -626,7 +635,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,
@@ -658,7 +667,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         await databaseBuilder.commit();
 
-        const result = await list();
+        const result = await listActive();
 
         expect(result).to.deep.equal([new Mission({
           id: 2,

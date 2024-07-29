@@ -169,7 +169,7 @@ async function mockCurrentContent() {
       thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-      status: Mission.status.INACTIVE,
+      status: Mission.status.EXPERIMENTAL,
       createdAt: new Date('2010-01-05'),
     })]
   };
@@ -229,6 +229,16 @@ async function mockCurrentContent() {
   });
   databaseBuilder.factory.buildMission({
     id: 2,
+    name: 'Alt name',
+    competenceId: 'competenceId',
+    thematicIds: 'thematicId,thematicId',
+    learningObjectives: 'Alt objectives',
+    validatedObjectives: 'Alt validated objectives',
+    status: Mission.status.EXPERIMENTAL,
+    createdAt: new Date('2010-01-05'),
+  });
+  databaseBuilder.factory.buildMission({
+    id: 3,
     name: 'Alt name',
     competenceId: 'competenceId',
     thematicIds: 'thematicId,thematicId',
@@ -479,7 +489,7 @@ async function mockContentForRelease() {
       competenceId: 'competenceId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-      status: Mission.status.INACTIVE,
+      status: Mission.status.EXPERIMENTAL,
       content: {
         dareChallenges: [],
         steps: []
@@ -752,6 +762,15 @@ describe('Acceptance | Controller | release-controller', () => {
         });
         databaseBuilder.factory.buildMission({
           id: 2,
+          name: 'Alt name',
+          competenceId: 'competenceId',
+          thematicIds: 'thematicId,thematicId',
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          status: Mission.status.EXPERIMENTAL,
+        });
+        databaseBuilder.factory.buildMission({
+          id: 3,
           name: 'Alt name',
           competenceId: 'competenceId',
           thematicIds: 'thematicId,thematicId',
