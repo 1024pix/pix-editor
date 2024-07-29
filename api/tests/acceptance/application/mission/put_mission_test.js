@@ -27,7 +27,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
             name: 'Mission à mettre à jour',
             'competence-id': 'TYUI',
             'thematic-id': null,
-            status: Mission.status.ACTIVE,
+            status: Mission.status.VALIDATED,
             'learning-objectives': 'Une chose',
             'validated-objectives': null
           },

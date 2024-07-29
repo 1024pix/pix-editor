@@ -23,8 +23,8 @@ export async function findAllMissions({ filter, page }) {
   const query = knex('missions')
     .select('*')
     .orderBy('createdAt', 'desc');
-  if (filter?.isActive) {
-    query.where('status', Mission.status.ACTIVE);
+  if (filter?.statuses) {
+    query.whereIn('status', filter.statuses.map((status) => status.toUpperCase()));
   }
   const { results, pagination } = await fetchPage(query, page);
   const translations = await translationRepository.listByPrefix(missionTranslations.prefix);

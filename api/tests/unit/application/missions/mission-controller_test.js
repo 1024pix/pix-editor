@@ -18,7 +18,7 @@ describe('Unit | Controller | missions controller', function() {
               id: 1,
               name: 'Ma première mission',
               competence: '1.1 Ma compétence',
-              status: Mission.status.ACTIVE,
+              status: Mission.status.VALIDATED,
               createdAt: new Date('2010-01-04'),
             })],
           meta: {}
@@ -27,17 +27,17 @@ describe('Unit | Controller | missions controller', function() {
 
     it('should call the repository with all query params when they are valid', async function() {
       // given
-      const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[isActive]': 'true' } };
+      const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[statuses][]': ['VALIDATED'] } };
 
       // when
       await missionsController.findMissions(request, hFake);
 
       // then
-      expect(findAllMissions).toHaveBeenCalledWith({ filter: { isActive: true }, page: { number: 3, size: 5 } });
+      expect(findAllMissions).toHaveBeenCalledWith({ filter: { statuses: ['VALIDATED'] }, page: { number: 3, size: 5 } });
     });
     it('should return the serialized mission with french translations', async function() {
       // given
-      const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[isActive]': 'true' } };
+      const request = { query: { 'page[size]': 5, 'page[number]': 3, 'filter[statuses][]': ['VALIDATED'] } };
 
       // when
       const result = await missionsController.findMissions(request, hFake);
@@ -51,14 +51,14 @@ describe('Unit | Controller | missions controller', function() {
             name: 'Ma première mission',
             competence: '1.1 Ma compétence',
             'created-at': new Date('2010-01-04'),
-            status: 'ACTIVE'
+            status: Mission.status.VALIDATED
           }
         }
       ]);
     });
 
     describe('pagination', function() {
-      const filter = { isActive: false };
+      const filter = {};
 
       it('ignore unknown pagination parameters', async function() {
         // given
@@ -138,41 +138,13 @@ describe('Unit | Controller | missions controller', function() {
 
       it('ignore unknown filter parameters', async function() {
         // given
-        const request = { query: { 'filter[isActive]': 'true', 'filter[damn]': 'ok' } };
+        const request = { query: { 'filter[statuses][]': 'VALIDATED', 'filter[damn]': 'ok' } };
 
         // when
         await missionsController.findMissions(request, hFake);
 
         // then
-        expect(findAllMissions).toHaveBeenCalledWith({ filter: { isActive: true }, page });
-      });
-
-      context('filter isActive', function() {
-        it('extract isActive parameter correctly', async function() {
-          // given
-          const request0 = { query: { 'filter[isActive]': 3 } };
-          const request1 = { query: { 'filter[isActive]': 'ok' } };
-          const request2 = { query: { 'filter[somethingElse]': 'coucou' } };
-          const request3 = { query: { 'filter[isActive]': 'true' } };
-          const request4 = { query: { 'filter[isActive]': 'false' } };
-          const request5 = { query: { 'filter[isActive]': '' } };
-
-          // when
-          await missionsController.findMissions(request0, hFake);
-          await missionsController.findMissions(request1, hFake);
-          await missionsController.findMissions(request2, hFake);
-          await missionsController.findMissions(request3, hFake);
-          await missionsController.findMissions(request4, hFake);
-          await missionsController.findMissions(request5, hFake);
-
-          // then
-          expect(findAllMissions).toHaveBeenNthCalledWith(1, { filter: { isActive: false }, page });
-          expect(findAllMissions).toHaveBeenNthCalledWith(2, { filter: { isActive: false }, page });
-          expect(findAllMissions).toHaveBeenNthCalledWith(3, { filter: { isActive: false }, page });
-          expect(findAllMissions).toHaveBeenNthCalledWith(4, { filter: { isActive: true }, page });
-          expect(findAllMissions).toHaveBeenNthCalledWith(5, { filter: { isActive: false }, page });
-          expect(findAllMissions).toHaveBeenNthCalledWith(6, { filter: { isActive: false }, page });
-        });
+        expect(findAllMissions).toHaveBeenCalledWith({ filter: { statuses: ['VALIDATED'] }, page });
       });
     });
   });
@@ -233,7 +205,7 @@ describe('Unit | Controller | missions controller', function() {
     const attributes = {
       name: 'Mission possible',
       'competence-id': 'QWERTY',
-      status: Mission.status.ACTIVE,
+      status: Mission.status.VALIDATED,
       'learning-objectives': 'apprendre à éviter les lasers',
       'validated-objectives': 'Très bien',
       'thematic-id': null
@@ -262,7 +234,7 @@ describe('Unit | Controller | missions controller', function() {
         thematicId: null,
         learningObjectives_i18n: { fr: 'apprendre à éviter les lasers' },
         validatedObjectives_i18n: { fr: 'Très bien' },
-        status: Mission.status.ACTIVE,
+        status: Mission.status.VALIDATED,
       });
       // then
       expect(updateMissionMock).toHaveBeenCalledWith(deserializedMission);

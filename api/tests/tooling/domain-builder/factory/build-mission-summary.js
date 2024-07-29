@@ -6,7 +6,7 @@ export function buildMissionSummary({
   name = 'Ma mission',
   competence = '1.1 Traitement',
   createdAt = new Date('2023-10-14'),
-  status = Mission.status.ACTIVE,
+  status = Mission.status.VALIDATED,
 } = {}) {
   return new MissionSummary ({
     id,

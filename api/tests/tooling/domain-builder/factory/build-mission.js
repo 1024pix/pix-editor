@@ -8,7 +8,7 @@ export function buildMission({
   createdAt = new Date('2023-10-14'),
   learningObjectives = '- Que tu deviennes forte\n Et...',
   validatedObjectives = '- Ca\n Et puis ça',
-  status = Mission.status.ACTIVE,
+  status = Mission.status.VALIDATED,
 } = {}) {
   return new Mission ({
     id,

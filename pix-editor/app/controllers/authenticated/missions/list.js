@@ -13,8 +13,8 @@ export default class MissionsListController extends Controller {
 
 
   @action
-  onChangesStatus(arg1) {
-    this.statuses = arg1;
+  onChangesStatus(selectedStatuses) {
+    this.statuses = selectedStatuses;
   }
 
   @action
