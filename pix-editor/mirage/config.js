@@ -125,7 +125,7 @@ function routes() {
   this.post('/airtable/content/Tubes', (schema, request) => {
     const tubePayload = JSON.parse(request.requestBody);
     const tube = _deserializePayload(tubePayload, 'tube');
-    const createdTube =  schema.tubes.create(tube);
+    const createdTube = schema.tubes.create(tube);
     return _serializeModel(createdTube, 'tube');
   });
 
@@ -265,11 +265,11 @@ function routes() {
   this.get('/missions', function (schema, request) {
     const queryParams = request.queryParams;
     const {
-      'filter[isActive]': isActiveFilter,
+      'filter[statuses]': statuses,
     } = queryParams;
     let allmissionSummaries;
-    if (isActiveFilter === 'true') {
-      allmissionSummaries = schema.missionSummaries.where({ status: 'ACTIVE' }).models;
+    if (statuses) {
+      allmissionSummaries = schema.missionSummaries.where((mission) => statuses.includes(mission.status)).models;
     } else {
       allmissionSummaries = schema.missionSummaries.all().models;
     }

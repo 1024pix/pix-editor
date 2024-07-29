@@ -1,15 +1,9 @@
-import Model, { attr } from '@ember-data/model';
+import { attr } from '@ember-data/model';
+import MissionSummary from './mission-summary';
 
-export default class Mission extends Model {
-  @attr name;
+export default class Mission extends MissionSummary {
   @attr competenceId;
   @attr thematicIds;
-  @attr createdAt;
-  @attr status;
   @attr learningObjectives;
   @attr validatedObjectives;
-
-  get isActive () {
-    return this.status === 'ACTIVE';
-  }
 }

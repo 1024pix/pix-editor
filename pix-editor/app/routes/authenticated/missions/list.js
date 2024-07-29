@@ -9,7 +9,7 @@ export default class MissionsRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
-    showActiveMissions: {
+    statuses: {
       refreshModel: true,
     },
   };
@@ -17,6 +17,7 @@ export default class MissionsRoute extends Route {
   @service store;
   @service access;
   async model(params) {
+    console.log(params);
     const missions = await this.store.query('mission-summary', {
       page: {
         number: params.pageNumber,
@@ -24,7 +25,7 @@ export default class MissionsRoute extends Route {
       },
 
       filter: {
-        isActive: params.showActiveMissions,
+        statuses: params.statuses,
       },
     }, { reload: true });
     return {

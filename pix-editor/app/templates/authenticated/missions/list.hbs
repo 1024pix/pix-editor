@@ -24,14 +24,19 @@
       @onClearFilters={{this.clearFilters}}
       @isClearFilterButtonDisabled={{false}}
     >
-      <PixToggle
-        @inline={{true}}
-        @onLabel="Actives"
-        @offLabel="Toutes"
-        @toggled={{this.showActiveMissions}}
-        @onChange={{this.toggleShowActiveMissions}}
+      <PixMultiSelect
+        id="mission-status-multi-select"
         @screenReaderOnly={{true}}
-      ><:label>Statut</:label></PixToggle>
+        @placeholder="Aucun"
+        @onChange={{this.onChangesStatus}}
+        @values={{this.getStatusSelected}}
+        @emptyMessage="Il n'y a pas de statut"
+        @options={{this.statusesOption}}
+      >
+        <:label>Statut</:label>
+        <:default as |option|>{{option.label}}</:default>
+      </PixMultiSelect>
+
     </PixFilterBanner>
     <div class="panel-table-v2">
       <table class="content-text content-text--small">
@@ -58,8 +63,8 @@
             <td>{{mission.competence}}</td>
             <td>{{dayjs-format mission.createdAt "DD/MM/YYYY" allow-empty=true}}</td>
             <td>
-              <PixTag @color="{{if mission.isActive "green-light" "grey-light"}}">
-                {{if mission.isActive "Active" "Inactive"}}
+              <PixTag @color="{{mission.statusColor}}">
+                {{mission.displayableStatus}}
               </PixTag>
             </td>
           </tr>

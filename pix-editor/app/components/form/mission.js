@@ -3,6 +3,7 @@ import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+import MissionSummary from '../../models/mission-summary';
 
 export default class MissionForm extends Component {
   @service currentData;
@@ -43,8 +44,13 @@ export default class MissionForm extends Component {
     return this.args.mission.name?.length > 0;
   }
 
-  get statusOptions() {
-    return [{ value: 'ACTIVE', label: 'ACTIVE' }, { value: 'INACTIVE', label: 'INACTIVE' }];
+  get statusOptions () {
+    return Object.keys(MissionSummary.statuses).map((status) => {
+      return {
+        value: MissionSummary.statuses[status],
+        label:  MissionSummary.displayableStatuses[status],
+      };
+    });
   }
 
   get competencesOptions() {
