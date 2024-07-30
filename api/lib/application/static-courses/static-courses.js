@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import {
   localizedChallengeRepository,
   staticCourseRepository,
@@ -10,15 +9,9 @@ import * as idGenerator from '../../infrastructure/utils/id-generator.js';
 import { StaticCourse } from '../../domain/models/index.js';
 import { NotFoundError } from '../../domain/errors.js';
 
-const DEFAULT_PAGE = {
-  number: 1,
-  size: 10,
-  maxSize: 100,
-};
-
 export async function findSummaries(request, h) {
-  const { filter, page } = extractParameters(request.query);
-  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ filter: normalizeFilter(filter), page: normalizePage(page) });
+  const { filter, page } = request.query;
+  const { results: staticCourseSummaries, meta } = await staticCourseRepository.findReadSummaries({ filter, page });
   return h.response(staticCourseSerializer.serializeSummary(staticCourseSummaries, meta));
 }
 
@@ -97,37 +90,6 @@ export async function reactivate(request, h) {
   await staticCourseRepository.save(commandResult.value);
   const staticCourseReadModel = await staticCourseRepository.getRead(staticCourseId, { baseUrl: getBaseUrl(request) });
   return h.response(staticCourseSerializer.serialize(staticCourseReadModel));
-}
-
-function normalizePage(page) {
-  return {
-    number: _.isInteger(page.number) && Math.sign(page.number) === 1 ? page.number : DEFAULT_PAGE.number,
-    size: _.isInteger(page.size) && Math.sign(page.size) === 1 ? Math.min(page.size, DEFAULT_PAGE.maxSize) : DEFAULT_PAGE.size,
-  };
-}
-
-function normalizeFilter(filter) {
-  const normalizedFilter = {};
-  if (filter.isActive === undefined)
-    normalizedFilter.isActive = null;
-  else if (_.isString(filter.isActive)) {
-    const trimmedValueFromFilter = filter.isActive.trim().toLowerCase();
-    if (trimmedValueFromFilter === '') normalizedFilter.isActive = null;
-    else normalizedFilter.isActive = trimmedValueFromFilter === 'true';
-  } else {
-    normalizedFilter.isActive = false;
-  }
-
-  if (filter.name) {
-    const trimmedValueFromFilter = filter.name.toString().trim();
-    if (trimmedValueFromFilter.length > 0) normalizedFilter.name = trimmedValueFromFilter;
-    else normalizedFilter.name = null;
-  }
-  else {
-    normalizedFilter.name = null;
-  }
-
-  return normalizedFilter;
 }
 
 function normalizeCreationOrUpdateCommand(attrs) {
