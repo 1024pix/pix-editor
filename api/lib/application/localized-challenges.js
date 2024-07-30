@@ -1,10 +1,10 @@
 import { localizedChallengeRepository } from '../infrastructure/repositories/index.js';
 import { localizedChallengeSerializer } from '../infrastructure/serializers/jsonapi/index.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
-import { extractParameters } from '../infrastructure/utils/query-params-utils.js';
 import { hasAuthenticatedUserAccess, replyForbiddenError } from './security-utils.js';
 import { modifyLocalizedChallenge } from '../domain/usecases/index.js';
 import { ForbiddenError } from '../domain/errors.js';
+import Joi from 'joi';
 
 export async function register(server) {
   server.route([
@@ -23,9 +23,14 @@ export async function register(server) {
       method: 'GET',
       path: '/api/localized-challenges',
       config: {
-        handler: async function(request) {
-          const params = extractParameters(request.query);
-          const localizedChallenges = await localizedChallengeRepository.getMany({ ids: params.filter.ids });
+        validate: {
+          query: Joi.object({
+            filter: Joi.object({
+              ids: Joi.array().items(Joi.string()).default([])
+            }).default({ ids: [] }),
+          })
+        }, handler: async function(request) {
+          const localizedChallenges = await localizedChallengeRepository.getMany({ ids: request.query.filter.ids });
           return localizedChallengeSerializer.serialize(localizedChallenges);
         }
       },

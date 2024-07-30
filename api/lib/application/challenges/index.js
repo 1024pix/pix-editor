@@ -10,7 +10,6 @@ import { createChallengeTransformer } from '../../infrastructure/transformers/in
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
 import { getPhraseTranslationsURL, previewChallenge } from '../../domain/usecases/index.js';
-import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 
 const challengeIdType = Joi.string().pattern(/^(rec|challenge)[a-zA-Z0-9]+$/).required();
 
@@ -35,9 +34,16 @@ export async function register(server) {
       method: 'GET',
       path: '/api/challenges',
       config: {
+        validate: {
+          query: Joi.object({
+            filter: Joi.object().unknown(true),
+            page: Joi.object({
+              size: Joi.number().positive().default(100)
+            }).default({ size: 100 })
+          }).default({ filter: { page: { size: 100 } } }).unknown(true)
+        },
         handler: async function(request) {
-          const params = extractParameters(request.query, { page: { size: 100 } });
-          const challenges = await challengeRepository.filter(params);
+          const challenges = await challengeRepository.filter(request.query);
           return challengeSerializer.serialize(challenges);
         },
       },
