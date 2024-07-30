@@ -78,7 +78,7 @@
     "pino": "^8.0.0",
     "pino-pretty": "^11.0.0",
     "progress": "2.0.3",
-    "qs": "^6.10.1",
+    "qs": "6.12.3",
     "sequelize": "^6.29.0",
     "showdown": "^2.0.0",
     "tough-cookie": "^4.0.0",
