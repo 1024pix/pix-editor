@@ -152,7 +152,7 @@ async function _getCurrentContentFromPG() {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
-  const missions = await missionRepository.list();
+  const missions = await missionRepository.listActive();
 
   return {
     courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
