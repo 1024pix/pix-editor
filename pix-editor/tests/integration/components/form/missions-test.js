@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, find, triggerEvent } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { clickByName, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 
 module('Integration | Component | mission', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -22,7 +22,7 @@ module('Integration | Component | mission', function(hooks) {
     await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
     await triggerEvent(find('#mission-name'), 'keyup', '');
 
-    await clickByName('champ requis Compétence');
+    await clickByText('Compétence');
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'Notre compétence' }));
 
