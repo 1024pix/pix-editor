@@ -1,6 +1,7 @@
 import * as config from './lib/config.js';
 import Hapi from '@hapi/hapi';
 import Oppsy from 'oppsy';
+import Qs from 'qs';
 
 import { catchDomainAndInfrastructureErrors } from './lib/infrastructure/utils/pre-response-utils.js';
 
@@ -26,7 +27,10 @@ export async function createServer() {
     port: config.port,
     router: {
       isCaseSensitive: false,
-    }
+    },
+    query: {
+      parser: (query) => Qs.parse(query),
+    },
   });
 
   server.ext('onPreResponse', catchDomainAndInfrastructureErrors);
