@@ -23,7 +23,8 @@ export class Mission {
 }
 
 const status = {
-  ACTIVE: 'ACTIVE',
+  VALIDATED: 'VALIDATED',
+  EXPERIMENTAL: 'EXPERIMENTAL',
   INACTIVE: 'INACTIVE',
 };
 

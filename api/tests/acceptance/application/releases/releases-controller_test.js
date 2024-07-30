@@ -160,7 +160,7 @@ async function mockCurrentContent() {
       thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.ACTIVE,
+      status: Mission.status.VALIDATED,
       createdAt: new Date('2010-01-04'),
     }), new Mission({
       id: 2,
@@ -224,7 +224,7 @@ async function mockCurrentContent() {
     thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Que tu sois le meilleur',
     validatedObjectives: 'Rien',
-    status: Mission.status.ACTIVE,
+    status: Mission.status.VALIDATED,
     createdAt: new Date('2010-01-04'),
   });
   databaseBuilder.factory.buildMission({
@@ -468,7 +468,7 @@ async function mockContentForRelease() {
       competenceId: 'competenceId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
-      status: Mission.status.ACTIVE,
+      status: Mission.status.VALIDATED,
       content: {
         dareChallenges: [],
         steps: []
@@ -748,7 +748,7 @@ describe('Acceptance | Controller | release-controller', () => {
           thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Que tu sois le meilleur',
           validatedObjectives: 'Rien',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
         });
         databaseBuilder.factory.buildMission({
           id: 2,

@@ -22,7 +22,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
     context('When mission exists', function() {
       it('should return the mission', async function() {
-        databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.ACTIVE });
+        databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
         await databaseBuilder.commit();
 
         const result = await getById(1);
@@ -34,7 +34,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }));
       });
@@ -43,7 +43,7 @@ describe('Integration | Repository | mission-repository', function() {
   describe('#findAllMissions', function() {
     context('When there are missions', function() {
       it('should return all missions', async function() {
-        databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.ACTIVE });
+        databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
@@ -62,7 +62,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }), new Mission({
           id: 2,
@@ -96,14 +96,15 @@ describe('Integration | Repository | mission-repository', function() {
         });
       });
     });
-    context('With isActive filter', function() {
+    context('With statuses filter', function() {
       context('with results', function() {
-        it('should return all active missions', async function() {
-          const activeMission = databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.ACTIVE });
+        it('should return all missions of given status', async function() {
+          const activeMission = databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
+          databaseBuilder.factory.buildMission({ id: 3, status: Mission.status.EXPERIMENTAL });
           await databaseBuilder.commit();
 
-          const results = await findAllMissions({ filter: { isActive: true }, page: { number: 1, size: 20 } });
+          const results = await findAllMissions({ filter: { statuses: ['validated'] }, page: { number: 1, size: 20 } });
 
           expect(results.missions.length).to.equal(1);
           expect(results.missions[0].id).to.equal(activeMission.id);
@@ -121,7 +122,7 @@ describe('Integration | Repository | mission-repository', function() {
           databaseBuilder.factory.buildMission({ id: 2, status: Mission.status.INACTIVE });
           await databaseBuilder.commit();
 
-          const results = await findAllMissions({ filter: { isActive: true }, page: { number: 1, size: 20 } });
+          const results = await findAllMissions({ filter: { statuses: [] }, page: { number: 1, size: 20 } });
 
           expect(results.missions.length).to.equal(0);
           expect(results.meta).to.deep.equal({
@@ -135,7 +136,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
   });
 
-  describe('#list', function()  {
+  describe('#list', function() {
     let mockedLearningContent;
 
     beforeEach(async function() {
@@ -197,7 +198,7 @@ describe('Integration | Repository | mission-repository', function() {
       databaseBuilder.factory.buildMission({
         id: 2,
         name: 'Alt name',
-        status: Mission.status.ACTIVE,
+        status: Mission.status.VALIDATED,
         learningObjectives: 'Alt objectives',
         validatedObjectives: 'Alt validated objectives',
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
@@ -214,7 +215,7 @@ describe('Integration | Repository | mission-repository', function() {
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-        status: Mission.status.ACTIVE,
+        status: Mission.status.VALIDATED,
         createdAt: new Date('2010-01-04'),
         content: {
           steps: [{
@@ -227,7 +228,7 @@ describe('Integration | Repository | mission-repository', function() {
             validationChallenges: [
               ['challengeValidation1'],
             ],
-          },{
+          }, {
             tutorialChallenges: [
               ['challengeTuto2'],
             ],
@@ -261,7 +262,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -278,7 +279,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -322,7 +323,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -339,7 +340,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -377,7 +378,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -394,7 +395,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -431,7 +432,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -448,7 +449,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -472,7 +473,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -489,7 +490,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -512,7 +513,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -529,7 +530,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -551,7 +552,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -568,7 +569,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
 
@@ -576,7 +577,7 @@ describe('Integration | Repository | mission-repository', function() {
     });
     context('Without tubes in thematic', async function() {
       it('Should return missions', async function() {
-        mockedLearningContent.thematics = [ airtableBuilder.factory.buildThematic({ id: 'thematicStep1', tubeIds: undefined }, { id: 'thematicDefiVide', tubeIds: undefined }) ];
+        mockedLearningContent.thematics = [airtableBuilder.factory.buildThematic({ id: 'thematicStep1', tubeIds: undefined }, { id: 'thematicDefiVide', tubeIds: undefined })];
         airtableBuilder.mockLists(mockedLearningContent);
 
         buildLocalizedChallenges(mockedLearningContent);
@@ -584,7 +585,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -601,7 +602,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
 
@@ -617,7 +618,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -634,7 +635,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
 
@@ -649,7 +650,7 @@ describe('Integration | Repository | mission-repository', function() {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           thematicIds: null,
@@ -666,7 +667,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: null,
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
       });
@@ -677,10 +678,10 @@ describe('Integration | Repository | mission-repository', function() {
     context('Mission creation', function() {
       it('should store mission', async function() {
         const mission = new Mission({
-          name_i18n: { fr: 'Mission impossible'  },
+          name_i18n: { fr: 'Mission impossible' },
           competenceId: 'AZERTY',
           thematicIds: 'QWERTY',
-          learningObjectives_i18n:  { fr: null },
+          learningObjectives_i18n: { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
         });
@@ -703,10 +704,10 @@ describe('Integration | Repository | mission-repository', function() {
       it('should store I18n for mission', async function() {
 
         const mission = new Mission({
-          name_i18n: { fr: 'Mission impossible'  },
+          name_i18n: { fr: 'Mission impossible' },
           competenceId: 'AZERTY',
           thematicIds: 'QWERTY',
-          learningObjectives_i18n:  { fr: 'au boulot' },
+          learningObjectives_i18n: { fr: 'au boulot' },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
         });
@@ -737,15 +738,15 @@ describe('Integration | Repository | mission-repository', function() {
 
     context('Update mission', function() {
       it('should update the mission', async function() {
-        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.ACTIVE });
+        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.VALIDATED });
         await databaseBuilder.commit();
 
         const missionToUpdate = new Mission({
           id: savedMission.id,
-          name_i18n: { fr: 'Updated mission'  },
+          name_i18n: { fr: 'Updated mission' },
           competenceId: 'QWERTY',
           thematicIds: 'Thematic',
-          learningObjectives_i18n:  { fr: null },
+          learningObjectives_i18n: { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
           status: Mission.status.INACTIVE,
         });
@@ -767,15 +768,15 @@ describe('Integration | Repository | mission-repository', function() {
       });
 
       it('should store I18n for mission', async function() {
-        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.ACTIVE });
+        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.VALIDATED });
         await databaseBuilder.commit();
 
         const missionToUpdate = new Mission({
           id: savedMission.id,
-          name_i18n: { fr: 'Updated mission'  },
+          name_i18n: { fr: 'Updated mission' },
           competenceId: 'QWERTY',
           thematicIds: 'Thematic',
-          learningObjectives_i18n:  { fr: 'Etre la boss' },
+          learningObjectives_i18n: { fr: 'Etre la boss' },
           validatedObjectives_i18n: { fr: 'intermédiaire' },
           status: Mission.status.INACTIVE,
         });

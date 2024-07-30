@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { extractParameters } from '../../infrastructure/utils/query-params-utils.js';
 import { findAllMissions, createMission, updateMission } from '../../domain/usecases/index.js';
 import { missionSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
-import * as missionRepository  from '../../infrastructure/repositories/mission-repository.js';
+import * as missionRepository from '../../infrastructure/repositories/mission-repository.js';
 //TODO Faire éventuellement un refacto pour mutualiser la gestion de la pagination
 const DEFAULT_PAGE = {
   number: 1,
@@ -44,6 +44,7 @@ function normalizePage(page) {
 
 function normalizeFilter(filter) {
   return {
-    isActive: filter.isActive === 'true',
+    statuses: filter.statuses,
   };
 }
+

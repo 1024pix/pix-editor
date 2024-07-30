@@ -9,7 +9,7 @@ export default class MissionsRoute extends Route {
     pageSize: {
       refreshModel: true,
     },
-    showActiveMissions: {
+    statuses: {
       refreshModel: true,
     },
   };
@@ -24,7 +24,7 @@ export default class MissionsRoute extends Route {
       },
 
       filter: {
-        isActive: params.showActiveMissions,
+        statuses: params.statuses,
       },
     }, { reload: true });
     return {

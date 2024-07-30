@@ -18,7 +18,7 @@ describe('Acceptance | API | mission | GET /api/missions', function() {
 
     //given
     const user = databaseBuilder.factory.buildAdminUser();
-    const mission = databaseBuilder.factory.buildMission({ name: 'Condor', status: Mission.status.ACTIVE, competenceId: 'recCompetence0', thematicIds: null, validatedObjectives: 'Être forte', learningObjectives: 'Être imbattable', createdAt: new Date('2024-01-01') });
+    const mission = databaseBuilder.factory.buildMission({ name: 'Condor', status: Mission.status.VALIDATED, competenceId: 'recCompetence0', thematicIds: null, validatedObjectives: 'Être forte', learningObjectives: 'Être imbattable', createdAt: new Date('2024-01-01') });
     await databaseBuilder.commit();
 
     //when
@@ -36,7 +36,7 @@ describe('Acceptance | API | mission | GET /api/missions', function() {
         id: mission.id.toString(),
         attributes: {
           name: 'Condor',
-          status: Mission.status.ACTIVE,
+          status: Mission.status.VALIDATED,
           'competence-id': 'recCompetence0',
           'thematic-ids': null,
           'validated-objectives': 'Être forte',

@@ -26,8 +26,8 @@
           {{this.model.thematics}}
         </li>
         <li><span class="bold">Statut : </span>
-          <PixTag @color="{{if this.model.mission.isActive "green-light" "grey-light"}}">
-            {{ if this.model.mission.isActive "Active" "Inactive" }}
+          <PixTag @color="{{this.model.mission.statusColor}}">
+            {{this.model.mission.displayableStatus }}
           </PixTag>
         </li>
         <li>
