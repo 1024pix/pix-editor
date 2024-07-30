@@ -54,7 +54,7 @@
     "airtable": "^0.12.2",
     "axios": "^1.0.0",
     "axios-cookiejar-support": "^5.0.0",
-    "base-x": "^4.0.0",
+    "base-x": "^5.0.0",
     "blipp": "4.0.2",
     "bull": "^4.10.4",
     "countries-list": "^3.0.6",
