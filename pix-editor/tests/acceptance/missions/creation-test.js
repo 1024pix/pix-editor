@@ -3,7 +3,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
 module('Acceptance | Missions | Creation', function(hooks) {
   setupApplicationTest(hooks);
@@ -73,7 +73,7 @@ module('Acceptance | Missions | Creation', function(hooks) {
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
-      await clickByName('champ requis Compétence');
+      await clickByText('Compétence');
       await screen.findByRole('listbox');
 
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
