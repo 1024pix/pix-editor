@@ -1,5 +1,20 @@
 
 
+## v3.155.0 (30/07/2024)
+
+
+### :rocket: Amélioration
+- [#707](https://github.com/1024pix/pix-editor/pull/707) [FEATURE] Ajout du statut "expérimental" des missions (PIX-13584).
+
+### :building_construction: Tech
+- [#705](https://github.com/1024pix/pix-editor/pull/705) [TECH] Améliorer le script de passage en focus afin d'avoir la correspondance entre les ID des épreuves avant/après (PIX-13363).
+
+### :arrow_up: Montée de version
+- [#708](https://github.com/1024pix/pix-editor/pull/708) [BUMP] Update dependency @playwright/test to v1.45.3.
+- [#666](https://github.com/1024pix/pix-editor/pull/666) [BUMP] Update dependency @1024pix/pix-ui to v46 (pix-editor).
+- [#685](https://github.com/1024pix/pix-editor/pull/685) [BUMP] Update dependency postgres to v15.
+- [#695](https://github.com/1024pix/pix-editor/pull/695) [BUMP] Update dependency @playwright/test to v1.45.0.
+
 ## v3.154.0 (23/07/2024)
 
 
