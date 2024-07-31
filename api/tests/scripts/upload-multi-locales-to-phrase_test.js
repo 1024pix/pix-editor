@@ -15,6 +15,7 @@ describe('#script.uploadToPhrase',() => {
 
   it('should return a super csv', async () => {
     // given
+    const scriptExectId = 'scriptExectId';
     const skill1 = domainBuilder.buildSkill({
       id:'skill1',
       tubeId: 'tube1',
@@ -179,22 +180,28 @@ describe('#script.uploadToPhrase',() => {
     await knex('focus_phrase').insert([
       {
         type: 'skill',
-        persistantId: skill1.id
+        persistantId: skill1.id,
+        scriptExectId
       }, {
         type: 'skill',
-        persistantId: skill2.id
+        persistantId: skill2.id,
+        scriptExectId
       }, {
         type: 'challenge',
-        persistantId: challengeA.id
+        persistantId: challengeA.id,
+        scriptExectId
       }, {
         type: 'challenge',
-        persistantId: challengeB.id
+        persistantId: challengeB.id,
+        scriptExectId
       }, {
         type: 'challenge',
-        persistantId: challengeC.id
+        persistantId: challengeC.id,
+        scriptExectId
       }, {
         type: 'challenge',
-        persistantId: challengeD.id
+        persistantId: challengeD.id,
+        scriptExectId
       }
     ]);
 
@@ -295,7 +302,7 @@ describe('#script.uploadToPhrase',() => {
       .reply(201, {});
 
     // when
-    await uploadToPhrase();
+    await uploadToPhrase({ scriptExectId });
 
     expect(phraseLocalesAPI.isDone()).to.be.true;
     expect(phraseUploadAPI.isDone()).to.be.true;

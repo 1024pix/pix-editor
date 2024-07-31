@@ -6,7 +6,6 @@ import csv from 'fast-csv';
 import { logger } from '../../lib/infrastructure/logger.js';
 import { streamToPromise } from '../../lib/infrastructure/utils/stream-to-promise.js';
 import * as config from '../../lib/config.js';
-import Airtable from 'airtable';
 import { disconnect, knex } from '../../db/knex-database-connection.js';
 import { fileURLToPath } from 'node:url';
 import {
@@ -16,11 +15,11 @@ import {
   translationRepository
 } from '../../lib/infrastructure/repositories/index.js';
 
-export async function uploadToPhrase() {
+export async function uploadToPhrase({ scriptExectId }) {
   const releaseId = await releaseRepository.create();
   const release = await  releaseRepository.getRelease(releaseId);
 
-  const clonedSkillsIdsChallengesIds = await knex('focus_phrase').select('*');
+  const clonedSkillsIdsChallengesIds = await knex('focus_phrase').select('*').where({ scriptExectId });
 
   // type // persistante ID //
   const clonedPersistantIds = clonedSkillsIdsChallengesIds.map(({ persistantId }) => persistantId);
@@ -200,14 +199,11 @@ async function main() {
   if (!isLaunchedFromCommandLine) return;
 
   try {
-    const airtableClient = new Airtable({
-      apiKey: process.env.AIRTABLE_API_KEY,
-    }).base(process.env.AIRTABLE_BASE);
-    const dryRun = process.env.DRY_RUN !== 'false';
 
-    if (dryRun) logger.warn('Dry run: no actual modification will be performed, use DRY_RUN=false to disable');
+    const scriptExectId = process.env.SCRIPT_EXECT_ID;
+    if (!scriptExectId) throw new Error('le scriptExectId est obligatoire');
 
-    await uploadToPhrase({ airtableClient, dryRun });
+    await uploadToPhrase({ scriptExectId });
     logger.info('All done');
   } catch (e) {
     logger.error(e);
