@@ -24,6 +24,9 @@ async function _getChallengesFromParams(params) {
     });
     return challengeDatasource.search(params);
   }
+  if (params?.filter?.formula) {
+    return challengeDatasource.filter(params);
+  }
   return challengeDatasource.list(params);
 }
 
@@ -61,10 +64,16 @@ export async function filter(params = {}) {
   return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
+export async function filterByThematicIds(thematicIds) {
+  const formula = `OR(${thematicIds.map((thematicId) => `FIND("${thematicId}", {Thematique (Record ID)})`).join(', ')})`;
+
+  return filter({ filter: { formula } });
+}
+
 export async function create(challenge) {
   const createdChallengeDto = await challengeDatasource.create(challenge);
   const primaryLocalizedChallenge = challenge.localizedChallenges[0];
-  await localizedChallengeRepository.create({ localizedChallenges:[primaryLocalizedChallenge] });
+  await localizedChallengeRepository.create({ localizedChallenges: [primaryLocalizedChallenge] });
 
   const translations = extractTranslationsFromChallenge(challenge);
   await translationRepository.save({ translations });
@@ -105,7 +114,7 @@ export async function update(challenge, knexConn = knex) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
 
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction: knexConn });
-  const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary })=> isPrimary);
+  const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
   const oldPrimaryLocale = primaryLocalizedChallenge.locale;
   if (oldPrimaryLocale !== challenge.primaryLocale) {
