@@ -20,6 +20,11 @@ export default class MissionEditController extends Controller {
       this.router.transitionTo('authenticated.missions.mission');
     } catch (err) {
       this.model.mission.rollbackAttributes();
+
+      if (err.errors?.[0]) {
+        await this.notifications.error(err.errors[0].detail);
+        return;
+      }
       await this.notifications.error('Une erreur est survenue lors de la mise à jour de la mission.');
     }
   }
