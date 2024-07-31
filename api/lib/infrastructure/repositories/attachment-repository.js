@@ -53,14 +53,14 @@ export async function createBatch(attachments) {
 
 function toDomainList(datasourceAttachments, translations, localizedChallenges) {
   const translationsByChallengeId = _.groupBy(translations, 'entityId');
-  const localizedChallengesById = _.groupBy(localizedChallenges, 'id');
+  const localizedChallengesById = _.keyBy(localizedChallenges, 'id');
 
   return datasourceAttachments.map((attachment) => {
     if (attachment.type !== Attachment.TYPES.ILLUSTRATION) {
       return toDomain(attachment);
     }
     const challengeTranslations = translationsByChallengeId[attachment.challengeId];
-    const locale = localizedChallengesById[attachment.localizedChallengeId][0].locale;
+    const locale = localizedChallengesById[attachment.localizedChallengeId].locale;
     const translation = challengeTranslations?.find((translation) => locale === translation.locale);
 
     return toDomain(attachment, translation);

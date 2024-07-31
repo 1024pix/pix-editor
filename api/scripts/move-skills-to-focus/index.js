@@ -111,8 +111,7 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
   let clonedAttachments, clonedChallenges, clonedSkill;
   try {
     const tubeSkills = await skillRepository.listByTubeId(skill.tubeId);
-    const localizedChallengeIds = skillChallenges.flatMap((ch) => ch.localizedChallenges.map((loc) => loc.id));
-    const attachments = await attachmentRepository.listByLocalizedChallengeIds(localizedChallengeIds);
+
     // Exploitation du duck typing pour tricher
     // tubeDestination : besoin de name, competenceId et id
     const tubeDestination = {
@@ -126,6 +125,9 @@ async function _cloneSkillAndChallengesAndAttachments({ skill, skillChallenges, 
       (challenge.genealogy === Challenge.GENEALOGIES.PROTOTYPE && challenge.isValide)
       || (challenge.genealogy === Challenge.GENEALOGIES.DECLINAISON && (challenge.isValide || challenge.isPropose))
     );
+
+    const localizedChallengeIds = preFilteredSkillChallenges.flatMap((ch) => ch.localizedChallenges.map((loc) => loc.id));
+    const attachments = await attachmentRepository.listByLocalizedChallengeIds(localizedChallengeIds);
 
     const res = skill.cloneSkillAndChallenges({
       tubeDestination,
