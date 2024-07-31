@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 import * as config from '../config.js';
 import * as pixApiClient from '../infrastructure/pix-api-client.js';
 import * as updatedRecordNotifier from '../infrastructure/event-notifier/updated-record-notifier.js';

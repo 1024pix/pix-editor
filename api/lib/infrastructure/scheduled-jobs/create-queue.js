@@ -1,5 +1,5 @@
 import { logger } from '../logger.js';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 import Queue from 'bull';
 import * as config from '../../config.js';
 
