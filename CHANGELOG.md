@@ -1,5 +1,24 @@
 
 
+## v3.155.1 (31/07/2024)
+
+
+### :rocket: Amélioration
+- [#711](https://github.com/1024pix/pix-editor/pull/711) [FEATURE] Exclu les missions inactive de la `release` (PIX-13588).
+
+### :building_construction: Tech
+- [#718](https://github.com/1024pix/pix-editor/pull/718) [TECH] Filtrer l'ajout des nouvelle clef de traduction par scriptExectId (PIX-13702).
+
+### :bug: Correction
+- [#717](https://github.com/1024pix/pix-editor/pull/717) [BUGFIX] Script migration en focus: correction requête Airtable attachments (PIX-13700).
+
+### :arrow_up: Montée de version
+- [#715](https://github.com/1024pix/pix-editor/pull/715) [BUMP] Update dependency base-x to v5 (api).
+- [#716](https://github.com/1024pix/pix-editor/pull/716) [BUMP] Update dependency base-x to v5 (pix-editor).
+- [#712](https://github.com/1024pix/pix-editor/pull/712) [BUMP] Update dependency @1024pix/ember-testing-library to v3 (pix-editor).
+- [#710](https://github.com/1024pix/pix-editor/pull/710) [BUMP] Update dependency @1024pix/ember-testing-library to v2 (pix-editor).
+- [#709](https://github.com/1024pix/pix-editor/pull/709) [BUMP] Update dependency redis to v7.2.5.
+
 ## v3.155.0 (30/07/2024)
 
 
