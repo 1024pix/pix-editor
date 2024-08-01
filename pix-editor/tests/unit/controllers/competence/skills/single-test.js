@@ -1,16 +1,16 @@
 import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import Service from '@ember/service';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence/skills/single', function (hooks) {
-  setupTest(hooks);
+  setupIntlRenderingTest(hooks);
 
   let storeStub, controller, changelogEntryService;
   const date = '14/07/1986';
   const author = 'DEV';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     controller = this.owner.lookup('controller:authenticated.competence/skills/single');
     changelogEntryService = this.owner.lookup('service:ChangelogEntry');
     class ConfigService extends Service {
@@ -21,7 +21,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       ask = sinon.stub().resolves();
     }
     this.owner.unregister('service:Config');
-    this.owner.register('service:Config',ConfigService);
+    this.owner.register('service:Config', ConfigService);
   });
 
   test('it should create a skill changelogEntry', async function (assert) {
@@ -53,7 +53,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const storeResult = storeStub.createRecord.getCall(0).args;
     //stub createdAt
     storeResult[1].createdAt = date;
-    assert.deepEqual(storeStub.createRecord.getCall(0).args,['changelogEntry', expectedChangelog]);
+    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelogEntry', expectedChangelog]);
   });
 
   test('it should create a challenge changelogEntry', async function (assert) {
@@ -82,7 +82,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     const storeResult = storeStub.createRecord.getCall(0).args;
     //stub createdAt
     storeResult[1].createdAt = date;
-    assert.deepEqual(storeStub.createRecord.getCall(0).args,['changelogEntry', expectedChangelog]);
+    assert.deepEqual(storeStub.createRecord.getCall(0).args, ['changelogEntry', expectedChangelog]);
   });
 
   test('it should clone skill with new location', async function (assert) {
@@ -96,7 +96,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     sinon.stub(controller, '_duplicateLiveChallenges').resolves([]);
     controller.loader = {
       start: sinon.stub(),
-      stop:  sinon.stub()
+      stop: sinon.stub()
     };
     controller.notify = {
       message: sinon.stub(),
@@ -138,9 +138,9 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     // given
     const store = this.owner.lookup('service:store');
 
-    const copyForDifferentSkillStub = sinon.stub().returns({ save:sinon.stub().resolves({}) });
+    const copyForDifferentSkillStub = sinon.stub().returns({ save: sinon.stub().resolves({}) });
 
-    const validatedChallenge = store.createRecord('challenge',{
+    const validatedChallenge = store.createRecord('challenge', {
       id: 'rec_1_1',
       pixId: 'pix_1_1',
       status: 'validé',
@@ -172,7 +172,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
       name: 'deletedChallenge',
       copyForDifferentSkill: copyForDifferentSkillStub
     });
-    const skill =  store.createRecord('skill',{
+    const skill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       challenges: [validatedChallenge, draftChallenge, archiveChallenge, deletedChallenge]
@@ -201,7 +201,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     });
     sinon.stub(attachment, 'save').resolves(attachment);
 
-    const challenge = store.createRecord('challenge',{
+    const challenge = store.createRecord('challenge', {
       id: 'rec_1_1',
       pixId: 'pix_1_1',
       status: 'validé',
@@ -211,7 +211,7 @@ module('Unit | Controller | competence/skills/single', function (hooks) {
     sinon.stub(challenge, 'save').resolves(challenge);
     challenge.copyForDifferentSkill = sinon.stub().returns(challenge);
 
-    const skill =  store.createRecord('skill',{
+    const skill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       challenges: [challenge]

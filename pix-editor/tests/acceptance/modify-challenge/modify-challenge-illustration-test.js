@@ -1,18 +1,18 @@
 import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { visit, findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../setup-application-rendering';
 import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
 import Service from '@ember/service';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
+module('Acceptance | Modify-Challenge-Illustration', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -23,18 +23,18 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
     this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds:['recTheme1'], rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds:['recTheme2'], rawTubeIds: ['recTube2'] });
+    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
     return authenticateSession();
   });
 
-  test('adding illustration', async function(assert) {
+  test('adding illustration', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -51,7 +51,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => {}, 200);
+    await runTask(this, async () => { }, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -64,7 +64,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every(record => !record.isNew));
   });
 
-  test('delete illustration', async function(assert) {
+  test('delete illustration', async function (assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -81,7 +81,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -93,7 +93,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     await click(find('[data-test-modify-challenge-button]'));
     await click(find('[data-test-delete-illustration-button]'));
 
-    await runTask(this, async () => {}, 200);
+    await runTask(this, async () => { }, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -106,7 +106,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every(record => !record.isDeleted));
   });
 
-  test('update illustration', async function(assert) {
+  test('update illustration', async function (assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -123,7 +123,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -136,7 +136,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => {}, 200);
+    await runTask(this, async () => { }, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -144,7 +144,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
     await challenge.files;
-    const newIllustration  = challenge.files.findBy('type', 'illustration');
+    const newIllustration = challenge.files.findBy('type', 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
@@ -153,7 +153,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.strictEqual(newIllustration.url, 'data:,');
   });
 
-  test('delete and upload a new illustration', async function(assert) {
+  test('delete and upload a new illustration', async function (assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -169,7 +169,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2' });
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -183,7 +183,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-illustration] input', file);
 
-    await runTask(this, async () => {}, 200);
+    await runTask(this, async () => { }, 200);
     await click(find('[data-test-save-challenge-button]'));
     await click(find('[data-test-confirm-log-approve]'));
 
@@ -191,7 +191,7 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
     await challenge.files;
-    const newIllustration  = challenge.files.findBy('type', 'illustration');
+    const newIllustration = challenge.files.findBy('type', 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');

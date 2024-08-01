@@ -1,19 +1,19 @@
 import { module, test } from 'qunit';
 import { visit, findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Controller | Create alternative challenge', function(hooks) {
+module('Acceptance | Controller | Create alternative challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let challenge;
   let skill;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -27,10 +27,10 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     return authenticateSession();
   });
 
-  test('create a challenge alternative', async function(assert) {
+  test('create a challenge alternative', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);
@@ -57,10 +57,10 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.ok(attachments.every(record => !record.isNew));
   });
 
-  test('create a challenge alternative clone the attachments', async function(assert) {
+  test('create a challenge alternative clone the attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      cloneFile() {}
+      cloneFile() { }
     }
     const attachment = this.server.create('attachment', { url: 'data:1,', challenge });
     challenge.update({ filesIds: [attachment.id] });
@@ -89,10 +89,10 @@ module('Acceptance | Controller | Create alternative challenge', function(hooks)
     assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
-  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
+  test('create a challenge alternative don\'t clone deleted attachments', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      cloneFile() {}
+      cloneFile() { }
     }
     const challenge2 = this.server.create('challenge', { id: 'recChallenge2', filesIds: ['recAttachment1'] });
     this.server.create('attachment', { id: 'recAttachment1', type: 'attachment', url: 'data:,', filename: 'test.ods', challenge: challenge2 });

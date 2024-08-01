@@ -1,24 +1,24 @@
 import { module, test } from 'qunit';
 import { Response } from 'miragejs/dist/mirage-esm';
 import { currentURL } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { visit, fillByLabel, clickByName } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Login', function(hooks) {
+module('Acceptance | Login', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   const VALID_API_KEY = 'valid-api-key';
   const INVALID_API_KEY = 'invalid-api-key';
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
   });
 
-  module('when user is not authenticated', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user is not authenticated', function (hooks) {
+    hooks.beforeEach(function () {
       // FIXME move this in mirage's configuration and remove direct dependency on miragejs
       this.server.get('/users/me', ({ users }, request) => {
         const apiKey = request.requestHeaders && request.requestHeaders['Authorization'];
@@ -26,7 +26,7 @@ module('Acceptance | Login', function(hooks) {
       });
     });
 
-    test('it should lead to login page', async function(assert) {
+    test('it should lead to login page', async function (assert) {
       // when
       await visit('/statistics');
 
@@ -34,7 +34,7 @@ module('Acceptance | Login', function(hooks) {
       assert.strictEqual(currentURL(), '/connexion');
     });
 
-    test('redirect to / when logging in with a valid api key', async function(assert) {
+    test('redirect to / when logging in with a valid api key', async function (assert) {
       // given
       await visit('/');
 
@@ -46,7 +46,7 @@ module('Acceptance | Login', function(hooks) {
       assert.strictEqual(currentURL(), '/');
     });
 
-    test('remain on login page when logging in with a invalid api key', async function(assert) {
+    test('remain on login page when logging in with a invalid api key', async function (assert) {
       // given
       await visit('/');
 
@@ -58,7 +58,7 @@ module('Acceptance | Login', function(hooks) {
       assert.strictEqual(currentURL(), '/connexion');
     });
 
-    test('redirect to the page the user initially intended to visit', async function(assert) {
+    test('redirect to the page the user initially intended to visit', async function (assert) {
       // given
       this.server.create('framework', { id: 'recFramework0', name: 'Pix' });
       await visit('/statistics');
@@ -72,11 +72,11 @@ module('Acceptance | Login', function(hooks) {
     });
   });
 
-  module('when user is already authenticated', function(hooks) {
-    hooks.beforeEach(function() {
+  module('when user is already authenticated', function (hooks) {
+    hooks.beforeEach(function () {
       return authenticateSession();
     });
-    test('it should redirect to root page when trying to visit login page', async function(assert) {
+    test('it should redirect to root page when trying to visit login page', async function (assert) {
       // when
       await visit('/connexion');
 

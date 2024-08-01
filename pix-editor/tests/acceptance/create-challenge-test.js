@@ -1,17 +1,17 @@
 import { module, test } from 'qunit';
 import { visit, findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { selectFiles } from 'ember-file-upload/test-support';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
 import sinon from 'sinon';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Create-Challenge', function(hooks) {
+module('Acceptance | Create-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -30,10 +30,10 @@ module('Acceptance | Create-Challenge', function(hooks) {
     return authenticateSession();
   });
 
-  test('creating a new challenge', async function(assert) {
+  test('creating a new challenge', async function (assert) {
     // given
     class StorageServiceStub extends Service {
-      uploadFile() {}
+      uploadFile() { }
     }
 
     this.owner.register('service:storage', StorageServiceStub);

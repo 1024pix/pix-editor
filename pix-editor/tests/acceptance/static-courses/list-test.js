@@ -1,15 +1,15 @@
 import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { click, currentURL, triggerEvent } from '@ember/test-helpers';
 import { clickByName, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Static Courses | List', function(hooks) {
+module('Acceptance | Static Courses | List', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     const tags = [
@@ -23,7 +23,7 @@ module('Acceptance | Static Courses | List', function(hooks) {
     return authenticateSession();
   });
 
-  test('should display active static courses by default when accessing list', async function(assert) {
+  test('should display active static courses by default when accessing list', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -34,7 +34,7 @@ module('Acceptance | Static Courses | List', function(hooks) {
     assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 
-  test('should display all static courses when accessing list and toggling filter', async function(assert) {
+  test('should display all static courses when accessing list and toggling filter', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -49,7 +49,7 @@ module('Acceptance | Static Courses | List', function(hooks) {
     assert.dom(screen.queryByText('Deuxième test statique')).doesNotExist();
   });
 
-  test('should render correctly a row', async function(assert) {
+  test('should render correctly a row', async function (assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');

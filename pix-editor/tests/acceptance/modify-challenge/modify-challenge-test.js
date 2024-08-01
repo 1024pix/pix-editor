@@ -1,15 +1,15 @@
 import { module, test } from 'qunit';
 import { click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 
-module('Acceptance | Modify-Challenge', function(hooks) {
+module('Acceptance | Modify-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -21,15 +21,15 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     this.server.create('tube', { id: 'recTube2', rawSkillIds: ['recSkill2'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
     this.server.create('theme', { id: 'recTheme2', name: 'theme2', rawTubeIds: ['recTube2'] });
-    this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds:['recTheme1'], rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds:['recTheme2'], rawTubeIds: ['recTube2'] });
+    this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence', { id: 'recCompetence2.1', pixId: 'pixId recCompetence2.1', rawThemeIds: ['recTheme2'], rawTubeIds: ['recTube2'] });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('area', { id: 'recArea2', name: '2. Communication et collaboration', code: '2', competenceIds: ['recCompetence2.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
     return authenticateSession();
   });
 
-  test('visiting /', async function(assert) {
+  test('visiting /', async function (assert) {
     // when
     const store = this.owner.lookup('service:store');
 
@@ -50,7 +50,7 @@ module('Acceptance | Modify-Challenge', function(hooks) {
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
   });
 
-  test('modify a challenge\'s urlsToConsult', async function(assert) {
+  test('modify a challenge\'s urlsToConsult', async function (assert) {
     // when
     const store = this.owner.lookup('service:store');
 
