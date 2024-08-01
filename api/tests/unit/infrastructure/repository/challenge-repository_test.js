@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { filter, get, list, update } from '../../../../lib/infrastructure/repositories/challenge-repository.js';
+import * as challengeRepository from '../../../../lib/infrastructure/repositories/challenge-repository.js';
 import { challengeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import {
   localizedChallengeRepository,
@@ -7,6 +7,8 @@ import {
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+
+const { filter, get, list, update } = challengeRepository;
 
 describe('Unit | Repository | challenge-repository', () => {
   describe('#list', () => {
@@ -135,7 +137,7 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges[0].instruction).to.equal('instruction');
         expect(challenges[0].proposals).to.equal('proposals');
         expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
-        expect(challenges[0].localizedChallenges).to.deep.equal([ localizedChallenge1, localizedChallenge1_en]);
+        expect(challenges[0].localizedChallenges).to.deep.equal([localizedChallenge1, localizedChallenge1_en]);
         expect(challenges[0].geography).to.equal('Brésil');
         expect(challenges[1].instruction).to.equal('instruction 2');
         expect(challenges[1].proposals).to.equal('proposals 2');
@@ -288,6 +290,18 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(translationRepository.listByPrefix).not.toHaveBeenCalled();
         expect(localizedChallengeRepository.listByChallengeIds).not.toHaveBeenCalled();
       });
+    });
+  });
+  describe('#filterByThematicIds', () => {
+    it('calls filter with filterByFormula defined to filter by thematic ids', async function() {
+      const thematicsIds = ['id1', 'id2'];
+      vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([]);
+      vi.spyOn(translationRepository, 'listByPrefix');
+      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds');
+
+      await challengeRepository.filterByThematicIds(thematicsIds);
+
+      expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter : { formula: 'OR(FIND("id1", {Thematique (Record ID)}), FIND("id2", {Thematique (Record ID)}))' } });
     });
   });
   describe('#get', () => {
