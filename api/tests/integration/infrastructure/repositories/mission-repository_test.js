@@ -257,50 +257,101 @@ describe('Integration | Repository | mission-repository', function() {
     });
 
     context('with inactive, proposal, and active challenges', async function() {
-      it('should return proposal and active challenges only', async function() {
-        mockedLearningContent.challenges = [
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: Challenge.STATUSES.PROPOSE, skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: Challenge.STATUSES.PERIME, skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: Challenge.STATUSES.ARCHIVE, skillId: 'skillValidation1' }),
-        ];
-        airtableBuilder.mockLists(mockedLearningContent);
+      context('when mission is EXPERIMENTAL', function() {
+        it('should return proposal and active challenges only', async function() {
+          mockedLearningContent.challenges = [
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: Challenge.STATUSES.PROPOSE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: Challenge.STATUSES.PERIME, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: Challenge.STATUSES.ARCHIVE, skillId: 'skillValidation1' }),
+          ];
+          airtableBuilder.mockLists(mockedLearningContent);
 
-        buildLocalizedChallenges(mockedLearningContent);
+          buildLocalizedChallenges(mockedLearningContent);
 
-        databaseBuilder.factory.buildMission({
-          id: 2,
-          name: 'Alt name',
-          status: Mission.status.VALIDATED,
-          learningObjectives: 'Alt objectives',
-          validatedObjectives: 'Alt validated objectives',
-          thematicIds: 'thematicStep1,thematicDefiVide',
+          databaseBuilder.factory.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.EXPERIMENTAL,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+          });
+
+          await databaseBuilder.commit();
+
+          const result = await listActive();
+
+          expect(result).to.deep.equal([new Mission({
+            id: 2,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            status: Mission.status.EXPERIMENTAL,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [{
+                tutorialChallenges: [],
+                trainingChallenges: [],
+                validationChallenges: [
+                  ['challengeValidationValidé', 'challengeValidationProposé'],
+                ],
+              }],
+              dareChallenges: [],
+            },
+          })]);
+        });
+      });
+
+      context('when mission is validated', function() {
+        it('should return active challenges only', async function() {
+          mockedLearningContent.challenges = [
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: Challenge.STATUSES.PROPOSE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: Challenge.STATUSES.PERIME, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: Challenge.STATUSES.ARCHIVE, skillId: 'skillValidation1' }),
+          ];
+          airtableBuilder.mockLists(mockedLearningContent);
+
+          buildLocalizedChallenges(mockedLearningContent);
+
+          databaseBuilder.factory.buildMission({
+            id: 2,
+            name: 'Alt name',
+            status: Mission.status.VALIDATED,
+            learningObjectives: 'Alt objectives',
+            validatedObjectives: 'Alt validated objectives',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+          });
+
+          await databaseBuilder.commit();
+
+          const result = await listActive();
+
+          expect(result).to.deep.equal([new Mission({
+            id: 2,
+            name_i18n: { fr: 'Alt name' },
+            competenceId: 'competenceId',
+            thematicIds: 'thematicStep1,thematicDefiVide',
+            learningObjectives_i18n: { fr: 'Alt objectives' },
+            validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            status: Mission.status.VALIDATED,
+            createdAt: new Date('2010-01-04'),
+            content: {
+              steps: [{
+                tutorialChallenges: [],
+                trainingChallenges: [],
+                validationChallenges: [
+                  ['challengeValidationValidé'],
+                ],
+              }],
+              dareChallenges: [],
+            },
+          })]);
         });
 
-        await databaseBuilder.commit();
-
-        const result = await listActive();
-
-        expect(result).to.deep.equal([new Mission({
-          id: 2,
-          name_i18n: { fr: 'Alt name' },
-          competenceId: 'competenceId',
-          thematicIds: 'thematicStep1,thematicDefiVide',
-          learningObjectives_i18n: { fr: 'Alt objectives' },
-          validatedObjectives_i18n: { fr: 'Alt validated objectives' },
-          status: Mission.status.VALIDATED,
-          createdAt: new Date('2010-01-04'),
-          content: {
-            steps: [{
-              tutorialChallenges: [],
-              trainingChallenges: [],
-              validationChallenges: [
-                ['challengeValidationValidé', 'challengeValidationProposé'],
-              ],
-            }],
-            dareChallenges: [],
-          },
-        })]);
       });
     });
 
