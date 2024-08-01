@@ -1,6 +1,6 @@
 import Boom from '@hapi/boom';
 import Joi from 'joi';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 import { logger } from '../../infrastructure/logger.js';
 import { challengeRepository } from '../../infrastructure/repositories/index.js';
 import { challengeSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
