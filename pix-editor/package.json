@@ -69,7 +69,7 @@
     "ember-dayjs": "^0.12.1",
     "ember-fetch": "^8.1.2",
     "ember-file-upload": "^9.0.0",
-    "ember-intl": "^6.0.0",
+    "ember-intl": "^7.0.0",
     "ember-lifeline": "7.0.0",
     "ember-load-initializers": "^2.1.2",
     "ember-modal-dialog": "^4.0.1",
