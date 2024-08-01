@@ -61,7 +61,7 @@ async function _getSkillsToFocus({ airtableClient }) {
       fields: [
         'id persistant',
       ],
-      filterByFormula: '{Spoil_focus} = "focusable"',
+      filterByFormula: 'AND(({Spoil_focus} = "focusable"), ({Origine} = "Pix"))',
     })
     .all();
   const skillIdsToFocus = airtableSkills.map((at) => at.get('id persistant'));
