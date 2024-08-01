@@ -147,7 +147,7 @@ export default class ApplicationController extends Controller {
 
   @action
   logout() {
-    Sentry.configureScope(scope => scope.setUser(null));
+    Sentry.getCurrentScope().setUser(null);
     this.session.invalidate();
   }
 
