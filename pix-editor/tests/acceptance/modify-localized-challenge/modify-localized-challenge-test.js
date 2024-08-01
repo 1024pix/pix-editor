@@ -1,15 +1,15 @@
 import { module, test } from 'qunit';
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Modify-Localized-Challenge', function(hooks) {
+module('Acceptance | Modify-Localized-Challenge', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -19,13 +19,13 @@ module('Acceptance | Modify-Localized-Challenge', function(hooks) {
     this.server.create('skill', { id: 'recSkill1', name: '@trululu2', challengeIds: ['recChallenge1'] });
     this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
-    this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds:['recTheme1'], rawTubeIds: ['recTube1'] });
+    this.server.create('competence', { id: 'recCompetence1.1', title: 'ma competence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('visiting /', async function(assert) {
+  test('visiting /', async function (assert) {
     // when
     const store = this.owner.lookup('service:store');
 

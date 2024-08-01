@@ -1,11 +1,11 @@
 import { module, test } from 'qunit';
 import { clickByName, visit } from '@1024pix/ember-testing-library';
 import { currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Search', function(hooks) {
+module('Acceptance | Search', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
@@ -19,7 +19,7 @@ module('Acceptance | Search', function(hooks) {
     return authenticateSession();
   });
 
-  test('it should create a new framework', async function(assert) {
+  test('it should create a new framework', async function (assert) {
     // given
     const newFrameworkName = 'Nouveau titre';
 

@@ -1,10 +1,10 @@
 import { module, test } from 'qunit';
 import { visit } from '@1024pix/ember-testing-library';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | Navigate through frameworks', function(hooks) {
+module('Acceptance | Navigate through frameworks', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let apiKey;
@@ -16,7 +16,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
   });
 
   for (const role of ['readonly', 'replicator', 'editor', 'admin']) {
-    module(`when user is ${role}`, function(hooks) {
+    module(`when user is ${role}`, function (hooks) {
       let screen;
 
       hooks.beforeEach(async function () {
@@ -37,14 +37,14 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
         assert.dom('[data-test-target-profile-link]').exists();
       });
 
-      test('it should display search bar', function(assert) {
+      test('it should display search bar', function (assert) {
         // then
         assert.dom('[data-test-sidebar-search]').exists();
       });
     });
   }
 
-  module('when user is `readpixonly`', function(hooks) {
+  module('when user is `readpixonly`', function (hooks) {
     hooks.beforeEach(async function () {
       //given
       this.server.create('user', { apiKey, trigram: 'ABC', access: 'readpixonly', });
@@ -63,7 +63,7 @@ module('Acceptance | Navigate through frameworks', function(hooks) {
       assert.dom('[data-test-target-profile-link]').doesNotExist();
     });
 
-    test('it should not display search bar', function(assert) {
+    test('it should not display search bar', function (assert) {
       // then
       assert.dom('[data-test-sidebar-search]').doesNotExist();
     });

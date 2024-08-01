@@ -2,7 +2,7 @@ import { module, test } from 'qunit';
 import sinon from 'sinon';
 import { visit, clickByText } from '@1024pix/ember-testing-library';
 import { findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../setup-application-rendering';
 import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';

@@ -1,21 +1,21 @@
 import { module, test } from 'qunit';
 import { currentURL, visit, click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
-module('Acceptance | single', function(hooks) {
+module('Acceptance | single', function (hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let skill1, competence1, tube1;
 
-  hooks.beforeEach(function() {
+  hooks.beforeEach(function () {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
     const challenge1 = this.server.create('challenge', { id: 'recChallenge1', status: 'proposé' });
     const challenge2 = this.server.create('challenge', { id: 'recChallenge2', status: 'proposé' });
-    skill1 = this.server.create('skill', { id: 'skillId1', challengeIds: [challenge1.id, challenge2.id], level:1 });
+    skill1 = this.server.create('skill', { id: 'skillId1', challengeIds: [challenge1.id, challenge2.id], level: 1 });
     tube1 = this.server.create('tube', { id: 'recTube1', rawSkillIds: [skill1.id] });
     const theme1 = this.server.create('theme', { id: 'recTheme1', rawTubeIds: [tube1.id] });
     competence1 = this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixId recCompetence1.1', rawThemeIds: [theme1.id], rawTubeIds: [tube1.id] });
@@ -24,15 +24,15 @@ module('Acceptance | single', function(hooks) {
     return authenticateSession();
   });
 
-  test('close single', async function(assert) {
+  test('close single', async function (assert) {
     await visit(`/competence/${competence1.id}/skills/new/${tube1.id}/0?leftMaximized=true&view=workbench`);
     await click(find('.icon.window.close'));
 
     assert.strictEqual(currentURL(), `/competence/${competence1.id}/skills?view=workbench`);
   });
 
-  module('#duplicateToLocation', function() {
-    test('it should duplicate a skill and his challenges to new location', async function(assert) {
+  module('#duplicateToLocation', function () {
+    test('it should duplicate a skill and his challenges to new location', async function (assert) {
       // given
       const SKILL_LEVEL_CHOOSE = 4;
       const store = this.owner.lookup('service:store');

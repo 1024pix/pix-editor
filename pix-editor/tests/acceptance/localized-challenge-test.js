@@ -1,7 +1,7 @@
 import { module, test } from 'qunit';
 import { visit, clickByText } from '@1024pix/ember-testing-library';
 import { findAll, click } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 
@@ -13,7 +13,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1',  embedURL: 'https://mon-site.fr/my-link.html?lang=fr' });
+    this.server.create('challenge', { id: 'recChallenge1', airtableId: 'airtableId1', embedURL: 'https://mon-site.fr/my-link.html?lang=fr' });
     this.server.create('localized-challenge', { id: 'recChallenge1', challengeId: 'recChallenge1', locale: 'fr' });
     this.server.create('localized-challenge', { id: 'recChallenge1NL', challengeId: 'recChallenge1', locale: 'nl', defaultEmbedURL: 'https://mon-site.fr/my-link.html?lang=nl' });
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });
@@ -46,7 +46,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     // then
     assert.dom(await screen.queryByText('https://mon-site.fr/my-link.html?lang=nl', { exact: false })).exists();
   });
-  test('should not display a default url if primary does not have any', async function(assert) {
+  test('should not display a default url if primary does not have any', async function (assert) {
     // given
     this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1', embedURL: null });
     this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
@@ -63,7 +63,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     // then
     assert.dom(await screen.queryByText('Embed URL auto-générée', { exact: false })).doesNotExist();
   });
-  test('should display an embed url if localized challenge has one', async function(assert) {
+  test('should display an embed url if localized challenge has one', async function (assert) {
     // given
     this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1' });
     this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });

@@ -1,6 +1,6 @@
 import { module, test } from 'qunit';
 import { visit, currentURL, find, findAll, click, waitUntil } from '@ember/test-helpers';
-import { setupApplicationTest } from 'ember-qunit';
+import { setupApplicationTest } from '../../../setup-application-rendering';
 import { runTask } from 'ember-lifeline';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
@@ -52,7 +52,7 @@ module('Acceptance | competence/prototypes/list', function () {
     test('it should display a list of prototype of `skill1`', function (assert) {
       // then
       assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.3`);
-      assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
+      assert.dom('[data-test-prototype-list] tbody tr').exists({ count: 1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge1');
     });
 
@@ -63,7 +63,7 @@ module('Acceptance | competence/prototypes/list', function () {
       // then
       const tabs = this.element.querySelectorAll('[data-test-skill-tab]');
       assert.strictEqual(tabs.length, expectedResult.length);
-      tabs.forEach((tab, index)=>{
+      tabs.forEach((tab, index) => {
         assert.dom(tab).hasText(expectedResult[index]);
       });
     });
@@ -71,13 +71,13 @@ module('Acceptance | competence/prototypes/list', function () {
     test('it should display a list of prototype of selected skill', async function (assert) {
       //when
       await click(findAll('[data-test-skill-tab]')[1]);
-      await waitUntil(function() {
+      await waitUntil(function () {
         return find('[data-test-prototype-list]').textContent.includes('instructionsChallenge2');
       }, { timeout: 1000 });
 
       // then
       assert.dom('[data-test-skill-tab].active').hasText(`${skillName} v.2`);
-      assert.dom('[data-test-prototype-list] tbody tr').exists({ count:1 });
+      assert.dom('[data-test-prototype-list] tbody tr').exists({ count: 1 });
       assert.dom('[data-test-prototype-list]').includesText('instructionsChallenge2');
     });
 
@@ -91,7 +91,7 @@ module('Acceptance | competence/prototypes/list', function () {
       // Ugly hack to wait for ToastUI to be ready
       // otherwise test is flacky and fails with error message
       // Attempted to access the computed <pixeditor@component:tui-editor::ember393>.options on a destroyed object, which is not allowed
-      await runTask(this, async () => {}, 100);
+      await runTask(this, async () => { }, 100);
 
       //then
       assert.strictEqual(currentURL().indexOf(expectedResult), 0);
