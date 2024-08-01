@@ -70,12 +70,12 @@ export async function listActive() {
 
       if (index < thematicIds.length - 1) {
         content.steps.push({
-          tutorialChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_di'),
-          trainingChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_en'),
-          validationChallenges: _getChallengeIdsForActivity(missionTubes, skills, challenges, '_va'),
+          tutorialChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_di'),
+          trainingChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_en'),
+          validationChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_va'),
         });
       } else {
-        content.dareChallenges = _getChallengeIdsForActivity(missionTubes, skills, challenges, '_de');
+        content.dareChallenges = _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_de');
       }
     });
     return new Mission({ ...mission, content });
@@ -87,7 +87,7 @@ export async function listActive() {
 const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
 const _byAlternativeVersion = (challengeA, challengeB) => (challengeA.alternativeVersion ?? 0) - (challengeB.alternativeVersion ?? 0);
 
-function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityPostfix) {
+function _getChallengeIdsForActivity(missionStatus, missionTubes, skills, challenges, activityPostfix) {
   const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
 
   if (!activityTube) {
@@ -108,7 +108,8 @@ function _getChallengeIdsForActivity(missionTubes, skills, challenges, activityP
   return activitySkills.map((activitySkill) => {
     const alternatives = challenges
       .filter((challenge) => activitySkill.id === challenge.skillId)
-      .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()));
+      .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()))
+      .filter((challenge) => (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE) || missionStatus !== Mission.status.VALIDATED);
 
     if (alternatives.length === 0) {
       logger.warn({ activitySkill }, 'No challenges found for activitySkill');
