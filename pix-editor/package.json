@@ -44,7 +44,7 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@playwright/test": "1.45.3",
-    "@sentry/ember": "^7.22.0",
+    "@sentry/ember": "^8.0.0",
     "acorn": "^8.8.1",
     "base-x": "^5.0.0",
     "canvg": "^4.0.1",
