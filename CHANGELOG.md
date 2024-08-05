@@ -1,5 +1,26 @@
 
 
+## v3.156.0 (05/08/2024)
+
+
+### :rocket: Amélioration
+- [#704](https://github.com/1024pix/pix-editor/pull/704) [FEATURE] Autoriser le filtre par tags sur les tests statiques (PIX-13404).
+- [#725](https://github.com/1024pix/pix-editor/pull/725) [FEATURE] Ajout de contrôle sur la liste des Epreuves quand la Mission est VALIDATED (Pix-13589).
+- [#719](https://github.com/1024pix/pix-editor/pull/719) [FEATURE] Ne pas autoriser la validation d'une mission si celle-ci contient au moins une épreuve non validée (PIX-13613).
+
+### :bug: Correction
+- [#724](https://github.com/1024pix/pix-editor/pull/724) [BUGFIX] Migration focus: Ne migrer que les acquis de Pix coeur (PIX-13709).
+
+### :arrow_up: Montée de version
+- [#722](https://github.com/1024pix/pix-editor/pull/722) [BUMP] Update dependency ember-intl to v7 (pix-editor).
+- [#726](https://github.com/1024pix/pix-editor/pull/726) [BUMP] Update dependency ember-test-selectors to v7 (pix-editor).
+- [#727](https://github.com/1024pix/pix-editor/pull/727) [BUMP] Update dependency googleapis to v135 (api).
+- [#723](https://github.com/1024pix/pix-editor/pull/723) [BUMP] Update dependency ember-resolver to v12 (pix-editor).
+- [#721](https://github.com/1024pix/pix-editor/pull/721) [BUMP] Update dependency ember-cli-app-version to v7 (pix-editor).
+- [#713](https://github.com/1024pix/pix-editor/pull/713) [BUMP] Update dependency @sentry/ember to v8 (pix-editor).
+- [#720](https://github.com/1024pix/pix-editor/pull/720) [BUMP] Update dependency @1024pix/pix-ui to ^46.12.16 (pix-editor).
+- [#714](https://github.com/1024pix/pix-editor/pull/714) [BUMP] Update dependency @sentry/node to v8 (api).
+
 ## v3.155.1 (31/07/2024)
 
 
