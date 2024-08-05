@@ -1,5 +1,11 @@
 
 
+## v3.156.1 (05/08/2024)
+
+
+### :bug: Correction
+- [#734](https://github.com/1024pix/pix-editor/pull/734) [BUGFIX] Un mauvais usage de initSentry fait planté l'application. (PIX-13749).
+
 ## v3.156.0 (05/08/2024)
 
 
