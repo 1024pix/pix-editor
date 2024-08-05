@@ -14,7 +14,10 @@ export default class StaticCoursesRoute extends Route {
     },
     name: {
       refreshModel: true,
-    }
+    },
+    tagIds: {
+      refreshModel: true,
+    },
   };
 
   @service store;
@@ -31,12 +34,15 @@ export default class StaticCoursesRoute extends Route {
         filter: {
           isActive: params.isActive,
           name: params.name,
+          tagIds: params.tagIds
         },
       },
       { reload: true }
     );
+    const staticCourseTags = await this.store.findAll('static-course-tag');
     return {
       staticCourseSummaries,
+      staticCourseTags,
       mayCreateStaticCourse: this.access.mayCreateOrEditStaticCourse(),
     };
   }

@@ -44,6 +44,19 @@
           @value={{this.name}}
           {{on "keyup" this.updateName}}
         ><:label>Nom</:label></PixInput>
+        <PixMultiSelect
+          @id="filter-tags-selector"
+          @placeholder="Sélectionnez des tags"
+          @isSearchable="true"
+          @emptyMessage="Pas de résultats"
+          @screenReaderOnly={{true}}
+          @onChange={{this.selectTags}}
+          @values={{this.tempTagIds}}
+          @options={{this.tagOptions}}
+        >
+          <:label>Tags</:label>
+          <:default as |option|>{{option.label}}</:default>
+        </PixMultiSelect>
         <PixToggle
           @inline={{true}}
           @onLabel="Actifs"

@@ -127,6 +127,12 @@ function normalizeFilter(filter) {
     normalizedFilter.name = null;
   }
 
+  if (filter.tagIds?.length) {
+    normalizedFilter.tagIds = filter.tagIds.map((tagId) => {
+      return Number(tagId);
+    });
+  }
+
   return normalizedFilter;
 }
 

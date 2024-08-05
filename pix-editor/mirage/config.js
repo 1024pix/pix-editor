@@ -332,6 +332,7 @@ function routes() {
     const {
       'filter[isActive]': isActiveFilter,
       'filter[name]': nameFilter,
+      'filter[tagIds]' : tagFilter,
     } = queryParams;
     let allStaticCourseSummaries;
     if (isActiveFilter === '') {
@@ -344,6 +345,14 @@ function routes() {
       allStaticCourseSummaries = allStaticCourseSummaries.filter((staticCourse) => {
         const staticCourseName = staticCourse.name.toLowerCase();
         return staticCourseName.includes(nameFilter.toLowerCase());
+      });
+    }
+
+    if (tagFilter?.length > 0) {
+      allStaticCourseSummaries = allStaticCourseSummaries.filter((staticCourse) => {
+        return staticCourse.tagIds.some((tagId) => {
+          return tagFilter.includes(tagId);
+        });
       });
     }
     const rowCount = allStaticCourseSummaries.length;
