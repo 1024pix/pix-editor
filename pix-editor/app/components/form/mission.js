@@ -15,6 +15,7 @@ export default class MissionForm extends Component {
   @tracked selectedStatus = 'ACTIVE';
   @tracked validatedObjectives = null;
   @tracked learningObjectives = null;
+  @tracked introductionMedia = null;
   @tracked errorMessages = A([]);
   @tracked isSubmitting = false;
   @tracked isFormValid = false;
@@ -27,6 +28,7 @@ export default class MissionForm extends Component {
       this.selectedStatus = this.args.mission.status;
       this.validatedObjectives = this.args.mission.validatedObjectives;
       this.learningObjectives = this.args.mission.learningObjectives;
+      this.introductionMedia = this.args.mission.introductionMedia;
       this.isFormValid = true;
       this.thematicIds.setValue(this.args.mission.thematicIds);
     }
@@ -70,7 +72,8 @@ export default class MissionForm extends Component {
       thematicIds: this.thematicIds.getValueForSubmit(),
       status: this.selectedStatus,
       learningObjectives: this.learningObjectives,
-      validatedObjectives: this.validatedObjectives
+      validatedObjectives: this.validatedObjectives,
+      introductionMedia: this.introductionMedia
 
     };
     try {
@@ -111,6 +114,11 @@ export default class MissionForm extends Component {
   validateCompetence() {
     this.selectedCompetenceId.validate();
     this.checkFormValidity();
+  }
+
+  @action
+  updateIntroductionMedia(event) {
+    this.introductionMedia = event.target.value;
   }
 
   @action
