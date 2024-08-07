@@ -74,7 +74,6 @@ export default class MissionForm extends Component {
       learningObjectives: this.learningObjectives,
       validatedObjectives: this.validatedObjectives,
       introductionMedia: this.introductionMedia
-
     };
     try {
       await this.args.onFormSubmitted(formData);

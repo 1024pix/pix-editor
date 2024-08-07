@@ -32,6 +32,7 @@ describe('Integration | Usecases | Update mission', function() {
           thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
+          introductionMedia: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')
         });
@@ -70,6 +71,7 @@ describe('Integration | Usecases | Update mission', function() {
             thematicIds: 'Thematic',
             learningObjectives_i18n:  { fr: null },
             validatedObjectives_i18n: { fr: 'Très bien' },
+            introductionMedia: null,
             status: Mission.status.VALIDATED,
             createdAt: new Date('2023-12-25')
           });

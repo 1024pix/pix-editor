@@ -34,6 +34,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }));
@@ -62,6 +63,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }), new Mission({
@@ -71,6 +73,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -224,6 +227,7 @@ describe('Integration | Repository | mission-repository', function() {
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+        introductionMedia: null,
         status: Mission.status.VALIDATED,
         createdAt: new Date('2010-01-04'),
         content: {
@@ -289,6 +293,7 @@ describe('Integration | Repository | mission-repository', function() {
             thematicIds: 'thematicStep1,thematicDefiVide',
             learningObjectives_i18n: { fr: 'Alt objectives' },
             validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMedia: null,
             status: Mission.status.EXPERIMENTAL,
             createdAt: new Date('2010-01-04'),
             content: {
@@ -337,6 +342,7 @@ describe('Integration | Repository | mission-repository', function() {
             thematicIds: 'thematicStep1,thematicDefiVide',
             learningObjectives_i18n: { fr: 'Alt objectives' },
             validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+            introductionMedia: null,
             status: Mission.status.VALIDATED,
             createdAt: new Date('2010-01-04'),
             content: {
@@ -400,6 +406,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -455,6 +462,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -510,6 +518,7 @@ describe('Integration | Repository | mission-repository', function() {
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           status: Mission.status.VALIDATED,
+          introductionMedia: null,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -550,6 +559,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -590,6 +600,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -629,6 +640,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -662,6 +674,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -695,6 +708,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'thematicStep1,thematicDefiVide',
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -727,6 +741,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: null,
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
+          introductionMedia: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -743,6 +758,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'QWERTY',
           learningObjectives_i18n: { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
+          introductionMedia: 'http://example.net',
           status: Mission.status.INACTIVE,
         });
 
@@ -754,10 +770,11 @@ describe('Integration | Repository | mission-repository', function() {
           id: savedMission.id,
           competenceId: 'AZERTY',
           thematicIds: 'QWERTY',
+          introductionMedia: 'http://example.net',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMedia');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -808,6 +825,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'Thematic',
           learningObjectives_i18n: { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
+          introductionMedia: 'http://example.net',
           status: Mission.status.INACTIVE,
         });
 
@@ -821,9 +839,10 @@ describe('Integration | Repository | mission-repository', function() {
           competenceId: 'QWERTY',
           thematicIds: 'Thematic',
           status: Mission.status.INACTIVE,
+          introductionMedia: 'http://example.net',
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id');
+        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMedia');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 

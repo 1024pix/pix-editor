@@ -7,6 +7,7 @@ export class Mission {
     createdAt,
     learningObjectives_i18n,
     validatedObjectives_i18n,
+    introductionMedia,
     status,
     content,
   }) {
@@ -17,6 +18,7 @@ export class Mission {
     this.createdAt = createdAt;
     this.learningObjectives_i18n = learningObjectives_i18n;
     this.validatedObjectives_i18n = validatedObjectives_i18n;
+    this.introductionMedia = introductionMedia;
     this.status = status;
     this.content = new Content(content);
   }

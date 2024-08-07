@@ -200,6 +200,7 @@ describe('Unit | Controller | missions controller', function() {
       );
     });
   });
+
   describe('updateMission', function() {
     let updateMissionMock;
     const attributes = {

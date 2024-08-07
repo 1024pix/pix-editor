@@ -123,7 +123,8 @@ export async function save(mission) {
     id: mission.id,
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
-    status: mission.status
+    status: mission.status,
+    introductionMedia: mission.introductionMedia,
   }).onConflict('id')
     .merge()
     .returning('*');
@@ -143,6 +144,7 @@ function _toDomain(mission, translations) {
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
     content: mission.content,
+    introductionMedia: mission.introductionMedia,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });
 }
