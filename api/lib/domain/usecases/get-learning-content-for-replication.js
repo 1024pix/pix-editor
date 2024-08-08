@@ -46,8 +46,6 @@ export async function getLearningContentForReplication() {
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
 
-  await skillRepository.addSpoilData(skills);
-
   return {
     areas,
     competences,
