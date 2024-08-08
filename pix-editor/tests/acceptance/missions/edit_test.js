@@ -55,6 +55,7 @@ module('Acceptance | Missions | Edit', function (hooks) {
         competenceId: 'recCompetence1.1',
         thematicIds: '',
         createdAt: '2023/12/11',
+        introductionMedia: null,
         status: 'VALIDATED'
       });
       const screen = await visit('/missions/3/edit');
@@ -66,11 +67,14 @@ module('Acceptance | Missions | Edit', function (hooks) {
       await clickByText('Compétence');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
+      await fillByLabel('Média d\'introduction de la mission', 'http://example.com');
+
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
 
       // then
       assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
+      assert.dom(screen.getByText('http://example.com')).exists();
     });
 
     test('should display errors if any', async function (assert) {
