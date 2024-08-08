@@ -42,6 +42,10 @@
             <MarkdownToHtml @markdown={{this.model.mission.validatedObjectives}} />
           </div>
         </li>
+        <li>
+          <span class="bold">Média d'introduction de la mission : </span>
+          <a href={{ this.model.mission.introductionMedia }}>{{this.model.mission.introductionMedia}}</a>
+        </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>
     </Card>

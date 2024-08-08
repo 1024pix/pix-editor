@@ -6,4 +6,5 @@ export default class Mission extends MissionSummary {
   @attr thematicIds;
   @attr learningObjectives;
   @attr validatedObjectives;
+  @attr introductionMedia;
 }

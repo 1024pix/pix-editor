@@ -52,7 +52,16 @@
       @value={{this.validatedObjectives}}
       {{on "change" this.updateValidatedObjectives}}
     />
+
+    <label class="new-mission-form__label-text-area" for="mission-introduction-media">Média d'introduction de la mission</label>
+    <p class="new-mission-form__description">Ce média s’affichera avant de démarrer la mission, avant la première épreuve.</p>
+    <PixInput
+      @id="mission-introduction-media"
+      @value={{this.introductionMedia}}
+      {{on "change" this.updateIntroductionMedia}}
+    />
    </Card>
+ 
   <div class="form-error">
     {{#each this.errorMessages as |errorMessage|}}
       {{errorMessage}}<br/>

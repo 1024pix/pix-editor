@@ -16,5 +16,6 @@ function preparePayloadForCreateAndUpdate(payload, adapterOptions) {
   payload.data.attributes['thematic-ids'] = adapterOptions.thematicIds;
   payload.data.attributes['learning-objectives'] = adapterOptions.learningObjectives;
   payload.data.attributes['validated-objectives'] = adapterOptions.validatedObjectives;
+  payload.data.attributes['introduction-media'] = adapterOptions.introductionMedia;
   return payload;
 }
