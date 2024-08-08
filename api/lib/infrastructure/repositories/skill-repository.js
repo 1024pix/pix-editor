@@ -4,7 +4,6 @@ import { skillDatasource, tubeDatasource, tutorialDatasource } from '../datasour
 import * as translationRepository from './translation-repository.js';
 import * as skillTranslations from '../translations/skill.js';
 import { Skill } from '../../domain/models/Skill.js';
-import * as airtable from '../airtable.js';
 import { Translation } from '../../domain/models/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
@@ -12,14 +11,6 @@ export async function list() {
   const datasourceSkills = await skillDatasource.list();
   const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
   return toDomainList(datasourceSkills, translations);
-}
-
-export async function addSpoilData(skills) {
-  const SPOIL_COLUMNS = ['Spoil_focus', 'Spoil_variabilisation', 'Spoil_mauvaisereponse', 'Spoil_nouvelacquis'];
-  const options = { fields: ['id persistant', ...SPOIL_COLUMNS] };
-  const airtableRawObjects = await airtable.findRecords('Acquis', options);
-
-  skills.forEach((skill) => addSpoilDataToSkill(skill, airtableRawObjects));
 }
 
 export async function get(id) {
@@ -105,15 +96,6 @@ export async function update(skill) {
     }
     return toDomain(updatedSkillDto, translations);
   });
-}
-
-function addSpoilDataToSkill(skill, airtableSkills) {
-  const airtableSkill = airtableSkills.find((item) => item.get('id persistant') === skill.id);
-
-  skill.spoil_focus = airtableSkill.get('Spoil_focus') || null;
-  skill.spoil_variabilisation = airtableSkill.get('Spoil_variabilisation')?.filter((val) => val.length > 0) ?? [];
-  skill.spoil_mauvaisereponse = airtableSkill.get('Spoil_mauvaisereponse')?.filter((val) => val.length > 0) ?? [];
-  skill.spoil_nouvelacquis = airtableSkill.get('Spoil_nouvelacquis') ?? null;
 }
 
 function toDomainList(datasourceSkills, translations) {

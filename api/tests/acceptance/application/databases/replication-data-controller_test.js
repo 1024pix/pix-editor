@@ -91,13 +91,7 @@ async function mockCurrentContent() {
       }
     })],
     tubes: [domainBuilder.buildTube()],
-    skills: [{
-      ...domainBuilder.buildSkill({ id: 'recSkill1' }),
-      spoil_focus: 'en_devenir',
-      spoil_variabilisation: [],
-      spoil_mauvaisereponse: ['courgette', '67'],
-      spoil_nouvelacquis: null,
-    }],
+    skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
     challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [domainBuilder.buildThematic({
@@ -122,13 +116,6 @@ async function mockCurrentContent() {
     tubes: [buildTube(expectedCurrentContent.tubes[0])],
     skills: [{
       ...airtableSkill,
-      fields: {
-        ...airtableSkill.fields,
-        Spoil_focus: 'en_devenir',
-        Spoil_variabilisation: [''],
-        Spoil_mauvaisereponse: ['courgette', '67'],
-        Spoil_nouvelacquis: null,
-      },
     }],
     challenges: [buildChallenge({
       ...expectedChallenge,
