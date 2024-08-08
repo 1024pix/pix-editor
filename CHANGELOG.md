@@ -1,5 +1,18 @@
 
 
+## v3.157.0 (08/08/2024)
+
+
+### :building_construction: Tech
+- [#739](https://github.com/1024pix/pix-editor/pull/739) [TECH] Nettoyage des données de l'enquête anti-spoil (PIX-13812).
+
+### :arrow_up: Montée de version
+- [#735](https://github.com/1024pix/pix-editor/pull/735) [BUMP] Update dependency @1024pix/ember-testing-library to ^3.0.6 (pix-editor).
+- [#736](https://github.com/1024pix/pix-editor/pull/736) [BUMP] Update dependency node to v20.16.0.
+
+### :coffee: Autre
+- [#738](https://github.com/1024pix/pix-editor/pull/738) [FEAUTURE] Ajouter un media d'introduction à une mission (Pix-13630).
+
 ## v3.156.1 (05/08/2024)
 
 
