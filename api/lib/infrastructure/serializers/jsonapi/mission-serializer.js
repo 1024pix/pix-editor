@@ -11,7 +11,6 @@ export function serializeMissionSummary(mission, meta) {
       'thematicIds',
       'learningObjectives',
       'validatedObjectives',
-      'introductionMedia',
       'createdAt',
       'status'
     ],
@@ -34,7 +33,9 @@ export function serializeMission(mission) {
       'thematicIds',
       'learningObjectives',
       'validatedObjectives',
-      'introductionMedia',
+      'introductionMediaUrl',
+      'introductionMediaType',
+      'introductionMediaAlt',
       'createdAt',
       'status'
     ],
@@ -54,7 +55,9 @@ export function deserializeMission(attributes) {
     thematicIds: attributes['thematic-ids'],
     learningObjectives_i18n:  { fr:  attributes['learning-objectives'] },
     validatedObjectives_i18n: { fr:  attributes['validated-objectives'] },
-    introductionMedia: attributes['introduction-media'],
+    introductionMediaUrl: attributes['introduction-media-url'],
+    introductionMediaType: attributes['introduction-media-type'],
+    introductionMediaAlt: attributes['introduction-media-alt'],
     status: attributes.status,
   });
 }

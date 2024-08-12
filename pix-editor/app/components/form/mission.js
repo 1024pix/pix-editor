@@ -15,7 +15,9 @@ export default class MissionForm extends Component {
   @tracked selectedStatus = 'ACTIVE';
   @tracked validatedObjectives = null;
   @tracked learningObjectives = null;
-  @tracked introductionMedia = null;
+  @tracked introductionMediaUrl = null;
+  @tracked introductionMediaAlt = null;
+  @tracked introductionMediaType = null;
   @tracked errorMessages = A([]);
   @tracked isSubmitting = false;
   @tracked isFormValid = false;
@@ -28,7 +30,9 @@ export default class MissionForm extends Component {
       this.selectedStatus = this.args.mission.status;
       this.validatedObjectives = this.args.mission.validatedObjectives;
       this.learningObjectives = this.args.mission.learningObjectives;
-      this.introductionMedia = this.args.mission.introductionMedia;
+      this.introductionMediaUrl = this.args.mission.introductionMediaUrl;
+      this.introductionMediaType = this.args.mission.introductionMediaType;
+      this.introductionMediaAlt = this.args.mission.introductionMediaAlt;
       this.isFormValid = true;
       this.thematicIds.setValue(this.args.mission.thematicIds);
     }
@@ -73,7 +77,9 @@ export default class MissionForm extends Component {
       status: this.selectedStatus,
       learningObjectives: this.learningObjectives,
       validatedObjectives: this.validatedObjectives,
-      introductionMedia: this.introductionMedia
+      introductionMediaUrl: this.introductionMediaUrl,
+      introductionMediaAlt: this.introductionMediaAlt,
+      introductionMediaType: this.introductionMediaType
     };
     try {
       await this.args.onFormSubmitted(formData);
@@ -116,8 +122,18 @@ export default class MissionForm extends Component {
   }
 
   @action
-  updateIntroductionMedia(event) {
-    this.introductionMedia = event.target.value;
+  updateintroductionMediaType(event) {
+    this.introductionMediaType = event.target.value;
+  }
+
+  @action
+  updateintroductionMediaAlt(event) {
+    this.introductionMediaAlt = event.target.value;
+  }
+
+  @action
+  updateintroductionMediaUrl(event) {
+    this.introductionMediaUrl = event.target.value;
   }
 
   @action

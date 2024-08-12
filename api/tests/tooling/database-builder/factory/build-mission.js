@@ -10,11 +10,14 @@ export function buildMission({
   thematicIds = 'thematicIds',
   validatedObjectives = 'Rien',
   status = Mission.status.INACTIVE,
-  introductionMedia = null,
+  introductionMediaUrl = null,
+  introductionMediaAlt = null,
+  introductionMediaType = null,
+
   createdAt = new Date('2010-01-04'),
 } = {}) {
 
-  const values = { id, competenceId, thematicIds, createdAt, status, introductionMedia };
+  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, introductionMediaAlt };
 
   buildTranslation({
     key: `mission.${id}.name`,

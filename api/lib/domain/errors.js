@@ -24,6 +24,12 @@ export class UserNotFoundError extends NotFoundError {
   }
 }
 
+export class MissionIntroductionMediaError extends DomainError {
+  constructor(message = 'Opération impossible car la mission n\'a pas de type pour le media d\'introduction') {
+    super(message);
+  }
+}
+
 export class StaticCourseIsInactiveError extends DomainError {
   constructor(message = 'Opération impossible sur un test statique inactif.') {
     super(message);

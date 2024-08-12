@@ -1424,7 +1424,9 @@ function _getRichCurrentContentDTO() {
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.VALIDATED,
       createdAt: new Date('2010-01-04'),
-      introductionMedia: null,
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt: null,
     }),
   ];
 

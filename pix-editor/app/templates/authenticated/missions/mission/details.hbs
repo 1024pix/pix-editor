@@ -44,7 +44,15 @@
         </li>
         <li>
           <span class="bold">Média d'introduction de la mission : </span>
-          <a href={{ this.model.mission.introductionMedia }}>{{this.model.mission.introductionMedia}}</a>
+          <a href={{ this.model.mission.introductionMediaUrl }}>{{this.model.mission.introductionMediaUrl}}</a>
+        </li>
+        <li>
+          <span class="bold">Type de média d'introduction : </span>
+          {{ this.model.mission.introductionMediaType }}
+        </li>
+        <li>
+          <span class="bold">Texte alternatif au média d'introduction de la mission : </span>
+          {{ this.model.mission.introductionMediaAlt }}
         </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>

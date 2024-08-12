@@ -53,15 +53,30 @@
       {{on "change" this.updateValidatedObjectives}}
     />
 
-    <label class="new-mission-form__label-text-area" for="mission-introduction-media">Média d'introduction de la mission</label>
+    <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL d'un média d'introduction de la mission</label>
     <p class="new-mission-form__description">Ce média s’affichera avant de démarrer la mission, avant la première épreuve.</p>
     <PixInput
-      @id="mission-introduction-media"
-      @value={{this.introductionMedia}}
-      {{on "change" this.updateIntroductionMedia}}
+      @id="mission-introduction-media-url"
+      @value={{this.introductionMediaUrl}}
+      {{on "change" this.updateintroductionMediaUrl}}
     />
+
+    <label class="new-mission-form__label-text-area" for="mission-introduction-media-type">Type de média (image ou video)</label>
+    <PixInput
+      @id="mission-introduction-media-type"
+      @value={{this.introductionMediaType}}
+      {{on "change" this.updateintroductionMediaType}}
+    />
+
+    <label class="new-mission-form__label-text-area" for="mission-introduction-media-alt">Texte alternatif pour le média d'introduction</label>
+    <PixInput
+      @id="mission-introduction-media-alt"
+      @value={{this.introductionMediaAlt}}
+      {{on "change" this.updateintroductionMediaAlt}}
+    />
+
    </Card>
- 
+
   <div class="form-error">
     {{#each this.errorMessages as |errorMessage|}}
       {{errorMessage}}<br/>

@@ -15,7 +15,9 @@ export default class MissionEditController extends Controller {
       this.model.mission.thematicIds = formData.thematicIds;
       this.model.mission.validatedObjectives = formData.validatedObjectives;
       this.model.mission.learningObjectives = formData.learningObjectives;
-      this.model.mission.introductionMedia = formData.introductionMedia;
+      this.model.mission.introductionMediaUrl = formData.introductionMediaUrl;
+      this.model.mission.introductionMediaType = formData.introductionMediaType;
+      this.model.mission.introductionMediaAlt = formData.introductionMediaAlt;
       await this.model.mission.save();
       this.notifications.success('Mission mise à jour avec succès.');
       this.router.transitionTo('authenticated.missions.mission');
