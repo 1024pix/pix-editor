@@ -1,5 +1,11 @@
 
 
+## v3.157.1 (13/08/2024)
+
+
+### :bug: Correction
+- [#741](https://github.com/1024pix/pix-editor/pull/741) [BUGFIX] La détection de la locale dans `defaultEmbedURL` est cassée (PIX-13850).
+
 ## v3.157.0 (08/08/2024)
 
 
