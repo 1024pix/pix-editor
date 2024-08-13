@@ -112,14 +112,11 @@ export class LocalizedChallenge {
 
 function hasLocaleInFirstPathSegment(url) {
   if (url.searchParams.has('lang')) return false;
-  return isLocale(url.pathname.split('/')[1]);
+  return isSupportedLocale(url.pathname.split('/')[1]);
 }
 
-function isLocale(s) {
-  try {
-    new Intl.Locale(s);
-    return true;
-  } catch {
-    return false;
-  }
+function isSupportedLocale(s) {
+  return SUPPORTED_LOCALES.includes(s);
 }
+
+const SUPPORTED_LOCALES = ['en', 'es', 'fr', 'fr-BE', 'fr-FR', 'nl-BE', 'nl'];
