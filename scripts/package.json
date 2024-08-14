@@ -35,8 +35,10 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.19.3/xlsx-0.19.3.tgz"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.0",
     "eslint": "^8.0.0",
     "eslint-plugin-mocha": "^10.0.0",
+    "globals": "^15.9.0",
     "nock": "^13.0.10"
   }
 }
