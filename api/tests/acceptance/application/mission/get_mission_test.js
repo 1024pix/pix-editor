@@ -41,7 +41,9 @@ describe('Acceptance | API | mission | GET /api/missions', function() {
           'thematic-ids': null,
           'validated-objectives': 'Être forte',
           'learning-objectives': 'Être imbattable',
-          'introduction-media': null,
+          'introduction-media-url': null,
+          'introduction-media-type': null,
+          'introduction-media-alt': null,
           'created-at': new Date('2024-01-01')
         },
       },

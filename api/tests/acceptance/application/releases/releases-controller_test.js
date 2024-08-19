@@ -162,7 +162,9 @@ async function mockCurrentContent() {
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.VALIDATED,
       createdAt: new Date('2010-01-04'),
-      introductionMedia: null,
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt: null,
     }), new Mission({
       id: 2,
       name_i18n: { fr: 'Alt name' },
@@ -172,7 +174,9 @@ async function mockCurrentContent() {
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
       status: Mission.status.EXPERIMENTAL,
       createdAt: new Date('2010-01-05'),
-      introductionMedia: 'http://example.com',
+      introductionMediaUrl: 'http://example.com',
+      introductionMediaType: 'image',
+      introductionMediaAlt: null,
     })]
   };
 
@@ -228,7 +232,9 @@ async function mockCurrentContent() {
     validatedObjectives: 'Rien',
     status: Mission.status.VALIDATED,
     createdAt: new Date('2010-01-04'),
-    introductionMedia: null,
+    introductionMediaUrl: null,
+    introductionMediaType: null,
+    introductionMediaAlt: null,
   });
   databaseBuilder.factory.buildMission({
     id: 2,
@@ -239,7 +245,9 @@ async function mockCurrentContent() {
     validatedObjectives: 'Alt validated objectives',
     status: Mission.status.EXPERIMENTAL,
     createdAt: new Date('2010-01-05'),
-    introductionMedia: 'http://example.com',
+    introductionMediaUrl: 'http://example.com',
+    introductionMediaType: 'image',
+    introductionMediaAlt: null,
   });
   databaseBuilder.factory.buildMission({
     id: 3,
@@ -250,7 +258,9 @@ async function mockCurrentContent() {
     validatedObjectives: 'Alt validated objectives',
     status: Mission.status.INACTIVE,
     createdAt: new Date('2010-01-05'),
-    introductionMedia: null,
+    introductionMediaUrl: null,
+    introductionMediaType: null,
+    introductionMediaAlt: null,
   });
 
   for (const locale of ['fr', 'en', 'nl']) {
@@ -484,7 +494,9 @@ async function mockContentForRelease() {
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
       status: Mission.status.VALIDATED,
-      introductionMedia: 'http://example.com',
+      introductionMediaUrl: 'http://example.com',
+      introductionMediaType: 'image',
+      introductionMediaAlt: null,
       content: {
         dareChallenges: [],
         steps: []
@@ -496,7 +508,9 @@ async function mockContentForRelease() {
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
       status: Mission.status.EXPERIMENTAL,
-      introductionMedia: null,
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt: null,
       content: {
         dareChallenges: [],
         steps: []
@@ -766,7 +780,9 @@ describe('Acceptance | Controller | release-controller', () => {
           learningObjectives: 'Que tu sois le meilleur',
           validatedObjectives: 'Rien',
           status: Mission.status.VALIDATED,
-          introductionMedia: 'http://example.com',
+          introductionMediaUrl: 'http://example.com',
+          introductionMediaType: 'image',
+          introductionMediaAlt: null,
         });
         databaseBuilder.factory.buildMission({
           id: 2,
@@ -776,7 +792,9 @@ describe('Acceptance | Controller | release-controller', () => {
           learningObjectives: 'Alt objectives',
           validatedObjectives: 'Alt validated objectives',
           status: Mission.status.EXPERIMENTAL,
-          introductionMedia: null,
+          introductionMediaUrl: null,
+          introductionMediaType: null,
+          introductionMediaAlt: null,
         });
         databaseBuilder.factory.buildMission({
           id: 3,

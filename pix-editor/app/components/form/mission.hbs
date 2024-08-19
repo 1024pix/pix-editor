@@ -8,14 +8,18 @@
       @validationStatus={{this.name.state}}
       {{on "focusout" this.validateName}}
       {{on "keyup" this.updateName}}
-    ><:label>Nom de la mission</:label></PixInput>
-   <PixSelect
+    >
+      <:label>Nom de la mission</:label>
+    </PixInput>
+    <PixSelect
       @options={{this.statusOptions}}
       @value={{this.selectedStatus}}
       @hideDefaultOption={{true}}
       @onChange={{this.changeStatus}}
       @requiredLabel="{{this.name.errorMessage}}"
-    ><:label>Statut</:label></PixSelect>
+    >
+      <:label>Statut</:label>
+    </PixSelect>
 
     <PixSelect
       class="new-mission-form__select"
@@ -26,7 +30,9 @@
       @requiredLabel="champ requis"
       @errorMessage="{{this.selectedCompetenceId.errorMessage}}"
       {{on "focusout" this.validateCompetence}}
-    ><:label>Compétence</:label></PixSelect>
+    >
+      <:label>Compétence</:label>
+    </PixSelect>
 
     <PixInput
       @id="thematic-ids"
@@ -35,7 +41,9 @@
       @validationStatus={{this.thematicIds.state}}
       {{on "focusout" this.validateThematicIds}}
       {{on "keyup" this.updateThematicIds}}
-    ><:label>Liste des thématiques</:label></PixInput>
+    >
+      <:label>Liste des thématiques</:label>
+    </PixInput>
 
     <label class="new-mission-form__label-text-area" for="mission-learning-objectives">Objectifs d'apprentissage</label>
     <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de début de mission.</p>
@@ -45,23 +53,49 @@
       {{on "change" this.updateLearningObjectives}}
     />
 
-    <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la mission</label>
-    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, cet élément est pour le moment utilisé que pour de l’affichage dans Pix 1D</p>
+    <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la
+      mission</label>
+    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, cet
+      élément est pour le moment utilisé que pour de l’affichage dans Pix 1D</p>
     <PixTextarea
       @id="mission-validated-objectives"
       @value={{this.validatedObjectives}}
       {{on "change" this.updateValidatedObjectives}}
     />
 
-    <label class="new-mission-form__label-text-area" for="mission-introduction-media">Média d'introduction de la mission</label>
-    <p class="new-mission-form__description">Ce média s’affichera avant de démarrer la mission, avant la première épreuve.</p>
-    <PixInput
-      @id="mission-introduction-media"
-      @value={{this.introductionMedia}}
-      {{on "change" this.updateIntroductionMedia}}
-    />
-   </Card>
- 
+    <section class="new-mission-form__mission-introduction">
+      <h2 class=" mission-introduction__title">Introduction à la mission</h2>
+      <p class="mission-introduction__description">Ce média s’affichera avant de démarrer la mission, avant la première
+        épreuve. <br> Lorsqu'une URL est précisée, elle doit être obligatoirement accompagnée du type de média. <br>
+        Si le média est de type image, un texte alternatif doit être renseigné.</p>
+
+      <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL d'un média d'introduction
+        de la mission</label>
+      <PixInput
+        @id="mission-introduction-media-url"
+        @value={{this.introductionMediaUrl}}
+        {{on "change" this.updateIntroductionMediaUrl}}
+      />
+
+      <PixSelect
+        @options={{this.typeOptions}}
+        @onChange={{this.updateIntroductionMediaType}}
+        @value={{this.introductionMediaType}}
+        @placeholder="-- Sélectionner un type --"
+      >
+        <:label>Type de média</:label>
+      </PixSelect>
+
+      <label class="new-mission-form__label-text-area" for="mission-introduction-media-alt">Texte alternatif pour le média
+        d'introduction</label>
+      <PixInput
+        @id="mission-introduction-media-alt"
+        @value={{this.introductionMediaAlt}}
+        {{on "change" this.updateIntroductionMediaAlt}}
+      />
+    </section>
+  </Card>
+
   <div class="form-error">
     {{#each this.errorMessages as |errorMessage|}}
       {{errorMessage}}<br/>

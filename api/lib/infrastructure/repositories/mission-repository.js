@@ -124,7 +124,9 @@ export async function save(mission) {
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
     status: mission.status,
-    introductionMedia: mission.introductionMedia,
+    introductionMediaUrl: mission.introductionMediaUrl,
+    introductionMediaType: mission.introductionMediaType,
+    introductionMediaAlt: mission.introductionMediaAlt,
   }).onConflict('id')
     .merge()
     .returning('*');
@@ -144,7 +146,9 @@ function _toDomain(mission, translations) {
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
     content: mission.content,
-    introductionMedia: mission.introductionMedia,
+    introductionMediaUrl: mission.introductionMediaUrl,
+    introductionMediaType: mission.introductionMediaType,
+    introductionMediaAlt: mission.introductionMediaAlt,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });
 }

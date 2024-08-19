@@ -18,7 +18,6 @@ describe('Integration | Usecases | Update mission', function() {
     });
   });
   context('When the mission exists', function() {
-
     context('when requested status is not VALIDATED', function() {
       it('should return the updated mission', async () => {
         // given
@@ -32,7 +31,9 @@ describe('Integration | Usecases | Update mission', function() {
           thematicIds: 'Thematic',
           learningObjectives_i18n:  { fr: null },
           validatedObjectives_i18n: { fr: 'Très bien' },
-          introductionMedia: null,
+          introductionMediaUrl: null,
+          introductionMediaType: null,
+          introductionMediaAlt: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')
         });
@@ -71,7 +72,9 @@ describe('Integration | Usecases | Update mission', function() {
             thematicIds: 'Thematic',
             learningObjectives_i18n:  { fr: null },
             validatedObjectives_i18n: { fr: 'Très bien' },
-            introductionMedia: null,
+            introductionMediaUrl: null,
+            introductionMediaType: null,
+            introductionMediaAlt: null,
             status: Mission.status.VALIDATED,
             createdAt: new Date('2023-12-25')
           });
@@ -118,7 +121,7 @@ describe('Integration | Usecases | Update mission', function() {
           const promise = updateMission(missionToUpdate);
 
           // then
-          await expect(promise).rejects.to.deep.equal(new BadRequestError('La mission ne peut pas être mise à jour car les challenges "challengeTraining1", "challengeTraining2" ne sont pas au status VALIDE'));
+          await expect(promise).rejects.to.deep.equal(new BadRequestError('La mission ne peut pas être mise à jour car les challenges "challengeTraining1", "challengeTraining2" ne sont pas au statut VALIDE'));
 
         });
 
