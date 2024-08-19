@@ -59,6 +59,10 @@ export default class MissionForm extends Component {
     });
   }
 
+  get typeOptions() {
+    return [{ value: 'image', label: 'Image' }, { value: 'video', label: 'Vidéo' }];
+  }
+
   get competencesOptions() {
     return this.args.competences.map((competence) => {
       return { value: competence.pixId, label: competence.title };
@@ -122,8 +126,8 @@ export default class MissionForm extends Component {
   }
 
   @action
-  updateintroductionMediaType(event) {
-    this.introductionMediaType = event.target.value;
+  updateintroductionMediaType(value) {
+    this.introductionMediaType = value;
   }
 
   @action
