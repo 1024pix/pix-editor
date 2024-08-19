@@ -203,6 +203,7 @@ describe('Integration | Repository | release-repository', function() {
         thematicIds: 'thematicIds',
         validatedObjectives: 'Rien',
         status: Mission.status.VALIDATED,
+        documentationUrl: 'http://url-example.net'
       });
 
       databaseBuilder.factory.buildMission({
@@ -1427,6 +1428,7 @@ function _getRichCurrentContentDTO() {
       introductionMediaUrl: null,
       introductionMediaType: null,
       introductionMediaAlt: null,
+      documentationUrl: 'http://url-example.net'
     }),
   ];
 

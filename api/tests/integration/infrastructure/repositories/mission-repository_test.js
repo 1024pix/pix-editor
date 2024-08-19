@@ -1,7 +1,12 @@
 import { omit } from 'lodash';
 import { beforeEach, describe as context, describe, expect, expectTypeOf, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, knex } from '../../../test-helper.js';
-import { findAllMissions, getById, listActive, save, } from '../../../../lib/infrastructure/repositories/mission-repository.js';
+import {
+  findAllMissions,
+  getById,
+  listActive,
+  save,
+} from '../../../../lib/infrastructure/repositories/mission-repository.js';
 import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
@@ -37,6 +42,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }));
@@ -68,6 +74,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         }), new Mission({
@@ -80,6 +87,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -151,13 +159,41 @@ describe('Integration | Repository | mission-repository', function() {
     beforeEach(async function() {
       mockedLearningContent = {
         challenges: [
-          airtableBuilder.factory.buildChallenge({ id: 'challengeTuto1', status: Challenge.STATUSES.VALIDE, skillId: 'skillTuto1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeTraining1', status: Challenge.STATUSES.VALIDE, skillId: 'skillTraining1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidation1', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeTuto2', status: Challenge.STATUSES.VALIDE, skillId: 'skillTuto2' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeTraining2', status: Challenge.STATUSES.VALIDE, skillId: 'skillTraining2' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeValidation2', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation2' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeDare', status: Challenge.STATUSES.VALIDE, skillId: 'skillDare' }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeTuto1',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillTuto1'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeTraining1',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillTraining1'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeValidation1',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeTuto2',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillTuto2'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeTraining2',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillTraining2'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeValidation2',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation2'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeDare',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillDare'
+          }),
         ],
         skills: [
           airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
@@ -236,6 +272,7 @@ describe('Integration | Repository | mission-repository', function() {
         introductionMediaUrl: null,
         introductionMediaAlt: null,
         introductionMediaType: null,
+        documentationUrl: null,
         status: Mission.status.VALIDATED,
         createdAt: new Date('2010-01-04'),
         content: {
@@ -272,10 +309,26 @@ describe('Integration | Repository | mission-repository', function() {
       context('when mission is EXPERIMENTAL', function() {
         it('should return proposal and active challenges only', async function() {
           mockedLearningContent.challenges = [
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: Challenge.STATUSES.PROPOSE, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: Challenge.STATUSES.PERIME, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: Challenge.STATUSES.ARCHIVE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationValidé',
+              status: Challenge.STATUSES.VALIDE,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationProposé',
+              status: Challenge.STATUSES.PROPOSE,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationPérimé',
+              status: Challenge.STATUSES.PERIME,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationArchivé',
+              status: Challenge.STATUSES.ARCHIVE,
+              skillId: 'skillValidation1'
+            }),
           ];
           airtableBuilder.mockLists(mockedLearningContent);
 
@@ -304,6 +357,7 @@ describe('Integration | Repository | mission-repository', function() {
             introductionMediaUrl: null,
             introductionMediaAlt: null,
             introductionMediaType: null,
+            documentationUrl: null,
             status: Mission.status.EXPERIMENTAL,
             createdAt: new Date('2010-01-04'),
             content: {
@@ -323,10 +377,26 @@ describe('Integration | Repository | mission-repository', function() {
       context('when mission is validated', function() {
         it('should return active challenges only', async function() {
           mockedLearningContent.challenges = [
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationValidé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationProposé', status: Challenge.STATUSES.PROPOSE, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationPérimé', status: Challenge.STATUSES.PERIME, skillId: 'skillValidation1' }),
-            airtableBuilder.factory.buildChallenge({ id: 'challengeValidationArchivé', status: Challenge.STATUSES.ARCHIVE, skillId: 'skillValidation1' }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationValidé',
+              status: Challenge.STATUSES.VALIDE,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationProposé',
+              status: Challenge.STATUSES.PROPOSE,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationPérimé',
+              status: Challenge.STATUSES.PERIME,
+              skillId: 'skillValidation1'
+            }),
+            airtableBuilder.factory.buildChallenge({
+              id: 'challengeValidationArchivé',
+              status: Challenge.STATUSES.ARCHIVE,
+              skillId: 'skillValidation1'
+            }),
           ];
           airtableBuilder.mockLists(mockedLearningContent);
 
@@ -355,6 +425,7 @@ describe('Integration | Repository | mission-repository', function() {
             introductionMediaUrl: null,
             introductionMediaAlt: null,
             introductionMediaType: null,
+            documentationUrl: null,
             status: Mission.status.VALIDATED,
             createdAt: new Date('2010-01-04'),
             content: {
@@ -376,18 +447,54 @@ describe('Integration | Repository | mission-repository', function() {
     context('with inactive, proposal, and active skills', async function() {
       it('should return in progress and active skill challenges only', async function() {
         mockedLearningContent.challenges = [
-          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillActif', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1Active' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillEnConstruction', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation2InProgress' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillPérimé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation3Deprecated' }),
-          airtableBuilder.factory.buildChallenge({ id: 'challengeSkillArchivé', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation3Archived' }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeSkillActif',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1Active'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeSkillEnConstruction',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation2InProgress'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeSkillPérimé',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation3Deprecated'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'challengeSkillArchivé',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation3Archived'
+          }),
         ];
         mockedLearningContent.skills = [
           airtableBuilder.factory.buildSkill({ id: 'skillTuto1', level: 1, tubeId: 'tubeTuto1' }),
           airtableBuilder.factory.buildSkill({ id: 'skillTraining1', level: 1, tubeId: 'tubeTraining1' }),
-          airtableBuilder.factory.buildSkill({ id: 'skillValidation1Active', status: SkillForRelease.STATUSES.ACTIF, level: 1, tubeId: 'tubeValidation1' }),
-          airtableBuilder.factory.buildSkill({ id: 'skillValidation2InProgress', status: SkillForRelease.STATUSES.EN_CONSTRUCTION, level: 2, tubeId: 'tubeValidation1' }),
-          airtableBuilder.factory.buildSkill({ id: 'skillValidation3Deprecated', status: SkillForRelease.STATUSES.PERIME, level: 3, tubeId: 'tubeValidation1' }),
-          airtableBuilder.factory.buildSkill({ id: 'skillValidation3Archived', status: SkillForRelease.STATUSES.ARCHIVE, level: 4, tubeId: 'tubeValidation1' }),
+          airtableBuilder.factory.buildSkill({
+            id: 'skillValidation1Active',
+            status: SkillForRelease.STATUSES.ACTIF,
+            level: 1,
+            tubeId: 'tubeValidation1'
+          }),
+          airtableBuilder.factory.buildSkill({
+            id: 'skillValidation2InProgress',
+            status: SkillForRelease.STATUSES.EN_CONSTRUCTION,
+            level: 2,
+            tubeId: 'tubeValidation1'
+          }),
+          airtableBuilder.factory.buildSkill({
+            id: 'skillValidation3Deprecated',
+            status: SkillForRelease.STATUSES.PERIME,
+            level: 3,
+            tubeId: 'tubeValidation1'
+          }),
+          airtableBuilder.factory.buildSkill({
+            id: 'skillValidation3Archived',
+            status: SkillForRelease.STATUSES.ARCHIVE,
+            level: 4,
+            tubeId: 'tubeValidation1'
+          }),
           airtableBuilder.factory.buildSkill({ id: 'skillTuto2', level: 1, tubeId: 'tubeTuto2' }),
           airtableBuilder.factory.buildSkill({ id: 'skillTraining2', level: 1, tubeId: 'tubeTraining2' }),
           airtableBuilder.factory.buildSkill({ id: 'skillValidation2', level: 1, tubeId: 'tubeValidation2' }),
@@ -421,6 +528,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -441,10 +549,26 @@ describe('Integration | Repository | mission-repository', function() {
     context('with multiple challenges in activities', async function() {
       it('should return ordered challenges', async function() {
         mockedLearningContent.challenges = [
-          airtableBuilder.factory.buildChallenge({ id: 'secondChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation2' }),
-          airtableBuilder.factory.buildChallenge({ id: 'firstChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1' }),
-          airtableBuilder.factory.buildChallenge({ id: 'fourthChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation4' }),
-          airtableBuilder.factory.buildChallenge({ id: 'thirdChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation3' }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'secondChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation2'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'firstChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'fourthChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation4'
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'thirdChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation3'
+          }),
         ];
         mockedLearningContent.skills = [
           airtableBuilder.factory.buildSkill({ id: 'skillValidation2', level: 2, tubeId: 'tubeValidation1' }),
@@ -479,6 +603,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -501,10 +626,30 @@ describe('Integration | Repository | mission-repository', function() {
     context('with alternative challenges in activities', async function() {
       it('should return ordered alternative challenges', async function() {
         mockedLearningContent.challenges = [
-          airtableBuilder.factory.buildChallenge({ id: 'secondAltChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1', alternativeVersion: 1 }),
-          airtableBuilder.factory.buildChallenge({ id: 'firstAltChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1', alternativeVersion: undefined }),
-          airtableBuilder.factory.buildChallenge({ id: 'fourthAltChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1', alternativeVersion: 3 }),
-          airtableBuilder.factory.buildChallenge({ id: 'thirdAltChallengeValidation', status: Challenge.STATUSES.VALIDE, skillId: 'skillValidation1', alternativeVersion: 2 }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'secondAltChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1',
+            alternativeVersion: 1
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'firstAltChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1',
+            alternativeVersion: undefined
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'fourthAltChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1',
+            alternativeVersion: 3
+          }),
+          airtableBuilder.factory.buildChallenge({
+            id: 'thirdAltChallengeValidation',
+            status: Challenge.STATUSES.VALIDE,
+            skillId: 'skillValidation1',
+            alternativeVersion: 2
+          }),
         ];
         mockedLearningContent.skills = [
           airtableBuilder.factory.buildSkill({ id: 'skillValidation1', level: 1, tubeId: 'tubeValidation1' }),
@@ -537,6 +682,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
@@ -580,6 +726,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -623,6 +770,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
           content: {
@@ -665,6 +813,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -673,7 +822,10 @@ describe('Integration | Repository | mission-repository', function() {
     });
     context('Without tubes in thematic', async function() {
       it('Should return missions', async function() {
-        mockedLearningContent.thematics = [airtableBuilder.factory.buildThematic({ id: 'thematicStep1', tubeIds: undefined }, { id: 'thematicDefiVide', tubeIds: undefined })];
+        mockedLearningContent.thematics = [airtableBuilder.factory.buildThematic({
+          id: 'thematicStep1',
+          tubeIds: undefined
+        }, { id: 'thematicDefiVide', tubeIds: undefined })];
         airtableBuilder.mockLists(mockedLearningContent);
 
         buildLocalizedChallenges(mockedLearningContent);
@@ -701,6 +853,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -737,6 +890,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaAlt: null,
           introductionMediaType: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -772,6 +926,7 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           status: Mission.status.VALIDATED,
           createdAt: new Date('2010-01-04'),
         })]);
@@ -791,12 +946,16 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'image',
           introductionMediaAlt: null,
+          documentationUrl: 'http://url-example.net',
           status: Mission.status.INACTIVE,
         });
 
         const savedMission = await save(mission);
         expectTypeOf(savedMission).toEqualTypeOf('Mission');
-        expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...mission, id: savedMission.id }), ['createdAt']));
+        expect(omit(savedMission, ['createdAt'])).to.deep.equal(omit(new Mission({
+          ...mission,
+          id: savedMission.id
+        }), ['createdAt']));
 
         const expectedMission = {
           id: savedMission.id,
@@ -805,10 +964,11 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'image',
           introductionMediaAlt: null,
+          documentationUrl: 'http://url-example.net',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaAlt', 'introductionMediaType');
+        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaAlt', 'introductionMediaType', 'documentationUrl');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -849,7 +1009,12 @@ describe('Integration | Repository | mission-repository', function() {
 
     context('Update mission', function() {
       it('should update the mission', async function() {
-        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.VALIDATED });
+        const savedMission = databaseBuilder.factory.buildMission({
+          name: 'saved mission',
+          competenceId: 'AZERTY',
+          status: Mission.status.VALIDATED,
+          documentationUrl: null,
+        });
         await databaseBuilder.commit();
 
         const missionToUpdate = new Mission({
@@ -862,13 +1027,17 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'vidéo',
           introductionMediaAlt: null,
+          documentationUrl: 'http://fake-url.net',
           status: Mission.status.INACTIVE,
         });
 
         const updatedMission = await save(missionToUpdate);
 
         expectTypeOf(updatedMission).toEqualTypeOf('Mission');
-        expect(omit(updatedMission, ['createdAt'])).to.deep.equal(omit(new Mission({ ...missionToUpdate, id: updatedMission.id }), ['createdAt']));
+        expect(omit(updatedMission, ['createdAt'])).to.deep.equal(omit(new Mission({
+          ...missionToUpdate,
+          id: updatedMission.id
+        }), ['createdAt']));
 
         const expectedMission = {
           id: updatedMission.id,
@@ -878,14 +1047,19 @@ describe('Integration | Repository | mission-repository', function() {
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'vidéo',
           introductionMediaAlt: null,
+          documentationUrl: 'http://fake-url.net',
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl','introductionMediaAlt', 'introductionMediaType');
+        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaAlt', 'introductionMediaType', 'documentationUrl');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
       it('should store I18n for mission', async function() {
-        const savedMission = databaseBuilder.factory.buildMission({ name: 'saved mission', competenceId: 'AZERTY', status: Mission.status.VALIDATED });
+        const savedMission = databaseBuilder.factory.buildMission({
+          name: 'saved mission',
+          competenceId: 'AZERTY',
+          status: Mission.status.VALIDATED
+        });
         await databaseBuilder.commit();
 
         const missionToUpdate = new Mission({

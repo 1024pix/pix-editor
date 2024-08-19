@@ -8,7 +8,10 @@ export function buildMission({
   createdAt = new Date('2023-10-14'),
   learningObjectives = '- Que tu deviennes forte\n Et...',
   validatedObjectives = '- Ca\n Et puis ça',
-  introductionMediaUrl = 'http://example.net',
+  introductionMediaUrl = null,
+  introductionMediaType = null,
+  introductionMediaAlt = null,
+  documentationUrl = null,
   status = Mission.status.VALIDATED,
 } = {}) {
   return new Mission ({
@@ -20,6 +23,9 @@ export function buildMission({
     learningObjectives_i18n: { fr: learningObjectives },
     validatedObjectives_i18n: { fr: validatedObjectives },
     introductionMediaUrl,
+    introductionMediaType,
+    introductionMediaAlt,
+    documentationUrl,
     status,
   });
 }

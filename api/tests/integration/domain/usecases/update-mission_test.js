@@ -34,6 +34,7 @@ describe('Integration | Usecases | Update mission', function() {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')
         });
@@ -75,6 +76,7 @@ describe('Integration | Usecases | Update mission', function() {
             introductionMediaUrl: null,
             introductionMediaType: null,
             introductionMediaAlt: null,
+            documentationUrl: null,
             status: Mission.status.VALIDATED,
             createdAt: new Date('2023-12-25')
           });

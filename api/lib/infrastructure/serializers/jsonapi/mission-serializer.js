@@ -36,6 +36,7 @@ export function serializeMission(mission) {
       'introductionMediaUrl',
       'introductionMediaType',
       'introductionMediaAlt',
+      'documentationUrl',
       'createdAt',
       'status'
     ],
@@ -58,6 +59,7 @@ export function deserializeMission(attributes) {
     introductionMediaUrl: attributes['introduction-media-url'] || null,
     introductionMediaType: attributes['introduction-media-type'] || null,
     introductionMediaAlt: attributes['introduction-media-alt'] || null,
+    documentationUrl: attributes['documentation-url'] || null,
     status: attributes.status,
   });
 }

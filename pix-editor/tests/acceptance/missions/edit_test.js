@@ -69,7 +69,8 @@ module('Acceptance | Missions | Edit', function (hooks) {
       await clickByText('Compétence');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
-      await fillByLabel('URL d\'un média d\'introduction de la mission', 'http://example.com');
+      await fillByLabel('URL du média d\'introduction de la mission', 'http://example.com');
+      await fillByLabel('URL de la documentation de la mission', 'http://doc.com');
 
       await click(screen.getByRole('button', { name: 'Modifier la mission' }));
 
@@ -77,6 +78,7 @@ module('Acceptance | Missions | Edit', function (hooks) {
       assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
       assert.dom(screen.getByText('http://example.com')).exists();
+      assert.dom(screen.getByText('http://doc.com')).exists();
     });
 
     test('should display errors if any', async function (assert) {

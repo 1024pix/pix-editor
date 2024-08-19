@@ -19,5 +19,6 @@ function preparePayloadForCreateAndUpdate(payload, adapterOptions) {
   payload.data.attributes['introduction-media-url'] = adapterOptions.introductionMediaUrl;
   payload.data.attributes['introduction-media-type'] = adapterOptions.introductionMediaType;
   payload.data.attributes['introduction-media-alt'] = adapterOptions.introductionMediaAlt;
+  payload.data.attributes['documentation-url'] = adapterOptions.documentationUrl;
   return payload;
 }

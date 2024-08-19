@@ -12,6 +12,7 @@ export class Mission {
     introductionMediaAlt,
     status,
     content,
+    documentationUrl,
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -25,6 +26,7 @@ export class Mission {
     this.introductionMediaAlt = introductionMediaAlt;
     this.status = status;
     this.content = new Content(content);
+    this.documentationUrl = documentationUrl;
   }
 }
 

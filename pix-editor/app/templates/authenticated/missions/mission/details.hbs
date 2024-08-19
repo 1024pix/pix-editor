@@ -43,8 +43,8 @@
           </div>
         </li>
         <li>
-          <span class="bold">Média d'introduction de la mission : </span>
-          <a href={{ this.model.mission.introductionMediaUrl }}>{{this.model.mission.introductionMediaUrl}}</a>
+          <span class="bold">URL du média d'introduction de la mission : </span>
+          <a href={{ this.model.mission.introductionMediaUrl }} target="_blank">{{this.model.mission.introductionMediaUrl}}</a>
         </li>
         <li>
           <span class="bold">Type de média d'introduction : </span>
@@ -53,6 +53,10 @@
         <li>
           <span class="bold">Texte alternatif au média d'introduction de la mission : </span>
           {{ this.model.mission.introductionMediaAlt }}
+        </li>
+        <li>
+          <span class="bold">URL de la documentation de la mission : </span>
+          <a href={{ this.model.mission.documentationUrl }} target="_blank">{{this.model.mission.documentationUrl}} </a>
         </li>
         <li><span class="bold">Crée le : </span>{{dayjs-format this.model.mission.createdAt "DD/MM/YYYY" allow-empty=true}}</li>
       </ul>

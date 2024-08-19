@@ -13,11 +13,12 @@ export function buildMission({
   introductionMediaUrl = null,
   introductionMediaAlt = null,
   introductionMediaType = null,
+  documentationUrl = null,
 
   createdAt = new Date('2010-01-04'),
 } = {}) {
 
-  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, introductionMediaAlt };
+  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, introductionMediaAlt, documentationUrl };
 
   buildTranslation({
     key: `mission.${id}.name`,

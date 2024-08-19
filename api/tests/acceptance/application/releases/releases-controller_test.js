@@ -165,6 +165,7 @@ async function mockCurrentContent() {
       introductionMediaUrl: null,
       introductionMediaType: null,
       introductionMediaAlt: null,
+      documentationUrl: null,
     }), new Mission({
       id: 2,
       name_i18n: { fr: 'Alt name' },
@@ -177,6 +178,7 @@ async function mockCurrentContent() {
       introductionMediaUrl: 'http://example.com',
       introductionMediaType: 'image',
       introductionMediaAlt: null,
+      documentationUrl: null,
     })]
   };
 
@@ -497,6 +499,7 @@ async function mockContentForRelease() {
       introductionMediaUrl: 'http://example.com',
       introductionMediaType: 'image',
       introductionMediaAlt: null,
+      documentationUrl: null,
       content: {
         dareChallenges: [],
         steps: []
@@ -511,6 +514,7 @@ async function mockContentForRelease() {
       introductionMediaUrl: null,
       introductionMediaType: null,
       introductionMediaAlt: null,
+      documentationUrl: 'http://url-example.net',
       content: {
         dareChallenges: [],
         steps: []
@@ -783,6 +787,7 @@ describe('Acceptance | Controller | release-controller', () => {
           introductionMediaUrl: 'http://example.com',
           introductionMediaType: 'image',
           introductionMediaAlt: null,
+          documentationUrl: null,
         });
         databaseBuilder.factory.buildMission({
           id: 2,
@@ -795,6 +800,7 @@ describe('Acceptance | Controller | release-controller', () => {
           introductionMediaUrl: null,
           introductionMediaType: null,
           introductionMediaAlt: null,
+          documentationUrl: 'http://url-example.net',
         });
         databaseBuilder.factory.buildMission({
           id: 3,
