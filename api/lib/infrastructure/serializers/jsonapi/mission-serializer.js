@@ -55,9 +55,9 @@ export function deserializeMission(attributes) {
     thematicIds: attributes['thematic-ids'],
     learningObjectives_i18n:  { fr:  attributes['learning-objectives'] },
     validatedObjectives_i18n: { fr:  attributes['validated-objectives'] },
-    introductionMediaUrl: attributes['introduction-media-url'],
-    introductionMediaType: attributes['introduction-media-type'],
-    introductionMediaAlt: attributes['introduction-media-alt'],
+    introductionMediaUrl: attributes['introduction-media-url'] || null,
+    introductionMediaType: attributes['introduction-media-type'] || null,
+    introductionMediaAlt: attributes['introduction-media-alt'] || null,
     status: attributes.status,
   });
 }

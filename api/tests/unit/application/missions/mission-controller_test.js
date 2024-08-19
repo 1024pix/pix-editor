@@ -182,6 +182,9 @@ describe('Unit | Controller | missions controller', function() {
         learningObjectives_i18n: { fr: null },
         validatedObjectives_i18n: { fr: 'Très bien' },
         status: Mission.status.INACTIVE,
+        introductionMediaUrl: null,
+        introductionMediaType: null,
+        introductionMediaAlt: null,
       });
       // then
       expect(createMissionMock).toHaveBeenCalledWith(deserializedMission);
@@ -235,6 +238,9 @@ describe('Unit | Controller | missions controller', function() {
         thematicId: null,
         learningObjectives_i18n: { fr: 'apprendre à éviter les lasers' },
         validatedObjectives_i18n: { fr: 'Très bien' },
+        introductionMediaUrl: null,
+        introductionMediaType: null,
+        introductionMediaAlt: null,
         status: Mission.status.VALIDATED,
       });
       // then
