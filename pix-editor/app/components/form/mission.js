@@ -126,17 +126,17 @@ export default class MissionForm extends Component {
   }
 
   @action
-  updateintroductionMediaType(value) {
+  updateIntroductionMediaType(value) {
     this.introductionMediaType = value;
   }
 
   @action
-  updateintroductionMediaAlt(event) {
+  updateIntroductionMediaAlt(event) {
     this.introductionMediaAlt = event.target.value;
   }
 
   @action
-  updateintroductionMediaUrl(event) {
+  updateIntroductionMediaUrl(event) {
     this.introductionMediaUrl = event.target.value;
   }
 

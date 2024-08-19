@@ -74,12 +74,12 @@
       <PixInput
         @id="mission-introduction-media-url"
         @value={{this.introductionMediaUrl}}
-        {{on "change" this.updateintroductionMediaUrl}}
+        {{on "change" this.updateIntroductionMediaUrl}}
       />
 
       <PixSelect
         @options={{this.typeOptions}}
-        @onChange={{this.updateintroductionMediaType}}
+        @onChange={{this.updateIntroductionMediaType}}
         @value={{this.introductionMediaType}}
         @placeholder="-- Sélectionner un type --"
       >
@@ -91,7 +91,7 @@
       <PixInput
         @id="mission-introduction-media-alt"
         @value={{this.introductionMediaAlt}}
-        {{on "change" this.updateintroductionMediaAlt}}
+        {{on "change" this.updateIntroductionMediaAlt}}
       />
     </section>
   </Card>
