@@ -23,6 +23,7 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         introductionMediaUrl: 'introduction-media-url-value',
         introductionMediaType: 'introduction-media-type-value',
         introductionMediaAlt: 'introduction-media-alt-value',
+        documentationUrl: 'www.test.com',
         status: 'EXPERIMENTAL',
       });
 
@@ -36,6 +37,7 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         'introduction-media-url': expectedMission.introductionMediaUrl,
         'introduction-media-type': expectedMission.introductionMediaType,
         'introduction-media-alt': expectedMission.introductionMediaAlt,
+        'documentation-url': expectedMission.documentationUrl,
         status: expectedMission.status
       };
       const deserializedMission = deserializeMission(attributes);
@@ -52,12 +54,14 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         'introduction-media-url': '',
         'introduction-media-type': '',
         'introduction-media-alt': '',
+        'documentation-url': '',
       };
       const deserializedMission = deserializeMission(attributes);
 
       expect(deserializedMission.introductionMediaUrl).to.be.null;
       expect(deserializedMission.introductionMediaType).to.be.null;
       expect(deserializedMission.introductionMediaAlt).to.be.null;
+      expect(deserializedMission.documentationUrl).to.be.null;
     });
   });
 });

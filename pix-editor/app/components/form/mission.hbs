@@ -55,8 +55,8 @@
 
     <label class="new-mission-form__label-text-area" for="mission-validated-objectives">Objectifs validés dans la
       mission</label>
-    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, cet
-      élément est pour le moment utilisé que pour de l’affichage dans Pix 1D</p>
+    <p class="new-mission-form__description">Ce texte s’affichera dans l’écran de fin de mission.<br>Attention, pour le moment, cet
+      élément n'est utilisé que pour de l’affichage dans Pix Junior</p>
     <PixTextarea
       @id="mission-validated-objectives"
       @value={{this.validatedObjectives}}
@@ -69,7 +69,7 @@
         épreuve. <br> Lorsqu'une URL est précisée, elle doit être obligatoirement accompagnée du type de média. <br>
         Si le média est de type image, un texte alternatif doit être renseigné.</p>
 
-      <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL d'un média d'introduction
+      <label class="new-mission-form__label-text-area" for="mission-introduction-media-url">URL du média d'introduction
         de la mission</label>
       <PixInput
         @id="mission-introduction-media-url"
@@ -94,6 +94,14 @@
         {{on "change" this.updateIntroductionMediaAlt}}
       />
     </section>
+
+    <label class="new-mission-form__label-text-area" for="mission-documentation-url">URL de la documentation de la mission</label>
+      <PixInput
+        @id="mission-documentation-url"
+        @value={{this.documentationUrl}}
+        {{on "change" this.updateDocumentationUrl}}
+      />
+
   </Card>
 
   <div class="form-error">

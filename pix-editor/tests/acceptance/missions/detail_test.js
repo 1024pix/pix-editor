@@ -19,7 +19,7 @@ module('Acceptance | Missions | Detail', function(hooks) {
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
     this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });
     this.server.create('mission-summary', { id: 1, name: 'Mission 1', competence: 'Mirage', createdAt: '2023/12/11', status: 'ACTIVE' });
-    this.server.create('mission', { id: 1, name: 'Mission 1', competenceId: 'pixIdRecCompetence1.1', createdAt: '2023/12/11', status: 'ACTIVE', learningObjectives: 'Tout savoir', validatedObjectives: 'Jusque là, rien' });
+    this.server.create('mission', { id: 1, name: 'Mission 1', competenceId: 'pixIdRecCompetence1.1', createdAt: '2023/12/11', status: 'ACTIVE', learningObjectives: 'Tout savoir', validatedObjectives: 'Jusque là, rien', documentationUrl: 'http://url-example.net' });
     this.server.create('mission-summary', { id: 2, name: 'Mission 2', competence: 'Autres', createdAt: '2023/12/11', status: 'INACTIVE' });
 
     return authenticateSession();
@@ -42,6 +42,7 @@ module('Acceptance | Missions | Detail', function(hooks) {
     assert.dom(screen.getByText('Notre compétence')).exists();
     assert.dom(screen.getByText('Tout savoir')).exists();
     assert.dom(screen.getByText('Jusque là, rien')).exists();
+    assert.dom(screen.getByRole('link',  { name: 'http://url-example.net' })).exists();
   });
 
   test('it redirects to missions list', async function(assert) {

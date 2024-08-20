@@ -185,6 +185,7 @@ describe('Unit | Controller | missions controller', function() {
         introductionMediaUrl: null,
         introductionMediaType: null,
         introductionMediaAlt: null,
+        documentationUrl: null,
       });
       // then
       expect(createMissionMock).toHaveBeenCalledWith(deserializedMission);
@@ -212,7 +213,8 @@ describe('Unit | Controller | missions controller', function() {
       status: Mission.status.VALIDATED,
       'learning-objectives': 'apprendre à éviter les lasers',
       'validated-objectives': 'Très bien',
-      'thematic-id': null
+      'thematic-id': null,
+      'documentation-url': 'http://url-example.net'
     };
 
     const missionId = 1;
@@ -241,6 +243,7 @@ describe('Unit | Controller | missions controller', function() {
         introductionMediaUrl: null,
         introductionMediaType: null,
         introductionMediaAlt: null,
+        documentationUrl: 'http://url-example.net',
         status: Mission.status.VALIDATED,
       });
       // then

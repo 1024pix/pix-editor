@@ -18,6 +18,7 @@ export default class MissionForm extends Component {
   @tracked introductionMediaUrl = null;
   @tracked introductionMediaAlt = null;
   @tracked introductionMediaType = null;
+  @tracked documentationUrl = null;
   @tracked errorMessages = A([]);
   @tracked isSubmitting = false;
   @tracked isFormValid = false;
@@ -33,6 +34,7 @@ export default class MissionForm extends Component {
       this.introductionMediaUrl = this.args.mission.introductionMediaUrl;
       this.introductionMediaType = this.args.mission.introductionMediaType;
       this.introductionMediaAlt = this.args.mission.introductionMediaAlt;
+      this.documentationUrl = this.args.mission.documentationUrl;
       this.isFormValid = true;
       this.thematicIds.setValue(this.args.mission.thematicIds);
     }
@@ -83,7 +85,8 @@ export default class MissionForm extends Component {
       validatedObjectives: this.validatedObjectives,
       introductionMediaUrl: this.introductionMediaUrl,
       introductionMediaAlt: this.introductionMediaAlt,
-      introductionMediaType: this.introductionMediaType
+      introductionMediaType: this.introductionMediaType,
+      documentationUrl: this.documentationUrl,
     };
     try {
       await this.args.onFormSubmitted(formData);
@@ -138,6 +141,11 @@ export default class MissionForm extends Component {
   @action
   updateIntroductionMediaUrl(event) {
     this.introductionMediaUrl = event.target.value;
+  }
+
+  @action
+  updateDocumentationUrl(event) {
+    this.documentationUrl = event.target.value;
   }
 
   @action

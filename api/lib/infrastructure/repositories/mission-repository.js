@@ -127,6 +127,7 @@ export async function save(mission) {
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
     introductionMediaAlt: mission.introductionMediaAlt,
+    documentationUrl: mission.documentationUrl,
   }).onConflict('id')
     .merge()
     .returning('*');
@@ -149,6 +150,7 @@ function _toDomain(mission, translations) {
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
     introductionMediaAlt: mission.introductionMediaAlt,
+    documentationUrl: mission.documentationUrl,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });
 }

@@ -9,7 +9,8 @@ export class MissionForRelease {
     content,
     introductionMediaUrl,
     introductionMediaType,
-    introductionMediaAlt
+    introductionMediaAlt,
+    documentationUrl
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -21,5 +22,6 @@ export class MissionForRelease {
     this.introductionMediaUrl = introductionMediaUrl;
     this.introductionMediaType = introductionMediaType;
     this.introductionMediaAlt = introductionMediaAlt;
+    this.documentationUrl = documentationUrl;
   }
 }

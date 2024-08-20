@@ -9,4 +9,5 @@ export default class Mission extends MissionSummary {
   @attr introductionMediaUrl;
   @attr introductionMediaType;
   @attr introductionMediaAlt;
+  @attr documentationUrl;
 }

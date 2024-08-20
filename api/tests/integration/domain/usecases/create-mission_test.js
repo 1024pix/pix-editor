@@ -16,6 +16,7 @@ describe('Integration | Usecases | Create mission', function() {
         introductionMediaType: null,
         introductionMediaUrl: 'http://example.net',
         introductionMediaAlt: null,
+        documentationUrl: null,
         status: Mission.status.INACTIVE,
         createdAt: new Date('2023-12-25')
       });
@@ -40,6 +41,7 @@ describe('Integration | Usecases | Create mission', function() {
         introductionMediaType: 'image',
         introductionMediaUrl: null,
         introductionMediaAlt: null,
+        documentationUrl: null,
         status: Mission.status.INACTIVE,
         createdAt: new Date('2023-12-25')
       });
