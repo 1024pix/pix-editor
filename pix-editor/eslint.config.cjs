@@ -33,6 +33,7 @@ module.exports = [
     ignores: [...unconventionalJsFiles, ...compiledOutputFiles, ...dependenciesFiles, ...miscFiles, ...emberTryFiles],
   },
   {
+    ignores: ['**/*.yaml'],
     languageOptions: {
       globals: {
         ...globals.browser,
