@@ -86,10 +86,10 @@
     "url-regex-safe": "^4.0.0"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.22.15",
+    "@babel/eslint-parser": "^7.25.1",
     "@babel/plugin-syntax-import-assertions": "^7.22.5",
-    "eslint": "^8.0.0",
-    "eslint-plugin-mocha": "^10.0.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-mocha": "^10.5.0",
     "flush-write-stream": "^2.0.0",
     "form-data": "4.0.0",
     "globals": "^15.9.0",
