@@ -53,7 +53,7 @@ export default class StaticCoursesController extends Controller {
     try {
       await this.model.staticCourse.save({ adapterOptions: { reason: this.deactivationReason.trim(), action: 'deactivate' } });
       this.notifications.success('Test statique désactivé avec succès.');
-    } catch (err) {
+    } catch {
       await this.notifications.error('Une erreur est survenue lors de la désactivation du test statique.');
     } finally {
       this.shouldDisplayDeactivationModal = false;
@@ -65,7 +65,7 @@ export default class StaticCoursesController extends Controller {
     try {
       await this.model.staticCourse.save({ adapterOptions: { action: 'reactivate' } });
       this.notifications.success('Test statique réactivé avec succès.');
-    } catch (err) {
+    } catch {
       await this.notifications.error('Une erreur est survenue lors de la réactivation du test statique.');
     } finally {
       this.shouldDisplayReactivationModal = false;

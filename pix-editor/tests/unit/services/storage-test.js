@@ -261,7 +261,7 @@ module('Unit | Service | storage', function(hooks) {
         // when
         await storageService.cloneFile('https://dl.ovh.com/bucket/NOW.txt', date, fetch);
         assert.ok(false, 'should raise en error');
-      } catch (e) {
+      } catch {
         assert.ok(true);
       }
 
@@ -284,7 +284,7 @@ module('Unit | Service | storage', function(hooks) {
         // when
         await storageService.cloneFile('https://dl.ovh.com/bucket/NOW.txt', date, fetch);
         assert.ok(false, 'should raise an error');
-      } catch (e) {
+      } catch {
         assert.ok(true);
       }
 
@@ -424,7 +424,7 @@ module('Unit | Service | storage', function(hooks) {
         // when
         await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
         assert.ok(false, 'should raise en error');
-      } catch (e) {
+      } catch {
         assert.ok(true);
       }
 
@@ -443,7 +443,7 @@ module('Unit | Service | storage', function(hooks) {
         // when
         await storageService.renameFile('https://dl.ovh.com/bucket/NOW.txt', 'update-file-name.jpg', fetch);
         assert.ok(false, 'should raise an error');
-      } catch (e) {
+      } catch {
         assert.ok(true);
       }
 
