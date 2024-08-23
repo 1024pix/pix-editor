@@ -204,7 +204,7 @@ function routes() {
   this.get('/challenges/:id', (schema, request) => {
     try {
       return schema.challenges.find(request.params.id);
-    } catch (e) {
+    } catch {
       return new Response(404);
     }
   });

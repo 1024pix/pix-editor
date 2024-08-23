@@ -9,7 +9,7 @@ export async function checkUserIsAuthenticatedViaBearer(request, h) {
   try {
     const user = await userRepository.findByApiKey(apiKey);
     return h.authenticated({ credentials: { user } });
-  } catch (error) {
+  } catch {
     return replyWithAuthenticationError(h);
   }
 }
@@ -21,7 +21,7 @@ export async function checkUserIsAuthenticatedViaBasicAndAdmin(username) {
       throw new Error('not an admin');
     }
     return { email: username };
-  } catch (error) {
+  } catch {
     return false;
   }
 }

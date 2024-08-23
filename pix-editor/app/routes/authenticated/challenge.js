@@ -34,7 +34,7 @@ export default class ChallengeRoute extends Route {
       } else {
         return this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.localized', competence, challenge.get('relatedPrototype'), challenge.get('id'), localizedChallenge.get('id'));
       }
-    } catch (e) {
+    } catch {
       this.router.transitionTo('authenticated');
     }
   }

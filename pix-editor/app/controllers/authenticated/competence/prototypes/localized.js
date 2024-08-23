@@ -124,7 +124,7 @@ export default class LocalizedController extends Controller {
       try {
         new URL(value);
         return true;
-      } catch (e) {
+      } catch {
         invalidUrls.push(value);
         return false;
       }

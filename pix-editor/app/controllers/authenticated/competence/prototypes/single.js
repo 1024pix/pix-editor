@@ -269,7 +269,7 @@ export default class SingleController extends Controller {
         } finally {
           this.loader.stop();
         }});
-    } catch (error) {
+    } catch {
       this._message('Mise en production abandonnée');
     }
   }
@@ -442,7 +442,7 @@ export default class SingleController extends Controller {
       try {
         new URL(value);
         return true;
-      } catch (e) {
+      } catch {
         invalidUrls.push(value);
         return false;
       }
@@ -469,7 +469,7 @@ export default class SingleController extends Controller {
     try {
       yaml.load(content);
       return true;
-    } catch (e) {
+    } catch {
       return false;
     }
   }

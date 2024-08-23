@@ -61,7 +61,7 @@ function _mergeChallengesInfo(...challengesInfos) {
 async function _parseReleases(cursor) {
   const challengesInfo = new Map();
 
-  while (true) { // eslint-disable-line no-constant-condition
+  while (true) {
     const releases = await cursor.read(25);
     if (!releases.length) break;
 

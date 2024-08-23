@@ -54,7 +54,6 @@ export async function emptyAllTables() {
   const tables = _.map(tablesToDelete, (tableToDelete) => `"${tableToDelete}"`).join();
 
   const query = _dbSpecificQueries.emptyTableQuery;
-  // eslint-disable-next-line no-restricted-syntax
   return knex.raw(`${query}${tables}`);
 }
 

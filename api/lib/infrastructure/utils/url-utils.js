@@ -73,7 +73,7 @@ export async function checkUrl(url, config) {
   const client = wrapper(axios.create({ jar }));
   try {
     return (await client.head(url, config));
-  } catch (e) {
+  } catch {
     return (await client.get(url, config));
   }
 }
