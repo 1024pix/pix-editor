@@ -1,143 +1,95 @@
-import { describe, describe as context, expect, it, expectTypeOf } from 'vitest';
-import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { describe, expect, it } from 'vitest';
+import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { updateMission } from '../../../../lib/domain/usecases/index.js';
 import { airtableBuilder, databaseBuilder } from '../../../test-helper.js';
-import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
-import { BadRequestError } from '../../../../lib/infrastructure/errors.js';
+import { Mission, Skill } from '../../../../lib/domain/models/index.js';
+import * as missionRepository from '../../../../lib/infrastructure/repositories/mission-repository.js';
+
 describe('Integration | Usecases | Update mission', function() {
-  context('When the mission to update does not exist', function() {
-    it('should return a not found error', async () => {
-      // given
-      const id = 1;
+  it('when mission is totally valid, should update mission without warnings', async () => {
+    // given
+    const mission = databaseBuilder.factory.buildMission();
+    await databaseBuilder.commit();
 
-      // when
-      const promise = updateMission({ id });
+    const updatedMission = await missionRepository.getById(mission.id);
+    updatedMission.status = Mission.status.EXPERIMENTAL;
 
-      // then
-      await expect(promise).rejects.to.deep.equal(new NotFoundError('Mission introuvable'));
-    });
+    // when
+    const result = await updateMission(updatedMission);
+
+    // then
+    expect(result).to.deep.equal({ mission: updatedMission, warnings: [] });
   });
-  context('When the mission exists', function() {
-    context('when requested status is not VALIDATED', function() {
-      it('should return the updated mission', async () => {
-        // given
-        const mission = databaseBuilder.factory.buildMission({ createdAt: new Date('2023-12-25') });
-        await databaseBuilder.commit();
 
-        const missionToUpdate = new Mission({
-          id: mission.id,
-          name_i18n: { fr: 'Updated mission'  },
-          competenceId: 'QWERTY',
-          thematicIds: 'Thematic',
-          learningObjectives_i18n:  { fr: null },
-          validatedObjectives_i18n: { fr: 'Très bien' },
-          introductionMediaUrl: null,
-          introductionMediaType: null,
-          introductionMediaAlt: null,
-          documentationUrl: null,
-          status: Mission.status.INACTIVE,
-          createdAt: new Date('2023-12-25')
-        });
+  it('when mission is partially valid, should update mission with warnings', async () => {
+    const mockedLearningContent = {
+      skills: [
+        airtableBuilder.factory.buildSkill({
+          id: 'skillTuto2',
+          level: 2,
+          tubeId: 'tubeTuto',
+          status: Skill.STATUSES.EN_CONSTRUCTION
+        })],
+      tubes: [
+        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+      ],
+      thematics: [
+        airtableBuilder.factory.buildThematic({
+          id: 'Thematic',
+          tubeIds: ['tubeTuto']
+        }),
+      ],
+    };
 
-        // when
-        const updatedMission = await updateMission(missionToUpdate);
+    airtableBuilder.mockLists(mockedLearningContent);
 
-        // then
-        expectTypeOf(updatedMission).toEqualTypeOf('Mission');
-        await expect(updatedMission).to.deep.equal(missionToUpdate);
+    // given
+    const mission = databaseBuilder.factory.buildMission({ thematicIds: 'Thematic' });
+    await databaseBuilder.commit();
 
-      });
-    });
-    context('when requested status is VALIDATED', function() {
-      context('when all challenges in the mission has VALIDATED status', function() {
-        it('should return the updated mission', async () => {
-          const mockedLearningContent =  {
-            challenges: [
-              airtableBuilder.factory.buildChallenge({ id: 'challengeTuto1', status: Challenge.STATUSES.VALIDE, skillId: 'skillTuto1' }),
-              airtableBuilder.factory.buildChallenge({ id: 'challengeTraining1', status: Challenge.STATUSES.VALIDE, skillId: 'skillTraining1' }),
-            ],
-          };
+    const updatedMission = await missionRepository.getById(mission.id);
+    updatedMission.status = Mission.status.VALIDATED;
 
-          airtableBuilder.mockLists(mockedLearningContent);
+    // when
+    const result = await updateMission(updatedMission);
 
-          buildLocalizedChallenges(mockedLearningContent);
+    // then
+    expect(result).to.deep.equal({ mission: updatedMission, warnings: ['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'] });
+  });
 
-          // given
-          const mission = databaseBuilder.factory.buildMission({ createdAt: new Date('2023-12-25') });
-          await databaseBuilder.commit();
+  it('when mission is not valid, should throw an error', async () => {
+    const mockedLearningContent = {
+      skills: [
+        airtableBuilder.factory.buildSkill({
+          id: 'skillTuto2',
+          level: 2,
+          tubeId: 'tubeTuto',
+          status: Skill.STATUSES.EN_CONSTRUCTION
+        })],
+      tubes: [
+        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+      ],
+      thematics: [
+        airtableBuilder.factory.buildThematic({
+          id: 'Thematic',
+          tubeIds: ['tubeTuto']
+        }),
+      ],
+    };
 
-          const missionToUpdate = new Mission({
-            id: mission.id,
-            name_i18n: { fr: 'Updated mission'  },
-            competenceId: 'QWERTY',
-            thematicIds: 'Thematic',
-            learningObjectives_i18n:  { fr: null },
-            validatedObjectives_i18n: { fr: 'Très bien' },
-            introductionMediaUrl: null,
-            introductionMediaType: null,
-            introductionMediaAlt: null,
-            documentationUrl: null,
-            status: Mission.status.VALIDATED,
-            createdAt: new Date('2023-12-25')
-          });
+    airtableBuilder.mockLists(mockedLearningContent);
 
-          // when
-          const updatedMission = await updateMission(missionToUpdate);
+    // given
+    const mission = databaseBuilder.factory.buildMission();
+    await databaseBuilder.commit();
 
-          // then
-          expectTypeOf(updatedMission).toEqualTypeOf('Mission');
-          await expect(updatedMission).to.deep.equal(missionToUpdate);
+    const updatedMission = await missionRepository.getById(mission.id);
+    updatedMission.status = Mission.status.VALIDATED;
 
-        });
-      });
-      context('when some challenges in the mission has PROPOSE status', function() {
-        it('should return not update the mission', async () => {
-          const mockedLearningContent =  {
-            challenges: [
-              airtableBuilder.factory.buildChallenge({ id: 'challengeTuto1', status: Challenge.STATUSES.VALIDE, skillId: 'skillTuto1' }),
-              airtableBuilder.factory.buildChallenge({ id: 'challengeTraining1', status: Challenge.STATUSES.PROPOSE, skillId: 'skillTraining1' }),
-              airtableBuilder.factory.buildChallenge({ id: 'challengeTraining2', status: Challenge.STATUSES.PROPOSE, skillId: 'skillTraining2' }),
-            ],
-          };
+    // when
+    const promise = updateMission(updatedMission);
 
-          airtableBuilder.mockLists(mockedLearningContent);
-
-          buildLocalizedChallenges(mockedLearningContent);
-
-          // given
-          const mission = databaseBuilder.factory.buildMission({ createdAt: new Date('2023-12-25') });
-          await databaseBuilder.commit();
-
-          const missionToUpdate = new Mission({
-            id: mission.id,
-            name_i18n: { fr: 'Updated mission'  },
-            competenceId: 'QWERTY',
-            thematicIds: 'Thematic',
-            learningObjectives_i18n:  { fr: null },
-            validatedObjectives_i18n: { fr: 'Très bien' },
-            status: Mission.status.VALIDATED,
-            createdAt: new Date('2023-12-25')
-          });
-
-          // when
-          const promise = updateMission(missionToUpdate);
-
-          // then
-          await expect(promise).rejects.to.deep.equal(new BadRequestError('La mission ne peut pas être mise à jour car les challenges "challengeTraining1", "challengeTraining2" ne sont pas au statut VALIDE'));
-
-        });
-
-      });
-    });
-
+    // then
+    await expect(promise).rejects.to.deep.equal(new InvalidMissionContentError('La mission ne peut pas être mise à jour car elle n\'a pas de sujet'));
   });
 });
-
-function buildLocalizedChallenges(mockedLearningContent) {
-  mockedLearningContent.challenges.forEach((airtableChallenge) => {
-    databaseBuilder.factory.buildLocalizedChallenge({
-      id: airtableChallenge.fields['id persistant'],
-      challengeId: airtableChallenge.fields['id persistant']
-    });
-  });
-}

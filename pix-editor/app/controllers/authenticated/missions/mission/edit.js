@@ -21,6 +21,9 @@ export default class MissionEditController extends Controller {
       this.model.mission.documentationUrl = formData.documentationUrl;
       await this.model.mission.save();
       this.notifications.success('Mission mise à jour avec succès.');
+      if (this.model.mission.hasWarnings()) {
+        this.notifications.warning(this.model.mission.warnings.join('<br>'), { clearDuration: 5000, htmlContent: true });
+      }
       this.router.transitionTo('authenticated.missions.mission');
     } catch (err) {
       this.model.mission.rollbackAttributes();

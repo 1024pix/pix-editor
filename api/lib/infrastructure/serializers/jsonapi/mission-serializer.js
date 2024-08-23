@@ -17,14 +17,15 @@ export function serializeMissionSummary(mission, meta) {
     meta,
   }).serialize(mission);
 }
-export function serializeMission(mission) {
+export function serializeMission(mission, warnings) {
   return new Serializer('mission', {
     transform: (mission) => {
       return {
         ...mission,
         name: mission.name_i18n.fr,
         learningObjectives: mission.learningObjectives_i18n.fr,
-        validatedObjectives: mission.validatedObjectives_i18n.fr
+        validatedObjectives: mission.validatedObjectives_i18n.fr,
+        warnings,
       };
     },
     attributes: [
@@ -38,7 +39,8 @@ export function serializeMission(mission) {
       'introductionMediaAlt',
       'documentationUrl',
       'createdAt',
-      'status'
+      'status',
+      'warnings',
     ],
 
   }).serialize(mission);

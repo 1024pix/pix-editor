@@ -11,4 +11,9 @@ export default class Mission extends MissionSummary {
   @attr introductionMediaType;
   @attr introductionMediaAlt;
   @attr documentationUrl;
+  @attr warnings;
+
+  hasWarnings() {
+    return this.warnings?.length > 0;
+  }
 }

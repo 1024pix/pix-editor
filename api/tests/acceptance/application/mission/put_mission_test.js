@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { afterEach, describe, describe as context, expect, it } from 'vitest';
 import {
   databaseBuilder,
@@ -26,8 +27,8 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
           attributes: {
             name: 'Mission à mettre à jour',
             'competence-id': 'TYUI',
-            'thematic-id': null,
-            status: Mission.status.VALIDATED,
+            'thematic-ids': '',
+            status: Mission.status.EXPERIMENTAL,
             'learning-objectives': 'Une chose',
             'validated-objectives': null
           },
@@ -47,10 +48,23 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
       const { id: missionId } = await knex('missions').select('id').first();
 
       expect(response.statusCode).to.equal(201);
-      expect(response.result).to.deep.equal({
+      expect(_.omit(response.result, 'data.attributes.created-at')).to.deep.equal({
         data: {
           type: 'missions',
           id: missionId.toString(),
+          'attributes': {
+            'competence-id': 'TYUI',
+            'documentation-url': null,
+            'introduction-media-alt': null,
+            'introduction-media-type': null,
+            'introduction-media-url': null,
+            'learning-objectives': 'Une chose',
+            'name': 'Mission à mettre à jour',
+            'status': 'EXPERIMENTAL',
+            'thematic-ids': '',
+            'validated-objectives': null,
+            'warnings': [],
+          },
         },
       });
     });

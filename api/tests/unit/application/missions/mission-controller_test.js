@@ -213,18 +213,38 @@ describe('Unit | Controller | missions controller', function() {
       status: Mission.status.VALIDATED,
       'learning-objectives': 'apprendre à éviter les lasers',
       'validated-objectives': 'Très bien',
-      'thematic-id': null,
-      'documentation-url': 'http://url-example.net'
+      'thematic-ids': undefined,
+      'created-at': undefined,
+      'documentation-url': 'http://url-example.net',
+      'introduction-media-alt': null,
+      'introduction-media-type': null,
+      'introduction-media-url': null,
+
     };
 
     const missionId = 1;
     const request = { payload: { data: { attributes } }, params: { id: missionId } };
+    const deserializedMission = new Mission({
+      id: missionId,
+      name_i18n: { fr: 'Mission possible' },
+      competenceId: 'QWERTY',
+      thematicId: null,
+      learningObjectives_i18n: { fr: 'apprendre à éviter les lasers' },
+      validatedObjectives_i18n: { fr: 'Très bien' },
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt: null,
+      documentationUrl: 'http://url-example.net',
+      status: Mission.status.VALIDATED,
+    });
 
     beforeEach(function() {
       updateMissionMock = vi.spyOn(usecases, 'updateMission');
-      updateMissionMock.mockResolvedValue(new Mission({
-        id: missionId
-      }));
+
+      updateMissionMock.mockResolvedValue({
+        mission: deserializedMission,
+        warnings: ['Ca va pas du tout là !'],
+      });
     });
 
     it('should call the usecase with a domain object', async function() {
@@ -233,24 +253,11 @@ describe('Unit | Controller | missions controller', function() {
       // when
       await missionsController.update(request, hFake);
 
-      const deserializedMission = new Mission({
-        id: missionId,
-        name_i18n: { fr: 'Mission possible' },
-        competenceId: 'QWERTY',
-        thematicId: null,
-        learningObjectives_i18n: { fr: 'apprendre à éviter les lasers' },
-        validatedObjectives_i18n: { fr: 'Très bien' },
-        introductionMediaUrl: null,
-        introductionMediaType: null,
-        introductionMediaAlt: null,
-        documentationUrl: 'http://url-example.net',
-        status: Mission.status.VALIDATED,
-      });
       // then
       expect(updateMissionMock).toHaveBeenCalledWith(deserializedMission);
     });
 
-    it('should return the serialized mission id', async function() {
+    it('should return the serialized mission id and warnings', async function() {
       // when
       const result = await missionsController.update(request, hFake);
 
@@ -259,6 +266,10 @@ describe('Unit | Controller | missions controller', function() {
         {
           type: 'missions',
           id: '1',
+          attributes: {
+            ...attributes,
+            warnings: ['Ca va pas du tout là !'],
+          }
         }
       );
     });

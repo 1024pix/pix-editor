@@ -31,8 +31,8 @@ export async function update(request, h) {
   const attributes = request?.payload?.data?.attributes;
   const missionId = request?.params?.id;
   const mission = missionSerializer.deserializeMission({ ...attributes, id: missionId });
-  const updatedMission = await updateMission(mission);
-  return h.response(missionSerializer.serializeMissionId(updatedMission.id)).created();
+  const { mission: updatedMission, warnings } = await updateMission(mission);
+  return h.response(missionSerializer.serializeMission(updatedMission, warnings)).created();
 }
 
 function normalizePage(page) {

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { afterEach, describe, describe as context, expect, it } from 'vitest';
 import {
   databaseBuilder,
@@ -19,7 +20,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       await databaseBuilder.commit();
-  
+
       const payload = {
         data: {
           attributes: {
@@ -32,7 +33,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
           }
         },
       };
-  
+
       // when
       const server = await createServer();
       const response = await server.inject({
@@ -41,15 +42,28 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
         headers: generateAuthorizationHeader(user),
         payload,
       });
-  
+
       // then
       const { id: missionId } = await knex('missions').select('id').first();
-  
+
       expect(response.statusCode).to.equal(201);
-      expect(response.result).to.deep.equal({
+      expect(_.omit(response.result, 'data.attributes.created-at')).to.deep.equal({
         data: {
           type: 'missions',
           id: missionId.toString(),
+          'attributes': {
+            'competence-id': 'AZERTY',
+            'documentation-url': null,
+            'introduction-media-alt': null,
+            'introduction-media-type': null,
+            'introduction-media-url': null,
+            'learning-objectives': 'Autre chose',
+            'name': 'Mission impossible',
+            'status': 'INACTIVE',
+            'thematic-ids': null,
+            'validated-objectives': 'Très bien',
+            'warnings': [],
+          },
         },
       });
     });
@@ -60,7 +74,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
       // given
       const user = databaseBuilder.factory.buildReadonlyUser();
       await databaseBuilder.commit();
-  
+
       const payload = {
         data: {
           attributes: {
@@ -73,7 +87,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
           }
         },
       };
-  
+
       // when
       const server = await createServer();
       const response = await server.inject({
@@ -82,7 +96,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
         headers: generateAuthorizationHeader(user),
         payload,
       });
-  
+
       // then
       expect(response.statusCode).to.equal(403);
     });

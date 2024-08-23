@@ -30,6 +30,12 @@ export class MissionIntroductionMediaError extends DomainError {
   }
 }
 
+export class InvalidMissionContentError extends DomainError {
+  constructor(message) {
+    super(message);
+  }
+}
+
 export class StaticCourseIsInactiveError extends DomainError {
   constructor(message = 'Opération impossible sur un test statique inactif.') {
     super(message);
