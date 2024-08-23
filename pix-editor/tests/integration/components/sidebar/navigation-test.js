@@ -1,46 +1,47 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { click, findAll, render } from '@ember/test-helpers';
 import { clickByName } from '@1024pix/ember-testing-library';
-import { hbs } from 'ember-cli-htmlbars';
 import Service from '@ember/service';
-import sinon  from 'sinon';
+import { click, findAll, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | sidebar/navigation', function(hooks) {
   setupIntlRenderingTest(hooks);
   module('#isAdmin', function(hooks) {
     let areas, frameworks, pixFramework, pixFranceFramework;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       this.closeAction = sinon.stub();
       this.displayFrameworkList = sinon.stub().returns(true);
 
       areas = [{
         name: 'area_1',
         sortedCompetences: [{
-          id:'competence1_1',
-          name:'competence1_1'
-        },{
-          id:'competence1_2',
-          name:'competence1_2'
-        }]
+          id: 'competence1_1',
+          name: 'competence1_1',
+        }, {
+          id: 'competence1_2',
+          name: 'competence1_2',
+        }],
       }, {
         name: 'area_2',
         sortedCompetences: [{
-          id:'competence2_1',
-          name:'competence2_1'
-        },{
-          id:'competence2_2',
-          name:'competence2_2'
-        }]
+          id: 'competence2_1',
+          name: 'competence2_1',
+        }, {
+          id: 'competence2_2',
+          name: 'competence2_2',
+        }],
       }];
 
       pixFramework = {
-        name: 'Pix'
+        name: 'Pix',
       };
 
       pixFranceFramework = {
-        name: 'Pix +'
+        name: 'Pix +',
       };
 
       frameworks = [pixFramework, pixFranceFramework];
@@ -54,7 +55,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
         getFramework() {
           return pixFramework;
         }
-        get isPixFramework  () {
+        get isPixFramework() {
           return true;
         }
       });
@@ -77,7 +78,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
       // then
       const sourcesList = findAll('.ember-power-select-option');
-      sourcesList.forEach(source => {
+      sourcesList.forEach((source) => {
         assert.ok(expectedFrameworks.includes(source.textContent.trim()));
       });
     });
@@ -92,7 +93,7 @@ module('Integration | Component | sidebar/navigation', function(hooks) {
 
       // then
       const areasList = findAll('[data-test-area-item]');
-      areasList.forEach(area => {
+      areasList.forEach((area) => {
         assert.ok(expectedAreas.includes(area.textContent.trim()));
       });
       assert.dom('[data-test-add-area]').doesNotExist();

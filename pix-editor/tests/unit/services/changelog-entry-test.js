@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Service | changelog-entry', function(hooks) {
   setupTest(hooks);
@@ -15,7 +15,7 @@ module('Unit | Service | changelog-entry', function(hooks) {
     const service = this.owner.lookup('service:changelog-entry');
 
     //then
-    keys.forEach((key,index) => {
+    keys.forEach((key, index) => {
       assert.strictEqual(service[key], expectedResults[index]);
     });
   });

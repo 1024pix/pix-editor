@@ -1,15 +1,15 @@
-import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
-import { setupMirage } from 'ember-cli-mirage/test-support';
-import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL } from '@ember/test-helpers';
 import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupApplicationTest } from 'ember-qunit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Missions | List', function (hooks) {
+module('Acceptance | Missions | List', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
@@ -21,7 +21,7 @@ module('Acceptance | Missions | List', function (hooks) {
     return authenticateSession();
   });
 
-  test('it displays all Pix 1D missions', async function (assert) {
+  test('it displays all Pix 1D missions', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
@@ -35,7 +35,7 @@ module('Acceptance | Missions | List', function (hooks) {
     assert.dom(screen.queryByText('Mission 2')).exists();
   });
 
-  test('should display only validated missions', async function (assert) {
+  test('should display only validated missions', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');
@@ -50,7 +50,7 @@ module('Acceptance | Missions | List', function (hooks) {
     assert.dom(screen.queryByText('Mission 2')).doesNotExist();
   });
 
-  test('should display only mission validée et expérimental', async function (assert) {
+  test('should display only mission validée et expérimental', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Sélectionner un référentiel');

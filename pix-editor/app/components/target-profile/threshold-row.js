@@ -3,7 +3,7 @@ import Component from '@glimmer/component';
 export default class ThresholdRow extends Component {
   get skillsCountByLevel() {
     const skills = this.args.selectedSkills;
-    const skillsByLevel = skills.filter(skill => {
+    const skillsByLevel = skills.filter((skill) => {
       return skill.level === this.args.level;
     });
     return skillsByLevel.length;
@@ -11,7 +11,7 @@ export default class ThresholdRow extends Component {
 
   get skillsCountByLevelMax() {
     const skills = this.args.selectedSkills;
-    const skillsByLevel = skills.filter(skill => {
+    const skillsByLevel = skills.filter((skill) => {
       return skill.level <= this.args.level;
     });
     return skillsByLevel.length;

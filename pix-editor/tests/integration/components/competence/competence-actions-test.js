@@ -1,21 +1,22 @@
-import { module, test } from 'qunit';
 import { click, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence/competence-actions', function(hooks) {
   setupIntlRenderingTest(hooks);
   let selectViewStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     selectViewStub = sinon.stub();
     this.selectView = selectViewStub;
   });
 
   module('#skillSection', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       this.section = 'skills';
       this.exportSkills = sinon.stub();
       this.refresh = sinon.stub();

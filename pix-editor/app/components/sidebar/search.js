@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 import { uniqBy } from 'lodash';
 
 export default class SidebarSearchComponent extends Component {
@@ -14,9 +14,9 @@ export default class SidebarSearchComponent extends Component {
     const skills = await this.store.query('skill', {
       filterByFormula: `FIND('${skillName.toLowerCase()}', LOWER(Nom))`,
       maxRecords: 20,
-      sort: [{ field: 'Nom', direction: 'asc' }]
+      sort: [{ field: 'Nom', direction: 'asc' }],
     });
-    return skills.map(skill => ({
+    return skills.map((skill) => ({
       isSkill: true,
       title: skill.name,
       status: skill.status,
@@ -35,7 +35,7 @@ export default class SidebarSearchComponent extends Component {
         ids: [challengeId],
       },
     });
-    return challenges.map(challenge => ({
+    return challenges.map((challenge) => ({
       title: challenge.id,
       transition: {
         route: 'authenticated.challenge',
@@ -50,7 +50,7 @@ export default class SidebarSearchComponent extends Component {
         ids: [localizedChallengeId],
       },
     });
-    return results.map(result => ({
+    return results.map((result) => ({
       title: result.id,
       transition: {
         route: 'authenticated.challenge',
@@ -68,7 +68,7 @@ export default class SidebarSearchComponent extends Component {
         size: 20,
       },
     });
-    return challenges.map(challenge => ({
+    return challenges.map((challenge) => ({
       title: challenge.instruction.substr(0, 100),
       transition: {
         route: 'authenticated.challenge',

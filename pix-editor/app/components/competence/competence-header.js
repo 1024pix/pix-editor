@@ -6,19 +6,19 @@ export default class CompetenceHeader extends Component {
 
   sections = [{
     title: 'Epreuves',
-    id: 'challenges'
+    id: 'challenges',
   }, {
     title: 'Acquis',
-    id: 'skills'
+    id: 'skills',
   }, {
     title: 'Qualité',
-    id: 'quality'
+    id: 'quality',
   },
   ];
 
   languageOptions = [{
     local: false,
-    title: 'Filtre par langue'
+    title: 'Filtre par langue',
   }, {
     language: 'Anglais',
     local: 'en',
@@ -30,7 +30,7 @@ export default class CompetenceHeader extends Component {
     local: 'fr',
   }, {
     language: 'Franco Français',
-    local: 'fr-fr'
+    local: 'fr-fr',
   }, {
     language: 'Italie',
     local: 'it',
@@ -48,12 +48,12 @@ export default class CompetenceHeader extends Component {
 
   get selectedSection() {
     const section = this.args.section;
-    return this.sections.find(el => el.id === section);
+    return this.sections.find((el) => el.id === section);
   }
 
   get selectedLanguageToFilter() {
     const languageFilter = this.args.languageFilter;
-    return this.languageOptions.find(languagesOption => languagesOption.local === languageFilter);
+    return this.languageOptions.find((languagesOption) => languagesOption.local === languageFilter);
   }
 
   get displayLanguageFilter() {

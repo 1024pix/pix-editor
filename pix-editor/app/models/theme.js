@@ -1,4 +1,4 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class ThemeModel extends Model {
 
@@ -11,11 +11,11 @@ export default class ThemeModel extends Model {
   @hasMany('tube') rawTubes;
 
   get tubes() {
-    return this.rawTubes.filter(tube => tube.name !== '@workbench').sortBy('index');
+    return this.rawTubes.filter((tube) => tube.name !== '@workbench').sortBy('index');
   }
 
   get productionTubes() {
-    return this.tubes.filter(tube => tube.hasProductionSkills);
+    return this.tubes.filter((tube) => tube.hasProductionSkills);
   }
 
   get hasProductionTubes() {
@@ -27,6 +27,6 @@ export default class ThemeModel extends Model {
   }
 
   get selectedProductionTubeLength() {
-    return this.productionTubes.filter(tube => tube.selectedLevel).length;
+    return this.productionTubes.filter((tube) => tube.selectedLevel).length;
   }
 }

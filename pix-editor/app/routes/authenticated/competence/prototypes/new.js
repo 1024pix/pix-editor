@@ -1,5 +1,6 @@
-import PrototypeRoute from './single';
 import { inject as service } from '@ember/service';
+
+import PrototypeRoute from './single';
 
 export default class NewRoute extends PrototypeRoute {
   templateName = 'authenticated/competence/prototypes/single';
@@ -21,7 +22,7 @@ export default class NewRoute extends PrototypeRoute {
         t3Status: true,
         genealogy: 'Prototype 1',
         author: [this.config.author],
-        id: this.idGenerator.newId('challenge')
+        id: this.idGenerator.newId('challenge'),
       });
       if (params.fromSkill) {
         const skill = await this.store.findRecord('skill', params.fromSkill);

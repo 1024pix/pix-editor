@@ -29,7 +29,7 @@ export default class MissionsRoute extends Route {
     }, { reload: true });
     return {
       missions,
-      mayCreateOrEditMissions: this.access.isEditor()
+      mayCreateOrEditMissions: this.access.isEditor(),
     };
   }
 }

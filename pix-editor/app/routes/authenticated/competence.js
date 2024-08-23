@@ -1,6 +1,6 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceRoute extends Route {
   @service currentData;
@@ -18,14 +18,14 @@ export default class CompetenceRoute extends Route {
     this.currentData.setFramework(framework);
     if (model.needsRefresh) {
       const themes = await model.hasMany('rawThemes').reload();
-      const themesTubes = await Promise.all(themes.map(theme => theme.hasMany('rawTubes').reload()));
-      const tubesSkills = await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.hasMany('rawSkills').reload())));
-      Promise.all(tubesSkills.flatMap(skills => skills.map(skill => skill.hasMany('challenges').reload()))).catch(console.error);
+      const themesTubes = await Promise.all(themes.map((theme) => theme.hasMany('rawTubes').reload()));
+      const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())));
+      Promise.all(tubesSkills.flatMap((skills) => skills.map((skill) => skill.hasMany('challenges').reload()))).catch(console.error);
       model.needsRefresh = false;
     } else {
       const themes = await model.rawThemes;
-      const themesTubes = await Promise.all(themes.map(theme => theme.rawTubes));
-      await Promise.all(themesTubes.flatMap(tubes => tubes.map(tube => tube.rawSkills)));
+      const themesTubes = await Promise.all(themes.map((theme) => theme.rawTubes));
+      await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.rawSkills)));
     }
   }
 

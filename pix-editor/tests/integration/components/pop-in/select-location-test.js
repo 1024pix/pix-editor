@@ -1,11 +1,12 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { click, render, findAll } from '@ember/test-helpers';
-import hbs from 'htmlbars-inline-precompile';
 import Service from '@ember/service';
+import { click, findAll, render } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Integration | Component | popin-select-location', function (hooks) {
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+
+module('Integration | Component | popin-select-location', function(hooks) {
   setupIntlRenderingTest(hooks);
   let framework1, framework2,
     area1_1, area1_2,
@@ -19,7 +20,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
 
   const stubRelationship = sinon.stub().resolves();
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     skill1_1_1_1_1 = {
       id: 'skill1_1_1_1_1',
@@ -27,7 +28,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_1_1_1_1',
       level: 2,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_1_1_1_2 = {
       id: 'skill1_1_1_1_2',
@@ -35,7 +36,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_1_1_1_2',
       level: 5,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_2_1_1_1 = {
       id: 'skill1_2_1_1_1',
@@ -43,7 +44,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_1_1_1',
       level: 1,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_2_1_1_2 = {
       id: 'skill1_2_1_1_2',
@@ -53,8 +54,8 @@ module('Integration | Component | popin-select-location', function (hooks) {
       version: 1,
       status: 'actif',
       get() {
-        return  'skill1_2_1_1_2';
-      }
+        return 'skill1_2_1_1_2';
+      },
     };
     skill1_2_1_1_3 = {
       id: 'skill1_2_1_1_3',
@@ -62,7 +63,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_1_1_3',
       level: 6,
       version: 2,
-      status: 'en construction'
+      status: 'en construction',
     };
     skill1_2_1_2_1 = {
       id: 'skill1_2_1_2_1',
@@ -70,7 +71,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_1_2_1',
       level: 3,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_2_1_2_2 = {
       id: 'skill1_2_1_2_2',
@@ -78,7 +79,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_1_2_2',
       level: 4,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_2_2_1_1 = {
       id: 'skill1_2_2_1_1',
@@ -86,7 +87,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_2_1_1',
       level: 2,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     skill1_2_2_1_2 = {
       id: 'skill1_2_2_1_2',
@@ -94,28 +95,28 @@ module('Integration | Component | popin-select-location', function (hooks) {
       name: 'skill1_2_2_1_2',
       level: 3,
       version: 1,
-      status: 'actif'
+      status: 'actif',
     };
     tube1_1_1_1 = {
       name: 'tube1_1_1_1',
       rawSkills: stubRelationship(),
-      filledLiveSkills: [false, [skill1_1_1_1_1], false, false, [skill1_1_1_1_2], false, false]
+      filledLiveSkills: [false, [skill1_1_1_1_1], false, false, [skill1_1_1_1_2], false, false],
     };
     tube1_2_1_1 = {
       name: 'tube1_2_1_1',
       rawSkills: stubRelationship(),
-      filledLiveSkills: [[skill1_2_1_1_1], false, false, false, false, [skill1_2_1_1_2, skill1_2_1_1_3], false]
+      filledLiveSkills: [[skill1_2_1_1_1], false, false, false, false, [skill1_2_1_1_2, skill1_2_1_1_3], false],
 
     };
     tube1_2_1_2 = {
       name: 'tube1_2_1_2',
       rawSkills: stubRelationship(),
-      filledLiveSkills: [false, false, [skill1_2_1_2_1], [skill1_2_1_2_2], false, false, false]
+      filledLiveSkills: [false, false, [skill1_2_1_2_1], [skill1_2_1_2_2], false, false, false],
     };
     tube1_2_2_1 = {
       name: 'tube1_2_2_1',
       rawSkills: stubRelationship(),
-      filledLiveSkills: [false, [skill1_2_2_1_1], [skill1_2_2_1_2], false, false, false, false]
+      filledLiveSkills: [false, [skill1_2_2_1_1], [skill1_2_2_1_2], false, false, false, false],
     };
     theme1_1_1_1 = {
       name: 'theme1_1_1_1',
@@ -131,21 +132,21 @@ module('Integration | Component | popin-select-location', function (hooks) {
       rawTubes: stubRelationship(),
       rawThemes: stubRelationship(),
       sortedTubes: [tube1_1_1_1],
-      sortedThemes: [theme1_1_1_1, theme1_1_1_2]
+      sortedThemes: [theme1_1_1_1, theme1_1_1_2],
     };
     competence1_2_1 = {
       name: 'competence1_2_1',
       rawTubes: stubRelationship(),
       rawThemes: stubRelationship(),
       sortedTubes: [tube1_2_1_1, tube1_2_1_2],
-      sortedThemes: [theme1_2_1_1]
+      sortedThemes: [theme1_2_1_1],
     };
     competence1_2_2 = {
       name: 'competence1_2_2',
       rawTubes: stubRelationship(),
       rawThemes: stubRelationship(),
       sortedTubes: [tube1_2_2_1],
-      sortedThemes: []
+      sortedThemes: [],
     };
     area1_1 = {
       sortedCompetences: [competence1_1_1],
@@ -155,11 +156,11 @@ module('Integration | Component | popin-select-location', function (hooks) {
     };
     framework1 = {
       name: 'pix',
-      areas: [area1_1, area1_2]
+      areas: [area1_1, area1_2],
     };
     framework2 = {
       name: 'pix+',
-      areas: []
+      areas: [],
     };
 
     this.owner.register('service:currentData', class MockService extends Service {
@@ -180,8 +181,8 @@ module('Integration | Component | popin-select-location', function (hooks) {
       }
     });
   });
-  module('if `isPrototypeLocation`', function (hooks) {
-    hooks.beforeEach(async function () {
+  module('if `isPrototypeLocation`', function(hooks) {
+    hooks.beforeEach(async function() {
       // when
       this.setSkill = sinon.stub();
       this.closeMovePrototype = () => {
@@ -190,7 +191,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       this.tube = tube1_2_1_1;
       this.challenge = {
         name: 'challenge1',
-        skill: skill1_2_1_1_2
+        skill: skill1_2_1_1_2,
       };
 
       await render(hbs`<PopIn::SelectLocation
@@ -204,7 +205,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
                         @close={{this.closeMovePrototype}} />`);
     });
 
-    test('it should display location fields of challenge', function (assert) {
+    test('it should display location fields of challenge', function(assert) {
       // given
       const expectedResult = ['pix', 'competence1_2_1', 'tube1_2_1_1', 'skill1_2_1_1_2 (v.1)'];
 
@@ -215,7 +216,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
     });
 
-    test('it should display a list of skills on click', async function (assert) {
+    test('it should display a list of skills on click', async function(assert) {
       assert.expect(5);
       // given
       const expectedGroupResult = ['Niveau 1', 'Niveau 6'];
@@ -237,7 +238,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
     });
 
-    test('it should load a list of skill of selected location', async function (assert) {
+    test('it should load a list of skill of selected location', async function(assert) {
       //given
       const expectedOptionsResult = [ 'skill1_1_1_1_1 (v.1)', 'skill1_1_1_1_2 (v.1)'];
 
@@ -255,7 +256,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
     });
 
-    test('move button is disabled if no location is selected', async function (assert) {
+    test('move button is disabled if no location is selected', async function(assert) {
       // when
       await click(findAll('.ember-basic-dropdown-trigger')[2]);
       await click(findAll('.ember-power-select-options li')[1]);
@@ -264,7 +265,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       assert.dom('[data-test-move-action]').hasAttribute('disabled');
     });
 
-    test('it should invoke `setSkill` on click with new skill location argument', async function (assert) {
+    test('it should invoke `setSkill` on click with new skill location argument', async function(assert) {
       // when
       await click(findAll('.ember-basic-dropdown-trigger')[2]);
       await click(findAll('.ember-power-select-options li')[1]);
@@ -279,12 +280,12 @@ module('Integration | Component | popin-select-location', function (hooks) {
         name: 'skill1_2_1_2_1',
         level: 3,
         status: 'actif',
-        version: 1
+        version: 1,
       });
     });
   });
-  module('if `isSkillLocation`', function (hooks) {
-    hooks.beforeEach(async function () {
+  module('if `isSkillLocation`', function(hooks) {
+    hooks.beforeEach(async function() {
       // when
       this.copyToNewLocation = sinon.stub();
       this.closeSelectLocation = () => {
@@ -303,9 +304,9 @@ module('Integration | Component | popin-select-location', function (hooks) {
                         @isSkillLocation={{true}}
                         @close={{this.closeSelectLocation}} />`);
     });
-    test('it should display a list of all skill levels', async function (assert) {
+    test('it should display a list of all skill levels', async function(assert) {
       // given
-      const expectedOptionsResult = [1,2,3,4,5,6,7,8];
+      const expectedOptionsResult = [1, 2, 3, 4, 5, 6, 7, 8];
 
       // when
       await click(findAll('.ember-basic-dropdown-trigger')[3]);
@@ -318,9 +319,9 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
     });
   });
-  module('if `isTubeLocation`', function (hooks) {
+  module('if `isTubeLocation`', function(hooks) {
     let setCompetenceStub;
-    hooks.beforeEach(async function () {
+    hooks.beforeEach(async function() {
       // given
       setCompetenceStub = sinon.stub();
       this.setCompetence = setCompetenceStub;
@@ -337,14 +338,14 @@ module('Integration | Component | popin-select-location', function (hooks) {
                                               @close={{this.close}} />`);
     });
 
-    test('it should display appropriate fields', async function (assert) {
+    test('it should display appropriate fields', async function(assert) {
       // then
       assert.dom('[data-test-select-source]').hasText('Référentiel pix');
       assert.dom('[data-test-select-competence]').hasText('Compétence competence1_2_1');
       assert.dom('[data-test-select-theme]').hasText('Thématique* theme1_2_1_1');
     });
 
-    test('it should display a list of competence theme', async function (assert) {
+    test('it should display a list of competence theme', async function(assert) {
       // given
       const expectedThemeOptions = ['theme1_1_1_1', 'theme1_1_1_2'];
 
@@ -360,7 +361,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       });
     });
 
-    test('it should disable button action if have no selected theme', async function (assert) {
+    test('it should disable button action if have no selected theme', async function(assert) {
       // when
       await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
       await click(findAll('.ember-power-select-options li')[0]);
@@ -369,7 +370,7 @@ module('Integration | Component | popin-select-location', function (hooks) {
       assert.dom('[data-test-move-action]').hasAttribute('disabled');
     });
 
-    test('it should call setCompetence with a competence and a theme', async function (assert) {
+    test('it should call setCompetence with a competence and a theme', async function(assert) {
       // when
       await click('[data-test-select-competence] .ember-basic-dropdown-trigger');
       await click(findAll('.ember-power-select-options li')[0]);

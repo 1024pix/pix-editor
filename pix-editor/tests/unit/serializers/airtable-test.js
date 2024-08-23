@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Serializer | airtable', function(hooks) {
   setupTest(hooks);
@@ -17,20 +17,20 @@ module('Unit | Serializer | airtable', function(hooks) {
         hasMany() { return [
           {
             id: 1,
-            attributes() {return {};}
+            attributes() {return {};},
           },
           {
             id: 2,
-            attributes() {return {};}
-          }
+            attributes() {return {};},
+          },
         ]; },
         type: {
           determineRelationshipType() { return 'manyToMany'; },
           attributes: {
             key: 'key',
-            has() { return true; }
-          }
-        }
+            has() { return true; },
+          },
+        },
       };
 
       // when
@@ -51,15 +51,15 @@ module('Unit | Serializer | airtable', function(hooks) {
         },
         hasMany() { return [{
           id: 'primaryKey',
-          attributes() { return { airtableId: 'MyIdea' }; }
+          attributes() { return { airtableId: 'MyIdea' }; },
         }]; },
         type: {
           determineRelationshipType() { return 'manyToMany'; },
           attributes: {
             key: 'key',
-            has() { return true; }
-          }
-        }
+            has() { return true; },
+          },
+        },
       };
 
       // when

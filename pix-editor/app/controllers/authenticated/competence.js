@@ -7,11 +7,11 @@ import * as Sentry from '@sentry/ember';
 export default class CompetenceController extends Controller {
   queryParams = [{
     'leftMaximized': {
-      scope:'controller'
+      scope: 'controller',
     },
     'view': {
-      scope: 'controller'
-    }
+      scope: 'controller',
+    },
   }];
 
   @tracked view = 'production';
@@ -165,16 +165,16 @@ export default class CompetenceController extends Controller {
     this.loader.start('Export des acquis...');
     const competence = this.competence;
     const productionTubes = competence.productionTubes;
-    const filledSkills = productionTubes.map(productionTube => productionTube.filledProductionSkills);
+    const filledSkills = productionTubes.map((productionTube) => productionTube.filledProductionSkills);
     const skillData = filledSkills.flat()
-      .filter(filledSkill => filledSkill !== false)
-      .map(filledSkill => {
+      .filter((filledSkill) => filledSkill !== false)
+      .map((filledSkill) => {
         const tube = filledSkill.tube;
         const description = this._formatCSVString(filledSkill.description);
         return [competence.name, tube.get('name'), filledSkill.name, description];
       });
-    const contentCSV = skillData.filter(data => data !== false).reduce((content, data) => {
-      return content + `\n${data.map(item => item ? `"${item}"` : ' ').join(',')}`;
+    const contentCSV = skillData.filter((data) => data !== false).reduce((content, data) => {
+      return content + `\n${data.map((item) => item ? `"${item}"` : ' ').join(',')}`;
     }, '"Compétence","Tube","Acquis","Description"');
     const fileName = `Export_acquis_${competence.name}_${(new Date()).toLocaleString('fr-FR')}.csv`;
     this.fileSaver.saveAs(contentCSV, fileName);
@@ -254,7 +254,7 @@ export default class CompetenceController extends Controller {
   }
 
   _cancelSorting(models) {
-    models.forEach(model => model.rollbackAttributes());
+    models.forEach((model) => model.rollbackAttributes());
     this.displaySortingPopIn = false;
   }
 

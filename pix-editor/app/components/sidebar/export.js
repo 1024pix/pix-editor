@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 
 export default class SidebarExportComponent extends Component {
 
@@ -27,15 +27,15 @@ export default class SidebarExportComponent extends Component {
   }
 
   async _loadContent(areas) {
-    const getCompetences = areas.map(area => area.competences);
+    const getCompetences = areas.map((area) => area.competences);
     const areaCompetences = await Promise.all(getCompetences);
-    const getThemes = areaCompetences.map(competences => competences.map(competence => competence.rawThemes)).flat();
+    const getThemes = areaCompetences.map((competences) => competences.map((competence) => competence.rawThemes)).flat();
     const competenceThemes = await Promise.all(getThemes);
-    const getTubes = competenceThemes.map(themes => themes.map(theme => theme.rawTubes)).flat();
+    const getTubes = competenceThemes.map((themes) => themes.map((theme) => theme.rawTubes)).flat();
     const competenceTubes = await Promise.all(getTubes);
-    const getSkills = competenceTubes.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
+    const getSkills = competenceTubes.map((tubes) => tubes.map((tube) => tube.rawSkills)).flat();
     const tubeSkills = await Promise.all(getSkills);
-    const getChallenges = tubeSkills.map(skills => skills.map(skill => skill.challenges)).flat();
+    const getChallenges = tubeSkills.map((skills) => skills.map((skill) => skill.challenges)).flat();
     await Promise.all(getChallenges);
   }
 
@@ -54,9 +54,9 @@ export default class SidebarExportComponent extends Component {
               tube.productionSkills.reduce((table, skill) => {
                 table[skill.level - 1] = skill.name;
                 return table;
-              }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(',')
+              }, ['░', '░', '░', '░', '░', '░', '░', '░']).join(','),
             ];
-            fields = fields.map(field => this._formatCSVString(field));
+            fields = fields.map((field) => this._formatCSVString(field));
             return content + '\n' + fields.join(',');
 
           }, content);

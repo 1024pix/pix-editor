@@ -1,28 +1,28 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
 
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-skill', function(hooks) {
   setupIntlRenderingTest(hooks);
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     const tutorial1 = EmberObject.create({
       title: 'tutorial_1',
-      language: 'fr-fr'
+      language: 'fr-fr',
     });
     const tutorial2 = EmberObject.create({
       title: 'tutorial_2',
-      language: 'en-us'
+      language: 'en-us',
     });
     const tutorial3 = EmberObject.create({
       title: 'tutorial_3',
-      language: 'fr-fr'
+      language: 'fr-fr',
     });
     const skill = EmberObject.create({
-      name:'skill_name',
+      name: 'skill_name',
       clue: 'my clue',
       clueCSS: 'validated',
       tutoSolution: [tutorial1, tutorial2],
@@ -43,8 +43,8 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
 
   });
 
-  module('#languageFilter activated', function () {
-    test('it should display a clue status and number of tutorials filtered by language', async function (assert) {
+  module('#languageFilter activated', function() {
+    test('it should display a clue status and number of tutorials filtered by language', async function(assert) {
       // given
       this.set('languageFilter', 'en');
 
@@ -56,7 +56,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
       assert.dom('.tuto-count').hasText('1 - 0');
     });
 
-    test('it should alert with warning class if have no `tutoMore` or `tutoSolution`', async function (assert) {
+    test('it should alert with warning class if have no `tutoMore` or `tutoSolution`', async function(assert) {
       // given
       this.set('languageFilter', 'en');
 
@@ -67,7 +67,7 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
       assert.dom('.skill-cell').hasClass('warning');
     });
 
-    test('it should alert with danger class if have no `tutoMore` and `tutoSolution`', async function (assert) {
+    test('it should alert with danger class if have no `tutoMore` and `tutoSolution`', async function(assert) {
       // given
       this.set('languageFilter', 'de');
 

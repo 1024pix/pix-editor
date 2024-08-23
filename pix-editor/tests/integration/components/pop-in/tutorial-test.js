@@ -1,12 +1,13 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in/tutorial', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const configService = this.owner.lookup('service:config');
     configService.tutorialLocaleToLanguageMap = {
       lang: 'Première langue',
@@ -18,15 +19,15 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     this.set('close', () => {});
     this.set('saveTutorial', () => {});
     this.set('tutorial', {
-      title:'',
-      language:'',
-      link:'',
-      source:'',
-      license:'',
-      format:'',
-      duration:'',
-      level:'',
-      tags:[]
+      title: '',
+      language: '',
+      link: '',
+      source: '',
+      license: '',
+      format: '',
+      duration: '',
+      level: '',
+      tags: [],
     });
 
     //when
@@ -41,15 +42,15 @@ module('Integration | Component | pop-in/tutorial', function(hooks) {
     this.set('close', () => {});
     this.set('saveTutorial', () => {});
     this.set('tutorial', {
-      title:'title',
-      language:'fr-fr',
-      link:'link',
-      source:'source',
-      license:'',
-      format:'image',
-      duration:'00:20:00',
-      level:'',
-      tags:[]
+      title: 'title',
+      language: 'fr-fr',
+      link: 'link',
+      source: 'source',
+      license: '',
+      format: 'image',
+      duration: '00:20:00',
+      level: '',
+      tags: [],
     });
 
     //when

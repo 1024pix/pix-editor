@@ -1,16 +1,17 @@
-import { module, test } from 'qunit';
+import { clickByText, visit, within } from '@1024pix/ember-testing-library';
 import { click, findAll } from '@ember/test-helpers';
-import { visit, clickByText, within } from '@1024pix/ember-testing-library';
-import { setupApplicationTest } from '../../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Controller | Localized Challenge', function (hooks) {
+import { setupApplicationTest } from '../../../setup-application-rendering';
+
+module('Acceptance | Controller | Localized Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let localizedChallenge;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -32,7 +33,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('it should display the localized challenge', async function (assert) {
+  test('it should display the localized challenge', async function(assert) {
     const screen = await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
@@ -53,7 +54,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     assert.ok(translationsLink.getAttribute('href').endsWith('/translations/en'), 'href ends with /translations/en');
   });
 
-  test('it should go back to the original challenge', async function (assert) {
+  test('it should go back to the original challenge', async function(assert) {
     const screen = await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
@@ -65,8 +66,8 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
     assert.dom(screen.getByText('Version en')).exists();
   });
 
-  module('#edit localized challenge status', function () {
-    test('should set localized status to `validé`', async function (assert) {
+  module('#edit localized challenge status', function() {
+    test('should set localized status to `validé`', async function(assert) {
       const screen = await visit('/');
       await click(findAll('[data-test-area-item]')[0]);
       await click(findAll('[data-test-competence-item]')[0]);
@@ -81,7 +82,7 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
       assert.dom(screen.getByText('En prod')).exists();
     });
 
-    test('should set localized status to `proposé`', async function (assert) {
+    test('should set localized status to `proposé`', async function(assert) {
       localizedChallenge.update({ status: 'validé' });
       const screen = await visit('/');
       await click(findAll('[data-test-area-item]')[0]);
@@ -99,8 +100,8 @@ module('Acceptance | Controller | Localized Challenge', function (hooks) {
 
   });
 
-  module('#edit localized challenge', function () {
-    test('should display edition form', async function (assert) {
+  module('#edit localized challenge', function() {
+    test('should display edition form', async function(assert) {
       const screen = await visit('/');
       await click(findAll('[data-test-area-item]')[0]);
       await click(findAll('[data-test-competence-item]')[0]);

@@ -1,16 +1,15 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
-import Service from '@ember/service';
-import sinon from 'sinon';
 import EmberObject from '@ember/object';
-
+import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 module('Unit | Controller | competence/tubes/new', function(hooks) {
   setupTest(hooks);
 
   let controller, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, deleteRecordStub, themeRollbackAttributesStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -34,7 +33,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     class CurrentDataService extends Service {
       getCompetence() {
         return {
-          name:'Competence'
+          name: 'Competence',
         };
       }
     }
@@ -53,7 +52,7 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     controller.model = EmberObject.create({
       theme: {
         rollbackAttributes: themeRollbackAttributesStub,
-      }
+      },
     });
     controller.edition = true;
   });
@@ -94,13 +93,13 @@ module('Unit | Controller | competence/tubes/new', function(hooks) {
     assert.ok(saveStub.calledOnce);
     assert.ok(loaderStopStub.calledOnce);
     assert.ok(notifyMessageStub.calledWith('Tube créé'));
-    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', { name:'Competence' }, controller.model));
+    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.tubes.single', { name: 'Competence' }, controller.model));
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = {
-      'error': ['error-test']
+      'error': ['error-test'],
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;

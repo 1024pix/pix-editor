@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | workbench-list', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -10,10 +11,8 @@ module('Integration | Component | workbench-list', function(hooks) {
 
     // given
 
-
     // when
     await render(hbs`<List::Workbench />`);
-
 
     // then
     assert.dom('.ember-table').exists();

@@ -1,13 +1,13 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence-management/single', function(hooks) {
   setupTest(hooks);
   let controller, notifyMessageStub, notifyErrorStub, rollbackAttributesStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -29,9 +29,9 @@ module('Unit | Controller | competence-management/single', function(hooks) {
     this.owner.register('service:loader', LoaderService);
 
     rollbackAttributesStub = sinon.stub();
-    const competence =  {
+    const competence = {
       name: 'themeName',
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
     };
 
     controller = this.owner.lookup('controller:authenticated.competence-management/single');
@@ -63,7 +63,7 @@ module('Unit | Controller | competence-management/single', function(hooks) {
     assert.ok(notifyMessageStub.calledWith('Modification annulée'));
   });
 
-  test('it should save modification', async function (assert) {
+  test('it should save modification', async function(assert) {
     // given
     const saveStub = sinon.stub().resolves();
     controller.model.save = saveStub;
@@ -80,10 +80,10 @@ module('Unit | Controller | competence-management/single', function(hooks) {
     assert.ok(notifyMessageStub.calledWith('Compétence mise à jour'));
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = {
-      'error': ['error']
+      'error': ['error'],
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;

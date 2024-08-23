@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Service | current-data', function(hooks) {
   setupTest(hooks);
@@ -9,55 +9,55 @@ module('Unit | Service | current-data', function(hooks) {
     const store = this.owner.lookup('service:store');
 
     // Given
-    prototype = store.createRecord('challenge',{
-      id: 'prototype'
+    prototype = store.createRecord('challenge', {
+      id: 'prototype',
     });
 
-    competence = store.createRecord('competence',{
-      id: 'competence'
+    competence = store.createRecord('competence', {
+      id: 'competence',
     });
 
-    pix1dThematic = store.createRecord('theme',{
-      id: 'thematic'
+    pix1dThematic = store.createRecord('theme', {
+      id: 'thematic',
     });
 
-    pix1dCompetence = store.createRecord('competence',{
+    pix1dCompetence = store.createRecord('competence', {
       id: 'pix1dCompetence',
-      rawThemes: [pix1dThematic]
+      rawThemes: [pix1dThematic],
     });
 
-    pixFranceArea = store.createRecord('area',{
+    pixFranceArea = store.createRecord('area', {
       id: 'pixFranceArea',
       code: '1',
     });
 
-    pixArea = store.createRecord('area',{
+    pixArea = store.createRecord('area', {
       id: 'pixArea',
       code: '2',
     });
 
-    pix1dArea = store.createRecord('area',{
+    pix1dArea = store.createRecord('area', {
       id: 'pix1dArea',
       code: '3',
-      competences: [pix1dCompetence]
+      competences: [pix1dCompetence],
     });
 
     pixFranceFramework = store.createRecord('framework', {
       id: 'pixFranceFramework',
       name: 'France',
-      areas: [pixFranceArea]
+      areas: [pixFranceArea],
     });
 
     pixFramework = store.createRecord('framework', {
       id: 'pixFramework',
       name: 'Pix',
-      areas: [pixArea]
+      areas: [pixArea],
     });
 
     pix1dFramework = store.createRecord('framework', {
       id: 'pix1dFramework',
       name: 'Pix 1D',
-      areas: [pix1dArea]
+      areas: [pix1dArea],
     });
 
     service = this.owner.lookup('service:current-data');

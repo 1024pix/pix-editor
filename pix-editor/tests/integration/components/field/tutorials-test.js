@@ -1,6 +1,7 @@
-import { module, test } from 'qunit';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
 import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | form-tutorials', function(hooks) {

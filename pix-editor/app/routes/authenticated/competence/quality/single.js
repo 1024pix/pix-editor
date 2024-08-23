@@ -1,6 +1,7 @@
-import SkillRoute from '../skills/single';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+
+import SkillRoute from '../skills/single';
 
 export default class SingleRoute extends SkillRoute {
   templateName = 'authenticated/competence/skills/single';

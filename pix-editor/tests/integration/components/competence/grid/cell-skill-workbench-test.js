@@ -1,8 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
 
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-skill-workbench', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -12,61 +12,61 @@ module('Integration | Component | competence/grid/cell-skill-workbench', functio
   const skillName = '@skill1';
   let tube;
 
-  hooks.beforeEach (async function() {
+  hooks.beforeEach(async function() {
     // given
     store = this.owner.lookup('service:store');
-    skillRecord1 = store.createRecord('skill',{
+    skillRecord1 = store.createRecord('skill', {
       id: 'rec654258',
       name: skillName,
       level: 1,
-      status:'actif',
-      challenges: [store.createRecord('challenge',{
+      status: 'actif',
+      challenges: [store.createRecord('challenge', {
         id: 'recChallenge0',
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
-    skillRecord2 = store.createRecord('skill',{
+    skillRecord2 = store.createRecord('skill', {
       id: 'rec654259',
       level: 1,
       name: skillName,
-      status:'archivé'
+      status: 'archivé',
     });
-    skillRecord3 = store.createRecord('skill',{
+    skillRecord3 = store.createRecord('skill', {
       id: 'rec654260',
       level: 1,
       name: skillName,
-      status:'en construction',
+      status: 'en construction',
     });
-    skillRecord4 = store.createRecord('skill',{
+    skillRecord4 = store.createRecord('skill', {
       id: 'rec654261',
       level: 1,
       name: skillName,
-      status:'archivé',
+      status: 'archivé',
     });
-    skillRecord5 = store.createRecord('skill',{
+    skillRecord5 = store.createRecord('skill', {
       id: 'rec664261',
       level: 1,
       name: skillName,
-      status:'en construction',
+      status: 'en construction',
     });
-    skillRecord6 = store.createRecord('skill',{
+    skillRecord6 = store.createRecord('skill', {
       id: 'rec674261',
       level: 1,
       name: skillName,
-      status:'périmé',
+      status: 'périmé',
     });
-    tube = store.createRecord('tube',{
+    tube = store.createRecord('tube', {
       id: 'rec123456',
       name: 'tubeName',
       rawSkills: [
         skillRecord1
-        ,skillRecord2
-        ,skillRecord3
-        ,skillRecord4
-        ,skillRecord5
-        ,skillRecord6
-      ]
+        , skillRecord2
+        , skillRecord3
+        , skillRecord4
+        , skillRecord5
+        , skillRecord6,
+      ],
     });
     this.skill = skillRecord1;
     this.skills = [skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6];

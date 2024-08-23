@@ -1,5 +1,5 @@
-import RESTAdapter from '@ember-data/adapter/rest';
 import { inject as service } from '@ember/service';
+import RESTAdapter from '@ember-data/adapter/rest';
 import chunk from 'lodash/chunk';
 
 const ID_PERSISTANT_FIELD = 'id persistant';
@@ -26,7 +26,7 @@ export default class AirtableAdapter extends RESTAdapter {
     if (serializer.primaryKey === ID_PERSISTANT_FIELD) {
       const url = this.buildURL(type.modelName, id, snapshot, 'findMany');
       return this.ajax(url, 'GET', { data: {
-        filterByFormula:`AND(FIND('${id}', {id persistant}))`,
+        filterByFormula: `AND(FIND('${id}', {id persistant}))`,
         maxRecords: 1,
       } });
     }
@@ -59,7 +59,7 @@ export default class AirtableAdapter extends RESTAdapter {
   async findMany(store, type, ids, snapshots, maxIds = 90) {
     const serializer = store.serializerFor(type.modelName);
     const responses = await Promise.all(chunk(ids, maxIds).map((chunkedIds) => {
-      const recordsText = 'OR(' + chunkedIds.map(id => `{${serializer.primaryKey}} = '${id}'`).join(',') + ')';
+      const recordsText = 'OR(' + chunkedIds.map((id) => `{${serializer.primaryKey}} = '${id}'`).join(',') + ')';
       const url = this.buildURL(type.modelName, chunkedIds, snapshots, 'findMany');
       return this.ajax(url, 'GET', { data: { filterByFormula: recordsText } });
     }));

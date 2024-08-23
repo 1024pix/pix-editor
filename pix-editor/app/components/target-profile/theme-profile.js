@@ -1,12 +1,12 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 
 export default class TargetProfileThemeProfileComponent extends Component {
 
   get filteredTubes() {
     const theme = this.args.theme;
     if (this.args.filter) {
-      return theme.productionTubes.filter(tube => tube.selectedLevel);
+      return theme.productionTubes.filter((tube) => tube.selectedLevel);
     }
     return theme.productionTubes;
   }

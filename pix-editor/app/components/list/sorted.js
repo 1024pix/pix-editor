@@ -1,7 +1,7 @@
-import ENV from 'pixeditor/config/environment';
 import { action } from '@ember/object';
 import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
+import ENV from 'pixeditor/config/environment';
 
 export default class SortedList extends Component {
 
@@ -62,8 +62,8 @@ export default class SortedList extends Component {
     } else {
       this.ascending = !this.ascending;
       this.sorts = [{
-        valuePath:this.sortField,
-        isAscending:this.ascending
+        valuePath: this.sortField,
+        isAscending: this.ascending,
       }];
     }
   }

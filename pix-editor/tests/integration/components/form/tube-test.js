@@ -1,8 +1,9 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | tube-form', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -23,7 +24,7 @@ module('Integration | Component | tube-form', function(hooks) {
   });
 
   module('#not edition', function(hooks) {
-    hooks.beforeEach(async function () {
+    hooks.beforeEach(async function() {
       const tube = EmberObject.create({});
       this.set('tube', tube);
       this.set('edition', false);
@@ -44,7 +45,7 @@ module('Integration | Component | tube-form', function(hooks) {
   });
 
   module('#edition', function(hooks) {
-    hooks.beforeEach(async function () {
+    hooks.beforeEach(async function() {
       const tube = EmberObject.create({});
       this.set('tube', tube);
       this.set('edition', true);

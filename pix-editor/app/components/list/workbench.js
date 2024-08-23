@@ -1,6 +1,7 @@
 import { action } from '@ember/object';
-import SortedList from './sorted';
 import { inject as service } from '@ember/service';
+
+import SortedList from './sorted';
 
 export default class CompetencesList extends SortedList {
 
@@ -8,28 +9,28 @@ export default class CompetencesList extends SortedList {
   @service currentData;
 
   headers = [{
-    name:'Auteur',
-    valuePath:'authorText',
-    maxWidth:150
-  },{
-    name:'Consigne',
-    valuePath:'instruction',
-  },{
-    name:'Type',
-    valuePath:'type',
-    maxWidth:150
-  },{
-    name:'Statut',
-    valuePath:'status',
-    maxWidth:150,
-    style:true
+    name: 'Auteur',
+    valuePath: 'authorText',
+    maxWidth: 150,
+  }, {
+    name: 'Consigne',
+    valuePath: 'instruction',
+  }, {
+    name: 'Type',
+    valuePath: 'type',
+    maxWidth: 150,
+  }, {
+    name: 'Statut',
+    valuePath: 'status',
+    maxWidth: 150,
+    style: true,
   }];
 
   sortTypes = {
-    'authorText':'string',
-    'instruction':'string',
-    'type':'string',
-    'status':'string'
+    'authorText': 'string',
+    'instruction': 'string',
+    'type': 'string',
+    'status': 'string',
   };
 
   @action

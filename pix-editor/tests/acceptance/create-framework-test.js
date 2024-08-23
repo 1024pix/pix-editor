@@ -1,16 +1,17 @@
-import { module, test } from 'qunit';
 import { clickByName, visit } from '@1024pix/ember-testing-library';
-import { currentURL, fillIn, click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from '../setup-application-rendering';
+import { click, currentURL, fillIn, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Search', function (hooks) {
+import { setupApplicationTest } from '../setup-application-rendering';
+
+module('Acceptance | Search', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
@@ -19,7 +20,7 @@ module('Acceptance | Search', function (hooks) {
     return authenticateSession();
   });
 
-  test('it should create a new framework', async function (assert) {
+  test('it should create a new framework', async function(assert) {
     // given
     const newFrameworkName = 'Nouveau titre';
 
@@ -32,7 +33,7 @@ module('Acceptance | Search', function (hooks) {
 
     // then
     const frameworks = await store.findAll('framework');
-    assert.ok(frameworks.find(framework => framework.name === newFrameworkName));
+    assert.ok(frameworks.find((framework) => framework.name === newFrameworkName));
     assert.dom(find('[data-test-main-message]')).hasText('Référentiel créé');
     assert.strictEqual(currentURL(), '/');
   });

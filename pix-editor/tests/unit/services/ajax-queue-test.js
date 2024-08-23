@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import ENV from 'pixeditor/config/environment';
+import { module, test } from 'qunit';
 
 module('Unit | Service | ajax-queue', function(hooks) {
   setupTest(hooks);

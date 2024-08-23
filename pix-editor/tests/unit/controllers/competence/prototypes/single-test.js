@@ -1,14 +1,15 @@
-import { module, test } from 'qunit';
-import Service from '@ember/service';
-import sinon from 'sinon';
 import EmberObject from '@ember/object';
+import Service from '@ember/service';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Unit | Controller | competence/prototypes/single', function (hooks) {
+module('Unit | Controller | competence/prototypes/single', function(hooks) {
   setupIntlRenderingTest(hooks);
   let controller, messageStub, startStub, stopStub, errorStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     //given
     controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
 
@@ -38,10 +39,10 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     let handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
       challenge;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
 
       challenge = {
-        id: 'rec123456'
+        id: 'rec123456',
       };
       controller.model = challenge;
 
@@ -82,7 +83,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
 
     });
 
-    test('it should reinitialize edition',  async function(assert) {
+    test('it should reinitialize edition', async function(assert) {
       // given
       controller.edition = true;
       controller.displayAlternativeInstructionsField = true;
@@ -109,7 +110,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       skill2,
       tube;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       const saveStub = sinon.stub().resolves({});
       const store = this.owner.lookup('service:store');
 
@@ -119,7 +120,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         genealogy: 'Prototype 1',
         version: 1,
         status: 'proposé',
-        save: saveStub
+        save: saveStub,
       });
       proposalChallenge1_1 = store.createRecord('challenge', {
         id: 'rec_challenge1_1',
@@ -127,7 +128,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         status: 'proposé',
         version: 1,
         alternativeVersion: 1,
-        save: saveStub
+        save: saveStub,
       });
       validatePrototype2_1 = store.createRecord('challenge', {
         id: 'rec_proto2_1',
@@ -135,14 +136,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         status: 'validé',
         version: 1,
         genealogy: 'Prototype 1',
-        save: saveStub
+        save: saveStub,
       });
       validateChallenge2_1 = store.createRecord('challenge', {
         id: 'rec_challenge2_1',
         pixId: 'pix_challenge2_1',
         status: 'validé',
         version: 1,
-        save: saveStub
+        save: saveStub,
       });
       proposalPrototype2_2 = store.createRecord('challenge', {
         id: 'rec_proto2_2',
@@ -150,42 +151,42 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         status: 'proposé',
         version: 2,
         genealogy: 'Prototype 1',
-        save: saveStub
+        save: saveStub,
       });
       proposalChallenge2_2 = store.createRecord('challenge', {
         id: 'rec_challenge2_2',
         pixId: 'pix_challenge2_2',
         version: 2,
         status: 'proposé',
-        save: saveStub
+        save: saveStub,
       });
       skill1 = store.createRecord('skill', {
         id: 'rec_skill1',
         pixId: 'pix_skill1',
         status: 'en construction',
-        level:1,
+        level: 1,
         challenges: [proposalPrototype1_1, proposalChallenge1_1],
-        save: saveStub
+        save: saveStub,
       });
       skill2 = store.createRecord('skill', {
         id: 'rec_skill2',
         pixId: 'pix_skill2',
         status: 'actif',
-        level:1,
+        level: 1,
         challenges: [validatePrototype2_1, validateChallenge2_1, proposalPrototype2_2, proposalChallenge2_2],
-        save: saveStub
+        save: saveStub,
       });
       tube = store.createRecord('tube', {
         id: 'rec_tube',
-        skills: [skill1, skill2]
+        skills: [skill1, skill2],
       });
-      tube.skills.forEach(skill=>{
+      tube.skills.forEach((skill)=>{
         skill.tube = tube;
       });
     });
 
     module('on prototype validation', function() {
-      test('it should archive previous active prototype and alternatives or delete draft alternative', async function (assert) {
+      test('it should archive previous active prototype and alternatives or delete draft alternative', async function(assert) {
         //given
         proposalChallenge2_2.version = 1;
 
@@ -198,7 +199,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
-      test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function (assert) {
+      test('it should archive the actual validated skill and is associated validated challenges or delete draft challenges if is an other version', async function(assert) {
         //when
         await controller._archiveOtherActiveSkillVersion(proposalPrototype1_1);
 
@@ -210,7 +211,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(proposalChallenge2_2.status, 'périmé');
       });
 
-      test('it should validate skill', async function (assert) {
+      test('it should validate skill', async function(assert) {
         //given
         proposalPrototype1_1.validate();
 
@@ -221,7 +222,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         assert.strictEqual(skill1.status, 'actif');
       });
 
-      test('it should validate alternatives', async function (assert) {
+      test('it should validate alternatives', async function(assert) {
         //given
         proposalPrototype1_1.validate();
 
@@ -313,7 +314,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       });
     });
 
-    module('#setSkill', function () {
+    module('#setSkill', function() {
       test('it should display an error message if have no skill', async function(assert) {
         // when
         await controller.setSkill();
@@ -348,7 +349,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
     const challenge = EmberObject.create({
       id: 'recChallenge',
       files: [],
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
     });
     controller.model = challenge;
 
@@ -378,7 +379,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           type: 'illustration',
           deleteRecord: deleteRecordStub,
           alt: 'alternative text',
-        }
+        },
       };
       controller.model = challenge;
 
@@ -406,15 +407,15 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
             mimeType: 'application/pdf',
             type: 'attachment',
             deleteRecord: deleteRecordStub,
-          }
-        ]
+          },
+        ],
 
       };
       controller.model = challenge;
 
       // when
       await controller.removeAttachment({
-        filename: 'file_name.pdf'
+        filename: 'file_name.pdf',
       });
 
       // then
@@ -480,7 +481,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           mimeType: 'image/png',
           type: 'illustration',
           isNew: true,
-        }
+        },
       });
 
       storageServiceStub = {
@@ -488,8 +489,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           url: 'data:,',
           filename: 'attachment-name',
           size: 123,
-          type: 'image/png'
-        })
+          type: 'image/png',
+        }),
       };
 
       storeServiceStub = { createRecord: sinon.stub().returns({ save() {} }) };
@@ -532,8 +533,8 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       challenge = EmberObject.create({
         id: 'recChallenge',
         files: [
-          { save: sinon.stub().resolves() }
-        ]
+          { save: sinon.stub().resolves() },
+        ],
       });
 
       controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
@@ -587,14 +588,14 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           isNew: true,
         },
         ],
-        files:[]
+        files: [],
       });
 
       storageServiceStub = {
         uploadFile: sinon.stub().resolves({
           url: 'data:,',
           filename: challenge.attachmentBaseName + '.pdf',
-        })
+        }),
       };
       controller.storage = storageServiceStub;
 
@@ -603,11 +604,11 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           filePath: '',
           name: 'attachment-base-name.pdf',
           size: 123,
-          type: 'application/pdf'
+          type: 'application/pdf',
         },
         filename: 'attachment-base-name.pdf',
         isNew: true,
-        url: 'data:,'
+        url: 'data:,',
       }];
 
       // when
@@ -643,7 +644,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           },
           isNew: true,
         }],
-        files:[]
+        files: [],
       });
 
       const uploadFileStub = sinon.stub();
@@ -688,7 +689,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
       assert.deepEqual(newChallenge.attachments, expectedAttachements);
     });
 
-    test('it renames attachments', async function (assert) {
+    test('it renames attachments', async function(assert) {
       const attachmentBaseName = 'attachment-base-name';
       challenge = EmberObject.create({
         id: 'recChallenge',
@@ -706,11 +707,11 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
           size: 456,
           mimeType: 'image/png',
           type: 'illustration',
-        }]
+        }],
       });
 
       challenge.files.forEach((file) => file.challenge = challenge);
-      challenge.attachments = challenge.files.filter(file => file.type === 'attachment');
+      challenge.attachments = challenge.files.filter((file) => file.type === 'attachment');
       storageServiceStub = {
         renameFile: sinon.stub().resolves(),
       };
@@ -722,7 +723,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 123,
         mimeType: 'application/pdf',
         type: 'attachment',
-        challenge
+        challenge,
       };
       const expectedIllustration = {
         filename: 'attachment-base-name.png',
@@ -730,7 +731,7 @@ module('Unit | Controller | competence/prototypes/single', function (hooks) {
         size: 456,
         mimeType: 'image/png',
         type: 'illustration',
-        challenge
+        challenge,
       };
 
       // when

@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
 import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from '../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Modify-Localized-Challenge', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | Modify-Localized-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -25,7 +26,7 @@ module('Acceptance | Modify-Localized-Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('visiting /', async function (assert) {
+  test('visiting /', async function(assert) {
     // when
     const store = this.owner.lookup('service:store');
 

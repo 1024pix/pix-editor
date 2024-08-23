@@ -6,10 +6,10 @@ export default class ThemeSerializer extends AirtableSerializer {
   attrs = {
     pixId: 'id persistant',
     name: 'Nom',
-    nameEnUs:'Titre en-us',
+    nameEnUs: 'Titre en-us',
     rawTubes: 'Tubes',
     competence: 'Competence',
-    index: 'Index'
+    index: 'Index',
   };
 
   payloadKeyFromModelName() {

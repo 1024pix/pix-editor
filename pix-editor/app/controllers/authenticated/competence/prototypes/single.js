@@ -1,6 +1,6 @@
 import Controller, { inject as controller } from '@ember/controller';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 import yaml from 'js-yaml';
@@ -206,11 +206,11 @@ export default class SingleController extends Controller {
     this.closeComfirmLogPopin();
     this.loader.start();
     return Promise.resolve(this.challenge)
-      .then(challenge => this._handleIllustration(challenge))
-      .then(challenge => this._handleAttachments(challenge))
-      .then(challenge => this._saveAttachments(challenge))
-      .then(challenge => this._saveChallenge(challenge))
-      .then(challenge => this._handleChangelog(challenge, changelog))
+      .then((challenge) => this._handleIllustration(challenge))
+      .then((challenge) => this._handleAttachments(challenge))
+      .then((challenge) => this._saveAttachments(challenge))
+      .then((challenge) => this._saveChallenge(challenge))
+      .then((challenge) => this._handleChangelog(challenge, changelog))
       .then(() => {
         this.edition = false;
         this.displayAlternativeInstructionsField = false;
@@ -407,7 +407,7 @@ export default class SingleController extends Controller {
           } else {
             this._message(this.intl.t('challenge.move.success-alternative-message', { number: challenge.alternativeVersion }));
           }
-        })
+        }),
       );
       return current;
     }, []);
@@ -510,7 +510,7 @@ export default class SingleController extends Controller {
     }
     const alternatives = challenge.draftAlternatives;
     await this.confirm.ask('Mise en production des déclinaisons', 'Souhaitez-vous mettre en production les déclinaisons proposées ?');
-    const alternativesPublication = alternatives.map(async alternative => {
+    const alternativesPublication = alternatives.map(async (alternative) => {
       const validatedAlternative = await alternative.validate();
       this._message(`Alternative n°${validatedAlternative.alternativeVersion} mise en production`);
     });
@@ -526,13 +526,13 @@ export default class SingleController extends Controller {
     if (toArchive.length === 0 && toObsolete.length) {
       return Promise.resolve(challenge);
     }
-    const alternativesArchive = toArchive.map(alternative => {
+    const alternativesArchive = toArchive.map((alternative) => {
       return alternative.archive()
-        .then(alternative => this._message(this.intl.t('challenge.alternative.archive', { number: alternative.alternativeVersion })));
+        .then((alternative) => this._message(this.intl.t('challenge.alternative.archive', { number: alternative.alternativeVersion })));
     });
-    const alternativesObsolete = toObsolete.map(alternative => {
+    const alternativesObsolete = toObsolete.map((alternative) => {
       return alternative.obsolete()
-        .then(alternative => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
+        .then((alternative) => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
     });
     const alternativesArchiveAndObsolete = [...alternativesArchive, ...alternativesObsolete];
     return Promise.all(alternativesArchiveAndObsolete)
@@ -543,13 +543,13 @@ export default class SingleController extends Controller {
     if (!challenge.isPrototype) {
       return Promise.resolve(challenge);
     }
-    const toObsolete = challenge.alternatives.filter(alternative => !alternative.isObsolete);
+    const toObsolete = challenge.alternatives.filter((alternative) => !alternative.isObsolete);
     if (toObsolete.length === 0) {
       return Promise.resolve(challenge);
     }
-    const alternativesObsolete = toObsolete.map(alternative => {
+    const alternativesObsolete = toObsolete.map((alternative) => {
       return alternative.obsolete()
-        .then(alternative => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
+        .then((alternative) => this._message(this.intl.t('challenge.alternative.obsolete', { number: alternative.alternativeVersion })));
     });
     return Promise.all(alternativesObsolete)
       .then(() => challenge);
@@ -562,13 +562,13 @@ export default class SingleController extends Controller {
     }
     const tube = await currentSkill.tube;
     const skillVersions = tube.filledLiveSkills[currentSkill.level - 1];
-    const activeSkill = skillVersions ? skillVersions.find(skill => skill.isActive) : false;
+    const activeSkill = skillVersions ? skillVersions.find((skill) => skill.isActive) : false;
     if (!activeSkill) {
       return;
     }
     await this.confirm.ask('Archivage de la version précédente de l\'acquis', `La mise en production de ce prototype va remplacer l'acquis précédent (${activeSkill.pixId}) par le nouvel acquis (${currentSkill.pixId}). Êtes-vous sûr de vouloir archiver l'acquis ${activeSkill.pixId} et les épreuves correspondantes ?`);
     await activeSkill.archive();
-    const challengesToArchiveOrObsolete = activeSkill.liveChallenges.map(liveChallenge => {
+    const challengesToArchiveOrObsolete = activeSkill.liveChallenges.map((liveChallenge) => {
       if (liveChallenge.isValidated) {
         return liveChallenge.archive();
       }
@@ -702,7 +702,7 @@ export default class SingleController extends Controller {
       recordId: challenge.id,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
-      elementType: this.changelogEntry.challenge
+      elementType: this.changelogEntry.challenge,
     });
     await entry.save();
   }

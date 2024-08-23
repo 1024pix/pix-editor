@@ -1,17 +1,18 @@
-import { module, test } from 'qunit';
-import { visit, findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from '../setup-application-rendering';
-import { selectFiles } from 'ember-file-upload/test-support';
-import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
-import sinon from 'sinon';
+import { click, find, findAll, visit } from '@ember/test-helpers';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
-module('Acceptance | Create-Challenge', function (hooks) {
+import { setupApplicationTest } from '../setup-application-rendering';
+
+module('Acceptance | Create-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -30,7 +31,7 @@ module('Acceptance | Create-Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('creating a new challenge', async function (assert) {
+  test('creating a new challenge', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -56,7 +57,7 @@ module('Acceptance | Create-Challenge', function (hooks) {
     const attachments = await store.peekAll('attachment');
     assert.dom('[data-test-main-message]').hasText('Prototype enregistré');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
-    assert.ok(attachments.every(record => !record.isNew));
+    assert.ok(attachments.every((record) => !record.isNew));
   });
 
 });

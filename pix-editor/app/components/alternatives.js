@@ -1,5 +1,5 @@
-import Component from '@glimmer/component';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class Alternatives extends Component {
@@ -10,6 +10,6 @@ export default class Alternatives extends Component {
   @service config;
 
   get alternatives() {
-    return this.arePerimeDeclisDisplayed ? this.args.challenge.alternatives : this.args.challenge.alternatives.filter(alternative => alternative.status !== 'périmé');
+    return this.arePerimeDeclisDisplayed ? this.args.challenge.alternatives : this.args.challenge.alternatives.filter((alternative) => alternative.status !== 'périmé');
   }
 }

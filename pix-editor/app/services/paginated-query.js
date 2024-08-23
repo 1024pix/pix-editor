@@ -1,6 +1,6 @@
+import { A } from '@ember/array';
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { A } from '@ember/array';
 
 export default class PaginatedQueryService extends Service {
   @service store;
@@ -41,7 +41,7 @@ export default class PaginatedQueryService extends Service {
       parameters.offset = offset;
     }
     return store.query(model, parameters)
-      .then(result => {
+      .then((result) => {
         currentModel.pushObjects(result.toArray());
         if (result.meta && result.meta.offset) {
           this.offset = result.meta.offset;

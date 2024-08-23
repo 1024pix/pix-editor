@@ -7,7 +7,7 @@ export default class SkillRoute extends Route {
   @service store;
 
   model(params) {
-    return this.store.query('skill', { filterByFormula:`FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
+    return this.store.query('skill', { filterByFormula: `FIND('${params.skill_name}', {Nom})`, maxRecords: 1 });
   }
 
   async afterModel(model) {

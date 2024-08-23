@@ -1,11 +1,11 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Model | framework', function(hooks) {
   setupTest(hooks);
   let store;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
   });
 
@@ -16,7 +16,7 @@ module('Unit | Model | framework', function(hooks) {
         areas: [
           store.createRecord('area', { code: '10' }),
           store.createRecord('area', { code: '9' }),
-        ]
+        ],
       });
 
       // when

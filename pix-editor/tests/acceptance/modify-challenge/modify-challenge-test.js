@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
+import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
 import { click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from '../../setup-application-rendering';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
 
-module('Acceptance | Modify-Challenge', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | Modify-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -29,7 +30,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('visiting /', async function (assert) {
+  test('visiting /', async function(assert) {
     // when
     const store = this.owner.lookup('service:store');
 
@@ -50,7 +51,7 @@ module('Acceptance | Modify-Challenge', function (hooks) {
     assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
   });
 
-  test('modify a challenge\'s urlsToConsult', async function (assert) {
+  test('modify a challenge\'s urlsToConsult', async function(assert) {
     // when
     const store = this.owner.lookup('service:store');
 

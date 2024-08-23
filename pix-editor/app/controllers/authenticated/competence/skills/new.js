@@ -1,7 +1,8 @@
-import Skill from './single';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import * as Sentry from '@sentry/ember';
+
+import Skill from './single';
 
 export default class NewController extends Skill {
   competence = null;

@@ -1,9 +1,9 @@
-import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
-import { setupMirage } from 'ember-cli-mirage/test-support';
-import { authenticateSession } from 'ember-simple-auth/test-support';
-import { currentURL, click } from '@ember/test-helpers';
 import { visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupApplicationTest } from 'ember-qunit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
 module('Acceptance | Missions | Detail', function(hooks) {
   setupApplicationTest(hooks);
@@ -42,7 +42,7 @@ module('Acceptance | Missions | Detail', function(hooks) {
     assert.dom(screen.getByText('Notre compétence')).exists();
     assert.dom(screen.getByText('Tout savoir')).exists();
     assert.dom(screen.getByText('Jusque là, rien')).exists();
-    assert.dom(screen.getByRole('link',  { name: 'http://url-example.net' })).exists();
+    assert.dom(screen.getByRole('link', { name: 'http://url-example.net' })).exists();
   });
 
   test('it redirects to missions list', async function(assert) {

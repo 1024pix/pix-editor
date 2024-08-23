@@ -1,13 +1,13 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence/themes/new', function(hooks) {
   setupTest(hooks);
   let controller, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, deleteRecordStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -46,7 +46,7 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     controller.model.name = 'newTheme';
     const parentControllerSendStub = sinon.stub();
     controller.parentController = {
-      send: parentControllerSendStub
+      send: parentControllerSendStub,
     };
 
     // when
@@ -64,7 +64,7 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     class CurrentDataService extends Service {
       getCompetence() {
         return {
-          name:'Competence'
+          name: 'Competence',
         };
       }
     }
@@ -88,19 +88,19 @@ module('Unit | Controller | competence/themes/new', function(hooks) {
     assert.ok(transitionToRouteStub.calledOnce);
   });
 
-  test('it should catch an error if save action failed', async function (assert) {
+  test('it should catch an error if save action failed', async function(assert) {
     // given
     class CurrentDataService extends Service {
       getCompetence() {
         return {
-          name:'Competence'
+          name: 'Competence',
         };
       }
     }
     this.owner.register('service:currentData', CurrentDataService);
 
     const errorMessage = {
-      'error': ['error-test']
+      'error': ['error-test'],
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;

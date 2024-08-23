@@ -1,6 +1,6 @@
 import Service from '@ember/service';
-import random from 'js-crypto-random';
 import basex from 'base-x';
+import random from 'js-crypto-random';
 
 // TODO : put code in one place
 // duplicated in api side

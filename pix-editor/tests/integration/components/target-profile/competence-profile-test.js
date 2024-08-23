@@ -1,8 +1,9 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | target-profile/competence-profile', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -13,24 +14,24 @@ module('Integration | Component | target-profile/competence-profile', function(h
     const theme_1 = EmberObject.create({
       name: 'theme_1',
       hasSelectedProductionTube: true,
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }],
     });
     const theme_2 = EmberObject.create({
       name: 'theme_2',
       hasSelectedProductionTube: false,
-      productionTubes: [{ selectedLevel: false }, { selectedLevel: false }]
+      productionTubes: [{ selectedLevel: false }, { selectedLevel: false }],
     });
     const theme_3 = EmberObject.create({
       name: 'theme_3',
       hasSelectedProductionTube: true,
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }],
     });
 
     const competence = EmberObject.create({
-      title:'competence_title',
-      description:'competence_description',
+      title: 'competence_title',
+      description: 'competence_description',
       code: '1',
-      sortedThemes: [theme_1, theme_2, theme_3]
+      sortedThemes: [theme_1, theme_2, theme_3],
     });
     this.set('competence', competence);
     this.set('filter', true);
@@ -43,25 +44,25 @@ module('Integration | Component | target-profile/competence-profile', function(h
     assert.dom('[data-test-theme-profile]').exists({ count: 2 });
   });
 
-  test('it should not display empty theme', async function (assert) {
+  test('it should not display empty theme', async function(assert) {
     // given
     const theme_1 = EmberObject.create({
       name: 'theme_1',
       hasProductionTubes: true,
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }],
     });
 
     const theme_2 = EmberObject.create({
       name: 'theme_2',
       hasProductionTubes: false,
-      productionTubes: []
+      productionTubes: [],
     });
 
     const competence = EmberObject.create({
-      title:'competence_title',
-      description:'competence_description',
+      title: 'competence_title',
+      description: 'competence_description',
       code: '1',
-      sortedThemes: [theme_1, theme_2]
+      sortedThemes: [theme_1, theme_2],
     });
     this.set('competence', competence);
 

@@ -1,11 +1,11 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Model | localized-challenge', function(hooks) {
   setupTest(hooks);
   let store;
 
-  hooks.beforeEach (function() {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
   });
 
@@ -20,14 +20,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedStatus: 'suggested' },
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedStatus: 'suggested' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedStatus })=> {
-      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedStatus}`, function (assert) {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedStatus}`, function(assert) {
         const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
-          challenge: store.createRecord('challenge',{
+          challenge: store.createRecord('challenge', {
             id: 'rec654260',
-            status: challengeStatus
-          })
+            status: challengeStatus,
+          }),
         });
         const statusCSS = localizedChallenge.statusCSS;
 
@@ -47,14 +47,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expectedText: 'Pas en prod' },
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expectedText: 'Pas en prod' },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expectedText })=> {
-      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedText}`, function (assert) {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} css status should be ${expectedText}`, function(assert) {
         const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
-          challenge: store.createRecord('challenge',{
+          challenge: store.createRecord('challenge', {
             id: 'rec654260',
-            status: challengeStatus
-          })
+            status: challengeStatus,
+          }),
         });
         const statusText = localizedChallenge.statusText;
 
@@ -74,14 +74,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expected: false },
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
-      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} should ${expected ? '' : 'not '}be in production`, function (assert) {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} should ${expected ? '' : 'not '}be in production`, function(assert) {
         const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
-          challenge: store.createRecord('challenge',{
+          challenge: store.createRecord('challenge', {
             id: 'rec654260',
-            status: challengeStatus
-          })
+            status: challengeStatus,
+          }),
         });
 
         assert.strictEqual(localizedChallenge.isInProduction, expected);
@@ -100,14 +100,14 @@ module('Unit | Model | localized-challenge', function(hooks) {
       { challengeStatus: 'périmé', localizedChallengeStatus: 'proposé', expected: false },
       { challengeStatus: 'périmé', localizedChallengeStatus: 'validé', expected: false },
     ].forEach(({ challengeStatus, localizedChallengeStatus, expected })=> {
-      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} status is ${expected ? '' : 'not '}editable`, function (assert) {
+      test(`when challenge is ${challengeStatus} and localized challenge status is ${localizedChallengeStatus} status is ${expected ? '' : 'not '}editable`, function(assert) {
         const localizedChallenge = store.createRecord('localized-challenge', {
           id: 'rec123456',
           status: localizedChallengeStatus,
-          challenge: store.createRecord('challenge',{
+          challenge: store.createRecord('challenge', {
             id: 'rec654260',
-            status: challengeStatus
-          })
+            status: challengeStatus,
+          }),
         });
 
         assert.strictEqual(localizedChallenge.isStatusEditable, expected);
@@ -116,5 +116,4 @@ module('Unit | Model | localized-challenge', function(hooks) {
 
   });
 });
-
 

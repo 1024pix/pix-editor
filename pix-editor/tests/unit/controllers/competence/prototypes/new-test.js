@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Unit | Controller | competence/prototypes/new', function(hooks) {
@@ -26,17 +27,17 @@ module('Unit | Controller | competence/prototypes/new', function(hooks) {
         version: 1,
       });
 
-      newPrototype1_2 = store.createRecord('challenge',{
+      newPrototype1_2 = store.createRecord('challenge', {
         id: 'rec_proto1_2',
         pixId: 'pix_proto1_1',
         genealogy: 'Prototype 1',
       });
 
-      skill = store.createRecord('skill',{
+      skill = store.createRecord('skill', {
         id: 'rec_proto1_2',
         pixId: 'pix_proto1_1',
         genealogy: 'Prototype 1',
-        challenges:[prototype1_1, newPrototype1_2],
+        challenges: [prototype1_1, newPrototype1_2],
       });
     });
 

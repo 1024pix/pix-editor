@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | area-management/new', function(hooks) {
@@ -20,14 +20,14 @@ module('Unit | Controller | area-management/new', function(hooks) {
     transitionToRouteStub = sinon.stub();
     controller.router.transitionTo = transitionToRouteStub;
     area = {
-      name: 'newArea'
+      name: 'newArea',
     };
     framework = {
-      name: 'Pix+'
+      name: 'Pix+',
     };
     controller.model = {
       area,
-      framework
+      framework,
     };
   });
 
@@ -47,7 +47,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
 
   module('#save', function(hooks) {
     let loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       loaderStartStub = sinon.stub();
       loaderStopStub = sinon.stub();
 
@@ -67,7 +67,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
       const expectedArea = {
         name: 'newArea',
         framework,
-        save: saveStub
+        save: saveStub,
       };
 
       // when
@@ -85,7 +85,7 @@ module('Unit | Controller | area-management/new', function(hooks) {
     test('it should throw an error if saving failed', async function(assert) {
       // given
       const errorMessage = {
-        'error': ['error-test']
+        'error': ['error-test'],
       };
       const saveStub = sinon.stub().rejects(errorMessage);
       area.save = saveStub;

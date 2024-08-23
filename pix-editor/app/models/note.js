@@ -1,5 +1,5 @@
-import Model, { attr } from '@ember-data/model';
 import { inject as service } from '@ember/service';
+import Model, { attr } from '@ember-data/model';
 
 export default class NoteModel extends Model {
 

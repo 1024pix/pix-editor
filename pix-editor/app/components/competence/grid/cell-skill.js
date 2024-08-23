@@ -1,6 +1,5 @@
 import Component from '@glimmer/component';
 
-
 export default class CompetenceGridCellSkillComponent extends Component {
 
   get hasNoClueByLanguage() {
@@ -39,7 +38,7 @@ export default class CompetenceGridCellSkillComponent extends Component {
   _getTutorialsCountByLanguage(tutorials) {
     const languageFilter = this.args.languageFilter;
     if (languageFilter) {
-      const filteredTutorials = tutorials.filter(tutorial => {
+      const filteredTutorials = tutorials.filter((tutorial) => {
         const language = this._convertLanguageFilterToLanguageTutorial(languageFilter);
         return tutorial.language === language;
       });

@@ -1,6 +1,6 @@
 import { action } from '@ember/object';
-import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class CompetenceManagementNewRoute extends Route {
   templateName = 'authenticated/competence-management/single';
@@ -12,7 +12,7 @@ export default class CompetenceManagementNewRoute extends Route {
   model(params) {
     const area = this.store.peekRecord('area', params.area_id);
     return area.get('competences')
-      .then(competences => {
+      .then((competences) => {
         const competence = this.store.createRecord('competence', {
           code: `${area.code}.${competences.length + 1}`,
           pixId: this.idGenerator.newId('competence'),

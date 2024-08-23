@@ -15,7 +15,7 @@ export default class TubeSerializer extends AirtableSerializer {
     rawSkills: 'Acquis',
     theme: 'Thematique',
     pixId: 'id persistant',
-    index: 'Index'
+    index: 'Index',
   };
 
   payloadKeyFromModelName() {

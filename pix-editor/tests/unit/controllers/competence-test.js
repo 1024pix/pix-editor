@@ -1,13 +1,13 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence', function(hooks) {
   setupTest(hooks);
   let controller, theme1, theme2, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
 
@@ -35,10 +35,10 @@ module('Unit | Controller | competence', function(hooks) {
     // given
     const saveModelStub = sinon.stub().resolves();
     const model1 = {
-      save: saveModelStub
+      save: saveModelStub,
     };
     const model2 = {
-      save: saveModelStub
+      save: saveModelStub,
     };
     controller.displaySortingPopIn = true;
 
@@ -57,7 +57,7 @@ module('Unit | Controller | competence', function(hooks) {
     // given
     const saveModelStub = sinon.stub().rejects();
     const model1 = {
-      save: saveModelStub
+      save: saveModelStub,
     };
 
     // when
@@ -73,10 +73,10 @@ module('Unit | Controller | competence', function(hooks) {
     // given
     const rollbackAttributesStub = sinon.stub();
     const model1 = {
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
     };
     const model2 = {
-      rollbackAttributes: rollbackAttributesStub
+      rollbackAttributes: rollbackAttributesStub,
     };
     controller.displaySortingPopIn = true;
     // when
@@ -87,8 +87,8 @@ module('Unit | Controller | competence', function(hooks) {
     assert.notOk(controller.displaySortingPopIn);
   });
 
-  module('#theme sorting', function (hooks) {
-    hooks.beforeEach(function () {
+  module('#theme sorting', function(hooks) {
+    hooks.beforeEach(function() {
       theme1 = {
         name: 'theme1',
       };
@@ -116,7 +116,7 @@ module('Unit | Controller | competence', function(hooks) {
       assert.deepEqual(controller.sortingModel, [theme1, theme2]);
     });
 
-    test('it should cancel theme sorting', function (assert) {
+    test('it should cancel theme sorting', function(assert) {
       // given
       const cancelSortingStub = sinon.stub();
       controller._cancelSorting = cancelSortingStub;
@@ -128,7 +128,7 @@ module('Unit | Controller | competence', function(hooks) {
       assert.ok(cancelSortingStub.calledWith([theme1, theme2]));
     });
 
-    test('it should sort theme', async function (assert) {
+    test('it should sort theme', async function(assert) {
       // given
       const saveSortingStub = sinon.stub();
       controller._saveSorting = saveSortingStub;
@@ -137,14 +137,14 @@ module('Unit | Controller | competence', function(hooks) {
       await controller.sortThemes([theme1, theme2]);
 
       // then
-      assert.ok(saveSortingStub.calledWith([theme1, theme2],'Thématiques ordonnées', 'Erreur lors du trie des thématiques'));
+      assert.ok(saveSortingStub.calledWith([theme1, theme2], 'Thématiques ordonnées', 'Erreur lors du trie des thématiques'));
     });
   });
 
-  module('#tube sorting', function (hooks) {
+  module('#tube sorting', function(hooks) {
     let tube1, tube2;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
 
       tube1 = {
         name: 'tube1',
@@ -167,7 +167,7 @@ module('Unit | Controller | competence', function(hooks) {
       assert.deepEqual(controller.sortingPopInCancelAction, controller.cancelTubesSorting);
     });
 
-    test('it should cancel tube sorting', function (assert) {
+    test('it should cancel tube sorting', function(assert) {
       // given
       const cancelSortingStub = sinon.stub();
       controller._cancelSorting = cancelSortingStub;
@@ -179,7 +179,7 @@ module('Unit | Controller | competence', function(hooks) {
       assert.ok(cancelSortingStub.calledWith([tube1, tube2]));
     });
 
-    test('it should sort tubes', async function (assert) {
+    test('it should sort tubes', async function(assert) {
       // given
       const saveSortingStub = sinon.stub();
       controller._saveSorting = saveSortingStub;

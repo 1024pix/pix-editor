@@ -5,6 +5,6 @@ export default class PhraseModel extends Model {
   download = collectionAction({
     path: 'download',
     type: 'post',
-    urlType: 'findRecord'
+    urlType: 'findRecord',
   });
 }

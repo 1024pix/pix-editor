@@ -1,4 +1,5 @@
 import { attr } from '@ember-data/model';
+
 import MissionSummary from './mission-summary';
 
 export default class Mission extends MissionSummary {

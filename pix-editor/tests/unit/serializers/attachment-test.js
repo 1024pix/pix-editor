@@ -1,10 +1,10 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
-module('Unit | Serializer | attachment', function (hooks) {
+module('Unit | Serializer | attachment', function(hooks) {
   setupTest(hooks);
 
-  test('it serializes attachments', function (assert) {
+  test('it serializes attachments', function(assert) {
     const store = this.owner.lookup('service:store');
     const challenge = store.createRecord('challenge', { id: 'challengeId', airtableId: 'myAirtableId' });
     const attachment = store.createRecord('attachment', {
@@ -23,7 +23,7 @@ module('Unit | Serializer | attachment', function (hooks) {
       size: 'size',
       type: 'type',
       challengeId: ['myAirtableId'],
-      localizedChallengeId: 'challengeId'
+      localizedChallengeId: 'challengeId',
     };
 
     const serializedAttachment = attachment.serialize();

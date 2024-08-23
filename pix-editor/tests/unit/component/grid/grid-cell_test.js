@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('Unit | Component | competence/grid/grid-cell', function(hooks) {
@@ -9,7 +10,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
   let section, view;
   module('#draftSkill', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       section = 'skills';
       view = 'draft';
     });
@@ -18,7 +19,7 @@ module('Unit | Component | competence/grid/grid-cell', function(hooks) {
       // given
       const skill = {
         id: 'skillId',
-        status: 'En construction'
+        status: 'En construction',
       };
       const component = createGlimmerComponent('component:competence/grid/grid-cell', { section, view, skill });
 

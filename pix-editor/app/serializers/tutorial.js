@@ -16,7 +16,7 @@ export default class TutorialSerializer extends AirtableSerializer {
     date: 'Date maj',
     crush: 'CoupDeCoeur',
     pixId: 'id persistant',
-    language: 'Langue'
+    language: 'Langue',
   };
 
   payloadKeyFromModelName() {
@@ -37,7 +37,7 @@ export default class TutorialSerializer extends AirtableSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (key === 'crush') {
-      const payloadKey =  this._getMappedKey(key, snapshot.type);
+      const payloadKey = this._getMappedKey(key, snapshot.type);
       const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'YES';
@@ -48,6 +48,5 @@ export default class TutorialSerializer extends AirtableSerializer {
       return super.serializeAttribute(...arguments);
     }
   }
-
 
 }

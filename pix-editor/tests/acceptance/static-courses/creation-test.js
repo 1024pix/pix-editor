@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { currentURL, find, triggerEvent } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { currentURL, find, triggerEvent } from '@ember/test-helpers';
-import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
 
-module('Acceptance | Static Courses | Creation', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | Static Courses | Creation', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', challengeCount: 3, createdAt: new Date('2020-01-01') });
@@ -50,15 +51,15 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
     });
   });
 
-  module('when user does not have write access', function (hooks) {
+  module('when user does not have write access', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'readonly' });
       return authenticateSession();
     });
 
-    test('should prevent user from being able to access creation form', async function (assert) {
+    test('should prevent user from being able to access creation form', async function(assert) {
       // when
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -70,15 +71,15 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
     });
   });
 
-  module('when user has write access', function (hooks) {
+  module('when user has write access', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       this.server.create('config', 'default');
       this.server.create('user', { trigram: 'ABC', access: 'admin' });
       return authenticateSession();
     });
 
-    test('should create a static course', async function (assert) {
+    test('should create a static course', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');
@@ -110,7 +111,7 @@ module('Acceptance | Static Courses | Creation', function (hooks) {
       assert.dom(screen.getByText('COUleur')).exists();
     });
 
-    test('should cancel static course creation', async function (assert) {
+    test('should cancel static course creation', async function(assert) {
       // given
       const screen = await visit('/');
       await clickByName('Tests statiques');

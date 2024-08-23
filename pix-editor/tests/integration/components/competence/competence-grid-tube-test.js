@@ -1,25 +1,26 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | competence/competence-grid-tube', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const tube = EmberObject.create({
       id: 'recTube1',
       name: '@tube',
       filledSkills: [[{ name: '@skill1', tutoSolution: [], tutoMore: [] }]],
-      filledProductionSkills: [{ name: '@productionSkill1', tutoSolution: [], tutoMore: [] }]
+      filledProductionSkills: [{ name: '@productionSkill1', tutoSolution: [], tutoMore: [] }],
     });
 
     this.set('tube', tube);
   });
 
-  ['workbench', 'production'].forEach(view => {
-    test(`it should display a link to display tube management if section is skills and view is ${view}`, async function (assert) {
+  ['workbench', 'production'].forEach((view) => {
+    test(`it should display a link to display tube management if section is skills and view is ${view}`, async function(assert) {
       // given
       this.set('section', 'skills');
       this.set('view', view);

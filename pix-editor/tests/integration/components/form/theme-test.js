@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | form/theme', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -10,7 +11,7 @@ module('Integration | Component | form/theme', function(hooks) {
     // given
     const theme = {
       name: 'themeName',
-      nameEnUs: 'themeNameEnUs'
+      nameEnUs: 'themeNameEnUs',
     };
     this.set('theme', theme);
 

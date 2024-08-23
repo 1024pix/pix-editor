@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
-import { inject as service } from '@ember/service';
 import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
@@ -34,7 +34,7 @@ export default class SidebarNavigationComponent extends Component {
     if (this._selectedFramework) {
       return this._selectedFramework;
     }
-    return this.frameworkList.find(item => {
+    return this.frameworkList.find((item) => {
       if (this.currentData.getFramework()) {
         return item.label === this.currentData.getFramework().name;
       }
@@ -42,14 +42,14 @@ export default class SidebarNavigationComponent extends Component {
   }
 
   get frameworkList() {
-    const frameworkList = this.frameworks.map(framework => ({
+    const frameworkList = this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework
+      data: framework,
     }));
     if (this.access.isAdmin()) {
       frameworkList.push({
         label: this.addFrameworkLabel,
-        data: 'create'
+        data: 'create',
       });
     }
     return frameworkList;
@@ -93,7 +93,7 @@ export default class SidebarNavigationComponent extends Component {
       await this.newFramework.save();
       this.setFramework({
         label: this.newFramework.name,
-        data: this.newFramework
+        data: this.newFramework,
       });
       this.notify.message('Référentiel créé');
       this.displayNewFrameworkPopIn = false;

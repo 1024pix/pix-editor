@@ -10,7 +10,7 @@ export default class TagSerializer extends AirtableSerializer {
     notes: 'Notes',
     skills: 'Acquis',
     tutorials: 'Tutoriels',
-    pixId: 'id persistant'
+    pixId: 'id persistant',
   };
 
   payloadKeyFromModelName() {

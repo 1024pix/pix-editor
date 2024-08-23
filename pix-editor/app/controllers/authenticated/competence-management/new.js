@@ -3,7 +3,6 @@ import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import * as Sentry from '@sentry/ember';
 
-
 export default class CompetenceManagementNewController extends Controller {
 
   @service idGenerator;
@@ -70,7 +69,7 @@ export default class CompetenceManagementNewController extends Controller {
   }
 
   _getThemeWorkbenchName(competenceCode, frameworkName) {
-    const code =  competenceCode.replace('.', '_');
+    const code = competenceCode.replace('.', '_');
     return `workbench_${frameworkName}_${code}`;
   }
 

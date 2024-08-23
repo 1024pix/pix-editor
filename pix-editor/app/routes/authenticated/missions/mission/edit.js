@@ -7,7 +7,6 @@ export default class MissionNewRoute extends Route {
   @service store;
   @service currentData;
 
-
   beforeModel() {
     if (!this.access.mayCreateOrEditMission()) {
       this.router.transitionTo('authenticated.missions.list');
@@ -19,7 +18,7 @@ export default class MissionNewRoute extends Route {
     const mission = this.modelFor('authenticated.missions.mission');
     return {
       mission,
-      competences
+      competences,
     };
   }
 

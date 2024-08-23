@@ -3,7 +3,6 @@ export default function(server) {
   server.create('config', 'default');
   server.create('user', { trigram: 'ABC' });
 
-
   server.create('challenge', { id: 'recChallenge1' });
   server.create('challenge', { id: 'recChallenge2' });
   server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'] });

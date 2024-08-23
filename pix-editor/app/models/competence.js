@@ -22,11 +22,11 @@ export default class CompetenceModel extends Model {
   }
 
   get tubes() {
-    return this.rawTubes.filter(tube => tube.name !== '@workbench');
+    return this.rawTubes.filter((tube) => tube.name !== '@workbench');
   }
 
   get themes() {
-    return this.rawThemes.filter(theme => theme.name.indexOf('workbench') === -1);
+    return this.rawThemes.filter((theme) => theme.name.indexOf('workbench') === -1);
   }
 
   get sortedThemes() {
@@ -34,7 +34,7 @@ export default class CompetenceModel extends Model {
   }
 
   get productionTubes() {
-    const allTubes = this.rawTubes.filter(tube => tube.hasProductionSkills);
+    const allTubes = this.rawTubes.filter((tube) => tube.hasProductionSkills);
     return allTubes.sortBy('index');
   }
 
@@ -51,27 +51,27 @@ export default class CompetenceModel extends Model {
   }
 
   get selectedProductionTubeCount() {
-    return this.productionTubes.filter(tube => tube.selectedLevel).length;
+    return this.productionTubes.filter((tube) => tube.selectedLevel).length;
   }
 
   get selectedThematicResultTubeCount() {
-    return this.productionTubes.filter(tube => tube.selectedThematicResultLevel).length;
+    return this.productionTubes.filter((tube) => tube.selectedThematicResultLevel).length;
   }
 
   get skillCount() {
-    return this.tubes.map(tube => tube.skillCount).reduce((count, value)=> {
+    return this.tubes.map((tube) => tube.skillCount).reduce((count, value)=> {
       return count + value;
-    },0);
+    }, 0);
   }
 
   get productionSkillCount() {
-    return this.tubes.map(tube => tube.productionSkillCount).reduce((count, value)=> {
+    return this.tubes.map((tube) => tube.productionSkillCount).reduce((count, value)=> {
       return count + value;
-    },0);
+    }, 0);
   }
 
   get workbenchSkill() {
-    const workbenchTube = this.rawTubes.find(tube => tube.name === '@workbench');
+    const workbenchTube = this.rawTubes.find((tube) => tube.name === '@workbench');
     if (workbenchTube) {
       return workbenchTube.rawSkills.firstObject;
     }
@@ -81,7 +81,7 @@ export default class CompetenceModel extends Model {
   get workbenchPrototypes() {
     const workbenchSkill = this.workbenchSkill;
     if (workbenchSkill) {
-      return workbenchSkill.prototypes.filter(prototype => !prototype.get('isArchived'));
+      return workbenchSkill.prototypes.filter((prototype) => !prototype.get('isArchived'));
     }
     return [];
   }

@@ -1,11 +1,4 @@
-import Component from '@glimmer/component';
-import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
-import { Canvg, presets } from 'canvg';
-import { isEmpty } from 'lodash';
-import { firstPageBackground, area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, pixLogoWhite } from '../../vendor/pdf-assets.js';
 import '../../vendor/AmpleSoft-bold.js';
 import '../../vendor/AmpleSoft-normal.js';
 import '../../vendor/Roboto-normal.js';
@@ -13,9 +6,18 @@ import '../../vendor/Roboto-condensed.js';
 import '../../vendor/Roboto-condensedBold.js';
 import '../../vendor/Roboto-condensedLight.js';
 
+import { action } from '@ember/object';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { Canvg, presets } from 'canvg';
+import jsPDF from 'jspdf';
+import { isEmpty } from 'lodash';
+
+import { area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, firstPageBackground, pixLogoWhite } from '../../vendor/pdf-assets.js';
+
 const legalMentionByLanguage = {
   en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',
-  fr: 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.'
+  fr: 'Ceci est un document de travail. Il évolue régulièrement. Sa diffusion est restreinte et son usage limité aux utilisateurs de Pix Orga dans le cadre de la mise en oeuvre de l\'accompagnement de leurs publics.',
 };
 const firstPageTitleSize = 30;
 const firstPagePSize = 20;
@@ -44,7 +46,7 @@ function createOffscreenCanvas(width, height) {
     canvas.width = width;
     canvas.height = height;
     canvas['convertToBlob'] = async () => {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         canvas.toBlob(resolve);
       });
     };
@@ -81,7 +83,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     const canvas = createOffscreenCanvas(pdfWidth, pdfHeight);
     const ctx = canvas.getContext('2d');
 
-    const filteredArea = areas.find(area => (area.competences.find(competence => competence.selectedProductionTubeCount > 0) !== undefined));
+    const filteredArea = areas.find((area) => (area.competences.find((competence) => competence.selectedProductionTubeCount > 0) !== undefined));
     const filter = filteredArea !== undefined;
     const v = await Canvg.fromString(ctx, firstPageBackground, presets.offscreen());
     await v.render();
@@ -93,7 +95,7 @@ export default class TargetProfilePdfExportComponent extends Component {
       margin / 2,
       margin / 2,
       pdfWidth - margin,
-      pdfHeight - margin
+      pdfHeight - margin,
     );
     pdf.setDrawColor(255, 255, 255);
     pdf.setLineWidth(margin);
@@ -111,10 +113,9 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.text(legalMention, 44, 580, { maxWidth: 360, align: 'justify' });
     pdf.addPage();
 
-
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
-      const competences = filter ? area.sortedCompetences.filter(competence => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
+      const competences = filter ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
       y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
@@ -125,7 +126,7 @@ export default class TargetProfilePdfExportComponent extends Component {
         pdf.setTextColor('#fff');
         pdf.text(this._getCenteredX(pdf, areaName), (areaTitleHeight / 2) - 10, areaName);
 
-        competences.forEach(competence => {
+        competences.forEach((competence) => {
           const competenceColor = colors[i];
           const competenceName = this._getTranslatedCompetenceName(language, competence);
           const tableHead = [[
@@ -138,25 +139,25 @@ export default class TargetProfilePdfExportComponent extends Component {
                   left: margin,
                   top: competenceTitleCellPadding,
                   right: margin,
-                  bottom: competenceTitleCellPadding
+                  bottom: competenceTitleCellPadding,
                 },
                 fillColor: lightGrey,
                 font: 'RobotoCondensed',
                 fontStyle: 'bold',
                 fontSize: competenceTitleSize,
                 textColor: competenceColor,
-                valign: 'middle'
-              }
-            }
+                valign: 'middle',
+              },
+            },
           ]];
 
-          const themes = filter ? competence.sortedThemes.filter(theme => theme.hasSelectedProductionTube) : competence.sortedThemes.filter(theme => theme.hasProductionTubes);
+          const themes = filter ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube) : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
 
           const tableBody = themes.reduce((values, theme) => {
-            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            const tubes = filter ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
             const buildCell = this._buildCell(theme, tubes, language);
             return [...values, ...buildCell];
-          },[]);
+          }, []);
 
           pdf.autoTable({
             startY: y,
@@ -203,9 +204,9 @@ export default class TargetProfilePdfExportComponent extends Component {
           // Draw separation between theme
           let indexCell = 0;
           themes.forEach((theme) => {
-            const tubes = filter ? theme.productionTubes.filter(tube => tube.selectedLevel) : theme.productionTubes;
+            const tubes = filter ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
             indexCell += tubes.length;
-            const positionCell =  pdf.autoTable.previous.body[indexCell]?.cells[0];
+            const positionCell = pdf.autoTable.previous.body[indexCell]?.cells[0];
             if (positionCell) {
               pdf.setDrawColor(255, 255, 255);
               pdf.setLineWidth(1);
@@ -233,12 +234,11 @@ export default class TargetProfilePdfExportComponent extends Component {
     pdf.save(`${pdfName}.pdf`);
   }
 
-
   _buildCell(theme, tubes, language) {
     const rowSpan = tubes.length;
     const cellPaddingTop = 5;
     const firstTube = tubes.shift();
-    const { tubeName, tubeDescription  } = this._getTranslatedTubeNameAndDescription(language, firstTube);
+    const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, firstTube);
     const themeName = this._getTranslatedThemeName(language, theme);
     const firstCell = [{
       content: themeName,
@@ -252,8 +252,8 @@ export default class TargetProfilePdfExportComponent extends Component {
         fontSize: pSize + 1,
         textColor: fontColor,
         fillColor: lightGrey,
-      }
-    },{
+      },
+    }, {
       content: tubeName,
       styles: {
         cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
@@ -264,8 +264,8 @@ export default class TargetProfilePdfExportComponent extends Component {
         fontSize: pSize,
         textColor: fontColor,
         fillColor: lightGrey,
-      }
-    },{
+      },
+    }, {
       content: tubeDescription,
       styles: {
         cellPadding: { top: cellPaddingTop, right: 5, bottom: 1, left: 1 },
@@ -275,9 +275,9 @@ export default class TargetProfilePdfExportComponent extends Component {
         fontStyle: 'light',
         textColor: fontColor,
         fillColor: lightGrey,
-      }
+      },
     }];
-    return  tubes.reduce((values, tube, index) => {
+    return tubes.reduce((values, tube, index) => {
       const fillColor = index % 2 === 0 ? grey : lightGrey;
       const { tubeName, tubeDescription } = this._getTranslatedTubeNameAndDescription(language, tube);
       const cells = [
@@ -291,8 +291,8 @@ export default class TargetProfilePdfExportComponent extends Component {
             fontStyle: 'normal',
             fontSize: pSize,
             textColor: fontColor,
-            fillColor
-          }
+            fillColor,
+          },
         },
         {
           content: tubeDescription,
@@ -303,8 +303,8 @@ export default class TargetProfilePdfExportComponent extends Component {
             font: 'RobotoCondensed',
             fontStyle: 'light',
             textColor: fontColor,
-            fillColor
-          }
+            fillColor,
+          },
         }];
       values.push(cells);
       return values;
@@ -315,7 +315,7 @@ export default class TargetProfilePdfExportComponent extends Component {
     const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
     const versionTextByLanguage = {
       en: `Version ${(new Date()).toLocaleDateString('en', dateOptions)}`,
-      fr: `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`
+      fr: `Version du ${(new Date()).toLocaleDateString('fr', dateOptions)}`,
     };
     return versionTextByLanguage[language];
   }
@@ -323,7 +323,7 @@ export default class TargetProfilePdfExportComponent extends Component {
   _getTranslatedAreaName(language, area) {
     const areaNameKeys = {
       en: 'titleEnUs',
-      fr: 'titleFrFr'
+      fr: 'titleFrFr',
     };
     return this._getTranslatedField(areaNameKeys, language, area);
   }
@@ -331,7 +331,7 @@ export default class TargetProfilePdfExportComponent extends Component {
   _getTranslatedCompetenceName(language, competence) {
     const competenceNameKeys = {
       en: 'titleEn',
-      fr: 'title'
+      fr: 'title',
     };
     return this._getTranslatedField(competenceNameKeys, language, competence);
   }
@@ -339,19 +339,19 @@ export default class TargetProfilePdfExportComponent extends Component {
   _getTranslatedThemeName(language, theme) {
     const themeNameKeys = {
       en: 'nameEnUs',
-      fr: 'name'
+      fr: 'name',
     };
     return this._getTranslatedField(themeNameKeys, language, theme);
   }
 
   _getTranslatedTubeNameAndDescription(language, tube) {
     const tubeNameKeys = {
-      en :  'practicalTitleEn',
-      fr : 'practicalTitleFr',
+      en: 'practicalTitleEn',
+      fr: 'practicalTitleFr',
     };
     const tubeDescriptionKeys = {
-      en :  'practicalDescriptionEn',
-      fr : 'practicalDescriptionFr',
+      en: 'practicalDescriptionEn',
+      fr: 'practicalDescriptionFr',
     };
     const tubeName = this._getTranslatedField(tubeNameKeys, language, tube);
     const tubeDescription = this._getTranslatedField(tubeDescriptionKeys, language, tube);
@@ -384,14 +384,14 @@ export default class TargetProfilePdfExportComponent extends Component {
   }
 
   _generatePdfName(title) {
-    const id = `${Date.now()}`.slice(5,9);
+    const id = `${Date.now()}`.slice(5, 9);
     const generateDate = `${(new Date()).toLocaleDateString('fr')}_${id}`;
     return `${title}-${generateDate}`;
   }
 
   _generateCenteredLongText(pdf, text, breakX, breakY, positionY) {
     const lines = pdf.splitTextToSize(text, breakX);
-    lines.forEach(line=>{
+    lines.forEach((line)=>{
       pdf.text(line, this._getCenteredX(pdf, line), positionY);
       positionY += breakY;
     });

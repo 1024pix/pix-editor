@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { render, findAll } from '@ember/test-helpers';
+import { findAll, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | list/events-log', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -14,7 +15,7 @@ module('Integration | Component | list/events-log', function(hooks) {
       author: 'DEV',
       date: '14/07/1986',
       action: 'suppression',
-      skillName: '@acquis1'
+      skillName: '@acquis1',
     };
     const skillLog2 = {
       recordId: 'rec123456',
@@ -22,9 +23,9 @@ module('Integration | Component | list/events-log', function(hooks) {
       author: 'DEV',
       date: '14/07/1986',
       action: 'ajout',
-      skillName: '@acquis2'
+      skillName: '@acquis2',
     };
-    const skillLogs = [skillLog1,skillLog2];
+    const skillLogs = [skillLog1, skillLog2];
 
     this.skillLogs = skillLogs;
 

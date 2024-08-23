@@ -6,7 +6,7 @@ export default class MissionSummary extends Model {
   @attr createdAt;
   @attr status;
 
-  static get statuses () {
+  static get statuses() {
     return {
       VALIDATED: 'VALIDATED',
       EXPERIMENTAL: 'EXPERIMENTAL',
@@ -14,7 +14,7 @@ export default class MissionSummary extends Model {
     };
   }
 
-  static get displayableStatuses () {
+  static get displayableStatuses() {
     return {
       VALIDATED: 'Validée',
       EXPERIMENTAL: 'Expérimentale',
@@ -22,26 +22,26 @@ export default class MissionSummary extends Model {
     };
   }
 
-  get displayableStatus () {
+  get displayableStatus() {
     return MissionSummary.displayableStatuses[this.status];
   }
 
-  get statusColor () {
+  get statusColor() {
     if (this.isExperimental) return 'secondary';
     if (this.isValidated) return 'green-light';
     return 'grey-light';
   }
 
-  get isExperimental () {
+  get isExperimental() {
     return this.status === MissionSummary.statuses.EXPERIMENTAL;
 
   }
 
-  get isValidated () {
+  get isValidated() {
     return this.status === MissionSummary.statuses.VALIDATED;
   }
 
-  get isInactive () {
+  get isInactive() {
     return !this.isExperimental && !this.isValidated;
   }
 }

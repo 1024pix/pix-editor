@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | authenticated', function(hooks) {
@@ -8,7 +8,7 @@ module('Unit | Controller | authenticated', function(hooks) {
 
   let controller, confirmAskStub, storeQueryStub, reloadStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     storeQueryStub = sinon.stub();
     class Store extends Service {
       queryRecord = storeQueryStub;
@@ -38,7 +38,6 @@ module('Unit | Controller | authenticated', function(hooks) {
     // then
     assert.true(reloadStub.calledOnce, 'window.location.reload() called');
   });
-
 
   test('it should not reload when user does not confirm new version notification', async function(assert) {
     // given

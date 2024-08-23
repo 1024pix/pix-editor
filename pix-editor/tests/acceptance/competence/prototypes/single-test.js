@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
-import { click, findAll, find } from '@ember/test-helpers';
 import { visit } from '@1024pix/ember-testing-library';
-import { setupApplicationTest } from '../../../setup-application-rendering';
+import { click, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Controller | Get Challenge', function (hooks) {
+import { setupApplicationTest } from '../../../setup-application-rendering';
+
+module('Acceptance | Controller | Get Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -25,7 +26,7 @@ module('Acceptance | Controller | Get Challenge', function (hooks) {
     return authenticateSession();
   });
 
-  test('it should display the challenge', async function (assert) {
+  test('it should display the challenge', async function(assert) {
     await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
     await click(findAll('[data-test-competence-item]')[0]);
@@ -34,7 +35,7 @@ module('Acceptance | Controller | Get Challenge', function (hooks) {
     assert.dom('time').hasAttribute('datetime', '2021-10-04T14:00:00.000Z');
   });
 
-  test('it should change prototype location', async function (assert) {
+  test('it should change prototype location', async function(assert) {
     //when
     await visit('/competence/recCompetence1.1/prototypes/recChallenge2?leftMaximized=false&view=workbench');
     await click(find('[data-test-move-button]'));

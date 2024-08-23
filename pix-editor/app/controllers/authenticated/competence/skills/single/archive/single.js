@@ -1,6 +1,7 @@
-import PrototypeController from '../../../prototypes/single';
-import { action } from '@ember/object';
 import { inject as controller } from '@ember/controller';
+import { action } from '@ember/object';
+
+import PrototypeController from '../../../prototypes/single';
 
 export default class SingleController extends PrototypeController {
 

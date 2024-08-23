@@ -1,5 +1,5 @@
-import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { inject as service } from '@ember/service';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class SkillModel extends Model {
@@ -10,7 +10,7 @@ export default class SkillModel extends Model {
   @attr clue;
   @attr clueEn;
   @attr clueStatus;
-  @attr ({ readOnly: true }) createdAt;
+  @attr({ readOnly: true }) createdAt;
   @attr description;
   @attr descriptionStatus;
   @attr level;
@@ -43,7 +43,7 @@ export default class SkillModel extends Model {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
@@ -77,7 +77,7 @@ export default class SkillModel extends Model {
   }
 
   get prototypes() {
-    return this.challenges.filter(challenge => challenge.isPrototype);
+    return this.challenges.filter((challenge) => challenge.isPrototype);
   }
 
   get sortedPrototypes() {
@@ -85,23 +85,23 @@ export default class SkillModel extends Model {
   }
 
   get productionPrototype() {
-    return this.prototypes.find(prototype => prototype.isValidated);
+    return this.prototypes.find((prototype) => prototype.isValidated);
   }
 
   get productionPrototypes() {
-    return this.prototypes.filter(prototype => prototype.isValidated);
+    return this.prototypes.filter((prototype) => prototype.isValidated);
   }
 
   get alternatives() {
-    return this.challenges.filter(challenge => !challenge.isPrototype);
+    return this.challenges.filter((challenge) => !challenge.isPrototype);
   }
 
   get validatedChallenges() {
-    return this.challenges.filter(challenge => challenge.isValidated);
+    return this.challenges.filter((challenge) => challenge.isValidated);
   }
 
   get liveChallenges() {
-    return this.challenges.filter(challenge => challenge.isLive);
+    return this.challenges.filter((challenge) => challenge.isLive);
   }
 
   get isActive() {
@@ -172,10 +172,10 @@ export default class SkillModel extends Model {
   pinRelationships() {
     const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)
-      .then(tutorials => {
+      .then((tutorials) => {
         this._pinnedRelationships = {
           tutoSolution: tutorials[0].toArray(),
-          tutoMore: tutorials[1].toArray()
+          tutoMore: tutorials[1].toArray(),
         };
       });
   }
@@ -190,7 +190,7 @@ export default class SkillModel extends Model {
 
   save() {
     return super.save(...arguments)
-      .then(result => {
+      .then((result) => {
         this.pinRelationships();
         return result;
       });
@@ -204,7 +204,7 @@ export default class SkillModel extends Model {
     const newSkill = this.myStore.createRecord(this.constructor.modelName, data);
     const requests = [this.tutoSolution, this.tutoMore];
     return Promise.all(requests)
-      .then(tutorials => {
+      .then((tutorials) => {
         newSkill.tutoSolution = tutorials[0];
         newSkill.tutoMore = tutorials[1];
         return newSkill;
@@ -257,7 +257,7 @@ export default class SkillModel extends Model {
 
   _extractLanguagesAndAlternativesCountFromChallenges(extractedLanguages, challengeLanguages) {
     if (challengeLanguages) {
-      challengeLanguages.forEach(language => {
+      challengeLanguages.forEach((language) => {
         if (!extractedLanguages.has(language)) {
           extractedLanguages.set(language, 1);
         } else {

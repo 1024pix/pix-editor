@@ -1,25 +1,24 @@
 import Component from '@glimmer/component';
 
-
 export default class CompetenceGridCellSkillWorkbenchComponent extends Component {
 
   get archivedCount() {
-    const archivedSkill = this.args.skills.filter(skill=> skill.isArchived);
+    const archivedSkill = this.args.skills.filter((skill)=> skill.isArchived);
     return archivedSkill.length;
   }
 
   get obsoleteCount() {
-    const obsoleteSkills = this.args.skills.filter(skill=> skill.isObsolete);
+    const obsoleteSkills = this.args.skills.filter((skill)=> skill.isObsolete);
     return obsoleteSkills.length;
   }
 
   get draftCount() {
-    const draftSkill = this.args.skills.filter(skill=> skill.isDraft);
+    const draftSkill = this.args.skills.filter((skill)=> skill.isDraft);
     return draftSkill.length;
   }
 
   get hasActiveSkill() {
-    const activeSkill = this.args.skills.filter(skill=> skill.isActive);
+    const activeSkill = this.args.skills.filter((skill)=> skill.isActive);
     return activeSkill.length > 0;
   }
 
