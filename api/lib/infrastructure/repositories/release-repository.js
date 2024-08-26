@@ -94,17 +94,6 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
-  const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
-    _getCurrentContentFromAirtable(),
-    _getCurrentContentFromPG(),
-  ]);
-  return {
-    ...currentContentFromAirtable,
-    ...currentContentFromPG,
-  };
-}
-
-async function _getCurrentContentFromAirtable() {
   const [
     challenges,
     areas,
@@ -115,6 +104,8 @@ async function _getCurrentContentFromAirtable() {
     thematics,
     tubes,
     tutorials,
+    courses,
+    missions,
   ] = await Promise.all([
     challengeRepository.list(),
     areaRepository.list(),
@@ -125,6 +116,8 @@ async function _getCurrentContentFromAirtable() {
     thematicRepository.list(),
     tubeRepository.list(),
     tutorialDatasource.list(),
+    getStaticCourses(),
+    missionRepository.listActive(),
   ]);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
@@ -146,26 +139,24 @@ async function _getCurrentContentFromAirtable() {
     skills: filteredSkills,
     challenges: transformedChallenges,
     tutorials: filteredTutorials,
+    courses,
+    missions,
   };
 }
 
-async function _getCurrentContentFromPG() {
+async function getStaticCourses() {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
-  const missions = await missionRepository.listActive();
 
-  return {
-    courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
-      const challenges = challengeIds.replaceAll(' ', '').split(',');
-      return {
-        id,
-        name,
-        description,
-        isActive,
-        challenges,
-      };
-    }),
-    missions,
-  };
+  return staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
+    const challenges = challengeIds.replaceAll(' ', '').split(',');
+    return {
+      id,
+      name,
+      description,
+      isActive,
+      challenges,
+    };
+  });
 }
