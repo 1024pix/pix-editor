@@ -1,13 +1,12 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { fetchPage } from '../utils/knex-utils.js';
-import { Challenge, Mission } from '../../domain/models/index.js';
+import { Challenge, Mission, Skill } from '../../domain/models/index.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { challengeRepository, skillRepository, translationRepository, tubeRepository } from './index.js';
 import { thematicDatasource } from '../datasources/airtable/index.js';
 import { logger } from '../logger.js';
-import { SkillForRelease } from '../../domain/models/release/index.js';
 
 export async function getById(id) {
   const mission = await knex('missions').select('*').where({ id }).first();
@@ -36,7 +35,7 @@ export async function findAllMissions({ filter, page }) {
 }
 
 const SCHOOL_PLAYABLE_CHALLENGE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
-const SCHOOL_PLAYABLE_SKILL_STATUSES = [SkillForRelease.STATUSES.ACTIF, SkillForRelease.STATUSES.EN_CONSTRUCTION];
+const SCHOOL_PLAYABLE_SKILL_STATUSES = [Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION];
 
 export async function listActive() {
   const missions = await knex('missions').select('*').whereNot({ status: 'INACTIVE' });
