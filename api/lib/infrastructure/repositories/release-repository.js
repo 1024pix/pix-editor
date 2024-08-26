@@ -94,19 +94,19 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
-  const challenges = await challengeRepository.list();
   const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
-    _getCurrentContentFromAirtable(challenges),
+    _getCurrentContentFromAirtable(),
     _getCurrentContentFromPG(),
   ]);
   return {
     ...currentContentFromAirtable,
-    ...currentContentFromPG
+    ...currentContentFromPG,
   };
 }
 
-async function _getCurrentContentFromAirtable(challenges) {
+async function _getCurrentContentFromAirtable() {
   const [
+    challenges,
     areas,
     attachments,
     competences,
@@ -116,6 +116,7 @@ async function _getCurrentContentFromAirtable(challenges) {
     tubes,
     tutorials,
   ] = await Promise.all([
+    challengeRepository.list(),
     areaRepository.list(),
     attachmentDatasource.list(),
     competenceRepository.list(),
