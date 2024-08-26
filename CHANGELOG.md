@@ -1,5 +1,20 @@
 
 
+## v3.158.0 (26/08/2024)
+
+
+### :rocket: Amélioration
+- [#747](https://github.com/1024pix/pix-editor/pull/747) [FEATURE] Ajouter une documentation à une misson (Pix-13774).
+- [#742](https://github.com/1024pix/pix-editor/pull/742) [FEATURE] Préciser le type de média de l'URL d'introduction de mission (pix-13843).
+
+### :building_construction: Tech
+- [#748](https://github.com/1024pix/pix-editor/pull/748) [TECH] Montée de version ESLint v9.
+- [#744](https://github.com/1024pix/pix-editor/pull/744) [TECH] Utiliser le nouveau format de config ESLint.
+- [#743](https://github.com/1024pix/pix-editor/pull/743) [TECH] Passage des configs ESLint de .yaml à .cjs.
+
+### :arrow_up: Montée de version
+- [#737](https://github.com/1024pix/pix-editor/pull/737) [BUMP]: migrate renovate config.
+
 ## v3.157.1 (13/08/2024)
 
 
