@@ -1,7 +1,7 @@
 import { applyEmberDataSerializers, discoverEmberDataModels } from 'ember-cli-mirage';
-import { createServer, Response } from 'miragejs';
 import { getDsModels, getDsSerializers } from 'ember-cli-mirage/ember-data';
 import slice from 'lodash/slice';
+import { createServer, Response } from 'miragejs';
 
 export default function makeServer(config) {
   const finalConfig = {
@@ -97,7 +97,7 @@ function routes() {
   });
 
   this.get('/airtable/content/Thematiques', (schema) => {
-    const records = schema.themes.all().models.map(theme => {
+    const records = schema.themes.all().models.map((theme) => {
       return _serializeModel(theme, 'theme');
     });
     return { records };
@@ -116,7 +116,7 @@ function routes() {
   });
 
   this.get('/airtable/content/Tubes', (schema) => {
-    const records = schema.tubes.all().models.map(tube => {
+    const records = schema.tubes.all().models.map((tube) => {
       return _serializeModel(tube, 'tube');
     });
     return { records };
@@ -262,7 +262,7 @@ function routes() {
   });
 
   //TODO extraire le contenu des configs liées aux missions dans un fichier dédié
-  this.get('/missions', function (schema, request) {
+  this.get('/missions', function(schema, request) {
     const queryParams = request.queryParams;
     const {
       'filter[statuses]': statuses,
@@ -287,14 +287,14 @@ function routes() {
     return json;
   });
 
-  this.post('/missions', function (schema, request) {
+  this.post('/missions', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const mission = schema.create('mission', { ...attributes });
     schema.create('mission-summary', { id: mission.id, ...attributes });
     return mission;
   });
 
-  this.get('/missions/:id', function (schema, request) {
+  this.get('/missions/:id', function(schema, request) {
     const id = request.params.id;
     const mission = schema.missions.find(id);
     if (mission) return mission;
@@ -305,19 +305,19 @@ function routes() {
       thematicId: null,
       status: 'ACTIVE',
       learningObjectives: null,
-      validatedObjectives: null
+      validatedObjectives: null,
     });
   });
 
-  this.patch('/missions/:id', function (schema, request) {
+  this.patch('/missions/:id', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     if (attributes.name === 'will trigger error') {
       return new Response(400, {}, {
         errors: [{
           status: '400',
           title: 'Bad Request',
-          detail: 'La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.'
-        }]
+          detail: 'La mission ne peut pas être mise à jour car les épreuves X, Y ne sont pas au statut VALIDE.',
+        }],
       });
     }
     const id = request.params.id;
@@ -327,12 +327,12 @@ function routes() {
     return mission;
   });
 
-  this.get('/static-course-summaries', function (schema, request) {
+  this.get('/static-course-summaries', function(schema, request) {
     const queryParams = request.queryParams;
     const {
       'filter[isActive]': isActiveFilter,
       'filter[name]': nameFilter,
-      'filter[tagIds]' : tagFilter,
+      'filter[tagIds]': tagFilter,
     } = queryParams;
     let allStaticCourseSummaries;
     if (isActiveFilter === '') {
@@ -374,7 +374,7 @@ function routes() {
 
   this.get('/static-course-tags');
 
-  this.post('/static-courses', function (schema, request) {
+  this.post('/static-courses', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const tagIds = attributes['tag-ids'];
     const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
@@ -387,7 +387,7 @@ function routes() {
     });
   });
 
-  this.put('/static-courses/:id', function (schema, request) {
+  this.put('/static-courses/:id', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const tagIds = attributes['tag-ids'];
     const tags = schema.staticCourseTags.all().models.filter(({ id }) => tagIds.includes(id));
@@ -401,7 +401,7 @@ function routes() {
     return staticCourse;
   });
 
-  this.put('/static-courses/:id/deactivate', function (schema, request) {
+  this.put('/static-courses/:id/deactivate', function(schema, request) {
     const attributes = JSON.parse(request.requestBody).data.attributes;
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
@@ -411,7 +411,7 @@ function routes() {
     return staticCourse;
   });
 
-  this.put('/static-courses/:id/reactivate', function (schema, request) {
+  this.put('/static-courses/:id/reactivate', function(schema, request) {
     const staticCourse = schema.staticCourses.find(request.params.id);
     staticCourse.update({
       isActive: true,
@@ -430,8 +430,8 @@ function _serializeModel(instance, modelName) {
   for (const [key, value] of Object.entries(serializer.attrs)) {
     payload.fields[value] = instance[key];
   }
-  relationships.forEach(allRelationships => {
-    allRelationships.forEach(relationship => {
+  relationships.forEach((allRelationships) => {
+    allRelationships.forEach((relationship) => {
       const meta = relationship.meta;
       const relationshipSerializedKey = serializer.attrs[meta.key];
       if (meta.kind === 'hasMany') {

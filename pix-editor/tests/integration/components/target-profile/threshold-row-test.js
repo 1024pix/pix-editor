@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | target-profile/threshold-row', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -13,61 +14,61 @@ module('Integration | Component | target-profile/threshold-row', function(hooks)
         id: 'rec123456',
         name: 'tube1SelectedSkill1',
         isActive: true,
-        level: 1
+        level: 1,
       }, {
         id: 'rec223457',
         name: 'tube2SelectedSkill1',
         isActive: true,
-        level: 1
+        level: 1,
       }, {
         id: 'rec423451',
         name: 'tube2SelectedSkill1',
         isActive: true,
-        level: 1
-      }
+        level: 1,
+      },
     ];
     const selectedSkillsOtherLevel = [
       {
         id: 'rec123457',
         name: 'tube1SelectedSkill2',
         isActive: true,
-        level: 2
+        level: 2,
       }, {
         id: 'rec123458',
         name: 'tube1SelectedSkill3',
         isActive: true,
-        level: 3
+        level: 3,
       }, {
         id: 'rec223456',
         name: 'tube2SelectedSkill4',
         isActive: true,
-        level: 4
+        level: 4,
       }, {
         id: 'rec223458',
         name: 'tube2SelectedSkill6',
         isActive: true,
-        level: 6
+        level: 6,
       }, {
         id: 'rec323456',
         name: 'tube2SelectedSkill7',
         isActive: true,
-        level: 7
+        level: 7,
       }, {
         id: 'rec323457',
         name: 'tube2SelectedSkill8',
         isActive: true,
-        level: 8
+        level: 8,
       }, {
         id: 'rec423456',
         name: 'tube2SelectedSkill7',
         isActive: true,
-        level: 7
+        level: 7,
       }, {
         id: 'rec423457',
         name: 'tube2SelectedSkill8',
         isActive: true,
-        level: 8
-      }
+        level: 8,
+      },
     ];
 
     const expectedCountResult = '3';

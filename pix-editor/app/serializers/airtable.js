@@ -15,7 +15,7 @@ export default class AirtableSerializer extends RESTSerializer {
       delete payload.records;
 
       payload.meta = {
-        offset: payload.offset
+        offset: payload.offset,
       };
       delete payload.offset;
 

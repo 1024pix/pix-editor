@@ -1,7 +1,7 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
-import sinon from 'sinon';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
 module('Unit | Service | storage', function(hooks) {
   setupTest(hooks);
@@ -25,7 +25,7 @@ module('Unit | Service | storage', function(hooks) {
       configService.storagePost = 'https://dl.ovh.com/bucket/';
 
       const date = {
-        now() { return 'NOW'; }
+        now() { return 'NOW'; },
       };
 
       const file = {
@@ -58,7 +58,7 @@ module('Unit | Service | storage', function(hooks) {
       configService.storagePost = 'https://dl.ovh.com/bucket/';
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       const file = {
@@ -93,7 +93,7 @@ module('Unit | Service | storage', function(hooks) {
       configService.storagePost = 'https://dl.pix.fr/';
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       const file = {
@@ -128,7 +128,7 @@ module('Unit | Service | storage', function(hooks) {
       configService.storagePost = 'https://dl.pix.fr/';
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       const file = {
@@ -161,7 +161,7 @@ module('Unit | Service | storage', function(hooks) {
     let fetch;
     const storageToken = 'HaveFun';
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves(storageToken);
 
@@ -177,7 +177,7 @@ module('Unit | Service | storage', function(hooks) {
       fetch.resolves();
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       // when
@@ -190,8 +190,8 @@ module('Unit | Service | storage', function(hooks) {
         method: 'PUT',
         headers: {
           'X-Auth-Token': storageToken,
-          'X-Copy-From': '/bucket/NOW.txt'
-        }
+          'X-Copy-From': '/bucket/NOW.txt',
+        },
       }]);
     });
 
@@ -200,7 +200,7 @@ module('Unit | Service | storage', function(hooks) {
       fetch.resolves();
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       // when
@@ -213,21 +213,21 @@ module('Unit | Service | storage', function(hooks) {
         method: 'PUT',
         headers: {
           'X-Auth-Token': storageToken,
-          'X-Copy-From': '/bucket/NOW/test.txt'
-        }
+          'X-Copy-From': '/bucket/NOW/test.txt',
+        },
       }]);
     });
 
     test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({
-        status: 401
+        status: 401,
       });
 
       fetch.onSecondCall().resolves();
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       // when
@@ -240,8 +240,8 @@ module('Unit | Service | storage', function(hooks) {
         method: 'PUT',
         headers: {
           'X-Auth-Token': storageToken,
-          'X-Copy-From': '/bucket/NOW.txt'
-        }
+          'X-Copy-From': '/bucket/NOW.txt',
+        },
       }]);
     });
 
@@ -249,11 +249,11 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        status: 401
+        status: 401,
       });
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       // then
@@ -272,11 +272,11 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        status: 400
+        status: 400,
       });
 
       const date = {
-        now() { return 'NOW2'; }
+        now() { return 'NOW2'; },
       };
 
       // then
@@ -302,7 +302,7 @@ module('Unit | Service | storage', function(hooks) {
         ok: true,
         json() {
           return Promise.resolve({ token });
-        }
+        },
       });
 
       const fetchedToken = await storageService.getStorageToken(false, fetch);
@@ -312,7 +312,7 @@ module('Unit | Service | storage', function(hooks) {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer someApiKey',
-        }
+        },
       }]);
       assert.strictEqual(fetchedToken, token);
     });
@@ -340,7 +340,7 @@ module('Unit | Service | storage', function(hooks) {
         ok: true,
         json() {
           return Promise.resolve({ token });
-        }
+        },
       });
 
       const fetchedToken = await storageService.getStorageToken(true, fetch);
@@ -350,7 +350,7 @@ module('Unit | Service | storage', function(hooks) {
         method: 'POST',
         headers: {
           'Authorization': 'Bearer someApiKey',
-        }
+        },
       }]);
       assert.strictEqual(fetchedToken, token);
     });
@@ -361,7 +361,7 @@ module('Unit | Service | storage', function(hooks) {
     let fetch;
     const storageToken = 'HaveFun';
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       storageService = this.owner.lookup('service:storage');
       storageService.getStorageToken = sinon.stub().resolves(storageToken);
 
@@ -386,14 +386,14 @@ module('Unit | Service | storage', function(hooks) {
         headers: {
           'X-Auth-Token': storageToken,
           'Content-Disposition': 'attachment; filename="update-file-name.jpg"',
-        }
+        },
       }]);
     });
 
     test('it should retry when token has expired', async function(assert) {
       // given
       fetch.onFirstCall().rejects({
-        status: 401
+        status: 401,
       });
 
       fetch.onSecondCall().resolves();
@@ -408,7 +408,7 @@ module('Unit | Service | storage', function(hooks) {
         headers: {
           'X-Auth-Token': storageToken,
           'Content-Disposition': 'attachment; filename="update-file-name.jpg"',
-        }
+        },
       }]);
     });
 
@@ -416,7 +416,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        status: 401
+        status: 401,
       });
 
       // then
@@ -435,7 +435,7 @@ module('Unit | Service | storage', function(hooks) {
       assert.expect(2);
       // given
       fetch.rejects({
-        status: 400
+        status: 400,
       });
 
       // then

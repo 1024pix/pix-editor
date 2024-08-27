@@ -5,10 +5,10 @@ const config = {
   disable_watching: true,
   reporter: 'dot',
   launch_in_ci: [
-    'Chrome'
+    'Chrome',
   ],
   launch_in_dev: [
-    'Chrome'
+    'Chrome',
   ],
   browser_start_timeout: 120,
   browser_args: {
@@ -21,10 +21,10 @@ const config = {
         '--disable-software-rasterizer',
         '--mute-audio',
         '--remote-debugging-port=0',
-        '--window-size=1440,900'
-      ].filter(Boolean)
-    }
-  }
+        '--window-size=1440,900',
+      ].filter(Boolean),
+    },
+  },
 };
 
 module.exports = process.env.CI

@@ -2,6 +2,7 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
+
 import MissionSummary from '../../../models/mission-summary';
 
 export default class MissionsListController extends Controller {
@@ -10,7 +11,6 @@ export default class MissionsListController extends Controller {
   @tracked pageNumber = 1;
   @tracked pageSize = 10;
   @tracked statuses = [];
-
 
   @action
   onChangesStatus(selectedStatuses) {

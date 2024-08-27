@@ -1,14 +1,15 @@
-import { module, test } from 'qunit';
-import Service from '@ember/service';
-import sinon from 'sinon';
 import EmberObject from '@ember/object';
+import Service from '@ember/service';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+
 import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
-module('Unit | Controller | competence/prototypes/localized', function (hooks) {
+module('Unit | Controller | competence/prototypes/localized', function(hooks) {
   setupIntlRenderingTest(hooks);
   let controller, messageStub, startStub, stopStub, errorStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     //given
     controller = this.owner.lookup('controller:authenticated.competence/prototypes/localized');
     controller.model = {};
@@ -32,7 +33,7 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
   module('it should save localized challenge', function(hooks) {
     let handleIllustrationStub, handleAttachmentStub, localizedChallenge, saveChallengeStub, saveAttachmentsStub;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
 
       localizedChallenge = {
         id: 'rec123456',
@@ -70,7 +71,7 @@ module('Unit | Controller | competence/prototypes/localized', function (hooks) {
       assert.ok(stopStub.calledOnce);
     });
 
-    test('it should reinitialize edition',  async function(assert) {
+    test('it should reinitialize edition', async function(assert) {
       // given
       controller.edition = true;
 

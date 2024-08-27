@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import createGlimmerComponent from '../../../helpers/create-glimmer-component';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('unit | Component | field/illustration', function(hooks) {
   setupTest(hooks);
@@ -19,7 +20,7 @@ module('unit | Component | field/illustration', function(hooks) {
     const addIllustrationStub = sinon.stub();
     component.args.addIllustration = addIllustrationStub;
 
-    const file =  {
+    const file = {
       name: 'file_name',
       size: 123,
       type: 'image/png',

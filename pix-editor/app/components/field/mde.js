@@ -1,6 +1,6 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
 import { htmlSafe } from '@ember/template';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class Mde extends Component {

@@ -4,7 +4,7 @@ function _isFeatureEnabled(environmentVariable) {
   return environmentVariable === 'true';
 }
 
-module.exports = function (environment) {
+module.exports = function(environment) {
   const ENV = {
     modulePrefix: 'pixeditor',
     environment,
@@ -20,7 +20,7 @@ module.exports = function (environment) {
         Date: false,
         // Prevent overriding String.prototype.
         String: false,
-      }
+      },
     },
 
     APP: {
@@ -30,7 +30,7 @@ module.exports = function (environment) {
       MAX_CONCURRENT_AJAX_CALLS: _getEnvironmentVariableAsNumber({
         environmentVariableName: 'MAX_CONCURRENT_AJAX_CALLS',
         defaultValue: 4,
-        minValue: 1
+        minValue: 1,
       }),
     },
 
@@ -46,7 +46,7 @@ module.exports = function (environment) {
         maxBreadcrumbs: _getEnvironmentVariableAsNumber({
           environmentVariable: process.env.SENTRY_MAX_BREADCRUMBS,
           defaultValue: 100,
-          minValue: 100
+          minValue: 100,
         }),
         debug: _isFeatureEnabled(process.env.SENTRY_DEBUG),
         release: `v${process.env.npm_package_version}`,

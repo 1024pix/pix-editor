@@ -1,5 +1,6 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
+
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('Unit | Component | target-profile/pdf-export', function(hooks) {
@@ -13,7 +14,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
   module('#_getTranslatedField', function(hooks) {
     let model, keys;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       model = {
         id: 'modelId',
         titleEnUs: 'English name',
@@ -21,7 +22,7 @@ module('Unit | Component | target-profile/pdf-export', function(hooks) {
       };
       keys = {
         en: 'titleEnUs',
-        fr: 'titleFrFr'
+        fr: 'titleFrFr',
       };
     });
 

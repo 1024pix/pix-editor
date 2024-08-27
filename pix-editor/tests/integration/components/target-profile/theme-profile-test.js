@@ -1,9 +1,9 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
 
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | target-profile/theme-profile', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -12,7 +12,7 @@ module('Integration | Component | target-profile/theme-profile', function(hooks)
     // given
     const theme = EmberObject.create({
       name: 'theme_name',
-      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }, { selectedLevel: false }]
+      productionTubes: [{ selectedLevel: 5 }, { selectedLevel: 5 }, { selectedLevel: false }],
     });
 
     this.set('theme', theme);

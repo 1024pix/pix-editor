@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import createGlimmerComponent from '../../../helpers/create-glimmer-component';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('unit | Component | form/challenge', function(hooks) {
   setupTest(hooks);
@@ -20,7 +21,7 @@ module('unit | Component | form/challenge', function(hooks) {
       createRecord: createRecordStub,
     };
 
-    const file =  {
+    const file = {
       name: 'file_name',
       size: 123,
       type: 'image/png',
@@ -28,7 +29,7 @@ module('unit | Component | form/challenge', function(hooks) {
 
     const challenge = {
       id: 'recchallenge_1',
-      name: 'challenge'
+      name: 'challenge',
     };
 
     component.args.challenge = challenge;
@@ -56,7 +57,7 @@ module('unit | Component | form/challenge', function(hooks) {
       createRecord: createRecordStub,
     };
 
-    const file =  {
+    const file = {
       name: 'file_name',
       size: 123,
       type: 'application/msdoc',
@@ -64,7 +65,7 @@ module('unit | Component | form/challenge', function(hooks) {
 
     const challenge = {
       id: 'recchallenge_1',
-      name: 'challenge'
+      name: 'challenge',
     };
 
     component.args.challenge = challenge;
@@ -90,15 +91,15 @@ module('unit | Component | form/challenge', function(hooks) {
     const input = [
       { label: 'Anglais', value: 'en' },
       { label: 'Franco Français', value: 'fr-fr' },
-      { label: 'Francophone', value: 'fr' }
+      { label: 'Francophone', value: 'fr' },
     ];
 
-    const expected = ['en','fr-fr','fr'];
+    const expected = ['en', 'fr-fr', 'fr'];
 
     const challenge = {
       id: 'recchallenge_1',
       name: 'challenge',
-      locales: []
+      locales: [],
     };
     component.args.challenge = challenge;
 

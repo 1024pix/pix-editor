@@ -24,7 +24,6 @@ export default class TargetProfileController extends Controller {
   @tracked clearTubeAction = null;
   @tracked setTubeAction = null;
 
-
   @service('file-saver') fileSaver;
   @service currentData;
   @service notify;
@@ -55,19 +54,19 @@ export default class TargetProfileController extends Controller {
     if (this._selectedFrameworks) {
       return this._selectedFrameworks;
     }
-    return [this.frameworkList.find(item => (item.data === this.currentData.getFramework()))];
+    return [this.frameworkList.find((item) => (item.data === this.currentData.getFramework()))];
   }
 
   get frameworkList() {
-    return this.frameworks.map(framework => ({
+    return this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework
+      data: framework,
     }));
   }
 
   get areas() {
-    const selectedFrameworkData = this.selectedFrameworks.map(framework => framework.data);
-    return selectedFrameworkData.map(framework => framework.areas.toArray()).flat();
+    const selectedFrameworkData = this.selectedFrameworks.map((framework) => framework.data);
+    return selectedFrameworkData.map((framework) => framework.areas.toArray()).flat();
   }
 
   @action
@@ -99,7 +98,7 @@ export default class TargetProfileController extends Controller {
 
   _getThematicTubeSkills(tube) {
     const productionSkill = tube.productionSkills;
-    return productionSkill.filter(skill=>{
+    return productionSkill.filter((skill)=>{
       return tube.selectedSkills.includes(skill.pixId);
     });
   }
@@ -194,7 +193,7 @@ export default class TargetProfileController extends Controller {
             tubeValues.push({
               id: tube.pixId,
               level: tube.selectedLevel,
-              skills: tube.selectedSkills
+              skills: tube.selectedSkills,
             });
           }
           return tubeValues;
@@ -284,9 +283,9 @@ export default class TargetProfileController extends Controller {
     const frameworksName = [];
     for (const area of areas) {
       const framework = await area.framework;
-      area.competences.forEach(competence => {
+      area.competences.forEach((competence) => {
         const tubes = competence.tubes;
-        tubes.forEach(tube => {
+        tubes.forEach((tube) => {
           if (indexedTubes[tube.pixId]) {
             if (indexedTubes[tube.pixId].level === 'max') {
               const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
@@ -314,9 +313,9 @@ export default class TargetProfileController extends Controller {
     const frameworksName = [];
     for (const area of areas) {
       const framework = await area.framework;
-      area.competences.forEach(competence => {
+      area.competences.forEach((competence) => {
         const tubes = competence.tubes;
-        tubes.forEach(tube => {
+        tubes.forEach((tube) => {
           if (tubesFromFile.includes(tube.pixId)) {
             const [skills, level] = this._getTubeSkillsAndMaxLevel(tube);
             tube.selectedLevel = level;
@@ -335,7 +334,7 @@ export default class TargetProfileController extends Controller {
   }
 
   _updateSelectedFrameworks(frameworksName) {
-    this._selectedFrameworks = this.frameworkList.filter(framework => frameworksName.includes(framework.label));
+    this._selectedFrameworks = this.frameworkList.filter((framework) => frameworksName.includes(framework.label));
   }
 
   @action

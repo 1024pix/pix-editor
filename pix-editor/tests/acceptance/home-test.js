@@ -1,19 +1,20 @@
-import { module, test } from 'qunit';
-import { visit, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from '../setup-application-rendering';
+import { findAll, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
+
+import { setupApplicationTest } from '../setup-application-rendering';
 
 const competenceIds = [
   'recCompetence1.1',
   'recCompetence2.1',
 ];
 
-module('Acceptance | Home', function (hooks) {
+module('Acceptance | Home', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -24,7 +25,7 @@ module('Acceptance | Home', function (hooks) {
     return authenticateSession();
   });
 
-  test('visiting /', async function (assert) {
+  test('visiting /', async function(assert) {
     // when
     await visit('/');
 

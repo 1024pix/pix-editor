@@ -1,5 +1,5 @@
 import { inject as service } from '@ember/service';
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class ChallengeModel extends Model {
@@ -21,7 +21,7 @@ export default class ChallengeModel extends Model {
   @attr('number') version;
   @attr genealogy;
   @attr status;
-  @attr({ readOnly:true }) preview;
+  @attr({ readOnly: true }) preview;
   @attr('number') timer;
   @attr embedURL;
   @attr embedTitle;
@@ -31,7 +31,7 @@ export default class ChallengeModel extends Model {
   @attr accessibility2;
   @attr spoil;
   @attr responsive;
-  @attr ({ defaultValue: function() { return []; } }) locales;
+  @attr({ defaultValue: function() { return []; } }) locales;
   @attr alternativeLocales;
   @attr geography;
   @attr urlsToConsult;
@@ -43,7 +43,7 @@ export default class ChallengeModel extends Model {
   @attr('date') archivedAt;
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
-  @attr ({ defaultValue: function() { return []; } }) contextualizedFields;
+  @attr({ defaultValue: function() { return []; } }) contextualizedFields;
 
   @belongsTo('skill') skill;
   @hasMany('attachment', { inverse: 'challenge' }) files;
@@ -127,7 +127,7 @@ export default class ChallengeModel extends Model {
     const currentVersion = this.version;
     const skill = this.skill;
     if (skill) {
-      return skill.get('alternatives').filter(alternative => {
+      return skill.get('alternatives').filter((alternative) => {
         return (alternative.version === currentVersion);
       }).sort((a, b) => {
         return a.alternativeVersion - b.alternativeVersion;
@@ -144,26 +144,26 @@ export default class ChallengeModel extends Model {
     const currentVersion = this.version;
     const skill = this.skill;
     if (skill) {
-      return skill.get('prototypes').find(prototype => (prototype.version === currentVersion));
+      return skill.get('prototypes').find((prototype) => (prototype.version === currentVersion));
     }
     return null;
   }
 
   get productionAlternatives() {
-    return this.alternatives.filter(alternative => alternative.isValidated);
+    return this.alternatives.filter((alternative) => alternative.isValidated);
   }
 
   get archivedAlternatives() {
-    return this.alternatives.filter(alternative => alternative.isArchived);
+    return this.alternatives.filter((alternative) => alternative.isArchived);
   }
 
   get draftAlternatives() {
-    return this.alternatives.filter(alternative => alternative.isDraft);
+    return this.alternatives.filter((alternative) => alternative.isDraft);
   }
 
   get isTextBased() {
     const type = this.type;
-    return ['QROC','QROCM','QROCM-ind','QROCM-dep'].includes(type);
+    return ['QROC', 'QROCM', 'QROCM-ind', 'QROCM-dep'].includes(type);
   }
 
   get timerOn() {
@@ -298,11 +298,11 @@ export default class ChallengeModel extends Model {
     const data = this.toJSON({ idIncluded: false });
     if (data.illustration) {
       const illustration = data.illustration[0];
-      data.illustration = [{ url:illustration.url, filename:illustration.filename }];
+      data.illustration = [{ url: illustration.url, filename: illustration.filename }];
     }
     if (data.attachments) {
-      data.attachments = data.attachments.map(value => {
-        return { url:value.url, filename:value.filename };
+      data.attachments = data.attachments.map((value) => {
+        return { url: value.url, filename: value.filename };
       });
     }
     if (fieldsToRemove) {

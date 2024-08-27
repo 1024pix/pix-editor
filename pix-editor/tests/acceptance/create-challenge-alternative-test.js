@@ -1,19 +1,20 @@
-import { module, test } from 'qunit';
-import { visit, findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from '../setup-application-rendering';
-import { selectFiles } from 'ember-file-upload/test-support';
-import { setupMirage } from 'ember-cli-mirage/test-support';
 import Service from '@ember/service';
-import sinon from 'sinon';
+import { click, find, findAll, visit } from '@ember/test-helpers';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { selectFiles } from 'ember-file-upload/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
-module('Acceptance | Controller | Create alternative challenge', function (hooks) {
+import { setupApplicationTest } from '../setup-application-rendering';
+
+module('Acceptance | Controller | Create alternative challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let challenge;
   let skill;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -27,7 +28,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     return authenticateSession();
   });
 
-  test('create a challenge alternative', async function (assert) {
+  test('create a challenge alternative', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() { }
@@ -54,10 +55,10 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     const attachments = await store.peekAll('attachment');
     assert.dom('[data-test-main-message]').hasText('Déclinaison numéro 1 enregistrée');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
-    assert.ok(attachments.every(record => !record.isNew));
+    assert.ok(attachments.every((record) => !record.isNew));
   });
 
-  test('create a challenge alternative clone the attachments', async function (assert) {
+  test('create a challenge alternative clone the attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }
@@ -89,7 +90,7 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
     assert.strictEqual(clonedAttachment.url, 'data:2,');
   });
 
-  test('create a challenge alternative don\'t clone deleted attachments', async function (assert) {
+  test('create a challenge alternative don\'t clone deleted attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       cloneFile() { }
@@ -108,7 +109,6 @@ module('Acceptance | Controller | Create alternative challenge', function (hooks
 
     await click(find('[data-test-new-alternative-action]'));
     await click(find('[data-test-save-challenge-button]'));
-
 
     await click(findAll('[data-test-modify-challenge-button]')[1]);
     await click(find('[data-test-delete-attachment-button]'));

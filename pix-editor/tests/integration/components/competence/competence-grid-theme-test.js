@@ -1,37 +1,38 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { render } from '@ember/test-helpers';
-import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
 import Service from '@ember/service';
+import { render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Integration | Component | competence/competence-grid-theme', function (hooks) {
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+
+module('Integration | Component | competence/competence-grid-theme', function(hooks) {
 
   setupIntlRenderingTest(hooks);
 
-  module('if theme have tube', function (hooks) {
-    hooks.beforeEach(function () {
+  module('if theme have tube', function(hooks) {
+    hooks.beforeEach(function() {
       const productionTube1 = EmberObject.create({
-        name: '@productionTube1'
+        name: '@productionTube1',
       });
       const productionTube2 = EmberObject.create({
-        name: '@productionTube2'
+        name: '@productionTube2',
       });
 
       const draftTube = EmberObject.create({
-        name: '@draftTube'
+        name: '@draftTube',
       });
 
       const theme = EmberObject.create({
         name: 'Theme',
         tubes: [productionTube1, productionTube2, draftTube],
-        productionTubes: [productionTube1, productionTube2]
+        productionTubes: [productionTube1, productionTube2],
       });
       this.set('theme', theme);
     });
 
-    test('it should display a theme cell with appropriate rowspan', async function (assert) {
+    test('it should display a theme cell with appropriate rowspan', async function(assert) {
       // given
       this.set('view', 'workbench');
       this.set('section', 'challenges');
@@ -46,8 +47,8 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       assert.dom('[data-test-theme-cell]').hasAttribute('rowspan', '3');
     });
 
-    ['workbench', 'production'].forEach(view => {
-      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function (assert) {
+    ['workbench', 'production'].forEach((view) => {
+      test(`it should display a link to display theme management if section is skills and view is ${view}`, async function(assert) {
         // given
         this.set('section', 'skills');
         this.set('view', view);
@@ -62,8 +63,8 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       });
     });
 
-    ['skills', 'challenges', 'i18n', 'quality'].forEach(section => {
-      test(`it should display production tubes if section is set on ${section} and view is production`, async function (assert) {
+    ['skills', 'challenges', 'i18n', 'quality'].forEach((section) => {
+      test(`it should display production tubes if section is set on ${section} and view is production`, async function(assert) {
         // given
         this.set('view', 'production');
         this.set('section', section);
@@ -79,8 +80,8 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       });
     });
 
-    ['skills', 'challenges'].forEach(section => {
-      test(`it should display all tubes if section is set on ${section} and view is workbench`, async function (assert) {
+    ['skills', 'challenges'].forEach((section) => {
+      test(`it should display all tubes if section is set on ${section} and view is workbench`, async function(assert) {
         // given
         this.set('view', 'workbench');
         this.set('section', section);
@@ -123,13 +124,13 @@ module('Integration | Component | competence/competence-grid-theme', function (h
     });
   });
 
-  module('if theme have no tube', function (hooks) {
+  module('if theme have no tube', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       const theme = EmberObject.create({
         name: 'Theme',
         tubes: [],
-        productionTubes: []
+        productionTubes: [],
       });
       this.set('theme', theme);
     });
@@ -139,8 +140,8 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       { section: 'challenges', view: 'production' },
       { section: 'challenges', view: 'workbench' },
       { section: 'i18n', view: null },
-      { section: 'quality', view: null }].forEach(item => {
-      test(`it should not be display if section is ${item.section} and view is ${item.view} and mayCreateTube is false`, async function (assert) {
+      { section: 'quality', view: null }].forEach((item) => {
+      test(`it should not be display if section is ${item.section} and view is ${item.view} and mayCreateTube is false`, async function(assert) {
         // given
         const mayCreateTubeStub = sinon.stub().returns(false);
         class Access extends Service {
@@ -159,7 +160,7 @@ module('Integration | Component | competence/competence-grid-theme', function (h
       });
     });
 
-    test('it should be display with a create tube button if section is skills and view is workbench and mayCreateTube is true', async function (assert) {
+    test('it should be display with a create tube button if section is skills and view is workbench and mayCreateTube is true', async function(assert) {
       // given
       const mayCreateTubeStub = sinon.stub().returns(true);
       class Access extends Service {

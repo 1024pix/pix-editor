@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Model | theme', function(hooks) {
   setupTest(hooks);
@@ -7,49 +7,49 @@ module('Unit | Model | theme', function(hooks) {
   let tube_1, tube_2, tube_3, tube_4;
   let theme;
 
-  hooks.beforeEach (function() {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
 
     const activeSkill_1 = store.createRecord('skill', {
       status: 'actif',
       challenges: [ store.createRecord('challenge', {
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
     const activeSkill_2 = store.createRecord('skill', {
       status: 'actif',
       challenges: [ store.createRecord('challenge', {
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
 
     const deadSkill = store.createRecord('skill', {
-      status: 'périmé'
+      status: 'périmé',
     });
 
     tube_1 = store.createRecord('tube', {
-      name: '@workbench'
+      name: '@workbench',
     });
 
     tube_2 = store.createRecord('tube', {
       name: '@tube_2',
       selectedLevel: 2,
       index: 0,
-      rawSkills: [activeSkill_1]
+      rawSkills: [activeSkill_1],
     });
 
     tube_3 = store.createRecord('tube', {
       name: '@tube_3',
       index: 1,
-      rawSkills: [deadSkill]
+      rawSkills: [deadSkill],
     });
 
     tube_4 = store.createRecord('tube', {
       name: '@tube_4',
       index: 2,
-      rawSkills: [activeSkill_2]
+      rawSkills: [activeSkill_2],
     });
 
     theme = store.createRecord('theme', {
@@ -58,8 +58,8 @@ module('Unit | Model | theme', function(hooks) {
         tube_4,
         tube_1,
         tube_2,
-        tube_3
-      ]
+        tube_3,
+      ],
     });
   });
 
@@ -94,7 +94,7 @@ module('Unit | Model | theme', function(hooks) {
     assert.strictEqual(selectedProductionTubeLength, 1);
   });
 
-  module('#hasSelectedProductionTube', function () {
+  module('#hasSelectedProductionTube', function() {
     test('it should be true if has selected tube', function(assert) {
       // when
       const hasSelectedProductionTube = theme.hasSelectedProductionTube;
@@ -110,8 +110,8 @@ module('Unit | Model | theme', function(hooks) {
         name: 'themeName',
         rawTubes: [
           tube_1,
-          tube_3
-        ]
+          tube_3,
+        ],
       });
 
       // when
@@ -122,6 +122,5 @@ module('Unit | Model | theme', function(hooks) {
 
     });
   });
-
 
 });

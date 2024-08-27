@@ -90,6 +90,6 @@ module.exports = function(/* environment */) {
      */
     requiresTranslation(/* key, locale */) {
       return true;
-    }
+    },
   };
 };

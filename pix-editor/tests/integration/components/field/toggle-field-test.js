@@ -1,16 +1,17 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
+import Service from '@ember/service';
 import { click, find, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
-import Service from '@ember/service';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
-import EmberObject from '@ember/object';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | field/toggle-field', function(hooks) {
   setupIntlRenderingTest(hooks);
   let setDisplayFieldStub;
   let confirmAskStub;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     confirmAskStub = sinon.stub().resolves();
     class ConfirmService extends Service {
       ask = confirmAskStub;
@@ -45,14 +46,14 @@ module('Integration | Component | field/toggle-field', function(hooks) {
     assert.dom('[data-test-toggle-field-button]').doesNotExist();
   });
 
-  module('if model field is empty', function (hooks) {
+  module('if model field is empty', function(hooks) {
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       const modelData = EmberObject.create({ someField: '' });
       this.set('modelData', modelData);
     });
 
-    test('if `displayField` is `false` yield content should be hidden', async function (assert) {
+    test('if `displayField` is `false` yield content should be hidden', async function(assert) {
       // when
       await render(hbs`
         <Field::ToggleField @edition={{true}}
@@ -92,8 +93,7 @@ module('Integration | Component | field/toggle-field', function(hooks) {
       assert.ok(setDisplayFieldStub.calledWith(true));
     });
 
-
-    test('if displayField is `true` yield content should be display', async function (assert) {
+    test('if displayField is `true` yield content should be display', async function(assert) {
       // when
       await render(hbs`
         <Field::ToggleField @edition={{true}}
@@ -115,16 +115,16 @@ module('Integration | Component | field/toggle-field', function(hooks) {
 
   });
 
-  module('if model field is fill', function (hooks) {
+  module('if model field is fill', function(hooks) {
 
     let modelData;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       modelData = EmberObject.create({ someField: 'Some data' });
       this.set('modelData', modelData);
     });
 
-    test('yield content should be display', async function (assert) {
+    test('yield content should be display', async function(assert) {
       // when
       await render(hbs`
         <Field::ToggleField @edition={{true}}
@@ -144,7 +144,7 @@ module('Integration | Component | field/toggle-field', function(hooks) {
       assert.dom('.yield-content').exists();
     });
 
-    test('it should call `setDisplayField` on click with `false` as argument and empty model field', async function (assert) {
+    test('it should call `setDisplayField` on click with `false` as argument and empty model field', async function(assert) {
       // when
       await render(hbs`
         <Field::ToggleField @edition={{true}}

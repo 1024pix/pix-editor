@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import createGlimmerComponent from '../../../helpers/create-glimmer-component';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('unit | Component | sidebar/navigation', function(hooks) {
   setupTest(hooks);
@@ -46,7 +47,7 @@ module('unit | Component | sidebar/navigation', function(hooks) {
 
   module('#saveFramework', function(hooks) {
     let notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       notifyMessageStub = sinon.stub();
       notifyErrorStub = sinon.stub();
 
@@ -90,7 +91,7 @@ module('unit | Component | sidebar/navigation', function(hooks) {
       assert.ok(setFrameworkStub.calledWith(framework));
       assert.deepEqual(component._selectedFramework, {
         label: 'pix +',
-        data: framework
+        data: framework,
       });
       assert.ok(notifyMessageStub.calledWith('Référentiel créé'));
       assert.notOk(component.displayNewFrameworkPopIn);
@@ -100,7 +101,7 @@ module('unit | Component | sidebar/navigation', function(hooks) {
     test('it should catch an error if save framework failed', async function(assert) {
       // given
       const errorMessage = {
-        'error': ['error-test']
+        'error': ['error-test'],
       };
       const saveStub = sinon.stub().rejects(errorMessage);
       component.newFramework = {

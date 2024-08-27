@@ -1,28 +1,29 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { click, findAll, render } from '@ember/test-helpers';
-import { drag } from 'ember-sortable/test-support';
-import { hbs } from 'ember-cli-htmlbars';
 import EmberObject from '@ember/object';
+import { click, findAll, render } from '@ember/test-helpers';
+import { hbs } from 'ember-cli-htmlbars';
+import { drag } from 'ember-sortable/test-support';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in/sorting', function(hooks) {
   setupIntlRenderingTest(hooks);
   let modelToSort1, modelToSort2, modelToSort3, approveActionStub, denyActionStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     modelToSort1 = EmberObject.create({
       name: 'model_1',
-      index: 0
+      index: 0,
     });
     modelToSort2 = EmberObject.create({
       name: 'model_2',
-      index: 1
+      index: 1,
     });
     modelToSort3 = EmberObject.create({
       name: 'model_3',
-      index: 2
+      index: 2,
     });
     approveActionStub = sinon.stub();
     denyActionStub = sinon.stub();
@@ -44,7 +45,7 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
     assert.dom('[data-test-sorting-pop-in-content] li').exists({ count: 3 });
   });
 
-  test('it should reorder models', async function (assert) {
+  test('it should reorder models', async function(assert) {
     // when
     await render(hbs`<PopIn::Sorting @title={{this.title}}
                                      @model={{this.sortingModel}}
@@ -59,7 +60,7 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
     assert.strictEqual(modelToSort3.index, 1);
   });
 
-  test('it should trigger approve action', async function (assert) {
+  test('it should trigger approve action', async function(assert) {
     // when
     await render(hbs`<PopIn::Sorting @title={{this.title}}
                                      @model={{this.sortingModel}}
@@ -72,7 +73,7 @@ module('Integration | Component | pop-in/sorting', function(hooks) {
     assert.deepEqual(approveActionStub.getCall(0).args[0], [modelToSort1, modelToSort2, modelToSort3]);
   });
 
-  test('it should trigger deny action', async function (assert) {
+  test('it should trigger deny action', async function(assert) {
     // when
     await render(hbs`<PopIn::Sorting @title={{this.title}}
                                      @model={{this.sortingModel}}

@@ -1,33 +1,34 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
+import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-production', function(hooks) {
   setupIntlRenderingTest(hooks);
   let skill;
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     const challenge1 = {
       id: 'challenge1',
-      locales: ['Francophone', 'Franco Français']
+      locales: ['Francophone', 'Franco Français'],
     };
     const challenge2 = {
       id: 'challenge2',
-      locales: ['Francophone']
+      locales: ['Francophone'],
     };
     const challenge3 = {
       id: 'challenge3',
-      locales: ['Espagnol']
+      locales: ['Espagnol'],
     };
     const challenge4 = {
       id: 'challenge4',
-      locales: ['Francophone', 'Franco Français']
+      locales: ['Francophone', 'Franco Français'],
     };
     const challenge5 = {
       id: 'challenge5',
-      locales: ['Anglais']
+      locales: ['Anglais'],
     };
     skill = EmberObject.create({
       productionPrototype: {

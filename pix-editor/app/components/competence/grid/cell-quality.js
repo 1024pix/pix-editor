@@ -1,5 +1,5 @@
-import Component from '@glimmer/component';
 import { htmlSafe } from '@ember/template';
+import Component from '@glimmer/component';
 
 export default class CellQuality extends Component {
 
@@ -77,7 +77,7 @@ export default class CellQuality extends Component {
       'Non Sp': 3,
       'Difficilement Sp': 2,
       'Facilement Sp': 1,
-      'default': 0
+      'default': 0,
     };
     return (quality[spoil] || quality['default']) / 3 * weight;
   }
@@ -88,7 +88,7 @@ export default class CellQuality extends Component {
       'Tablette': 1,
       'Smartphone': 1,
       'Tablette/Smartphone': 2,
-      'default': 0
+      'default': 0,
     };
     return (quality[responsive] || quality['default']) / 2 * weight;
   }
@@ -98,7 +98,7 @@ export default class CellQuality extends Component {
     const quality = {
       'RAS': 1,
       'OK': 1,
-      'default': 0
+      'default': 0,
     };
     return (quality[colorblind] || quality['default']) * weight;
   }
@@ -110,7 +110,7 @@ export default class CellQuality extends Component {
       'OK': 2,
       'Acquis Non Pertinent': 2,
       'KO': 0,
-      'default': 0
+      'default': 0,
     };
     return (quality[a11Y] || quality['default']) / 2 * weight;
   }
@@ -124,7 +124,7 @@ export default class CellQuality extends Component {
       'à soumettre': 2,
       'à retravailler': 1,
       'archiver': 0,
-      'default': 0
+      'default': 0,
     };
     return (quality[clue] || quality['default']) / 4 * weight;
   }

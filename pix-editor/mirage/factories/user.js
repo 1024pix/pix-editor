@@ -16,6 +16,6 @@ export default Factory.extend({
 
   apiKey() {
     return 'default-valid-api-key';
-  }
+  },
 });
 

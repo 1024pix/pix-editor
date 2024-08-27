@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL } from '@ember/test-helpers';
-import { clickByName, visit } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
 
-module('Acceptance | Static Courses | Details', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | Static Courses | Details', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     const tag = this.server.create('static-course-tag', { id: 123, label: 'Mon super tag' });
     this.server.create('static-course-summary', { id: 'courseA', name: 'Premier test statique', isActive: true, challengeCount: 3, createdAt: new Date('2020-01-01') });
     this.server.create('static-course-summary', { id: 'courseB', name: 'Deuxième test statique', isActive: true, challengeCount: 10, createdAt: new Date('2019-01-01') });
@@ -51,7 +52,7 @@ module('Acceptance | Static Courses | Details', function (hooks) {
     return authenticateSession();
   });
 
-  test('should access to static course details when clicking on an row entry in the list', async function (assert) {
+  test('should access to static course details when clicking on an row entry in the list', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');
@@ -93,7 +94,7 @@ module('Acceptance | Static Courses | Details', function (hooks) {
     assert.dom(screen.getByText('Mon super tag')).exists();
   });
 
-  test('should go back to static course list when clicking on "Retour" button', async function (assert) {
+  test('should go back to static course list when clicking on "Retour" button', async function(assert) {
     // when
     const screen = await visit('/');
     await clickByName('Tests statiques');

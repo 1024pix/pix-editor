@@ -34,10 +34,10 @@ export default class StaticCoursesRoute extends Route {
         filter: {
           isActive: params.isActive,
           name: params.name,
-          tagIds: params.tagIds
+          tagIds: params.tagIds,
         },
       },
-      { reload: true }
+      { reload: true },
     );
     const staticCourseTags = await this.store.findAll('static-course-tag');
     return {

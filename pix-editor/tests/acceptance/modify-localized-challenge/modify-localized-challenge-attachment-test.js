@@ -1,19 +1,20 @@
-import { module, test } from 'qunit';
-import sinon from 'sinon';
-import { visit, clickByText } from '@1024pix/ember-testing-library';
-import { findAll, click, find } from '@ember/test-helpers';
-import { setupApplicationTest } from '../../setup-application-rendering';
-import { runTask } from 'ember-lifeline';
+import { clickByText, visit } from '@1024pix/ember-testing-library';
+import Service from '@ember/service';
+import { click, find, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { selectFiles } from 'ember-file-upload/test-support';
-import Service from '@ember/service';
+import { runTask } from 'ember-lifeline';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
 
-module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | Modify-Localized-Challenge-Attachment', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -30,31 +31,31 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
       rawThemeIds: ['recTheme1'],
-      rawTubeIds: ['recTube1']
+      rawTubeIds: ['recTube1'],
     });
     this.server.create('competence', {
       id: 'recCompetence2.1',
       pixId: 'pixId recCompetence2.1',
       rawThemeIds: ['recTheme2'],
-      rawTubeIds: ['recTube2']
+      rawTubeIds: ['recTube2'],
     });
     this.server.create('area', {
       id: 'recArea1',
       name: '1. Information et données',
       code: '1',
-      competenceIds: ['recCompetence1.1']
+      competenceIds: ['recCompetence1.1'],
     });
     this.server.create('area', {
       id: 'recArea2',
       name: '2. Communication et collaboration',
       code: '2',
-      competenceIds: ['recCompetence2.1']
+      competenceIds: ['recCompetence2.1'],
     });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1', 'recArea2'] });
     return authenticateSession();
   });
 
-  test('adding attachments', async function (assert) {
+  test('adding attachments', async function(assert) {
     // given
     class StorageServiceStub extends Service {
       uploadFile() {
@@ -87,11 +88,11 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.ok(storageServiceStub.uploadFile.calledOnce);
-    assert.ok(attachments.every(record => !record.isNew));
+    assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
   });
 
-  test('adding attachments on localized challenge with illustration', async function (assert) {
+  test('adding attachments on localized challenge with illustration', async function(assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -106,10 +107,10 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
         'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/CertificatGUL2020.png',
         'filename': 'Certificat GUL 2020.png',
         'size': 178629,
-        'type': 'image/png'
+        'type': 'image/png',
       }],
       filesIds: ['recAttachment1'],
-      locale: 'nl'
+      locale: 'nl',
     });
     this.server.create('attachment', { id: 'recAttachment1', type: 'illustration', challengeId: 'recChallenge2', localizedChallengeId: 'recChallenge2NL' });
 
@@ -141,7 +142,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     assert.dom(screen.getByRole('heading', { name: 'Illustration' })).exists();
   });
 
-  test('delete attachment', async function (assert) {
+  test('delete attachment', async function(assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -157,17 +158,17 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
         'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
         'filename': 'attachment.png',
         'size': 178629,
-        'type': 'image/png'
+        'type': 'image/png',
       }],
       filesIds: ['recAttachment1'],
-      locale: 'nl'
+      locale: 'nl',
     });
     this.server.create('attachment', {
       id: 'recAttachment1',
       type: 'attachment',
       challengeId: 'recChallenge2',
       filename: 'attachment.png',
-      localizedChallengeId: 'recChallenge2NL'
+      localizedChallengeId: 'recChallenge2NL',
     });
 
     // when
@@ -188,10 +189,10 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
     assert.strictEqual(attachments.length, 0);
-    assert.ok(attachments.every(record => !record.isDeleted));
+    assert.ok(attachments.every((record) => !record.isDeleted));
   });
 
-  test('cancel adding an attachment', async function (assert) {
+  test('cancel adding an attachment', async function(assert) {
     // given
     this.server.create('challenge', {
       id: 'recChallenge2',
@@ -207,17 +208,17 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
         'url': 'https://dl.airtable.com/.attachments/b60304a44214d5b6f94d63df59d3516a/d1f1b65b/attachment.png',
         'filename': 'attachment.png',
         'size': 178629,
-        'type': 'image/png'
+        'type': 'image/png',
       }],
       filesIds: ['recAttachment1'],
-      locale: 'nl'
+      locale: 'nl',
     });
     this.server.create('attachment', {
       id: 'recAttachment1',
       type: 'attachment',
       challengeId: 'recChallenge2',
       filename: 'attachment.png',
-      localizedChallengeId: 'recChallenge2NL'
+      localizedChallengeId: 'recChallenge2NL',
     });
 
     // when
@@ -237,7 +238,7 @@ module('Acceptance | Modify-Localized-Challenge-Attachment', function (hooks) {
     // then
     assert.dom('[data-test-main-message]').hasText('Modification annulée');
     assert.strictEqual(attachments.length, 1);
-    assert.ok(attachments.every(record => !record.isDeleted));
+    assert.ok(attachments.every((record) => !record.isDeleted));
   });
 });
 

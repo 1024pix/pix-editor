@@ -1,5 +1,5 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 
 export default class TargetProfileNavigationComponent extends Component {
 
@@ -7,7 +7,7 @@ export default class TargetProfileNavigationComponent extends Component {
     const { top, left, width } = trigger.getBoundingClientRect();
     const style = {
       left: left + width,
-      top: top +  window.pageYOffset
+      top: top + window.pageYOffset,
     };
     return { style };
   }

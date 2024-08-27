@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Adapter | airtable', function(hooks) {
@@ -18,7 +18,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       const snapshot = {
         id: '1',
@@ -48,7 +48,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       const snapshot = {
         id: '1',
@@ -78,7 +78,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       const snapshot = {
         id: '1',
@@ -111,7 +111,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       adapter.ajax = sinon.stub();
 
@@ -132,7 +132,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       adapter.ajax = sinon.stub().resolves({ records: ['data'] });
 
@@ -154,7 +154,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       adapter.ajax = sinon.stub().resolves({ records: ['data'] });
 
@@ -174,7 +174,7 @@ module('Unit | Adapter | airtable', function(hooks) {
         },
       };
       const type = {
-        modelName: 'TestTable'
+        modelName: 'TestTable',
       };
       adapter.ajax = sinon.stub()
         .onFirstCall().resolves({ records: ['data'] })

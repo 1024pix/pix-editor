@@ -4,16 +4,16 @@ export default class CompetenceSerializer extends AirtableSerializer {
   primaryKey = 'Record ID';
 
   attrs = {
-    title:'Titre fr-fr',
-    titleEn:'Titre en-us',
-    description:'Description fr-fr',
-    descriptionEn:'Description en-us',
-    code:'Sous-domaine',
+    title: 'Titre fr-fr',
+    titleEn: 'Titre en-us',
+    description: 'Description fr-fr',
+    descriptionEn: 'Description en-us',
+    code: 'Sous-domaine',
     rawThemes: 'Thematiques',
-    rawTubes:'Tubes',
-    pixId:'id persistant',
-    source:'Origine',
-    area: 'Domaine'
+    rawTubes: 'Tubes',
+    pixId: 'id persistant',
+    source: 'Origine',
+    area: 'Domaine',
   };
 
   payloadKeyFromModelName() {

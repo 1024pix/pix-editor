@@ -7,7 +7,6 @@ export default class MissionNewRoute extends Route {
   @service store;
   @service currentData;
 
-
   beforeModel() {
     if (!this.access.mayCreateOrEditMission()) {
       this.router.transitionTo('authenticated.missions.list');
@@ -16,11 +15,11 @@ export default class MissionNewRoute extends Route {
 
   async model() {
     const competences = await this.currentData.getCompetencesFromPix1DFramework();
-    const mission =  this.store.createRecord('mission');
+    const mission = this.store.createRecord('mission');
 
     return {
       mission,
-      competences
+      competences,
     };
   }
 

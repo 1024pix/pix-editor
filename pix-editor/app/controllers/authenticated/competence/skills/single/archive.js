@@ -1,7 +1,7 @@
 import Controller, { inject as controller } from '@ember/controller';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { action } from '@ember/object';
 
 export default class CompetenceSkillsSingleArchiveController extends Controller {
 
@@ -24,7 +24,7 @@ export default class CompetenceSkillsSingleArchiveController extends Controller 
   }
 
   get challengeList() {
-    return this.skill.challenges.toArray().sort((a,b) => {
+    return this.skill.challenges.toArray().sort((a, b) => {
       if (a.version > b.version) {
         return 1;
       } else if (a.version < b.version) {
@@ -39,11 +39,11 @@ export default class CompetenceSkillsSingleArchiveController extends Controller 
   }
 
   get alternativesCount() {
-    return this.skill.challenges.filter(challenge => !challenge.isPrototype).length;
+    return this.skill.challenges.filter((challenge) => !challenge.isPrototype).length;
   }
 
   get prototypesCount() {
-    return this.skill.challenges.filter(challenge => challenge.isPrototype).length;
+    return this.skill.challenges.filter((challenge) => challenge.isPrototype).length;
   }
 
   maximizeRight(value) {

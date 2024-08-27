@@ -1,8 +1,8 @@
-import Component from '@glimmer/component';
-import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { A } from '@ember/array';
+import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class PopinSelectLocation extends Component {
 
@@ -19,7 +19,7 @@ export default class PopinSelectLocation extends Component {
 
   @service currentData;
 
-  selectLevelOptions = [1,2,3,4,5,6,7,8];
+  selectLevelOptions = [1, 2, 3, 4, 5, 6, 7, 8];
 
   _themes = A([]);
   _tubes = A([]);
@@ -40,7 +40,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedFramework) {
       return this._selectedFramework;
     }
-    return this.frameworkList.find(item => (item.data === this.currentData.getFramework()));
+    return this.frameworkList.find((item) => (item.data === this.currentData.getFramework()));
   }
 
   set selectedFramework(value) {
@@ -49,9 +49,9 @@ export default class PopinSelectLocation extends Component {
   }
 
   get frameworkList() {
-    return this.frameworks.map(framework => ({
+    return this.frameworks.map((framework) => ({
       label: framework.name,
-      data: framework
+      data: framework,
     }));
   }
 
@@ -59,7 +59,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedCompetence) {
       return this._selectedCompetence;
     }
-    return this.competenceList.find(item => (item.data === this.currentData.getCompetence()));
+    return this.competenceList.find((item) => (item.data === this.currentData.getCompetence()));
   }
 
   set selectedCompetence(value) {
@@ -70,16 +70,16 @@ export default class PopinSelectLocation extends Component {
   get competences() {
     const framework = this.selectedFramework.data;
     const areas = framework.areas;
-    const areaCompetences = areas.map(area => area.sortedCompetences);
+    const areaCompetences = areas.map((area) => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
     }, []);
   }
 
   get competenceList() {
-    return this.competences.map(competence => ({
+    return this.competences.map((competence) => ({
       label: competence.name,
-      data: competence
+      data: competence,
     }));
   }
 
@@ -87,7 +87,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedTheme) {
       return this._selectedTheme;
     }
-    return this.themeList.find(item => (item.data === this.args.theme.content));
+    return this.themeList.find((item) => (item.data === this.args.theme.content));
 
   }
 
@@ -103,9 +103,9 @@ export default class PopinSelectLocation extends Component {
       this._loadThemes();
       return A([]);
     } else {
-      return this.themes.map(theme => ({
+      return this.themes.map((theme) => ({
         label: theme.name,
-        data: theme
+        data: theme,
       }));
     }
   }
@@ -121,7 +121,6 @@ export default class PopinSelectLocation extends Component {
     }
   }
 
-
   get tubes() {
     if (!this.tubesLoaded) {
       this._loadTubes().then(() => this._tubes);
@@ -134,9 +133,9 @@ export default class PopinSelectLocation extends Component {
       this._loadTubes();
       return A([]);
     } else {
-      return this.tubes.map(tube => ({
+      return this.tubes.map((tube) => ({
         label: tube.name,
-        data: tube
+        data: tube,
       }));
     }
   }
@@ -156,7 +155,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedTube) {
       return this._selectedTube;
     }
-    return this.tubeList.find(item => (item.data == this.args.tube.content));
+    return this.tubeList.find((item) => (item.data == this.args.tube.content));
   }
 
   set selectedTube(value) {
@@ -176,7 +175,7 @@ export default class PopinSelectLocation extends Component {
       this._loadSkills();
       return A([]);
     }
-    return this.skills.map(skills=>this._buildGroupOption(skills[0].level, skills));
+    return this.skills.map((skills)=>this._buildGroupOption(skills[0].level, skills));
   }
 
   get titleButtonAction() {
@@ -191,7 +190,7 @@ export default class PopinSelectLocation extends Component {
       const selectedTube = this.selectedTube.data;
       return selectedTube.rawSkills
         .then(()=>{
-          this._skills = selectedTube.filledLiveSkills.filter(liveSkill=>{return liveSkill;});
+          this._skills = selectedTube.filledLiveSkills.filter((liveSkill)=>{return liveSkill;});
           this.skillsLoaded = true;
         });
     }
@@ -200,7 +199,7 @@ export default class PopinSelectLocation extends Component {
   _buildGroupOption(level, skills) {
     return {
       groupName: `Niveau ${level}`,
-      options: skills
+      options: skills,
     };
   }
 
@@ -256,9 +255,9 @@ export default class PopinSelectLocation extends Component {
       return this._selectedSkill;
     }
     let result = false;
-    this.skillsGroupByLevelList.find(groupOptions=>{
+    this.skillsGroupByLevelList.find((groupOptions)=>{
       if (groupOptions) {
-        result = groupOptions.options.find(skill=> {
+        result = groupOptions.options.find((skill)=> {
           return skill.id === this.args.skill.get('id');
         });
         return !!result;

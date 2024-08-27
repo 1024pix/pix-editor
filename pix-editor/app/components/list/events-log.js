@@ -6,11 +6,11 @@ export default class EventsLogList extends SortedList {
     name: 'Acquis',
     valuePath: 'skillName',
     maxWidth: 150,
-    skill: true
-  },{
+    skill: true,
+  }, {
     name: 'Description',
     valuePath: 'text',
-  },{
+  }, {
     name: 'Date',
     valuePath: 'date',
     maxWidth: 100,

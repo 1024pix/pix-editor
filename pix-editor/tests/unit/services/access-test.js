@@ -1,7 +1,7 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
-import Service from '@ember/service';
 import EmberObject from '@ember/object';
+import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Service | access', function(hooks) {
   setupTest(hooks);
@@ -28,12 +28,12 @@ module('Unit | Service | access', function(hooks) {
 
   module('mayEdit', function() {
 
-    test('it should return `false` if challenge is obsolete', function (assert) {
+    test('it should return `false` if challenge is obsolete', function(assert) {
       // given
       const challenge = EmberObject.create({
         id: 'rec123656',
         name: 'deletedChallenge',
-        isObsolete: true
+        isObsolete: true,
       });
 
       //when
@@ -45,7 +45,7 @@ module('Unit | Service | access', function(hooks) {
 
     module('#liveChallenge', function(hooks) {
       let validatedChallenge, archivedChallenge;
-      hooks.beforeEach(function () {
+      hooks.beforeEach(function() {
         validatedChallenge = EmberObject.create({
           id: 'recChallenge1',
           name: 'challenge',
@@ -58,7 +58,7 @@ module('Unit | Service | access', function(hooks) {
           isArchived: true,
         });
       });
-      test('it should return `true` if challenge is live and level is `EDITOR`', function (assert) {
+      test('it should return `true` if challenge is live and level is `EDITOR`', function(assert) {
         //when
         _stubAccessLevel(EDITOR, this.owner);
 
@@ -67,7 +67,7 @@ module('Unit | Service | access', function(hooks) {
         assert.ok(accessService.mayEdit(archivedChallenge));
 
       });
-      test('it should return `true` if challenge is live and level is `ADMIN`', function (assert) {
+      test('it should return `true` if challenge is live and level is `ADMIN`', function(assert) {
         //when
         _stubAccessLevel(ADMIN, this.owner);
 
@@ -77,7 +77,7 @@ module('Unit | Service | access', function(hooks) {
       });
     });
 
-    test('it should return `true` when level is `REPLICATOR` only if challenge is not in production and is not a prototype', function (assert) {
+    test('it should return `true` when level is `REPLICATOR` only if challenge is not in production and is not a prototype', function(assert) {
       //given
       const validatedChallenge = EmberObject.create({
         id: 'rec123655',
@@ -105,7 +105,7 @@ module('Unit | Service | access', function(hooks) {
   });
 
   module('mayChangeLocalizedChallengeStatus', function() {
-    test('it should return `false` if localized challenge is not editable', function (assert) {
+    test('it should return `false` if localized challenge is not editable', function(assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',
@@ -119,7 +119,7 @@ module('Unit | Service | access', function(hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `false` if localized challenge is editable and user is not admin', function (assert) {
+    test('it should return `false` if localized challenge is editable and user is not admin', function(assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',
@@ -134,7 +134,7 @@ module('Unit | Service | access', function(hooks) {
       assert.notOk(accessResult);
     });
 
-    test('it should return `true` if localized challenge is editable and user is admin', function (assert) {
+    test('it should return `true` if localized challenge is editable and user is admin', function(assert) {
       // given
       const localizedChallenge = EmberObject.create({
         id: 'rec123656',

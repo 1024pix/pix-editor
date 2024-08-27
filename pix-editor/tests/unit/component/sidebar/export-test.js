@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
-import createGlimmerComponent from '../../../helpers/create-glimmer-component';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
 module('unit | Component | sidebar/export', function(hooks) {
   setupTest(hooks);
@@ -12,32 +13,32 @@ module('unit | Component | sidebar/export', function(hooks) {
 
     const productionSkill_1_1 = [
       {
-        name: 'skill1_1', level: 1
+        name: 'skill1_1', level: 1,
       }, {
-        name: 'skill1_3', level: 3
+        name: 'skill1_3', level: 3,
       }, {
-        name: 'skill1_6', level: 6
-      }
+        name: 'skill1_6', level: 6,
+      },
     ];
 
     const productionSkill_1_2 = [
       {
-        name: 'skill2_2', level: 2
+        name: 'skill2_2', level: 2,
       }, {
-        name: 'skill2_3', level: 3
+        name: 'skill2_3', level: 3,
       }, {
-        name: 'skill2_4', level: 4
-      }
+        name: 'skill2_4', level: 4,
+      },
     ];
 
     const productionSkill_2_1 = [
       {
-        name: 'skill3_1', level: 1
+        name: 'skill3_1', level: 1,
       }, {
-        name: 'skill3_5', level: 5
+        name: 'skill3_5', level: 5,
       }, {
-        name: 'skill3_6', level: 6
-      }
+        name: 'skill3_6', level: 6,
+      },
     ];
 
     const productionTubes_1_1 = {
@@ -124,7 +125,7 @@ module('unit | Component | sidebar/export', function(hooks) {
   module('#export', function(hooks) {
     let notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub, buildCSVContentStub;
 
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       notifyMessageStub = sinon.stub();
       notifyErrorStub = sinon.stub();
 

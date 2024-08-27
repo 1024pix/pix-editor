@@ -1,4 +1,4 @@
-import Model, { attr, hasMany, belongsTo } from '@ember-data/model';
+import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
 
 export default class TubeModel extends Model {
@@ -22,15 +22,15 @@ export default class TubeModel extends Model {
   @tracked selectedThematicResultLevel = false;
 
   get liveSkills() {
-    return this.rawSkills.filter(skill => skill.isLive);
+    return this.rawSkills.filter((skill) => skill.isLive);
   }
 
   get draftSkills() {
-    return this.rawSkills.filter(skill => skill.isDraft);
+    return this.rawSkills.filter((skill) => skill.isDraft);
   }
 
   get deadSkills() {
-    return this.rawSkills.filter(skill => !skill.isLive);
+    return this.rawSkills.filter((skill) => !skill.isLive);
   }
 
   get skillCount() {
@@ -38,7 +38,7 @@ export default class TubeModel extends Model {
   }
 
   get productionSkills() {
-    return this.sortedSkills.filter(skill => skill.status === 'actif');
+    return this.sortedSkills.filter((skill) => skill.status === 'actif');
   }
 
   get productionSkillCount() {
@@ -85,7 +85,7 @@ export default class TubeModel extends Model {
 
   _getFilledOrderedVersions(skills) {
     const filledSkills = this._getFilledSkillGroupByLevel(skills);
-    return filledSkills.map(filledSkill => {
+    return filledSkills.map((filledSkill) => {
       if (filledSkill && filledSkill.length > 1) {
         return filledSkill.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       }

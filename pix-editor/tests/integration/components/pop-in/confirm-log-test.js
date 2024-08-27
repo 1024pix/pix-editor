@@ -1,13 +1,14 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { render, click } from '@ember/test-helpers';
+import { click, render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | popin-confirm-log', function(hooks) {
   setupIntlRenderingTest(hooks);
   let approveActionStub, denyActionStub;
-  hooks.beforeEach(async function () {
+  hooks.beforeEach(async function() {
     // given
     approveActionStub = sinon.stub();
     denyActionStub = sinon.stub();

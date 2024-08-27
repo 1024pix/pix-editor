@@ -1,23 +1,24 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
-import { click, find, findAll, settled } from '@ember/test-helpers';
 import { render } from '@1024pix/ember-testing-library';
-import hbs from 'htmlbars-inline-precompile';
 import EmberObject from '@ember/object';
+import { click, find, findAll, settled } from '@ember/test-helpers';
+import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | challenge-form', function(hooks) {
   setupIntlRenderingTest(hooks);
 
   test('it should display expected fields if challenge type is `QROC`', async function(assert) {
     // Given
-    const challengeData = EmberObject.create({ type: 'QROC' , isTextBased: true, isPrototype: true });
+    const challengeData = EmberObject.create({ type: 'QROC', isTextBased: true, isPrototype: true });
     this.set('challengeData', challengeData);
 
     // When
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
 
     // Then
-    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach(field => {
+    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
       assert.dom(`[${field}]`).exists();
     });
   });
@@ -31,7 +32,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     await render(hbs`<Form::Challenge @challenge={{this.challengeData}}/>`);
 
     // Then
-    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach(field => {
+    ['data-test-format-field', 'data-test-tolerence-fields', 'data-test-suggestion-field'].forEach((field) => {
       assert.dom(`[${field}]`).doesNotExist();
     });
   });
@@ -39,7 +40,7 @@ module('Integration | Component | challenge-form', function(hooks) {
   test('it should display autochecked checkbox if challenge type is `QCM`', async function(assert) {
     // Given
     const store = this.owner.lookup('service:store');
-    const challengeData = store.createRecord('challenge',{
+    const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
     });
@@ -56,14 +57,14 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
 
     // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
-    await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 400));
     await settled();
   });
 
   test('it should display autochecked checkbox if challenge type is `QCU`', async function(assert) {
     // Given
     const store = this.owner.lookup('service:store');
-    const challengeData = store.createRecord('challenge',{
+    const challengeData = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
     });
@@ -80,7 +81,7 @@ module('Integration | Component | challenge-form', function(hooks) {
     assert.dom('[data-test-checkbox-shuffle] > input').isChecked();
 
     // WORKAROUND: https://github.com/1024pix/pix-editor/pull/107#issuecomment-1547481515
-    await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise((resolve) => setTimeout(resolve, 400));
     await settled();
   });
 });

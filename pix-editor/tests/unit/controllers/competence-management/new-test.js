@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence-management/new', function(hooks) {
@@ -25,11 +25,11 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       },
     };
     competence = {
-      code: '1.1'
+      code: '1.1',
     };
     controller.model = {
       area,
-      competence
+      competence,
     };
   });
 
@@ -50,7 +50,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
 
   module('#save', function(hooks) {
     let loaderStartStub, loaderStopStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       loaderStartStub = sinon.stub();
       loaderStopStub = sinon.stub();
       class LoaderService extends Service {
@@ -70,7 +70,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       const expectedCompetence = {
         area,
         code: '1.1',
-        save: saveStub
+        save: saveStub,
       };
       // when
       await controller.save();
@@ -84,13 +84,13 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
       assert.ok(createWorkbenchStub.calledOnce);
       assert.ok(notifyMessageStub.getCall(0).args, ['Atelier créé']);
-      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence,  { queryParams: { view: 'workbench' } }));
+      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence, { queryParams: { view: 'workbench' } }));
     });
 
     test('it should throw an error if saving failed', async function(assert) {
       // given
       const errorMessage = {
-        'error': ['error-test']
+        'error': ['error-test'],
       };
       const saveStub = sinon.stub().rejects(errorMessage);
       competence.save = saveStub;

@@ -1,9 +1,9 @@
-import { module, test } from 'qunit';
-import { setupApplicationTest } from 'ember-qunit';
-import { setupMirage } from 'ember-cli-mirage/test-support';
-import { authenticateSession } from 'ember-simple-auth/test-support';
-import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
 import { clickByName, clickByText, fillByLabel, visit } from '@1024pix/ember-testing-library';
+import { click, currentURL, find, triggerEvent } from '@ember/test-helpers';
+import { setupMirage } from 'ember-cli-mirage/test-support';
+import { setupApplicationTest } from 'ember-qunit';
+import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
 module('Acceptance | Missions | Creation', function(hooks) {
   setupApplicationTest(hooks);
@@ -13,7 +13,7 @@ module('Acceptance | Missions | Creation', function(hooks) {
     const notifications = this.owner.lookup('service:notifications');
     notifications.setDefaultClearDuration(50);
     this.server.create('config', 'default');
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence' , source: 'Pix+' });
+    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Notre compétence', source: 'Pix+' });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix' });
     this.server.create('framework', { id: 'recFrameworkPix1D', name: 'Pix 1D', areaIds: ['recArea1'] });

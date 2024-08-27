@@ -24,7 +24,7 @@ challenge:
     archive: Déclinaison n°{number} archivée
     obsolete: Déclinaison n°{number} périmée
   new:
-    version: "Nouvelle version : {version}"
+    version: 'Nouvelle version : {version}'
 skill:
   changelog:
     update-message: Mise à jour de l'acquis

@@ -1,5 +1,5 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 
 export default class PopinThresholdCalculation extends Component {
 
@@ -7,17 +7,17 @@ export default class PopinThresholdCalculation extends Component {
     const selectedSkills = [];
     const areas = this.args.model;
     const selectedTubes = [];
-    areas.forEach(area => {
-      area.sortedCompetences.forEach(competence => {
-        competence.productionTubes.forEach(tube => {
+    areas.forEach((area) => {
+      area.sortedCompetences.forEach((competence) => {
+        competence.productionTubes.forEach((tube) => {
           if (tube.selectedLevel) {
             selectedTubes.push(tube);
           }
         });
       });
     });
-    selectedTubes.forEach(tube => {
-      tube.liveSkills.forEach(skill => {
+    selectedTubes.forEach((tube) => {
+      tube.liveSkills.forEach((skill) => {
         if (skill.isActive && skill.level <= tube.selectedLevel) {
           selectedSkills.push(skill);
         }
@@ -32,7 +32,7 @@ export default class PopinThresholdCalculation extends Component {
 
   get selectedSkillsLevels() {
     const levels = [];
-    this.selectedSkills.forEach(skill=>{
+    this.selectedSkills.forEach((skill)=>{
       if (!levels.includes(skill.level)) {
         levels.push(skill.level);
       }

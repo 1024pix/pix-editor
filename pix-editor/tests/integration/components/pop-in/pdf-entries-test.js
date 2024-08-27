@@ -1,8 +1,9 @@
-import sinon from 'sinon';
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { click, fillIn, render } from '@ember/test-helpers';
 import { hbs } from 'ember-cli-htmlbars';
+import { module, test } from 'qunit';
+import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | pop-in/pdf-entries', function(hooks) {
   setupIntlRenderingTest(hooks);

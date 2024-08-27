@@ -11,7 +11,7 @@ module.exports = function(defaults) {
       plugins: [
         require.resolve('ember-concurrency/async-arrow-task-transform'),
       ],
-    }
+    },
 
     // Add options here
     /*babel: {
@@ -34,19 +34,19 @@ module.exports = function(defaults) {
   app.import('node_modules/semantic-ui-css/semantic.css');
 
   //TODO: remove this once outline icons are included in ember-semantic-ui
-  ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach(type => {
-    ['brand', 'outline'].forEach(asset => {
+  ['eot', 'svg', 'ttf', 'woff', 'woff2'].forEach((type) => {
+    ['brand', 'outline'].forEach((asset) => {
       app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/${asset}-icons.${type}`, {
-        destDir: 'assets/themes/default/assets/fonts'
+        destDir: 'assets/themes/default/assets/fonts',
       });
     });
     app.import(`node_modules/semantic-ui-css/themes/default/assets/fonts/icons.${type}`, {
-      destDir: 'assets/themes/default/assets/fonts'
+      destDir: 'assets/themes/default/assets/fonts',
     });
   });
 
   app.import('node_modules/semantic-ui-css/themes/default/assets/images/flags.png', {
-    destDir: 'assets/themes/default/assets/images'
+    destDir: 'assets/themes/default/assets/images',
   });
 
   const { Webpack } = require('@embroider/webpack');

@@ -166,7 +166,7 @@ export default class SingleController extends Controller {
       newSkill.version = newTube.getNextSkillVersion(level);
       await newSkill.save();
       await this._duplicateLiveChallenges(newSkill);
-      await this._handleSkillChangelog(newSkill,changelogValue, this.changelogEntry.moveAction);
+      await this._handleSkillChangelog(newSkill, changelogValue, this.changelogEntry.moveAction);
 
       this.notify.message('Acquis et épreuves associées dupliqués');
       this.router.transitionTo('authenticated.competence.skills.single', competence, newSkill);
@@ -182,7 +182,7 @@ export default class SingleController extends Controller {
   async _duplicateLiveChallenges(newSkill) {
     const skill = this.skill;
     const challenges = await skill.challenges;
-    const liveChallenges = challenges.filter(challenge => challenge.isLive);
+    const liveChallenges = challenges.filter((challenge) => challenge.isLive);
     const newChallenges = await Promise.all(liveChallenges.map(async (challenge) => {
       const newChallenge = await challenge.copyForDifferentSkill();
       newChallenge.skill = newSkill;
@@ -195,7 +195,7 @@ export default class SingleController extends Controller {
 
   async _saveDuplicatedAttachments(challenge) {
     await challenge.files;
-    await Promise.all(challenge.files.map(async file => {
+    await Promise.all(challenge.files.map(async (file) => {
       file.url = await this.storage.cloneFile(file.url);
       return file.save();
     }));
@@ -227,7 +227,7 @@ export default class SingleController extends Controller {
               this.notify.message(this.intl.t('skill.archive.success'));
             })
             .then(() => {
-              const updateChallenges = challenges.filter(challenge => challenge.isDraft).map(challenge => {
+              const updateChallenges = challenges.filter((challenge) => challenge.isDraft).map((challenge) => {
                 return challenge.archive()
                   .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.archive.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
@@ -240,7 +240,7 @@ export default class SingleController extends Controller {
               });
               return Promise.all(updateChallenges);
             })
-            .catch(error => {
+            .catch((error) => {
               console.error(error);
               Sentry.captureException(error);
               this.notify.error(this.intl.t('skill.archive.error'));
@@ -277,7 +277,7 @@ export default class SingleController extends Controller {
               this.notify.message(this.intl.t('skill.obsolete.success'));
             })
             .then(() => {
-              const updateChallenges = challenges.filter(challenge => !challenge.isObsolete).map(challenge => {
+              const updateChallenges = challenges.filter((challenge) => !challenge.isObsolete).map((challenge) => {
                 return challenge.obsolete()
                   .then(()=>this._handleChallengeChangelog(challenge, this.intl.t('skill.obsolete.challenge.changelog', { skillName: this.skill.name })))
                   .then(() => {
@@ -290,7 +290,7 @@ export default class SingleController extends Controller {
               });
               return Promise.all(updateChallenges);
             })
-            .catch(error => {
+            .catch((error) => {
               console.error(error);
               Sentry.captureException(error);
               this.notify.error(this.intl.t('skill.obsolete.error'));
@@ -336,7 +336,7 @@ export default class SingleController extends Controller {
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
       elementType: this.changelogEntry.skill,
-      action
+      action,
     });
     return entry.save()
       .then(() => skill);
@@ -348,7 +348,7 @@ export default class SingleController extends Controller {
       recordId: challenge.id,
       author: this.config.author,
       createdAt: (new Date()).toISOString(),
-      elementType: this.changelogEntry.challenge
+      elementType: this.changelogEntry.challenge,
     });
     return entry.save()
       .then(() => challenge);

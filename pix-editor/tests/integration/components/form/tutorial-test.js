@@ -1,8 +1,9 @@
-import { module, test } from 'qunit';
+import { clickByName, render } from '@1024pix/ember-testing-library';
 import Service from '@ember/service';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import hbs from 'htmlbars-inline-precompile';
-import { render, clickByName } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | tutorial-form', function(hooks) {
   setupIntlRenderingTest(hooks);

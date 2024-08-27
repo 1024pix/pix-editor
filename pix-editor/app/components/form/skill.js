@@ -5,7 +5,7 @@ export default class SkillForm extends Component {
   options = {
     'clueStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé', 'inapplicable'],
     'descriptionStatus': ['Proposé', 'Validé', 'pré-validé', 'à soumettre', 'à retravailler', 'archivé'],
-    'i18n': ['France', 'Monde', 'Union Européenne']
+    'i18n': ['France', 'Monde', 'Union Européenne'],
   };
 
   addTutorial(tutorials, tutorial) {

@@ -1,39 +1,40 @@
-import SortedList from './sorted';
 import { action } from '@ember/object';
+
+import SortedList from './sorted';
 
 export default class NoteList extends SortedList {
 
   sortHandlers = {
-    date:{
-      type:'date',
-      field:'createdAt'
-    }
+    date: {
+      type: 'date',
+      field: 'createdAt',
+    },
   };
 
   get headers() {
     const headers = [{
-      name:'Date',
-      valuePath:'date',
-      maxWidth:150,
+      name: 'Date',
+      valuePath: 'date',
+      maxWidth: 150,
     }];
     if (this.displayAuthor) {
       headers.push({
-        name:'Auteur',
-        valuePath:'author',
-        maxWidth:150,
-        style: 'author-note'
+        name: 'Auteur',
+        valuePath: 'author',
+        maxWidth: 150,
+        style: 'author-note',
       });
     }
     headers.push({
-      name:'Texte',
-      valuePath:'text',
+      name: 'Texte',
+      valuePath: 'text',
     });
     if (this.displayStatus) {
       headers.push({
-        name:'Statut',
-        valuePath:'status',
-        maxWidth:150,
-        style: 'status-note'
+        name: 'Statut',
+        valuePath: 'status',
+        maxWidth: 150,
+        style: 'status-note',
 
       });
     }

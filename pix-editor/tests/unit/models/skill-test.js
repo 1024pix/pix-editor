@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Model | skill', function(hooks) {
@@ -7,25 +7,25 @@ module('Unit | Model | skill', function(hooks) {
   let store;
   const challenge1 = {
     id: 'rec654258',
-    locales: ['Francophone','Franco Français'],
-    status:'validé'
+    locales: ['Francophone', 'Franco Français'],
+    status: 'validé',
   };
   const challenge2 = {
     id: 'rec654259',
     locales: ['Anglais'],
-    status:'validé'
+    status: 'validé',
   };
   const challenge3 = {
     id: 'rec654260',
     locales: ['Anglais'],
-    status:'validé'
+    status: 'validé',
   };
   const challenge4 = {
     id: 'rec654261',
     locales: ['Franco Français'],
-    status:'validé',
+    status: 'validé',
   };
-  hooks.beforeEach (function() {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
   });
 
@@ -35,18 +35,18 @@ module('Unit | Model | skill', function(hooks) {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
-        store.createRecord('challenge',challenge1),
-        store.createRecord('challenge',challenge2),
-        store.createRecord('challenge',challenge3),
-        store.createRecord('challenge',challenge4),
-      ]
+        store.createRecord('challenge', challenge1),
+        store.createRecord('challenge', challenge2),
+        store.createRecord('challenge', challenge3),
+        store.createRecord('challenge', challenge4),
+      ],
     });
 
     // when
     const languagesAndAlternativesCount = skill.languagesAndAlternativesCount;
 
     // then
-    assert.strictEqual(languagesAndAlternativesCount.get('Anglais'),2);
+    assert.strictEqual(languagesAndAlternativesCount.get('Anglais'), 2);
   });
 
   test('it should return an array of unique language sorted', function(assert) {
@@ -55,11 +55,11 @@ module('Unit | Model | skill', function(hooks) {
       id: 'rec123456',
       name: 'skillName',
       challenges: [
-        store.createRecord('challenge',challenge1),
-        store.createRecord('challenge',challenge2),
-        store.createRecord('challenge',challenge3),
-        store.createRecord('challenge',challenge4),
-      ]
+        store.createRecord('challenge', challenge1),
+        store.createRecord('challenge', challenge2),
+        store.createRecord('challenge', challenge3),
+        store.createRecord('challenge', challenge4),
+      ],
     });
 
     // when
@@ -67,10 +67,10 @@ module('Unit | Model | skill', function(hooks) {
     const expected = ['Anglais', 'Franco Français', 'Francophone'];
 
     // then
-    assert.deepEqual(languages,expected);
+    assert.deepEqual(languages, expected);
   });
 
-  test('it should duplicate skill without location and with a draft status',async function (assert) {
+  test('it should duplicate skill without location and with a draft status', async function(assert) {
     // given
     const idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
 
@@ -84,9 +84,9 @@ module('Unit | Model | skill', function(hooks) {
       status: 'actif',
       competence: ['competenceId'],
       tube: tube,
-      challenges: [store.createRecord('challenge',challenge1)],
+      challenges: [store.createRecord('challenge', challenge1)],
       tutoSolution: [tutorial1],
-      tutoMore: [tutorial2, tutorial3]
+      tutoMore: [tutorial2, tutorial3],
     });
 
     skill.idGenerator = idGeneratorStub;

@@ -20,9 +20,9 @@ export default class StatisticsProductionComponent extends Component {
     return this.productionCounts((competence) => {
       return competence.tubes.reduce((current, tube) => {
         return current + tube.liveSkills.reduce((current, skill) => {
-          return current + skill.challenges.filter(challenge => challenge.isValidated).length;
-        },0);
-      },0);
+          return current + skill.challenges.filter((challenge) => challenge.isValidated).length;
+        }, 0);
+      }, 0);
     });
   }
 
@@ -36,12 +36,12 @@ export default class StatisticsProductionComponent extends Component {
   }
 
   get productionData() {
-    return this.args.competenceCodes.map(code => ({
-      name:code,
-      tubes:this.productionTubeCounts[code],
-      skills:this.productionSkillCounts[code],
-      challenges:this.productionChallengeCounts[code],
-      rate:(this.productionChallengeCounts[code] * 100 / this.productionChallengeTotal).toFixed(1)
+    return this.args.competenceCodes.map((code) => ({
+      name: code,
+      tubes: this.productionTubeCounts[code],
+      skills: this.productionSkillCounts[code],
+      challenges: this.productionChallengeCounts[code],
+      rate: (this.productionChallengeCounts[code] * 100 / this.productionChallengeTotal).toFixed(1),
     }));
   }
 

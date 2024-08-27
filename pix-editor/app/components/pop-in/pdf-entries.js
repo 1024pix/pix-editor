@@ -1,10 +1,10 @@
-import Component from '@glimmer/component';
 import { action } from '@ember/object';
+import Component from '@glimmer/component';
 import { tracked } from '@glimmer/tracking';
 
 export default class PopinPDFEntries extends Component {
   options = {
-    language: [{ value:'en',label:'Anglais' }, { value:'fr',label:'Français' }],
+    language: [{ value: 'en', label: 'Anglais' }, { value: 'fr', label: 'Français' }],
   };
 
   @tracked title = 'Liste des thèmes et des sujets abordés dans Pix';
@@ -14,7 +14,7 @@ export default class PopinPDFEntries extends Component {
     if (this.language) {
       return this.language;
     }
-    return this.options.language.find(option => option.value === 'fr');
+    return this.options.language.find((option) => option.value === 'fr');
   }
 
   @action

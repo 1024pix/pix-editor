@@ -4,7 +4,6 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
 
-
 export default class CompetenceThemesSingleController extends Controller {
 
   @service access;

@@ -1,6 +1,7 @@
 import { inject as service } from '@ember/service';
 import Component from '@glimmer/component';
 import ENV from 'pixeditor/config/environment';
+
 import FrameworkModel from '../../models/framework';
 
 export default class SidebarMain extends Component {

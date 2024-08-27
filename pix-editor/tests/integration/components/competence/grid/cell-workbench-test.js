@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../../setup-intl-rendering';
 
 module('Integration | Component | competence/grid/cell-workbench', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -12,52 +13,52 @@ module('Integration | Component | competence/grid/cell-workbench', function(hook
 
   test('it should display a prototype count by status', async function(assert) {
     // given
-    const validatedPrototype = store.createRecord('challenge',{
+    const validatedPrototype = store.createRecord('challenge', {
       id: 'recChallenge0',
       genealogy: 'Prototype 1',
-      status: 'validé'
+      status: 'validé',
     });
-    const archivedPrototype1 = store.createRecord('challenge',{
+    const archivedPrototype1 = store.createRecord('challenge', {
       id: 'recChallenge1',
       genealogy: 'Prototype 1',
-      status: 'archivé'
+      status: 'archivé',
     });
-    const archivedPrototype2 = store.createRecord('challenge',{
+    const archivedPrototype2 = store.createRecord('challenge', {
       id: 'recChallenge2',
       genealogy: 'Prototype 1',
-      status: 'archivé'
+      status: 'archivé',
     });
-    const archivedPrototype3 = store.createRecord('challenge',{
+    const archivedPrototype3 = store.createRecord('challenge', {
       id: 'recChallenge3',
       genealogy: 'Prototype 1',
-      status: 'archivé'
+      status: 'archivé',
     });
-    const deletedPrototype1 = store.createRecord('challenge',{
+    const deletedPrototype1 = store.createRecord('challenge', {
       id: 'recChallenge4',
       genealogy: 'Prototype 1',
-      status: 'périmé'
+      status: 'périmé',
     });
-    const deletedPrototype2 = store.createRecord('challenge',{
+    const deletedPrototype2 = store.createRecord('challenge', {
       id: 'recChallenge5',
       genealogy: 'Prototype 1',
-      status: 'périmé'
+      status: 'périmé',
     });
-    const draftPrototype1 = store.createRecord('challenge',{
+    const draftPrototype1 = store.createRecord('challenge', {
       id: 'recChallenge6',
       genealogy: 'Prototype 1',
-      status: 'proposé'
+      status: 'proposé',
     });
-    const skill1 = store.createRecord('skill',{
+    const skill1 = store.createRecord('skill', {
       id: 'recSkill1',
       name: 'skill1',
       level: 1,
-      challenges: [validatedPrototype, archivedPrototype1, archivedPrototype2, draftPrototype1, deletedPrototype1]
+      challenges: [validatedPrototype, archivedPrototype1, archivedPrototype2, draftPrototype1, deletedPrototype1],
     });
-    const skill2 = store.createRecord('skill',{
+    const skill2 = store.createRecord('skill', {
       id: 'recSkill2',
       name: 'skill1',
       level: 1,
-      challenges: [archivedPrototype3, deletedPrototype2]
+      challenges: [archivedPrototype3, deletedPrototype2],
     });
 
     this.skill = skill1;

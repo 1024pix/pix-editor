@@ -1,7 +1,8 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | note-form', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -12,7 +13,7 @@ module('Integration | Component | note-form', function(hooks) {
 
     this.set('closeAction', function() {});
     this.set('editAction', function() {});
-    this.set('entry', { status:false });
+    this.set('entry', { status: false });
 
     await render(hbs`<Form::Note @close={{this.closeAction}}
                                  @edit={{this.editAction}}

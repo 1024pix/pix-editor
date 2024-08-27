@@ -6,7 +6,6 @@ const REPLICATOR = 2;
 const EDITOR = 3;
 const ADMIN = 4;
 
-
 export default class AccessService extends Service {
   @service config;
 

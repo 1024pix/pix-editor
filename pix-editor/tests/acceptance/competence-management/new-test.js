@@ -1,17 +1,18 @@
-import { module, test } from 'qunit';
-import { currentURL, visit, fillIn, click, find, findAll } from '@ember/test-helpers';
-import { setupApplicationTest } from '../../setup-application-rendering';
+import { click, currentURL, fillIn, find, findAll, visit } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
-module('Acceptance | competence-management/single', function (hooks) {
+import { setupApplicationTest } from '../../setup-application-rendering';
+
+module('Acceptance | competence-management/single', function(hooks) {
 
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let store, originalWindowConfirm;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     // given
     originalWindowConfirm = window.confirm;
     store = this.owner.lookup('service:store');
@@ -26,11 +27,11 @@ module('Acceptance | competence-management/single', function (hooks) {
     return authenticateSession();
   });
 
-  hooks.afterEach(function () {
+  hooks.afterEach(function() {
     window.confirm = originalWindowConfirm;
   });
 
-  test('it should create a new competence', async function (assert) {
+  test('it should create a new competence', async function(assert) {
     // given
     const newCompetenceTitle = 'Nouveau titre';
 
@@ -45,10 +46,10 @@ module('Acceptance | competence-management/single', function (hooks) {
 
     // then
     const area = await store.peekRecord('area', 'recArea1');
-    const newCompetence = area.competences.find(competence => competence.title === newCompetenceTitle);
-    const workbenchTheme = newCompetence.rawThemes.find(theme => theme.name === 'workbench_Pix+_1_2');
-    const workbenchTube = workbenchTheme.rawTubes.find(tube => tube.name === '@workbench');
-    const workbenchSkill = workbenchTube.rawSkills.find(skill => skill.name === '@workbench');
+    const newCompetence = area.competences.find((competence) => competence.title === newCompetenceTitle);
+    const workbenchTheme = newCompetence.rawThemes.find((theme) => theme.name === 'workbench_Pix+_1_2');
+    const workbenchTube = workbenchTheme.rawTubes.find((tube) => tube.name === '@workbench');
+    const workbenchSkill = workbenchTube.rawSkills.find((skill) => skill.name === '@workbench');
     assert.ok(newCompetence);
     assert.ok(workbenchTheme);
     assert.ok(workbenchTube);
@@ -58,7 +59,7 @@ module('Acceptance | competence-management/single', function (hooks) {
     assert.strictEqual(currentURL(), `/competence/${newCompetence.id}/skills?view=workbench`);
   });
 
-  test('it should cancel creation', async function (assert) {
+  test('it should cancel creation', async function(assert) {
     // when
     await visit('/competence-management/new/recArea1');
     await click(find('[data-test-cancel-button]'));
@@ -68,7 +69,7 @@ module('Acceptance | competence-management/single', function (hooks) {
     assert.strictEqual(currentURL(), '/');
   });
 
-  test('it should prevent transition', async function (assert) {
+  test('it should prevent transition', async function(assert) {
     // given
     const confirmStub = sinon.stub(window, 'confirm');
     confirmStub.returns(false);

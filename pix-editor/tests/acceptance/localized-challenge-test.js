@@ -1,15 +1,16 @@
-import { module, test } from 'qunit';
-import { visit, clickByText } from '@1024pix/ember-testing-library';
-import { findAll, click } from '@ember/test-helpers';
-import { setupApplicationTest } from '../setup-application-rendering';
+import { clickByText, visit } from '@1024pix/ember-testing-library';
+import { click, findAll } from '@ember/test-helpers';
 import { setupMirage } from 'ember-cli-mirage/test-support';
 import { authenticateSession } from 'ember-simple-auth/test-support';
+import { module, test } from 'qunit';
 
-module('Acceptance | Localized-Challenge', function (hooks) {
+import { setupApplicationTest } from '../setup-application-rendering';
+
+module('Acceptance | Localized-Challenge', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
@@ -23,19 +24,19 @@ module('Acceptance | Localized-Challenge', function (hooks) {
       id: 'recCompetence1.1',
       pixId: 'pixId recCompetence1.1',
       rawThemeIds: ['recTheme1'],
-      rawTubeIds: ['recTube1']
+      rawTubeIds: ['recTube1'],
     });
     this.server.create('area', {
       id: 'recArea1',
       name: '1. Information et données',
       code: '1',
-      competenceIds: ['recCompetence1.1']
+      competenceIds: ['recCompetence1.1'],
     });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     return authenticateSession();
   });
 
-  test('should display a default embedUrl if is empty but not for primary', async function (assert) {
+  test('should display a default embedUrl if is empty but not for primary', async function(assert) {
     // when
     const screen = await visit('/');
     await click(findAll('[data-test-area-item]')[0]);
@@ -46,7 +47,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     // then
     assert.dom(await screen.queryByText('https://mon-site.fr/my-link.html?lang=nl', { exact: false })).exists();
   });
-  test('should not display a default url if primary does not have any', async function (assert) {
+  test('should not display a default url if primary does not have any', async function(assert) {
     // given
     this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1', embedURL: null });
     this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
@@ -63,7 +64,7 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     // then
     assert.dom(await screen.queryByText('Embed URL auto-générée', { exact: false })).doesNotExist();
   });
-  test('should display an embed url if localized challenge has one', async function (assert) {
+  test('should display an embed url if localized challenge has one', async function(assert) {
     // given
     this.server.create('challenge', { id: 'recChallenge2', airtableId: 'airtableId1' });
     this.server.create('localized-challenge', { id: 'recChallenge2', challengeId: 'recChallenge2', locale: 'fr' });
@@ -81,7 +82,6 @@ module('Acceptance | Localized-Challenge', function (hooks) {
     const input = await screen.findByLabelText('Embed URL :');
     assert.strictEqual(input.value, 'https://mon-site.fr/my-nl-link.html');
   });
-
 
 });
 

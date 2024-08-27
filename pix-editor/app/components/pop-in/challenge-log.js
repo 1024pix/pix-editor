@@ -1,8 +1,8 @@
-import Component from '@glimmer/component';
-import { tracked } from '@glimmer/tracking';
+import { A } from '@ember/array';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
-import { A } from '@ember/array';
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
 
 export default class PopinChallengeLog extends Component {
   @service store;
@@ -22,7 +22,7 @@ export default class PopinChallengeLog extends Component {
   changelogEntries = A([]);
 
   constructor() {
-    super (...arguments);
+    super(...arguments);
     this._loadNotes();
     this._loadChangelog();
   }
@@ -39,7 +39,7 @@ export default class PopinChallengeLog extends Component {
     } else {
       const notes = this.notes;
       const author = this.config.author;
-      return notes.filter(note => note.author === author);
+      return notes.filter((note) => note.author === author);
     }
   }
 
@@ -60,7 +60,7 @@ export default class PopinChallengeLog extends Component {
     const newNote = this.store.createRecord('note', {
       recordId: this.args.challenge.id,
       author: this.config.author,
-      elementType: this.changelogEntry.challenge
+      elementType: this.changelogEntry.challenge,
     });
     this.logEntry = newNote;
     this.list = false;
@@ -129,8 +129,8 @@ export default class PopinChallengeLog extends Component {
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
-      return pq.query('note', { filterByFormula:`AND(Record_Id = '${challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
-        .then(notes => {
+      return pq.query('note', { filterByFormula: `AND(Record_Id = '${challenge.id}', Statut != 'archive', Changelog='non')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        .then((notes) => {
           this.notes = notes;
           this.notesLoaded = true;
           return notes;
@@ -143,8 +143,8 @@ export default class PopinChallengeLog extends Component {
     const challenge = this.args.challenge;
     if (challenge) {
       const pq = this.paginatedQuery;
-      return pq.query('changelogEntry', { filterByFormula:`AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
-        .then(entries => {
+      return pq.query('changelogEntry', { filterByFormula: `AND(Record_Id = '${challenge.id}', Changelog='oui')`, sort: [{ field: 'Date', direction: 'desc' }] })
+        .then((entries) => {
           this.changelogEntries = entries;
           this.changelogLoaded = true;
         });

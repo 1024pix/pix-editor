@@ -1,5 +1,6 @@
-import CompetenceThemesSingleRoute from './single';
 import { inject as service } from '@ember/service';
+
+import CompetenceThemesSingleRoute from './single';
 
 export default class CompetenceThemesNewRoute extends CompetenceThemesSingleRoute {
   templateName = 'authenticated/competence/themes/single';

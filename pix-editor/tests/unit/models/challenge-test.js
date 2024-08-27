@@ -1,13 +1,13 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Model | challenge', function(hooks) {
   setupTest(hooks);
   let store, idGeneratorStub, alternative, prototype;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
 
     class ConfigService extends Service {
@@ -21,29 +21,29 @@ module('Unit | Model | challenge', function(hooks) {
 
     idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
 
-    prototype =  {
+    prototype = {
       id: 'pix_1',
       airtableId: 'rec_1',
-      status:'validé',
+      status: 'validé',
       genealogy: 'Prototype 1',
       author: 'DEV',
       version: 1,
       skill: store.createRecord('skill', {}),
-      idGenerator: idGeneratorStub
+      idGenerator: idGeneratorStub,
     };
-    alternative =  {
+    alternative = {
       id: 'pix_1',
       airtableId: 'rec_1',
-      status:'validé',
+      status: 'validé',
       author: 'DEV',
       alternativeVersion: 1,
       skill: store.createRecord('skill', {}),
-      idGenerator: idGeneratorStub
+      idGenerator: idGeneratorStub,
     };
   });
 
   module('#duplicate', function() {
-    test('it should duplicate challenge to create new prototype version', async function (assert) {
+    test('it should duplicate challenge to create new prototype version', async function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
 
@@ -60,7 +60,7 @@ module('Unit | Model | challenge', function(hooks) {
       assert.ok(clonedChallenge.skill);
     });
 
-    test('it should duplicate challenge to create new alternative version', async function (assert) {
+    test('it should duplicate challenge to create new alternative version', async function(assert) {
       // given
       const challenge = store.createRecord('challenge', alternative);
 
@@ -76,10 +76,10 @@ module('Unit | Model | challenge', function(hooks) {
       assert.ok(clonedChallenge.skill);
     });
 
-    test('it should clone the attachments', async function (assert) {
+    test('it should clone the attachments', async function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
+      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
 
       // when
       const clonedChallenge = await challenge.duplicate();
@@ -109,10 +109,10 @@ module('Unit | Model | challenge', function(hooks) {
       assert.notOk(skill);
     });
 
-    test('it should clone the attachments', async function (assert) {
+    test('it should clone the attachments', async function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
+      const illustration = store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'illustration', alt: 'alt message', challenge });
 
       // when
       const clonedChallenge = await challenge.copyForDifferentSkill();
@@ -129,7 +129,7 @@ module('Unit | Model | challenge', function(hooks) {
     test('it should return true if the base name is updated', function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
 
       // when
       challenge.attachmentBaseName = 'otherName';
@@ -141,7 +141,7 @@ module('Unit | Model | challenge', function(hooks) {
     test('it should return false if the base name is not updated', function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
 
       // when
       challenge.attachmentBaseName = 'filename';
@@ -153,7 +153,7 @@ module('Unit | Model | challenge', function(hooks) {
     test('it should return true if the base name undefined', function(assert) {
       // given
       const challenge = store.createRecord('challenge', prototype);
-      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;',  size: 10, mimeType: 'image/png', type: 'attachment', challenge });
+      store.createRecord('attachment', { id: 'rec1234156', filename: 'filename.test', url: 'data:;', size: 10, mimeType: 'image/png', type: 'attachment', challenge });
 
       // then
       assert.false(challenge.baseNameUpdated());

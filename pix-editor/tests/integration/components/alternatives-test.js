@@ -1,10 +1,11 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 import { render } from '@1024pix/ember-testing-library';
+import EmberObject from '@ember/object';
 import { click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import EmberObject from '@ember/object';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
+
+import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 
 module('Integration | Component | alternatives', function(hooks) {
   setupIntlRenderingTest(hooks);

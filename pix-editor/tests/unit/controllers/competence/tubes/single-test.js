@@ -1,6 +1,6 @@
-import { module, test } from 'qunit';
-import { setupTest } from 'ember-qunit';
 import Service from '@ember/service';
+import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 import sinon from 'sinon';
 
 module('Unit | Controller | competence/tubes/single', function(hooks) {
@@ -8,7 +8,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
 
   let controller, store, notifyMessageStub, notifyErrorStub, loaderStartStub, loaderStopStub;
 
-  hooks.beforeEach(function () {
+  hooks.beforeEach(function() {
 
     notifyMessageStub = sinon.stub();
     notifyErrorStub = sinon.stub();
@@ -32,7 +32,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
 
     store = this.owner.lookup('service:store');
 
-    const tube = store.createRecord('tube',{
+    const tube = store.createRecord('tube', {
       id: 'recTube0',
       name: 'TubeName',
     });
@@ -66,7 +66,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
   test('it should catch an error if save action failed', async function(assert) {
     // given
     const errorMessage = {
-      'error': ['error-test']
+      'error': ['error-test'],
     };
     const saveStub = sinon.stub().rejects(errorMessage);
     controller.model.save = saveStub;
@@ -101,7 +101,7 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
 
   module('#cancelEdition', function(hooks) {
     let rollbackAttributesStub;
-    hooks.beforeEach(function () {
+    hooks.beforeEach(function() {
       rollbackAttributesStub = sinon.stub();
       controller.model.rollbackAttributes = rollbackAttributesStub;
       controller.edition = true;
@@ -151,12 +151,12 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
 
   module('#setCompetence', function(hooks) {
     let newTheme, newCompetence;
-    hooks.beforeEach(function () {
-      newTheme = store.createRecord('theme',{
+    hooks.beforeEach(function() {
+      newTheme = store.createRecord('theme', {
         id: 'recTheme0',
         name: 'themeName',
       });
-      newCompetence = store.createRecord('competence',{
+      newCompetence = store.createRecord('competence', {
         id: 'recCompetence0',
         title: 'competenceName',
       });
@@ -184,10 +184,10 @@ module('Unit | Controller | competence/tubes/single', function(hooks) {
       assert.deepEqual(theme, newTheme);
     });
 
-    test('it should catch an error if action failed',async function(assert) {
+    test('it should catch an error if action failed', async function(assert) {
       // given
       const errorMessage = {
-        'error': ['error-test']
+        'error': ['error-test'],
       };
       const saveStub = sinon.stub().rejects(errorMessage);
       controller.model.save = saveStub;

@@ -1,8 +1,9 @@
-import { module, test } from 'qunit';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
+import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
 import { click, find, triggerEvent } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
-import { clickByText, fillByLabel, render } from '@1024pix/ember-testing-library';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | mission', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -10,7 +11,7 @@ module('Integration | Component | mission', function(hooks) {
   test('Should enable create mission button when mandatory informations have been given', async function(assert) {
 
     this.set('mission', {});
-    this.set('competences', [{ title: 'Notre compétence', pixId: 'pixId' , themes: [{}] }]);
+    this.set('competences', [{ title: 'Notre compétence', pixId: 'pixId', themes: [{}] }]);
     this.set('submitButtonText', 'Créer la mission');
 
     const screen = await render(hbs`<Form::Mission
@@ -30,7 +31,6 @@ module('Integration | Component | mission', function(hooks) {
 
     assert.dom(button).doesNotHaveAttribute('disabled');
   });
-
 
   test('Should disable create mission button when no complete informations', async function(assert) {
 

@@ -1,8 +1,9 @@
-import Prototype from './single';
 import { action } from '@ember/object';
-import { tracked } from '@glimmer/tracking';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 import * as Sentry from '@sentry/ember';
+
+import Prototype from './single';
 
 export default class NewController extends Prototype {
 
@@ -28,14 +29,14 @@ export default class NewController extends Prototype {
   save() {
     this.loader.start();
     return this._handleIllustration(this.challenge)
-      .then(challenge => this._handleAttachments(challenge))
+      .then((challenge) => this._handleAttachments(challenge))
       // create challenge without patching Pix API cache
-      .then(challenge => this._saveChallenge(challenge))
-      .then(challenge => this._saveAttachments(challenge))
-      .then(challenge => this._setVersion(challenge))
+      .then((challenge) => this._saveChallenge(challenge))
+      .then((challenge) => this._saveAttachments(challenge))
+      .then((challenge) => this._setVersion(challenge))
       // update challenge's version and patch Pix API cache
-      .then(challenge => this._saveChallenge(challenge))
-      .then(challenge => {
+      .then((challenge) => this._saveChallenge(challenge))
+      .then((challenge) => {
         this.edition = false;
         this.send('minimize');
         this._message('Prototype enregistré');

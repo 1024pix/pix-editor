@@ -1,5 +1,5 @@
-import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
+import { module, test } from 'qunit';
 
 module('Unit | Model | tube', function(hooks) {
   setupTest(hooks);
@@ -7,65 +7,65 @@ module('Unit | Model | tube', function(hooks) {
   let skillRecord1, skillRecord2, skillRecord3, skillRecord4, skillRecord5, skillRecord6;
   let tube;
 
-  hooks.beforeEach (function() {
+  hooks.beforeEach(function() {
     store = this.owner.lookup('service:store');
-    skillRecord1 = store.createRecord('skill',{
+    skillRecord1 = store.createRecord('skill', {
       id: 'rec654258',
       level: 1,
-      status:'actif',
-      challenges: [store.createRecord('challenge',{
+      status: 'actif',
+      challenges: [store.createRecord('challenge', {
         id: 'recChallenge0',
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
-    skillRecord2 = store.createRecord('skill',{
+    skillRecord2 = store.createRecord('skill', {
       id: 'rec654259',
       level: 1,
-      status:'archivé'
+      status: 'archivé',
     });
-    skillRecord3 = store.createRecord('skill',{
+    skillRecord3 = store.createRecord('skill', {
       id: 'rec654260',
       level: 3,
-      status:'actif',
-      challenges: [store.createRecord('challenge',{
+      status: 'actif',
+      challenges: [store.createRecord('challenge', {
         id: 'recChallenge1',
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
-    skillRecord4 = store.createRecord('skill',{
+    skillRecord4 = store.createRecord('skill', {
       id: 'rec654261',
       level: 4,
-      status:'actif',
-      challenges: [store.createRecord('challenge',{
+      status: 'actif',
+      challenges: [store.createRecord('challenge', {
         id: 'recChallenge2',
         genealogy: 'Prototype 1',
-        status: 'validé'
-      })]
+        status: 'validé',
+      })],
     });
-    skillRecord5 = store.createRecord('skill',{
+    skillRecord5 = store.createRecord('skill', {
       id: 'rec664261',
       level: 5,
-      status:'en construction',
+      status: 'en construction',
       version: 1,
     });
-    skillRecord6 = store.createRecord('skill',{
+    skillRecord6 = store.createRecord('skill', {
       id: 'rec674261',
       level: 6,
-      status:'périmé',
+      status: 'périmé',
     });
     tube = store.createRecord('tube', {
       id: 'rec123456',
       name: 'tubeName',
       rawSkills: [
         skillRecord1
-        ,skillRecord2
-        ,skillRecord3
-        ,skillRecord4
-        ,skillRecord5
-        ,skillRecord6
-      ]
+        , skillRecord2
+        , skillRecord3
+        , skillRecord4
+        , skillRecord5
+        , skillRecord6,
+      ],
     });
   });
 
@@ -78,7 +78,7 @@ module('Unit | Model | tube', function(hooks) {
     const liveSkills = tube.liveSkills;
 
     // then
-    liveSkills.forEach(skill => {
+    liveSkills.forEach((skill) => {
       assert.notOk(wrongStatus.includes(skill.status));
     });
   });
@@ -91,7 +91,7 @@ module('Unit | Model | tube', function(hooks) {
     const filledSkills = tube.filledSkills;
 
     // then
-    assert.deepEqual(filledSkills,expectedArray);
+    assert.deepEqual(filledSkills, expectedArray);
   });
 
   test('it should return an array of productionSkill positioned by level', function(assert) {
@@ -103,21 +103,21 @@ module('Unit | Model | tube', function(hooks) {
     const filledSkills = tube.filledProductionSkills;
 
     // then
-    assert.deepEqual(filledSkills,expectedArray);
+    assert.deepEqual(filledSkills, expectedArray);
   });
   module('#draftSkill', function(hooks) {
     let skillRecord5v2, skillRecord1v2;
-    hooks.beforeEach(function () {
-      skillRecord1v2 = store.createRecord('skill',{
+    hooks.beforeEach(function() {
+      skillRecord1v2 = store.createRecord('skill', {
         id: 'skillRecord1v2',
         level: 1,
-        status:'en construction',
+        status: 'en construction',
         version: 2,
       });
-      skillRecord5v2 = store.createRecord('skill',{
+      skillRecord5v2 = store.createRecord('skill', {
         id: 'skillRecord5v2',
         level: 5,
-        status:'en construction',
+        status: 'en construction',
         version: 2,
       });
       tube.rawSkills.pushObject(skillRecord1v2);
@@ -147,7 +147,7 @@ module('Unit | Model | tube', function(hooks) {
     });
   });
 
-  test('it should get a next skill version', async function (assert) {
+  test('it should get a next skill version', async function(assert) {
 
     // when
     const nextSkillVersion = tube.getNextSkillVersion(skillRecord2.level);

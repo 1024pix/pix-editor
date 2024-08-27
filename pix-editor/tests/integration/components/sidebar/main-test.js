@@ -1,8 +1,9 @@
-import { module, test } from 'qunit';
-import Service from '@ember/service';
-import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 import { render } from '@1024pix/ember-testing-library';
+import Service from '@ember/service';
 import hbs from 'htmlbars-inline-precompile';
+import { module, test } from 'qunit';
+
+import { setupIntlRenderingTest } from '../../../setup-intl-rendering';
 
 module('Integration | Component | main-sidebar', function(hooks) {
   setupIntlRenderingTest(hooks);
@@ -64,7 +65,7 @@ module('Integration | Component | main-sidebar', function(hooks) {
       const screen = await render(hbs`<Sidebar::Main @openLogout={{this.openLogout}}
                                     @open={{this.menuOpen}}
                                     @close={{this.closeMenu}} />`);
-                                    
+
       assert.dom(screen.queryByText('Missions Pix 1D')).doesNotExist();
     });
   });

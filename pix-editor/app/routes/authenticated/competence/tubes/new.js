@@ -1,12 +1,13 @@
-import Tube from './single';
 import { inject as service } from '@ember/service';
+
+import Tube from './single';
 
 export default class NewRoute extends Tube {
 
   queryParams = {
     themeId: {
-      refreshModel: true
-    }
+      refreshModel: true,
+    },
   };
 
   templateName = 'authenticated/competence/tubes/single';
@@ -17,7 +18,7 @@ export default class NewRoute extends Tube {
     const theme = await this.store.findRecord('theme', params.themeId);
     return this.store.createRecord('tube', {
       pixId: this.idGenerator.newId('tube'),
-      theme
+      theme,
     });
   }
 

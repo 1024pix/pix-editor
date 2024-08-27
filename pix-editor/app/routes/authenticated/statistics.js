@@ -1,5 +1,5 @@
-import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
+import { inject as service } from '@ember/service';
 
 export default class StatisticsRoute extends Route {
 
@@ -10,18 +10,18 @@ export default class StatisticsRoute extends Route {
   }
 
   afterModel(model) {
-    const getCompetences = model.map(area => area.competences);
+    const getCompetences = model.map((area) => area.competences);
     return Promise.all(getCompetences)
-      .then(areaCompetences => {
-        const getTubes = areaCompetences.map(competences => competences.map(competence => competence.rawTubes)).flat();
+      .then((areaCompetences) => {
+        const getTubes = areaCompetences.map((competences) => competences.map((competence) => competence.rawTubes)).flat();
         return Promise.all(getTubes);
       })
-      .then(competenceTubes => {
-        const getSkills = competenceTubes.map(tubes => tubes.map(tube => tube.rawSkills)).flat();
+      .then((competenceTubes) => {
+        const getSkills = competenceTubes.map((tubes) => tubes.map((tube) => tube.rawSkills)).flat();
         return Promise.all(getSkills);
       })
-      .then(tubeSkills => {
-        const getChallenges = tubeSkills.map(skills => skills.map(skill => skill.challenges)).flat();
+      .then((tubeSkills) => {
+        const getChallenges = tubeSkills.map((skills) => skills.map((skill) => skill.challenges)).flat();
         return Promise.all(getChallenges);
       });
   }

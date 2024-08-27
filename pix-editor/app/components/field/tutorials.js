@@ -28,9 +28,9 @@ export default class Tutorials extends Component {
     const tutorials = await this.store.query('tutorial', {
       filterByFormula: tagSearch ? `AND(${tagSearch})` : `FIND('${query.replace(/'/g, '\\\'')}', LOWER(Titre))`,
       maxRecords: 100,
-      sort: [{ field: 'Titre', direction: 'asc' }]
+      sort: [{ field: 'Titre', direction: 'asc' }],
     });
-    const tagsLoad = tutorials.map(tutorial => tutorial.tags);
+    const tagsLoad = tutorials.map((tutorial) => tutorial.tags);
     await Promise.all(tagsLoad);
 
     const results = tutorials.map((tutorial) => {
@@ -38,7 +38,7 @@ export default class Tutorials extends Component {
       return {
         title: tutorial.title,
         description: haveTags ? `TAG : ${tutorial.tagsTitle}` : false,
-        id: tutorial.id
+        id: tutorial.id,
       };
     });
     return results;
@@ -56,7 +56,7 @@ export default class Tutorials extends Component {
     const date = new Date();
     this.tutorial = this.store.createRecord('tutorial', {
       pixId: this.idGenerator.newId('tutorial'),
-      date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+      date: `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`,
     });
     this.displayTutorialPopin = true;
   }
