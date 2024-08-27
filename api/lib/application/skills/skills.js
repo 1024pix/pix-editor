@@ -9,6 +9,7 @@ import {
 } from '../../infrastructure/repositories/index.js';
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import { cloneSkill } from '../../domain/usecases/index.js';
+import * as pixApiClient from '../../infrastructure/pix-api-client.js';
 
 export async function clone(request, h) {
   const userId = extractUserIdFromRequest(request);
@@ -23,6 +24,7 @@ export async function clone(request, h) {
         tubeRepository,
         attachmentRepository,
         generateNewIdFnc: generateNewId,
+        pixApiClient,
       },
     });
   } catch (err) {

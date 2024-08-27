@@ -1,3 +1,11 @@
+import {
+  createChallengeTransformer,
+  skillTransformer,
+} from '../../infrastructure/transformers/index.js';
+import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
+import { logger } from '../../infrastructure/logger.js';
+import * as Sentry from '@sentry/node';
+
 // TODO LIST
 // industrialiser les utils translations pour gérer les objets du domaine
 // factoriser du code entre pix-api-client et storage et faire un peu mieux (separation of concerns etc...)
@@ -12,6 +20,7 @@ export async function cloneSkill({
     tubeRepository,
     attachmentRepository,
     generateNewIdFnc,
+    pixApiClient,
   },
 }) {
   const { tube, skillToClone } = await _checkIfCloningIsPossible({
@@ -51,6 +60,7 @@ export async function cloneSkill({
   // for now only persist primary attachments
   const attachmentsToPersist = clonedAttachments.filter((attachment) => attachment.challengeId === attachment.localizedChallengeId);
   await attachmentRepository.createBatch(attachmentsToPersist);
+  updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient });
   return 'ok';
 }
 
@@ -86,4 +96,21 @@ async function _fetchData({ skillToCloneId, tubeId, challengeRepository, skillRe
     tubeSkills,
     attachments,
   };
+}
+
+function updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient }) {
+  (async () => {
+    const [transformedSkill] = skillTransformer.filterSkillsFields([clonedSkill]);
+    await updatedRecordNotifier.notify({ updatedRecord: transformedSkill, model: 'skills', pixApiClient });
+
+    const primaryChallenges = clonedChallenges.filter((challenge) => challenge.isPrimary);
+    const transformChallenge = createChallengeTransformer({ attachments: clonedAttachments });
+    const transformedChallenges = primaryChallenges.map(transformChallenge);
+    for (const transformedChallenge of transformedChallenges) {
+      await updatedRecordNotifier.notify({ updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
+    }
+  })().catch((err) => {
+    logger.error(err);
+    Sentry.captureException(err);
+  });
 }
