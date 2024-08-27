@@ -69,7 +69,6 @@ function _toDomain(mission, translations) {
     status: mission.status,
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
-    content: mission.content,
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
     introductionMediaAlt: mission.introductionMediaAlt,

@@ -1416,7 +1416,7 @@ function _getRichCurrentContentDTO() {
     },
   ];
   const expectedMissionsDTOs = [
-    new Mission({
+    {
       id: 123456789,
       name_i18n: { fr: 'validated mission PG name' },
       competenceId: 'competenceId',
@@ -1428,8 +1428,12 @@ function _getRichCurrentContentDTO() {
       introductionMediaUrl: null,
       introductionMediaType: null,
       introductionMediaAlt: null,
-      documentationUrl: 'http://url-example.net'
-    }),
+      documentationUrl: 'http://url-example.net',
+      content: {
+        dareChallenges: [],
+        steps: [],
+      },
+    },
   ];
 
   return {

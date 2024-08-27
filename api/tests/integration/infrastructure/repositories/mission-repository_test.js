@@ -189,12 +189,7 @@ describe('Integration | Repository | mission-repository', function() {
         documentationUrl: null,
         status: Mission.status.VALIDATED,
         createdAt: new Date('2010-01-04'),
-        content: {
-          steps: [],
-          dareChallenges: [],
-        },
       })]);
-
     });
   });
 
