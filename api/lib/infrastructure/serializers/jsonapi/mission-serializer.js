@@ -46,10 +46,6 @@ export function serializeMission(mission, warnings) {
   }).serialize(mission);
 }
 
-export function serializeMissionId(id) {
-  return new Serializer('mission', {}).serialize({ id });
-}
-
 export function deserializeMission(attributes) {
   return new Mission({
     id: attributes.id,

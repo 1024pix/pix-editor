@@ -24,8 +24,8 @@ export async function getMission(request, h) {
 export async function create(request, h) {
   const attributes = request?.payload?.data?.attributes;
   const mission = missionSerializer.deserializeMission(attributes);
-  const savedMission = await createMission(mission);
-  return h.response(missionSerializer.serializeMissionId(savedMission.id)).created();
+  const { mission: savedMission, warnings } = await createMission(mission);
+  return h.response(missionSerializer.serializeMission(savedMission, warnings)).created();
 }
 export async function update(request, h) {
   const attributes = request?.payload?.data?.attributes;

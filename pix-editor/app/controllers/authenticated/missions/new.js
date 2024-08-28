@@ -11,6 +11,9 @@ export default class MissionController extends Controller {
     try {
       await this.model.mission.save({ adapterOptions: formData });
       this.notifications.success('Mission créé avec succès.');
+      if (this.model.mission.hasWarnings()) {
+        this.notifications.warning(this.model.mission.warnings.join('<br>'), { clearDuration: 5000, htmlContent: true });
+      }
       this.router.transitionTo('authenticated.missions.list');
     } catch {
       this.model.mission.deleteRecord();

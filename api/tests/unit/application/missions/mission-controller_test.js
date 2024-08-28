@@ -152,21 +152,39 @@ describe('Unit | Controller | missions controller', function() {
   describe('createMission', function() {
     let createMissionMock;
     const attributes = {
-      name: 'Mission impossible',
+      name: 'Mission possible',
       'competence-id': 'AZERTY',
-      status: Mission.status.INACTIVE,
+      status: Mission.status.VALIDATED,
       'learning-objectives': null,
       'validated-objectives': 'Très bien',
-      'thematic-id': null
+      'thematic-ids': null,
+      'introduction-media-url': null,
+      'introduction-media-type': null,
+      'introduction-media-alt': null,
+      'documentation-url': 'http://url-example.net',
     };
 
     const request = { payload: { data: { attributes } } };
+    const deserializedMission = new Mission({
+      name_i18n: { fr: 'Mission possible' },
+      competenceId: 'AZERTY',
+      thematicIds: null,
+      learningObjectives_i18n: { fr: null },
+      validatedObjectives_i18n: { fr: 'Très bien' },
+      introductionMediaUrl: null,
+      introductionMediaType: null,
+      introductionMediaAlt: null,
+      documentationUrl: 'http://url-example.net',
+      status: Mission.status.VALIDATED,
+    });
 
     beforeEach(function() {
       createMissionMock = vi.spyOn(usecases, 'createMission');
-      createMissionMock.mockResolvedValue(new Mission({
-        id: 1
-      }));
+
+      createMissionMock.mockResolvedValue({
+        mission: { ...deserializedMission, id: '1' },
+        warnings: ['Ca va pas du tout là !'],
+      });
     });
 
     it('should call the usecase with a domain object', async function() {
@@ -174,19 +192,6 @@ describe('Unit | Controller | missions controller', function() {
 
       // when
       await missionsController.create(request, hFake);
-
-      const deserializedMission = new Mission({
-        name_i18n: { fr: 'Mission impossible' },
-        competenceId: 'AZERTY',
-        thematicId: null,
-        learningObjectives_i18n: { fr: null },
-        validatedObjectives_i18n: { fr: 'Très bien' },
-        status: Mission.status.INACTIVE,
-        introductionMediaUrl: null,
-        introductionMediaType: null,
-        introductionMediaAlt: null,
-        documentationUrl: null,
-      });
       // then
       expect(createMissionMock).toHaveBeenCalledWith(deserializedMission);
     });
@@ -200,6 +205,12 @@ describe('Unit | Controller | missions controller', function() {
         {
           type: 'missions',
           id: '1',
+          attributes: {
+            ...attributes,
+            'created-at': undefined,
+            'thematic-ids': null,
+            warnings: ['Ca va pas du tout là !'],
+          }
         }
       );
     });
