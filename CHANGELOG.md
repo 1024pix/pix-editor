@@ -1,5 +1,15 @@
 
 
+## v3.159.0 (28/08/2024)
+
+
+### :rocket: Amélioration
+- [#740](https://github.com/1024pix/pix-editor/pull/740) [FEATURE] Générer la liste des embeds utilisés par pix-editor (PIX-13835).
+
+### :building_construction: Tech
+- [#751](https://github.com/1024pix/pix-editor/pull/751) [TECH] Amélioration de performance de la création de release (PIX-13991).
+- [#749](https://github.com/1024pix/pix-editor/pull/749) [TECH] Mise en place de la config partagée `@1024pix/eslint-plugin` sur editor.
+
 ## v3.158.0 (26/08/2024)
 
 
