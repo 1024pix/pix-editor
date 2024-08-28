@@ -10,6 +10,8 @@ export { default as plugin } from '@adminjs/hapi';
 const componentLoader = new ComponentLoader();
 const Components = {
   ImportExportComponent: componentLoader.add('ImportExportComponent', './components/ImportExportComponent.jsx'),
+  GetEmbedList: componentLoader.add('GetEmbedList', './components/GetEmbedList.jsx'),
+  Dashboard: componentLoader.add('Dashboard', './components/Dashboard.jsx'),
 };
 
 const readOnlyOptions =  {
@@ -30,6 +32,9 @@ const readOnlyOptions =  {
 export const options = {
   branding: {
     companyName: 'Pix Editor',
+  },
+  dashboard: {
+    component: Components.Dashboard,
   },
   componentLoader,
   resources: [
@@ -67,7 +72,12 @@ export const options = {
     {
       resource: Release,
       options: {
-        actions: readOnlyOptions,
+        actions: {
+          ...readOnlyOptions,
+          getEmbedList: {
+            component: Components.GetEmbedList,
+          }
+        },
       }
     },
     {
