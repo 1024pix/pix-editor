@@ -11,9 +11,9 @@ export async function register(server) {
         pre:[{
           method: securityPreHandlers.checkUserHasAdminAccess,
         }],
-        handler: function(request, h) {
+        handler: async function(request, h) {
           const stream = new PassThrough();
-          getEmbedList(stream);
+          await getEmbedList(stream);
           return h.response(stream).header('Content-type', 'text/csv');
         },
       },

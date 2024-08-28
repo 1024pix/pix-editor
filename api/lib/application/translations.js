@@ -14,10 +14,10 @@ export async function register(server) {
       method: 'GET',
       path: '/api/translations.csv',
       config: {
-        handler: function(request, h) {
+        handler: async function(request, h) {
           const stream = new PassThrough();
           const baseUrl = config.lcms.baseUrl;
-          exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
+          await exportTranslations(stream, { releaseRepository, localizedChallengeRepository, baseUrl });
           return h.response(stream).header('Content-type', 'text/csv');
         }
       },
