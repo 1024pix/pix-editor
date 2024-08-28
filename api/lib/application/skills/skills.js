@@ -7,6 +7,8 @@ import {
   tubeRepository,
   userRepository,
 } from '../../infrastructure/repositories/index.js';
+import * as updatedRecordNotifier from '../../infrastructure/event-notifier/updated-record-notifier.js';
+
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import { cloneSkill } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
@@ -25,6 +27,7 @@ export async function clone(request, h) {
         attachmentRepository,
         generateNewIdFnc: generateNewId,
         pixApiClient,
+        updatedRecordNotifier,
       },
     });
   } catch (err) {
