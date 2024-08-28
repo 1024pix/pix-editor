@@ -153,7 +153,7 @@ async function mockCurrentContent() {
       isActive: true,
       challenges: ['recChallenge0'],
     }],
-    missions: [new Mission({
+    missions: [{
       id: 1,
       name_i18n: { fr: 'Ma première mission' },
       competenceId: 'competenceId',
@@ -166,7 +166,11 @@ async function mockCurrentContent() {
       introductionMediaType: null,
       introductionMediaAlt: null,
       documentationUrl: null,
-    }), new Mission({
+      content: {
+        dareChallenges: [],
+        steps: [],
+      },
+    }, {
       id: 2,
       name_i18n: { fr: 'Alt name' },
       competenceId: 'competenceId',
@@ -179,7 +183,11 @@ async function mockCurrentContent() {
       introductionMediaType: 'image',
       introductionMediaAlt: null,
       documentationUrl: null,
-    })]
+      content: {
+        dareChallenges: [],
+        steps: [],
+      },
+    }]
   };
 
   const attachments = [{
@@ -500,10 +508,6 @@ async function mockContentForRelease() {
       introductionMediaType: 'image',
       introductionMediaAlt: null,
       documentationUrl: null,
-      content: {
-        dareChallenges: [],
-        steps: []
-      }
     }), new MissionForRelease({
       id: 2,
       name_i18n: { fr: 'Alt name' },
@@ -515,10 +519,6 @@ async function mockContentForRelease() {
       introductionMediaType: null,
       introductionMediaAlt: null,
       documentationUrl: 'http://url-example.net',
-      content: {
-        dareChallenges: [],
-        steps: []
-      }
     })],
   };
 

@@ -1,13 +1,10 @@
 import { knex } from '../../../db/knex-database-connection.js';
 import { fetchPage } from '../utils/knex-utils.js';
-import { Challenge, Mission } from '../../domain/models/index.js';
+import { Mission } from '../../domain/models/index.js';
 import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
 import { NotFoundError } from '../../domain/errors.js';
-import { challengeRepository, skillRepository, translationRepository, tubeRepository } from './index.js';
-import { thematicDatasource } from '../datasources/airtable/index.js';
-import { logger } from '../logger.js';
-import { SkillForRelease } from '../../domain/models/release/index.js';
+import { translationRepository } from './index.js';
 
 export async function getById(id) {
   const mission = await knex('missions').select('*').where({ id }).first();
@@ -35,87 +32,13 @@ export async function findAllMissions({ filter, page }) {
   };
 }
 
-const SCHOOL_PLAYABLE_CHALLENGE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge.STATUSES.PROPOSE];
-const SCHOOL_PLAYABLE_SKILL_STATUSES = [SkillForRelease.STATUSES.ACTIF, SkillForRelease.STATUSES.EN_CONSTRUCTION];
-
 export async function listActive() {
-  const missions = await knex('missions').select('*').whereNot({ status: 'INACTIVE' });
+  const [missions, translations] = await Promise.all([
+    knex('missions').select('*').whereNot({ status: 'INACTIVE' }),
+    translationRepository.listByPrefix(missionTranslations.prefix),
+  ]);
 
-  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
-  const tubes = await tubeRepository.list();
-  const thematics = await thematicDatasource.list();
-  const skills = await skillRepository.list();
-
-  const challenges = await challengeRepository.list();
-
-  const missionsWithContent = missions.map((mission) => {
-    const thematicIds = mission.thematicIds?.split(',') ?? [];
-    const content = {
-      steps: []
-    };
-
-    thematicIds.forEach((thematicId, index) => {
-      const thematic = thematics.find((thematic) => thematic.id === thematicId);
-
-      if (!thematic) {
-        logger.warn({ mission }, 'No thematic found for mission');
-        return;
-      }
-
-      const missionTubes = tubes.filter((tube) => thematic?.tubeIds?.includes(tube.id));
-      if (missionTubes.length === 0) {
-        logger.warn({ mission }, 'No tubes found for mission');
-        return;
-      }
-
-      if (index < thematicIds.length - 1) {
-        content.steps.push({
-          tutorialChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_di'),
-          trainingChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_en'),
-          validationChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_va'),
-        });
-      } else {
-        content.dareChallenges = _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_de');
-      }
-    });
-    return new Mission({ ...mission, content });
-  });
-
-  return _toDomainList(missionsWithContent, translations);
-}
-
-const _byLevel = (skillA, skillB) => skillA.level - skillB.level;
-const _byAlternativeVersion = (challengeA, challengeB) => (challengeA.alternativeVersion ?? 0) - (challengeB.alternativeVersion ?? 0);
-
-function _getChallengeIdsForActivity(missionStatus, missionTubes, skills, challenges, activityPostfix) {
-  const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
-
-  if (!activityTube) {
-    logger.warn({ missionTubes }, `No tubes found for postFix ${activityPostfix} in mission tubes`);
-    return [];
-  }
-
-  const activitySkills = skills
-    .filter((skill) => skill.tubeId === activityTube.id)
-    .filter((skill) => SCHOOL_PLAYABLE_SKILL_STATUSES.includes(skill.status.toLowerCase()))
-    .sort(_byLevel);
-
-  if (!activitySkills) {
-    logger.warn({ activityTube }, 'No skills found for activityTube');
-    return [];
-  }
-
-  return activitySkills.map((activitySkill) => {
-    const alternatives = challenges
-      .filter((challenge) => activitySkill.id === challenge.skillId)
-      .filter((challenge) => SCHOOL_PLAYABLE_CHALLENGE_STATUSES.includes(challenge.status.toLowerCase()))
-      .filter((challenge) => (missionStatus === Mission.status.VALIDATED && challenge.status === Challenge.STATUSES.VALIDE) || missionStatus !== Mission.status.VALIDATED);
-
-    if (alternatives.length === 0) {
-      logger.warn({ activitySkill }, 'No challenges found for activitySkill');
-    }
-    return alternatives.sort(_byAlternativeVersion).map(({ id }) => id);
-  }).filter((activitySkills) => activitySkills.length > 0);
+  return _toDomainList(missions, translations);
 }
 
 export async function save(mission) {
@@ -146,7 +69,6 @@ function _toDomain(mission, translations) {
     status: mission.status,
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
-    content: mission.content,
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
     introductionMediaAlt: mission.introductionMediaAlt,

@@ -11,7 +11,6 @@ export class Mission {
     introductionMediaType,
     introductionMediaAlt,
     status,
-    content,
     documentationUrl,
   }) {
     this.id = id;
@@ -25,7 +24,6 @@ export class Mission {
     this.introductionMediaType = introductionMediaType;
     this.introductionMediaAlt = introductionMediaAlt;
     this.status = status;
-    this.content = new Content(content);
     this.documentationUrl = documentationUrl;
   }
 }
@@ -37,26 +35,3 @@ const status = {
 };
 
 Mission.status = status;
-
-class Content {
-  constructor({
-    steps = [],
-    dareChallenges = [],
-  } = {}) {
-    this.steps = steps.map((step) => new Step(step));
-    this.dareChallenges = dareChallenges;
-  }
-}
-
-class Step {
-  constructor({
-    tutorialChallenges = [],
-    trainingChallenges = [],
-    validationChallenges = [],
-  } = {}) {
-    this.tutorialChallenges = tutorialChallenges;
-    this.trainingChallenges = trainingChallenges;
-    this.validationChallenges = validationChallenges;
-  }
-}
-

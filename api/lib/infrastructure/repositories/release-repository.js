@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import {
   attachmentDatasource,
   challengeDatasource,
@@ -21,6 +20,7 @@ import {
   skillTransformer,
   tubeTransformer,
   tutorialTransformer,
+  missionTransformer
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
@@ -94,19 +94,8 @@ function _toDomain(releaseDTO) {
 }
 
 async function _getCurrentContent() {
-  const challenges = await challengeRepository.list();
-  const [currentContentFromAirtable, currentContentFromPG] = await Promise.all([
-    _getCurrentContentFromAirtable(challenges),
-    _getCurrentContentFromPG(),
-  ]);
-  return {
-    ...currentContentFromAirtable,
-    ...currentContentFromPG
-  };
-}
-
-async function _getCurrentContentFromAirtable(challenges) {
   const [
+    challenges,
     areas,
     attachments,
     competences,
@@ -115,7 +104,10 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematics,
     tubes,
     tutorials,
+    courses,
+    missions,
   ] = await Promise.all([
+    challengeRepository.list(),
     areaRepository.list(),
     attachmentDatasource.list(),
     competenceRepository.list(),
@@ -124,6 +116,8 @@ async function _getCurrentContentFromAirtable(challenges) {
     thematicRepository.list(),
     tubeRepository.list(),
     tutorialDatasource.list(),
+    getStaticCourses(),
+    missionRepository.listActive(),
   ]);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
@@ -135,6 +129,7 @@ async function _getCurrentContentFromAirtable(challenges) {
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
+  const transformedMissions = missionTransformer.transform({ missions, challenges, tubes, thematics, skills });
 
   return {
     frameworks,
@@ -145,26 +140,24 @@ async function _getCurrentContentFromAirtable(challenges) {
     skills: filteredSkills,
     challenges: transformedChallenges,
     tutorials: filteredTutorials,
+    courses,
+    missions: transformedMissions,
   };
 }
 
-async function _getCurrentContentFromPG() {
+async function getStaticCourses() {
   const staticCoursesDTO = await knex('static_courses')
     .select(['id', 'name', 'description', 'isActive', 'challengeIds'])
     .orderBy('id');
-  const missions = await missionRepository.listActive();
 
-  return {
-    courses: staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
-      const challenges = challengeIds.replaceAll(' ', '').split(',');
-      return {
-        id,
-        name,
-        description,
-        isActive,
-        challenges,
-      };
-    }),
-    missions,
-  };
+  return staticCoursesDTO.map(({ id, name, description, isActive, challengeIds }) => {
+    const challenges = challengeIds.replaceAll(' ', '').split(',');
+    return {
+      id,
+      name,
+      description,
+      isActive,
+      challenges,
+    };
+  });
 }
