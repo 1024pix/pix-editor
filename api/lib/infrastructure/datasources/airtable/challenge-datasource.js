@@ -1,5 +1,5 @@
 import { datasource } from './datasource.js';
-import { findRecords } from '../../airtable.js';
+import { findRecords, stringValue } from '../../airtable.js';
 import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
 // Cet import m'embête un peu qu'en pensez-vous ?
@@ -161,10 +161,10 @@ export const challengeDatasource = datasource.extend({
   async search(params) {
     const options = {
       fields: this.usedFields,
-      filterByFormula: `FIND('${_escapeQuery(params.filter.search)}', LOWER(CONCATENATE({Embed URL})))`
+      filterByFormula: `FIND(${stringValue(params.filter.search)}, LOWER(CONCATENATE({Embed URL})))`
     };
     if (params.filter.ids && params.filter.ids.length > 0) {
-      options.filterByFormula = 'OR(' + options.filterByFormula + ', ' + params.filter.ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')';
+      options.filterByFormula = 'OR(' + options.filterByFormula + ', ' + params.filter.ids.map((id) => `${stringValue(id)} = {id persistant}`).join(',') + ')';
     }
     if (params.page && params.page.size) {
       options.maxRecords = params.page.size;

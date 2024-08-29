@@ -69,5 +69,10 @@ export async function deleteRecords(tableName, recordIds) {
 }
 
 export function stringValue(value) {
-  return value;
+  return `"${
+    value.replace(/\r/g, '')
+      .replace(/["\\]/g, '\\$&')
+      .replace(/\n/g, '\\n')
+      .replace(/\t/g, '\\t')
+  }"`;
 }

@@ -241,7 +241,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
-        filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))'
+        filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))'
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
@@ -266,23 +266,10 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
         fields: challengeDatasource.usedFields,
-        filterByFormula: 'OR(FIND(\'query term\', LOWER(CONCATENATE({Embed URL}))), \'challengeId1\' = {id persistant})'
+        filterByFormula: 'OR(FIND("query term", LOWER(CONCATENATE({Embed URL}))), "challengeId1" = {id persistant})'
       });
       expect(challenges.length).to.equal(1);
       expect(challenges[0].id).to.equal('recChallenge');
-    });
-
-    it('should escape the query', async () => {
-      vi.spyOn(airtable, 'findRecords')
-        .mockResolvedValue([]);
-
-      challengeDatasource.usedFields = Symbol('used fields');
-      await challengeDatasource.search({ filter: { search: 'query \' term' } });
-
-      expect(airtable.findRecords).toHaveBeenCalledWith('Epreuves', {
-        fields: challengeDatasource.usedFields,
-        filterByFormula: 'FIND(\'query \\\' term\', LOWER(CONCATENATE({Embed URL})))'
-      });
     });
   });
 });

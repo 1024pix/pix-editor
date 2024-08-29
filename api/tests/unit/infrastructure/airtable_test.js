@@ -3,7 +3,7 @@ import * as airtable from '../../../lib/infrastructure/airtable.js';
 
 describe('Unit | Infrastructure | Airtable', () => {
   describe('#stringValue', () => {
-    it.fails('should prepare a string value for airtable formula', async () => {
+    it('should prepare a string value for airtable formula', async () => {
       // given
       const rawStrings = [
         'coucou',

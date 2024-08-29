@@ -250,7 +250,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})'
+          filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})'
         })
         .reply(200, {
           records: [
@@ -527,7 +527,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
             '': challengeAirtableFields,
           },
           maxRecords: 100,
-          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
+          filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
         })
         .reply(200, {
           records: []
@@ -554,7 +554,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'FIND(\'query term\', LOWER(CONCATENATE({Embed URL})))',
+          filterByFormula: 'FIND("query term", LOWER(CONCATENATE({Embed URL})))',
           maxRecords: 20,
         })
         .reply(200, {
@@ -600,7 +600,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR(\'recChallengeId1\' = {id persistant})'
+          filterByFormula: 'OR("recChallengeId1" = {id persistant})'
         })
         .reply(200, {
           records: [
@@ -758,7 +758,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           fields: {
             '': challengeAirtableFields,
           },
-          filterByFormula: 'OR(\'recChallengeId2\' = {id persistant})'
+          filterByFormula: 'OR("recChallengeId2" = {id persistant})'
         })
         .reply(200, {
           records: []

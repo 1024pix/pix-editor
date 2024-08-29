@@ -73,7 +73,27 @@ describe('Unit | Infrastructure | Datasource | Airtable | datasource', () => {
         'Airtable_table',
         {
           fields: ['Shi', 'Foo', 'Me'],
-          filterByFormula: 'OR(\'1\' = {id persistant},\'2\' = {id persistant})',
+          filterByFormula: 'OR("1" = {id persistant},"2" = {id persistant})',
+        }
+      );
+    });
+
+    it('should escape the query', async () => {
+      // given
+      vi.spyOn(airtable, 'findRecords').mockImplementation(async (tableName, options) => {
+        const returnValue = [{ id: 1, tableName, ...options }];
+        return returnValue;
+      });
+
+      // when
+      await someDatasource.filter({ filter: { ids: ['1\'', '2\''] } });
+
+      // then
+      expect(airtable.findRecords).toHaveBeenCalledWith(
+        'Airtable_table',
+        {
+          fields: ['Shi', 'Foo', 'Me'],
+          filterByFormula: 'OR("1\'" = {id persistant},"2\'" = {id persistant})',
         }
       );
     });
