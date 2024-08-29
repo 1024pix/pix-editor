@@ -10,6 +10,11 @@ export async function list() {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function getMany(thematicIds) {
+  const thematics = await list();
+  return thematics.filter((thematic) => thematicIds.includes(thematic.id));
+}
+
 function toDomainList(datasourceThematics, translations) {
   const translationsByThematicId = _.groupBy(translations, 'entityId');
   return _.orderBy(datasourceThematics.map(

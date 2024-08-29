@@ -1,58 +1,93 @@
-import { describe, describe as context, expect, it } from 'vitest';
-import { MissionIntroductionMediaError } from '../../../../lib/domain/errors.js';
+import { afterEach, describe, expect, it } from 'vitest';
+import { InvalidMissionContentError } from '../../../../lib/domain/errors.js';
 import { createMission } from '../../../../lib/domain/usecases/index.js';
-import { Mission } from '../../../../lib/domain/models/index.js';
+import { airtableBuilder, domainBuilder, knex } from '../../../test-helper.js';
+import { Mission, Skill } from '../../../../lib/domain/models/index.js';
+import _ from 'lodash';
 
-describe('Integration | Usecases | Create mission', function() {
-  context('When the mission has a media url without a type', function() {
-    it('should return an error MissionIntroductionMediaError', async () => {
-      // given
-      const missionToSave = new Mission({
-        name_i18n: { fr: 'new mission'  },
-        competenceId: 'QWERTY',
-        thematicIds: 'Thematic',
-        learningObjectives_i18n:  { fr: null },
-        validatedObjectives_i18n: { fr: 'Très bien' },
-        introductionMediaType: null,
-        introductionMediaUrl: 'http://example.net',
-        introductionMediaAlt: null,
-        documentationUrl: null,
-        status: Mission.status.INACTIVE,
-        createdAt: new Date('2023-12-25')
-      });
-
-      // when
-      const promise = createMission(missionToSave);
-
-      // then
-      await expect(promise).rejects.to.deep.equal(new MissionIntroductionMediaError('Opération impossible car la mission n\'a pas de type pour le media d\'introduction.'));
-
-    });
+describe('Integration | Usecases | create mission', function() {
+  afterEach(async function() {
+    await knex('missions').delete();
+    await knex('translations').delete();
   });
-  context('When the mission has a media type without an url', function() {
-    it('should return an error MissionIntroductionMediaError', async () => {
-      // given
-      const missionToSave = new Mission({
-        name_i18n: { fr: 'new mission'  },
-        competenceId: 'QWERTY',
-        thematicIds: 'Thematic',
-        learningObjectives_i18n:  { fr: null },
-        validatedObjectives_i18n: { fr: 'Très bien' },
-        introductionMediaType: 'image',
-        introductionMediaUrl: null,
-        introductionMediaAlt: null,
-        documentationUrl: null,
-        status: Mission.status.INACTIVE,
-        createdAt: new Date('2023-12-25')
-      });
 
-      // when
-      const promise = createMission(missionToSave);
+  it('when mission is totally valid, should create mission without warnings', async () => {
+    // given
+    const mission = domainBuilder.buildMission({ status: Mission.status.EXPERIMENTAL });
 
-      // then
-      await expect(promise).rejects.to.deep.equal(new MissionIntroductionMediaError('Opération impossible car la mission ne peut avoir de type de média sans URL pour ce dernier.'));
+    // when
+    const result = await createMission(mission);
 
+    // then
+    expect(_.omit(result.mission, 'createdAt')).to.deep.equal(_.omit(mission, 'createdAt'));
+    expect(result.warnings).to.be.empty;
+  });
+
+  it('when mission is partially valid, should update mission with warnings', async () => {
+    const mockedLearningContent = {
+      skills: [
+        airtableBuilder.factory.buildSkill({
+          id: 'skillTuto2',
+          level: 2,
+          tubeId: 'tubeTuto',
+          status: Skill.STATUSES.EN_CONSTRUCTION
+        })],
+      tubes: [
+        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+      ],
+      thematics: [
+        airtableBuilder.factory.buildThematic({
+          id: 'Thematic',
+          tubeIds: ['tubeTuto']
+        }),
+      ],
+    };
+
+    airtableBuilder.mockLists(mockedLearningContent);
+
+    // given
+    const createdMission = domainBuilder.buildMission({ status: Mission.status.VALIDATED, thematicIds: 'Thematic' });
+
+    // when
+    const result = await createMission(createdMission);
+
+    // then
+    expect(result.warnings).to.deep.equal(['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
+  });
+
+  it('when mission is not valid, should throw an error', async () => {
+    const mockedLearningContent = {
+      skills: [
+        airtableBuilder.factory.buildSkill({
+          id: 'skillTuto2',
+          level: 2,
+          tubeId: 'tubeTuto',
+          status: Skill.STATUSES.EN_CONSTRUCTION
+        })],
+      tubes: [
+        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
+      ],
+      thematics: [
+        airtableBuilder.factory.buildThematic({
+          id: 'Thematic',
+          tubeIds: ['tubeTuto']
+        }),
+      ],
+    };
+
+    airtableBuilder.mockLists(mockedLearningContent);
+
+    // given
+    const createdMission = domainBuilder.buildMission({
+      status: Mission.status.VALIDATED,
+      thematicIds: ''
     });
+
+    // when
+    const promise = createMission(createdMission);
+
+    // then
+    await expect(promise).rejects.to.deep.equal(new InvalidMissionContentError('La mission ne peut pas être mise à jour car elle n\'a pas de thématique'));
   });
 });
 

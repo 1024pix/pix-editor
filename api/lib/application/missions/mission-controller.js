@@ -24,15 +24,15 @@ export async function getMission(request, h) {
 export async function create(request, h) {
   const attributes = request?.payload?.data?.attributes;
   const mission = missionSerializer.deserializeMission(attributes);
-  const savedMission = await createMission(mission);
-  return h.response(missionSerializer.serializeMissionId(savedMission.id)).created();
+  const { mission: savedMission, warnings } = await createMission(mission);
+  return h.response(missionSerializer.serializeMission(savedMission, warnings)).created();
 }
 export async function update(request, h) {
   const attributes = request?.payload?.data?.attributes;
   const missionId = request?.params?.id;
   const mission = missionSerializer.deserializeMission({ ...attributes, id: missionId });
-  const updatedMission = await updateMission(mission);
-  return h.response(missionSerializer.serializeMissionId(updatedMission.id)).created();
+  const { mission: updatedMission, warnings } = await updateMission(mission);
+  return h.response(missionSerializer.serializeMission(updatedMission, warnings)).created();
 }
 
 function normalizePage(page) {

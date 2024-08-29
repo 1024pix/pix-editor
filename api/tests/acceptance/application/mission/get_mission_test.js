@@ -45,7 +45,8 @@ describe('Acceptance | API | mission | GET /api/missions', function() {
           'introduction-media-type': null,
           'introduction-media-alt': null,
           'documentation-url': null,
-          'created-at': new Date('2024-01-01')
+          'created-at': new Date('2024-01-01'),
+          'warnings': undefined,
         },
       },
     });
