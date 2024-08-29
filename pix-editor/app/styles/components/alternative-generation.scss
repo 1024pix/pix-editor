@@ -8,9 +8,9 @@
 }
 
 .alternative-generation__item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 20px;
+  // display: grid;
+  // grid-template-columns: auto 1fr;
+  // gap: 20px;
 
   &:not(:first-child) {
     margin-top: 20px;
