@@ -2,11 +2,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { cloneSkill } from '../../../../lib/domain/usecases/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
+import * as transformers from '../../../../lib/infrastructure/transformers/index.js';
+import { logger } from '../../../../lib/infrastructure/logger.js';
+import * as Sentry from '@sentry/node';
 
 describe('Unit | Domain | Usecases | clone-skill', () => {
-  let attachmentRepository, skillRepository, challengeRepository, tubeRepository, generateNewIdFnc;
+  let attachmentRepository, skillRepository, challengeRepository, tubeRepository, generateNewIdFnc, updatedRecordNotifier, transformChallenge, filterSkillsFields;
   let dependencies;
   const userId = 123;
+  const pixApiClient = Symbol('pixApiClient');
 
   beforeEach(() => {
     skillRepository = {
@@ -26,13 +30,19 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       createBatch: vi.fn(),
     };
     generateNewIdFnc = vi.fn();
+    updatedRecordNotifier = { notify: vi.fn() };
     dependencies = {
       attachmentRepository,
       skillRepository,
       challengeRepository,
       tubeRepository,
       generateNewIdFnc,
+      pixApiClient,
+      updatedRecordNotifier,
     };
+    transformChallenge = vi.fn();
+    vi.spyOn(transformers, 'createChallengeTransformer').mockReturnValue(transformChallenge);
+    filterSkillsFields = vi.spyOn(transformers.skillTransformer, 'filterSkillsFields');
   });
 
   describe('pre-checks KO', () => {
@@ -159,7 +169,7 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       // given
       spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
         clonedSkill: 'clonedSkill',
-        clonedChallenges: 'clonedChallenges',
+        clonedChallenges: [{ id: 'challengeId' }],
         clonedAttachments: [{ challengeId: 'attachmentChallengeId', localizedChallengeId: 'attachmentLocalizedChallengeId' }],
       });
 
@@ -182,10 +192,10 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       });
     });
 
-    it('should send to persistance to cloned entities', async () => {
+    it('should send to persistance to clone entities', async () => {
       // given
       const clonedSkill = Symbol('clonedSkill');
-      const clonedChallenges = Symbol('clonedChallenges');
+      const clonedChallenges = [Symbol('clonedChallenges')];
       const clonedAttachments = [
         { challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' },
         { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
@@ -203,6 +213,73 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       expect(skillRepository.create).toHaveBeenCalledWith(clonedSkill);
       expect(challengeRepository.createBatch).toHaveBeenCalledWith(clonedChallenges);
       expect(attachmentRepository.createBatch).toHaveBeenCalledWith([{ challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' }]);
+    });
+
+    it('should update records for preview',  async() => {
+      // given
+      const clonedSkill = Symbol('clonedSkill');
+      const clonedChallenge = { id: 'clonedChallenge', isPrimary: true };
+      const clonedChallenges = [clonedChallenge, { id: 'clonedChallenge2', isPrimary: false }];
+      const clonedAttachments = [
+        { challengeId: 'notPrimaryChal', localizedChallengeId: 'notPrimaryLoc' },
+        { challengeId: 'primaryChallengeId', localizedChallengeId: 'primaryChallengeId' },
+      ];
+      spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
+        clonedSkill,
+        clonedChallenges,
+        clonedAttachments,
+      });
+      const transformedSkill = Symbol('transformedSkill');
+      filterSkillsFields.mockReturnValue([transformedSkill]);
+      const transformedChallenge =  Symbol('transformedChallenge');
+      transformChallenge.mockReturnValue(transformedChallenge);
+
+      // when
+      await cloneSkill({ cloneCommand, dependencies });
+
+      // then
+      expect(filterSkillsFields).toHaveBeenCalledOnce();
+      expect(filterSkillsFields).toHaveBeenCalledWith([clonedSkill]);
+      expect(transformChallenge).toHaveBeenCalledOnce();
+      expect(transformChallenge).toHaveBeenCalledWith(clonedChallenge);
+      expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(2);
+      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedSkill, model: 'skills', pixApiClient });
+      expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(2, { updatedRecord: transformedChallenge, model: 'challenges', pixApiClient });
+    });
+
+    describe('when patching fails', () => {
+      let logError, captureException;
+
+      beforeEach(() => {
+        logError = vi.spyOn(logger, 'error');
+        captureException = vi.spyOn(Sentry, 'captureException');
+      });
+
+      it('should still resolve', async () => {
+        // given
+        const clonedSkill = Symbol('clonedSkill');
+        const clonedChallenges = [{ id: 'clonedChallenge', isPrimary: true }];
+        spyCloneFnc = vi.spyOn(skillToClone, 'cloneSkillAndChallenges').mockReturnValue({
+          clonedSkill,
+          clonedChallenges,
+          clonedAttachments: [],
+        });
+        const transformedSkill = Symbol('transformedSkill');
+        filterSkillsFields.mockReturnValue([transformedSkill]);
+        const error = Symbol('error');
+        updatedRecordNotifier.notify.mockRejectedValue(error);
+
+        // when
+        await cloneSkill({ cloneCommand, dependencies });
+
+        // then
+        expect(filterSkillsFields).toHaveBeenCalledOnce();
+        expect(filterSkillsFields).toHaveBeenCalledWith([clonedSkill]);
+        expect(updatedRecordNotifier.notify).toHaveBeenCalledTimes(1);
+        expect(updatedRecordNotifier.notify).toHaveBeenNthCalledWith(1, { updatedRecord: transformedSkill, model: 'skills', pixApiClient });
+        expect(logError).toHaveBeenCalledWith(error);
+        expect(captureException).toHaveBeenCalledWith(error);
+      });
     });
   });
 });
