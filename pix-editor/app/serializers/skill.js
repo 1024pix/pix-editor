@@ -26,4 +26,25 @@ export default class SkillSerializer extends AirtableSerializer {
   payloadKeyFromModelName() {
     return 'Acquis';
   }
+
+  serialize(snapshot, options) {
+    if (snapshot.adapterOptions?.clone) {
+      return {
+        skillIdToClone: snapshot.adapterOptions.skillIdToClone,
+        tubeDestinationId: snapshot.adapterOptions.tubeDestinationId,
+        level: snapshot.adapterOptions.level,
+      };
+    }
+    return super.serialize(snapshot, options);
+  }
+
+  serializeIntoHash(hash, typeClass, snapshot, options) {
+    if (snapshot.adapterOptions?.clone) {
+      hash.data = {
+        attributes: this.serialize(snapshot, options),
+      };
+      return;
+    }
+    super.serializeIntoHash(hash, typeClass, snapshot, options);
+  }
 }

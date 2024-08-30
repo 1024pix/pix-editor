@@ -148,6 +148,25 @@ function routes() {
     return _serializeModel(createdSkill, 'skill');
   });
 
+  this.post('/skills/clone', function(schema, request) {
+    const attributes = JSON.parse(request.requestBody).data.attributes;
+    const level = attributes.level;
+    const skillToClone = schema.skills.findBy({ pixId: attributes.skillIdToClone });
+    const tubeDestination = schema.tubes.findBy({ pixId: attributes.tubeDestinationId });
+    const createdSkill = schema.create('skill', {
+      id: 'newSkillId',
+      pixId: 'newPixId',
+      tubeId: tubeDestination.id,
+      level,
+      status: 'en construction',
+      name: `${tubeDestination.name}${level}`,
+      tutoSolution: skillToClone.tutoSolution,
+      tutoMore: skillToClone.tutoMore,
+      challenges: skillToClone.challenges,
+    });
+    return _serializeModel(createdSkill, 'skill');
+  });
+
   this.get('/airtable/content/Attachments/:id', (schema, request) => {
     const attachment = schema.attachments.find(request.params.id);
     return _serializeModel(attachment, 'attachment');

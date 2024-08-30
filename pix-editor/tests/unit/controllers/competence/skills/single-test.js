@@ -93,8 +93,7 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
     const transitionToRouteStub = sinon.stub();
     controller.router.transitionTo = transitionToRouteStub;
 
-    sinon.stub(controller, '_handleSkillChangelog').resolves();
-    sinon.stub(controller, '_duplicateLiveChallenges').resolves([]);
+    const handleSkillChangelogStub = sinon.stub(controller, '_handleSkillChangelog').resolves();
     controller.loader = {
       start: sinon.stub(),
       stop: sinon.stub(),
@@ -103,134 +102,30 @@ module('Unit | Controller | competence/skills/single', function(hooks) {
       message: sinon.stub(),
       error: sinon.stub(),
     };
+    const competence = Symbol('competence');
+    const changelogValue = Symbol('changelog value');
+    const tubeDestination = Symbol('tube destination');
+    const level = Symbol('level');
+    const newSkill = Symbol('new skill');
 
-    const competence = {
-      get() {
-        return 'competenceId';
-      },
-    };
-    const currentSkill = store.createRecord('skill', {
+    const skill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       name: 'currentSkill',
     });
-    const clonedSkill = {
-      id: 'rec_2',
-      pixId: 'pix_2',
-      save: sinon.stub().resolves({}),
-    };
-    const newTube = {
-      getNextSkillVersion: sinon.stub(),
-    };
 
-    currentSkill.clone = sinon.stub().resolves(clonedSkill);
-    controller.model = currentSkill;
-
-    // when
-    await controller._duplicateToLocationCallback('changelogValue', competence, newTube, 'level');
-
-    // then
-    const duplicateToLocationArgs = transitionToRouteStub.getCall(0).args[2];
-    assert.strictEqual(duplicateToLocationArgs.level, 'level');
-    assert.strictEqual(duplicateToLocationArgs.tube, newTube);
-  });
-
-  test('it should clone only validated and draft challenges', async function(assert) {
-    // given
-    const store = this.owner.lookup('service:store');
-
-    const copyForDifferentSkillStub = sinon.stub().returns({ save: sinon.stub().resolves({}) });
-
-    const validatedChallenge = store.createRecord('challenge', {
-      id: 'rec_1_1',
-      pixId: 'pix_1_1',
-      status: 'validé',
-      name: 'validatedChallenge',
-    });
-    sinon.stub(validatedChallenge, 'save').resolves(validatedChallenge);
-    validatedChallenge.copyForDifferentSkill = sinon.stub().returns(validatedChallenge);
-
-    const draftChallenge = store.createRecord('challenge', {
-      id: 'rec_1_2',
-      pixId: 'pix_1_2',
-      status: 'proposé',
-      name: 'draftChallenge',
-    });
-    sinon.stub(draftChallenge, 'save').resolves(draftChallenge);
-    draftChallenge.copyForDifferentSkill = sinon.stub().returns(draftChallenge);
-
-    const archiveChallenge = store.createRecord('challenge', {
-      id: 'rec_1_3',
-      pixId: 'pix_1_3',
-      status: 'archivé',
-      name: 'archiveChallenge',
-      copyForDifferentSkill: copyForDifferentSkillStub,
-    });
-    const deletedChallenge = store.createRecord('challenge', {
-      id: 'rec_1_4',
-      pixId: 'pix_1_4',
-      status: 'périmé',
-      name: 'deletedChallenge',
-      copyForDifferentSkill: copyForDifferentSkillStub,
-    });
-    const skill = store.createRecord('skill', {
-      id: 'rec_1',
-      pixId: 'pix_1',
-      challenges: [validatedChallenge, draftChallenge, archiveChallenge, deletedChallenge],
-    });
+    skill.clone = sinon.stub().resolves(newSkill);
     controller.model = skill;
 
     // when
-    const result = await controller._duplicateLiveChallenges(skill);
+    await controller._duplicateToLocationCallback(changelogValue, competence, tubeDestination, level);
 
     // then
-    assert.strictEqual(result.length, 2);
-    assert.strictEqual(result[0].name, 'validatedChallenge');
-    assert.strictEqual(result[1].name, 'draftChallenge');
-  });
-
-  test('it should duplicate challenge and attachments', async function(assert) {
-    // given
-    const store = this.owner.lookup('service:store');
-
-    const attachment = store.createRecord('attachment', {
-      type: 'illustration',
-      size: 123,
-      mimeType: 'image/png',
-      filename: 'myfilename.png',
-      url: 'data:1,',
-    });
-    sinon.stub(attachment, 'save').resolves(attachment);
-
-    const challenge = store.createRecord('challenge', {
-      id: 'rec_1_1',
-      pixId: 'pix_1_1',
-      status: 'validé',
-      name: 'validatedChallenge',
-      files: [attachment],
-    });
-    sinon.stub(challenge, 'save').resolves(challenge);
-    challenge.copyForDifferentSkill = sinon.stub().returns(challenge);
-
-    const skill = store.createRecord('skill', {
-      id: 'rec_1',
-      pixId: 'pix_1',
-      challenges: [challenge],
-    });
-    controller.model = skill;
-
-    const storageServiceStub = this.owner.lookup('service:storage');
-    sinon.stub(storageServiceStub, 'cloneFile').resolves('data:2,');
-
-    // when
-    const newChallenges = await controller._duplicateLiveChallenges(skill);
-
-    // then
-    assert.strictEqual(newChallenges.length, 1);
-    assert.strictEqual(newChallenges[0].name, 'validatedChallenge');
-    assert.strictEqual(newChallenges[0].files.length, 1);
-    assert.strictEqual(newChallenges[0].files.firstObject.url, 'data:2,');
-    assert.ok(challenge.save.calledOnce);
-    assert.ok(attachment.save.calledOnce);
+    assert.ok(skill.clone.calledOnce);
+    assert.ok(skill.clone.calledWith({ tubeDestination, level }));
+    assert.ok(handleSkillChangelogStub.calledOnce);
+    assert.ok(handleSkillChangelogStub.calledWith(newSkill, changelogValue, 'déplacement'));
+    assert.ok(transitionToRouteStub.calledOnce);
+    assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills.single', competence, newSkill));
   });
 });

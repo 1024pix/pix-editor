@@ -154,18 +154,13 @@ export default class SingleController extends Controller {
       (changelogValue) => this._duplicateToLocationCallback(changelogValue, competence, newTube, level));
   }
 
-  async _duplicateToLocationCallback(changelogValue, competence, newTube, level) {
+  async _duplicateToLocationCallback(changelogValue, competence, tubeDestination, level) {
     this.loader.start();
 
     try {
       const currentSkill = this.skill;
-      const newSkill = await currentSkill.clone();
+      const newSkill = await currentSkill.clone({ tubeDestination, level });
 
-      newSkill.tube = newTube;
-      newSkill.level = level;
-      newSkill.version = newTube.getNextSkillVersion(level);
-      await newSkill.save();
-      await this._duplicateLiveChallenges(newSkill);
       await this._handleSkillChangelog(newSkill, changelogValue, this.changelogEntry.moveAction);
 
       this.notify.message('Acquis et épreuves associées dupliqués');
@@ -177,28 +172,6 @@ export default class SingleController extends Controller {
     } finally {
       this.loader.stop();
     }
-  }
-
-  async _duplicateLiveChallenges(newSkill) {
-    const skill = this.skill;
-    const challenges = await skill.challenges;
-    const liveChallenges = challenges.filter((challenge) => challenge.isLive);
-    const newChallenges = await Promise.all(liveChallenges.map(async (challenge) => {
-      const newChallenge = await challenge.copyForDifferentSkill();
-      newChallenge.skill = newSkill;
-      await newChallenge.save();
-      await this._saveDuplicatedAttachments(newChallenge);
-      return newChallenge;
-    }));
-    return newChallenges;
-  }
-
-  async _saveDuplicatedAttachments(challenge) {
-    await challenge.files;
-    await Promise.all(challenge.files.map(async (file) => {
-      file.url = await this.storage.cloneFile(file.url);
-      return file.save();
-    }));
   }
 
   @action

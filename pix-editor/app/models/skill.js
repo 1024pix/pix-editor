@@ -32,7 +32,6 @@ export default class SkillModel extends Model {
     tutoMore;
 
   @service('store') myStore;
-  @service idGenerator;
 
   @tracked _selected = false;
 
@@ -169,15 +168,12 @@ export default class SkillModel extends Model {
     return this.save();
   }
 
-  pinRelationships() {
-    const requests = [this.tutoSolution, this.tutoMore];
-    return Promise.all(requests)
-      .then((tutorials) => {
-        this._pinnedRelationships = {
-          tutoSolution: tutorials[0].toArray(),
-          tutoMore: tutorials[1].toArray(),
-        };
-      });
+  async pinRelationships() {
+    const tutorials = await Promise.all([this.tutoSolution, this.tutoMore]);
+    this._pinnedRelationships = {
+      tutoSolution: tutorials[0].toArray(),
+      tutoMore: tutorials[1].toArray(),
+    };
   }
 
   rollbackAttributes() {
@@ -188,27 +184,21 @@ export default class SkillModel extends Model {
     this.tutoMore = tutoMore;
   }
 
-  save() {
-    return super.save(...arguments)
-      .then((result) => {
-        this.pinRelationships();
-        return result;
-      });
+  async save(...args) {
+    const result = await super.save(...args);
+    await this.pinRelationships();
+    return result;
   }
 
-  clone() {
-    const ignoredFields = ['pixId', 'competence', 'level', 'tube', 'createdAt', 'challenges', 'tutoSolution', 'tutoMore', 'version'];
-    const data = this._getJSON(ignoredFields);
-    data.status = 'en construction';
-    data.pixId = this.idGenerator.newId('skill');
-    const newSkill = this.myStore.createRecord(this.constructor.modelName, data);
-    const requests = [this.tutoSolution, this.tutoMore];
-    return Promise.all(requests)
-      .then((tutorials) => {
-        newSkill.tutoSolution = tutorials[0];
-        newSkill.tutoMore = tutorials[1];
-        return newSkill;
-      });
+  async clone({ tubeDestination, level }) {
+    const newSkill = this.myStore.createRecord(this.constructor.modelName, {});
+
+    return newSkill.save({ adapterOptions: {
+      clone: true,
+      skillIdToClone: this.pixId,
+      tubeDestinationId: tubeDestination.pixId,
+      level,
+    } });
   }
 
   _getJSON(fieldsToRemove) {
