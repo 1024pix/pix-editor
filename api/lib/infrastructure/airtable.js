@@ -67,3 +67,12 @@ export async function deleteRecords(tableName, recordIds) {
   logger.info({ tableName }, 'Deleting records in Airtable');
   return _airtableClient().table(tableName).destroy(recordIds);
 }
+
+export function stringValue(value) {
+  return `"${
+    value.replace(/\r/g, '')
+      .replace(/["\\]/g, '\\$&')
+      .replace(/\n/g, '\\n')
+      .replace(/\t/g, '\\t')
+  }"`;
+}

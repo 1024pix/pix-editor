@@ -17,7 +17,7 @@ const _DatasourcePrototype = {
 
   async filter({ filter: { ids, formula } }) {
     const filterByFormula = ids ? (
-      'OR(' + ids.map((id) => `'${id}' = {id persistant}`).join(',') + ')'
+      'OR(' + ids.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',') + ')'
     ) : formula;
     const airtableRawObjects = await airtable.findRecords(
       this.tableName,
