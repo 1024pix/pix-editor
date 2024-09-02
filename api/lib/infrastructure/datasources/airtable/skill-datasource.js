@@ -12,6 +12,7 @@ export const skillDatasource = datasource.extend({
 
   usedFields: [
     'id persistant',
+    'Record Id',
     'Nom',
     'Statut de l\'indice',
     'Comprendre (id persistant)',
@@ -30,6 +31,7 @@ export const skillDatasource = datasource.extend({
 
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.get('Record Id'),
       name: airtableRecord.get('Nom'),
       hintStatus: airtableRecord.get('Statut de l\'indice') || '',
       tutorialIds: airtableRecord.get('Comprendre (id persistant)') || [],

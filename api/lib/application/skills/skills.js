@@ -12,12 +12,13 @@ import * as updatedRecordNotifier from '../../infrastructure/event-notifier/upda
 import { generateNewId } from '../../infrastructure/utils/id-generator.js';
 import { cloneSkill } from '../../domain/usecases/index.js';
 import * as pixApiClient from '../../infrastructure/pix-api-client.js';
+import { logger } from '../../infrastructure/logger.js';
 
 export async function clone(request, h) {
   const userId = extractUserIdFromRequest(request);
   try {
     const cloneCommand = normalizeCloneCommand(request.payload.data.attributes, userId);
-    return await cloneSkill({
+    const newSkill = await cloneSkill({
       cloneCommand,
       dependencies: {
         userRepository,
@@ -30,8 +31,9 @@ export async function clone(request, h) {
         updatedRecordNotifier,
       },
     });
+    return h.response().redirect(`/api/airtable/content/Acquis/${newSkill.airtableId}`);
   } catch (err) {
-    console.log(err);
+    logger.error(err);
     return h.response(err).code(400);
   }
 }

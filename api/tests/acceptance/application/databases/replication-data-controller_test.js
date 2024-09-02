@@ -137,7 +137,6 @@ async function mockCurrentContent() {
       buildAttachment(expectedAttachmentNl)
     ],
   });
-
   databaseBuilder.factory.buildStaticCourse({
     id: 'recCourse2',
     name: 'nameCourse2',

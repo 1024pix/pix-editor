@@ -15,16 +15,19 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     const airtableSkills = [
       airtableBuilder.factory.buildSkill({
         id: 'skillid2',
+        airtableId: 'airtableskillid2',
         name: '@skillid2',
         hint_i18n: {},
       }),
       airtableBuilder.factory.buildSkill({
         id: 'skillid3',
+        airtableId: 'airtableskillid3',
         name: '@skillid3',
         hint_i18n: {},
       }),
       airtableBuilder.factory.buildSkill({
         id: 'skillid4',
+        airtableId: 'airtableskillid4',
         name: '@skillid4',
         hint_i18n: {},
       }),
@@ -33,19 +36,19 @@ describe('Acceptance | API | static courses | PUT /api/static-courses/{id}/deact
     const airtableChallenges = [
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid2',
-        skillId: airtableSkills[0].id,
+        skillId: airtableSkills[0].fields['id persistant'],
         status: 'status for challengeid2',
         locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid3',
-        skillId: airtableSkills[1].id,
+        skillId: airtableSkills[1].fields['id persistant'],
         status: 'status for challengeid3',
         locales: ['fr'],
       }),
       airtableBuilder.factory.buildChallenge({
         id: 'challengeid4',
-        skillId: airtableSkills[2].id,
+        skillId: airtableSkills[2].fields['id persistant'],
         status: 'status for challengeid4',
         locales: ['fr'],
       }),

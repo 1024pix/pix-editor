@@ -55,13 +55,13 @@ export async function cloneSkill({
     attachments,
     generateNewIdFnc,
   });
-  await skillRepository.create(clonedSkill);
+  const savedSkill = await skillRepository.create(clonedSkill);
   await challengeRepository.createBatch(clonedChallenges);
   // for now only persist primary attachments
   const attachmentsToPersist = clonedAttachments.filter((attachment) => attachment.challengeId === attachment.localizedChallengeId);
   await attachmentRepository.createBatch(attachmentsToPersist);
   await updateStagingPixApiCache({ clonedSkill, clonedChallenges, clonedAttachments, pixApiClient, updatedRecordNotifier });
-  return 'ok';
+  return savedSkill;
 }
 
 async function _checkIfCloningIsPossible({ level, tubeId, skillIdToClone, tubeRepository, skillRepository }) {

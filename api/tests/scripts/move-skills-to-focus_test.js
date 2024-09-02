@@ -10,6 +10,7 @@ import {
   skillRepository,
 } from '../../lib/infrastructure/repositories/index.js';
 import * as idGenerator from '../../lib/infrastructure/utils/id-generator.js';
+import _ from 'lodash';
 
 describe('Script | Move skills to focus', function() {
 
@@ -192,15 +193,7 @@ describe('Script | Move skills to focus', function() {
         domainBuilder.buildSkill({ level: 4, version: 1 }),
       ]);
 
-      vi.spyOn(challengeRepository, 'listBySkillId')
-        .mockImplementation(() => []);
-
-      // when
-      await script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true });
-
-      // then
-      expect(skillRepository.create).toHaveBeenCalledTimes(1);
-      expect(skillRepository.create).toHaveBeenCalledWith(domainBuilder.buildSkill({
+      const expectedCalledSkill = domainBuilder.buildSkill({
         id: 'skillNewId',
         name: actifSkillData.name,
         description: actifSkillData.description,
@@ -215,7 +208,17 @@ describe('Script | Move skills to focus', function() {
         level: actifSkillData.level,
         internationalisation: actifSkillData.internationalisation,
         version: 3,
-      }));
+      });
+
+      vi.spyOn(challengeRepository, 'listBySkillId')
+        .mockImplementation(() => []);
+
+      // when
+      await script.moveToFocus({ airtableClient, dryRun: false, skipUpload: true });
+
+      // then
+      expect(skillRepository.create).toHaveBeenCalledTimes(1);
+      expect(skillRepository.create).toHaveBeenCalledWith(_.omit(expectedCalledSkill, 'airtableId'));
       const focus_phrase_records = await knex('focus_phrase').select('*').orderBy(['type', 'persistantId']);
       expect(focus_phrase_records).toStrictEqual([
         {
@@ -791,6 +794,10 @@ describe('Script | Move skills to focus', function() {
       const archiveForActifSkill = domainBuilder.buildChallenge(archiveForActifSkillData);
       const challenges = [valideForActifSkill, proposeForActifSkill, archiveForActifSkill];
 
+      const expectedCalledSkill = domainBuilder.buildSkill({
+        ...actifSkillData,
+        status: Skill.STATUSES.ARCHIVE,
+      });
       vi.spyOn(challengeRepository, 'listBySkillId')
         .mockImplementation((skillId) => challenges.filter((challenge) => challenge.skillId === skillId));
 
@@ -799,10 +806,7 @@ describe('Script | Move skills to focus', function() {
 
       // then
       expect(skillRepository.update).toHaveBeenCalledTimes(1);
-      expect(skillRepository.update).toHaveBeenCalledWith(domainBuilder.buildSkill({
-        ...actifSkillData,
-        status: Skill.STATUSES.ARCHIVE,
-      }));
+      expect(skillRepository.update).toHaveBeenCalledWith(_.omit(expectedCalledSkill, 'airtableId'));
       expect(challengeRepository.updateBatch).toHaveBeenCalledTimes(1);
       expect(challengeRepository.updateBatch).toHaveBeenCalledWith([
         domainBuilder.buildChallenge({
