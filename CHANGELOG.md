@@ -1,5 +1,15 @@
 
 
+## v3.160.0 (03/09/2024)
+
+
+### :rocket: Amélioration
+- [#752](https://github.com/1024pix/pix-editor/pull/752) [FEATURE] Patcher le cache quand on clone un acquis (PIX-13780).
+
+### :bug: Correction
+- [#754](https://github.com/1024pix/pix-editor/pull/754) [BUGFIX] Permettre la recherche avec un guillemet simple (PIX-14047).
+- [#750](https://github.com/1024pix/pix-editor/pull/750) [BUGFIX] Pouvoir passer une mission en validée même si elle contient des acquis périmés, archivés ou en construction (Pix-13942).
+
 ## v3.159.0 (28/08/2024)
 
 
