@@ -2,8 +2,6 @@ import { getCountryCode, getCountryName } from './Geography.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
-const cloneSource = new WeakMap();
-
 export class Challenge {
 
   #allFiles;
@@ -274,10 +272,6 @@ export class Challenge {
     return [...locales].sort();
   }
 
-  static getCloneSource(clonedChallenge) {
-    return cloneSource.get(clonedChallenge);
-  }
-
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
     const localizedChallengePrimary = this.#primaryLocalizedChallenge;
@@ -287,7 +281,6 @@ export class Challenge {
       status: LocalizedChallenge.STATUSES.PRIMARY,
       attachments
     });
-    cloneSource.set(clonedLocalizedChallenge, localizedChallengePrimary);
     const primaryTranslation = {
       [this.primaryLocale]:  _.cloneDeep(this.translations[this.primaryLocale])
     };
@@ -333,8 +326,6 @@ export class Challenge {
       validatedAt: null,
       version: prototypeVersion,
     });
-
-    cloneSource.set(clonedChallenge, this);
 
     return {
       clonedChallenge,
