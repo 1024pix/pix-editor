@@ -8,7 +8,6 @@ export default class SingleController extends Controller {
 
   wasMaximized = false;
   changelogCallback = null;
-  defaultSaveChangelog = this.intl.t('skill.changelog.update-message');
 
   @tracked edition = false;
   @tracked displaySelectLocation = false;
@@ -69,6 +68,10 @@ export default class SingleController extends Controller {
 
   get airtableUrl() {
     return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableSkills}/${this.skill.id}`;
+  }
+
+  get defaultSaveChangelog() {
+    return this.intl.t('skill.changelog.update-message');
   }
 
   @action
