@@ -51,7 +51,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const cloneCommand = {
         tubeDestinationId: 'tubeABCId',
         level: -1,
-        changelogText: '',
         skillIdToClone: 'skillABC1Id',
         userId,
       };
@@ -70,7 +69,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const cloneCommand = {
         tubeDestinationId: 'tubeABCId',
         level: 7,
-        changelogText: '',
         skillIdToClone: 'skillABC1Id',
         userId,
       };
@@ -89,7 +87,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const cloneCommand = {
         tubeDestinationId: 'tubeABCId',
         level: 7,
-        changelogText: '',
         skillIdToClone: 'skillABC1Id',
         userId,
       };
@@ -108,7 +105,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       const cloneCommand = {
         tubeDestinationId: 'tubeABCId',
         level: 7,
-        changelogText: '',
         skillIdToClone: 'skillABC1Id',
         userId,
       };
@@ -132,7 +128,6 @@ describe('Unit | Domain | Usecases | clone-skill', () => {
       cloneCommand = {
         tubeDestinationId: 'tubeABCId',
         level: 4,
-        changelogText: '',
         skillIdToClone: 'skillABC1Id',
         userId,
       };

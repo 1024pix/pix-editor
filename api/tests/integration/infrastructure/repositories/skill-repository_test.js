@@ -17,6 +17,7 @@ describe('Integration | Repository | skill-repository', () => {
       const airtableScope = airtableBuilder.mockList({ tableName: 'Acquis' }).returns([
         airtableBuilder.factory.buildSkill({
           id: 'skill1',
+          airtableId: 'recId1',
           name: 'Acquis 1',
           description: 'Description Acquis 1',
           hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
@@ -32,6 +33,7 @@ describe('Integration | Repository | skill-repository', () => {
         }),
         airtableBuilder.factory.buildSkill({
           id: 'skill2',
+          airtableId: 'recId2',
           name: 'Acquis 2',
           description: 'Description Acquis 2',
           hintStatus: SkillForRelease.HINT_STATUSES.PROPOSE,
@@ -77,6 +79,7 @@ describe('Integration | Repository | skill-repository', () => {
       expect(skills).toEqual([
         domainBuilder.buildSkill({
           id: 'skill1',
+          airtableId: 'recId1',
           name: 'Acquis 1',
           description: 'Description Acquis 1',
           hint_i18n: {
@@ -96,6 +99,7 @@ describe('Integration | Repository | skill-repository', () => {
         }),
         domainBuilder.buildSkill({
           id: 'skill2',
+          airtableId: 'recId2',
           name: 'Acquis 2',
           description: 'Description Acquis 2',
           hint_i18n: {

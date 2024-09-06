@@ -13,7 +13,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | SkillDatasource', () =
       // given
       const expectedSkill = domainBuilder.buildSkillDatasourceObject();
       const airtableSkill = airtableBuilder.factory.buildSkill(expectedSkill);
-      const skillRecord = new AirtableRecord('Acquis', airtableSkill.id, airtableSkill);
+      const skillRecord = new AirtableRecord('Acquis', airtableSkill.airtableId, airtableSkill);
 
       // when
       const skill = skillDatasource.fromAirTableObject(skillRecord);

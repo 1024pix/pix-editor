@@ -5,7 +5,7 @@ import { module, test } from 'qunit';
 
 import { setupApplicationTest } from '../../../setup-application-rendering';
 
-module('Acceptance | single', function(hooks) {
+module('Acceptance | skill | single', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
   let skill1, competence1, tube1;
@@ -48,6 +48,7 @@ module('Acceptance | single', function(hooks) {
 
       const tube = await store.peekRecord('tube', 'recTube1');
       const newSkill = tube.rawSkills.find((skill) => skill.level === SKILL_LEVEL_CHOOSE);
+
       // then
       assert.ok(newSkill);
       assert.strictEqual(newSkill.challenges.length, 2);

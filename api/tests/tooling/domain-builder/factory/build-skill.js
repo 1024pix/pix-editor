@@ -1,7 +1,8 @@
 import { Skill } from '../../../../lib/domain/models/index.js';
 
 export function buildSkill({
-  id = 'recTIddrkopID28Ep',
+  id = 'skillIdPersistant',
+  airtableId = 'recTIddrkopID28Ep',
   name = '@accesDonnées1',
   description = 'skill description',
   hint_i18n = {
@@ -21,6 +22,7 @@ export function buildSkill({
 } = {}) {
   return new Skill({
     id,
+    airtableId,
     name,
     description,
     hint_i18n,

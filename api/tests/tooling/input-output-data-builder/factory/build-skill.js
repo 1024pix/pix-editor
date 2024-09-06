@@ -1,5 +1,6 @@
 export function buildSkill({
   id = 'skillid1',
+  airtableId = 'recId',
   name,
   hint_i18n: { fr: hintFrFr, en: hintEnUs },
   hintStatus,
@@ -15,9 +16,10 @@ export function buildSkill({
   version,
 } = {}) {
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
+      'Record Id': airtableId,
       'Indice fr-fr': hintFrFr,
       'Indice en-us': hintEnUs,
       'Statut de l\'indice': hintStatus,

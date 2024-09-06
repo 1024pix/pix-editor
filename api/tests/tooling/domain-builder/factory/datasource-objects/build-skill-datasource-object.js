@@ -2,7 +2,8 @@ import { Skill } from '../../../../../lib/domain/models/index.js';
 
 export function buildSkillDatasourceObject(
   {
-    id = 'recTIddrkopID28Ep',
+    id = 'skillIdPersistant',
+    airtableId = 'recTIddrkopID28Ep',
     name = '@accesDonnées1',
     hintStatus = Skill.HINT_STATUSES.VALIDE,
     tutorialIds = ['receomyzL0AmpMFGw'],
@@ -18,6 +19,7 @@ export function buildSkillDatasourceObject(
   } = {}) {
   return {
     id,
+    airtableId,
     name,
     hintStatus,
     tutorialIds,

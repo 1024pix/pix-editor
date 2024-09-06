@@ -70,42 +70,37 @@ module('Unit | Model | skill', function(hooks) {
     assert.deepEqual(languages, expected);
   });
 
-  test('it should duplicate skill without location and with a draft status', async function(assert) {
+  test('it should clone skill with save method and adapterOptions', async function(assert) {
     // given
-    const idGeneratorStub = { newId: sinon.stub().returns('generatedId') };
+    const level = Symbol('level');
+    const storeStub = {
+      createRecord: sinon.stub(),
+    };
+    const saveStub = sinon.stub();
+    storeStub.createRecord.returns({
+      save: saveStub,
+    });
 
-    const tutorial1 = store.createRecord('tutorial', { title: 'tutoMore' });
-    const tutorial2 = store.createRecord('tutorial', { title: 'tutoSolution1' });
-    const tutorial3 = store.createRecord('tutorial', { title: 'tutoSolution2' });
-    const tube = store.createRecord('tube', { title: 'tube' });
+    const tube = store.createRecord('tube', { pixId: 'tubeId' });
     const skill = store.createRecord('skill', {
       id: 'rec_1',
       pixId: 'pix_1',
       status: 'actif',
       competence: ['competenceId'],
-      tube: tube,
-      challenges: [store.createRecord('challenge', challenge1)],
-      tutoSolution: [tutorial1],
-      tutoMore: [tutorial2, tutorial3],
     });
 
-    skill.idGenerator = idGeneratorStub;
-    // const ignoredFields = ['competence', 'level', 'tube', 'challenges'];
-
+    skill.myStore = storeStub;
     // when
-    const clonedSkill = await skill.clone();
-    const tubeField = await clonedSkill.get('tube');
+    await skill.clone({ tubeDestination: tube, level });
 
     // then
-    assert.strictEqual(clonedSkill.level, undefined);
-    assert.strictEqual(clonedSkill.competence, undefined);
-    assert.strictEqual(tubeField, null);
-
-    assert.strictEqual(clonedSkill.challenges.length, 0);
-    assert.strictEqual(clonedSkill.status, 'en construction');
-    assert.strictEqual(clonedSkill.pixId, 'generatedId');
-
-    assert.strictEqual(clonedSkill.tutoSolution.length, 1);
-    assert.strictEqual(clonedSkill.tutoMore.length, 2);
+    assert.ok(saveStub.calledOnce);
+    assert.ok(saveStub.calledWith({ adapterOptions: {
+      clone: true,
+      skillIdToClone: 'pix_1',
+      tubeDestinationId: 'tubeId',
+      level,
+    },
+    }));
   });
 });

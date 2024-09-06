@@ -3,6 +3,7 @@ import { Challenge } from './Challenge.js';
 export class Skill {
   constructor({
     id,
+    airtableId,
     name,
     description,
     hint_i18n,
@@ -18,6 +19,7 @@ export class Skill {
     level,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.description = description;
     this.hint_i18n = hint_i18n;

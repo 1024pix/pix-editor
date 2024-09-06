@@ -1,5 +1,6 @@
 export function buildSkill({
   id,
+  airtableId,
   name,
   hintStatus,
   tutorialIds,
@@ -15,9 +16,10 @@ export function buildSkill({
 } = {}) {
 
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
+      'Record Id': airtableId,
       'Statut de l\'indice': hintStatus,
       'Comprendre (id persistant)': tutorialIds,
       'En savoir plus (id persistant)': learningMoreTutorialIds,

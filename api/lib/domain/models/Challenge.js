@@ -2,8 +2,6 @@ import { getCountryCode, getCountryName } from './Geography.js';
 import { LocalizedChallenge } from './LocalizedChallenge.js';
 import _ from 'lodash';
 
-const cloneSource = new WeakMap();
-
 export class Challenge {
 
   #allFiles;
@@ -274,34 +272,24 @@ export class Challenge {
     return [...locales].sort();
   }
 
-  static getCloneSource(clonedChallenge) {
-    return cloneSource.get(clonedChallenge);
-  }
-
   cloneChallengeAndAttachments({ competenceId, skillId, generateNewIdFnc, alternativeVersion, prototypeVersion, attachments }) {
     const id = generateNewIdFnc(Challenge.ID_PREFIX);
-    const clonedAttachments = [];
-    const clonedLocalizedChallenges = [];
-    for (const localizedChallenge of this.localizedChallenges) {
-      let newLocalizedChallengeId, status;
-      if (localizedChallenge.isPrimary) {
-        newLocalizedChallengeId = id;
-        status = LocalizedChallenge.STATUSES.PRIMARY;
-      } else {
-        newLocalizedChallengeId = generateNewIdFnc(Challenge.ID_PREFIX);
-        status = LocalizedChallenge.STATUSES.PAUSE;
-      }
-      const { clonedLocalizedChallenge, clonedAttachments: clonedAttachmentsForLoc } = localizedChallenge.clone({ id: newLocalizedChallengeId, challengeId: id, status, attachments });
-      clonedLocalizedChallenges.push(clonedLocalizedChallenge);
-      cloneSource.set(clonedLocalizedChallenge, localizedChallenge);
-      clonedAttachments.push(...clonedAttachmentsForLoc);
-    }
+    const localizedChallengePrimary = this.#primaryLocalizedChallenge;
+    const { clonedLocalizedChallenge, clonedAttachments } = localizedChallengePrimary.clone({
+      id,
+      challengeId: id,
+      status: LocalizedChallenge.STATUSES.PRIMARY,
+      attachments
+    });
+    const primaryTranslation = {
+      [this.primaryLocale]:  _.cloneDeep(this.translations[this.primaryLocale])
+    };
 
     const clonedChallenge =  new Challenge({
       id,
       airtableId: null,
-      translations: _.cloneDeep(this.#translations),
-      localizedChallenges: clonedLocalizedChallenges,
+      translations: primaryTranslation,
+      localizedChallenges: [clonedLocalizedChallenge],
       locales: this.locales,
       files: [],
       accessibility1: this.accessibility1,
@@ -338,8 +326,6 @@ export class Challenge {
       validatedAt: null,
       version: prototypeVersion,
     });
-
-    cloneSource.set(clonedChallenge, this);
 
     return {
       clonedChallenge,
