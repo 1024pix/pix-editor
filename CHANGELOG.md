@@ -1,5 +1,14 @@
 
 
+## v3.161.0 (06/09/2024)
+
+
+### :rocket: Amélioration
+- [#755](https://github.com/1024pix/pix-editor/pull/755) [FEATURE] Déplacer la logique de clonage côté back (PIX-13710).
+
+### :bug: Correction
+- [#756](https://github.com/1024pix/pix-editor/pull/756) [BUGFIX] Crash de l’appli lorsqu’on rafraîchit sur détail acquis/épreuve (PIX-14085).
+
 ## v3.160.0 (03/09/2024)
 
 
