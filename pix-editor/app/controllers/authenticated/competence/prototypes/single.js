@@ -28,7 +28,6 @@ export default class SingleController extends Controller {
   @service currentData;
   @service filePath;
   @service intl;
-  defaultSaveChangelog = this.intl.t('prototype.changelog.update-message');
   @service loader;
   @service notify;
   @service router;
@@ -119,6 +118,10 @@ export default class SingleController extends Controller {
 
   get localizedChallengeLinkRoute() {
     return this.challenge.get('isPrototype') ? 'authenticated.competence.prototypes.localized' : 'authenticated.competence.prototypes.single.alternatives.localized';
+  }
+
+  get defaultSaveChangelog() {
+    return this.intl.t('prototype.changelog.update-message');
   }
 
   @action
