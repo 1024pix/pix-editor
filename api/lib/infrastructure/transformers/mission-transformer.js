@@ -25,6 +25,7 @@ export function transform({ missions, challenges, tubes, thematics, skills }) {
 
       if (index < thematicIds.length - 1) {
         content.steps.push({
+          name_i18n: thematic.name_i18n,
           tutorialChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_di'),
           trainingChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_en'),
           validationChallenges: _getChallengeIdsForActivity(mission.status, missionTubes, skills, challenges, '_va'),
