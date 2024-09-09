@@ -116,4 +116,90 @@ describe('Integration | Repository | tube-repository', () => {
       airtableScope.done();
     });
   });
+
+  describe('#getMany', ()=> {
+    it('should return a list of tubes by ids', async () => {
+      // given
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Tubes' }).returns([
+        airtableBuilder.factory.buildTube({
+          id: 'tubeId1',
+          name: '@tube1',
+          practicalTitle_i18n: {
+            fr: 'practicalTitleFrFr tube1',
+            en: 'practicalTitleEnUs tube1',
+          },
+          practicalDescription_i18n: {
+            fr: 'practicalDescriptionFrFr tube1',
+            en: 'practicalDescriptionEnUs tube1',
+          },
+          competenceId: 'competenceId'
+        }),
+      ]).activate().nockScope;
+      const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'en',
+        value: 'Identify a web browser and a search engine, know how the search engine works from PG 1'
+      });
+      const tube1DescriptionFr = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'fr',
+        value: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG 1'
+      });
+      const tube1TitleEn = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'en',
+        value: 'Tools for web from PG 1'
+      });
+      const tube1TitleFr = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'fr',
+        value: 'Outils d\'accès au web from PG 1'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalDescription',
+        locale: 'en',
+        value: 'Identify a web browser and a search engine, know how the search engine works from PG 2'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalDescription',
+        locale: 'fr',
+        value: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG 2'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalTitle',
+        locale: 'en',
+        value: 'Tools for web from PG 2'
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId2.practicalTitle',
+        locale: 'fr',
+        value: 'Outils d\'accès au web from PG 2'
+      });
+
+      await databaseBuilder.commit();
+
+      // when
+      const tubes = await tubeRepository.getMany(['tubeId1']);
+
+      // then
+      expect(tubes).toEqual([
+        domainBuilder.buildTube({
+          id: 'tubeId1',
+          name: '@tube1',
+          practicalTitle_i18n: {
+            fr: tube1TitleFr.value,
+            en: tube1TitleEn.value,
+          },
+          practicalDescription_i18n: {
+            fr: tube1DescriptionFr.value,
+            en: tube1DescriptionEn.value,
+          },
+          competenceId: 'competenceId',
+        }),
+      ]);
+
+      airtableScope.done();
+
+    });
+  });
 });

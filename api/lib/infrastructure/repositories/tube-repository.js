@@ -23,6 +23,12 @@ export async function get(id) {
   return toDomain(tubeDTO, translations);
 }
 
+export async function getMany(ids) {
+  const datasourceTubes = await tubeDatasource.filter({ filter: { ids } });
+  const translations = await translationRepository.listByPrefix(tubeTranslations.prefix);
+  return toDomainList(datasourceTubes, translations);
+}
+
 function toDomainList(datasourceTubes, translations) {
   const translationsByTubeId = _.groupBy(translations, 'entityId');
   return datasourceTubes.map(
