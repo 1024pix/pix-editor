@@ -38,10 +38,12 @@ class Content {
 
 class Step {
   constructor({
+    name_i18n,
     tutorialChallenges = [],
     trainingChallenges = [],
     validationChallenges = [],
   } = {}) {
+    this.name_i18n = name_i18n;
     this.tutorialChallenges = tutorialChallenges;
     this.trainingChallenges = trainingChallenges;
     this.validationChallenges = validationChallenges;

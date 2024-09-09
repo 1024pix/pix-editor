@@ -66,10 +66,16 @@ describe('Unit | Transformer | mission-transformer', function() {
       thematics = [
         domainBuilder.buildThematic({
           id: 'thematicStep1',
+          name_i18n: {
+            fr: 'Thématique du step 1',
+          },
           tubeIds: ['tubeTuto1', 'tubeTraining1', 'tubeValidation1']
         }),
         domainBuilder.buildThematic({
           id: 'thematicStep2',
+          name_i18n: {
+            fr: 'Thématique du step 2',
+          },
           tubeIds: ['tubeTuto2', 'tubeTraining2', 'tubeValidation2']
         }),
         domainBuilder.buildThematic({
@@ -89,24 +95,24 @@ describe('Unit | Transformer | mission-transformer', function() {
         it('should return proposal and active challenges only', function() {
           challenges = [
             domainBuilder.buildChallenge({
-              id: 'challengeValidationValidé',
+              id: 'challengeValidationValidéStep1',
               status: Challenge.STATUSES.VALIDE,
               skillId: 'skillValidation1'
             }),
             domainBuilder.buildChallenge({
-              id: 'challengeValidationProposé',
-              status: Challenge.STATUSES.PROPOSE,
-              skillId: 'skillValidation1'
-            }),
-            domainBuilder.buildChallenge({
-              id: 'challengeValidationPérimé',
+              id: 'challengeValidationPériméStep1',
               status: Challenge.STATUSES.PERIME,
               skillId: 'skillValidation1'
             }),
             domainBuilder.buildChallenge({
-              id: 'challengeValidationArchivé',
+              id: 'challengeValidationProposéStep2',
+              status: Challenge.STATUSES.PROPOSE,
+              skillId: 'skillValidation2'
+            }),
+            domainBuilder.buildChallenge({
+              id: 'challengeValidationArchivéStep2',
               status: Challenge.STATUSES.ARCHIVE,
-              skillId: 'skillValidation1'
+              skillId: 'skillValidation2'
             }),
           ];
 
@@ -116,7 +122,7 @@ describe('Unit | Transformer | mission-transformer', function() {
             status: Mission.status.EXPERIMENTAL,
             learningObjectives: 'Alt objectives',
             validatedObjectives: 'Alt validated objectives',
-            thematicIds: 'thematicStep1,thematicDefiVide',
+            thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
             competenceId: 'competenceId',
             createdAt: new Date('2010-01-04'),
           })];
@@ -127,7 +133,7 @@ describe('Unit | Transformer | mission-transformer', function() {
             id: 2,
             name_i18n: { fr: 'Alt name' },
             competenceId: 'competenceId',
-            thematicIds: 'thematicStep1,thematicDefiVide',
+            thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
             learningObjectives_i18n: { fr: 'Alt objectives' },
             validatedObjectives_i18n: { fr: 'Alt validated objectives' },
             introductionMediaUrl: null,
@@ -138,10 +144,19 @@ describe('Unit | Transformer | mission-transformer', function() {
             createdAt: new Date('2010-01-04'),
             content: {
               steps: [{
+                name_i18n: { fr: 'Thématique du step 1' },
                 tutorialChallenges: [],
                 trainingChallenges: [],
                 validationChallenges: [
-                  ['challengeValidationValidé', 'challengeValidationProposé'],
+                  ['challengeValidationValidéStep1'],
+                ],
+              },
+              {
+                name_i18n: { fr: 'Thématique du step 2' },
+                tutorialChallenges: [],
+                trainingChallenges: [],
+                validationChallenges: [
+                  ['challengeValidationProposéStep2'],
                 ],
               }],
               dareChallenges: [],
@@ -203,6 +218,7 @@ describe('Unit | Transformer | mission-transformer', function() {
             createdAt: new Date('2010-01-04'),
             content: {
               steps: [{
+                name_i18n: { fr: 'Thématique du step 1' },
                 tutorialChallenges: [],
                 trainingChallenges: [],
                 validationChallenges: [
@@ -213,7 +229,6 @@ describe('Unit | Transformer | mission-transformer', function() {
             },
           }]);
         });
-
       });
     });
 
@@ -302,6 +317,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
+              name_i18n: { fr: 'Thématique du step 1' },
               tutorialChallenges: [],
               trainingChallenges: [],
               validationChallenges: [
@@ -374,6 +390,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
+              name_i18n: { fr: 'Thématique du step 1' },
               tutorialChallenges: [],
               trainingChallenges: [],
               validationChallenges: [
@@ -451,6 +468,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
+              name_i18n: { fr: 'Thématique du step 1' },
               tutorialChallenges: [],
               trainingChallenges: [],
               validationChallenges: [
@@ -495,6 +513,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
+              name_i18n: { fr: 'Thématique du step 1' },
               trainingChallenges: [],
               validationChallenges: [],
               tutorialChallenges: [],
@@ -538,6 +557,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           createdAt: new Date('2010-01-04'),
           content: {
             steps: [{
+              name_i18n: { fr: 'Thématique du step 1' },
               trainingChallenges: [],
               validationChallenges: [],
               tutorialChallenges: [],
