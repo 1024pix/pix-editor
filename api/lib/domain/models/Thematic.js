@@ -5,7 +5,7 @@ export class Thematic {
     index,
     airtableId,
     competenceId,
-    tubeIds,
+    tubeIds = [],
   }) {
     this.id = id;
     this.name_i18n = name_i18n;

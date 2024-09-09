@@ -22,6 +22,7 @@ export class CompetenceOverview {
       const tubeOverviews = [];
       for (const tube of tubesForThematic) {
         const skillsForTube = skillsForCompetence.filter((sk) => sk.tubeId === tube.id);
+
         tubeOverviews.push(new TubeOverview({
           id: tube.id,
           name: tube.name,

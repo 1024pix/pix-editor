@@ -1,32 +1,31 @@
 import { action } from '@ember/object';
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
+import { tracked } from '@glimmer/tracking';
 
 export default class CompetenceRoute extends Route {
   @service currentData;
   @service paginatedQuery;
   @service store;
 
-  model(params) {
-    return this.store.findRecord('competence', params.competence_id);
+  @tracked competenceModel;
+
+  queryParams = {
+    locale: {
+      refreshModel: true,
+    },
+  };
+
+  async model(params) {
+    this.competenceModel = await this.store.findRecord('competence', params.competence_id);
+    return this.store.findRecord('competence-overview', this.competenceModel.pixId, { adapterOptions: { locale: params.locale } });
   }
 
-  async afterModel(model) {
-    this.currentData.setCompetence(model);
-    const area = await model.area;
+  async afterModel() {
+    this.currentData.setCompetence(this.competenceModel);
+    const area = await this.competenceModel.area;
     const framework = await area.framework;
     this.currentData.setFramework(framework);
-    if (model.needsRefresh) {
-      const themes = await model.hasMany('rawThemes').reload();
-      const themesTubes = await Promise.all(themes.map((theme) => theme.hasMany('rawTubes').reload()));
-      const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.hasMany('rawSkills').reload())));
-      Promise.all(tubesSkills.flatMap((skills) => skills.map((skill) => skill.hasMany('challenges').reload()))).catch(console.error);
-      model.needsRefresh = false;
-    } else {
-      const themes = await model.rawThemes;
-      const themesTubes = await Promise.all(themes.map((theme) => theme.rawTubes));
-      await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.rawSkills)));
-    }
   }
 
   @action

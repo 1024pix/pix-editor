@@ -31,13 +31,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
         id: 'thematic1Id',
         name_i18n: { 'fr' : 'thematic1Name' },
         competenceId: competence.id,
-        tubeIds: [],
+        tubeIds: undefined,
       });
       thematic2 = domainBuilder.buildThematic({
         id: 'thematic2Id',
         name_i18n: { 'fr' : 'thematic2Name' },
         competenceId: competence.id,
-        tubeIds: [],
+        tubeIds: undefined,
       });
       thematicWorkbench = domainBuilder.buildThematic({
         id: 'thematicWorkbenchId',
@@ -47,6 +47,161 @@ describe('Unit | Domain | CompetenceOverview', () => {
       });
       thematicsForCompetence = [thematicWorkbench, thematic1, thematic2];
     });
+
+    it('should not crash when there are no tubes in thematic', () => {
+      // when
+      const competenceOverview = CompetenceOverview.build({
+        locale,
+        competence,
+        thematicsForCompetence,
+        tubesForCompetence: [domainBuilder.buildTube({
+          id: 'tubeABCId',
+          name: '@tubeABC',
+          competenceId: competence.id,
+        })],
+        skillsForCompetence: [],
+        challengesForCompetence: [],
+        tutorialsForCompetence: [],
+      });
+
+      // then
+      const expectedCompetenceOverview = new CompetenceOverview({
+        id: competence.id,
+        name: competence.name_i18n['fr'],
+        locale,
+        thematicOverviews: [
+          new ThematicOverview({
+            id: thematic1.id,
+            name: thematic1.name_i18n['fr'],
+            tubeOverviews: [],
+          }),
+          new ThematicOverview({
+            id: thematic2.id,
+            name: thematic2.name_i18n['fr'],
+            tubeOverviews: [],
+          }),
+        ],
+      });
+
+      expect(competenceOverview).toStrictEqual(expectedCompetenceOverview);
+    });
+
+    it('should not crash when there are no skills in tube', () => {
+      // given
+      const tubeABC = domainBuilder.buildTube({
+        id: 'tubeABCId',
+        name: '@tubeABC',
+        competenceId: competence.id,
+      });
+      thematic1.tubeIds = ['tubeABCId'];
+
+      // when
+      const competenceOverview = CompetenceOverview.build({
+        locale,
+        competence,
+        thematicsForCompetence: [thematic1],
+        tubesForCompetence: [tubeABC],
+        skillsForCompetence: [],
+        challengesForCompetence: [],
+        tutorialsForCompetence: [],
+      });
+
+      // then
+      const expectedCompetenceOverview = new CompetenceOverview({
+        id: competence.id,
+        name: competence.name_i18n['fr'],
+        locale,
+        thematicOverviews: [
+          new ThematicOverview({
+            id: thematic1.id,
+            name: thematic1.name_i18n['fr'],
+            tubeOverviews: [
+              new TubeOverview({
+                id: 'tubeABCId',
+                name: '@tubeABC',
+                competenceId: competence.id,
+                enProductionSkillViews: [],
+                enConstructionSkillViews: [],
+                atelierSkillViews: []
+              })
+            ],
+          }),
+        ],
+      });
+
+      expect(competenceOverview).toStrictEqual(expectedCompetenceOverview);
+    });
+
+    it('should not crash when there are no challenges in skill', () => {
+      // given
+      const tubeABC = domainBuilder.buildTube({
+        id: 'tubeABCId',
+        name: '@tubeABC',
+        competenceId: competence.id,
+      });
+      thematic1.tubeIds = ['tubeABCId'];
+
+      const skill = domainBuilder.buildSkill({
+        id: 'archivedSkillId',
+        name: `${tubeABC.name}1`,
+        status: Skill.STATUSES.ARCHIVE,
+        level: 1,
+        hintStatus: Skill.HINT_STATUSES.NONE,
+        tubeId: tubeABC.id,
+      });
+
+      // when
+      const competenceOverview = CompetenceOverview.build({
+        locale,
+        competence,
+        thematicsForCompetence: [thematic1],
+        tubesForCompetence: [tubeABC],
+        skillsForCompetence: [skill],
+        challengesForCompetence: [],
+        tutorialsForCompetence: [],
+      });
+
+      // then
+      const expectedCompetenceOverview = new CompetenceOverview({
+        id: competence.id,
+        name: competence.name_i18n['fr'],
+        locale,
+        thematicOverviews: [
+          new ThematicOverview({
+            id: thematic1.id,
+            name: thematic1.name_i18n['fr'],
+            tubeOverviews: [
+              new TubeOverview({
+                id: 'tubeABCId',
+                name: '@tubeABC',
+                competenceId: competence.id,
+                enProductionSkillViews: expect.any(Array),
+                enConstructionSkillViews: expect.any(Array),
+                atelierSkillViews: [
+                  new AtelierSkillView({
+                    name: skill.name,
+                    level: skill.level,
+                    atelierSkillVersionViews: [
+                      new AtelierSkillVersionView({
+                        id: skill.id,
+                        status: skill.status,
+                        validatedPrototypesCount: 0,
+                        proposedPrototypesCount: 0,
+                        archivedPrototypesCount: 0,
+                        obsoletePrototypesCount: 0,
+                      }),
+                    ]
+                  })
+                ]
+              })
+            ],
+          }),
+        ],
+      });
+
+      expect(competenceOverview).toStrictEqual(expectedCompetenceOverview);
+    });
+
     describe('EnConstruction view', () => {
       let tubeABC, tubeDEF, tubeGHI, tubeJKL;
       it('should build a CompetenceOverview readmodel and respect all the business rules to build the enconstruction view objects', () => {
@@ -281,6 +436,8 @@ describe('Unit | Domain | CompetenceOverview', () => {
             }),
           ],
         });
+
+        // then
         expect(competenceOverview).toStrictEqual(expectedCompetenceOverview);
       });
     });

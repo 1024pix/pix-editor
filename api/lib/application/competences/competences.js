@@ -4,8 +4,9 @@ import { extractParameters } from '../../infrastructure/utils/query-params-utils
 import { competenceOverviewSerializer } from '../../infrastructure/serializers/jsonapi/index.js';
 
 export async function getCompetenceOverview(request, h) {
-  const { locale } = extractParameters(request.query);
+  let { locale } = extractParameters(request.query);
 
+  locale = locale ?? 'fr';
   const competence = await competenceRepository.getById(request.params.id);
   const thematicsForCompetence = await thematicRepository.getMany(competence.thematicIds);
   const tubesForCompetence = await tubeRepository.getMany(thematicsForCompetence.flatMap((thematic) => thematic.tubeIds));
@@ -15,14 +16,14 @@ export async function getCompetenceOverview(request, h) {
     const skillsByTube = await skillRepository.listByTubeId(tubeId);
     skillsForCompetence.push(...skillsByTube);
   }
-  const skillIds = skillsForCompetence.map(({ id })=> id);
+  const skillIds = skillsForCompetence.map(({ id }) => id);
   const challengesForCompetence = [];
   for (const skillId of skillIds) {
     const challengesBySkill = await challengeRepository.listBySkillId(skillId);
     challengesForCompetence.push(...challengesBySkill);
   }
-  const learningMoreTutoIds = skillsForCompetence.map(({ learningMoreTutorialIds }) => learningMoreTutorialIds);
-  const tutoIds = skillsForCompetence.map(({ tutorialIds }) => tutorialIds);
+  const learningMoreTutoIds = skillsForCompetence.flatMap(({ learningMoreTutorialIds }) => learningMoreTutorialIds ?? []);
+  const tutoIds = skillsForCompetence.flatMap(({ tutorialIds }) => tutorialIds ?? []);
   const tutorialsForCompetence = await tutorialRepository.getMany([...tutoIds, ...learningMoreTutoIds]);
 
   const competenceOverview = CompetenceOverview.build({ locale, competence, thematicsForCompetence, tubesForCompetence, skillsForCompetence, challengesForCompetence, tutorialsForCompetence });
