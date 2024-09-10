@@ -11,7 +11,7 @@
     <td data-test-empty-row colspan="8" class="empty-row"></td>
   </tr>
 {{else}}
-  {{#each this.tubesOrProductionTubes as |tube index|}}
+  {{#each this.tubes as |tube index|}}
     <tr>
       {{#if (eq index 0)}}
         <td data-test-theme-cell rowspan={{this.rowSpanTheme}} class="theme-cell {{if this.mayCreateTube 'create-tube'}}">

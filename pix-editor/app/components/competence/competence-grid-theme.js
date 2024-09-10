@@ -11,20 +11,15 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
     return section === 'skills' && view === 'workbench' && this.access.mayCreateTube();
   }
 
-  get tubesOrProductionTubes() {
-    const theme = this.args.theme;
-    if (this.args.view === 'workbench') {
-      return theme.tubes;
-    }
-    return theme.productionTubes;
+  get tubes() {
+    return this.args.theme.tubeOverviews;
   }
 
   get rowSpanTheme() {
-    return this.tubesOrProductionTubes.length;
+    return this.tubes.length;
   }
 
   get hasNoTubes() {
-    const theme = this.args.theme;
-    return theme.tubes.length === 0;
+    return this.rowSpanTheme === 0;
   }
 }
