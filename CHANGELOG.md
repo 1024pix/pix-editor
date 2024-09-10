@@ -1,5 +1,11 @@
 
 
+## v3.162.0 (10/09/2024)
+
+
+### :rocket: Amélioration
+- [#757](https://github.com/1024pix/pix-editor/pull/757) [FEATURE] Ajout des titres de thématique en tant que nom d'étapes dans les missions releasées (PIX-13849).
+
 ## v3.161.0 (06/09/2024)
 
 
