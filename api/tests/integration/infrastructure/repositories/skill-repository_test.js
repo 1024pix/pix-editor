@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import AirtableLib from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
 import {
@@ -8,6 +9,10 @@ import {
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 import { Skill } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
+import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import { stringValue } from '../../../../lib/infrastructure/airtable.js';
+
+const { Record: AirtableRecord } = AirtableLib;
 
 describe('Integration | Repository | skill-repository', () => {
 
@@ -120,6 +125,93 @@ describe('Integration | Repository | skill-repository', () => {
       ]);
 
       airtableScope.done();
+    });
+  });
+
+  describe('#listByCompetenceId', () => {
+    it('should retrieve all skills by competence Id', async () => {
+      // given
+      const skill1 = {
+        id: 'skill1',
+        airtableId: 'recId1',
+        name: 'Acquis 1',
+        description: 'Description Acquis 1',
+        hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
+        tutorialIds: ['tuto1', 'tuto2'],
+        learningMoreTutorialIds: ['tuto3', 'tuto4'],
+        pixValue: 2.5,
+        competenceId: 'competence1',
+        status: Skill.STATUSES.PERIME,
+        tubeId: 'tube1',
+        level: 4,
+        internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+        version: '1',
+      };
+
+      databaseBuilder.factory.buildTranslation({
+        key: 'skill.skill1.hint',
+        locale: 'fr',
+        value: 'Indice acquis 1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'skill.skill1.hint',
+        locale: 'en',
+        value: 'Skill 1 hint',
+      });
+
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+        if (tableName !== 'Acquis') expect.unreachable('Airtable tableName should be Acquis');
+        if (options?.filterByFormula !== `{Compétence (via Tube) (id persistant)} = ${stringValue(skill1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        return [{
+          id: skill1.airtableId,
+          fields: {
+            'id persistant': skill1.id,
+            'Record Id': skill1.airtableId,
+            'Nom': skill1.name,
+            'Statut de l\'indice': skill1.hintStatus,
+            'Comprendre (id persistant)': skill1.tutorialIds,
+            'En savoir plus (id persistant)': skill1.learningMoreTutorialIds,
+            'PixValue': skill1.pixValue,
+            'Compétence (via Tube) (id persistant)': [skill1.competenceId],
+            'Status': skill1.status,
+            'Tube (id persistant)': [skill1.tubeId],
+            'Description': skill1.description,
+            'Level': skill1.level,
+            'Internationalisation': skill1.internationalisation,
+            'Version': skill1.version,
+          },
+          get: function(field) { return this.fields[field]; },
+        }];
+      });
+
+      // when
+      const skills = await skillRepository.listByCompetenceId('competence1');
+
+      // then
+
+      expect(skills).toEqual([
+        domainBuilder.buildSkill({
+          id: 'skill1',
+          airtableId: 'recId1',
+          name: 'Acquis 1',
+          description: 'Description Acquis 1',
+          hint_i18n: {
+            fr: 'Indice acquis 1',
+            en: 'Skill 1 hint',
+          },
+          hintStatus: SkillForRelease.HINT_STATUSES.VALIDE,
+          tutorialIds: ['tuto1', 'tuto2'],
+          learningMoreTutorialIds: ['tuto3', 'tuto4'],
+          pixValue: 2.5,
+          competenceId: 'competence1',
+          status: Skill.STATUSES.PERIME,
+          tubeId: 'tube1',
+          level: 4,
+          internationalisation: Skill.INTERNATIONALISATIONS.FRANCE,
+          version: '1',
+        }),
+      ]);
     });
   });
 

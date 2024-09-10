@@ -24,9 +24,10 @@ export async function getMany(ids) {
 }
 
 export async function getById(id) {
-  const [datasourceCompetence] = await competenceDatasource.filter({ filter: { ids: [id] } });
-
-  const translations = await translationRepository.listByPrefix(`${competenceTranslations.prefix}${id}.`);
+  const [[datasourceCompetence], translations] = await Promise.all([
+    competenceDatasource.filter({ filter: { ids: [id] } }),
+    translationRepository.listByEntity(model, id),
+  ]);
   return toDomain(datasourceCompetence, translations);
 }
 

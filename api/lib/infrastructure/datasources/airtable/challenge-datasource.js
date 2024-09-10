@@ -3,6 +3,7 @@ import { findRecords, stringValue } from '../../airtable.js';
 import { convertLanguagesToLocales, convertLocalesToLanguages } from '../../../domain/services/convert-locales.js';
 
 // Cet import m'embête un peu qu'en pensez-vous ?
+// Je suis d’accord, il m’embête aussi.
 import { Challenge } from '../../../domain/models/index.js';
 
 export const challengeDatasource = datasource.extend({
@@ -185,6 +186,14 @@ export const challengeDatasource = datasource.extend({
   async filterBySkillId(skillId) {
     const airtableRawObjects = await findRecords(this.tableName, {
       filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
+
+  async listByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `{Compétences (via tube) (id persistant)} = ${stringValue(competenceId)}`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
