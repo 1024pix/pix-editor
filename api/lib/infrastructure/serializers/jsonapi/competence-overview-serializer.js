@@ -68,6 +68,10 @@ export function serialize(competenceOverview) {
           attributes: [
             'name',
             'level',
+            'validatedPrototypesCount',
+            'proposedPrototypesCount',
+            'archivedPrototypesCount',
+            'obsoletePrototypesCount',
             'atelierSkillVersionViews',
           ],
           atelierSkillVersionViews: {
@@ -75,10 +79,6 @@ export function serialize(competenceOverview) {
             ref: 'id',
             attributes: [
               'status',
-              'validatedPrototypesCount',
-              'proposedPrototypesCount',
-              'archivedPrototypesCount',
-              'obsoletePrototypesCount',
             ],
           }
         },

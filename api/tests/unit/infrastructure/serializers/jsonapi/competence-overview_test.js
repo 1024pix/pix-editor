@@ -22,14 +22,14 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                   new AtelierSkillView({
                     name: 'atelierSkillViewName',
                     level: 666,
+                    archivedPrototypesCount: 3469237895,
+                    obsoletePrototypesCount: 1294672387,
+                    proposedPrototypesCount: 9823789237,
+                    validatedPrototypesCount: 1239719831,
                     atelierSkillVersionViews: [
                       new AtelierSkillVersionView({
                         id: 'atelierSkillVersionViewId1',
                         status: 'atelierSkillVersionViewStatus',
-                        archivedPrototypesCount: 3469237895,
-                        obsoletePrototypesCount: 1294672387,
-                        proposedPrototypesCount: 9823789237,
-                        validatedPrototypesCount: 1239719831,
                       }),
                     ],
                   }),
@@ -121,10 +121,6 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             id: 'atelierSkillVersionViewId1',
             attributes: {
               status: 'atelierSkillVersionViewStatus',
-              'archived-prototypes-count': 3469237895,
-              'obsolete-prototypes-count': 1294672387,
-              'proposed-prototypes-count': 9823789237,
-              'validated-prototypes-count': 1239719831,
             },
           },
           {
@@ -133,6 +129,10 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             attributes: {
               name: 'atelierSkillViewName',
               level: 666,
+              'archived-prototypes-count': 3469237895,
+              'obsolete-prototypes-count': 1294672387,
+              'proposed-prototypes-count': 9823789237,
+              'validated-prototypes-count': 1239719831,
             },
             relationships: {
               'atelier-skill-version-views': {

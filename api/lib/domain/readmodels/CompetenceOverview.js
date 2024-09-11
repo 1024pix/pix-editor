@@ -22,7 +22,6 @@ export class CompetenceOverview {
       const tubeOverviews = [];
       for (const tube of tubesForThematic) {
         const skillsForTube = skillsForCompetence.filter((sk) => sk.tubeId === tube.id);
-
         tubeOverviews.push(new TubeOverview({
           id: tube.id,
           name: tube.name,
@@ -114,23 +113,28 @@ export class CompetenceOverview {
   }
 
   static #buildAtelierSkillViews({ skills, challenges }) {
-    const skillsByName = _.groupBy(skills, 'name');
+    const skillsByLevel = _.groupBy(skills, 'level');
     const atelierSkillViews = [];
-    for (const skillsForName of Object.values(skillsByName)) {
+    for (const skillsForName of Object.values(skillsByLevel)) {
+      let validatedPrototypesCount = 0, proposedPrototypesCount = 0, archivedPrototypesCount = 0, obsoletePrototypesCount = 0;
       const atelierSkillVersionViews = skillsForName.map((sk) => {
         const prototypesForSkill = challenges.filter((ch) => ch.skillId === sk.id && ch.genealogy === Challenge.GENEALOGIES.PROTOTYPE);
+        validatedPrototypesCount += prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.VALIDE).length;
+        proposedPrototypesCount += prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.PROPOSE).length;
+        archivedPrototypesCount += prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.ARCHIVE).length;
+        obsoletePrototypesCount += prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.PERIME).length;
         return new AtelierSkillVersionView({
           id: sk.id,
           status: sk.status,
-          validatedPrototypesCount: prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.VALIDE).length,
-          proposedPrototypesCount: prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.PROPOSE).length,
-          archivedPrototypesCount: prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.ARCHIVE).length,
-          obsoletePrototypesCount: prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.PERIME).length,
         });
       });
       atelierSkillViews.push(new AtelierSkillView({
         name: skillsForName[0].name,
         level: skillsForName[0].level,
+        validatedPrototypesCount,
+        proposedPrototypesCount,
+        archivedPrototypesCount,
+        obsoletePrototypesCount,
         atelierSkillVersionViews,
       }));
     }
@@ -188,11 +192,19 @@ export class AtelierSkillView {
   constructor({
     name,
     level,
+    validatedPrototypesCount,
+    proposedPrototypesCount,
+    archivedPrototypesCount,
+    obsoletePrototypesCount,
     atelierSkillVersionViews,
   }) {
     this.id = name;
     this.name = name;
     this.level = level;
+    this.validatedPrototypesCount = validatedPrototypesCount;
+    this.proposedPrototypesCount = proposedPrototypesCount;
+    this.archivedPrototypesCount = archivedPrototypesCount;
+    this.obsoletePrototypesCount = obsoletePrototypesCount;
     this.atelierSkillVersionViews = atelierSkillVersionViews;
   }
 }
@@ -201,17 +213,9 @@ export class AtelierSkillVersionView {
   constructor({
     id,
     status,
-    validatedPrototypesCount,
-    proposedPrototypesCount,
-    archivedPrototypesCount,
-    obsoletePrototypesCount,
   }) {
     this.id = id;
     this.status = status;
-    this.validatedPrototypesCount = validatedPrototypesCount;
-    this.proposedPrototypesCount = proposedPrototypesCount;
-    this.archivedPrototypesCount = archivedPrototypesCount;
-    this.obsoletePrototypesCount = obsoletePrototypesCount;
   }
 }
 

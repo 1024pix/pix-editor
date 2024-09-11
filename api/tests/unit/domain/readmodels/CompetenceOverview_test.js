@@ -181,14 +181,14 @@ describe('Unit | Domain | CompetenceOverview', () => {
                   new AtelierSkillView({
                     name: skill.name,
                     level: skill.level,
+                    validatedPrototypesCount: 0,
+                    proposedPrototypesCount: 0,
+                    archivedPrototypesCount: 0,
+                    obsoletePrototypesCount: 0,
                     atelierSkillVersionViews: [
                       new AtelierSkillVersionView({
                         id: skill.id,
                         status: skill.status,
-                        validatedPrototypesCount: 0,
-                        proposedPrototypesCount: 0,
-                        archivedPrototypesCount: 0,
-                        obsoletePrototypesCount: 0,
                       }),
                     ]
                   })
@@ -1007,14 +1007,14 @@ describe('Unit | Domain | CompetenceOverview', () => {
                     new AtelierSkillView({
                       name: skillTubeABC5_enconstruction_noversion.name,
                       level: skillTubeABC5_enconstruction_noversion.level,
+                      validatedPrototypesCount: 0,
+                      proposedPrototypesCount: 0,
+                      archivedPrototypesCount: 0,
+                      obsoletePrototypesCount: 0,
                       atelierSkillVersionViews: [
                         new AtelierSkillVersionView({
                           id: skillTubeABC5_enconstruction_noversion.id,
                           status: skillTubeABC5_enconstruction_noversion.status,
-                          validatedPrototypesCount: 0,
-                          proposedPrototypesCount: 0,
-                          archivedPrototypesCount: 0,
-                          obsoletePrototypesCount: 0,
                         }),
                       ],
                     }),
@@ -1029,22 +1029,18 @@ describe('Unit | Domain | CompetenceOverview', () => {
                     new AtelierSkillView({
                       name: skillTubeDEF2_archive_noversion.name,
                       level: skillTubeDEF2_archive_noversion.level,
+                      validatedPrototypesCount: 0,
+                      proposedPrototypesCount: 1,
+                      archivedPrototypesCount: 1,
+                      obsoletePrototypesCount: 2,
                       atelierSkillVersionViews: [
                         new AtelierSkillVersionView({
                           id: skillTubeDEF2_archive_noversion.id,
                           status: skillTubeDEF2_archive_noversion.status,
-                          validatedPrototypesCount: 0,
-                          proposedPrototypesCount: 0,
-                          archivedPrototypesCount: 1,
-                          obsoletePrototypesCount: 1,
                         }),
                         new AtelierSkillVersionView({
                           id: skillTubeDEF2_perime_version1.id,
                           status: skillTubeDEF2_perime_version1.status,
-                          validatedPrototypesCount: 0,
-                          proposedPrototypesCount: 1,
-                          archivedPrototypesCount: 0,
-                          obsoletePrototypesCount: 1,
                         }),
                       ],
                     }),
@@ -1065,22 +1061,19 @@ describe('Unit | Domain | CompetenceOverview', () => {
                     new AtelierSkillView({
                       name: skillTubeGHI4_archive_version1.name,
                       level: skillTubeGHI4_archive_version1.level,
+                      validatedPrototypesCount: 1,
+                      proposedPrototypesCount: 1,
+                      archivedPrototypesCount: 3,
+                      obsoletePrototypesCount: 0,
                       atelierSkillVersionViews: [
                         new AtelierSkillVersionView({
                           id: skillTubeGHI4_archive_version1.id,
                           status: skillTubeGHI4_archive_version1.status,
-                          validatedPrototypesCount: 0,
-                          proposedPrototypesCount: 0,
-                          archivedPrototypesCount: 1,
-                          obsoletePrototypesCount: 0,
+
                         }),
                         new AtelierSkillVersionView({
                           id: skillTubeGHI4_actif_version2.id,
                           status: skillTubeGHI4_actif_version2.status,
-                          validatedPrototypesCount: 1,
-                          proposedPrototypesCount: 1,
-                          archivedPrototypesCount: 2,
-                          obsoletePrototypesCount: 0,
                         }),
                       ],
                     }),
