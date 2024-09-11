@@ -34,7 +34,7 @@ export async function get(id) {
   const [challengeDto, localizedChallenges, translations] = await Promise.all([
     challengeDatasource.filterById(id),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
-    translationRepository.listByPrefix(`challenge.${id}.`),
+    translationRepository.listByPrefix(`${prefix}${id}.`),
   ]);
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
@@ -52,9 +52,11 @@ export async function list() {
 }
 
 export async function getMany(ids) {
-  const challengeDTOs = await challengeDatasource.filter({ filter: { ids } });
+  const [challengeDTOs, [translations, localizedChallenges]] = await Promise.all([
+    challengeDatasource.filter({ filter: { ids } }),
+    loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
+  ]);
   if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
   return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
@@ -160,16 +162,24 @@ export async function listBySkillId(skillId) {
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
-  if (challengeDtos.length === 0) return [[], []];
+  return loadTranslationsAndLocalizedChallengesForChallengeIds(
+    challengeDtos.map(({ id }) => id),
+  );
+}
+
+async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeIds) {
+  if (challengeIds.length === 0) return [[], []];
 
   return knex.transaction(async (transaction) => {
-    const challengesTranslations = await Promise.all(challengeDtos.map(
-      (challengeDto) => translationRepository.listByPrefix(prefixFor(challengeDto), { transaction })
-    ));
-    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
-      challengeIds: challengeDtos.map(({ id }) => id),
-      transaction,
-    });
+    const [challengesTranslations, localizedChallenges] = await Promise.all([
+      Promise.all(challengeIds.map(
+        (challengeId) => translationRepository.listByPrefix(`${prefix}${challengeId}.`, { transaction })
+      )),
+      localizedChallengeRepository.listByChallengeIds({
+        challengeIds,
+        transaction,
+      }),
+    ]);
 
     return [challengesTranslations.flat(), localizedChallenges];
   }, { readOnly: true });
