@@ -262,7 +262,7 @@ describe('Integration | Repository | mission-repository', function() {
           }
         ];
 
-        expect(await knex('translations').select('*')).to.deep.equal(translations);
+        expect(await knex('translations').select('key', 'locale', 'value')).to.deep.equal(translations);
       });
     });
 
@@ -351,7 +351,7 @@ describe('Integration | Repository | mission-repository', function() {
           }
         ];
 
-        expect(await knex('translations').select('*')).to.deep.equal(translations);
+        expect(await knex('translations').select('key', 'locale', 'value')).to.deep.equal(translations);
       });
     });
   });

@@ -165,7 +165,7 @@ describe('Integration | Validator | Mission', function() {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            await expect(warnings).to.deep.equal([]);
+            expect(warnings).to.deep.equal([]);
           });
         });
         context('when a skill has versions with only "ARCHIVE" or "PERIME" statuses', function() {
@@ -217,7 +217,7 @@ describe('Integration | Validator | Mission', function() {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            await expect(warnings).to.deep.equal([]);
+            expect(warnings).to.deep.equal([]);
           });
         });
         context('when a skill has a "en construction" status version but no "actif" status version', function() {
@@ -275,7 +275,7 @@ describe('Integration | Validator | Mission', function() {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            await expect(warnings).to.deep.equal(['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
+            expect(warnings).to.deep.equal(['L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.']);
           });
         });
         context('when there is several skills with "en construction"', function() {
@@ -327,7 +327,7 @@ describe('Integration | Validator | Mission', function() {
             const warnings = await missionValidator.validate(mission);
 
             // then
-            await expect(warnings).to.deep.equal(
+            expect(warnings).to.deep.equal(
               [
                 'L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 1.',
                 'L\'activité \'@Pix1D-recherche_di\' n\'a pas d\'acquis actif pour le niveau 2.'

@@ -45,7 +45,7 @@ describe('Migrate translation from airtable', function() {
     await migrateSkillsTranslationFromAirtable({ airtableClient });
 
     // then
-    const translations = await knex('translations').select().orderBy([{
+    const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
       column: 'key',
       order: 'asc'
     }, { column: 'locale', order: 'asc' }]);

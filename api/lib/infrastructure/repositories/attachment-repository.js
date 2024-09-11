@@ -1,7 +1,7 @@
+import _ from 'lodash';
 import { attachmentDatasource, challengeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
-import _ from 'lodash';
 import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 

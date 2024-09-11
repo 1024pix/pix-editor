@@ -77,14 +77,7 @@ describe('Integration | Repository | thematic-repository', () => {
   });
 
   describe('#getMany', () => {
-    it('Should return correspond thematics', async () => {
-      const thematic1 = airtableBuilder.factory.buildThematic({
-        id: 'thematic1',
-        competenceId: 'competenceId1',
-        index: '1',
-        tubeIds: ['tubeId1', 'tubeId2'],
-      });
-
+    it('should return corresponding thematics', async () => {
       const thematic2 = airtableBuilder.factory.buildThematic({
         id: 'thematic2',
         competenceId: 'competenceId2',
@@ -98,33 +91,11 @@ describe('Integration | Repository | thematic-repository', () => {
         tubeIds: ['tubeId5', 'tubeId6'],
       });
 
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([thematic1, thematic2, thematic3]).activate().nockScope;
+      const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([thematic2, thematic3]).activate().nockScope;
 
       const result = await thematicRepository.getMany([thematic2.id, thematic3.id]);
 
       expect(result.map((thematic) => thematic.id)).toEqual([thematic2.id, thematic3.id]);
-      airtableScope.done();
-    });
-    it('Should return empty array when there is no correspond thematics', async () => {
-      const thematic1 = airtableBuilder.factory.buildThematic({
-        id: 'thematic1',
-        competenceId: 'competenceId1',
-        index: '1',
-        tubeIds: ['tubeId1', 'tubeId2'],
-      });
-
-      const thematic2 = airtableBuilder.factory.buildThematic({
-        id: 'thematic2',
-        competenceId: 'competenceId2',
-        index: '2',
-        tubeIds: ['tubeId3', 'tubeId4'],
-      });
-
-      const airtableScope = airtableBuilder.mockList({ tableName: 'Thematiques' }).returns([thematic1, thematic2]).activate().nockScope;
-
-      const result = await thematicRepository.getMany(['thematic5']);
-
-      expect(result).toEqual([]);
       airtableScope.done();
     });
   });

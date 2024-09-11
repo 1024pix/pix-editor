@@ -834,7 +834,7 @@ describe('Integration | Repository | challenge-repository', () => {
         .select('*');
       expect(allLocalizedChallengesAttachments.length).toStrictEqual(0);
       const allTranslations = await knex('translations')
-        .select('*')
+        .select('key', 'locale', 'value')
         .orderBy(['key', 'locale']);
       expect(allTranslations).toStrictEqual([
         {

@@ -27,7 +27,7 @@ describe('Unit | Repository | competence-repository', () => {
         }),
       ]);
 
-      vi.spyOn(translationRepository, 'listByPrefix')
+      vi.spyOn(translationRepository, 'listByEntities')
         .mockResolvedValueOnce([{
           key: 'competence.competence1.name',
           locale: 'fr',
@@ -67,7 +67,7 @@ describe('Unit | Repository | competence-repository', () => {
 
       // then
       expect(competenceDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['competence1', 'competence2'] } });
-      expect(translationRepository.listByPrefix).toHaveBeenCalledWith('competence.');
+      expect(translationRepository.listByEntities).toHaveBeenCalledWith('competence', ['competence1', 'competence2']);
       expect(competences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',

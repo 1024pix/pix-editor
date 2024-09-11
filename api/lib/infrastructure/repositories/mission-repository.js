@@ -1,15 +1,17 @@
+import _ from 'lodash';
 import { knex } from '../../../db/knex-database-connection.js';
 import { fetchPage } from '../utils/knex-utils.js';
 import { Mission } from '../../domain/models/index.js';
-import _ from 'lodash';
 import * as missionTranslations from '../translations/mission.js';
 import { NotFoundError } from '../../domain/errors.js';
 import { translationRepository } from './index.js';
 
+const model = 'mission';
+
 export async function getById(id) {
   const [mission, translations] = await Promise.all([
     knex('missions').select('*').where({ id }).first(),
-    translationRepository.listByPrefix(`${missionTranslations.prefix}${id}.`),
+    translationRepository.listByEntity(model, id),
   ]);
 
   if (!mission) {
@@ -27,7 +29,7 @@ export async function findAllMissions({ filter, page }) {
     query.whereIn('status', filter.statuses.map((status) => status.toUpperCase()));
   }
   const { results, pagination } = await fetchPage(query, page);
-  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
+  const translations = await translationRepository.listByEntities(model, results.map(({ id }) => id));
 
   return {
     missions: _toDomainList(results, translations),
@@ -38,7 +40,7 @@ export async function findAllMissions({ filter, page }) {
 export async function listActive() {
   const [missions, translations] = await Promise.all([
     knex('missions').select('*').whereNot({ status: 'INACTIVE' }),
-    translationRepository.listByPrefix(missionTranslations.prefix),
+    translationRepository.listByModel(model),
   ]);
 
   return _toDomainList(missions, translations);

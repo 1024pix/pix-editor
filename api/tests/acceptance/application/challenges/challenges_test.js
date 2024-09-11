@@ -1171,7 +1171,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           urlsToConsult: ['firstLink', 'secondLink']
         }
       ]);
-      const translations = await knex('translations').select().orderBy('key');
+      const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
       expect(translations).to.deep.equal([
         {
           key: 'challenge.challengeId.alternativeInstruction',
@@ -1637,7 +1637,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
       expect(localizedChallenge).toHaveProperty('urlsToConsult', ['pouet.com']);
       expect(localizedChallenge).toHaveProperty('geography', 'NL');
-      await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
+      await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
           locale: 'fr',
@@ -1893,7 +1893,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           urlsToConsult: ['truc'],
         },
       ]);
-      await expect(knex('translations').orderBy('key').select()).resolves.to.deep.equal([
+      await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
           locale: 'fr',

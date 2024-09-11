@@ -6,10 +6,11 @@ import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import {
   extractFromChallenge as extractTranslationsFromChallenge,
-  prefix,
-  prefixFor
+  prefixFor,
 } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
+
+const model = 'challenge';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -17,7 +18,7 @@ async function _getChallengesFromParams(params) {
   }
   if (params.filter && params.filter.search) {
     params.filter.ids = await translationRepository.search({
-      entity: 'challenge',
+      entity: model,
       fields: ['instruction', 'proposals'],
       search: params.filter.search,
       limit: params.page?.size,
@@ -34,7 +35,7 @@ export async function get(id) {
   const [challengeDto, localizedChallenges, translations] = await Promise.all([
     challengeDatasource.filterById(id),
     localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
-    translationRepository.listByPrefix(`${prefix}${id}.`),
+    translationRepository.listByEntity(model, id),
   ]);
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
@@ -45,7 +46,7 @@ export async function get(id) {
 export async function list() {
   const [challengeDtos, translations, localizedChallenges] = await Promise.all([
     challengeDatasource.list(),
-    translationRepository.listByPrefix(prefix),
+    translationRepository.listByModel(model),
     localizedChallengeRepository.list(),
   ]);
   return toDomainList(challengeDtos, translations, localizedChallenges);
@@ -170,19 +171,10 @@ async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos
 async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeIds) {
   if (challengeIds.length === 0) return [[], []];
 
-  return knex.transaction(async (transaction) => {
-    const [challengesTranslations, localizedChallenges] = await Promise.all([
-      Promise.all(challengeIds.map(
-        (challengeId) => translationRepository.listByPrefix(`${prefix}${challengeId}.`, { transaction })
-      )),
-      localizedChallengeRepository.listByChallengeIds({
-        challengeIds,
-        transaction,
-      }),
-    ]);
-
-    return [challengesTranslations.flat(), localizedChallenges];
-  }, { readOnly: true });
+  return Promise.all([
+    translationRepository.listByEntities(model, challengeIds),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds }),
+  ]);
 }
 
 function toDomainList(challengeDtos, translations, localizedChallenges) {
