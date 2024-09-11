@@ -5,6 +5,7 @@ export default class EnProductionSkillViewModel extends Model {
   @attr name;
   @attr level;
   @attr status;
+  @attr hint;
   @attr hintStatus;
   @attr prototypeId;
   @attr isProtoDeclinable;

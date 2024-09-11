@@ -41,6 +41,7 @@ export function serialize(competenceOverview) {
           attributes: [
             'name',
             'level',
+            'hint',
             'hintStatus',
             'tutorialsCount',
             'learningMoreTutorialsCount',
@@ -53,6 +54,7 @@ export function serialize(competenceOverview) {
             'name',
             'level',
             'status',
+            'hint',
             'hintStatus',
             'prototypeId',
             'isProtoDeclinable',

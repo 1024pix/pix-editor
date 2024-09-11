@@ -37,6 +37,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 enConstructionSkillViews: [
                   new EnConstructionSkillView({
                     id: 'enConstructionSkillViewId1',
+                    hint: 'enConstructionSkillViewHint',
                     hintStatus: 'enConstructionSkillViewHintStatus',
                     learningMoreTutorialsCount: 49257492353,
                     level: 777,
@@ -47,6 +48,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 enProductionSkillViews: [
                   new EnProductionSkillView({
                     id: 'enProductionSkillViewId1',
+                    hint: 'enProductionSkillViewHint',
                     hintStatus: 'enProductionSkillViewHintStatus',
                     isProtoDeclinable: true,
                     learningMoreTutorialsCount: 23789468237,
@@ -94,6 +96,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             id: 'enConstructionSkillViewId1',
             attributes: {
               'hint-status': 'enConstructionSkillViewHintStatus',
+              'hint': 'enConstructionSkillViewHint',
               'learning-more-tutorials-count': 49257492353,
               level: 777,
               name: 'enConstructionSkillViewName',
@@ -105,6 +108,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             id: 'enProductionSkillViewId1',
             attributes: {
               'hint-status': 'enProductionSkillViewHintStatus',
+              'hint': 'enProductionSkillViewHint',
               'is-proto-declinable': true,
               'learning-more-tutorials-count': 23789468237,
               level: 888,

@@ -260,6 +260,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           version: null,
           level: 5,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.A_RETRAVAILLER,
           tutorialIds: [tutorialABC_frfr.id, tutorialGHI_nl.id, tutorialJKL_fr.id],
           learningMoreTutorialIds: [],
@@ -271,6 +274,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           version: null,
           level: 2,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.A_SOUMETTRE,
           tutorialIds: [tutorialGHI_nl.id],
           learningMoreTutorialIds: [],
@@ -282,6 +288,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           version: 1,
           level: 2,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.PROPOSE,
           tutorialIds: [tutorialJKL_fr.id],
           learningMoreTutorialIds: [tutorialDEF_fr.id],
@@ -293,6 +302,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.EN_CONSTRUCTION,
           version: 1,
           level: 4,
+          hint_i18n: {
+            wrongLocal: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.A_SOUMETTRE,
           tutorialIds: [],
           learningMoreTutorialIds: [],
@@ -304,6 +316,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.ACTIF,
           version: 2,
           level: 4,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.VALIDE,
           tubeId: tubeGHI.id,
         });
@@ -316,6 +331,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.PERIME,
           version: 1,
           level: 3,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.VALIDE,
           tubeId: tubeJKL.id,
         });
@@ -328,6 +346,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           status: Skill.STATUSES.ARCHIVE,
           version: 2,
           level: 3,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.A_SOUMETTRE,
           tubeId: tubeJKL.id,
         });
@@ -379,6 +400,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                       id: skillTubeABC5_enconstruction_noversion.id,
                       name: skillTubeABC5_enconstruction_noversion.name,
                       level: skillTubeABC5_enconstruction_noversion.level,
+                      hint: skillTubeABC5_enconstruction_noversion.hint_i18n[locale],
                       hintStatus: skillTubeABC5_enconstruction_noversion.hintStatus,
                       tutorialsCount: 2,
                       learningMoreTutorialsCount: 0,
@@ -395,6 +417,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                       id: skillTubeDEF2_enconstruction_version1.id,
                       name: skillTubeDEF2_enconstruction_version1.name,
                       level: skillTubeDEF2_enconstruction_version1.level,
+                      hint: skillTubeDEF2_enconstruction_version1.hint_i18n[locale],
                       hintStatus: skillTubeDEF2_enconstruction_version1.hintStatus,
                       tutorialsCount: 1,
                       learningMoreTutorialsCount: 1,
@@ -417,6 +440,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                       id: skillTubeGHI4_enconstruction_version1.id,
                       name: skillTubeGHI4_enconstruction_version1.name,
                       level: skillTubeGHI4_enconstruction_version1.level,
+                      hint: undefined,
                       hintStatus: skillTubeGHI4_enconstruction_version1.hintStatus,
                       tutorialsCount: 0,
                       learningMoreTutorialsCount: 0,
@@ -548,6 +572,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           name: `${tube.name}1`,
           status: Skill.STATUSES.ACTIF,
           level: 1,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
           tubeId: tube.id,
           tutorialIds: [tutorial_frfr.id, tutorial_nl.id],
@@ -618,6 +645,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                       name: actifSkill.name,
                       level: actifSkill.level,
                       status: actifSkill.status,
+                      hint: actifSkill.hint_i18n[locale],
                       hintStatus: actifSkill.hintStatus,
                       prototypeId: validePrototype.id,
                       isProtoDeclinable: false,
@@ -653,6 +681,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
           name: `${tube.name}1`,
           status: Skill.STATUSES.ACTIF,
           level: 1,
+          hint_i18n: {
+            [locale]: 'coucou'
+          },
           hintStatus: Skill.HINT_STATUSES.PRE_VALIDE,
           tubeId: tube.id,
         });
@@ -796,6 +827,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                       name: actifSkill.name,
                       level: actifSkill.level,
                       status: actifSkill.status,
+                      hint: actifSkill.hint_i18n[locale],
                       hintStatus: actifSkill.hintStatus,
                       prototypeId: validePrototype.id,
                       isProtoDeclinable: false,

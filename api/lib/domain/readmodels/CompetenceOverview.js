@@ -61,6 +61,7 @@ export class CompetenceOverview {
         id: enConstructionSkill.id,
         name: enConstructionSkill.name,
         level: enConstructionSkill.level,
+        hint: enConstructionSkill.hint_i18n[locale],
         hintStatus: enConstructionSkill.hintStatus,
         tutorialsCount,
         learningMoreTutorialsCount,
@@ -100,6 +101,7 @@ export class CompetenceOverview {
         id: skill.id,
         name: skill.name,
         level: skill.level,
+        hint: skill.hint_i18n[locale],
         hintStatus: skill.hintStatus,
         status: skill.status,
         prototypeId: validePrototype.id,
@@ -175,6 +177,7 @@ export class EnConstructionSkillView {
     id,
     name,
     level,
+    hint,
     hintStatus,
     tutorialsCount,
     learningMoreTutorialsCount,
@@ -182,6 +185,7 @@ export class EnConstructionSkillView {
     this.id = id;
     this.name = name;
     this.level = level;
+    this.hint = hint;
     this.hintStatus = hintStatus;
     this.tutorialsCount = tutorialsCount;
     this.learningMoreTutorialsCount = learningMoreTutorialsCount;
@@ -225,6 +229,7 @@ export class EnProductionSkillView {
     name,
     level,
     status,
+    hint,
     hintStatus,
     prototypeId,
     isProtoDeclinable,
@@ -237,6 +242,7 @@ export class EnProductionSkillView {
     this.name = name;
     this.level = level;
     this.status = status;
+    this.hint = hint;
     this.hintStatus = hintStatus;
     this.prototypeId = prototypeId;
     this.isProtoDeclinable = isProtoDeclinable;
