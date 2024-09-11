@@ -5,8 +5,10 @@ import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 
 export async function list() {
-  const datasourceThematics = await thematicDatasource.list();
-  const translations = await translationRepository.listByPrefix(thematicTranslations.prefix);
+  const [datasourceThematics, translations] = await Promise.all([
+    thematicDatasource.list(),
+    translationRepository.listByPrefix(thematicTranslations.prefix),
+  ]);
   return toDomainList(datasourceThematics, translations);
 }
 

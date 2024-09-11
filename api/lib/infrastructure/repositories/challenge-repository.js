@@ -31,13 +31,13 @@ async function _getChallengesFromParams(params) {
 }
 
 export async function get(id) {
-  const challengeDto = await challengeDatasource.filterById(id);
+  const [challengeDto, localizedChallenges, translations] = await Promise.all([
+    challengeDatasource.filterById(id),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
+    translationRepository.listByPrefix(`challenge.${id}.`),
+  ]);
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
-
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeDto.id] });
-
-  const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
 
   return toDomain(challengeDto, translations, localizedChallenges);
 }

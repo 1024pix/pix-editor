@@ -6,18 +6,23 @@ import { Attachment } from '../../domain/models/index.js';
 import * as localizedChallengesAttachmentsRepository from './localized-challenges-attachments-repository.js';
 
 export async function list() {
-  const datasourceAttachments = await attachmentDatasource.list();
-  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
-  const localizedChallenges = await localizedChallengeRepository.list();
+  const [datasourceAttachments, translations, localizedChallenges] = await Promise.all([
+    attachmentDatasource.list(),
+    translationRepository.listByPattern('challenge.%.illustrationAlt'),
+    localizedChallengeRepository.list(),
+  ]);
 
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }
 
 export async function listByLocalizedChallengeIds(localizedChallengeIds) {
-  const datasourceAttachments = await attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds);
+  const [datasourceAttachments, translations, localizedChallenges] = await Promise.all([
+    attachmentDatasource.filterByLocalizedChallengeIds(localizedChallengeIds),
+    translationRepository.listByPattern('challenge.%.illustrationAlt'),
+    localizedChallengeRepository.getMany({ ids: localizedChallengeIds }),
+  ]);
+
   if (!datasourceAttachments) return [];
-  const translations = await translationRepository.listByPattern('challenge.%.illustrationAlt');
-  const localizedChallenges = await localizedChallengeRepository.getMany({ ids: localizedChallengeIds });
 
   return toDomainList(datasourceAttachments, translations, localizedChallenges);
 }

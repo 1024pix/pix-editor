@@ -5,8 +5,10 @@ import _ from 'lodash';
 import { Area } from '../../domain/models/index.js';
 
 export async function list() {
-  const datasourceAreas = await areaDatasource.list();
-  const translations = await translationRepository.listByPrefix(areaTranslations.prefix);
+  const [datasourceAreas, translations] = await Promise.all([
+    areaDatasource.list(),
+    translationRepository.listByPrefix(areaTranslations.prefix),
+  ]);
   return toDomainList(datasourceAreas, translations);
 }
 

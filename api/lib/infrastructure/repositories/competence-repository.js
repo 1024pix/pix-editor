@@ -6,14 +6,18 @@ import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/Competence.js';
 
 export async function list() {
-  const datasourceCompetences = await competenceDatasource.list();
-  const translations = await translationRepository.listByPrefix(competenceTranslations.prefix);
+  const [datasourceCompetences, translations] = await Promise.all([
+    competenceDatasource.list(),
+    translationRepository.listByPrefix(competenceTranslations.prefix),
+  ]) ;
   return toDomainList(datasourceCompetences, translations);
 }
 
 export async function getMany(ids) {
-  const datasourceCompetences = await competenceDatasource.filter({ filter: { ids } });
-  const translations = await translationRepository.listByPrefix(competenceTranslations.prefix);
+  const [datasourceCompetences, translations] = await Promise.all([
+    competenceDatasource.filter({ filter: { ids } }),
+    translationRepository.listByPrefix(competenceTranslations.prefix),
+  ]);
   return toDomainList(datasourceCompetences, translations);
 }
 

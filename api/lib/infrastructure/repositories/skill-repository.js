@@ -8,23 +8,28 @@ import { Translation } from '../../domain/models/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function list() {
-  const datasourceSkills = await skillDatasource.list();
-  const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
+  const [datasourceSkills, translations] = await Promise.all([
+    skillDatasource.list(),
+    translationRepository.listByPrefix(skillTranslations.prefix),
+  ]);
   return toDomainList(datasourceSkills, translations);
 }
 
 export async function get(id) {
-  const [skillDTO] = await skillDatasource.filter({ filter: { ids: [id] } });
+  const [[skillDTO], translations] = await Promise.all([
+    skillDatasource.filter({ filter: { ids: [id] } }),
+    translationRepository.listByPrefix(`${skillTranslations.prefix}${id}`),
+  ]);
   if (!skillDTO) return null;
-  const prefix = `${skillTranslations.prefix}${skillDTO.id}`;
-  const translations = await translationRepository.listByPrefix(prefix);
   return toDomain(skillDTO, translations);
 }
 
 export async function listByTubeId(tubeId) {
-  const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
+  const [datasourceSkills, translations] = await Promise.all([
+    skillDatasource.filterByTubeId(tubeId),
+    translationRepository.listByPrefix(skillTranslations.prefix),
+  ]);
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
   return toDomainList(datasourceSkills, translations);
 }
 

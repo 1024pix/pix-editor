@@ -7,12 +7,15 @@ import { NotFoundError } from '../../domain/errors.js';
 import { translationRepository } from './index.js';
 
 export async function getById(id) {
-  const mission = await knex('missions').select('*').where({ id }).first();
+  const [mission, translations] = await Promise.all([
+    knex('missions').select('*').where({ id }).first(),
+    translationRepository.listByPrefix(`${missionTranslations.prefix}${id}.`),
+  ]);
+
   if (!mission) {
     throw new NotFoundError('Mission introuvable');
   }
 
-  const translations = await translationRepository.listByPrefix(missionTranslations.prefix);
   return _toDomain(mission, translations);
 }
 
