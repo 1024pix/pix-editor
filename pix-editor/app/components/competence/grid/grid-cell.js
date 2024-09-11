@@ -26,7 +26,6 @@ export default class GridCell extends Component {
       case 'skills':
         switch (this.args.view) {
           case 'production':
-            console.log('cellType', skill);
             if (skill) {
               return 'skill';
             }
