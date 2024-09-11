@@ -1,7 +1,7 @@
 import { it, describe, expect } from 'vitest';
 import {
-  airtableBuilder,
   databaseBuilder,
+  domainBuilder,
   generateAuthorizationHeader,
   streamToPromiseArray
 } from '../../test-helper.js';
@@ -15,53 +15,45 @@ describe('Acceptance | Controller | embed', () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
 
-      const airtableChallenges = [
-        airtableBuilder.factory.buildChallenge({
-          id: 'challengeId1',
-          status: 'validé'
-        }),
-        airtableBuilder.factory.buildChallenge({
-          id: 'challengeId_other',
-          status: 'validé'
-        })];
+      const competence = domainBuilder.buildCompetenceForRelease({
+        id: 'competenceId',
+        name_i18n: {
+          fr: 'Ma competence',
+          en: 'My comptence'
+        },
+        origin: 'pix',
+      });
 
-      const localizedChallenge1 = databaseBuilder.factory.buildLocalizedChallenge({
+      const tube = domainBuilder.buildTubeForRelease({
+        id: 'tubeId',
+        name: '@sujet',
+        competenceId: competence.id
+      });
+
+      const skill = domainBuilder.buildSkillForRelease({
+        id: 'skillId',
+        name: '@sujet1',
+        tubeId: tube.id,
+        competenceId: competence.id,
+      });
+
+      const challenge = domainBuilder.buildChallengeForRelease({
         id: 'challengeId1',
-        challengeId: 'challengeId1',
+        skillId: skill.id,
+        instruction: 'mon instruction go visite mon [site](https://epreuves.pix.fr/fr/mon-embed/lilou.html)',
         embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=coucou&lang=fr',
-        locale: 'fr',
-        status: null
-      });
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${localizedChallenge1.challengeId}.instruction`,
-        locale: 'fr',
-        value: 'allez sur se site https://epreuves.pix.fr/fr/mon-embed/lilou.html'
       });
 
-      const localizedChallenge1NL = databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeId1NL',
-        challengeId: 'challengeId1',
-        embedUrl: 'https://epreuves.pix.fr/mon-embed.html?mode=coucou&lang=nl',
-        locale: 'nl',
-        status: 'proposé'
+      databaseBuilder.factory.buildRelease({
+        content: domainBuilder.buildContentForRelease({
+          competences: [competence],
+          tubes: [tube],
+          skills: [skill],
+          challenges: [challenge]
+        })
       });
-      databaseBuilder.factory.buildTranslation({
-        key: `challenge.${localizedChallenge1NL.challengeId}.instruction`,
-        locale: 'nl',
-        value: 'flüt truque https://epreuves.pix.fr/nl/mon-embed/lilou.html'
-      });
-      databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeId_other',
-        challengeId: 'challengeId_other',
-        embedUrl: null,
-        locale: 'fr',
-        status: null
-      });
+
       await databaseBuilder.commit();
-
-      airtableBuilder.mockList({ tableName: 'Epreuves' })
-        .returns(airtableChallenges)
-        .activate();
 
       const server = await createServer();
 
@@ -80,14 +72,20 @@ describe('Acceptance | Controller | embed', () => {
       expect(response.statusCode).to.equal(200);
       expect(response.headers['content-type']).to.equal('text/csv; charset=utf-8');
 
-      expect(headers).to.deep.equal(['challengeId', 'embedUrl', 'status']);
+      expect(headers).to.deep.equal(['origin', 'competence', 'acquis','challengeId', 'embedUrl', 'status']);
       expect(data).to.deep.equal([
         [
+          'pix',
+          'Ma competence',
+          '@sujet1',
           'challengeId1',
           'https://epreuves.pix.fr/fr/mon-embed/lilou.html',
           'validé'
         ],
         [
+          'pix',
+          'Ma competence',
+          '@sujet1',
           'challengeId1',
           'https://epreuves.pix.fr/mon-embed.html?mode=coucou&lang=fr',
           'validé'
