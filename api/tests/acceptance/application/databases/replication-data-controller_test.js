@@ -57,6 +57,14 @@ async function mockCurrentContent() {
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
   };
+  const expectedThematic = domainBuilder.buildThematic({
+    name_i18n: {
+      fr: 'Thématique en fr',
+      en: 'Thematic in en',
+    },
+  });
+
+  delete expectedThematic.airtableId;
 
   const expectedChallenge = {
     ...challenge,
@@ -94,21 +102,19 @@ async function mockCurrentContent() {
     skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
     challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
-    thematics: [domainBuilder.buildThematic({
-      name_i18n: {
-        fr: 'Thématique en fr',
-        en: 'Thematic in en',
+    thematics: [expectedThematic],
+    courses: [
+      {
+        id: 'recCourse1',
+        name: 'nameCourse1',
       },
-    })],
-    courses: [{
-      id: 'recCourse1',
-      name: 'nameCourse1',
-    },
-    {
-      id: 'recCourse2',
-      name: 'nameCourse2',
-    }],
+      {
+        id: 'recCourse2',
+        name: 'nameCourse2',
+      },
+    ]
   };
+
   const airtableSkill = buildSkill(expectedCurrentContent.skills[0]);
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],

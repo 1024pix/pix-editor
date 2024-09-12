@@ -19,6 +19,7 @@ import {
   competenceTransformer,
   skillTransformer,
   tubeTransformer,
+  thematicTransformer,
   tutorialTransformer,
   missionTransformer
 } from '../transformers/index.js';
@@ -26,6 +27,7 @@ import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
+import { filterThematicsFields } from '../transformers/thematic-transformer.js';
 
 export function getCurrentContent() {
   return _getCurrentContent();
@@ -126,6 +128,8 @@ async function _getCurrentContent() {
   const transformChallenge = createChallengeTransformer({ attachments });
   const transformedChallenges = translatedChallenges.map(transformChallenge);
   const transformedTubes = tubeTransformer.transform({ tubes, skills, challenges: transformedChallenges, thematics });
+  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+
   const filteredCompetences = competenceTransformer.filterCompetencesFields(competences);
   const filteredSkills = skillTransformer.filterSkillsFields(skills);
   const filteredTutorials = tutorialTransformer.filterTutorialsFields(tutorials);
@@ -135,7 +139,7 @@ async function _getCurrentContent() {
     frameworks,
     areas,
     competences: filteredCompetences,
-    thematics,
+    thematics: transformedThematics,
     tubes: transformedTubes,
     skills: filteredSkills,
     challenges: transformedChallenges,

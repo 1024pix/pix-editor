@@ -18,6 +18,7 @@ export const thematicDatasource = datasource.extend({
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.id,
       competenceId: airtableRecord.get('Competence (id persistant)')[0],
       tubeIds: airtableRecord.get('Tubes (id persistant)'),
       index: airtableRecord.get('Index'),
