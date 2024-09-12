@@ -2,6 +2,7 @@ import { Competence } from '../../../../lib/domain/models/index.js';
 
 export function buildCompetence({
   id = 'recCompetence1',
+  airtableId = 'recAirtableCompetence1',
   name = 'nameCompetence1',
   name_i18n = { fr: 'nameFrCompetence1', en: 'nameUsCompetence1' },
   index = '1.1',
@@ -14,6 +15,7 @@ export function buildCompetence({
 } = {}) {
   return new Competence({
     id,
+    airtableId,
     name,
     name_i18n,
     index,

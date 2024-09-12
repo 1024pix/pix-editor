@@ -76,6 +76,7 @@ describe('Integration | Repository | competence-repository', () => {
       expect(competences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',
+          airtableId: 'competence1',
           index: '1.1',
           origin: 'Pix',
           areaId: 'area1',
@@ -92,6 +93,7 @@ describe('Integration | Repository | competence-repository', () => {
         }),
         domainBuilder.buildCompetence({
           id: 'competence2',
+          airtableId: 'competence2',
           index: '1.2',
           origin: 'Pix',
           areaId: 'area2',

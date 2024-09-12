@@ -18,6 +18,7 @@ export const competenceDatasource = datasource.extend({
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.id,
       index: airtableRecord.get('Sous-domaine'),
       areaId: airtableRecord.get('Domaine (id persistant)') ? airtableRecord.get('Domaine (id persistant)')[0] : '',
       skillIds: airtableRecord.get('Acquis (via Tubes) (id persistant)') || [],

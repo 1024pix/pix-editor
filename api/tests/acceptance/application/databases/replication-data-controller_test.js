@@ -79,6 +79,20 @@ async function mockCurrentContent() {
 
   const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
+
+  const expectedCompetence = domainBuilder.buildCompetence({
+    name_i18n: {
+      fr: 'Français',
+      en: 'English',
+    },
+    description_i18n: {
+      fr: 'Description française',
+      en: 'Description anglaise',
+    }
+  });
+
+  delete expectedCompetence.airtableId;
+
   const expectedCurrentContent = {
     attachments: [
       { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
@@ -88,16 +102,7 @@ async function mockCurrentContent() {
       },
     ],
     areas: [domainBuilder.buildArea()],
-    competences: [domainBuilder.buildCompetence({
-      name_i18n: {
-        fr: 'Français',
-        en: 'English',
-      },
-      description_i18n: {
-        fr: 'Description française',
-        en: 'Description anglaise',
-      }
-    })],
+    competences: [expectedCompetence],
     tubes: [domainBuilder.buildTube()],
     skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
     challenges: [expectedChallenge, expectedChallengeNl],

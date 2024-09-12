@@ -1,5 +1,6 @@
 export function buildCompetenceDatasourceObject({
   id = 'recsvLz0W2ShyfD63',
+  airtableId,
   index = '1.1',
   areaId = 'recvoGdo7z2z7pXWa',
   origin = 'Pix',
@@ -19,6 +20,7 @@ export function buildCompetenceDatasourceObject({
 
   return {
     id,
+    airtableId: airtableId ?? id,
     index,
     areaId,
     origin,
