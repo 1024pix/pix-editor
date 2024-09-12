@@ -21,7 +21,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | AttachmentDatasource',
 
       expect(newAttachments[0].id).to.equal('recAttachment');
       expect(newAttachments).to.have.length(1);
-      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Attachments', { filterByFormula: '{localizedChallengeId} = \'recChallenge\'' });
+      expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Attachments', { filterByFormula: '{localizedChallengeId} = "recChallenge"' });
     });
   });
 });

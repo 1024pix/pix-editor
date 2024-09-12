@@ -175,7 +175,7 @@ export const challengeDatasource = datasource.extend({
 
   async filterById(id) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `{id persistant} = '${id}'`,
+      filterByFormula: `{id persistant} = ${stringValue(id)}`,
       maxRecords: 1,
     });
     if (airtableRawObjects.length === 0) return undefined;
@@ -184,16 +184,12 @@ export const challengeDatasource = datasource.extend({
 
   async filterBySkillId(skillId) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `FIND("${skillId}", ARRAYJOIN({Acquix (id persistant)}))`,
+      filterByFormula: `{Acquix (id persistant)} = ${stringValue(skillId)}`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },
 });
-
-function _escapeQuery(value) {
-  return value.replace(/'/g, '\\\'');
-}
 
 function _convertBooleanToAirtableValue(value) {
   if (value) {

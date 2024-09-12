@@ -1,5 +1,5 @@
 import { datasource } from './datasource.js';
-import { findRecords } from '../../airtable.js';
+import { findRecords, stringValue } from '../../airtable.js';
 
 export const attachmentDatasource = datasource.extend({
 
@@ -52,7 +52,7 @@ export const attachmentDatasource = datasource.extend({
 
   async filterByLocalizedChallengeId(localizedChallengeId) {
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula : `{localizedChallengeId} = '${localizedChallengeId}'`,
+      filterByFormula : `{localizedChallengeId} = ${stringValue(localizedChallengeId)}`,
     });
     return airtableRawObjects.map(this.fromAirTableObject);
   },
@@ -60,7 +60,7 @@ export const attachmentDatasource = datasource.extend({
   async filterByLocalizedChallengeIds(localizedChallengeIds) {
     if (localizedChallengeIds.length === 0) return undefined;
     const airtableRawObjects = await findRecords(this.tableName, {
-      filterByFormula: `OR(${localizedChallengeIds.map((id) => `({localizedChallengeId} = "${id}")`).join(',')})`,
+      filterByFormula: `OR(${localizedChallengeIds.map((id) => `{localizedChallengeId} = ${stringValue(id)}`).join(',')})`,
     });
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);

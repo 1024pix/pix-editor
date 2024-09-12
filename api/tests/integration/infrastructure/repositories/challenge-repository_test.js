@@ -184,7 +184,7 @@ describe('Integration | Repository | challenge-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (options?.filterByFormula !== 'FIND("skillId", ARRAYJOIN({Acquix (id persistant)}))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== '{Acquix (id persistant)} = "skillId"') expect.unreachable('Wrong filterByFormula');
         return [
           {
             id: challengeA_data.airtableId,
@@ -388,7 +388,7 @@ describe('Integration | Repository | challenge-repository', () => {
       // given
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Epreuves') expect.unreachable('Airtable tableName should be Epreuves');
-        if (options?.filterByFormula !== 'FIND("someSkillId", ARRAYJOIN({Acquix (id persistant)}))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== '{Acquix (id persistant)} = "someSkillId"') expect.unreachable('Wrong filterByFormula');
         return [];
       });
 

@@ -70,7 +70,7 @@ const _DatasourcePrototype = {
   async getAirtableIdsByIds(entityIds) {
     const airtableRawObjects = await airtable.findRecords(this.tableName, {
       fields: [this.airtableIdField, 'id persistant'],
-      filterByFormula: `OR(${entityIds.map((id) => `'${id}' = {id persistant}`).join(',')})`,
+      filterByFormula: `OR(${entityIds.map((id) => `${airtable.stringValue(id)} = {id persistant}`).join(',')})`,
     });
     return Object
       .fromEntries(airtableRawObjects
