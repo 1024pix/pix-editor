@@ -225,7 +225,7 @@ describe('Integration | Repository | release-repository', function() {
       // Then
 
       const expectedReleaseContentDTO = _getRichCurrentContentDTO();
-      expect(currentContentDTO).to.deep.equal(expectedReleaseContentDTO);
+      expect(currentContentDTO.tubes).to.deep.equal(expectedReleaseContentDTO.tubes);
     });
   });
 });

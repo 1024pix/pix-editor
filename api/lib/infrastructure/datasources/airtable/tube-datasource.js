@@ -18,6 +18,7 @@ export const tubeDatasource = datasource.extend({
   fromAirTableObject(airtableRecord) {
     return {
       id: airtableRecord.get('id persistant'),
+      airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
       competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
     };

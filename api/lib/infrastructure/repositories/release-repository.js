@@ -27,7 +27,6 @@ import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
 
 import { knex } from '../../../db/knex-database-connection.js';
-import { filterThematicsFields } from '../transformers/thematic-transformer.js';
 
 export function getCurrentContent() {
   return _getCurrentContent();

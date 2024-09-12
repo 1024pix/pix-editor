@@ -2,6 +2,7 @@ import { Tube } from '../../../../lib/domain/models/Tube.js';
 
 export function buildTube({
   id = 'tubeTIddrkopID23Fp',
+  airtableId = 'recAirtableTube1',
   name = '@Moteur',
   practicalTitle_i18n = {
     fr: 'Outils d\'accès au web',
@@ -15,6 +16,7 @@ export function buildTube({
 } = {}) {
   return new Tube({
     id,
+    airtableId,
     name,
     practicalTitle_i18n,
     practicalDescription_i18n,

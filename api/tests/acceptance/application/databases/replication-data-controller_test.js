@@ -93,6 +93,9 @@ async function mockCurrentContent() {
 
   delete expectedCompetence.airtableId;
 
+  const expectedTube = domainBuilder.buildTube();
+  delete expectedTube.airtableId;
+
   const expectedCurrentContent = {
     attachments: [
       { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
@@ -103,7 +106,7 @@ async function mockCurrentContent() {
     ],
     areas: [domainBuilder.buildArea()],
     competences: [expectedCompetence],
-    tubes: [domainBuilder.buildTube()],
+    tubes: [expectedTube],
     skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
     challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],

@@ -8,7 +8,7 @@ import {
   thematicRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer, thematicTransformer } from '../../infrastructure/transformers/index.js';
+import { competenceTransformer, thematicTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
@@ -48,11 +48,12 @@ export async function getLearningContentForReplication() {
   }));
   const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
   const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+  const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
 
   return {
     areas,
     competences: transformedCompetences,
-    tubes,
+    tubes: transformedTubes,
     skills,
     challenges: translatedChallenges,
     tutorials,

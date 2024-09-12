@@ -85,6 +85,7 @@ describe('Integration | Repository | tube-repository', () => {
       expect(tubes).toEqual([
         domainBuilder.buildTube({
           id: 'tubeId1',
+          airtableId: 'tubeId1',
           name: '@tube1',
           practicalTitle_i18n: {
             fr: tube1TitleFr.value,
@@ -98,6 +99,7 @@ describe('Integration | Repository | tube-repository', () => {
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
+          airtableId: 'tubeId2',
           name: '@tube2',
           practicalTitle_i18n: {
             fr: tube2TitleFr.value,
