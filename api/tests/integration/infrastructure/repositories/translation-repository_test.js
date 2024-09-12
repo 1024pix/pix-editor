@@ -1,12 +1,7 @@
 import { afterEach, beforeEach, describe, describe as context, expect, it } from 'vitest';
-import { knex, databaseBuilder } from '../../../test-helper.js';
-import {
-  checkIfTableExistInAirtable,
-  save,
-  search,
-} from '../../../../lib/infrastructure/repositories/translation-repository.js';
 import nock from 'nock';
-import { translationRepository } from '../../../../lib/infrastructure/repositories/index.js';
+import { knex, databaseBuilder, domainBuilder } from '../../../test-helper.js';
+import * as translationRepository from '../../../../lib/infrastructure/repositories/translation-repository.js';
 
 describe('Integration | Repository | translation-repository', function() {
 
@@ -41,7 +36,7 @@ describe('Integration | Repository | translation-repository', function() {
       await translationRepository.save({ translations });
 
       // then
-      await expect(knex('translations').select().orderBy('key')).resolves.to.deep.equal(translations);
+      await expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal(translations);
     });
 
     context('when Airtable has a translations table', () => {
@@ -77,7 +72,7 @@ describe('Integration | Repository | translation-repository', function() {
           .reply(200, { records: [] });
 
         // when
-        await save({ translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }] });
+        await translationRepository.save({ translations: [{ key: 'entity.recordid.key', locale: 'fr', value: 'translationValue' }] });
 
         // then
         expect(nock.isDone()).to.be.true;
@@ -112,7 +107,7 @@ describe('Integration | Repository | translation-repository', function() {
       await translationRepository.deleteByKeyPrefixAndLocales({ prefix: prefixToDelete, locales });
 
       // then
-      expect(await knex('translations').select()).to.deep.equal([
+      expect(await knex('translations').select('key', 'locale', 'value')).to.deep.equal([
         {
           key: 'some.prefix.key',
           locale: 'nl-be',
@@ -211,8 +206,9 @@ describe('Integration | Repository | translation-repository', function() {
         value: 'coucou'
       });
       await databaseBuilder.commit();
+
       // when
-      const entityIds = await search({
+      const entityIds = await translationRepository.search({
         entity: 'entity',
         fields: ['key'],
         search: 'coucou'
@@ -235,8 +231,9 @@ describe('Integration | Repository | translation-repository', function() {
         value: 'coucou'
       });
       await databaseBuilder.commit();
+
       // when
-      const entityIds = await search({
+      const entityIds = await translationRepository.search({
         entity: 'entity',
         fields: ['key', 'key2'],
         search: 'coucou'
@@ -259,8 +256,9 @@ describe('Integration | Repository | translation-repository', function() {
         value: 'coucou'
       });
       await databaseBuilder.commit();
+
       // when
-      const entityIds = await search({
+      const entityIds = await translationRepository.search({
         entity: 'entity',
         fields: ['key'],
         search: 'coucou'
@@ -285,7 +283,7 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await search({
+      const entityIds = await translationRepository.search({
         entity: 'entity',
         fields: ['key'],
         search: 'coucou',
@@ -311,7 +309,7 @@ describe('Integration | Repository | translation-repository', function() {
       await databaseBuilder.commit();
 
       // when
-      const entityIds = await search({
+      const entityIds = await translationRepository.search({
         entity: 'entity',
         fields: ['key'],
         search: 'coucou',
@@ -348,7 +346,7 @@ describe('Integration | Repository | translation-repository', function() {
         const searchString = '%';
 
         // when
-        const entityIds = await search({
+        const entityIds = await translationRepository.search({
           entity: 'entity',
           fields: ['key'],
           search: searchString,
@@ -363,7 +361,7 @@ describe('Integration | Repository | translation-repository', function() {
         const searchString = 'N_n';
 
         // when
-        const entityIds = await search({
+        const entityIds = await translationRepository.search({
           entity: 'entity',
           fields: ['key'],
           search: searchString,
@@ -372,6 +370,212 @@ describe('Integration | Repository | translation-repository', function() {
         // then
         expect(entityIds).to.deep.equal(['entityId1']);
       });
+    });
+  });
+
+  context('#listByModel', () => {
+    it('should list translations matching first portion of key', async () => {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field1',
+        locale:  'fr',
+        value: 'aaa',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field2',
+        locale:  'fr',
+        value: 'bbb',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'fr',
+        value: 'ccc',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'en',
+        value: 'ddd',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity2.id1.field1',
+        locale:  'fr',
+        value: 'eee',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const translations1 = await translationRepository.listByModel('entity1');
+      const translations2 = await translationRepository.listByModel('entity2');
+
+      // then
+      expect(translations1).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity1.id1.field1',
+          locale:  'fr',
+          value: 'aaa',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id1.field2',
+          locale:  'fr',
+          value: 'bbb',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'fr',
+          value: 'ccc',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'en',
+          value: 'ddd',
+        }),
+      ]);
+      expect(translations2).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity2.id1.field1',
+          locale:  'fr',
+          value: 'eee',
+        }),
+      ]);
+    });
+  });
+
+  context('#listByEntity', () => {
+    it('should list translations matching first and second portion of key', async () => {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field1',
+        locale:  'fr',
+        value: 'aaa',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field2',
+        locale:  'fr',
+        value: 'bbb',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'fr',
+        value: 'ccc',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'en',
+        value: 'ddd',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity2.id1.field1',
+        locale:  'fr',
+        value: 'eee',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const translations1 = await translationRepository.listByEntity('entity1', 'id1');
+      const translations2 = await translationRepository.listByEntity('entity1', 'id2');
+      const translations3 = await translationRepository.listByEntity('entity2', 'id1');
+
+      // then
+      expect(translations1).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity1.id1.field1',
+          locale:  'fr',
+          value: 'aaa',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id1.field2',
+          locale:  'fr',
+          value: 'bbb',
+        }),
+      ]);
+      expect(translations2).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'fr',
+          value: 'ccc',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'en',
+          value: 'ddd',
+        }),
+      ]);
+      expect(translations3).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity2.id1.field1',
+          locale:  'fr',
+          value: 'eee',
+        }),
+      ]);
+    });
+  });
+
+  context('#listByEntities', () => {
+    it('should list translations matching first and second portion of key', async () => {
+      // given
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field1',
+        locale:  'fr',
+        value: 'aaa',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id1.field2',
+        locale:  'fr',
+        value: 'bbb',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'fr',
+        value: 'ccc',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id2.field1',
+        locale:  'en',
+        value: 'ddd',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id3.field1',
+        locale:  'fr',
+        value: 'eee',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity1.id3.field2',
+        locale:  'fr',
+        value: 'fff',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'entity2.id1.field1',
+        locale:  'fr',
+        value: 'ggg',
+      });
+      await databaseBuilder.commit();
+
+      // when
+      const translations = await translationRepository.listByEntities('entity1', ['id2', 'id3']);
+
+      // then
+      expect(translations).toStrictEqual([
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'fr',
+          value: 'ccc',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id2.field1',
+          locale:  'en',
+          value: 'ddd',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id3.field1',
+          locale:  'fr',
+          value: 'eee',
+        }),
+        domainBuilder.buildTranslation({
+          key: 'entity1.id3.field2',
+          locale:  'fr',
+          value: 'fff',
+        }),
+      ]);
     });
   });
 });
@@ -411,5 +615,5 @@ async function _setDoesTableExistInAirtable(value) {
       .reply(404);
   }
 
-  await checkIfTableExistInAirtable();
+  await translationRepository.checkIfTableExistInAirtable();
 }

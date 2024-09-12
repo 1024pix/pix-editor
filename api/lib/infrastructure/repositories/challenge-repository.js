@@ -6,10 +6,11 @@ import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
 import {
   extractFromChallenge as extractTranslationsFromChallenge,
-  prefix,
-  prefixFor
+  prefixFor,
 } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
+
+const model = 'challenge';
 
 async function _getChallengesFromParams(params) {
   if (params.filter && params.filter.ids) {
@@ -17,7 +18,7 @@ async function _getChallengesFromParams(params) {
   }
   if (params.filter && params.filter.search) {
     params.filter.ids = await translationRepository.search({
-      entity: 'challenge',
+      entity: model,
       fields: ['instruction', 'proposals'],
       search: params.filter.search,
       limit: params.page?.size,
@@ -31,13 +32,13 @@ async function _getChallengesFromParams(params) {
 }
 
 export async function get(id) {
-  const challengeDto = await challengeDatasource.filterById(id);
+  const [challengeDto, localizedChallenges, translations] = await Promise.all([
+    challengeDatasource.filterById(id),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds: [id] }),
+    translationRepository.listByEntity(model, id),
+  ]);
 
   if (!challengeDto) throw new NotFoundError('Épreuve introuvable');
-
-  const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challengeDto.id] });
-
-  const translations = await translationRepository.listByPrefix(`challenge.${id}.`);
 
   return toDomain(challengeDto, translations, localizedChallenges);
 }
@@ -45,16 +46,18 @@ export async function get(id) {
 export async function list() {
   const [challengeDtos, translations, localizedChallenges] = await Promise.all([
     challengeDatasource.list(),
-    translationRepository.listByPrefix(prefix),
+    translationRepository.listByModel(model),
     localizedChallengeRepository.list(),
   ]);
   return toDomainList(challengeDtos, translations, localizedChallenges);
 }
 
 export async function getMany(ids) {
-  const challengeDTOs = await challengeDatasource.filter({ filter: { ids } });
+  const [challengeDTOs, [translations, localizedChallenges]] = await Promise.all([
+    challengeDatasource.filter({ filter: { ids } }),
+    loadTranslationsAndLocalizedChallengesForChallengeIds(ids),
+  ]);
   if (!challengeDTOs) return [];
-  const [translations, localizedChallenges] = await loadTranslationsAndLocalizedChallengesForChallenges(challengeDTOs);
   return toDomainList(challengeDTOs, translations, localizedChallenges);
 }
 
@@ -160,19 +163,18 @@ export async function listBySkillId(skillId) {
 }
 
 async function loadTranslationsAndLocalizedChallengesForChallenges(challengeDtos) {
-  if (challengeDtos.length === 0) return [[], []];
+  return loadTranslationsAndLocalizedChallengesForChallengeIds(
+    challengeDtos.map(({ id }) => id),
+  );
+}
 
-  return knex.transaction(async (transaction) => {
-    const challengesTranslations = await Promise.all(challengeDtos.map(
-      (challengeDto) => translationRepository.listByPrefix(prefixFor(challengeDto), { transaction })
-    ));
-    const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({
-      challengeIds: challengeDtos.map(({ id }) => id),
-      transaction,
-    });
+async function loadTranslationsAndLocalizedChallengesForChallengeIds(challengeIds) {
+  if (challengeIds.length === 0) return [[], []];
 
-    return [challengesTranslations.flat(), localizedChallenges];
-  }, { readOnly: true });
+  return Promise.all([
+    translationRepository.listByEntities(model, challengeIds),
+    localizedChallengeRepository.listByChallengeIds({ challengeIds }),
+  ]);
 }
 
 function toDomainList(challengeDtos, translations, localizedChallenges) {

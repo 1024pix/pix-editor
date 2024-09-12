@@ -241,7 +241,7 @@ describe('Integration | Repository | attachment-repository', () => {
       await databaseBuilder.commit();
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-        if (options?.filterByFormula !== 'OR(({localizedChallengeId} = "challengeA"),({localizedChallengeId} = "localizedChallengeNLForChallengeA"),({localizedChallengeId} = "challengeB"))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== 'OR({localizedChallengeId} = "challengeA",{localizedChallengeId} = "localizedChallengeNLForChallengeA",{localizedChallengeId} = "challengeB")') expect.unreachable('Wrong filterByFormula');
         return [
           {
             id: attachment_NL_forChallengeA_data.id,
@@ -362,7 +362,7 @@ describe('Integration | Repository | attachment-repository', () => {
       // given
       vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
         if (tableName !== 'Attachments') expect.unreachable('Airtable tableName should be Attachments');
-        if (options?.filterByFormula !== 'OR(({localizedChallengeId} = "someLocalizedChallengeId"))') expect.unreachable('Wrong filterByFormula');
+        if (options?.filterByFormula !== 'OR({localizedChallengeId} = "someLocalizedChallengeId")') expect.unreachable('Wrong filterByFormula');
         return [];
       });
 

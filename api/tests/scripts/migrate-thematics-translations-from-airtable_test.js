@@ -60,7 +60,7 @@ describe('Script | Migrate thematics translations from Airtable', function() {
 
     // then
     await expect(
-      knex('translations').select().orderBy([
+      knex('translations').select('key', 'locale', 'value').orderBy([
         { column: 'key', order: 'asc' },
         { column: 'locale', order: 'asc' },
       ]),

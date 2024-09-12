@@ -290,7 +290,7 @@ describe('Integration | Repository | skill-repository', () => {
       await skillRepository.update(skillNoHintBeforeNoHintAfter);
 
       // when
-      const allTranslations = await knex('translations').select('*').orderBy('key', 'locale');
+      const allTranslations = await knex('translations').select('key', 'locale', 'value').orderBy('key', 'locale');
       expect(allTranslations).toEqual([{
         key: 'skill.skillIdPersistantA.hint',
         locale: 'fr',

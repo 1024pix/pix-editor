@@ -453,7 +453,7 @@ describe('Acceptance | Controller | phrase-controller', () => {
       expect(phraseAPILocales.isDone()).to.be.true;
       expect(phraseAPIDownloadEn.isDone()).to.be.true;
       expect(phraseAPIDownloadNl.isDone()).to.be.true;
-      expect(knex('translations').select().orderBy('key')).resolves.to.deep.equal([
+      expect(knex('translations').select('key', 'locale', 'value').orderBy('key')).resolves.to.deep.equal([
         { key: 'area.recnrCmBiPXGbgIyQ.title', locale: 'nl', value: 'Environnement numérique' },
         { key: 'challenge.challenge1nwE8BcKcmiNvR.instruction', locale: 'nl', value: 'Quelle technologie sans fil est utilisée pour un kit mains-libres permettant de téléphoner en voiture ?\n' },
       ]);

@@ -1,20 +1,25 @@
+import _ from 'lodash';
 import { tubeDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
-import _ from 'lodash';
 import * as tubeTranslations from '../translations/tube.js';
 import { Tube } from '../../domain/models/Tube.js';
 
+const model = 'tube';
+
 export async function list() {
-  const datasourceTubes = await tubeDatasource.list();
-  const translations = await translationRepository.listByPrefix(tubeTranslations.prefix);
+  const [datasourceTubes, translations] = await Promise.all([
+    tubeDatasource.list(),
+    translationRepository.listByModel(model),
+  ]);
   return toDomainList(datasourceTubes, translations);
 }
 
 export async function get(id) {
-  const [tubeDTO] = await tubeDatasource.filter({ filter: { ids: [id] } });
+  const [[tubeDTO], translations] = await Promise.all([
+    tubeDatasource.filter({ filter: { ids: [id] } }),
+    translationRepository.listByEntity(model, id),
+  ]);
   if (!tubeDTO) return null;
-  const prefix = `${tubeTranslations.prefix}${tubeDTO.id}`;
-  const translations = await translationRepository.listByPrefix(prefix);
   return toDomain(tubeDTO, translations);
 }
 

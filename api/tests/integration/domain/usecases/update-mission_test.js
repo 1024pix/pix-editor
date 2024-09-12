@@ -59,20 +59,10 @@ describe('Integration | Usecases | Update mission', function() {
 
   it('when mission is not valid, should throw an error', async () => {
     const mockedLearningContent = {
-      skills: [
-        airtableBuilder.factory.buildSkill({
-          id: 'skillTuto2',
-          level: 2,
-          tubeId: 'tubeTuto',
-          status: Skill.STATUSES.EN_CONSTRUCTION
-        })],
-      tubes: [
-        airtableBuilder.factory.buildTube({ id: 'tubeTuto', name: '@Pix1D-recherche_di' }),
-      ],
       thematics: [
         airtableBuilder.factory.buildThematic({
           id: 'Thematic',
-          tubeIds: ['tubeTuto']
+          tubeIds: [],
         }),
       ],
     };

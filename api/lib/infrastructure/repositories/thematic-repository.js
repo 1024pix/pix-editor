@@ -1,18 +1,25 @@
+import _ from 'lodash';
 import { thematicDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
-import _ from 'lodash';
 import * as thematicTranslations from '../translations/thematic.js';
 import { Thematic } from '../../domain/models/index.js';
 
+const model = 'thematic';
+
 export async function list() {
-  const datasourceThematics = await thematicDatasource.list();
-  const translations = await translationRepository.listByPrefix(thematicTranslations.prefix);
+  const [datasourceThematics, translations] = await Promise.all([
+    thematicDatasource.list(),
+    translationRepository.listByModel(model),
+  ]);
   return toDomainList(datasourceThematics, translations);
 }
 
-export async function getMany(thematicIds) {
-  const thematics = await list();
-  return thematics.filter((thematic) => thematicIds.includes(thematic.id));
+export async function getMany(ids) {
+  const [datasourceThematics, translations] = await Promise.all([
+    thematicDatasource.filter({ filter: { ids } }),
+    translationRepository.listByEntities(model, ids),
+  ]);
+  return toDomainList(datasourceThematics, translations);
 }
 
 function toDomainList(datasourceThematics, translations) {

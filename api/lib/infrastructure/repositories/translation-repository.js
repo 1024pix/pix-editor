@@ -6,6 +6,8 @@ import _ from 'lodash';
 let _doesTableExistInAirtable;
 let _doesTableExistInAirtablePromise;
 
+const projection = ['key', 'locale', 'value'];
+
 export async function save({ translations, transaction: knexConnection = knex, shouldDuplicateToAirtable = true }) {
   if (translations.length === 0) return [];
 
@@ -25,22 +27,53 @@ export async function save({ translations, transaction: knexConnection = knex, s
   }
 }
 
+/**
+ * @deprecated use one of {@link listByModel}, {@link listByEntity} or {@link listByEntities}
+ */
 export async function listByPrefix(prefix, { transaction = knex } = {}) {
-  const translationDtos = await transaction('translations')
-    .select()
+  const translationDtos = await transaction
+    .select(projection)
+    .from('translations')
     .whereLike('key', `${prefix}%`);
   return translationDtos.map(_toDomain);
 }
 
+export async function listByModel(model, { knexConn = knex } = {}) {
+  const translationDtos = await knexConn
+    .select(projection)
+    .from('translations')
+    .where('model', model);
+  return translationDtos.map(_toDomain);
+}
+
+export async function listByEntity(model, entityId, { knexConn = knex } = {}) {
+  const translationDtos = await knexConn
+    .select(projection)
+    .from('translations')
+    .where('model', model)
+    .andWhere('entityId', entityId);
+  return translationDtos.map(_toDomain);
+}
+
+export async function listByEntities(model, entityIds, { knexConn = knex } = {}) {
+  const translationDtos = await knexConn
+    .select(projection)
+    .from('translations')
+    .where('model', model)
+    .andWhere('entityId', 'in', entityIds);
+  return translationDtos.map(_toDomain);
+}
+
 export async function listByPattern(pattern, { transaction = knex } = {}) {
-  const translationDtos = await transaction('translations')
-    .select()
+  const translationDtos = await transaction
+    .select(projection)
+    .from('translations')
     .whereLike('key', `${pattern}`);
   return translationDtos.map(_toDomain);
 }
 
 export async function list() {
-  const translationDtos = await knex('translations').select();
+  const translationDtos = await knex.select(projection).from('translations');
   return translationDtos.map(_toDomain);
 }
 

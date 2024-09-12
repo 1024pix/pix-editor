@@ -5,15 +5,21 @@ import * as translationRepository from './translation-repository.js';
 import * as competenceTranslations from '../translations/competence.js';
 import { Competence } from '../../domain/models/Competence.js';
 
+const model = 'competence';
+
 export async function list() {
-  const datasourceCompetences = await competenceDatasource.list();
-  const translations = await translationRepository.listByPrefix(competenceTranslations.prefix);
+  const [datasourceCompetences, translations] = await Promise.all([
+    competenceDatasource.list(),
+    translationRepository.listByModel(model),
+  ]) ;
   return toDomainList(datasourceCompetences, translations);
 }
 
 export async function getMany(ids) {
-  const datasourceCompetences = await competenceDatasource.filter({ filter: { ids } });
-  const translations = await translationRepository.listByPrefix(competenceTranslations.prefix);
+  const [datasourceCompetences, translations] = await Promise.all([
+    competenceDatasource.filter({ filter: { ids } }),
+    translationRepository.listByEntities(model, ids),
+  ]);
   return toDomainList(datasourceCompetences, translations);
 }
 

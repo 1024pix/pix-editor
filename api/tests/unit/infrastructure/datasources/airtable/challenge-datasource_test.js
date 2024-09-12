@@ -200,7 +200,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
       expect(newChallenge.id).to.equal('recChallenge');
       expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', {
-        filterByFormula: '{id persistant} = \'recChallenge\'',
+        filterByFormula: '{id persistant} = "recChallenge"',
         maxRecords: 1
       });
     });
@@ -214,7 +214,7 @@ describe('Unit | Infrastructure | Datasource | Airtable | ChallengeDatasource', 
 
         expect(result).toBe(undefined);
         expect(airtableFindRecordsSpy).toHaveBeenCalledWith('Epreuves', {
-          filterByFormula: '{id persistant} = \'recChallenge\'',
+          filterByFormula: '{id persistant} = "recChallenge"',
           maxRecords: 1
         });
       });

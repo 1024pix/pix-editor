@@ -14,7 +14,7 @@ describe('Unit | Repository | challenge-repository', () => {
   describe('#list', () => {
     it('should return all challenges', async () => {
       // given
-      vi.spyOn(translationRepository, 'listByPrefix')
+      vi.spyOn(translationRepository, 'listByModel')
         .mockResolvedValueOnce([{
           key: 'challenge.1.instruction',
           value: 'instruction',
@@ -60,7 +60,7 @@ describe('Unit | Repository | challenge-repository', () => {
       // then
       expect(challenges.length).to.equal(2);
       expect(challengeDatasource.list).toHaveBeenCalled();
-      expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.');
+      expect(translationRepository.listByModel).toHaveBeenCalledWith('challenge');
       expect(localizedChallengeRepository.list).toHaveBeenCalled();
       expect(challenges[0].instruction).to.equal('instruction');
       expect(challenges[0].proposals).to.equal('proposals');
@@ -80,7 +80,7 @@ describe('Unit | Repository | challenge-repository', () => {
           { id: '1', locales: ['fr'], geography: 'DeprecatedLand' },
           { id: '2', locales: ['fr'], geography: 'DeprecatedLand' },
         ]);
-        vi.spyOn(translationRepository, 'listByPrefix')
+        vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
             key: 'challenge.1.instruction',
             value: 'instruction',
@@ -93,8 +93,7 @@ describe('Unit | Repository | challenge-repository', () => {
             key: 'challenge.1.proposals',
             value: 'proposals',
             locale: 'fr'
-          }].map(domainBuilder.buildTranslation))
-          .mockResolvedValueOnce([{
+          }, {
             key: 'challenge.2.instruction',
             value: 'instruction 2',
             locale: 'fr'
@@ -145,15 +144,14 @@ describe('Unit | Repository | challenge-repository', () => {
         expect(challenges[1].localizedChallenges).to.deep.equal([localizedChallenge2]);
         expect(challenges[1].geography).to.equal('Philippines');
         expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['1', '2'] } });
-        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.1.', { transaction: expect.anything() });
-        expect(translationRepository.listByPrefix).toHaveBeenCalledWith('challenge.2.', { transaction: expect.anything() });
-        expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: ['1', '2'], transaction: expect.anything() });
+        expect(translationRepository.listByEntities).toHaveBeenCalledWith('challenge', ['1', '2']);
+        expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: ['1', '2'] });
       });
 
       it('should return challenges with empty fields when have no translation', async () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: [], geography: 'DeprecatedLand' }]);
-        vi.spyOn(translationRepository, 'listByPrefix')
+        vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
             key: 'challenge.1.proposals',
             value: 'proposals',
@@ -181,7 +179,7 @@ describe('Unit | Repository | challenge-repository', () => {
       it('should return challenges with empty fields when locale translations are not available', async () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([{ id: 1, locales: ['en'], geography: 'DeprecatedLand' }]);
-        vi.spyOn(translationRepository, 'listByPrefix')
+        vi.spyOn(translationRepository, 'listByEntities')
           .mockResolvedValueOnce([{
             key: 'challenge.1.proposals',
             value: 'proposals',
@@ -279,7 +277,7 @@ describe('Unit | Repository | challenge-repository', () => {
       it('should return an empty array w/o loading translations and localized challenges', async () => {
         // given
         vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([]);
-        vi.spyOn(translationRepository, 'listByPrefix');
+        vi.spyOn(translationRepository, 'listByEntities');
         vi.spyOn(localizedChallengeRepository, 'listByChallengeIds');
 
         // when
@@ -287,16 +285,17 @@ describe('Unit | Repository | challenge-repository', () => {
 
         // then
         expect(challenges).to.deep.equal([]);
-        expect(translationRepository.listByPrefix).not.toHaveBeenCalled();
+        expect(translationRepository.listByEntities).not.toHaveBeenCalled();
         expect(localizedChallengeRepository.listByChallengeIds).not.toHaveBeenCalled();
       });
     });
   });
+
   describe('#filterByThematicIds', () => {
     it('calls filter with filterByFormula defined to filter by thematic ids', async function() {
       const thematicsIds = ['id1', 'id2'];
       vi.spyOn(challengeDatasource, 'filter').mockResolvedValue([]);
-      vi.spyOn(translationRepository, 'listByPrefix');
+      vi.spyOn(translationRepository, 'listByEntities');
       vi.spyOn(localizedChallengeRepository, 'listByChallengeIds');
 
       await challengeRepository.filterByThematicIds(thematicsIds);
@@ -304,6 +303,7 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter : { formula: 'OR(FIND("id1", {Thematique (Record ID)}), FIND("id2", {Thematique (Record ID)}))' } });
     });
   });
+
   describe('#get', () => {
     it('should return a challenge by id', async () => {
       // given
@@ -334,7 +334,7 @@ describe('Unit | Repository | challenge-repository', () => {
 
       vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(expectedChallenge.localizedChallenges);
       vi.spyOn(challengeDatasource, 'filterById').mockResolvedValue(challengeFromAirtable);
-      vi.spyOn(translationRepository, 'listByPrefix')
+      vi.spyOn(translationRepository, 'listByEntity')
         .mockResolvedValueOnce([{
           key: `challenge.${challengeId}.instruction`,
           value: 'instruction fr',
@@ -358,7 +358,7 @@ describe('Unit | Repository | challenge-repository', () => {
 
       // then
       expect(challengeDatasource.filterById).toHaveBeenCalledWith(challengeId);
-      expect(translationRepository.listByPrefix).toHaveBeenCalledWith(`challenge.${challengeId}.`);
+      expect(translationRepository.listByEntity).toHaveBeenCalledWith('challenge', challengeId);
       expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: [challengeId] });
       expect(result).toEqual(expectedChallenge);
     });
@@ -377,6 +377,7 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
+
   describe('#update', () => {
     it('should update a challenge by id', async () => {
       // given

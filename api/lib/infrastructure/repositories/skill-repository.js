@@ -7,24 +7,29 @@ import { Skill } from '../../domain/models/Skill.js';
 import { Translation } from '../../domain/models/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
+const model = 'skill';
+
 export async function list() {
-  const datasourceSkills = await skillDatasource.list();
-  const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
+  const [datasourceSkills, translations] = await Promise.all([
+    skillDatasource.list(),
+    translationRepository.listByModel(model),
+  ]);
   return toDomainList(datasourceSkills, translations);
 }
 
 export async function get(id) {
-  const [skillDTO] = await skillDatasource.filter({ filter: { ids: [id] } });
+  const [[skillDTO], translations] = await Promise.all([
+    skillDatasource.filter({ filter: { ids: [id] } }),
+    translationRepository.listByEntity(model, id),
+  ]);
   if (!skillDTO) return null;
-  const prefix = `${skillTranslations.prefix}${skillDTO.id}`;
-  const translations = await translationRepository.listByPrefix(prefix);
   return toDomain(skillDTO, translations);
 }
 
 export async function listByTubeId(tubeId) {
   const datasourceSkills = await skillDatasource.filterByTubeId(tubeId);
+  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
   if (!datasourceSkills) return [];
-  const translations = await translationRepository.listByPrefix(skillTranslations.prefix);
   return toDomainList(datasourceSkills, translations);
 }
 
@@ -51,7 +56,7 @@ export async function create(skill) {
   for (const [locale, value] of Object.entries(skill.hint_i18n)) {
     if (!value) continue;
     translations.push(new Translation({
-      key: `skill.${skill.id}.hint`,
+      key: `${model}.${skill.id}.hint`,
       locale,
       value,
     }));
@@ -84,11 +89,11 @@ export async function update(skill) {
     const updatedSkillDto = await skillDatasource.update(skillToUpdateDTO);
     const translations = [];
     const locale = 'fr';
-    const hasKeyForHint = Boolean(await knex('translations').select('*').where({ key: `skill.${skill.id}.hint`, locale }).first());
+    const hasKeyForHint = Boolean(await knex('translations').select('*').where({ key: `${model}.${skill.id}.hint`, locale }).first());
     const translationFr = skill.hint_i18n[locale];
     if (hasKeyForHint || translationFr) {
       translations.push(new Translation({
-        key: `skill.${skill.id}.hint`,
+        key: `${model}.${skill.id}.hint`,
         locale,
         value: translationFr,
       }));

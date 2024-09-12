@@ -1,12 +1,16 @@
+import _ from 'lodash';
 import { areaDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as areaTranslations from '../translations/area.js';
-import _ from 'lodash';
 import { Area } from '../../domain/models/index.js';
 
+const model = 'area';
+
 export async function list() {
-  const datasourceAreas = await areaDatasource.list();
-  const translations = await translationRepository.listByPrefix(areaTranslations.prefix);
+  const [datasourceAreas, translations] = await Promise.all([
+    areaDatasource.list(),
+    translationRepository.listByModel(model),
+  ]);
   return toDomainList(datasourceAreas, translations);
 }
 

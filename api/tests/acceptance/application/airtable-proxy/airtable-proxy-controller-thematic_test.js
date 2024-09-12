@@ -69,7 +69,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | write thematic',
 
       await expect(
         knex('translations')
-          .select()
+          .select('key', 'locale', 'value')
           .orderBy([
             { column: 'key', order: 'asc' },
             { column: 'locale', order: 'asc' },
@@ -140,7 +140,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | write thematic',
       expect(response.statusCode).to.equal(200);
 
       await expect(
-        knex('translations').select().orderBy([{
+        knex('translations').select('key', 'locale', 'value').orderBy([{
           column: 'key',
           order: 'asc'
         }, { column: 'locale', order: 'asc' }])

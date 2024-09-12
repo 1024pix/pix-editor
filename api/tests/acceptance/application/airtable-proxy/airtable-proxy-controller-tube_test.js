@@ -71,7 +71,7 @@ describe('Acceptance | Controller | airtable-proxy-controller | create tube tran
 
         // Then
         expect(response.statusCode).to.equal(200);
-        const translations = await knex('translations').select().orderBy([{
+        const translations = await knex('translations').select('key', 'locale', 'value').orderBy([{
           column: 'key',
           order: 'asc'
         }, { column: 'locale', order: 'asc' }]);
