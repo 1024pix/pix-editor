@@ -4,11 +4,13 @@ import { Challenge } from '../models/index.js';
 export class CompetenceOverview {
   constructor({
     id,
+    airtableId,
     name,
     locale,
     thematicOverviews,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.locale = locale;
     this.thematicOverviews = thematicOverviews;
@@ -24,6 +26,7 @@ export class CompetenceOverview {
         const skillsForTube = skillsForCompetence.filter((sk) => sk.tubeId === tube.id);
         tubeOverviews.push(new TubeOverview({
           id: tube.id,
+          airtableId: tube.airtableId,
           name: tube.name,
           enConstructionSkillViews: CompetenceOverview.#buildEnConstructionSkillViews({ locale, skills: skillsForTube, tutorials: tutorialsForCompetence }),
           enProductionSkillViews: CompetenceOverview.#buildEnProductionSkillViews2({ locale, skills: skillsForTube, challenges: challengesForCompetence, tutorials: tutorialsForCompetence }),
@@ -32,12 +35,14 @@ export class CompetenceOverview {
       }
       thematicOverviews.push(new ThematicOverview({
         id: thematic.id,
+        airtableId: thematic.airtableId,
         name: thematic.name_i18n['fr'],
         tubeOverviews,
       }));
     }
     return new CompetenceOverview({
       id: competence.id,
+      airtableId: competence.airtableId,
       name: competence.name_i18n['fr'],
       locale,
       thematicOverviews,
@@ -59,6 +64,7 @@ export class CompetenceOverview {
       const learningMoreTutorialsCount = tutorials.filter((tu) => enConstructionSkill.learningMoreTutorialIds.includes(tu.id) && tu.locale.startsWith(locale)).length;
       enConstructionSkillViews.push(new EnConstructionSkillView({
         id: enConstructionSkill.id,
+        airtableId: enConstructionSkill.airtableId,
         name: enConstructionSkill.name,
         level: enConstructionSkill.level,
         hint: enConstructionSkill.hint_i18n[locale],
@@ -99,6 +105,7 @@ export class CompetenceOverview {
 
       return new EnProductionSkillView({
         id: skill.id,
+        airtableId: skill.airtableId,
         name: skill.name,
         level: skill.level,
         hint: skill.hint_i18n[locale],
@@ -127,6 +134,7 @@ export class CompetenceOverview {
         obsoletePrototypesCount += prototypesForSkill.filter((proto) => proto.status === Challenge.STATUSES.PERIME).length;
         return new AtelierSkillVersionView({
           id: sk.id,
+          airtableId: sk.airtableId,
           status: sk.status,
         });
       });
@@ -147,10 +155,12 @@ export class CompetenceOverview {
 export class ThematicOverview {
   constructor({
     id,
+    airtableId,
     name,
     tubeOverviews,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.tubeOverviews = tubeOverviews;
   }
@@ -159,12 +169,14 @@ export class ThematicOverview {
 export class TubeOverview {
   constructor({
     id,
+    airtableId,
     name,
     enConstructionSkillViews,
     atelierSkillViews,
     enProductionSkillViews,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.enConstructionSkillViews = enConstructionSkillViews;
     this.atelierSkillViews = atelierSkillViews;
@@ -175,6 +187,7 @@ export class TubeOverview {
 export class EnConstructionSkillView {
   constructor({
     id,
+    airtableId,
     name,
     level,
     hint,
@@ -183,6 +196,7 @@ export class EnConstructionSkillView {
     learningMoreTutorialsCount,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.level = level;
     this.hint = hint;
@@ -216,9 +230,11 @@ export class AtelierSkillView {
 export class AtelierSkillVersionView {
   constructor({
     id,
+    airtableId,
     status,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.status = status;
   }
 }
@@ -226,6 +242,7 @@ export class AtelierSkillVersionView {
 export class EnProductionSkillView {
   constructor({
     id,
+    airtableId,
     name,
     level,
     status,
@@ -239,6 +256,7 @@ export class EnProductionSkillView {
     learningMoreTutorialsCount,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.name = name;
     this.level = level;
     this.status = status;

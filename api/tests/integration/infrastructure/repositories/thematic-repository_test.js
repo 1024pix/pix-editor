@@ -3,7 +3,6 @@ import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-h
 import * as thematicRepository from '../../../../lib/infrastructure/repositories/thematic-repository.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
-import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
 
 describe('Integration | Repository | thematic-repository', () => {
 
@@ -86,6 +85,7 @@ describe('Integration | Repository | thematic-repository', () => {
       //given
       const thematic1 = {
         id: 'thematic1',
+        airtableId: 'airtableThematic1',
         competenceId: 'competenceId1',
         index: '1',
         tubeIds: ['tubeId1', 'tubeId2'],
@@ -106,7 +106,7 @@ describe('Integration | Repository | thematic-repository', () => {
         if (tableName !== 'Thematiques') expect.unreachable('Airtable tableName should be Tubes');
         if (options?.filterByFormula !==  `{Competence (id persistant)} = ${stringValue(thematic1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
-          id: thematic1.id,
+          id: thematic1.airtableId,
           fields: {
             'id persistant': thematic1.id,
             'Competence (id persistant)': [thematic1.competenceId],
@@ -124,6 +124,7 @@ describe('Integration | Repository | thematic-repository', () => {
       expect(tubes).toStrictEqual([
         domainBuilder.buildThematic({
           id: 'thematic1',
+          airtableId: 'airtableThematic1',
           name_i18n: {
             fr: 'Nom thématique 1',
             en: 'Thematic 1 name',

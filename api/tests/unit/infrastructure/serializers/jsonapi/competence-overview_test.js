@@ -8,15 +8,18 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       // given
       const competenceOverview = new CompetenceOverview({
         id: 'competenceOverviewId',
+        airtableId: 'competenceOverviewAirtableId',
         locale: 'ao',
         name: 'competenceOverviewName',
         thematicOverviews: [
           new ThematicOverview({
             id: 'thematicOverviewId1',
+            airtableId: 'thematicOverviewAirtableId1',
             name: 'thematicOverviewName1',
             tubeOverviews: [
               new TubeOverview({
                 id: 'tubeOverviewId1',
+                airtableId: 'tubeOverviewAirtableId1',
                 name: 'tubeOverviewName1',
                 atelierSkillViews: [
                   new AtelierSkillView({
@@ -29,6 +32,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                     atelierSkillVersionViews: [
                       new AtelierSkillVersionView({
                         id: 'atelierSkillVersionViewId1',
+                        airtableId: 'atelierSkillVersionViewAirtableId1',
                         status: 'atelierSkillVersionViewStatus',
                       }),
                     ],
@@ -37,6 +41,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 enConstructionSkillViews: [
                   new EnConstructionSkillView({
                     id: 'enConstructionSkillViewId1',
+                    airtableId: 'enConstructionSkillViewAirtableId1',
                     hint: 'enConstructionSkillViewHint',
                     hintStatus: 'enConstructionSkillViewHintStatus',
                     learningMoreTutorialsCount: 49257492353,
@@ -48,6 +53,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                 enProductionSkillViews: [
                   new EnProductionSkillView({
                     id: 'enProductionSkillViewId1',
+                    airtableId: 'enProductionSkillViewAirtableId1',
                     hint: 'enProductionSkillViewHint',
                     hintStatus: 'enProductionSkillViewHintStatus',
                     isProtoDeclinable: true,
@@ -76,6 +82,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
           type: 'competence-overviews',
           id: 'competenceOverviewId',
           attributes: {
+            'airtable-id': 'competenceOverviewAirtableId',
             locale: 'ao',
             name: 'competenceOverviewName',
           },
@@ -95,6 +102,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'en-construction-skill-views',
             id: 'enConstructionSkillViewId1',
             attributes: {
+              'airtable-id': 'enConstructionSkillViewAirtableId1',
               'hint-status': 'enConstructionSkillViewHintStatus',
               'hint': 'enConstructionSkillViewHint',
               'learning-more-tutorials-count': 49257492353,
@@ -107,6 +115,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'en-production-skill-views',
             id: 'enProductionSkillViewId1',
             attributes: {
+              'airtable-id': 'enProductionSkillViewAirtableId1',
               'hint-status': 'enProductionSkillViewHintStatus',
               'hint': 'enProductionSkillViewHint',
               'is-proto-declinable': true,
@@ -124,6 +133,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'atelier-skill-version-views',
             id: 'atelierSkillVersionViewId1',
             attributes: {
+              'airtable-id': 'atelierSkillVersionViewAirtableId1',
               status: 'atelierSkillVersionViewStatus',
             },
           },
@@ -153,6 +163,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'tube-overviews',
             id: 'tubeOverviewId1',
             attributes: {
+              'airtable-id': 'tubeOverviewAirtableId1',
               name: 'tubeOverviewName1',
             },
             relationships: {
@@ -186,6 +197,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             type: 'thematic-overviews',
             id: 'thematicOverviewId1',
             attributes: {
+              'airtable-id': 'thematicOverviewAirtableId1',
               name: 'thematicOverviewName1',
             },
             relationships: {

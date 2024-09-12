@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import AirtableLib from 'airtable';
 import { airtableBuilder, databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as skillRepository from '../../../../lib/infrastructure/repositories/skill-repository.js';
 import {
@@ -11,8 +10,6 @@ import { Skill } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
 import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
 import { stringValue } from '../../../../lib/infrastructure/airtable.js';
-
-const { Record: AirtableRecord } = AirtableLib;
 
 describe('Integration | Repository | skill-repository', () => {
 

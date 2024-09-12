@@ -6,6 +6,7 @@ export function serialize(competenceOverview) {
   return new Serializer('competence-overview', {
     ref: 'id',
     attributes: [
+      'airtableId',
       'name',
       'locale',
       'thematicOverviews',
@@ -23,6 +24,7 @@ export function serialize(competenceOverview) {
       include: true,
       ref: 'id',
       attributes: [
+        'airtableId',
         'name',
         'tubeOverviews',
       ],
@@ -30,6 +32,7 @@ export function serialize(competenceOverview) {
         include: true,
         ref: 'id',
         attributes: [
+          'airtableId',
           'name',
           'enConstructionSkillViews',
           'enProductionSkillViews',
@@ -39,6 +42,7 @@ export function serialize(competenceOverview) {
           include: true,
           ref: 'id',
           attributes: [
+            'airtableId',
             'name',
             'level',
             'hint',
@@ -51,6 +55,7 @@ export function serialize(competenceOverview) {
           include: true,
           ref: 'id',
           attributes: [
+            'airtableId',
             'name',
             'level',
             'status',
@@ -80,6 +85,7 @@ export function serialize(competenceOverview) {
             include: true,
             ref: 'id',
             attributes: [
+              'airtableId',
               'status',
             ],
           }

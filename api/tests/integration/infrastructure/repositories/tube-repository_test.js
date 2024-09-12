@@ -124,6 +124,7 @@ describe('Integration | Repository | tube-repository', () => {
       //given
       const tube1 = {
         id: 'tubeId1',
+        airtableId: 'airtableTubeId1',
         name: '@tube1',
         practicalTitle_i18n: {
           fr: 'practicalTitleFrFr tube1',
@@ -160,7 +161,7 @@ describe('Integration | Repository | tube-repository', () => {
         if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
         if (options?.filterByFormula !==  `{Competence (via Thematique) (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
         return [{
-          id: tube1.id,
+          id: tube1.airtableId,
           fields: {
             'id persistant': tube1.id,
             'Nom': tube1.name,
@@ -177,6 +178,7 @@ describe('Integration | Repository | tube-repository', () => {
       expect(tubes).toStrictEqual([
         domainBuilder.buildTube({
           id: 'tubeId1',
+          airtableId: 'airtableTubeId1',
           name: '@tube1',
           practicalTitle_i18n: {
             fr: tube1TitleFr.value,
