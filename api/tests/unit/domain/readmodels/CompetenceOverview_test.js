@@ -208,6 +208,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                         id: skill.id,
                         airtableId: skill.airtableId,
                         status: skill.status,
+                        version: skill.version,
                       }),
                     ]
                   })
@@ -1123,6 +1124,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                           id: skillTubeABC5_enconstruction_noversion.id,
                           airtableId: skillTubeABC5_enconstruction_noversion.airtableId,
                           status: skillTubeABC5_enconstruction_noversion.status,
+                          version: skillTubeABC5_enconstruction_noversion.version,
                         }),
                       ],
                     }),
@@ -1147,11 +1149,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
                           id: skillTubeDEF2_archive_noversion.id,
                           airtableId: skillTubeDEF2_archive_noversion.airtableId,
                           status: skillTubeDEF2_archive_noversion.status,
+                          version: skillTubeDEF2_archive_noversion.version,
                         }),
                         new AtelierSkillVersionView({
                           id: skillTubeDEF2_perime_version1.id,
                           airtableId: skillTubeDEF2_perime_version1.airtableId,
                           status: skillTubeDEF2_perime_version1.status,
+                          version: skillTubeDEF2_perime_version1.version,
                         }),
                       ],
                     }),
@@ -1183,12 +1187,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
                           id: skillTubeGHI4_archive_version1.id,
                           airtableId: skillTubeGHI4_archive_version1.airtableId,
                           status: skillTubeGHI4_archive_version1.status,
-
+                          version: skillTubeGHI4_archive_version1.version,
                         }),
                         new AtelierSkillVersionView({
                           id: skillTubeGHI4_actif_version2.id,
                           airtableId: skillTubeGHI4_actif_version2.airtableId,
                           status: skillTubeGHI4_actif_version2.status,
+                          version: skillTubeGHI4_actif_version2.version,
                         }),
                       ],
                     }),

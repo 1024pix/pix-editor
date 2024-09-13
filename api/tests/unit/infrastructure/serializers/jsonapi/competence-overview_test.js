@@ -34,6 +34,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
                         id: 'atelierSkillVersionViewId1',
                         airtableId: 'atelierSkillVersionViewAirtableId1',
                         status: 'atelierSkillVersionViewStatus',
+                        version: 'version1',
                       }),
                     ],
                   }),
@@ -135,6 +136,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             attributes: {
               'airtable-id': 'atelierSkillVersionViewAirtableId1',
               status: 'atelierSkillVersionViewStatus',
+              version: 'version1',
             },
           },
           {

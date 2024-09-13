@@ -87,6 +87,7 @@ export function serialize(competenceOverview) {
             attributes: [
               'airtableId',
               'status',
+              'version',
             ],
           }
         },

@@ -136,6 +136,7 @@ export class CompetenceOverview {
           id: sk.id,
           airtableId: sk.airtableId,
           status: sk.status,
+          version: sk.version,
         });
       });
       atelierSkillViews.push(new AtelierSkillView({
@@ -232,10 +233,12 @@ export class AtelierSkillVersionView {
     id,
     airtableId,
     status,
+    version,
   }) {
     this.id = id;
     this.airtableId = airtableId;
     this.status = status;
+    this.version = version;
   }
 }
 
