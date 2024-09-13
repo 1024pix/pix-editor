@@ -1,5 +1,12 @@
 
 
+## v3.163.0 (13/09/2024)
+
+
+### :building_construction: Tech
+- [#759](https://github.com/1024pix/pix-editor/pull/759) [TECH] Exposer `airtableId` dans nos models (PIX-14272).
+- [#758](https://github.com/1024pix/pix-editor/pull/758) [TECH] Améliorations de perf sur les repo Airtable (PIX-14271).
+
 ## v3.162.0 (10/09/2024)
 
 
