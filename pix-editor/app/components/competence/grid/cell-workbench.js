@@ -2,6 +2,12 @@ import Component from '@glimmer/component';
 
 export default class CellWorkbench extends Component {
 
+  get latestAirtableIdSkill() {
+    return this.args.skill.atelierSkillVersionViews
+      .toArray()
+      .sort((skillA, skillB) => skillB.version - skillA.version)[0].airtableId;
+  }
+
   get validatedPrototype() {
     return this.args.skill.validatedPrototypesCount === 1;
   }

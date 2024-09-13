@@ -3,6 +3,7 @@ import Model, { attr } from '@ember-data/model';
 export default class EnProductionSkillViewModel extends Model {
 
   @attr name;
+  @attr airtableId;
   @attr level;
   @attr status;
   @attr hint;

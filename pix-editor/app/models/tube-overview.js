@@ -3,6 +3,7 @@ import Model, { attr, hasMany } from '@ember-data/model';
 export default class TubeOverviewModel extends Model {
 
   @attr name;
+  @attr airtableId;
 
   @hasMany('en-construction-skill-views') enConstructionSkillViews;
   @hasMany('atelier-skill-views') atelierSkillViews;
