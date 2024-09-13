@@ -2,6 +2,7 @@ import { Thematic } from '../../../../lib/domain/models/index.js';
 
 export function buildThematic({
   id = 'recFvllz2Ckz',
+  airtableId = 'recAirtableThematic',
   name_i18n = {
     fr: 'Nom de la thématique',
     en: 'Thematic\'s name',
@@ -13,6 +14,7 @@ export function buildThematic({
   return new Thematic({
     id,
     name_i18n,
+    airtableId,
     competenceId,
     tubeIds,
     index,

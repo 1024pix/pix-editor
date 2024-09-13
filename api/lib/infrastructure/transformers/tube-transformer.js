@@ -1,16 +1,30 @@
 import { ChallengeForRelease } from '../../domain/models/release/index.js';
+import _ from 'lodash';
 
 export function transform({ tubes, skills, challenges, thematics }) {
-  tubes.forEach((tube) => {
-    _addLinks({ tube, skills, thematics });
-    _addDeviceCompliance({ tube, skills, challenges });
-  });
-  return tubes;
+  return tubes.map(filterTubeFields)
+    .map((tube) => _addLinks({ tube, skills, thematics }))
+    .map((tube) => _addDeviceCompliance({ tube, skills, challenges }));
 }
 
 function _addLinks({ tube, skills, thematics }) {
-  tube.thematicId = _findThematicId(tube.id, thematics);
-  tube.skillIds = _findSkillIds(tube.id, skills);
+  return {
+    ...tube,
+    thematicId: _findThematicId(tube.id, thematics),
+    skillIds: _findSkillIds(tube.id, skills),
+  };
+}
+
+export function filterTubeFields(tube) {
+  const fieldsToInclude = [
+    'id',
+    'name',
+    'practicalTitle_i18n',
+    'practicalDescription_i18n',
+    'competenceId',
+  ];
+
+  return _.pick(tube, fieldsToInclude);
 }
 
 function _findThematicId(tubeId, thematics) {
@@ -24,8 +38,11 @@ function _findSkillIds(tubeId, skills) {
 
 function _addDeviceCompliance({ tube, skills, challenges }) {
   const tubeChallenges = _filterValidatedPrototypeTubeChallenges(skills, challenges, tube.id);
-  tube.isMobileCompliant = tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeSmartphoneCompliant);
-  tube.isTabletCompliant = tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeTabletCompliant);
+  return {
+    ...tube,
+    isMobileCompliant: tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeSmartphoneCompliant),
+    isTabletCompliant: tubeChallenges?.length > 0 && tubeChallenges.every(_isChallengeTabletCompliant),
+  };
 }
 
 function _filterValidatedPrototypeTubeChallenges(skills, challenges, tubeId) {

@@ -1,6 +1,7 @@
 export class Competence {
   constructor({
     id,
+    airtableId,
     index,
     origin,
     areaId,
@@ -10,6 +11,7 @@ export class Competence {
     description_i18n,
   }) {
     this.id = id;
+    this.airtableId = airtableId;
     this.index = index;
     this.origin = origin;
     this.areaId = areaId;

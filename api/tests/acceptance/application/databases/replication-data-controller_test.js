@@ -57,6 +57,14 @@ async function mockCurrentContent() {
     alt: 'alt_nl',
     localizedChallengeId: 'localized-challenge-id',
   };
+  const expectedThematic = domainBuilder.buildThematic({
+    name_i18n: {
+      fr: 'Thématique en fr',
+      en: 'Thematic in en',
+    },
+  });
+
+  delete expectedThematic.airtableId;
 
   const expectedChallenge = {
     ...challenge,
@@ -71,6 +79,23 @@ async function mockCurrentContent() {
 
   const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
+
+  const expectedCompetence = domainBuilder.buildCompetence({
+    name_i18n: {
+      fr: 'Français',
+      en: 'English',
+    },
+    description_i18n: {
+      fr: 'Description française',
+      en: 'Description anglaise',
+    }
+  });
+
+  delete expectedCompetence.airtableId;
+
+  const expectedTube = domainBuilder.buildTube();
+  delete expectedTube.airtableId;
+
   const expectedCurrentContent = {
     attachments: [
       { ...domainBuilder.buildAttachment(expectedAttachment),  alt: null, },
@@ -80,35 +105,24 @@ async function mockCurrentContent() {
       },
     ],
     areas: [domainBuilder.buildArea()],
-    competences: [domainBuilder.buildCompetence({
-      name_i18n: {
-        fr: 'Français',
-        en: 'English',
-      },
-      description_i18n: {
-        fr: 'Description française',
-        en: 'Description anglaise',
-      }
-    })],
-    tubes: [domainBuilder.buildTube()],
+    competences: [expectedCompetence],
+    tubes: [expectedTube],
     skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
     challenges: [expectedChallenge, expectedChallengeNl],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
-    thematics: [domainBuilder.buildThematic({
-      name_i18n: {
-        fr: 'Thématique en fr',
-        en: 'Thematic in en',
+    thematics: [expectedThematic],
+    courses: [
+      {
+        id: 'recCourse1',
+        name: 'nameCourse1',
       },
-    })],
-    courses: [{
-      id: 'recCourse1',
-      name: 'nameCourse1',
-    },
-    {
-      id: 'recCourse2',
-      name: 'nameCourse2',
-    }],
+      {
+        id: 'recCourse2',
+        name: 'nameCourse2',
+      },
+    ]
   };
+
   const airtableSkill = buildSkill(expectedCurrentContent.skills[0]);
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],

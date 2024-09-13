@@ -8,6 +8,7 @@ import {
   thematicRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
+import { competenceTransformer, thematicTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
@@ -45,16 +46,19 @@ export async function getLearningContentForReplication() {
     challengeId: attachment.localizedChallengeId,
     alt: translatedChallenges.find(({ id }) => id === attachment.localizedChallengeId).illustrationAlt
   }));
+  const transformedCompetences = competenceTransformer.filterCompetencesFields(competences);
+  const transformedThematics = thematicTransformer.filterThematicsFields(thematics);
+  const transformedTubes = tubes.map(tubeTransformer.filterTubeFields);
 
   return {
     areas,
-    competences,
-    tubes,
+    competences: transformedCompetences,
+    tubes: transformedTubes,
     skills,
     challenges: translatedChallenges,
     tutorials,
     attachments: translatedAttachments,
-    thematics,
+    thematics: transformedThematics,
     courses
   };
 }

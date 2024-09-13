@@ -52,6 +52,7 @@ describe('Integration | Repository | thematic-repository', () => {
       expect(thematics).toEqual([
         domainBuilder.buildThematic({
           id: 'thematic1',
+          airtableId: 'thematic1',
           competenceId: 'competenceId1',
           index: '1',
           tubeIds: ['tubeId1', 'tubeId2'],
@@ -62,6 +63,7 @@ describe('Integration | Repository | thematic-repository', () => {
         }),
         domainBuilder.buildThematic({
           id: 'thematic2',
+          airtableId: 'thematic2',
           competenceId: 'competenceId2',
           index: '2',
           tubeIds: ['tubeId3', 'tubeId4'],
