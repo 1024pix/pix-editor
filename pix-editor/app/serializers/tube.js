@@ -5,8 +5,6 @@ export default class TubeSerializer extends AirtableSerializer {
 
   attrs = {
     name: 'Nom',
-    title: 'Titre',
-    description: 'Description',
     practicalTitleFr: 'Titre pratique fr-fr',
     practicalTitleEn: 'Titre pratique en-us',
     practicalDescriptionFr: 'Description pratique fr-fr',
