@@ -2,8 +2,6 @@ import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 
 export default class CompetenceModel extends Model {
 
-  needsRefresh = false;
-
   @attr title;
   @attr titleEn;
   @attr description;
