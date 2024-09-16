@@ -22,4 +22,16 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
   get hasNoTubes() {
     return this.rowSpanTheme === 0;
   }
+
+  get areTubesEmpty() {
+    return this.tubes.every((tube) => tube.enProductionSkillViews.length === 0);
+  }
+
+  get isThemeEmpty() {
+    return this.hasNoTubes || this.areTubesEmpty;
+  }
+
+  get isInProductionView() {
+    return this.args.view === 'production';
+  }
 }
