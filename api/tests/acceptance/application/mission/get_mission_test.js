@@ -43,7 +43,7 @@ describe('Acceptance | API | mission | GET /api/missions', function() {
           'learning-objectives': 'Être imbattable',
           'introduction-media-url': null,
           'introduction-media-type': null,
-          'introduction-media-alt': null,
+          'introduction-media-alt': 'Message alternatif',
           'documentation-url': null,
           'created-at': new Date('2024-01-01'),
           'warnings': undefined,

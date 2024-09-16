@@ -11,14 +11,14 @@ export function buildMission({
   validatedObjectives = 'Rien',
   status = Mission.status.INACTIVE,
   introductionMediaUrl = null,
-  introductionMediaAlt = null,
+  introductionMediaAlt = 'Message alternatif',
   introductionMediaType = null,
   documentationUrl = null,
 
   createdAt = new Date('2010-01-04'),
 } = {}) {
 
-  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, introductionMediaAlt, documentationUrl };
+  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, documentationUrl };
 
   buildTranslation({
     key: `mission.${id}.name`,
@@ -34,6 +34,11 @@ export function buildMission({
     key: `mission.${id}.validatedObjectives`,
     locale: 'fr',
     value: validatedObjectives,
+  });
+  buildTranslation({
+    key: `mission.${id}.introductionMediaAlt`,
+    locale: 'fr',
+    value: introductionMediaAlt,
   });
 
   return databaseBuffer.pushInsertable({

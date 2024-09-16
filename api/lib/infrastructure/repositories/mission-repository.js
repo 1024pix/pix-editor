@@ -54,7 +54,6 @@ export async function save(mission) {
     status: mission.status,
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
-    introductionMediaAlt: mission.introductionMediaAlt,
     documentationUrl: mission.documentationUrl,
   }).onConflict('id')
     .merge()
@@ -76,7 +75,6 @@ function _toDomain(mission, translations) {
     thematicIds: mission.thematicIds,
     introductionMediaUrl: mission.introductionMediaUrl,
     introductionMediaType: mission.introductionMediaType,
-    introductionMediaAlt: mission.introductionMediaAlt,
     documentationUrl: mission.documentationUrl,
     ...missionTranslations.toDomain(translationsByMissionId[mission.id])
   });

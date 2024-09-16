@@ -173,7 +173,7 @@ describe('Unit | Controller | missions controller', function() {
       validatedObjectives_i18n: { fr: 'Très bien' },
       introductionMediaUrl: null,
       introductionMediaType: null,
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: null },
       documentationUrl: 'http://url-example.net',
       status: Mission.status.VALIDATED,
     });
@@ -244,7 +244,7 @@ describe('Unit | Controller | missions controller', function() {
       validatedObjectives_i18n: { fr: 'Très bien' },
       introductionMediaUrl: null,
       introductionMediaType: null,
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: null },
       documentationUrl: 'http://url-example.net',
       status: Mission.status.VALIDATED,
     });

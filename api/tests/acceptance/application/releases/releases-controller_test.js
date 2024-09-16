@@ -164,7 +164,7 @@ async function mockCurrentContent() {
       createdAt: new Date('2010-01-04'),
       introductionMediaUrl: null,
       introductionMediaType: null,
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: null,
       content: {
         dareChallenges: [],
@@ -181,7 +181,7 @@ async function mockCurrentContent() {
       createdAt: new Date('2010-01-05'),
       introductionMediaUrl: 'http://example.com',
       introductionMediaType: 'image',
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: null,
       content: {
         dareChallenges: [],
@@ -244,7 +244,7 @@ async function mockCurrentContent() {
     createdAt: new Date('2010-01-04'),
     introductionMediaUrl: null,
     introductionMediaType: null,
-    introductionMediaAlt: null,
+    introductionMediaAlt: 'Message alternatif',
   });
   databaseBuilder.factory.buildMission({
     id: 2,
@@ -257,7 +257,7 @@ async function mockCurrentContent() {
     createdAt: new Date('2010-01-05'),
     introductionMediaUrl: 'http://example.com',
     introductionMediaType: 'image',
-    introductionMediaAlt: null,
+    introductionMediaAlt: 'Message alternatif',
   });
   databaseBuilder.factory.buildMission({
     id: 3,
@@ -270,7 +270,7 @@ async function mockCurrentContent() {
     createdAt: new Date('2010-01-05'),
     introductionMediaUrl: null,
     introductionMediaType: null,
-    introductionMediaAlt: null,
+    introductionMediaAlt: 'Message alternatif',
   });
 
   for (const locale of ['fr', 'en', 'nl']) {
@@ -506,7 +506,7 @@ async function mockContentForRelease() {
       status: Mission.status.VALIDATED,
       introductionMediaUrl: 'http://example.com',
       introductionMediaType: 'image',
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: null,
     }), new MissionForRelease({
       id: 2,
@@ -517,7 +517,7 @@ async function mockContentForRelease() {
       status: Mission.status.EXPERIMENTAL,
       introductionMediaUrl: null,
       introductionMediaType: null,
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: 'Alt Message alternatif' },
       documentationUrl: 'http://url-example.net',
     })],
   };
@@ -786,7 +786,7 @@ describe('Acceptance | Controller | release-controller', () => {
           status: Mission.status.VALIDATED,
           introductionMediaUrl: 'http://example.com',
           introductionMediaType: 'image',
-          introductionMediaAlt: null,
+          introductionMediaAlt: 'Message alternatif',
           documentationUrl: null,
         });
         databaseBuilder.factory.buildMission({
@@ -799,7 +799,7 @@ describe('Acceptance | Controller | release-controller', () => {
           status: Mission.status.EXPERIMENTAL,
           introductionMediaUrl: null,
           introductionMediaType: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt: 'Alt Message alternatif',
           documentationUrl: 'http://url-example.net',
         });
         databaseBuilder.factory.buildMission({

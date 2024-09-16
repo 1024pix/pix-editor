@@ -9,7 +9,7 @@ export class Mission {
     validatedObjectives_i18n,
     introductionMediaUrl,
     introductionMediaType,
-    introductionMediaAlt,
+    introductionMediaAlt_i18n,
     status,
     documentationUrl,
   }) {
@@ -22,7 +22,7 @@ export class Mission {
     this.validatedObjectives_i18n = validatedObjectives_i18n;
     this.introductionMediaUrl = introductionMediaUrl;
     this.introductionMediaType = introductionMediaType;
-    this.introductionMediaAlt = introductionMediaAlt;
+    this.introductionMediaAlt_i18n = introductionMediaAlt_i18n;
     this.status = status;
     this.documentationUrl = documentationUrl;
   }

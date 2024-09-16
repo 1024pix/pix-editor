@@ -10,6 +10,7 @@ const fields = [
   { field: 'name' },
   { field: 'learningObjectives' },
   { field: 'validatedObjectives' },
+  { field: 'introductionMediaAlt' },
 ];
 
 export const {
