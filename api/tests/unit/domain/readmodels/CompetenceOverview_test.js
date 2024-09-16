@@ -82,12 +82,14 @@ describe('Unit | Domain | CompetenceOverview', () => {
             airtableId: thematic1.airtableId,
             name: thematic1.name_i18n['fr'],
             tubeOverviews: [],
+            index: 0,
           }),
           new ThematicOverview({
             id: thematic2.id,
             airtableId: thematic2.airtableId,
             name: thematic2.name_i18n['fr'],
             tubeOverviews: [],
+            index: 0,
           }),
         ],
       });
@@ -127,6 +129,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
             id: thematic1.id,
             airtableId: thematic1.airtableId,
             name: thematic1.name_i18n['fr'],
+            index: 0,
             tubeOverviews: [
               new TubeOverview({
                 id: 'tubeABCId',
@@ -135,8 +138,9 @@ describe('Unit | Domain | CompetenceOverview', () => {
                 competenceId: competence.id,
                 enProductionSkillViews: [],
                 enConstructionSkillViews: [],
-                atelierSkillViews: []
-              })
+                atelierSkillViews: [],
+                index: 0,
+              }),
             ],
           }),
         ],
@@ -187,12 +191,14 @@ describe('Unit | Domain | CompetenceOverview', () => {
             id: thematic1.id,
             airtableId: thematic1.airtableId,
             name: thematic1.name_i18n['fr'],
+            index: 0,
             tubeOverviews: [
               new TubeOverview({
                 id: 'tubeABCId',
                 airtableId: tubeABC.airtableId,
                 name: '@tubeABC',
                 competenceId: competence.id,
+                index: 0,
                 enProductionSkillViews: expect.any(Array),
                 enConstructionSkillViews: expect.any(Array),
                 atelierSkillViews: [
@@ -425,11 +431,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic1.id,
               airtableId: thematic1.airtableId,
               name: thematic1.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tubeABC.id,
                   airtableId: tubeABC.airtableId,
                   name: tubeABC.name,
+                  index: 0,
                   enConstructionSkillViews: [
                     new EnConstructionSkillView({
                       id: skillTubeABC5_enconstruction_noversion.id,
@@ -449,6 +457,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                   id: tubeDEF.id,
                   airtableId: tubeDEF.airtableId,
                   name: tubeDEF.name,
+                  index: 0,
                   enConstructionSkillViews: [
                     new EnConstructionSkillView({
                       id: skillTubeDEF2_enconstruction_version1.id,
@@ -470,11 +479,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic2.id,
               airtableId: thematic2.airtableId,
               name: thematic2.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tubeGHI.id,
                   airtableId: tubeGHI.airtableId,
                   name: tubeGHI.name,
+                  index: 0,
                   enConstructionSkillViews: [
                     new EnConstructionSkillView({
                       id: skillTubeGHI4_enconstruction_version1.id,
@@ -494,6 +505,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                   id: tubeJKL.id,
                   airtableId: tubeJKL.airtableId,
                   name: tubeJKL.name,
+                  index: 0,
                   enConstructionSkillViews: [],
                   atelierSkillViews: expect.any(Array),
                   enProductionSkillViews: expect.any(Array),
@@ -575,11 +587,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic1.id,
               airtableId: thematic1.airtableId,
               name: thematic1.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tubeWithNoActiveSkill.id,
                   airtableId: tubeWithNoActiveSkill.airtableId,
                   name: tubeWithNoActiveSkill.name,
+                  index: 0,
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: expect.any(Array),
                   enProductionSkillViews: [],
@@ -590,6 +604,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic2.id,
               airtableId: thematic2.airtableId,
               name: thematic2.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [],
             }),
           ],
@@ -687,11 +702,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic1.id,
               airtableId: thematic1.airtableId,
               name: thematic1.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tube.id,
                   airtableId: tube.airtableId,
                   name: tube.name,
+                  index: 0,
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: expect.any(Array),
                   enProductionSkillViews: [
@@ -718,6 +735,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic2.id,
               airtableId: thematic2.airtableId,
               name: thematic2.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [],
             }),
           ],
@@ -876,11 +894,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic1.id,
               airtableId: thematic1.airtableId,
               name: thematic1.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tube.id,
                   airtableId: tube.airtableId,
                   name: tube.name,
+                  index: 0,
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: expect.any(Array),
                   enProductionSkillViews: [
@@ -907,6 +927,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic2.id,
               airtableId: thematic2.airtableId,
               name: thematic2.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [],
             }),
           ],
@@ -1104,11 +1125,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic1.id,
               airtableId: thematic1.airtableId,
               name: thematic1.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tubeABC.id,
                   airtableId: tubeABC.airtableId,
                   name: tubeABC.name,
+                  index: 0,
                   enProductionSkillViews: expect.any(Array),
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: [
@@ -1134,6 +1157,7 @@ describe('Unit | Domain | CompetenceOverview', () => {
                   id: tubeDEF.id,
                   airtableId: tubeDEF.airtableId,
                   name: tubeDEF.name,
+                  index: 0,
                   enProductionSkillViews: expect.any(Array),
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: [
@@ -1167,11 +1191,13 @@ describe('Unit | Domain | CompetenceOverview', () => {
               id: thematic2.id,
               airtableId: thematic2.airtableId,
               name: thematic2.name_i18n['fr'],
+              index: 0,
               tubeOverviews: [
                 new TubeOverview({
                   id: tubeGHI.id,
                   airtableId: tubeGHI.airtableId,
                   name: tubeGHI.name,
+                  index: 0,
                   enProductionSkillViews: expect.any(Array),
                   enConstructionSkillViews: expect.any(Array),
                   atelierSkillViews: [

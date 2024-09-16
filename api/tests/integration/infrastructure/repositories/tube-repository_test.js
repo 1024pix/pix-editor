@@ -21,7 +21,8 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube1',
             en: 'practicalDescriptionEnUs tube1',
           },
-          competenceId: 'competenceId'
+          competenceId: 'competenceId',
+          index: 1,
         }),
         airtableBuilder.factory.buildTube({
           id: 'tubeId2',
@@ -34,7 +35,8 @@ describe('Integration | Repository | tube-repository', () => {
             fr: 'practicalDescriptionFrFr tube2',
             en: 'practicalDescriptionEnUs tube2',
           },
-          competenceId: 'competenceId'
+          competenceId: 'competenceId',
+          index: 2,
         }),
       ]).activate().nockScope;
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
@@ -98,6 +100,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube1DescriptionEn.value,
           },
           competenceId: 'competenceId',
+          index: 1,
         }),
         domainBuilder.buildTube({
           id: 'tubeId2',
@@ -112,6 +115,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube2DescriptionEn.value,
           },
           competenceId: 'competenceId',
+          index: 2,
         }),
       ]);
 
@@ -135,6 +139,7 @@ describe('Integration | Repository | tube-repository', () => {
           en: 'practicalDescriptionEnUs tube1',
         },
         competenceId: 'competenceId1',
+        index: 0,
       };
       const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
         key: 'tube.tubeId1.practicalDescription',
@@ -166,6 +171,7 @@ describe('Integration | Repository | tube-repository', () => {
             'id persistant': tube1.id,
             'Nom': tube1.name,
             'Competences (id persistant)': [tube1.competenceId],
+            'Index': tube1.index,
           },
           get: function(field) { return this.fields[field]; },
         }];
@@ -189,6 +195,7 @@ describe('Integration | Repository | tube-repository', () => {
             en: tube1DescriptionEn.value,
           },
           competenceId: 'competenceId1',
+          index: 0,
         })
       ]);
     });

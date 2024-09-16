@@ -27,6 +27,7 @@ export function serialize(competenceOverview) {
         'airtableId',
         'name',
         'tubeOverviews',
+        'index',
       ],
       tubeOverviews: {
         include: true,
@@ -37,6 +38,7 @@ export function serialize(competenceOverview) {
           'enConstructionSkillViews',
           'enProductionSkillViews',
           'atelierSkillViews',
+          'index',
         ],
         enConstructionSkillViews: {
           include: true,

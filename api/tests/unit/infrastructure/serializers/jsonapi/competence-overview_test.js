@@ -16,11 +16,13 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             id: 'thematicOverviewId1',
             airtableId: 'thematicOverviewAirtableId1',
             name: 'thematicOverviewName1',
+            index: 1,
             tubeOverviews: [
               new TubeOverview({
                 id: 'tubeOverviewId1',
                 airtableId: 'tubeOverviewAirtableId1',
                 name: 'tubeOverviewName1',
+                index: 2,
                 atelierSkillViews: [
                   new AtelierSkillView({
                     name: 'atelierSkillViewName',
@@ -167,6 +169,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             attributes: {
               'airtable-id': 'tubeOverviewAirtableId1',
               name: 'tubeOverviewName1',
+              index: 2,
             },
             relationships: {
               'atelier-skill-views': {
@@ -201,6 +204,7 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             attributes: {
               'airtable-id': 'thematicOverviewAirtableId1',
               name: 'thematicOverviewName1',
+              index: 1,
             },
             relationships: {
               'tube-overviews': {

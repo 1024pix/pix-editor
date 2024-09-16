@@ -2,6 +2,7 @@ export function buildTube({
   id,
   name,
   competenceId,
+  index,
 } = {}) {
 
   return {
@@ -10,6 +11,7 @@ export function buildTube({
       'id persistant': id,
       'Nom': name,
       'Competences (id persistant)': [competenceId],
+      'Index': index,
     },
   };
 }

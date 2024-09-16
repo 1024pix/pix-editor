@@ -12,7 +12,7 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
   }
 
   get tubes() {
-    return this.args.theme.tubeOverviews.filter((tube) => this.shouldDisplayTube(tube));
+    return this.args.theme.tubeOverviews.filter((tube) => this.shouldDisplayTube(tube)).sortBy('index');
   }
 
   get rowSpanTheme() {

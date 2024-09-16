@@ -28,6 +28,7 @@ export class CompetenceOverview {
           id: tube.id,
           airtableId: tube.airtableId,
           name: tube.name,
+          index: tube.index,
           enConstructionSkillViews: CompetenceOverview.#buildEnConstructionSkillViews({ locale, skills: skillsForTube, tutorials: tutorialsForCompetence }),
           enProductionSkillViews: CompetenceOverview.#buildEnProductionSkillViews2({ locale, skills: skillsForTube, challenges: challengesForCompetence, tutorials: tutorialsForCompetence }),
           atelierSkillViews: CompetenceOverview.#buildAtelierSkillViews({ locale, skills: skillsForTube, challenges: challengesForCompetence }),
@@ -38,6 +39,7 @@ export class CompetenceOverview {
         airtableId: thematic.airtableId,
         name: thematic.name_i18n['fr'],
         tubeOverviews,
+        index: thematic.index,
       }));
     }
     return new CompetenceOverview({
@@ -159,11 +161,13 @@ export class ThematicOverview {
     airtableId,
     name,
     tubeOverviews,
+    index,
   }) {
     this.id = id;
     this.airtableId = airtableId;
     this.name = name;
     this.tubeOverviews = tubeOverviews;
+    this.index = index;
   }
 }
 
@@ -175,6 +179,7 @@ export class TubeOverview {
     enConstructionSkillViews,
     atelierSkillViews,
     enProductionSkillViews,
+    index,
   }) {
     this.id = id;
     this.airtableId = airtableId;
@@ -182,6 +187,7 @@ export class TubeOverview {
     this.enConstructionSkillViews = enConstructionSkillViews;
     this.atelierSkillViews = atelierSkillViews;
     this.enProductionSkillViews = enProductionSkillViews;
+    this.index = index;
   }
 }
 
