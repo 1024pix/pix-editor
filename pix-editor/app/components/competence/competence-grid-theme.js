@@ -12,7 +12,7 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
   }
 
   get tubes() {
-    return this.args.theme.tubeOverviews;
+    return this.args.theme.tubeOverviews.filter((tube) => this.shouldDisplayTube(tube));
   }
 
   get rowSpanTheme() {
@@ -22,4 +22,28 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
   get hasNoTubes() {
     return this.rowSpanTheme === 0;
   }
+
+  get areProductionTubesEmpty() {
+    return this.tubes.every(isProductionTubeEmpty);
+  }
+
+  get isThemeEmpty() {
+    return this.hasNoTubes || this.areProductionTubesEmpty;
+  }
+
+  get isInProductionView() {
+    return this.args.view === 'production';
+  }
+
+  get shouldHideThematic() {
+    return this.isInProductionView && this.isThemeEmpty;
+  }
+
+  shouldDisplayTube(tube) {
+    return !(this.isInProductionView && isProductionTubeEmpty(tube));
+  }
+}
+
+function isProductionTubeEmpty(tube) {
+  return tube?.enProductionSkillViews?.length === 0;
 }
