@@ -118,7 +118,7 @@
     "ember-cli-page-object": ">= 2.1.0"
   },
   "engines": {
-    "node": "^20.16.0"
+    "node": "^20.17.0"
   },
   "ember": {
     "edition": "octane"
