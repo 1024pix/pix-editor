@@ -14,9 +14,9 @@ export default class EditStaticCourseController extends Controller {
   }
 
   get tagIds() {
-    return this.model.staticCourse.tags.toArray()
-      .sort((a, b) => a.label.localeCompare(b.label))
-      .map(({ id }) => id);
+    const tags = this.model.staticCourse.hasMany('tags').value();
+    const sortedTags = tags?.sortBy?.('label') ?? [];
+    return sortedTags.map(({ id }) => id);
   }
 
   @action

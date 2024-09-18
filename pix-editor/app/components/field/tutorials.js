@@ -47,7 +47,7 @@ export default class Tutorials extends Component {
   @action
   async attachTutorial(item) {
     const tutorial = await this.store.findRecord('tutorial', item.id);
-    this.args.addTutorial(tutorial);
+    this.args.addTutorial(this.args.tutorials, tutorial);
   }
 
   @action
@@ -85,7 +85,7 @@ export default class Tutorials extends Component {
       const tutorial = await this.tutorial.save();
       this.loader.stop();
       this.notify.message('Tutoriel créé');
-      this.args.addTutorial(tutorial);
+      this.args.addTutorial(this.args.tutorials, tutorial);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);

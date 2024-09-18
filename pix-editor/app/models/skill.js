@@ -19,17 +19,13 @@ export default class SkillModel extends Model {
   @attr i18n;
   @attr('number') version;
 
-  @belongsTo('tube')
-    tube;
+  @belongsTo('tube', { async: true, inverse: 'rawSkills' }) tube;
 
-  @hasMany('challenge', { readOnly: true })
-    challenges;
+  @hasMany('challenge', { async: true, inverse: 'skill' }) challenges;
 
-  @hasMany('tutorial')
-    tutoSolution;
+  @hasMany('tutorial', { async: true, inverse: null }) tutoSolution;
 
-  @hasMany('tutorial')
-    tutoMore;
+  @hasMany('tutorial', { async: true, inverse: null }) tutoMore;
 
   @service('store') myStore;
 
@@ -76,7 +72,11 @@ export default class SkillModel extends Model {
   }
 
   get prototypes() {
-    return this.challenges.filter((challenge) => challenge.isPrototype);
+    const challenges = this.hasMany('challenges').value();
+
+    if (challenges === null) return [];
+
+    return challenges.filter((challenge) => challenge.isPrototype);
   }
 
   get sortedPrototypes() {
@@ -91,16 +91,20 @@ export default class SkillModel extends Model {
     return this.prototypes.filter((prototype) => prototype.isValidated);
   }
 
+  get challengesArray() {
+    return this.hasMany('challenges').value() || [];
+  }
+
   get alternatives() {
-    return this.challenges.filter((challenge) => !challenge.isPrototype);
+    return this.challengesArray.filter((challenge) => !challenge.isPrototype);
   }
 
   get validatedChallenges() {
-    return this.challenges.filter((challenge) => challenge.isValidated);
+    return this.challengesArray.filter((challenge) => challenge.isValidated);
   }
 
   get liveChallenges() {
-    return this.challenges.filter((challenge) => challenge.isLive);
+    return this.challengesArray.filter((challenge) => challenge.isLive);
   }
 
   get isActive() {
@@ -169,19 +173,17 @@ export default class SkillModel extends Model {
   }
 
   async pinRelationships() {
-    const tutorials = await Promise.all([this.tutoSolution, this.tutoMore]);
+    const [tutoMore, tutoSolution] = await Promise.all([this.tutoMore, this.tutoSolution]);
     this._pinnedRelationships = {
-      tutoSolution: tutorials[0].toArray(),
-      tutoMore: tutorials[1].toArray(),
+      tutoSolution: tutoSolution.slice(),
+      tutoMore: tutoMore.slice(),
     };
   }
 
   rollbackAttributes() {
     super.rollbackAttributes(...arguments);
-    const tutoSolution = this._pinnedRelationships.tutoSolution;
-    this.tutoSolution = tutoSolution;
-    const tutoMore = this._pinnedRelationships.tutoMore;
-    this.tutoMore = tutoMore;
+    this.tutoSolution = this._pinnedRelationships.tutoSolution;
+    this.tutoMore = this._pinnedRelationships.tutoMore;
   }
 
   async save(...args) {
@@ -193,22 +195,14 @@ export default class SkillModel extends Model {
   async clone({ tubeDestination, level }) {
     const newSkill = this.myStore.createRecord(this.constructor.modelName, {});
 
-    return newSkill.save({ adapterOptions: {
-      clone: true,
-      skillIdToClone: this.pixId,
-      tubeDestinationId: tubeDestination.pixId,
-      level,
-    } });
-  }
-
-  _getJSON(fieldsToRemove) {
-    const data = this.toJSON({ idIncluded: false });
-    fieldsToRemove.forEach((current) => {
-      if (data[current]) {
-        delete data[current];
-      }
+    return newSkill.save({
+      adapterOptions: {
+        clone: true,
+        skillIdToClone: this.pixId,
+        tubeDestinationId: tubeDestination.pixId,
+        level,
+      },
     });
-    return data;
   }
 
   _getCSSFromStatus(status) {
@@ -259,4 +253,3 @@ export default class SkillModel extends Model {
   }
 
 }
-

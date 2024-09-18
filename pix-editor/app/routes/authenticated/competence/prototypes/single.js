@@ -14,7 +14,9 @@ export default class SingleRoute extends Route {
 
   async afterModel(model) {
     super.afterModel(...arguments);
-    await model.files;
+    console.log(model);
+    if (!model) return;
+    await model?.files;
     this.currentData.setPrototype(model);
   }
 

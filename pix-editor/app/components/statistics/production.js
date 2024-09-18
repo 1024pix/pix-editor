@@ -20,7 +20,7 @@ export default class StatisticsProductionComponent extends Component {
     return this.productionCounts((competence) => {
       return competence.tubes.reduce((current, tube) => {
         return current + tube.liveSkills.reduce((current, skill) => {
-          return current + skill.challenges.filter((challenge) => challenge.isValidated).length;
+          return current + skill.challengesArray.filter((challenge) => challenge.isValidated).length;
         }, 0);
       }, 0);
     });
@@ -28,7 +28,7 @@ export default class StatisticsProductionComponent extends Component {
 
   productionCounts(callbackCount) {
     return this.args.areas.reduce((current, area) => {
-      return area.competences.reduce((current, competence) => {
+      return area.competencesArray.reduce((current, competence) => {
         current[competence.code] = callbackCount(competence);
         return current;
       }, current);

@@ -14,19 +14,22 @@ export default class LocalizedChallengeModel extends Model {
   @attr status;
   @attr translations;
 
-  @belongsTo('challenge', { inverse: 'localizedChallenges' }) challenge;
-  @hasMany('attachment', { inverse: 'localizedChallenge' }) files;
+  @belongsTo('challenge', { inverse: 'localizedChallenges', async: true }) challenge;
+  @hasMany('attachment', { inverse: 'localizedChallenge', async: true }) files;
 
   get isPrimaryChallenge() {
     return this.challenge.get('id') === this.id;
   }
 
-  get illustration() {
-    return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
+  get attachments() {
+    const files = this.hasMany('files').value();
+    if (!files) return null;
+    return files.filter((file) => file.type === 'attachment' && !file.isDeleted);
   }
 
-  get attachments() {
-    return this.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+  get illustration() {
+    const files = this.hasMany('files').value() ?? [];
+    return files.find((file) => file.type === 'illustration' && !file.isDeleted);
   }
 
   get statusCSS() {

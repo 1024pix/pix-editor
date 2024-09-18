@@ -7,11 +7,15 @@ export default class ThemeModel extends Model {
   @attr nameEnUs;
   @attr index;
 
-  @belongsTo('competence') competence;
-  @hasMany('tube') rawTubes;
+  @belongsTo('competence', { async: true, inverse: 'rawThemes' }) competence;
+  @hasMany('tube', { async: true, inverse: 'theme' }) rawTubes;
 
   get tubes() {
-    return this.rawTubes.filter((tube) => tube.name !== '@workbench').sortBy('index');
+    const rawTubes = this.hasMany('rawTubes').value();
+
+    if (rawTubes === null) return [];
+
+    return rawTubes.filter((tube) => tube.name !== '@workbench').sortBy('index');
   }
 
   get productionTubes() {

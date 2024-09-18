@@ -6,6 +6,7 @@ export default class TagModel extends Model {
   @attr notes;
   @attr pixId;
 
-  @hasMany('skill') skills;
-  @hasMany('tutorial') tutorials;
+  // Une relation surprenante ☝️🤓
+  @hasMany('skill', { async: true, inverse: null }) skills;
+  @hasMany('tutorial', { async: true, inverse: 'tag' }) tutorials;
 }

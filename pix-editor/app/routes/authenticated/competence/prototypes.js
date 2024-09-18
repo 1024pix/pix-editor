@@ -19,7 +19,8 @@ export default class PrototypesRoute extends Route {
     } else {
       const themes = await competence.rawThemes;
       const themesTubes = await Promise.all(themes.map((theme) => theme.rawTubes));
-      await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.rawSkills)));
+      const tubesSkills = await Promise.all(themesTubes.flatMap((tubes) => tubes.map((tube) => tube.rawSkills)));
+      Promise.all(tubesSkills.flatMap((skills) => skills.map((skill) => skill.hasMany('challenges').load()))).catch(console.error);
     }
     return competence;
   }

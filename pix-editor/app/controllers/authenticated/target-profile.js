@@ -66,7 +66,7 @@ export default class TargetProfileController extends Controller {
 
   get areas() {
     const selectedFrameworkData = this.selectedFrameworks.map((framework) => framework.data);
-    return selectedFrameworkData.map((framework) => framework.areas.toArray()).flat();
+    return selectedFrameworkData.map((framework) => framework.hasMany('areas').value() ?? []).flat();
   }
 
   @action
@@ -185,7 +185,7 @@ export default class TargetProfileController extends Controller {
   @action
   save(title) {
     const data = this.areas.reduce((areaValues, area) => {
-      const competences = area.competences;
+      const competences = area.hasMany('competences').value() ?? [];
       return competences.reduce((competenceValues, competence) => {
         const tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
@@ -379,8 +379,7 @@ export default class TargetProfileController extends Controller {
 
   _getSelectedSkillsIds(fromProfileAction) {
     return this.areas.reduce((areaValues, area) => {
-      const competences = area.competences;
-      return competences.reduce((competenceValues, competence) => {
+      return area.competencesArray.reduce((competenceValues, competence) => {
         const tubes = competence.tubes;
         return tubes.reduce((tubeValues, tube) => {
           if (fromProfileAction && tube.selectedLevel) {

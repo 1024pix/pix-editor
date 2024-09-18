@@ -1,5 +1,6 @@
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import _ from 'lodash';
 
 export default class TubeModel extends Model {
 
@@ -14,23 +15,27 @@ export default class TubeModel extends Model {
   @attr index;
   @attr pixId;
 
-  @belongsTo('competence') competence;
-  @belongsTo('theme') theme;
-  @hasMany('skill') rawSkills;
+  @belongsTo('competence', { async: true, inverse: 'rawTubes' }) competence;
+  @belongsTo('theme', { async: true, inverse: 'rawTubes' }) theme;
+  @hasMany('skill', { async: true, inverse: 'tube' }) rawSkills;
 
   @tracked selectedLevel = false;
   @tracked selectedThematicResultLevel = false;
 
+  get rawSkillsArray() {
+    return this.hasMany('rawSkills').value() || [];
+  }
+
   get liveSkills() {
-    return this.rawSkills.filter((skill) => skill.isLive);
+    return this.rawSkillsArray.filter((skill) => skill.isLive);
   }
 
   get draftSkills() {
-    return this.rawSkills.filter((skill) => skill.isDraft);
+    return this.rawSkillsArray.filter((skill) => skill.isDraft);
   }
 
   get deadSkills() {
-    return this.rawSkills.filter((skill) => !skill.isLive);
+    return this.rawSkillsArray.filter((skill) => !skill.isLive);
   }
 
   get skillCount() {
@@ -46,11 +51,11 @@ export default class TubeModel extends Model {
   }
 
   get sortedSkills() {
-    return this.liveSkills.sortBy('level');
+    return _.sortBy(this.liveSkills, 'level');
   }
 
   get filledSkills() {
-    return this._getFilledOrderedVersions(this.rawSkills);
+    return this._getFilledOrderedVersions(this.rawSkillsArray);
   }
 
   get filledProductionSkills() {

@@ -118,7 +118,7 @@ export default class LocalizedController extends Controller {
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    let values = value.split('\n').map((s)=>s.trim());
+    let values = value.split('\n').map((s) => s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -280,8 +280,8 @@ export default class LocalizedController extends Controller {
 
   @action
   async removeAttachment(removedAttachment) {
-    await this.localizedChallenge.files;
-    const removedFile = this.localizedChallenge.files.findBy('filename', removedAttachment.filename);
+    const files = this.localizedChallenge.hasMany('files').value() ?? [];
+    const removedFile = files.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
       this.deletedFiles.push(removedFile);
@@ -340,9 +340,8 @@ export default class LocalizedController extends Controller {
   }
 
   async _saveAttachments(challenge) {
-    await challenge.files;
-
-    for (const file of challenge.files.toArray()) {
+    const files = await challenge.files;
+    for (const file of files) {
       await file.save();
     }
     for (const file of this.deletedFiles) {

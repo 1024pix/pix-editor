@@ -5,7 +5,7 @@ export default class StaticCourseSummaryModel extends Model {
   @attr challengeCount;
   @attr isActive;
   @attr createdAt;
-  @hasMany('static-course-tag') tags;
+  @hasMany('static-course-tag', { async: true, inverse: null }) tags;
 
   get previewURL() {
     return `https://app.pix.fr/courses/${this.id}`;

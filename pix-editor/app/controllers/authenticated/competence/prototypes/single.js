@@ -38,8 +38,7 @@ export default class SingleController extends Controller {
   @tracked urlsToConsult = '';
 
   deletedFiles = [];
-  @controller('authenticated.competence')
-    parentController;
+  @controller('authenticated.competence') parentController;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -105,7 +104,7 @@ export default class SingleController extends Controller {
   }
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${ this.challenge.airtableId}`;
+    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${this.challenge.airtableId}`;
   }
 
   get lastUpdatedAtISO() {
@@ -282,7 +281,8 @@ export default class SingleController extends Controller {
           this._errorMessage('Erreur lors de la mise en production');
         } finally {
           this.loader.stop();
-        }});
+        }
+      });
     } catch {
       this._message('Mise en production abandonnée');
     }
@@ -440,8 +440,7 @@ export default class SingleController extends Controller {
 
   @action
   async removeAttachment(removedAttachment) {
-    await this.challenge.files;
-    const removedFile = this.challenge.attachments.findBy('filename', removedAttachment.filename);
+    const removedFile = this.challenge.attachments?.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
       this.deletedFiles.push(removedFile);
@@ -451,7 +450,7 @@ export default class SingleController extends Controller {
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    let values = value.split('\n').map((s)=>s.trim());
+    let values = value.split('\n').map((s) => s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -641,7 +640,7 @@ export default class SingleController extends Controller {
   }
 
   async _handleIllustration(challenge) {
-    const illustration = challenge.illustration;
+    const illustration = await challenge.illustration;
     if (illustration && illustration.isNew && !illustration.cloneBeforeSave) {
       this._loadingMessage('Envoi de l\'illustration...');
       const newIllustration = await this.storage.uploadFile({ file: illustration.file });
@@ -651,7 +650,7 @@ export default class SingleController extends Controller {
   }
 
   async _handleAttachments(challenge) {
-    const attachments = challenge.attachments;
+    const attachments = await challenge.attachments;
     if (attachments.length === 0) {
       return challenge;
     }
@@ -692,8 +691,8 @@ export default class SingleController extends Controller {
   }
 
   async _saveAttachments(challenge) {
-    await challenge.files;
-    for (const file of challenge.files.toArray()) {
+    const files = await challenge.files;
+    for (const file of files) {
       if (file.cloneBeforeSave) {
         file.url = await this.storage.cloneFile(file.url);
         file.cloneBeforeSave = false;
