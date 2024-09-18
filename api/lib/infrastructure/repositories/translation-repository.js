@@ -68,7 +68,7 @@ export async function listByPattern(pattern, { transaction = knex } = {}) {
   const translationDtos = await transaction
     .select(projection)
     .from('translations')
-    .whereLike('key', `${pattern}`);
+    .whereLike('key', pattern);
   return translationDtos.map(_toDomain);
 }
 

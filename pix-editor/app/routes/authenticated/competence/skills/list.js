@@ -7,6 +7,7 @@ export default class CompetenceSkillsListRoute extends Route {
 
   async model(params) {
     const tube = await this.store.findRecord('tube', params.tube_id);
+    await tube.rawSkills;
     const intLevel = parseInt(params.level);
     return { tube, sortedSkills: tube.filledSkills[intLevel - 1] };
   }

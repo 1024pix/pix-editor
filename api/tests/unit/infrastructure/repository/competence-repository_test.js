@@ -11,6 +11,7 @@ describe('Unit | Repository | competence-repository', () => {
       vi.spyOn(competenceDatasource, 'filter').mockResolvedValue([
         domainBuilder.buildCompetence({
           id: 'competence1',
+          airtableId: 'airtableCompetence1',
           index: '1.1',
           origin: 'Pix',
           areaId: 'area1',
@@ -19,6 +20,7 @@ describe('Unit | Repository | competence-repository', () => {
         }),
         domainBuilder.buildCompetence({
           id: 'competence2',
+          airtableId: 'airtableCompetence2',
           index: '1.2',
           origin: 'Pix',
           areaId: 'area2',
@@ -71,6 +73,7 @@ describe('Unit | Repository | competence-repository', () => {
       expect(competences).toEqual([
         domainBuilder.buildCompetence({
           id: 'competence1',
+          airtableId: 'airtableCompetence1',
           index: '1.1',
           origin: 'Pix',
           areaId: 'area1',
@@ -87,6 +90,7 @@ describe('Unit | Repository | competence-repository', () => {
         }),
         domainBuilder.buildCompetence({
           id: 'competence2',
+          airtableId: 'airtableCompetence2',
           index: '1.2',
           origin: 'Pix',
           areaId: 'area2',
@@ -104,4 +108,64 @@ describe('Unit | Repository | competence-repository', () => {
       ]);
     });
   });
+
+  describe ('#getById', () => (
+    it ('should return a competence thanks to its id', async () => {
+      // given
+      vi.spyOn(competenceDatasource, 'filter').mockResolvedValue([
+        domainBuilder.buildCompetence({
+          id: 'competence1',
+          index: '1.1',
+          origin: 'Pix',
+          areaId: 'area1',
+          skillIds: ['skill1', 'skill2'],
+          thematicIds: ['thematic1', 'thematic2'],
+        }),
+      ]);
+
+      vi.spyOn(translationRepository, 'listByEntity')
+        .mockResolvedValueOnce([{
+          key: 'competence.competence1.name',
+          locale: 'fr',
+          value: 'Nom compétence 1',
+        }, {
+          key: 'competence.competence1.description',
+          locale: 'fr',
+          value: 'Description compétence 1',
+        }, {
+          key: 'competence.competence1.name',
+          locale: 'en',
+          value: 'Competence 1 name',
+        }, {
+          key: 'competence.competence1.description',
+          locale: 'en',
+          value: 'Competence 1 description',
+        }].map(domainBuilder.buildTranslation));
+
+      // when
+      const competence = await competenceRepository.getById('competence1');
+
+      // then
+      expect(competenceDatasource.filter).toHaveBeenCalledWith({ filter: { ids: ['competence1'] } });
+      expect(translationRepository.listByEntity).toHaveBeenCalledWith('competence', 'competence1');
+      expect(competence).toEqual(
+        domainBuilder.buildCompetence({
+          id: 'competence1',
+          index: '1.1',
+          origin: 'Pix',
+          areaId: 'area1',
+          skillIds: ['skill1', 'skill2'],
+          thematicIds: ['thematic1', 'thematic2'],
+          name_i18n: {
+            fr: 'Nom compétence 1',
+            en: 'Competence 1 name',
+          },
+          description_i18n: {
+            fr: 'Description compétence 1',
+            en: 'Competence 1 description',
+          }
+        }),
+      );
+    })
+  ));
 });

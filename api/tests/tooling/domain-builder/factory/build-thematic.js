@@ -8,7 +8,7 @@ export function buildThematic({
     en: 'Thematic\'s name',
   },
   competenceId = 'recCompetence0',
-  tubeIds = ['recTube0'],
+  tubeIds,
   index = 0,
 } = {}) {
   return new Thematic({

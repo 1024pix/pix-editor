@@ -11,20 +11,39 @@ export default class CompetenceCompetenceGridThemeComponent extends Component {
     return section === 'skills' && view === 'workbench' && this.access.mayCreateTube();
   }
 
-  get tubesOrProductionTubes() {
-    const theme = this.args.theme;
-    if (this.args.view === 'workbench') {
-      return theme.tubes;
-    }
-    return theme.productionTubes;
+  get tubes() {
+    return this.args.theme.tubeOverviews.filter((tube) => this.shouldDisplayTube(tube)).sortBy('index');
   }
 
   get rowSpanTheme() {
-    return this.tubesOrProductionTubes.length;
+    return this.tubes.length;
   }
 
   get hasNoTubes() {
-    const theme = this.args.theme;
-    return theme.tubes.length === 0;
+    return this.rowSpanTheme === 0;
   }
+
+  get areProductionTubesEmpty() {
+    return this.tubes.every(isProductionTubeEmpty);
+  }
+
+  get isThemeEmpty() {
+    return this.hasNoTubes || this.areProductionTubesEmpty;
+  }
+
+  get isInProductionView() {
+    return this.args.view === 'production';
+  }
+
+  get shouldHideThematic() {
+    return this.isInProductionView && this.isThemeEmpty;
+  }
+
+  shouldDisplayTube(tube) {
+    return !(this.isInProductionView && isProductionTubeEmpty(tube));
+  }
+}
+
+function isProductionTubeEmpty(tube) {
+  return tube?.enProductionSkillViews?.length === 0;
 }

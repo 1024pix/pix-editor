@@ -2,22 +2,23 @@ import Component from '@glimmer/component';
 
 export default class CompetenceGridCellSkillComponent extends Component {
 
-  get hasNoClueByLanguage() {
-    switch (this.args.languageFilter) {
-      case 'fr':
-      case 'fr-fr':
-        return !this.args.skill.clue;
-      case 'en':
-        return !this.args.skill.clueEn;
-      default :
-        return true;
-    }
+  get skill() {
+    return this.args.skill;
+  }
+
+  get isApplicableHint() {
+    return this.skill.hintStatus !== 'inapplicable';
+  }
+
+  get isFrenchFilteredLanguage() {
+    return ['fr', 'fr-fr'].includes(this.args.languageFilter);
+  }
+
+  get hasNoHint() {
+    return !!this.skill.hint;
   }
 
   get alertCSS() {
-    if (!this.args.languageFilter) {
-      return '';
-    }
     if (this.tutoMoreCountByLanguage + this.tutoSolutionCountByLanguage === 0) {
       return 'danger';
     }
@@ -28,33 +29,10 @@ export default class CompetenceGridCellSkillComponent extends Component {
   }
 
   get tutoMoreCountByLanguage() {
-    return this._getTutorialsCountByLanguage(this.args.skill.tutoMore);
+    return this.skill.learningMoreTutorialsCount;
   }
 
   get tutoSolutionCountByLanguage() {
-    return this._getTutorialsCountByLanguage(this.args.skill.tutoSolution);
-  }
-
-  _getTutorialsCountByLanguage(tutorials) {
-    const languageFilter = this.args.languageFilter;
-    if (languageFilter) {
-      const filteredTutorials = tutorials.filter((tutorial) => {
-        const language = this._convertLanguageFilterToLanguageTutorial(languageFilter);
-        return tutorial.language === language;
-      });
-      return filteredTutorials.length;
-    }
-    return tutorials.length;
-  }
-
-  _convertLanguageFilterToLanguageTutorial(language) {
-    switch (language) {
-      case 'fr' :
-        return 'fr-fr';
-      case 'en':
-        return 'en-us';
-      default :
-        return language;
-    }
+    return this.skill.tutorialsCount;
   }
 }

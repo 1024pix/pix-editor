@@ -44,8 +44,37 @@ describe('Unit | Domain | Skill', () => {
       expect(isLive).to.be.false;
     });
   });
+
+  describe('#get isWorkbench', () => {
+    it('should return true when skill is workbench', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        name: Skill.WORKBENCH,
+      });
+
+      // when
+      const isWorkbench = skill.isWorkbench;
+
+      // then
+      expect(isWorkbench).to.be.true;
+    });
+
+    it('should return false when skill is not workbench', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        name: '@mangerDesFruits5',
+      });
+
+      // when
+      const isWorkbench = skill.isWorkbench;
+
+      // then
+      expect(isWorkbench).to.be.false;
+    });
+  });
+
   describe('#get isEnConstruction', () => {
-    it('should return true when skill is enConstruction', () => {
+    it('should return true when skill is en construction', () => {
       // given
       const skill  = domainBuilder.buildSkill({
         status: Skill.STATUSES.EN_CONSTRUCTION,
@@ -72,6 +101,7 @@ describe('Unit | Domain | Skill', () => {
       expect(isEnConstruction).to.be.false;
     });
   });
+
   describe('#get isActif', () => {
     it('should return true when skill is actif', () => {
       // given
@@ -92,7 +122,6 @@ describe('Unit | Domain | Skill', () => {
       const skill  = domainBuilder.buildSkill({
         status: Skill.STATUSES[statusKey],
       });
-
       // when
       const isActif = skill.isActif;
 
@@ -100,6 +129,65 @@ describe('Unit | Domain | Skill', () => {
       expect(isActif).to.be.false;
     });
   });
+
+  describe('#get isArchive', () => {
+    it('should return true when skill is archive', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.ARCHIVE,
+      });
+
+      // when
+      const isArchive = skill.isArchive;
+
+      // then
+      expect(isArchive).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((status) => Skill.STATUSES[status] !== Skill.STATUSES.ARCHIVE)
+    )('should return false when status key is %s', (status) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status,
+      });
+
+      // when
+      const isArchive = skill.isArchive;
+
+      // then
+      expect(isArchive).to.be.false;
+    });
+  });
+
+  describe('#get isPerime', () => {
+    it('should return true when skill is perime', () => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status: Skill.STATUSES.PERIME,
+      });
+
+      // when
+      const isPerime = skill.isPerime;
+
+      // then
+      expect(isPerime).to.be.true;
+    });
+
+    it.each(Object.keys(Skill.STATUSES).filter((status) => Skill.STATUSES[status] !== Skill.STATUSES.PERIME)
+    )('should return false when status key is %s', (status) => {
+      // given
+      const skill  = domainBuilder.buildSkill({
+        status,
+      });
+
+      // when
+      const isPerime = skill.isPerime;
+
+      // then
+      expect(isPerime).to.be.false;
+    });
+  });
+
   describe('#cloneSkillAndChallenges', () => {
     const clonedSkillId = 'clonedSkillId';
     const level = 4;

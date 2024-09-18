@@ -95,6 +95,7 @@ async function mockCurrentContent() {
 
   const expectedTube = domainBuilder.buildTube();
   delete expectedTube.airtableId;
+  delete expectedTube.index;
 
   const expectedCurrentContent = {
     attachments: [

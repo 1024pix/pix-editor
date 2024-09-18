@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { datasource } from './datasource.js';
+import { findRecords, stringValue } from '../../airtable.js';
 
 export const tubeDatasource = datasource.extend({
 
@@ -13,6 +14,7 @@ export const tubeDatasource = datasource.extend({
     'id persistant',
     'Nom',
     'Competences (id persistant)',
+    'Index',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -20,7 +22,17 @@ export const tubeDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
+      // FIXME remplacer par Competence (via Thematique) (id persistant) ?
       competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
+      index: airtableRecord.get('Index'),
     };
+  },
+
+  async listByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      filterByFormula: `{Competence (via Thematique) (id persistant)} = ${stringValue(competenceId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
   },
 });

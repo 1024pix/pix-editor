@@ -5,7 +5,7 @@ export class Thematic {
     index,
     airtableId,
     competenceId,
-    tubeIds,
+    tubeIds = [],
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
@@ -13,5 +13,13 @@ export class Thematic {
     this.airtableId = airtableId;
     this.competenceId = competenceId;
     this.tubeIds = tubeIds;
+  }
+
+  static get WORKBENCH() {
+    return 'workbench';
+  }
+
+  get isWorkbench() {
+    return this.name_i18n['fr'].startsWith(Thematic.WORKBENCH);
   }
 }

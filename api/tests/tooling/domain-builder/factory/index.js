@@ -26,6 +26,7 @@ export * from './build-thematic-for-release.js';
 export * from './build-translation.js';
 export * from './build-tube.js';
 export * from './build-tube-for-release.js';
+export * from './build-tutorial.js';
 export * from './build-tutorial-for-release.js';
 export * from './datasource-objects/build-area-datasource-object.js';
 export * from './datasource-objects/build-attachment-datasource-object.js';

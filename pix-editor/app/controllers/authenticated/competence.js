@@ -12,6 +12,9 @@ export default class CompetenceController extends Controller {
     'view': {
       scope: 'controller',
     },
+    'locale': {
+      scope: 'controller',
+    },
   }];
 
   @tracked view = 'production';

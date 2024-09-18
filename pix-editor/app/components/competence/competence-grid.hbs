@@ -2,13 +2,15 @@
   <table class="ui celled table definition tubes">
     <tbody>
     {{#each @themes as |theme|}}
-     <Competence::CompetenceGridTheme @languageFilter={{@languageFilter}}
-                                      @section={{@section}}
-                                      @view={{@view}}
-                                      @theme={{theme}}
-                                      @newTube={{@newTube}}
-                                      @displaySortTubesPopIn={{@displaySortTubesPopIn}}
-                                      @link={{@link}}/>
+      <Competence::CompetenceGridTheme
+        @languageFilter={{@languageFilter}}
+        @section={{@section}}
+        @view={{@view}}
+        @theme={{theme}}
+        @newTube={{@newTube}}
+        @displaySortTubesPopIn={{@displaySortTubesPopIn}}
+        @link={{@link}}
+      />
     {{/each}}
     </tbody>
   </table>

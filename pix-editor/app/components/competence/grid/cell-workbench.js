@@ -2,31 +2,26 @@ import Component from '@glimmer/component';
 
 export default class CellWorkbench extends Component {
 
-  get prototypes() {
-    return this.args.skills.map((skill) => skill.prototypes).flat();
-  }
-
-  get loadingChallenges() {
-    return this.args.skills.some((skill) => skill.challenges.isPending);
+  get latestAirtableIdSkill() {
+    return this.args.skill.atelierSkillVersionViews
+      .toArray()
+      .sort((skillA, skillB) => skillB.version - skillA.version)[0].airtableId;
   }
 
   get validatedPrototype() {
-    return this.prototypes.find((prototype) => prototype.isValidated);
+    return this.args.skill.validatedPrototypesCount === 1;
   }
 
   get draftPrototypesCount() {
-    const draftPrototypes = this.prototypes.filter((prototype) => prototype.isDraft);
-    return draftPrototypes.length;
+    return this.args.skill.proposedPrototypesCount;
   }
 
   get archivedPrototypesCount() {
-    const archivedPrototypes = this.prototypes.filter((prototype) => prototype.isArchived);
-    return archivedPrototypes.length;
+    return this.args.skill.archivedPrototypesCount;
   }
 
   get obsoletePrototypesCount() {
-    const obsoletePrototypes = this.prototypes.filter((prototype) => prototype.isObsolete);
-    return obsoletePrototypes.length;
+    return this.args.skill.obsoletePrototypesCount;
   }
 
   get hasDraftPrototypes() {

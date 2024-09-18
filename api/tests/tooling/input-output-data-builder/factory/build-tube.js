@@ -10,6 +10,7 @@ export function buildTube({
     en: practicalDescriptionEnUs,
   } = {},
   competenceId,
+  index,
 } = {}) {
   return {
     id,
@@ -21,6 +22,7 @@ export function buildTube({
       'Description pratique fr-fr': practicalDescriptionFrFr,
       'Description pratique en-us': practicalDescriptionEnUs,
       'Competences (id persistant)': [competenceId],
+      'Index': index,
     },
   };
 }

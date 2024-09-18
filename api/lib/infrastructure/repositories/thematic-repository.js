@@ -22,6 +22,13 @@ export async function getMany(ids) {
   return toDomainList(datasourceThematics, translations);
 }
 
+export async function listByCompetenceId(competenceId) {
+  const datasourceThematics = await thematicDatasource.listByCompetenceId(competenceId);
+  if (!datasourceThematics) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceThematics.map(({ id }) => id));
+  return toDomainList(datasourceThematics, translations);
+}
+
 function toDomainList(datasourceThematics, translations) {
   const translationsByThematicId = _.groupBy(translations, 'entityId');
   return _.orderBy(datasourceThematics.map(
