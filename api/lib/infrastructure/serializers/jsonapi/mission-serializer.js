@@ -25,6 +25,7 @@ export function serializeMission(mission, warnings) {
         name: mission.name_i18n.fr,
         learningObjectives: mission.learningObjectives_i18n.fr,
         validatedObjectives: mission.validatedObjectives_i18n.fr,
+        introductionMediaAlt: mission.introductionMediaAlt_i18n.fr,
         warnings,
       };
     },
@@ -56,7 +57,7 @@ export function deserializeMission(attributes) {
     validatedObjectives_i18n: { fr:  attributes['validated-objectives'] },
     introductionMediaUrl: attributes['introduction-media-url'] || null,
     introductionMediaType: attributes['introduction-media-type'] || null,
-    introductionMediaAlt: attributes['introduction-media-alt'] || null,
+    introductionMediaAlt_i18n:  { fr:  attributes['introduction-media-alt'] },
     documentationUrl: attributes['documentation-url'] || null,
     status: attributes.status,
   });

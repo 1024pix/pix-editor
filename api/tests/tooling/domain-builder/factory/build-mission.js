@@ -24,7 +24,7 @@ export function buildMission({
     validatedObjectives_i18n: { fr: validatedObjectives },
     introductionMediaUrl,
     introductionMediaType,
-    introductionMediaAlt,
+    introductionMediaAlt_i18n: { fr: introductionMediaAlt },
     documentationUrl,
     status,
   });

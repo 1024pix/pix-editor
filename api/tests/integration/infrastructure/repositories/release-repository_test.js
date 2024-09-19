@@ -1427,7 +1427,7 @@ function _getRichCurrentContentDTO() {
       createdAt: new Date('2010-01-04'),
       introductionMediaUrl: null,
       introductionMediaType: null,
-      introductionMediaAlt: null,
+      introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: 'http://url-example.net',
       content: {
         dareChallenges: [],

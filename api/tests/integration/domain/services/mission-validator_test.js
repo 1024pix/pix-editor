@@ -33,7 +33,7 @@ describe('Integration | Validator | Mission', function() {
           validatedObjectives_i18n: { fr: 'Très bien' },
           introductionMediaUrl: null,
           introductionMediaType: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: null },
           documentationUrl: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')
@@ -155,7 +155,7 @@ describe('Integration | Validator | Mission', function() {
               validatedObjectives_i18n: { fr: 'Très bien' },
               introductionMediaUrl: null,
               introductionMediaType: null,
-              introductionMediaAlt: null,
+              introductionMediaAlt_i18n: { fr: null },
               documentationUrl: null,
               status: Mission.status.VALIDATED,
               createdAt: new Date('2023-12-25')
@@ -207,7 +207,7 @@ describe('Integration | Validator | Mission', function() {
               validatedObjectives_i18n: { fr: 'Très bien' },
               introductionMediaUrl: null,
               introductionMediaType: null,
-              introductionMediaAlt: null,
+              introductionMediaAlt_i18n: { fr: null },
               documentationUrl: null,
               status: Mission.status.VALIDATED,
               createdAt: new Date('2023-12-25')
@@ -265,7 +265,7 @@ describe('Integration | Validator | Mission', function() {
               validatedObjectives_i18n: { fr: 'Très bien' },
               introductionMediaUrl: null,
               introductionMediaType: null,
-              introductionMediaAlt: null,
+              introductionMediaAlt_i18n: { fr: null },
               documentationUrl: null,
               status: Mission.status.VALIDATED,
               createdAt: new Date('2023-12-25')
@@ -317,7 +317,7 @@ describe('Integration | Validator | Mission', function() {
               validatedObjectives_i18n: { fr: 'Très bien' },
               introductionMediaUrl: null,
               introductionMediaType: null,
-              introductionMediaAlt: null,
+              introductionMediaAlt_i18n: { fr: null },
               documentationUrl: null,
               status: Mission.status.VALIDATED,
               createdAt: new Date('2023-12-25')
@@ -350,7 +350,7 @@ describe('Integration | Validator | Mission', function() {
           validatedObjectives_i18n: { fr: 'Très bien' },
           introductionMediaType: null,
           introductionMediaUrl: 'http://example.net',
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: null },
           documentationUrl: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')
@@ -375,7 +375,7 @@ describe('Integration | Validator | Mission', function() {
           validatedObjectives_i18n: { fr: 'Très bien' },
           introductionMediaType: 'image',
           introductionMediaUrl: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: null },
           documentationUrl: null,
           status: Mission.status.INACTIVE,
           createdAt: new Date('2023-12-25')

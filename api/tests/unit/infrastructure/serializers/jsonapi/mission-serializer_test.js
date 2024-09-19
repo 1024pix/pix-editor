@@ -8,21 +8,16 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
 
       const expectedMission = new Mission({
         id: 12,
-        learningObjectives_i18n: {
-          fr: 'learning objectives-value',
-        }, name_i18n: {
-          fr: 'Mission Name',
-        },
-        validatedObjectives_i18n: {
-          fr: 'validated-objectives-value',
-        },
+        learningObjectives_i18n: { fr: 'learning objectives-value', },
+        name_i18n: { fr: 'Mission Name', },
+        validatedObjectives_i18n: { fr: 'validated-objectives-value', },
         competenceId: 'rec12E12EFZF',
         thematicIds: 'someThematicIds',
         learningObjectives: 'learning objectives-value',
         validatedObjectives: 'validated-objectives-value',
         introductionMediaUrl: 'introduction-media-url-value',
         introductionMediaType: 'introduction-media-type-value',
-        introductionMediaAlt: 'introduction-media-alt-value',
+        introductionMediaAlt_i18n: { fr: 'introduction-media-alt-value' },
         documentationUrl: 'www.test.com',
         status: 'EXPERIMENTAL',
       });
@@ -36,7 +31,7 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         'validated-objectives': expectedMission.validatedObjectives_i18n.fr,
         'introduction-media-url': expectedMission.introductionMediaUrl,
         'introduction-media-type': expectedMission.introductionMediaType,
-        'introduction-media-alt': expectedMission.introductionMediaAlt,
+        'introduction-media-alt':  expectedMission.introductionMediaAlt_i18n.fr,
         'documentation-url': expectedMission.documentationUrl,
         status: expectedMission.status
       };
@@ -53,14 +48,12 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         id: expectedMission.id,
         'introduction-media-url': '',
         'introduction-media-type': '',
-        'introduction-media-alt': '',
         'documentation-url': '',
       };
       const deserializedMission = deserializeMission(attributes);
 
       expect(deserializedMission.introductionMediaUrl).to.be.null;
       expect(deserializedMission.introductionMediaType).to.be.null;
-      expect(deserializedMission.introductionMediaAlt).to.be.null;
       expect(deserializedMission.documentationUrl).to.be.null;
     });
   });

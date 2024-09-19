@@ -39,7 +39,7 @@ describe('Integration | Repository | mission-repository', function() {
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           introductionMediaUrl: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
           introductionMediaType: null,
           documentationUrl: null,
           status: Mission.status.VALIDATED,
@@ -71,7 +71,7 @@ describe('Integration | Repository | mission-repository', function() {
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
           validatedObjectives_i18n: { fr: 'Rien' },
           introductionMediaUrl: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
           introductionMediaType: null,
           documentationUrl: null,
           status: Mission.status.VALIDATED,
@@ -84,7 +84,7 @@ describe('Integration | Repository | mission-repository', function() {
           learningObjectives_i18n: { fr: 'Alt objectives' },
           validatedObjectives_i18n: { fr: 'Alt validated objectives' },
           introductionMediaUrl: null,
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
           introductionMediaType: null,
           documentationUrl: null,
           status: Mission.status.INACTIVE,
@@ -184,7 +184,7 @@ describe('Integration | Repository | mission-repository', function() {
         learningObjectives_i18n: { fr: 'Alt objectives' },
         validatedObjectives_i18n: { fr: 'Alt validated objectives' },
         introductionMediaUrl: null,
-        introductionMediaAlt: null,
+        introductionMediaAlt_i18n: { fr: 'Message alternatif' },
         introductionMediaType: null,
         documentationUrl: null,
         status: Mission.status.VALIDATED,
@@ -204,7 +204,7 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Très bien' },
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'image',
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
           documentationUrl: 'http://url-example.net',
           status: Mission.status.INACTIVE,
         });
@@ -222,12 +222,11 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'QWERTY',
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'image',
-          introductionMediaAlt: null,
           documentationUrl: 'http://url-example.net',
           status: Mission.status.INACTIVE,
         };
 
-        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaAlt', 'introductionMediaType', 'documentationUrl');
+        const missionFromDb = await knex('missions').where({ id: savedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaType', 'documentationUrl');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -239,6 +238,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'QWERTY',
           learningObjectives_i18n: { fr: 'au boulot' },
           validatedObjectives_i18n: { fr: 'Très bien' },
+          introductionMediaAlt_i18n: { fr: 'Alt text' },
           status: Mission.status.INACTIVE,
         });
 
@@ -259,6 +259,11 @@ describe('Integration | Repository | mission-repository', function() {
             key: `mission.${savedMission.id}.validatedObjectives`,
             locale: 'fr',
             value: 'Très bien'
+          },
+          {
+            key: `mission.${savedMission.id}.introductionMediaAlt`,
+            locale: 'fr',
+            value: 'Alt text'
           }
         ];
 
@@ -285,7 +290,7 @@ describe('Integration | Repository | mission-repository', function() {
           validatedObjectives_i18n: { fr: 'Très bien' },
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'vidéo',
-          introductionMediaAlt: null,
+          introductionMediaAlt_i18n: { fr: 'Message alternatif' },
           documentationUrl: 'http://fake-url.net',
           status: Mission.status.INACTIVE,
         });
@@ -305,11 +310,10 @@ describe('Integration | Repository | mission-repository', function() {
           status: Mission.status.INACTIVE,
           introductionMediaUrl: 'http://example.net',
           introductionMediaType: 'vidéo',
-          introductionMediaAlt: null,
           documentationUrl: 'http://fake-url.net',
         };
 
-        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaAlt', 'introductionMediaType', 'documentationUrl');
+        const missionFromDb = await knex('missions').where({ id: updatedMission.id }).first().select('competenceId', 'thematicIds', 'status', 'id', 'introductionMediaUrl', 'introductionMediaType', 'documentationUrl');
         expect(missionFromDb).to.deep.equal(expectedMission);
       });
 
@@ -328,6 +332,7 @@ describe('Integration | Repository | mission-repository', function() {
           thematicIds: 'Thematic',
           learningObjectives_i18n: { fr: 'Etre la boss' },
           validatedObjectives_i18n: { fr: 'intermédiaire' },
+          introductionMediaAlt_i18n: { fr: 'New Alt text' },
           status: Mission.status.INACTIVE,
         });
 
@@ -348,6 +353,11 @@ describe('Integration | Repository | mission-repository', function() {
             key: `mission.${updatedMission.id}.validatedObjectives`,
             locale: 'fr',
             value: 'intermédiaire'
+          },
+          {
+            key: `mission.${savedMission.id}.introductionMediaAlt`,
+            locale: 'fr',
+            value: 'New Alt text'
           }
         ];
 

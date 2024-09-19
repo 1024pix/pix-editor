@@ -30,7 +30,8 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
             'thematic-ids': '',
             status: Mission.status.EXPERIMENTAL,
             'learning-objectives': 'Une chose',
-            'validated-objectives': null
+            'validated-objectives': null,
+            'introductionMediaAlt': null
           },
         },
       };
