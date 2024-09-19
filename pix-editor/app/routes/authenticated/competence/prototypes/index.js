@@ -1,8 +1,8 @@
 import Route from '@ember/routing/route';
 
-export default class IndexRoute extends Route {
-  setupController() {
-    super.setupController(...arguments);
+export default class PrototypesIndexRoute extends Route {
+  setupController(...args) {
+    super.setupController(...args);
     const competenceController = this.controllerFor('authenticated.competence');
     competenceController.setSection('challenges');
     competenceController.maximizeLeft(false);
