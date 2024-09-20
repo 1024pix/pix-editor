@@ -68,7 +68,8 @@ export default class AirtableSerializer extends RESTSerializer {
 
     // if provided, use the mapping provided by `attrs` in
     // the serializer
-    let payloadKey = this._getMappedKey(key, snapshot.type);
+    const schema = this.store.modelFor(snapshot.modelName);
+    let payloadKey = this._getMappedKey(key, schema);
     if (payloadKey === key && this.keyForRelationship) {
       payloadKey = this.keyForRelationship(key, 'belongsTo', 'serialize');
     }
@@ -90,7 +91,8 @@ export default class AirtableSerializer extends RESTSerializer {
       if (hasMany !== undefined) {
         // if provided, use the mapping provided by `attrs` in
         // the serializer
-        let payloadKey = this._getMappedKey(key, snapshot.type);
+        const schema = this.store.modelFor(snapshot.modelName);
+        let payloadKey = this._getMappedKey(key, schema);
         if (payloadKey === key && this.keyForRelationship) {
           payloadKey = this.keyForRelationship(key, 'hasMany', 'serialize');
         }

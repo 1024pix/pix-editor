@@ -33,7 +33,8 @@ export default class NoteSerializer extends AirtableSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (['changelog'].includes(key)) {
-      const payloadKey = this._getMappedKey(key, snapshot.type);
+      const schema = this.store.modelFor(snapshot.modelName);
+      const payloadKey = this._getMappedKey(key, schema);
       const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'oui';
