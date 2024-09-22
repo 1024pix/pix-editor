@@ -7,39 +7,73 @@
 >
   <:actions>
     {{#if this.mayAccessLog}}
-      <button class="ui button icon item" {{on "click" this.challengeLog}} type="button"><i class="icon window chat"></i></button>
+      <button
+        class="ui button icon item"
+        {{on "click" this.challengeLog}}
+        type="button"
+      ><i class="icon window chat"></i></button>
     {{/if}}
     {{#unless this.edition}}
       {{#if (and this.challenge.isPrototype (not this.challenge.isWorkbench))}}
-        <button class="ui button icon item" {{on "click" this.showVersions}} type="button"><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
+        <button
+          class="ui button icon item"
+          {{on "click" this.showVersions}}
+          type="button"
+        ><i class="clone icon"></i>&nbsp;v{{this.challenge.version}}</button>
       {{/if}}
       {{#if (or this.mayValidate this.mayArchive this.mayObsolete)}}
-        <BasicDropdown @renderInPlace={{true}} @class="icon ui dropdown" @horizontalPosition="left" as |dd|>
-          <dd.Trigger><button class="ui icon button item" type="button"><i class="bolt icon"></i></button></dd.Trigger>
-          <dd.Content @class="dropdown-content dropdown-content-challenge slide-fade">
+        <BasicDropdown
+          @renderInPlace={{true}}
+          @class="icon ui dropdown"
+          @horizontalPosition="left"
+          as |dd|
+        >
+          <dd.Trigger><button class="ui icon button item" type="button"><i
+                class="bolt icon"
+              ></i></button></dd.Trigger>
+          <dd.Content
+            @class="dropdown-content dropdown-content-challenge slide-fade"
+          >
             {{#if this.mayValidate}}
-              <button class="ui button validate item"  {{on "click" (fn this.validate dd)}} type="button">
+              <button
+                class="ui button validate item"
+                {{on "click" (fn this.validate dd)}}
+                type="button"
+              >
                 <i class="checkmark icon"></i>
-                {{t 'common.validate'}}
+                {{t "common.validate"}}
               </button>
             {{/if}}
             {{#if this.mayArchive}}
-              <button class="ui button archive item"  {{on "click" (fn this.archive dd)}} type="button">
+              <button
+                class="ui button archive item"
+                {{on "click" (fn this.archive dd)}}
+                type="button"
+              >
                 <i class="archive icon"></i>
-                {{t 'competence.prototypes.archive'}}
+                {{t "competence.prototypes.archive"}}
               </button>
             {{/if}}
             {{#if this.mayObsolete}}
-              <button class="ui button archive item"  {{on "click" (fn this.obsolete dd)}} type="button">
+              <button
+                class="ui button archive item"
+                {{on "click" (fn this.obsolete dd)}}
+                type="button"
+              >
                 <i class="trash alternate icon"></i>
-                {{t 'competence.prototypes.obsolete'}}
+                {{t "competence.prototypes.obsolete"}}
               </button>
             {{/if}}
           </dd.Content>
         </BasicDropdown>
       {{/if}}
       {{#if this.mayMove}}
-        <button data-test-move-button class="ui icon button item" {{on "click" this.movePrototype}} type="button"><i class="icon random"></i></button>
+        <button
+          data-test-move-button
+          class="ui icon button item"
+          {{on "click" this.movePrototype}}
+          type="button"
+        ><i class="icon random"></i></button>
       {{/if}}
     {{/unless}}
   </:actions>
@@ -47,78 +81,134 @@
     <div class={{(if this.creation " creation" "")}}>
       {{this.challengeTitle}}
     </div>
-    <div class="ui circular label {{this.challenge.statusCSS}}">{{this.challenge.status}}</div>
+    <div
+      class="ui circular label {{this.challenge.statusCSS}}"
+    >{{this.challenge.status}}</div>
     {{#unless this.challenge.isNew}}
-      <time class="ui colored label" title="Dernière modification" datetime="{{this.lastUpdatedAtISO}}">{{format-date this.challenge.updatedAt}}</time>
+      <time
+        class="ui colored label"
+        title="Dernière modification"
+        datetime="{{this.lastUpdatedAtISO}}"
+      >{{format-date this.challenge.updatedAt}}</time>
     {{/unless}}
   </:default>
 </Competence::Prototypes::ChallengeHeader>
 <div class="challenge">
   <div class="challenge-data {{this.elementClass}}" {{scroll-top this.edition}}>
-    <Form::Challenge @challenge={{this.challenge}}
-                     @showIllustration={{this.showIllustration}}
-                     @edition={{this.edition}}
-                     @displayAlternativeInstructionsField={{this.displayAlternativeInstructionsField}}
-                     @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}
-                     @displaySolutionToDisplayField={{this.displaySolutionToDisplayField}}
-                     @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}}
-                     @removeIllustration={{this.removeIllustration}}
-                     @removeAttachment={{this.removeAttachment}}
-                     @invalidUrlsToConsult={{this.invalidUrlsToConsult}}
-                     @displayUrlsToConsultField={{this.displayUrlsToConsultField}}
-                     @setDisplayUrlsToConsultField={{this.setDisplayUrlsToConsultField}}
-                     @urlsToConsult={{this.urlsToConsult}}
-                     @setUrlsToConsult={{this.setUrlsToConsult}}
+    <Form::Challenge
+      @challenge={{this.challenge}}
+      @showIllustration={{this.showIllustration}}
+      @edition={{this.edition}}
+      @displayAlternativeInstructionsField={{this.displayAlternativeInstructionsField}}
+      @setDisplayAlternativeInstructionsField={{this.setDisplayAlternativeInstructionsField}}
+      @displaySolutionToDisplayField={{this.displaySolutionToDisplayField}}
+      @setDisplaySolutionToDisplayField={{this.setDisplaySolutionToDisplayField}}
+      @removeIllustration={{this.removeIllustration}}
+      @removeAttachment={{this.removeAttachment}}
+      @invalidUrlsToConsult={{this.invalidUrlsToConsult}}
+      @displayUrlsToConsultField={{this.displayUrlsToConsultField}}
+      @setDisplayUrlsToConsultField={{this.setDisplayUrlsToConsultField}}
+      @urlsToConsult={{this.urlsToConsult}}
+      @setUrlsToConsult={{this.setUrlsToConsult}}
     />
   </div>
-<div class="ui vertical compact labeled icon menu challenge-menu">
-  {{#if this.edition}}
-    <button data-test-save-challenge-button class="ui button item important-action" {{on "click" this.save}} type="button">
-      <i class="save icon"></i>
-      Enregistrer
-    </button>
-    <button data-test-cancel-challenge-button class="ui button item" {{on "click" this.cancelEdit}} type="button">
-      <i class="ban icon"></i>
-      Annuler
-    </button>
-  {{else}}
-    <a class="ui button item" href={{this.absolutePreviewUrl}} target="_blank" rel="noopener noreferrer">
-      <i class="eye icon"></i>
-      Prévisualiser
-    </a>
-    <Buttons::CopyLink @link={{this.absolutePreviewUrl}} />
-    {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge| }}
-      <LinkTo @route={{this.localizedChallengeLinkRoute}} @models={{this.getLocalizedChallengeLinkModels localizedChallenge}} class="ui button item">
-        <i class="globe icon"></i>
-        Version {{ localizedChallenge.locale }}
-      </LinkTo>
-    {{/each}}
-    {{#if this.mayEdit}}
-      <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
-        <i class="edit icon"></i>
-        Modifier
+  <div class="ui vertical compact labeled icon menu challenge-menu">
+    {{#if this.edition}}
+      <button
+        data-test-save-challenge-button
+        class="ui button item important-action"
+        {{on "click" this.save}}
+        type="button"
+      >
+        <i class="save icon"></i>
+        Enregistrer
       </button>
-    {{/if}}
-    {{#if this.mayDuplicate}}
-      <button class="ui button item" {{on "click" this.duplicate}} type="button">
-        <i class="copy icon"></i>
-        Dupliquer
+      <button
+        data-test-cancel-challenge-button
+        class="ui button item"
+        {{on "click" this.cancelEdit}}
+        type="button"
+      >
+        <i class="ban icon"></i>
+        Annuler
       </button>
-    {{/if}}
-    {{#if this.mayAccessAirtable}}
-      <a class="ui button item" href={{this.airtableUrl}} target="_blank" rel="noopener noreferrer">
-        <i class="table icon"></i>
-        Airtable
+    {{else}}
+      <a
+        class="ui button item"
+        href={{this.absolutePreviewUrl}}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <i class="eye icon"></i>
+        Prévisualiser
       </a>
+      <Buttons::CopyLink @link={{this.absolutePreviewUrl}} />
+      {{#each this.challenge.otherLocalizedChallenges as |localizedChallenge|}}
+        <LinkTo
+          @route={{this.localizedChallengeLinkRoute}}
+          @models={{this.getLocalizedChallengeLinkModels localizedChallenge}}
+          class="ui button item"
+        >
+          <i class="globe icon"></i>
+          Version
+          {{localizedChallenge.locale}}
+        </LinkTo>
+      {{/each}}
+      {{#if this.mayEdit}}
+        <button
+          data-test-modify-challenge-button
+          class="ui button item"
+          {{on "click" this.edit}}
+          type="button"
+        >
+          <i class="edit icon"></i>
+          Modifier
+        </button>
+      {{/if}}
+      {{#if this.mayDuplicate}}
+        <button
+          class="ui button item"
+          {{on "click" this.duplicate}}
+          type="button"
+        >
+          <i class="copy icon"></i>
+          Dupliquer
+        </button>
+      {{/if}}
+      {{#if this.mayAccessAirtable}}
+        <a
+          class="ui button item"
+          href={{this.airtableUrl}}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i class="table icon"></i>
+          Airtable
+        </a>
+      {{/if}}
+      {{#if this.mayAccessAlternatives}}
+        <button
+          class="ui button item alternatives"
+          {{on "click" this.showAlternatives}}
+          type="button"
+        >
+          <i class="cubes icon"></i>
+          Déclinaisons &gt;&gt;
+        </button>
+      {{/if}}
+      {{#unless this.mayAccessAlternatives}}
+        <Competence::Prototypes::ChallengeReword
+          @locale={{this.challenge.locales}}
+          @instruction={{this.challenge.instruction}}
+          @tubeDescription={{get
+            this.challenge.skill.tube
+            "practicalDescriptionFr"
+          }}
+          @skillDescription={{get this.challenge.skill "description"}}
+        />
+      {{/unless}}
     {{/if}}
-    {{#if this.mayAccessAlternatives}}
-      <button class="ui button item alternatives" {{on "click" this.showAlternatives}} type="button">
-        <i class="cubes icon"></i>
-        Déclinaisons &gt;&gt;
-      </button>
-    {{/if}}
-  {{/if}}
-</div>
+  </div>
 </div>
 <PopIn::ChallengeLog
   @challenge={{this.challenge}}
@@ -136,13 +226,13 @@
   @showModal={{this.displayChangeLog}}
 />
 <PopIn::ConfirmLog
-  @title={{t 'common.confirm-log.save'}}
+  @title={{t "common.confirm-log.save"}}
   @onApprove={{this.saveChallengeCallback}}
   @defaultValue={{this.defaultSaveChangelog}}
   @inputId="changelog-message"
   @onDeny={{this.closeComfirmLogPopin}}
-  @content={{t 'common.confirm-log.content'}}
-  @label={{t 'common.confirm-log.label'}}
+  @content={{t "common.confirm-log.content"}}
+  @label={{t "common.confirm-log.label"}}
   @showModal={{this.displayConfirmLog}}
 />
 {{#if this.mayMove}}
