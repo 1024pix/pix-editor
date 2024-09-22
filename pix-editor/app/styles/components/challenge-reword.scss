@@ -1,0 +1,21 @@
+.challenge-reword__modal {
+  width: 90vw;
+  max-width: 1200px;
+}
+
+.challenge-reword__separator {
+  margin: 20px 0;
+}
+
+.challenge-reword__rewording-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
+}
+.pix-label:has(+ div >  .challenge-reword__rewording-item--selected)  {
+  color: green;
+}

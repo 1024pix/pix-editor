@@ -10,4 +10,6 @@ export default class ConfigModel extends Model {
   @attr storageBucket;
   @attr localeToLanguageMap;
   @attr tutorialLocaleToLanguageMap;
+  @attr llmVariationsUrl;
+  @attr llmVariationsToken;
 }

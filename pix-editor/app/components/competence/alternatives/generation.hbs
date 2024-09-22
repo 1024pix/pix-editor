@@ -1,0 +1,93 @@
+<button
+  class="ui button right item"
+  {{on "click" this.generateAlternatives}}
+  type="button"
+>
+  <i class="magic icon" data-test-new-alternative-action></i>
+  Générer
+</button>
+
+<PixModal
+  class="alternative-generation__modal"
+  @title="Nouvelles déclinaisons"
+  @showModal={{this.showModal}}
+  @onCloseButtonClick={{this.toggleModal}}
+>
+  <:content>
+    {{#if this.isLoading}}
+      <div class="ui dimmer inverted active" style="position: relative;">
+        <div class="ui loader"></div>
+      </div>
+    {{else}}
+      <div class="alternative-generation__instruction ui form">
+        <Field::Mde
+          @title="Consigne Initiale"
+          @value={{@challenge.instruction}}
+        />
+      </div>
+      <div class="alternative-generation__alternatives">
+        {{#each this.alternatives as |alternative index|}}
+          <hr class="alternative-generation__separator" />
+          <div class="alternative-generation__item">
+            <PixCheckbox
+              @id="checkbox-alternative-{{index}}"
+              @checked={{alternative.checked}}
+              {{on "change" (fn this.toggleAlternatives index)}}
+            />
+            <div>
+              <PixTextarea
+                @id="alternative-{{index}}"
+                @value={{alternative.instruction}}
+                class={{if
+                  alternative.checked
+                  "alternative-generation__item--selected"
+                }}
+              >
+                <:label>{{alternative.label}}</:label>
+              </PixTextarea>
+              <div class="alternative-generation__item-answers">
+                <div>
+                  <h3
+                    class="alternative-generation__item-answers-title correct"
+                  >
+                    Bonne réponse
+                  </h3>
+                  <code>{{alternative.correctAnswer}}</code>
+                </div>
+                <div>
+                  <h3 class="alternative-generation__item-answers-title wrong">
+                    Mauvaises réponses
+                  </h3>
+                  <ul>
+                    {{#each alternative.wrongAnswers as |wrongAnswer index|}}
+                      <li>
+                        <code>{{wrongAnswer}}</code>
+                      </li>
+                    {{/each}}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    {{/if}}
+  </:content>
+  <:footer>
+    <PixButton
+      @size="small"
+      @isBorderVisible={{true}}
+      @backgroundColor="transparent-light"
+      @triggerAction={{this.toggleModal}}
+    >
+      Annuler
+    </PixButton>
+    <PixButton
+      @size="small"
+      @isDisabled={{eq this.selectedAlternativesCount 0}}
+      @backgroundColor="blue"
+    >Accepter les
+      {{this.selectedAlternativesCount}}
+      déclinaison(s)</PixButton>
+  </:footer>
+</PixModal>

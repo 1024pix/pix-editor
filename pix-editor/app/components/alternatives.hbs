@@ -23,6 +23,7 @@
       <button class="ui button right item" {{on "click" @newAlternative}} type="button">
         <i class="plus square outline icon" data-test-new-alternative-action></i> Nouvelle déclinaison
       </button>
+      <Competence::Alternatives::Generation @challenge={{@challenge}} />
     {{/if}}
   </div>
 {{/unless}}

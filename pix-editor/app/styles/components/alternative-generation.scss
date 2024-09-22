@@ -1,0 +1,57 @@
+.alternative-generation__modal {
+  width: 90vw;
+  max-width: 1200px;
+}
+
+.alternative-generation__separator {
+  margin: 20px 0;
+}
+
+.alternative-generation__item {
+  // display: grid;
+  // grid-template-columns: auto 1fr;
+  // gap: 20px;
+
+  &:not(:first-child) {
+    margin-top: 20px;
+  }
+}
+
+.alternative-generation__item-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 10px;
+
+  code {
+    display: block;
+    margin-top: 10px;
+    padding: 10px;
+    background: white;
+  }
+}
+
+.alternative-generation__item-answers-title {
+  font-size: 1.1em;
+  font-weight: bold;
+
+  &.correct {
+    color: green;
+  }
+
+  &.wrong {
+    color: red;
+  }
+}
+
+.pix-label:has(+ div > .alternative-generation__item--selected) {
+  color: green;
+}
+.skill-cell {
+  position: relative;
+}
+.skill-cell--magic {
+  color: $alternative-count-color;
+  position: absolute;
+  bottom: 5px;
+  right:0px; }
