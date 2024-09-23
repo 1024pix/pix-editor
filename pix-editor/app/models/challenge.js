@@ -221,7 +221,6 @@ export default class ChallengeModel extends Model {
 
   get otherLocalizedChallenges() {
     const localizedChallenges = this.hasMany('localizedChallenges').value() ?? [];
-    console.log(localizedChallenges);
     return localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
   }
 

@@ -18,150 +18,140 @@ module('Integration | Component | popin-select-location', function(hooks) {
     skill1_2_1_2_1, skill1_2_1_2_2,
     skill1_2_2_1_1, skill1_2_2_1_2;
 
-  const stubRelationship = sinon.stub().resolves();
-
   hooks.beforeEach(function() {
+    const store = this.owner.lookup('service:store');
+
     // given
-    skill1_1_1_1_1 = {
+    skill1_1_1_1_1 = store.createRecord('skill', {
       id: 'skill1_1_1_1_1',
       pixId: 'pixIdSkill1_1_1_1_1',
       name: 'skill1_1_1_1_1',
       level: 2,
       version: 1,
       status: 'actif',
-    };
-    skill1_1_1_1_2 = {
+    });
+    skill1_1_1_1_2 = store.createRecord('skill', {
       id: 'skill1_1_1_1_2',
       pixId: 'pixIdSkill1_1_1_1_2',
       name: 'skill1_1_1_1_2',
       level: 5,
       version: 1,
       status: 'actif',
-    };
-    skill1_2_1_1_1 = {
+    });
+    skill1_2_1_1_1 = store.createRecord('skill', {
       id: 'skill1_2_1_1_1',
       pixId: 'pixIdSkill1_2_1_1_1',
       name: 'skill1_2_1_1_1',
       level: 1,
       version: 1,
       status: 'actif',
-    };
-    skill1_2_1_1_2 = {
+    });
+    skill1_2_1_1_2 = store.createRecord('skill', {
       id: 'skill1_2_1_1_2',
       pixId: 'pixIdSkill1_2_1_1_2',
       name: 'skill1_2_1_1_2',
       level: 6,
       version: 1,
       status: 'actif',
-      get() {
-        return 'skill1_2_1_1_2';
-      },
-    };
-    skill1_2_1_1_3 = {
+    });
+    skill1_2_1_1_3 = store.createRecord('skill', {
       id: 'skill1_2_1_1_3',
       pixId: 'pixIdSkill1_2_1_1_3',
       name: 'skill1_2_1_1_3',
       level: 6,
       version: 2,
       status: 'en construction',
-    };
-    skill1_2_1_2_1 = {
+    });
+    skill1_2_1_2_1 = store.createRecord('skill', {
       id: 'skill1_2_1_2_1',
       pixId: 'pixIdSkill1_2_1_2_1',
       name: 'skill1_2_1_2_1',
       level: 3,
       version: 1,
       status: 'actif',
-    };
-    skill1_2_1_2_2 = {
+    });
+    skill1_2_1_2_2 = store.createRecord('skill', {
       id: 'skill1_2_1_2_2',
       pixId: 'pixIdSkill1_2_1_2_2',
       name: 'skill1_2_1_2_2',
       level: 4,
       version: 1,
       status: 'actif',
-    };
-    skill1_2_2_1_1 = {
+    });
+    skill1_2_2_1_1 = store.createRecord('skill', {
       id: 'skill1_2_2_1_1',
       pixId: 'pixIdSkill1_2_2_1_1',
       name: 'skill1_2_2_1_1',
       level: 2,
       version: 1,
       status: 'actif',
-    };
-    skill1_2_2_1_2 = {
+    });
+    skill1_2_2_1_2 = store.createRecord('skill', {
       id: 'skill1_2_2_1_2',
       pixId: 'pixIdSkill1_2_2_1_2',
       name: 'skill1_2_2_1_2',
       level: 3,
       version: 1,
       status: 'actif',
-    };
-    tube1_1_1_1 = {
+    });
+    tube1_1_1_1 = store.createRecord('tube', {
       name: 'tube1_1_1_1',
-      rawSkills: stubRelationship(),
-      filledLiveSkills: [false, [skill1_1_1_1_1], false, false, [skill1_1_1_1_2], false, false],
-    };
-    tube1_2_1_1 = {
+      rawSkills: [skill1_1_1_1_1, skill1_1_1_1_2],
+    });
+    tube1_2_1_1 = store.createRecord('tube', {
       name: 'tube1_2_1_1',
-      rawSkills: stubRelationship(),
-      filledLiveSkills: [[skill1_2_1_1_1], false, false, false, false, [skill1_2_1_1_2, skill1_2_1_1_3], false],
+      rawSkills: [skill1_2_1_1_1, skill1_2_1_1_2, skill1_2_1_1_3],
 
-    };
-    tube1_2_1_2 = {
+    });
+    tube1_2_1_2 = store.createRecord('tube', {
       name: 'tube1_2_1_2',
-      rawSkills: stubRelationship(),
-      filledLiveSkills: [false, false, [skill1_2_1_2_1], [skill1_2_1_2_2], false, false, false],
-    };
-    tube1_2_2_1 = {
+      rawSkills: [skill1_2_1_2_1, skill1_2_1_2_2],
+    });
+    tube1_2_2_1 = store.createRecord('tube', {
       name: 'tube1_2_2_1',
-      rawSkills: stubRelationship(),
-      filledLiveSkills: [false, [skill1_2_2_1_1], [skill1_2_2_1_2], false, false, false, false],
-    };
-    theme1_1_1_1 = {
+      rawSkills: [skill1_2_2_1_1, skill1_2_2_1_2],
+    });
+    theme1_1_1_1 = store.createRecord('theme', {
       name: 'theme1_1_1_1',
-    };
-    theme1_1_1_2 = {
+    });
+    theme1_1_1_2 = store.createRecord('theme', {
       name: 'theme1_1_1_2',
-    };
-    theme1_2_1_1 = {
+    });
+    theme1_2_1_1 = store.createRecord('theme', {
       name: 'theme1_2_1_1',
-    };
-    competence1_1_1 = {
-      name: 'competence1_1_1',
-      rawTubes: stubRelationship(),
-      rawThemes: stubRelationship(),
-      sortedTubes: [tube1_1_1_1],
-      sortedThemes: [theme1_1_1_1, theme1_1_1_2],
-    };
-    competence1_2_1 = {
-      name: 'competence1_2_1',
-      rawTubes: stubRelationship(),
-      rawThemes: stubRelationship(),
-      sortedTubes: [tube1_2_1_1, tube1_2_1_2],
-      sortedThemes: [theme1_2_1_1],
-    };
-    competence1_2_2 = {
-      name: 'competence1_2_2',
-      rawTubes: stubRelationship(),
-      rawThemes: stubRelationship(),
-      sortedTubes: [tube1_2_2_1],
-      sortedThemes: [],
-    };
-    area1_1 = {
-      sortedCompetences: [competence1_1_1],
-    };
-    area1_2 = {
-      sortedCompetences: [competence1_2_1, competence1_2_2],
-    };
-    framework1 = {
+    });
+    competence1_1_1 = store.createRecord('competence', {
+      title: 'competence1_1_1',
+      code: '1.1',
+      rawTubes: [tube1_1_1_1],
+      rawThemes: [theme1_1_1_1, theme1_1_1_2],
+    });
+    competence1_2_1 = store.createRecord('competence', {
+      title: 'competence1_2_1',
+      code: '2.1',
+      rawTubes: [tube1_2_1_1, tube1_2_1_2],
+      rawThemes: [theme1_2_1_1],
+    });
+    competence1_2_2 = store.createRecord('competence', {
+      title: 'competence1_2_2',
+      code: '2.2',
+      rawTubes: [tube1_2_2_1],
+      rawThemes: [],
+    });
+    area1_1 = store.createRecord('area', {
+      competences: [competence1_1_1],
+    });
+    area1_2 = store.createRecord('area', {
+      competences: [competence1_2_1, competence1_2_2],
+    });
+    framework1 = store.createRecord('framework', {
       name: 'pix',
       areas: [area1_1, area1_2],
-    };
-    framework2 = {
+    });
+    framework2 = store.createRecord('framework', {
       name: 'pix+',
       areas: [],
-    };
+    });
 
     this.owner.register('service:currentData', class MockService extends Service {
       getCompetence() {
@@ -207,7 +197,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
 
     test('it should display location fields of challenge', function(assert) {
       // given
-      const expectedResult = ['pix', 'competence1_2_1', 'tube1_2_1_1', 'skill1_2_1_1_2 (v.1)'];
+      const expectedResult = ['pix', '2.1 competence1_2_1', 'tube1_2_1_1', 'skill1_2_1_1_2 (v.1)'];
 
       // then
       const fields = findAll('.field .ember-power-select-selected-item');
@@ -274,14 +264,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
       await click('[data-test-move-action]');
 
       // then
-      assert.deepEqual(this.setSkill.getCall(0).args[0], {
-        id: 'skill1_2_1_2_1',
-        pixId: 'pixIdSkill1_2_1_2_1',
-        name: 'skill1_2_1_2_1',
-        level: 3,
-        status: 'actif',
-        version: 1,
-      });
+      assert.deepEqual(this.setSkill.getCall(0).args[0], skill1_2_1_2_1);
     });
   });
   module('if `isSkillLocation`', function(hooks) {
@@ -341,7 +324,7 @@ module('Integration | Component | popin-select-location', function(hooks) {
     test('it should display appropriate fields', async function(assert) {
       // then
       assert.dom('[data-test-select-source]').hasText('Référentiel pix');
-      assert.dom('[data-test-select-competence]').hasText('Compétence competence1_2_1');
+      assert.dom('[data-test-select-competence]').hasText('Compétence 2.1 competence1_2_1');
       assert.dom('[data-test-select-theme]').hasText('Thématique* theme1_2_1_1');
     });
 

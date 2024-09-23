@@ -24,6 +24,7 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
       status: 'proposé',
       translations: '/api/challenges/recChallenge1/translations/en',
     });
+
     this.server.create('skill', { id: 'recSkill1', challengeIds: ['recChallenge1'], level: 1 });
     this.server.create('tube', { id: 'recTube1', rawSkillIds: ['recSkill1'] });
     this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
@@ -39,7 +40,8 @@ module('Acceptance | Controller | Localized Challenge', function(hooks) {
     await click(findAll('[data-test-competence-item]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(findAll('[data-test-skill-cell-link]')[0]);
-    await click(screen.getByText('Version en'));
+    const versionEn = screen.getByText('Version en');
+    await click(versionEn);
 
     const embedUrlInput = await screen.getByRole('textbox', { name: 'Embed URL :' });
     assert.deepEqual(embedUrlInput.value, 'https://my-embed.com/en.html');
