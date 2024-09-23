@@ -451,13 +451,12 @@ function _serializeModel(instance, modelName) {
   }
   relationships.forEach((allRelationships) => {
     allRelationships.forEach((relationship) => {
-      const meta = relationship.meta;
-      const relationshipSerializedKey = serializer.attrs[meta.key];
-      if (meta.kind === 'hasMany') {
-        payload.fields[relationshipSerializedKey] = instance.attrs[`${meta.name.slice(0, -1)}Ids`];
+      const relationshipSerializedKey = serializer.attrs[relationship.key];
+      if (relationship.kind === 'hasMany') {
+        payload.fields[relationshipSerializedKey] = instance.attrs[`${relationship.name.slice(0, -1)}Ids`];
       }
-      if (meta.kind === 'belongsTo') {
-        payload.fields[relationshipSerializedKey] = instance.attrs[`${meta.name}Id`];
+      if (relationship.kind === 'belongsTo') {
+        payload.fields[relationshipSerializedKey] = instance.attrs[`${relationship.name}Id`];
       }
     });
   });
