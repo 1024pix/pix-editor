@@ -168,7 +168,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge2NL');
     await localizedChallenge.files;
-    const newIllustration = localizedChallenge.files.findBy('type', 'illustration');
+    const newIllustration = localizedChallenge.hasMany('files').value().find((file) => file.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
@@ -222,7 +222,7 @@ module('Acceptance | Modify-Localized-Challenge-Illustration', function(hooks) {
     const attachments = await store.peekAll('attachment');
     const localizedChallenge = await store.peekRecord('localized-challenge', 'recChallenge2NL');
     await localizedChallenge.files;
-    const newIllustration = localizedChallenge.files.findBy('type', 'illustration');
+    const newIllustration = localizedChallenge.hasMany('files').value().find((file) => file.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');

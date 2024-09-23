@@ -80,6 +80,7 @@ function routes() {
     const competencePayload = JSON.parse(request.requestBody);
     const competence = schema.competences.find(request.params.id);
     const competenceNew = _deserializePayload(competencePayload, 'competence');
+    delete competenceNew.id;
     competence.update({ ...competenceNew });
     return _serializeModel(competence, 'competence');
   });

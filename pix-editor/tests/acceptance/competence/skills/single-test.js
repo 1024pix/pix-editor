@@ -47,7 +47,8 @@ module('Acceptance | skill | single', function(hooks) {
       await click(find('[data-test-save-changelog-button]'));
 
       const tube = await store.peekRecord('tube', 'recTube1');
-      const newSkill = tube.rawSkills.find((skill) => skill.level === SKILL_LEVEL_CHOOSE);
+      const newSkill = tube.rawSkillsArray.find((skill) => skill.level === SKILL_LEVEL_CHOOSE);
+      await newSkill.challenges;
 
       // then
       assert.ok(newSkill);

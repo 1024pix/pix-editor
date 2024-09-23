@@ -144,8 +144,8 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
-    await challenge.files;
-    const newIllustration = challenge.files.findBy('type', 'illustration');
+    const files = challenge.hasMany('files').value() ?? [];
+    const newIllustration = files.find((file) => file.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
@@ -191,8 +191,8 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     const store = this.owner.lookup('service:store');
     const attachments = await store.peekAll('attachment');
     const challenge = await store.peekRecord('challenge', 'recChallenge2');
-    await challenge.files;
-    const newIllustration = challenge.files.findBy('type', 'illustration');
+    const files = challenge.hasMany('files').value() ?? [];
+    const newIllustration = files.find((file) => file.type === 'illustration');
 
     // then
     assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
