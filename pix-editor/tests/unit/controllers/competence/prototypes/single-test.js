@@ -342,16 +342,18 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
   test('it should cancel edition', async function(assert) {
     // given
     controller.edition = true;
+    controller.wasMaximized = true;
     controller.displayAlternativeInstructionsField = true;
     controller.displaySolutionToDisplayField = true;
-    controller.wasMaximized = true;
+    controller.displayUrlsToConsultField = true;
+    controller.urlsToConsult = 'http:://other-test.com';
     const rollbackAttributesStub = sinon.stub();
-    const challenge = EmberObject.create({
+    controller.model = EmberObject.create({
       id: 'recChallenge',
       files: [],
+      urlsToConsult: ['http:://test.com'],
       rollbackAttributes: rollbackAttributesStub,
     });
-    controller.model = challenge;
 
     // when
     await controller.cancelEdit();
@@ -359,6 +361,8 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
     // then
     assert.notOk(controller.displayAlternativeInstructionsField);
     assert.notOk(controller.displaySolutionToDisplayField);
+    assert.notOk(controller.displayUrlsToConsultField);
+    assert.strictEqual(controller.urlsToConsult, 'http:://test.com');
     assert.notOk(controller.edition);
     assert.ok(rollbackAttributesStub.calledOnce);
     assert.ok(messageStub.calledWith('Modification annulée'));
@@ -421,6 +425,29 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       // then
       assert.ok(deleteRecordStub.calledOnce);
       assert.strictEqual(controller.deletedFiles.length, 1);
+    });
+  });
+
+  module('#UrlsToConsult', function() {
+    test('it should reset urlToConsult when urlToConsultField is closed', function(assert) {
+      // given
+      controller.displayUrlsToConsultField = true;
+      controller.urlsToConsult = 'http:://other-test.com';
+      controller.invalidUrlsToConsult = 'wrong-test.com';
+      controller.model = EmberObject.create({
+        id: 'recChallenge',
+        files: [],
+        urlsToConsult: ['http:://test.com'],
+      });
+
+      // when
+      controller.setDisplayUrlsToConsultField(false);
+
+      // then
+      assert.notOk(controller.displayUrlsToConsultField);
+      assert.strictEqual(controller.model.urlsToConsult, null);
+      assert.notOk(controller.urlsToConsult);
+      assert.notOk(controller.invalidUrlsToConsult);
     });
   });
 

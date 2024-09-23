@@ -130,18 +130,29 @@ export default class SingleController extends Controller {
   }
 
   @action
-  setDisplayAlternativeInstructionsField(value) {
-    this.displayAlternativeInstructionsField = value;
+  setDisplayAlternativeInstructionsField(boolean) {
+    this.displayAlternativeInstructionsField = boolean;
+    if (!boolean) {
+      this.challenge.alternativeInstruction = '';
+    }
   }
 
   @action
-  setDisplaySolutionToDisplayField(value) {
-    this.displaySolutionToDisplayField = value;
+  setDisplaySolutionToDisplayField(boolean) {
+    this.displaySolutionToDisplayField = boolean;
+    if (!boolean) {
+      this.challenge.solutionToDisplay = '';
+    }
   }
 
   @action
-  setDisplayUrlsToConsultField(value) {
-    this.displayUrlsToConsultField = value;
+  setDisplayUrlsToConsultField(boolean) {
+    this.displayUrlsToConsultField = boolean;
+    if (!boolean) {
+      this.challenge.urlsToConsult = null;
+      this.urlsToConsult = '';
+      this.invalidUrlsToConsult = '';
+    }
   }
 
   @action

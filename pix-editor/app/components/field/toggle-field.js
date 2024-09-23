@@ -21,7 +21,6 @@ export default class FieldToggleFieldComponent extends Component {
   async toggleFieldDisplay() {
     if (this.shouldDisplayField) {
       await this.confirm.ask('Suppression', `Êtes-vous sûr de vouloir supprimer ${this.args.confirmText} ?`);
-      this.args.model.set(`${this.args.modelField}`, '');
       this.args.setDisplayField(false);
     } else {
       this.args.setDisplayField(true);

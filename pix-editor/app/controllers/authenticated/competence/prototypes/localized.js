@@ -134,8 +134,13 @@ export default class LocalizedController extends Controller {
   }
 
   @action
-  setDisplayUrlsToConsultField(value) {
-    this.displayUrlsToConsultField = value;
+  setDisplayUrlsToConsultField(boolean) {
+    this.displayUrlsToConsultField = boolean;
+    if (!boolean) {
+      this.challenge.urlsToConsult = null;
+      this.urlsToConsult = '';
+      this.invalidUrlsToConsult = '';
+    }
   }
 
   @action
