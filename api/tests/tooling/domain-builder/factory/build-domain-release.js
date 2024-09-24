@@ -14,7 +14,7 @@ export const buildDomainRelease = function({
 };
 
 buildDomainRelease.withContent = function({
-  id,
+  id = 123,
   frameworksFromRelease,
   areasFromRelease,
   competencesFromRelease,
@@ -24,7 +24,7 @@ buildDomainRelease.withContent = function({
   challengesFromRelease,
   tutorialsFromRelease,
   missionsFromRelease,
-  createdAt,
+  createdAt = new Date('2020-01-01'),
 }) {
   return buildDomainRelease({
     id,
