@@ -12,7 +12,7 @@ export default class MissionDetailsRoute extends Route {
     let missionThematicNames;
     if (mission.thematicIds) {
       const pix1DThematics = await this.currentData.getThematicsFromPix1DFramework();
-      const thematicNameById = new Map(pix1DThematics.map((thematic) => [thematic.id, thematic.name]));
+      const thematicNameById = new Map(pix1DThematics.map((thematic) => [thematic.pixId, thematic.name]));
       const missionThematicIds = mission.thematicIds.split(',');
       missionThematicNames = missionThematicIds.map((thematicId) => thematicNameById.get(thematicId)).join(', ');
     }
