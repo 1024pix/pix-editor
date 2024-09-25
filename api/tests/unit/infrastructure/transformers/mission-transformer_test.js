@@ -3,6 +3,7 @@ import { domainBuilder } from '../../../test-helper.js';
 import { transform as missionTransformer } from '../../../../lib/infrastructure/transformers/mission-transformer.js';
 import { Challenge, Mission } from '../../../../lib/domain/models/index.js';
 import { SkillForRelease } from '../../../../lib/domain/models/release/index.js';
+import { Tube } from '../../../../lib/domain/models/Tube.js';
 
 describe('Unit | Transformer | mission-transformer', function() {
   describe('#listActive', function() {
@@ -55,6 +56,7 @@ describe('Unit | Transformer | mission-transformer', function() {
         domainBuilder.buildSkill({ id: 'skillDare', level: 1, tubeId: 'tubeDare' }),
       ];
       tubes = [
+        new Tube({ id: 'aTubeWithoutName' }),
         domainBuilder.buildTube({ id: 'tubeTuto1', name: '@Pix1D-recherche_di' }),
         domainBuilder.buildTube({ id: 'tubeTraining1', name: '@Pix1D-recherche_en' }),
         domainBuilder.buildTube({ id: 'tubeValidation1', name: '@Pix1D-recherche_va' }),
@@ -69,7 +71,7 @@ describe('Unit | Transformer | mission-transformer', function() {
           name_i18n: {
             fr: 'Thématique du step 1',
           },
-          tubeIds: ['tubeTuto1', 'tubeTraining1', 'tubeValidation1']
+          tubeIds: ['aTubeWithoutName', 'tubeTuto1', 'tubeTraining1', 'tubeValidation1' ]
         }),
         domainBuilder.buildThematic({
           id: 'thematicStep2',
@@ -85,6 +87,10 @@ describe('Unit | Transformer | mission-transformer', function() {
         domainBuilder.buildThematic({
           id: 'thematicDefiVide',
           tubeIds: [],
+        }),
+        domainBuilder.buildThematic({
+          id: 'thematicWithNoNameTube',
+          tubeIds: ['aTubeWithoutName'],
         })
       ];
 
@@ -720,6 +726,27 @@ describe('Unit | Transformer | mission-transformer', function() {
         }]);
       });
     });
-  });
 
+    context('With no name tube in thematic', function() {
+      it('Should return empty conten', async function() {
+        const missions = [domainBuilder.buildMission({
+          id: 2,
+          name: 'Alt name',
+          status: Mission.status.VALIDATED,
+          learningObjectives: 'Alt objectives',
+          validatedObjectives: 'Alt validated objectives',
+          thematicIds: 'thematicWithNoNameTube',
+          competenceId: 'competenceId',
+          createdAt: new Date('2010-01-04'),
+        })];
+
+        const result = missionTransformer({ missions, challenges, tubes, thematics, skills });
+
+        expect(result[0].content).to.deep.equal({
+          'dareChallenges': [],
+          'steps': []
+        });
+      });
+    });
+  });
 });
