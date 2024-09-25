@@ -42,7 +42,7 @@ const SCHOOL_PLAYABLE_CHALLENGE_STATUSES = [Challenge.STATUSES.VALIDE, Challenge
 const SCHOOL_PLAYABLE_SKILL_STATUSES = [Skill.STATUSES.ACTIF, Skill.STATUSES.EN_CONSTRUCTION];
 
 function _getChallengeIdsForActivity(missionStatus, missionTubes, skills, challenges, activityPostfix) {
-  const activityTube = missionTubes.find(({ name }) => name.endsWith(activityPostfix));
+  const activityTube = missionTubes.find(({ name }) => name?.endsWith(activityPostfix));
 
   if (!activityTube) {
     logger.warn({ missionTubes }, `No tubes found for postFix ${activityPostfix} in mission tubes`);
