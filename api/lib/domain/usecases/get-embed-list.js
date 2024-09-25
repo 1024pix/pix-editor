@@ -1,15 +1,15 @@
 import {  pipeline, Readable } from 'node:stream';
-import _ from 'lodash';
 import csv from 'fast-csv';
-import { challengeRepository } from '../../infrastructure/repositories/index.js';
+import { releaseRepository } from '../../infrastructure/repositories/index.js';
+import { findUrlsInMarkdown } from '../../infrastructure/utils/url-utils.js';
 import { logger } from '../../infrastructure/logger.js';
 
-export async function getEmbedList(stream, dependencies = { challengeRepository }) {
-  const challenges = await dependencies.challengeRepository.list();
-  const embedUrlsToCsv = extractEmbedUrlFromChallenges(challenges);
+export async function getEmbedList(stream) {
+  const release = await releaseRepository.getLatestRelease();
+  const embedUrlsToCsv = findPixEpreuvesUrlsFromChallenges(release);
 
   const embedUrlWithToCsvHeader = [
-    ['challengeId', 'embedUrl', 'status'],
+    ['origin','competence', 'acquis' ,'challengeId', 'embedUrl', 'status'],
     ...embedUrlsToCsv
   ];
 
@@ -24,45 +24,30 @@ export async function getEmbedList(stream, dependencies = { challengeRepository 
   );
 }
 
-export function extractEmbedUrlFromChallenges(challenges) {
-  const embedList = [];
-  for (const challenge of challenges) {
-    const embedsFromChallenge = getEmbedFromChallenge(challenge);
-    if (embedsFromChallenge.length) {
-      embedsFromChallenge.forEach((embedUrl) => {
-        embedList.push([
-          challenge.id,
-          embedUrl,
-          challenge.status
-        ]);
-      });
-    }
-  }
-  return embedList.sort(byUrl);
+export function findPixEpreuvesUrlsFromChallenges(release) {
+  const challenges = release.content.challenges;
+  return challenges
+    .flatMap((challenge) => {
+      const functions = [
+        (challenge) => findUrlsInMarkdown(challenge.instruction).filter((url) => url?.includes('epreuves.pix.fr')),
+        (challenge) => [challenge.embedUrl].filter((url) => url?.includes('epreuves.pix.fr')),
+      ];
+      return functions
+        .flatMap((fun) => fun(challenge))
+        .map((url) => {
+          return [
+            release.findOriginForChallenge(challenge) ?? '',
+            release.findCompetenceNameForChallenge(challenge) ?? '',
+            release.findSkillNameForChallenge(challenge) ?? '',
+            challenge.id,
+            url,
+            challenge.status,
+          ];
+        });
+    })
+    .sort(byUrl);
 }
 
-function getEmbedFromChallenge(challenge) {
-  const regex = /https:\/\/epreuves\.pix\.fr\/.*\.html/gm;
-  const embedUrls = challenge.embedUrl && challenge.embedUrl.match(regex) ? [challenge.embedUrl] : [];
-  const urlsFromInstruction = findUrlFromInstruction(regex, challenge.instruction);
-  const allEmbedUrls =  urlsFromInstruction ? [...embedUrls, ...urlsFromInstruction] : embedUrls;
-  return _.uniq(allEmbedUrls);
-}
-
-function findUrlFromInstruction(regexWithoutParam, instruction) {
-  const regexWithOneParam = /https:\/\/epreuves\.pix\.fr\/.*\.html\?(mode|lang)+=\w+/gm;
-  const regexWithTwoParam = /https:\/\/epreuves\.pix\.fr\/.*\.html\?(mode|lang)+=\w+&(mode|lang)+=\w+/gm;
-  let url = instruction.match(regexWithTwoParam);
-  if (url) {
-    return url;
-  }
-  url = instruction.match(regexWithOneParam);
-  if (url) {
-    return url;
-  }
-  return instruction.match(regexWithoutParam);
-}
-
-function byUrl([, urlA], [, urlB]) {
+function byUrl([, , , , urlA], [, , , , urlB]) {
   return urlA.localeCompare(urlB);
 }

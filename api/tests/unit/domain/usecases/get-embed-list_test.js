@@ -1,74 +1,111 @@
-import {  describe, expect, it, } from 'vitest';
+import { describe, expect, it, } from 'vitest';
 import { domainBuilder } from '../../../test-helper.js';
-import { extractEmbedUrlFromChallenges } from '../../../../lib/domain/usecases/get-embed-list.js';
+import { findPixEpreuvesUrlsFromChallenges } from '../../../../lib/domain/usecases/get-embed-list.js';
 
-describe('Unit | Domain | Usecases | get-embed-list-from-challenge', function() {
+describe('Unit | Domain | Usecases | get-embed-list-from-release', function() {
 
-  it('should extract embed url from challenges', async () => {
+  it('should extract embed url from release', async () => {
     // given
-    const challengeWithEmbedUrl =  domainBuilder.buildChallenge({
+
+    const competence = domainBuilder.buildCompetenceForRelease({
+      id: 'competenceId',
+      name_i18n: {
+        fr: 'Ma competence',
+        en: 'My comptence'
+      },
+      origin: 'pix',
+    });
+
+    const tube = domainBuilder.buildTubeForRelease({
+      id: 'tubeId',
+      name: '@sujet',
+      competenceId: competence.id
+    });
+
+    const skill = domainBuilder.buildSkillForRelease({
+      id: 'skillId',
+      name: '@sujet1',
+      tubeId: tube.id,
+      competenceId: competence.id,
+    });
+
+    const challengeWithEmbedUrl =  domainBuilder.buildChallengeForRelease({
       id: 'challengeWithEmbedUrl',
       status: 'validé',
+      skillId: skill.id,
       embedUrl: 'https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=coucou&lang=fr'
     });
-    const challengeWithEmbedUrlDecli =  domainBuilder.buildChallenge({
+    const challengeWithEmbedUrlDecli =  domainBuilder.buildChallengeForRelease({
       id: 'challengeWithEmbedUrlDecli',
       status: 'archivé',
+      skillId: skill.id,
       embedUrl: 'https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=lilou&lang=en'
     });
-    const challengeWithEmbedUrlAstro =  domainBuilder.buildChallenge({
+    const challengeWithEmbedUrlAstro =  domainBuilder.buildChallengeForRelease({
       id: 'challengeWithEmbedUrlAstro',
       status: 'validé',
+      skillId: skill.id,
       embedUrl: 'https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/coucou.html'
     });
-    const challengeWithEmbedUrlAstroDecli =  domainBuilder.buildChallenge({
+    const challengeWithEmbedUrlAstroDecli =  domainBuilder.buildChallengeForRelease({
       id: 'challengeWithEmbedUrlAstroDecli',
       status: 'périmé',
+      skillId: skill.id,
       embedUrl: 'https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/lilou.html'
     });
-    const challengesWithInstruction = domainBuilder.buildChallenge({
+    const challengesWithInstruction = domainBuilder.buildChallengeForRelease({
       id: 'challengeWithInstruction',
       status: 'proposé',
+      skillId: skill.id,
       instruction: 'Salut clique [ici](https://epreuves.pix.fr/challengesWithInstruction.html) et ça sera bien'
     });
-    const challengesWithInstructionOneParam = domainBuilder.buildChallenge({
+    const challengesWithInstructionOneParam = domainBuilder.buildChallengeForRelease({
       id: 'challengeWithInstructionOneParam',
       status: 'proposé',
+      skillId: skill.id,
       instruction: 'Salut clique [ici](https://epreuves.pix.fr/challengesWithInstruction.html?lang=fr)heuuuu'
     });
-    const challengesWithInstructionTwoParam = domainBuilder.buildChallenge({
+    const challengesWithInstructionTwoParam = domainBuilder.buildChallengeForRelease({
       id: 'challengeWithInstructionTwoParam',
       status: 'proposé',
+      skillId: skill.id,
       instruction: 'Salut clique <a href="https://epreuves.pix.fr/challengesWithInstruction.html?mode=coucou&lang=fr">ici</a>.'
     });
-    const otherChallenge = domainBuilder.buildChallenge({
+    const otherChallenge = domainBuilder.buildChallengeForRelease({
       id: 'otherChallenge',
       status: 'validé',
+      skillId: skill.id,
     });
-    const challenges = [
-      challengeWithEmbedUrl,
-      challengeWithEmbedUrlDecli,
-      challengeWithEmbedUrlAstro,
-      challengeWithEmbedUrlAstroDecli,
-      challengesWithInstruction,
-      otherChallenge,
-      challengesWithInstructionOneParam,
-      challengesWithInstructionTwoParam,
-    ];
+
+    const release = domainBuilder.buildDomainRelease.withContent({
+      competencesFromRelease: [competence],
+      tubesFromRelease: [tube],
+      skillsFromRelease: [skill],
+      challengesFromRelease: [
+        challengeWithEmbedUrl,
+        challengeWithEmbedUrlDecli,
+        challengeWithEmbedUrlAstro,
+        challengeWithEmbedUrlAstroDecli,
+        challengesWithInstruction,
+        otherChallenge,
+        challengesWithInstructionOneParam,
+        challengesWithInstructionTwoParam,
+      ]
+    });
 
     // when
-    const result =  extractEmbedUrlFromChallenges(challenges);
+    const result = findPixEpreuvesUrlsFromChallenges(release);
 
     // then
 
     expect(result).toStrictEqual([
-      ['challengeWithInstruction','https://epreuves.pix.fr/challengesWithInstruction.html','proposé'],
-      ['challengeWithInstructionOneParam','https://epreuves.pix.fr/challengesWithInstruction.html?lang=fr','proposé'],
-      ['challengeWithInstructionTwoParam','https://epreuves.pix.fr/challengesWithInstruction.html?mode=coucou&lang=fr','proposé'],
-      ['challengeWithEmbedUrl','https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=coucou&lang=fr','validé'],
-      ['challengeWithEmbedUrlDecli','https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=lilou&lang=en','archivé'],
-      ['challengeWithEmbedUrlAstro','https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/coucou.html','validé'],
-      ['challengeWithEmbedUrlAstroDecli','https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/lilou.html','périmé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithInstruction', 'https://epreuves.pix.fr/challengesWithInstruction.html', 'proposé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithInstructionOneParam', 'https://epreuves.pix.fr/challengesWithInstruction.html?lang=fr', 'proposé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithInstructionTwoParam', 'https://epreuves.pix.fr/challengesWithInstruction.html?mode=coucou&lang=fr', 'proposé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithEmbedUrl', 'https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=coucou&lang=fr', 'validé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithEmbedUrlDecli', 'https://epreuves.pix.fr/challengeWithEmbedUrl.html?mode=lilou&lang=en', 'archivé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithEmbedUrlAstro', 'https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/coucou.html', 'validé'],
+      ['pix', 'Ma competence', '@sujet1', 'challengeWithEmbedUrlAstroDecli', 'https://epreuves.pix.fr/fr/challengeWithEmbedUrlAstro/lilou.html', 'périmé'],
     ]);
   });
 });
