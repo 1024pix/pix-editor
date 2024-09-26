@@ -26,35 +26,33 @@ export default class NewController extends Prototype {
   }
 
   @action
-  save() {
+  async save() {
     this.loader.start();
-    return this._handleIllustration(this.challenge)
-      .then((challenge) => this._handleAttachments(challenge))
+    try {
+      await this._handleIllustration(this.challenge);
+      await this._handleAttachments(this.challenge);
       // create challenge without patching Pix API cache
-      .then((challenge) => this._saveChallenge(challenge))
-      .then((challenge) => this._saveAttachments(challenge))
-      .then((challenge) => this._setVersion(challenge))
+      await this._saveChallenge(this.challenge);
+      await this._saveAttachments(this.challenge);
+      await this._setVersion(this.challenge);
       // update challenge's version and patch Pix API cache
-      .then((challenge) => this._saveChallenge(challenge))
-      .then((challenge) => {
-        this.edition = false;
-        this.send('minimize');
-        this._message('Prototype enregistré');
-        this.router.transitionTo('authenticated.competence.prototypes.single', this.currentData.getCompetence(), challenge.id);
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this._errorMessage('Erreur lors de la création');
-      })
-      .finally(() => {
-        this.loader.stop();
-      });
+      await this._saveChallenge(this.challenge);
+      this.edition = false;
+      this.send('minimize');
+      this._message('Prototype enregistré');
+      this.router.transitionTo('authenticated.competence.prototypes.single', this.currentData.getCompetence(), this.challenge.id);
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this._errorMessage('Erreur lors de la création');
+    } finally {
+      this.loader.stop();
+    }
   }
 
   async _setVersion(challenge) {
+    const skill = await challenge.skill;
     if (!challenge.isWorkbench) {
-      const skill = await challenge.skill;
       const version = skill.getNextPrototypeVersion();
       challenge.version = version;
       this._message(this.intl.t('challenge.new.version', { version }), true);

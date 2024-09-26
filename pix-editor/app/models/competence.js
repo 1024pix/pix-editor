@@ -81,12 +81,17 @@ export default class CompetenceModel extends Model {
     }, 0);
   }
 
+  get workbenchTube() {
+    const rawTubes = this.hasMany('rawTubes').value() ?? [];
+    return rawTubes.find((tube) => tube.name === '@workbench') || null;
+  }
+
   get workbenchSkill() {
     const rawTubes = this.hasMany('rawTubes').value() ?? [];
     const workbenchTube = rawTubes.find((tube) => tube.name === '@workbench');
     if (workbenchTube) {
       const rawSkills = workbenchTube.hasMany('rawSkills').value() ?? [];
-      return rawSkills[0] ;
+      return rawSkills[0];
     }
     return null;
   }

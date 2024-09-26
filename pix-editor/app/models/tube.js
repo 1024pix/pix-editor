@@ -46,6 +46,10 @@ export default class TubeModel extends Model {
     return this.sortedSkills.filter((skill) => skill.status === 'actif');
   }
 
+  get workbenchSkill() {
+    return this.rawSkillsArray.find((skill) => skill.name === '@workbench');
+  }
+
   get productionSkillCount() {
     return this.productionSkills.length;
   }
