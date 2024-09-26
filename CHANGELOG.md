@@ -1,5 +1,23 @@
 
 
+## v3.164.0 (26/09/2024)
+
+
+### :building_construction: Tech
+- [#767](https://github.com/1024pix/pix-editor/pull/767) [TECH] Récupérer la liste des embeds url depuis la release.
+- [#763](https://github.com/1024pix/pix-editor/pull/763) [TECH] Refacto de la route competences (PIX-14367).
+- [#760](https://github.com/1024pix/pix-editor/pull/760) [TECH] Internationalisation de l'alternative textuelle au média d'introduction dans les missions.
+
+### :bug: Correction
+- [#769](https://github.com/1024pix/pix-editor/pull/769) [BUGFIX] :bug: Ne lève pas une erreur quand il n'y a pas de nom au tube (pix-14512).
+- [#766](https://github.com/1024pix/pix-editor/pull/766) [BUGFIX] Supprimer le champ  `url externe à consulter` casse l'enregistrement de l'épreuve (PIX-14455).
+
+### :arrow_up: Montée de version
+- [#764](https://github.com/1024pix/pix-editor/pull/764) [BUMP] Update dependency node to v20.17.0.
+- [#745](https://github.com/1024pix/pix-editor/pull/745) [BUMP] Update dependency axios to v1.7.4 [SECURITY].
+- [#753](https://github.com/1024pix/pix-editor/pull/753) [BUMP] Update dependency webpack to v5.94.0 [SECURITY].
+- [#728](https://github.com/1024pix/pix-editor/pull/728) [BUMP] Update dependency googleapis to v136 (api).
+
 ## v3.163.0 (13/09/2024)
 
 
