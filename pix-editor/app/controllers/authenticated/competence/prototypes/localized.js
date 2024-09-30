@@ -259,7 +259,9 @@ export default class LocalizedController extends Controller {
     const removedFile = this.localizedChallenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
       return removedFile.alt;
     }
   }
@@ -284,7 +286,9 @@ export default class LocalizedController extends Controller {
     const removedFile = files.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 

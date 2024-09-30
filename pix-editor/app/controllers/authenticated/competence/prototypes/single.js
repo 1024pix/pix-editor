@@ -434,16 +434,21 @@ export default class SingleController extends Controller {
     const removedFile = this.challenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 
   @action
   async removeAttachment(removedAttachment) {
+    await this.challenge.files;
     const removedFile = this.challenge.attachments?.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 

@@ -377,6 +377,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         name: 'challenge',
         files: [],
         illustration: {
+          id: 'illustration_id',
           filename: 'file_name',
           size: 123,
           mimeType: 'image/png',
@@ -406,6 +407,7 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
         files: [],
         attachments: [
           {
+            id: 'attachment_id',
             filename: 'file_name.pdf',
             size: 123,
             mimeType: 'application/pdf',
