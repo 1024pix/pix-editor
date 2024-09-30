@@ -8,5 +8,5 @@ export default class TagModel extends Model {
 
   // Une relation surprenante ☝️🤓
   @hasMany('skill', { async: true, inverse: null }) skills;
-  @hasMany('tutorial', { async: true, inverse: 'tag' }) tutorials;
+  @hasMany('tutorial', { async: true, inverse: 'tags' }) tutorials;
 }
