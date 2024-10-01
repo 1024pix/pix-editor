@@ -1,6 +1,8 @@
 import AirtableSerializer from './airtable';
 
 export default class NoteSerializer extends AirtableSerializer {
+  primaryKey = 'Record Id';
+
   attrs = {
     text: 'Texte',
     recordId: 'Record_Id',
