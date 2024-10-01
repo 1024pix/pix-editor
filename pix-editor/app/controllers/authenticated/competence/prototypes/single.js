@@ -541,7 +541,7 @@ export default class SingleController extends Controller {
     }
     const toArchive = challenge.productionAlternatives;
     const toObsolete = challenge.draftAlternatives;
-    if (toArchive.length === 0 && toObsolete.length) {
+    if (toArchive.length === 0 && toObsolete.length === 0) {
       return Promise.resolve(challenge);
     }
     const alternativesArchive = toArchive.map((alternative) => {
