@@ -305,6 +305,7 @@ export default class SingleController extends Controller {
           this._message('Épreuve archivée');
           this.send('close');
         } catch (error) {
+          console.error(error);
           Sentry.captureException(error);
           this._errorMessage('Erreur lors de l\'archivage');
         } finally {
@@ -610,6 +611,7 @@ export default class SingleController extends Controller {
     if (!this._isProductionPrototype(challenge)) {
       return;
     }
+    await Promise.all([skill.tutoMore, skill.tutoSolution]);
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
     const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
     if (haveProposalPrototype) {
