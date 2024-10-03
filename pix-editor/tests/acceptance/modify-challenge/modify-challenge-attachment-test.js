@@ -49,7 +49,7 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     await click(findAll('[data-test-skill-cell-link]')[0]);
     await click(find('[data-test-modify-challenge-button]'));
 
-    const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
+    const file = new File([], 'challenge-attachment.png', { type: 'image/png' });
     await selectFiles('[data-test-file-input-attachment] input', file);
 
     await runTask(this, async () => { }, 400);
@@ -64,6 +64,51 @@ module('Acceptance | Modify-Challenge-Attachment', function(hooks) {
     assert.ok(storageServiceStub.uploadFile.calledOnce);
     assert.ok(attachments.every((record) => !record.isNew));
     assert.strictEqual(attachments.length, 1);
+  });
+
+  test('replace attachment', async function(assert) {
+    // given
+    class StorageServiceStub extends Service {
+      uploadFile() { }
+    }
+
+    this.owner.register('service:storage', StorageServiceStub);
+    const storageService = this.owner.lookup('service:storage');
+    const attachmentA = new File([], 'challenge-attachmentA.png', { type: 'image/png' });
+    const attachmentB = new File([], 'challenge-attachmentB.png', { type: 'image/png' });
+    const uploadFileStub = sinon.stub(storageService, 'uploadFile');
+    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentA }), filename: 'challenge-attachmentA.png', isAttachment: true }).resolves({ url: 'data-attachmentA:,', filename: 'attachment-nameA' });
+    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentB }), filename: 'challenge-attachmentB.png', isAttachment: true }).resolves({ url: 'data-attachmentB:,', filename: 'attachment-nameB' });
+
+    // when
+    // adding attachmentA
+    await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await click(find('[data-test-modify-challenge-button]'));
+    await selectFiles('[data-test-file-input-attachment] input', attachmentA);
+    await runTask(this, async () => { }, 400);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
+
+    // replace attachmentA with attachmentB
+    await click(find('[data-test-modify-challenge-button]'));
+    await click(find('[data-test-delete-attachment-button]'));
+    await selectFiles('[data-test-file-input-attachment] input', attachmentB);
+    await runTask(this, async () => { }, 400);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
+
+    const store = this.owner.lookup('service:store');
+    const attachments = store.peekAll('attachment').slice();
+
+    // then
+    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.ok(uploadFileStub.calledTwice);
+    assert.ok(attachments.every((record) => !record.isNew));
+    assert.strictEqual(attachments.length, 1);
+    assert.strictEqual(attachments[0].url, 'data-attachmentB:,');
   });
 
   test('delete attachment', async function(assert) {

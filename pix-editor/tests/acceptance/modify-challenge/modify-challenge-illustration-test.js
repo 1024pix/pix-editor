@@ -65,6 +65,51 @@ module('Acceptance | Modify-Challenge-Illustration', function(hooks) {
     assert.ok(attachments.every((record) => !record.isNew));
   });
 
+  test('replace illustration', async function(assert) {
+    // given
+    class StorageServiceStub extends Service {
+      uploadFile() { }
+    }
+
+    this.owner.register('service:storage', StorageServiceStub);
+    const storageService = this.owner.lookup('service:storage');
+    const illustrationA = new File([], 'challenge-illustrationA.png', { type: 'image/png' });
+    const illustrationB = new File([], 'challenge-illustrationB.png', { type: 'image/png' });
+    const uploadFileStub = sinon.stub(storageService, 'uploadFile');
+    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationA }) }).resolves({ url: 'data-illustrationA:,', filename: 'illustration-nameA' });
+    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationB }) }).resolves({ url: 'data-illustrationB:,', filename: 'illustration-nameB' });
+
+    // when
+    // adding illustrationA
+    await visit('/');
+    await click(findAll('[data-test-area-item]')[0]);
+    await click(findAll('[data-test-competence-item]')[0]);
+    await click(findAll('[data-test-skill-cell-link]')[0]);
+    await click(find('[data-test-modify-challenge-button]'));
+    await selectFiles('[data-test-file-input-illustration] input', illustrationA);
+    await runTask(this, async () => { }, 400);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
+
+    // replace illustrationA with illustrationB
+    await click(find('[data-test-modify-challenge-button]'));
+    await click(find('[data-test-delete-illustration-button]'));
+    await selectFiles('[data-test-file-input-illustration] input', illustrationB);
+    await runTask(this, async () => { }, 400);
+    await click(find('[data-test-save-challenge-button]'));
+    await click(find('[data-test-confirm-log-approve]'));
+
+    const store = this.owner.lookup('service:store');
+    const attachments = store.peekAll('attachment').slice();
+
+    // then
+    assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+    assert.ok(uploadFileStub.calledTwice);
+    assert.ok(attachments.every((record) => !record.isNew));
+    assert.strictEqual(attachments.length, 1);
+    assert.strictEqual(attachments[0].url, 'data-illustrationB:,');
+  });
+
   test('delete illustration', async function(assert) {
     // given
     this.server.create('challenge', {

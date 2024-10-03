@@ -157,29 +157,31 @@ export default class ChallengeForm extends Component {
   }
 
   @action
-  addIllustration(file) {
-    const attachment = {
+  async addIllustration(file) {
+    const attachmentData = {
       filename: file.name,
       size: file.size,
       mimeType: file.type,
       file,
       type: 'illustration',
-      challenge: this.args.challenge,
     };
-    this.store.createRecord('attachment', attachment);
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const files = await this.args.challenge.files;
+    files.push(attachment);
   }
 
   @action
-  addAttachment(file) {
-    const attachment = {
+  async addAttachment(file) {
+    const attachmentData = {
       filename: file.name,
       size: file.size,
       mimeType: file.type,
       file,
       type: 'attachment',
-      challenge: this.args.challenge,
     };
-    this.store.createRecord('attachment', attachment);
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const files = await this.args.challenge.files;
+    files.push(attachment);
   }
 
   @action

@@ -32,7 +32,7 @@ export default class NewController extends Alternative {
       await this._handleAttachments(this.challenge);
       // create challenge without patching Pix API cache
       await this._saveChallenge(this.challenge);
-      await this._saveAttachments(this.challenge);
+      await this._saveFiles(this.challenge);
       await this._setAlternativeVersion(this.challenge);
       // update challenge's alternative version and patch Pix API cache
       await this._saveChallenge(this.challenge);
@@ -51,7 +51,7 @@ export default class NewController extends Alternative {
 
   async _setAlternativeVersion(challenge) {
     const skill = challenge.skill;
-    skill.reload();
+    await skill.reload();
     const version = await this.currentData.getPrototype().getNextAlternativeVersion();
     challenge.alternativeVersion = version;
   }

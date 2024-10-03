@@ -46,8 +46,14 @@ module('Acceptance | Create-Challenge', function(hooks) {
     }
 
     this.owner.register('service:storage', StorageServiceStub);
-    const storageServiceStub = this.owner.lookup('service:storage');
-    sinon.stub(storageServiceStub, 'uploadFile').resolves({ url: 'data:,', filename: 'attachment-name' });
+    const storageService = this.owner.lookup('service:storage');
+    const illustrationFile = new File([], 'challenge-illustration.png', { type: 'image/png' });
+    const attachmentFile = new File([], 'challenge-attachment.csv', { type: 'text/csv' });
+    const uploadFileStub = sinon.stub(storageService, 'uploadFile');
+    uploadFileStub.withArgs({ file: sinon.match({ file: illustrationFile }) })
+      .resolves({ url: 'data_illustration:,', filename: 'illustration-name' });
+    uploadFileStub.withArgs({ file: sinon.match({ file: attachmentFile }), filename: 'challenge-attachment.csv', isAttachment: true })
+      .resolves({ url: 'data_attachment:,', filename: 'attachment-name' });
 
     // when
     await visit('/');
@@ -55,18 +61,18 @@ module('Acceptance | Create-Challenge', function(hooks) {
     await click(findAll('[data-test-competence-item]')[0]);
     await click(find('.workbench'));
     await click(find('[data-test-create-new-challenge]'));
-    const file = new File([], 'challenge-illustration.png', { type: 'image/png' });
-    await selectFiles('[data-test-file-input-illustration] input', file);
+    await selectFiles('[data-test-file-input-illustration] input', illustrationFile);
+    await selectFiles('[data-test-file-input-attachment] input', attachmentFile);
     await click(find('[data-test-save-challenge-button]'));
 
-    const store = this.owner.lookup('service:store');
-
     // then
-    const attachments = await store.peekAll('attachment');
+    const store = this.owner.lookup('service:store');
+    const attachments = store.peekAll('attachment').slice();
     assert.dom('[data-test-main-message]').hasText('Prototype enregistré');
-    assert.ok(storageServiceStub.uploadFile.calledOnce);
+    assert.ok(uploadFileStub.calledTwice);
     assert.ok(attachments.every((record) => !record.isNew));
+    assert.strictEqual(attachments[0].url, 'data_illustration:,');
+    assert.strictEqual(attachments[1].url, 'data_attachment:,');
   });
-
 });
 

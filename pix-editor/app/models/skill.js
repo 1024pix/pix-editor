@@ -175,8 +175,8 @@ export default class SkillModel extends Model {
   async pinRelationships() {
     const [tutoMore, tutoSolution] = await Promise.all([this.tutoMore, this.tutoSolution]);
     this._pinnedRelationships = {
-      tutoSolution: tutoSolution.slice(),
-      tutoMore: tutoMore.slice(),
+      tutoSolution: tutoSolution?.slice() ?? [],
+      tutoMore: tutoMore?.slice() ?? [],
     };
   }
 

@@ -1,6 +1,5 @@
 import { setupTest } from 'ember-qunit';
 import { module, test } from 'qunit';
-import sinon from 'sinon';
 
 import createGlimmerComponent from '../../../helpers/create-glimmer-component';
 
@@ -12,78 +11,6 @@ module('unit | Component | form/challenge', function(hooks) {
     component = createGlimmerComponent('component:form/challenge', {
       challenge: {},
     });
-  });
-
-  test('it should add illustration', function(assert) {
-    // given
-    const createRecordStub = sinon.stub();
-    component.store = {
-      createRecord: createRecordStub,
-    };
-
-    const file = {
-      name: 'file_name',
-      size: 123,
-      type: 'image/png',
-    };
-
-    const challenge = {
-      id: 'recchallenge_1',
-      name: 'challenge',
-    };
-
-    component.args.challenge = challenge;
-
-    const expectedAttachment = {
-      filename: 'file_name',
-      size: 123,
-      mimeType: 'image/png',
-      file,
-      type: 'illustration',
-      challenge,
-    };
-
-    // when
-    component.addIllustration(file);
-
-    // then
-    assert.ok(createRecordStub.calledWith('attachment', expectedAttachment));
-  });
-
-  test('it should add attachment', async function(assert) {
-    //given
-    const createRecordStub = sinon.stub();
-    component.store = {
-      createRecord: createRecordStub,
-    };
-
-    const file = {
-      name: 'file_name',
-      size: 123,
-      type: 'application/msdoc',
-    };
-
-    const challenge = {
-      id: 'recchallenge_1',
-      name: 'challenge',
-    };
-
-    component.args.challenge = challenge;
-
-    const expectedAttachment = {
-      filename: 'file_name',
-      size: 123,
-      mimeType: 'application/msdoc',
-      file,
-      type: 'attachment',
-      challenge,
-    };
-
-    // when
-    component.addAttachment(file);
-
-    // then
-    assert.ok(createRecordStub.calledWith('attachment', expectedAttachment));
   });
 
   test('it should set locales properly', async function(assert) {

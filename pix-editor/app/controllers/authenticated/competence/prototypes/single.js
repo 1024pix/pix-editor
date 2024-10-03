@@ -221,7 +221,7 @@ export default class SingleController extends Controller {
     return Promise.resolve(this.challenge)
       .then((challenge) => this._handleIllustration(challenge))
       .then((challenge) => this._handleAttachments(challenge))
-      .then((challenge) => this._saveAttachments(challenge))
+      .then((challenge) => this._saveFiles(challenge))
       .then((challenge) => this._saveChallenge(challenge))
       .then((challenge) => this._handleChangelog(challenge, changelog))
       .then(() => {
@@ -680,8 +680,8 @@ export default class SingleController extends Controller {
     if (!challenge.baseNameUpdated()) {
       return;
     }
-    const attachments = await challenge.attachments;
-    for (const file of attachments.toArray()) {
+    const attachments = (await challenge.attachments)?.slice() ?? [];
+    for (const file of attachments) {
       file.filename = this._getAttachmentFullFilename(challenge, file.filename);
       await this.storage.renameFile(file.url, file.filename);
     }
@@ -697,8 +697,8 @@ export default class SingleController extends Controller {
     return challenge.save();
   }
 
-  async _saveAttachments(challenge) {
-    const files = await challenge.files;
+  async _saveFiles(challenge) {
+    const files = (await challenge.files)?.slice() ?? [];
     for (const file of files) {
       if (file.cloneBeforeSave) {
         file.url = await this.storage.cloneFile(file.url);

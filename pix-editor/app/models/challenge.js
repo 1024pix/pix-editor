@@ -207,6 +207,11 @@ export default class ChallengeModel extends Model {
     return this._firstAttachmentBaseName;
   }
 
+  set attachmentBaseName(value) {
+    this._definedBaseName = value;
+    return value;
+  }
+
   get _firstAttachmentBaseName() {
     const attachments = this.attachments;
     if (attachments && attachments.length > 0) {
@@ -222,11 +227,6 @@ export default class ChallengeModel extends Model {
   get otherLocalizedChallenges() {
     const localizedChallenges = this.hasMany('localizedChallenges').value() ?? [];
     return localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
-  }
-
-  set attachmentBaseName(value) {
-    this._definedBaseName = value;
-    return value;
   }
 
   archive() {
@@ -323,7 +323,7 @@ export default class ChallengeModel extends Model {
   }
 
   async _cloneAttachments(newChallenge) {
-    const files = this.hasMany('files').value() ?? [];
+    const files = (await this.files)?.slice() ?? [];
     files.map((attachment) => {
       const data = this._attachmentToJSON(attachment);
       this.store.createRecord('attachment', { ...data, challenge: newChallenge, cloneBeforeSave: true });

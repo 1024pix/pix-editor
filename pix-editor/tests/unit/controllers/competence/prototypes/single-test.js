@@ -35,70 +35,6 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
     controller._message = messageStub;
   });
 
-  module('It should save challenge', function(hooks) {
-    let handleIllustrationStub, handleAttachmentStub, saveChallengeStub, saveAttachmentsStub, handleChangelogStub,
-      challenge;
-
-    hooks.beforeEach(function() {
-
-      challenge = {
-        id: 'rec123456',
-      };
-      controller.model = challenge;
-
-      handleIllustrationStub = sinon.stub().resolves(challenge);
-      controller._handleIllustration = handleIllustrationStub;
-
-      handleAttachmentStub = sinon.stub().resolves(challenge);
-      controller._handleAttachments = handleAttachmentStub;
-
-      saveChallengeStub = sinon.stub().resolves(challenge);
-      controller._saveChallenge = saveChallengeStub;
-
-      saveAttachmentsStub = sinon.stub().resolves(challenge);
-      controller._saveAttachments = saveAttachmentsStub;
-
-      handleChangelogStub = sinon.stub().resolves(challenge);
-      controller._handleChangelog = handleChangelogStub;
-
-      controller.wasMaximized = true;
-    });
-
-    test('it should call handler with appropriate args', async function(assert) {
-      // given
-      const changelog = 'some changelog';
-
-      // when
-      await controller.saveChallengeCallback(changelog);
-
-      // then
-      assert.ok(startStub.calledOnce);
-      assert.ok(handleIllustrationStub.calledWith(challenge));
-      assert.ok(handleAttachmentStub.calledWith(challenge));
-      assert.ok(saveChallengeStub.calledWith(challenge));
-      assert.ok(saveAttachmentsStub.calledWith(challenge));
-      assert.ok(handleChangelogStub.calledWith(challenge, changelog));
-      assert.ok(messageStub.calledWith('Épreuve mise à jour'));
-      assert.ok(stopStub.calledOnce);
-
-    });
-
-    test('it should reinitialize edition', async function(assert) {
-      // given
-      controller.edition = true;
-      controller.displayAlternativeInstructionsField = true;
-      controller.displaySolutionToDisplayField = true;
-
-      // when
-      await controller.saveChallengeCallback();
-
-      // then
-      assert.notOk(controller.displayAlternativeInstructionsField);
-      assert.notOk(controller.displaySolutionToDisplayField);
-      assert.notOk(controller.edition);
-    });
-  });
-
   module('#prototype actions', function(hooks) {
     let proposalPrototype1_1,
       validatePrototype2_1,
@@ -551,33 +487,6 @@ module('Unit | Controller | competence/prototypes/single', function(hooks) {
       assert.ok(loaderServiceStub.start.calledWith('Envoi de l\'illustration...'));
       assert.deepEqual(challenge.illustration, expectedIllustration);
     });
-  });
-
-  module('_saveAttachments', function(hooks) {
-    let challenge;
-    let storeServiceStub;
-    let controller;
-
-    hooks.beforeEach(function() {
-      challenge = EmberObject.create({
-        id: 'recChallenge',
-        files: [
-          { save: sinon.stub().resolves() },
-        ],
-      });
-
-      controller = this.owner.lookup('controller:authenticated.competence/prototypes/single');
-      controller.store = storeServiceStub;
-    });
-
-    test('it saves attachments', async function(assert) {
-      // when
-      await controller._saveAttachments(challenge);
-
-      // then
-      assert.ok(challenge.files[0].save.calledWith());
-    });
-
   });
 
   module('_handleAttachments', function(hooks) {
