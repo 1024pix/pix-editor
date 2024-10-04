@@ -12,6 +12,7 @@ function preparePayloadForCreateAndUpdate(payload, adapterOptions) {
   payload.data.attributes = {};
   payload.data.attributes.name = adapterOptions.name;
   payload.data.attributes.status = adapterOptions.status;
+  payload.data.attributes['card-image-url'] = adapterOptions.cardImageUrl;
   payload.data.attributes['competence-id'] = adapterOptions.competenceId;
   payload.data.attributes['thematic-ids'] = adapterOptions.thematicIds;
   payload.data.attributes['learning-objectives'] = adapterOptions.learningObjectives;

@@ -49,6 +49,7 @@ export async function listActive() {
 export async function save(mission) {
   const [insertedMission] = await knex('missions').insert({
     id: mission.id,
+    cardImageUrl: mission.cardImageUrl,
     competenceId: mission.competenceId,
     thematicIds: mission.thematicIds,
     status: mission.status,
@@ -69,6 +70,7 @@ function _toDomain(mission, translations) {
   const translationsByMissionId = _.groupBy(translations, 'entityId');
   return new Mission({
     id: mission.id,
+    cardImageUrl: mission.cardImageUrl,
     createdAt: mission.createdAt,
     status: mission.status,
     competenceId: mission.competenceId,

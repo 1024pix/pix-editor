@@ -11,6 +11,7 @@ export default class MissionForm extends Component {
   @service store;
 
   @tracked name = new NameField();
+  @tracked cardImageUrl = null;
   @tracked thematicIds = new ThematicIdsField();
   @tracked selectedCompetenceId = new CompetenceIdField();
   @tracked selectedStatus = 'ACTIVE';
@@ -29,6 +30,7 @@ export default class MissionForm extends Component {
     if (this.editMode()) {
       this.name.setValue(this.args.mission.name);
       this.name.validate();
+      this.cardImageUrl = this.args.mission.cardImageUrl;
       this.selectedStatus = this.args.mission.status;
       this.validatedObjectives = this.args.mission.validatedObjectives;
       this.learningObjectives = this.args.mission.learningObjectives;
@@ -79,6 +81,7 @@ export default class MissionForm extends Component {
     this.isSubmitting = true;
     const formData = {
       name: this.name.getValueForSubmit(),
+      cardImageUrl: this.cardImageUrl,
       competenceId: this.selectedCompetenceId.value,
       thematicIds: this.thematicIds.getValueForSubmit(),
       status: this.selectedStatus,
@@ -109,6 +112,11 @@ export default class MissionForm extends Component {
   validateName() {
     this.name.validate();
     this.checkFormValidity();
+  }
+
+  @action
+  updateCardImageUrl(event) {
+    this.cardImageUrl = event.target.value;
   }
 
   @action

@@ -73,6 +73,8 @@ module('Acceptance | Missions | Creation', function(hooks) {
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
+      await fillByLabel('URL de l\'image de la carte', 'https://example.pix.fr/ma-image.png');
+
       await clickByText('Compétence');
       await screen.findByRole('listbox');
 

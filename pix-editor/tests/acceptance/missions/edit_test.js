@@ -24,6 +24,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
     this.server.create('mission', {
       id: 2,
       name: 'Mission 1',
+      cardImageUrl: 'https://example.net/card-image.png',
       competenceId: 'recCompetence1.1',
       createdAt: '2023/12/11',
       status: 'VALIDATED',
@@ -53,6 +54,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       this.server.create('mission', {
         id: 3,
         name: 'Mission',
+        cardImageUrl: 'https://example.net/card-image.png',
         competenceId: 'recCompetence1.1',
         thematicIds: '',
         createdAt: '2023/12/11',
@@ -67,6 +69,8 @@ module('Acceptance | Missions | Edit', function(hooks) {
       await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
       await triggerEvent(find('#mission-name'), 'keyup', '');
 
+      await fillByLabel('URL de l\'image de la carte', 'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg');
+
       await clickByText('Compétence');
       await screen.findByRole('listbox');
       await click(screen.getByRole('option', { name: 'Notre compétence' }));
@@ -78,6 +82,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       // then
       assert.strictEqual(currentURL(), '/missions/3');
       assert.dom(screen.getByText('Nouvelle mission de test')).exists();
+      assert.dom(screen.getByText('https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg')).exists();
       assert.dom(screen.getByText('http://example.com')).exists();
       assert.dom(screen.getByText('http://doc.com')).exists();
     });
@@ -87,6 +92,7 @@ module('Acceptance | Missions | Edit', function(hooks) {
       this.server.create('mission', {
         id: 3,
         name: 'Mission',
+        cardImageUrl: 'https://example.net/image.png',
         competenceId: 'recCompetence1.1',
         thematicIds: '',
         createdAt: '2023/12/11',

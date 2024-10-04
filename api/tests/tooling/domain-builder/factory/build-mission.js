@@ -3,6 +3,7 @@ import { Mission } from '../../../../lib/domain/models/index.js';
 export function buildMission({
   id = 3,
   name = 'Ma mission',
+  cardImageUrl = null,
   competenceId = 'recCompetence1',
   thematicIds = 'recThematic1',
   createdAt = new Date('2023-10-14'),
@@ -17,6 +18,7 @@ export function buildMission({
   return new Mission ({
     id,
     name_i18n: { fr: name },
+    cardImageUrl,
     competenceId,
     thematicIds,
     createdAt,

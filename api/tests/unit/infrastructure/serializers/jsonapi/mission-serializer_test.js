@@ -10,6 +10,7 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
         id: 12,
         learningObjectives_i18n: { fr: 'learning objectives-value', },
         name_i18n: { fr: 'Mission Name', },
+        cardImageUrl: 'card-image-url',
         validatedObjectives_i18n: { fr: 'validated-objectives-value', },
         competenceId: 'rec12E12EFZF',
         thematicIds: 'someThematicIds',
@@ -25,6 +26,7 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
       const attributes = {
         id: expectedMission.id,
         name: expectedMission.name_i18n.fr,
+        'card-image-url': expectedMission.cardImageUrl,
         'competence-id': expectedMission.competenceId,
         'thematic-ids': expectedMission.thematicIds,
         'learning-objectives': expectedMission.learningObjectives_i18n.fr,
@@ -46,12 +48,14 @@ describe('Unit | Serializer | JSONAPI | mission-serializer', () => {
 
       const attributes = {
         id: expectedMission.id,
+        'card-image-url': '',
         'introduction-media-url': '',
         'introduction-media-type': '',
         'documentation-url': '',
       };
       const deserializedMission = deserializeMission(attributes);
 
+      expect(deserializedMission.cardImageUrl).to.be.null;
       expect(deserializedMission.introductionMediaUrl).to.be.null;
       expect(deserializedMission.introductionMediaType).to.be.null;
       expect(deserializedMission.documentationUrl).to.be.null;

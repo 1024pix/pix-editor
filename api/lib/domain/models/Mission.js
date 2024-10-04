@@ -2,6 +2,7 @@ export class Mission {
   constructor({
     id,
     name_i18n,
+    cardImageUrl,
     competenceId,
     thematicIds,
     createdAt,
@@ -15,6 +16,7 @@ export class Mission {
   }) {
     this.id = id;
     this.name_i18n = name_i18n;
+    this.cardImageUrl = cardImageUrl;
     this.competenceId = competenceId;
     this.thematicIds = thematicIds;
     this.createdAt = createdAt;

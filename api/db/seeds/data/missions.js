@@ -3,6 +3,7 @@ import { Mission } from '../../../lib/domain/models/Mission.js';
 export function buildMissions(databaseBuilder) {
   databaseBuilder.factory.buildMission({
     name: 'Mission test active',
+    cardImageUrl: 'https://example.net/image.png',
     competenceId: 'competence1NC9NE3IIOa0ym',
     learningObjectives: 'Que tu sois le meilleur',
     thematicIds: 'recOO8OsMJpe5cZzi,recOO8OsMJpe5cZzi',
@@ -13,6 +14,7 @@ export function buildMissions(databaseBuilder) {
 
   databaseBuilder.factory.buildMission({
     name: 'Mission test inactive',
+    cardImageUrl: 'https://example.net/image.png',
     competenceId: 'competence2k2eVZ2GRLwqFL',
     learningObjectives: 'Y\'en a plus',
     thematicIds: 'rec98EBX88mkQR3gx,rec98EBX88mkQR3gx',
@@ -22,6 +24,7 @@ export function buildMissions(databaseBuilder) {
   });
   databaseBuilder.factory.buildMission({
     name: 'Mission test inactive',
+    cardImageUrl: 'https://example.net/image.png',
     competenceId: 'competence1NC9NE3IIOa0ym',
     learningObjectives: 'Y\'en a plus',
     thematicIds: 'recOO8OsMJpe5cZzi,recj6ITlVfU0vByrR,recRSPkFIgrY6Ps61',
@@ -31,6 +34,7 @@ export function buildMissions(databaseBuilder) {
   });
   databaseBuilder.factory.buildMission({
     name: 'Mission test expérimentale',
+    cardImageUrl: 'https://example.net/image.png',
     competenceId: 'competence1NC9NE3IIOa0ym',
     learningObjectives: 'Y\'en a plus',
     thematicIds: 'recOO8OsMJpe5cZzi,recj6ITlVfU0vByrR,recRSPkFIgrY6Ps61',
