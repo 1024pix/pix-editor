@@ -50,8 +50,6 @@ export default class NewController extends Alternative {
   }
 
   async _setAlternativeVersion(challenge) {
-    const skill = challenge.skill;
-    await skill.reload();
     const version = await this.currentData.getPrototype().getNextAlternativeVersion();
     challenge.alternativeVersion = version;
   }
