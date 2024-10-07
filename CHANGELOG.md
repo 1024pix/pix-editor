@@ -1,5 +1,12 @@
 
 
+## v3.165.0 (07/10/2024)
+
+
+### :building_construction: Tech
+- [#770](https://github.com/1024pix/pix-editor/pull/770) [TECH] Mise à jour d'Ember en v5 (PIX-14133).
+- [#771](https://github.com/1024pix/pix-editor/pull/771) [TECH] Utiliser un service plutot que passer par le model pour synchroniser les traductions (PIX-14629).
+
 ## v3.164.0 (26/09/2024)
 
 
