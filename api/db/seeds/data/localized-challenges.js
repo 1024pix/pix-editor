@@ -33,10 +33,16 @@ export async function localizedChallengesBuilder(databaseBuilder, translations) 
   const localizedChallenges = challenges.flatMap((challenge) => {
     const challengeId = challenge.get('id persistant');
     const countryName = challenge.get('Géographie');
+    const embedUrl = challenge.get('Embed URL');
     const primaryLocale = convertLanguagesToLocales(challenge.get('Langues'))?.sort()?.[0] ?? 'fr';
     const countryCode = getCountryCode(countryName);
     return [
-      { id: challengeId, challengeId, locale: primaryLocale, embedUrl: challenge.get('Embed URL') },
+      {
+        id: challengeId,
+        challengeId,
+        locale: primaryLocale,
+        embedUrl,
+      },
       ...challengesLocales[challengeId]
         ?.filter((locale) => locale !== primaryLocale)
         .map((locale) => ({
