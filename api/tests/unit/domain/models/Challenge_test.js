@@ -212,6 +212,35 @@ describe('Unit | Domain | Challenge', () => {
     });
   });
 
+  describe('#get isPrototype', () => {
+    it('should return true when challenge is isPrototype', () => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.true;
+    });
+
+    it.each(Object.keys(Challenge.GENEALOGIES).filter((statusKey) => Challenge.STATUSES[statusKey] !== Challenge.STATUSES.PROTOTYPE)
+    )('should return false when status key is %s', (statusKey) => {
+      // given
+      const challenge  = domainBuilder.buildChallenge({
+        status: Challenge.STATUSES[statusKey],
+      });
+
+      // when
+      const isPrototype = challenge.isPrototype;
+
+      // then
+      expect(isPrototype).to.be.false;
+    });
+  });
+
   describe('#get instruction', () => {
     it('should return instruction from translations', () => {
       // given

@@ -231,6 +231,10 @@ export class Challenge {
     return this.status === Challenge.STATUSES.PERIME;
   }
 
+  get isPrototype() {
+    return this.genealogy === Challenge.GENEALOGIES.PROTOTYPE;
+  }
+
   get primaryLocale() {
     return this.#primaryLocales[0];
   }
