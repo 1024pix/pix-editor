@@ -15,6 +15,12 @@ export class LocalizedChallenge {
     // remove me when all doubt is lifted (because in model challenge, geography references a country name !)
     geography,
     urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -25,6 +31,11 @@ export class LocalizedChallenge {
     this.status = status;
     this.geography = geography;
     this.urlsToConsult = urlsToConsult;
+    this.requireGafamWebsiteAccess = requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = deafAndHardOfHearing;
+    this.isAwarenessChallenge = isAwarenessChallenge;
+    this.toRephrase = toRephrase;
   }
 
   static get STATUSES() {
@@ -32,6 +43,14 @@ export class LocalizedChallenge {
       PLAY: Challenge.STATUSES.VALIDE,
       PAUSE: Challenge.STATUSES.PROPOSE,
       PRIMARY: null,
+    };
+  }
+
+  static get DEAF_AND_HARD_OF_HEARING_VALUES() {
+    return {
+      OK: 'OK',
+      KO: 'KO',
+      RAS: 'RAS',
     };
   }
 

@@ -7,6 +7,7 @@ import {
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const { filter, get, list, update } = challengeRepository;
 
@@ -38,18 +39,33 @@ describe('Unit | Repository | challenge-repository', () => {
           challengeId: '1',
           locale: 'fr',
           geography: 'PH',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: '1_en',
           challengeId: '1',
           locale: 'en',
           geography: 'LA',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: '2',
           challengeId: '2',
           locale: 'fr',
           geography: 'BR',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: true,
+          toRephrase: false,
         }),
       ]);
       vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [], geography: 'DeprecatedLand' }, { id: 2, locales: [], geography: 'DeprecatedLand' }]);
@@ -66,10 +82,22 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challenges[0].proposals).to.equal('proposals');
       expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
       expect(challenges[0].geography).to.equal('Philippines');
+      expect(challenges[0].requireGafamWebsiteAccess).to.equal(true);
+      expect(challenges[0].isIncompatibleIpadCertif).to.equal(true);
+      expect(challenges[0].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
+      expect(challenges[0].isAwarenessChallenge).to.equal(true);
+      expect(challenges[0].toRephrase).to.equal(true);
+
       expect(challenges[1].instruction).to.equal('instruction 2');
       expect(challenges[1].proposals).to.equal('proposals 2');
       expect(challenges[1].alternativeLocales).to.deep.equal([]);
       expect(challenges[1].geography).to.equal('Brésil');
+      expect(challenges[1].requireGafamWebsiteAccess).to.equal(false);
+      expect(challenges[1].isIncompatibleIpadCertif).to.equal(true);
+      expect(challenges[1].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
+      expect(challenges[1].isAwarenessChallenge).to.equal(true);
+      expect(challenges[1].toRephrase).to.equal(false);
+
     });
   });
   describe('#filter', () => {

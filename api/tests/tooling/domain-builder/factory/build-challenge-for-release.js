@@ -1,4 +1,5 @@
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 export function buildChallengeForRelease({
   id = 'recwWzTquPlvIl4So',
@@ -33,6 +34,11 @@ export function buildChallengeForRelease({
   alternativeVersion = 2,
   accessibility1 = ChallengeForRelease.ACCESSIBILITY1.OK,
   accessibility2 = ChallengeForRelease.ACCESSIBILITY2.RAS,
+  requireGafamWebsiteAccess = false,
+  isIncompatibleIpadCertif = false,
+  deafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+  isAwarenessChallenge = false,
+  toRephrase = false,
 } = {}) {
 
   return new ChallengeForRelease({
@@ -68,5 +74,10 @@ export function buildChallengeForRelease({
     alternativeVersion,
     accessibility1,
     accessibility2,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   });
 }

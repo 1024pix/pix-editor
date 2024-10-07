@@ -196,9 +196,11 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
       ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
     ]);
   });
+
   return new Challenge({
     ...challengeDto,
     translations,
     localizedChallenges,
   });
+
 }

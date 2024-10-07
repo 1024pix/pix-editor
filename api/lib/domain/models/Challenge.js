@@ -389,6 +389,11 @@ export class Challenge {
     this.embedUrl = localizedChallenge.embedUrl ?? localizedChallenge.defaultEmbedUrl;
     this.geography = getCountryName(localizedChallenge.geography);
     this.urlsToConsult = this.#translateUrlsToConsult(localizedChallenge);
+    this.requireGafamWebsiteAccess = this.#primaryLocalizedChallenge.requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = this.#primaryLocalizedChallenge.isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = this.#primaryLocalizedChallenge.deafAndHardOfHearing;
+    this.isAwarenessChallenge = this.#primaryLocalizedChallenge.isAwarenessChallenge;
+    this.toRephrase = this.#primaryLocalizedChallenge.toRephrase;
 
     this.files = this.#allFiles
       ?.filter(({ localizedChallengeId }) => localizedChallengeId === this.id)
