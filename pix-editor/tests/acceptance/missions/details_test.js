@@ -5,7 +5,7 @@ import { setupApplicationTest } from 'ember-qunit';
 import { authenticateSession } from 'ember-simple-auth/test-support';
 import { module, test } from 'qunit';
 
-module('Acceptance | Missions | Detail', function(hooks) {
+module('Acceptance | Missions | Details', function(hooks) {
   setupApplicationTest(hooks);
   setupMirage(hooks);
 
