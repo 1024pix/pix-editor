@@ -137,6 +137,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
           expect(result).to.deep.equal([{
             id: 2,
+            cardImageUrl: null,
             name_i18n: { fr: 'Alt name' },
             competenceId: 'competenceId',
             thematicIds: 'thematicStep1,thematicStep2,thematicDefiVide',
@@ -211,6 +212,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
           expect(result).to.deep.equal([{
             id: 2,
+            cardImageUrl: null,
             name_i18n: { fr: 'Alt name' },
             competenceId: 'competenceId',
             thematicIds: 'thematicStep1,thematicDefiVide',
@@ -310,6 +312,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -383,6 +386,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -461,6 +465,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -506,6 +511,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -550,6 +556,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -592,6 +599,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -633,6 +641,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -671,6 +680,7 @@ describe('Unit | Transformer | mission-transformer', function() {
 
         expect(result).to.deep.equal([{
           id: 2,
+          cardImageUrl: null,
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicStep1,thematicDefiVide',
@@ -709,6 +719,7 @@ describe('Unit | Transformer | mission-transformer', function() {
         expect(result).to.deep.equal([{
           id: 2,
           name_i18n: { fr: 'Alt name' },
+          cardImageUrl: null,
           competenceId: 'competenceId',
           thematicIds: null,
           learningObjectives_i18n: { fr: 'Alt objectives' },

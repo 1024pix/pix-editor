@@ -156,6 +156,7 @@ async function mockCurrentContent() {
     missions: [{
       id: 1,
       name_i18n: { fr: 'Ma première mission' },
+      cardImageUrl: 'https://example.com/image0.png',
       competenceId: 'competenceId',
       thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
@@ -173,6 +174,7 @@ async function mockCurrentContent() {
     }, {
       id: 2,
       name_i18n: { fr: 'Alt name' },
+      cardImageUrl: 'https://example.com/image1.png',
       competenceId: 'competenceId',
       thematicIds: 'thematicId,thematicId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
@@ -236,6 +238,7 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildMission({
     id: 1,
     name: 'Ma première mission',
+    cardImageUrl: 'https://example.com/image0.png',
     competenceId: 'competenceId',
     thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Que tu sois le meilleur',
@@ -249,6 +252,7 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildMission({
     id: 2,
     name: 'Alt name',
+    cardImageUrl: 'https://example.com/image1.png',
     competenceId: 'competenceId',
     thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Alt objectives',
@@ -262,6 +266,7 @@ async function mockCurrentContent() {
   databaseBuilder.factory.buildMission({
     id: 3,
     name: 'Alt name',
+    cardImageUrl: 'https://example.com/image2.png',
     competenceId: 'competenceId',
     thematicIds: 'thematicId,thematicId',
     learningObjectives: 'Alt objectives',
@@ -500,6 +505,7 @@ async function mockContentForRelease() {
     missions: [new MissionForRelease({
       id: 1,
       name_i18n: { fr: 'Ma première mission' },
+      cardImageUrl: 'https://example.com/image2.png',
       competenceId: 'competenceId',
       learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
       validatedObjectives_i18n: { fr: 'Rien' },
@@ -511,6 +517,7 @@ async function mockContentForRelease() {
     }), new MissionForRelease({
       id: 2,
       name_i18n: { fr: 'Alt name' },
+      cardImageUrl: 'https://example.com/image2.png',
       competenceId: 'competenceId',
       learningObjectives_i18n: { fr: 'Alt objectives' },
       validatedObjectives_i18n: { fr: 'Alt validated objectives' },
@@ -779,6 +786,7 @@ describe('Acceptance | Controller | release-controller', () => {
         databaseBuilder.factory.buildMission({
           id: 1,
           name: 'Ma première mission',
+          cardImageUrl: 'https://example.com/image2.png',
           competenceId: 'competenceId',
           thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Que tu sois le meilleur',
@@ -792,6 +800,7 @@ describe('Acceptance | Controller | release-controller', () => {
         databaseBuilder.factory.buildMission({
           id: 2,
           name: 'Alt name',
+          cardImageUrl: 'https://example.com/image2.png',
           competenceId: 'competenceId',
           thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Alt objectives',
@@ -805,6 +814,7 @@ describe('Acceptance | Controller | release-controller', () => {
         databaseBuilder.factory.buildMission({
           id: 3,
           name: 'Alt name',
+          cardImageUrl: 'https://example.com/image2.png',
           competenceId: 'competenceId',
           thematicIds: 'thematicId,thematicId',
           learningObjectives: 'Alt objectives',

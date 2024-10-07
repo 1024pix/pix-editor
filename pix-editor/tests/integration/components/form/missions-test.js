@@ -23,6 +23,8 @@ module('Integration | Component | mission', function(hooks) {
     await fillByLabel('* Nom de la mission', 'Nouvelle mission de test');
     await triggerEvent(find('#mission-name'), 'keyup', '');
 
+    await fillByLabel('URL de l\'image de la carte', 'https://images.pix.fr/badges/Pix_Plus-Donnee-Visualisation_des_donnees.svg.svg');
+
     await clickByText('Compétence');
     await screen.findByRole('listbox');
     await click(screen.getByRole('option', { name: 'Notre compétence' }));

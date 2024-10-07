@@ -5,6 +5,7 @@ import { buildTranslation } from './build-translation.js';
 export function buildMission({
   id = databaseBuffer.nextId++,
   name = 'Ma première mission',
+  cardImageUrl = null,
   competenceId = 'competenceId',
   learningObjectives = 'Que tu sois le meilleur',
   thematicIds = 'thematicIds',
@@ -18,7 +19,7 @@ export function buildMission({
   createdAt = new Date('2010-01-04'),
 } = {}) {
 
-  const values = { id, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, documentationUrl };
+  const values = { id, cardImageUrl, competenceId, thematicIds, createdAt, status, introductionMediaUrl, introductionMediaType, documentationUrl };
 
   buildTranslation({
     key: `mission.${id}.name`,

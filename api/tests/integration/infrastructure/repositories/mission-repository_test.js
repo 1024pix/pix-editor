@@ -34,6 +34,7 @@ describe('Integration | Repository | mission-repository', function() {
         expect(result).to.deep.equal(new Mission({
           id: 1,
           name_i18n: { fr: 'Ma première mission' },
+          cardImageUrl: null,
           competenceId: 'competenceId',
           thematicIds: 'thematicIds',
           learningObjectives_i18n: { fr: 'Que tu sois le meilleur' },
@@ -51,9 +52,10 @@ describe('Integration | Repository | mission-repository', function() {
   describe('#findAllMissions', function() {
     context('When there are missions', function() {
       it('should return all missions', async function() {
-        databaseBuilder.factory.buildMission({ id: 1, status: Mission.status.VALIDATED });
+        databaseBuilder.factory.buildMission({ id: 1, cardImageUrl: null, status: Mission.status.VALIDATED });
         databaseBuilder.factory.buildMission({
           id: 2,
+          cardImageUrl: 'https://images.pix.fr/mission-card-image.png',
           name: 'Alt name',
           status: Mission.status.INACTIVE,
           learningObjectives: 'Alt objectives',
@@ -65,6 +67,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         expect(results.missions).to.deep.equal([new Mission({
           id: 1,
+          cardImageUrl: null,
           name_i18n: { fr: 'Ma première mission' },
           competenceId: 'competenceId',
           thematicIds: 'thematicIds',
@@ -78,6 +81,7 @@ describe('Integration | Repository | mission-repository', function() {
           createdAt: new Date('2010-01-04'),
         }), new Mission({
           id: 2,
+          cardImageUrl: 'https://images.pix.fr/mission-card-image.png',
           name_i18n: { fr: 'Alt name' },
           competenceId: 'competenceId',
           thematicIds: 'thematicIds',
@@ -156,6 +160,7 @@ describe('Integration | Repository | mission-repository', function() {
     it('should return all active missions', async function() {
       databaseBuilder.factory.buildMission({
         id: 2,
+        cardImageUrl: 'https://example.com/image.png',
         name: 'Alt name',
         status: Mission.status.VALIDATED,
         learningObjectives: 'Alt objectives',
@@ -165,6 +170,7 @@ describe('Integration | Repository | mission-repository', function() {
 
       databaseBuilder.factory.buildMission({
         id: 3,
+        cardImageUrl: null,
         name: 'inactive name',
         status: Mission.status.INACTIVE,
         learningObjectives: 'Alt objectives',
@@ -178,6 +184,7 @@ describe('Integration | Repository | mission-repository', function() {
 
       expect(result).to.deep.equal([new Mission({
         id: 2,
+        cardImageUrl: 'https://example.com/image.png',
         name_i18n: { fr: 'Alt name' },
         competenceId: 'competenceId',
         thematicIds: 'thematicStep1,thematicStep2,thematicDefi',
@@ -197,6 +204,7 @@ describe('Integration | Repository | mission-repository', function() {
     context('Mission creation', function() {
       it('should store mission', async function() {
         const mission = new Mission({
+          cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
           competenceId: 'AZERTY',
           thematicIds: 'QWERTY',
@@ -233,6 +241,7 @@ describe('Integration | Repository | mission-repository', function() {
       it('should store I18n for mission', async function() {
 
         const mission = new Mission({
+          cardImageUrl: null,
           name_i18n: { fr: 'Mission impossible' },
           competenceId: 'AZERTY',
           thematicIds: 'QWERTY',
@@ -283,6 +292,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         const missionToUpdate = new Mission({
           id: savedMission.id,
+          cardImageUrl: null,
           name_i18n: { fr: 'Updated mission' },
           competenceId: 'QWERTY',
           thematicIds: 'Thematic',
@@ -327,6 +337,7 @@ describe('Integration | Repository | mission-repository', function() {
 
         const missionToUpdate = new Mission({
           id: savedMission.id,
+          cardImageUrl: null,
           name_i18n: { fr: 'Updated mission' },
           competenceId: 'QWERTY',
           thematicIds: 'Thematic',

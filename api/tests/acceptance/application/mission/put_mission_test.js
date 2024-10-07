@@ -26,6 +26,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
         data: {
           attributes: {
             name: 'Mission à mettre à jour',
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'TYUI',
             'thematic-ids': '',
             status: Mission.status.EXPERIMENTAL,
@@ -54,6 +55,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
           type: 'missions',
           id: missionId.toString(),
           'attributes': {
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'TYUI',
             'documentation-url': null,
             'introduction-media-alt': null,
@@ -82,6 +84,7 @@ describe('Acceptance | API | mission | PATCH /api/missions/{id}', function() {
         data: {
           attributes: {
             name: 'Mission impossible',
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'AZERTY',
             'thematic-id': null,
             status: Mission.status.INACTIVE,

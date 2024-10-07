@@ -11,6 +11,13 @@
     >
       <:label>Nom de la mission</:label>
     </PixInput>
+    <PixInput
+      @id="mission-card-image-url"
+      @value={{this.cardImageUrl}}
+      {{on "change" this.updateCardImageUrl}}
+      >
+      <:label>URL de l'image de la carte</:label>
+    </PixInput>
     <PixSelect
       @options={{this.statusOptions}}
       @value={{this.selectedStatus}}

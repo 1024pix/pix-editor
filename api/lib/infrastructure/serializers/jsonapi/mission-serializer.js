@@ -31,6 +31,7 @@ export function serializeMission(mission, warnings) {
     },
     attributes: [
       'name',
+      'cardImageUrl',
       'competenceId',
       'thematicIds',
       'learningObjectives',
@@ -51,6 +52,7 @@ export function deserializeMission(attributes) {
   return new Mission({
     id: attributes.id,
     name_i18n: { fr: attributes.name  },
+    cardImageUrl: attributes['card-image-url'] || null,
     competenceId: attributes['competence-id'],
     thematicIds: attributes['thematic-ids'],
     learningObjectives_i18n:  { fr:  attributes['learning-objectives'] },

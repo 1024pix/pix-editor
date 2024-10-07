@@ -25,6 +25,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
         data: {
           attributes: {
             name: 'Mission impossible',
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'AZERTY',
             'thematic-id': null,
             status: Mission.status.INACTIVE,
@@ -52,6 +53,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
           type: 'missions',
           id: missionId.toString(),
           'attributes': {
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'AZERTY',
             'documentation-url': null,
             'introduction-media-alt': null,
@@ -79,6 +81,7 @@ describe('Acceptance | API | mission | POST /api/missions', function() {
         data: {
           attributes: {
             name: 'Mission impossible',
+            'card-image-url': 'https://example.com/image.png',
             'competence-id': 'AZERTY',
             'thematic-id': null,
             status: Mission.status.INACTIVE,

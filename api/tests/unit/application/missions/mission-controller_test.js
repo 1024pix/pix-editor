@@ -153,6 +153,7 @@ describe('Unit | Controller | missions controller', function() {
     let createMissionMock;
     const attributes = {
       name: 'Mission possible',
+      'card-image-url': null,
       'competence-id': 'AZERTY',
       status: Mission.status.VALIDATED,
       'learning-objectives': null,
@@ -166,6 +167,7 @@ describe('Unit | Controller | missions controller', function() {
 
     const request = { payload: { data: { attributes } } };
     const deserializedMission = new Mission({
+      cardImageUrl: null,
       name_i18n: { fr: 'Mission possible' },
       competenceId: 'AZERTY',
       thematicIds: null,
@@ -220,6 +222,7 @@ describe('Unit | Controller | missions controller', function() {
     let updateMissionMock;
     const attributes = {
       name: 'Mission possible',
+      'card-image-url': null,
       'competence-id': 'QWERTY',
       status: Mission.status.VALIDATED,
       'learning-objectives': 'apprendre à éviter les lasers',
@@ -237,6 +240,7 @@ describe('Unit | Controller | missions controller', function() {
     const request = { payload: { data: { attributes } }, params: { id: missionId } };
     const deserializedMission = new Mission({
       id: missionId,
+      cardImageUrl: null,
       name_i18n: { fr: 'Mission possible' },
       competenceId: 'QWERTY',
       thematicId: null,

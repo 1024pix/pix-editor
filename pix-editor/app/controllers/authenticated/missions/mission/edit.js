@@ -10,6 +10,7 @@ export default class MissionEditController extends Controller {
   async submitMission(formData) {
     try {
       this.model.mission.name = formData.name;
+      this.model.mission.cardImageUrl = formData.cardImageUrl;
       this.model.mission.competenceId = formData.competenceId;
       this.model.mission.status = formData.status;
       this.model.mission.thematicIds = formData.thematicIds;
