@@ -8,6 +8,30 @@ export function createChallengeTransformer({ attachments }) {
   );
 }
 
+export function fillAlternativeQualityFieldsFromMatchingProto(challenges) {
+  const challengesBySkillIdAndVersion = _.groupBy(challenges, (challenge) => {
+    return `${challenge.skillId}__${challenge.version}`;
+  });
+
+  Object.values(challengesBySkillIdAndVersion).forEach((groupedChallenges) => {
+    const prototype = groupedChallenges.find((challenge) => challenge.isPrototype);
+    for (const challenge of groupedChallenges) {
+      _fillAlternativeQualityFields(challenge, prototype);
+    }
+  });
+}
+
+function _fillAlternativeQualityFields(challenge, prototype) {
+  const fieldsToOverride = [
+    'accessibility1',
+    'accessibility2',
+  ];
+
+  for (const field of fieldsToOverride) {
+    challenge[field] = prototype[field];
+  }
+}
+
 function _filterChallengeFields(challenge) {
   const fieldsToInclude = [
     'id',

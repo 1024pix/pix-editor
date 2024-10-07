@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createChallengeTransformer } from '../../../../lib/infrastructure/transformers/challenge-transformer.js';
+import { createChallengeTransformer, fillAlternativeQualityFieldsFromMatchingProto } from '../../../../lib/infrastructure/transformers/index.js';
+import { Challenge } from '../../../../lib/domain/models/Challenge.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { Attachment } from '../../../../lib/domain/models/index.js';
 
@@ -135,6 +136,165 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
           }),
         );
       });
+    });
+  });
+
+  describe('#fillAlternativeFieldsFromProto', () => {
+    it('should fill same accessibility1 and accessibility2 from prototype for all challenges by skill and version', () => {
+      // given
+      const challengeProto1Skill1DTO = {
+        id: 'challengeProto1Skill1',
+        skillId: 'skill1',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        version: '1',
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      };
+      const challengeAlternative1Skill1DTO = {
+        id: 'challengeAlternative1Skill1',
+        skillId: 'skill1',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.RAS,
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        version: '1',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON
+      };
+
+      const challengeProto2Skill1DTO = {
+        id: 'challengeProto2Skill1',
+        skillId: 'skill1',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.KO,
+        accessibility2: Challenge.ACCESSIBILITY2.OK,
+        version: '2',
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      };
+      const challengeAlternative2Skill1DTO = {
+        id: 'challengeAlternative2Skill1',
+        skillId: 'skill1',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        version: '2',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      };
+
+      const challengeProto1Skill2DTO = {
+        id: 'challengeProto1Skill2',
+        skillId: 'skill2',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.RAS,
+        accessibility2: Challenge.ACCESSIBILITY2.OK,
+        version: '1',
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+      };
+      const challengeAlternative1Skill2DTO = {
+        id: 'challengeAlternative1Skill2',
+        skillId: 'skill2',
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        version: '1',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON
+      };
+
+      const [
+        challengeProto1Skill1,
+        challengeAlternative1Skill1,
+        challengeProto2Skill1,
+        challengeAlternative2Skill1,
+        challengeProto1Skill2,
+        challengeAlternative1Skill2,
+      ] = [
+        domainBuilder.buildChallenge(challengeProto1Skill1DTO),
+        domainBuilder.buildChallenge(challengeAlternative1Skill1DTO),
+        domainBuilder.buildChallenge(challengeProto2Skill1DTO),
+        domainBuilder.buildChallenge(challengeAlternative2Skill1DTO),
+        domainBuilder.buildChallenge(challengeProto1Skill2DTO),
+        domainBuilder.buildChallenge(challengeAlternative1Skill2DTO)
+      ];
+
+      // when
+      fillAlternativeQualityFieldsFromMatchingProto([
+        challengeProto1Skill1,
+        challengeAlternative1Skill1,
+        challengeProto2Skill1,
+        challengeAlternative2Skill1,
+        challengeProto1Skill2,
+        challengeAlternative1Skill2,
+      ]);
+
+      // then
+      expect(challengeProto1Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill1DTO));
+      expect(challengeAlternative1Skill1).to.deep.equal(domainBuilder.buildChallenge({
+        ...challengeAlternative1Skill1DTO,
+        accessibility1: challengeProto1Skill1DTO.accessibility1,
+        accessibility2: challengeProto1Skill1DTO.accessibility2,
+      }));
+
+      expect(challengeProto2Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto2Skill1DTO));
+      expect(challengeAlternative2Skill1).to.deep.equal(domainBuilder.buildChallenge({
+        ...challengeAlternative2Skill1DTO,
+        accessibility1: challengeProto2Skill1DTO.accessibility1,
+        accessibility2: challengeProto2Skill1DTO.accessibility2,
+      }));
+
+      expect(challengeProto1Skill2).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill2DTO));
+      expect(challengeAlternative1Skill2).to.deep.equal(domainBuilder.buildChallenge({
+        ...challengeAlternative1Skill2DTO,
+        accessibility1: challengeProto1Skill2DTO.accessibility1,
+        accessibility2: challengeProto1Skill2DTO.accessibility2,
+      }));
+
     });
   });
 });
