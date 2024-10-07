@@ -12,7 +12,7 @@ export default class SkillRoute extends Route {
 
   async afterModel(model) {
     if (model.length > 0) {
-      const skill = model.firstObject;
+      const skill = model[0];
       const tube = await skill.tube;
       const competence = await tube.competence;
       this.router.transitionTo('authenticated.competence.skills.single', competence.id, skill.id);

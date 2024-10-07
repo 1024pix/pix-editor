@@ -107,7 +107,7 @@ module('Unit | Model | tube', function(hooks) {
   });
   module('#draftSkill', function(hooks) {
     let skillRecord5v2, skillRecord1v2;
-    hooks.beforeEach(function() {
+    hooks.beforeEach(async function() {
       skillRecord1v2 = store.createRecord('skill', {
         id: 'skillRecord1v2',
         level: 1,
@@ -120,8 +120,10 @@ module('Unit | Model | tube', function(hooks) {
         status: 'en construction',
         version: 2,
       });
-      tube.rawSkills.pushObject(skillRecord1v2);
-      tube.rawSkills.pushObject(skillRecord5v2);
+      const rawSkills = await tube.rawSkills;
+      rawSkills.pushObject(skillRecord1v2);
+      rawSkills.pushObject(skillRecord5v2);
+      tube.rawSkills = rawSkills;
     });
 
     test('it should return an array of draftSkill positioned by level', function(assert) {

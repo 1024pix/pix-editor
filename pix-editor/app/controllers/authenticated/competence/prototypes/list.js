@@ -33,7 +33,7 @@ export default class ListController extends Controller {
   newVersion() {
     const prototypes = this.selectedSkill.sortedPrototypes;
     if (prototypes.length > 0) {
-      const prototype = prototypes.firstObject;
+      const prototype = prototypes[0];
       this.router.transitionTo('authenticated.competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { from: prototype.id } });
     } else {
       this.router.transitionTo('authenticated.competence.prototypes.new', this.currentData.getCompetence(), { queryParams: { fromSkill: this.selectedSkill.id } });

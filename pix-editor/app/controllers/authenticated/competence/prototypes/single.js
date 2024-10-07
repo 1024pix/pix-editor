@@ -38,8 +38,7 @@ export default class SingleController extends Controller {
   @tracked urlsToConsult = '';
 
   deletedFiles = [];
-  @controller('authenticated.competence')
-    parentController;
+  @controller('authenticated.competence') parentController;
 
   get maximized() {
     return this.parentController.leftMaximized;
@@ -105,7 +104,7 @@ export default class SingleController extends Controller {
   }
 
   get airtableUrl() {
-    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${ this.challenge.airtableId}`;
+    return `${this.config.airtableUrl}${this.config.airtableBase}/${this.config.tableChallenges}/${this.challenge.airtableId}`;
   }
 
   get lastUpdatedAtISO() {
@@ -222,7 +221,7 @@ export default class SingleController extends Controller {
     return Promise.resolve(this.challenge)
       .then((challenge) => this._handleIllustration(challenge))
       .then((challenge) => this._handleAttachments(challenge))
-      .then((challenge) => this._saveAttachments(challenge))
+      .then((challenge) => this._saveFiles(challenge))
       .then((challenge) => this._saveChallenge(challenge))
       .then((challenge) => this._handleChangelog(challenge, changelog))
       .then(() => {
@@ -282,7 +281,8 @@ export default class SingleController extends Controller {
           this._errorMessage('Erreur lors de la mise en production');
         } finally {
           this.loader.stop();
-        }});
+        }
+      });
     } catch {
       this._message('Mise en production abandonnée');
     }
@@ -305,6 +305,7 @@ export default class SingleController extends Controller {
           this._message('Épreuve archivée');
           this.send('close');
         } catch (error) {
+          console.error(error);
           Sentry.captureException(error);
           this._errorMessage('Erreur lors de l\'archivage');
         } finally {
@@ -434,24 +435,28 @@ export default class SingleController extends Controller {
     const removedFile = this.challenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 
   @action
   async removeAttachment(removedAttachment) {
     await this.challenge.files;
-    const removedFile = this.challenge.attachments.findBy('filename', removedAttachment.filename);
+    const removedFile = this.challenge.attachments?.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (removedFile.id) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    let values = value.split('\n').map((s)=>s.trim());
+    let values = value.split('\n').map((s) => s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -537,7 +542,7 @@ export default class SingleController extends Controller {
     }
     const toArchive = challenge.productionAlternatives;
     const toObsolete = challenge.draftAlternatives;
-    if (toArchive.length === 0 && toObsolete.length) {
+    if (toArchive.length === 0 && toObsolete.length === 0) {
       return Promise.resolve(challenge);
     }
     const alternativesArchive = toArchive.map((alternative) => {
@@ -606,6 +611,7 @@ export default class SingleController extends Controller {
     if (!this._isProductionPrototype(challenge)) {
       return;
     }
+    await Promise.all([skill.tutoMore, skill.tutoSolution]);
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
     const haveProposalPrototype = prototypesStatusOtherVersion.includes('proposé');
     if (haveProposalPrototype) {
@@ -641,7 +647,7 @@ export default class SingleController extends Controller {
   }
 
   async _handleIllustration(challenge) {
-    const illustration = challenge.illustration;
+    const illustration = await challenge.illustration;
     if (illustration && illustration.isNew && !illustration.cloneBeforeSave) {
       this._loadingMessage('Envoi de l\'illustration...');
       const newIllustration = await this.storage.uploadFile({ file: illustration.file });
@@ -651,7 +657,7 @@ export default class SingleController extends Controller {
   }
 
   async _handleAttachments(challenge) {
-    const attachments = challenge.attachments;
+    const attachments = await challenge.attachments;
     if (attachments.length === 0) {
       return challenge;
     }
@@ -674,8 +680,8 @@ export default class SingleController extends Controller {
     if (!challenge.baseNameUpdated()) {
       return;
     }
-    const attachments = await challenge.attachments;
-    for (const file of attachments.toArray()) {
+    const attachments = (await challenge.attachments)?.slice() ?? [];
+    for (const file of attachments) {
       file.filename = this._getAttachmentFullFilename(challenge, file.filename);
       await this.storage.renameFile(file.url, file.filename);
     }
@@ -691,9 +697,9 @@ export default class SingleController extends Controller {
     return challenge.save();
   }
 
-  async _saveAttachments(challenge) {
-    await challenge.files;
-    for (const file of challenge.files.toArray()) {
+  async _saveFiles(challenge) {
+    const files = (await challenge.files)?.slice() ?? [];
+    for (const file of files) {
       if (file.cloneBeforeSave) {
         file.url = await this.storage.cloneFile(file.url);
         file.cloneBeforeSave = false;

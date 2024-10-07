@@ -118,7 +118,7 @@ export default class LocalizedController extends Controller {
   @action
   setUrlsToConsult(value) {
     const invalidUrls = [];
-    let values = value.split('\n').map((s)=>s.trim());
+    let values = value.split('\n').map((s) => s.trim());
     values = values.filter((value) => {
       try {
         new URL(value);
@@ -190,7 +190,7 @@ export default class LocalizedController extends Controller {
     try {
       await this._handleIllustration(this.localizedChallenge);
       await this._handleAttachments(this.localizedChallenge);
-      await this._saveAttachments(this.localizedChallenge);
+      await this._saveFiles(this.localizedChallenge);
       await this._saveChallenge(this.localizedChallenge);
       this.edition = false;
       this.invalidUrlsToConsult = '';
@@ -239,18 +239,20 @@ export default class LocalizedController extends Controller {
   }
 
   @action
-  addIllustration(file, alt = '') {
-    const attachment = {
+  async addIllustration(file, alt = '') {
+    const attachmentData = {
       filename: file.name,
       size: file.size,
       mimeType: file.type,
       file,
       type: 'illustration',
-      localizedChallenge: this.localizedChallenge,
-      challenge: this.challenge,
       alt,
     };
-    this.store.createRecord('attachment', attachment);
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const files = await this.challenge.files;
+    const localizedFiles = await this.localizedChallenge.files;
+    files.push(attachment);
+    localizedFiles.push(attachment);
   }
 
   @action
@@ -259,32 +261,38 @@ export default class LocalizedController extends Controller {
     const removedFile = this.localizedChallenge.illustration;
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (!removedFile.isNew) {
+        this.deletedFiles.push(removedFile);
+      }
       return removedFile.alt;
     }
   }
 
   @action
-  addAttachment(file) {
-    const attachment = {
+  async addAttachment(file) {
+    const attachmentData = {
       filename: file.name,
       size: file.size,
       mimeType: file.type,
       file,
       type: 'attachment',
-      localizedChallenge: this.localizedChallenge,
-      challenge: this.challenge,
     };
-    this.store.createRecord('attachment', attachment);
+    const attachment = this.store.createRecord('attachment', attachmentData);
+    const files = await this.challenge.files;
+    const localizedFiles = await this.localizedChallenge.files;
+    files.push(attachment);
+    localizedFiles.push(attachment);
   }
 
   @action
   async removeAttachment(removedAttachment) {
-    await this.localizedChallenge.files;
-    const removedFile = this.localizedChallenge.files.findBy('filename', removedAttachment.filename);
+    const files = await this.localizedChallenge.files;
+    const removedFile = files.find((file) => file.filename === removedAttachment.filename);
     if (removedFile) {
       removedFile.deleteRecord();
-      this.deletedFiles.push(removedFile);
+      if (!removedFile.isNew) {
+        this.deletedFiles.push(removedFile);
+      }
     }
   }
 
@@ -339,10 +347,9 @@ export default class LocalizedController extends Controller {
     return challenge.save();
   }
 
-  async _saveAttachments(challenge) {
-    await challenge.files;
-
-    for (const file of challenge.files.toArray()) {
+  async _saveFiles(challenge) {
+    const files = (await challenge.files)?.slice() ?? [];
+    for (const file of files) {
       await file.save();
     }
     for (const file of this.deletedFiles) {

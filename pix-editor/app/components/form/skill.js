@@ -8,14 +8,14 @@ export default class SkillForm extends Component {
     'i18n': ['France', 'Monde', 'Union Européenne'],
   };
 
-  addTutorial(tutorials, tutorial) {
-    // not a very best practice to update list from here...
-    tutorials.pushObject(tutorial);
+  async addTutorial(tutorials, tutorial) {
+    const loadedTutorials = await tutorials;
+    loadedTutorials.push(tutorial);
   }
 
-  removeTutorial(tutorials, tutorial) {
-    // not a very best practice to update list from here...
-    tutorials.removeObject(tutorial);
+  async removeTutorial(tutorials, tutorial) {
+    const loadedTutorials = await tutorials;
+    loadedTutorials.removeObject(tutorial);
   }
 
 }

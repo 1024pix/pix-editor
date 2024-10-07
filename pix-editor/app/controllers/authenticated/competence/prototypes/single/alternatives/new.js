@@ -25,37 +25,32 @@ export default class NewController extends Alternative {
   }
 
   @action
-  save() {
+  async save() {
     this.loader.start();
-    return this._handleIllustration(this.challenge)
-      .then((challenge) => this._handleAttachments(challenge))
+    try {
+      await this._handleIllustration(this.challenge);
+      await this._handleAttachments(this.challenge);
       // create challenge without patching Pix API cache
-      .then((challenge) => this._saveChallenge(challenge))
-      .then((challenge) => this._saveAttachments(challenge))
-      .then((challenge) => this._setAlternativeVersion(challenge))
+      await this._saveChallenge(this.challenge);
+      await this._saveFiles(this.challenge);
+      await this._setAlternativeVersion(this.challenge);
       // update challenge's alternative version and patch Pix API cache
-      .then((challenge) => this._saveChallenge(challenge))
-      .then((challenge) => {
-        this.edition = false;
-        this.send('minimize');
-        this._message(`Déclinaison numéro ${challenge.alternativeVersion} enregistrée`);
-        this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), challenge);
-      })
-      .catch((error) => {
-        console.error(error);
-        Sentry.captureException(error);
-        this._errorMessage('Erreur lors de la création');
-      })
-      .finally(() => this.loader.stop());
+      await this._saveChallenge(this.challenge);
+      this.edition = false;
+      this.send('minimize');
+      this._message(`Déclinaison numéro ${this.challenge.alternativeVersion} enregistrée`);
+      this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), this.challenge);
+    } catch (error) {
+      console.error(error);
+      Sentry.captureException(error);
+      this._errorMessage('Erreur lors de la création');
+    } finally {
+      this.loader.stop();
+    }
   }
 
-  _setAlternativeVersion(challenge) {
-    const skill = challenge.skill;
-    return skill.reload()
-      .then(() => this.currentData.getPrototype().getNextAlternativeVersion())
-      .then((version) => {
-        challenge.alternativeVersion = version;
-        return challenge;
-      });
+  async _setAlternativeVersion(challenge) {
+    const version = await this.currentData.getPrototype().getNextAlternativeVersion();
+    challenge.alternativeVersion = version;
   }
 }

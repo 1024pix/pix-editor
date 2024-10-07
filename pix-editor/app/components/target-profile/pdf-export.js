@@ -13,7 +13,16 @@ import { Canvg, presets } from 'canvg';
 import jsPDF from 'jspdf';
 import { isEmpty } from 'lodash';
 
-import { area1bg, area2bg, area3bg, area4bg, area5bg, area6bg, firstPageBackground, pixLogoWhite } from '../../vendor/pdf-assets.js';
+import {
+  area1bg,
+  area2bg,
+  area3bg,
+  area4bg,
+  area5bg,
+  area6bg,
+  firstPageBackground,
+  pixLogoWhite,
+} from '../../vendor/pdf-assets.js';
 
 const legalMentionByLanguage = {
   en: 'This is a working document, updated regularly. Its distribution is restricted and its use limited to Pix Orga members in the context of the implementation of the support of their users.',
@@ -83,8 +92,9 @@ export default class TargetProfilePdfExportComponent extends Component {
     const canvas = createOffscreenCanvas(pdfWidth, pdfHeight);
     const ctx = canvas.getContext('2d');
 
-    const filteredArea = areas.find((area) => (area.competences.find((competence) => competence.selectedProductionTubeCount > 0) !== undefined));
-    const filter = filteredArea !== undefined;
+    const hasSelectedTubes = areas.some((area) => {
+      return area.competencesArray.some((competence) => competence.selectedProductionTubeCount > 0);
+    });
     const v = await Canvg.fromString(ctx, firstPageBackground, presets.offscreen());
     await v.render();
     const blob = await canvas.convertToBlob();
@@ -115,7 +125,7 @@ export default class TargetProfilePdfExportComponent extends Component {
 
     for (let i = 0; i < areas.length; i++) {
       const area = areas[i];
-      const competences = filter ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
+      const competences = hasSelectedTubes ? area.sortedCompetences.filter((competence) => competence.selectedProductionTubeCount > 0) : area.sortedCompetences;
       y = areaTitleHeight / 2 + 10;
 
       if (competences.length !== 0) {
@@ -151,10 +161,10 @@ export default class TargetProfilePdfExportComponent extends Component {
             },
           ]];
 
-          const themes = filter ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube) : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
+          const themes = hasSelectedTubes ? competence.sortedThemes.filter((theme) => theme.hasSelectedProductionTube) : competence.sortedThemes.filter((theme) => theme.hasProductionTubes);
 
           const tableBody = themes.reduce((values, theme) => {
-            const tubes = filter ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
+            const tubes = hasSelectedTubes ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
             const buildCell = this._buildCell(theme, tubes, language);
             return [...values, ...buildCell];
           }, []);
@@ -204,7 +214,7 @@ export default class TargetProfilePdfExportComponent extends Component {
           // Draw separation between theme
           let indexCell = 0;
           themes.forEach((theme) => {
-            const tubes = filter ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
+            const tubes = hasSelectedTubes ? theme.productionTubes.filter((tube) => tube.selectedLevel) : theme.productionTubes;
             indexCell += tubes.length;
             const positionCell = pdf.autoTable.previous.body[indexCell]?.cells[0];
             if (positionCell) {

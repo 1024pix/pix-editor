@@ -37,7 +37,7 @@ module('Acceptance | area-management/new', function(hooks) {
 
     // then
     const framework = await store.peekRecord('framework', 'recFramework1');
-    assert.ok(framework.areas.find((area) => area.titleFrFr === newAreaTitle));
+    assert.ok(framework.hasMany('areas').value().find((area) => area.titleFrFr === newAreaTitle));
     assert.dom(find('[data-test-main-message]')).hasText('Domaine créé');
     assert.strictEqual(currentURL(), '/');
   });

@@ -5,11 +5,15 @@ class FrameworkModel extends Model {
 
   static pix1DFrameworkName = 'Pix 1D';
   @attr name;
-  @hasMany('area') areas;
+  @hasMany('area', { async: true, inverse: 'framework' }) areas;
 
   get sortedAreas() {
-    return this.areas
-      .toArray()
+    const areas = this.hasMany('areas').value();
+
+    if (areas === null) return [];
+
+    return areas
+      .slice()
       .sort((areaA, areaB) => parseInt(areaA.code) - parseInt(areaB.code));
   }
 }

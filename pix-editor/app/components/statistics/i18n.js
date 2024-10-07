@@ -57,11 +57,11 @@ export default class StatisticsI18nComponent extends Component {
 
   get i18nCountryCounts() {
     return this.args.areas.reduce((current, area) => {
-      return area.competences.reduce((current, competence) => {
+      return area.competencesArray.reduce((current, competence) => {
         const competenceCountries = competence.tubes.reduce((current, tube) => {
           return tube.productionSkills.reduce((current, skill) => {
             if (skill.i18n === 'Monde') {
-              return skill.challenges.reduce((current, challenge) => {
+              return skill.challengesArray.reduce((current, challenge) => {
                 const geography = challenge.geography;
                 if (!current.has(geography)) {
                   current.set(geography, [0, 0]);
@@ -144,7 +144,7 @@ export default class StatisticsI18nComponent extends Component {
 
   i18nSkills(region) {
     return this.args.areas.reduce((current, area) => {
-      return area.competences.reduce((current, competence) => {
+      return area.competencesArray.reduce((current, competence) => {
         return competence.tubes.reduce((current, tube) => {
           return tube.productionSkills.reduce((current, skill) => {
             if (skill.i18n === region) {

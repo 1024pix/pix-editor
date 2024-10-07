@@ -191,7 +191,7 @@ export default class SingleController extends Controller {
     if (dropdown) {
       dropdown.actions.close();
     }
-    const challenges = this.skill.challenges;
+    const challenges = this.skill.challengesArray;
     return this.confirm.ask(this.intl.t('skill.archive.confirm.title'), this.intl.t('skill.archive.confirm.message'))
       .then(() => {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.archive'), (changelogValue)=>{
@@ -241,7 +241,7 @@ export default class SingleController extends Controller {
     if (dropdown) {
       dropdown.actions.close();
     }
-    const challenges = this.skill.challenges;
+    const challenges = this.skill.challengesArray;
     return this.confirm.ask(this.intl.t('skill.obsolete.confirm.title'), this.intl.t('skill.obsolete.confirm.message'))
       .then(() => {
         this._displayChangelogPopIn(this.intl.t('skill.changelog.obsolete'), (changelogValue) => {

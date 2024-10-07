@@ -83,6 +83,7 @@ module('Integration | Component | alternatives', function(hooks) {
 
     assert.dom(screen.queryByText('ceci est une alternative validée')).exists();
     assert.dom(screen.queryByText('ceci est une alternative proposée')).exists();
+    // TODO: unflake
     assert.dom(screen.queryByText('ceci est une alternative périmée')).exists();
   });
 

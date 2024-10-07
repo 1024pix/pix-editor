@@ -1,6 +1,7 @@
 import { inject as service } from '@ember/service';
 import Model, { attr, belongsTo, hasMany } from '@ember-data/model';
 import { tracked } from '@glimmer/tracking';
+import _ from 'lodash';
 
 export default class ChallengeModel extends Model {
 
@@ -45,9 +46,9 @@ export default class ChallengeModel extends Model {
   @attr('boolean') shuffled;
   @attr({ defaultValue: function() { return []; } }) contextualizedFields;
 
-  @belongsTo('skill') skill;
-  @hasMany('attachment', { inverse: 'challenge' }) files;
-  @hasMany('localized-challenge', { inverse: 'challenge' }) localizedChallenges;
+  @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
+  @hasMany('attachment', { inverse: 'challenge', async: true }) files;
+  @hasMany('localized-challenge', { inverse: 'challenge', async: true }) localizedChallenges;
 
   @service('store') myStore;
   @service config;
@@ -56,11 +57,13 @@ export default class ChallengeModel extends Model {
   @tracked _definedBaseName;
 
   get illustration() {
-    return this.files.find((file) => file.type === 'illustration' && !file.isDeleted);
+    const files = this.hasMany('files').value() ?? [];
+    return files.find((file) => file.type === 'illustration' && !file.isDeleted);
   }
 
   get attachments() {
-    return this.files.filter((file) => file.type === 'attachment' && !file.isDeleted);
+    const files = this.hasMany('files').value() ?? [];
+    return files.filter((file) => file.type === 'attachment' && !file.isDeleted);
   }
 
   get isPrototype() {
@@ -204,6 +207,11 @@ export default class ChallengeModel extends Model {
     return this._firstAttachmentBaseName;
   }
 
+  set attachmentBaseName(value) {
+    this._definedBaseName = value;
+    return value;
+  }
+
   get _firstAttachmentBaseName() {
     const attachments = this.attachments;
     if (attachments && attachments.length > 0) {
@@ -217,12 +225,8 @@ export default class ChallengeModel extends Model {
   }
 
   get otherLocalizedChallenges() {
-    return this.localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
-  }
-
-  set attachmentBaseName(value) {
-    this._definedBaseName = value;
-    return value;
+    const localizedChallenges = this.hasMany('localizedChallenges').value() ?? [];
+    return localizedChallenges.filter((localizedChallenge) => localizedChallenge.locale !== this.primaryLocale);
   }
 
   archive() {
@@ -252,10 +256,10 @@ export default class ChallengeModel extends Model {
     }
     const data = this._getJSON(ignoredFields);
     data.author = [this.config.author];
-
     data.status = 'proposé';
-    data.skill = this.skill;
+    data.skill = await this.skill;
     data.id = this.idGenerator.newId('challenge');
+
     const newChallenge = this.myStore.createRecord(this.constructor.modelName, data);
     await this._cloneAttachments(newChallenge);
     return newChallenge;
@@ -295,7 +299,10 @@ export default class ChallengeModel extends Model {
   }
 
   _getJSON(fieldsToRemove) {
-    const data = this.toJSON({ idIncluded: false });
+    const data = this._toJSON(this);
+
+    delete data['airtable-id'];
+
     if (data.illustration) {
       const illustration = data.illustration[0];
       data.illustration = [{ url: illustration.url, filename: illustration.filename }];
@@ -316,11 +323,30 @@ export default class ChallengeModel extends Model {
   }
 
   async _cloneAttachments(newChallenge) {
-    await this.files;
-    this.files.map((attachment) => {
-      const data = attachment.toJSON({ idIncluded: false });
+    const files = (await this.files)?.slice() ?? [];
+    files.map((attachment) => {
+      const data = this._attachmentToJSON(attachment);
       this.store.createRecord('attachment', { ...data, challenge: newChallenge, cloneBeforeSave: true });
     });
   }
 
+  _toJSON() {
+    const rawSerializedData = structuredClone(this.serialize({ idIncluded: false }));
+    const data = {};
+    for (const [key, value] of Object.entries(rawSerializedData.data.attributes)) {
+      const newKey = _.camelCase(key);
+      data[newKey] = value;
+    }
+    return data;
+  }
+
+  _attachmentToJSON(attachment) {
+    const rawSerializedData = structuredClone(attachment.serialize({ idIncluded: false }));
+    const data = {};
+    for (const [key, value] of Object.entries(rawSerializedData)) {
+      const newKey = _.camelCase(key);
+      data[newKey] = value;
+    }
+    return data;
+  }
 }

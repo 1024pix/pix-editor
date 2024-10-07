@@ -40,16 +40,16 @@
     @tutorials={{@skill.tutoSolution}}
     @searchClass="solution"
     @edition={{@edition}}
-    @addTutorial={{fn this.addTutorial @skill.tutoSolution}}
-    @removeTutorial={{fn this.removeTutorial @skill.tutoSolution}}/>
+    @addTutorial={{this.addTutorial}}
+    @removeTutorial={{this.removeTutorial}}/>
   <Field::Tutorials
     @title="Pour en savoir plus"
     @skill={{@skill}}
     @tutorials={{@skill.tutoMore}}
     @edition={{@edition}}
     @searchClass="more"
-    @addTutorial={{fn this.addTutorial @skill.tutoMore}}
-    @removeTutorial={{fn this.removeTutorial @skill.tutoMore}}/>
+    @addTutorial={{this.addTutorial}}
+    @removeTutorial={{this.removeTutorial}}/>
   <Field::Select
     @title="Internationalisation"
     @value={{@skill.i18n}}

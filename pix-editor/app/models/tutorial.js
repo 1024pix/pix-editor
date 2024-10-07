@@ -13,9 +13,10 @@ export default class TutorialModel extends Model {
   @attr pixId;
   @attr language;
 
-  @hasMany('tag') tags;
+  @hasMany('tag', { async: true, inverse: 'tutorials' }) tags;
 
   get tagsTitle() {
-    return this.tags.map((tag) => tag.title).join(' | ');
+    const tags = this.hasMany('tags').value() || [];
+    return tags.map((tag) => tag.title).join(' | ');
   }
 }

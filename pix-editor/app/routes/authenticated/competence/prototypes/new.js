@@ -29,7 +29,11 @@ export default class NewRoute extends PrototypeRoute {
         newChallenge.skill = skill;
         return newChallenge;
       }
-      newChallenge.skill = this.modelFor('authenticated.competence').workbenchSkill;
+      const competenceModel = this.modelFor('authenticated.competence.prototypes');
+      await competenceModel.rawTubes;
+      const workbenchTube = competenceModel.workbenchTube;
+      await workbenchTube.rawSkills;
+      newChallenge.skill = workbenchTube.workbenchSkill;
       return newChallenge;
     }
   }

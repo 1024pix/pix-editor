@@ -39,7 +39,7 @@
           <div class="content">
             <div class="header">
               {{#if @edition}}
-                <div {{on "click" (fn @removeTutorial tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
+                <div {{on "click" (fn @removeTutorial @tutorials tutorial)}} title="Supprimer le tutoriel" class="ui right floated icon button">
                   <i class="close icon"></i>
                 </div>
                 <div {{on "click" (fn this.editTutorial tutorial)}} title="Modifier le tutoriel" class="ui right floated button">

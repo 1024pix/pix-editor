@@ -69,7 +69,7 @@ export default class PopinSelectLocation extends Component {
 
   get competences() {
     const framework = this.selectedFramework.data;
-    const areas = framework.areas;
+    const areas = framework?.hasMany('areas').value() ?? [];
     const areaCompetences = areas.map((area) => area.sortedCompetences);
     return areaCompetences.reduce((table, competences) => {
       return table.concat(competences);
@@ -155,7 +155,7 @@ export default class PopinSelectLocation extends Component {
     if (this._selectedTube) {
       return this._selectedTube;
     }
-    return this.tubeList.find((item) => (item.data == this.args.tube.content));
+    return this.tubeList.find((item) => (item.data == this.args.tube?.content));
   }
 
   set selectedTube(value) {

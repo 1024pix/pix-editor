@@ -59,8 +59,9 @@ export default class TutorialForm extends Component {
   }
 
   @action
-  selectTag(item) {
+  async selectTag(item) {
     const tutorial = this.args.tutorial;
+    const tags = await tutorial.tags;
     if (item.id === 'create') {
       const value = document.querySelector('.tutorial-search .ember-power-select-search-input').value;
       if (value.indexOf('[') !== -1) {
@@ -68,40 +69,31 @@ export default class TutorialForm extends Component {
         const length = value.length;
         const title = value.slice(0, pos);
         const notes = value.slice(pos + 1, length - 1);
-        this.store.createRecord('tag', {
+        const tag = await this.store.createRecord('tag', {
           title: title,
           notes: notes,
           pixId: this.idGenerator.newId('tag'),
-        }).save()
-          .then((tag) => {
-            tutorial.tags.pushObject(tag);
-          });
+        }).save();
+        tags.pushObject(tag);
       } else {
-        this.store.createRecord('tag', {
+        const tag = await this.store.createRecord('tag', {
           title: value,
-        }).save()
-          .then((tag) => {
-            tutorial.tags.pushObject(tag);
-          });
+        }).save();
+        tags.pushObject(tag);
       }
     } else {
-      return this.store.findRecord('tag', item.id)
-        .then((tag) => {
-          if (tutorial.tags.indexOf(tag) === -1) {
-            tutorial.tags.pushObject(tag);
-          }
-        });
+      const tag = await this.store.findRecord('tag', item.id);
+      if (tags.indexOf(tag) === -1) {
+        tags.pushObject(tag);
+      }
     }
   }
 
   @action
-  unselectTag(id) {
+  async unselectTag(id) {
     const tutorial = this.args.tutorial;
-    tutorial.tags.forEach((tag) => {
-      if (tag.id === id) {
-        tutorial.tags.removeObject(tag);
-      }
-    });
+    const tags = await tutorial.tags;
+    this.args.tutorial.tags = tags.filter((tag) => tag.id !== id);
   }
 
   @action

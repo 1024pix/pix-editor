@@ -19,7 +19,7 @@ module('Acceptance | competence-management/single', function(hooks) {
     this.server.create('config', 'default');
     this.server.create('user', { trigram: 'ABC' });
 
-    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'pixIdRecCompetence1.1', title: 'Titre' });
+    this.server.create('competence', { id: 'recCompetence1.1', pixId: 'persistantPixIdRecCompetence', title: 'Titre' });
     this.server.create('area', { id: 'recArea1', name: '1. Information et données', code: '1', competenceIds: ['recCompetence1.1'] });
     this.server.create('framework', { id: 'recFramework1', name: 'Pix+', areaIds: ['recArea1'] });
     return authenticateSession();

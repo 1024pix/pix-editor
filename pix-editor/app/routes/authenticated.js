@@ -17,6 +17,7 @@ export default class AuthenticatedRoute extends Route {
     const frameworks = await this.store.findAll('framework');
     if (frameworks) {
       const frameworksAreas = await Promise.all(frameworks.toArray().map((framework) => framework.areas));
+      await Promise.all(frameworksAreas.flatMap((frameworkAreas) => frameworkAreas.toArray()).map((area) => area.competences));
       const areas = frameworksAreas.flatMap((frameworkAreas) => frameworkAreas.toArray());
       this.currentData.setAreas(areas);
       this.currentData.setFrameworks(frameworks);

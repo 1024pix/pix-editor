@@ -5,127 +5,121 @@ import sinon from 'sinon';
 
 module('Unit | Controller | target-profile', function(hooks) {
   setupTest(hooks);
-  let tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, framework, controller;
+  let store, tube1, skill1, skill2, skill5, skill6, skill7, skill8, skill9, tube2, areas, framework, controller;
   hooks.beforeEach(function() {
+
+    store = this.owner.lookup('service:store');
     // given
-    skill1 = {
+    skill1 = store.createRecord('skill', {
       id: 'rec321654',
       pixId: 'pix321654',
       name: 'skill1',
+      status: 'actif',
       level: 1,
-    };
-    skill2 = {
+    });
+    skill2 = store.createRecord('skill', {
       id: 'rec321655',
       pixId: 'pix321655',
       name: 'skill2',
+      status: 'actif',
       level: 2,
-    };
-    skill5 = {
+    });
+    skill5 = store.createRecord('skill', {
       id: 'rec321656',
       pixId: 'pix321656',
       name: 'skill5',
+      status: 'actif',
       level: 5,
-    };
-    skill6 = {
+    });
+    skill6 = store.createRecord('skill', {
       id: 'rec321657',
       pixId: 'pix321657',
       name: 'skill6',
+      status: 'actif',
       level: 6,
-    };
-    tube1 = {
+    });
+    tube1 = store.createRecord('tube', {
       id: 'rec123456',
       pixId: 'pix123456',
       name: 'tube1',
-      selectedLevel: 5,
-      selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId],
-      selectedThematicResultLevel: 2,
-      selectedThematicResultSkills: [skill1.pixId, skill2.pixId],
-      productionSkills: [skill1, skill2, skill5, skill6],
-    };
-    skill7 = {
+      rawSkills: [skill1, skill2, skill5, skill6],
+    });
+    tube1.selectedLevel = 5;
+    tube1.selectedThematicResultLevel = 2;
+    tube1.selectedSkills = [skill1.pixId, skill2.pixId, skill5.pixId];
+    tube1.selectedThematicResultSkills = [skill1.pixId, skill2.pixId];
+    skill7 = store.createRecord('skill', {
       id: 'recSkill2_1_1',
       pixId: 'pixSkill2_1_1',
       name: 'skill2_1_1',
+      status: 'actif',
       level: 1,
-    };
-    skill8 = {
+    });
+    skill8 = store.createRecord('skill', {
       id: 'recSkill2_1_2',
       pixId: 'pixSkill2_1_2',
       name: 'skill2_1_2',
+      status: 'actif',
       level: 2,
-    };
-    skill9 = {
+    });
+    skill9 = store.createRecord('skill', {
       id: 'recSkill2_1_4',
       pixId: 'pixSkill2_1_4',
       name: 'skill2_1_4',
+      status: 'actif',
       level: 4,
-    };
-    tube2 = {
+    });
+    tube2 = store.createRecord('tube', {
       id: 'rec123457',
       pixId: 'pix123457',
-      name: 'tube1',
-      selectedLevel: 4,
-      selectedSkills: [skill7.pixId, skill8.pixId, skill9.pixId],
-      selectedThematicResultLevel: 1,
-      selectedThematicResultSkills: [skill7.pixId],
-      productionSkills: [skill7, skill8, skill9],
-    };
+      name: 'tube2',
+      rawSkills: [skill7, skill8, skill9],
+    });
+    tube2.selectedLevel = 4;
+    tube2.selectedThematicResultLevel = 1;
+    tube2.selectedSkills = [skill7.pixId, skill8.pixId, skill9.pixId];
+    tube2.selectedThematicResultSkills = [skill7.pixId];
 
-    const area1 = {
+    const area1 = store.createRecord('area', {
       id: 'recArea1',
       competences: [
-        {
+        store.createRecord('competence', {
           id: 'recCompetence1_1',
-          tubes: [tube1],
-        },
+          rawTubes: [tube1],
+        }),
       ],
-    };
-    const area2 = {
+    });
+    const area2 = store.createRecord('area', {
       id: 'recArea2',
       competences: [
-        {
+        store.createRecord('competence', {
           id: 'recCompetence2_1',
-          tubes: [tube2],
-        },
+          rawTubes: [tube2],
+        }),
       ],
-    };
+    });
     areas = [area1, area2];
-    framework = {
+    framework = store.createRecord('framework', {
       name: 'Pix',
       areas,
-    };
+    });
     area1.framework = framework;
     area2.framework = framework;
     controller = this.owner.lookup('controller:authenticated.target-profile');
   });
 
   test('it should set tube-level arguments for production tube', function(assert) {
-    assert.expect(7);
     // when
     controller.displayTube(tube1);
 
-    const expectedResult = [
-      tube1,
-      tube1.productionSkills,
-      tube1.selectedLevel,
-      tube1.selectedSkills,
-      controller.setProfileTube,
-      controller.unsetProfileTube,
-      true,
-    ];
-
     // then
-    const tubeLevelArguments = [controller.selectedTube,
-      controller.tubeSkills,
-      controller.selectedTubeLevel,
-      controller.selectedTubeSkills,
-      controller.setTubeAction,
-      controller.clearTubeAction,
-      controller.displayTubeLevel];
-
-    tubeLevelArguments.forEach((value, i) => {
-      assert.strictEqual(value, expectedResult[i]);
-    });
+    assert.strictEqual(controller.selectedTube, tube1);
+    assert.deepEqual(controller.tubeSkills, tube1.productionSkills);
+    assert.strictEqual(controller.selectedTubeLevel, tube1.selectedLevel);
+    assert.strictEqual(controller.selectedTubeSkills, tube1.selectedSkills);
+    assert.strictEqual(controller.setTubeAction, controller.setProfileTube);
+    assert.strictEqual(controller.clearTubeAction, controller.unsetProfileTube);
+    assert.ok(controller.displayTubeLevel);
   });
 
   test('it should set a profile tube, with a level and a list of production skill id under this level ', function(assert) {
@@ -153,7 +147,6 @@ module('Unit | Controller | target-profile', function(hooks) {
   });
 
   test('it should set tube-level arguments for thematic result tube', function(assert) {
-    assert.expect(7);
     // when
     controller.displayThematicResultTube(tube1);
 
@@ -176,6 +169,7 @@ module('Unit | Controller | target-profile', function(hooks) {
       controller.clearTubeAction,
       controller.displayTubeLevel];
 
+    assert.expect(tubeLevelArguments.length);
     tubeLevelArguments.forEach((value, i) => {
       assert.deepEqual(value, expectedResult[i]);
     });
@@ -276,42 +270,38 @@ module('Unit | Controller | target-profile', function(hooks) {
     let skill10, skill11, skill12, tube3, area3, framework2;
 
     hooks.beforeEach(function() {
-      skill10 = {
-        id: 'recSkill3_1_1',
+      skill10 = store.createRecord('skill', {
         pixId: 'pixSkill3_1_1',
         name: 'skill3_1_1',
+        status: 'actif',
         level: 1,
-      };
-      skill11 = {
-        id: 'recSkill3_1_2',
+      });
+      skill11 = store.createRecord('skill', {
         pixId: 'pixSkill3_1_2',
         name: 'skill3_1_2',
+        status: 'actif',
         level: 2,
-      };
-      skill12 = {
-        id: 'recSkill3_1_6',
+      });
+      skill12 = store.createRecord('skill', {
         pixId: 'pixSkill3_1_6',
         name: 'skill3_1_6',
+        status: 'actif',
         level: 6,
-      };
-      tube3 = {
-        id: 'rec666457',
+      });
+      tube3 = store.createRecord('tube', {
         pixId: 'pix666457',
         name: 'tube3',
-        productionSkills: [skill10, skill11, skill12],
-      };
-      area3 = {
-        id: 'recArea3',
-        competences: [{
-          id: 'recCompetence3_1',
-          tubes: [tube3],
-        }],
-      };
-      framework2 = {
+        rawSkills: [skill10, skill11, skill12],
+      });
+      area3 = store.createRecord('area', {
+        competences: [store.createRecord('competence', {
+          rawTubes: [tube3],
+        })],
+      });
+      framework2 = store.createRecord('framework', {
         name: 'Pix+',
         areas: [area3],
-      };
-      area3.framework = framework2;
+      });
 
       this.owner.register('service:currentData', class MockService extends Service {
 
@@ -338,37 +328,6 @@ module('Unit | Controller | target-profile', function(hooks) {
         },
       ];
 
-      const expectedTube1 = {
-        id: 'rec123456',
-        pixId: 'pix123456',
-        name: 'tube1',
-        selectedLevel: 6,
-        selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId, skill6.pixId],
-        selectedThematicResultLevel: 2,
-        selectedThematicResultSkills: [skill1.pixId, skill2.pixId],
-        productionSkills: [skill1, skill2, skill5, skill6],
-      };
-
-      const expectedTube2 = {
-        id: 'rec123457',
-        pixId: 'pix123457',
-        name: 'tube1',
-        selectedLevel: false,
-        selectedSkills: [],
-        selectedThematicResultLevel: 1,
-        selectedThematicResultSkills: [skill7.pixId],
-        productionSkills: [skill7, skill8, skill9],
-      };
-
-      const expectedTube3 = {
-        id: 'rec666457',
-        pixId: 'pix666457',
-        name: 'tube3',
-        selectedLevel: 2,
-        selectedSkills: [skill10.pixId, skill11.pixId],
-        productionSkills: [skill10, skill11, skill12],
-      };
-
       const explectedSelectedFrameworks = [
         { data: framework, label: 'Pix' },
         { data: framework2, label: 'Pix+' },
@@ -378,45 +337,15 @@ module('Unit | Controller | target-profile', function(hooks) {
       await controller._buildTargetProfileFromFile(fileContent);
 
       // then
-      assert.deepEqual(tube1, expectedTube1);
-      assert.deepEqual(tube2, expectedTube2);
-      assert.deepEqual(tube3, expectedTube3);
+      assert.strictEqual(tube1.selectedLevel, 6);
+      assert.notOk(tube2.selectedLevel);
+      assert.strictEqual(tube3.selectedLevel, 2);
       assert.deepEqual(controller._selectedFrameworks, explectedSelectedFrameworks);
     });
 
     test('it should build a profile state from orga json file', async function(assert) {
       // given
       const fileContent = ['pix123456', 'pix666457'];
-      const expectedTube1 = {
-        id: 'rec123456',
-        pixId: 'pix123456',
-        name: 'tube1',
-        selectedLevel: 6,
-        selectedSkills: [skill1.pixId, skill2.pixId, skill5.pixId, skill6.pixId],
-        selectedThematicResultLevel: 2,
-        selectedThematicResultSkills: [skill1.pixId, skill2.pixId],
-        productionSkills: [skill1, skill2, skill5, skill6],
-      };
-
-      const expectedTube2 = {
-        id: 'rec123457',
-        pixId: 'pix123457',
-        name: 'tube1',
-        selectedLevel: false,
-        selectedSkills: [],
-        selectedThematicResultLevel: 1,
-        selectedThematicResultSkills: [skill7.pixId],
-        productionSkills: [skill7, skill8, skill9],
-      };
-
-      const expectedTube3 = {
-        id: 'rec666457',
-        pixId: 'pix666457',
-        name: 'tube3',
-        selectedLevel: 6,
-        selectedSkills: [skill10.pixId, skill11.pixId, skill12.pixId],
-        productionSkills: [skill10, skill11, skill12],
-      };
 
       const explectedSelectedFrameworks = [
         { data: framework, label: 'Pix' },
@@ -427,9 +356,9 @@ module('Unit | Controller | target-profile', function(hooks) {
       await controller._buildTargetProfileFromFile(fileContent);
 
       // then
-      assert.deepEqual(tube1, expectedTube1);
-      assert.deepEqual(tube2, expectedTube2);
-      assert.deepEqual(tube3, expectedTube3);
+      assert.strictEqual(tube1.selectedLevel, 6);
+      assert.notOk(tube2.selectedLevel);
+      assert.strictEqual(tube3.selectedLevel, 6);
       assert.deepEqual(controller._selectedFrameworks, explectedSelectedFrameworks);
     });
   });

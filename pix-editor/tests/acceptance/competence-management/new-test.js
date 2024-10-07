@@ -6,7 +6,7 @@ import sinon from 'sinon';
 
 import { setupApplicationTest } from '../../setup-application-rendering';
 
-module('Acceptance | competence-management/single', function(hooks) {
+module('Acceptance | competence-management/new', function(hooks) {
 
   setupApplicationTest(hooks);
   setupMirage(hooks);
@@ -46,10 +46,10 @@ module('Acceptance | competence-management/single', function(hooks) {
 
     // then
     const area = await store.peekRecord('area', 'recArea1');
-    const newCompetence = area.competences.find((competence) => competence.title === newCompetenceTitle);
-    const workbenchTheme = newCompetence.rawThemes.find((theme) => theme.name === 'workbench_Pix+_1_2');
-    const workbenchTube = workbenchTheme.rawTubes.find((tube) => tube.name === '@workbench');
-    const workbenchSkill = workbenchTube.rawSkills.find((skill) => skill.name === '@workbench');
+    const newCompetence = area.competencesArray.find((competence) => competence.title === newCompetenceTitle);
+    const workbenchTheme = newCompetence.hasMany('rawThemes').value().find((theme) => theme.name === 'workbench_Pix+_1_2');
+    const workbenchTube = workbenchTheme.hasMany('rawTubes').value().find((tube) => tube.name === '@workbench');
+    const workbenchSkill = workbenchTube.hasMany('rawSkills').value().find((skill) => skill.name === '@workbench');
     assert.ok(newCompetence);
     assert.ok(workbenchTheme);
     assert.ok(workbenchTube);

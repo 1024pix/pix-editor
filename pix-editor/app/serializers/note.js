@@ -1,6 +1,8 @@
 import AirtableSerializer from './airtable';
 
 export default class NoteSerializer extends AirtableSerializer {
+  primaryKey = 'Record Id';
+
   attrs = {
     text: 'Texte',
     recordId: 'Record_Id',
@@ -33,7 +35,8 @@ export default class NoteSerializer extends AirtableSerializer {
 
   serializeAttribute(snapshot, json, key) {
     if (['changelog'].includes(key)) {
-      const payloadKey = this._getMappedKey(key, snapshot.type);
+      const schema = this.store.modelFor(snapshot.modelName);
+      const payloadKey = this._getMappedKey(key, schema);
       const value = snapshot.attr(key);
       if (value) {
         json[payloadKey] = 'oui';
