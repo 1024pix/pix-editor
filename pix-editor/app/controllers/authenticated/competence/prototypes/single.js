@@ -600,6 +600,7 @@ export default class SingleController extends Controller {
 
   async _checkSkillValidation(challenge) {
     const skill = await challenge.skill;
+    await Promise.all([skill.tutoMore, skill.tutoSolution]);
     if (challenge.isPrototype && !skill.isActive) {
       await skill.activate();
       this._message(`Activation de l'acquis ${skill.name}`);
@@ -625,6 +626,7 @@ export default class SingleController extends Controller {
     if (!this._isProductionPrototype(challenge)) {
       return;
     }
+    await Promise.all([skill.tutoMore, skill.tutoSolution]);
     const prototypesStatusOtherVersion = this._getPrototypesStatusOtherVersion(skill, challenge);
     if (prototypesStatusOtherVersion.includes('proposé')) {
       return skill.deactivate();
