@@ -1,5 +1,15 @@
 
 
+## v3.165.1 (08/10/2024)
+
+
+### :rocket: Amélioration
+- [#772](https://github.com/1024pix/pix-editor/pull/772) [FEATURE] :sparkles: Ajoute un champ pour spécifier l'image de la carte de mission (pix-14588).
+
+### :bug: Correction
+- [#773](https://github.com/1024pix/pix-editor/pull/773) [BUGFIX]  Valider un prototype ne rend pas actif son acquis (PIX-14700).
+- [#768](https://github.com/1024pix/pix-editor/pull/768) [BUGFIX] Utilise l'ID persistant plutôt que le `RecordId` (pix-14380).
+
 ## v3.165.0 (07/10/2024)
 
 
