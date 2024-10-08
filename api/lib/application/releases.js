@@ -1,8 +1,11 @@
 import Boom from '@hapi/boom';
+import Joi from 'joi';
 import { releaseRepository } from '../infrastructure/repositories/index.js';
 import { queue as createReleaseQueue } from '../infrastructure/scheduled-jobs/release-job.js';
 import { promiseStreamer } from '../infrastructure/utils/promise-streamer.js';
 import * as securityPreHandlers from './security-pre-handlers.js';
+
+const releaseIdType = Joi.number().greater(-2147483648).less(2147483647).required();
 
 export async function register(server) {
   server.route([
@@ -46,6 +49,11 @@ export async function register(server) {
       method: 'GET',
       path: '/api/releases/{id}',
       config: {
+        validate: {
+          params: Joi.object({
+            id: releaseIdType,
+          })
+        },
         handler: async function(request) {
           const release = await releaseRepository.getRelease(request.params.id);
           if (release) {
