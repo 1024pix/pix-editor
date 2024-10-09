@@ -8,7 +8,7 @@ import {
   thematicRepository,
   tubeRepository,
 } from '../../infrastructure/repositories/index.js';
-import { competenceTransformer, thematicTransformer, tubeTransformer } from '../../infrastructure/transformers/index.js';
+import { competenceTransformer, thematicTransformer, tubeTransformer, fillAlternativeQualityFieldsFromMatchingProto } from '../../infrastructure/transformers/index.js';
 import { knex } from '../../../db/knex-database-connection.js';
 
 export async function getLearningContentForReplication() {
@@ -33,7 +33,7 @@ export async function getLearningContentForReplication() {
     thematicRepository.list(),
     _getCoursesFromPGForReplication(),
   ]);
-
+  fillAlternativeQualityFieldsFromMatchingProto(challenges);
   const translatedChallenges = challenges
     .flatMap((challenge) => [
       challenge,

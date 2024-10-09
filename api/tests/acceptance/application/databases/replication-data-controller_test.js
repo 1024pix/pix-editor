@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, LocalizedChallenge, Challenge } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -21,7 +21,21 @@ async function mockCurrentContent() {
       { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
     ],
+    version:1,
+    genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+    accessibility1: Challenge.ACCESSIBILITY1.OK,
+    accessibility2: Challenge.ACCESSIBILITY2.OK
   });
+
+  const alternativeChallenge = domainBuilder.buildChallenge({
+    id: 'challenge-id_alt',
+    version: 1,
+    genealogy: Challenge.GENEALOGIES.DECLINAISON,
+    accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+    accessibility2: Challenge.ACCESSIBILITY2.RAS,
+    files: null,
+  });
+
   const challengeNl = domainBuilder.buildChallenge({
     id: 'localized-challenge-id',
     locales: ['nl'],
@@ -35,6 +49,8 @@ async function mockCurrentContent() {
       { fileId: 'attid1', localizedChallengeId: 'challenge-id' },
       { fileId: 'attid2', localizedChallengeId: 'localized-challenge-id' },
     ],
+    accessibility1: challenge.accessibility1,
+    accessibility2: challenge.accessibility2,
   });
 
   const expectedAttachment = {
@@ -77,6 +93,15 @@ async function mockCurrentContent() {
   };
   delete expectedChallenge.localizedChallenges;
 
+  const expectedAlternativeChallenge = {
+    ...alternativeChallenge,
+    area: 'Neutre',
+    files: [],
+    accessibility1: challenge.accessibility1,
+    accessibility2: challenge.accessibility2,
+  };
+  delete expectedAlternativeChallenge.localizedChallenges;
+
   const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
 
@@ -108,7 +133,7 @@ async function mockCurrentContent() {
     competences: [expectedCompetence],
     tubes: [expectedTube],
     skills: [domainBuilder.buildSkill({ id: 'recSkill1' })],
-    challenges: [expectedChallenge, expectedChallengeNl],
+    challenges: [expectedChallenge, expectedChallengeNl, expectedAlternativeChallenge],
     tutorials: [domainBuilder.buildTutorialDatasourceObject()],
     thematics: [expectedThematic],
     courses: [
@@ -143,7 +168,11 @@ async function mockCurrentContent() {
           localizedChallengeId: expectedChallengeNl.id
         },
       ]
-    })],
+    }),
+    buildChallenge({
+      ...alternativeChallenge
+    })
+    ],
     tutorials: [buildTutorial(expectedCurrentContent.tutorials[0])],
     thematics: [buildThematic(expectedCurrentContent.thematics[0])],
     attachments: [
@@ -176,6 +205,14 @@ async function mockCurrentContent() {
       'https://example.com/',
       'https://pix.org/nl-be',
     ],
+  });
+  databaseBuilder.factory.buildLocalizedChallenge({
+    id: alternativeChallenge.id,
+    challengeId: alternativeChallenge.id,
+    locale: 'fr',
+    embedUrl: alternativeChallenge.embedUrl,
+    status: LocalizedChallenge.STATUSES.PLAY,
+
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
@@ -265,36 +302,38 @@ async function mockCurrentContent() {
     value: expectedCurrentContent.skills[0].hint_i18n.en,
   });
 
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.instruction`,
-    locale: 'fr',
-    value: expectedChallenge.instruction,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.alternativeInstruction`,
-    locale: 'fr',
-    value: expectedChallenge.alternativeInstruction,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.proposals`,
-    locale: 'fr',
-    value: expectedChallenge.proposals,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.solution`,
-    locale: 'fr',
-    value: expectedChallenge.solution,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.solutionToDisplay`,
-    locale: 'fr',
-    value: expectedChallenge.solutionToDisplay,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedChallenge.id}.embedTitle`,
-    locale: 'fr',
-    value: expectedChallenge.embedTitle,
-  });
+  for (const challengeForTranslation of [expectedChallenge, expectedAlternativeChallenge]) {
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.instruction`,
+      locale: 'fr',
+      value: challengeForTranslation.instruction,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.alternativeInstruction`,
+      locale: 'fr',
+      value: challengeForTranslation.alternativeInstruction,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.proposals`,
+      locale: 'fr',
+      value: challengeForTranslation.proposals,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.solution`,
+      locale: 'fr',
+      value: challengeForTranslation.solution,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.solutionToDisplay`,
+      locale: 'fr',
+      value: challengeForTranslation.solutionToDisplay,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challengeForTranslation.id}.embedTitle`,
+      locale: 'fr',
+      value: challengeForTranslation.embedTitle,
+    });
+  }
 
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${expectedChallenge.id}.illustrationAlt`,
