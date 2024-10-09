@@ -39,7 +39,7 @@ export default class NewController extends Alternative {
       this.edition = false;
       this.send('minimize');
       this._message(`Déclinaison numéro ${this.challenge.alternativeVersion} enregistrée`);
-      this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), this.challenge);
+      this.router.transitionTo('authenticated.competence.prototypes.single.alternatives.single', this.currentData.getCompetence(), this.currentData.getPrototype(), this.challenge.id);
     } catch (error) {
       console.error(error);
       Sentry.captureException(error);
