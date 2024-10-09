@@ -5,8 +5,16 @@ import { inject as service } from '@ember/service';
 export default class SingleRoute extends Route {
 
   @service store;
+  templateName = 'authenticated/competence/prototypes/single';
+
   model(params) {
     return this.store.findRecord('challenge', params.alternative_id);
+  }
+
+  async afterModel(model) {
+    super.afterModel(...arguments);
+    await model.localizedChallenges;
+    await model?.files;
   }
 
   setupController(controller) {
@@ -25,6 +33,4 @@ export default class SingleRoute extends Route {
       }
     }
   }
-
-  templateName = 'authenticated/competence/prototypes/single';
 }

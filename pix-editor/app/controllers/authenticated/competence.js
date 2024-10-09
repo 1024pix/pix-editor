@@ -39,24 +39,6 @@ export default class CompetenceController extends Controller {
     return this.model;
   }
 
-  setSection(value) {
-    if (this.section !== value) {
-      this.section = value;
-    }
-  }
-
-  setView(value) {
-    if (this.view !== value) {
-      this.view = value;
-    }
-  }
-
-  maximizeLeft(value) {
-    if (this.leftMaximized !== value) {
-      this.leftMaximized = value;
-    }
-  }
-
   get displayGrid() {
     return this.section !== 'challenges' || this.view !== 'workbench-list';
   }
@@ -99,6 +81,24 @@ export default class CompetenceController extends Controller {
       }
     } else {
       return 'authenticated.competence.prototypes.single';
+    }
+  }
+
+  setSection(value) {
+    if (this.section !== value) {
+      this.section = value;
+    }
+  }
+
+  setView(value) {
+    if (this.view !== value) {
+      this.view = value;
+    }
+  }
+
+  maximizeLeft(value) {
+    if (this.leftMaximized !== value) {
+      this.leftMaximized = value;
     }
   }
 
