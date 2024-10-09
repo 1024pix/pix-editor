@@ -21,7 +21,8 @@ import {
   tubeTransformer,
   thematicTransformer,
   tutorialTransformer,
-  missionTransformer
+  missionTransformer,
+  fillAlternativeQualityFieldsFromMatchingProto,
 } from '../transformers/index.js';
 import * as tablesTranslations from '../translations/index.js';
 import { Content, Release } from '../../domain/models/release/index.js';
@@ -120,6 +121,7 @@ async function _getCurrentContent() {
     getStaticCourses(),
     missionRepository.listActive(),
   ]);
+  fillAlternativeQualityFieldsFromMatchingProto(challenges);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
     ...challenge.alternativeLocales.map((locale) => challenge.translate(locale))

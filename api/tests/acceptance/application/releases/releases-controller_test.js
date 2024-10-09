@@ -485,7 +485,37 @@ async function mockContentForRelease() {
       illustrationAlt: 'Texte alternatif illustration',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
-    }],
+    }, {
+      id: 'recChallenge0_1',
+      instruction: 'Consigne du Challenge - fr-fr',
+      proposals: 'Propositions du Challenge - fr-fr',
+      type: 'Type d\'épreuve',
+      solution: 'Bonnes réponses du Challenge - fr-fr',
+      solutionToDisplay: 'Bonnes réponses du Challenge à afficher - fr-fr',
+      t1Status: false,
+      t2Status: true,
+      t3Status: false,
+      status: ChallengeForRelease.STATUSES.VALIDE,
+      skillId: 'recSkill0',
+      embedUrl: 'Embed URL',
+      embedTitle: 'Embed title',
+      embedHeight: 'Embed height',
+      timer: 12,
+      competenceId: 'recCompetence0',
+      format: ChallengeForRelease.FORMATS.MOTS,
+      autoReply: false,
+      locales: ['fr-fr'],
+      alternativeInstruction: 'Consigne alternative - fr-fr',
+      focusable: false,
+      delta: 0.5,
+      alpha: 0.9,
+      responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
+      genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
+      illustrationAlt: 'Texte alternatif illustration',
+      illustrationUrl: null,
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
+    },],
     tutorials: [{
       id: 'recTutorial0',
       duration: 'Durée du Tutoriel',
@@ -552,10 +582,17 @@ async function mockContentForRelease() {
   airtableBuilder.mockLists({
     areas: [buildArea(expectedCurrentContent.areas[0])],
     attachments: attachments.map(buildAttachment),
-    challenges: [buildChallenge({
-      ...expectedCurrentContent.challenges[0],
-      files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
-    })],
+    challenges: [
+      buildChallenge({
+        ...expectedCurrentContent.challenges[0],
+        files: attachments.map(({ id: fileId, localizedChallengeId }) => ({ fileId, localizedChallengeId }))
+      }),
+      buildChallenge({
+        ...expectedCurrentContent.challenges[1],
+        accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
+        accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
+      }),
+    ],
     competences: [buildCompetence(expectedCurrentContent.competences[0])],
     frameworks: [buildFramework(expectedCurrentContent.frameworks[0])],
     skills: [buildSkill(expectedCurrentContent.skills[0])],
@@ -615,48 +652,50 @@ async function mockContentForRelease() {
     });
   }
 
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.instruction`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].instruction,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.alternativeInstruction`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].alternativeInstruction,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.proposals`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].proposals,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.solution`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].solution,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.solutionToDisplay`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].solutionToDisplay,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.embedTitle`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].embedTitle,
-  });
-  databaseBuilder.factory.buildTranslation({
-    key: `challenge.${expectedCurrentContent.challenges[0].id}.illustrationAlt`,
-    locale: 'fr-fr',
-    value: expectedCurrentContent.challenges[0].illustrationAlt,
-  });
+  for (const challenge of expectedCurrentContent.challenges) {
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.instruction`,
+      locale: 'fr-fr',
+      value: challenge.instruction,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.alternativeInstruction`,
+      locale: 'fr-fr',
+      value: challenge.alternativeInstruction,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.proposals`,
+      locale: 'fr-fr',
+      value: challenge.proposals,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.solution`,
+      locale: 'fr-fr',
+      value: challenge.solution,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.solutionToDisplay`,
+      locale: 'fr-fr',
+      value: challenge.solutionToDisplay,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.embedTitle`,
+      locale: 'fr-fr',
+      value: challenge.embedTitle,
+    });
+    databaseBuilder.factory.buildTranslation({
+      key: `challenge.${challenge.id}.illustrationAlt`,
+      locale: 'fr-fr',
+      value: challenge.illustrationAlt,
+    });
 
-  databaseBuilder.factory.buildLocalizedChallenge({
-    id: expectedCurrentContent.challenges[0].id,
-    challengeId: expectedCurrentContent.challenges[0].id,
-    locale: 'fr-fr',
-    embedUrl: expectedCurrentContent.challenges[0].embedUrl,
-  });
+    databaseBuilder.factory.buildLocalizedChallenge({
+      id: challenge.id,
+      challengeId: challenge.id,
+      locale: 'fr-fr',
+      embedUrl: challenge.embedUrl,
+    });
+  }
 
   await databaseBuilder.commit();
   return expectedCurrentContent;
@@ -714,7 +753,7 @@ describe('Acceptance | Controller | release-controller', () => {
     });
   });
 
-  describe('GET /latest-release - Returns latest release', () => {
+  describe('GET /releases/latest - Returns latest release', () => {
     context('nominal case', () => {
       let user;
       beforeEach(async function() {
