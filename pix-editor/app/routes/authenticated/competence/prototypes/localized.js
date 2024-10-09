@@ -19,6 +19,6 @@ export default class LocalizedPrototypeRoute extends Route {
 
   resetController(controller, _isExiting, _transition) {
     super.resetController(controller, _isExiting, _transition);
-    controller.send('cancelEdit');
+    if (controller.edition) controller.send('cancelEdit');
   }
 }
