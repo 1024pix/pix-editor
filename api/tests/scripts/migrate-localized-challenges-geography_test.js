@@ -8,7 +8,7 @@ import { LocalizedChallenge } from '../../lib/domain/models/index.js';
 
 describe('Script | migrate-localized-challenges-geography', () => {
 
-  it.fails('should copy geography field from airtable to PG', async () => {
+  it('should copy geography field from airtable to PG', async () => {
     // given
     databaseBuilder.factory.buildLocalizedChallenge({
       id: 'recChallenge1',
@@ -82,6 +82,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge1Nl',
@@ -91,6 +96,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PLAY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge2',
@@ -100,6 +110,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge2Nl',
@@ -109,6 +124,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PAUSE,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge3',
@@ -118,6 +138,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge4',
@@ -127,6 +152,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
       {
         id: 'recChallenge5',
@@ -136,6 +166,11 @@ describe('Script | migrate-localized-challenges-geography', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       },
     ]);
   });
