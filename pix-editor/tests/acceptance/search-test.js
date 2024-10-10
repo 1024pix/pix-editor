@@ -37,7 +37,7 @@ module('Acceptance | Search', function(hooks) {
 
   test('search a challenge by rec id', async function(assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1';
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
@@ -53,7 +53,7 @@ module('Acceptance | Search', function(hooks) {
 
   test('search a challenge by challenge id', async function(assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1';
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/challengeChallenge1?view=production';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
@@ -85,7 +85,7 @@ module('Acceptance | Search', function(hooks) {
 
   test('search a challenge by text', async function(assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1';
+    const expectedUrl = '/competence/recCompetence1.1/prototypes/recChallenge1?view=production';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
@@ -101,7 +101,7 @@ module('Acceptance | Search', function(hooks) {
 
   test('search a skill by name - starting with @', async function(assert) {
     // given
-    const expectedUrl = '/competence/recCompetence1.1/skills/recSkill1';
+    const expectedUrl = '/competence/recCompetence1.1/skills/recSkill1?view=production';
     // when
     await visit('/');
     await click(find('[data-test-sidebar-search] .ember-basic-dropdown-trigger'));
