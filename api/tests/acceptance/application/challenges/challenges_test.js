@@ -845,6 +845,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         challengeId,
         locale: 'fr',
         geography: 'BR',
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
@@ -852,12 +857,17 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale,
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
 
       await databaseBuilder.commit();
     });
 
-    it.fails('should redirect to a staging Pix App preview URL', async () => {
+    it('should redirect to a staging Pix App preview URL', async () => {
       // given
       const apiToken = 'secret';
       const apiTokenScope = nock('https://api.test.pix.fr')
@@ -888,6 +898,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             t2Status: false,
             t3Status: false,
             status: Challenge.STATUSES.PROPOSE,
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: false,
+            toRephrase: true,
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);

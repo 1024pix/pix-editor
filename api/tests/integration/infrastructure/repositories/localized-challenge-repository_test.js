@@ -473,6 +473,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: challengeId1,
         locale: 'fr-fr',
         embedUrl,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: `${challengeId1}En`,
@@ -524,6 +529,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'fr-fr',
           embedUrl,
           urlsToConsult: null,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId1}Nl`,
