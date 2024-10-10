@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createChallengeTransformer, fillAlternativeQualityFieldsFromMatchingProto } from '../../../../lib/infrastructure/transformers/index.js';
-import { Challenge } from '../../../../lib/domain/models/Challenge.js';
+import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { Attachment } from '../../../../lib/domain/models/index.js';
 
@@ -142,9 +142,24 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
   describe('#fillAlternativeFieldsFromProto', () => {
     it('should fill same accessibility1 and accessibility2 from prototype for all challenges by skill and version', () => {
       // given
+      const skill1 = {
+        id: 'skill1',
+        name: 'skill1',
+      };
+
+      const skill2 = {
+        id: 'skill2',
+        name: 'skill2',
+      };
+
+      const workbenchSkill = {
+        id: 'skill3',
+        name: Skill.WORKBENCH_NAME,
+      };
+
       const challengeProto1Skill1DTO = {
         id: 'challengeProto1Skill1',
-        skillId: 'skill1',
+        skillId: skill1.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -161,7 +176,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       };
       const challengeAlternative1Skill1DTO = {
         id: 'challengeAlternative1Skill1',
-        skillId: 'skill1',
+        skillId:  skill1.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -179,7 +194,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
 
       const challengeProto2Skill1DTO = {
         id: 'challengeProto2Skill1',
-        skillId: 'skill1',
+        skillId: skill1.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -196,7 +211,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       };
       const challengeAlternative2Skill1DTO = {
         id: 'challengeAlternative2Skill1',
-        skillId: 'skill1',
+        skillId: skill1.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -214,7 +229,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
 
       const challengeProto1Skill2DTO = {
         id: 'challengeProto1Skill2',
-        skillId: 'skill2',
+        skillId: skill2.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -231,7 +246,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       };
       const challengeAlternative1Skill2DTO = {
         id: 'challengeAlternative1Skill2',
-        skillId: 'skill2',
+        skillId: skill2.id,
         translations: {
           fr: {
             instruction: 'Consigne',
@@ -247,20 +262,55 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         genealogy: Challenge.GENEALOGIES.DECLINAISON
       };
 
-      const [
-        challengeProto1Skill1,
-        challengeAlternative1Skill1,
-        challengeProto2Skill1,
-        challengeAlternative2Skill1,
-        challengeProto1Skill2,
-        challengeAlternative1Skill2,
-      ] = [
-        domainBuilder.buildChallenge(challengeProto1Skill1DTO),
-        domainBuilder.buildChallenge(challengeAlternative1Skill1DTO),
-        domainBuilder.buildChallenge(challengeProto2Skill1DTO),
-        domainBuilder.buildChallenge(challengeAlternative2Skill1DTO),
-        domainBuilder.buildChallenge(challengeProto1Skill2DTO),
-        domainBuilder.buildChallenge(challengeAlternative1Skill2DTO)
+      const challengeProtoWorkbench1DTO  = {
+        id: 'challengeProtoWorkbench1',
+        skillId: workbenchSkill.id,
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        version: null,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE
+      };
+
+      const challengeProtoWorkbench2DTO  = {
+        id: 'challengeProtoWorkbench2',
+        skillId: workbenchSkill.id,
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.KO,
+        accessibility2: Challenge.ACCESSIBILITY2.RAS,
+        version: null,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE
+      };
+
+      const challengeProto1Skill1 = domainBuilder.buildChallenge(challengeProto1Skill1DTO);
+      const challengeAlternative1Skill1 = domainBuilder.buildChallenge(challengeAlternative1Skill1DTO);
+      const challengeProto2Skill1 = domainBuilder.buildChallenge(challengeProto2Skill1DTO);
+      const challengeAlternative2Skill1 = domainBuilder.buildChallenge(challengeAlternative2Skill1DTO);
+      const challengeProto1Skill2 = domainBuilder.buildChallenge(challengeProto1Skill2DTO);
+      const challengeAlternative1Skill2 = domainBuilder.buildChallenge(challengeAlternative1Skill2DTO);
+      const challengeProtoWorkbench1 = domainBuilder.buildChallenge(challengeProtoWorkbench1DTO);
+      const challengeProtoWorkbench2 = domainBuilder.buildChallenge(challengeProtoWorkbench2DTO);
+
+      const skills = [
+        domainBuilder.buildSkill(skill1),
+        domainBuilder.buildSkill(skill2),
+        domainBuilder.buildSkill(workbenchSkill),
       ];
 
       // when
@@ -271,7 +321,9 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         challengeAlternative2Skill1,
         challengeProto1Skill2,
         challengeAlternative1Skill2,
-      ]);
+        challengeProtoWorkbench1,
+        challengeProtoWorkbench2,
+      ], skills);
 
       // then
       expect(challengeProto1Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill1DTO));
@@ -295,6 +347,8 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         accessibility2: challengeProto1Skill2DTO.accessibility2,
       }));
 
+      expect(challengeProtoWorkbench1).to.deep.equal(domainBuilder.buildChallenge(challengeProtoWorkbench1DTO));
+      expect(challengeProtoWorkbench2).to.deep.equal(domainBuilder.buildChallenge(challengeProtoWorkbench2DTO));
     });
   });
 });

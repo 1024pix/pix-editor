@@ -121,7 +121,7 @@ async function _getCurrentContent() {
     getStaticCourses(),
     missionRepository.listActive(),
   ]);
-  fillAlternativeQualityFieldsFromMatchingProto(challenges);
+  fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges.flatMap((challenge) => [
     challenge,
     ...challenge.alternativeLocales.map((locale) => challenge.translate(locale))

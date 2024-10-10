@@ -33,7 +33,7 @@ export async function getLearningContentForReplication() {
     thematicRepository.list(),
     _getCoursesFromPGForReplication(),
   ]);
-  fillAlternativeQualityFieldsFromMatchingProto(challenges);
+  fillAlternativeQualityFieldsFromMatchingProto(challenges, skills);
   const translatedChallenges = challenges
     .flatMap((challenge) => [
       challenge,

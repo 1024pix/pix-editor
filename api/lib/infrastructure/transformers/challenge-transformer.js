@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Attachment } from '../../domain/models/index.js';
+import { Attachment, Skill } from '../../domain/models/index.js';
 
 export function createChallengeTransformer({ attachments }) {
   return _.flow(
@@ -8,8 +8,16 @@ export function createChallengeTransformer({ attachments }) {
   );
 }
 
-export function fillAlternativeQualityFieldsFromMatchingProto(challenges) {
-  const challengesBySkillIdAndVersion = _.groupBy(challenges, (challenge) => {
+export function fillAlternativeQualityFieldsFromMatchingProto(challenges, skills) {
+  const workbenchSkillIds = skills
+    .filter((skill) => skill.name === Skill.WORKBENCH_NAME)
+    .map(({ id }) => id);
+
+  const workbenchSkillIdsSet = new Set(workbenchSkillIds);
+
+  const challengesNotFromWorkbench = challenges.filter((challenge) => !workbenchSkillIdsSet.has(challenge.skillId));
+
+  const challengesBySkillIdAndVersion = _.groupBy(challengesNotFromWorkbench, (challenge) => {
     return `${challenge.skillId}__${challenge.version}`;
   });
 
