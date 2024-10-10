@@ -227,6 +227,24 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         genealogy: Challenge.GENEALOGIES.DECLINAISON,
       };
 
+      const challengeAlternative3Skill1DTO = {
+        id: 'challengeAlternative3Skill1',
+        skillId: skill1.id,
+        translations: {
+          fr: {
+            instruction: 'Consigne',
+            alternativeInstruction: 'Consigne alternative',
+            proposals: 'Propositions',
+          },
+        },
+        locales: ['fr', 'fr-fr'],
+        files: [],
+        accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
+        accessibility2: Challenge.ACCESSIBILITY2.KO,
+        version: '3',
+        genealogy: Challenge.GENEALOGIES.DECLINAISON,
+      };
+
       const challengeProto1Skill2DTO = {
         id: 'challengeProto1Skill2',
         skillId: skill2.id,
@@ -302,6 +320,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
       const challengeAlternative1Skill1 = domainBuilder.buildChallenge(challengeAlternative1Skill1DTO);
       const challengeProto2Skill1 = domainBuilder.buildChallenge(challengeProto2Skill1DTO);
       const challengeAlternative2Skill1 = domainBuilder.buildChallenge(challengeAlternative2Skill1DTO);
+      const challengeAlternative3Skill1 = domainBuilder.buildChallenge(challengeAlternative3Skill1DTO);
       const challengeProto1Skill2 = domainBuilder.buildChallenge(challengeProto1Skill2DTO);
       const challengeAlternative1Skill2 = domainBuilder.buildChallenge(challengeAlternative1Skill2DTO);
       const challengeProtoWorkbench1 = domainBuilder.buildChallenge(challengeProtoWorkbench1DTO);
@@ -319,6 +338,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         challengeAlternative1Skill1,
         challengeProto2Skill1,
         challengeAlternative2Skill1,
+        challengeAlternative3Skill1,
         challengeProto1Skill2,
         challengeAlternative1Skill2,
         challengeProtoWorkbench1,

@@ -23,6 +23,9 @@ export function fillAlternativeQualityFieldsFromMatchingProto(challenges, skills
 
   Object.values(challengesBySkillIdAndVersion).forEach((groupedChallenges) => {
     const prototype = groupedChallenges.find((challenge) => challenge.isPrototype);
+
+    if (!prototype) return;
+
     for (const challenge of groupedChallenges) {
       _fillAlternativeQualityFields(challenge, prototype);
     }
