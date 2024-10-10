@@ -101,7 +101,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('static buildAlternativeFromTranslation', function() {
-    it.fails('should build an alternative localized challenge', function() {
+    it('should build an alternative localized challenge', function() {
       // given
       const translation = domainBuilder.buildTranslation({
         key: 'challenge.idDuChallenge.field',
@@ -121,6 +121,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         fileIds: [],
         geography: null,
         urlsToConsult: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
     });
   });

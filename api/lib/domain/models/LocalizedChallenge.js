@@ -100,6 +100,11 @@ export class LocalizedChallenge {
       fileIds: [],
       geography: null,
       urlsToConsult: null,
+      requireGafamWebsiteAccess: false,
+      isIncompatibleIpadCertif: false,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+      isAwarenessChallenge: false,
+      toRephrase: false,
     });
   }
 
