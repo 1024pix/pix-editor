@@ -1,5 +1,14 @@
 
 
+## v3.166.0 (10/10/2024)
+
+
+### :building_construction: Tech
+- [#774](https://github.com/1024pix/pix-editor/pull/774) [TECH] Valider le type de l'id dans la route `GET /api/releases/:id` (PIX-14706).
+
+### :bug: Correction
+- [#775](https://github.com/1024pix/pix-editor/pull/775) [BUGFIX] Permettre d'acceder au version traduite d'une déclinaison (PIX-14710).
+
 ## v3.165.1 (08/10/2024)
 
 
