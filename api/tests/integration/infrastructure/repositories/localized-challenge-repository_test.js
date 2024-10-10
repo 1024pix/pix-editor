@@ -136,7 +136,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
       await knex('localized_challenges').delete();
     });
 
-    it.fails('should create a localized challenge', async function() {
+    it('should create a localized challenge', async function() {
       // when
       await localizedChallengeRepository.create({ localizedChallenges: [
         domainBuilder.buildLocalizedChallenge({
@@ -147,6 +147,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           geography: 'AZ',
           urlsToConsult: ['lien1', 'lien2'],
           status: LocalizedChallenge.STATUSES.PRIMARY,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         })
       ] });
 
@@ -161,6 +166,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'AZ',
         urlsToConsult: ['lien1', 'lien2'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       }]);
     });
 
@@ -177,16 +187,26 @@ describe('Integration | Repository | localized-challenge-repository', function()
     });
 
     context('when there is no id', function() {
-      it.fails('should generate an id and create a localized challenge', async function() {
+      it('should generate an id and create a localized challenge', async function() {
         // when
-        await localizedChallengeRepository.create({ localizedChallenges:[{
+        const localizedChallengeToCreate = domainBuilder.buildLocalizedChallenge({
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
           status: LocalizedChallenge.STATUSES.PRIMARY,
-        }], generateId: () => 'generated-id' });
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        });
+        delete localizedChallengeToCreate.id;
+        await localizedChallengeRepository.create({
+          localizedChallenges: [localizedChallengeToCreate],
+          generateId: () => 'generated-id',
+        });
 
         // then
         const localizedChallenge = await knex('localized_challenges').select();
@@ -199,6 +219,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }]);
       });
 
@@ -223,7 +248,7 @@ describe('Integration | Repository | localized-challenge-repository', function()
         expect(localizedChallenges[0].id).not.to.equal(localizedChallenges[1].id);
       });
 
-      it.fails('should not create duplicated localizedChallenges when already exist', async () => {
+      it('should not create duplicated localizedChallenges when already exist', async () => {
         // given
         databaseBuilder.factory.buildLocalizedChallenge({
           id: 'id',
@@ -231,6 +256,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'en',
           embedUrl: 'example.com',
           urlsToConsult: ['link1', 'link2'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         });
         await databaseBuilder.commit();
 
@@ -243,6 +273,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             geography: null,
             urlsToConsult: ['link1', 'link2'],
             status: LocalizedChallenge.STATUSES.PRIMARY,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
           },
           {
             challengeId: 'challengeId',
@@ -251,6 +286,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
             status: LocalizedChallenge.STATUSES.PRIMARY,
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: true,
+            toRephrase: false,
           }
         ] });
 
@@ -267,6 +307,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: null,
             urlsToConsult: ['link1', 'link2'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
@@ -276,6 +321,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: true,
+            toRephrase: false,
           },
         ]);
       });

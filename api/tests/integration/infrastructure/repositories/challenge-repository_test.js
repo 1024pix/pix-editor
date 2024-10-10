@@ -408,7 +408,7 @@ describe('Integration | Repository | challenge-repository', () => {
       return knex('translations').del();
     });
 
-    it.fails('should create several challenges in airtable and its localized challenges and translations in PG', async () => {
+    it('should create several challenges in airtable and its localized challenges and translations in PG', async () => {
       // given
       const primaryLocalizedChallenge_challengeA = domainBuilder.buildLocalizedChallenge({
         id: 'challengeA_id',
@@ -419,6 +419,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: null,
         geography: 'FR',
         urlsToConsult: ['http://challengeA_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const localizedChallengeNL_challengeA = domainBuilder.buildLocalizedChallenge({
         id: 'localizedChallengeNL_challengeA_id',
@@ -429,6 +434,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: LocalizedChallenge.STATUSES.PLAY,
         geography: 'NL',
         urlsToConsult: ['http://localizedChallengeNL_challengeA_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: true,
+        toRephrase: false,
       });
       const challengeA_data = {
         id: 'challengeA_id',
@@ -487,6 +497,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: null,
         geography: 'FR',
         urlsToConsult: ['http://challengeB_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
       const challengeB_data = {
         id: 'challengeB_id',
@@ -810,6 +825,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: primaryLocalizedChallenge_challengeA.status,
           geography: primaryLocalizedChallenge_challengeA.geography,
           urlsToConsult: primaryLocalizedChallenge_challengeA.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         },
         {
           id: localizedChallengeNL_challengeA.id,
@@ -819,6 +839,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: localizedChallengeNL_challengeA.status,
           geography: localizedChallengeNL_challengeA.geography,
           urlsToConsult: localizedChallengeNL_challengeA.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: true,
+          toRephrase: false,
         },
         {
           id: challengeB_data.id,
@@ -828,6 +853,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: primaryLocalizedChallenge_challengeB.status,
           geography: primaryLocalizedChallenge_challengeB.geography,
           urlsToConsult: primaryLocalizedChallenge_challengeB.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         },
       ]);
       const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')

@@ -119,6 +119,11 @@ export class LocalizedChallenge {
       fileIds: [],
       geography: this.geography,
       urlsToConsult: this.urlsToConsult,
+      requireGafamWebsiteAccess: this.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: this.isIncompatibleIpadCertif,
+      deafAndHardOfHearing: this.deafAndHardOfHearing,
+      isAwarenessChallenge: this.isAwarenessChallenge,
+      toRephrase: this.toRephrase,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);

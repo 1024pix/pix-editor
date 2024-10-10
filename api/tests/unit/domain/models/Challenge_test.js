@@ -596,7 +596,7 @@ describe('Unit | Domain | Challenge', () => {
   });
 
   describe('#cloneChallengeAndAttachments', ()=> {
-    it.fails('should clone challenge', () => {
+    it('should clone challenge', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
       const competenceId = 'competenceId';
@@ -626,6 +626,11 @@ describe('Unit | Domain | Challenge', () => {
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
             urlsToConsult: ['https://monurl.fr'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
           }),
         ],
         files: [{
@@ -714,6 +719,11 @@ describe('Unit | Domain | Challenge', () => {
       expect(clonedChallenge.validatedAt).toBeNull;
       expect(clonedChallenge.version).toEqual(prototypeVersion);
       expect(clonedChallenge.locales).toEqual(challenge.locales);
+      expect(clonedChallenge.requireGafamWebsiteAccess).toEqual(challenge.requireGafamWebsiteAccess);
+      expect(clonedChallenge.isIncompatibleIpadCertif).toEqual(challenge.isIncompatibleIpadCertif);
+      expect(clonedChallenge.deafAndHardOfHearing).toEqual(challenge.deafAndHardOfHearing);
+      expect(clonedChallenge.isAwarenessChallenge).toEqual(challenge.isAwarenessChallenge);
+      expect(clonedChallenge.toRephrase).toEqual(challenge.toRephrase);
       expect(clonedChallenge.localizedChallenges[0]).toStrictEqual(domainBuilder.buildLocalizedChallenge({
         id: clonedChallengeId,
         challengeId: clonedChallengeId,
@@ -723,10 +733,15 @@ describe('Unit | Domain | Challenge', () => {
         urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
         fileIds: [],
         locale: challenge.localizedChallenges[0].locale,
+        requireGafamWebsiteAccess: challenge.localizedChallenges[0].requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challenge.localizedChallenges[0].isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challenge.localizedChallenges[0].deafAndHardOfHearing,
+        isAwarenessChallenge: challenge.localizedChallenges[0].isAwarenessChallenge,
+        toRephrase: challenge.localizedChallenges[0].toRephrase,
       }));
     });
 
-    it.fails('should clone challenge without translations', () => {
+    it('should clone challenge without translations', () => {
       // given
       const clonedChallengeId = 'clonedChallengeId';
       const clonedNLLocalizedChallengeId = 'clonedNLLocalizedChallengeId';
@@ -768,6 +783,11 @@ describe('Unit | Domain | Challenge', () => {
             embedUrl: 'pix-mailccoule.fr',
             geography: 'France',
             urlsToConsult: ['https://monurl.fr'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
           }),
           new LocalizedChallenge({
             id: 'locNLChallengeId',
@@ -778,6 +798,11 @@ describe('Unit | Domain | Challenge', () => {
             embedUrl: 'pix-mailccoule.nl',
             geography: 'Netherlands',
             urlsToConsult: ['https://monurl.nl'],
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
           }),
         ],
         files: [{
@@ -818,6 +843,11 @@ describe('Unit | Domain | Challenge', () => {
 
       // then
       // airtable ids are unknown yet
+      expect(clonedChallenge.requireGafamWebsiteAccess).toEqual(challenge.requireGafamWebsiteAccess);
+      expect(clonedChallenge.isIncompatibleIpadCertif).toEqual(challenge.isIncompatibleIpadCertif);
+      expect(clonedChallenge.deafAndHardOfHearing).toEqual(challenge.deafAndHardOfHearing);
+      expect(clonedChallenge.isAwarenessChallenge).toEqual(challenge.isAwarenessChallenge);
+      expect(clonedChallenge.toRephrase).toEqual(challenge.toRephrase);
       expect(clonedChallenge.files).toStrictEqual([]);
 
       expect(clonedChallenge.translations).toStrictEqual({
@@ -840,7 +870,12 @@ describe('Unit | Domain | Challenge', () => {
           urlsToConsult: challenge.localizedChallenges[0].urlsToConsult,
           fileIds: [],
           locale: challenge.localizedChallenges[0].locale,
-        })
+          requireGafamWebsiteAccess: challenge.localizedChallenges[0].requireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: challenge.localizedChallenges[0].isIncompatibleIpadCertif,
+          deafAndHardOfHearing: challenge.localizedChallenges[0].deafAndHardOfHearing,
+          isAwarenessChallenge: challenge.localizedChallenges[0].isAwarenessChallenge,
+          toRephrase: challenge.localizedChallenges[0].toRephrase,
+        }),
       ]);
 
       expect(clonedAttachments).toStrictEqual([

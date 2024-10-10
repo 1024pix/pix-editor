@@ -283,7 +283,7 @@ export class Challenge {
       id,
       challengeId: id,
       status: LocalizedChallenge.STATUSES.PRIMARY,
-      attachments
+      attachments,
     });
     const primaryTranslation = {
       [this.primaryLocale]:  _.cloneDeep(this.translations[this.primaryLocale])

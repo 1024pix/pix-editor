@@ -131,7 +131,7 @@ describe('Unit | Domain | LocalizedChallenge', () => {
   });
 
   describe('clone', function() {
-    it.fails('should return a cloned localized challenge and its cloned attachments', function() {
+    it('should return a cloned localized challenge and its cloned attachments', function() {
       // given
       const newId = 'newChallengeId';
       const newChallengeId = 'newChallengeId';
@@ -145,6 +145,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: 'France',
         urlsToConsult: ['http://url.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const attachments = [
         domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
@@ -183,6 +188,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         status: newStatus,
         geography: localizedChallenge.geography,
         urlsToConsult: localizedChallenge.urlsToConsult,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
       expect(clonedAttachments).toStrictEqual([
