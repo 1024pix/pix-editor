@@ -79,7 +79,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should return challenges', async () => {
+    it('should return challenges', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({ id: 'my id', geography: 'DeprecatedLand' });
 
@@ -139,6 +139,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
         urlsToConsult: ['truc'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'my id_nl',
@@ -206,6 +211,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'Une illustration',
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -240,7 +250,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       });
     });
 
-    it.fails('should filter challenges by id', async () => {
+    it('should filter challenges by id', async () => {
       // Given
       const challenge1 = domainBuilder.buildChallengeDatasourceObject({ id: '1', geography: 'DeprecatedLand' });
       const challenge2 = domainBuilder.buildChallengeDatasourceObject({ id: '2', geography: 'DeprecatedLand' });
@@ -337,6 +347,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
         urlsToConsult: ['truc.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
@@ -344,6 +359,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         geography: 'PH',
         urlsToConsult: ['truc2.fr'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: true,
+        toRephrase: false,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2_nl',
@@ -414,6 +434,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'La belle image',
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -484,6 +509,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'Une autre image',
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': true,
+              'to-rephrase': false,
             },
             relationships: {
               skill: {
@@ -583,7 +613,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       await databaseBuilder.commit();
     });
 
-    it.fails('should return given challenge', async () => {
+    it('should return given challenge', async () => {
       // Given
       const challenge = domainBuilder.buildChallengeDatasourceObject({
         id: 'recChallengeId1',
@@ -614,6 +644,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'https://github.io/page/epreuve.html',
         geography: 'BR',
         urlsToConsult: ['truc.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
@@ -717,6 +752,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
