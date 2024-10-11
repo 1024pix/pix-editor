@@ -70,6 +70,10 @@ export class Skill {
     return 'skill';
   }
 
+  static get WORKBENCH_NAME() {
+    return '@workbench';
+  }
+
   get isLive() {
     return [Skill.STATUSES.EN_CONSTRUCTION, Skill.STATUSES.ACTIF].includes(this.status);
   }

@@ -1,11 +1,46 @@
 import _ from 'lodash';
-import { Attachment } from '../../domain/models/index.js';
+import { Attachment, Skill } from '../../domain/models/index.js';
 
 export function createChallengeTransformer({ attachments }) {
   return _.flow(
     _addAttachmentsToChallenge({ attachments }),
     _filterChallengeFields,
   );
+}
+
+export function fillAlternativeQualityFieldsFromMatchingProto(challenges, skills) {
+  const workbenchSkillIds = skills
+    .filter((skill) => skill.name === Skill.WORKBENCH_NAME)
+    .map(({ id }) => id);
+
+  const workbenchSkillIdsSet = new Set(workbenchSkillIds);
+
+  const challengesNotFromWorkbench = challenges.filter((challenge) => !workbenchSkillIdsSet.has(challenge.skillId));
+
+  const challengesBySkillIdAndVersion = _.groupBy(challengesNotFromWorkbench, (challenge) => {
+    return `${challenge.skillId}__${challenge.version}`;
+  });
+
+  Object.values(challengesBySkillIdAndVersion).forEach((groupedChallenges) => {
+    const prototype = groupedChallenges.find((challenge) => challenge.isPrototype);
+
+    if (!prototype) return;
+
+    for (const challenge of groupedChallenges) {
+      _fillAlternativeQualityFields(challenge, prototype);
+    }
+  });
+}
+
+function _fillAlternativeQualityFields(challenge, prototype) {
+  const fieldsToOverride = [
+    'accessibility1',
+    'accessibility2',
+  ];
+
+  for (const field of fieldsToOverride) {
+    challenge[field] = prototype[field];
+  }
 }
 
 function _filterChallengeFields(challenge) {
