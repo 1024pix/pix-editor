@@ -1483,7 +1483,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       user = databaseBuilder.factory.buildAdminUser();
     });
 
-    it.fails('should update a challenge', async () => {
+    it('should update a challenge', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const locale = 'fr';
@@ -1503,6 +1503,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'old_url',
         urlsToConsult: ['pouet'],
         locale,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge_localized_nl',
@@ -1603,6 +1608,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
             },
             relationships: {
               skill: {
@@ -1672,6 +1682,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': false,
+            'is-incompatible-ipad-certif': false,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            'is-awareness-challenge': false,
+            'to-rephrase': false,
           },
           relationships: {
             skill: {
@@ -1707,6 +1722,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
       expect(localizedChallenge).toHaveProperty('urlsToConsult', ['pouet.com']);
       expect(localizedChallenge).toHaveProperty('geography', 'NL');
+      expect(localizedChallenge).toHaveProperty('requireGafamWebsiteAccess', false);
+      expect(localizedChallenge).toHaveProperty('isIncompatibleIpadCertif', false);
+      expect(localizedChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
+      expect(localizedChallenge).toHaveProperty('isAwarenessChallenge', false);
+      expect(localizedChallenge).toHaveProperty('toRephrase', false);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -1741,7 +1761,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
       ]);
     });
 
-    it.fails('should change challenge\'s primary locale', async () => {
+    it('should change challenge\'s primary locale', async () => {
       // Given
       const challengeId = 'recChallengeId';
       const originalLocale = 'fr-fr';
@@ -1763,6 +1783,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: originalLocale,
         geography: 'BR',
         urlsToConsult: ['truc'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1856,6 +1881,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -1925,6 +1955,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
@@ -1961,6 +1996,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           status: null,
           geography: 'JM',
           urlsToConsult: ['truc'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         },
       ]);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
