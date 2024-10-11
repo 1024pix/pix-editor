@@ -144,17 +144,6 @@ export async function update(challenge, knexConn = knex) {
   return toDomain(updatedChallengeDto, translations, localizedChallenges);
 }
 
-export async function updateBatch(challenges) {
-  return knex.transaction(async (transaction) => {
-    const updatedChallenges = [];
-    for (const challenge of challenges) {
-      const updatedChallenge = await update(challenge, transaction);
-      updatedChallenges.push(updatedChallenge);
-    }
-    return updatedChallenges;
-  });
-}
-
 export async function listBySkillId(skillId) {
   const challengeDTOs = await challengeDatasource.filterBySkillId(skillId);
   if (!challengeDTOs) return [];
