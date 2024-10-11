@@ -77,6 +77,11 @@ export class LocalizedChallenge {
     embedUrl,
     geography,
     urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -87,6 +92,11 @@ export class LocalizedChallenge {
       urlsToConsult,
       status: LocalizedChallenge.STATUSES.PRIMARY,
       fileIds: [],
+      requireGafamWebsiteAccess: requireGafamWebsiteAccess ?? false,
+      isIncompatibleIpadCertif: isIncompatibleIpadCertif ?? false,
+      deafAndHardOfHearing: deafAndHardOfHearing ?? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+      isAwarenessChallenge: isAwarenessChallenge ?? false,
+      toRephrase: toRephrase ?? false,
     });
   }
 

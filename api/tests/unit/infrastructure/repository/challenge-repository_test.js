@@ -318,7 +318,6 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
-
   describe('#filterByThematicIds', () => {
     it('calls filter with filterByFormula defined to filter by thematic ids', async function() {
       const thematicsIds = ['id1', 'id2'];
@@ -331,7 +330,6 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter : { formula: 'OR(FIND("id1", {Thematique (Record ID)}), FIND("id2", {Thematique (Record ID)}))' } });
     });
   });
-
   describe('#get', () => {
     it('should return a challenge by id', async () => {
       // given
@@ -405,7 +403,6 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
-
   describe('#update', () => {
     it('should update a challenge by id', async () => {
       // given

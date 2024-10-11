@@ -49,6 +49,11 @@ const serializer = new Serializer('challenges', {
     'contextualizedFields',
     'localizedChallenges',
     'illustrationAlt',
+    'requireGafamWebsiteAccess',
+    'isIncompatibleIpadCertif',
+    'deafAndHardOfHearing',
+    'isAwarenessChallenge',
+    'toRephrase',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'files') return 'attachments';
@@ -129,6 +134,11 @@ export function deserialize(challengeBody) {
         embedUrl: challengeObject.embedUrl,
         geography: getCountryCode(challengeObject.geography),
         urlsToConsult: challengeObject.urlsToConsult,
+        requireGafamWebsiteAccess: challengeObject.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challengeObject.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challengeObject.deafAndHardOfHearing,
+        isAwarenessChallenge: challengeObject.isAwarenessChallenge,
+        toRephrase: challengeObject.toRephrase,
       })];
       return err ? reject(err) : resolve(new Challenge(challengeObject));
     });
