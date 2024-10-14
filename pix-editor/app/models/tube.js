@@ -87,6 +87,10 @@ export default class TubeModel extends Model {
     return this._getFilledOrderedVersions(this.deadSkills);
   }
 
+  get hasProductionSkills() {
+    return this.productionSkillCount > 0;
+  }
+
   getNextSkillVersion(level) {
     const skills = this.filledSkills[level - 1];
     return skills.length;
@@ -111,9 +115,5 @@ export default class TubeModel extends Model {
       }
       return grid;
     }, [false, false, false, false, false, false, false]);
-  }
-
-  get hasProductionSkills() {
-    return this.productionSkillCount > 0;
   }
 }

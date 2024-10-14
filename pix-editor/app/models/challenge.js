@@ -45,6 +45,11 @@ export default class ChallengeModel extends Model {
   @attr('date') madeObsoleteAt;
   @attr('boolean') shuffled;
   @attr({ defaultValue: function() { return []; } }) contextualizedFields;
+  @attr requireGafamWebsiteAccess;
+  @attr isIncompatibleIpadCertif;
+  @attr deafAndHardOfHearing;
+  @attr isAwarenessChallenge;
+  @attr toRephrase;
 
   @belongsTo('skill', { inverse: 'challenges', async: true }) skill;
   @hasMany('attachment', { inverse: 'challenge', async: true }) files;

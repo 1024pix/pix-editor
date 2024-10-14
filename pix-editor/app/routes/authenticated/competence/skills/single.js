@@ -8,8 +8,10 @@ export default class SingleRoute extends Route {
   @service router;
   @service store;
 
-  model(params) {
-    return this.store.findRecord('skill', params.skill_id);
+  async model(params) {
+    const skill = await this.store.findRecord('skill', params.skill_id);
+    await skill.challenges;
+    return skill;
   }
 
   afterModel(model) {

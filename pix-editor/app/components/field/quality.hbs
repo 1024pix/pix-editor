@@ -1,17 +1,67 @@
 <div class={{concat "field" (if @edition "" " disabled")}} ...attributes>
-    <label>{{@title}}</label>
-    <div class="four fields">
-        <div class="field">
-          <Field::Select @title="Non voyant" @value={{@challenge.accessibility1}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility1}} @setValue={{fn (mut @challenge.accessibility1)}} />
-        </div>
-        <div class="field">
-          <Field::Select @title="Daltonien" @value={{@challenge.accessibility2}} @edition={{@edition}} @multiple={{false}} @options={{this.options.accessibility2}} @setValue={{fn (mut @challenge.accessibility2)}}/>
-        </div>
-        <div class="field">
-          <Field::Select @title="Spoil" @value={{@challenge.spoil}} @edition={{@edition}} @multiple={{false}} @options={{this.options.spoil}} @setValue={{fn (mut @challenge.spoil)}}/>
-        </div>
-        <div class="field">
-          <Field::Select @title="Responsive" @value={{@challenge.responsive}} @edition={{@edition}} @multiple={{false}} @options={{this.options.responsive}} @setValue={{fn (mut @challenge.responsive)}}/>
-        </div>
-    </div>
+  <label>{{@title}}</label>
+  <div class="fields--selectors">
+    <PixSelect
+      @options={{this.accessibility1Options}}
+      @value={{@challenge.accessibility1}}
+      @onChange={{fn (mut @challenge.accessibility1)}}
+      @isDisabled={{not @edition}}
+    >
+      <:label>Non voyant</:label>
+    </PixSelect>
+    <PixSelect
+      @options={{this.accessibility2Options}}
+      @value={{@challenge.accessibility2}}
+      @onChange={{fn (mut @challenge.accessibility2)}}
+      @isDisabled={{not @edition}}
+    >
+      <:label>Daltonien</:label>
+    </PixSelect>
+    <PixSelect
+      @options={{this.spoilOptions}}
+      @value={{@challenge.spoil}}
+      @onChange={{fn (mut @challenge.spoil)}}
+      @isDisabled={{not @edition}}
+    >
+      <:label>Spoil</:label>
+    </PixSelect>
+    <PixSelect
+      @options={{this.responsiveOptions}}
+      @value={{@challenge.responsive}}
+      @onChange={{fn (mut @challenge.responsive)}}
+      @isDisabled={{not @edition}}
+    >
+      <:label>Responsive</:label>
+    </PixSelect>
+    <PixSelect
+      @options={{this.deafAndHardOfHearingOptions}}
+      @value={{@challenge.deafAndHardOfHearing}}
+      @onChange={{fn (mut @challenge.deafAndHardOfHearing)}}
+      @isDisabled={{not @edition}}
+    >
+      <:label>Sourds et malentendants</:label>
+    </PixSelect>
+  </div>
+  <div class="fields--selectors">
+    <Field::Checkbox
+      @label="Épreuve de sensibilisation"
+      @checked={{@challenge.isAwarenessChallenge}}
+      @disabled={{not @edition}}
+    />
+    <Field::Checkbox
+      @label="Accès GAFAM requis"
+      @checked={{@challenge.requireGafamWebsiteAccess}}
+      @disabled={{not @edition}}
+    />
+    <Field::Checkbox
+      @label="Formulation à revoir"
+      @checked={{@challenge.toRephrase}}
+      @disabled={{not @edition}}
+    />
+    <Field::Checkbox
+      @label="Incompatible iPad certif"
+      @checked={{@challenge.isIncompatibleIpadCertif}}
+      @disabled={{not @edition}}
+    />
+  </div>
 </div>
