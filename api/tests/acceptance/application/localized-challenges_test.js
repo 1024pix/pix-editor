@@ -5,7 +5,7 @@ import { LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | localized-challenges-controller', () => {
   describe('GET /localized-challenges/{id}', () => {
-    it.fails('should get a localized challenge by ID', async () => {
+    it('should get a localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -23,6 +23,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         embedUrl: 'https://choucroute.com/le-nl-c-est-ici',
         status: LocalizedChallenge.STATUSES.PAUSE,
         urlsToConsult: null,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
 
       await databaseBuilder.commit();
@@ -46,6 +51,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
             'urls-to-consult': null,
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             challenge: {
@@ -71,7 +81,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
   });
 
   describe('GET /localized-challenges', () => {
-    it.fails('should filter one localized challenge by ID', async () => {
+    it('should filter one localized challenge by ID', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
       databaseBuilder.factory.buildLocalizedChallenge({
@@ -85,6 +95,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
 
       await databaseBuilder.commit();
@@ -108,6 +123,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             geography: 'Neutre',
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
             'urls-to-consult': null,
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             challenge: {
@@ -131,7 +151,7 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
       expect(response.result).to.deep.equal(expectedLocalizedChallenges);
     });
 
-    it.fails('should filter several localized challenges by IDs', async () => {
+    it('should filter several localized challenges by IDs', async () => {
       // given
       const user = databaseBuilder.factory.buildAdminUser();
 
@@ -154,12 +174,22 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           id: 'localizedChallengeId0',
           locale: 'nl',
           embedUrl: 'https://choucroute.com/',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         }),
         databaseBuilder.factory.buildLocalizedChallenge({
           challengeId: 'recChallenge1',
           id: 'localizedChallengeId1',
           locale: 'de',
           embedUrl: 'https://raclette.com/',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
       ];
 
@@ -185,6 +215,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               status: null,
               translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
               'urls-to-consult': null,
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
             },
             relationships: {
               challenge: {
@@ -209,6 +244,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               status: null,
               translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
               'urls-to-consult': null,
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               challenge: {
