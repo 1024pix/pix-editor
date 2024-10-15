@@ -134,6 +134,8 @@ export default class ChallengeForm extends Component {
     return this.args.edition || this.args.challenge.urlsToConsult;
   }
 
+  shouldDisplayQualitySection = (challenge) => challenge.isDraft && challenge.isPrototype;
+
   @action
   setChallengeType({ value }) {
     this.args.challenge.type = value;

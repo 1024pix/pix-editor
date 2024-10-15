@@ -94,7 +94,7 @@
       </LinkTo>
     {{/each}}
     {{#if this.mayEdit}}
-      <button data-test-modify-challenge-button class="ui button item" {{on "click" this.edit}} type="button">
+      <button data-test-modify-challenge-button={{this.challenge.id}} class="ui button item" {{on "click" this.edit}} type="button">
         <i class="edit icon"></i>
         Modifier
       </button>

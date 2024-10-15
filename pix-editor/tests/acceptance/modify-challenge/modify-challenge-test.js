@@ -32,10 +32,27 @@ module('Acceptance | Modify-Challenge', function(hooks) {
         isAwarenessChallenge: false,
         toRephrase: false,
         genealogy: 'Prototype 1',
+        version: 1,
         status: 'proposé',
-        instruction: 'Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
+        instruction: 'Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis',
       });
-      this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1'], status: 'en construction' });
+      this.server.create('challenge', {
+        id: 'recChallenge2',
+        accessibility1: 'RAS',
+        accessibility2: 'OK',
+        responsive: 'Tablette',
+        spoil: 'Non Sp',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: 'KO',
+        isAwarenessChallenge: false,
+        toRephrase: false,
+        genealogy: 'Décliné 1',
+        version: 1,
+        status: 'proposé',
+        instruction: 'Cliquer sur instructions de la décli pour interagir avec',
+      });
+      this.server.create('skill', { id: 'recSkill1', level: 2, name: '@trululu2', challengeIds: ['recChallenge1', 'recChallenge2'], status: 'en construction' });
       this.server.create('tube', { id: 'recTube1', name: '@trululu', rawSkillIds: ['recSkill1'] });
       this.server.create('theme', { id: 'recTheme1', name: 'theme1', rawTubeIds: ['recTube1'] });
       this.server.create('competence', { id: 'recCompetence1.1', code: '1', title: 'titre compétence', pixId: 'pixId recCompetence1.1', rawThemeIds: ['recTheme1'], rawTubeIds: ['recTube1'] });
@@ -43,13 +60,13 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       this.server.create('framework', { id: 'recFramework1', name: 'Pix', areaIds: ['recArea1'] });
     });
 
-    test('can modify common attributes as well as quality attributes', async function(assert) {
+    test('can modify common attributes as well as quality attributes when challenge is a prototype', async function(assert) {
       const screen = await visit('/');
       await clickByText('1. Information et données');
       await clickByText('1 titre compétence');
       await clickByText('Atelier');
       await clickByText('@trululu2');
-      await clickByText('Cliquer sur instructions pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText('Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
       await clickByText('Modifier');
       await clickByText('Ajouter des URLs à consulter');
       await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
@@ -87,6 +104,35 @@ module('Acceptance | Modify-Challenge', function(hooks) {
       assert.true(screen.getByRole('checkbox', { name: 'Accès GAFAM requis' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Formulation à revoir' }).checked);
       assert.true(screen.getByRole('checkbox', { name: 'Incompatible iPad certif' }).checked);
+    });
+
+    test('can modify common attributes but not the quality attributes when challenge is an alternative', async function(assert) {
+      await visit('/');
+      await clickByText('1. Information et données');
+      await clickByText('1 titre compétence');
+      await clickByText('Atelier');
+      await clickByText('@trululu2');
+      await clickByText('Cliquer sur instructions du proto pour aller sur ma page principale depuis la liste des épreuves de l\'acquis');
+      await clickByText('Déclinaisons >>');
+      await clickByText('Cliquer sur instructions de la décli pour interagir avec');
+      await click('[data-test-modify-challenge-button="recChallenge2"]');
+      await clickByText('Ajouter des URLs à consulter');
+      await fillByLabel('URLs externes à consulter', ' https://mon-url.com \n mon-autre-url.com');
+      assert.dom(find('[data-test-accessibility1-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-accessibility2-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-spoil-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-responsive-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-deaf-and-hard-of-hearing-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-is-awareness-challenge-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-require-gafam-website-access-challenge-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-to-rephrase-challenge-id="recChallenge2"]')).doesNotExist();
+      assert.dom(find('[data-test-is-incompatible-ipad-certif-challenge-id="recChallenge2"]')).doesNotExist();
+      await click(find('[data-test-save-challenge-button]'));
+      await click(find('[data-test-confirm-log-approve]'));
+
+      const challenge = await store.peekRecord('challenge', 'recChallenge2');
+      assert.dom('[data-test-main-message]').hasText('Épreuve mise à jour');
+      assert.deepEqual(challenge.urlsToConsult, ['https://mon-url.com']);
     });
   });
 
