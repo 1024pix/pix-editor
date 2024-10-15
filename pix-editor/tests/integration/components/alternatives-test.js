@@ -1,5 +1,4 @@
 import { render } from '@1024pix/ember-testing-library';
-import EmberObject from '@ember/object';
 import { click } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -10,34 +9,41 @@ import { setupIntlRenderingTest } from '../../setup-intl-rendering';
 module('Integration | Component | alternatives', function(hooks) {
   setupIntlRenderingTest(hooks);
 
-  let newAlternativeStub;
+  let newAlternativeStub, store;
 
   hooks.beforeEach(function() {
+    store = this.owner.lookup('service:store');
     const alternatives = [
-      EmberObject.create({
+      store.createRecord('challenge', {
         id: 'recAlternativeId1',
         status: 'validé',
         instruction: 'ceci est une alternative validée',
         version: 2,
+        genealogy: 'Décliné 1',
       }),
-      EmberObject.create({
+      store.createRecord('challenge', {
         id: 'recAlternativeId2',
         status: 'proposé',
         instruction: 'ceci est une alternative proposée',
-        version: 3,
+        version: 2,
+        genealogy: 'Décliné 1',
       }),
-      EmberObject.create({
+      store.createRecord('challenge', {
         id: 'recAlternativeId3',
         status: 'périmé',
         instruction: 'ceci est une alternative périmée',
-        version: 4,
+        version: 2,
+        genealogy: 'Décliné 1',
       }),
     ];
 
-    const challenge = EmberObject.create({
+    const challenge = store.createRecord('challenge', {
       id: 'recChallengeId',
-      alternatives,
-      version: 1,
+      version: 2,
+      genealogy: 'Prototype 1',
+    });
+    store.createRecord('skill', {
+      challenges: [challenge, ...alternatives],
     });
 
     newAlternativeStub = sinon.stub();
@@ -66,7 +72,7 @@ module('Integration | Component | alternatives', function(hooks) {
     assert.dom(screen.queryByRole('button', { name: 'Nouvelle déclinaison' })).doesNotExist();
   });
 
-  test('display\'s obsolete alternatives when checked', async function(assert) {
+  test('displays obsolete alternatives when checked', async function(assert) {
     // when
     const screen = await render(hbs`
       <Alternatives
@@ -79,11 +85,10 @@ module('Integration | Component | alternatives', function(hooks) {
       />
     `);
 
-    await click(screen.getByRole('checkbox', { name: 'Afficher les déclinaisons périmées' }));
+    await click(await screen.getByRole('checkbox', { name: 'Afficher les déclinaisons périmées' }));
 
     assert.dom(screen.queryByText('ceci est une alternative validée')).exists();
     assert.dom(screen.queryByText('ceci est une alternative proposée')).exists();
-    // TODO: unflake
     assert.dom(screen.queryByText('ceci est une alternative périmée')).exists();
   });
 
