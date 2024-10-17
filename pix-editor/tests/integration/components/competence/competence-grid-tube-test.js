@@ -1,5 +1,5 @@
-import EmberObject from '@ember/object';
-import { render } from '@ember/test-helpers';
+// import { render } from '@ember/test-helpers';
+import { render } from '@1024pix/ember-testing-library';
 import { hbs } from 'ember-cli-htmlbars';
 import { module, test } from 'qunit';
 
@@ -9,11 +9,31 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
   setupIntlRenderingTest(hooks);
 
   hooks.beforeEach(function() {
-    const tube = EmberObject.create({
+    const store = this.owner.lookup('service:store');
+
+    const productionSkill1 = store.createRecord('skill', {
+      id: 'rec654258',
+      name: '@productionSkill1',
+      level: 1,
+      status: 'actif',
+      challenges: [store.createRecord('challenge', {
+        id: 'recChallenge0',
+        genealogy: 'Prototype 1',
+        status: 'validé',
+      })],
+    });
+
+    const workbenchSkill1 = store.createRecord('skill', {
+      id: 'rec654259',
+      name: '@workbenchSkill2',
+      level: 2,
+      status: 'en construction',
+    });
+
+    const tube = store.createRecord('tube', {
       id: 'recTube1',
       name: '@tube',
-      filledSkills: [[{ name: '@skill1', tutoSolution: [], tutoMore: [] }]],
-      filledProductionSkills: [{ name: '@productionSkill1', tutoSolution: [], tutoMore: [] }],
+      rawSkills: [productionSkill1, workbenchSkill1],
     });
 
     this.set('tube', tube);
@@ -57,12 +77,13 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
     this.set('section', 'skills');
 
     // when
-    await render(hbs`<Competence::CompetenceGridTube @tube={{this.tube}}
+    const screen = await render(hbs`<Competence::CompetenceGridTube @tube={{this.tube}}
                                                      @section={{this.section}}
                                                      @view={{this.view}} />`);
 
     // then
-    assert.dom('td.skill-cell').includesText('@skill1');
+    assert.dom(screen.queryByText('@workbenchSkill2')).exists();
+    assert.dom(screen.queryByText('@productionSkill1')).exists();
 
   });
 
@@ -72,12 +93,13 @@ module('Integration | Component | competence/competence-grid-tube', function(hoo
     this.set('section', 'skills');
 
     // when
-    await render(hbs`<Competence::CompetenceGridTube @tube={{this.tube}}
+    const screen = await render(hbs`<Competence::CompetenceGridTube @tube={{this.tube}}
                                                      @section={{this.section}}
                                                      @view={{this.view}} />`);
 
     // then
-    assert.dom('td.skill-cell').includesText('@productionSkill1');
+    assert.dom(screen.queryByText('@workbenchSkill2')).doesNotExist();
+    assert.dom(screen.queryByText('@productionSkill1')).exists();
 
   });
 });

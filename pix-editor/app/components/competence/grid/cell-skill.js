@@ -28,11 +28,13 @@ export default class CompetenceGridCellSkillComponent extends Component {
   }
 
   get tutoMoreCountByLanguage() {
-    return this._getTutorialsCountByLanguage(this.args.skill.tutoMore);
+    const tutoMoreArray = this.args.skill.hasMany('tutoMore')?.value() || [];
+    return this._getTutorialsCountByLanguage(tutoMoreArray);
   }
 
   get tutoSolutionCountByLanguage() {
-    return this._getTutorialsCountByLanguage(this.args.skill.tutoSolution);
+    const tutoSolutionArray = this.args.skill.hasMany('tutoSolution')?.value() || [];
+    return this._getTutorialsCountByLanguage(tutoSolutionArray);
   }
 
   _getTutorialsCountByLanguage(tutorials) {

@@ -17,7 +17,7 @@ export default class CompetenceHeader extends Component {
   ];
 
   languageOptions = [{
-    local: false,
+    local: undefined,
     title: 'Filtre par langue',
   }, {
     language: 'Anglais',

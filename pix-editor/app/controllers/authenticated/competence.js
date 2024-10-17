@@ -9,14 +9,12 @@ export default class CompetenceController extends Controller {
     'leftMaximized': {
       scope: 'controller',
     },
-    'view': {
-      scope: 'controller',
-    },
   }];
 
-  @tracked view = 'production';
+  @tracked view;
+  @tracked languageFilter;
+
   @tracked section = 'challenges';
-  @tracked languageFilter = false;
   @tracked leftMaximized = false;
   @tracked displaySortingPopIn = false;
   @tracked sortingPopInTitle = '';

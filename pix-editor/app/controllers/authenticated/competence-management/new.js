@@ -36,7 +36,7 @@ export default class CompetenceManagementNewController extends Controller {
       await this._createWorkbench(framework.name);
       this.notify.message('Atelier créé');
       this.edition = false;
-      this.router.transitionTo('authenticated.competence.skills', this.competence, { queryParams: { view: 'workbench' } });
+      this.router.transitionTo('authenticated.competence.skills', this.competence.id, { queryParams: { view: 'workbench' } });
     } catch (error) {
       Sentry.captureException(error);
       console.log(error);

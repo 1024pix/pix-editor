@@ -6,6 +6,15 @@ export default class CompetenceRoute extends Route {
   @service store;
   @service router;
 
+  queryParams = {
+    view: {
+      refreshModel: true,
+    },
+    languageFilter: {
+      refreshModel: true,
+    },
+  };
+
   model(params) {
     return this.store.findRecord('competence', params.competence_id);
   }
