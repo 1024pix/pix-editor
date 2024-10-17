@@ -152,7 +152,7 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
   });
 
   describe('#fillAlternativeFieldsFromProto', () => {
-    it('should fill same accessibility1 and accessibility2 from prototype for all challenges by skill and version', () => {
+    it('should fill same quality attributes from prototype for all challenges by skill and version', () => {
       // given
       const skill1 = {
         id: 'skill1',
@@ -163,7 +163,6 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         id: 'skill2',
         name: 'skill2',
       };
-
       const challengeProto1Skill1DTO = {
         id: 'challengeProto1Skill1',
         skillId: skill1.id,
@@ -174,6 +173,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeProto1Skill1',
+          challengeId: 'challengeProto1Skill1',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -191,6 +199,10 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeAlternative1Skill1',
+          challengeId: 'challengeAlternative1Skill1',
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.RAS,
@@ -209,6 +221,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeProto2Skill1',
+          challengeId: 'challengeProto2Skill1',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,
@@ -226,6 +247,10 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeAlternative2Skill1',
+          challengeId: 'challengeAlternative2Skill1',
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -244,6 +269,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeProto1Skill2',
+          challengeId: 'challengeProto1Skill2',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.RAS,
@@ -261,6 +295,10 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeAlternative1Skill2',
+          challengeId: 'challengeAlternative1Skill2',
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -293,25 +331,46 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
 
       // then
       expect(challengeProto1Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill1DTO));
-      expect(challengeAlternative1Skill1).to.deep.equal(domainBuilder.buildChallenge({
-        ...challengeAlternative1Skill1DTO,
-        accessibility1: challengeProto1Skill1DTO.accessibility1,
-        accessibility2: challengeProto1Skill1DTO.accessibility2,
-      }));
+      expect(challengeAlternative1Skill1).to.deep.equal({
+        ...domainBuilder.buildChallenge({
+          ...challengeAlternative1Skill1DTO,
+          accessibility1: challengeProto1Skill1DTO.accessibility1,
+          accessibility2: challengeProto1Skill1DTO.accessibility2,
+        }),
+        requireGafamWebsiteAccess: challengeProto1Skill1.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challengeProto1Skill1.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challengeProto1Skill1.deafAndHardOfHearing,
+        isAwarenessChallenge: challengeProto1Skill1.isAwarenessChallenge,
+        toRephrase: challengeProto1Skill1.toRephrase,
+      });
 
       expect(challengeProto2Skill1).to.deep.equal(domainBuilder.buildChallenge(challengeProto2Skill1DTO));
-      expect(challengeAlternative2Skill1).to.deep.equal(domainBuilder.buildChallenge({
-        ...challengeAlternative2Skill1DTO,
-        accessibility1: challengeProto2Skill1DTO.accessibility1,
-        accessibility2: challengeProto2Skill1DTO.accessibility2,
-      }));
+      expect(challengeAlternative2Skill1).to.deep.equal({
+        ...domainBuilder.buildChallenge({
+          ...challengeAlternative2Skill1DTO,
+          accessibility1: challengeProto2Skill1DTO.accessibility1,
+          accessibility2: challengeProto2Skill1DTO.accessibility2,
+        }),
+        requireGafamWebsiteAccess: challengeProto2Skill1.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challengeProto2Skill1.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challengeProto2Skill1.deafAndHardOfHearing,
+        isAwarenessChallenge: challengeProto2Skill1.isAwarenessChallenge,
+        toRephrase: challengeProto2Skill1.toRephrase,
+      });
 
       expect(challengeProto1Skill2).to.deep.equal(domainBuilder.buildChallenge(challengeProto1Skill2DTO));
-      expect(challengeAlternative1Skill2).to.deep.equal(domainBuilder.buildChallenge({
-        ...challengeAlternative1Skill2DTO,
-        accessibility1: challengeProto1Skill2DTO.accessibility1,
-        accessibility2: challengeProto1Skill2DTO.accessibility2,
-      }));
+      expect(challengeAlternative1Skill2).to.deep.equal({
+        ...domainBuilder.buildChallenge({
+          ...challengeAlternative1Skill2DTO,
+          accessibility1: challengeProto1Skill2DTO.accessibility1,
+          accessibility2: challengeProto1Skill2DTO.accessibility2,
+        }),
+        requireGafamWebsiteAccess: challengeProto1Skill2.requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: challengeProto1Skill2.isIncompatibleIpadCertif,
+        deafAndHardOfHearing: challengeProto1Skill2.deafAndHardOfHearing,
+        isAwarenessChallenge: challengeProto1Skill2.isAwarenessChallenge,
+        toRephrase: challengeProto1Skill2.toRephrase,
+      });
     });
 
     it('shouldn\'t alter challenges from workbench', () => {
@@ -331,12 +390,22 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeProtoWorkbench1',
+          challengeId: 'challengeProtoWorkbench1',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
         accessibility2: Challenge.ACCESSIBILITY2.KO,
         version: null,
-        genealogy: Challenge.GENEALOGIES.PROTOTYPE
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+
       };
 
       const challengeProtoWorkbench2DTO  = {
@@ -349,6 +418,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeProtoWorkbench2',
+          challengeId: 'challengeProtoWorkbench2',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,
@@ -392,6 +470,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeAlternative3Skill1',
+          challengeId: 'challengeAlternative3Skill1',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.A_TESTER,
@@ -410,6 +497,15 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
             proposals: 'Propositions',
           },
         },
+        localizedChallenges: [domainBuilder.buildLocalizedChallenge({
+          id: 'challengeAlternative3Skill1',
+          challengeId: 'challengeAlternative3Skill1',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
+        })],
         locales: ['fr', 'fr-fr'],
         files: [],
         accessibility1: Challenge.ACCESSIBILITY1.KO,

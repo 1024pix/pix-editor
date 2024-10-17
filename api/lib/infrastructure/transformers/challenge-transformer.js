@@ -36,6 +36,11 @@ function _fillAlternativeQualityFields(challenge, prototype) {
   const fieldsToOverride = [
     'accessibility1',
     'accessibility2',
+    'requireGafamWebsiteAccess',
+    'isIncompatibleIpadCertif',
+    'deafAndHardOfHearing',
+    'isAwarenessChallenge',
+    'toRephrase',
   ];
 
   for (const field of fieldsToOverride) {

@@ -24,7 +24,7 @@ async function mockCurrentContent() {
     version:1,
     genealogy: Challenge.GENEALOGIES.PROTOTYPE,
     accessibility1: Challenge.ACCESSIBILITY1.OK,
-    accessibility2: Challenge.ACCESSIBILITY2.OK
+    accessibility2: Challenge.ACCESSIBILITY2.OK,
   });
 
   const alternativeChallenge = domainBuilder.buildChallenge({
@@ -102,20 +102,13 @@ async function mockCurrentContent() {
   };
   delete expectedChallenge.localizedChallenges;
 
-  const expectedPrimaryAlternativeQualityAttributes = {
-    requireGafamWebsiteAccess: false,
-    isIncompatibleIpadCertif: true,
-    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-    isAwarenessChallenge: true,
-    toRephrase: false,
-  };
   const expectedAlternativeChallenge = {
     ...alternativeChallenge,
     area: 'Neutre',
     files: [],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
-    ...expectedPrimaryAlternativeQualityAttributes,
+    ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
 
@@ -230,7 +223,11 @@ async function mockCurrentContent() {
     locale: 'fr',
     embedUrl: alternativeChallenge.embedUrl,
     status: LocalizedChallenge.STATUSES.PLAY,
-    ...expectedPrimaryAlternativeQualityAttributes,
+    requireGafamWebsiteAccess: false,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+    isAwarenessChallenge: true,
+    toRephrase: false,
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
