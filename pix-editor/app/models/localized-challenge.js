@@ -13,6 +13,11 @@ export default class LocalizedChallengeModel extends Model {
   @attr locale;
   @attr status;
   @attr translations;
+  @attr requireGafamWebsiteAccess;
+  @attr isIncompatibleIpadCertif;
+  @attr deafAndHardOfHearing;
+  @attr isAwarenessChallenge;
+  @attr toRephrase;
 
   @belongsTo('challenge', { inverse: 'localizedChallenges', async: true }) challenge;
   @hasMany('attachment', { inverse: 'localizedChallenge', async: true }) files;

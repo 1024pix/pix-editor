@@ -30,6 +30,11 @@ module('Unit | Model | challenge', function(hooks) {
       version: 1,
       skill: store.createRecord('skill', {}),
       idGenerator: idGeneratorStub,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: 'OK',
+      isAwarenessChallenge: true,
+      toRephrase: true,
     };
     alternative = {
       id: 'pix_1',
@@ -57,6 +62,11 @@ module('Unit | Model | challenge', function(hooks) {
       assert.strictEqual(clonedChallenge.status, 'proposé');
       assert.deepEqual(clonedChallenge.author, ['NEW']);
       assert.strictEqual(clonedChallenge.version, undefined);
+      assert.true(clonedChallenge.requireGafamWebsiteAccess);
+      assert.true(clonedChallenge.isIncompatibleIpadCertif);
+      assert.strictEqual(clonedChallenge.deafAndHardOfHearing, 'OK');
+      assert.true(clonedChallenge.isAwarenessChallenge);
+      assert.true(clonedChallenge.toRephrase);
       assert.ok(clonedChallenge.skill);
     });
 

@@ -139,6 +139,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
         urlsToConsult: ['truc'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'my id_nl',
@@ -206,6 +211,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'Une illustration',
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -337,6 +347,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'http://example.com/my_embed.html',
         geography: 'BR',
         urlsToConsult: ['truc.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2',
@@ -344,6 +359,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: 'fr',
         geography: 'PH',
         urlsToConsult: ['truc2.fr'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: true,
+        toRephrase: false,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: '2_nl',
@@ -414,6 +434,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'La belle image',
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -484,6 +509,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
               'illustration-alt': 'Une autre image',
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': true,
+              'to-rephrase': false,
             },
             relationships: {
               skill: {
@@ -614,6 +644,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'https://github.io/page/epreuve.html',
         geography: 'BR',
         urlsToConsult: ['truc.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'localizedChallengeId2',
@@ -717,6 +752,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
@@ -845,6 +885,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         challengeId,
         locale: 'fr',
         geography: 'BR',
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: localizedChallengeId,
@@ -852,6 +897,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale,
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
 
       await databaseBuilder.commit();
@@ -888,6 +938,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             t2Status: false,
             t3Status: false,
             status: Challenge.STATUSES.PROPOSE,
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: false,
+            toRephrase: true,
           })
         .matchHeader('Authorization', `Bearer ${apiToken}`)
         .reply(200);
@@ -996,7 +1051,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
 
     it('should create a challenge', async () => {
       // Given
-      const challenge = {
+      const challengeData = {
         ...domainBuilder.buildChallengeDatasourceObject({ id: 'challengeId', locales: ['fr'] }),
         geography: 'Mozambique',
         instruction: 'consigne',
@@ -1006,7 +1061,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         proposals: 'propositions',
         embedTitle: 'Titre d\'embed',
       };
-      const airtableChallenge = airtableBuilder.factory.buildChallenge(challenge);
+      const airtableChallenge = airtableBuilder.factory.buildChallenge(challengeData);
       const expectedBodyChallenge = _removeReadonlyFields(airtableChallenge, true);
       const expectedBody = { records: [expectedBodyChallenge] };
 
@@ -1026,55 +1081,60 @@ describe('Acceptance | Controller | challenges-controller', () => {
         payload: {
           data: {
             type: 'challenges',
-            id: challenge.id,
+            id: challengeData.id,
             attributes: {
-              instruction: challenge.instruction,
-              'alternative-instruction': challenge.alternativeInstruction,
-              type: challenge.type,
-              format: challenge.format,
-              proposals: challenge.proposals,
-              solution: challenge.solution,
-              'solution-to-display': challenge.solutionToDisplay,
-              't1-status': challenge.t1Status,
-              't2-status': challenge.t2Status,
-              't3-status': challenge.t3Status,
-              pedagogy: challenge.pedagogy,
-              author: challenge.author,
-              declinable: challenge.declinable,
-              version: challenge.version,
-              genealogy: challenge.genealogy,
-              status: challenge.status,
-              preview: challenge.preview,
-              timer: challenge.timer,
-              'embed-url': challenge.embedUrl,
-              'embed-title': challenge.embedTitle,
-              'embed-height': challenge.embedHeight,
-              'alternative-version': challenge.alternativeVersion,
-              accessibility1: challenge.accessibility1,
-              accessibility2: challenge.accessibility2,
-              spoil: challenge.spoil,
-              responsive: challenge.responsive,
-              locales: challenge.locales,
-              geography: challenge.geography,
+              instruction: challengeData.instruction,
+              'alternative-instruction': challengeData.alternativeInstruction,
+              type: challengeData.type,
+              format: challengeData.format,
+              proposals: challengeData.proposals,
+              solution: challengeData.solution,
+              'solution-to-display': challengeData.solutionToDisplay,
+              't1-status': challengeData.t1Status,
+              't2-status': challengeData.t2Status,
+              't3-status': challengeData.t3Status,
+              pedagogy: challengeData.pedagogy,
+              author: challengeData.author,
+              declinable: challengeData.declinable,
+              version: challengeData.version,
+              genealogy: challengeData.genealogy,
+              status: challengeData.status,
+              preview: challengeData.preview,
+              timer: challengeData.timer,
+              'embed-url': challengeData.embedUrl,
+              'embed-title': challengeData.embedTitle,
+              'embed-height': challengeData.embedHeight,
+              'alternative-version': challengeData.alternativeVersion,
+              accessibility1: challengeData.accessibility1,
+              accessibility2: challengeData.accessibility2,
+              spoil: challengeData.spoil,
+              responsive: challengeData.responsive,
+              locales: challengeData.locales,
+              geography: challengeData.geography,
               'urls-to-consult': ['firstLink', 'secondLink'],
-              'auto-reply': challenge.autoReply,
-              focusable: challenge.focusable,
+              'auto-reply': challengeData.autoReply,
+              focusable: challengeData.focusable,
               'updated-at': '2021-10-04',
               'validated-at': '2023-02-02T14:17:30.820Z',
               'archived-at': '2023-03-03T10:47:05.555Z',
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
                 data: {
                   type: 'skills',
-                  id: challenge.skills[0],
+                  id: challengeData.skills[0],
                 }
               },
               files: {
-                data: challenge.files.map(({ fileId }) => {
+                data: challengeData.files.map(({ fileId }) => {
                   return {
                     type: 'attachments',
                     id: fileId,
@@ -1094,7 +1154,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
           type: 'challenges',
           id: 'challengeId',
           attributes: {
-            'airtable-id': challenge.airtableId,
+            'airtable-id': challengeData.airtableId,
             instruction: 'consigne',
             'alternative-instruction': 'consigne alternative',
             type: Challenge.TYPES.QCM,
@@ -1134,6 +1194,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
@@ -1165,10 +1230,15 @@ describe('Acceptance | Controller | challenges-controller', () => {
           id: 'challengeId',
           challengeId: 'challengeId',
           locale: 'fr',
-          embedUrl: challenge.embedUrl,
+          embedUrl: challengeData.embedUrl,
           status: null,
           geography: 'MZ',
-          urlsToConsult: ['firstLink', 'secondLink']
+          urlsToConsult: ['firstLink', 'secondLink'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }
       ]);
       const translations = await knex('translations').select('key', 'locale', 'value').orderBy('key');
@@ -1181,7 +1251,7 @@ describe('Acceptance | Controller | challenges-controller', () => {
         {
           key: 'challenge.challengeId.embedTitle',
           locale: 'fr',
-          value: challenge.embedTitle,
+          value: challengeData.embedTitle,
         },
         {
           key: 'challenge.challengeId.instruction',
@@ -1433,6 +1503,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         embedUrl: 'old_url',
         urlsToConsult: ['pouet'],
         locale,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challenge_localized_nl',
@@ -1533,6 +1608,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
             },
             relationships: {
               skill: {
@@ -1602,6 +1682,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': false,
+            'is-incompatible-ipad-certif': false,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            'is-awareness-challenge': false,
+            'to-rephrase': false,
           },
           relationships: {
             skill: {
@@ -1637,6 +1722,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
       expect(localizedChallenge).toHaveProperty('embedUrl', challenge.embedUrl);
       expect(localizedChallenge).toHaveProperty('urlsToConsult', ['pouet.com']);
       expect(localizedChallenge).toHaveProperty('geography', 'NL');
+      expect(localizedChallenge).toHaveProperty('requireGafamWebsiteAccess', false);
+      expect(localizedChallenge).toHaveProperty('isIncompatibleIpadCertif', false);
+      expect(localizedChallenge).toHaveProperty('deafAndHardOfHearing', LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
+      expect(localizedChallenge).toHaveProperty('isAwarenessChallenge', false);
+      expect(localizedChallenge).toHaveProperty('toRephrase', false);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([
         {
           key: 'challenge.recChallengeId.alternativeInstruction',
@@ -1693,6 +1783,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
         locale: originalLocale,
         geography: 'BR',
         urlsToConsult: ['truc'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildTranslation({
         key: `challenge.${challengeId}.instruction`,
@@ -1786,6 +1881,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
               'made-obsolete-at': '2023-04-04T10:47:05.555Z',
               shuffled: false,
               'contextualized-fields': ['instruction', 'illustration'],
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               skill: {
@@ -1855,6 +1955,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
             shuffled: false,
             'illustration-alt': null,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
@@ -1891,6 +1996,11 @@ describe('Acceptance | Controller | challenges-controller', () => {
           status: null,
           geography: 'JM',
           urlsToConsult: ['truc'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         },
       ]);
       await expect(knex('translations').orderBy('key').select('key', 'locale', 'value')).resolves.to.deep.equal([

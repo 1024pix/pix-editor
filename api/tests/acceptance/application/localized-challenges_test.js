@@ -23,6 +23,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         embedUrl: 'https://choucroute.com/le-nl-c-est-ici',
         status: LocalizedChallenge.STATUSES.PAUSE,
         urlsToConsult: null,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
 
       await databaseBuilder.commit();
@@ -46,6 +51,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             status: localizedChallenge.status,
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
             'urls-to-consult': null,
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             challenge: {
@@ -85,6 +95,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: 'https://choucroute.com/',
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
 
       await databaseBuilder.commit();
@@ -108,6 +123,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
             geography: 'Neutre',
             translations: `/api/challenges/${localizedChallenge.challengeId}/translations/${localizedChallenge.locale}`,
             'urls-to-consult': null,
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             challenge: {
@@ -154,12 +174,22 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
           id: 'localizedChallengeId0',
           locale: 'nl',
           embedUrl: 'https://choucroute.com/',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         }),
         databaseBuilder.factory.buildLocalizedChallenge({
           challengeId: 'recChallenge1',
           id: 'localizedChallengeId1',
           locale: 'de',
           embedUrl: 'https://raclette.com/',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
       ];
 
@@ -185,6 +215,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               status: null,
               translations: `/api/challenges/${localizedChallenges[0].challengeId}/translations/${localizedChallenges[0].locale}`,
               'urls-to-consult': null,
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
             },
             relationships: {
               challenge: {
@@ -209,6 +244,11 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               status: null,
               translations: `/api/challenges/${localizedChallenges[1].challengeId}/translations/${localizedChallenges[1].locale}`,
               'urls-to-consult': null,
+              'require-gafam-website-access': true,
+              'is-incompatible-ipad-certif': true,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+              'is-awareness-challenge': true,
+              'to-rephrase': true,
             },
             relationships: {
               challenge: {
@@ -249,6 +289,12 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
         id: 'localizedChallengeId',
         locale: 'nl',
         embedUrl: null,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+        status: LocalizedChallenge.STATUSES.PAUSE,
       });
 
       await databaseBuilder.commit();
@@ -266,6 +312,12 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
               'embed-url': 'https://cassoulet.com/',
               locale: 'should-not-update',
               'challenge-id': 'should-not-update',
+              'require-gafam-website-access': false,
+              'is-incompatible-ipad-certif': false,
+              'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+              'is-awareness-challenge': false,
+              'to-rephrase': false,
+              status: LocalizedChallenge.STATUSES.PLAY,
             },
           },
         },
@@ -276,16 +328,49 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
 
       // then
       expect(response.statusCode).to.equal(200);
-
+      expect(response.result.data).to.deep.equal({
+        type: 'localized-challenges',
+        id: 'localizedChallengeId',
+        attributes: {
+          'default-embed-url': 'https://choucroute.com/?lang=nl',
+          'embed-url': 'https://cassoulet.com/',
+          geography: 'Neutre',
+          locale: 'nl',
+          status: LocalizedChallenge.STATUSES.PLAY,
+          translations: '/api/challenges/recChallenge0/translations/nl',
+          'urls-to-consult': null,
+          'require-gafam-website-access': false,
+          'is-incompatible-ipad-certif': false,
+          'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          'is-awareness-challenge': false,
+          'to-rephrase': false,
+        },
+        relationships: {
+          challenge: {
+            data: {
+              type: 'challenges',
+              id: 'recChallenge0',
+            },
+          },
+          files: {
+            data: [],
+          },
+        },
+      });
       const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
       expect(updatedLocalizedChallenge).to.deep.equal({
         id: localizedChallenge.id,
         challengeId: localizedChallenge.challengeId,
         locale: 'nl',
         embedUrl: 'https://cassoulet.com/',
-        status: LocalizedChallenge.STATUSES.PRIMARY,
+        status: LocalizedChallenge.STATUSES.PLAY,
         geography: null,
         urlsToConsult: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
     });
 
@@ -305,59 +390,6 @@ describe('Acceptance | Controller | localized-challenges-controller', () => {
 
       // Then
       expect(response.statusCode).to.equal(403);
-    });
-
-    it('should modify localized challenge status of given ID', async () => {
-      // given
-      const user = databaseBuilder.factory.buildAdminUser();
-      databaseBuilder.factory.buildLocalizedChallenge({
-        challengeId: 'recChallenge0',
-        id: 'recChallenge0',
-        locale: 'fr',
-        embedUrl: 'https://choucroute.com/',
-      });
-      const localizedChallenge = databaseBuilder.factory.buildLocalizedChallenge({
-        challengeId: 'recChallenge0',
-        id: 'localizedChallengeId',
-        locale: 'nl',
-        embedUrl: 'https://choucroute.com/',
-        status: LocalizedChallenge.STATUSES.PAUSE,
-      });
-
-      await databaseBuilder.commit();
-
-      const server = await createServer();
-      const patchLocalizedChallengeOptions = {
-        method: 'PATCH',
-        url: '/api/localized-challenges/localizedChallengeId',
-        headers: generateAuthorizationHeader(user),
-        payload: {
-          data: {
-            type: 'localized-challenges',
-            id: localizedChallenge.id,
-            attributes: {
-              'status': LocalizedChallenge.STATUSES.PLAY,
-            },
-          },
-        },
-      };
-
-      // When
-      const response = await server.inject(patchLocalizedChallengeOptions);
-
-      // then
-      expect(response.statusCode).to.equal(200);
-
-      const updatedLocalizedChallenge = await knex('localized_challenges').select().where({ id: localizedChallenge.id }).first();
-      expect(updatedLocalizedChallenge).to.deep.equal({
-        id: localizedChallenge.id,
-        challengeId: localizedChallenge.challengeId,
-        locale: 'nl',
-        embedUrl: 'https://choucroute.com/',
-        status: LocalizedChallenge.STATUSES.PLAY,
-        geography: null,
-        urlsToConsult: null,
-      });
     });
 
     it('should return forbidden error if user is NOT admin and updates status', async() => {

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createChallengeTransformer, fillAlternativeQualityFieldsFromMatchingProto } from '../../../../lib/infrastructure/transformers/index.js';
 import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
 import { domainBuilder } from '../../../test-helper.js';
-import { Attachment } from '../../../../lib/domain/models/index.js';
+import { Attachment, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Infrastructure | Challenge Transformer', function() {
 
@@ -24,6 +24,18 @@ describe('Unit | Infrastructure | Challenge Transformer', function() {
         files: [],
         accessibility1: 'A tester',
         accessibility2: 'KO',
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: 'challenge-id',
+            challengeId: 'challenge-id',
+            locale: 'fr',
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
+          })
+        ]
       });
 
       // when
@@ -457,6 +469,11 @@ function _buildReleaseChallenge({
   alternativeVersion,
   accessibility1,
   accessibility2,
+  requireGafamWebsiteAccess,
+  isIncompatibleIpadCertif,
+  deafAndHardOfHearing,
+  isAwarenessChallenge,
+  toRephrase,
 }) {
   const releaseChallenge = {
     id,
@@ -490,6 +507,11 @@ function _buildReleaseChallenge({
     alternativeVersion,
     accessibility1,
     accessibility2,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   };
   if (attachments) {
     releaseChallenge.attachments = attachments;

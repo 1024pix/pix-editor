@@ -222,10 +222,10 @@ describe('Integration | Repository | release-repository', function() {
     it('should return current content as DTO', async function() {
       // When
       const currentContentDTO = await getCurrentContent();
-      // Then
 
+      // Then
       const expectedReleaseContentDTO = _getRichCurrentContentDTO();
-      expect(currentContentDTO.tubes).to.deep.equal(expectedReleaseContentDTO.tubes);
+      expect(currentContentDTO).to.deep.equal(expectedReleaseContentDTO);
     });
   });
 });
@@ -365,12 +365,18 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
     value: `${challenge.id} embedTitle ${locale}`,
   });
 
+  const isPrimary = localizedChallengeId === challenge.id;
   databaseBuilder.factory.buildLocalizedChallenge({
     id: localizedChallengeId,
     challengeId: challenge.id,
     locale,
-    embedUrl: localizedChallengeId === challenge.id ? challenge.embedUrl : undefined,
+    embedUrl: isPrimary ? challenge.embedUrl : null,
     status: LocalizedChallenge.STATUSES.PLAY,
+    requireGafamWebsiteAccess: isPrimary,
+    isIncompatibleIpadCertif: isPrimary,
+    deafAndHardOfHearing: isPrimary ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK : LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+    isAwarenessChallenge: isPrimary,
+    toRephrase: isPrimary,
   });
 }
 
@@ -1217,6 +1223,11 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121211 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.OK,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
     {
       id: 'challengeNl',
@@ -1251,6 +1262,11 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121211 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.OK,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
     {
       id: 'challenge121212',
@@ -1284,6 +1300,11 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121212 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
     {
       id: 'challenge211111',
@@ -1318,6 +1339,11 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge211111 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.KO,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
     {
       id: 'challenge211112',
@@ -1351,6 +1377,11 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge211112 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
     {
       id: 'challenge211113',
@@ -1382,8 +1413,13 @@ function _getRichCurrentContentDTO() {
       illustrationAlt: null,
       shuffled: false,
       alternativeVersion: 'challenge211113 alternativeVersion',
-      accessibility1: ChallengeForRelease.ACCESSIBILITY1.A_TESTER,
-      accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
+      accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
+      accessibility2: ChallengeForRelease.ACCESSIBILITY2.RAS,
+      requireGafamWebsiteAccess: true,
+      isIncompatibleIpadCertif: true,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+      isAwarenessChallenge: true,
+      toRephrase: true,
     },
   ];
   const expectedCourseDTOs = [
@@ -1429,6 +1465,7 @@ function _getRichCurrentContentDTO() {
       introductionMediaType: null,
       introductionMediaAlt_i18n: { fr: 'Message alternatif' },
       documentationUrl: 'http://url-example.net',
+      cardImageUrl: null,
       content: {
         dareChallenges: [],
         steps: [],

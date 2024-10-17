@@ -34,6 +34,11 @@ export class ChallengeForRelease {
     alternativeVersion,
     accessibility1,
     accessibility2,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   }) {
     this.id = id;
     this.instruction = instruction;
@@ -67,6 +72,11 @@ export class ChallengeForRelease {
     this.alternativeVersion = alternativeVersion;
     this.accessibility1 = accessibility1;
     this.accessibility2 = accessibility2;
+    this.requireGafamWebsiteAccess = requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = deafAndHardOfHearing;
+    this.isAwarenessChallenge = isAwarenessChallenge;
+    this.toRephrase = toRephrase;
   }
 
   static get STATUSES() {

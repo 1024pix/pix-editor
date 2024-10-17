@@ -77,6 +77,11 @@ function _filterChallengeFields(challenge) {
     'alternativeVersion',
     'accessibility1',
     'accessibility2',
+    'requireGafamWebsiteAccess',
+    'isIncompatibleIpadCertif',
+    'deafAndHardOfHearing',
+    'isAwarenessChallenge',
+    'toRephrase',
   ];
 
   return _.pick(challenge, fieldsToInclude);

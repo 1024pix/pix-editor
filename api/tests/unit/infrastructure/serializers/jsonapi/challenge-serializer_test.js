@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
 import { deserialize, serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/challenge-serializer.js';
-import { Challenge } from '../../../../../lib/domain/models/index.js';
+import { Challenge, LocalizedChallenge } from '../../../../../lib/domain/models/index.js';
 
 describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
   describe('#serialize', () => {
@@ -10,7 +10,12 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
       const localizedChallenge = domainBuilder.buildLocalizedChallenge({
         id: 'recwWzTquPlvIl4So',
         geography: 'MZ',
-        urlsToConsult: ['mylink1', 'mylink2']
+        urlsToConsult: ['mylink1', 'mylink2'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const challenge = domainBuilder.buildChallenge({
         id: 'recwWzTquPlvIl4So',
@@ -63,6 +68,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             shuffled: false,
             'contextualized-fields': ['instruction', 'illustration'],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {
@@ -101,6 +111,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
         geography: 'MD',
         embedUrl: 'https://github.io/page/epreuve.html',
         urlsToConsult: ['mylink1', 'mylink2'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const expectedDeserializedChallenge = domainBuilder.buildChallenge({ localizedChallenges: [expectedLocalizedChallenge] }, ['alpha', 'delta', 'skillId']);
       const json = {
@@ -148,6 +163,11 @@ describe('Unit | Serializer | JSONAPI | challenge-serializer', () => {
             'made-obsolete-at': '2023-04-04T10:47:05.555Z',
             'shuffled': false,
             'contextualizedFields': [Challenge.CONTEXTUALIZED_FIELDS.INSTRUCTION, Challenge.CONTEXTUALIZED_FIELDS.ILLUSTRATION],
+            'require-gafam-website-access': true,
+            'is-incompatible-ipad-certif': true,
+            'deaf-and-hard-of-hearing': LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            'is-awareness-challenge': true,
+            'to-rephrase': true,
           },
           relationships: {
             skill: {

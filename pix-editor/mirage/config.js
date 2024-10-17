@@ -135,6 +135,15 @@ function routes() {
     return _serializeModel(skill, 'skill');
   });
 
+  this.patch('/airtable/content/Acquis/:id', (schema, request) => {
+    const skillPayload = JSON.parse(request.requestBody);
+    const skill = schema.skills.find(request.params.id);
+    const skillNew = _deserializePayload(skillPayload, 'skill');
+    delete skillNew.id;
+    skill.update({ ...skillNew });
+    return _serializeModel(skill, 'skill');
+  });
+
   this.get('/airtable/content/Acquis', (schema) => {
     const records = schema.skills.all().models.map((skill) => {
       return _serializeModel(skill, 'skill');
@@ -267,16 +276,16 @@ function routes() {
   this.patch('/challenges/:id', (schema, request) => {
     const challenge = schema.challenges.find(request.params.id);
     const body = JSON.parse(request.requestBody);
-
     const skillId = body.data.relationships.skill.data.id;
     const skill = schema.skills.find(skillId);
-    challenge.skill = skill;
-
     const files = body.data.relationships.files.data.map(({ id }) => {
       return schema.attachments.find(id);
     });
-    challenge.files = files;
-    challenge.save();
+    challenge.update({
+      ...body.data.attributes,
+      skill,
+      files,
+    });
 
     return challenge;
   });

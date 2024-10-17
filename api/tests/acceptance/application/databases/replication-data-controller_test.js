@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder, generateAuthorizationHeader } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { Attachment, LocalizedChallenge, Challenge } from '../../../../lib/domain/models/index.js';
+import { Attachment, Challenge, LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const {
   buildArea,
@@ -82,6 +82,14 @@ async function mockCurrentContent() {
 
   delete expectedThematic.airtableId;
 
+  const expectedPrimaryProtoQualityAttributes = {
+    requireGafamWebsiteAccess: true,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+    isAwarenessChallenge: true,
+    toRephrase: true,
+  };
+
   const expectedChallenge = {
     ...challenge,
     geography: 'Brésil',
@@ -90,19 +98,28 @@ async function mockCurrentContent() {
       'https://example.com/',
       'https://pix.org/nl-be',
     ],
+    ...expectedPrimaryProtoQualityAttributes,
   };
   delete expectedChallenge.localizedChallenges;
 
+  const expectedPrimaryAlternativeQualityAttributes = {
+    requireGafamWebsiteAccess: false,
+    isIncompatibleIpadCertif: true,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+    isAwarenessChallenge: true,
+    toRephrase: false,
+  };
   const expectedAlternativeChallenge = {
     ...alternativeChallenge,
     area: 'Neutre',
     files: [],
     accessibility1: challenge.accessibility1,
     accessibility2: challenge.accessibility2,
+    ...expectedPrimaryAlternativeQualityAttributes,
   };
   delete expectedAlternativeChallenge.localizedChallenges;
 
-  const expectedChallengeNl = { ...challengeNl, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
+  const expectedChallengeNl = { ...challengeNl, ...expectedPrimaryProtoQualityAttributes, illustrationAlt: 'alt_nl', geography: 'Neutre', area: 'Neutre' };
   delete expectedChallengeNl.localizedChallenges;
 
   const expectedCompetence = domainBuilder.buildCompetence({
@@ -205,6 +222,7 @@ async function mockCurrentContent() {
       'https://example.com/',
       'https://pix.org/nl-be',
     ],
+    ...expectedPrimaryProtoQualityAttributes,
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: alternativeChallenge.id,
@@ -212,7 +230,7 @@ async function mockCurrentContent() {
     locale: 'fr',
     embedUrl: alternativeChallenge.embedUrl,
     status: LocalizedChallenge.STATUSES.PLAY,
-
+    ...expectedPrimaryAlternativeQualityAttributes,
   });
   databaseBuilder.factory.buildLocalizedChallenge({
     id: 'localized-challenge-id',
@@ -220,6 +238,11 @@ async function mockCurrentContent() {
     locale: 'nl',
     status: LocalizedChallenge.STATUSES.PLAY,
     geography: null,
+    requireGafamWebsiteAccess: false,
+    isIncompatibleIpadCertif: false,
+    deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+    isAwarenessChallenge: false,
+    toRephrase: false,
   });
   databaseBuilder.factory.buildTranslation({
     key: `challenge.${challenge.id}.instruction`,

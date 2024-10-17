@@ -15,6 +15,12 @@ export class LocalizedChallenge {
     // remove me when all doubt is lifted (because in model challenge, geography references a country name !)
     geography,
     urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
+
   } = {}) {
     this.id = id;
     this.challengeId = challengeId;
@@ -25,6 +31,11 @@ export class LocalizedChallenge {
     this.status = status;
     this.geography = geography;
     this.urlsToConsult = urlsToConsult;
+    this.requireGafamWebsiteAccess = requireGafamWebsiteAccess;
+    this.isIncompatibleIpadCertif = isIncompatibleIpadCertif;
+    this.deafAndHardOfHearing = deafAndHardOfHearing;
+    this.isAwarenessChallenge = isAwarenessChallenge;
+    this.toRephrase = toRephrase;
   }
 
   static get STATUSES() {
@@ -32,6 +43,14 @@ export class LocalizedChallenge {
       PLAY: Challenge.STATUSES.VALIDE,
       PAUSE: Challenge.STATUSES.PROPOSE,
       PRIMARY: null,
+    };
+  }
+
+  static get DEAF_AND_HARD_OF_HEARING_VALUES() {
+    return {
+      OK: 'OK',
+      KO: 'KO',
+      RAS: 'RAS',
     };
   }
 
@@ -58,6 +77,11 @@ export class LocalizedChallenge {
     embedUrl,
     geography,
     urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   }) {
     return new LocalizedChallenge({
       id: challengeId,
@@ -68,6 +92,11 @@ export class LocalizedChallenge {
       urlsToConsult,
       status: LocalizedChallenge.STATUSES.PRIMARY,
       fileIds: [],
+      requireGafamWebsiteAccess: requireGafamWebsiteAccess ?? false,
+      isIncompatibleIpadCertif: isIncompatibleIpadCertif ?? false,
+      deafAndHardOfHearing: deafAndHardOfHearing ?? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+      isAwarenessChallenge: isAwarenessChallenge ?? false,
+      toRephrase: toRephrase ?? false,
     });
   }
 
@@ -81,6 +110,11 @@ export class LocalizedChallenge {
       fileIds: [],
       geography: null,
       urlsToConsult: null,
+      requireGafamWebsiteAccess: false,
+      isIncompatibleIpadCertif: false,
+      deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+      isAwarenessChallenge: false,
+      toRephrase: false,
     });
   }
 
@@ -95,6 +129,11 @@ export class LocalizedChallenge {
       fileIds: [],
       geography: this.geography,
       urlsToConsult: this.urlsToConsult,
+      requireGafamWebsiteAccess: this.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: this.isIncompatibleIpadCertif,
+      deafAndHardOfHearing: this.deafAndHardOfHearing,
+      isAwarenessChallenge: this.isAwarenessChallenge,
+      toRephrase: this.toRephrase,
     });
     for (const attachmentId of this.fileIds) {
       const attachmentToClone = attachments.find((attachment) => attachment.id === attachmentId);

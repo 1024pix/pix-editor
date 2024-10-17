@@ -15,6 +15,7 @@ export default class NewRoute extends PrototypeRoute {
       return prototype.duplicate();
     } else {
       const newChallenge = this.store.createRecord('challenge', {
+        id: this.idGenerator.newId('challenge'),
         competence: [this.modelFor('authenticated.competence').id],
         status: 'proposé',
         t1Status: true,
@@ -22,7 +23,11 @@ export default class NewRoute extends PrototypeRoute {
         t3Status: true,
         genealogy: 'Prototype 1',
         author: [this.config.author],
-        id: this.idGenerator.newId('challenge'),
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: 'RAS',
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
       if (params.fromSkill) {
         const skill = await this.store.findRecord('skill', params.fromSkill);

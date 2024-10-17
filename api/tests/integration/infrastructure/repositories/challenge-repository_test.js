@@ -419,6 +419,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: null,
         geography: 'FR',
         urlsToConsult: ['http://challengeA_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const localizedChallengeNL_challengeA = domainBuilder.buildLocalizedChallenge({
         id: 'localizedChallengeNL_challengeA_id',
@@ -429,6 +434,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: LocalizedChallenge.STATUSES.PLAY,
         geography: 'NL',
         urlsToConsult: ['http://localizedChallengeNL_challengeA_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: true,
+        toRephrase: false,
       });
       const challengeA_data = {
         id: 'challengeA_id',
@@ -487,6 +497,11 @@ describe('Integration | Repository | challenge-repository', () => {
         status: null,
         geography: 'FR',
         urlsToConsult: ['http://challengeB_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
       const challengeB_data = {
         id: 'challengeB_id',
@@ -810,6 +825,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: primaryLocalizedChallenge_challengeA.status,
           geography: primaryLocalizedChallenge_challengeA.geography,
           urlsToConsult: primaryLocalizedChallenge_challengeA.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         },
         {
           id: localizedChallengeNL_challengeA.id,
@@ -819,6 +839,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: localizedChallengeNL_challengeA.status,
           geography: localizedChallengeNL_challengeA.geography,
           urlsToConsult: localizedChallengeNL_challengeA.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: true,
+          toRephrase: false,
         },
         {
           id: challengeB_data.id,
@@ -828,6 +853,11 @@ describe('Integration | Repository | challenge-repository', () => {
           status: primaryLocalizedChallenge_challengeB.status,
           geography: primaryLocalizedChallenge_challengeB.geography,
           urlsToConsult: primaryLocalizedChallenge_challengeB.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         },
       ]);
       const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')
@@ -861,6 +891,281 @@ describe('Integration | Repository | challenge-repository', () => {
           key: 'challenge.challengeB_id.proposals',
           locale: 'fr',
           value: 'proposals FR challengeB',
+        },
+      ]);
+    });
+  });
+
+  describe('#create', () => {
+    it('should create a challenge, its localized challenge primary and its translated attributes', async function() {
+      // given
+      const challengeToCreate_data = {
+        id: 'challengeToCreate_id',
+        accessibility1: Challenge.ACCESSIBILITY1.OK,
+        accessibility2: Challenge.ACCESSIBILITY1.KO,
+        airtableId: null,
+        alternativeVersion: 1,
+        alpha: null,
+        delta: null,
+        archivedAt: null,
+        createdAt: null,
+        validatedAt: null,
+        madeObsoleteAt: null,
+        updatedAt: null,
+        author: 'MOI',
+        autoReply: true,
+        competenceId: 'Unused competenceId',
+        contextualizedFields: [Challenge.CONTEXTUALIZED_FIELDS.EMBED],
+        declinable: Challenge.DECLINABLES.FACILEMENT,
+        embedHeight: 'embedHeight challengeToCreate',
+        files: [],
+        focusable: 'focusable challengeToCreate',
+        format: Challenge.FORMATS.MOTS,
+        genealogy: Challenge.GENEALOGIES.PROTOTYPE,
+        geography: 'France',
+        locales: ['fr'],
+        localesAirtable: ['Francophone'],
+        pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
+        responsive: Challenge.RESPONSIVES.SMARTPHONE,
+        shuffled: 'shuffled challengeToCreate',
+        skillId: 'skillId1',
+        skills: ['airtableSkillId1'],
+        spoil: Challenge.SPOILS.NON_SPOILABLE,
+        status: Challenge.STATUSES.PROPOSE,
+        t1Status: false,
+        t1StatusAirtable: 'Désactivé',
+        t2Status: false,
+        t2StatusAirtable: 'Désactivé',
+        t3Status: true,
+        t3StatusAirtable: 'Activé',
+        timer: 123,
+        type: 'type challengeToCreate',
+        version: 4,
+      };
+      const localizedChallengeToCreate = domainBuilder.buildLocalizedChallenge({
+        id: 'challengeToCreate_id',
+        challengeId: 'challengeToCreate_id',
+        embedUrl: 'https://challengeToCreate_id.embedUrl.html',
+        fileIds: ['ignored'],
+        locale: 'fr',
+        status: null,
+        geography: 'FR',
+        urlsToConsult: ['http://challengeToCreate_id.urlToConsult.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+      });
+      const challengeToCreate = domainBuilder.buildChallenge({
+        ...challengeToCreate_data,
+        localizedChallenges: [localizedChallengeToCreate],
+        translations: { fr: {
+          instruction: 'instruction FR challengeToCreate',
+          solution: 'solution FR challengeToCreate' ,
+          alternativeInstruction: 'alternativeInstruction FR challengeToCreate',
+          proposals: 'proposals FR challengeToCreate',
+          solutionToDisplay: 'solutionToDisplay FR challengeToCreate',
+          embedTitle: 'embedTitle FR challengeToCreate',
+          illustrationAlt: 'illustrationAlt FR challengeToCreate',
+        } },
+      });
+      vi.spyOn(airtableClient, 'createRecord').mockImplementation((tableName, airtableRequestBody) => {
+        if (tableName !== 'Epreuves') {
+          expect.unreachable('Airtable tableName should be Epreuves');
+        }
+        if (!_.isEqual(airtableRequestBody,
+          {
+            fields: {
+              'id persistant': challengeToCreate_data.id,
+              'Type d\'épreuve': challengeToCreate_data.type,
+              'T1 - Espaces, casse & accents': challengeToCreate_data.t1StatusAirtable,
+              'T2 - Ponctuation': challengeToCreate_data.t2StatusAirtable,
+              'T3 - Distance d\'édition': challengeToCreate_data.t3StatusAirtable,
+              'Statut': challengeToCreate_data.status,
+              'Embed URL': challengeToCreate.localizedChallenges[0].embedUrl,
+              'Embed height': challengeToCreate_data.embedHeight,
+              'Timer': challengeToCreate_data.timer,
+              'Format': challengeToCreate_data.format,
+              'Réponse automatique': challengeToCreate_data.autoReply,
+              'Langues': challengeToCreate_data.localesAirtable,
+              'Focalisée': challengeToCreate_data.focusable,
+              'Acquix': challengeToCreate_data.skills,
+              'Généalogie': challengeToCreate_data.genealogy,
+              'Type péda': challengeToCreate_data.pedagogy,
+              'Auteur': challengeToCreate_data.author,
+              'Déclinable': challengeToCreate_data.declinable,
+              'Version prototype': challengeToCreate_data.version,
+              'Version déclinaison': challengeToCreate_data.alternativeVersion,
+              'Non voyant': challengeToCreate_data.accessibility1,
+              'Daltonien': challengeToCreate_data.accessibility2,
+              'Spoil': challengeToCreate_data.spoil,
+              'Responsive': challengeToCreate_data.responsive,
+              'Géographie': challengeToCreate_data.geography,
+              'files': challengeToCreate_data.files,
+              'validated_at': challengeToCreate_data.validatedAt,
+              'archived_at': challengeToCreate_data.archivedAt,
+              'made_obsolete_at': challengeToCreate_data.madeObsoleteAt,
+              'shuffled': challengeToCreate_data.shuffled,
+              'contextualizedFields': challengeToCreate_data.contextualizedFields,
+            },
+          }
+        )) {
+          expect.unreachable('Challenges to create to airtable wrong body');
+        }
+        return {
+          id: 'airtableIdChallengeToCreate',
+          fields: {
+            'id persistant': challengeToCreate_data.id,
+            'Record ID': 'airtableIdChallengeToCreate',
+            'Compétences (via tube) (id persistant)': ['theRightCompetenceId'],
+            'Type d\'épreuve': challengeToCreate_data.type,
+            'T1 - Espaces, casse & accents': challengeToCreate_data.t1StatusAirtable,
+            'T2 - Ponctuation': challengeToCreate_data.t2StatusAirtable,
+            'T3 - Distance d\'édition': challengeToCreate_data.t3StatusAirtable,
+            'Statut': challengeToCreate_data.status,
+            'Embed URL': challengeToCreate_data.embedUrl,
+            'Embed height': challengeToCreate_data.embedHeight,
+            'Timer': challengeToCreate_data.timer,
+            'Format': challengeToCreate_data.format,
+            'Réponse automatique': challengeToCreate_data.autoReply,
+            'Langues': challengeToCreate_data.localesAirtable,
+            'Focalisée': challengeToCreate_data.focusable,
+            'Difficulté calculée': NaN,
+            'Discrimination calculée': NaN,
+            'Acquix': challengeToCreate_data.skills,
+            'Acquix (id persistant)': [challengeToCreate_data.skillId],
+            'Généalogie': challengeToCreate_data.genealogy,
+            'Type péda': challengeToCreate_data.pedagogy,
+            'Auteur': challengeToCreate_data.author,
+            'Déclinable': challengeToCreate_data.declinable,
+            'Version prototype': challengeToCreate_data.version,
+            'Version déclinaison': challengeToCreate_data.alternativeVersion,
+            'Non voyant': challengeToCreate_data.accessibility1,
+            'Daltonien': challengeToCreate_data.accessibility2,
+            'Spoil': challengeToCreate_data.spoil,
+            'Responsive': challengeToCreate_data.responsive,
+            'Géographie': challengeToCreate_data.geography,
+            'files': challengeToCreate_data.files,
+            'validated_at': challengeToCreate_data.validatedAt,
+            'archived_at': challengeToCreate_data.archivedAt,
+            'created_at': challengeToCreate_data.createdAt,
+            'made_obsolete_at': challengeToCreate_data.madeObsoleteAt,
+            'updated_at': challengeToCreate_data.updatedAt,
+            'shuffled': challengeToCreate_data.shuffled,
+            'contextualizedFields': challengeToCreate_data.contextualizedFields,
+          },
+          get: function(field) { return this.fields[field]; },
+        };
+      });
+
+      // when
+      const challenge = await challengeRepository.create(challengeToCreate);
+
+      // then
+      expect(challenge).toStrictEqual(
+        domainBuilder.buildChallenge({
+          accessibility1: challengeToCreate_data.accessibility1,
+          accessibility2: challengeToCreate_data.accessibility2,
+          airtableId: 'airtableIdChallengeToCreate',
+          alternativeVersion: challengeToCreate_data.alternativeVersion,
+          alpha: NaN,
+          archivedAt: challengeToCreate_data.archivedAt,
+          author: challengeToCreate_data.author,
+          autoReply: challengeToCreate_data.autoReply,
+          competenceId: 'theRightCompetenceId',
+          contextualizedFields: challengeToCreate_data.contextualizedFields,
+          createdAt: challengeToCreate_data.createdAt,
+          declinable: challengeToCreate_data.declinable,
+          delta: NaN,
+          embedHeight: challengeToCreate_data.embedHeight,
+          files: challengeToCreate_data.files,
+          focusable: challengeToCreate_data.focusable,
+          format: challengeToCreate_data.format,
+          genealogy: challengeToCreate_data.genealogy,
+          geography: challengeToCreate_data.geography,
+          id: challengeToCreate_data.id,
+          locales: challengeToCreate_data.locales,
+          localizedChallenges: challengeToCreate.localizedChallenges,
+          madeObsoleteAt: challengeToCreate_data.madeObsoleteAt,
+          pedagogy: challengeToCreate_data.pedagogy,
+          responsive: challengeToCreate_data.responsive,
+          shuffled: challengeToCreate_data.shuffled,
+          skillId: challengeToCreate_data.skillId,
+          skills: challengeToCreate_data.skills,
+          spoil: challengeToCreate_data.spoil,
+          status: challengeToCreate_data.status,
+          t1Status: challengeToCreate_data.t1Status,
+          t2Status: challengeToCreate_data.t2Status,
+          t3Status: challengeToCreate_data.t3Status,
+          timer: challengeToCreate_data.timer,
+          translations: challengeToCreate.translations,
+          type: challengeToCreate_data.type,
+          updatedAt: challengeToCreate_data.updatedAt,
+          validatedAt: challengeToCreate_data.validatedAt,
+          version: challengeToCreate_data.version,
+        }));
+      const localizedChallenges = await knex('localized_challenges')
+        .select('*')
+        .orderBy(['challengeId', 'id']);
+      expect(localizedChallenges).toStrictEqual([
+        {
+          id: challengeToCreate_data.id,
+          challengeId: challengeToCreate_data.id,
+          embedUrl: localizedChallengeToCreate.embedUrl,
+          locale: localizedChallengeToCreate.locale,
+          status: localizedChallengeToCreate.status,
+          geography: localizedChallengeToCreate.geography,
+          urlsToConsult: localizedChallengeToCreate.urlsToConsult,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        },
+      ]);
+      const allLocalizedChallengesAttachments = await knex('localized_challenges-attachments')
+        .select('*');
+      expect(allLocalizedChallengesAttachments.length).toStrictEqual(0);
+      const allTranslations = await knex('translations')
+        .select('key', 'locale', 'value')
+        .orderBy(['key', 'locale']);
+
+      expect(allTranslations).to.deep.have.members([
+        {
+          key: 'challenge.challengeToCreate_id.instruction',
+          locale: 'fr',
+          value: 'instruction FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.solution',
+          locale: 'fr',
+          value: 'solution FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.alternativeInstruction',
+          locale: 'fr',
+          value: 'alternativeInstruction FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.proposals',
+          locale: 'fr',
+          value: 'proposals FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.solutionToDisplay',
+          locale: 'fr',
+          value: 'solutionToDisplay FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.embedTitle',
+          locale: 'fr',
+          value: 'embedTitle FR challengeToCreate',
+        },
+        {
+          key: 'challenge.challengeToCreate_id.illustrationAlt',
+          locale: 'fr',
+          value: 'illustrationAlt FR challengeToCreate',
         },
       ]);
     });

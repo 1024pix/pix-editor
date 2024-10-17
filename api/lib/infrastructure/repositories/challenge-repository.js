@@ -4,10 +4,7 @@ import { Challenge, Translation } from '../../domain/models/index.js';
 import { challengeDatasource, skillDatasource } from '../datasources/airtable/index.js';
 import * as translationRepository from './translation-repository.js';
 import * as localizedChallengeRepository from './localized-challenge-repository.js';
-import {
-  extractFromChallenge as extractTranslationsFromChallenge,
-  prefixFor,
-} from '../translations/challenge.js';
+import { extractFromChallenge as extractTranslationsFromChallenge, prefixFor, } from '../translations/challenge.js';
 import { NotFoundError } from '../../domain/errors.js';
 
 const model = 'challenge';
@@ -115,7 +112,6 @@ export async function createBatch(challenges) {
 
 export async function update(challenge, knexConn = knex) {
   const updatedChallengeDto = await challengeDatasource.update(challenge);
-
   const localizedChallenges = await localizedChallengeRepository.listByChallengeIds({ challengeIds: [challenge.id], transaction: knexConn });
   const primaryLocalizedChallenge = localizedChallenges.find(({ isPrimary }) => isPrimary);
 
@@ -127,6 +123,11 @@ export async function update(challenge, knexConn = knex) {
   primaryLocalizedChallenge.embedUrl = challenge.embedUrl;
   primaryLocalizedChallenge.geography = challenge.geographyCode;
   primaryLocalizedChallenge.urlsToConsult = challenge.urlsToConsult;
+  primaryLocalizedChallenge.requireGafamWebsiteAccess = challenge.requireGafamWebsiteAccess;
+  primaryLocalizedChallenge.isIncompatibleIpadCertif = challenge.isIncompatibleIpadCertif;
+  primaryLocalizedChallenge.deafAndHardOfHearing = challenge.deafAndHardOfHearing;
+  primaryLocalizedChallenge.isAwarenessChallenge = challenge.isAwarenessChallenge;
+  primaryLocalizedChallenge.toRephrase = challenge.toRephrase;
 
   await localizedChallengeRepository.update({
     localizedChallenge: primaryLocalizedChallenge,
@@ -140,19 +141,7 @@ export async function update(challenge, knexConn = knex) {
     transaction: knexConn,
   });
   await translationRepository.save({ translations, transaction: knexConn });
-
   return toDomain(updatedChallengeDto, translations, localizedChallenges);
-}
-
-export async function updateBatch(challenges) {
-  return knex.transaction(async (transaction) => {
-    const updatedChallenges = [];
-    for (const challenge of challenges) {
-      const updatedChallenge = await update(challenge, transaction);
-      updatedChallenges.push(updatedChallenge);
-    }
-    return updatedChallenges;
-  });
 }
 
 export async function listBySkillId(skillId) {
@@ -196,9 +185,11 @@ function toDomain(challengeDto, challengeTranslations, localizedChallenges = [])
       ...localeTranslations.map(({ key, value }) => [key.split('.').at(-1), value]),
     ]);
   });
+
   return new Challenge({
     ...challengeDto,
     translations,
     localizedChallenges,
   });
+
 }

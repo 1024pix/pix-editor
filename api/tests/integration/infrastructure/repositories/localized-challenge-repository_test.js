@@ -18,6 +18,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
         status: 'proposé',
         geography: null,
         urlsToConsult: ['pouet.com', 'truc.fr'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: 'challengeNewid',
@@ -27,6 +33,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: null,
         urlsToConsult: ['pouet.com', 'truc.fr'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
       await databaseBuilder.commit();
 
@@ -44,6 +55,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           fileIds: [],
           geography: null,
           urlsToConsult: ['pouet.com', 'truc.fr'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: 'challengeNewid',
@@ -54,59 +70,64 @@ describe('Integration | Repository | localized-challenge-repository', function()
           fileIds: [],
           geography: null,
           urlsToConsult: ['pouet.com', 'truc.fr'],
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         })
       ]);
     });
-  });
 
-  context('when there is one attachment joined to localized challenges', () => {
-    it('should return a list of localized challenges with fileIds', async () => {
-      // given
-      const id = 'localizedChallengeId';
-      const id2 = 'localizedChallengeId2';
-      const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
-        id,
-        challengeId: 'challengeId',
-        embedUrl: 'mon-url.com',
-        locale: 'bz',
-      });
-      const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
-        id: id2,
-        challengeId: 'challengeId',
-        embedUrl: 'mon-url-nl.com',
-        locale: 'nl',
-      });
-      const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
-        id: 'challengeId',
-        challengeId: 'challengeId',
-        embedUrl: 'mon-url-fr.com',
-        locale: 'fr',
-      });
+    context('when there is one attachment joined to localized challenges', () => {
+      it('should return a list of localized challenges with fileIds', async () => {
+        // given
+        const id = 'localizedChallengeId';
+        const id2 = 'localizedChallengeId2';
+        const localizedChallengeBz = databaseBuilder.factory.buildLocalizedChallenge({
+          id,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url.com',
+          locale: 'bz',
+        });
+        const localizedChallengeNl = databaseBuilder.factory.buildLocalizedChallenge({
+          id: id2,
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url-nl.com',
+          locale: 'nl',
+        });
+        const localizedChallengeFr = databaseBuilder.factory.buildLocalizedChallenge({
+          id: 'challengeId',
+          challengeId: 'challengeId',
+          embedUrl: 'mon-url-fr.com',
+          locale: 'fr',
+        });
 
-      const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
-        localizedChallengeId: localizedChallengeBz.id,
-        attachmentId: 'attachment-id-0',
-      });
-      await databaseBuilder.commit();
+        const localizedChallengeAttachment = databaseBuilder.factory.buildLocalizedChallengeAttachment({
+          localizedChallengeId: localizedChallengeBz.id,
+          attachmentId: 'attachment-id-0',
+        });
+        await databaseBuilder.commit();
 
-      const expectedFrenchChallenge = domainBuilder.buildLocalizedChallenge({
-        ...localizedChallengeFr,
-        fileIds: [],
-      });
-      const expectedBzChallenge = domainBuilder.buildLocalizedChallenge({
-        ...localizedChallengeBz,
-        fileIds: [localizedChallengeAttachment.attachmentId],
-      });
-      const expectedNlChallenge = domainBuilder.buildLocalizedChallenge({
-        ...localizedChallengeNl,
-        fileIds: [],
-      });
+        const expectedFrenchChallenge = domainBuilder.buildLocalizedChallenge({
+          ...localizedChallengeFr,
+          fileIds: [],
+        });
+        const expectedBzChallenge = domainBuilder.buildLocalizedChallenge({
+          ...localizedChallengeBz,
+          fileIds: [localizedChallengeAttachment.attachmentId],
+        });
+        const expectedNlChallenge = domainBuilder.buildLocalizedChallenge({
+          ...localizedChallengeNl,
+          fileIds: [],
+        });
 
-      // when
-      const localizedChallenges = await localizedChallengeRepository.list();
+        // when
+        const localizedChallenges = await localizedChallengeRepository.list();
 
-      // then
-      expect(localizedChallenges).toStrictEqual([expectedFrenchChallenge, expectedBzChallenge, expectedNlChallenge]);
+        // then
+        expect(localizedChallenges).toStrictEqual([expectedFrenchChallenge, expectedBzChallenge, expectedNlChallenge]);
+      });
     });
   });
 
@@ -126,6 +147,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           geography: 'AZ',
           urlsToConsult: ['lien1', 'lien2'],
           status: LocalizedChallenge.STATUSES.PRIMARY,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         })
       ] });
 
@@ -140,6 +166,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'AZ',
         urlsToConsult: ['lien1', 'lien2'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       }]);
     });
 
@@ -158,14 +189,24 @@ describe('Integration | Repository | localized-challenge-repository', function()
     context('when there is no id', function() {
       it('should generate an id and create a localized challenge', async function() {
         // when
-        await localizedChallengeRepository.create({ localizedChallenges:[{
+        const localizedChallengeToCreate = domainBuilder.buildLocalizedChallenge({
           challengeId: 'challengeId',
           locale: 'locale',
           embedUrl: 'https://example.com/embed.html',
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
           status: LocalizedChallenge.STATUSES.PRIMARY,
-        }], generateId: () => 'generated-id' });
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
+        });
+        delete localizedChallengeToCreate.id;
+        await localizedChallengeRepository.create({
+          localizedChallenges: [localizedChallengeToCreate],
+          generateId: () => 'generated-id',
+        });
 
         // then
         const localizedChallenge = await knex('localized_challenges').select();
@@ -178,6 +219,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'BE',
           urlsToConsult: ['lien1', 'lien2'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }]);
       });
 
@@ -210,6 +256,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'en',
           embedUrl: 'example.com',
           urlsToConsult: ['link1', 'link2'],
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         });
         await databaseBuilder.commit();
 
@@ -222,6 +273,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             geography: null,
             urlsToConsult: ['link1', 'link2'],
             status: LocalizedChallenge.STATUSES.PRIMARY,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
           },
           {
             challengeId: 'challengeId',
@@ -230,6 +286,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
             status: LocalizedChallenge.STATUSES.PRIMARY,
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: true,
+            toRephrase: false,
           }
         ] });
 
@@ -246,6 +307,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: null,
             urlsToConsult: ['link1', 'link2'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+            isAwarenessChallenge: true,
+            toRephrase: true,
           },
           {
             id: expect.stringMatching(/^challenge\w+$/),
@@ -255,6 +321,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: 'FR',
             urlsToConsult: ['lien1', 'lien2'],
+            requireGafamWebsiteAccess: true,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+            isAwarenessChallenge: true,
+            toRephrase: false,
           },
         ]);
       });
@@ -402,6 +473,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         challengeId: challengeId1,
         locale: 'fr-fr',
         embedUrl,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       databaseBuilder.factory.buildLocalizedChallenge({
         id: `${challengeId1}En`,
@@ -453,6 +529,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'fr-fr',
           embedUrl,
           urlsToConsult: null,
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: `${challengeId1}Nl`,
@@ -832,6 +913,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'bz',
         geography: 'BZ',
         status: LocalizedChallenge.STATUSES.PRIMARY,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       await databaseBuilder.commit();
 
@@ -842,7 +928,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
         locale: 'ar',
         status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'AR',
-        urlsToConsult: ['my-new-link']
+        urlsToConsult: ['my-new-link'],
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
 
       // when
@@ -857,7 +948,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ar',
           status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'AR',
-          urlsToConsult: ['my-new-link']
+          urlsToConsult: ['my-new-link'],
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         },
       ]);
 
@@ -869,7 +965,12 @@ describe('Integration | Repository | localized-challenge-repository', function()
           locale: 'ar',
           status: LocalizedChallenge.STATUSES.PRIMARY,
           geography: 'AR',
-          urlsToConsult: ['my-new-link']
+          urlsToConsult: ['my-new-link'],
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         }));
     });
 
@@ -913,6 +1014,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           challengeId: 'challengeId',
           embedUrl: 'my-url.html',
           locale: 'bz',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         });
 
         await databaseBuilder.commit();
@@ -925,6 +1031,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
           status: LocalizedChallenge.STATUSES.PRIMARY,
           files: ['attachmentId'],
           urlsToConsult: null,
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         });
 
         // when
@@ -940,6 +1051,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             geography: null,
             urlsToConsult: null,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
           },
         ]);
 
@@ -952,6 +1068,11 @@ describe('Integration | Repository | localized-challenge-repository', function()
             status: LocalizedChallenge.STATUSES.PRIMARY,
             files: ['attachmentId'],
             urlsToConsult: null,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: false,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: false,
           }));
       });
     });

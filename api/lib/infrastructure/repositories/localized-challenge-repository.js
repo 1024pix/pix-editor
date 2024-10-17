@@ -17,18 +17,8 @@ export async function create({ localizedChallenges = [], generateId = _generateI
   if (localizedChallenges.length === 0) {
     return;
   }
-  const localizedChallengesWithId = localizedChallenges.map((localizedChallenge) => {
-    return {
-      id: localizedChallenge.id ?? generateId(),
-      challengeId: localizedChallenge.challengeId,
-      embedUrl: localizedChallenge.embedUrl,
-      locale: localizedChallenge.locale,
-      status: localizedChallenge.status,
-      geography: localizedChallenge.geography,
-      urlsToConsult: localizedChallenge.urlsToConsult,
-    };
-  });
-  await knexConnection('localized_challenges').insert(localizedChallengesWithId).onConflict().ignore();
+  const dataToInsert = _adaptModelsForDB(localizedChallenges, generateId);
+  await knexConnection('localized_challenges').insert(dataToInsert).onConflict().ignore();
 }
 
 export async function getByChallengeIdAndLocale({ challengeId, locale }) {
@@ -70,7 +60,7 @@ export async function getMany({ ids, transaction: knexConnection = knex }) {
 }
 
 export async function update({
-  localizedChallenge: { id, locale, embedUrl, status, fileIds, geography, urlsToConsult },
+  localizedChallenge: { id, locale, embedUrl, status, fileIds, geography, urlsToConsult, requireGafamWebsiteAccess, isIncompatibleIpadCertif, deafAndHardOfHearing, isAwarenessChallenge, toRephrase },
   transaction: knexConnection = knex
 }) {
   const [dto] = await knexConnection('localized_challenges').where('id', id).update({
@@ -78,7 +68,12 @@ export async function update({
     embedUrl,
     status,
     geography,
-    urlsToConsult
+    urlsToConsult,
+    requireGafamWebsiteAccess,
+    isIncompatibleIpadCertif,
+    deafAndHardOfHearing,
+    isAwarenessChallenge,
+    toRephrase,
   }).returning('*');
 
   if (!dto) throw new NotFoundError('Épreuve ou langue introuvable');
@@ -90,6 +85,25 @@ export async function update({
 
 function _toDomain(dto) {
   return new LocalizedChallenge(dto);
+}
+
+function _adaptModelsForDB(localizedChallenges, generateId) {
+  return localizedChallenges.map((localizedChallenge) => {
+    return {
+      id: localizedChallenge.id ?? generateId(),
+      challengeId: localizedChallenge.challengeId,
+      embedUrl: localizedChallenge.embedUrl,
+      locale: localizedChallenge.locale,
+      status: localizedChallenge.status,
+      geography: localizedChallenge.geography,
+      urlsToConsult: localizedChallenge.urlsToConsult,
+      requireGafamWebsiteAccess: localizedChallenge.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: localizedChallenge.isIncompatibleIpadCertif,
+      deafAndHardOfHearing: localizedChallenge.deafAndHardOfHearing,
+      isAwarenessChallenge: localizedChallenge.isAwarenessChallenge,
+      toRephrase: localizedChallenge.toRephrase,
+    };
+  });
 }
 
 function _queryLocalizedChallengeWithAttachment(knexConnection = knex) {

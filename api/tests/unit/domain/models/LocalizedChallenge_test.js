@@ -76,6 +76,50 @@ describe('Unit | Domain | LocalizedChallenge', () => {
       const embedUrl = 'mon/embed.url';
       const geography = 'JP';
       const urlsToConsult = 'http://mon-url-a-consulter.com';
+      const requireGafamWebsiteAccess = true;
+      const isIncompatibleIpadCertif = true;
+      const deafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK;
+      const isAwarenessChallenge = true;
+      const toRephrase = true;
+
+      // when
+      const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
+        challengeId,
+        locale,
+        embedUrl,
+        geography,
+        urlsToConsult,
+        requireGafamWebsiteAccess,
+        isIncompatibleIpadCertif,
+        deafAndHardOfHearing,
+        isAwarenessChallenge,
+        toRephrase,
+      });
+
+      // then
+      expect(primaryLocalizedChallenge).to.deep.equal({
+        id: 'idDuChallenge',
+        challengeId: 'idDuChallenge',
+        embedUrl: 'mon/embed.url',
+        fileIds: [],
+        locale: 'en',
+        status: LocalizedChallenge.STATUSES.PRIMARY,
+        geography: 'JP',
+        urlsToConsult: 'http://mon-url-a-consulter.com',
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
+      });
+    });
+    it('should build a primary localized challenge with default values when some not filled', function() {
+      // given
+      const challengeId = 'idDuChallenge';
+      const locale = 'en';
+      const embedUrl = 'mon/embed.url';
+      const geography = 'JP';
+      const urlsToConsult = 'http://mon-url-a-consulter.com';
 
       // when
       const primaryLocalizedChallenge = LocalizedChallenge.buildPrimary({
@@ -96,6 +140,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         status: LocalizedChallenge.STATUSES.PRIMARY,
         geography: 'JP',
         urlsToConsult: 'http://mon-url-a-consulter.com',
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
     });
   });
@@ -121,6 +170,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         fileIds: [],
         geography: null,
         urlsToConsult: null,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       });
     });
   });
@@ -140,6 +194,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         status: LocalizedChallenge.STATUSES.PAUSE,
         geography: 'France',
         urlsToConsult: ['http://url.com'],
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       const attachments = [
         domainBuilder.buildAttachment({ id: 'someIrrelevantAttachment' }),
@@ -178,6 +237,11 @@ describe('Unit | Domain | LocalizedChallenge', () => {
         status: newStatus,
         geography: localizedChallenge.geography,
         urlsToConsult: localizedChallenge.urlsToConsult,
+        requireGafamWebsiteAccess: true,
+        isIncompatibleIpadCertif: true,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
+        toRephrase: true,
       });
       expect(clonedLocalizedChallenge).toStrictEqual(expectedLocalizedChallenge);
       expect(clonedAttachments).toStrictEqual([

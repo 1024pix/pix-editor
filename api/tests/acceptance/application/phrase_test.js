@@ -7,7 +7,7 @@ import nock from 'nock';
 import { databaseBuilder, generateAuthorizationHeader, knex, streamToPromiseArray } from '../../test-helper';
 import { createServer } from '../../../server';
 import { ChallengeForRelease, SkillForRelease } from '../../../lib/domain/models/release/index.js';
-import { Area } from '../../../lib/domain/models/index.js';
+import { Area, LocalizedChallenge } from '../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | phrase-controller', () => {
 
@@ -465,6 +465,11 @@ describe('Acceptance | Controller | phrase-controller', () => {
         embedUrl: null,
         urlsToConsult: null,
         status: ChallengeForRelease.STATUSES.PROPOSE,
+        requireGafamWebsiteAccess: false,
+        isIncompatibleIpadCertif: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+        isAwarenessChallenge: false,
+        toRephrase: false,
       }]);
     });
   });

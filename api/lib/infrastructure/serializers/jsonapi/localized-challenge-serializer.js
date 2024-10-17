@@ -16,6 +16,11 @@ const serializer = new Serializer('localized-challenges', {
     'status',
     'fileIds',
     'translations',
+    'requireGafamWebsiteAccess',
+    'isIncompatibleIpadCertif',
+    'deafAndHardOfHearing',
+    'isAwarenessChallenge',
+    'toRephrase',
   ],
   typeForAttribute(attribute) {
     if (attribute === 'fileIds') return 'attachments';

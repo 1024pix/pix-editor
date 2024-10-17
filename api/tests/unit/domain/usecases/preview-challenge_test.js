@@ -17,9 +17,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
       locale,
       geography: 'TJ',
     });
-    const localizedChallengeRepository = {
-      getByChallengeIdAndLocale: vi.fn().mockResolvedValueOnce(localizedChallenge),
-    };
+
     const challenge = domainBuilder.buildChallenge({
       localizedChallenges: [localizedChallenge],
       geography: 'Tadjikistan',
@@ -30,7 +28,7 @@ describe('Unit | Domain | Usecases | preview-challenge', function() {
     const refreshCache = vi.fn().mockResolvedValueOnce();
 
     // when
-    const url = await previewChallenge({ challengeId, locale }, { localizedChallengeRepository, challengeRepository, refreshCache });
+    const url = await previewChallenge({ challengeId, locale }, { challengeRepository, refreshCache });
 
     // then
     expect(url).to.equal(`https://preview.url.org/challenges/${localizedChallengeId}/preview?lang=fr`);

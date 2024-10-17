@@ -7,6 +7,7 @@ import {
 } from '../../../../lib/infrastructure/repositories/index.js';
 import { domainBuilder } from '../../../test-helper.js';
 import { NotFoundError } from '../../../../lib/domain/errors.js';
+import { LocalizedChallenge } from '../../../../lib/domain/models/index.js';
 
 const { filter, get, list, update } = challengeRepository;
 
@@ -38,18 +39,33 @@ describe('Unit | Repository | challenge-repository', () => {
           challengeId: '1',
           locale: 'fr',
           geography: 'PH',
+          requireGafamWebsiteAccess: true,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+          isAwarenessChallenge: true,
+          toRephrase: true,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: '1_en',
           challengeId: '1',
           locale: 'en',
           geography: 'LA',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: false,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
+          isAwarenessChallenge: false,
+          toRephrase: false,
         }),
         domainBuilder.buildLocalizedChallenge({
           id: '2',
           challengeId: '2',
           locale: 'fr',
           geography: 'BR',
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: true,
+          toRephrase: false,
         }),
       ]);
       vi.spyOn(challengeDatasource, 'list').mockResolvedValue([{ id: 1, locales: [], geography: 'DeprecatedLand' }, { id: 2, locales: [], geography: 'DeprecatedLand' }]);
@@ -66,10 +82,22 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challenges[0].proposals).to.equal('proposals');
       expect(challenges[0].alternativeLocales).to.deep.equal(['en']);
       expect(challenges[0].geography).to.equal('Philippines');
+      expect(challenges[0].requireGafamWebsiteAccess).to.equal(true);
+      expect(challenges[0].isIncompatibleIpadCertif).to.equal(true);
+      expect(challenges[0].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK);
+      expect(challenges[0].isAwarenessChallenge).to.equal(true);
+      expect(challenges[0].toRephrase).to.equal(true);
+
       expect(challenges[1].instruction).to.equal('instruction 2');
       expect(challenges[1].proposals).to.equal('proposals 2');
       expect(challenges[1].alternativeLocales).to.deep.equal([]);
       expect(challenges[1].geography).to.equal('Brésil');
+      expect(challenges[1].requireGafamWebsiteAccess).to.equal(false);
+      expect(challenges[1].isIncompatibleIpadCertif).to.equal(true);
+      expect(challenges[1].deafAndHardOfHearing).to.equal(LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO);
+      expect(challenges[1].isAwarenessChallenge).to.equal(true);
+      expect(challenges[1].toRephrase).to.equal(false);
+
     });
   });
   describe('#filter', () => {
@@ -290,7 +318,6 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
-
   describe('#filterByThematicIds', () => {
     it('calls filter with filterByFormula defined to filter by thematic ids', async function() {
       const thematicsIds = ['id1', 'id2'];
@@ -303,7 +330,6 @@ describe('Unit | Repository | challenge-repository', () => {
       expect(challengeDatasource.filter).toHaveBeenCalledWith({ filter : { formula: 'OR(FIND("id1", {Thematique (Record ID)}), FIND("id2", {Thematique (Record ID)}))' } });
     });
   });
-
   describe('#get', () => {
     it('should return a challenge by id', async () => {
       // given
@@ -377,43 +403,88 @@ describe('Unit | Repository | challenge-repository', () => {
       });
     });
   });
-
   describe('#update', () => {
     it('should update a challenge by id', async () => {
       // given
       const locale = 'en';
-      const primaryLocale = 'fr';
+      const oldPrimaryLocale = 'fr';
+      const newPrimaryLocale = 'es';
+      const oldEmbedUrl = 'old embed url';
+      const newEmbedUrl = 'new embed url';
+      const oldGeography = 'FR';
+      const newGeography = 'ES';
+      const oldUrlsToConsult = 'old UrlsToConsult';
+      const newUrlsToConsult = 'new UrlsToConsult';
+      const oldRequireGafamWebsiteAccess = false;
+      const newRequireGafamWebsiteAccess = true;
+      const oldIsIncompatibleIpadCertif = false;
+      const newIsIncompatibleIpadCertif = true;
+      const oldDeafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK;
+      const newDeafAndHardOfHearing = LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO;
+      const oldIsAwarenessChallenge = false;
+      const newIsAwarenessChallenge = true;
+      const oldToRephrase = false;
+      const newToRephrase = true;
       const challengeId = 'challengeId';
       const challengeFromAirtable = domainBuilder.buildChallengeDatasourceObject({
         id: challengeId,
-        locales: [primaryLocale]
+        locales: [oldPrimaryLocale]
       });
-      const localizedChallenges = [
-        domainBuilder.buildLocalizedChallenge({
-          id: challengeId,
-          challengeId,
-          locale: primaryLocale,
-        }),
+      const localizedChallenge_originalData = {
+        id: challengeId,
+        challengeId,
+        status: null,
+        locale: oldPrimaryLocale,
+        embedUrl: oldEmbedUrl,
+        geography: oldGeography,
+        urlsToConsult: oldUrlsToConsult,
+        requireGafamWebsiteAccess: oldRequireGafamWebsiteAccess,
+        isIncompatibleIpadCertif: oldIsIncompatibleIpadCertif,
+        deafAndHardOfHearing: oldDeafAndHardOfHearing,
+        isAwarenessChallenge: oldIsAwarenessChallenge,
+        toRephrase: oldToRephrase,
+      };
+      const localizedChallengesInDb = [
+        domainBuilder.buildLocalizedChallenge(localizedChallenge_originalData),
         domainBuilder.buildLocalizedChallenge({
           id: 'localizedChallengeId',
           challengeId,
           locale,
+          requireGafamWebsiteAccess: false,
+          isIncompatibleIpadCertif: true,
+          deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+          isAwarenessChallenge: false,
+          toRephrase: true,
         }),
       ];
       const challengeToUpdate = domainBuilder.buildChallenge({
         ...challengeFromAirtable,
-        locales: [primaryLocale],
+        locales: [newPrimaryLocale],
         translations: {
-          [primaryLocale]: {
-            instruction: 'instruction fr',
-            proposals: 'proposals fr',
+          [newPrimaryLocale]: {
+            instruction: 'instruction es',
+            proposals: 'proposals es',
           },
         },
-        localizedChallenges,
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeId,
+            challengeId,
+            locale: newPrimaryLocale,
+            embedUrl: newEmbedUrl,
+            geography: newGeography,
+            urlsToConsult: newUrlsToConsult,
+            requireGafamWebsiteAccess: newRequireGafamWebsiteAccess,
+            isIncompatibleIpadCertif: newIsIncompatibleIpadCertif,
+            deafAndHardOfHearing: newDeafAndHardOfHearing,
+            isAwarenessChallenge: newIsAwarenessChallenge,
+            toRephrase: newToRephrase,
+          }),
+        ],
       });
 
-      vi.spyOn(challengeDatasource, 'update').mockResolvedValue(challengeFromAirtable);
-      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(localizedChallenges);
+      vi.spyOn(challengeDatasource, 'update').mockResolvedValue({ ...challengeFromAirtable, locales: [newPrimaryLocale] });
+      vi.spyOn(localizedChallengeRepository, 'listByChallengeIds').mockResolvedValueOnce(localizedChallengesInDb);
       vi.spyOn(localizedChallengeRepository, 'update').mockResolvedValueOnce();
       vi.spyOn(translationRepository, 'save').mockResolvedValueOnce();
       vi.spyOn(translationRepository, 'deleteByKeyPrefixAndLocales').mockResolvedValueOnce();
@@ -424,25 +495,74 @@ describe('Unit | Repository | challenge-repository', () => {
       // then
       expect(challengeDatasource.update).toHaveBeenCalledWith(challengeToUpdate);
       expect(localizedChallengeRepository.listByChallengeIds).toHaveBeenCalledWith({ challengeIds: [challengeId], transaction: expect.anything() });
-      expect(localizedChallengeRepository.update).toHaveBeenCalledWith({ localizedChallenge: localizedChallenges[0], transaction: expect.anything() });
+      expect(localizedChallengeRepository.update).toHaveBeenCalledWith({
+        localizedChallenge: domainBuilder.buildLocalizedChallenge({
+          ...localizedChallenge_originalData,
+          locale: newPrimaryLocale,
+          embedUrl: newEmbedUrl,
+          geography: newGeography,
+          urlsToConsult: newUrlsToConsult,
+          requireGafamWebsiteAccess: newRequireGafamWebsiteAccess,
+          isIncompatibleIpadCertif: newIsIncompatibleIpadCertif,
+          deafAndHardOfHearing: newDeafAndHardOfHearing,
+          isAwarenessChallenge: newIsAwarenessChallenge,
+          toRephrase: newToRephrase,
+        }),
+        transaction: expect.anything(),
+      });
       expect(translationRepository.deleteByKeyPrefixAndLocales).toHaveBeenCalledWith({
         prefix: 'challenge.challengeId.',
-        locales: [primaryLocale],
+        locales: [oldPrimaryLocale],
         transaction: expect.anything(),
       });
       expect(translationRepository.save).toHaveBeenCalledWith({
         translations: [{
           key: `challenge.${challengeId}.instruction`,
-          value: 'instruction fr',
-          locale: primaryLocale,
+          value: 'instruction es',
+          locale: newPrimaryLocale,
         }, {
           key: `challenge.${challengeId}.proposals`,
-          value: 'proposals fr',
-          locale: primaryLocale,
+          value: 'proposals es',
+          locale: newPrimaryLocale,
         }],
         transaction: expect.anything(),
       });
-      expect(result).toEqual(challengeToUpdate);
+      const expectedChallenge = domainBuilder.buildChallenge({
+        ...challengeFromAirtable,
+        locales: [newPrimaryLocale],
+        translations: {
+          [newPrimaryLocale]: {
+            instruction: 'instruction es',
+            proposals: 'proposals es',
+          },
+        },
+        localizedChallenges: [
+          domainBuilder.buildLocalizedChallenge({
+            id: challengeId,
+            challengeId,
+            locale: newPrimaryLocale,
+            embedUrl: newEmbedUrl,
+            geography: newGeography,
+            urlsToConsult: newUrlsToConsult,
+            requireGafamWebsiteAccess: newRequireGafamWebsiteAccess,
+            isIncompatibleIpadCertif: newIsIncompatibleIpadCertif,
+            deafAndHardOfHearing: newDeafAndHardOfHearing,
+            isAwarenessChallenge: newIsAwarenessChallenge,
+            toRephrase: newToRephrase,
+          }),
+          domainBuilder.buildLocalizedChallenge({
+            id: 'localizedChallengeId',
+            challengeId,
+            locale,
+            requireGafamWebsiteAccess: false,
+            isIncompatibleIpadCertif: true,
+            deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
+            isAwarenessChallenge: false,
+            toRephrase: true,
+          }),
+        ],
+      });
+      expect(result).toEqual(expectedChallenge);
     });
   });
 });
