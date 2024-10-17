@@ -12,8 +12,9 @@ export default class CompetenceController extends Controller {
   }];
 
   @tracked view;
+  @tracked languageFilter;
+
   @tracked section = 'challenges';
-  @tracked languageFilter = false;
   @tracked leftMaximized = false;
   @tracked displaySortingPopIn = false;
   @tracked sortingPopInTitle = '';

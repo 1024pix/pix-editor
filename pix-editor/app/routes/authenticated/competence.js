@@ -10,6 +10,9 @@ export default class CompetenceRoute extends Route {
     view: {
       refreshModel: true,
     },
+    languageFilter: {
+      refreshModel: true,
+    },
   };
 
   model(params) {
