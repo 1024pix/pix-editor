@@ -58,13 +58,15 @@
           <:default as |option|>{{option.label}}</:default>
         </PixMultiSelect>
         <PixToggle
-          @inline={{true}}
-          @onLabel="Actifs"
-          @offLabel="Tous"
+          @inlineLabel={{true}}
           @toggled={{this.showActiveOnly}}
           @onChange={{this.toggleShowActiveOnly}}
           @screenReaderOnly={{true}}
-        ><:label>Statut</:label></PixToggle>
+        >
+          <:label>Statut</:label>
+          <:on>Actifs</:on>
+          <:off>Tous</:off>
+        </PixToggle>
         <PixButton
           @type="submit"
         >
@@ -122,7 +124,7 @@
                 <:triggerElement>
                   <PixIconButton
                     @triggerAction={{fn this.copyStaticCoursePreviewUrl staticCourseSummary}}
-                    @icon="copy"
+                    @iconName="copy"
                     @iconPrefix="far"
                     @ariaLabel="copier le lien vers la preview"
                     class="icon"
