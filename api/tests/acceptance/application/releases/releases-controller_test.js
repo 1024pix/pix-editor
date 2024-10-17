@@ -540,10 +540,10 @@ async function mockContentForRelease() {
         illustrationUrl: null,
         accessibility1: ChallengeForRelease.ACCESSIBILITY1.RAS,
         accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
-        requireGafamWebsiteAccess: false,
+        requireGafamWebsiteAccess: true,
         isIncompatibleIpadCertif: true,
-        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.KO,
-        isAwarenessChallenge: false,
+        deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
+        isAwarenessChallenge: true,
         toRephrase: true,
       },],
     tutorials: [{
@@ -719,16 +719,17 @@ async function mockContentForRelease() {
       value: challenge.illustrationAlt,
     });
 
+    const isAlternative = challenge.genealogy !== 'Décliné 1';
     databaseBuilder.factory.buildLocalizedChallenge({
       id: challenge.id,
       challengeId: challenge.id,
       locale: 'fr-fr',
       embedUrl: challenge.embedUrl,
-      requireGafamWebsiteAccess: challenge.requireGafamWebsiteAccess,
-      isIncompatibleIpadCertif: challenge.isIncompatibleIpadCertif,
-      deafAndHardOfHearing: challenge.deafAndHardOfHearing,
-      isAwarenessChallenge: challenge.isAwarenessChallenge,
-      toRephrase: challenge.toRephrase,
+      requireGafamWebsiteAccess: isAlternative ? !challenge.requireGafamWebsiteAccess : challenge.requireGafamWebsiteAccess,
+      isIncompatibleIpadCertif: isAlternative ? !challenge.isIncompatibleIpadCertif : challenge.isIncompatibleIpadCertif,
+      isAwarenessChallenge: isAlternative ? !challenge.isAwarenessChallenge : challenge.isAwarenessChallenge,
+      toRephrase: isAlternative ? !challenge.toRephrase : challenge.toRephrase,
+      deafAndHardOfHearing: isAlternative ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS : challenge.deafAndHardOfHearing,
     });
   }
 
@@ -854,7 +855,7 @@ describe('Acceptance | Controller | release-controller', () => {
     });
 
     context('nominal case', () => {
-      it.fails('should create the release', async () => {
+      it('should create the release', async () => {
         // Given
         const user = databaseBuilder.factory.buildAdminUser();
         databaseBuilder.factory.buildMission({
