@@ -289,14 +289,8 @@ export default class ChallengeModel extends Model {
   }
 
   getNextAlternativeVersion() {
-    return this.alternatives.reduce((current, alternative) => {
-      const version = alternative.alternativeVersion;
-      if (!isNaN(version)) {
-        return Math.max(current, version);
-      } else {
-        return current;
-      }
-    }, 0) + 1;
+    const currentVersions = this.alternatives.map((alternative) => parseInt(alternative.alternativeVersion)).filter(Number.isInteger);
+    return Math.max(...currentVersions, 0) + 1;
   }
 
   baseNameUpdated() {
