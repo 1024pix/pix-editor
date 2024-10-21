@@ -53,7 +53,7 @@ export default class SingleRoute extends Route {
         if (!challenge.isWorkbench) {
           const skill = challenge.skill;
           if (skill) {
-            if (transition.targetName === 'authenticated.competence.quality.index' && skill.productionPrototype) {
+            if (transition.targetName === 'authenticated.competence.quality.index' && skill.get('productionPrototype')) {
               return this.router.transitionTo('authenticated.competence.quality.single', this.currentData.getCompetence(), skill);
             } else if (transition.targetName === 'authenticated.competence.skills.index') {
               return this.router.transitionTo('authenticated.competence.skills.single', this.currentData.getCompetence(), skill);

@@ -84,7 +84,7 @@ module('Unit | Controller | competence-management/new', function(hooks) {
       assert.ok(notifyMessageStub.getCall(0).args, ['Compétence créée']);
       assert.ok(createWorkbenchStub.calledOnce);
       assert.ok(notifyMessageStub.getCall(0).args, ['Atelier créé']);
-      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence, { queryParams: { view: 'workbench' } }));
+      assert.ok(transitionToRouteStub.calledWith('authenticated.competence.skills', controller.model.competence.id, { queryParams: { view: 'workbench' } }));
     });
 
     test('it should throw an error if saving failed', async function(assert) {

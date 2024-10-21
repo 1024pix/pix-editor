@@ -10,10 +10,10 @@
   {{#if this.displayLanguageFilter}}
     <div class="selection ui small right floated header language-filter">
       <PowerSelect @dropdownClass="language-filter-dropdown" @searchEnabled={{false}} @options={{this.languageOptions}} @selected={{this.selectedLanguageToFilter}} @onChange={{@selectLanguageToFilter}} as |languageOption|>
-        {{#if languageOption.local}}
-          {{languageOption.language}} <i class="flag {{convert-language-as-flag languageOption.local}}"></i>
-        {{else}}
+        {{#if languageOption.title}}
           {{languageOption.title}}
+        {{else}}
+          {{languageOption.language}} <i class="flag {{convert-language-as-flag languageOption.locale}}"></i>
         {{/if}}
       </PowerSelect>
     </div>

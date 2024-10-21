@@ -21,7 +21,7 @@ module('Integration | Component | competence/competence-header', function(hooks)
     //  when
     await render(hbs`<Competence::CompetenceHeader @competence={{this.competence}}
                                                    @section={{this.section}}
-                                                   @languageFilter={{false}}
+                                                   @languageFilter={{undefined}}
                                                    @selectLanguageToFilter={{this.selectLanguageToFilter}}
                                                    @view={{this.view}}
                                                    @selectSection={{this.selectSection}}/>`);

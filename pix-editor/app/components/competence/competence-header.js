@@ -17,29 +17,29 @@ export default class CompetenceHeader extends Component {
   ];
 
   languageOptions = [{
-    local: false,
+    locale: undefined,
     title: 'Filtre par langue',
   }, {
     language: 'Anglais',
-    local: 'en',
+    locale: 'en',
   }, {
     language: 'Espagnol',
-    local: 'es',
+    locale: 'es',
   }, {
     language: 'Francophone',
-    local: 'fr',
+    locale: 'fr',
   }, {
     language: 'Franco Français',
-    local: 'fr-fr',
+    locale: 'fr-fr',
   }, {
     language: 'Italie',
-    local: 'it',
+    locale: 'it',
   }, {
     language: 'Portugais',
-    local: 'pt',
+    locale: 'pt',
   }, {
     language: 'Néerlandais',
-    local: 'nl',
+    locale: 'nl',
   }];
 
   get liteClass() {
@@ -53,7 +53,7 @@ export default class CompetenceHeader extends Component {
 
   get selectedLanguageToFilter() {
     const languageFilter = this.args.languageFilter;
-    return this.languageOptions.find((languagesOption) => languagesOption.local === languageFilter);
+    return this.languageOptions.find((languagesOption) => languagesOption.locale === languageFilter);
   }
 
   get displayLanguageFilter() {

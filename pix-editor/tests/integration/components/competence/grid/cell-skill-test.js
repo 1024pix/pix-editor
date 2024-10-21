@@ -1,4 +1,3 @@
-import EmberObject from '@ember/object';
 import { render } from '@ember/test-helpers';
 import hbs from 'htmlbars-inline-precompile';
 import { module, test } from 'qunit';
@@ -9,22 +8,25 @@ module('Integration | Component | competence/grid/cell-skill', function(hooks) {
   setupIntlRenderingTest(hooks);
   hooks.beforeEach(function() {
     // given
-    const tutorial1 = EmberObject.create({
+    const store = this.owner.lookup('service:store');
+
+    const tutorial1 = store.createRecord('tutorial', {
       title: 'tutorial_1',
       language: 'fr-fr',
     });
-    const tutorial2 = EmberObject.create({
+    const tutorial2 = store.createRecord('tutorial', {
       title: 'tutorial_2',
       language: 'en-us',
     });
-    const tutorial3 = EmberObject.create({
+    const tutorial3 = store.createRecord('tutorial', {
       title: 'tutorial_3',
       language: 'fr-fr',
     });
-    const skill = EmberObject.create({
+    const skill = store.createRecord('skill', {
       name: 'skill_name',
       clue: 'my clue',
-      clueCSS: 'validated',
+      status: 'actif',
+      clueStatus: 'Validé',
       tutoSolution: [tutorial1, tutorial2],
       tutoMore: [tutorial3],
     });
