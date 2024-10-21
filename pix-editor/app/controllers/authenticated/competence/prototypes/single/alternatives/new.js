@@ -50,7 +50,7 @@ export default class NewController extends Alternative {
   }
 
   async _setAlternativeVersion(challenge) {
-    const version = await this.currentData.getPrototype().getNextAlternativeVersion();
+    const version = this.currentData.getPrototype().getNextAlternativeVersion();
     challenge.alternativeVersion = version;
   }
 }
