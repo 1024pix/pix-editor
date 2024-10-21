@@ -1,5 +1,19 @@
 
 
+## v3.167.0 (21/10/2024)
+
+
+### :rocket: Amélioration
+- [#781](https://github.com/1024pix/pix-editor/pull/781) [FEATURE] Faire en sorte que les déclis portent les valeurs de qualité de leur prototype dans la release et répli (PIX-14679).
+- [#777](https://github.com/1024pix/pix-editor/pull/777) [FEATURE] Ajout de 5 nouveaux attributs "qualité" concernant une épreuve sur Pix-Editor (PIX-14531).
+
+### :building_construction: Tech
+- [#780](https://github.com/1024pix/pix-editor/pull/780) [TECH] Permettre le chargement de modèles au changement des query params `view` et `languageFilter` (PIX-14422).
+- [#776](https://github.com/1024pix/pix-editor/pull/776) [TECH] harmoniser les champs de qualité entre le prototype et ses déclinaisons (PIX-14677).
+
+### :bug: Correction
+- [#778](https://github.com/1024pix/pix-editor/pull/778) [BUGFIX] Ascenseur remonte tout seul lors de l'édition d'une épreuve proposée, lorsqu'on souhaite modifier la valeur d'un champ "Qualité" (PIX-14877).
+
 ## v3.166.0 (10/10/2024)
 
 
