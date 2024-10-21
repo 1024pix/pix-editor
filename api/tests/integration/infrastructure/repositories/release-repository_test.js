@@ -366,13 +366,14 @@ function buildChallengeTranslationsAndLocalizedChallenge(challenge, locale, loca
   });
 
   const isPrimary = localizedChallengeId === challenge.id;
+  const isAlternative = challenge.genealogy === 'Décliné 1';
   databaseBuilder.factory.buildLocalizedChallenge({
     id: localizedChallengeId,
     challengeId: challenge.id,
     locale,
     embedUrl: isPrimary ? challenge.embedUrl : null,
     status: LocalizedChallenge.STATUSES.PLAY,
-    requireGafamWebsiteAccess: isPrimary,
+    requireGafamWebsiteAccess: !isAlternative,
     isIncompatibleIpadCertif: isPrimary,
     deafAndHardOfHearing: isPrimary ? LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK : LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.RAS,
     isAwarenessChallenge: isPrimary,
@@ -674,7 +675,7 @@ function _mockRichAirtableContent() {
     locales: ['en'],
     airtableId: 'challenge121212',
     skills: 'challenge121212 skills',
-    genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+    genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
     pedagogy: Challenge.PEDAGOGIES.Q_SITUATION,
     author: 'challenge121212 author',
     declinable: Challenge.DECLINABLES.FACILEMENT,
@@ -1097,7 +1098,7 @@ function _getRichCurrentContentDTO() {
       },
       competenceId: 'competence12',
       isMobileCompliant: true,
-      isTabletCompliant: false,
+      isTabletCompliant: true,
       thematicId: 'thematic121',
       skillIds: ['skill12121'],
     },
@@ -1289,7 +1290,7 @@ function _getRichCurrentContentDTO() {
       autoReply: true,
       locales: ['en'],
       alternativeInstruction: 'challenge121212 alternativeInstruction en',
-      genealogy: ChallengeForRelease.GENEALOGIES.PROTOTYPE,
+      genealogy: ChallengeForRelease.GENEALOGIES.DECLINAISON,
       responsive: ChallengeForRelease.RESPONSIVES.SMARTPHONE,
       focusable: 'challenge121212 focusable',
       delta: 123,
@@ -1300,7 +1301,7 @@ function _getRichCurrentContentDTO() {
       alternativeVersion: 'challenge121212 alternativeVersion',
       accessibility1: ChallengeForRelease.ACCESSIBILITY1.KO,
       accessibility2: ChallengeForRelease.ACCESSIBILITY2.OK,
-      requireGafamWebsiteAccess: true,
+      requireGafamWebsiteAccess: false,
       isIncompatibleIpadCertif: true,
       deafAndHardOfHearing: LocalizedChallenge.DEAF_AND_HARD_OF_HEARING_VALUES.OK,
       isAwarenessChallenge: true,
