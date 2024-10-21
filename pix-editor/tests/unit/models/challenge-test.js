@@ -325,4 +325,73 @@ module('Unit | Model | challenge', function(hooks) {
     });
 
   });
+
+  module('#getNextAlternativeVersion', function() {
+    test('it should return 1 if no other alternatives', function(assert) {
+      // given
+      const proto = store.createRecord('challenge', {
+        id: 'challengeProto',
+        genealogy: 'Prototype 1',
+        skill: store.createRecord('skill', {}),
+      });
+
+      // when
+      const nextAlternativeVersion = proto.getNextAlternativeVersion();
+
+      // then
+      assert.strictEqual(nextAlternativeVersion, 1);
+    });
+
+    test('it should return "highest current decli + 1" when there are alternatives', function(assert) {
+      // given
+      const skill = store.createRecord('skill', {});
+      const proto = store.createRecord('challenge', {
+        id: 'challengeProto',
+        genealogy: 'Prototype 1',
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécli1',
+        genealogy: 'Décliné 1',
+        alternativeVersion: 1,
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécli3',
+        genealogy: 'Décliné 1',
+        alternativeVersion: 3,
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécli4String',
+        genealogy: 'Décliné 1',
+        alternativeVersion: '4',
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécliNull',
+        genealogy: 'Décliné 1',
+        alternativeVersion: null,
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécliHello',
+        genealogy: 'Décliné 1',
+        alternativeVersion: 'hello',
+        skill,
+      });
+      store.createRecord('challenge', {
+        id: 'challengeDécliMinusOne',
+        genealogy: 'Décliné 1',
+        alternativeVersion: -1,
+        skill,
+      });
+
+      // when
+      const nextAlternativeVersion = proto.getNextAlternativeVersion();
+
+      // then
+      assert.strictEqual(nextAlternativeVersion, 5);
+    });
+  });
 });
