@@ -253,7 +253,7 @@ export default class ChallengeModel extends Model {
   }
 
   async duplicate() {
-    const ignoredFields = ['skill', 'author', 'airtableId'];
+    const ignoredFields = ['skill', 'author', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
     if (this.isPrototype) {
       ignoredFields.push('version');
     } else {
@@ -271,7 +271,7 @@ export default class ChallengeModel extends Model {
   }
 
   async copyForDifferentSkill() {
-    const ignoredFields = ['skill', 'airtableId'];
+    const ignoredFields = ['skill', 'airtableId', 'updatedAt', 'archivedAt', 'madeObsoleteAt', 'validatedAt'];
     const data = this._getJSON(ignoredFields);
 
     data.status = 'proposé';
@@ -339,7 +339,7 @@ export default class ChallengeModel extends Model {
     const rawSerializedData = structuredClone(this.serialize({ idIncluded: false }));
     const data = {};
     for (const [key, value] of Object.entries(rawSerializedData.data.attributes)) {
-      const newKey = _.camelCase(key);
+      const newKey = key === 'embed-url' ? 'embedURL' : _.camelCase(key);
       data[newKey] = value;
     }
     return data;
