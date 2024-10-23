@@ -7,6 +7,7 @@
       @value={{@challenge.accessibility1}}
       @onChange={{fn (mut @challenge.accessibility1)}}
       @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
     >
       <:label>Non voyant</:label>
     </PixSelect>
@@ -16,6 +17,7 @@
       @value={{@challenge.accessibility2}}
       @onChange={{fn (mut @challenge.accessibility2)}}
       @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
     >
       <:label>Daltonien</:label>
     </PixSelect>
@@ -25,17 +27,17 @@
       @value={{@challenge.spoil}}
       @onChange={{fn (mut @challenge.spoil)}}
       @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
     >
       <:label>Spoil</:label>
     </PixSelect>
     <PixSelect
-      class="COUCOU"
-      data-test-mon-cul="oh-yea"
       data-test-responsive-challenge-id={{@challenge.id}}
       @options={{this.responsiveOptions}}
       @value={{@challenge.responsive}}
       @onChange={{fn (mut @challenge.responsive)}}
       @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
     >
       <:label>Responsive</:label>
     </PixSelect>
@@ -45,6 +47,7 @@
       @value={{@challenge.deafAndHardOfHearing}}
       @onChange={{fn (mut @challenge.deafAndHardOfHearing)}}
       @isDisabled={{not @edition}}
+      @hideDefaultOption={{true}}
     >
       <:label>Sourds et malentendants</:label>
     </PixSelect>
