@@ -20,7 +20,7 @@ describe('Acceptance | Route | competence-overviews', () => {
 
   describe('GET /competences/:id/overviews/challenges-production', () => {
 
-    it.fails('should respond status 200 and overview of competence’s prodcution challenges', async () => {
+    it('should respond status 200 and overview of competence’s production challenges', async () => {
       // given
       const competenceId = 'recCompetence1';
 
