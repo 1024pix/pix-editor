@@ -14,6 +14,7 @@ export const tubeDatasource = datasource.extend({
     'id persistant',
     'Nom',
     'Competences (id persistant)',
+    'Index',
   ],
 
   fromAirTableObject(airtableRecord) {
@@ -21,6 +22,7 @@ export const tubeDatasource = datasource.extend({
       id: airtableRecord.get('id persistant'),
       airtableId: airtableRecord.id,
       name: airtableRecord.get('Nom'),
+      index: airtableRecord.get('Index'),
       // FIXME remplacer par Competence (via Thematique) (id persistant) ?
       competenceId: _.head(airtableRecord.get('Competences (id persistant)')),
     };
