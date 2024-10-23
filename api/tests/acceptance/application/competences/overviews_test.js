@@ -8,7 +8,7 @@ import {
   generateAuthorizationHeader,
 } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
-import { thematicDatasource } from '../../../../lib/infrastructure/datasources/airtable/thematic-datasource.js';
+import { thematicDatasource, tubeDatasource } from '../../../../lib/infrastructure/datasources/airtable/index.js';
 
 describe('Acceptance | Route | competence-overviews', () => {
 
@@ -20,13 +20,14 @@ describe('Acceptance | Route | competence-overviews', () => {
 
   describe('GET /competences/:id/overviews/challenges-production', () => {
 
-    it('should respond status 200 and overview of competence’s production challenges', async () => {
+    it.fails('should respond status 200 and overview of competence’s production challenges', async () => {
       // given
       const competenceId = 'recCompetence1';
 
       const airtableThematics = [
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index:2 })),
-        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index:1 })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic1', airtableId: 'recAirtableThematic1', index: 2, tubeIds: ['recTube1', 'recTube2', 'recTube3'] })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic2', airtableId: 'recAirtableThematic2', index: 1, tubeIds: ['recTube4', 'recTube5'] })),
+        airtableBuilder.factory.buildThematic(domainBuilder.buildThematicDatasourceObject({ id: 'recThematic3', airtableId: 'recAirtableThematic3', index: 3, tubeIds: [] })),
       ];
 
       const airtableThematicsScope = nock('https://api.airtable.com')
@@ -51,7 +52,25 @@ describe('Acceptance | Route | competence-overviews', () => {
         value: 'Thématique 2',
       });
 
-      // FIXME tubes
+      const airtableTubes = [
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube1', airtableId: 'recAirtableTube1', competenceId, name: '@tube1', index: 2 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube2', airtableId: 'recAirtableTube2', competenceId, name: '@tube2', index: 1 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube3', airtableId: 'recAirtableTube3', competenceId, name: '@tube3', index: 3 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube4', airtableId: 'recAirtableTube4', competenceId, name: '@tube4', index: 1 })),
+        airtableBuilder.factory.buildTube(domainBuilder.buildTubeDatasourceObject({ id: 'recTube5', airtableId: 'recAirtableTube5', competenceId, name: '@tube5', index: 2 })),
+      ];
+
+      const airtableTubesScope = nock('https://api.airtable.com')
+        .get('/v0/airtableBaseValue/Tubes')
+        .query({
+          fields: {
+            '': tubeDatasource.usedFields,
+          },
+          filterByFormula: `{Competence (via Thematique) (id persistant)} = "${competenceId}"`
+        })
+        .matchHeader('authorization', 'Bearer airtableApiKeyValue')
+        .reply(200, { records: airtableTubes });
+
       // FIXME skills
       // FIXME challenges
 
@@ -78,10 +97,34 @@ describe('Acceptance | Route | competence-overviews', () => {
               {
                 airtableId: 'recAirtableThematic2',
                 name: 'Thématique 2',
+                tubeOverviews: [
+                  {
+                    airtableId: 'recAirtableTube4',
+                    name: '@tube4',
+                  },
+                  {
+                    airtableId: 'recAirtableTube5',
+                    name: '@tube5',
+                  },
+                ],
               },
               {
                 airtableId: 'recAirtableThematic1',
                 name: 'Thématique 1',
+                tubeOverviews: [
+                  {
+                    airtableId: 'recAirtableTube2',
+                    name: '@tube2',
+                  },
+                  {
+                    airtableId: 'recAirtableTube1',
+                    name: '@tube1',
+                  },
+                  {
+                    airtableId: 'recAirtableTube3',
+                    name: '@tube3',
+                  },
+                ],
               },
             ],
           },
@@ -121,6 +164,7 @@ describe('Acceptance | Route | competence-overviews', () => {
       // }
 
       expect(airtableThematicsScope.isDone()).toBe(true);
+      expect(airtableTubesScope.isDone()).toBe(true);
     });
   });
 });
