@@ -1,12 +1,13 @@
 export function buildThematic(
   {
     id,
+    airtableId = id,
     competenceId,
     tubeIds,
     index,
   } = {}) {
   return {
-    id,
+    id: airtableId,
     'fields': {
       'id persistant': id,
       'Competence (id persistant)': [competenceId],
