@@ -10,6 +10,10 @@ export default class LocalizedPrototypeRoute extends Route {
     return { localizedChallenge, challenge };
   }
 
+  async afterModel(model) {
+    await model.localizedChallenge.files;
+  }
+
   setupController(controller, model) {
     super.setupController(...arguments);
     const localizedChallenge = model.localizedChallenge;
