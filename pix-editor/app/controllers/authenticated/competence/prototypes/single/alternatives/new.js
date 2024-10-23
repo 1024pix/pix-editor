@@ -31,10 +31,10 @@ export default class NewController extends Alternative {
       await this._handleIllustration(this.challenge);
       await this._handleAttachments(this.challenge);
       // create challenge without patching Pix API cache
+      this._setAlternativeVersion(this.challenge);
       await this._saveChallenge(this.challenge);
       await this._saveFiles(this.challenge);
-      await this._setAlternativeVersion(this.challenge);
-      // update challenge's alternative version and patch Pix API cache
+      // refresh Pix API cache (only done on PATCH route)
       await this._saveChallenge(this.challenge);
       this.edition = false;
       this.send('minimize');
@@ -49,8 +49,8 @@ export default class NewController extends Alternative {
     }
   }
 
-  async _setAlternativeVersion(challenge) {
-    const version = await this.currentData.getPrototype().getNextAlternativeVersion();
+  _setAlternativeVersion(challenge) {
+    const version = this.currentData.getPrototype().getNextAlternativeVersion();
     challenge.alternativeVersion = version;
   }
 }
