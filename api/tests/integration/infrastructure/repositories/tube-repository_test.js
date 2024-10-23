@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import * as tubeRepository from '../../../../lib/infrastructure/repositories/tube-repository.js';
+import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import { stringValue } from '../../../../lib/infrastructure/airtable.js';
 
 describe('Integration | Repository | tube-repository', () => {
 
@@ -114,6 +116,80 @@ describe('Integration | Repository | tube-repository', () => {
       ]);
 
       airtableScope.done();
+    });
+  });
+
+  describe('#listByCompetenceId', () => {
+    it('should retrieve all tubes by competence id', async () => {
+      //given
+      const tube1 = {
+        id: 'tubeId1',
+        name: '@tube1',
+        practicalTitle_i18n: {
+          fr: 'practicalTitleFrFr tube1',
+          en: 'practicalTitleEnUs tube1',
+        },
+        practicalDescription_i18n: {
+          fr: 'practicalDescriptionFrFr tube1',
+          en: 'practicalDescriptionEnUs tube1',
+        },
+        competenceId: 'competenceId1',
+      };
+      const tube1DescriptionEn = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'en',
+        value: 'Identify a web browser and a search engine, know how the search engine works from PG 1'
+      });
+      const tube1DescriptionFr = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalDescription',
+        locale: 'fr',
+        value: 'Identifier un navigateur web et un moteur de recherche, connaître le fonctionnement du moteur de recherche from PG 1'
+      });
+      const tube1TitleEn = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'en',
+        value: 'Tools for web from PG 1'
+      });
+      const tube1TitleFr = databaseBuilder.factory.buildTranslation({
+        key: 'tube.tubeId1.practicalTitle',
+        locale: 'fr',
+        value: 'Outils d\'accès au web from PG 1'
+      });
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+        if (tableName !== 'Tubes') expect.unreachable('Airtable tableName should be Tubes');
+        if (options?.filterByFormula !==  `{Competence (via Thematique) (id persistant)} = ${stringValue(tube1.competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        return [{
+          id: 'airtableTubeId1',
+          fields: {
+            'id persistant': tube1.id,
+            'Nom': tube1.name,
+            'Competences (id persistant)': [tube1.competenceId],
+          },
+          get: function(field) { return this.fields[field]; },
+        }];
+      });
+
+      //when
+      const tubes = await tubeRepository.listByCompetenceId(tube1.competenceId);
+
+      //then
+      expect(tubes).toStrictEqual([
+        domainBuilder.buildTube({
+          id: 'tubeId1',
+          airtableId: 'airtableTubeId1',
+          name: '@tube1',
+          practicalTitle_i18n: {
+            fr: tube1TitleFr.value,
+            en: tube1TitleEn.value,
+          },
+          practicalDescription_i18n: {
+            fr: tube1DescriptionFr.value,
+            en: tube1DescriptionEn.value,
+          },
+          competenceId: 'competenceId1',
+        })
+      ]);
     });
   });
 });
