@@ -5,6 +5,7 @@ export class Tube {
     name,
     practicalTitle_i18n,
     practicalDescription_i18n,
+    index,
     competenceId,
   }) {
     this.id = id;
@@ -12,6 +13,7 @@ export class Tube {
     this.name = name;
     this.practicalTitle_i18n = practicalTitle_i18n;
     this.practicalDescription_i18n = practicalDescription_i18n;
+    this.index = index;
     this.competenceId = competenceId;
   }
 }
