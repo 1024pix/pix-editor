@@ -1,5 +1,19 @@
 
 
+## v3.168.0 (23/10/2024)
+
+
+### :bug: Correction
+- [#782](https://github.com/1024pix/pix-editor/pull/782) [BUGFIX] Empêcher la création d'une déclinaison avec une version `undefined` (PIX-14943).
+- [#784](https://github.com/1024pix/pix-editor/pull/784) [BUGFIX] Le champ embedURL n'était pas prérempli lorsqu'on crée une déclinaison ou qu'on duplique une épreuve (PIX-14926).
+- [#783](https://github.com/1024pix/pix-editor/pull/783) [BUGFIX] Pour les champs qualité, dans la liste des choix possibles on pouvait choisir une option "vide" (PIX-14925).
+
+### :arrow_up: Montée de version
+- [#786](https://github.com/1024pix/pix-editor/pull/786) [BUMP] Update dependency node to v20.18.0.
+- [#785](https://github.com/1024pix/pix-editor/pull/785) [BUMP] Update dependency @1024pix/pix-ui to ^47.2.0 (pix-editor).
+- [#746](https://github.com/1024pix/pix-editor/pull/746) [BUMP] Update dependency axios to v1.7.4 [SECURITY].
+- [#779](https://github.com/1024pix/pix-editor/pull/779) [BUMP] Update dependency form-data to v4.0.1 (api).
+
 ## v3.167.0 (21/10/2024)
 
 
