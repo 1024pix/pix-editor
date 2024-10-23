@@ -1,6 +1,8 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { airtableBuilder, databaseBuilder, domainBuilder } from '../../../test-helper.js';
 import * as thematicRepository from '../../../../lib/infrastructure/repositories/thematic-repository.js';
+import * as airtableClient from '../../../../lib/infrastructure/airtable.js';
+import { stringValue } from '../../../../lib/infrastructure/airtable.js';
 
 describe('Integration | Repository | thematic-repository', () => {
 
@@ -75,6 +77,58 @@ describe('Integration | Repository | thematic-repository', () => {
       ]);
 
       airtableScope.done();
+    });
+  });
+
+  describe('#listByCompetenceId', () => {
+    it('should retrieve all thematics by competence id', async () => {
+      //given
+      const competenceId = 'competenceId1';
+      const thematicId = 'recThematic1';
+      databaseBuilder.factory.buildTranslation({
+        key: 'thematic.recThematic1.name',
+        locale: 'fr',
+        value: 'Nom thématique 1',
+      });
+      databaseBuilder.factory.buildTranslation({
+        key: 'thematic.recThematic1.name',
+        locale: 'en',
+        value: 'Thematic 1 name',
+      });
+
+      await databaseBuilder.commit();
+      vi.spyOn(airtableClient, 'findRecords').mockImplementation((tableName, options) => {
+        if (tableName !== 'Thematiques') expect.unreachable('Airtable tableName should be Tubes');
+        if (options?.filterByFormula !==  `{Competence (id persistant)} = ${stringValue(competenceId)}`) expect.unreachable('Wrong filterByFormula');
+        return [{
+          id: 'recAirtableThematic1',
+          fields: {
+            'id persistant': thematicId,
+            'Competence (id persistant)': [competenceId],
+            'Tubes (id persistant)': ['tubeId1', 'tubeId2'],
+            'Index': 1,
+          },
+          get: function(field) { return this.fields[field]; },
+        }];
+      });
+
+      //when
+      const thematics = await thematicRepository.listByCompetenceId(competenceId);
+
+      //then
+      expect(thematics).toStrictEqual([
+        domainBuilder.buildThematic({
+          id: 'recThematic1',
+          airtableId: 'recAirtableThematic1',
+          name_i18n: {
+            fr: 'Nom thématique 1',
+            en: 'Thematic 1 name',
+          },
+          competenceId: 'competenceId1',
+          tubeIds: ['tubeId1', 'tubeId2'],
+          index: 1,
+        })
+      ]);
     });
   });
 
