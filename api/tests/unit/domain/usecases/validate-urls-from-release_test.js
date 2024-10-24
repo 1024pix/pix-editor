@@ -3,10 +3,11 @@ import { domainBuilder } from '../../../test-helper.js';
 import { ChallengeForRelease } from '../../../../lib/domain/models/release/index.js';
 import { validateUrlsFromRelease } from '../../../../lib/domain/usecases/index.js';
 import * as UrlUtils from '../../../../lib/infrastructure/utils/url-utils.js';
+import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Unit | Domain | Usecases | Validate urls from release', function() {
   describe('#validateUrlsFromRelease', function() {
-    let releaseRepository, urlRepository, localizedChallengeRepository, mockedUrlUtils;
+    let releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, mockedUrlUtils;
     const identifiedUrlChallenge1_1 = {
       id: 'Pix;competence 1.1;@mySkill1;challenge1;validé;fr',
       url: 'https://example.net/',
@@ -144,8 +145,8 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
       });
       const wonderlandChallenge5Skill23 = domainBuilder.buildChallengeForRelease({
         id: 'challenge5',
-        instruction: 'instructions',
-        solutionToDisplay: '',
+        instruction: 'instructions https://ignorez-moi.fr',
+        solutionToDisplay: 'https://ignore-me.us/some-page',
         skillId: 'skill23',
         status: ChallengeForRelease.STATUSES.VALIDE,
         locales: ['nl'],
@@ -185,6 +186,11 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         domainBuilder.buildLocalizedChallenge({ id: 'challenge7', urlsToConsult: [] }),
       ];
       localizedChallengeRepository = { list: vi.fn().mockResolvedValue(localizedChallenges) };
+      const whitelistedUrls = [
+        domainBuilder.buildWhitelistedUrl({ url: 'https://ignorez-moi.fr', checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH }),
+        domainBuilder.buildWhitelistedUrl({ url: 'https://ignore-me.us', checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH }),
+      ];
+      whitelistedUrlRepository = { listRead: vi.fn().mockResolvedValue(whitelistedUrls) };
       urlRepository = {
         updateChallenges: vi.fn(),
         updateTutorials: vi.fn(),
@@ -297,7 +303,7 @@ describe('Unit | Domain | Usecases | Validate urls from release', function() {
         ]);
 
       // when
-      await validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, UrlUtils: mockedUrlUtils });
+      await validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils: mockedUrlUtils });
 
       // then
       expect(mockedUrlUtils.analyzeIdentifiedUrls.mock.calls[0]).toStrictEqual([[identifiedUrlChallenge1_1, identifiedUrlChallenge1_2, identifiedUrlChallenge1_3, identifiedUrlChallenge1_4, identifiedUrlChallenge1_5, identifiedUrlChallenge2_1, identifiedUrlChallenge2_2, identifiedUrlChallenge3_1, identifiedUrlChallenge4_1, identifiedUrlChallenge5_1 ]]);

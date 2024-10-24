@@ -1,10 +1,11 @@
 import _ from 'lodash';
 
-export async function validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, UrlUtils }) {
+export async function validateUrlsFromRelease({ releaseRepository, urlRepository, localizedChallengeRepository, whitelistedUrlRepository, UrlUtils }) {
   const release = await releaseRepository.getLatestRelease();
+  const whitelistedUrls = await whitelistedUrlRepository.listRead();
 
-  await checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils });
-  await checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils });
+  await checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }, whitelistedUrls);
+  await checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls);
 }
 
 function findUrlsFromChallenges(challenges, release, localizedChallengesById, UrlUtils) {
@@ -55,19 +56,21 @@ function keepAndFormatKOUrls(analyzedLines) {
   });
 }
 
-async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }) {
+async function checkAndUploadKOUrlsFromChallenges(release, { urlRepository, localizedChallengeRepository, UrlUtils }, whitelistedUrls) {
   const operativeChallenges = release.operativeChallenges;
   const localizedChallengesById = _.keyBy(await localizedChallengeRepository.list(), 'id');
   const urlList = findUrlsFromChallenges(operativeChallenges, release, localizedChallengesById, UrlUtils);
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
+  const finalUrlList = urlList.filter(({ url }) => whitelistedUrls.every((whitelistedUrl) => !whitelistedUrl.isMatching(url)));
+  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOChallengeUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateChallenges(formattedKOChallengeUrls);
 }
 
-async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }) {
+async function checkAndUploadKOUrlsFromTutorials(release, { urlRepository, UrlUtils }, whitelistedUrls) {
   const tutorials = release.content.tutorials;
   const urlList = findUrlsFromTutorials(tutorials, release);
-  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(urlList);
+  const finalUrlList = urlList.filter(({ url }) => whitelistedUrls.every((whitelistedUrl) => !whitelistedUrl.isMatching(url)));
+  const analyzedUrls = await UrlUtils.analyzeIdentifiedUrls(finalUrlList);
   const formattedKOTutorialUrls = keepAndFormatKOUrls(analyzedUrls);
   await urlRepository.updateTutorials(formattedKOTutorialUrls);
 }
