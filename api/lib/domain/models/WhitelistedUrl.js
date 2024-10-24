@@ -97,6 +97,12 @@ export class WhitelistedUrl {
     this.comment = updateCommand.comment;
     this.checkType = updateCommand.checkType;
   }
+
+  isMatching(url) {
+    if (this.checkType === WhitelistedUrl.CHECK_TYPES.EXACT_MATCH) return url === this.url;
+    if (this.checkType === WhitelistedUrl.CHECK_TYPES.STARTS_WITH) return url.startsWith(this.url);
+    return false;
+  }
 }
 
 function isUrlValid(url) {

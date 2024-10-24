@@ -580,4 +580,143 @@ describe('Unit | Domain | WhitelistedUrl', () => {
       }));
     });
   });
+
+  describe('#isMatching', function() {
+    describe('exact_match', function() {
+      it('should match when url is exactly the same as the whitelisted', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mOn-Bidet_orange.com/token=COUCOU',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.true;
+      });
+
+      it('should not match when url is not the same case-wise', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://MON-Bidet_orange.com/token=COUCOU',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+
+      it('should not match when url is just partially the same', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mOn-Bidet_orange.com/token=C',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+
+      it('should not match when url is not the same', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://quelquechose-dautre',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+    });
+    describe('starts_with', function() {
+      it('should match when url is starts exactly with the same as the whitelisted', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mOn-Bidet_orange.com/to',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.true;
+      });
+      it('should match when url is exactly the same', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mOn-Bidet_orange.com/token=COUCOU',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.true;
+      });
+
+      it('should not match when url does not start the same case-wise', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://MON-Bidet_orange.com/to',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+
+      it('should not match when url is different even if they start similar', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://mOn-Bidet_orange.com/token=COUCOU_MAMAN',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+
+      it('should not match when url does not start the same at all', function() {
+        // given
+        const url = 'https://mOn-Bidet_orange.com/token=COUCOU';
+        const whitelistedUrl = domainBuilder.buildWhitelistedUrl({
+          url: 'https://quelquechose-dautre',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
+        });
+
+        // when
+        const isMatching = whitelistedUrl.isMatching(url);
+
+        // then
+        expect(isMatching).to.be.false;
+      });
+    });
+  });
 });
