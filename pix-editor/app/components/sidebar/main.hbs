@@ -26,6 +26,12 @@
         <i class="crosshairs icon"></i> Générateur de profil cible
       </LinkTo>
     {{/if}}
+    {{#if this.mayAccessWhitelistedUrls}}
+      <LinkTo data-test-whitelisted-urls-link @route="authenticated.whitelisted-urls" {{on "click" @close}}>
+        <FaIcon @icon="recycle" @prefix="fas"></FaIcon>
+        Whitelist moulinette des URLs
+      </LinkTo>
+    {{/if}}
     <Sidebar::Export @areas={{this.areas}}/>
     <LinkTo @route="authenticated.statistics" {{on "click" @close}}>
       <i class="chart bar icon"></i> Statistiques

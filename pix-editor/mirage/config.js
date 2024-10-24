@@ -448,6 +448,12 @@ function routes() {
     });
     return staticCourse;
   });
+
+  this.get('/whitelisted-urls', function(schema) {
+    const whitelistedUrls = schema.whitelistedUrls.all().models;
+
+    return this.serialize({ modelName: 'whitelisted-urls', models: whitelistedUrls }, 'whitelisted-url');
+  });
 }
 
 function _serializeModel(instance, modelName) {
