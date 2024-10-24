@@ -13,7 +13,7 @@ import {
   thematicDatasource,
   tubeDatasource
 } from '../../../../lib/infrastructure/datasources/airtable/index.js';
-import { Challenge, Skill } from '../../../../lib/domain/models/index.js';
+import { Challenge, LocalizedChallenge, Skill } from '../../../../lib/domain/models/index.js';
 import { LOCALE } from '../../../../lib/domain/constants.js';
 
 describe('Acceptance | Route | competence-overviews', () => {
@@ -102,9 +102,11 @@ describe('Acceptance | Route | competence-overviews', () => {
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge1', airtableId: 'recAirtableChallenge1', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge11', airtableId: 'recAirtableChallenge11', skillId: 'recSkill1', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 1, status: Challenge.STATUSES.VALIDE, locales: [LOCALE.FRENCH_FRANCE], competenceId })),
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge2', airtableId: 'recAirtableChallenge2', skillId: 'recSkill2', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge3', airtableId: 'recAirtableChallenge3', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.FACILEMENT, version: 2, status: Challenge.STATUSES.VALIDE, competenceId })),
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge31', airtableId: 'recAirtableChallenge31', skillId: 'recSkill3', genealogy: Challenge.GENEALOGIES.DECLINAISON, version: 2, status: Challenge.STATUSES.PROPOSE, competenceId })),
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge4', airtableId: 'recAirtableChallenge4', skillId: 'recSkill4', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.DIFFICILEMENT, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
+
         airtableBuilder.factory.buildChallenge(domainBuilder.buildChallengeDatasourceObject({ id: 'recChallenge5', airtableId: 'recAirtableChallenge5', skillId: 'recSkill5', genealogy: Challenge.GENEALOGIES.PROTOTYPE, declinable: Challenge.DECLINABLES.NON, version: 1, status: Challenge.STATUSES.VALIDE, competenceId })),
       ];
 
@@ -276,6 +278,11 @@ describe('Acceptance | Route | competence-overviews', () => {
     describe('with language filter set to english', () => {
       it('should respond status 200 and overview of competence’s production, localized and primary english challenges', async () => {
         // given
+        databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge3_en', challengeId: 'recChallenge3', status: LocalizedChallenge.STATUSES.PLAY, locale: LOCALE.ENGLISH_SPOKEN });
+        databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge31_en', challengeId: 'recChallenge31', status: LocalizedChallenge.STATUSES.PAUSE, locale: LOCALE.ENGLISH_SPOKEN });
+        databaseBuilder.factory.buildLocalizedChallenge({ id: 'recChallenge4_en', challengeId: 'recChallenge4', status: LocalizedChallenge.STATUSES.PAUSE, locale: LOCALE.ENGLISH_SPOKEN });
+        await databaseBuilder.commit();
+
         const server = await createServer();
 
         // when
@@ -307,7 +314,7 @@ describe('Acceptance | Route | competence-overviews', () => {
                           name: '@tube41',
                           prototypeId: 'recChallenge4',
                           validatedChallengesCount: 0,
-                          proposedChallengesCount: 0,
+                          proposedChallengesCount: 1,
                           isPrototypeDeclinable: true,
                         },
                         null,
@@ -358,8 +365,8 @@ describe('Acceptance | Route | competence-overviews', () => {
                           airtableId: 'recAirtableSkill3',
                           name: '@tube27',
                           prototypeId: 'recChallenge3',
-                          validatedChallengesCount: 0,
-                          proposedChallengesCount: 0,
+                          validatedChallengesCount: 1,
+                          proposedChallengesCount: 1,
                           isPrototypeDeclinable: true,
                         },
                       ],

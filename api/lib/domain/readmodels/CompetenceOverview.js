@@ -143,8 +143,17 @@ function hasSkillIdAndVersionOf({ skillId, version } = {}) {
 
 function countChallengesByStatusAndLocale(challenges, status, locale) {
   return challenges.reduce((count, challenge) => {
-    if (challenge.status !== status) return count;
-    if (locale && challenge.locale !== locale) return count;
-    return count + 1;
+    const localeChallenge = getChallengeForLocale(challenge, locale);
+
+    if (!localeChallenge) return count;
+
+    return localeChallenge.status === status ? count + 1 : count;
   }, 0);
+}
+
+function getChallengeForLocale(challenge, locale) {
+  if (!locale) return challenge;
+  if (challenge.locales.includes(locale)) return challenge;
+  if (challenge.alternativeLocales.includes(locale)) return challenge.translate(locale);
+  return undefined;
 }
