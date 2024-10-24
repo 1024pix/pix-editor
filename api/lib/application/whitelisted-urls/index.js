@@ -59,6 +59,7 @@ export async function register(server) {
             url: attributes['url'] ?? null,
             relatedEntityIds: attributes['related-entity-ids'] ?? null,
             comment: attributes['comment'] ?? null,
+            checkType: attributes['check-type'] ?? null,
           };
           const existingWhitelistedUrls = await whitelistedUrlRepository.listRead();
           const canCreate = WhitelistedUrl.canCreate(creationCommand, authenticatedUser, existingWhitelistedUrls);
@@ -90,6 +91,7 @@ export async function register(server) {
             url: attributes['url'] ?? null,
             relatedEntityIds: attributes['related-entity-ids'] ?? null,
             comment: attributes['comment'] ?? null,
+            checkType: attributes['check-type'] ?? null,
           };
           const whitelistedUrlToUpdate = await whitelistedUrlRepository.find(whitelistedUrlId);
           if (!whitelistedUrlToUpdate) {

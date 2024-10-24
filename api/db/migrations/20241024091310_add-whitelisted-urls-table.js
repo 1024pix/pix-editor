@@ -10,6 +10,7 @@ export function up(knex) {
     t.dateTime('updatedAt').notNullable().defaultTo(knex.fn.now());
     t.dateTime('deletedAt').defaultTo(null);
     t.text('url').notNullable();
+    t.string('checkType').notNullable();
     t.string('relatedEntityIds');
     t.text('comment');
   }

@@ -11,6 +11,7 @@ const serializer = new Serializer('whitelisted-urls', {
     'url',
     'relatedEntityIds',
     'comment',
+    'checkType',
   ],
 });
 

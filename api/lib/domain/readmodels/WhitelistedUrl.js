@@ -8,6 +8,7 @@ export class WhitelistedUrl {
     url,
     relatedEntityIds,
     comment,
+    checkType,
   }) {
     this.id = id;
     this.createdAt = createdAt;
@@ -17,5 +18,6 @@ export class WhitelistedUrl {
     this.url = url;
     this.relatedEntityIds = relatedEntityIds;
     this.comment = comment;
+    this.checkType = checkType;
   }
 }

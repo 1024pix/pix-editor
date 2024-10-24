@@ -116,11 +116,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         };
         const creationCommand2 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 'recTest12345678,recSuperTest789123',
           comment: 'COucou',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -140,6 +142,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -155,12 +158,15 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const creationCommand1 = {
           url: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const creationCommand2 = {
           url: 'www.missing-protocol.com',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const creationCommand3 = {
           url: 123456,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -183,10 +189,12 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const creationCommand1 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 123456.12,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const creationCommand2 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 'je ne suis pas une suite d ids d entités séparés par des virgules sans espaces',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -207,6 +215,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: 123,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -215,6 +224,37 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         // then
         expect(canCreate.cannot).to.be.true;
         expect(canCreate.errorMessage).to.equal('Commentaire invalide. Doit être un texte ou vide');
+      });
+
+      it('should return a canExecute invalid when checkType is not valid in creation command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const creationCommand1 = {
+          url: 'https://www.brioche.com',
+          checkType: 'autre_type',
+        };
+        const creationCommand2 = {
+          url: 'https://www.brioche.com',
+          checkType: null,
+        };
+        const creationCommand3 = {
+          url: 'https://www.brioche.com',
+          checkType: 456789,
+        };
+
+        // when
+        const canCreate1 = WhitelistedUrl.canCreate(creationCommand1, user, []);
+        const canCreate2 = WhitelistedUrl.canCreate(creationCommand2, user, []);
+        const canCreate3 = WhitelistedUrl.canCreate(creationCommand3, user, []);
+
+        // then
+        const allowedValues = Object.values(WhitelistedUrl.CHECK_TYPES).join(', ');
+        expect(canCreate1.cannot).to.be.true;
+        expect(canCreate1.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        expect(canCreate2.cannot).to.be.true;
+        expect(canCreate2.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        expect(canCreate3.cannot).to.be.true;
+        expect(canCreate3.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
       });
 
       it('should return a canExecute invalid when url has already been whitelisted (case sensitive, exact match)', function() {
@@ -227,6 +267,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
 
         // when
@@ -247,6 +288,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         url: 'https://www.brioche.com',
         relatedEntityIds: 'recABC,redDEF',
         comment: 'coucou maman',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       };
 
       // when
@@ -264,6 +306,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         url: 'https://www.brioche.com',
         relatedEntityIds: 'recABC,redDEF',
         comment: 'coucou maman',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       }));
     });
   });
@@ -280,11 +323,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand2 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 'recTest12345678,recSuperTest789123',
           comment: 'COucou',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -308,6 +353,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -327,12 +373,15 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
         const updateCommand1 = {
           url: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand2 = {
           url: 'www.missing-protocol.com',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand3 = {
           url: 123456,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -359,10 +408,12 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         const updateCommand1 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 123456.12,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const updateCommand2 = {
           url: 'https://www.brioche.com',
           relatedEntityIds: 'je ne suis pas une suite d ids d entités séparés par des virgules sans espaces',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -387,6 +438,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: 123,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -401,6 +453,41 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         expect(canUpdate.errorMessage).to.equal('Commentaire invalide. Doit être un texte ou vide');
       });
 
+      it('should return a canExecute invalid when checkType is not valid in update command', function() {
+        // given
+        const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
+        const updateCommand1 = {
+          url: 'https://www.brioche.com',
+          checkType: 'autre_type',
+        };
+        const updateCommand2 = {
+          url: 'https://www.brioche.com',
+          checkType: null,
+        };
+        const updateCommand3 = {
+          url: 'https://www.brioche.com',
+          checkType: 456789,
+        };
+        const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
+          deletedBy: null,
+          deletedAt: null,
+        });
+
+        // when
+        const canUpdate1 = whitelistedUrlToUpdate.canUpdate(updateCommand1, user, []);
+        const canUpdate2 = whitelistedUrlToUpdate.canUpdate(updateCommand2, user, []);
+        const canUpdate3 = whitelistedUrlToUpdate.canUpdate(updateCommand3, user, []);
+
+        // then
+        const allowedValues = Object.values(WhitelistedUrl.CHECK_TYPES).join(', ');
+        expect(canUpdate1.cannot).to.be.true;
+        expect(canUpdate1.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        expect(canUpdate2.cannot).to.be.true;
+        expect(canUpdate2.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+        expect(canUpdate3.cannot).to.be.true;
+        expect(canUpdate3.errorMessage).to.equal(`Type de check invalide. Valeurs parmi : ${allowedValues}`);
+      });
+
       it('should return a canExecute invalid when url has already been whitelisted (case sensitive, exact match)', function() {
         // given
         const user = domainBuilder.buildUser({ access: User.ROLES.ADMIN });
@@ -411,6 +498,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: null,
@@ -432,6 +520,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
           url: 'https://www.brioche.com',
           relatedEntityIds: null,
           comment: null,
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         };
         const whitelistedUrlToUpdate = domainBuilder.buildWhitelistedUrl({
           deletedBy: 123,
@@ -463,11 +552,13 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       const updateCommand = {
         url: 'https://www.brioche.com',
         relatedEntityIds: 'recDautreTrucs',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       };
 
       // when
@@ -485,6 +576,7 @@ describe('Unit | Domain | WhitelistedUrl', () => {
         url: 'https://www.brioche.com',
         relatedEntityIds: 'recDautreTrucs',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       }));
     });
   });

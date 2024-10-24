@@ -10,6 +10,7 @@ export function buildReadWhitelistedUrl({
   url = 'http://pipeau-la-grenouille.fr',
   relatedEntityIds = 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
   comment = 'Les grenouilles sont jolies',
+  checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
 } = {}) {
   return new ReadWhitelistedUrl({
     id,
@@ -20,6 +21,7 @@ export function buildReadWhitelistedUrl({
     url,
     relatedEntityIds,
     comment,
+    checkType,
   });
 }
 
@@ -34,6 +36,7 @@ export function buildWhitelistedUrl({
   url = 'http://pipeau-la-grenouille.fr',
   relatedEntityIds = 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
   comment = 'Les grenouilles sont jolies',
+  checkType = WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
 } = {}) {
   return new WhitelistedUrl({
     id,
@@ -46,5 +49,6 @@ export function buildWhitelistedUrl({
     url,
     relatedEntityIds,
     comment,
+    checkType,
   });
 }

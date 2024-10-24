@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { databaseBuilder, domainBuilder, knex } from '../../../test-helper.js';
 import * as whitelistedUrlRepository from '../../../../lib/infrastructure/repositories/whitelisted-url-repository.js';
+import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Integration | Repository | whitelisted-url-repository', () => {
 
@@ -21,6 +22,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -33,6 +35,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -45,6 +48,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -62,6 +66,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           url: 'https://www.editor.pix.fr',
           relatedEntityIds: null,
           comment: 'Mon site préféré',
+          checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
         }),
         domainBuilder.buildReadWhitelistedUrl({
           id: 123,
@@ -72,6 +77,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
           url: 'https://www.google.com',
           relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
           comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+          checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
         }),
       ]);
     });
@@ -90,6 +96,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -102,6 +109,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -130,6 +138,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -142,6 +151,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -154,6 +164,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -170,6 +181,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       }));
     });
 
@@ -188,6 +200,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -200,6 +213,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -212,6 +226,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -236,6 +251,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -248,6 +264,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -276,6 +293,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -288,6 +306,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -300,6 +319,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -318,6 +338,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       }));
     });
 
@@ -335,6 +356,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -347,6 +369,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
 
@@ -378,6 +401,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       await databaseBuilder.commit();
       const whitelistedUrlToSave = domainBuilder.buildWhitelistedUrl({
@@ -391,6 +415,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.bing.com',
         relatedEntityIds: 'recABC789123',
         comment: 'Je viens de modifier le commentaire',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
 
       // when
@@ -400,6 +425,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
       const savedWhitelistedUrl = await whitelistedUrlRepository.find(123);
       expect(savedWhitelistedUrl).toStrictEqual(whitelistedUrlToSave);
     });
+
     it('should insert a new whitelisted url', async function() {
       // given
       const adminUser1 = databaseBuilder.factory.buildUser({ name: 'Madame Admin 1', access: 'admin' });
@@ -416,6 +442,7 @@ describe('Integration | Repository | whitelisted-url-repository', () => {
         url: 'https://www.bing.com',
         relatedEntityIds: 'recABC789123',
         comment: 'Je viens de créer cette entrée',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
 
       // when
