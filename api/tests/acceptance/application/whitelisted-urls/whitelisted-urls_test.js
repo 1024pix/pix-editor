@@ -390,4 +390,131 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
       });
     });
   });
+  describe('PATCH /whitelisted-urls/{whitelistedUrlId}', () => {
+    let adminUser, server, validPayload;
+    beforeEach(async function() {
+      adminUser = databaseBuilder.factory.buildUser({ name: 'Madame Admin', access: 'admin' });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 123,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: null,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: null,
+        url: 'https://www.google.com',
+        relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
+        comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 456,
+        createdBy: null,
+        latestUpdatedBy: null,
+        deletedBy: null,
+        createdAt: new Date('2020-12-12'),
+        updatedAt: new Date('2022-08-08'),
+        deletedAt: null,
+        url: 'https://www.editor.pix.fr',
+        relatedEntityIds: null,
+        comment: 'Mon site préféré',
+      });
+      databaseBuilder.factory.buildWhitelistedUrl({
+        id: 789,
+        createdBy: adminUser.id,
+        latestUpdatedBy: adminUser.id,
+        deletedBy: adminUser.id,
+        createdAt: new Date('2020-01-01'),
+        updatedAt: new Date('2022-02-02'),
+        deletedAt: new Date('2023-01-01'),
+        url: 'https://www.les-fruits-c-super-bon',
+        relatedEntityIds: 'reclbhuUTRGc1jZRL',
+        comment: null,
+      });
+      await databaseBuilder.commit();
+      server = await createServer();
+      validPayload = {
+        data: {
+          attributes: {
+            url: 'https://super-casserole.com',
+            'related-entity-ids': 'rec123,rec789',
+            comment: 'Un super commentaire',
+          },
+        },
+      };
+    });
+
+    it('should return a 403 status code when user is not admin', async () => {
+      // given
+      const notAdminUser = databaseBuilder.factory.buildEditorUser();
+      await databaseBuilder.commit();
+
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(notAdminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(403);
+      expect(response.result).to.deep.equal({
+        errors: [
+          {
+            code: 403,
+            detail: 'Missing or insufficient permissions.',
+            title: 'Forbidden access',
+          },
+        ],
+      });
+    });
+
+    it('should return a 422 status code when update command in invalid', async () => {
+      // when
+      const invalidPayload = JSON.parse(JSON.stringify(validPayload));
+      invalidPayload.data.attributes.url = 'je ne suis pas une bonne url';
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: invalidPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(422);
+      expect(response.result).to.deep.equal({
+        error: 'Unprocessable Entity',
+        message: 'URL invalide',
+        statusCode: 422,
+      });
+    });
+
+    it('should return a 200 status code and the serialized updated whitelisted url', async () => {
+      // when
+      const response = await server.inject({
+        method: 'PATCH',
+        url: '/api/whitelisted-urls/456',
+        headers: generateAuthorizationHeader(adminUser),
+        payload: validPayload,
+      });
+
+      // Then
+      expect(response.statusCode).to.equal(200);
+      expect(response.result).toStrictEqual({
+        data: {
+          type: 'whitelisted-urls',
+          id: '456',
+          attributes: {
+            'created-at': new Date('2020-12-12'),
+            'updated-at': now,
+            'creator-name': null,
+            'latest-updator-name': 'Madame Admin',
+            url: 'https://super-casserole.com',
+            'related-entity-ids': 'rec123,rec789',
+            comment: 'Un super commentaire',
+          },
+        },
+      });
+    });
+  });
 });

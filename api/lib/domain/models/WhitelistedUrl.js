@@ -27,21 +27,10 @@ export class WhitelistedUrl {
 
   static canCreate(creationCommand, user, existingReadWhitelistedUrls) {
     if (!user.isAdmin) return CanExecute.cannot('L\'utilisateur n\'a pas les droits pour créer une URL whitelistée');
-    try {
-      new URL(creationCommand.url);
-      // eslint-disable-next-line no-unused-vars
-    } catch (_err) {
-      return CanExecute.cannot('URL invalide');
-    }
-    const idsSeparatedByCommaRegex = /^[A-Za-z0-9]+(,[A-Za-z0-9]+)*[A-Za-z0-9]+$/;
-    if (creationCommand.relatedEntityIds && !idsSeparatedByCommaRegex.test(creationCommand.relatedEntityIds))
-      return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
-
-    if (creationCommand.comment && !(typeof creationCommand.comment === 'string'))
-      return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
-
-    if (existingReadWhitelistedUrls.some((whitelistedUrl) => whitelistedUrl.url === creationCommand.url))
-      return CanExecute.cannot('URL déjà whitelistée');
+    if (!isUrlValid(creationCommand.url)) return CanExecute.cannot('URL invalide');
+    if (!isRelatedEntityIdsValid(creationCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+    if (!isCommentValid(creationCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
+    if (!isUrlUnique(creationCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
 
     return CanExecute.can();
   }
@@ -75,4 +64,49 @@ export class WhitelistedUrl {
     this.updatedAt = operationDate;
     this.deletedAt = operationDate;
   }
+
+  canUpdate(updateCommand, user, existingReadWhitelistedUrls) {
+    if (!user.isAdmin) return CanExecute.cannot('L\'utilisateur n\'a pas les droits pour mettre à jour cette URL whitelistée');
+    if (this.deletedAt) return CanExecute.cannot('L\'URL whitelistée n\'existe pas');
+    if (!isUrlValid(updateCommand.url)) return CanExecute.cannot('URL invalide');
+    if (!isRelatedEntityIdsValid(updateCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
+    if (!isCommentValid(updateCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
+    if (!isUrlUnique(updateCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
+
+    return CanExecute.can();
+  }
+
+  update(updateCommand, user) {
+    const operationDate = new Date();
+    this.latestUpdatedBy = user.id;
+    this.updatedAt = operationDate;
+    this.url = updateCommand.url;
+    this.relatedEntityIds = updateCommand.relatedEntityIds;
+    this.comment = updateCommand.comment;
+  }
+}
+
+function isUrlValid(url) {
+  try {
+    new URL(url);
+    // eslint-disable-next-line no-unused-vars
+  } catch (_err) {
+    return false;
+  }
+  return true;
+}
+
+function isRelatedEntityIdsValid(relatedEntityIds) {
+  const idsSeparatedByCommaRegex = /^[A-Za-z0-9]+(,[A-Za-z0-9]+)*[A-Za-z0-9]+$/;
+  if (!relatedEntityIds) return true;
+  return idsSeparatedByCommaRegex.test(relatedEntityIds);
+}
+
+function isCommentValid(comment) {
+  if (!comment) return true;
+  return typeof comment === 'string';
+}
+
+function isUrlUnique(url, existingReadWhitelistedUrls) {
+  return existingReadWhitelistedUrls.every((whitelistedUrl) => whitelistedUrl.url !== url);
 }
