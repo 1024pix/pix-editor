@@ -16,6 +16,7 @@ import * as staticRoute from './application/static/index.js';
 import * as translationsRoute from './application/translations.js';
 import * as embedsRoute from './application/embeds.js';
 import * as usersRoute from './application/users.js';
+import * as whitelistedUrlsRoute from './application/whitelisted-urls/index.js';
 
 export const routes = [
   airtableProxyRoute,
@@ -35,5 +36,6 @@ export const routes = [
   translationsRoute,
   embedsRoute,
   usersRoute,
+  whitelistedUrlsRoute,
   ...competenceRoutes,
 ];
