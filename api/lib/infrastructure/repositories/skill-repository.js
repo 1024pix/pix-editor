@@ -33,6 +33,13 @@ export async function listByTubeId(tubeId) {
   return toDomainList(datasourceSkills, translations);
 }
 
+export async function listByCompetenceId(competenceId) {
+  const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
+  if (!datasourceSkills) return [];
+  const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
+  return toDomainList(datasourceSkills, translations);
+}
+
 export async function create(skill) {
   const airtableTubeId = (await tubeDatasource.getAirtableIdsByIds([skill.tubeId]))[skill.tubeId];
   const airtableTutorialAirtableIdsByIds = await tutorialDatasource.getAirtableIdsByIds(_.uniq([...skill.tutorialIds, ...skill.learningMoreTutorialIds]));
