@@ -82,4 +82,13 @@ export const skillDatasource = datasource.extend({
     if (airtableRawObjects.length === 0) return undefined;
     return airtableRawObjects.map(this.fromAirTableObject);
   },
+
+  async listByCompetenceId(competenceId) {
+    const airtableRawObjects = await findRecords(this.tableName, {
+      fields: this.usedFields,
+      filterByFormula: `{Compétence (via Tube) (id persistant)} = ${stringValue(competenceId)}`,
+    });
+    if (airtableRawObjects.length === 0) return undefined;
+    return airtableRawObjects.map(this.fromAirTableObject);
+  },
 });
