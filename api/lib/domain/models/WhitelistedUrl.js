@@ -12,6 +12,7 @@ export class WhitelistedUrl {
     url,
     relatedEntityIds,
     comment,
+    checkType,
   }) {
     this.id = id;
     this.createdBy = createdBy;
@@ -23,6 +24,14 @@ export class WhitelistedUrl {
     this.url = url;
     this.relatedEntityIds = relatedEntityIds;
     this.comment = comment;
+    this.checkType = checkType;
+  }
+
+  static get CHECK_TYPES() {
+    return {
+      EXACT_MATCH: 'exact_match',
+      STARTS_WITH: 'starts_with',
+    };
   }
 
   static canCreate(creationCommand, user, existingReadWhitelistedUrls) {
@@ -30,6 +39,7 @@ export class WhitelistedUrl {
     if (!isUrlValid(creationCommand.url)) return CanExecute.cannot('URL invalide');
     if (!isRelatedEntityIdsValid(creationCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
     if (!isCommentValid(creationCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
+    if (!isCheckTypeValid(creationCommand.checkType)) return CanExecute.cannot(`Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`);
     if (!isUrlUnique(creationCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
 
     return CanExecute.can();
@@ -48,6 +58,7 @@ export class WhitelistedUrl {
       url: creationCommand.url,
       relatedEntityIds: creationCommand.relatedEntityIds,
       comment: creationCommand.comment,
+      checkType: creationCommand.checkType,
     });
   }
 
@@ -71,6 +82,7 @@ export class WhitelistedUrl {
     if (!isUrlValid(updateCommand.url)) return CanExecute.cannot('URL invalide');
     if (!isRelatedEntityIdsValid(updateCommand.relatedEntityIds)) return CanExecute.cannot('Liste d\'ids invalides. Doit être une suite d\'ids séparés par des virgules ou vide');
     if (!isCommentValid(updateCommand.comment)) return CanExecute.cannot('Commentaire invalide. Doit être un texte ou vide');
+    if (!isCheckTypeValid(updateCommand.checkType)) return CanExecute.cannot(`Type de check invalide. Valeurs parmi : ${Object.values(WhitelistedUrl.CHECK_TYPES).join(', ')}`);
     if (!isUrlUnique(updateCommand.url, existingReadWhitelistedUrls)) return CanExecute.cannot('URL déjà whitelistée');
 
     return CanExecute.can();
@@ -83,6 +95,7 @@ export class WhitelistedUrl {
     this.url = updateCommand.url;
     this.relatedEntityIds = updateCommand.relatedEntityIds;
     this.comment = updateCommand.comment;
+    this.checkType = updateCommand.checkType;
   }
 }
 
@@ -105,6 +118,11 @@ function isRelatedEntityIdsValid(relatedEntityIds) {
 function isCommentValid(comment) {
   if (!comment) return true;
   return typeof comment === 'string';
+}
+
+function isCheckTypeValid(checkType) {
+  if (typeof checkType === 'string') return Object.values(WhitelistedUrl.CHECK_TYPES).includes(checkType);
+  return false;
 }
 
 function isUrlUnique(url, existingReadWhitelistedUrls) {

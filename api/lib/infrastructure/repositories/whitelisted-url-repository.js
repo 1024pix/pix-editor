@@ -11,6 +11,7 @@ export async function listRead() {
       url: 'whitelisted_urls.url',
       relatedEntityIds: 'whitelisted_urls.relatedEntityIds',
       comment: 'whitelisted_urls.comment',
+      checkType: 'whitelisted_urls.checkType',
       creatorName: 'users_for_creation.name',
       latestUpdatorName: 'users_for_update.name',
     })
@@ -31,6 +32,7 @@ export async function findRead(id) {
       url: 'whitelisted_urls.url',
       relatedEntityIds: 'whitelisted_urls.relatedEntityIds',
       comment: 'whitelisted_urls.comment',
+      checkType: 'whitelisted_urls.checkType',
       creatorName: 'users_for_creation.name',
       latestUpdatorName: 'users_for_update.name',
     })
@@ -46,7 +48,7 @@ export async function findRead(id) {
 
 export async function find(id) {
   const whitelistedUrlDto = await knex('whitelisted_urls')
-    .select(['id', 'createdBy', 'latestUpdatedBy', 'deletedBy', 'createdAt', 'updatedAt', 'deletedAt', 'url', 'relatedEntityIds', 'comment'])
+    .select(['id', 'createdBy', 'latestUpdatedBy', 'deletedBy', 'createdAt', 'updatedAt', 'deletedAt', 'url', 'relatedEntityIds', 'comment', 'checkType'])
     .where({ id })
     .first();
 
@@ -91,5 +93,6 @@ function adaptModelToDB(whitelistedUrl) {
     url: whitelistedUrl.url,
     relatedEntityIds: whitelistedUrl.relatedEntityIds,
     comment: whitelistedUrl.comment,
+    checkType: whitelistedUrl.checkType,
   };
 }

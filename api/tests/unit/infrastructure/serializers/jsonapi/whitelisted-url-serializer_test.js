@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { domainBuilder } from '../../../../test-helper.js';
 import { serialize } from '../../../../../lib/infrastructure/serializers/jsonapi/whitelisted-url-serializer.js';
+import { WhitelistedUrl } from '../../../../../lib/domain/models/index.js';
 
 describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
   describe('#serialize', () => {
@@ -15,6 +16,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       const expectedSerializedWhitelistedUrl = {
         data: {
@@ -28,6 +30,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
             'url': 'https://www.google.com',
             'related-entity-ids': 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
             'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
+            'check-type': 'exact_match',
           },
         }
       };
@@ -48,6 +51,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       const whitelistedUrl2 = domainBuilder.buildReadWhitelistedUrl({
         id: 456,
@@ -58,6 +62,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       const expectedSerializedWhitelistedUrls = {
         data: [
@@ -72,6 +77,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
               'url': 'https://www.google.com',
               'related-entity-ids': 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
               'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
+              'check-type': 'exact_match',
             },
           },
           {
@@ -85,6 +91,7 @@ describe('Unit | Serializer | JSONAPI | whitelisted-url-serializer', () => {
               'url': 'https://www.editor.pix.fr',
               'related-entity-ids': null,
               'comment': 'Mon site préféré',
+              'check-type': 'starts_with',
             },
           },
         ],

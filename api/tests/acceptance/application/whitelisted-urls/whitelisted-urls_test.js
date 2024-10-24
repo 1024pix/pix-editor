@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { databaseBuilder, generateAuthorizationHeader, knex } from '../../../test-helper.js';
 import { createServer } from '../../../../server.js';
+import { WhitelistedUrl } from '../../../../lib/domain/models/index.js';
 
 describe('Acceptance | Controller | whitelisted-urls', () => {
   let now;
@@ -32,6 +33,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -44,6 +46,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -56,6 +59,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -109,6 +113,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
               'url': 'https://www.editor.pix.fr',
               'related-entity-ids': null,
               'comment': 'Mon site préféré',
+              'check-type': 'exact_match',
             },
           },
           {
@@ -122,6 +127,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
               'url': 'https://www.google.com',
               'related-entity-ids': 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
               'comment': 'Je décide de whitelister ça car mon cousin travaille chez google',
+              'check-type': 'starts_with',
             },
           },
         ],
@@ -143,6 +149,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -155,6 +162,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -167,6 +175,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -277,6 +286,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -289,6 +299,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -301,6 +312,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -310,6 +322,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             url: 'https://super-casserole.com',
             'related-entity-ids': 'rec123,rec789',
             comment: 'Un super commentaire',
+            'check-type': WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
           },
         },
       };
@@ -385,6 +398,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             url: 'https://super-casserole.com',
             'related-entity-ids': 'rec123,rec789',
             comment: 'Un super commentaire',
+            'check-type': 'exact_match',
           },
         },
       });
@@ -405,6 +419,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.google.com',
         relatedEntityIds: 'recINswt85utqO5KJ,recPiCGFhfgervqr5',
         comment: 'Je décide de whitelister ça car mon cousin travaille chez google',
+        checkType: WhitelistedUrl.CHECK_TYPES.STARTS_WITH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 456,
@@ -417,6 +432,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.editor.pix.fr',
         relatedEntityIds: null,
         comment: 'Mon site préféré',
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       databaseBuilder.factory.buildWhitelistedUrl({
         id: 789,
@@ -429,6 +445,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
         url: 'https://www.les-fruits-c-super-bon',
         relatedEntityIds: 'reclbhuUTRGc1jZRL',
         comment: null,
+        checkType: WhitelistedUrl.CHECK_TYPES.EXACT_MATCH,
       });
       await databaseBuilder.commit();
       server = await createServer();
@@ -438,6 +455,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             url: 'https://super-casserole.com',
             'related-entity-ids': 'rec123,rec789',
             comment: 'Un super commentaire',
+            'check-type': 'starts_with',
           },
         },
       };
@@ -512,6 +530,7 @@ describe('Acceptance | Controller | whitelisted-urls', () => {
             url: 'https://super-casserole.com',
             'related-entity-ids': 'rec123,rec789',
             comment: 'Un super commentaire',
+            'check-type': 'starts_with',
           },
         },
       });
