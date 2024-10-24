@@ -33,8 +33,8 @@ export async function listByTubeId(tubeId) {
   return toDomainList(datasourceSkills, translations);
 }
 
-export async function listByCompetenceId(competenceId) {
-  const datasourceSkills = await skillDatasource.listByCompetenceId(competenceId);
+export async function listActiveByCompetenceId(competenceId) {
+  const datasourceSkills = await skillDatasource.listActiveByCompetenceId(competenceId);
   if (!datasourceSkills) return [];
   const translations = await translationRepository.listByEntities(model, datasourceSkills.map(({ id }) => id));
   return toDomainList(datasourceSkills, translations);
