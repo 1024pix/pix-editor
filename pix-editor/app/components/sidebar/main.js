@@ -22,6 +22,10 @@ export default class SidebarMain extends Component {
     return this.access.mayAccessStaticCourses();
   }
 
+  get mayAccessWhitelistedUrls() {
+    return this.access.mayAccessWhitelistedUrls();
+  }
+
   get mayGenerateTargetProfile() {
     return this.access.isReadOnly();
   }
