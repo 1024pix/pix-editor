@@ -1,4 +1,4 @@
-import { Challenge } from '../models';
+import { Challenge } from '../models/index.js';
 
 export class CompetenceOverview {
   constructor({
@@ -21,7 +21,7 @@ export class CompetenceOverview {
           airtableId: thematic.airtableId,
           name: thematic.name_i18n.fr,
           tubeOverviews: thematic.tubeIds
-            .map((tubeId) => tubesById[tubeId])
+            ?.map((tubeId) => tubesById[tubeId])
             .sort(byIndex)
             .map((tube) => new TubeOverview({
               airtableId: tube.airtableId,
@@ -29,9 +29,9 @@ export class CompetenceOverview {
               skillOverviews: skillsByTubeIdAndLevel[tube.id]
                 ?.map((skill) => SkillOverview.buildForChallengesProduction({ skill, challenges })),
             }))
-            .filter((tubeOverview) => tubeOverview.skillOverviews)
+            .filter((tubeOverview) => !tubeOverview.isEmpty)
         }))
-        .filter((thematicOverview) => thematicOverview.tubeOverviews.length),
+        .filter((thematicOverview) => !thematicOverview.isEmpty),
     });
   }
 }
@@ -46,6 +46,10 @@ class ThematicOverview {
     this.name = name;
     this.tubeOverviews = tubeOverviews;
   }
+
+  get isEmpty() {
+    return !this.tubeOverviews || this.tubeOverviews.length === 0;
+  }
 }
 
 class TubeOverview {
@@ -57,6 +61,10 @@ class TubeOverview {
     this.airtableId = airtableId;
     this.name = name;
     this.skillOverviews = skillOverviews;
+  }
+
+  get isEmpty() {
+    return !this.skillOverviews || this.skillOverviews.length === 0;
   }
 }
 
